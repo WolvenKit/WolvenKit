@@ -58,10 +58,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public ICommand OpenRefCommand { get; private set; }
         private bool CanOpenRef() => CName != null && DataViewModel.File.RelativePath != CName;
-        private void ExecuteOpenRef()
-        {
-            Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(CName);
-        }
+        private void ExecuteOpenRef() => Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(CName);
 
         public ICommand LoadRefCommand { get; private set; }
         private bool CanLoadRef() => CName != null;
@@ -169,10 +166,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public RedBaseClass GetData() => (RedBaseClass)_data;
 
-        public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file)
-        {
-            Header = header;
-        }
+        public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file) => Header = header;
 
         #region properties
 
@@ -230,20 +224,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public ICommand OnDemandLoadingCommand { get; private set; }
 
-        private bool CanExecuteOnDemandLoading(TreeViewNode node)
-        {
-            if (node.Content is GroupedChunkViewModel)
-            {
-                return true;
-            }
-
-            if (node.Content is ChunkViewModel cvm && cvm.HasChildren())
-            {
-                return true;
-            }
-
-            return false;
-        }
+        private bool CanExecuteOnDemandLoading(TreeViewNode node) => node.Content is GroupedChunkViewModel || node.Content is ChunkViewModel cvm && cvm.HasChildren();
 
         private void ExecuteOnDemandLoading(TreeViewNode node)
         {
@@ -380,13 +361,10 @@ namespace WolvenKit.ViewModels.Documents
                                 destSocket = reference.Destination;
                             }
                         }
-                        if (destSocket == null)
+                        destSocket ??= new ReferenceSocket(res.DepotPath)
                         {
-                            destSocket = new ReferenceSocket(res.DepotPath)
-                            {
-                                IsConnected = true
-                            };
-                        }
+                            IsConnected = true
+                        };
                         References.Add(new RedReference(this, sourceSocket, destSocket));
                     }
                 }
@@ -514,9 +492,9 @@ namespace WolvenKit.ViewModels.Documents
         //}
     }
 
-    public class ReferenceSocket : ReactiveObject, INodeSocket<INode>
+    public class ReferenceSocket : ReactiveObject, INodeSocket<WolvenKit.Functionality.Interfaces.INode>
     {
-        public INode Node { get; set; }
+        public WolvenKit.Functionality.Interfaces.INode Node { get; set; }
 
         [Reactive] public CName File { get; set; }
 

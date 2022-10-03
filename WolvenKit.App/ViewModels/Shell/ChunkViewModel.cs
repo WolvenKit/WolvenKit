@@ -34,7 +34,7 @@ using static WolvenKit.ViewModels.Dialogs.DialogViewModel;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public partial class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
+    public partial class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, WolvenKit.Functionality.Interfaces.INode<ReferenceSocket>
     {
         private static readonly List<string> s_hiddenProperties = new();
 
@@ -242,7 +242,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        private readonly RedDocumentTabViewModel _tab;
+        private readonly RDTDataViewModel _tab;
 
         public RDTDataViewModel Tab => _tab ?? Parent?.Tab;
 
@@ -2458,9 +2458,6 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand OpenSelfCommand { get; private set; }
         private bool CanOpenSelf() => RelativePath != null && _tab == null;
-        private void ExecuteOpenSelf()
-        {
-            Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
-        }
+        private void ExecuteOpenSelf() => Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
     }
 }
