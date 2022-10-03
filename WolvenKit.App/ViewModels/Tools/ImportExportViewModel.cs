@@ -96,31 +96,30 @@ namespace WolvenKit.ViewModels.Tools
 
         private static JsonSerializerOptions s_jsonSerializerSettings = new() { Converters = { new JsonFileEntryConverter() }, WriteIndented = true };
 
-#endregion fields
+        #endregion fields
 
-/// <summary>
-/// Import Export ViewModel Constructor
-/// </summary>
-/// <param name="projectManager"></param>
-/// <param name="loggerService"></param>
-/// <param name="messageService"></param>
-/// <param name="watcherService"></param>
-/// <param name="gameController"></param>
-/// <param name="modTools"></param>
-public ImportExportViewModel(
-           IProjectManager projectManager,
-           ILoggerService loggerService,
-           IProgressService<double> progressService,
-           IWatcherService watcherService,
-           INotificationService notificationService,
-           IGameControllerFactory gameController,
-           ISettingsManager settingsManager,
-           IModTools modTools,
-           MeshTools meshTools,
-           IArchiveManager archiveManager,
-           IPluginService pluginService,
-           Red4ParserService parserService
-           ) : base(ToolTitle)
+        /// <summary>
+        /// Import Export ViewModel Constructor
+        /// </summary>
+        /// <param name="projectManager"></param>
+        /// <param name="loggerService"></param>
+        /// <param name="messageService"></param>
+        /// <param name="watcherService"></param>
+        /// <param name="gameController"></param>
+        /// <param name="modTools"></param>
+        public ImportExportViewModel(
+            IProjectManager projectManager,
+            ILoggerService loggerService,
+            IProgressService<double> progressService,
+            IWatcherService watcherService,
+            INotificationService notificationService,
+            IGameControllerFactory gameController,
+            ISettingsManager settingsManager,
+            IModTools modTools,
+            MeshTools meshTools,
+            IArchiveManager archiveManager,
+            IPluginService pluginService,
+            Red4ParserService parserService) : base(ToolTitle)
         {
             _projectManager = projectManager;
             _loggerService = loggerService;
@@ -999,6 +998,13 @@ public ImportExportViewModel(
         [RelayCommand]
         private void ImportSettings()
         {
+            // Don't import if there is no active project.
+            if (_projectManager.ActiveProject == null
+                || string.IsNullOrWhiteSpace(_projectManager.ActiveProject.ProjectDirectory))
+            {
+                return;
+            }
+
             var gammaRegex = new Regex(".*_[de][0-9]*$");
 
             foreach (var importableItem in ImportableItems)
