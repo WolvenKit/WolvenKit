@@ -10,17 +10,13 @@ using ReactiveUI;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Wizards;
-using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
-using WolvenKit.Views.Wizards;
 
 namespace WolvenKit
 {
@@ -95,6 +91,13 @@ namespace WolvenKit
             //NNViewRegistrar.RegisterSplat();
         }
 
+        protected override void OnExit(ExitEventArgs e)
+        {
+            Log.CloseAndFlush();
+
+            base.OnExit(e);
+        }
+
         private IServiceProvider Container { get; set; }
 
         private IHost _host;
@@ -117,11 +120,22 @@ namespace WolvenKit
             var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
-              .MinimumLevel.Debug()
-              .WriteTo.Console()
-              .WriteTo.MySink(_host.Services.GetService<MySink>())
-              .WriteTo.File(path, outputTemplate: outputTemplate, rollingInterval: RollingInterval.Day)
-              .CreateLogger();
+#if DEBUG
+                .MinimumLevel.Debug()
+                .WriteTo.Async(a => a.Console(), bufferSize: 1000)
+#else
+                .MinimumLevel.Warning()
+#endif
+                .WriteTo.MySink(_host.Services.GetService<MySink>())
+                .WriteTo.Async(
+                    a => a.File(
+                        path,
+                        outputTemplate: outputTemplate,
+                        rollingInterval: RollingInterval.Day,
+                        fileSizeLimitBytes: 100 * 1000 * 1024, // MaxFileSize: 100 MB
+                        retainedFileCountLimit: 10,
+                        buffered: true)) // Allow internal buffering.
+                .CreateLogger();
         }
 
         //https://stackoverflow.com/a/46804709/16407587
