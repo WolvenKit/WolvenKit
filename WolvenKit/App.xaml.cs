@@ -3,7 +3,6 @@ using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProtoBuf.Meta;
@@ -11,17 +10,13 @@ using ReactiveUI;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Wizards;
-using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
-using WolvenKit.Views.Wizards;
 
 namespace WolvenKit
 {
@@ -96,6 +91,13 @@ namespace WolvenKit
             //NNViewRegistrar.RegisterSplat();
         }
 
+        protected override void OnExit(ExitEventArgs e)
+        {
+            Log.CloseAndFlush();
+
+            base.OnExit(e);
+        }
+
         private IServiceProvider Container { get; set; }
 
         private IHost _host;
@@ -130,9 +132,9 @@ namespace WolvenKit
                         path,
                         outputTemplate: outputTemplate,
                         rollingInterval: RollingInterval.Day,
-                        fileSizeLimitBytes: 100 * 1000 * 1024, // 100 MB
+                        fileSizeLimitBytes: 100 * 1000 * 1024, // MaxFileSize: 100 MB
                         retainedFileCountLimit: 10,
-                        buffered: true)) // Max File Size
+                        buffered: true)) // Allow internal buffering.
                 .CreateLogger();
         }
 
