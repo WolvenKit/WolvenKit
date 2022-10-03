@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -155,6 +157,49 @@ namespace WolvenKit
                 LogUnhandledException(e.Exception, "TaskScheduler.UnobservedTaskException");
                 e.SetObserved();
             };
+
+            RxApp.DefaultExceptionHandler = new DefaultObserverExceptionHandler();
+        }
+
+        /// <summary>
+        /// This isn't great but can used until each TaskCommand ThrownExceptions can be properly subscribed to.
+        /// </summary>
+        // https://www.reactiveui.net/docs/handbook/default-exception-handler/
+        public class DefaultObserverExceptionHandler : IObserver<Exception>
+        {
+            public void OnNext(Exception ex)
+            {
+                if (Debugger.IsAttached) // If we're debugging, break.
+                {
+                    Debugger.Break();
+                }
+
+                LogUnhandledException(ex, "RxApp.DefaultExceptionHandler");
+
+                RxApp.MainThreadScheduler.Schedule(() => throw ex); // Without EDI, we lose the real stack trace;
+            }
+
+            public void OnError(Exception ex)
+            {
+                if (Debugger.IsAttached) // If we're debugging, break.
+                {
+                    Debugger.Break();
+                }
+
+                LogUnhandledException(ex, "RxApp.DefaultExceptionHandler");
+
+                RxApp.MainThreadScheduler.Schedule(() => throw ex); // Without EDI, we lose the real stack trace;
+            }
+
+            public void OnCompleted()
+            {
+                if (Debugger.IsAttached) // If we're debugging, break.
+                {
+                    Debugger.Break();
+                }
+
+                RxApp.MainThreadScheduler.Schedule(() => throw new NotImplementedException());
+            }
         }
 
         private static void LogUnhandledException(Exception exception, string source)
