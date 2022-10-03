@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Threading;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
@@ -12,7 +13,6 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Tools;
@@ -21,6 +21,8 @@ namespace WolvenKit.Views.Tools
 {
     public partial class ImportExportView : ReactiveUserControl<ImportExportViewModel>
     {
+        private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
+
         private PropertyItem _propertyItem;
         private readonly IProjectManager projectManager;
         private readonly Red4ParserService parser;
@@ -204,7 +206,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void OnPropertyValueChanged(object sender, PropertyChangedEventArgs e) => OverlayPropertyGrid.RefreshPropertygrid();
+        private void OnPropertyValueChanged(object sender, PropertyChangedEventArgs e) => _dispatcher.Invoke(() => OverlayPropertyGrid.RefreshPropertygrid());
 
         /// <summary>
         /// Confirm Button (Advanced Options)
