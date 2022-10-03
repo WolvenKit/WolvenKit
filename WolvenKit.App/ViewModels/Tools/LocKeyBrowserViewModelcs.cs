@@ -137,7 +137,11 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedLocKey != null)
                 {
                     SelectedChunk.Clear();
-                    SelectedChunk.Add(new ChunkViewModel(_selectedLocKey, null));
+                    SelectedChunk.Add(new ChunkViewModel(_selectedLocKey)
+                    {
+                        IsReadOnly = true,
+                        IsExpanded = true
+                    });
                 }
                 else
                 {

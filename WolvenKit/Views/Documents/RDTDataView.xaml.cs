@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Newtonsoft.Json;
+using Nodify;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.Common.Conversion;
+using WolvenKit.Functionality.Interfaces;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.Views.Editors;
 
 namespace WolvenKit.Views.Documents
 {
@@ -61,6 +65,25 @@ namespace WolvenKit.Views.Documents
                       view => view.CustomPG.ViewModel)
                   .DisposeWith(disposables);
 
+                Editor.LayoutNodes();
+
+                //ViewModel.Nodes.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+                //{
+                //    LayoutNodes();
+                //};
+
+                //ViewModel.References.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+                //{
+                //    LayoutNodes();
+                //};
+
+                ViewModel.LayoutNodes = () => Editor.LayoutNodes();
+
+                //Editor.ItemsUpdated += (object sender, RoutedEventArgs e) =>
+                //{
+                //    LayoutNodes();
+                //};
+
                 //ViewModel.SelectedChunk.IsExpanded = true;
 
                 //this.OneWayBind(ViewModel,
@@ -103,6 +126,7 @@ namespace WolvenKit.Views.Documents
             //PropertyGrid.CustomEditorCollection = CustomEditorCollection;
             //MainTreeGrid.RequestTreeItems += TreeGrid_RequestTreeItems;
         }
+
         //public ICommand AddItemToArrayCommand { get; private set; }
         //public ICommand ExportChunkCommand { get; private set; }
 
@@ -121,5 +145,9 @@ namespace WolvenKit.Views.Documents
         //}
 
 
+        private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e)
+        {
+            Editor.LayoutNodes();
+        }
     }
 }

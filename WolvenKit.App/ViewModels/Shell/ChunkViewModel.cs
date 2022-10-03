@@ -34,7 +34,7 @@ using static WolvenKit.ViewModels.Dialogs.DialogViewModel;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public partial class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
+    public partial class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
     {
         private static readonly List<string> s_hiddenProperties = new();
 
@@ -186,6 +186,7 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkViewModel(IRedType export, RDTDataViewModel tab, bool isReadOnly) : this(export, null, null, false, isReadOnly)
         {
             _tab = tab;
+            RelativePath = _tab.File.RelativePath;
             IsExpanded = true;
             //Data = export;
             //if (!PropertiesLoaded)
@@ -195,6 +196,13 @@ namespace WolvenKit.ViewModels.Shell
             //TVProperties.AddRange(Properties);
             //this.RaisePropertyChanged("Data");
             this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) => Tab.File.SetIsDirty(true));
+        }
+
+        public ChunkViewModel(IRedType export, ReferenceSocket socket) : this(export)
+        {
+            Socket = socket;
+            socket.Node = this;
+            RelativePath = socket.File;
         }
 
         #endregion Constructors
@@ -234,11 +242,13 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        private readonly RDTDataViewModel _tab;
+        private readonly RedDocumentTabViewModel _tab;
 
         public RDTDataViewModel Tab => _tab ?? Parent?.Tab;
 
         [Reactive] public IRedType Data { get; set; }
+
+        [Reactive] public CName RelativePath { get; set; }
 
         private IRedType _resolvedDataCache;
 
@@ -504,7 +514,8 @@ namespace WolvenKit.ViewModels.Shell
                             Properties.Add(new ChunkViewModel(irt, this, pi.Name, false, isreadonly));
                         }
                     }
-                    if (Data is worldNodeData sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+
+                    if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
                     {
                         try
                         {
@@ -1044,8 +1055,7 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
-
-            if (Data is worldNodeData sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+            if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
             {
                 Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].Chunk.DebugName}";
                 return;
@@ -2097,7 +2107,6 @@ namespace WolvenKit.ViewModels.Shell
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
-
         public ICommand CopySelectionCommand { get; private set; }
         private bool CanCopySelection() => IsInArray;
         private void ExecuteCopySelection()
@@ -2418,7 +2427,10 @@ namespace WolvenKit.ViewModels.Shell
                     if (prop.Data is not null && prop.Data.GetHashCode() == selectChild.GetHashCode())
                     {
                         prop.IsExpanded = true;
-                        Tab.SelectedChunk = prop;
+                        if (Tab is RDTDataViewModel dvm)
+                        {
+                            dvm.SelectedChunk = prop;
+                        }
                         break;
                     }
                 }
@@ -2426,5 +2438,29 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
+        // node stuff
+
+        [Reactive] public ReferenceSocket Socket { get; set; }
+
+        public IList<ReferenceSocket> Inputs
+        {
+            get => new List<ReferenceSocket>(new ReferenceSocket[] { Socket });
+            set
+            {
+                ;
+            }
+        }
+
+        [Reactive] public IList<ReferenceSocket> Outputs { get; set; } = new ObservableCollection<ReferenceSocket>();
+
+        [Reactive] public System.Windows.Point Location { get; set; }
+
+        public ICommand OpenSelfCommand { get; private set; }
+        private bool CanOpenSelf() => RelativePath != null && _tab == null;
+        private void ExecuteOpenSelf()
+        {
+            Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
+        }
     }
 }

@@ -237,6 +237,10 @@ namespace WolvenKit.ViewModels.Documents
             {
                 TabItemViewModels.Add(new RDTGraphViewModel(ggr, this));
             }
+            if (cls is scnSceneResource ssr)
+            {
+                TabItemViewModels.Add(new RDTGraphViewModel(ssr, this));
+            }
         }
 
         private void PopulateItems()

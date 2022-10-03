@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Newtonsoft.Json;
+using Nodify;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.Common.Conversion;
@@ -23,6 +24,28 @@ namespace WolvenKit.Views.Documents
         public RDTGraphView()
         {
             InitializeComponent();
+
+            EventManager.RegisterClassHandler(typeof(BaseConnection), MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnConnectionInteraction));
+
+            this.WhenActivated(disposables =>
+            {
+                //Editor.LayoutNodes();
+            });
+        }
+
+        private void OnConnectionInteraction(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is BaseConnection ctrl && ctrl.DataContext is ConnectionViewModel connection)
+            {
+                if (Keyboard.Modifiers == ModifierKeys.Alt)
+                {
+                    connection.Remove();
+                }
+                else if (e.ClickCount > 1)
+                {
+                    connection.Split(e.GetPosition(ctrl) - new Vector(30, 15));
+                }
+            }
         }
     }
 }
