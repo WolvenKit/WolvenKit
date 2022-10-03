@@ -118,15 +118,19 @@ public class RedImage : IDisposable
     public static RedImage LoadFromDDSFile(string szFile) =>
         new() { InternalScratchImage = TexHelper.Instance.LoadFromDDSFile(szFile, DDS_FLAGS.FORCE_DX10_EXT, out _) };
 
-    public static RedImage LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format = Enums.ETextureRawFormat.TRF_Invalid)
+    public static RedImage LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer);
+
+    public static RedImage LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
+
+    public static RedImage LoadFromDDSMemory(byte[] buffer, Common.DDS.DXGI_FORMAT format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
+
+    internal static RedImage LoadFromDDSMemory(byte[] buffer, DXGI_FORMAT format = DXGI_FORMAT.UNKNOWN)
     {
         var scratchImage = TexHelper.Instance.LoadFromDDSMemory(buffer, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
 
         if (TexHelper.Instance.IsCompressed(metadata.Format))
         {
-            var targetFormat = CommonFunctions.GetDXGIFormat2(Enums.ETextureCompression.TCM_None, format, false, null);
-
-            scratchImage = scratchImage.Decompress(targetFormat);
+            scratchImage = scratchImage.Decompress(format);
         }
 
         return new RedImage
