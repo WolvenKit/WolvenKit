@@ -93,7 +93,7 @@ namespace WolvenKit.Common.Model
 
             foreach (var archive in ModArchives.Items)
             {
-                var modroot = new RedFileSystemModel(archive.Name);
+                var modroot = new RedFileSystemModel(archive.ArchiveRelativePath);
 
                 // loop through all files
                 //Parallel.ForEach(archive.Files, item =>

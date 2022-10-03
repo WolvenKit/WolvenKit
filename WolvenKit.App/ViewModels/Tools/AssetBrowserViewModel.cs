@@ -29,6 +29,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 
@@ -777,10 +778,20 @@ namespace WolvenKit.ViewModels.Tools
             RightItems.SuppressNotification = false;
         }
 
-        public IGameFile LookupGameFile(ulong hash)
+        public IGameFile LookupGameFile(string archiveRelativeName, ulong hash)
         {
-            DynamicData.Kernel.Optional<IGameFile> f = _archiveManager.Lookup(hash);
-            return f.HasValue ? f.Value : null;
+            foreach (var archive in _archiveManager.ModArchives.Items)
+            {
+                if (archive.ArchiveRelativePath == archiveRelativeName)
+                {
+                    if (archive.Files.ContainsKey(hash))
+                    {
+                        return archive.Files[hash];
+                    }
+                }
+            }
+
+            return null;
         }
 
         #endregion methods
