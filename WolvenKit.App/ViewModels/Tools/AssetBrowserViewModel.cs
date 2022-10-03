@@ -184,7 +184,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region properties
 
-        [Reactive] public string Extension { get; set; } = "reds";
+        // [Reactive] public string Extension { get; set; } = "reds";
 
         [Reactive] public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
 
