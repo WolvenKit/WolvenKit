@@ -10,6 +10,7 @@ using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -235,11 +236,21 @@ namespace WolvenKit.ViewModels.Documents
             }
             if (cls is graphGraphResource ggr)
             {
-                TabItemViewModels.Add(new RDTGraphViewModel(ggr, this));
+                if (Globals.ENABLE_NODE_EDITOR)
+                {
+#pragma warning disable CS0162 // Unreachable code detected
+                    TabItemViewModels.Add(new RDTGraphViewModel(ggr, this));
+#pragma warning restore CS0162 // Unreachable code detected
+                }
             }
             if (cls is scnSceneResource ssr)
             {
-                TabItemViewModels.Add(new RDTGraphViewModel(ssr, this));
+                if (Globals.ENABLE_NODE_EDITOR)
+                {
+#pragma warning disable CS0162 // Unreachable code detected
+                    TabItemViewModels.Add(new RDTGraphViewModel(ssr, this));
+#pragma warning restore CS0162 // Unreachable code detected
+                }
             }
         }
 

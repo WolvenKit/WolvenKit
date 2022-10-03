@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Nodify;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.TreeView;
+using WolvenKit.App;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Functionality.Interfaces;
 using WolvenKit.RED4.Types;
@@ -65,7 +66,10 @@ namespace WolvenKit.Views.Documents
                       view => view.CustomPG.ViewModel)
                   .DisposeWith(disposables);
 
-                Editor.LayoutNodes();
+                /*if (Globals.ENABLE_NODE_EDITOR)
+                {
+                    Editor.LayoutNodes();
+                }*/
 
                 //ViewModel.Nodes.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
                 //{
@@ -77,7 +81,10 @@ namespace WolvenKit.Views.Documents
                 //    LayoutNodes();
                 //};
 
-                ViewModel.LayoutNodes = () => Editor.LayoutNodes();
+                /*if (Globals.ENABLE_NODE_EDITOR)
+                {
+                    ViewModel.LayoutNodes = () => Editor.LayoutNodes();
+                }*/
 
                 //Editor.ItemsUpdated += (object sender, RoutedEventArgs e) =>
                 //{
@@ -145,9 +152,7 @@ namespace WolvenKit.Views.Documents
         //}
 
 
-        private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e)
-        {
-            Editor.LayoutNodes();
-        }
+        // ENABLE_NODE_EDITOR
+        //private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e) => Editor.LayoutNodes();
     }
 }

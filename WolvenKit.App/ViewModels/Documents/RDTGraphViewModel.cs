@@ -8,7 +8,13 @@ using System.Reactive.Disposables;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
+using Microsoft.Msagl.Core;
+using Microsoft.Msagl.Core.Geometry.Curves;
+using Microsoft.Msagl.Core.Layout;
+using Microsoft.Msagl.Core.Routing;
+using Microsoft.Msagl.Layout.Layered;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -17,17 +23,11 @@ using Syncfusion.Windows.Shared;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
-using Microsoft.Msagl.Core;
-using Microsoft.Msagl.Layout.Layered;
-using Microsoft.Msagl.Core.Routing;
-using Microsoft.Msagl.Core.Geometry.Curves;
-using Microsoft.Msagl.Core.Layout;
 using Point = System.Windows.Point;
-using WolvenKit.Functionality.Interfaces;
-using System.Windows.Media;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -335,7 +335,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 Header = qcpnd.DebugString;
             }
-            else if (node is questPauseConditionNodeDefinition || node is questConditionNodeDefinition)
+            else if (node is questPauseConditionNodeDefinition or questConditionNodeDefinition)
             {
                 questIBaseCondition condition = null;
                 if (node is questPauseConditionNodeDefinition qpcnd)
@@ -491,10 +491,7 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public override Size GetSize()
-        {
-            return new Size(Width, Height);
-        }
+        public override Size GetSize() => new(Width, Height);
     }
 
     public enum ConnectorFlow
@@ -566,10 +563,7 @@ namespace WolvenKit.ViewModels.Documents
             };
         }
 
-        public SocketViewModel(graphGraphSocketDefinition socket) : this()
-        {
-            Title = socket.Name;
-        }
+        public SocketViewModel(graphGraphSocketDefinition socket) : this() => Title = socket.Name;
 
         protected virtual void OnNodeChanged()
         {
@@ -604,10 +598,19 @@ namespace WolvenKit.ViewModels.Documents
         public ConnectionViewModel(RDTGraphViewModel graph, graphGraphConnectionDefinition connection)
         {
             Graph = graph;
-            Destination = Graph.SocketLookup[connection.Destination.Chunk.GetHashCode()];
-            Destination.Connections.Add(this);
-            Source = Graph.SocketLookup[connection.Source.Chunk.GetHashCode()];
-            Source.Connections.Add(this);
+            var hash = connection.Destination.Chunk.GetHashCode();
+
+            if (Graph.SocketLookup.ContainsKey(hash))
+            {
+                Destination = Graph.SocketLookup[connection.Destination.Chunk.GetHashCode()];
+                Destination.Connections.Add(this);
+                Source = Graph.SocketLookup[connection.Source.Chunk.GetHashCode()];
+                Source.Connections.Add(this);
+            }
+            else
+            {
+                // TODO why is this happening?
+            }
         }
 
         public void Split(Point point) { }
@@ -621,13 +624,13 @@ namespace WolvenKit.ViewModels.Documents
     {
         public static System.Windows.Rect GetBoundingBox(this IList<NodeViewModel> nodes, double padding = 0, int gridCellSize = 15)
         {
-            double minX = double.MaxValue;
-            double minY = double.MaxValue;
+            var minX = double.MaxValue;
+            var minY = double.MaxValue;
 
-            double maxX = double.MinValue;
-            double maxY = double.MinValue;
+            var maxX = double.MinValue;
+            var maxY = double.MinValue;
 
-            for (int i = 0; i < nodes.Count; i++)
+            for (var i = 0; i < nodes.Count; i++)
             {
                 var node = nodes[i];
                 var width = 200;    //node.Width
@@ -666,14 +669,14 @@ namespace WolvenKit.ViewModels.Documents
         {
             if (items is IList<T> itemsCol)
             {
-                for (int i = 0; i < itemsCol.Count; i++)
+                for (var i = 0; i < itemsCol.Count; i++)
                 {
                     col.Add(itemsCol[i]);
                 }
             }
             else if (items is T[] itemsArr)
             {
-                for (int i = 0; i < itemsArr.Length; i++)
+                for (var i = 0; i < itemsArr.Length; i++)
                 {
                     col.Add(itemsArr[i]);
                 }
