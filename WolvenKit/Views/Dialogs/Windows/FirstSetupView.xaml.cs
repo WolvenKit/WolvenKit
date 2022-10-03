@@ -30,10 +30,12 @@ namespace WolvenKit.Views.Dialogs.Windows
                     vm => vm.CP77ExePath,
                     v => v.cp77ExeTxtb.Text)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                         vm => vm.MaterialDepotPath,
                         v => v.matdepotxtb.Text)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                         vm => vm.AllFieldsValid,
                         v => v.WizardControl.FinishEnabled)
@@ -42,10 +44,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                 this.BindCommand(ViewModel,
                     vm => vm.OpenCP77GamePathCommand,
                     v => v.cp77ExeButton).DisposeWith(disposables);
+
                 this.BindCommand(ViewModel,
                     vm => vm.OpenDepotPathCommand,
                     v => v.matdepotButton).DisposeWith(disposables);
-
 
                 this.BindCommand(
                     ViewModel,
