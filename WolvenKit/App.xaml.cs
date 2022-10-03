@@ -3,6 +3,7 @@ using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProtoBuf.Meta;
@@ -117,11 +118,22 @@ namespace WolvenKit
             var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
-              .MinimumLevel.Debug()
-              .WriteTo.Console()
-              .WriteTo.MySink(_host.Services.GetService<MySink>())
-              .WriteTo.File(path, outputTemplate: outputTemplate, rollingInterval: RollingInterval.Day)
-              .CreateLogger();
+#if DEBUG
+                .MinimumLevel.Debug()
+                .WriteTo.Async(a => a.Console(), bufferSize: 1000)
+#else
+                .MinimumLevel.Warning()
+#endif
+                .WriteTo.MySink(_host.Services.GetService<MySink>())
+                .WriteTo.Async(
+                    a => a.File(
+                        path,
+                        outputTemplate: outputTemplate,
+                        rollingInterval: RollingInterval.Day,
+                        fileSizeLimitBytes: 100 * 1000 * 1024, // 100 MB
+                        retainedFileCountLimit: 10,
+                        buffered: true)) // Max File Size
+                .CreateLogger();
         }
 
         //https://stackoverflow.com/a/46804709/16407587

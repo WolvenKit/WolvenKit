@@ -38,6 +38,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
     <PackageReference Include="protobuf-net" Version="3.1.17" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.0" />
     <PackageReference Include="Splat" Version="14.4.1" />
     <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.4.1" />
