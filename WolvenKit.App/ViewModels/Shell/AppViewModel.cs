@@ -606,7 +606,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand ShowSoundModdingToolCommand { get; private set; }
-        private bool CanShowSoundModdingTool() => !IsDialogShown;
+        private bool CanShowSoundModdingTool() => !IsDialogShown && ActiveProject != null;
         private void ExecuteShowSoundModdingTool() => SetActiveDialog(new SoundModdingViewModel
         {
             FileHandler = OpenSoundModdingView
