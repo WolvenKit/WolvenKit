@@ -1,5 +1,3 @@
-using ReactiveUI;
-using Splat;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +5,8 @@ using System.Reactive.Disposables;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using ReactiveUI;
+using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
@@ -107,8 +107,8 @@ namespace WolvenKit.Views.Shell
             // add default profiles
             if (_settingsManager.LaunchProfiles is null || _settingsManager.LaunchProfiles.Count == 0)
             {
-                using System.IO.Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.Resources.launchprofiles.json");
-                Dictionary<string, LaunchProfile> defaultprofiles = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, LaunchProfile>>(stream, new System.Text.Json.JsonSerializerOptions()
+                using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.Resources.launchprofiles.json");
+                var defaultprofiles = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, LaunchProfile>>(stream, new System.Text.Json.JsonSerializerOptions()
                 {
                     WriteIndented = true,
                     DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
@@ -119,7 +119,7 @@ namespace WolvenKit.Views.Shell
             }
 
             // unsubscribe
-            foreach (object obj in LaunchMenuMainItem.Items)
+            foreach (var obj in LaunchMenuMainItem.Items)
             {
                 if (obj is MenuItem menuitem && menuitem.Header is string menuitemHeader)
                 {
@@ -131,15 +131,15 @@ namespace WolvenKit.Views.Shell
                 }
             }
             // delete all except for last two
-            int cntToRemove = LaunchMenuMainItem.Items.Count - 2;
-            for (int i = 0; i < cntToRemove; i++)
+            var cntToRemove = LaunchMenuMainItem.Items.Count - 2;
+            for (var i = 0; i < cntToRemove; i++)
             {
                 LaunchMenuMainItem.Items.RemoveAt(0);
             }
 
 
-            int count = 0;
-            foreach ((string name, LaunchProfile value) in _settingsManager.LaunchProfiles)
+            var count = 0;
+            foreach ((var name, var value) in _settingsManager.LaunchProfiles)
             {
                 MenuItem item = new()
                 {

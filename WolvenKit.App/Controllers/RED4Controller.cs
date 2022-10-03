@@ -259,6 +259,7 @@ namespace WolvenKit.Functionality.Controllers
                 _loggerService.Info("Hot archive installation complete!");
             }
             _loggerService.Success($"{cp77Proj.Name} packed into {hotdirectory}");
+            _notificationService.Success($"{cp77Proj.Name} packed into {hotdirectory}");
 
             return true;
         }
@@ -289,9 +290,8 @@ namespace WolvenKit.Functionality.Controllers
                 return false;
             }
 
-
             // cleanup
-            if (!Cleanup(cp77Proj, options))
+            if (!await Task.Run(() => Cleanup(cp77Proj, options)))
             {
                 _progressService.IsIndeterminate = false;
                 _loggerService.Error("Cleanup failed, aborting.");
@@ -303,7 +303,7 @@ namespace WolvenKit.Functionality.Controllers
 
             // copy files to packed dir
             // pack archives
-            if (!PackArchives(cp77Proj, options))
+            if (!await Task.Run(() => PackArchives(cp77Proj, options)))
             {
                 _progressService.IsIndeterminate = false;
                 _loggerService.Error("Packing archives failed, aborting.");
@@ -323,14 +323,18 @@ namespace WolvenKit.Functionality.Controllers
             _loggerService.Success($"{cp77Proj.Name} tweakXL files packed into {cp77Proj.PackedTweakDirectory}");
 
             // pack redmod files
-            if (!PackRedmodFiles(cp77Proj))
+            if (options.IsRedmod)
             {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Packing redmod files failed, aborting.");
-                _notificationService.Error("Packing redmod files failed, aborting.");
-                return false;
+                if (!PackRedmodFiles(cp77Proj))
+                {
+                    _progressService.IsIndeterminate = false;
+                    _loggerService.Error("Packing redmod files failed, aborting.");
+                    _notificationService.Error("Packing redmod files failed, aborting.");
+                    return false;
+                }
+                _loggerService.Success($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
             }
-            _loggerService.Success($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
+
             if (!options.Install)
             {
                 _notificationService.Success($"{cp77Proj.Name} packed!");
@@ -374,7 +378,7 @@ namespace WolvenKit.Functionality.Controllers
                     _notificationService.Error("Redmod deploy failed, aborting.");
                     return false;
                 }
-                _loggerService.Success($"{cp77Proj.Name} Redmod deployed!");
+                _loggerService.Success($"{_projectManager.ActiveProject.Name} Redmod deployed!");
             }
 
             _progressService.IsIndeterminate = false;
@@ -407,6 +411,7 @@ namespace WolvenKit.Functionality.Controllers
                 // redmod
                 Directory.Delete(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod), true);
                 Directory.Delete(cp77Proj.PackedSoundsDirectory, true);
+                File.Delete(Path.Combine(cp77Proj.PackedRedModDirectory, "info.json"));
             }
             catch (Exception e)
             {

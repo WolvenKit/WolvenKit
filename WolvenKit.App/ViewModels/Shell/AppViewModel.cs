@@ -119,11 +119,11 @@ namespace WolvenKit.ViewModels.Shell
             OpenFileCommand = ReactiveCommand.CreateFromTask<FileModel>(async (m) => await OpenFileAsync(m));
             OpenRedFileCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
-            PackModCommand = ReactiveCommand.CreateFromTask(async () => await ExecutePackModAsync());
-            PackInstallModCommand = ReactiveCommand.CreateFromTask(async () => await ExecutePackInstallModAsync());
-            PackInstallRunModCommand = ReactiveCommand.CreateFromTask(async () => await ExecutePackInstallRunModAsync());
+            PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackModAsync);
+            PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallModAsync);
+            PackInstallRunModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallRunModAsync);
 
-            HotInstallModCommand = ReactiveCommand.CreateFromTask(async () => await HotInstallModAsync());
+            HotInstallModCommand = ReactiveCommand.CreateFromTask(HotInstallModAsync);
 
 
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => IsDialogShown);
@@ -815,21 +815,38 @@ namespace WolvenKit.ViewModels.Shell
 
         // Pack mod
         public ReactiveCommand<Unit, Unit> PackModCommand { get; private set; }
-        private async Task ExecutePackModAsync() => await _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile() { });
+        private async Task ExecutePackModAsync()
+        {
+            _watcherService.IsSuspended = true;
+            await _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile() { });
+            _watcherService.IsSuspended = false;
+            await _watcherService.RefreshAsync(ActiveProject);
+        }
 
         public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
-        private Task ExecutePackInstallModAsync() => _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile()
+        private async Task ExecutePackInstallModAsync()
         {
-            Install = true
-        });
+            _watcherService.IsSuspended = true;
+            await _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile()
+            {
+                Install = true
+            });
+            _watcherService.IsSuspended = false;
+            await _watcherService.RefreshAsync(ActiveProject);
+        }
 
         public ReactiveCommand<Unit, Unit> PackInstallRunModCommand { get; private set; }
-        private Task ExecutePackInstallRunModAsync() => _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile()
+        private async Task ExecutePackInstallRunModAsync()
         {
-            Install = true,
-            LaunchGame = true
-        });
-
+            _watcherService.IsSuspended = true;
+            await _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile()
+            {
+                Install = true,
+                LaunchGame = true
+            });
+            _watcherService.IsSuspended = false;
+            await _watcherService.RefreshAsync(ActiveProject);
+        }
 
         public ReactiveCommand<Unit, Unit> HotInstallModCommand { get; private set; }
         private Task HotInstallModAsync() => Task.Run(() => _gameControllerFactory.GetController().PackProjectHot());

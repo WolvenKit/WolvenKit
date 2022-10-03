@@ -1,9 +1,9 @@
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
@@ -14,11 +14,13 @@ namespace WolvenKit.ViewModels.Shell
 {
     public class RibbonViewModel : ReactiveObject
     {
+        private readonly IWatcherService _watcherService;
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
         private readonly IGameControllerFactory _gameControllerFactory;
 
         public RibbonViewModel(
+            IWatcherService watcherService,
             ISettingsManager settingsManager,
             ILoggerService loggerService,
             IGameControllerFactory gameControllerFactory,
@@ -28,6 +30,8 @@ namespace WolvenKit.ViewModels.Shell
             _settingsManager = settingsManager;
             _loggerService = loggerService;
             _gameControllerFactory = gameControllerFactory;
+            _watcherService = watcherService;
+
             MainViewModel = appViewModel;
 
             LaunchProfileText = "Launch Profiles";
@@ -37,7 +41,7 @@ namespace WolvenKit.ViewModels.Shell
             SaveAsCommand = ReactiveCommand.Create(() => MainViewModel.SaveAsCommand.SafeExecute());
             SaveAllCommand = ReactiveCommand.Create(() => MainViewModel.SaveAllCommand.SafeExecute());
             LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
-            LaunchProfileCommand = ReactiveCommand.CreateFromTask(async () => await LaunchProfileAsync());
+            LaunchProfileCommand = ReactiveCommand.CreateFromTask(LaunchProfileAsync);
 
             /*this.WhenAnyValue(x => x.MainViewModel.ActiveProject).WhereNotNull().Subscribe(p =>
             {
@@ -67,9 +71,12 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> LaunchProfileCommand { get; }
         private async Task LaunchProfileAsync()
         {
-            if (_settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out App.Models.LaunchProfile launchProfile))
+            if (_settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))
             {
+                _watcherService.IsSuspended = true;
                 await _gameControllerFactory.GetController().LaunchProject(launchProfile);
+                _watcherService.IsSuspended = false;
+                await _watcherService.RefreshAsync(MainViewModel.ActiveProject);
             }
             else
             {
