@@ -115,8 +115,20 @@ public class RedImage : IDisposable
 
     #region LoadFromFileFormat
 
-    public static RedImage LoadFromDDSFile(string szFile) =>
-        new() { InternalScratchImage = TexHelper.Instance.LoadFromDDSFile(szFile, DDS_FLAGS.FORCE_DX10_EXT, out _) };
+    public static RedImage LoadFromDDSFile(string szFile, Common.DDS.DXGI_FORMAT format = Common.DDS.DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
+    {
+        var scratchImage = TexHelper.Instance.LoadFromDDSFile(szFile, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
+
+        if (TexHelper.Instance.IsCompressed(metadata.Format))
+        {
+            scratchImage = scratchImage.Decompress(format.ToDirectXTexFormat());
+        }
+
+        return new()
+        {
+            InternalScratchImage = scratchImage
+        };
+    }
 
     public static RedImage LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer);
 
