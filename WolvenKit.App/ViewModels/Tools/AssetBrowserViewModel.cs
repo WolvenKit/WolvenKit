@@ -29,6 +29,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 
@@ -375,7 +376,7 @@ namespace WolvenKit.ViewModels.Tools
                 switch (o)
                 {
                     case RedFileViewModel fileVm:
-                        AddFile(fileVm);
+                        AddFile(fileVm.GetGameFile());
                         break;
                     case RedDirectoryViewModel dirVm:
                         AddFolderRecursive(dirVm.GetModel());
@@ -401,7 +402,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (!_archiveManager.IsModBrowserActive)
             {
-                _archiveManager.LoadModsArchives(new[] { new DirectoryInfo(_settings.GetRED4GameLegacyModDir()), new DirectoryInfo(_settings.GetRED4GameModDir()) });
+                _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath));
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
             }
             else
@@ -446,7 +447,7 @@ namespace WolvenKit.ViewModels.Tools
                 switch (RightSelectedItem)
                 {
                     case RedFileViewModel fileVm:
-                        AddFile(fileVm);
+                        AddFile(fileVm.GetGameFile());
                         break;
                     case RedDirectoryViewModel dirVm:
                         MoveToFolder(dirVm);
@@ -477,9 +478,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
 
-        private void AddFile(RedFileViewModel item) => Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile()));
-
-        private void AddFile(ulong hash) => Task.Run(() => _gameController.GetController().AddToMod(hash));
+        private void AddFile(IGameFile item) => Task.Run(() => _gameController.GetController().AddToMod(item));
 
         private void AddFolderRecursive(RedFileSystemModel item)
         {
@@ -487,7 +486,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 AddFolderRecursive(dir);
             }
-            foreach (ulong file in item.Files)
+            foreach (var file in item.Files)
             {
                 AddFile(file);
             }
@@ -775,12 +774,6 @@ namespace WolvenKit.ViewModels.Tools
             RightItems.Clear();
             RightItems.AddRange(list);
             RightItems.SuppressNotification = false;
-        }
-
-        public IGameFile LookupGameFile(ulong hash)
-        {
-            DynamicData.Kernel.Optional<IGameFile> f = _archiveManager.Lookup(hash);
-            return f.HasValue ? f.Value : null;
         }
 
         #endregion methods

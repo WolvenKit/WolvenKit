@@ -244,14 +244,15 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (e.AddedItems.First() is TreeGridRowInfo { RowData: RedFileSystemModel model })
+            if (e.AddedItems.First() is TreeGridRowInfo { RowData: RedFileSystemModel model } rowInfo)
             {
                 vm.RightItems.Clear();
+
                 vm.RightItems.AddRange(model.Directories
                     .Select(h => new RedDirectoryViewModel(h.Value))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
                 vm.RightItems.AddRange(model.Files
-                    .Select(h => new RedFileViewModel(ViewModel.LookupGameFile(h)))
+                    .Select(h => new RedFileViewModel(h))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
             }
         }

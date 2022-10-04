@@ -14,6 +14,7 @@ public class FileSystemArchive : ICyberGameArchive
     private readonly Dictionary<ulong, string> _filePaths = new();
 
     public string ArchiveAbsolutePath { get; set; }
+    public string ArchiveRelativePath { get; set; }
     public Dictionary<ulong, IGameFile> Files { get; set; } = new();
     public string Name { get; set; }
     public EArchiveType TypeName { get; set; }

@@ -261,10 +261,27 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <summary>
         /// Loads bundles from specified mods and dlc folder
         /// </summary>
-        public override void LoadModsArchives(DirectoryInfo[] modsDirs)
+        public override void LoadModsArchives(FileInfo executable)
         {
+            var di = executable.Directory;
+            if (di?.Parent?.Parent is null)
+            {
+                return;
+            }
+            if (!di.Exists)
+            {
+                return;
+            }
+
             ModArchives.Clear();
 
+            var modsDirs = new DirectoryInfo[]
+            {
+                new(Path.Combine(di.Parent.Parent.FullName, "mods")),
+                new(Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "mod")),
+            };
+
+            var files = new List<string>();
             foreach (var modsDir in modsDirs)
             {
                 if (!modsDir.Exists)
@@ -274,8 +291,21 @@ namespace WolvenKit.RED4.CR2W.Archive
 
                 foreach (var file in Directory.GetFiles(modsDir.FullName, "*.archive", SearchOption.AllDirectories))
                 {
-                    LoadModArchive(file);
+                    files.Add(file);
                 }
+            }
+
+            files.Sort(string.CompareOrdinal);
+            files.Reverse();
+
+            foreach (var file in files)
+            {
+                LoadModArchive(file);
+            }
+
+            foreach (var modArchive in ModArchives.Items)
+            {
+                modArchive.ArchiveRelativePath = Path.GetRelativePath(di.Parent.Parent.FullName, modArchive.ArchiveAbsolutePath);
             }
 
             RebuildModRoot();
