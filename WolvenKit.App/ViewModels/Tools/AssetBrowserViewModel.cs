@@ -376,7 +376,7 @@ namespace WolvenKit.ViewModels.Tools
                 switch (o)
                 {
                     case RedFileViewModel fileVm:
-                        AddFile(fileVm);
+                        AddFile(fileVm.GetGameFile());
                         break;
                     case RedDirectoryViewModel dirVm:
                         AddFolderRecursive(dirVm.GetModel());
@@ -447,7 +447,7 @@ namespace WolvenKit.ViewModels.Tools
                 switch (RightSelectedItem)
                 {
                     case RedFileViewModel fileVm:
-                        AddFile(fileVm);
+                        AddFile(fileVm.GetGameFile());
                         break;
                     case RedDirectoryViewModel dirVm:
                         MoveToFolder(dirVm);
@@ -478,9 +478,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
 
-        private void AddFile(RedFileViewModel item) => Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile()));
-
-        private void AddFile(ulong hash) => Task.Run(() => _gameController.GetController().AddToMod(hash));
+        private void AddFile(IGameFile item) => Task.Run(() => _gameController.GetController().AddToMod(item));
 
         private void AddFolderRecursive(RedFileSystemModel item)
         {
@@ -488,7 +486,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 AddFolderRecursive(dir);
             }
-            foreach (ulong file in item.Files)
+            foreach (var file in item.Files)
             {
                 AddFile(file);
             }
@@ -776,22 +774,6 @@ namespace WolvenKit.ViewModels.Tools
             RightItems.Clear();
             RightItems.AddRange(list);
             RightItems.SuppressNotification = false;
-        }
-
-        public IGameFile LookupGameFile(string archiveRelativeName, ulong hash)
-        {
-            foreach (var archive in _archiveManager.ModArchives.Items)
-            {
-                if (archive.ArchiveRelativePath == archiveRelativeName)
-                {
-                    if (archive.Files.ContainsKey(hash))
-                    {
-                        return archive.Files[hash];
-                    }
-                }
-            }
-
-            return null;
         }
 
         #endregion methods

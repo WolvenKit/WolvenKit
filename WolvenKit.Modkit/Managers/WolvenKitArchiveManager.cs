@@ -82,7 +82,7 @@ namespace WolvenKit.Common.Model
                 }
 
                 // add file to the last directory in path
-                currentNode.Files.Add(key);
+                currentNode.Files.Add(model);
             }
             //);
         }
@@ -116,7 +116,7 @@ namespace WolvenKit.Common.Model
                     }
 
                     // add file to the last directory in path
-                    currentNode.Files.Add(item.Key);
+                    currentNode.Files.Add(item.Value);
                 }
                 //);
 
