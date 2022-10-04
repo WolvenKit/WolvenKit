@@ -218,6 +218,15 @@ namespace WolvenKit.ViewModels.Tools
 
                     SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
                 });
+
+            this
+                .WhenAnyValue(x => x._projectManager.IsProjectLoaded)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(
+                    _ =>
+                    {
+                        ImportSettingsCommand.NotifyCanExecuteChanged();
+                    });
         }
 
         private static bool CheckForMultiImport(Models.FileModel file)
@@ -304,7 +313,7 @@ namespace WolvenKit.ViewModels.Tools
         #endregion properties
 
         public ICommand AddItemsCommand { get; private set; }
-        
+
         public ICommand RemoveItemsCommand { get; private set; }
 
         private bool CanAddItems(ObservableCollection<object> items) => true;
@@ -976,8 +985,7 @@ namespace WolvenKit.ViewModels.Tools
         private void SetupToolDefaults() => ContentId = ToolContentId;
 
         public bool HasActiveProject => _projectManager != null
-            && _projectManager.ActiveProject != null
-            && string.IsNullOrWhiteSpace(_projectManager.ActiveProject.ProjectDirectory);
+            && _projectManager.IsProjectLoaded;
 
         #region Commands
 

@@ -56,6 +56,7 @@ namespace WolvenKit.Views.Tools
                         x => x.ExportableItems,
                         x => x.ExportGrid.ItemsSource)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                        x => x.SelectedExport,
                        x => x.ExportGrid.SelectedItem)
@@ -65,6 +66,7 @@ namespace WolvenKit.Views.Tools
                         x => x.ImportableItems,
                         x => x.ImportGrid.ItemsSource)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                        x => x.SelectedImport,
                        x => x.ImportGrid.SelectedItem)
@@ -74,11 +76,11 @@ namespace WolvenKit.Views.Tools
                         x => x.ConvertableItems,
                         x => x.ConvertGrid.ItemsSource)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                        x => x.SelectedConvert,
                        x => x.ConvertGrid.SelectedItem)
                    .DisposeWith(disposables);
-
             });
 
             this.WhenAnyValue(x => x.ViewModel.SelectedObject)
