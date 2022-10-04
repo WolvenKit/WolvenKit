@@ -304,9 +304,8 @@ namespace WolvenKit.ViewModels.Tools
         #endregion properties
 
         public ICommand AddItemsCommand { get; private set; }
+        
         public ICommand RemoveItemsCommand { get; private set; }
-
-
 
         private bool CanAddItems(ObservableCollection<object> items) => true;
 
@@ -826,7 +825,6 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand ProcessSelectedCommand { get; private set; }
 
-
         /// <summary>
         /// Execute Process selected in Import / Export Grid Command
         /// </summary>
@@ -977,6 +975,10 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
 
+        public bool HasActiveProject => _projectManager != null
+            && _projectManager.ActiveProject != null
+            && string.IsNullOrWhiteSpace(_projectManager.ActiveProject.ProjectDirectory);
+
         #region Commands
 
         [RelayCommand]
@@ -995,16 +997,9 @@ namespace WolvenKit.ViewModels.Tools
             SaveSettings();
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = "HasActiveProject")]
         private void ImportSettings()
         {
-            // Don't import if there is no active project.
-            if (_projectManager.ActiveProject == null
-                || string.IsNullOrWhiteSpace(_projectManager.ActiveProject.ProjectDirectory))
-            {
-                return;
-            }
-
             var gammaRegex = new Regex(".*_[de][0-9]*$");
 
             foreach (var importableItem in ImportableItems)
