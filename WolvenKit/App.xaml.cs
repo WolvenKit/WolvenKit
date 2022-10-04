@@ -93,6 +93,7 @@ namespace WolvenKit
 
         protected override void OnExit(ExitEventArgs e)
         {
+            Log.Information("Exiting application...");
             Log.CloseAndFlush();
 
             base.OnExit(e);
@@ -134,7 +135,8 @@ namespace WolvenKit
                         rollingInterval: RollingInterval.Day,
                         fileSizeLimitBytes: 100 * 1000 * 1024, // MaxFileSize: 100 MB
                         retainedFileCountLimit: 10,
-                        buffered: true)) // Allow internal buffering.
+                        buffered: true, // Allow internal buffering.
+                        flushToDiskInterval: TimeSpan.FromMinutes(1))) // Write once per minute.
                 .CreateLogger();
         }
 
