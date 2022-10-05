@@ -98,7 +98,6 @@ namespace WolvenKit.ViewModels.Tools
             Bk2ExportCommand = new DelegateCommand(ExecuteBk2Export, CanBk2Export).ObservesProperty(() => SelectedItem);
 
             ConvertToJsonCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.json), CanConvertTo).ObservesProperty(() => SelectedItem);
-            ConvertToXmlCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.xml), CanConvertTo).ObservesProperty(() => SelectedItem);
             ConvertFromJsonCommand = new DelegateCommand(ExecuteConvertFromJson, CanConvertFromJson).ObservesProperty(() => SelectedItem);
 
 
@@ -431,7 +430,6 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         public ICommand ConvertToJsonCommand { get; private set; }
-        public ICommand ConvertToXmlCommand { get; private set; }
 
         private bool CanConvertTo() => SelectedItem != null
                 && !IsInRawFolder(SelectedItem)
