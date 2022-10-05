@@ -130,13 +130,13 @@ public class RedImage : IDisposable
         };
     }
 
-    public static RedImage LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer);
+    public static RedImage LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer, DXGI_FORMAT.UNKNOWN);
 
     public static RedImage LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
 
     public static RedImage LoadFromDDSMemory(byte[] buffer, Common.DDS.DXGI_FORMAT format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
 
-    internal static RedImage LoadFromDDSMemory(byte[] buffer, DXGI_FORMAT format = DXGI_FORMAT.UNKNOWN)
+    internal static RedImage LoadFromDDSMemory(byte[] buffer, DXGI_FORMAT format)
     {
         var scratchImage = TexHelper.Instance.LoadFromDDSMemory(buffer, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
 
