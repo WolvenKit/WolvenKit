@@ -6,12 +6,12 @@ using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using Splat;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
@@ -61,9 +61,19 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         public ReactiveCommand<Unit, Unit> UnbundleGameCommand { get; }
 
-        private async void GenerateButton_Click(object sender, System.Windows.RoutedEventArgs e) => await Task.Run(() => GenerateMaterialRepo(new DirectoryInfo(MaterialsDepotPath), EUncookExtension.png));
+        private async void GenerateButton_Click(object sender, System.Windows.RoutedEventArgs e) =>
+            await Task.Run(
+                async () => await GenerateMaterialRepoAsync(new DirectoryInfo(MaterialsDepotPath), EUncookExtension.png));
 
-        private void GenerateMaterialRepo(DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
+        private static readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
+        private readonly ParallelOptions _parallelOptions = new ParallelOptions
+        {
+            MaxDegreeOfParallelism = _maxDoP,
+        };
+
+        public static bool UseNewParallelism { get; set; } = true;
+
+        private async Task GenerateMaterialRepoAsync(DirectoryInfo materialRepoDir, EUncookExtension texturesExtension)
         {
             var bm = Locator.Current.GetService<IArchiveManager>();
             if (bm == null)
@@ -93,6 +103,8 @@ namespace WolvenKit.Views.Dialogs.Windows
             };
             var groupedFiles = bm.GetGroupedFiles();
 
+            await Task.Yield(); // Ensure the below is scheduled.
+
             // unbundle
             foreach (var (key, fileEntries) in groupedFiles)
             {
@@ -100,26 +112,58 @@ namespace WolvenKit.Views.Dialogs.Windows
                 {
                     continue;
                 }
-                var fileslist = groupedFiles[key].GroupBy(x => x.Key).Select(x => x.First()).ToList();
-                _loggerService.Info($"{key}: Found {fileslist.Count} entries to uncook");
+
+                var filesList = groupedFiles[key].GroupBy(x => x.Key).Select(x => x.First()).ToList();
+                var fileCount = filesList.Count;
+                _loggerService.Info($"{key}: Found {fileCount} entries to uncook");
                 var progress = 0;
                 _progress.Report(0);
 
-                Parallel.ForEach(fileslist, entry =>
+                if (UseNewParallelism)
+                {
+                    async Task ExtractAsync(FileEntry entry)
                     {
                         var endPath = Path.Combine(materialRepoDir.FullName, entry.Name);
                         var dirpath = Path.GetDirectoryName(endPath);
-                        Directory.CreateDirectory(dirpath);
-                        using (var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write))
-                        {
-                            entry.Extract(fs);
-                        }
-                        Interlocked.Increment(ref progress);
-                        _progress.Report(progress / (float)fileslist.Count);
-                    }
-                );
+                        var dirInfo = Directory.CreateDirectory(dirpath);
 
-                _loggerService.Success($"{key}: Unbundled {fileslist.Count} files.");
+                        try
+                        {
+                            if (dirInfo.Exists) // CreateDirectory sometimes is false even on success.
+                            {
+                                using var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write);
+                                await entry.ExtractAsync(fs);
+                            }
+                            Interlocked.Increment(ref progress);
+                            _progress.Report(progress / (float)fileCount);
+                        }
+                        catch (Exception ex)
+                        {
+                            _loggerService.Error($"Error extracting [File: {endPath}] [Entry: {entry.Name}]");
+                            _loggerService.Error(ex);
+                        }
+                    }
+
+                    await filesList.ParallelForEachAsync(ExtractAsync, _maxDoP);
+                }
+                else
+                {
+                    Parallel.ForEach(
+                        filesList,
+                        _parallelOptions,
+                        entry =>
+                        {
+
+                        }
+                    );
+                }
+
+                // Temporary measure. As memory optimizations get made with streams
+                // this should be removed.
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+
+                _loggerService.Success($"{key}: Unbundled {fileCount} files.");
             }
 
             // uncook
@@ -135,22 +179,65 @@ namespace WolvenKit.Views.Dialogs.Windows
                 {
                     continue;
                 }
-                var fileslist = groupedFiles[key].ToList();
-                _loggerService.Info($"{key}: Found {fileslist.Count} entries to uncook");
+
+                var filesList = groupedFiles[key].ToList();
+                var fileCount = filesList.Count;
+
+                _loggerService.Info($"{key}: Found {fileCount} entries to uncook");
                 var progress = 0;
                 _progress.Report(0);
 
-                Parallel.ForEach(fileslist, entry =>
+                if (UseNewParallelism)
+                {
+                    async Task UncookAsync(FileEntry entry)
                     {
-                        exportArgs.Get<MlmaskExportArgs>().AsList = false;
-                        _modTools.UncookSingle(entry.Archive as Archive, entry.Key, materialRepoDir, exportArgs);
+                        try
+                        {
+                            exportArgs.Get<MlmaskExportArgs>().AsList = false;
+                            await _modTools.UncookSingleAsync(entry.Archive as Archive, entry.Key, materialRepoDir, exportArgs);
 
-                        Interlocked.Increment(ref progress);
-                        _progress.Report(progress / (float)fileslist.Count);
+                            Interlocked.Increment(ref progress);
+                            _progress.Report(progress / (float)fileCount);
+                        }
+                        catch (Exception ex)
+                        {
+                            _loggerService.Error($"Error uncooking [File: {entry.Name}] [Key: {entry.Key}]");
+                            _loggerService.Error(ex);
+                        }
                     }
-                );
 
-                _loggerService.Success($"{key}: Uncooked {fileslist.Count} files.");
+                    await filesList.ParallelForEachAsync(UncookAsync, _maxDoP);
+                }
+                else
+                {
+                    Parallel.ForEach(
+                        filesList,
+                        _parallelOptions,
+                        entry =>
+                        {
+                            try
+                            {
+                                exportArgs.Get<MlmaskExportArgs>().AsList = false;
+                                _modTools.UncookSingle(entry.Archive as Archive, entry.Key, materialRepoDir, exportArgs);
+
+                                Interlocked.Increment(ref progress);
+                                _progress.Report(progress / (float)fileCount);
+                            }
+                            catch (Exception ex)
+                            {
+                                _loggerService.Error($"Error uncooking [File: {entry.Name}] [Key: {entry.Key}]");
+                                _loggerService.Error(ex);
+                            }
+                        }
+                    );
+                }
+
+                // Temporary measure. As memory optimizations get made with streams
+                // this should be removed.
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+
+                _loggerService.Success($"{key}: Uncooked {fileCount} files.");
             }
 
             _loggerService.Success("Finished Generating Materials!");
