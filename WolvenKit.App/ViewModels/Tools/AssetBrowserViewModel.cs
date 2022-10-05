@@ -1,9 +1,3 @@
-using DynamicData;
-using Microsoft.EntityFrameworkCore;
-using Prism.Commands;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -15,6 +9,12 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using DynamicData;
+using Microsoft.EntityFrameworkCore;
+using Prism.Commands;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
@@ -254,15 +254,15 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     case WMessageBoxResult.OK:
                     case WMessageBoxResult.Yes:
-                        {
-                            HomePageViewModel homepage = Locator.Current.GetService<HomePageViewModel>();
-                            AppViewModel appViewModel = Locator.Current.GetService<AppViewModel>();
+                    {
+                        HomePageViewModel homepage = Locator.Current.GetService<HomePageViewModel>();
+                        AppViewModel appViewModel = Locator.Current.GetService<AppViewModel>();
 
-                            homepage.NavigateTo(EHomePage.Plugins);
-                            appViewModel.SetActiveOverlay(homepage);
-                        }
+                        homepage.NavigateTo(EHomePage.Plugins);
+                        appViewModel.SetActiveOverlay(homepage);
+                    }
 
-                        break;
+                    break;
                 }
 
                 return;
@@ -317,15 +317,15 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     case WMessageBoxResult.OK:
                     case WMessageBoxResult.Yes:
-                        {
-                            HomePageViewModel homepage = Locator.Current.GetService<HomePageViewModel>();
-                            AppViewModel appViewModel = Locator.Current.GetService<AppViewModel>();
+                    {
+                        HomePageViewModel homepage = Locator.Current.GetService<HomePageViewModel>();
+                        AppViewModel appViewModel = Locator.Current.GetService<AppViewModel>();
 
-                            homepage.NavigateTo(EHomePage.Plugins);
-                            appViewModel.SetActiveOverlay(homepage);
-                        }
+                        homepage.NavigateTo(EHomePage.Plugins);
+                        appViewModel.SetActiveOverlay(homepage);
+                    }
 
-                        break;
+                    break;
                 }
 
                 return;

@@ -59,7 +59,6 @@ namespace WolvenKit.RED4.Archive
         public MemoryMappedViewStream GetViewStream(ulong offset, uint size)
         {
             _mmf ??= MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
-
             return _mmf.CreateViewStream((long)offset, size, MemoryMappedFileAccess.Read);
         }
 

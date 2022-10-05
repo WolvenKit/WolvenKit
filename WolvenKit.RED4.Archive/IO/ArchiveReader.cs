@@ -63,59 +63,66 @@ public class ArchiveReader
             file.Archive = ar;
             ar.Files.Add(file.Key, file);
 
-            if (file.Extension == ".bin")
+            try
             {
-                var segment = ar.Index.FileSegments[(int)file.SegmentsStart];
-
-                using var vs = ar.GetViewStream(segment.Offset, segment.ZSize);
-                BinaryReader br;
-
-                if (segment.ZSize != segment.Size)
+                if (file.Extension == ".bin")
                 {
-                    var ms = new MemoryStream();
-                    vs.DecompressAndCopySegment(ms, segment.ZSize, segment.Size);
-                    ms.Position = 0;
-                    br = new BinaryReader(ms);
-                }
-                else
-                {
-                    br = new BinaryReader(vs);
-                }
+                    var segment = ar.Index.FileSegments[(int)file.SegmentsStart];
 
-                var id = br.BaseStream.ReadStruct<uint>();
-                switch (id)
-                {
-                    case CR2WFile.MAGIC:
+                    using var vs = ar.GetViewStream(segment.Offset, segment.ZSize);
+                    BinaryReader br;
+
+                    if (segment.ZSize != segment.Size)
                     {
-                        br.BaseStream.Position = 0xA1;
-                        var rootClsName = br.ReadNullTerminatedString();
-                        var fileTypes = FileTypeHelper.GetFileExtensionsFromRootName(rootClsName);
+                        var ms = new MemoryStream();
+                        vs.DecompressAndCopySegment(ms, segment.ZSize, segment.Size);
+                        ms.Position = 0;
+                        br = new BinaryReader(ms);
+                    }
+                    else
+                    {
+                        br = new BinaryReader(vs);
+                    }
 
-                        if (fileTypes.Length > 0)
+                    var id = br.BaseStream.ReadStruct<uint>();
+                    switch (id)
+                    {
+                        case CR2WFile.MAGIC:
                         {
-                            file.GuessedExtension = "." + fileTypes[0];
+                            br.BaseStream.Position = 0xA1;
+                            var rootClsName = br.ReadNullTerminatedString();
+                            var fileTypes = FileTypeHelper.GetFileExtensionsFromRootName(rootClsName);
+
+                            if (fileTypes.Length > 0)
+                            {
+                                file.GuessedExtension = "." + fileTypes[0];
+                            }
+
+                            break;
                         }
+                        case 0x44484B42:
+                        {
+                            file.GuessedExtension = ".bnk";
+                            break;
+                        }
+                        case 0x6A32424B:
+                        {
+                            file.GuessedExtension = ".bk2";
+                            break;
+                        }
+                        case 0x46464952:
+                        {
+                            file.GuessedExtension = ".wem";
+                            break;
+                        }
+                    }
 
-                        break;
-                    }
-                    case 0x44484B42:
-                    {
-                        file.GuessedExtension = ".bnk";
-                        break;
-                    }
-                    case 0x6A32424B:
-                    {
-                        file.GuessedExtension = ".bk2";
-                        break;
-                    }
-                    case 0x46464952:
-                    {
-                        file.GuessedExtension = ".wem";
-                        break;
-                    }
+                    br.Dispose();
                 }
-
-                br.Dispose();
+            }
+            catch (Exception)
+            {
+                continue;
             }
         }
 
@@ -169,7 +176,7 @@ public class ArchiveReader
         {
             index.Dependencies.Add(ReadDependency(br));
         }
-        
+
         foreach (var (_, value) in index.FileEntries)
         {
             var startIndex = (int)value.SegmentsStart;
@@ -200,12 +207,7 @@ public class ArchiveReader
             DebugSize = br.ReadUInt32(),
             Filesize = br.ReadUInt64()
         };
-        if (header.Magic != Header.MAGIC)
-        {
-            throw new InvalidParsingException("not an ArchiveHeader");
-        }
-
-        return header;
+        return header.Magic != Header.MAGIC ? throw new InvalidParsingException("not an ArchiveHeader") : header;
     }
 
     private Dependency ReadDependency(BinaryReader br) => new(br.ReadUInt64());

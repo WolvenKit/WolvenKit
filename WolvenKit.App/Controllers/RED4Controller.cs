@@ -695,9 +695,18 @@ namespace WolvenKit.Functionality.Controllers
                         {
                             if (MessageBox.Show($"The file {file.Name} already exists in project - overwrite it with game file?", $"Confirm overwrite: {file.Name}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                             {
-                                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                                file.Extract(fs);
-                                _loggerService.Success($"Overwrote existing file with game file: {file.Name}");
+                                try
+                                {
+                                    using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                                    file.Extract(fs);
+                                    _loggerService.Success($"Overwrote existing file with game file: {file.Name}");
+                                }
+                                catch (Exception ex)
+                                {
+                                    File.Delete(diskPathInfo.FullName);
+                                    _loggerService.Error(ex);
+                                }
+
                             }
                             else
                             {
@@ -707,9 +716,18 @@ namespace WolvenKit.Functionality.Controllers
                         else
                         {
                             Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                            file.Extract(fs);
-                            _loggerService.Success($"Added game file to project: {file.Name}");
+                            try
+                            {
+                                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                                file.Extract(fs);
+                                _loggerService.Success($"Added game file to project: {file.Name}");
+                            }
+                            catch (Exception ex)
+                            {
+                                File.Delete(diskPathInfo.FullName);
+                                _loggerService.Error(ex);
+                            }
+
                         }
                     }
 

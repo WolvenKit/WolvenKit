@@ -37,8 +37,7 @@ namespace WolvenKit.RED4.CR2W
             }
             catch (Exception e)
             {
-                var logger = Locator.Current.GetService<ILoggerService>();
-                logger?.Error(e);
+                _loggerService.Error(e);
 
                 archiveFile = null;
                 return false;
@@ -224,12 +223,7 @@ namespace WolvenKit.RED4.CR2W
 
             stream.Seek(-4, SeekOrigin.Current);
 
-            if (magic != CR2WFile.MAGIC)
-            {
-                return false;
-            }
-
-            return true;
+            return magic == CR2WFile.MAGIC;
         }
 
         #endregion Methods
