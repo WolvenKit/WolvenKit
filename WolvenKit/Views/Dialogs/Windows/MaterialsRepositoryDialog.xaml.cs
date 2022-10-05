@@ -115,13 +115,13 @@ namespace WolvenKit.Views.Dialogs.Windows
 
                 var filesList = groupedFiles[key].GroupBy(x => x.Key).Select(x => x.First()).ToList();
                 var fileCount = filesList.Count;
-                _loggerService.Info($"{key}: Found {fileCount} entries to uncook");
+                _loggerService.Info($"{key}: Found {fileCount} entries to unbundle");
                 var progress = 0;
                 _progress.Report(0);
 
                 if (UseNewParallelism)
                 {
-                    async Task ExtractAsync(FileEntry entry)
+                    async Task UnbundleAsync(FileEntry entry)
                     {
                         var endPath = Path.Combine(materialRepoDir.FullName, entry.Name);
                         var dirpath = Path.GetDirectoryName(endPath);
@@ -139,12 +139,12 @@ namespace WolvenKit.Views.Dialogs.Windows
                         }
                         catch (Exception ex)
                         {
-                            _loggerService.Error($"Error extracting [File: {endPath}] [Entry: {entry.Name}]");
+                            _loggerService.Error($"Error unbundling [File: {endPath}] [Entry: {entry.Name}]");
                             _loggerService.Error(ex);
                         }
                     }
 
-                    await filesList.ParallelForEachAsync(ExtractAsync, _maxDoP);
+                    await filesList.ParallelForEachAsync(UnbundleAsync, _maxDoP);
                 }
                 else
                 {
@@ -169,7 +169,7 @@ namespace WolvenKit.Views.Dialogs.Windows
                             }
                             catch (Exception ex)
                             {
-                                _loggerService.Error($"Error extracting [File: {entry.Name}] [Key: {entry.Key}]");
+                                _loggerService.Error($"Error unbundling [File: {endPath}] [Key: {entry.Key}]");
                                 _loggerService.Error(ex);
                             }
                         }

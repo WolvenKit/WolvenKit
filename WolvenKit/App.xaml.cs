@@ -127,7 +127,7 @@ namespace WolvenKit
                 .MinimumLevel.Debug()
                 .WriteTo.Async(a => a.Console(), bufferSize: 1000)
 #else
-                .MinimumLevel.Warning()
+                .MinimumLevel.Information()
 #endif
                 .WriteTo.MySink(_host.Services.GetService<MySink>())
                 .WriteTo.Async(
