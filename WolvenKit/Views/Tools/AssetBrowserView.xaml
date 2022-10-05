@@ -332,7 +332,7 @@
 
                                 <syncfusion:GridCheckBoxColumn
                                     Width="32"
-                                    AllowEditing="True"
+                                    AllowEditing="False"
                                     AllowFiltering="False"
                                     AllowResizing="False"
                                     HeaderText="#"

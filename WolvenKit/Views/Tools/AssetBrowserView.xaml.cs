@@ -90,10 +90,10 @@ namespace WolvenKit.Views.Tools
                         viewModel => viewModel.RightSelectedItem,
                         view => view.InnerList.SelectedItem)
                     .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                      viewModel => viewModel.RightSelectedItems,
-                      view => view.InnerList.SelectedItems)
-                  .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //      viewModel => viewModel.RightSelectedItems,
+                //      view => view.InnerList.SelectedItems)
+                //  .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.FindUsesCommand,
@@ -312,6 +312,22 @@ namespace WolvenKit.Views.Tools
             if (ViewModel is not { } vm)
             {
                 return;
+            }
+
+            foreach (var item in e.AddedItems)
+            {
+                if (item is GridRowInfo info && info.RowData is FileSystemViewModel fsvm)
+                {
+                    fsvm.IsChecked = true;
+                }
+            }
+
+            foreach (var item in e.RemovedItems)
+            {
+                if (item is GridRowInfo info && info.RowData is FileSystemViewModel fsvm)
+                {
+                    fsvm.IsChecked = false;
+                }
             }
 
             var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();

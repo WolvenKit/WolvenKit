@@ -380,32 +380,16 @@ namespace WolvenKit.ViewModels.Tools
 
         public void SetupRawImage(string fileName, EUncookExtension ext)
         {
-            RedImage image;
-
-            switch (ext)
+            var image = ext switch
             {
-                case EUncookExtension.dds:
-                    image = RedImage.LoadFromDDSFile(fileName);
-                    break;
-                case EUncookExtension.tga:
-                    image = RedImage.LoadFromTGAFile(fileName);
-                    break;
-                case EUncookExtension.bmp:
-                    image = RedImage.LoadFromBMPFile(fileName);
-                    break;
-                case EUncookExtension.jpg:
-                    image = RedImage.LoadFromJPGFile(fileName);
-                    break;
-                case EUncookExtension.png:
-                    image = RedImage.LoadFromPNGFile(fileName);
-                    break;
-                case EUncookExtension.tiff:
-                    image = RedImage.LoadFromTIFFFile(fileName);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(ext), ext, null);
-            }
-
+                EUncookExtension.dds => RedImage.LoadFromDDSFile(fileName),
+                EUncookExtension.tga => RedImage.LoadFromTGAFile(fileName),
+                EUncookExtension.bmp => RedImage.LoadFromBMPFile(fileName),
+                EUncookExtension.jpg => RedImage.LoadFromJPGFile(fileName),
+                EUncookExtension.png => RedImage.LoadFromPNGFile(fileName),
+                EUncookExtension.tiff => RedImage.LoadFromTIFFFile(fileName),
+                _ => throw new ArgumentOutOfRangeException(nameof(ext), ext, null),
+            };
             if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
             {
                 return;
