@@ -586,6 +586,18 @@
                             Kind="Package" />
                     </MenuItem.Icon>
                 </MenuItem>
+                
+                <Separator Margin="2,4"/>
+                
+                <MenuItem x:Name="MenuItemCyberpunkBlenderAddonLink" Header="Cyberpunk Blender Add-on">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="White"
+                            Kind="LinkExternal" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
         </Menu>

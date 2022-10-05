@@ -146,6 +146,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                    viewModel => viewModel.MainViewModel.ShowModsViewCommand,
                    view => view.MenuItemShowModsView)
                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenCyberpunkBlenderAddonLinkCommand,
+                    view => view.MenuItemCyberpunkBlenderAddonLink,
+                    viewModel => viewModel.MainViewModel.CyberpunkBlenderAddonLink);
 
 
 
