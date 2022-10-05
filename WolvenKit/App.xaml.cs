@@ -138,7 +138,8 @@ namespace WolvenKit
                         fileSizeLimitBytes: 100 * 1000 * 1024, // MaxFileSize: 100 MB
                         retainedFileCountLimit: 10,
                         buffered: true, // Allow internal buffering.
-                        flushToDiskInterval: TimeSpan.FromMinutes(1))) // Write once per minute.
+                        flushToDiskInterval: TimeSpan.FromMinutes(1)),
+                    bufferSize: 1000) // Write once per minute.
                 .CreateLogger();
         }
 
@@ -146,7 +147,13 @@ namespace WolvenKit
         private void SetupExceptionHandling()
         {
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
                 LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+                if (e.IsTerminating) // And we have no choice but to exit, flush/write any pending logs.
+                {
+                    Log.CloseAndFlush();
+                }
+            };
 
             DispatcherUnhandledException += (s, e) =>
             {
@@ -177,8 +184,6 @@ namespace WolvenKit
                 }
 
                 LogUnhandledException(ex, "RxApp.DefaultExceptionHandler");
-
-                RxApp.MainThreadScheduler.Schedule(() => throw ex); // Without EDI, we lose the real stack trace;
             }
 
             public void OnError(Exception ex)
@@ -189,8 +194,6 @@ namespace WolvenKit
                 }
 
                 LogUnhandledException(ex, "RxApp.DefaultExceptionHandler");
-
-                RxApp.MainThreadScheduler.Schedule(() => throw ex); // Without EDI, we lose the real stack trace;
             }
 
             public void OnCompleted()
@@ -199,8 +202,6 @@ namespace WolvenKit
                 {
                     Debugger.Break();
                 }
-
-                RxApp.MainThreadScheduler.Schedule(() => throw new NotImplementedException());
             }
         }
 
