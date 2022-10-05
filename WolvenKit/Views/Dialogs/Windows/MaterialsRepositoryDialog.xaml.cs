@@ -153,7 +153,25 @@ namespace WolvenKit.Views.Dialogs.Windows
                         _parallelOptions,
                         entry =>
                         {
+                            var endPath = Path.Combine(materialRepoDir.FullName, entry.Name);
+                            var dirpath = Path.GetDirectoryName(endPath);
+                            var dirInfo = Directory.CreateDirectory(dirpath);
 
+                            try
+                            {
+                                if (dirInfo.Exists) // CreateDirectory sometimes is false even on success.
+                                {
+                                    using var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write);
+                                    entry.Extract(fs);
+                                }
+                                Interlocked.Increment(ref progress);
+                                _progress.Report(progress / (float)filesList.Count);
+                            }
+                            catch (Exception ex)
+                            {
+                                _loggerService.Error($"Error extracting [File: {entry.Name}] [Key: {entry.Key}]");
+                                _loggerService.Error(ex);
+                            }
                         }
                     );
                 }
