@@ -109,6 +109,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.ShowSoundModdingToolCommand,
                     view => view.MenuItemShowSoundModdingTool)
                 .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                        viewModel => viewModel.OpenGameFolderCommand,
+                        view => view.MenuItemOpenGameFolder)
+                    .DisposeWith(disposables);
 
             // Game
             this.BindCommand(ViewModel,
@@ -132,15 +136,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
             //        viewModel => viewModel.MainViewModel.SelectedGameCommands,
             //        view => view.ToolbarLaunchCombobox.ItemsSource)
             //    .DisposeWith(disposables);
-
-            this.BindCommand(ViewModel,
-                        viewModel => viewModel.UnbundleGameCommand,
-                        view => view.MenuItemUnbundleGame)
-                    .DisposeWith(disposables);
-            this.BindCommand(ViewModel,
-                        viewModel => viewModel.OpenMaterialRepositoryCommand,
-                        view => view.MenuItemOpenMaterialRepository)
-                    .DisposeWith(disposables);
 
             // Extensions
             this.BindCommand(ViewModel,
@@ -194,7 +189,8 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
         {
             var x = new MaterialsRepositoryDialog();
             MaterialsRepositoryDia = x;
-            x.Show();
+            x.Owner = Application.Current.MainWindow;
+            x.ShowDialog();
         }
     }
 

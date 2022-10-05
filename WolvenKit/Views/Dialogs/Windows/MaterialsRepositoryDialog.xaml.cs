@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Splat;
+using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
@@ -14,6 +16,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
 using WolvenKit.RED4.Archive;
 using WolvenKit.Views.Shell;
 
@@ -25,6 +28,7 @@ namespace WolvenKit.Views.Dialogs.Windows
     public partial class MaterialsRepositoryDialog : HandyControl.Controls.Window
     {
         private readonly ISettingsManager _settingsManager;
+        private readonly IArchiveManager _archiveManager;
         private readonly IGameControllerFactory _gameControllerFactory;
         private readonly IProgressService<double> _progress;
         private readonly IModTools _modTools;
@@ -35,6 +39,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             InitializeComponent();
 
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
+            _archiveManager = Locator.Current.GetService<IArchiveManager>();
             _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
             _modTools = Locator.Current.GetService<IModTools>();
             _progress = Locator.Current.GetService<IProgressService<double>>();
@@ -43,11 +48,18 @@ namespace WolvenKit.Views.Dialogs.Windows
             ArchivesFolderPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "content");
             MaterialsDepotPath = _settingsManager.MaterialRepositoryPath;
             MaterialsTextBox.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, _settingsManager.MaterialRepositoryPath);
+
+            OpenMaterialRepositoryCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath));
+            UnbundleGameCommand = ReactiveCommand.CreateFromTask(UnbundleGame);
         }
 
         public string ArchivesFolderPath { get; }
 
         public string MaterialsDepotPath { get; set; }
+
+        public ReactiveCommand<Unit, Unit> OpenMaterialRepositoryCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> UnbundleGameCommand { get; }
 
         private async void GenerateButton_Click(object sender, System.Windows.RoutedEventArgs e) => await Task.Run(() => GenerateMaterialRepo(new DirectoryInfo(MaterialsDepotPath), EUncookExtension.png));
 
@@ -130,6 +142,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
                 Parallel.ForEach(fileslist, entry =>
                     {
+                        exportArgs.Get<MlmaskExportArgs>().AsList = false;
                         _modTools.UncookSingle(entry.Archive as Archive, entry.Key, materialRepoDir, exportArgs);
 
                         Interlocked.Increment(ref progress);
@@ -139,13 +152,53 @@ namespace WolvenKit.Views.Dialogs.Windows
 
                 _loggerService.Success($"{key}: Uncooked {fileslist.Count} files.");
             }
+
+            _loggerService.Success("Finished Generating Materials!");
+
+            OpenDepotFolder();
+        }
+
+        private async Task UnbundleGame()
+        {
+            var depotPath = new DirectoryInfo(_settingsManager.MaterialRepositoryPath);
+            if (depotPath.Exists)
+            {
+                await Task.Run(() =>
+                {
+                    var archives = _archiveManager.Archives.KeyValues.Select(x => x.Value).ToList();
+
+                    var total = archives.Count;
+                    var progress = 0;
+                    _progress.Report(0);
+
+                    for (var i = 0; i < archives.Count; i++)
+                    {
+                        var archive = archives[i];
+                        _modTools.ExtractAll(archive as Archive, depotPath);
+
+                        progress++;
+                        _progress.Report(i / (float)total);
+                    }
+                    _progress.Report(1.0);
+                });
+            }
+
+            _loggerService.Success("Finished Unbundling Game!");
+
+            OpenDepotFolder();
+        }
+
+        private void OpenDepotFolder()
+        {
+            Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath);
         }
 
         private void GenerateMaterials(object obj)
         {
         }
 
-        private void MaterialsButton_Click(object sender, System.Windows.RoutedEventArgs e)
+
+        private void MaterialsButton_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var dialog = new CommonOpenFileDialog { IsFolderPicker = true };
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
@@ -169,5 +222,7 @@ namespace WolvenKit.Views.Dialogs.Windows
         }
 
         private void Window_Closed(object sender, EventArgs e) => MenuBarView.MaterialsRepositoryDia = null;
+
+
     }
 }
