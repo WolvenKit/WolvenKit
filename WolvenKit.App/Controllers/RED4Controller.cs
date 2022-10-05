@@ -224,9 +224,7 @@ namespace WolvenKit.Functionality.Controllers
 
             LoadCustomHashes();
 
-#pragma warning disable 162
             return _archiveManager;
-#pragma warning restore 162
         }
 
         #region Packing

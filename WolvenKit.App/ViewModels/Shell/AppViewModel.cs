@@ -443,10 +443,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             try
             {
-                var projectLocation = Path.Combine(project.ProjectPath, project.ProjectName, project.ProjectName + ".cpmodproj");
+                var newProjectname = project.ProjectName.Trim();
+                var projectLocation = Path.Combine(project.ProjectPath, newProjectname, newProjectname + ".cpmodproj");
                 Cp77Project np = new(projectLocation)
                 {
-                    Name = project.ProjectName,
+                    Name = newProjectname,
                     Author = project.Author,
                     Email = project.Email,
                     Version = project.Version

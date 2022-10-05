@@ -16,9 +16,6 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class LogView : ReactiveUserControl<LogViewModel>
     {
-
-        #region Constructors
-
         public LogView()
         {
             InitializeComponent();
@@ -86,7 +83,8 @@ namespace WolvenKit.Views.Tools
             };
             var run = new Run($"[{DateTime.Now}] {item.RenderMessage()}")
             {
-                Foreground = GetBrushForLevel(level)
+                Foreground = GetBrushForLevel(level),
+                FontSize = 12,
             };
             paragraph.Inlines.Add(run);
             LogRichTextBox.Document.Blocks.Add(paragraph);
@@ -102,8 +100,6 @@ namespace WolvenKit.Views.Tools
             LogEventLevel.Warning => (Brush)Application.Current.FindResource("WolvenKitPurple"),
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
         };
-
-        #endregion Constructors
 
         private void Button_Click(object sender, RoutedEventArgs e) => LogRichTextBox.Document.Blocks.Clear();
     }
