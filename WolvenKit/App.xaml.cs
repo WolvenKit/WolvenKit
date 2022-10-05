@@ -138,8 +138,8 @@ namespace WolvenKit
                         fileSizeLimitBytes: 100 * 1000 * 1024, // MaxFileSize: 100 MB
                         retainedFileCountLimit: 10,
                         buffered: true, // Allow internal buffering.
-                        flushToDiskInterval: TimeSpan.FromMinutes(1)),
-                    bufferSize: 1000) // Write once per minute.
+                        flushToDiskInterval: TimeSpan.FromMinutes(1)), // Write once per minute.
+                    bufferSize: 1000)
                 .CreateLogger();
         }
 
