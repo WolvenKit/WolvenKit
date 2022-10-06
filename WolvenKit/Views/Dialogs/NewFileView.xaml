@@ -3,13 +3,13 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     Width="800"
     Height="600"
     d:DesignHeight="600"
@@ -60,16 +60,19 @@
             x:Name="DataGrid"
             Grid.Column="1"
             Margin="5"
-            AllowFiltering="False"
-            AllowSorting="False"
             AutoGenerateColumns="False"
             RowHeight="40">
+
             <syncfusion:SfDataGrid.Columns>
+
                 <syncfusion:GridTemplateColumn
+                    MappingName="Name"
+                    AllowSorting="True"
                     AllowFiltering="True"
                     ColumnSizer="AutoLastColumnFill"
                     HeaderText="File"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    >
                     <syncfusion:GridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid Margin="0,4" VerticalAlignment="Center">
@@ -100,7 +103,9 @@
                         </DataTemplate>
                     </syncfusion:GridTemplateColumn.CellTemplate>
                 </syncfusion:GridTemplateColumn>
+
             </syncfusion:SfDataGrid.Columns>
+
         </syncfusion:SfDataGrid>
 
         <!--  BOTTOM NAME BAR  -->
