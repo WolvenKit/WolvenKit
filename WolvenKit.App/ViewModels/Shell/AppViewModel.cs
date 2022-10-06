@@ -860,51 +860,7 @@ namespace WolvenKit.ViewModels.Shell
         public string AboutWolvenKitLink = "https://wiki.redmodding.org/wolvenkit/about";
 
 
-        public ReactiveCommand<string, Unit> OpenCyberpunkBlenderAddonLinkCommand = ReactiveCommand.Create<string>(
-            link =>
-            {
-                var ps = new ProcessStartInfo(link)
-                {
-                    UseShellExecute = true,
-                    Verb = "open"
-                };
-                Process.Start(ps);
-            });
-
-        public ReactiveCommand<string, Unit> OpenWolvenKitSetupLinkCommand = ReactiveCommand.Create<string>(
-            link =>
-            {
-                var ps = new ProcessStartInfo(link)
-                {
-                    UseShellExecute = true,
-                    Verb = "open"
-                };
-                Process.Start(ps);
-            });
-
-        public ReactiveCommand<string, Unit> OpenWolvenKitCreatingAModLinkCommand = ReactiveCommand.Create<string>(
-            link =>
-            {
-                var ps = new ProcessStartInfo(link)
-                {
-                    UseShellExecute = true,
-                    Verb = "open"
-                };
-                Process.Start(ps);
-            });
-
-        public ReactiveCommand<string, Unit> OpenDiscordInvitationCommand = ReactiveCommand.Create<string>(
-            link =>
-            {
-                var ps = new ProcessStartInfo(link)
-                {
-                    UseShellExecute = true,
-                    Verb = "open"
-                };
-                Process.Start(ps);
-            });
-
-        public ReactiveCommand<string, Unit> OpenAboutWolvenKitLinkCommand = ReactiveCommand.Create<string>(
+        public ReactiveCommand<string, Unit> OpenExternalLinkCommand = ReactiveCommand.Create<string>(
             link =>
             {
                 var ps = new ProcessStartInfo(link)
