@@ -38,41 +38,13 @@ namespace WolvenKit.ViewModels.Shell
             _modTools = modTools;
             SettingsManager = settingsManager;
 
-            OpenMaterialRepositoryCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(SettingsManager.MaterialRepositoryPath));
-
-            UnbundleGameCommand = ReactiveCommand.CreateFromTask(UnbundleGame);
+            OpenGameFolderCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(SettingsManager.GetRED4GameRootDir()));
         }
 
         public ISettingsManager SettingsManager { get; }
         public AppViewModel MainViewModel { get; }
 
-        public ReactiveCommand<Unit, Unit> OpenMaterialRepositoryCommand { get; }
-        public ReactiveCommand<Unit, Unit> UnbundleGameCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenGameFolderCommand { get; }
 
-        private async Task UnbundleGame()
-        {
-            var depotPath = new DirectoryInfo(SettingsManager.MaterialRepositoryPath);
-            if (depotPath.Exists)
-            {
-                await Task.Run(() =>
-                {
-                    var archives = _archiveManager.Archives.KeyValues.Select(x => x.Value).ToList();
-
-                    var total = archives.Count;
-                    var progress = 0;
-                    _progressService.Report(0);
-
-                    for (var i = 0; i < archives.Count; i++)
-                    {
-                        var archive = archives[i];
-                        _modTools.ExtractAll(archive as Archive, depotPath);
-
-                        progress++;
-                        _progressService.Report(i / (float)total);
-                    }
-                    _progressService.Report(1.0);
-                });
-            }
-        }
     }
 }

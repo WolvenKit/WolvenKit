@@ -340,7 +340,13 @@ namespace WolvenKit.Modkit.RED4
             var heightInTiles0 = DivCeil(maskHeight, maskTileSize);
             var smallOffset = widthInTiles0 * heightInTiles0;
 
-            var smallScale = maskWidth / mWidthLow;
+            // DivideByZero preventions.
+            // maskWidthLow == 0
+            // maskWidth < mWidthLow => maskWidth / mWidthLow = 0 because (int) Math
+            var smallScale =
+                mWidthLow == 0 || mWidthLow !< maskWidth
+                ? 1
+                : maskWidth / mWidthLow;
 
             for (uint x = 0; x < maskWidth; x++)
             {
@@ -362,7 +368,11 @@ namespace WolvenKit.Modkit.RED4
             var tileIndex = (widthInTiles * yTile) + xTile + tilesOffset;
 
             var paramOffset = tilesData[tileIndex * 2];
-            var paramBits = tilesData[(tileIndex * 2) + 1];
+
+            // IndexOutOfRange Prevention
+            var paramBits = tilesData.Length > (tileIndex * 2) + 1
+                ? tilesData[(tileIndex * 2) + 1]
+                : 0;
 
             if ((uint)(paramBits & (1 << maskIndex)) == 0U)
             {

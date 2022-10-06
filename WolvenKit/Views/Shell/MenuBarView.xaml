@@ -490,7 +490,22 @@
                 Margin="1,0"
                 Padding="12,0"
                 Header="Tools">
-                <MenuItem x:Name="MenuItemShowSoundModdingTool" Header="Sound Modding Tool">
+                <MenuItem
+                    Header="Depot Generator"
+                    Margin="2,1"
+                    Click="GenerateMaterialRepoButton_Click">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconForkAwesome
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitTan}"
+                            Kind="List"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemShowSoundModdingTool"
+                    Header="Sound Modding Tool"
+                    Margin="2,1">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Margin="6,0"
@@ -499,7 +514,6 @@
                             Kind="VolumeUp" />
                     </MenuItem.Icon>
                 </MenuItem>
-
             </MenuItem>
 
             <!--  Game  -->
@@ -509,20 +523,19 @@
                 Header="Game">
 
                 <MenuItem Margin="2,1" Header="Launch Game">
-
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="RunAll"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
 
                     <MenuItem
                         x:Name="ToolbarLaunchButton"
                         Margin="2,1"
                         CommandParameter="0"
                         Header="Launch Game">
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconCodicons
-                                Margin="5,0,5,0"
-                                Foreground="{StaticResource WolvenKitYellow}"
-                                Kind="RunAll"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                        </MenuItem.Icon>
                     </MenuItem>
 
                     <MenuItem
@@ -537,59 +550,15 @@
                         CommandParameter="2"
                         Header="Pack, Install and Launch Game" />
 
-
                 </MenuItem>
 
-                <Separator Margin="0,10" />
-
-                <MenuItem x:Name="MenuItemUnbundleGame" Header="Unbundle Game to Depot">
+                <MenuItem Margin="2,1" x:Name="MenuItemOpenGameFolder" Header="Open Game Folder">
                     <MenuItem.Icon>
-                        <Grid Width="18" Margin="0,0,-8,0">
-                            <iconPacks:PackIconForkAwesome
-                                Padding="0,0,2,2"
-                                Foreground="{StaticResource WolvenKitTan}"
-                                Kind="Archive"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            <iconPacks:PackIconForkAwesome
-                                Padding="6,6,-3,-3"
-                                Foreground="{StaticResource ContentBackgroundAlt2}"
-                                Kind="Circle"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            <iconPacks:PackIconForkAwesome
-                                Padding="8,8,-1,-1"
-                                Kind="Cog"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                        </Grid>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Click="GenerateMaterialRepoButton_Click" Header="Extract Materials to Depot">
-                    <MenuItem.Icon>
-                        <Grid Width="18" Margin="0,0,-8,0">
-                            <iconPacks:PackIconForkAwesome
-                                Padding="0,0,2,2"
-                                Foreground="{StaticResource WolvenKitTan}"
-                                Kind="PictureOutline"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            <iconPacks:PackIconForkAwesome
-                                Padding="6,6,-3,-3"
-                                Foreground="{StaticResource ContentBackgroundAlt2}"
-                                Kind="Circle"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            <iconPacks:PackIconForkAwesome
-                                Padding="8,8,-1,-1"
-                                Kind="Cog"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                        </Grid>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem x:Name="MenuItemOpenMaterialRepository" Header="Browse Game Depot">
-                    <MenuItem.Icon>
-                        <Grid Width="18" Margin="0,0,-8,0">
-                            <iconPacks:PackIconForkAwesome
-                                Foreground="{StaticResource WolvenKitTan}"
-                                Kind="List"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                        </Grid>
+                        <iconPacks:PackIconForkAwesome
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitTan}"
+                            Kind="FolderOpen"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

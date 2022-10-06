@@ -106,6 +106,8 @@ namespace WolvenKit.RED4.Archive
 
         public void Extract(Stream output) => Extract(output, false);
 
+        public Task ExtractAsync(Stream output) => ExtractAsync(output, false);
+
         public void Extract(Stream output, bool decompressBuffers)
         {
             if (Archive is not ICyberGameArchive ar)
