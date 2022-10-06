@@ -280,6 +280,23 @@
                         Orientation="Horizontal">
 
                         <helpers:TreeGridButton
+                            BorderBrush="{StaticResource WolvenKitYellow}"
+                            Command="{Binding ViewModel.OpenInFileExplorerCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
+                            CommandParameter="{Binding}"
+                            HoverBackground="{StaticResource WolvenKitYellowShadow}"
+                            Style="{StaticResource WolvenKitTreeGridButton}"
+                            ToolTip="Open in Explorer">
+                            <helpers:TreeGridButton.Content>
+                                <iconPacks:PackIconMaterial
+                                    Width="11"
+                                    Height="11"
+                                    Margin="-1,0,0,0"
+                                    Foreground="#222"
+                                    Kind="FolderOpen" />
+                            </helpers:TreeGridButton.Content>
+                        </helpers:TreeGridButton>
+                        
+                        <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitCyan}"
                             Command="{Binding ViewModel.MainViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
