@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Joins;
 using System.Reactive.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -371,21 +373,100 @@ namespace WolvenKit.ViewModels.Tools
 
         public ICommand AddSelectedCommand { get; private set; }
         private bool CanAddSelected() => _projectLoaded;
+
+        private void GetFilesRecursive(RedFileSystemModel directory, List<IGameFile> files)
+        {
+            foreach (var (key, model) in directory.Directories)
+            {
+                GetFilesRecursive(model, files);
+            }
+            foreach (var file in directory.Files)
+            {
+                if (!files.Contains(file))
+                {
+                    files.Add(file);
+                }
+            }
+        }
+
         private async void ExecuteAddSelected()
         {
             _watcherService.IsSuspended = true;
+
+            // get all selected files
+            List<IGameFile> filesToAdd = new();
             foreach (var o in RightItems.Where(x => x.IsChecked))
             {
                 switch (o)
                 {
                     case RedFileViewModel fileVm:
-                        AddFile(fileVm.GetGameFile());
+                        filesToAdd.Add(fileVm.GetGameFile());
                         break;
                     case RedDirectoryViewModel dirVm:
-                        AddFolderRecursive(dirVm.GetModel());
+                        GetFilesRecursive(dirVm.GetModel(), filesToAdd);
                         break;
                 }
             }
+
+            // check against existing files
+            List<IGameFile> existingFiles = new();
+            foreach (var gamefile in filesToAdd)
+            {
+                FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, gamefile.Name));
+                if (diskPathInfo.Exists)
+                {
+                    existingFiles.Add(gamefile);
+                }
+            }
+
+            // add files
+            List<IGameFile> finalFilesToAdd = new();
+            if (existingFiles.Count > 0)
+            {
+                var response = await Interactions.ShowMessageBoxAsync(
+                    $"{existingFiles.Count}/{filesToAdd.Count} Files exist in project. Overwrite existing files?",
+                    "Add selected files",
+                    WMessageBoxButtons.YesNoCancel);
+
+                switch (response)
+                {
+                    // Overwrite all
+                    case WMessageBoxResult.Yes:
+                    {
+                        finalFilesToAdd = filesToAdd;
+                        break;
+                    }
+
+                    // Skip existing files
+                    case WMessageBoxResult.No:
+                    {
+                        foreach (var f in filesToAdd)
+                        {
+                            if (!existingFiles.Contains(f))
+                            {
+                                finalFilesToAdd.Add(f);
+                            }
+                        }
+                        break;
+                    }
+
+                    // Rest cancels
+                    default:
+                        return;
+                }
+            }
+            else
+            {
+                finalFilesToAdd = filesToAdd;
+            }
+
+            foreach (var file in finalFilesToAdd)
+            {
+                AddFile(file);
+            }
+
+            _loggerService.Success($"Added {finalFilesToAdd.Count} files to the project.");
+
             _watcherService.IsSuspended = false;
             await _watcherService.RefreshAsync(_projectManager.ActiveProject);
         }
@@ -484,18 +565,6 @@ namespace WolvenKit.ViewModels.Tools
         private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
 
         private void AddFile(IGameFile item) => Task.Run(() => _gameController.GetController().AddToMod(item));
-
-        private void AddFolderRecursive(RedFileSystemModel item)
-        {
-            foreach ((var key, var dir) in item.Directories)
-            {
-                AddFolderRecursive(dir);
-            }
-            foreach (var file in item.Files)
-            {
-                AddFile(file);
-            }
-        }
 
         /// <summary>
         /// Navigates the right-side of the browser to the existing file

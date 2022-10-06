@@ -24,7 +24,6 @@ using WolvenKit.Models;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -691,25 +690,9 @@ namespace WolvenKit.Functionality.Controllers
 
                         if (File.Exists(diskPathInfo.FullName))
                         {
-                            if (MessageBox.Show($"The file {file.Name} already exists in project - overwrite it with game file?", $"Confirm overwrite: {file.Name}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                            {
-                                try
-                                {
-                                    using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                                    file.Extract(fs);
-                                    _loggerService.Success($"Overwrote existing file with game file: {file.Name}");
-                                }
-                                catch (Exception ex)
-                                {
-                                    File.Delete(diskPathInfo.FullName);
-                                    _loggerService.Error(ex);
-                                }
-
-                            }
-                            else
-                            {
-                                _loggerService.Info($"Declined to overwrite existing file: {file.Name}");
-                            }
+                            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                            file.Extract(fs);
+                            _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
                         }
                         else
                         {
@@ -718,7 +701,7 @@ namespace WolvenKit.Functionality.Controllers
                             {
                                 using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
                                 file.Extract(fs);
-                                _loggerService.Success($"Added game file to project: {file.Name}");
+                                _loggerService.Info($"Added game file to project: {file.Name}");
                             }
                             catch (Exception ex)
                             {
