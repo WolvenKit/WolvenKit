@@ -1,39 +1,39 @@
-<hc:Window
-    x:Class="WolvenKit.Views.Dialogs.Windows.MaterialsRepositoryDialog"
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.MaterialsRepositoryView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     Title="Depot Generator"
     Width="800"
     Height="450"
-    Closed="Window_Closed"
+    d:DataContext="{d:DesignInstance Type=dialogs:MaterialsRepositoryViewModel}"
     ResizeMode="NoResize"
-
-    SizeToContent="Height"
-    mc:Ignorable="d"
     ShowInTaskbar="False"
-    WindowStartupLocation="CenterOwner">
+    SizeToContent="Height"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
 
-    <hc:Window.Resources>
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources AccentColor="{StaticResource MahApps.Brushes.AccentBase}" RequestedTheme="Dark" />
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </hc:Window.Resources>
+    </Window.Resources>
 
     <Grid Background="{DynamicResource RegionBrush}" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hc:Window}}}">
 
         <StackPanel HorizontalAlignment="Stretch">
             <Grid Margin="16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Column="0"
@@ -41,52 +41,47 @@
                     VerticalAlignment="Center"
                     Text="Depot Path" />
                 <TextBox
+                    x:Name="MaterialsTextBox"
                     Grid.Column="1"
                     Margin="12,0,0,0"
-                    x:Name="MaterialsTextBox"
-                    ToolTip="The Depot Path is the output folder for extracted files"
-                    PreviewMouseDown="MaterialsButton_Click"
                     IsReadOnly="True"
-                    Text="{Binding MaterialsDepotPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    PreviewMouseDown="MaterialsButton_Click"
+                    ToolTip="The Depot Path is the output folder for extracted files" />
             </Grid>
             <Button
-                HorizontalAlignment="Stretch"
+                x:Name="OpenMaterialRepositoryButton"
                 Margin="16,0"
-                Command="{Binding OpenMaterialRepositoryCommand}"
+                HorizontalAlignment="Stretch"
                 Content="Open Depot Folder" />
 
             <Grid Margin="16,48,16,16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button
+                    x:Name="GenerateMaterialsButton"
                     Grid.Column="0"
-                    Height="48"
                     Width="190"
+                    Height="48"
                     HorizontalAlignment="Left"
-                    Click="GenerateButton_Click"
                     ToolTip="Extracts all material files from archives and exports textures to PNG">
                     <Button.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="24"/>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition Width="100" />
                             </Grid.ColumnDefinitions>
                             <iconPacks:PackIconForkAwesome
                                 Padding="0,0,2,2"
                                 Foreground="{StaticResource WolvenKitTan}"
-                                Kind="PictureOutline"/>
+                                Kind="PictureOutline" />
                             <iconPacks:PackIconForkAwesome
                                 Padding="6,6,-3,-3"
                                 Foreground="{StaticResource ContentBackgroundAlt2}"
-                                Kind="Circle"/>
-                            <iconPacks:PackIconForkAwesome
-                                Padding="8,8,-1,-1"
-                                Kind="Cog"/>
-                            <TextBlock
-                                Grid.Column="1"
-                                Text="Generate Materials"/>
+                                Kind="Circle" />
+                            <iconPacks:PackIconForkAwesome Padding="8,8,-1,-1" Kind="Cog" />
+                            <TextBlock Grid.Column="1" Text="Generate Materials" />
                         </Grid>
                     </Button.Content>
                 </Button>
@@ -96,44 +91,39 @@
                         Height="48"
                         VerticalAlignment="Stretch"
                         Style="{StaticResource BorderTipWarning}">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="Requires xxGB of space and is extremely resource intensive. Not necessary for material exports." />
+                        <TextBlock VerticalAlignment="Center" Text="Requires xxGB of space and is extremely resource intensive. Not necessary for material exports." />
                     </Border>
                 </StackPanel>
             </Grid>
 
             <Grid Margin="16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"
-                    Height="48"
+                <Button
+                    x:Name="UnbundleGameButton"
+                    Grid.Column="0"
                     Width="190"
+                    Height="48"
                     HorizontalAlignment="Left"
-                    Command="{Binding UnbundleGameCommand}"
                     ToolTip="Extracts all game files from archives">
                     <Button.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="24"/>
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition Width="100" />
                             </Grid.ColumnDefinitions>
                             <iconPacks:PackIconForkAwesome
                                 Padding="0,0,2,2"
                                 Foreground="{StaticResource WolvenKitTan}"
-                                Kind="Archive"/>
+                                Kind="Archive" />
                             <iconPacks:PackIconForkAwesome
                                 Padding="6,6,-3,-3"
                                 Foreground="{StaticResource ContentBackgroundAlt2}"
-                                Kind="Circle"/>
-                            <iconPacks:PackIconForkAwesome
-                                Padding="8,8,-1,-1"
-                                Kind="Cog"/>
-                            <TextBlock
-                                Grid.Column="1"
-                                Text="Unbundle Game"/>
+                                Kind="Circle" />
+                            <iconPacks:PackIconForkAwesome Padding="8,8,-1,-1" Kind="Cog" />
+                            <TextBlock Grid.Column="1" Text="Unbundle Game" />
                         </Grid>
                     </Button.Content>
                 </Button>
@@ -142,12 +132,10 @@
                         Height="48"
                         VerticalAlignment="Stretch"
                         Style="{StaticResource BorderTipWarning}">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="Requires xxGB of space and is extremely resource intensive. Not necessary for most modding workflows." />
+                        <TextBlock VerticalAlignment="Center" Text="Requires xxGB of space and is extremely resource intensive. Not necessary for most modding workflows." />
                     </Border>
                 </StackPanel>
             </Grid>
         </StackPanel>
     </Grid>
-</hc:Window>
+</Window>

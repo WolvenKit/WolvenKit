@@ -25,14 +25,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
             _loggerService = loggerService;
 
             CloseCommand = ReactiveCommand.Create(() => { });
-            OkCommand = ReactiveCommand.Create(() =>
-            {
-
-            });
-            CancelCommand = ReactiveCommand.Create(() =>
-            {
-
-            });
+            OkCommand = ReactiveCommand.Create(() => { });
+            CancelCommand = ReactiveCommand.Create(() => { });
 
             Title = "Rename";
 

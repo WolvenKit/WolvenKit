@@ -55,9 +55,21 @@ namespace WolvenKit.Views.Shell
                         {
                             if (dialog.ShowDialog(Application.Current.MainWindow) == true)
                             {
-                                var innerVm = dialog.ViewModel;
-                                ViewModel.SetLaunchProfiles(innerVm.LaunchProfiles);
+                                ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
                             }
+
+                            interaction.SetOutput(true);
+                        }, RxApp.MainThreadScheduler);
+                    });
+                Interactions.ShowMaterialRepositoryView.RegisterHandler(
+                    interaction =>
+                    {
+                        MaterialsRepositoryView dialog = new();
+
+                        return Observable.Start(() =>
+                        {
+                            if (dialog.ShowDialog(Application.Current.MainWindow) == true)
+                            { }
 
                             interaction.SetOutput(true);
                         }, RxApp.MainThreadScheduler);

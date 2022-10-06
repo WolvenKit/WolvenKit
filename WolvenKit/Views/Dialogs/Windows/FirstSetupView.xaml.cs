@@ -65,6 +65,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void ValidateAllFields() => ViewModel.AllFieldsValid = matdepotxtb.VerifyData() && cp77ExeTxtb.VerifyData();
 
+        // NOTE DO NOT DELETE This is referenced by name in the XAML!
         private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
         {
             if (File.Exists(str) && System.IO.Path.GetFileName(str).Equals(Core.Constants.Red4Exe))
@@ -87,6 +88,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             return HandyControl.Data.OperationResult.Failed();
         }
 
+        // NOTE DO NOT DELETE This is referenced by name in the XAML!
         private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
                 ? HandyControl.Data.OperationResult.Success()
                 : HandyControl.Data.OperationResult.Failed();

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ReactiveUI;
 using Splat;
+using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
@@ -26,7 +29,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
     private AppViewModel _mainViewModel;
 
 
-    public static MaterialsRepositoryDialog MaterialsRepositoryDia { get; set; }
+    //public static MaterialsRepositoryDialog MaterialsRepositoryDia { get; set; }
 
     public MenuBarView()
     {
@@ -206,15 +209,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
     private void SetLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.LoadLayoutDefault();
     private void SaveLayoutToProject(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayoutToProject();
-    private void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (MaterialsRepositoryDia == null)
-        {
-            var x = new MaterialsRepositoryDialog();
-            MaterialsRepositoryDia = x;
-            x.Owner = Application.Current.MainWindow;
-            x.ShowDialog();
-        }
-    }
+    private async void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e) => await Interactions.ShowMaterialRepositoryView.Handle(Unit.Default);
 
 }

@@ -112,6 +112,9 @@ namespace WolvenKit
                     services.AddTransient<LaunchProfilesViewModel>();
                     services.AddTransient<IViewFor<LaunchProfilesViewModel>, LaunchProfilesView>();
 
+                    services.AddTransient<MaterialsRepositoryViewModel>();
+                    services.AddTransient<IViewFor<MaterialsRepositoryViewModel>, MaterialsRepositoryView>();
+
                     services.AddTransient<NewFileViewModel>();
                     services.AddTransient<IViewFor<NewFileViewModel>, NewFileView>();
 
