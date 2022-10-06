@@ -152,6 +152,25 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.CyberpunkBlenderAddonLink);
 
 
+            // Help
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenWolvenKitSetupLinkCommand,
+                    view => view.MenuItemWolvenKitSetupLink,
+                    viewModel => viewModel.MainViewModel.WolvenKitSetupLink);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenWolvenKitCreatingAModLinkCommand,
+                    view => view.MenuItemWolvenKitCreatingAModLink,
+                    viewModel => viewModel.MainViewModel.WolvenKitCreatingAModLink);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenDiscordInvitationCommand,
+                    view => view.MenuItemDiscordInvitationLink,
+                    viewModel => viewModel.MainViewModel.DiscordInvitationLink);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenAboutWolvenKitLinkCommand,
+                    view => view.MenuItemAboutWolvenKitLink,
+                    viewModel => viewModel.MainViewModel.AboutWolvenKitLink);
+
+
 
             // visibility
             this.Bind(ViewModel,

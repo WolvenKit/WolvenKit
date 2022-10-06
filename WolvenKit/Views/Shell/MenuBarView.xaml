@@ -568,7 +568,7 @@
                 Margin="1,0"
                 Padding="12,0"
                 Header="Extensions">
-                <MenuItem x:Name="MenuItemShowPluginTool" Header="Plugin Manager">
+                <MenuItem x:Name="MenuItemShowPluginTool" Header="Plugin Manager" Margin="2,1">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
@@ -577,7 +577,7 @@
                             Kind="Extensions" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="MenuItemShowModsView" Header="Mod Manager">
+                <MenuItem x:Name="MenuItemShowModsView" Header="Mod Manager" Margin="2,1">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
@@ -589,7 +589,7 @@
                 
                 <Separator Margin="2,4"/>
                 
-                <MenuItem x:Name="MenuItemCyberpunkBlenderAddonLink" Header="Cyberpunk Blender Add-on">
+                <MenuItem x:Name="MenuItemCyberpunkBlenderAddonLink" Header="Cyberpunk Blender Add-on" Margin="2,1">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
@@ -598,6 +598,57 @@
                             Kind="LinkExternal" />
                     </MenuItem.Icon>
                 </MenuItem>
+            </MenuItem>
+
+            <!--  Help  -->
+            <MenuItem
+                Margin="1,0"
+                Padding="12,0"
+                Header="Help">
+
+                <MenuItem x:Name="MenuItemWolvenKitSetupLink" Header="Setting up WolvenKit" Margin="2,1">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="White"
+                            Kind="LinkExternal" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="MenuItemWolvenKitCreatingAModLink" Header="Creating a Mod" Margin="2,1">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="White"
+                            Kind="LinkExternal" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator Margin="2,4"/>
+
+                <MenuItem x:Name="MenuItemDiscordInvitationLink" Header="Discord Invitation" Margin="2,1">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="White"
+                            Kind="LinkExternal" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator Margin="2,4"/>
+
+                <MenuItem x:Name="MenuItemAboutWolvenKitLink" Header="About WolvenKit" Margin="2,1">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="White"
+                            Kind="LinkExternal" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
             </MenuItem>
 
         </Menu>
