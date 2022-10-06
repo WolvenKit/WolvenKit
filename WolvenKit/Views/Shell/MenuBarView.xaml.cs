@@ -146,6 +146,29 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                    viewModel => viewModel.MainViewModel.ShowModsViewCommand,
                    view => view.MenuItemShowModsView)
                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                    view => view.MenuItemCyberpunkBlenderAddonLink,
+                    viewModel => viewModel.MainViewModel.CyberpunkBlenderAddonLink);
+
+
+            // Help
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                    view => view.MenuItemWolvenKitSetupLink,
+                    viewModel => viewModel.MainViewModel.WolvenKitSetupLink);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                    view => view.MenuItemWolvenKitCreatingAModLink,
+                    viewModel => viewModel.MainViewModel.WolvenKitCreatingAModLink);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                    view => view.MenuItemDiscordInvitationLink,
+                    viewModel => viewModel.MainViewModel.DiscordInvitationLink);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                    view => view.MenuItemAboutWolvenKitLink,
+                    viewModel => viewModel.MainViewModel.AboutWolvenKitLink);
 
 
 

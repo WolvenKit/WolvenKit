@@ -852,6 +852,25 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> HotInstallModCommand { get; private set; }
         private Task HotInstallModAsync() => Task.Run(() => _gameControllerFactory.GetController().PackProjectHot());
 
+
+        public string CyberpunkBlenderAddonLink = "https://github.com/WolvenKit/Cyberpunk-Blender-add-on";
+        public string WolvenKitSetupLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
+        public string WolvenKitCreatingAModLink = "https://wiki.redmodding.org/wolvenkit/getting-started/creating-a-mod";
+        public string DiscordInvitationLink = "https://discord.gg/Epkq79kd96";
+        public string AboutWolvenKitLink = "https://wiki.redmodding.org/wolvenkit/about";
+
+
+        public ReactiveCommand<string, Unit> OpenExternalLinkCommand = ReactiveCommand.Create<string>(
+            link =>
+            {
+                var ps = new ProcessStartInfo(link)
+                {
+                    UseShellExecute = true,
+                    Verb = "open"
+                };
+                Process.Start(ps);
+            });
+
         public ICommand ShowAssetsCommand { get; private set; }
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
         private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
