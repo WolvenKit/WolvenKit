@@ -4,6 +4,7 @@ using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.Common;
+using WolvenKit.Common.Model.Arguments;
 
 namespace CP77Tools.Commands
 {
@@ -21,7 +22,7 @@ namespace CP77Tools.Commands
         public UncookCommand() : base(Name, Description)
         {
             AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to .archive."));
-            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directpry to extract main files to."));
+            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory to extract main files to."));
             AddOption(new Option<string>(new[] { "--raw", "-or" }, "Optional seperate directory to extract raw files to."));
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
@@ -31,18 +32,35 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] { "--unbundle", "-u" }, "Also unbundle files."));
             AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh"));
             AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize to JSON"));
+            AddOption(new Option<MeshExportType?>(new[] { "--mesh-export-type" }, "Mesh export type (Default, WithMaterials, WithRig, Multimesh)."));
+            AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
+
 
             Handler = CommandHandler
-                .Create<string[], string, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?
+                .Create<string[], string, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string
                     , IHost>(Action);
         }
 
         private void Action(string[] path, string outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
-            string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, IHost host)
+            string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExportType? meshExportType, string meshExportMaterialRepo, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.UncookTask(path, outpath, raw, uext, flip, hash, pattern, regex, unbundle, forcebuffers, serialize);
+            consoleFunctions.UncookTask(path, new UncookTaskOptions
+            {
+                outpath = outpath,
+                rawOutDir = raw,
+                uext = uext,
+                flip = flip,
+                hash = hash,
+                pattern = pattern,
+                regex = regex,
+                unbundle = unbundle,
+                forcebuffers = forcebuffers,
+                serialize = serialize,
+                meshExportType = meshExportType,
+                meshExportMaterialRepo = meshExportMaterialRepo
+            });
         }
 
 
