@@ -155,7 +155,7 @@ namespace WolvenKit.ViewModels.Shell
             //DoSubscribe();
             // TODO INPC 
             OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef).ObservesProperty(() => Data);
-            AddRefCommand = new DelegateCommand(ExecuteAddRef, CanAddRef).ObservesProperty(() => Data);
+            AddRefCommand = new DelegateCommand(async () => await ExecuteAddRef(), CanAddRef).ObservesProperty(() => Data);
             ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk).ObservesProperty(() => PropertyCount);
             ImportWorldNodeDataCommand = new DelegateCommand(async () => await ExecuteImportWorldNodeDataTask(), CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
             ImportWorldNodeDataWithoutCoordsCommand = new DelegateCommand(async () => await ExecuteImportWorldNodeDataWithoutCoordsTask(), CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
@@ -1230,19 +1230,13 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "SymbolEnum";
                 }
-                if (PropertyType.IsAssignableTo(typeof(IRedRef)))
-                {
-                    return "FileSymlinkFile";
-                }
-                if (PropertyType.IsAssignableTo(typeof(IRedBitField)))
-                {
-                    return "SymbolEnum";
-                }
-                if (PropertyType.IsAssignableTo(typeof(CBool)))
-                {
-                    return "SymbolBoolean";
-                }
-                return PropertyType.IsAssignableTo(typeof(IRedBaseHandle))
+                return PropertyType.IsAssignableTo(typeof(IRedRef))
+                    ? "FileSymlinkFile"
+                    : PropertyType.IsAssignableTo(typeof(IRedBitField))
+                    ? "SymbolEnum"
+                    : PropertyType.IsAssignableTo(typeof(CBool))
+                    ? "SymbolBoolean"
+                    : PropertyType.IsAssignableTo(typeof(IRedBaseHandle))
                     ? "References"
                     : PropertyType.IsAssignableTo(typeof(DataBuffer)) || PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer))
                     ? "GroupByRefType"
@@ -1289,7 +1283,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand AddRefCommand { get; private set; }
         private bool CanAddRef() => Data is IRedRef r && r.DepotPath is not null;
-        private void ExecuteAddRef()
+        private async Task ExecuteAddRef()
         {
             if (Data is IRedRef r)
             {
@@ -1297,14 +1291,8 @@ namespace WolvenKit.ViewModels.Shell
                 //Tab.File.OpenRefAsTab(depotpath);
                 //Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
                 var key = r.DepotPath.GetRedHash();
-
                 var gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
-                var archiveManager = Locator.Current.GetService<IArchiveManager>();
-
-                if (archiveManager.Lookup(key).HasValue)
-                {
-                    gameControllerFactory.GetController().AddToMod(key);
-                }
+                await gameControllerFactory.GetController().AddFileToModModal(key);
             }
         }
 

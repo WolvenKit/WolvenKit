@@ -127,9 +127,9 @@
                 <Grid Grid.Row="2">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" MinWidth="5" />
+                        <ColumnDefinition Width="1*" MinWidth="5" />
                         <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="4*" />
                     </Grid.ColumnDefinitions>
 
                     <!--  Left Navigation  -->

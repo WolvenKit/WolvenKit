@@ -20,6 +20,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
@@ -642,12 +643,29 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion
 
-        public void AddToMod(ulong hash)
+        public async Task AddFileToModModal(ulong hash)
         {
             var file = _archiveManager.Lookup(hash);
             if (file.HasValue)
             {
-                AddToMod(file.Value);
+                await AddFileToModModal(file.Value);
+            }
+        }
+
+        public async Task AddFileToModModal(IGameFile file)
+        {
+            var response = await Interactions.ShowMessageBoxAsync(
+                    $"File exists in project. Overwrite existing file?",
+                    "Add file",
+                    WMessageBoxButtons.YesNo);
+
+            switch (response)
+            {
+                case WMessageBoxResult.Yes:
+                {
+                    await Task.Run(() => AddToMod(file));
+                    break;
+                }
             }
         }
 

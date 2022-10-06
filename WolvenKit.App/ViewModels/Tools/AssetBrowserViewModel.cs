@@ -493,21 +493,7 @@ namespace WolvenKit.ViewModels.Tools
             switch (RightSelectedItem)
             {
                 case RedFileViewModel fileVm:
-
-                    var response = await Interactions.ShowMessageBoxAsync(
-                    $"File exists in project. Overwrite existing file?",
-                    "Add file",
-                    WMessageBoxButtons.YesNo);
-
-                    switch (response)
-                    {
-                        case WMessageBoxResult.Yes:
-                        {
-                            await Task.Run(() => _gameController.GetController().AddToMod(fileVm.GetGameFile()));
-                            break;
-                        }
-                    }
-
+                    await _gameController.GetController().AddFileToModModal(fileVm.GetGameFile());
                     break;
                 case RedDirectoryViewModel dirVm:
                     MoveToFolder(dirVm);
