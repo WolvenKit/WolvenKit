@@ -127,9 +127,9 @@
                 <Grid Grid.Row="2">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" MinWidth="5" />
+                        <ColumnDefinition Width="1*" MinWidth="5" />
                         <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="4*" />
                     </Grid.ColumnDefinitions>
 
                     <!--  Left Navigation  -->
@@ -287,9 +287,26 @@
 
                             <syncfusion:SfDataGrid.RecordContextMenu>
                                 <ContextMenu>
-                                    <MenuItem x:Name="OpenFileOnly" Header="Open without adding to project" />
-                                    <MenuItem x:Name="AddSelected" Header="Add selected items to project" />
+                                    <MenuItem x:Name="AddSelected" Header="Add selected items to project">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconVaadinIcons
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource WolvenKitYellow}"
+                                                Kind="ArrowCircleLeft" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                     <Separator />
+                                    <MenuItem x:Name="OpenFileOnly" Header="Open without adding to project">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconVaadinIcons
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource WolvenKitCyan}"
+                                                Kind="ArrowCircleUp"
+                                                RotationAngle="45" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                     <MenuItem Header="Video">
                                         <MenuItem
                                             x:Name="VidPreviewMenuItem"
@@ -304,6 +321,7 @@
                                     <Separator />
                                     <MenuItem x:Name="RightContextMenuFindUsesMenuItem" Header="Find used files" />
                                     <MenuItem x:Name="RightContextMenuFindUsingMenuItem" Header="Find files using this" />
+                                    <Separator />
                                     <MenuItem x:Name="RightContextMenuCopyPathMenuItem" Header="Copy Relative Path" />
                                 </ContextMenu>
                             </syncfusion:SfDataGrid.RecordContextMenu>

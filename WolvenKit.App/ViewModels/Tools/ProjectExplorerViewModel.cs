@@ -89,7 +89,7 @@ namespace WolvenKit.ViewModels.Tools
             RenameFileCommand = new DelegateCommand(ExecuteRenameFile, CanRenameFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
 
             CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            ReimportFileCommand = new DelegateCommand(ExecuteReimportFile, CanReimportFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+            ReimportFileCommand = new DelegateCommand(async () => await ExecuteReimportFile(), CanReimportFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
             OpenInFileExplorerCommand = new DelegateCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
 
             OpenRootFolderCommand = new DelegateCommand(ExecuteOpenRootFolder, CanOpenRootFolder).ObservesProperty(() => ActiveProject);
@@ -218,7 +218,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand ReimportFileCommand { get; private set; }
         private bool CanReimportFile() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
-        private void ExecuteReimportFile() => Task.Run(() => _gameController.GetController().AddToMod(SelectedItem.Hash));
+        private Task ExecuteReimportFile() => _gameController.GetController().AddFileToModModal(SelectedItem.Hash);
 
         /// <summary>
         /// Cuts selected node to the clipboard.

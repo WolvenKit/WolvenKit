@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Joins;
 using System.Reactive.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -111,13 +113,13 @@ namespace WolvenKit.ViewModels.Tools
             SideInDockedMode = DockSide.Tabbed;
 
             TogglePreviewCommand = new DelegateCommand(ExecuteTogglePreview, CanTogglePreview);
-            OpenFileSystemItemCommand = new DelegateCommand(ExecuteOpenFile, CanOpenFile).ObservesProperty(() => RightSelectedItem).ObservesProperty(() => _projectLoaded);
             ToggleModBrowserCommand = new DelegateCommand(ExecuteToggleModBrowser, CanToggleModBrowser);
-            OpenFileLocationCommand = new DelegateCommand(ExecuteOpenFileLocationCommand);
             CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath).ObservesProperty(() => RightSelectedItem);
 
             OpenFileOnlyCommand = new DelegateCommand(ExecuteOpenFileOnly, CanOpenFileOnly).ObservesProperty(() => RightSelectedItem);
-            AddSelectedCommand = new DelegateCommand(ExecuteAddSelected, CanAddSelected).ObservesProperty(() => RightSelectedItem).ObservesProperty(() => _projectLoaded);
+            AddSelectedCommand = ReactiveCommand.CreateFromTask(AddSelectedAsync);
+
+            OpenFileSystemItemCommand = ReactiveCommand.CreateFromTask(ExecuteOpenFileAsync);
 
             ExpandAll = ReactiveCommand.Create(() => { });
             CollapseAll = ReactiveCommand.Create(() => { });
@@ -369,27 +371,109 @@ namespace WolvenKit.ViewModels.Tools
             _progressService.IsIndeterminate = false;
         }
 
-        public ICommand AddSelectedCommand { get; private set; }
-        private bool CanAddSelected() => _projectLoaded;
-        private async void ExecuteAddSelected()
+        /// <summary>
+        /// Add File to Project
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> AddSelectedCommand { get; private set; }
+        private async Task AddSelectedAsync()
         {
             _watcherService.IsSuspended = true;
+
+            // get all selected files
+            List<IGameFile> filesToAdd = new();
             foreach (var o in RightItems.Where(x => x.IsChecked))
             {
                 switch (o)
                 {
                     case RedFileViewModel fileVm:
-                        AddFile(fileVm.GetGameFile());
+                        filesToAdd.Add(fileVm.GetGameFile());
                         break;
                     case RedDirectoryViewModel dirVm:
-                        AddFolderRecursive(dirVm.GetModel());
+                        GetFilesRecursive(dirVm.GetModel(), filesToAdd);
                         break;
                 }
             }
+
+            // check against existing files
+            List<IGameFile> existingFiles = new();
+            foreach (var gamefile in filesToAdd)
+            {
+                FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, gamefile.Name));
+                if (diskPathInfo.Exists)
+                {
+                    existingFiles.Add(gamefile);
+                }
+            }
+
+            // add files
+            List<IGameFile> finalFilesToAdd = new();
+            if (existingFiles.Count > 0)
+            {
+                var response = await Interactions.ShowMessageBoxAsync(
+                    $"{existingFiles.Count}/{filesToAdd.Count} Files exist in project. Overwrite existing files?",
+                    "Add selected files",
+                    WMessageBoxButtons.YesNoCancel);
+
+                switch (response)
+                {
+                    // Overwrite all
+                    case WMessageBoxResult.Yes:
+                    {
+                        finalFilesToAdd = filesToAdd;
+                        break;
+                    }
+
+                    // Skip existing files
+                    case WMessageBoxResult.No:
+                    {
+                        foreach (var f in filesToAdd)
+                        {
+                            if (!existingFiles.Contains(f))
+                            {
+                                finalFilesToAdd.Add(f);
+                            }
+                        }
+                        break;
+                    }
+
+                    // Rest cancels
+                    default:
+                        return;
+                }
+            }
+            else
+            {
+                finalFilesToAdd = filesToAdd;
+            }
+
+            foreach (var file in finalFilesToAdd)
+            {
+                await Task.Run(() => _gameController.GetController().AddToMod(file));
+            }
+
+            _loggerService.Success($"Added {finalFilesToAdd.Count} files to the project.");
+
             _watcherService.IsSuspended = false;
             await _watcherService.RefreshAsync(_projectManager.ActiveProject);
         }
+        private void GetFilesRecursive(RedFileSystemModel directory, List<IGameFile> files)
+        {
+            foreach (var (key, model) in directory.Directories)
+            {
+                GetFilesRecursive(model, files);
+            }
+            foreach (var file in directory.Files)
+            {
+                if (!files.Contains(file))
+                {
+                    files.Add(file);
+                }
+            }
+        }
 
+        /// <summary>
+        /// Open file without adding to project
+        /// </summary>
         public ICommand OpenFileOnlyCommand { get; private set; }
         private bool CanOpenFileOnly() => RightSelectedItem is RedFileViewModel;
         private void ExecuteOpenFileOnly()
@@ -397,6 +481,23 @@ namespace WolvenKit.ViewModels.Tools
             if (RightSelectedItem is RedFileViewModel rfvm)
             {
                 Locator.Current.GetService<AppViewModel>().OpenRedFileCommand.SafeExecute(rfvm.GetGameFile());
+            }
+        }
+
+        /// <summary>
+        /// Add file or go into directory
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> OpenFileSystemItemCommand { get; private set; }
+        private async Task ExecuteOpenFileAsync()
+        {
+            switch (RightSelectedItem)
+            {
+                case RedFileViewModel fileVm:
+                    await _gameController.GetController().AddFileToModModal(fileVm.GetGameFile());
+                    break;
+                case RedDirectoryViewModel dirVm:
+                    MoveToFolder(dirVm);
+                    break;
             }
         }
 
@@ -419,23 +520,6 @@ namespace WolvenKit.ViewModels.Tools
             _archiveManager.IsModBrowserActive = !_archiveManager.IsModBrowserActive;
         }
 
-        public ICommand OpenFileLocationCommand { get; private set; }
-        //private bool CanOpenFileLocationCommand() => RightSelectedItems != null && RightSelectedItems.OfType<RedFileViewModel>().Any();
-        private void ExecuteOpenFileLocationCommand()
-        {
-            if (RightItems.Where(x => x.IsChecked).First() is not RedFileViewModel fileVm)
-            {
-                return;
-            }
-
-            var parentPath = fileVm.GetParentPath();
-            var dir = _archiveManager.LookupDirectory(parentPath, true);
-            if (dir != null)
-            {
-                MoveToFolder(dir);
-            }
-        }
-
         public ICommand TogglePreviewCommand { get; private set; }
         private bool CanTogglePreview() => true;
         private void ExecuteTogglePreview() =>
@@ -443,27 +527,6 @@ namespace WolvenKit.ViewModels.Tools
                 ? new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel)
                 : new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
 
-        public ICommand OpenFileSystemItemCommand { get; private set; }
-        private bool CanOpenFile() => true;
-        private void ExecuteOpenFile()
-        {
-            if (CanAddSelected())
-            {
-                switch (RightSelectedItem)
-                {
-                    case RedFileViewModel fileVm:
-                        AddFile(fileVm.GetGameFile());
-                        break;
-                    case RedDirectoryViewModel dirVm:
-                        MoveToFolder(dirVm);
-                        break;
-                }
-            }
-            else if (CanOpenFileOnly())
-            {
-                ExecuteOpenFileOnly();
-            }
-        }
         /// <summary>
         /// Copies relative path of node.
         /// </summary>
@@ -482,20 +545,6 @@ namespace WolvenKit.ViewModels.Tools
         private void MoveToFolder(RedFileSystemModel dir) => LeftSelectedItem = dir;
 
         private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
-
-        private void AddFile(IGameFile item) => Task.Run(() => _gameController.GetController().AddToMod(item));
-
-        private void AddFolderRecursive(RedFileSystemModel item)
-        {
-            foreach ((var key, var dir) in item.Directories)
-            {
-                AddFolderRecursive(dir);
-            }
-            foreach (var file in item.Files)
-            {
-                AddFile(file);
-            }
-        }
 
         /// <summary>
         /// Navigates the right-side of the browser to the existing file

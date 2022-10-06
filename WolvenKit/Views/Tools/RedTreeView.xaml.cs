@@ -6,10 +6,11 @@ using System.Windows.Input;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Interaction;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.Shell;
-using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Views.Tools
 {
@@ -194,7 +195,7 @@ namespace WolvenKit.Views.Tools
             //}
         }
 
-        private void SfTreeView_ItemDropping(object sender, TreeViewItemDroppingEventArgs e)
+        private async void SfTreeView_ItemDropping(object sender, TreeViewItemDroppingEventArgs e)
         {
             e.Handled = true;
             if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
@@ -205,8 +206,7 @@ namespace WolvenKit.Views.Tools
                     {
                         if (source.Data is IRedCloneable irc)
                         {
-                            var messageBoxResult = MessageBox.Show($"Duplicate {source.Data.GetType().Name} here?", "Duplicate Confirmation", MessageBoxButton.YesNo);
-                            if (messageBoxResult == MessageBoxResult.Yes)
+                            if (await Interactions.ShowMessageBoxAsync($"Duplicate {source.Data.GetType().Name} here?", "Duplicate Confirmation", WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes)
                             {
                                 target.Parent.InsertChild(target.Parent.Properties.IndexOf(target) + (e.DropPosition == DropPosition.DropBelow ? 1 : 0), (IRedType)irc.DeepCopy());
                             }
