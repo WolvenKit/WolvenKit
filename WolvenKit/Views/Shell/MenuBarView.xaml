@@ -413,24 +413,17 @@
                 <MenuItem
                     x:Name="MenuItemHotInstallProject"
                     Margin="2,1"
-                    Header="Hot Install"
+                    Header="Hot Reload"
                     ToolTip="Pack mod &amp; install directly to hot directory">
                     <MenuItem.Icon>
                         <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
-                                Padding="0,0,2,2"
+                                Padding="0,1,0,1"
                                 Foreground="#f44b56"
                                 Kind="Fire"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            <iconPacks:PackIconForkAwesome
-                                Padding="7,7,-2,-2"
-                                Kind="ArrowRight"
-                                Style="{StaticResource WolvenKitToolBarButtonIconEraser}" />
-                            <iconPacks:PackIconCodicons
-                                Padding="9,8,-1,-1"
-                                Kind="ArrowRight"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
+
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -567,7 +560,34 @@
                 Padding="12,0"
                 Header="Game">
 
-                <MenuItem Margin="2,1" Header="Launch Game">
+
+
+                <MenuItem
+                    x:Name="ToolbarLaunchButton"
+                    Margin="2,1"
+                    CommandParameter="0"
+                    Header="Launch Game">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="Play"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
+                    x:Name="ToolbarLaunchSteamButton"
+                    Margin="8,1"
+                    CommandParameter="1"
+                    Header="Launch Game with Steam" />
+
+                <Separator />
+
+                <MenuItem
+                    x:Name="ToolbarPackInstallLaunchButton"
+                    Margin="2,1"
+                    Header="Install &amp; Launch Game">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
@@ -575,34 +595,22 @@
                             Kind="RunAll"
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
-
-                    <MenuItem
-                        x:Name="ToolbarLaunchButton"
-                        Margin="2,1"
-                        CommandParameter="0"
-                        Header="Launch Game" />
-
-                    <MenuItem
-                        x:Name="ToolbarLaunchSteamButton"
-                        Margin="2,1"
-                        CommandParameter="1"
-                        Header="Launch Game with Steam" />
-
-                    <Separator />
-
-                    <MenuItem
-                        x:Name="ToolbarPackInstallLaunchButton"
-                        Margin="2,1"
-                        Header="Install Mod and Launch Game" />
-                    <Separator />
-
-                    <MenuItem
-                        x:Name="ToolbarPackInstallRedmodLaunchButton"
-                        Margin="2,1"
-                        Header="Install as REDmod and Launch Game" />
-                    <Separator />
-
                 </MenuItem>
+
+                <MenuItem
+                    x:Name="ToolbarPackInstallRedmodLaunchButton"
+                    Margin="2,1"
+                    Header="Install as REDmod &amp; Launch Game">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="RunAll"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator />
 
                 <MenuItem
                     x:Name="MenuItemOpenGameFolder"

@@ -4,11 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:dialogs1="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
-    xmlns:dialogs1="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App" 
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     Title="Launch Profiles"
     Width="800"
     Height="600"
@@ -135,33 +135,37 @@
                         </Grid>
 
                         <!--  DataGrid  -->
-                        <ListView
+                        <syncfusion:SfDataGrid
                             x:Name="ProfilesListView"
                             Grid.Row="1"
                             Margin="0,10,0,0"
+                            AllowDeleting="False"
+                            AllowDraggingRows="True"
+                            AllowDrop="True"
+                            AllowFiltering="False"
+                            AutoGenerateColumns="False"
+                            ColumnSizer="Star"
                             ItemsSource="{Binding LaunchProfiles}"
-                            SelectedItem="{Binding SelectedLaunchProfile}">
+                            SelectedItem="{Binding SelectedLaunchProfile}"
+                            >
 
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBox
-                                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
-                                        <!--<TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsNotEditable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource Boolean2VisibilityConverter}}" />-->
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
+                            <syncfusion:SfDataGrid.Columns>
+                                <syncfusion:GridTextColumn
+                                    AllowEditing="True"
+                                    HeaderText="Name"
+                                    MappingName="Name" />
+                            </syncfusion:SfDataGrid.Columns>
 
-                        </ListView>
+                        </syncfusion:SfDataGrid>
 
                     </Grid>
 
-                    <!--  Modded grid  -->
+                    <!--  PropertyGrid  -->
                     <Grid Grid.Column="2" Margin="5">
                         <syncfusion:PropertyGrid
-                            EnableGrouping="True"
                             x:Name="ProfilePropertyGrid"
                             AutoGeneratingPropertyGridItem="ProfilePropertyGrid_AutoGeneratingPropertyGridItem"
+                            EnableGrouping="True"
                             SelectedObject="{Binding SelectedLaunchProfile.Profile}" />
                     </Grid>
 
