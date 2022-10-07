@@ -93,6 +93,7 @@ namespace WolvenKit.ViewModels.Tools
             OpenInFileExplorerCommand = new DelegateCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
 
             OpenRootFolderCommand = new DelegateCommand(ExecuteOpenRootFolder, CanOpenRootFolder).ObservesProperty(() => ActiveProject);
+            RefreshCommand = new DelegateCommand(async () => await ExecuteRefresh(), CanRefresh).ObservesProperty(() => ActiveProject);
 
             Bk2ImportCommand = new DelegateCommand(ExecuteBk2Import, CanBk2Import).ObservesProperty(() => SelectedItem);
             Bk2ExportCommand = new DelegateCommand(ExecuteBk2Export, CanBk2Export).ObservesProperty(() => SelectedItem);
@@ -167,6 +168,16 @@ namespace WolvenKit.ViewModels.Tools
 
         #region general commands
 
+        /// <summary>
+        /// Refreshes all files in the Grid
+        /// </summary>
+        public ICommand RefreshCommand { get; private set; }
+        private bool CanRefresh() => ActiveProject != null;
+        private Task ExecuteRefresh() => _watcherService.RefreshAsync(ActiveProject);
+
+        /// <summary>
+        /// Opens the currently selected folder in the tab
+        /// </summary>
         public ICommand OpenRootFolderCommand { get; private set; }
         private bool CanOpenRootFolder() => ActiveProject != null;
         private void ExecuteOpenRootFolder()

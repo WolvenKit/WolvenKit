@@ -124,6 +124,9 @@ namespace WolvenKit.Views.Tools
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.OpenRootFolderCommand,
                     view => view.OpenFolderButton);
+                this.BindCommand(ViewModel,
+                    viewModel => viewModel.RefreshCommand,
+                    view => view.RefreshButton);
 
 
             });
