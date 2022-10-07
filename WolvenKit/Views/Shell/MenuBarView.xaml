@@ -322,11 +322,13 @@
                 Margin="1,0"
                 Padding="12,0"
                 Header="Build">
+
+                <!--  Pack  -->
                 <MenuItem
-                    x:Name="MenuItemPackProject"
+                    x:Name="MenuItemPack"
                     Margin="2,1"
                     Header="Pack Project"
-                    ToolTip="Pack archives &amp; create mod package">
+                    ToolTip="Pack mod and create zip file">
                     <MenuItem.Icon>
                         <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
@@ -337,11 +339,31 @@
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
+                <!--  Pack as REDmod  -->
+                <MenuItem
+                    x:Name="MenuItemPackRedmod"
+                    Margin="2,1"
+                    Header="Pack as REDmod"
+                    ToolTip="Pack as REDmod and create zip file">
+                    <MenuItem.Icon>
+                        <Grid Margin="6,0">
+                            <iconPacks:PackIconForkAwesome
+                                Padding="0,0,2,2"
+                                Foreground="{StaticResource WolvenKitRed}"
+                                Kind="Archive"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator />
+
+                <!--  Install  -->
                 <MenuItem
                     x:Name="MenuItemPackInstallProject"
                     Margin="2,1"
-                    Header="Pack &amp; Install"
-                    ToolTip="Pack archives, create mod package &amp; install project to game">
+                    Header="Install"
+                    ToolTip="Pack mod &amp; install to game">
                     <MenuItem.Icon>
                         <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
@@ -360,17 +382,18 @@
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
+                <!--  Install as REDmod  -->
                 <MenuItem
-                    x:Name="MenuItemPackInstallRunProject"
+                    x:Name="MenuItemPackInstallRedmodProject"
                     Margin="2,1"
-                    Header="Install and Run"
-                    ToolTip="Pack archives, install project &amp; launch game">
+                    Header="Install as REDmod"
+                    ToolTip="Pack as REDmod &amp; install to game">
                     <MenuItem.Icon>
                         <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
                                 Padding="0,0,2,2"
-                                Foreground="LightGreen"
-                                Kind="Play"
+                                Foreground="{StaticResource WolvenKitRed}"
+                                Kind="Archive"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                             <iconPacks:PackIconForkAwesome
                                 Padding="7,7,-2,-2"
@@ -383,11 +406,15 @@
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <Separator />
+
+                <!--  Hot Reload  -->
                 <MenuItem
                     x:Name="MenuItemHotInstallProject"
                     Margin="2,1"
                     Header="Hot Install"
-                    ToolTip="Pack archives &amp; install directly to hot directory">
+                    ToolTip="Pack mod &amp; install directly to hot directory">
                     <MenuItem.Icon>
                         <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
@@ -402,6 +429,24 @@
                             <iconPacks:PackIconCodicons
                                 Padding="9,8,-1,-1"
                                 Kind="ArrowRight"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator />
+
+                <!--  Launch Profiles  -->
+                <MenuItem
+                    x:Name="MenuItemLaunchProfiles"
+                    Margin="2,1"
+                    Header="Launch Profiles"
+                    ToolTip="Open launch profile settings">
+                    <MenuItem.Icon>
+                        <Grid Margin="6,0">
+                            <iconPacks:PackIconForkAwesome
+                                Padding="0,0,2,2"
+                                Kind="Cog"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
                     </MenuItem.Icon>
@@ -491,9 +536,9 @@
                 Padding="12,0"
                 Header="Tools">
                 <MenuItem
-                    Header="Depot Generator"
                     Margin="2,1"
-                    Click="GenerateMaterialRepoButton_Click">
+                    Click="GenerateMaterialRepoButton_Click"
+                    Header="Depot Generator">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Margin="6,0"
@@ -504,8 +549,8 @@
                 </MenuItem>
                 <MenuItem
                     x:Name="MenuItemShowSoundModdingTool"
-                    Header="Sound Modding Tool"
-                    Margin="2,1">
+                    Margin="2,1"
+                    Header="Sound Modding Tool">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Margin="6,0"
@@ -535,8 +580,7 @@
                         x:Name="ToolbarLaunchButton"
                         Margin="2,1"
                         CommandParameter="0"
-                        Header="Launch Game">
-                    </MenuItem>
+                        Header="Launch Game" />
 
                     <MenuItem
                         x:Name="ToolbarLaunchSteamButton"
@@ -544,15 +588,26 @@
                         CommandParameter="1"
                         Header="Launch Game with Steam" />
 
+                    <Separator />
+
                     <MenuItem
                         x:Name="ToolbarPackInstallLaunchButton"
                         Margin="2,1"
-                        CommandParameter="2"
-                        Header="Pack, Install and Launch Game" />
+                        Header="Install Mod and Launch Game" />
+                    <Separator />
+
+                    <MenuItem
+                        x:Name="ToolbarPackInstallRedmodLaunchButton"
+                        Margin="2,1"
+                        Header="Install as REDmod and Launch Game" />
+                    <Separator />
 
                 </MenuItem>
 
-                <MenuItem Margin="2,1" x:Name="MenuItemOpenGameFolder" Header="Open Game Folder">
+                <MenuItem
+                    x:Name="MenuItemOpenGameFolder"
+                    Margin="2,1"
+                    Header="Open Game Folder">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Margin="6,0"
@@ -568,7 +623,10 @@
                 Margin="1,0"
                 Padding="12,0"
                 Header="Extensions">
-                <MenuItem x:Name="MenuItemShowPluginTool" Header="Plugin Manager" Margin="2,1">
+                <MenuItem
+                    x:Name="MenuItemShowPluginTool"
+                    Margin="2,1"
+                    Header="Plugin Manager">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
@@ -577,7 +635,10 @@
                             Kind="Extensions" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="MenuItemShowModsView" Header="Mod Manager" Margin="2,1">
+                <MenuItem
+                    x:Name="MenuItemShowModsView"
+                    Margin="2,1"
+                    Header="Mod Manager">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
@@ -586,10 +647,13 @@
                             Kind="Package" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
-                <Separator Margin="2,4"/>
-                
-                <MenuItem x:Name="MenuItemCyberpunkBlenderAddonLink" Header="Cyberpunk Blender Add-on" Margin="2,1">
+
+                <Separator Margin="2,4" />
+
+                <MenuItem
+                    x:Name="MenuItemCyberpunkBlenderAddonLink"
+                    Margin="2,1"
+                    Header="Cyberpunk Blender Add-on">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
@@ -606,7 +670,10 @@
                 Padding="12,0"
                 Header="Help">
 
-                <MenuItem x:Name="MenuItemWolvenKitSetupLink" Header="Setting up WolvenKit" Margin="2,1">
+                <MenuItem
+                    x:Name="MenuItemWolvenKitSetupLink"
+                    Margin="2,1"
+                    Header="Setting up WolvenKit">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
@@ -615,7 +682,10 @@
                             Kind="LinkExternal" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="MenuItemWolvenKitCreatingAModLink" Header="Creating a Mod" Margin="2,1">
+                <MenuItem
+                    x:Name="MenuItemWolvenKitCreatingAModLink"
+                    Margin="2,1"
+                    Header="Creating a Mod">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
@@ -625,9 +695,12 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <Separator Margin="2,4"/>
+                <Separator Margin="2,4" />
 
-                <MenuItem x:Name="MenuItemDiscordInvitationLink" Header="Discord Invitation" Margin="2,1">
+                <MenuItem
+                    x:Name="MenuItemDiscordInvitationLink"
+                    Margin="2,1"
+                    Header="Discord Invitation">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
@@ -637,9 +710,12 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <Separator Margin="2,4"/>
+                <Separator Margin="2,4" />
 
-                <MenuItem x:Name="MenuItemAboutWolvenKitLink" Header="About WolvenKit" Margin="2,1">
+                <MenuItem
+                    x:Name="MenuItemAboutWolvenKitLink"
+                    Margin="2,1"
+                    Header="About WolvenKit">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"

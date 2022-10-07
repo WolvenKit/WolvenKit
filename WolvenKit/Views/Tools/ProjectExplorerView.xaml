@@ -295,7 +295,7 @@
                                     Kind="FolderOpen" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
-                        
+
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitCyan}"
                             Command="{Binding ViewModel.MainViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
@@ -314,6 +314,7 @@
                         </helpers:TreeGridButton>
 
                         <helpers:TreeGridButton
+                            syncfusion:FocusManagerHelper.FocusedElement="True"
                             BorderBrush="{StaticResource WolvenKitRed}"
                             Command="{Binding ViewModel.DeleteFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             HoverBackground="{StaticResource WolvenKitRedShadow}"
@@ -587,7 +588,7 @@
                             Width="13"
                             Height="13"
                             Kind="ArrowsCollapse" />
-                    </Button> 
+                    </Button>
                     <Button
                         x:Name="RefreshButton"
                         Margin="3,0,0,0"
@@ -608,7 +609,7 @@
                             Foreground="Yellow"
                             Kind="RootFolderOpened" />
                     </Button>
-                   
+
                     <ToggleButton
                         Margin="3,0,0,0"
                         hc:VisualElement.HighlightBackground="{StaticResource WolvenKitRed}"
