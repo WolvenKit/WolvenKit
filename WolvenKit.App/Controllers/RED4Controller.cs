@@ -654,18 +654,26 @@ namespace WolvenKit.Functionality.Controllers
 
         public async Task AddFileToModModal(IGameFile file)
         {
-            var response = await Interactions.ShowMessageBoxAsync(
+            FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, file.Name));
+            if (diskPathInfo.Exists)
+            {
+                var response = await Interactions.ShowMessageBoxAsync(
                     $"File exists in project. Overwrite existing file?",
                     "Add file",
                     WMessageBoxButtons.YesNo);
 
-            switch (response)
-            {
-                case WMessageBoxResult.Yes:
+                switch (response)
                 {
-                    await Task.Run(() => AddToMod(file));
-                    break;
+                    case WMessageBoxResult.Yes:
+                    {
+                        await Task.Run(() => AddToMod(file));
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                await Task.Run(() => AddToMod(file));
             }
         }
 
