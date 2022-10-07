@@ -181,14 +181,8 @@ namespace WolvenKit.Functionality.Services
                 return;
             }
 
-            if (Path.GetExtension(e.Name).ToUpper().Equals(".TMP", StringComparison.Ordinal) ||
-                Path.GetExtension(e.OldName).ToUpper().Equals(".TMP", StringComparison.Ordinal) ||
-                Path.GetExtension(e.Name).ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal) ||
-                Path.GetExtension(e.OldName).ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal)
-                )
-            {
-                return;
-            }
+            bool newIsTempFile = Path.GetExtension(e.Name).ToUpper().Equals(".TMP", StringComparison.Ordinal) ||
+                                 Path.GetExtension(e.Name).ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal);
 
             switch (e.ChangeType)
             {
@@ -196,7 +190,11 @@ namespace WolvenKit.Functionality.Services
                 {
                     var key = FileModel.GenerateKey(e.OldFullPath, _projectManager.ActiveProject);
                     _files.RemoveKey(key);
-                    _files.AddOrUpdate(new FileModel(e.FullPath, _projectManager.ActiveProject));
+
+                    if(!newIsTempFile)
+                    {
+                        _files.AddOrUpdate(new FileModel(e.FullPath, _projectManager.ActiveProject));
+                    }
                     break;
                 }
 
