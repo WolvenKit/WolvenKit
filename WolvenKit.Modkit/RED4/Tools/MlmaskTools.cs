@@ -344,9 +344,9 @@ namespace WolvenKit.Modkit.RED4
             // maskWidthLow == 0
             // maskWidth < mWidthLow => maskWidth / mWidthLow = 0 because (int) Math
             var smallScale =
-                mWidthLow == 0 || mWidthLow !< maskWidth
-                ? 1
-                : maskWidth / mWidthLow;
+                mWidthLow == 0 || maskWidth < mWidthLow
+                    ? 1
+                    : maskWidth / mWidthLow;
 
             for (uint x = 0; x < maskWidth; x++)
             {
@@ -367,12 +367,13 @@ namespace WolvenKit.Modkit.RED4
 
             var tileIndex = (widthInTiles * yTile) + xTile + tilesOffset;
 
-            var paramOffset = tilesData[tileIndex * 2];
+            if ((tileIndex * 2) + 1 >= tilesData.Length)
+            {
+                return;
+            }
 
-            // IndexOutOfRange Prevention
-            var paramBits = tilesData.Length > (tileIndex * 2) + 1
-                ? tilesData[(tileIndex * 2) + 1]
-                : 0;
+            var paramOffset = tilesData[tileIndex * 2];
+            var paramBits = tilesData[(tileIndex * 2) + 1];
 
             if ((uint)(paramBits & (1 << maskIndex)) == 0U)
             {
