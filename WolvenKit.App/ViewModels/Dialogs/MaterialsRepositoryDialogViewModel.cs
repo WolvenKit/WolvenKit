@@ -143,6 +143,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 ".xbm",
                 ".mlmask"
             };
+
+            await _gameControllerFactory.GetRed4Controller().HandleStartup();
+
             var groupedFiles = _archiveManager.GetGroupedFiles();
 
             await Task.Yield(); // Ensure the below is scheduled.
