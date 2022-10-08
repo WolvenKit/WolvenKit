@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using DynamicData;
 using HandyControl.Data;
@@ -116,6 +117,8 @@ namespace WolvenKit.Views.Tools
                       viewModel => viewModel.AddSelectedCommand,
                       view => view.AddSelected)
                   .DisposeWith(disposables);
+
+                LeftNavigation.KeyUp += LeftNavigation_KeyDown;
             });
 
         }
@@ -232,6 +235,42 @@ namespace WolvenKit.Views.Tools
 
         #region leftNavigation
 
+        private void LeftNavigation_KeyDown(object sender, KeyEventArgs e)
+        {            
+            if(e.Key == Key.Right)
+            {                 
+                if(CanNodeExpand())
+                { 
+                    if(!IsNodeExpanded())
+                    { 
+                        ExpandNode();
+                    }
+                    else
+                    {
+                        // select first child node
+                        LeftNavigation.SetCurrentValue(SfGridBase.SelectedIndexProperty, LeftNavigation.SelectedIndex+1);
+                    }
+                }
+            }
+            else if (e.Key == Key.Left)
+            {
+                if(CanNodeExpand() && IsNodeExpanded())
+                { 
+                    CollapseNode();
+                }
+                else
+                {
+                    // select parent node
+                    var node = LeftNavigation.GetNodeAtRowIndex(LeftNavigation.SelectedIndex+1);
+                    if((node != null) && (node.ParentNode != null))
+                    {
+                       var newIndex = LeftNavigation.ResolveToRowIndex(node.ParentNode);
+                        LeftNavigation.SetCurrentValue(SfGridBase.SelectedIndexProperty, newIndex-1);
+                    }
+                }
+            }
+        }
+
         private void LeftNavigation_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
             if (DataContext is not AssetBrowserViewModel vm)
@@ -300,6 +339,18 @@ namespace WolvenKit.Views.Tools
         private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAllNodes();
 
         public void CollapseAllNodes() => LeftNavigation.CollapseAllNodes();
+
+        public bool IsNodeExpanded()
+        {
+            var selectedIndex = LeftNavigation.SelectedIndex + 1;
+            return LeftNavigation.GetNodeAtRowIndex(selectedIndex).IsExpanded;
+        }
+
+        public bool CanNodeExpand()
+        {
+            var selectedIndex = LeftNavigation.SelectedIndex + 1;
+            return LeftNavigation.GetNodeAtRowIndex(selectedIndex).HasChildNodes;
+        }
 
         #endregion
 
