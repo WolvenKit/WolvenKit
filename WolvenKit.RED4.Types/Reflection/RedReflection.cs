@@ -86,6 +86,22 @@ namespace WolvenKit.RED4.Types
             return RedTypeManager.Create(classType).GetProperty(propertyInfo.RedName);
         }
 
+        public static bool IsValueType(Type type)
+        {
+            if (type.IsValueType)
+            {
+                return true;
+            }
+
+            var typeInfo = GetTypeInfo(type);
+            if (typeInfo is { IsValueType: true })
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public static object GetDefaultValue(Type type)
         {
             if (s_defaultValueCache.TryGetValue(type, out var value))
@@ -94,13 +110,7 @@ namespace WolvenKit.RED4.Types
             }
 
             object result = null;
-            if (type.IsValueType)
-            {
-                result = System.Activator.CreateInstance(type);
-            }
-
-            var typeInfo = GetTypeInfo(type);
-            if (typeInfo is { IsValueType: true })
+            if (IsValueType(type))
             {
                 result = System.Activator.CreateInstance(type);
             }
