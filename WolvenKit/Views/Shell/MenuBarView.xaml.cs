@@ -88,22 +88,41 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                 .DisposeWith(disposables);
 
             // Build
+            // Pack
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.PackModCommand,
-                    view => view.MenuItemPackProject)
+                    view => view.MenuItemPack)
                 .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.PackRedModCommand,
+                    view => view.MenuItemPackRedmod)
+                .DisposeWith(disposables);
+
+            // Install
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.PackInstallModCommand,
                     view => view.MenuItemPackInstallProject)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.PackInstallRunModCommand,
-                    view => view.MenuItemPackInstallRunProject)
-                .DisposeWith(disposables);
+                   viewModel => viewModel.MainViewModel.PackInstallRedModCommand,
+                   view => view.MenuItemPackInstallRedmodProject)
+               .DisposeWith(disposables);
+
+
+
+            // Hot Reload
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.HotInstallModCommand,
                     view => view.MenuItemHotInstallProject)
                 .DisposeWith(disposables);
+
+            // Launch Profiles
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.LaunchOptionsCommand,
+                    view => view.MenuItemLaunchProfiles)
+                .DisposeWith(disposables);
+
+
 
             // View
 
@@ -126,19 +145,15 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                        viewModel => viewModel.MainViewModel.LaunchGameCommand,
                        view => view.ToolbarLaunchSteamButton)
                    .DisposeWith(disposables);
+
             this.BindCommand(ViewModel,
-                       viewModel => viewModel.MainViewModel.LaunchGameCommand,
+                       viewModel => viewModel.MainViewModel.PackInstallRunCommand,
                        view => view.ToolbarPackInstallLaunchButton)
                    .DisposeWith(disposables);
-
-            //this.Bind(ViewModel,
-            //       viewModel => viewModel.MainViewModel.SelectedGameCommandIdx,
-            //       view => view.ToolbarLaunchCombobox.SelectedIndex)
-            //   .DisposeWith(disposables);
-            //this.OneWayBind(ViewModel,
-            //        viewModel => viewModel.MainViewModel.SelectedGameCommands,
-            //        view => view.ToolbarLaunchCombobox.ItemsSource)
-            //    .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                       viewModel => viewModel.MainViewModel.PackInstallRedModRunCommand,
+                       view => view.ToolbarPackInstallRedmodLaunchButton)
+                   .DisposeWith(disposables);
 
             // Extensions
             this.BindCommand(ViewModel,

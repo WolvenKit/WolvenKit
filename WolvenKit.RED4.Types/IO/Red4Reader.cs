@@ -357,13 +357,13 @@ namespace WolvenKit.RED4.IO
             }
             else
             {
-                var args = new InvalidEnumValueEventArgs<T>(enumString);
+                var args = new InvalidEnumValueEventArgs(typeof(T), enumString);
                 if (!HandleParsingError(args))
                 {
                     throw new Exception($"CEnum \"{typeof(T).Name}.{enumString}\" could not be found!");
                 }
 
-                return args.Value;
+                return (CEnum<T>)args.Value;
             }
         }
 

@@ -30,11 +30,14 @@
     <Grid Background="{DynamicResource RegionBrush}" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hc:Window}}}">
 
         <StackPanel HorizontalAlignment="Stretch">
+
             <Grid Margin="16">
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+
                 <TextBlock
                     Grid.Column="0"
                     HorizontalAlignment="Left"
@@ -48,6 +51,7 @@
                     PreviewMouseDown="MaterialsButton_Click"
                     ToolTip="The Depot Path is the output folder for extracted files" />
             </Grid>
+
             <Button
                 x:Name="OpenMaterialRepositoryButton"
                 Margin="16,0"
@@ -55,10 +59,13 @@
                 Content="Open Depot Folder" />
 
             <Grid Margin="16,48,16,16">
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                
                 <Button
                     x:Name="GenerateMaterialsButton"
                     Grid.Column="0"
@@ -86,14 +93,26 @@
                     </Button.Content>
                 </Button>
 
-                <StackPanel Grid.Column="1">
+                <ComboBox Grid.Column="1" x:Name="MaterialExtensionCombobox" Margin="0,0,10,0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate >
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+
+
+                <StackPanel Grid.Column="2">
                     <Border
                         Height="48"
                         VerticalAlignment="Stretch"
                         Style="{StaticResource BorderTipWarning}">
-                        <TextBlock VerticalAlignment="Center" Text="Requires xxGB of space and is extremely resource intensive. Not necessary for material exports." />
+                        <TextBlock VerticalAlignment="Center" Text="Requires 43GB of space and is extremely resource intensive." />
                     </Border>
                 </StackPanel>
+                
+                
             </Grid>
 
             <Grid Margin="16">
@@ -136,6 +155,7 @@
                     </Border>
                 </StackPanel>
             </Grid>
+
         </StackPanel>
     </Grid>
 </Window>

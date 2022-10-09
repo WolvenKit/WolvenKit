@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WinCopies.Util;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -30,6 +32,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class MaterialsRepositoryViewModel : DialogViewModel
     {
+        public record class UncookExtensionViewModel(string Name, EUncookExtension Extension);
+
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
         private readonly IArchiveManager _archiveManager;
@@ -61,11 +65,19 @@ namespace WolvenKit.App.ViewModels.Dialogs
             GenerateMaterialRepoCommand = ReactiveCommand.CreateFromTask(GenerateMaterialRepoAsync);
 
             MaterialsDepotPath = _settingsManager.MaterialRepositoryPath;
+            UncookExtensions = new();
+            foreach (var item in Enum.GetValues<EUncookExtension>())
+            {
+                UncookExtensions.Add(new(item.ToString(), item));
+            }
+            UncookExtension = UncookExtensions.First();
         }
 
         #region Properties
 
         [Reactive] public string MaterialsDepotPath { get; set; }
+        [Reactive] public UncookExtensionViewModel UncookExtension { get; set; }
+        [Reactive] public List<UncookExtensionViewModel> UncookExtensions { get; set; }
 
 
         public string WikiHelpLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
@@ -108,8 +120,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private async Task GenerateMaterialRepoAsync()
         {
-            var texturesExtension = EUncookExtension.png;
             var materialRepoDir = new DirectoryInfo(MaterialsDepotPath);
+            var textureExtension = UncookExtension.Extension;
 
             var unbundle = new List<string>()
             {
@@ -131,6 +143,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 ".xbm",
                 ".mlmask"
             };
+
+            await _gameControllerFactory.GetRed4Controller().HandleStartup();
+
             var groupedFiles = _archiveManager.GetGroupedFiles();
 
             await Task.Yield(); // Ensure the below is scheduled.
@@ -217,8 +232,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
             // uncook
             var exportArgs =
                 new GlobalExportArgs().Register(
-                    new XbmExportArgs() { UncookExtension = texturesExtension },
-                    new MlmaskExportArgs() { UncookExtension = texturesExtension }
+                    new XbmExportArgs() { UncookExtension = textureExtension },
+                    new MlmaskExportArgs() { UncookExtension = textureExtension }
                 );
 
             foreach (var (key, fileEntries) in groupedFiles)

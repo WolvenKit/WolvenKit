@@ -63,7 +63,7 @@
                 <MenuItem
                     x:Name="ConvertToJsonMenuItem"
                     Command="{Binding ConvertToJsonCommand}"
-                    Header="Export to JSON"
+                    Header="Convert to JSON"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>
@@ -295,7 +295,7 @@
                                     Kind="FolderOpen" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
-                        
+
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitCyan}"
                             Command="{Binding ViewModel.MainViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
@@ -314,6 +314,7 @@
                         </helpers:TreeGridButton>
 
                         <helpers:TreeGridButton
+                            syncfusion:FocusManagerHelper.FocusedElement="True"
                             BorderBrush="{StaticResource WolvenKitRed}"
                             Command="{Binding ViewModel.DeleteFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             HoverBackground="{StaticResource WolvenKitRedShadow}"
@@ -589,14 +590,26 @@
                             Kind="ArrowsCollapse" />
                     </Button>
                     <Button
+                        x:Name="RefreshButton"
+                        Margin="3,0,0,0"
+                        ToolTip="Refresh all Files">
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Foreground="CornflowerBlue"
+                            Kind="Refresh" />
+                    </Button>
+                    <Button
                         x:Name="OpenFolderButton"
                         Margin="3,0,0,0"
                         ToolTip="Open Root Folder">
                         <iconPacks:PackIconCodicons
                             Width="13"
                             Height="13"
+                            Foreground="Yellow"
                             Kind="RootFolderOpened" />
                     </Button>
+
                     <ToggleButton
                         Margin="3,0,0,0"
                         hc:VisualElement.HighlightBackground="{StaticResource WolvenKitRed}"

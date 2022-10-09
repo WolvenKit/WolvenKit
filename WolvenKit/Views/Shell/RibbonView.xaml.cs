@@ -55,16 +55,12 @@ namespace WolvenKit.Views.Shell
 
                 // pack
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.PackModCommand,
+                        viewModel => viewModel.MainViewModel.PackRedModCommand,
                         view => view.ToolbarPackProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.PackInstallModCommand,
-                        view => view.ToolbarPackInstallButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.PackInstallRunModCommand,
-                        view => view.ToolbarInstallRunButton)
+                        viewModel => viewModel.MainViewModel.PackInstallRedModCommand,
+                        view => view.ToolbarPackInstallRedmodButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.HotInstallModCommand,
@@ -73,7 +69,7 @@ namespace WolvenKit.Views.Shell
 
 
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.LaunchOptionsCommand,
+                        viewModel => viewModel.MainViewModel.LaunchOptionsCommand,
                         view => view.LaunchOptionsMenuItem)
                     .DisposeWith(disposables);
 

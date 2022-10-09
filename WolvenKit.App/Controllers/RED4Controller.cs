@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Xml.Linq;
 using ReactiveUI;
 using Splat;
@@ -71,25 +70,18 @@ namespace WolvenKit.Functionality.Controllers
             _pluginService = pluginService;
         }
 
-        public Task HandleStartup()
+        public async Task HandleStartup()
         {
             if (!_initialized)
             {
                 _initialized = true;
 
                 // load archives
-                List<Func<IArchiveManager>> todo = new()
-                {
-                    LoadArchiveManager,
-                };
-                Parallel.ForEach(todo, _ => Task.Run(_));
+                await LoadArchiveManager();
 
                 // requires oodle
                 InitializeBk();
-
             }
-
-            return Task.CompletedTask;
         }
 
         // TODO: Move this somewhere else
@@ -200,32 +192,31 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        private IArchiveManager LoadArchiveManager()
-        {
-            if (_archiveManager != null && _archiveManager.IsManagerLoaded)
+        private Task LoadArchiveManager() =>
+            Task.Run(() =>
             {
-                return _archiveManager;
-            }
+                if (_archiveManager != null && _archiveManager.IsManagerLoaded)
+                {
+                    return;
+                }
 
-            _loggerService.Info("Loading Archive Manager ... ");
-            try
-            {
-                _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                throw;
-            }
-            finally
-            {
-                _loggerService.Success("Finished loading Archive Manager.");
-            }
+                _loggerService.Info("Loading Archive Manager ... ");
+                try
+                {
+                    _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error(e);
+                    throw;
+                }
+                finally
+                {
+                    _loggerService.Success("Finished loading Archive Manager.");
+                }
 
-            LoadCustomHashes();
-
-            return _archiveManager;
-        }
+                LoadCustomHashes();
+            });
 
         #region Packing
 
@@ -654,18 +645,26 @@ namespace WolvenKit.Functionality.Controllers
 
         public async Task AddFileToModModal(IGameFile file)
         {
-            var response = await Interactions.ShowMessageBoxAsync(
+            FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, file.Name));
+            if (diskPathInfo.Exists)
+            {
+                var response = await Interactions.ShowMessageBoxAsync(
                     $"File exists in project. Overwrite existing file?",
                     "Add file",
                     WMessageBoxButtons.YesNo);
 
-            switch (response)
-            {
-                case WMessageBoxResult.Yes:
+                switch (response)
                 {
-                    await Task.Run(() => AddToMod(file));
-                    break;
+                    case WMessageBoxResult.Yes:
+                    {
+                        await Task.Run(() => AddToMod(file));
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                await Task.Run(() => AddToMod(file));
             }
         }
 

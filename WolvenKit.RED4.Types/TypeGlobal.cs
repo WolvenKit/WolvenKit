@@ -1,3 +1,4 @@
+using System;
 using Serilog.Core;
 using WolvenKit.Core.Interfaces;
 
@@ -48,6 +49,15 @@ public static class TypeGlobal
 
                 return true;
             }
+        }
+
+        if (e is InvalidEnumValueEventArgs e2)
+        {
+            e2.Value = (Enum)System.Activator.CreateInstance(e2.EnumType);
+
+            Logger?.Warning($"Unknown enum value found for type \"{e2.EnumType.Name}\": {e2.StringValue}");
+
+            return true;
         }
 
         return false;

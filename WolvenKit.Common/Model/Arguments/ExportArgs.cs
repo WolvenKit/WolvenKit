@@ -31,7 +31,7 @@ namespace WolvenKit.Common.Model.Arguments
         public List<uint> SelectedForExport { get; set; } = new();
 
         [Browsable(false)]
-        public Archive SoundbanksArchive { get; set; } = new();
+        public ICyberGameArchive SoundbanksArchive { get; set; }
 
         [Browsable(false)]
         public string ModFolderPath { get; set; }
@@ -146,12 +146,6 @@ namespace WolvenKit.Common.Model.Arguments
     public class EntityExportArgs : ExportArgs
     {
         /// <summary>
-        ///  Uncook Format for Entity.
-        /// </summary>
-        [Category("Export Type")]
-        [Display(Name = "Export Type")]
-        public EntityExportType ExportType { get; set; } = EntityExportType.Json;
-        /// <summary>
         /// List of Archives for Gltf Mesh Export.
         /// </summary>
         [Browsable(false)]
@@ -160,7 +154,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"{ExportType}";
+        public override string ToString() => "Entity";
     }
     public enum EntityExportType
     {

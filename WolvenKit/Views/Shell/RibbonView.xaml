@@ -230,7 +230,7 @@
 
                 <Separator Margin="3" />
 
-                <Button x:Name="ToolbarPackProjectButton" ToolTip="Pack archives &amp; create mod package">
+                <Button x:Name="ToolbarPackProjectButton" ToolTip="Pack mod &amp; create mod package">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -239,10 +239,11 @@
                                 Kind="Archive"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="Pack Project" />
+                        <TextBlock Padding="5,0,0,0" Text="Pack as REDmod" />
                     </StackPanel>
                 </Button>
-                <Button x:Name="ToolbarPackInstallButton" ToolTip="Pack archives, create mod package &amp; install project to game">
+
+                <Button x:Name="ToolbarPackInstallRedmodButton" ToolTip="Pack mod &amp; install to game">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -259,31 +260,12 @@
                                 Kind="ArrowRight"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="Pack &amp; Install" />
+                        <TextBlock Padding="5,0,0,0" Text="Install as REDmod" />
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="ToolbarInstallRunButton" ToolTip="Pack archives, install project &amp; launch game">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid>
-                            <iconPacks:PackIconForkAwesome
-                                Padding="0,0,2,2"
-                                Foreground="LightGreen"
-                                Kind="Play"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            <iconPacks:PackIconForkAwesome
-                                Padding="7,7,-2,-2"
-                                Kind="ArrowRight"
-                                Style="{StaticResource WolvenKitToolBarButtonIconEraser}" />
-                            <iconPacks:PackIconCodicons
-                                Padding="9,8,-1,-1"
-                                Kind="ArrowRight"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                        </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="Install &amp; Run" />
-                    </StackPanel>
-                </Button>
-
+                <Separator />
+                
                 <Menu x:Name="LaunchMenu">
                     <MenuItem x:Name="LaunchMenuMainItem">
                         <MenuItem.Header>

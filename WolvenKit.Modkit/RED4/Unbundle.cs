@@ -238,7 +238,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="hash"></param>
         /// <param name="stream"></param>
         /// <param name="decompressBuffers"></param>
-        public static void ExtractSingleToStream(Archive ar, ulong hash, Stream ms)
+        public static void ExtractSingleToStream(ICyberGameArchive ar, ulong hash, Stream ms)
         {
             if (!ar.Files.TryGetValue(hash, out var tmp) || tmp is not FileEntry gameFile)
             {

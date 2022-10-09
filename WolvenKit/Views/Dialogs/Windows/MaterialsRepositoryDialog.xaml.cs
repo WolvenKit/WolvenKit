@@ -49,6 +49,11 @@ namespace WolvenKit.Views.Dialogs.Windows
 
                 this.Bind(ViewModel, x => x.MaterialsDepotPath, x => x.MaterialsTextBox.Text)
                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel, x => x.UncookExtension, x => x.MaterialExtensionCombobox.SelectedItem)
+                   .DisposeWith(disposables);
+                this.OneWayBind(ViewModel, x => x.UncookExtensions, x => x.MaterialExtensionCombobox.ItemsSource)
+                  .DisposeWith(disposables);
             });
         }
 
