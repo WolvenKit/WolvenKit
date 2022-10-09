@@ -1384,7 +1384,7 @@ namespace WolvenKit.ViewModels.Shell
                 
                 var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
-                    .Where(p => innerType.IsAssignableFrom(p) && p.IsClass)
+                    .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
                     .Select(x => x.Name));
 
                 // no inheritable
@@ -1494,7 +1494,7 @@ namespace WolvenKit.ViewModels.Shell
             if (sender is not null)
             {
                 var vm = sender as CreateClassDialogViewModel;
-                var instance = RedTypeManager.Create(vm.SelectedClass);
+                var instance = RedTypeManager.CreateRedType(vm.SelectedType);
                 if (!InsertChild(-1, instance))
                 {
                     Locator.Current.GetService<ILoggerService>().Error("Unable to insert child");

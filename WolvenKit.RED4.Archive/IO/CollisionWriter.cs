@@ -76,6 +76,11 @@ public class CollisionWriter : Red4Writer
 
             _writer.Write(shape.Uk1);
 
+            if (shape.Materials.Count == 0)
+            {
+                shape.Materials.Add(0);
+            }
+
             for (var j = 0; j < shape.Materials.Count; j++)
             {
                 var material = shape.Materials[j];
