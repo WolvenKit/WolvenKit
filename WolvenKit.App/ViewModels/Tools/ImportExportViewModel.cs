@@ -94,7 +94,14 @@ namespace WolvenKit.ViewModels.Tools
 
         private Dictionary<string, Dictionary<string, JsonObject>> _loadedSettings;
 
-        private static JsonSerializerOptions s_jsonSerializerSettings = new() { Converters = { new JsonFileEntryConverter() }, WriteIndented = true };
+        private static JsonSerializerOptions s_jsonSerializerSettings = new()
+        {
+            Converters =
+            {
+                new JsonFileEntryConverter(),
+                new JsonArchiveConverter()
+            }, WriteIndented = true
+        };
 
         #endregion fields
 
@@ -673,7 +680,7 @@ namespace WolvenKit.ViewModels.Tools
                 var toBeExported = ExportableItems.ToList();
                 foreach (var item in toBeExported)
                 {
-                    success = ExportSingle(item);
+                    success = await ExportSingleAsync(item);
                 }
             }
             if (IsConvertsSelected)
@@ -760,6 +767,8 @@ namespace WolvenKit.ViewModels.Tools
 
             return Task.FromResult(false);
         }
+
+        private Task<bool> ExportSingleAsync(ExportableItemViewModel item) => Task.Run(() => ExportSingle(item));
 
         /// <summary>
         /// Export Single Item
@@ -872,7 +881,7 @@ namespace WolvenKit.ViewModels.Tools
                     var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
                     foreach (var item in toBeConverted)
                     {
-                        success = await Task.Run(() => ExportSingle(item));
+                        success = await ExportSingleAsync(item);
                     }
                 }
                 if (IsConvertsSelected)

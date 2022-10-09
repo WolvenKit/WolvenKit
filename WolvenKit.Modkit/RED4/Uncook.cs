@@ -564,23 +564,23 @@ namespace WolvenKit.Modkit.RED4
 
         private bool HandleEntity(Stream cr2wStream, FileInfo cr2wFileName, EntityExportArgs entExportArgs)
         {
-            try
-            {
-                switch (entExportArgs.ExportType)
-                {
-                    case EntityExportType.Json:
-                        return DumpEntityPackageAsJson(cr2wStream, cr2wFileName);
-                    case EntityExportType.Gltf:
-                        throw new NotImplementedException("Uncooking Entity/Appearance Resources To Gltf Not Implemented");
-                    default:
-                        break;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error(ex);
-            }
+            // try
+            // {
+            //     switch (entExportArgs.ExportType)
+            //     {
+            //         case EntityExportType.Json:
+            //             return DumpEntityPackageAsJson(cr2wStream, cr2wFileName);
+            //         case EntityExportType.Gltf:
+            //             throw new NotImplementedException("Uncooking Entity/Appearance Resources To Gltf Not Implemented");
+            //         default:
+            //             break;
+            //     }
+            // 
+            // }
+            // catch (Exception ex)
+            // {
+            //     _loggerService.Error(ex);
+            // }
             return false;
         }
 
