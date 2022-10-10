@@ -72,7 +72,7 @@
                     Width="190"
                     Height="48"
                     HorizontalAlignment="Left"
-                    ToolTip="Extracts all material files from archives and exports textures to PNG">
+                    ToolTip="Extracts all material files from archives and exports textures to selected format">
                     <Button.Content>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -108,7 +108,7 @@
                         Height="48"
                         VerticalAlignment="Stretch"
                         Style="{StaticResource BorderTipWarning}">
-                        <TextBlock VerticalAlignment="Center" Text="Requires 43GB of space and is extremely resource intensive." />
+                        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Requires 12.3 GB free-space using PNG, or up to 56.2 GB using other formats. Generating Materials is extremely resource intensive!" />
                     </Border>
                 </StackPanel>
                 
@@ -151,7 +151,7 @@
                         Height="48"
                         VerticalAlignment="Stretch"
                         Style="{StaticResource BorderTipWarning}">
-                        <TextBlock VerticalAlignment="Center" Text="Requires xxGB of space and is extremely resource intensive. Not necessary for most modding workflows." />
+                        <TextBlock VerticalAlignment="Center" Text="Requires 71.2 GB of space and is extremely resource intensive. Not necessary for most modding workflows." />
                     </Border>
                 </StackPanel>
             </Grid>

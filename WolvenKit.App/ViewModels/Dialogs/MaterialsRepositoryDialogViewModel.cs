@@ -70,7 +70,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
             {
                 UncookExtensions.Add(new(item.ToString(), item));
             }
-            UncookExtension = UncookExtensions.First();
+            UncookExtension = UncookExtensions.First(x => x.Extension == EUncookExtension.png);
         }
 
         #region Properties
