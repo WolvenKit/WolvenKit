@@ -265,7 +265,7 @@
                         </Grid.RowDefinitions>
 
                         <syncfusion:SfDataGrid
-                            x:Name="InnerList"
+                            x:Name="RightFileView"
                             AllowDeleting="False"
                             AllowDraggingColumns="False"
                             AllowDraggingRows="False"
@@ -280,9 +280,9 @@
                             CurrentCellBorderThickness="0"
                             EnableDataVirtualization="True"
                             IsManipulationEnabled="False"
-                            MouseDoubleClick="InnerList_MouseDoubleClick"
+                            MouseDoubleClick="RightFileView_MouseDoubleClick"
                             RowHeight="19"
-                            SelectionChanged="InnerList_SelectionChanged"
+                            SelectionChanged="RightFileView_OnSelectionChanged"
                             SelectionMode="Extended">
 
                             <syncfusion:SfDataGrid.RecordContextMenu>

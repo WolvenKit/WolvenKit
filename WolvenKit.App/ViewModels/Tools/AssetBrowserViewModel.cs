@@ -547,7 +547,7 @@ namespace WolvenKit.ViewModels.Tools
         private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
 
         /// <summary>
-        /// Navigates the right-side of the browser to the existing file
+        /// Navigates the Asset Browser to the existing file.
         /// </summary>
         /// <param name="file"></param>
         public void ShowFile(FileModel file)
@@ -561,8 +561,30 @@ namespace WolvenKit.ViewModels.Tools
                 .Subscribe()
                 .Dispose();
 
-            RightItems.Clear();
-            RightItems.AddRange(list);
+            if (list.Count > 0)
+            {
+                var fullPath = "";
+                var parentDir = LeftItems.ElementAt(0);
+                parentDir.IsExpanded = true;
+
+                foreach (var dir in file.RelativePath.Split('\\').SkipLast(1))
+                {
+                    fullPath += dir;
+                    parentDir = parentDir.Directories
+                        .Where(x => x.Key == fullPath)
+                        .First()
+                        .Value;
+                    parentDir.IsExpanded = true;
+                    fullPath += '\\';
+                }
+                MoveToFolder(parentDir);
+                RightSelectedItem = RightItems.Where(x => x.FullName == file.RelativePath).FirstOrDefault();
+            }
+            else
+            {
+                _notificationService.Warning("File not found in Asset Browser.");
+            }
+
         }
 
         /// <summary>
