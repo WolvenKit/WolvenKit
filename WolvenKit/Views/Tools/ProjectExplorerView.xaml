@@ -108,7 +108,7 @@
 
                 <Separator />
 
-                <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete">
+                <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" InputGestureText="Del">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Width="13"
@@ -118,7 +118,7 @@
                             Kind="Trash" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding RenameFileCommand}" Header="Rename">
+                <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" InputGestureText="F2">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Width="13"
