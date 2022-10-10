@@ -16,7 +16,6 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
@@ -1349,8 +1348,18 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (Data == null)
                 {
-                    // TODO: Need info for CStatic, ...
-                    return;
+                    var typeInfo = RedReflection.GetTypeInfo(Parent.ResolvedData);
+                    var propertyInfo = typeInfo.GetPropertyInfoByName(Name);
+
+                    if (propertyInfo.Flags.Equals(Flags.Empty))
+                    {
+                        Data = (IRedType)System.Activator.CreateInstance(propertyInfo.Type);
+                    }
+                    else
+                    {
+                        var flags = propertyInfo.Flags;
+                        Data = (IRedType)System.Activator.CreateInstance(propertyInfo.Type, flags.MoveNext() ? flags.Current : 0);
+                    }
                 }
 
                 var arr = (IRedArray)Data;
@@ -1375,7 +1384,7 @@ namespace WolvenKit.ViewModels.Shell
                 
                 var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
-                    .Where(p => innerType.IsAssignableFrom(p) && p.IsClass)
+                    .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
                     .Select(x => x.Name));
 
                 // no inheritable
@@ -1448,6 +1457,12 @@ namespace WolvenKit.ViewModels.Shell
             }
             var db = Data as IRedBufferPointer;
             ObservableCollection<string> existing = null;
+            if (db.GetValue().Data is worldNodeDataBuffer worldNodeDataBuffer)
+            {
+                worldNodeDataBuffer.Add(new worldNodeData());
+                RecalculateProperties(worldNodeDataBuffer);
+                return;
+            }
             if (db.GetValue().Data is RedPackage pkg)
             {
                 existing = new ObservableCollection<string>(pkg.Chunks.Select(t => t.GetType().Name).Distinct());
@@ -1479,7 +1494,7 @@ namespace WolvenKit.ViewModels.Shell
             if (sender is not null)
             {
                 var vm = sender as CreateClassDialogViewModel;
-                var instance = RedTypeManager.Create(vm.SelectedClass);
+                var instance = RedTypeManager.CreateRedType(vm.SelectedType);
                 if (!InsertChild(-1, instance))
                 {
                     Locator.Current.GetService<ILoggerService>().Error("Unable to insert child");
@@ -1933,6 +1948,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (RDTDataViewModel.CopiedChunk is IRedBaseHandle sourceHandle)
             {
+                if (Parent is { Data: worldNodeData })
+                {
+                    return false;
+                }
+
                 if (Data is IRedBaseHandle destinationHandle)
                 {
                     return destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().GetType());
@@ -1975,13 +1995,6 @@ namespace WolvenKit.ViewModels.Shell
                 if (Data is IRedCloneable irc)
                 {
                     RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
-                }
-                else if (Data is worldNodeData)
-                {
-                    var tr = RedJsonSerializer.Serialize(Data);
-                    var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-
-                    RDTDataViewModel.CopiedChunk = copied;
                 }
                 else
                 {

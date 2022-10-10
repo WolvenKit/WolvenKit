@@ -8,7 +8,7 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.RED4.Archive.Buffer
 {
     // this might just be worldNodeEditorData
-    public class worldNodeData : IRedType
+    public class worldNodeData : IRedType, IRedCloneable
     {
         public CUInt64 Id { get; set; }
 
@@ -46,5 +46,27 @@ namespace WolvenKit.RED4.Archive.Buffer
         {
 
         }
+
+        public object ShallowCopy() => MemberwiseClone();
+
+        public object DeepCopy() =>
+            new worldNodeData
+            {
+                Id = Id,
+                NodeIndex = NodeIndex,
+                Position = (Vector4)Position.DeepCopy(),
+                Orientation = (Quaternion)Orientation.DeepCopy(),
+                Scale = (Vector3)Scale.DeepCopy(),
+                Pivot = (Vector3)Pivot.DeepCopy(),
+                Bounds = (Box)Bounds.DeepCopy(),
+                QuestPrefabRefHash = (NodeRef)QuestPrefabRefHash.DeepCopy(),
+                UkHash1 = (NodeRef)UkHash1.DeepCopy(),
+                CookedPrefabData = (CResourceReference<worldCookedPrefabData>)CookedPrefabData.DeepCopy(),
+                MaxStreamingDistance = MaxStreamingDistance,
+                UkFloat1 = UkFloat1,
+                Uk10 = Uk10,
+                Uk11 = Uk11,
+                Uk12 = Uk12
+            };
     }
 }

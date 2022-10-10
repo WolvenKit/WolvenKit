@@ -31,8 +31,13 @@ namespace WolvenKit.Views.Dialogs.Windows
 
                 if (!string.IsNullOrEmpty(TextBox.Text))
                 {
-                    var ext = Path.GetExtension(TextBox.Text);
-                    TextBox.CaretIndex = Math.Max(TextBox.Text.Length - ext.Length, 0);
+                    var fileNameStart = TextBox.Text.LastIndexOf(@"\");
+                    fileNameStart = (fileNameStart < 0) ? 0 : fileNameStart+1;
+
+                    var fileNameEnd = TextBox.Text.IndexOf(@".", fileNameStart);
+                    fileNameEnd = (fileNameEnd < 0) ? ViewModel.Text.Length - 1 : fileNameEnd;
+
+                    TextBox.Select(fileNameStart, fileNameEnd - fileNameStart);
                     TextBox.Focus();
                 }
 

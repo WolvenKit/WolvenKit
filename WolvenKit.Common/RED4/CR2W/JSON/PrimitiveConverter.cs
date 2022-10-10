@@ -1287,7 +1287,15 @@ public class RedPackageConverter : JsonConverter<RedPackage>, ICustomRedConverte
         var cruidToChunkDict = new Dictionary<int, CRUID>();
         foreach (var (chunk, cruid) in value.ChunkDictionary)
         {
-            var index = value.Chunks.IndexOf((RedBaseClass)chunk);
+            var index = -1;
+            for (var i = 0; i < value.Chunks.Count; i++)
+            {
+                if (ReferenceEquals(chunk, value.Chunks[i]))
+                {
+                    index = i;
+                }
+            }
+
             if (index == -1)
             {
                 throw new JsonException();

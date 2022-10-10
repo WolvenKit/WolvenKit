@@ -128,6 +128,9 @@ namespace WolvenKit.Views.Tools
                     viewModel => viewModel.RefreshCommand,
                     view => view.RefreshButton);
 
+                // register to KeyUp because KeyDown doesn't forward "F2"
+                this.KeyUp += OnKeyUp;
+
 
             });
 
@@ -141,6 +144,19 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        private void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.F2 && ViewModel.RenameFileCommand.CanExecute(null))
+            {
+                ViewModel.RenameFileCommand.Execute(null);
+
+            }
+            else if (e.Key == Key.Delete && ViewModel.DeleteFileCommand.CanExecute(null))
+            {
+                ViewModel.DeleteFileCommand.Execute(null);
+
+            }
+        }
         private bool _isfirsttime { get; set; } = true;
 
         private void TreeGrid_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)

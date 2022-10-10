@@ -7,4 +7,9 @@ namespace WolvenKit.RED4.Types
         public object ShallowCopy();
         public object DeepCopy();
     }
+
+    public interface IRedClass : IRedType
+    {
+
+    }
 }
