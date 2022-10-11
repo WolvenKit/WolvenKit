@@ -35,7 +35,7 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="HomePageSideBar" Width="1*" />
+                <ColumnDefinition x:Name="HomePageSideBar" Width="200"/>
                 <ColumnDefinition x:Name="HomePageContent" Width="5*" />
             </Grid.ColumnDefinitions>
         </Grid>
@@ -53,29 +53,22 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type TabItem}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="11*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Border
-                                        x:Name="Border"
-                                        Grid.Column="1"
-                                        Margin="30,0,0,0"
-                                        Background="{TemplateBinding Background}"
-                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="3,0,0,0">
-                                        <ContentPresenter
-                                            x:Name="ContentSite"
-                                            Width="160"
-                                            Height="44"
-                                            Margin="8,0,0,0"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Center"
-                                            ContentSource="Header"
-                                            RecognizesAccessKey="True" />
+                                <Border
+                                    x:Name="Border"
+                                    Margin="8,0,0,0"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="3,0,0,0">
+                                    <ContentPresenter
+                                        x:Name="ContentSite"
+                                        Width="160"
+                                        Height="44"
+                                        Margin="8,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        ContentSource="Header"
+                                        RecognizesAccessKey="True" />
                                     </Border>
-                                </Grid>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -324,14 +317,20 @@
             </TabItem>
         </TabControl>
 
-        <!--  Left Bottom Button  -->
-        <Grid
-            Margin="18,0,25,18"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom">
+        <!--  Bottom Left Sidebar Grid  -->
+        <Grid Width="200" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <!--  Left Bottom Button  -->
             <Button
                 x:Name="ToEditorButton"
-                Grid.Row="1"
+                Grid.Row="0"
+                Padding="0"
+                Margin="4,4,4,30"
+                Background="{StaticResource ContentBackgroundAlt}"
                 HorizontalAlignment="Stretch"
                 BorderThickness="0">
                 <Grid>
@@ -341,29 +340,23 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock
-                        Width="150"
+                        Width="130"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        FontSize="16"
+                        FontSize="14"
                         Text="Continue to editor" />
                     <iconPacks:PackIconCodicons
                         Grid.Column="1"
-                        Width="30"
-                        Height="30"
+                        Width="26"
+                        Height="26"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Kind="ArrowRight" />
                 </Grid>
             </Button>
-        </Grid>
 
-        <!--  Right Bottom Version Number  -->
-        <Grid
-            Margin="0,0,25,18"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom">
-
-            <StackPanel Orientation="Horizontal">
+            <!--  Left Bottom Version Number  -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="6" >
                 <TextBlock
                     Margin="5"
                     VerticalAlignment="Center"

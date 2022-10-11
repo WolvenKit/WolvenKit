@@ -43,7 +43,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
             TryToFindCP77ExecutableAutomatically();
 
-            MaterialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "MaterialDepot");
+            MaterialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "Depot");
             if (!Directory.Exists(MaterialDepotPath))
             {
                 Directory.CreateDirectory(MaterialDepotPath);

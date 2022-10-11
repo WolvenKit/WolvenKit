@@ -307,11 +307,11 @@
                 <MenuItem
                     x:Name="ToolbarProjectSettingsButton"
                     Margin="2,1"
-                    Header="Project Settings">
+                    Header="Project Configuration">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
-                            Kind="Settings"
+                            Kind="SettingsGear"
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
@@ -409,6 +409,36 @@
 
                 <Separator />
 
+                <!--  Install & Launch Game  -->
+                <MenuItem
+                    x:Name="ToolbarPackInstallLaunchButton"
+                    Margin="2,1"
+                    Header="Install &amp; Launch Game">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="RunAll"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!--  Install as REDmod & Launch Game  -->
+                <MenuItem
+                    x:Name="ToolbarPackInstallRedmodLaunchButton"
+                    Margin="2,1"
+                    Header="Install as REDmod &amp; Launch Game">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="RunAll"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator />
+
                 <!--  Hot Reload  -->
                 <MenuItem
                     x:Name="MenuItemHotInstallProject"
@@ -494,13 +524,13 @@
                     Margin="2,1"
                     Header="Show File Preview"
                     IsCheckable="True"
-                    IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    IsChecked="{Binding SettingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ToolTip="Toggle interactive file preview for improved performance" />
-                <MenuItem
+                <!-- <MenuItem
                     x:Name="toolbarLabels"
                     Header="Show Toolbar Labels"
                     IsCheckable="True"
-                    IsChecked="True" />
+                    IsChecked="True" /> -->
 
                 <Separator Margin="0,10" />
 
@@ -581,34 +611,6 @@
                     Margin="8,1"
                     CommandParameter="1"
                     Header="Launch Game with Steam" />
-
-                <Separator />
-
-                <MenuItem
-                    x:Name="ToolbarPackInstallLaunchButton"
-                    Margin="2,1"
-                    Header="Install &amp; Launch Game">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Margin="6,0"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="RunAll"
-                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem
-                    x:Name="ToolbarPackInstallRedmodLaunchButton"
-                    Margin="2,1"
-                    Header="Install as REDmod &amp; Launch Game">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Margin="6,0"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="RunAll"
-                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                    </MenuItem.Icon>
-                </MenuItem>
 
                 <Separator />
 
