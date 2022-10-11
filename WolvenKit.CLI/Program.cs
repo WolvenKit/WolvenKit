@@ -15,6 +15,8 @@ namespace WolvenKit.CLI
         [STAThread]
         public static void Main(string[] args)
         {
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(CancelHandler);
+
             if (!Oodle.Load())
             {
                 Console.Error.WriteLine("Failed to load any oodle libraries. Aborting");
@@ -52,6 +54,11 @@ namespace WolvenKit.CLI
             ImportExportArgs.IsCLI = true;
 
             parser.Invoke(args);
+        }
+
+        protected static void CancelHandler(object sender, ConsoleCancelEventArgs args)
+        {
+            Environment.FailFast("Ctrl-C was triggered");
         }
     }
 }
