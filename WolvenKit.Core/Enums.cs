@@ -122,13 +122,15 @@ namespace WolvenKit.Common
         //json,
         mlmask,
         cubemap,
+        xcube,
         envprobe,
         texarray,
         morphtarget,
         fnt,
         opusinfo,
         anims,
-        ent
+        ent,
+        inkatlas
     }
 
     /// <summary>
@@ -254,6 +256,13 @@ namespace WolvenKit.Common
         Cooked,
         Uncooked,
         Raw
+    }
+
+    public enum EBool : byte
+    {
+        False,
+        True,
+        Automatic
     }
 
     /// IMPORT FLAGS

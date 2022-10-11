@@ -38,7 +38,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public static bool ExportMeshPreviewer(CR2WFile cr2w, FileInfo outFile)
         {
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
@@ -106,7 +106,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public static ModelRoot GetModel(CR2WFile cr2w, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue)
         {
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return null;
             }
@@ -136,7 +136,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public static void AddMeshToModel(CR2WFile cr2w, ModelRoot model, Skin skin, IVisualNodeContainer node, bool lodFilter = true, ulong chunkMask = ulong.MaxValue, Dictionary<string, Material> materials = null)
         {
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return;
             }
@@ -218,7 +218,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             {
                 var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
-                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
                 {
                     continue;
                 }
@@ -258,7 +258,7 @@ namespace WolvenKit.Modkit.RED4.Tools
         {
             var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
@@ -319,7 +319,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             foreach (var meshStream in meshStreamS)
             {
                 var cr2w = _red4ParserService.ReadRed4File(meshStream);
-                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null ||  cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
                 {
                     continue;
                 }
@@ -790,7 +790,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 for (var i = 0; i < mesh.texCoords0.Length; i++)
                 {
                     bw.Write(mesh.texCoords0[i].X);
-                    bw.Write(mesh.texCoords0[i].Y);
+                    bw.Write(mesh.texCoords0[i].Y * -1 + 1);
                 }
                 for (var i = 0; i < mesh.texCoords1.Length; i++)
                 {
@@ -1157,17 +1157,17 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 for (var i = 0; i < blob.Chunks.Count && i < meshes.Count; i++)
                 {
-                    if (blob.Chunks[i].SkinIndices.Buffer.MemSize > 0 && blob.Chunks[i].SkinWeights.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndices is { Buffer.MemSize: > 0 } && blob.Chunks[i].SkinWeights is { Buffer.MemSize: > 0 })
                     {
                         meshes[i].weightCount = 4;
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Buffer.MemSize > 0 && blob.Chunks[i].SkinWeightsExt.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndicesExt is { Buffer.MemSize: > 0 } && blob.Chunks[i].SkinWeightsExt is { Buffer.MemSize: > 0 })
                     {
                         meshes[i].weightCount += 4;
                     }
                     meshes[i].boneindices = new ushort[meshes[i].positions.Length, meshes[i].weightCount];
                     meshes[i].weights = new float[meshes[i].positions.Length, meshes[i].weightCount];
-                    if (blob.Chunks[i].SkinIndices.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndices is { Buffer.MemSize: > 0 })
                     {
                         var stream = new MemoryStream(blob.Chunks[i].SkinWeights.Buffer.GetBytes());
 
@@ -1181,7 +1181,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                             meshes[i].boneindices[e, 3] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeights.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinWeights is { Buffer.MemSize: > 0 })
                     {
                         var stream = new MemoryStream(blob.Chunks[i].SkinWeights.Buffer.GetBytes());
 
@@ -1195,7 +1195,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                             meshes[i].weights[e, 3] = br.ReadSingle();
                         }
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndicesExt is { Buffer.MemSize: > 0 })
                     {
                         var stream = new MemoryStream(blob.Chunks[i].SkinIndicesExt.Buffer.GetBytes());
 
@@ -1209,7 +1209,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                             meshes[i].boneindices[e, 7] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeightsExt.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinWeightsExt is { Buffer.MemSize: > 0 })
                     {
                         var stream = new MemoryStream(blob.Chunks[i].SkinWeightsExt.Buffer.GetBytes());
 
@@ -1264,17 +1264,17 @@ namespace WolvenKit.Modkit.RED4.Tools
                     {
                         meshes[i].colors1[blob.Chunks[i].Simulation[e]].X = 1f;
                     }
-                    if (blob.Chunks[i].SkinIndices.Buffer.MemSize > 0 && blob.Chunks[i].SkinWeights.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndices is { Buffer.MemSize: > 0 } && blob.Chunks[i].SkinWeights is { Buffer.MemSize: > 0 })
                     {
                         meshes[i].weightCount = 4;
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Buffer.MemSize > 0 && blob.Chunks[i].SkinWeightsExt.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndicesExt is {Buffer.MemSize: > 0 } && blob.Chunks[i].SkinWeightsExt is { Buffer.MemSize: > 0 })
                     {
                         meshes[i].weightCount += 4;
                     }
                     meshes[i].boneindices = new ushort[meshes[i].positions.Length, meshes[i].weightCount];
                     meshes[i].weights = new float[meshes[i].positions.Length, meshes[i].weightCount];
-                    if (blob.Chunks[i].SkinIndices.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndices is { Buffer.MemSize: > 0 })
                     {
                         var stream = new MemoryStream(blob.Chunks[i].SkinIndices.Buffer.GetBytes());
 
@@ -1288,7 +1288,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                             meshes[i].boneindices[e, 3] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeights.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinWeights is { Buffer.MemSize: > 0 })
                     {
                         var stream = new MemoryStream(blob.Chunks[i].SkinWeights.Buffer.GetBytes());
 
@@ -1302,7 +1302,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                             meshes[i].weights[e, 3] = br.ReadSingle();
                         }
                     }
-                    if (blob.Chunks[i].SkinIndicesExt.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinIndicesExt is { Buffer.MemSize: > 0 })
                     {
                         var stream = new MemoryStream(blob.Chunks[i].SkinIndicesExt.Buffer.GetBytes());
 
@@ -1316,7 +1316,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                             meshes[i].boneindices[e, 7] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeightsExt.Buffer.MemSize > 0)
+                    if (blob.Chunks[i].SkinWeightsExt is { Buffer.MemSize: > 0 })
                     {
                         var stream = new MemoryStream(blob.Chunks[i].SkinWeightsExt.Buffer.GetBytes());
 

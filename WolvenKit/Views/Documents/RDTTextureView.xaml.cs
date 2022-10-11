@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
@@ -26,7 +26,7 @@ namespace WolvenKit.Views.Documents
                 if (DataContext is RDTTextureViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
-                    ViewModel.Render();
+                    // ViewModel.Render();
                 }
             });
         }

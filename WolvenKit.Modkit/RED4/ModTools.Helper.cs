@@ -30,12 +30,39 @@ public partial class ModTools
         }
     }
 
-    private FindFileResult TryFindFile(List<ICyberGameArchive> archives, string path, out FindFileEntry result, bool excludeCustomArchives = false)
+    private FindFileResult TryFindFile(List<ICyberGameArchive> archives, CName path, out FindFileEntry result, bool excludeCustomArchives = false)
     {
-        return TryFindFile(archives, FNV1A64HashAlgorithm.HashString(path), out result, excludeCustomArchives);
+        var status = InternalTryFindFile(archives, path, out result, excludeCustomArchives);
+
+        var pathStr = path.GetResolvedText();
+        if (status == FindFileResult.FileNotFound)
+        {
+            if (string.IsNullOrEmpty(pathStr))
+            {
+                _loggerService?.Warning($"The file with the hash \"{(ulong)path}\" could not be found!");
+            }
+            else
+            {
+                _loggerService?.Warning($"The file \"{pathStr}\" could not be found!");
+            }
+        }
+
+        if (status == FindFileResult.NoCR2W)
+        {
+            if (string.IsNullOrEmpty(pathStr))
+            {
+                _loggerService?.Error($"The file with the hash \"{(ulong)path}\" could not be parsed!");
+            }
+            else
+            {
+                _loggerService?.Error($"The file \"{pathStr}\" could not be parsed!");
+            }
+        }
+
+        return status;
     }
 
-    private FindFileResult TryFindFile(List<ICyberGameArchive> archives, ulong hash, out FindFileEntry result, bool excludeCustomArchives = false)
+    private FindFileResult InternalTryFindFile(List<ICyberGameArchive> archives, ulong hash, out FindFileEntry result, bool excludeCustomArchives = false)
     {
         result = null;
 

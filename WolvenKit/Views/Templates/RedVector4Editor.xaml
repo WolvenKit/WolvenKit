@@ -1,12 +1,14 @@
-<UserControl x:Class="WolvenKit.Views.Editors.RedVector4Editor"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WolvenKit.Views.Editors"
-             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-             mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="400">
+<UserControl
+    x:Class="WolvenKit.Views.Editors.RedVector4Editor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    d:DesignHeight="100"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVector4Editor}}}">
         <Grid.ColumnDefinitions>
@@ -19,22 +21,42 @@
             <ColumnDefinition Width="20" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="X" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0"/>
-        <TextBox PreviewTextInput="NumberValidationTextBox"  Grid.Column="1"
-            Text="{Binding XText}"
-            />
-        <TextBlock Text="Y" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2"/>
-        <TextBox PreviewTextInput="NumberValidationTextBox"  Grid.Column="3"
-            Text="{Binding YText}"
-            />
-        <TextBlock Text="Z" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="4"/>
-        <TextBox PreviewTextInput="NumberValidationTextBox"  Grid.Column="5"
-            Text="{Binding ZText}"
-            />
-        <TextBlock Text="W" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="6"/>
-        <TextBox PreviewTextInput="NumberValidationTextBox"  Grid.Column="7"
-            Text="{Binding WText}"
-            />
+        <TextBlock
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Text="X" />
+        <TextBox
+            Grid.Column="1"
+            PreviewTextInput="NumberValidationTextBox"
+            Text="{Binding XText}" />
+        <TextBlock
+            Grid.Column="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Text="Y" />
+        <TextBox
+            Grid.Column="3"
+            PreviewTextInput="NumberValidationTextBox"
+            Text="{Binding YText}" />
+        <TextBlock
+            Grid.Column="4"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Text="Z" />
+        <TextBox
+            Grid.Column="5"
+            PreviewTextInput="NumberValidationTextBox"
+            Text="{Binding ZText}" />
+        <TextBlock
+            Grid.Column="6"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Text="W" />
+        <TextBox
+            Grid.Column="7"
+            PreviewTextInput="NumberValidationTextBox"
+            Text="{Binding WText}" />
 
     </Grid>
 </UserControl>

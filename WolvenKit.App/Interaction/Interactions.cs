@@ -22,17 +22,13 @@ namespace WolvenKit.Interaction
         // classic popups
         public static readonly Interaction<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation = new();
 
-        // ???
         public static readonly Interaction<IEnumerable<string>, bool> DeleteFiles = new();
         public static readonly Interaction<string, string> Rename = new();
 
-
-
-        public static readonly Interaction<Unit, string> NewProjectInteraction = new();
-        public static readonly Interaction<Unit, (AddFileModel, string)> AddNewFile = new();
-
         //custom views
         public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();
+        public static readonly Interaction<Unit, bool> ShowLaunchProfilesView = new();
+        public static readonly Interaction<Unit, bool> ShowMaterialRepositoryView = new();
 
     }
 

@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Types;
@@ -34,12 +33,11 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public const string ToolTitle = "Tweak Browser";
 
-        private readonly ILoggerService _loggerService;
+        private Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
+
+        private readonly ISettingsManager _settingsManager;
+        private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
-        private readonly IWatcherService _watcherService;
-        private readonly IModTools _modTools;
-        private readonly IProgressService<double> _progressService;
-        private readonly IGameControllerFactory _gameController;
         private readonly TweakDBService _tweakDB;
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
@@ -62,23 +60,16 @@ namespace WolvenKit.ViewModels.Tools
         #region constructors
 
         public TweakBrowserViewModel(
+            ISettingsManager settingsManager,
+            INotificationService notificationService,
             IProjectManager projectManager,
-            ILoggerService loggerService,
-            IWatcherService watcherService,
-            IProgressService<double> progressService,
-            IModTools modTools,
-            IGameControllerFactory gameController
+            TweakDBService tweakDbService
         ) : base(ToolTitle)
         {
+            _settingsManager = settingsManager;
+            _notificationService = notificationService;
             _projectManager = projectManager;
-            _loggerService = loggerService;
-            _watcherService = watcherService;
-            _modTools = modTools;
-            _progressService = progressService;
-            _gameController = gameController;
-            _tweakDB = Locator.Current.GetService<TweakDBService>();
-
-            //State = DockState.Document;
+            _tweakDB = tweakDbService;
 
             _tweakDB.Loaded += Load;
         }
@@ -87,12 +78,14 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Properties
 
-        public ICollectionView Records { get; set; }
-        public ICollectionView Flats { get; set; }
-        public ICollectionView Queries { get; set; }
-        public ICollectionView GroupTags { get; set; }
+        [Reactive] public Visibility LoadVisibility { get; set; } = Visibility.Visible;
 
-        public List<string> RecordTypes { get; set; }
+        [Reactive] public ICollectionView Records { get; set; } = new CollectionView(new List<object>());
+        [Reactive] public ICollectionView Flats { get; set; } = new CollectionView(new List<object>());
+        [Reactive] public ICollectionView Queries { get; set; } = new CollectionView(new List<object>());
+        [Reactive] public ICollectionView GroupTags { get; set; } = new CollectionView(new List<object>());
+
+        [Reactive] public List<string> RecordTypes { get; set; }
 
         public string RecordsHeader => $"Records ({Records.Cast<object>().Count()})";
         public string FlatsHeader => $"Flats ({Flats.Cast<object>().Count()})";
@@ -239,32 +232,56 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Methods
 
+        public void LoadTweakDB()
+        {
+            if (_tweakDB.IsLoaded)
+            {
+                return;
+            }
+
+            _tweakDB.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+        }
+
         private void Load(object sender, EventArgs eventArgs)
         {
             var records = _tweakDB.GetRecords().Select(x => new TweakEntry(x, _tweakDB, true)).ToList();
-            Records = CollectionViewSource.GetDefaultView(records);
-            Records.Filter = Filter;
+            var flats = _tweakDB.GetFlats().Select(x => new TweakEntry(x, _tweakDB)).ToList();
+            var queries = _tweakDB.GetQueries().Select(x => new TweakEntry(x, _tweakDB)).ToList();
+            var groupTags = _tweakDB.GetGroupTags().Select(x => new TweakEntry(x, _tweakDB)).ToList();
 
-            var classes = new HashSet<string>();
-            classes.Add("");
+            var classes = new List<string> { "" };
             foreach (var record in records)
             {
-                classes.Add(record.RecordTypeName);
+                if (!classes.Contains(record.RecordTypeName))
+                {
+                    classes.Add(record.RecordTypeName);
+                }
             }
+            classes.Sort();
 
-            RecordTypes = classes.ToList();
-            RecordTypes.Sort();
 
-            Flats = CollectionViewSource.GetDefaultView(_tweakDB.GetFlats().Select(x => new TweakEntry(x, _tweakDB)).ToList());
-            Flats.Filter = Filter;
+            _dispatcher.Invoke(() =>
+            {
+                RecordTypes = classes.ToList();
+                RecordTypes.Sort();
 
-            Queries = CollectionViewSource.GetDefaultView(_tweakDB.GetQueries().Select(x => new TweakEntry(x, _tweakDB)).ToList());
-            Queries.Filter = Filter;
+                Records = CollectionViewSource.GetDefaultView(records);
+                Records.Filter = Filter;
 
-            GroupTags = CollectionViewSource.GetDefaultView(_tweakDB.GetGroupTags().Select(x => new TweakEntry(x, _tweakDB)).ToList());
-            GroupTags.Filter = Filter;
+                Flats = CollectionViewSource.GetDefaultView(flats);
+                Flats.Filter = Filter;
 
-            Refresh();
+                Queries = CollectionViewSource.GetDefaultView(queries);
+                Queries.Filter = Filter;
+
+                GroupTags = CollectionViewSource.GetDefaultView(groupTags);
+                GroupTags.Filter = Filter;
+
+                Refresh();
+
+                LoadVisibility = Visibility.Collapsed;
+                _notificationService.Success($"Asset Browser is initialized");
+            });
         }
 
         private void Refresh()

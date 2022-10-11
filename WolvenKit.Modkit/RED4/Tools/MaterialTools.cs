@@ -35,7 +35,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var cr2w = _wolvenkitFileService.ReadRed4File(meshStream);
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
@@ -75,9 +75,14 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < cmesh.ExternalMaterials.Count; i++)
             {
-                string path = cmesh.ExternalMaterials[i].DepotPath;
+                var path = cmesh.ExternalMaterials[i].DepotPath;
+                if (path == 0)
+                {
+                    continue;
+                }
 
-                if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                var findStatus = TryFindFile(archives, path, out var result);
+                if (findStatus == FindFileResult.NoError)
                 {
                     if (result.File.RootChunk is CMaterialInstance mi)
                     {
@@ -104,16 +109,26 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
                 }
+                else if (findStatus == FindFileResult.NoCR2W)
+                {
+                    throw new InvalidParsingException("Error while parsing a file");
+                }
                 else
                 {
-                    throw new InvalidParsingException("not a cr2w file");
+                    throw new InvalidParsingException($"Error while finding the file: {(string)path}");
                 }
             }
+
             for (var i = 0; i < cmesh.PreloadExternalMaterials.Count; i++)
             {
-                string path = cmesh.PreloadExternalMaterials[i].DepotPath;
+                var path = cmesh.PreloadExternalMaterials[i].DepotPath;
+                if (path == 0)
+                {
+                    continue;
+                }
 
-                if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                var findStatus = TryFindFile(archives, path, out var result);
+                if (findStatus == FindFileResult.NoError)
                 {
                     ExternalMaterial.Add(result.File.RootChunk as CMaterialInstance);
 
@@ -125,9 +140,9 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
                 }
-                else
+                else if (findStatus == FindFileResult.NoCR2W)
                 {
-                    throw new InvalidParsingException("not a cr2w file");
+                    throw new InvalidParsingException("Error while parsing a file");
                 }
             }
 
@@ -171,8 +186,6 @@ namespace WolvenKit.Modkit.RED4
             }
             else
             {
-
-
                 foreach (var handle in cmesh.PreloadLocalMaterialInstances)
                 {
                     if (handle.Chunk is CMaterialInstance mi1)
@@ -206,42 +219,53 @@ namespace WolvenKit.Modkit.RED4
             }
             foreach (var m in materialEntries)
             {
-                string path = m.BaseMaterial.DepotPath;
-                while (!Path.GetExtension(path).Contains("mt"))
+                var path = m.BaseMaterial.DepotPath;
+                if (path == 0)
                 {
-                    if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
-                    {
-                        path = (result.File.RootChunk as CMaterialInstance).BaseMaterial.DepotPath;
+                    continue;
+                }
 
-                        foreach (var import in result.Imports)
+                while (true)
+                {
+                    var findStatus = TryFindFile(archives, path, out var result);
+                    if (findStatus == FindFileResult.NoError)
+                    {
+                        if (result.File.RootChunk is CMaterialInstance mi)
                         {
-                            if (!primaryDependencies.Contains(import.DepotPath))
+                            path = mi.BaseMaterial.DepotPath;
+
+                            foreach (var import in result.Imports)
                             {
-                                primaryDependencies.Add(import.DepotPath);
+                                if (!primaryDependencies.Contains(import.DepotPath))
+                                {
+                                    primaryDependencies.Add(import.DepotPath);
+                                }
                             }
                         }
+                        else if (result.File.RootChunk is CMaterialTemplate mt)
+                        {
+                            foreach (var import in result.Imports)
+                            {
+                                if (!primaryDependencies.Contains(import.DepotPath))
+                                {
+                                    primaryDependencies.Add(import.DepotPath);
+                                }
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            throw new InvalidParsingException($"Unexpected class found: {(string)path}");
+                        }
+                    }
+                    else if (findStatus == FindFileResult.NoCR2W)
+                    {
+                        throw new InvalidParsingException("Error while parsing a file");
                     }
                     else
                     {
-                        throw new InvalidParsingException("not a cr2w file");
+                        throw new InvalidParsingException($"Error while finding the file: {(string)path}");
                     }
-                }
-
-                var mt = FNV1A64HashAlgorithm.HashString(path);
-
-                if (TryFindFile(archives, path, out var result2) == FindFileResult.NoError)
-                {
-                    foreach (var import in result2.Imports)
-                    {
-                        if (!primaryDependencies.Contains(import.DepotPath))
-                        {
-                            primaryDependencies.Add(import.DepotPath);
-                        }
-                    }
-                }
-                else
-                {
-                    throw new InvalidParsingException("not a cr2w file");
                 }
             }
         }
@@ -266,7 +290,7 @@ namespace WolvenKit.Modkit.RED4
             var exportArgs =
                 new GlobalExportArgs().Register(
                     new XbmExportArgs() { UncookExtension = eUncookExtension },
-                    new MlmaskExportArgs() { UncookExtension = eUncookExtension.ToMlmaskUncookExtension() }
+                    new MlmaskExportArgs() { UncookExtension = eUncookExtension }
                 );
 
             for (var i = 0; i < primaryDependencies.Count; i++)
@@ -385,7 +409,8 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".hp.json")));
                     if (!fi.Exists)
                     {
-                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
                         {
                             if (!fi.Directory.Exists)
                             {
@@ -396,9 +421,9 @@ namespace WolvenKit.Modkit.RED4
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
                         }
-                        else
+                        else if (findStatus == FindFileResult.NoCR2W)
                         {
-                            throw new InvalidParsingException("not a cr2w file");
+                            throw new InvalidParsingException("Error while parsing a file");
                         }
                     }
                 }
@@ -415,7 +440,8 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".mlsetup.json")));
                     if (!fi.Exists)
                     {
-                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
                         {
                             if (!fi.Directory.Exists)
                             {
@@ -431,9 +457,9 @@ namespace WolvenKit.Modkit.RED4
                                 ExtractFile(import.DepotPath);
                             }
                         }
-                        else
+                        else if (findStatus == FindFileResult.NoCR2W)
                         {
-                            throw new InvalidParsingException("not a cr2w file");
+                            throw new InvalidParsingException("Error while parsing a file");
                         }
                     }
                 }
@@ -450,7 +476,8 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".mltemplate.json")));
                     if (!fi.Exists)
                     {
-                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
                         {
                             if (!fi.Directory.Exists)
                             {
@@ -473,9 +500,9 @@ namespace WolvenKit.Modkit.RED4
                                 ExtractXBM(mat.DepotPath);
                             }
                         }
-                        else
+                        else if (findStatus == FindFileResult.NoCR2W)
                         {
-                            throw new InvalidParsingException("not a cr2w file");
+                            throw new InvalidParsingException("Error while parsing a file");
                         }
                     }
                 }
@@ -492,7 +519,8 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".gradient.json")));
                     if (!fi.Exists)
                     {
-                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
                         {
                             if (!fi.Directory.Exists)
                             {
@@ -503,9 +531,9 @@ namespace WolvenKit.Modkit.RED4
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
                         }
-                        else
+                        else if (findStatus == FindFileResult.NoCR2W)
                         {
-                            throw new InvalidParsingException("not a cr2w file");
+                            throw new InvalidParsingException("Error while parsing a file");
                         }
                     }
                 }
@@ -1087,7 +1115,7 @@ namespace WolvenKit.Modkit.RED4
 
         public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData, List<ICyberGameArchive> archives)
         {
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob)
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob)
             {
                 return false;
             }

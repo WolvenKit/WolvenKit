@@ -4,14 +4,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Helpers;
 using WolvenKit.Interaction;
@@ -53,7 +53,13 @@ namespace WolvenKit.ViewModels.HomePage
 
             RemoveCommand = ReactiveCommand.Create(() => Remove());
 
-            LoadMods();
+            // LoadMods when we're good and ready
+            _settings
+                .WhenAnyValue(x => x.CP77ExecutablePath)
+                .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)) // -.-
+                .Take(1)
+                .Subscribe(x => LoadMods());
+
         }
 
         [Reactive] public ObservableCollection<ModInfoViewModel> Mods { get; set; } = new();
@@ -95,44 +101,38 @@ namespace WolvenKit.ViewModels.HomePage
             else
             {
                 var enabledMods = GetEnabledMods().ToList();
-                if (enabledMods.Any())
+
+                IsProcessing = true;
+
+                var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
+
+                var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
+                args += $" -mod={modsStr}";
+
+                _logger.Info($"WorkDir: {redmodPath}");
+                _logger.Info($"Running commandlet: {args}");
+                var result = await ProcessUtil.RunProcessAsync(redmodPath, args);
+
+                IsProcessing = false;
+
+                if (!result)
                 {
-                    IsProcessing = true;
-
-                    var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
-
-                    var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
-                    args += $" -mod={modsStr}";
-
-                    _logger.Info($"WorkDir: {redmodPath}");
-                    _logger.Info($"Running commandlet: {args}");
-                    var result = await ProcessUtil.RunProcessAsync(redmodPath, args);
-
-                    IsProcessing = false;
-
-                    if (!result)
-                    {
-                        await Interactions.ShowMessageBoxAsync(
-                            "RedMod deploy failed. Please check the log for details.",
-                            "RedMod",
-                            WMessageBoxButtons.Ok,
-                            WMessageBoxImage.Error);
-                    }
-                    else
-                    {
-                        await Interactions.ShowMessageBoxAsync(
-                            $"Deployed {enabledMods.Count} enabled mods with RedMod.",
-                            "RedMod deploy",
-                            WMessageBoxButtons.Ok,
-                            WMessageBoxImage.Exclamation);
-                    }
-                    return result;
+                    await Interactions.ShowMessageBoxAsync(
+                        "RedMod deploy failed. Please check the log for details.",
+                        "RedMod",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Error);
                 }
                 else
                 {
-                    _logger.Warning("No mods enabled.");
+                    await Interactions.ShowMessageBoxAsync(
+                        $"Deployed {enabledMods.Count} enabled mods with RedMod.",
+                        "RedMod deploy",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Exclamation);
                 }
-                return false;
+                return result;
+
             }
         }
 

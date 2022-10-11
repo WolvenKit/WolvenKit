@@ -50,67 +50,37 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
-     # environmental variables
-    - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $env:GITHUB_ENV
-    - run: echo "PROJC=./WolvenKit.CLI/WolvenKit.CLI.csproj" >> $env:GITHUB_ENV
-    - run: echo "OUT=./publish/app/" >> $env:GITHUB_ENV
-    - run: echo "OUTC=./publish/console/" >> $env:GITHUB_ENV
-    - run: echo "FINALOUT=./publish" >> $env:GITHUB_ENV
-    - run: echo "NAME=WolvenKit" >> $env:GITHUB_ENV
-    - run: echo "REF=${{github.ref}}" >> $env:GITHUB_ENV
-    - run: echo "MREPO=${{github.repository}}" >> $env:GITHUB_ENV
-
     - name: Get version
       uses: naminodarie/get-net-sdk-project-versions-action@v1
       id: get-version
       with:
-        proj-path:  ${{env.PROJ}}
+        proj-path: ./WolvenKit/WolvenKit.csproj
     - name: Get console version
       uses: naminodarie/get-net-sdk-project-versions-action@v1
       id: get-version-cli
       with:
-        proj-path: ${{env.PROJC}}
+        proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
     - name: Get Date
       run: |
         $date = Get-Date -Format "yyyy-MM-dd"
         echo "ISODATE=$date" >> $env:GITHUB_ENV
 
-
+    # environmental variables
+    - run: echo "FINALOUT=./publish" >> $env:GITHUB_ENV
+    - run: echo "NAME=WolvenKit" >> $env:GITHUB_ENV
+    - run: echo "MREPO=${{github.repository}}" >> $env:GITHUB_ENV
     - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
     - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
-
-    # Publish app
-    - run: dotnet publish ${{env.PROJ}} -o ${{env.OUT}} -c Release -p:InformationalVersion="${{env.VERSION}}"
-
-    # Publish console
-    - run: dotnet publish ${{env.PROJC}} -o ${{env.OUTC}} -c Release
-
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV
-    # - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $env:GITHUB_ENV
 
-    # Create assets
+    # Publish app and CLI
+    - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION}}"
+    - run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish/console/ -c Release --version-suffix "nightly.${{env.ISODATE}}"
+
     # create zip
-    - run: Compress-Archive -Path ${{env.OUT}}* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
-    - run: Compress-Archive -Path ${{env.OUTC}}* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
-    # create installer
-    # - run: .\Installers\ISCC\ISCC.exe /O"${{env.FINALOUT}}" /dMyAppBaseDir=".${{env.OUT}}" .\Installers\installer.iss
-
-    # PORTABLE
-    #- uses: actions/upload-artifact@v2
-    #  with:
-    #    name: ${{env.NAME}}-${{env.VERSION}}
-    #    path: ${{env.OUT}}
-    # INSTALLER
-    #- uses: actions/upload-artifact@v2
-    #  with:
-    #    name: ${{env.NAME}}-installer-${{env.VERSION}}
-    #    path: ${{env.FINALOUT}}/${{env.INSTALLER}}
-    # CONSOLE
-    #- uses: actions/upload-artifact@v2
-    #  with:
-    #   name: ${{env.NAME}}.Console-${{env.VERSIONC}}
-    #    path: ${{env.OUTC}}
+    - run: Compress-Archive -Path ./publish/app/* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
+    - run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
 
     # RELEASE
     - name: Release
@@ -121,3 +91,4 @@ jobs:
         FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}}
         REPO: WolvenKit/WolvenKit-nightly-releases
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+

@@ -16,8 +16,10 @@ using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Documents;
+using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 using DockState = WolvenKit.Models.Docking.DockState;
@@ -104,15 +106,19 @@ namespace WolvenKit.Views.Shell
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
+        private async void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
         {
             if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
-                if (vm.IsDirty && MessageBox.Show("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                if (vm.IsDirty)
                 {
-                    e.Cancel = true;
-                    return;
+                    if (await Interactions.ShowMessageBoxAsync("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
                 }
+
                 vm.Close.Execute().Subscribe();
 
                 (ItemsSource as IList).Remove(vm);
@@ -120,9 +126,72 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        private readonly bool DebuggingLayouts = false;
+        private readonly bool _debuggingLayouts = false;
+        private readonly bool _useAppdataStorage = true;
 
-        public void SetLayoutToDefault()
+        public void SaveLayout()
+        {
+            if (_useAppdataStorage)
+            {
+                var xmlPath = Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml");
+                var writer = XmlWriter.Create(xmlPath);
+
+                PART_DockingManager.SaveDockState(writer);
+
+                writer.Close();
+            }
+            else
+            {
+                PART_DockingManager.SaveDockState();
+            }
+        }
+
+        public void SaveLayoutToProject()
+        {
+            if (viewModel is null || viewModel.ActiveProject is null)
+            {
+                return;
+            }
+
+            var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
+            var writer = XmlWriter.Create(layoutPath);
+            PART_DockingManager.SaveDockState(writer);
+            writer.Close();
+        }
+
+        private void LoadLayout()
+        {
+            try
+            {
+                if (_useAppdataStorage)
+                {
+                    var xmlPath = Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml");
+                    if (!File.Exists(xmlPath))
+                    {
+                        LoadLayoutDefault();
+                        return;
+                    }
+
+                    var reader = XmlReader.Create(xmlPath);
+
+                    var Debugging_A = PART_DockingManager.LoadDockState(reader);
+
+                    reader.Close();
+                }
+                else
+                {
+                    var Debugging_A = PART_DockingManager.LoadDockState();
+                    Trace.WriteLine(Debugging_A);
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+                LoadLayoutDefault();
+            }
+        }
+
+        public void LoadLayoutDefault()
         {
             try
             {
@@ -146,30 +215,18 @@ namespace WolvenKit.Views.Shell
             var settings = Locator.Current.GetService<ISettingsManager>();
             if (settings != null && !settings.IsHealthy())
             {
-                SetLayoutToDefault();
+                LoadLayoutDefault();
             }
             else
             {
-                try
-                {
-                    var Debugging_A = PART_DockingManager.LoadDockState();
-                    Trace.WriteLine(Debugging_A);
-                }
-                catch (Exception ex)
-                {
-                    Trace.WriteLine(ex.Message);
-                    //SetLayoutToDefault();
-                }
+                LoadLayout();
             }
 
-            if (DebuggingLayouts)
+            if (_debuggingLayouts)
             {
-                var writer = XmlWriter.Create("DockStates.xml");
-
-                PART_DockingManager.SaveDockState(writer);
-
-                writer.Close();
+                SaveLayout();
             }
+
             // update the vms
             foreach (FrameworkElement frameworkElement in PART_DockingManager.Children)
             {
@@ -182,10 +239,7 @@ namespace WolvenKit.Views.Shell
                 }
             }
 
-            if (viewModel is null)
-            {
-                viewModel = DataContext as AppViewModel;
-            }
+            viewModel ??= DataContext as AppViewModel;
 
             SizeChanged += Window_SizeChanged;
         }
@@ -194,7 +248,7 @@ namespace WolvenKit.Views.Shell
         {
             if (!UsingProjectLayout)
             {
-                PART_DockingManager.SaveDockState();
+                SaveLayout();
             }
         }
 
@@ -239,10 +293,7 @@ namespace WolvenKit.Views.Shell
 
                 adapter.PART_DockingManager.SetCurrentValue(DockingManager.ActiveWindowProperty, control);
 
-                if (adapter.viewModel != null)
-                {
-                    adapter.viewModel.UpdateTitle();
-                }
+                adapter.viewModel?.UpdateTitle();
 
                 break;
             }
@@ -280,18 +331,7 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        public void SaveLayoutToProject()
-        {
-            if (viewModel is null || viewModel.ActiveProject is null)
-            {
-                return;
-            }
 
-            var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
-            var writer = XmlWriter.Create(layoutPath);
-            PART_DockingManager.SaveDockState(writer);
-            writer.Close();
-        }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
@@ -468,7 +508,7 @@ namespace WolvenKit.Views.Shell
                     propertiesViewModel.PE_FileInfoVisible = true;
                     propertiesViewModel.AB_FileInfoVisible = false;
                     //propertiesViewModel.PE_SelectedItem = pevm.SelectedItem;
-                    _ = propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
+                    propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
                 }
                 else if (content.Content is AssetBrowserViewModel abvm)
                 {
@@ -476,7 +516,7 @@ namespace WolvenKit.Views.Shell
                     propertiesViewModel.AB_FileInfoVisible = true;
                     propertiesViewModel.PE_FileInfoVisible = false;
                     //propertiesViewModel.AB_SelectedItem = abvm.RightSelectedItem;
-                    _ = propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
+                    propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
                 }
 
                 if (content.Content != null)
@@ -498,10 +538,7 @@ namespace WolvenKit.Views.Shell
 
             }
 
-            if (viewModel != null)
-            {
-                viewModel.UpdateTitle();
-            }
+            viewModel?.UpdateTitle();
         }
     }
 }

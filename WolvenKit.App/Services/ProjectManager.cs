@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.ProjectManagement.Project;
 
@@ -20,16 +21,19 @@ namespace WolvenKit.Functionality.Services
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly INotificationService _notificationService;
         private readonly ILoggerService _loggerService;
+        private readonly IHashService _hashService;
 
         public ProjectManager(
             IRecentlyUsedItemsService recentlyUsedItemsService,
             INotificationService notificationService,
-            ILoggerService loggerService
+            ILoggerService loggerService,
+            IHashService hashService
         )
         {
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _notificationService = notificationService;
             _loggerService = loggerService;
+            _hashService = hashService;
 
             this.WhenAnyValue(x => x.ActiveProject).Subscribe(async _ =>
             {
@@ -52,14 +56,7 @@ namespace WolvenKit.Functionality.Services
 
         public ReactiveCommand<string, Unit> OpenProjectCommand { get; set; }
 
-
         #endregion
-
-
-
-
-
-
 
         #region methods
 
@@ -67,6 +64,11 @@ namespace WolvenKit.Functionality.Services
 
         public async Task<bool> LoadAsync(string location)
         {
+            if (IsProjectLoaded)
+            {
+                await SaveAsync();
+            }
+
             IsProjectLoaded = false;
             await ReadFromLocationAsync(location).ContinueWith(_ =>
             {
@@ -100,7 +102,7 @@ namespace WolvenKit.Functionality.Services
         {
             try
             {
-                var fi = new FileInfo(location);
+                FileInfo fi = new(location);
                 if (!fi.Exists)
                 {
                     return null;
@@ -113,7 +115,7 @@ namespace WolvenKit.Functionality.Services
                     _ => null
                 };
 
-                return await Task.FromResult(project);
+                return project;
             }
             catch (IOException ex)
             {
@@ -127,35 +129,37 @@ namespace WolvenKit.Functionality.Services
         {
             try
             {
-                await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-                var ser = new XmlSerializer(typeof(CP77Mod));
+                await using FileStream lf = new(path, FileMode.Open, FileAccess.Read);
+                XmlSerializer ser = new(typeof(CP77Mod));
                 if (ser.Deserialize(lf) is not CP77Mod obj)
                 {
                     return null;
                 }
 
-                //if (typeof(T) == typeof(Tw3Project))
-                //{
-                //    return new Tw3Project(path)
-                //    {
-                //        Author = obj.Author,
-                //        Email = obj.Email,
-                //        Name = obj.Name,
-                //        Version = obj.Version,
-                //    };
-                //}
-                /*else*/
-                if (typeof(T) == typeof(Cp77Project))
+                if (typeof(T) != typeof(Cp77Project))
                 {
-                    return new Cp77Project(path)
-                    {
-                        Author = obj.Author,
-                        Email = obj.Email,
-                        Name = obj.Name,
-                        Version = obj.Version,
-                    };
+                    return null;
                 }
-                return null;
+
+                Cp77Project result = new(path)
+                {
+                    Author = obj.Author,
+                    Email = obj.Email,
+                    Name = obj.Name,
+                    Version = obj.Version,
+                };
+
+                var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
+                if (File.Exists(projectHashesFile) && _hashService is HashService hashService)
+                {
+                    var paths = await File.ReadAllLinesAsync(projectHashesFile);
+                    foreach (var p in paths)
+                    {
+                        hashService.AddProjectPath(p);
+                    }
+                }
+
+                return result;
             }
             catch (Exception e)
             {
@@ -174,10 +178,18 @@ namespace WolvenKit.Functionality.Services
                     Directory.CreateDirectory(ActiveProject.ProjectDirectory);
                 }
 
-                await using var fs = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);
-                var ser = new XmlSerializer(typeof(CP77Mod));
+                await using FileStream fs = new(ActiveProject.Location, FileMode.Create, FileAccess.Write);
+                XmlSerializer ser = new(typeof(CP77Mod));
                 ser.Serialize(fs, new CP77Mod(ActiveProject));
 
+                if (_hashService is HashService hashService)
+                {
+                    var projectHashes = hashService.GetProjectHashes();
+                    if (projectHashes.Count > 0)
+                    {
+                        await File.WriteAllLinesAsync(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -192,18 +204,13 @@ namespace WolvenKit.Functionality.Services
         #endregion
 
 
-
-
-
-
-
-
         public class CP77Mod
         {
             public CP77Mod()
             {
 
             }
+
             public CP77Mod(EditorProject project)
             {
                 Author = project.Author;
@@ -219,6 +226,8 @@ namespace WolvenKit.Functionality.Services
             public string Name { get; set; }
 
             public string Version { get; set; }
+            public bool IsRedMod { get; set; }
+            public bool ExecuteDeploy { get; set; }
         }
     }
 }

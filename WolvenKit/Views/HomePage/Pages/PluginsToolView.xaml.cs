@@ -6,7 +6,7 @@ using WolvenKit.ViewModels.HomePage;
 namespace WolvenKit.Views.HomePage.Pages
 {
     /// <summary>
-    /// Interaction logic for NewFileView.xaml
+    /// Interaction logic for PluginsToolView.xaml
     /// </summary>
     public partial class PluginsToolView : ReactiveUserControl<PluginsToolViewModel>
     {

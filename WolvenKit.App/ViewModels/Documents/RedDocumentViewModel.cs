@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData.Kernel;
 using Prism.Commands;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
@@ -49,18 +52,14 @@ namespace WolvenKit.ViewModels.Documents
             if (_projectManager.ActiveProject != null)
             {
                 // assume files that don't exist are relative paths
-                if (File.Exists(path))
-                {
-                    RelativePath = Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path);
-                }
-                else
-                {
-                    RelativePath = path;
-                }
+                RelativePath = File.Exists(path) ? Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path) : path;
             }
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
             NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile);
+
+            this.WhenAnyValue(x => x.SelectedTabItemViewModel)
+                .Subscribe(x => x?.OnSelected());
         }
 
         #region properties
@@ -143,18 +142,18 @@ namespace WolvenKit.ViewModels.Documents
             return false;
         }
 
-        public override async Task<bool> OpenFileAsync(string path)
+        public override Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;
 
             try
             {
-                await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     OpenStream(stream, path);
                 }
 
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception e)
             {
@@ -163,7 +162,7 @@ namespace WolvenKit.ViewModels.Documents
                 _isInitialized = false;
             }
 
-            return false;
+            return Task.FromResult(false);
         }
 
         public Optional<RDTDataViewModel> GetMainFile() => Optional<RDTDataViewModel>.ToOptional(TabItemViewModels
@@ -176,6 +175,14 @@ namespace WolvenKit.ViewModels.Documents
             if (cls is CBitmapTexture xbm)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(xbm, this));
+            }
+            if (cls is CCubeTexture cube)
+            {
+                TabItemViewModels.Add(new RDTTextureViewModel(cube, this));
+            }
+            if (cls is CTextureArray texa)
+            {
+                TabItemViewModels.Add(new RDTTextureViewModel(texa, this));
             }
             if (cls is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
@@ -200,7 +207,7 @@ namespace WolvenKit.ViewModels.Documents
             }
             if (cls is inkTextureAtlas atlas)
             {
-                var file = GetFileFromDepotPath(atlas.Slots[0].Texture.DepotPath);
+                var file = GetFileFromDepotPath(atlas.Slots[0]?.Texture?.DepotPath);
                 if (file != null)
                 {
                     TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
@@ -307,7 +314,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             var app = Locator.Current.GetService<AppViewModel>();
             app.CloseDialogCommand.Execute(null);
-            if (sender is not null && sender is CreateClassDialogViewModel dvm)
+            if (sender is not null and CreateClassDialogViewModel dvm)
             {
                 var instance = RedTypeManager.Create(dvm.SelectedClass);
 
@@ -332,6 +339,11 @@ namespace WolvenKit.ViewModels.Documents
 
         public CR2WFile GetFileFromDepotPath(CName depotPath, bool original = false)
         {
+            if (depotPath is null)
+            {
+                return null;
+            }
+
             try
             {
                 CR2WFile cr2wFile = null;

@@ -24,3 +24,18 @@ public class InvalidDefaultValueEventArgs : ParsingErrorEventArgs
 {
 
 }
+
+public class InvalidEnumValueEventArgs : ParsingErrorEventArgs
+{
+    public Type EnumType { get; }
+    public string StringValue { get; }
+    public Enum Value { get; set; }
+
+    public InvalidEnumValueEventArgs(Type enumType, string stringValue)
+    {
+        EnumType = enumType;
+        StringValue = stringValue;
+
+        Value = default;
+    }
+}

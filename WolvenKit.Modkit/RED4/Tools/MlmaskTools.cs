@@ -2,28 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using CP77.Common.Image;
+using SharpDX.Win32;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-
         #region Methods
 
-        public bool UncookMlmask(Stream cr2wStream, FileInfo outfile, MlmaskExportArgs args)
+        private static IEnumerable<RedImage> GetRedImages(rendRenderMultilayerMaskBlobPC blob)
         {
-            // read the cr2wfile
-            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
-            if (cr2w == null || cr2w.RootChunk is not Multilayer_Mask mlmask || mlmask.RenderResourceBlob.RenderResourceBlobPC.Chunk is not rendRenderMultilayerMaskBlobPC blob)
-            {
-                return false;
-            }
-
             uint atlasWidth = blob.Header.AtlasWidth;
             uint atlasHeight = blob.Header.AtlasHeight;
 
@@ -39,25 +33,11 @@ namespace WolvenKit.Modkit.RED4
 
             var atlasRaw = new byte[atlasWidth * atlasHeight];
 
-            //Decode compressed data into single channel uncompressed
-            //Mlmask always BC4?
             if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
             {
-                return false;
+                throw new Exception();
             }
 
-            //{
-            //    var mFilename = filename + $"__.dds";
-            //    var newpath = Path.Combine(path, mFilename);
-            //    using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
-            //    {
-            //        DDSUtils.GenerateAndWriteHeader(ddsStream, new DDSMetadata(atlasWidth, atlasHeight, 0, EFormat.R8_UNORM, 8, false, 0, false));
-            //
-            //        ddsStream.Write(atlasRaw);
-            //    }
-            //}
-
-            //Read tilesdata buffer into appropriate variable type
             var tileBuffer = blob.TilesData.Buffer;
             var tiles = new uint[tileBuffer.MemSize / 4];
 
@@ -72,6 +52,44 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
+            var maskData = new byte[maskWidth * maskHeight];
+
+            for (var i = 0; i < maskCount; i++)
+            {
+                //Clear instead of allocate new is faster?
+                //Mandatory cause decode does not always write to every pixel
+                Array.Clear(maskData, 0, maskData.Length);
+
+                Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth,
+                    atlasHeight, tiles, maskTileSize, i);
+
+                var info = new DDSUtils.DDSInfo
+                {
+                    Compression = Enums.ETextureCompression.TCM_None,
+                    RawFormat = Enums.ETextureRawFormat.TRF_Grayscale,
+                    IsGamma = false,
+                    Width = maskWidth,
+                    Height = maskHeight,
+                    Depth = 1,
+                    MipCount = 1,
+                    SliceCount = 1,
+                    TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D,
+                    FlipV = false
+                };
+
+                yield return RedImage.Create(info, maskData);
+            }
+        }
+
+        public bool UncookMlmask(Stream cr2wStream, FileInfo outfile, MlmaskExportArgs args)
+        {
+            // read the cr2wfile
+            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
+            if (cr2w == null || cr2w.RootChunk is not Multilayer_Mask mlmask || mlmask.RenderResourceBlob.RenderResourceBlobPC.Chunk is not rendRenderMultilayerMaskBlobPC blob)
+            {
+                return false;
+            }
+
             // write texture to file
             DirectoryInfo subdir = null;
             if (args.AsList)
@@ -83,99 +101,30 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            var maskData = new byte[maskWidth * maskHeight];
+            var cnt = 0;
             var masks = new List<string>();
-            for (var i = 0; i < maskCount; i++)
+
+            foreach (var img in GetRedImages(blob))
             {
+                var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{cnt++}";
+                var newPath = Path.Combine(args.AsList ? subdir.FullName : outfile.Directory.FullName, $"{mFilename}.{args.UncookExtension}");
 
-                //Clear instead of allocate new is faster?
-                //Mandatory cause decode does not always write to every pixel
-                Array.Clear(maskData, 0, maskData.Length);
-                try
+                var buffer = args.UncookExtension switch
                 {
-                    Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth,
-                        atlasHeight, tiles, maskTileSize, i);
-                }
-                catch
-                {
-                    return false;
-                }
+                    EUncookExtension.dds => img.SaveToDDSMemory(),
+                    EUncookExtension.tga => img.SaveToTGAMemory(),
+                    EUncookExtension.bmp => img.SaveToBMPMemory(),
+                    EUncookExtension.jpg => img.SaveToJPEGMemory(),
+                    EUncookExtension.png => img.SaveToPNGMemory(),
+                    EUncookExtension.tiff => img.SaveToTIFFMemory(),
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                img.Dispose();
 
-                if (WolvenTesting.IsTesting)
-                {
-                    continue;
-                }
-
-                // create dds stream
-                using var ms = new MemoryStream();
-                DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(
-                    maskWidth, maskHeight,
-                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8, true));
-                ms.Write(maskData);
-
-                string newpath;
-
-                var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}";
+                File.WriteAllBytes(newPath, buffer);
                 if (args.AsList)
                 {
-                    newpath = Path.Combine(subdir.FullName, $"{mFilename}.dds");
-                }
-                else
-                {
-                    newpath = Path.Combine(outfile.Directory.FullName, $"{mFilename}.dds");
-                }
-
-                if (args.UncookExtension == EMlmaskUncookExtension.dds)
-                {
-                    using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    ms.CopyTo(ddsStream);
-
-                    if (args.AsList)
-                    {
-                        masks.Add($"{subdir.Name}/{mFilename}.dds");
-                    }
-                }
-                //else if (args.UncookExtension == EUncookExtension.tga)
-                //{
-                //    using (var ddsStream = new FileStream($"{newpath}.tga", FileMode.Create, FileAccess.Write))
-                //    {
-                //        ms.Seek(0, SeekOrigin.Begin);
-                //        using (var ms2 = new MemoryStream(DDSUtils.ConvertFromDdsMemory(ms, EUncookExtension.tga)))
-                //        {
-                //            var br = new BinaryReader(ms2);
-                //            br.BaseStream.Seek(14, SeekOrigin.Begin);
-                //            ushort height = br.ReadUInt16();
-                //            br.BaseStream.Seek(17, SeekOrigin.Begin);
-                //            byte descriptor = br.ReadByte();
-
-                //            var bw = new BinaryWriter(ms2);
-                //            bw.BaseStream.Seek(10, SeekOrigin.Begin);
-                //            bw.Write(height);
-
-                //            bw.BaseStream.Seek(17, SeekOrigin.Begin);
-                //            bw.Write(descriptor ^ 0b00001000);
-
-                //            bw.Flush();
-
-                //            ms2.Position = 0;
-                //            ms2.CopyTo(ddsStream);
-                //        }
-                //    }
-                //}
-                else
-                {
-                    // convert
-                    ms.Seek(0, SeekOrigin.Begin);
-                    if (!Texconv.ConvertFromDdsAndSave(ms, newpath, args))
-                    {
-                        return false;
-                    }
-
-                    if (args.AsList)
-                    {
-                        masks.Add($"{subdir.Name}/{mFilename}.png");
-                    }
+                    masks.Add($"{subdir.Name}/{mFilename}.{args.UncookExtension}");
                 }
             }
 
@@ -197,79 +146,12 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            uint atlasWidth = blob.Header.AtlasWidth;
-            uint atlasHeight = blob.Header.AtlasHeight;
-
-            uint maskWidth = blob.Header.MaskWidth;
-            uint maskHeight = blob.Header.MaskHeight;
-
-            uint maskWidthLow = blob.Header.MaskWidthLow;
-            uint maskHeightLow = blob.Header.MaskHeightLow;
-
-            uint maskTileSize = blob.Header.MaskTileSize;
-
-            uint maskCount = blob.Header.NumLayers;
-
-            var atlasRaw = new byte[atlasWidth * atlasHeight];
-
-            //Decode compressed data into single channel uncompressed
-            //Mlmask always BC4?
-            if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
+            foreach (var img in GetRedImages(blob))
             {
-                return false;
+                streams.Add(new MemoryStream(img.SaveToDDSMemory()));
+                img.Dispose();
             }
-
-            //atlasRaw = blob.AtlasData.Buffer.GetBytes();
-
-            //Read tilesdata buffer into appropriate variable type
-            var tileBuffer = blob.TilesData.Buffer;
-            var tiles = new uint[tileBuffer.MemSize / 4];
-
-            using (var ms = new MemoryStream(tileBuffer.GetBytes()))
-            using (var br = new BinaryReader(ms))
-            {
-                ms.Seek(0, SeekOrigin.Begin);
-
-                for (var i = 0; i < tiles.Length; i++)
-                {
-                    tiles[i] = br.ReadUInt32();
-                }
-            }
-
-            var maskData = new byte[maskWidth * maskHeight];
-
-            for (var i = 0; i < maskCount; i++)
-            {
-                //Clear instead of allocate new is faster?
-                //Mandatory cause decode does not always write to every pixel
-                Array.Clear(maskData, 0, maskData.Length);
-                try
-                {
-                    Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth,
-                        atlasHeight, tiles, maskTileSize, i);
-                }
-                catch
-                {
-                    throw;
-                }
-
-                if (WolvenTesting.IsTesting)
-                {
-                    continue;
-                }
-
-                var ms = new MemoryStream();
-                DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(maskWidth, maskHeight,
-                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8, true));
-                ms.Write(maskData);
-                ms.Seek(0, SeekOrigin.Begin);
-                //var stream = new MemoryStream(DDSUtils.ConvertToDdsMemory(ms, EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM, false, false));
-                ms = new MemoryStream(
-                    Texconv.ConvertToDds(
-                        new MemoryStream(Texconv.ConvertFromDds(ms, EUncookExtension.tga)),
-                        EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM));
-                streams.Add(ms);
-            }
+            
             return true;
         }
 
@@ -323,7 +205,13 @@ namespace WolvenKit.Modkit.RED4
             var heightInTiles0 = DivCeil(maskHeight, maskTileSize);
             var smallOffset = widthInTiles0 * heightInTiles0;
 
-            var smallScale = maskWidth / mWidthLow;
+            // DivideByZero preventions.
+            // maskWidthLow == 0
+            // maskWidth < mWidthLow => maskWidth / mWidthLow = 0 because (int) Math
+            var smallScale =
+                mWidthLow == 0 || maskWidth < mWidthLow
+                    ? 1
+                    : maskWidth / mWidthLow;
 
             for (uint x = 0; x < maskWidth; x++)
             {
@@ -343,6 +231,11 @@ namespace WolvenKit.Modkit.RED4
             var yTile = y / maskTileSize / smallScale;
 
             var tileIndex = (widthInTiles * yTile) + xTile + tilesOffset;
+
+            if ((tileIndex * 2) + 1 >= tilesData.Length)
+            {
+                return;
+            }
 
             var paramOffset = tilesData[tileIndex * 2];
             var paramBits = tilesData[(tileIndex * 2) + 1];

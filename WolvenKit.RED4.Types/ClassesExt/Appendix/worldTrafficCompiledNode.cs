@@ -204,6 +204,7 @@ namespace WolvenKit.RED4.Types
 
         public worldTrafficCompiledNode_App1()
         {
+            Unk4 = new CByteArray();
             Unk7 = new CArray<worldTrafficCompiledNode_App2>();
             Handles = new CArray<CHandle<AITrafficWorkspotCompiled>>();
         }

@@ -1,12 +1,10 @@
-using System;
-using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 
@@ -14,19 +12,19 @@ namespace WolvenKit.ViewModels
 {
     public class SettingsPageViewModel : PageViewModel
     {
-        private readonly AppViewModel _main;
+        public readonly AppViewModel MainViewModel;
         private readonly ILoggerService _loggerService;
 
         public SettingsPageViewModel(
+            AppViewModel mainViewModel,
             ISettingsManager settingsManager,
             ILoggerService loggerService
         )
         {
-            _main = Locator.Current.GetService<AppViewModel>();
+            MainViewModel = mainViewModel;
             Settings = settingsManager;
             _loggerService = loggerService;
 
-            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(CheckForUpdates);
             SaveCloseCommand = ReactiveCommand.CreateFromTask(SaveClose);
         }
 
@@ -35,11 +33,7 @@ namespace WolvenKit.ViewModels
 
         public ReactiveCommand<Unit, Unit> SaveCloseCommand { get; }
 
-        public ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; }
-        // todo update task 
-        private async Task CheckForUpdates() => await Task.CompletedTask;
-
-        private async Task SaveClose() => await Task.Run(() => _main.CloseModalCommand.Execute(null));
+        private async Task SaveClose() => await Task.Run(() => MainViewModel.CloseModalCommand.Execute(null));
 
     }
 }

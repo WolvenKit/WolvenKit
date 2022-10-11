@@ -5,7 +5,7 @@ using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Dialogs;
 
@@ -19,7 +19,7 @@ namespace WolvenKit.ViewModels.HomePage
         [Reactive] public IPluginService _pluginService { get; set; }
 
 
-        public delegate Task ReturnHandler(NewFileViewModel file);
+        public delegate Task ReturnHandler(PluginsToolViewModel file);
         public ReturnHandler FileHandler;
 
         public PluginsToolViewModel()
@@ -27,7 +27,9 @@ namespace WolvenKit.ViewModels.HomePage
             _logger = Locator.Current.GetService<ILoggerService>();
             _pluginService = Locator.Current.GetService<IPluginService>();
 
-            CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
+#pragma warning disable IDE0053 // Use expression body for lambda expressions
+            CancelCommand = ReactiveCommand.Create(() => { FileHandler(null); });
+#pragma warning restore IDE0053 // Use expression body for lambda expressions
             SyncCommand = ReactiveCommand.CreateFromTask(SyncAsync);
         }
 
@@ -35,8 +37,11 @@ namespace WolvenKit.ViewModels.HomePage
         [Reactive] public PluginViewModel SelectedPlugin { get; set; }
 
 
-        public ICommand CancelCommand { get; private set; }
+        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
         public ReactiveCommand<Unit, Unit> SyncCommand { get; set; }
+
+        public override ReactiveCommand<Unit, Unit> OkCommand => throw new NotImplementedException();
+
         public async Task SyncAsync() => await _pluginService.CheckForUpdatesAsync();
 
     }

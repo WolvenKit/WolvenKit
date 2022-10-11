@@ -18,6 +18,12 @@ namespace WolvenKit.ViewModels.Tools
         public RedFileViewModel(IGameFile fileEntry)
         {
             _fileEntry = fileEntry;
+
+            ArchiveName = _fileEntry.Archive.Name;
+            if (!string.IsNullOrEmpty(_fileEntry.Archive.ArchiveRelativePath))
+            {
+                ArchiveName = _fileEntry.Archive.ArchiveRelativePath;
+            }
         }
 
 
@@ -39,7 +45,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public override string SizeString => FormatSize(_fileEntry.Size);
 
-        [Display(Name = "Archive")] public string ArchiveName => _fileEntry.Archive.Name;
+        [Display(Name = "Archive")] public string ArchiveName { get; }
 
         #endregion Properties
 

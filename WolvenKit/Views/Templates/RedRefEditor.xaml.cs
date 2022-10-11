@@ -45,10 +45,7 @@ namespace WolvenKit.Views.Editors
                 handler => PathBox.KeyUp -= handler)
                 .Throttle(TimeSpan.FromSeconds(.5))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x =>
-                {
-                    SetRedValue(PathBox.Text);
-                });
+                .Subscribe(x => SetRedValue(PathBox.Text));
 
             //this.WhenAnyValue(x => x.Path)
             //    .Select(x => x != "")
@@ -80,16 +77,11 @@ namespace WolvenKit.Views.Editors
         private void SetRedValue(string value)
         {
             if (RedRef == null)
+            {
                 return;
-            CName cn = null;
-            if (ulong.TryParse(value, out var number))
-            {
-                cn = number;
             }
-            else
-            {
-                cn = value;
-            }
+
+            var cn = ulong.TryParse(value, out var number) ? (CName)number : (CName)value;
             var redRef = (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType);
             redRef.DepotPath = cn;
             SetCurrentValue(RedRefProperty, redRef);
@@ -104,26 +96,14 @@ namespace WolvenKit.Views.Editors
         private string GetPathFromRedValue()
         {
             // this might need to be handled at the class level like enums
-            if (RedRef is null || RedRef.DepotPath is null)
-            {
-                return "";
-            }
-            if ((string)RedRef.DepotPath == null && RedRef.DepotPath.GetRedHash() != 0)
-            {
-                return GetHashFromRedValue().ToString();
-            }
-            return RedRef.DepotPath;
+            return RedRef is null || RedRef.DepotPath is null
+                ? ""
+                : string.IsNullOrEmpty((string)RedRef.DepotPath) && RedRef.DepotPath.GetRedHash() != 0 ? GetHashFromRedValue().ToString() : (string)RedRef.DepotPath;
         }
 
-        private ulong GetHashFromRedValue()
-        {
+        private ulong GetHashFromRedValue() =>
             // this might need to be handled at the class level like enums
-            if (RedRef is null)
-            {
-                return 0;
-            }
-            return RedRef.DepotPath?.GetRedHash() ?? 0;
-        }
+            RedRef is null ? 0 : RedRef.DepotPath?.GetRedHash() ?? 0;
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {

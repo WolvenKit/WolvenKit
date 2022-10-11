@@ -4,6 +4,9 @@
       <Platforms>x64</Platforms>
       <OutputType>Exe</OutputType>
       <TargetFramework>net6.0</TargetFramework>
+      <VersionPrefix>1.7.0</VersionPrefix>
+      <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <StartupObject>WolvenKit.CLI.Program</StartupObject>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
@@ -11,11 +14,10 @@
 
     <PropertyGroup>
         <Title>WolvenKit.CLI</Title>
-        <Version>1.7.0</Version>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>cp77tools</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <PackageId>WolvenKit.CLI</PackageId>
         <Company>WolvenKit</Company>
         <Product>WolvenKit.CLI</Product>
@@ -39,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.3.4" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.4.1" />
     <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.21216.1" />
 
   </ItemGroup>

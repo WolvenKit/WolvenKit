@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WolvenKit.Core.Interfaces;
 
@@ -32,4 +33,6 @@ public interface IGameFile
     #endregion Properties
 
     public void Extract(Stream output);
+
+    public Task ExtractAsync(Stream output);
 }

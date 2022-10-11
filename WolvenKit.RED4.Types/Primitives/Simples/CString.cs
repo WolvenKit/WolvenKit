@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
     [RED("String")]
     [REDType(IsValueType = true)]
-    public sealed class CString : BaseStringType
+    public sealed class CString : BaseStringType, IRedCloneable
     {
         public CString() { }
         private CString(string value) : base(value) { }
@@ -14,6 +14,14 @@ namespace WolvenKit.RED4.Types
 
         public static bool operator ==(CString a, CString b) => Equals(a, b);
         public static bool operator !=(CString a, CString b) => !(a == b);
+
+        #region IRedCloneable
+
+        public object ShallowCopy() => MemberwiseClone();
+
+        public object DeepCopy() => new CString(_value);
+
+        #endregion IRedCloneable
 
         public override string ToString() => this;
 

@@ -1,15 +1,15 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using ReactiveUI;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Modkit.RED4.Sounds;
-using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
 {
     /// <summary>
-    /// Interaction logic for NewFileView.xaml
+    /// Interaction logic for SoundModdingView.xaml
     /// </summary>
     public partial class SoundModdingView : ReactiveUserControl<SoundModdingViewModel>
     {
@@ -23,6 +23,12 @@ namespace WolvenKit.Views.Dialogs
                 this.Bind(ViewModel,
                     vm => vm.SoundEvents,
                     v => v.DataGridEvents.ItemsSource)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
                     .DisposeWith(disposables);
             });
         }
@@ -39,7 +45,7 @@ namespace WolvenKit.Views.Dialogs
             }
 
             ViewModel.SelectedEvents = selectedtems;
-            ViewModel.AddCommand.Execute(null);
+            ViewModel.AddCommand.Execute().Subscribe();
         }
 
         private List<string> _selectedtems = new();
@@ -76,12 +82,14 @@ namespace WolvenKit.Views.Dialogs
 
         private void ButtonAdd_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            
+
             var item = DataGridEvents.SelectedItem as SoundEvent;
-            var selectedtems = new List<SoundEvent>();
-            selectedtems.Add(item);
+            var selectedtems = new List<SoundEvent>
+            {
+                item
+            };
             ViewModel.SelectedEvents = selectedtems;
-            ViewModel.AddCommand.Execute(null);
+            ViewModel.AddCommand.Execute().Subscribe();
         }
 
         private void ButtonDel_Click(object sender, System.Windows.RoutedEventArgs e)

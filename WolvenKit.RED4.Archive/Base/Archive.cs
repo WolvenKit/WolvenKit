@@ -41,6 +41,8 @@ namespace WolvenKit.RED4.Archive
 
         [ProtoMember(3)] public Index Index { get; set; }
 
+        [ProtoMember(4)] public string ArchiveRelativePath { get; set; }
+
 
         public Dictionary<ulong, IGameFile> Files { get; }
 
@@ -57,8 +59,16 @@ namespace WolvenKit.RED4.Archive
         public MemoryMappedViewStream GetViewStream(ulong offset, uint size)
         {
             _mmf ??= MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
-
             return _mmf.CreateViewStream((long)offset, size, MemoryMappedFileAccess.Read);
+        }
+
+        public void ReleaseFileHandle()
+        {
+            if (_mmf != null)
+            {
+                _mmf.Dispose();
+                _mmf = null;
+            }
         }
 
         /// <summary>

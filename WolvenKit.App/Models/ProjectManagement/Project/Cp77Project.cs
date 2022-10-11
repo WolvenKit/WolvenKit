@@ -1,6 +1,9 @@
+using Splat;
 using System;
 using System.IO;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Services;
 
 
 namespace WolvenKit.ProjectManagement.Project
@@ -22,7 +25,7 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(FileDirectory, "customSounds");
+                string dir = Path.Combine(FileDirectory, "customSounds");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -35,7 +38,7 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(FileDirectory, "scripts");
+                string dir = Path.Combine(FileDirectory, "scripts");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -49,12 +52,12 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var oldDir = Path.Combine(FileDirectory, "tweakdbs");
+                string oldDir = Path.Combine(FileDirectory, "tweakdbs");
                 if (Directory.Exists(oldDir))
                 {
                     return oldDir;
                 }
-                var dir = Path.Combine(FileDirectory, "tweaks");
+                string dir = Path.Combine(FileDirectory, "tweaks");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -68,7 +71,7 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "packed");
+                string dir = Path.Combine(ProjectDirectory, "packed");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -78,11 +81,11 @@ namespace WolvenKit.ProjectManagement.Project
             }
         }
 
-        public override string PackedModDirectory
+        public override string PackedRedModDirectory
         {
             get
             {
-                var dir = Path.Combine(PackedRootDirectory, "mods", Name);
+                string dir = Path.Combine(PackedRootDirectory, "mods", Name);
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -92,26 +95,23 @@ namespace WolvenKit.ProjectManagement.Project
             }
         }
 
-        public override string PackedArchiveDirectory
+        public string GetPackedArchiveDirectory(bool IsRedMod)
         {
-            get
-            {
-                //var dir = Path.Combine(PackedRootDirectory, "archive", "pc", "mod"/*, $"mod{Name}"*/);
-                var dir = Path.Combine(PackedModDirectory, "archives");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
+            string dir = IsRedMod ? Path.Combine(PackedRedModDirectory, "archives") : Path.Combine(PackedRootDirectory, "archive", "pc", "mod");
 
-                return dir;
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
             }
+
+            return dir;
         }
 
         public string PackedSoundsDirectory
         {
             get
             {
-                var dir = Path.Combine(PackedModDirectory, "customSounds");
+                string dir = Path.Combine(PackedRedModDirectory, "customSounds");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -125,7 +125,7 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(PackedRootDirectory, "r6", "tweaks");
+                string dir = Path.Combine(PackedRootDirectory, "r6", "tweaks");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -134,22 +134,6 @@ namespace WolvenKit.ProjectManagement.Project
                 return dir;
             }
         }
-
-        public string PackedScriptsDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(PackedRootDirectory, "r6", "scripts");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
-
-        
 
         #region methods
 
@@ -164,9 +148,29 @@ namespace WolvenKit.ProjectManagement.Project
             _ = ScriptDirectory;
         }
 
+        private void LoadProjectHashes()
+        {
+            if (Locator.Current.GetService<IHashService>() is HashService hashService)
+            {
+                hashService.ClearProjectHashes();
+
+                string hashPath = Path.Combine(FileDirectory, "project_hashes.txt");
+                if (!File.Exists(hashPath))
+                {
+                    return;
+                }
+
+                string[] paths = File.ReadAllLines(hashPath);
+                foreach (string path in paths)
+                {
+                    hashService.AddProjectPath(path);
+                }
+            }
+        }
+
         public object Clone()
         {
-            var clone = new Cp77Project()
+            Cp77Project clone = new()
             {
                 Name = Name,
                 Author = Author,

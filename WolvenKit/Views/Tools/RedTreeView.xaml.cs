@@ -5,10 +5,12 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
-using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.ViewModels.Documents;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Interaction;
+using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Documents;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Tools
 {
@@ -17,18 +19,15 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class RedTreeView : UserControl
     {
-        public RedTreeView()
-        {
-            InitializeComponent();
-        }
+        public RedTreeView() => InitializeComponent();
 
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(RedTreeView));
 
         public object ItemsSource
         {
-            get { return (object)GetValue(ItemsSourceProperty); }
-            set { SetValue(ItemsSourceProperty, value); }
+            get => GetValue(ItemsSourceProperty);
+            set => SetValue(ItemsSourceProperty, value);
         }
 
         /// <summary>Identifies the <see cref="SelectedItem"/> dependency property.</summary>
@@ -37,8 +36,8 @@ namespace WolvenKit.Views.Tools
 
         public object SelectedItem
         {
-            get { return (object)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }
+            get => GetValue(SelectedItemProperty);
+            set => SetValue(SelectedItemProperty, value);
         }
 
         public object SelectedItems { get; set; } = new();
@@ -74,7 +73,7 @@ namespace WolvenKit.Views.Tools
 
         }
 
-        public void OnCollapsed(object sender, Syncfusion.UI.Xaml.TreeView.NodeExpandedCollapsedEventArgs e)
+        public async void OnCollapsed(object sender, Syncfusion.UI.Xaml.TreeView.NodeExpandedCollapsedEventArgs e)
         {
             if (e.Node.Level == 0 &&
                 e.Node.Content is ChunkViewModel cvm &&
@@ -89,9 +88,9 @@ namespace WolvenKit.Views.Tools
                     var chunk = rdtd.Chunks.First();
                     try
                     {
-                        chunk.Refresh();
+                        await chunk.Refresh();
                     }
-                    catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+                    catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
 
                 }
             }
@@ -130,7 +129,7 @@ namespace WolvenKit.Views.Tools
                         //{
                         //    e.DropPosition = DropPosition.DropAsChild;
                         //}
-                        else if (source.Data is IRedType)
+                        else if (source.Data is not null)
                         {
                             if (IsControlBeingHeld && !target.Parent.IsReadOnly)
                             {
@@ -161,7 +160,7 @@ namespace WolvenKit.Views.Tools
                         }
                     }
                 }
-                if (e.DropPosition == DropPosition.DropAsChild || e.DropPosition == DropPosition.DropHere)
+                if (e.DropPosition is DropPosition.DropAsChild or DropPosition.DropHere)
                 {
                     e.DropPosition = DropPosition.DropBelow;
                 }
@@ -196,7 +195,7 @@ namespace WolvenKit.Views.Tools
             //}
         }
 
-        private void SfTreeView_ItemDropping(object sender, TreeViewItemDroppingEventArgs e)
+        private async void SfTreeView_ItemDropping(object sender, TreeViewItemDroppingEventArgs e)
         {
             e.Handled = true;
             if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
@@ -207,8 +206,7 @@ namespace WolvenKit.Views.Tools
                     {
                         if (source.Data is IRedCloneable irc)
                         {
-                            MessageBoxResult messageBoxResult = MessageBox.Show($"Duplicate {source.Data.GetType().Name} here?", "Duplicate Confirmation", MessageBoxButton.YesNo);
-                            if (messageBoxResult == MessageBoxResult.Yes)
+                            if (await Interactions.ShowMessageBoxAsync($"Duplicate {source.Data.GetType().Name} here?", "Duplicate Confirmation", WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes)
                             {
                                 target.Parent.InsertChild(target.Parent.Properties.IndexOf(target) + (e.DropPosition == DropPosition.DropBelow ? 1 : 0), (IRedType)irc.DeepCopy());
                             }

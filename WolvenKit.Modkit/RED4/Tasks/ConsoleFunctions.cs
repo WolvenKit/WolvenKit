@@ -4,6 +4,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
 
@@ -21,9 +22,7 @@ namespace CP77Tools.Tasks
         public Task ImportTask(string[] path, string outDir, bool keep);
         public int OodleTask(string path, string outpath, bool decompress, bool compress);
         public void PackTask(string[] path, string outpath);
-        public void UncookTask(string[] path, string outpath, string rawOutDir,
-            EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
-            ECookedFileFormat[] forcebuffers, bool? serialize);
+        public void UncookTask(string[] path, UncookTaskOptions options);
     }
 
     public partial class ConsoleFunctions : IConsoleFunctions

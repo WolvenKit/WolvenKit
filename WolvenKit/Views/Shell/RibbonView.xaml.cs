@@ -1,41 +1,37 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
+using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Models;
+using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
-using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Shell
 {
     public partial class RibbonView : ReactiveUserControl<RibbonViewModel>
     {
-        private AppViewModel _mainViewModel;
-
+        private readonly ISettingsManager _settingsManager;
+        //private bool _profilesLoaded;
 
         public RibbonView()
         {
             ViewModel = Locator.Current.GetService<RibbonViewModel>();
             DataContext = ViewModel;
-
             InitializeComponent();
 
-            MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+
+            //GetLaunchProfiles();
 
             this.WhenActivated(disposables =>
             {
-
-                _mainViewModel = Locator.Current.GetService<AppViewModel>();
-
-                #region commands
-
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.ShowHomePageCommand,
-                        view => view.HomeButton)
-                    .DisposeWith(disposables);
-
                 // toolbar
+                // File
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.NewFileCommand,
                         view => view.ToolbarNewButton)
@@ -52,127 +48,133 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel.MainViewModel.SaveAllCommand,
                         view => view.ToolbarSaveAllButton)
                     .DisposeWith(disposables);
+
+                // project
+
+
+
+                // pack
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.NewProjectCommand,
-                        view => view.ToolbarNewProjectButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.PackModCommand,
+                        viewModel => viewModel.MainViewModel.PackRedModCommand,
                         view => view.ToolbarPackProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.PackInstallModCommand,
-                        view => view.ToolbarPackInstallButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.PackInstallRunModCommand,
-                        view => view.ToolbarInstallRunButton)
+                        viewModel => viewModel.MainViewModel.PackInstallRedModCommand,
+                        view => view.ToolbarPackInstallRedmodButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.HotInstallModCommand,
                         view => view.ToolbarHotInstallButton)
                     .DisposeWith(disposables);
 
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.LaunchGameCommand,
-                        view => view.ToolbarLaunchButton)
-                    .DisposeWith(disposables);
 
-                this.Bind(ViewModel,
-                        viewModel => viewModel.MainViewModel.SelectedGameCommandIdx,
-                        view => view.ToolbarLaunchCombobox.SelectedIndex)
-                    .DisposeWith(disposables);
-                this.OneWayBind(ViewModel,
-                        viewModel => viewModel.MainViewModel.SelectedGameCommands,
-                        view => view.ToolbarLaunchCombobox.ItemsSource)
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.MainViewModel.LaunchOptionsCommand,
+                        view => view.LaunchOptionsMenuItem)
                     .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.ShowSettingsCommand,
-                        view => view.ToolbarSettingsButton)
-                    .DisposeWith(disposables);
+                       viewModel => viewModel.LaunchProfileCommand,
+                       view => view.LaunchProfileButton)
+                   .DisposeWith(disposables);
 
-                this.Bind(ViewModel,
-                        viewModel => viewModel.MainViewModel.ProjectExplorer.IsVisible,
-                        view => view.ProjectExplorerCheckbox.IsChecked)
-                    .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                        viewModel => viewModel.MainViewModel.AssetBrowserVM.IsVisible,
-                        view => view.AssetBrowserCheckbox.IsChecked)
-                    .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.PropertiesViewModel.IsVisible,
-                        view => view.PropertiesCheckbox.IsChecked)
-                    .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                        viewModel => viewModel.MainViewModel.Log.IsVisible,
-                        view => view.LogCheckbox.IsChecked)
-                    .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                        viewModel => viewModel.MainViewModel.ImportExportToolVM.IsVisible,
-                        view => view.ImportExportCheckbox.IsChecked)
-                    .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                        viewModel => viewModel.MainViewModel.TweakBrowserVM.IsVisible,
-                        view => view.TweakBrowserCheckbox.IsChecked)
-                    .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                        viewModel => viewModel.MainViewModel.LocKeyBrowserVM.IsVisible,
-                        view => view.LocKeyBrowserCheckbox.IsChecked)
-                    .DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.LaunchProfileText,
+                   view => view.LaunchProfileText.Text)
+                   .DisposeWith(disposables);
 
-                #endregion
+                this.OneWayBind(ViewModel, vm => vm.MainViewModel.ActiveProject,
+                    view => view.LaunchMenu.IsEnabled,
+                    p => p is not null)
+                    .DisposeWith(disposables);
+            });
+
+            _settingsManager.WhenAnyValue(x => x.LaunchProfiles).Subscribe(dict =>
+            {
+                //if (_profilesLoaded)
+                {
+                    GetLaunchProfiles();
+                }
+
             });
         }
 
-        public int MaxBackgroundThreadsCount { get; set; }
-
-        public static MaterialsRepositoryDialog MaterialsRepositoryDia { get; set; }
-
-        private void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e)
+        private void GetLaunchProfiles()
         {
-            if (MaterialsRepositoryDia == null)
+            // add default profiles
+            if (_settingsManager.LaunchProfiles is null || _settingsManager.LaunchProfiles.Count == 0)
             {
-                var x = new MaterialsRepositoryDialog();
-                MaterialsRepositoryDia = x;
-                x.Show();
+                using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.Resources.launchprofiles.json");
+                var defaultprofiles = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, LaunchProfile>>(stream, new System.Text.Json.JsonSerializerOptions()
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+                });
+
+                _settingsManager.LaunchProfiles = defaultprofiles;
+                _settingsManager.Save();
             }
+
+            // unsubscribe
+            foreach (var obj in LaunchMenuMainItem.Items)
+            {
+                if (obj is MenuItem menuitem && menuitem.Header is string menuitemHeader)
+                {
+                    if (menuitemHeader == "Launch Options")
+                    {
+                        continue;
+                    }
+                    menuitem.Click -= LaunchMenu_MenuItem_Click;
+                }
+            }
+            // delete all except for last two
+            var cntToRemove = LaunchMenuMainItem.Items.Count - 2;
+            for (var i = 0; i < cntToRemove; i++)
+            {
+                LaunchMenuMainItem.Items.RemoveAt(0);
+            }
+
+
+            var count = 0;
+            foreach ((var name, var value) in _settingsManager.LaunchProfiles)
+            {
+                MenuItem item = new()
+                {
+                    Header = name
+                };
+
+                // Create image element to set as icon on the menu element
+                //Image icon = new Image();
+                //BitmapImage bmImage = new BitmapImage();
+                //bmImage.BeginInit();
+                //bmImage.UriSource = new Uri(imagePath, UriKind.Absolute);
+                //bmImage.EndInit();
+                //icon.Source = bmImage;
+                //icon.MaxWidth = 25;
+                //item.Icon = icon;
+
+                item.Click += new RoutedEventHandler(LaunchMenu_MenuItem_Click);
+
+                LaunchMenuMainItem.Items.Insert(count, item);
+                count++;
+            }
+
+            if (_settingsManager.LaunchProfiles is not null || _settingsManager.LaunchProfiles.Count != 0)
+            {
+                ViewModel.LaunchProfileText = _settingsManager.LaunchProfiles.First().Key;
+            }
+
+            //_profilesLoaded = true;
         }
 
-        private void SetLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SetLayoutToDefault();
-        private void SaveLayoutToProject(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayoutToProject();
-
-        private void ExandAllNodesContext_Click(object sender, RoutedEventArgs e) =>
-            _mainViewModel.ProjectExplorer.ExpandAll.Execute().Subscribe();
-
-        private void collapseAllNodesContext_Click(object sender, RoutedEventArgs e) =>
-            _mainViewModel.ProjectExplorer.CollapseAll.Execute().Subscribe();
-
-        private void CollapseChildrenContext_Click(object sender, RoutedEventArgs e) =>
-            _mainViewModel.ProjectExplorer.CollapseChildren.Execute().Subscribe();
-
-        private void ExandChildrenContext_Click(object sender, RoutedEventArgs e) =>
-            _mainViewModel.ProjectExplorer.ExpandChildren.Execute().Subscribe();
-
-
-
-        private void ExpandAllAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.ExpandAll.Execute().Subscribe();
-
-        private void CollapseAllAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.CollapseAll.Execute().Subscribe();
-
-        private void ExpandSingleAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.Expand.Execute().Subscribe();
-
-        private void collapseSingleAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.Collapse.Execute().Subscribe();
-
-        private void Ribbon_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void LaunchMenu_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            base.OnMouseLeftButtonDown(e);
-            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
-            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            if (e.Source is MenuItem item)
             {
-                mainWindow?.DragMove();
+                if (item.Header is string header)
+                {
+                    ViewModel.LaunchProfileText = header;
+                }
             }
         }
-
     }
 }

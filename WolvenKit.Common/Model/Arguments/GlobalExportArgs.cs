@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace WolvenKit.Common.Model.Arguments
@@ -22,6 +22,7 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(WemExportArgs), new WemExportArgs() },
             { typeof(OpusExportArgs), new OpusExportArgs() },
             { typeof(EntityExportArgs), new EntityExportArgs() },
+            { typeof(InkAtlasExportArgs), new InkAtlasExportArgs() },
         };
 
         /// <summary>

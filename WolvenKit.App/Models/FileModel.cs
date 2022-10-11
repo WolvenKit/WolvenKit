@@ -4,15 +4,12 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
-using System.Windows.Input;
-using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Interaction;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.ViewModels.Shell;
 
@@ -89,9 +86,6 @@ namespace WolvenKit.Models
             Hash = GenerateKey(FullName, project);
             ParentHash = GenerateKey(parentfullname, project);
             RelativePath = GetRelativeName(FullName, project);
-            OpenFileCommand = new DelegateCommand(ExecuteOpenFile);
-            DeleteFileCommand = new DelegateCommand(ExecuteDeleteFile);
-            RenameFileCommand = new DelegateCommand(ExecuteRenameFile, CanRenameFile).ObservesProperty(() => IsDirectory);
         }
 
         #region properties
@@ -145,8 +139,8 @@ namespace WolvenKit.Models
 
         [Browsable(false)]
         public bool IsExportable => !IsDirectory
-                                                       && !string.IsNullOrEmpty(GetExtension())
-                                                       && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
+                                    && !string.IsNullOrEmpty(GetExtension())
+                                    && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
 
         #endregion
 
@@ -196,17 +190,9 @@ namespace WolvenKit.Models
                 return rel;
             }
 
-            if (FullName.StartsWith(filedir, StringComparison.Ordinal))
-            {
-                return FullName[(filedir.Length + 1)..];
-            }
-
-            if (FullName.StartsWith(packedDir, StringComparison.Ordinal))
-            {
-                return FullName[(packedDir.Length + 1)..];
-            }
-
-            return FullName;
+            return FullName.StartsWith(filedir, StringComparison.Ordinal)
+                ? FullName[(filedir.Length + 1)..]
+                : FullName.StartsWith(packedDir, StringComparison.Ordinal) ? FullName[(packedDir.Length + 1)..] : FullName;
             //throw new System.NullReferenceException("fuzzy exception");
         }
 
@@ -232,98 +218,12 @@ namespace WolvenKit.Models
                     var tmpName = Path.GetRelativePath(project.ModDirectory, fullname);
                     if (tmpName != ".")
                     {
-                        if (ulong.TryParse(tmpName, out var hash))
-                        {
-                            return hash;
-                        }
-                        return FNV1A64HashAlgorithm.HashString(tmpName);
+                        return ulong.TryParse(tmpName, out var hash) ? hash : FNV1A64HashAlgorithm.HashString(tmpName);
                     }
                 }
 
                 return FNV1A64HashAlgorithm.HashString(fullname);
             }
-        }
-
-        [Browsable(false)] public ICommand OpenFileCommand { get; private set; }
-        private bool CanOpenFile() => true;
-        private void ExecuteOpenFile() => Locator.Current.GetService<AppViewModel>().OpenFileCommand.SafeExecute(this);
-
-        /// <summary>
-        /// Delets selected node.
-        /// </summary>
-        [Browsable(false)] public ICommand DeleteFileCommand { get; private set; }
-        private bool CanDeleteFile() => true;
-        private async void ExecuteDeleteFile()
-        {
-            var delete = await Interactions.DeleteFiles.Handle(new List<string>() { Name });
-            if (!delete)
-            {
-                return;
-            }
-
-            // Delete from file structure
-            var fullpath = FullName;
-            try
-            {
-                if (IsDirectory)
-                {
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
-                        , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                        , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
-                }
-                else
-                {
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
-                        , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                        , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
-                }
-            }
-            catch (Exception)
-            {
-                //_loggerService.Error("Failed to delete " + fullpath + ".\r\n");
-            }
-        }
-
-
-        /// <summary>
-        /// Renames selected node.
-        /// </summary>
-        [Browsable(false)] public ICommand RenameFileCommand { get; private set; }
-        private bool CanRenameFile() => !IsDirectory;
-        private async void ExecuteRenameFile()
-        {
-            var filename = FullName;
-            var newfilename = await Interactions.Rename.Handle(filename);
-
-            if (string.IsNullOrEmpty(newfilename))
-            {
-                return;
-            }
-
-            var newfullpath = Path.Combine(Path.GetDirectoryName(filename), newfilename);
-
-            if (File.Exists(newfullpath))
-            {
-                return;
-            }
-
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
-                if (IsDirectory)
-                {
-                    Directory.Move(filename, newfullpath);
-                }
-                else
-                {
-                    File.Move(filename, newfullpath);
-                }
-            }
-            catch
-            {
-            }
-
-
         }
 
     }

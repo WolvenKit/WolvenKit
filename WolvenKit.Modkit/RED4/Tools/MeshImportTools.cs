@@ -561,6 +561,26 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
+            var jointCount = 0;
+            var weightCount = 0;
+            foreach (var accessor in accessors)
+            {
+                if (accessor.StartsWith("JOINTS_"))
+                {
+                    jointCount++;
+                }
+
+                if (accessor.StartsWith("WEIGHTS_"))
+                {
+                    weightCount++;
+                }
+            }
+
+            if (jointCount != weightCount)
+            {
+                throw new Exception("Number of JOINTS does not match the number of WEIGHTS");
+            }
+
             var joints0 = accessors.Contains("JOINTS_0") ? mesh.Primitives[0].GetVertices("JOINTS_0").AsVector4Array().ToList() : null;
 
             var joints1 = accessors.Contains("JOINTS_1") ? mesh.Primitives[0].GetVertices("JOINTS_1").AsVector4Array().ToList() : null;
@@ -665,7 +685,7 @@ namespace WolvenKit.Modkit.RED4
             for (var i = 0; i < mesh.texCoords0.Length; i++)
             {
                 Re4Mesh.uv0s[i, 0] = Converters.converthf(mesh.texCoords0[i].X);
-                Re4Mesh.uv0s[i, 1] = Converters.converthf(mesh.texCoords0[i].Y);
+                Re4Mesh.uv0s[i, 1] = Converters.converthf(mesh.texCoords0[i].Y * -1 + 1);
             }
 
             Re4Mesh.uv1s = new ushort[vertCount, 2];

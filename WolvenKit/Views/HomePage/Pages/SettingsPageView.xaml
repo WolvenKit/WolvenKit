@@ -6,6 +6,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:sp="clr-namespace:WolvenKit.Views.HomePage.Pages"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
@@ -14,7 +15,9 @@
     <Grid MinWidth="300" MinHeight="300">
 
         <Grid.Resources>
+            
             <ResourceDictionary>
+                <System:Boolean x:Key="FalseValue">False</System:Boolean>
                 <!--<ResourceDictionary.MergedDictionaries>
                     <hc:ThemeResources RequestedTheme="Dark" />
                     <hc:Theme />
@@ -79,6 +82,7 @@
 
             <Button
                 x:Name="CheckForUpdatesButton"
+                CommandParameter="{StaticResource FalseValue}"
                 Height="40"
                 Margin="15">
                 <TextBlock FontSize="14" Text="Check for updates" />

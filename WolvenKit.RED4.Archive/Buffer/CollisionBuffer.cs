@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.Archive.Buffer
         public CArray<CollisionActor> Actors { get; set; } = new();
     }
 
-    public class CollisionActor : IRedType
+    public class CollisionActor : IRedClass
     {
         public WorldPosition Position { get; set; } = new();
         public Quaternion Orientation { get; set; } = new();
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Archive.Buffer
         public CUInt64 Uk2 { get; set; }
     }
 
-    public abstract class CollisionShape : IRedType
+    public abstract class CollisionShape : IRedClass
     {
         public CEnum<physicsShapeType> ShapeType { get; set; }
         public Vector3 Position { get; set; } = new();
