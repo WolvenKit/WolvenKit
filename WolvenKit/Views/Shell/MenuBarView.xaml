@@ -494,13 +494,13 @@
                     Margin="2,1"
                     Header="Show File Preview"
                     IsCheckable="True"
-                    IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    IsChecked="{Binding SettingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ToolTip="Toggle interactive file preview for improved performance" />
-                <MenuItem
+                <!-- <MenuItem
                     x:Name="toolbarLabels"
                     Header="Show Toolbar Labels"
                     IsCheckable="True"
-                    IsChecked="True" />
+                    IsChecked="True" /> -->
 
                 <Separator Margin="0,10" />
 
