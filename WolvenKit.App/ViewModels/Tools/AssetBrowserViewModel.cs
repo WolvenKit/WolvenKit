@@ -567,7 +567,7 @@ namespace WolvenKit.ViewModels.Tools
                 var parentDir = LeftItems.ElementAt(0);
                 parentDir.IsExpanded = true;
 
-                foreach (var dir in file.RelativePath.Split('\\').SkipLast(1))
+                foreach (var dir in file.RelativePath.Split(Path.DirectorySeparatorChar).SkipLast(1))
                 {
                     fullPath += dir;
                     parentDir = parentDir.Directories
@@ -575,7 +575,7 @@ namespace WolvenKit.ViewModels.Tools
                         .First()
                         .Value;
                     parentDir.IsExpanded = true;
-                    fullPath += '\\';
+                    fullPath += Path.DirectorySeparatorChar;
                 }
                 MoveToFolder(parentDir);
                 RightSelectedItem = RightItems.Where(x => x.FullName == file.RelativePath).FirstOrDefault();
