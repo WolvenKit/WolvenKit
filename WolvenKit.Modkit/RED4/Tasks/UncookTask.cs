@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
@@ -27,8 +29,6 @@ namespace CP77Tools.Tasks
 
     public partial class ConsoleFunctions
     {
-        #region Methods
-
         public void UncookTask(string[] path, UncookTaskOptions options)
         {
             if (path == null || path.Length < 1)
@@ -197,7 +197,5 @@ namespace CP77Tools.Tasks
 
             return;
         }
-
-        #endregion Methods
     }
 }

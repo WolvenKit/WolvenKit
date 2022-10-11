@@ -13,8 +13,6 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-        #region Methods
-
         public async Task Cr2wTask(string[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
         {
             if (path is null || path.Length < 1)
@@ -151,7 +149,5 @@ namespace CP77Tools.Tasks
             watch.Stop();
             _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds}ms.");
         }
-
-        #endregion Methods
     }
 }

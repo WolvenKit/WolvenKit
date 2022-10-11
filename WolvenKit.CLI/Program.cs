@@ -34,6 +34,7 @@ namespace WolvenKit.CLI
                 new PackCommand(),
 
                 new ConvertCommand(),
+                new ConflictsCommand(),
 
                 new HashCommand(),
                 new OodleCommand(),

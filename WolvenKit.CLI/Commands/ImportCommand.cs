@@ -24,10 +24,10 @@ namespace CP77Tools.Commands
 
             AddOption(new Option<bool>(new[] { "--keep", "-k" }, "Keep existing CR2W files intact and only append the buffer."));
 
-            Handler = CommandHandler.Create<string[], DirectoryInfo, bool, bool, IHost>(Action);
+            Handler = CommandHandler.Create<string[], DirectoryInfo, bool, IHost>(Action);
         }
 
-        private async Task Action(string[] path, DirectoryInfo outpath, bool keep, bool clean, IHost host)
+        private async Task Action(string[] path, DirectoryInfo outpath, bool keep, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
