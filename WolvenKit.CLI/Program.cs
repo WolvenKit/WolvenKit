@@ -30,10 +30,9 @@ namespace WolvenKit.CLI
                 new UnbundleCommand(),
                 new UncookCommand(),
                 new ImportCommand(),
-                new PackCommand(),
                 new ExportCommand(),
+                new PackCommand(),
 
-                new DumpCommand(),
                 new ConvertCommand(),
 
                 new HashCommand(),
