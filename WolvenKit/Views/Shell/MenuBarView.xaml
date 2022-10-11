@@ -307,11 +307,11 @@
                 <MenuItem
                     x:Name="ToolbarProjectSettingsButton"
                     Margin="2,1"
-                    Header="Project Settings">
+                    Header="Project Configuration">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
-                            Kind="Settings"
+                            Kind="SettingsGear"
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
@@ -404,6 +404,36 @@
                                 Kind="ArrowRight"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator />
+
+                <!--  Install & Launch Game  -->
+                <MenuItem
+                    x:Name="ToolbarPackInstallLaunchButton"
+                    Margin="2,1"
+                    Header="Install &amp; Launch Game">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="RunAll"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!--  Install as REDmod & Launch Game  -->
+                <MenuItem
+                    x:Name="ToolbarPackInstallRedmodLaunchButton"
+                    Margin="2,1"
+                    Header="Install as REDmod &amp; Launch Game">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="RunAll"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -581,34 +611,6 @@
                     Margin="8,1"
                     CommandParameter="1"
                     Header="Launch Game with Steam" />
-
-                <Separator />
-
-                <MenuItem
-                    x:Name="ToolbarPackInstallLaunchButton"
-                    Margin="2,1"
-                    Header="Install &amp; Launch Game">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Margin="6,0"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="RunAll"
-                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem
-                    x:Name="ToolbarPackInstallRedmodLaunchButton"
-                    Margin="2,1"
-                    Header="Install as REDmod &amp; Launch Game">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Margin="6,0"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="RunAll"
-                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                    </MenuItem.Icon>
-                </MenuItem>
 
                 <Separator />
 

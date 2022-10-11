@@ -108,6 +108,16 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                    view => view.MenuItemPackInstallRedmodProject)
                .DisposeWith(disposables);
 
+            // Launch
+            this.BindCommand(ViewModel,
+                       viewModel => viewModel.MainViewModel.PackInstallRunCommand,
+                       view => view.ToolbarPackInstallLaunchButton)
+                   .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                       viewModel => viewModel.MainViewModel.PackInstallRedModRunCommand,
+                       view => view.ToolbarPackInstallRedmodLaunchButton)
+                   .DisposeWith(disposables);
+
 
 
             // Hot Reload
@@ -144,15 +154,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
             this.BindCommand(ViewModel,
                        viewModel => viewModel.MainViewModel.LaunchGameCommand,
                        view => view.ToolbarLaunchSteamButton)
-                   .DisposeWith(disposables);
-
-            this.BindCommand(ViewModel,
-                       viewModel => viewModel.MainViewModel.PackInstallRunCommand,
-                       view => view.ToolbarPackInstallLaunchButton)
-                   .DisposeWith(disposables);
-            this.BindCommand(ViewModel,
-                       viewModel => viewModel.MainViewModel.PackInstallRedModRunCommand,
-                       view => view.ToolbarPackInstallRedmodLaunchButton)
                    .DisposeWith(disposables);
 
             // Extensions
