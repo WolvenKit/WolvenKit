@@ -9,19 +9,10 @@ namespace CP77Tools.Commands
 {
     public class SettingsCommand : Command
     {
-        #region Fields
-
         private new const string Description = "App settings";
         private new const string Name = "settings";
 
-        #endregion Fields
-
-        #region Constructors
-
-        public SettingsCommand() : base(Name, Description)
-        {
-            Handler = CommandHandler.Create<IHost>(Action);
-        }
+        public SettingsCommand() : base(Name, Description) => Handler = CommandHandler.Create<IHost>(Action);
 
         private void Action(IHost host)
         {
@@ -36,7 +27,5 @@ namespace CP77Tools.Commands
                 }
             }.Start();
         }
-
-        #endregion Constructors
     }
 }

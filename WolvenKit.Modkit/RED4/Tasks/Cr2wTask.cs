@@ -13,13 +13,17 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-        #region Methods
-
-        public async Task Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
+        public async Task Cr2wTask(string[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
         {
-            if (path == null || path.Length < 1)
+            if (path is null || path.Length < 1)
             {
                 _loggerService.Warning("Please fill in an input path.");
+                return;
+            }
+
+            if (!deserialize && !serialize)
+            {
+                _loggerService.Error("Please specify either -s or -d.");
                 return;
             }
 
@@ -34,14 +38,14 @@ namespace CP77Tools.Tasks
             // });
         }
 
-        private async Task Cr2wTaskInner(string path, string outputDirectory, bool deserialize, bool serialize,
+        private async Task Cr2wTaskInner(string path, DirectoryInfo outputDirectory, bool deserialize, bool serialize,
             string pattern = "", string regex = "", ETextConvertFormat format = ETextConvertFormat.json)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                _loggerService.Warning("Please fill in an input path.");
+                _loggerService.Error("Please fill in an input path.");
                 return;
             }
 
@@ -105,9 +109,9 @@ namespace CP77Tools.Tasks
             foreach (var fileInfo in finalMatchesList)
             //Parallel.ForEach(finalMatchesList, fileInfo =>
             {
-                var outputDirInfo = string.IsNullOrEmpty(outputDirectory)
+                var outputDirInfo = outputDirectory is null
                     ? fileInfo.Directory
-                    : new DirectoryInfo(outputDirectory);
+                    : outputDirectory;
                 if (outputDirInfo == null || !outputDirInfo.Exists)
                 {
                     _loggerService.Error("Invalid output directory.");
@@ -119,7 +123,7 @@ namespace CP77Tools.Tasks
                     var infile = fileInfo.FullName;
                     if (await Task.Run(() => _modTools.ConvertToAndWrite(format, infile, outputDirInfo)))
                     {
-                        _loggerService.Success($"Saved {infile} to {format.ToString()}.");
+                        _loggerService.Success($"Saved {infile} to {format}.");
                     }
                 }
 
@@ -143,9 +147,7 @@ namespace CP77Tools.Tasks
             }
 
             watch.Stop();
-            _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds.ToString()}ms.");
+            _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds}ms.");
         }
-
-        #endregion Methods
     }
 }

@@ -12,7 +12,7 @@ namespace WolvenKit.Functionality.Services
 
         public SettingsDto(SettingsManager settings)
         {
-            CheckForUpdates = settings.CheckForUpdates;
+            SkipUpdateCheck = settings.SkipUpdateCheck;
             UpdateChannel = settings.UpdateChannel;
             ShowGuidedTour = settings.ShowGuidedTour;
             ThemeAccentString = settings.ThemeAccentString;
@@ -35,7 +35,7 @@ namespace WolvenKit.Functionality.Services
 
         public int SettingsVersion { get; set; }
 
-        public bool CheckForUpdates { get; set; }
+        public bool SkipUpdateCheck { get; set; }
         public EUpdateChannel UpdateChannel { get; set; }
         public bool ShowGuidedTour { get; set; }
         public string ThemeAccentString { get; set; }
@@ -59,7 +59,7 @@ namespace WolvenKit.Functionality.Services
 
             settingsManager.SettingsVersion = SettingsVersion;
 
-            settingsManager.CheckForUpdates = CheckForUpdates;
+            settingsManager.SkipUpdateCheck = SkipUpdateCheck;
             settingsManager.UpdateChannel = UpdateChannel;
             settingsManager.ShowGuidedTour = ShowGuidedTour;
             settingsManager.ThemeAccentString = ThemeAccentString;

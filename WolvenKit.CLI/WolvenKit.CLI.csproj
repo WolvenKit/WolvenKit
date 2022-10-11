@@ -4,7 +4,7 @@
       <Platforms>x64</Platforms>
       <OutputType>Exe</OutputType>
       <TargetFramework>net6.0</TargetFramework>
-      <VersionPrefix>1.7.0</VersionPrefix>
+      <VersionPrefix>1.7.1</VersionPrefix>
       <VersionSuffix>$(VersionSuffix)</VersionSuffix>
 
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
@@ -11,24 +13,22 @@ namespace CP77Tools.Tasks
 {
     public record UncookTaskOptions
     {
-        public string outpath { get; init; }
+        public DirectoryInfo outpath { get; init; }
         public string rawOutDir { get; init; }
         public EUncookExtension? uext { get; init; }
-        public  bool? flip { get; init; }
+        public bool? flip { get; init; }
         public ulong hash { get; init; }
-        public  string pattern { get; init; }
-        public  string regex { get; init; }
-        public  bool unbundle { get; init; }
-        public  ECookedFileFormat[] forcebuffers { get; init; }
-        public  bool? serialize { get; init; }
+        public string pattern { get; init; }
+        public string regex { get; init; }
+        public bool unbundle { get; init; }
+        public ECookedFileFormat[] forcebuffers { get; init; }
+        public bool? serialize { get; init; }
         public MeshExportType? meshExportType { get; init; }
         public string meshExportMaterialRepo { get; init; }
     }
 
     public partial class ConsoleFunctions
     {
-        #region Methods
-
         public void UncookTask(string[] path, UncookTaskOptions options)
         {
             if (path == null || path.Length < 1)
@@ -72,8 +72,8 @@ namespace CP77Tools.Tasks
                 _loggerService.Warning("No .archive file to process in the input directory");
                 return;
             }
-            
-            if (options.meshExportType != null && string.IsNullOrEmpty(options.meshExportMaterialRepo) && string.IsNullOrEmpty(options.outpath))
+
+            if (options.meshExportType != null && string.IsNullOrEmpty(options.meshExportMaterialRepo) && options.outpath is null)
             {
                 _loggerService.Warning("When using --mesh-export-type, the --outpath or the --mesh-export-material-repo must be specified.");
                 return;
@@ -103,10 +103,7 @@ namespace CP77Tools.Tasks
             if (options.meshExportType != null)
             {
                 exportArgs.Get<MeshExportArgs>().meshExportType = options.meshExportType.Value;
-                if (string.IsNullOrEmpty(options.meshExportMaterialRepo))
-                    exportArgs.Get<MeshExportArgs>().MaterialRepo = options.outpath;
-                else
-                    exportArgs.Get<MeshExportArgs>().MaterialRepo = options.meshExportMaterialRepo;
+                exportArgs.Get<MeshExportArgs>().MaterialRepo = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? options.outpath.FullName : options.meshExportMaterialRepo;
                 exportArgs.Get<MeshExportArgs>().ArchiveDepot = basedir.FullName;
             }
 
@@ -156,16 +153,16 @@ namespace CP77Tools.Tasks
             {
                 // get outdirectory
                 DirectoryInfo outDir;
-                if (string.IsNullOrEmpty(options.outpath))
+                if (options.outpath is null)
                 {
                     outDir = new DirectoryInfo(basedir.FullName);
                 }
                 else
                 {
-                    outDir = new DirectoryInfo(options.outpath);
+                    outDir = options.outpath;
                     if (!outDir.Exists)
                     {
-                        outDir = new DirectoryInfo(options.outpath);
+                        outDir = Directory.CreateDirectory(options.outpath.FullName);
                     }
                 }
 
@@ -200,7 +197,5 @@ namespace CP77Tools.Tasks
 
             return;
         }
-
-        #endregion Methods
     }
 }

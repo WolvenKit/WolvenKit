@@ -9,30 +9,21 @@ namespace CP77Tools.Commands
 {
     public class HashCommand : Command
     {
-        #region Fields
-
         private new const string Description = "Some helper functions related to hashes.";
         private new const string Name = "hash";
 
-        #endregion Fields
-
-        #region Constructors
-
         public HashCommand() : base(Name, Description)
         {
-            AddOption(new Option<string[]>(new[] { "--input", "-i" }, "Create FNV1A hash of a given string."));
-            AddOption(new Option<DirectoryInfo>(new[] { "--missing", "-m" }, "List missing hashes."));
+            AddArgument(new Argument<string[]>("input", "Create FNV1A hash for given strings."));
 
-            Handler = CommandHandler.Create<string[], DirectoryInfo, IHost>(Action);
+            Handler = CommandHandler.Create<string[], IHost>(Action);
         }
 
-        private void Action(string[] input, DirectoryInfo missing, IHost host)
+        private void Action(string[] input, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.HashTask(input, missing);
+            consoleFunctions.HashTask(input);
         }
-
-        #endregion Constructors
     }
 }

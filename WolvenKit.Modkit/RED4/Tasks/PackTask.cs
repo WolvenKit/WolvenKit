@@ -12,7 +12,7 @@ namespace CP77Tools.Tasks
         /// </summary>
         /// <param name="path"></param>
         /// <param name="outpath"></param>
-        public void PackTask(string[] path, string outpath)
+        public void PackTask(string[] path, DirectoryInfo outpath)
         {
             if (path == null || path.Length < 1)
             {
@@ -20,13 +20,10 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, file =>
-            {
-                PackTaskInner(file, outpath);
-            });
+            Parallel.ForEach(path, file => PackTaskInner(file, outpath));
         }
 
-        private void PackTaskInner(string path, string outpath, int cp = 0)
+        private void PackTaskInner(string path, DirectoryInfo outpath, int cp = 0)
         {
             #region checks
 
@@ -50,16 +47,16 @@ namespace CP77Tools.Tasks
             }
 
             DirectoryInfo outDir;
-            if (string.IsNullOrEmpty(outpath))
+            if (outpath is null)
             {
                 outDir = basedir.Parent;
             }
             else
             {
-                outDir = new DirectoryInfo(outpath);
+                outDir = outpath;
                 if (!outDir.Exists)
                 {
-                    outDir = Directory.CreateDirectory(outpath);
+                    outDir = Directory.CreateDirectory(outpath.FullName);
                 }
             }
 

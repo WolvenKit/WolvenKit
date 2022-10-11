@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 
@@ -12,29 +13,29 @@ namespace CP77Tools.Tasks
 
         #region Methods
 
-        public void UnbundleTask(string[] path, string outpath,
+        public void UnbundleTask(string[] path, DirectoryInfo outpath,
             string hash, string pattern, string regex, bool DEBUG_decompress = false)
         {
             if (path == null || path.Length < 1)
             {
-                _loggerService.Warning("Please fill in an input path.");
+                _loggerService.Error("Please fill in an input path.");
                 return;
             }
 
-            Parallel.ForEach(path, file =>
+            foreach (var file in path)
             {
                 UnbundleTaskInner(file, outpath, hash, pattern, regex, DEBUG_decompress);
-            });
+            }
         }
 
-        private void UnbundleTaskInner(string path, string outpath,
+        private void UnbundleTaskInner(string path, DirectoryInfo outpath,
             string hash, string pattern, string regex, bool DEBUG_decompress = false)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                _loggerService.Warning("Please fill in an input path.");
+                _loggerService.Error("Please fill in an input path.");
                 return;
             }
 
@@ -43,13 +44,13 @@ namespace CP77Tools.Tasks
 
             if (!inputFileInfo.Exists && !inputDirInfo.Exists)
             {
-                _loggerService.Warning("Input path does not exist.");
+                _loggerService.Error("Input path does not exist.");
                 return;
             }
 
             if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
             {
-                _loggerService.Warning("Input file is not an .archive.");
+                _loggerService.Error("Input file is not an .archive.");
                 return;
             }
             else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
@@ -67,7 +68,6 @@ namespace CP77Tools.Tasks
             if (isDirectory)
             {
                 _archiveManager.LoadFromFolder(basedir);
-                // TODO: use the manager here?
                 archiveFileInfos = _archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
             }
             else
@@ -75,23 +75,23 @@ namespace CP77Tools.Tasks
                 archiveFileInfos = new List<FileInfo> { inputFileInfo };
             }
 
+            // get outdirectory
+            DirectoryInfo outDir;
+            if (outpath is null)
+            {
+                outDir = new DirectoryInfo(basedir.FullName);
+            }
+            else
+            {
+                outDir = outpath;
+                if (!outDir.Exists)
+                {
+                    outDir = Directory.CreateDirectory(outpath.FullName);
+                }
+            }
+
             foreach (var fileInfo in archiveFileInfos)
             {
-                // get outdirectory
-                DirectoryInfo outDir;
-                if (string.IsNullOrEmpty(outpath))
-                {
-                    outDir = new DirectoryInfo(basedir.FullName);
-                }
-                else
-                {
-                    outDir = new DirectoryInfo(outpath);
-                    if (!outDir.Exists)
-                    {
-                        outDir = new DirectoryInfo(outpath);
-                    }
-                }
-
                 // read archive
                 var ar = _wolvenkitFileService.ReadRed4Archive(fileInfo.FullName, _hashService);
 

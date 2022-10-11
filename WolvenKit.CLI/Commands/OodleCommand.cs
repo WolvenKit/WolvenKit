@@ -1,5 +1,6 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,32 +9,58 @@ namespace CP77Tools.Commands
 {
     public class OodleCommand : Command
     {
-        #region Fields
-
         private new const string Description = "Some helper functions related to Oodle.";
         private new const string Name = "oodle";
 
-        #endregion Fields
-
-        #region Constructors
-
         public OodleCommand() : base(Name, Description)
         {
-            AddOption(new Option<string>(new[] { "--path", "-p" }, "Input path."));
-            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output path."));
-            AddOption(new Option<bool>(new[] { "--decompress", "-d" }, "Decompress with oodle kraken."));
-            AddOption(new Option<bool>(new[] { "--compress", "-c" }, "Compress with oodle kraken."));
-
-            Handler = CommandHandler.Create<string, string, bool, bool, IHost>(Action);
+            AddCommand(new DecompressCommand());
+            AddCommand(new CompressCommand());
         }
 
-        private void Action(string path, string outpath, bool decompress, bool compress, IHost host)
+        public class DecompressCommand : Command
         {
-            var serviceProvider = host.Services;
-            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.OodleTask(path, outpath, decompress, compress);
+            private new const string Description = "Decompress with oodle kraken.";
+            private new const string Name = "decompress";
+
+            public DecompressCommand() : base(Name, Description)
+            {
+                AddArgument(new Argument<FileInfo>("path", "Input path."));
+                AddArgument(new Argument<FileInfo>("outpath", () => null, "Output path."));
+
+                Handler = CommandHandler.Create<FileInfo, FileInfo, IHost>(Action);
+            }
+
+            private void Action(FileInfo path, FileInfo outpath, IHost host)
+            {
+                var serviceProvider = host.Services;
+                var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+                consoleFunctions.OodleTask(path, outpath, true, false);
+            }
         }
 
-        #endregion Constructors
+        public class CompressCommand : Command
+        {
+            private new const string Description = "Compress with oodle kraken.";
+            private new const string Name = "compress";
+
+            public CompressCommand() : base(Name, Description)
+            {
+                AddArgument(new Argument<FileInfo>("path", "Input path."));
+                AddArgument(new Argument<FileInfo>("outpath", () => null, "Output path."));
+
+                Handler = CommandHandler.Create<FileInfo, FileInfo, IHost>(Action);
+            }
+
+            private void Action(FileInfo path, FileInfo outpath, IHost host)
+            {
+                var serviceProvider = host.Services;
+                var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+                consoleFunctions.OodleTask(path, outpath, false, true);
+            }
+        }
     }
+
+
+
 }

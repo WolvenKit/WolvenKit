@@ -173,6 +173,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage).ObservesProperty(() => IsDialogShown);
             ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings).ObservesProperty(() => IsDialogShown);
             ShowProjectSettingsCommand = new DelegateCommand(ExecuteShowProjectSettings, CanShowProjectSettings).ObservesProperty(() => IsDialogShown).ObservesProperty(() => ActiveProject);
+            OpenLogsCommand = new DelegateCommand(ExecuteOpenLogs);
 
             LaunchGameCommand = ReactiveCommand.Create<string>(ExecuteLaunchGame);
 
@@ -225,6 +226,12 @@ namespace WolvenKit.ViewModels.Shell
 
         private void HandleActivation()
         {
+            var thisVersion = WolvenKit.Core.CommonFunctions.GetAssemblyVersion(WolvenKit.Functionality.Constants.AssemblyName);
+            if (thisVersion.ToString().Contains("nightly") && _settingsManager.UpdateChannel != EUpdateChannel.Nightly)
+            {
+                _settingsManager.UpdateChannel = EUpdateChannel.Nightly;
+            }
+
             Observable.Start(() => CheckForUpdatesCommand.Execute(true).Subscribe())
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe();
@@ -288,7 +295,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (checkForCheckForUpdates)
             {
-                if (!_settingsManager.CheckForUpdates)
+                if (_settingsManager.SkipUpdateCheck)
                 {
                     return;
                 }
@@ -310,6 +317,10 @@ namespace WolvenKit.ViewModels.Shell
             // disabled for testing in debug
 #if DEBUG
             var remoteVersion = SemVersion.Parse("8.6", SemVersionStyles.OptionalMinorPatch);
+            if (_settingsManager.UpdateChannel == EUpdateChannel.Nightly)
+            {
+                remoteVersion = SemVersion.Parse("8.7.0-nightly.2022-10-10", SemVersionStyles.OptionalMinorPatch);
+            }
 #else
             var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("wolvenkit"));
             var releases = await client.Repository.Release.GetAll(owner, name);
@@ -568,6 +579,9 @@ namespace WolvenKit.ViewModels.Shell
             CloseModalCommand.Execute(null);
             SetActiveDialog(new ProjectSettingsDialogViewModel());
         }
+
+        public ICommand OpenLogsCommand { get; private set; }
+        private void ExecuteOpenLogs() => Commonfunctions.ShowFolderInExplorer(ISettingsManager.GetAppData());
 
         [Reactive] public int SelectedGameCommandIdx { get; set; }
 

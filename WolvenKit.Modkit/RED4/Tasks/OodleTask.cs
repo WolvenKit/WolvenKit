@@ -10,26 +10,30 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public int OodleTask(string path, string outpath, bool decompress, bool compress)
+        public int OodleTask(FileInfo path, FileInfo outpath, bool decompress, bool compress)
         {
-            if (string.IsNullOrEmpty(path))
+            if (path is null)
             {
+                _loggerService.Error("No input file specifiied.");
                 return 0;
             }
 
-            if (string.IsNullOrEmpty(outpath))
+            if (!decompress && !compress)
             {
-                outpath = Path.ChangeExtension(path, ".kark");
+                _loggerService.Error("Please specify either -s or -d.");
+                return 0;
             }
+
+            outpath ??= new FileInfo(Path.ChangeExtension(path.FullName, ".kark"));
 
             if (decompress)
             {
-                var file = File.ReadAllBytes(path);
+                var file = File.ReadAllBytes(path.FullName);
                 using var ms = new MemoryStream(file);
                 using var br = new BinaryReader(ms);
 
                 var oodleCompression = br.ReadBytes(4);
-                if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
+                if (!oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b }))
                 {
                     throw new NotImplementedException();
                 }
@@ -47,17 +51,17 @@ namespace CP77Tools.Tasks
 
                 File.WriteAllBytes($"{outpath}.bin", msout.ToArray());
 
-                _loggerService.Success($"Finished decompressing: { outpath}.bin");
+                _loggerService.Success($"Finished decompressing: {outpath}.bin");
             }
 
             if (compress)
             {
-                var inbuffer = File.ReadAllBytes(path);
+                var inbuffer = File.ReadAllBytes(path.FullName);
                 IEnumerable<byte> outBuffer = new List<byte>();
 
                 var r = Oodle.Compress(inbuffer, ref outBuffer, true);
 
-                File.WriteAllBytes(outpath, outBuffer.ToArray());
+                File.WriteAllBytes(outpath.FullName, outBuffer.ToArray());
 
                 _loggerService.Success($"Finished compressing: {outpath}");
             }

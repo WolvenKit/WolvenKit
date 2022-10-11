@@ -11,6 +11,7 @@ using HandyControl.Data;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common;
@@ -84,15 +85,15 @@ namespace WolvenKit.Views.Tools
                 // right file list
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.RightItems,
-                        view => view.InnerList.ItemsSource)
+                        view => view.RightFileView.ItemsSource)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
                         viewModel => viewModel.RightSelectedItem,
-                        view => view.InnerList.SelectedItem)
+                        view => view.RightFileView.SelectedItem)
                     .DisposeWith(disposables);
                 //this.Bind(ViewModel,
                 //      viewModel => viewModel.RightSelectedItems,
-                //      view => view.InnerList.SelectedItems)
+                //      view => view.RightFileView.SelectedItems)
                 //  .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
@@ -254,6 +255,8 @@ namespace WolvenKit.Views.Tools
                 vm.RightItems.AddRange(model.Files
                     .Select(h => new RedFileViewModel(h))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
+
+                LeftNavigation.ScrollInView(new RowColumnIndex(rowInfo.RowIndex, 0));
             }
         }
 
@@ -307,7 +310,7 @@ namespace WolvenKit.Views.Tools
 
         #region rightFileGrid
 
-        private void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        private void RightFileView_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
             if (ViewModel is not { } vm)
             {
@@ -319,6 +322,8 @@ namespace WolvenKit.Views.Tools
                 if (item is GridRowInfo info && info.RowData is FileSystemViewModel fsvm)
                 {
                     fsvm.IsChecked = true;
+
+                    RightFileView.ScrollInView(new RowColumnIndex(info.RowIndex, 0));
                 }
             }
 
@@ -377,7 +382,7 @@ namespace WolvenKit.Views.Tools
             */
         }
 
-        private void InnerList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void RightFileView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var selectedIndex = LeftNavigation.SelectedIndex;
             LeftNavigation.ExpandNode(selectedIndex + 1);
@@ -390,11 +395,11 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (InnerList.SelectedItem == null)
+            if (RightFileView.SelectedItem == null)
             {
                 return;
             }
-            var selected = InnerList.SelectedItem as RedFileViewModel;
+            var selected = RightFileView.SelectedItem as RedFileViewModel;
 
             if (selected != null && !selected.FullName.ToLower().Contains("bk2"))
             {
@@ -446,7 +451,7 @@ namespace WolvenKit.Views.Tools
 
         private void BKExport_Click(object sender, RoutedEventArgs e)
         {
-            //var q = InnerList.SelectedItems[0] as FileEntryViewModel;
+            //var q = RightFileView.SelectedItems[0] as FileEntryViewModel;
 
             //if (!q.Extension.ToLower().Contains("bk2"))
             //{ return; }
