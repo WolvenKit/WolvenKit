@@ -16,7 +16,7 @@ namespace CP77Tools.Tasks
         /// <param name="path">Files or folders to import</param>
         /// <param name="outDir">Outdirectory to create redengine files in</param>
         /// <param name="keep">use existing redengine files in outdirectory</param>
-        public async Task ImportTask(string[] path, string outDir, bool keep )
+        public async Task ImportTask(string[] path, DirectoryInfo outDir, bool keep)
         {
             if (path == null || path.Length < 1)
             {
@@ -30,19 +30,19 @@ namespace CP77Tools.Tasks
             }
         }
 
-        private async Task ImportTaskInner(string path, string outDir, bool keep)
+        private async Task ImportTaskInner(string path, DirectoryInfo outDirectory, bool keep)
         {
             #region checks
 
             if (string.IsNullOrEmpty(path))
             {
-                _loggerService.Warning("Please fill in an input path.");
+                _loggerService.Error("Please fill in an input path.");
                 return;
             }
 
-            if (!string.IsNullOrEmpty(outDir) && !Directory.Exists(outDir))
+            if (outDirectory is not null && !outDirectory.Exists)
             {
-                _loggerService.Warning("Please fill in a valid outdirectory path.");
+                _loggerService.Error("Please fill in a valid outdirectory path.");
                 return;
             }
 
@@ -51,7 +51,7 @@ namespace CP77Tools.Tasks
 
             if (!rawFile.Exists && !inputDirInfo.Exists)
             {
-                _loggerService.Warning("Input path does not exist.");
+                _loggerService.Error("Input path does not exist.");
                 return;
             }
 
@@ -73,8 +73,6 @@ namespace CP77Tools.Tasks
             settings.Get<CommonImportArgs>().Keep = keep;
             settings.Get<XbmImportArgs>().Keep = keep;
             settings.Get<GltfImportArgs>().Keep = keep;
-
-            var outDirectory = string.IsNullOrEmpty(outDir) ? null : new DirectoryInfo(outDir);
 
             // a directory was selected to import
             if (isDirectory)
