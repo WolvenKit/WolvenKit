@@ -39,7 +39,7 @@ namespace WolvenKit.Functionality.Services
                 nameof(ShowGuidedTour),
                 nameof(MaterialRepositoryPath),
                 nameof(ThemeAccentString),
-                nameof(CheckForUpdates),
+                nameof(SkipUpdateCheck),
                 nameof(CP77ExecutablePath),
                 nameof(CP77LaunchCommand),
                 nameof(CP77LaunchOptions),
@@ -133,9 +133,9 @@ namespace WolvenKit.Functionality.Services
         public int SettingsVersion { get; set; }
 
         [Category("General")]
-        [Display(Name = "Check for Updates")]
+        [Display(Name = "Do not check for updates")]
         [Reactive]
-        public bool CheckForUpdates { get; set; }
+        public bool SkipUpdateCheck { get; set; }
 
         [Category("General")]
         [Display(Name = "Update Channel")]

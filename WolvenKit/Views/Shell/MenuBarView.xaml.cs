@@ -49,6 +49,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                        viewModel => viewModel.MainViewModel.ShowHomePageCommand,
                        view => view.HomeButton)
                    .DisposeWith(disposables);
+
             // File
             this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.NewFileCommand,
@@ -66,6 +67,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.SaveAllCommand,
                     view => view.MenuItemSaveAll)
                 .DisposeWith(disposables);
+
             // Project
             this.BindCommand(ViewModel,
                        viewModel => viewModel.MainViewModel.NewProjectCommand,
@@ -76,7 +78,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                        view => view.MenuItemOpenProject)
                    .DisposeWith(disposables);
 
-
             // Edit
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.ShowSettingsCommand,
@@ -85,6 +86,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.ShowProjectSettingsCommand,
                     view => view.ToolbarProjectSettingsButton)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenLogsCommand,
+                    view => view.ToolbarOpenLogsButton)
                 .DisposeWith(disposables);
 
             // Build
@@ -118,8 +123,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                        view => view.ToolbarPackInstallRedmodLaunchButton)
                    .DisposeWith(disposables);
 
-
-
             // Hot Reload
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.HotInstallModCommand,
@@ -131,8 +134,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.LaunchOptionsCommand,
                     view => view.MenuItemLaunchProfiles)
                 .DisposeWith(disposables);
-
-
 
             // View
 
@@ -170,7 +171,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.MenuItemCyberpunkBlenderAddonLink,
                     viewModel => viewModel.MainViewModel.CyberpunkBlenderAddonLink);
 
-
             // Help
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
@@ -188,8 +188,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemAboutWolvenKitLink,
                     viewModel => viewModel.MainViewModel.AboutWolvenKitLink);
-
-
 
             // visibility
             this.Bind(ViewModel,

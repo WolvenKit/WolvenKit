@@ -315,6 +315,19 @@
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <Separator />
+                <MenuItem
+                    x:Name="ToolbarOpenLogsButton"
+                    Margin="2,1"
+                    Header="Open Logs Folder">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="FolderOpened"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
             <!--  Build  -->
@@ -530,7 +543,7 @@
                     x:Name="toolbarLabels"
                     Header="Show Toolbar Labels"
                     IsCheckable="True"
-                    IsChecked="True" /> -->
+                    IsChecked="True" />-->
 
                 <Separator Margin="0,10" />
 
