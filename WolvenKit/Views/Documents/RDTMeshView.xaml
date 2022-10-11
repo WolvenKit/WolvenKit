@@ -295,7 +295,7 @@
                         Margin="4"
                         HorizontalAlignment="Stretch"
                         Command="{Binding LoadMaterialsCommand}"
-                        Content="Generate Materials for Appearance"
+                        Content="Generate Materials for Appearance (experimental)"
                         IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
                         ToolTip="May take a while - watch log for completion" />
                     <Button
