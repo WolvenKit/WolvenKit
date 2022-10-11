@@ -34,17 +34,19 @@ namespace WolvenKit.CLI
                 new ExportCommand(),
 
                 new DumpCommand(),
-                new CR2WCommand(),
+                new ConvertCommand(),
 
                 new HashCommand(),
                 new OodleCommand(),
-
-                new TweakCommand(),
 
                 new SettingsCommand(),
 
                 new WwiseCommand(),
             };
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            rootCommand.AddCommand(new CR2WCommand());
+#pragma warning restore CS0618 // Type or member is obsolete
 
             var parser = new CommandLineBuilder(rootCommand)
                 .UseDefaults()
@@ -56,9 +58,6 @@ namespace WolvenKit.CLI
             parser.Invoke(args);
         }
 
-        protected static void CancelHandler(object sender, ConsoleCancelEventArgs args)
-        {
-            Environment.FailFast("Ctrl-C was triggered");
-        }
+        protected static void CancelHandler(object sender, ConsoleCancelEventArgs args) => Environment.FailFast("Ctrl-C was triggered");
     }
 }

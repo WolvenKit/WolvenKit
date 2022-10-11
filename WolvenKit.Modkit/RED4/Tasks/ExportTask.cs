@@ -13,7 +13,7 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip, ECookedFileFormat[] forcebuffers)
+        public void ExportTask(string[] path, DirectoryInfo outDir, EUncookExtension? uncookext, bool? flip, ECookedFileFormat[] forcebuffers)
         {
             if (path == null || path.Length < 1)
             {
@@ -21,13 +21,10 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, file =>
-            {
-                ExportTaskInner(file, outDir, uncookext, flip, forcebuffers);
-            });
+            Parallel.ForEach(path, file => ExportTaskInner(file, outDir, uncookext, flip, forcebuffers));
         }
 
-        private void ExportTaskInner(string path, string outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers)
+        private void ExportTaskInner(string path, DirectoryInfo outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers)
         {
             #region checks
 
@@ -37,7 +34,7 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            if (!string.IsNullOrEmpty(outDir) && !Directory.Exists(outDir))
+            if (outDir is not null && !outDir.Exists)
             {
                 _loggerService.Warning("Please fill in a valid outdirectory path.");
                 return;
@@ -114,8 +111,7 @@ namespace CP77Tools.Tasks
 
             foreach (var fileInfo in filesToExport)
             {
-                var di = string.IsNullOrEmpty(outDir) ? null : new DirectoryInfo(outDir);
-                if (_modTools.Export(fileInfo, exportArgs, basedir, di, forcebuffers))
+                if (_modTools.Export(fileInfo, exportArgs, basedir, outDir, forcebuffers))
                 {
                     _loggerService.Success($"Successfully exported {path}.");
                 }

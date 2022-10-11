@@ -8,18 +8,13 @@ namespace CP77Tools.Commands
 {
     public class DumpCommand : Command
     {
-        #region Fields
-
         private new const string Description = "Target an archive or a directory to dump archive information.";
         private new const string Name = "dump";
 
-        #endregion Fields
-
-        #region Constructors
-
         public DumpCommand() : base(Name, Description)
         {
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to an .archive or directory (runs over all archives in directory)."));
+            AddArgument(new Argument<string[]>("path", "Input path to an .archive or directory (runs over all archives in directory)."));
+
             AddOption(new Option<bool>(new[] { "--imports", "-i" }, "Dump all imports (all filenames referenced by files in the archive)."));
             AddOption(new Option<bool>(new[] { "--missinghashes", "-m" }, "List missing hashes for all input archives."));
             AddOption(new Option<bool>(new[] { "--texinfo" }, "Dump all XBM info."));
@@ -36,7 +31,5 @@ namespace CP77Tools.Commands
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
             consoleFunctions.DumpTask(path, imports, missinghashes, texinfo, dump, list);
         }
-
-        #endregion Constructors
     }
 }

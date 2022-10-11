@@ -1,5 +1,6 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,19 +11,20 @@ namespace CP77Tools.Commands
 {
     public class UncookCommand : Command
     {
-        #region Fields
-
         private new const string Description = "Target an archive to uncook files fom.";
         private new const string Name = "uncook";
-
-        #endregion Fields
-
-        #region Constructors
-
         public UncookCommand() : base(Name, Description)
         {
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to .archive."));
-            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory to extract main files to."));
+            AddAlias("unbundle-and-export");
+            AddAlias("extract-and-export");
+
+            AddArgument(new Argument<string[]>("path", "Input paths to .archive files or folders."));
+
+            // deprecated. keep for backwards compatibility
+            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "[Deprecated] Input paths to .archive files or folders."));
+
+            AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory to extract main files to."));
+
             AddOption(new Option<string>(new[] { "--raw", "-or" }, "Optional seperate directory to extract raw files to."));
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
@@ -35,13 +37,12 @@ namespace CP77Tools.Commands
             AddOption(new Option<MeshExportType?>(new[] { "--mesh-export-type" }, "Mesh export type (Default, WithMaterials, WithRig, Multimesh)."));
             AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
 
-
             Handler = CommandHandler
-                .Create<string[], string, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string
+                .Create<string[], DirectoryInfo, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string
                     , IHost>(Action);
         }
 
-        private void Action(string[] path, string outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
+        private void Action(string[] path, DirectoryInfo outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
             string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExportType? meshExportType, string meshExportMaterialRepo, IHost host)
         {
             var serviceProvider = host.Services;
@@ -62,8 +63,5 @@ namespace CP77Tools.Commands
                 meshExportMaterialRepo = meshExportMaterialRepo
             });
         }
-
-
-        #endregion Constructors
     }
 }

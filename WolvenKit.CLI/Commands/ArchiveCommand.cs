@@ -8,22 +8,19 @@ namespace CP77Tools.Commands
 {
     public class ArchiveCommand : Command
     {
-        #region Fields
-
         private new const string Description = "Target an archive to display information of it.";
         private new const string Name = "archive";
 
-        #endregion Fields
-
-        #region Constructors
-
         public ArchiveCommand() : base(Name, Description)
         {
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input archives path. Can be a file or a folder or a list of files/folders"));
-            AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
-            AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
-            AddOption(new Option<bool>(new[] { "--diff", "-d" }, "Dump archive json for diff"));
-            AddOption(new Option<bool>(new[] { "--list", "-l" }, "List all files in archive"));
+            AddAlias("archiveinfo");
+
+            AddArgument(new Argument<string[]>("path", "Input archives path. Can be a file or a folder or a list of files/folders."));
+
+            AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
+            AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
+            AddOption(new Option<bool>(new[] { "--diff", "-d" }, "Dump archive json for diff."));
+            AddOption(new Option<bool>(new[] { "--list", "-l" }, "List all files in archive."));
 
             Handler = CommandHandler.Create<string[], string, string, bool, bool, IHost>(Action);
         }
@@ -34,7 +31,5 @@ namespace CP77Tools.Commands
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
             consoleFunctions.ArchiveTask(path, pattern, regex, diff, list);
         }
-
-        #endregion Constructors
     }
 }

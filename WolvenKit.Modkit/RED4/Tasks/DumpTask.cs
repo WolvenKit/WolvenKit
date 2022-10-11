@@ -150,8 +150,8 @@ namespace CP77Tools.Tasks
 
                 //compress all used and all missing hashes
                 _loggerService.Info($"Compressing...");
-                OodleTask(unusedhashtxt, "", false, true);
-                OodleTask(usedhashtxt, "", false, true);
+                OodleTask(new FileInfo(unusedhashtxt), null, false, true);
+                OodleTask(new FileInfo(usedhashtxt), null, false, true);
 
                 return 1;
             }

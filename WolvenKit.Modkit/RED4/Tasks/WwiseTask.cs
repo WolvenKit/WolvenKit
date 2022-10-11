@@ -5,21 +5,18 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-        public int WwiseTask(string path, string outpath, bool wem)
+        public int WwiseTask(FileInfo path, FileInfo outpath, bool wem)
         {
-            if (string.IsNullOrEmpty(path))
+            if (path is null)
             {
                 return 0;
             }
 
-            if (string.IsNullOrEmpty(outpath))
-            {
-                outpath = Path.ChangeExtension(path, ".ogg");
-            }
+            outpath ??= new FileInfo(Path.ChangeExtension(path.FullName, ".ogg"));
 
             if (wem)
             {
-                var inBuffer = File.ReadAllBytes(path);
+                var inBuffer = File.ReadAllBytes(path.FullName);
                 var oggBuffer = Wem.Convert(inBuffer);
 
                 if (oggBuffer.Length == 0)
@@ -28,7 +25,7 @@ namespace CP77Tools.Tasks
                     return 0;
                 }
 
-                File.WriteAllBytes(outpath, oggBuffer);
+                File.WriteAllBytes(outpath.FullName, oggBuffer);
 
                 _loggerService.Success($"Finished converting {path} to OGG: {outpath}");
             }

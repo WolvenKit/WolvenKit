@@ -1,3 +1,4 @@
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WolvenKit.Common;
@@ -13,15 +14,15 @@ namespace CP77Tools.Tasks
     public interface IConsoleFunctions
     {
         public void ArchiveTask(string[] path, string pattern, string regex, bool diff, bool list);
-        public void UnbundleTask(string[] path, string outpath, string hash, string pattern, string regex,
+        public void UnbundleTask(string[] path, DirectoryInfo outpath, string hash, string pattern, string regex,
             bool DEBUG_decompress = false);
-        public Task Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern,
+        public Task Cr2wTask(string[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
             string regex, ETextConvertFormat format);
-        public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip,
+        public void ExportTask(string[] path, DirectoryInfo outDir, EUncookExtension? uncookext, bool? flip,
             ECookedFileFormat[] forcebuffers);
-        public Task ImportTask(string[] path, string outDir, bool keep);
-        public int OodleTask(string path, string outpath, bool decompress, bool compress);
-        public void PackTask(string[] path, string outpath);
+        public Task ImportTask(string[] path, DirectoryInfo outDir, bool keep);
+        public int OodleTask(FileInfo path, FileInfo outpath, bool decompress, bool compress);
+        public void PackTask(string[] path, DirectoryInfo outpath);
         public void UncookTask(string[] path, UncookTaskOptions options);
     }
 

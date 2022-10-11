@@ -1,5 +1,7 @@
+using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.IO;
 using System.Threading.Tasks;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,41 +10,36 @@ using WolvenKit.Common;
 
 namespace CP77Tools.Commands
 {
+    [Obsolete("Use ConvertCommand")]
     public class CR2WCommand : Command
     {
-        #region Fields
-
-        private new const string Description = "Target a specific CR2W (extracted) and dump file info.";
+        private new const string Description = "[DEPRECATED] cr2w file conversion command.";
         private new const string Name = "cr2w";
-
-        #endregion Fields
-
-        #region Constructors
 
         public CR2WCommand() : base(Name, Description)
         {
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to a CR2W file or folder."));
-            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output path."));
-            AddOption(new Option<bool>(new[] { "--deserialize", "-d" }, "Create a CR2W file from json or xml"));
-            AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize the CR2W file to json or xml."));
-            AddOption(new Option<string>(new[] { "--pattern", "-w" },
-                "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
-            AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
-            AddOption(new Option<ETextConvertFormat>(new[] { "--format", "-ft" },
-                "Use optional serialization format. Options are json and xml"));
+            AddArgument(new Argument<string[]>("path", "Input path to a CR2W file or folder."));
+
+            // deprecated. keep for backwards compatibility
+            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "[Deprecated] Input path to a CR2W file or folder."));
+
+            AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory path."));
+            AddOption(new Option<bool>(new[] { "--deserialize", "-d" }, "Create a CR2W file from json."));
+            AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize the CR2W file to json."));
+
+            AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
+            AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
 
             Handler = CommandHandler
-                .Create<string[], string, bool, bool, string, string, ETextConvertFormat, IHost>(Action);
+                .Create<string[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
         }
 
-        private async Task Action(string[] path, string outpath, bool deserialize, bool serialize, string pattern,
-            string regex, ETextConvertFormat format, IHost host)
+        private async Task Action(string[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
+            string regex, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            await consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, format);
+            await consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, ETextConvertFormat.json);
         }
-
-        #endregion Constructors
     }
 }
