@@ -1,11 +1,13 @@
 namespace WolvenKit.RED4.Types;
 
-public class DynamicBaseClass : RedBaseClass
+public class DynamicBaseClass : RedBaseClass, IDynamicResource
 {
-    public string ClassName;
+    [REDProperty(IsIgnored = true)]
+    public string ClassName { get; set; }
 }
 
-public class DynamicResource : CResource
+public class DynamicResource : CResource, IDynamicResource
 {
-    public string ClassName;
+    [REDProperty(IsIgnored = true)]
+    public string ClassName { get; set; }
 }

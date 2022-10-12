@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
     public class CR2WImport : ICR2WImport
     {
-        public string DepotPath { get; set; }
+        public CName DepotPath { get; set; }
         public string ClassName { get; set; }
         public InternalEnums.EImportFlags Flags { get; set; }
     }

@@ -94,6 +94,7 @@ namespace WolvenKit.RED4.Archive.IO
             var size = _reader.ReadUInt32();
 
             var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
+            var redTypeInfos = RedReflection.GetRedTypeInfos(typename);
 
             var typeInfo = RedReflection.GetTypeInfo(cls);
 
@@ -106,12 +107,13 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (prop.IsDynamic)
             {
-                value = Read(type, size - 4, flags);
+                value = Read(redTypeInfos, size - 4);
+
                 cls.SetProperty(varName, value);
             }
             else
             {
-                value = Read(prop.Type, size - 4, prop.Flags.Clone());
+                value = Read(redTypeInfos, size - 4);
 
                 var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
                 if (type != prop.Type)

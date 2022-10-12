@@ -7,8 +7,20 @@ namespace WolvenKit.RED4.Types
     [REDType(IsValueType = true)]
     public class CResourceAsyncReference<T> : IRedResourceAsyncReference<T>, IEquatable<CResourceAsyncReference<T>>, IRedCloneable where T : CResource
     {
-        public CName DepotPath { get; set; } = new();
+        public CName DepotPath { get; set; }
         public InternalEnums.EImportFlags Flags { get; set; }
+
+        public CResourceAsyncReference()
+        {
+            DepotPath = new CName();
+            Flags = InternalEnums.EImportFlags.Default;
+        }
+
+        public CResourceAsyncReference(CName depotPath, InternalEnums.EImportFlags flags)
+        {
+            DepotPath = depotPath;
+            Flags = flags;
+        }
 
         #region IRedCloneable
 

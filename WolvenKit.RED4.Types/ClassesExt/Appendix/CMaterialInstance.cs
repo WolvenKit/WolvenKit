@@ -20,9 +20,9 @@ namespace WolvenKit.RED4.Types
                 var valueSize = reader.BaseReader.ReadInt32() - 8;
                 var name = reader.ReadCName();
                 var typename = reader.ReadCName();
-
-                var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
-                var value = reader.Read(type, (uint)valueSize, flags);
+                
+                var redTypeInfos = RedReflection.GetRedTypeInfos(typename);
+                var value = reader.Read(redTypeInfos, (uint)valueSize);
 
                 Values.Add(new CKeyValuePair(name, value));
             }

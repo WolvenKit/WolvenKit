@@ -10,6 +10,19 @@ namespace WolvenKit.RED4.Types
         public CName DepotPath { get; set; } = new();
         public InternalEnums.EImportFlags Flags { get; set; }
 
+
+        public CResourceReference()
+        {
+            DepotPath = new CName();
+            Flags = InternalEnums.EImportFlags.Default;
+        }
+
+        public CResourceReference(CName depotPath, InternalEnums.EImportFlags flags)
+        {
+            DepotPath = depotPath;
+            Flags = flags;
+        }
+
         #region IRedCloneable
 
         public object ShallowCopy() => MemberwiseClone();

@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
+using Activator = System.Activator;
 
 namespace WolvenKit.RED4.Archive.IO
 {
@@ -36,6 +38,7 @@ namespace WolvenKit.RED4.Archive.IO
                 var varName = GetStringValue(f.nameID);
                 var typeName = GetStringValue(f.typeID);
                 var (fieldType, flags) = RedReflection.GetCSTypeFromRedType(typeName);
+                var redTypeInfos = RedReflection.GetRedTypeInfos(typeName);
 
                 var prop = typeInfo.GetPropertyInfoByRedName(varName);
                 if (prop == null)
@@ -48,12 +51,12 @@ namespace WolvenKit.RED4.Archive.IO
                 BaseStream.Position = baseOff + f.offset;
                 if (prop.IsDynamic)
                 {
-                    value = Read(fieldType, 0, Flags.Empty);
+                    value = Read(redTypeInfos, 0);
                     cls.SetProperty(varName, value);
                 }
                 else
                 {
-                    value = Read(fieldType, 0, flags);
+                    value = Read(redTypeInfos, 0);
 
                     if (fieldType != prop.Type)
                     {
@@ -88,8 +91,14 @@ namespace WolvenKit.RED4.Archive.IO
             throw new NotImplementedException(nameof(ReadTweakDBID));
         }
 
-        public override CBitField<T> ReadCBitField<T>()
+        public override IRedBitField ReadCBitField(List<RedTypeInfo> redTypeInfos, uint size)
         {
+            if (redTypeInfos.Count != 1)
+            {
+                throw new TodoException();
+            }
+
+            var enumInfo = RedReflection.GetEnumTypeInfo(redTypeInfos[0].RedObjectType);
             var cnt = _reader.ReadByte();
 
             var enumString = "";
@@ -106,15 +115,15 @@ namespace WolvenKit.RED4.Archive.IO
                     enumString += ", ";
                 }
 
-                enumString += GetStringValue(index);
+                enumString += enumInfo.GetCSNameFromRedName(GetStringValue(index));
             }
 
+            var type = RedReflection.GetFullType(redTypeInfos);
             if (string.IsNullOrEmpty(enumString))
             {
-                return default(T);
+                return (IRedBitField)Activator.CreateInstance(type);
             }
-
-            return Enum.Parse<T>(enumString);
+            return (IRedBitField)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { Enum.Parse(redTypeInfos[0].RedObjectType, enumString) }, null);
         }
 
         public override IRedHandle<T> ReadCHandle<T>()
@@ -145,9 +154,10 @@ namespace WolvenKit.RED4.Archive.IO
             return handle;
         }
 
-        public override IRedWeakHandle<T> ReadCWeakHandle<T>()
+        public override IRedWeakHandle ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
         {
-            var handle = new CWeakHandle<T>();
+            var type = RedReflection.GetFullType(redTypeInfos);
+            var result = (IRedWeakHandle)Activator.CreateInstance(type);
 
             var pointer = _reader.ReadInt32();
             if (!HandleQueue.ContainsKey(pointer))
@@ -155,58 +165,56 @@ namespace WolvenKit.RED4.Archive.IO
                 HandleQueue.Add(pointer, new List<IRedBaseHandle>());
             }
 
-            HandleQueue[pointer].Add(handle);
+            HandleQueue[pointer].Add(result);
 
-            return handle;
+            return result;
         }
 
-        public override IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>()
+        public override IRedResourceAsyncReference ReadCResourceAsyncReference(List<RedTypeInfo> redTypeInfos, uint size)
         {
-            var index = _reader.ReadInt16();
-
-            if (index >= 0 && index < importsList.Count)
+            if (redTypeInfos.Count != 2)
             {
-                var import = (PackageImport)importsList[index - 0];
-
-                return new CResourceAsyncReference<T>
-                {
-                    DepotPath = import.DepotPath != "" ? import.DepotPath : import.Hash,
-                    Flags = import.Flags
-                };
+                throw new TodoException();
             }
 
-            return new CResourceAsyncReference<T>
-            {
-                // TODO: Find a better way (written as -1)
-                DepotPath = "INVALID",
-                Flags = InternalEnums.EImportFlags.Default
-            };
-        }
+            var depotPath = (CName)0;
+            var flags = InternalEnums.EImportFlags.Default;
 
-        public override IRedResourceReference<T> ReadCResourceReference<T>()
-        {
             var index = _reader.ReadInt16();
-
             if (index >= 0 && index < importsList.Count)
             {
-                var import = (PackageImport)importsList[index - 0];
-
-                return new CResourceReference<T>
-                {
-                    DepotPath = import.DepotPath != "" ? import.DepotPath : import.Hash,
-                    Flags = import.Flags
-                };
+                depotPath = importsList[index].DepotPath;
+                flags = importsList[index].Flags;
             }
 
-            return new CResourceReference<T>
-            {
-                // TODO: Find a better way (written as -1)
-                DepotPath = "INVALID",
-                Flags = InternalEnums.EImportFlags.Default
-            };
+            var type = RedReflection.GetFullType(redTypeInfos);
+            var result = (IRedResourceAsyncReference)Activator.CreateInstance(type, depotPath, flags);
+
+            return result;
         }
 
-        public override DataBuffer ReadDataBuffer() => base.ReadDataBuffer();
+        public override IRedResourceReference ReadCResourceReference(List<RedTypeInfo> redTypeInfos, uint size)
+        {
+            if (redTypeInfos.Count != 2)
+            {
+                throw new TodoException();
+            }
+
+            var depotPath = (CName)0;
+            var flags = InternalEnums.EImportFlags.Default;
+
+            var index = _reader.ReadInt16();
+            if (index >= 0 && index < importsList.Count)
+            {
+                depotPath = importsList[index].DepotPath;
+                flags = importsList[index].Flags;
+            }
+
+            var type = RedReflection.GetFullType(redTypeInfos);
+            var result = (IRedResourceReference)Activator.CreateInstance(type, depotPath, flags);
+
+            return result;
+        }
 
         public override NodeRef ReadNodeRef()
         {

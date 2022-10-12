@@ -11,13 +11,193 @@ namespace WolvenKit.RED4.Types
     public static class RedReflection
     {
         private static readonly ConcurrentDictionary<Type, object> s_defaultValueCache = new();
-        private static readonly Dictionary<string, Type> _redTypeCache = new();
+        private static readonly Dictionary<string, Type> s_redTypeCache = new();
         private static Dictionary<Type, string> _redTypeCacheReverse = new();
 
-        private static readonly Dictionary<string, ExtendedEnumInfo> _redEnumCache = new();
+        private static readonly Dictionary<string, ExtendedEnumInfo> s_redEnumCache = new();
 
         private static readonly ConcurrentDictionary<Type, ExtendedTypeInfo> s_typeInfoCache = new();
         private static readonly ConcurrentDictionary<string, ExtendedTypeInfo> s_dynamicTypeInfoCache = new();
+
+        #region TypeInfo
+
+        public static Type GetFullType(List<RedTypeInfo> redTypeInfos)
+        {
+            Type result = null;
+
+            for (var i = redTypeInfos.Count - 1; i >= 0; i--)
+            {
+                if (result == null)
+                {
+                    if (redTypeInfos[i].BaseRedType is BaseRedType.Class)
+                    {
+                        result = redTypeInfos[i].RedObjectType;
+                    }
+                    else if (redTypeInfos[i].BaseRedType is BaseRedType.Enum or BaseRedType.BitField)
+                    {
+                        result = redTypeInfos[i].MappedType.MakeGenericType(redTypeInfos[i].RedObjectType);
+                    }
+                    else
+                    {
+                        result = redTypeInfos[i].MappedType;
+                    }
+                }
+                else
+                {
+                    result = redTypeInfos[i].MappedType.MakeGenericType(result);
+                }
+            }
+
+            return result;
+        }
+
+        public static List<RedTypeInfo> GetRedTypeInfos(Type type, Flags flags = null) =>
+            GetRedTypeInfos(GetRedTypeFromCSType(type, flags));
+
+        public static List<RedTypeInfo> GetRedTypeInfos(string redTypeName)
+        {
+            var result = new List<RedTypeInfo>();
+
+            var isFixed = false;
+            var isStatic = false;
+
+            var str = "";
+            foreach (var c in redTypeName)
+            {
+                if (c == ':')
+                {
+                    Temp();
+                    continue;
+                }
+
+                if (isStatic && c == ',')
+                {
+                    isStatic = false;
+
+                    result.Add(new RedTypeInfo(BaseRedType.StaticArray, int.Parse(str)));
+
+                    str = "";
+                    continue;
+                }
+
+                if (c == '[')
+                {
+                    isFixed = true;
+                    continue;
+                }
+
+                if (isFixed && c == ']')
+                {
+                    isFixed = false;
+
+                    result.Add(new RedTypeInfo(BaseRedType.NativeArray, int.Parse(str)));
+
+                    str = "";
+                    continue;
+                }
+
+                str += c;
+            }
+
+            Temp();
+
+            return result;
+
+            void Temp()
+            {
+                switch (str)
+                {
+                    case "array":
+                        result.Add(new RedTypeInfo(BaseRedType.Array));
+                        break;
+
+                    case "static":
+                        isStatic = true;
+                        break;
+
+                    case "handle":
+                        result.Add(new RedTypeInfo(BaseRedType.Handle));
+                        break;
+
+                    case "whandle":
+                        result.Add(new RedTypeInfo(BaseRedType.WeakHandle));
+                        break;
+
+                    case "rRef":
+                        result.Add(new RedTypeInfo(BaseRedType.ResourceReference));
+                        break;
+
+                    case "raRef":
+                        result.Add(new RedTypeInfo(BaseRedType.ResourceAsyncReference));
+                        break;
+
+                    case "curveData":
+                        result.Add(new RedTypeInfo(BaseRedType.LegacySingleChannelCurve));
+                        break;
+
+                    case "CName":
+                    case "String":
+                    case "LocalizationString":
+                    case "TweakDBID":
+                    case "DataBuffer":
+                    case "serializationDeferredDataBuffer":
+                    case "SharedDataBuffer":
+                    case "Variant":
+                    case "CDateTime":
+                    case "CGUID":
+                    case "CRUID":
+                    case "CRUIDRef":
+                    case "EditorObjectID":
+                    case "gamedataLocKeyWrapper":
+                    case "MessageResourcePath":
+                    case "NodeRef":
+                    case "RuntimeEntityRef":
+                        result.Add(new SimpleRedTypeInfo(Enum.Parse<SimpleRedType>(str)));
+                        break;
+
+                    case "Bool":
+                    case "Int8":
+                    case "Uint8":
+                    case "Int16":
+                    case "Uint16":
+                    case "Int32":
+                    case "Uint32":
+                    case "Int64":
+                    case "Uint64":
+                    case "Float":
+                    case "Double":
+                        result.Add(new FundamentalRedTypeInfo(Enum.Parse<FundamentalRedType>(str)));
+                        break;
+
+                    case "multiChannelCurve":
+                        result.Add(new SpecialRedTypeInfo(SpecialRedType.MultiChannelCurve, str));
+                        break;
+
+                    default:
+                        if (s_redTypeCache.TryGetValue(str, out var type1) && type1.IsAssignableTo(typeof(RedBaseClass)))
+                        {
+                            result.Add(new RedTypeInfo(BaseRedType.Class, type1));
+                            break;
+                        }
+
+                        if (s_redEnumCache.TryGetValue(str, out var type2))
+                        {
+                            result.Add(type2.IsBitfield
+                                ? new RedTypeInfo(BaseRedType.BitField, type2.Type)
+                                : new RedTypeInfo(BaseRedType.Enum, type2.Type));
+                            break;
+                        }
+
+                        // could be enum/bitfield/class, just use class for now
+                        result.Add(new SpecialRedTypeInfo(SpecialRedType.Mixed, str));
+                        break;
+                }
+
+                str = "";
+            }
+        }
+
+        #endregion
 
         public static ExtendedTypeInfo GetTypeInfo(IRedType value)
         {
@@ -56,9 +236,9 @@ namespace WolvenKit.RED4.Types
             return result;
         }
 
-        public static Dictionary<string, Type> GetTypes() => new(_redTypeCache);
+        public static Dictionary<string, Type> GetTypes() => new(s_redTypeCache);
 
-        public static IEnumerable<Type> GetSubClassesOf(Type type) => _redTypeCache?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
+        public static IEnumerable<Type> GetSubClassesOf(Type type) => s_redTypeCache?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static ExtendedPropertyInfo GetPropertyByName(Type type, string propertyName)
         {
@@ -161,12 +341,12 @@ namespace WolvenKit.RED4.Types
 
         public static string GetEnumRedName(Type type)
         {
-            return _redEnumCache.FirstOrDefault(t => t.Value.Type == type).Key;
+            return s_redEnumCache.FirstOrDefault(t => t.Value.Type == type).Key;
         }
 
         public static ExtendedEnumInfo GetEnumTypeInfo(Type type)
         {
-            return _redEnumCache.FirstOrDefault(t => t.Value.Type == type).Value;
+            return s_redEnumCache.FirstOrDefault(t => t.Value.Type == type).Value;
         }
 
         private static readonly ConcurrentDictionary<string, (Type, Flags)> _csTypeCache2 = new();
@@ -201,7 +381,7 @@ namespace WolvenKit.RED4.Types
                     subType = subType.Substring(strVal.Length + 2);
                 }
 
-                if (_redTypeCache.TryGetValue(subType, out var tType))
+                if (s_redTypeCache.TryGetValue(subType, out var tType))
                 {
                     if (type == null)
                     {
@@ -223,7 +403,7 @@ namespace WolvenKit.RED4.Types
                     continue;
                 }
 
-                if (_redEnumCache.TryGetValue(subType, out var eType))
+                if (s_redEnumCache.TryGetValue(subType, out var eType))
                 {
                     if (type == null)
                     {
@@ -349,22 +529,22 @@ namespace WolvenKit.RED4.Types
                 var redAttr = type.GetCustomAttribute<REDAttribute>();
                 if (redAttr != null)
                 {
-                    _redTypeCache.Add(redAttr.Name, type);
+                    s_redTypeCache.Add(redAttr.Name, type);
                 }
                 else
                 {
-                    _redTypeCache.Add(type.Name, type);
+                    s_redTypeCache.Add(type.Name, type);
                 }
 
                 BuildTypeCache(type);
             }
 
-            _redTypeCacheReverse = _redTypeCache.ToDictionary(x => x.Value, x => x.Key);
+            _redTypeCacheReverse = s_redTypeCache.ToDictionary(x => x.Value, x => x.Key);
 
             var types = typeof(Enums).GetNestedTypes();
             foreach (var type in types)
             {
-                _redEnumCache.Add(type.Name, new ExtendedEnumInfo(type));
+                s_redEnumCache.Add(type.Name, new ExtendedEnumInfo(type));
             }
 
             void BuildTypeCache(Type type)
