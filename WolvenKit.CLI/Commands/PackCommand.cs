@@ -1,5 +1,5 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,12 +7,12 @@ using Microsoft.Extensions.Hosting;
 
 namespace CP77Tools.Commands
 {
-    public class PackCommand : Command
+    internal class PackCommand : CommandBase
     {
-        private new const string Description = "Pack resource files into an .archive file.";
-        private new const string Name = "pack";
+        private const string s_description = "Pack resource files into an .archive file.";
+        private const string s_name = "pack";
 
-        public PackCommand() : base(Name, Description)
+        public PackCommand() : base(s_name, s_description)
         {
             AddArgument(new Argument<DirectoryInfo[]>("path", "Input folder or folders."));
 
@@ -21,7 +21,7 @@ namespace CP77Tools.Commands
 
             AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory to create all archives.\nIf not specified, will output in the same directory."));
 
-            Handler = CommandHandler.Create<DirectoryInfo[], DirectoryInfo, IHost>(Action);
+            SetHandler(CommandHandler.Create<DirectoryInfo[], DirectoryInfo, IHost>(Action));
         }
 
         private void Action(DirectoryInfo[] path, DirectoryInfo outpath, IHost host)

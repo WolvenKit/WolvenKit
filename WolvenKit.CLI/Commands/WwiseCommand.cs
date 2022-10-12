@@ -1,5 +1,5 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,19 +7,19 @@ using Microsoft.Extensions.Hosting;
 
 namespace CP77Tools.Commands
 {
-    public class WwiseCommand : Command
+    internal class WwiseCommand : CommandBase
     {
-        private new const string Description = "Some helper functions related to Wwise.";
-        private new const string Name = "wwise";
+        private const string s_description = "Some helper functions related to Wwise.";
+        private const string s_name = "wwise";
 
-        public WwiseCommand() : base(Name, Description)
+        public WwiseCommand() : base(s_name, s_description)
         {
             AddArgument(new Argument<FileInfo[]>("path", "Input file epath."));
             AddArgument(new Argument<FileInfo[]>("outpath", () => null, "Output file path."));
 
             AddOption(new Option<bool>(new[] { "--wem", "-w" }, "Convert WEM to OGG."));
 
-            Handler = CommandHandler.Create<FileInfo, FileInfo, bool, IHost>(Action);
+            SetHandler(CommandHandler.Create<FileInfo, FileInfo, bool, IHost>(Action));
         }
 
         private void Action(FileInfo path, FileInfo outpath, bool wem, IHost host)

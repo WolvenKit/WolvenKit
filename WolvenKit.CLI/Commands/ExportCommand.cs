@@ -1,5 +1,5 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,12 +9,12 @@ using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands
 {
-    public class ExportCommand : Command
+    internal class ExportCommand : CommandBase
     {
-        private new const string Description = "Export a file or list of files into raw files.";
-        private new const string Name = "export";
+        private const string s_description = "Export a file or list of files into raw files.";
+        private const string s_name = "export";
 
-        public ExportCommand() : base(Name, Description)
+        public ExportCommand() : base(s_name, s_description)
         {
             AddArgument(new Argument<FileSystemInfo[]>("path", "Input path to file/directory or list of files/directories."));
 
@@ -27,7 +27,7 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flips textures vertically."));
             AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh."));
 
-            Handler = CommandHandler.Create<FileSystemInfo[], DirectoryInfo, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action);
+            SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action));
         }
 
         private void Action(FileSystemInfo[] path, DirectoryInfo outpath, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers, IHost host)

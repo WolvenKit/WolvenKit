@@ -1,5 +1,5 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,11 +10,11 @@ using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands
 {
-    public class UncookCommand : Command
+    internal class UncookCommand : CommandBase
     {
-        private new const string Description = "Target an archive to uncook files fom.";
-        private new const string Name = "uncook";
-        public UncookCommand() : base(Name, Description)
+        private const string s_description = "Target an archive to uncook files fom.";
+        private const string s_name = "uncook";
+        public UncookCommand() : base(s_name, s_description)
         {
             AddAlias("unbundle-and-export");
             AddAlias("extract-and-export");
@@ -38,9 +38,7 @@ namespace CP77Tools.Commands
             AddOption(new Option<MeshExportType?>(new[] { "--mesh-export-type" }, "Mesh export type (Default, WithMaterials, WithRig, Multimesh)."));
             AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
 
-            Handler = CommandHandler
-                .Create<FileSystemInfo[], DirectoryInfo, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string
-                    , IHost>(Action);
+            SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string, IHost>(Action));
         }
 
         private void Action(FileSystemInfo[] path, DirectoryInfo outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,

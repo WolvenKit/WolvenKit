@@ -1,5 +1,5 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using System.Threading.Tasks;
 using CP77Tools.Tasks;
@@ -9,12 +9,12 @@ using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands
 {
-    public class ImportCommand : Command
+    internal class ImportCommand : CommandBase
     {
-        private new const string Description = "Import raw files into redengine files.";
-        private new const string Name = "import";
+        private const string s_description = "Import raw files into redengine files.";
+        private const string s_name = "import";
 
-        public ImportCommand() : base(Name, Description)
+        public ImportCommand() : base(s_name, s_description)
         {
             AddArgument(new Argument<FileSystemInfo[]>("path", "Input path for raw files. Can be a file or a folder or a list of files/folders."));
 
@@ -25,7 +25,7 @@ namespace CP77Tools.Commands
 
             AddOption(new Option<bool>(new[] { "--keep", "-k" }, "Keep existing CR2W files intact and only append the buffer."));
 
-            Handler = CommandHandler.Create<FileSystemInfo[], DirectoryInfo, bool, IHost>(Action);
+            SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, bool, IHost>(Action));
         }
 
         private async Task Action(FileSystemInfo[] path, DirectoryInfo outpath, bool keep, IHost host)

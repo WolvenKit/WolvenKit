@@ -1,5 +1,5 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using System.Threading.Tasks;
 using CP77Tools.Tasks;
@@ -10,23 +10,23 @@ using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands
 {
-    public class ConvertCommand : Command
+    internal class ConvertCommand : CommandBase
     {
-        private new const string Description = "Target a specific CR2W (extracted) and dump file info.";
-        private new const string Name = "convert";
+        private const string s_description = "Target a specific CR2W (extracted) and dump file info.";
+        private const string s_name = "convert";
 
-        public ConvertCommand() : base(Name, Description)
+        public ConvertCommand() : base(s_name, s_description)
         {
             AddCommand(new DeserializeCommand());
             AddCommand(new SerializeCommand());
         }
 
-        public class DeserializeCommand : Command
+        public class DeserializeCommand : CommandBase
         {
-            private new const string Description = "Create a CR2W file from json.";
-            private new const string Name = "deserialize";
+            private const string s_description = "Create a CR2W file from json.";
+            private const string s_name = "deserialize";
 
-            public DeserializeCommand() : base(Name, Description)
+            public DeserializeCommand() : base(s_name, s_description)
             {
                 AddAlias("deserialise");
                 AddAlias("d");
@@ -38,8 +38,7 @@ namespace CP77Tools.Commands
                 AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
                 AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
 
-                Handler = CommandHandler
-                    .Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
+                SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action));
             }
 
             private async Task Action(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
@@ -65,12 +64,12 @@ namespace CP77Tools.Commands
             }
         }
 
-        public class SerializeCommand : Command
+        public class SerializeCommand : CommandBase
         {
-            private new const string Description = "Serialize the CR2W file to json.";
-            private new const string Name = "serialize";
+            private const string s_description = "Serialize the CR2W file to json.";
+            private const string s_name = "serialize";
 
-            public SerializeCommand() : base(Name, Description)
+            public SerializeCommand() : base(s_name, s_description)
             {
                 AddAlias("serialise");
                 AddAlias("s");
@@ -82,8 +81,7 @@ namespace CP77Tools.Commands
                 AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
                 AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
 
-                Handler = CommandHandler
-                    .Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
+                SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action));
             }
 
             private async Task Action(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,

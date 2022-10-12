@@ -2,7 +2,7 @@
 #undef IS_ASYNC
 
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,12 +11,12 @@ using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands
 {
-    public class UnbundleCommand : Command
+    internal class UnbundleCommand : CommandBase
     {
-        private new const string Description = "Target an archive to extract files from.";
-        private new const string Name = "unbundle";
+        private const string s_description = "Target an archive to extract files from.";
+        private const string s_name = "unbundle";
 
-        public UnbundleCommand() : base(Name, Description)
+        public UnbundleCommand() : base(s_name, s_description)
         {
             AddAlias("extract");
 
@@ -32,7 +32,7 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--hash" }, "Extract single file with a given hash. If a path is supplied, all hashes will be extracted."));
             AddOption(new Option<bool>(new[] { "--DEBUG_decompress" }, "Decompresses all buffers in the unbundled files."));
 
-            Handler = CommandHandler.Create<FileSystemInfo[], DirectoryInfo, string, string, string, bool, IHost>(Action);
+            SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, string, string, string, bool, IHost>(Action));
         }
 
         private void Action(FileSystemInfo[] path, DirectoryInfo outpath, string pattern, string regex, string hash, bool DEBUG_decompress, IHost host)

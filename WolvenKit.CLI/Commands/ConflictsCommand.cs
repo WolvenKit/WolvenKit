@@ -1,6 +1,6 @@
 using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using System.Threading.Tasks;
 using CP77Tools.Tasks;
@@ -10,18 +10,18 @@ using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands
 {
-    public class ConflictsCommand : Command
+    internal class ConflictsCommand : CommandBase
     {
-        private new const string Description = "Lists all mod conflicts in your mods.";
-        private new const string Name = "conflicts";
+        private const string s_description = "Lists all mod conflicts in your mods.";
+        private const string s_name = "conflicts";
 
-        public ConflictsCommand() : base(Name, Description)
+        public ConflictsCommand() : base(s_name, s_description)
         {
             AddArgument(new Argument<DirectoryInfo>("path", () => null, "Path to your Cyberpunk 2077 game folder (if left empty it will use the current working directory)."));
 
             AddOption(new Option<bool>(new[] { "--structured", "-s" }, "Print structured output (json)."));
 
-            Handler = CommandHandler.Create<DirectoryInfo, bool, IHost>(Action);
+            SetHandler(CommandHandler.Create<DirectoryInfo, bool, IHost>(Action));
         }
 
         private void Action(DirectoryInfo path, bool structured, IHost host)

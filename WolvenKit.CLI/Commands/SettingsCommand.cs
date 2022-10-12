@@ -1,18 +1,18 @@
 using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.Diagnostics;
 using System.IO;
 using Microsoft.Extensions.Hosting;
 
 namespace CP77Tools.Commands
 {
-    public class SettingsCommand : Command
+    internal class SettingsCommand : CommandBase
     {
-        private new const string Description = "App settings";
-        private new const string Name = "settings";
+        private const string s_description = "App settings";
+        private const string s_name = "settings";
 
-        public SettingsCommand() : base(Name, Description) => Handler = CommandHandler.Create<IHost>(Action);
+        public SettingsCommand() : base(s_name, s_description) => SetHandler(CommandHandler.Create<IHost>(Action));
 
         private void Action(IHost host)
         {

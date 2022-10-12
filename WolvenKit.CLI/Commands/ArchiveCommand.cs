@@ -1,20 +1,21 @@
 using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Types;
 
 namespace CP77Tools.Commands
 {
-    public class ArchiveCommand : Command
+    internal class ArchiveCommand : CommandBase
     {
-        private new const string Description = "Display information of an .archive file.";
-        private new const string Name = "archive";
+        private const string s_description = "Display information of an .archive file.";
+        private const string s_name = "archive";
 
-        public ArchiveCommand() : base(Name, Description)
+        public ArchiveCommand() : base(s_name, s_description)
         {
             AddAlias("archiveinfo");
 
@@ -25,11 +26,12 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] { "--diff", "-d" }, "Dump archive json for diff."));
             AddOption(new Option<bool>(new[] { "--list", "-l" }, "List all files in archive."));
 
-            Handler = CommandHandler.Create<FileSystemInfo[], string, string, bool, bool, IHost>(Action);
+            SetHandler(CommandHandler.Create<FileSystemInfo[], string, string, bool, bool, IHost>(Action));
         }
 
-        private void Action(FileSystemInfo[] path, string pattern, string regex, bool diff, bool list, IHost host)
+        public static void Action(FileSystemInfo[] path, string pattern, string regex, bool diff, bool list, IHost host)
         {
+
             var serviceProvider = host.Services;
             var logger = serviceProvider.GetRequiredService<ILoggerService>();
 

@@ -1,5 +1,5 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,16 +7,16 @@ using Microsoft.Extensions.Hosting;
 
 namespace CP77Tools.Commands
 {
-    public class HashCommand : Command
+    internal class HashCommand : CommandBase
     {
-        private new const string Description = "Some helper functions related to hashes.";
-        private new const string Name = "hash";
+        private const string s_description = "Some helper functions related to hashes.";
+        private const string s_name = "hash";
 
-        public HashCommand() : base(Name, Description)
+        public HashCommand() : base(s_name, s_description)
         {
             AddArgument(new Argument<string[]>("input", "Create FNV1A hash for given strings."));
 
-            Handler = CommandHandler.Create<string[], IHost>(Action);
+            SetHandler(CommandHandler.Create<string[], IHost>(Action));
         }
 
         private void Action(string[] input, IHost host)

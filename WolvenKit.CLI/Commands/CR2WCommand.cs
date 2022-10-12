@@ -1,6 +1,6 @@
 using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using System.Threading.Tasks;
 using CP77Tools.Tasks;
@@ -11,12 +11,12 @@ using WolvenKit.Common;
 namespace CP77Tools.Commands
 {
     [Obsolete("Use ConvertCommand")]
-    public class CR2WCommand : Command
+    internal class CR2WCommand : CommandBase
     {
-        private new const string Description = "[DEPRECATED] cr2w file conversion command.";
-        private new const string Name = "cr2w";
+        private const string s_description = "[DEPRECATED] cr2w file conversion command.";
+        private const string s_name = "cr2w";
 
-        public CR2WCommand() : base(Name, Description)
+        public CR2WCommand() : base(s_name, s_description)
         {
             AddArgument(new Argument<FileSystemInfo[]>("path", "Input path to a CR2W file or folder."));
 
@@ -30,8 +30,7 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
 
-            Handler = CommandHandler
-                .Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
+            SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action));
         }
 
         private async Task Action(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,

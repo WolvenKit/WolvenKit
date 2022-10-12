@@ -1,5 +1,5 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,28 +7,28 @@ using Microsoft.Extensions.Hosting;
 
 namespace CP77Tools.Commands
 {
-    public class OodleCommand : Command
+    internal class OodleCommand : CommandBase
     {
-        private new const string Description = "Some helper functions related to Oodle.";
-        private new const string Name = "oodle";
+        private const string s_description = "Some helper functions related to Oodle.";
+        private const string s_name = "oodle";
 
-        public OodleCommand() : base(Name, Description)
+        public OodleCommand() : base(s_name, s_description)
         {
             AddCommand(new DecompressCommand());
             AddCommand(new CompressCommand());
         }
 
-        public class DecompressCommand : Command
+        internal class DecompressCommand : CommandBase
         {
-            private new const string Description = "Decompress with oodle kraken.";
-            private new const string Name = "decompress";
+            private const string s_description = "Decompress with oodle kraken.";
+            private const string s_name = "decompress";
 
-            public DecompressCommand() : base(Name, Description)
+            public DecompressCommand() : base(s_name, s_description)
             {
                 AddArgument(new Argument<FileInfo>("path", "Input path."));
                 AddArgument(new Argument<FileInfo>("outpath", () => null, "Output path."));
 
-                Handler = CommandHandler.Create<FileInfo, FileInfo, IHost>(Action);
+                SetHandler(CommandHandler.Create<FileInfo, FileInfo, IHost>(Action));
             }
 
             private void Action(FileInfo path, FileInfo outpath, IHost host)
@@ -39,17 +39,17 @@ namespace CP77Tools.Commands
             }
         }
 
-        public class CompressCommand : Command
+        internal class CompressCommand : CommandBase
         {
-            private new const string Description = "Compress with oodle kraken.";
-            private new const string Name = "compress";
+            private const string s_description = "Compress with oodle kraken.";
+            private const string s_name = "compress";
 
-            public CompressCommand() : base(Name, Description)
+            public CompressCommand() : base(s_name, s_description)
             {
                 AddArgument(new Argument<FileInfo>("path", "Input path."));
                 AddArgument(new Argument<FileInfo>("outpath", () => null, "Output path."));
 
-                Handler = CommandHandler.Create<FileInfo, FileInfo, IHost>(Action);
+                SetHandler(CommandHandler.Create<FileInfo, FileInfo, IHost>(Action));
             }
 
             private void Action(FileInfo path, FileInfo outpath, IHost host)
