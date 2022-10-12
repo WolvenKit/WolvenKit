@@ -13,7 +13,7 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-        public async Task Cr2wTask(string[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
+        public async Task Cr2wTask(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
         {
             if (path is null || path.Length < 1)
             {
@@ -38,38 +38,40 @@ namespace CP77Tools.Tasks
             // });
         }
 
-        private async Task Cr2wTaskInner(string path, DirectoryInfo outputDirectory, bool deserialize, bool serialize,
+        private async Task Cr2wTaskInner(FileSystemInfo path, DirectoryInfo outputDirectory, bool deserialize, bool serialize,
             string pattern = "", string regex = "", ETextConvertFormat format = ETextConvertFormat.json)
         {
             #region checks
 
-            if (string.IsNullOrEmpty(path))
+            if (path is null)
             {
                 _loggerService.Error("Please fill in an input path.");
                 return;
             }
-
-            var inFileInfo = new FileInfo(path);
-            var inDirInfo = new DirectoryInfo(path);
-            var isDirectory = !inFileInfo.Exists && inDirInfo.Exists;
-            var isFile = inFileInfo.Exists && !inDirInfo.Exists;
-
-            if (!isDirectory && !isFile)
+            if (!path.Exists)
             {
-                _loggerService.Error("Input file does not exist.");
+                _loggerService.Error("Input path does not exist.");
                 return;
+            }
+
+            List<FileInfo> fileInfos = new();
+            switch (path)
+            {
+                case FileInfo file:
+                    fileInfos.Add(file);
+                    break;
+                case DirectoryInfo directory:
+                    fileInfos = directory.GetFiles("*", SearchOption.AllDirectories).ToList();
+                    break;
+                default:
+                    _loggerService.Error("Not a valid file or directory name.");
+                    return;
             }
 
             #endregion checks
 
             Stopwatch watch = new();
             watch.Restart();
-
-            // get all files
-            var fileInfos = isDirectory
-                ? inDirInfo.GetFiles("*", SearchOption.AllDirectories).ToList()
-                : new List<FileInfo> { inFileInfo };
-
 
             IEnumerable<FileInfo> finalmatches = fileInfos;
 

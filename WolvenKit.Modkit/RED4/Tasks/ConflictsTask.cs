@@ -58,7 +58,7 @@ public partial class ConsoleFunctions
             _archiveManager.LoadModsArchives(gameExe);
             var mods = _archiveManager.ModArchives.Items.ToList();
 
-            // TODO get load order
+            // TODO get correct redmod load order
 
             var conflictsDict = new Dictionary<IGameArchive, Conflicts>();
             foreach (var mod in mods)

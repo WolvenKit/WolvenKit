@@ -50,8 +50,6 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            #region unbundle main file
-
             using var cr2WStream = new MemoryStream();
             gameFile.Extract(cr2WStream);
 
@@ -81,8 +79,6 @@ namespace WolvenKit.Modkit.RED4
                         cr2WStream.CopyTo(fs);
                     }
                 }
-
-                #endregion unbundle main file
 
                 #region serialize
 
@@ -131,11 +127,11 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Error(e);
                     return false;
                 }
+
+                #endregion extract buffers
             }
 
             return false;
-
-            #endregion extract buffers
         }
 
         /// <summary>
@@ -560,28 +556,6 @@ namespace WolvenKit.Modkit.RED4
                 default:
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
-        }
-
-        private bool HandleEntity(Stream cr2wStream, FileInfo cr2wFileName, EntityExportArgs entExportArgs)
-        {
-            // try
-            // {
-            //     switch (entExportArgs.ExportType)
-            //     {
-            //         case EntityExportType.Json:
-            //             return DumpEntityPackageAsJson(cr2wStream, cr2wFileName);
-            //         case EntityExportType.Gltf:
-            //             throw new NotImplementedException("Uncooking Entity/Appearance Resources To Gltf Not Implemented");
-            //         default:
-            //             break;
-            //     }
-            // 
-            // }
-            // catch (Exception ex)
-            // {
-            //     _loggerService.Error(ex);
-            // }
-            return false;
         }
 
         private static bool HandleOpus(OpusExportArgs opusExportArgs)

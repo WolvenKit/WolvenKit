@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -16,11 +18,11 @@ namespace CP77Tools.Tasks
         /// <param name="path">Files or folders to import</param>
         /// <param name="outDir">Outdirectory to create redengine files in</param>
         /// <param name="keep">use existing redengine files in outdirectory</param>
-        public async Task ImportTask(string[] path, DirectoryInfo outDir, bool keep)
+        public async Task ImportTask(FileSystemInfo[] path, DirectoryInfo outDir, bool keep)
         {
             if (path == null || path.Length < 1)
             {
-                _loggerService.Warning("Please fill in an input path.");
+                _loggerService.Error("Please fill in an input path.");
                 return;
             }
 
@@ -30,40 +32,27 @@ namespace CP77Tools.Tasks
             }
         }
 
-        private async Task ImportTaskInner(string path, DirectoryInfo outDirectory, bool keep)
+        private async Task ImportTaskInner(FileSystemInfo path, DirectoryInfo outDirectory, bool keep)
         {
             #region checks
 
-            if (string.IsNullOrEmpty(path))
+            if (path is null)
             {
                 _loggerService.Error("Please fill in an input path.");
                 return;
             }
-
+            if (!path.Exists)
+            {
+                _loggerService.Error("Input path does not exist.");
+                return;
+            }
             if (outDirectory is not null && !outDirectory.Exists)
             {
                 _loggerService.Error("Please fill in a valid outdirectory path.");
                 return;
             }
 
-            var rawFile = new FileInfo(path);
-            var inputDirInfo = new DirectoryInfo(path);
-
-            if (!rawFile.Exists && !inputDirInfo.Exists)
-            {
-                _loggerService.Error("Input path does not exist.");
-                return;
-            }
-
-            var isDirectory = !rawFile.Exists;
-            var basedir = rawFile.Exists
-                ? new FileInfo(path).Directory
-                : inputDirInfo;
-
             #endregion checks
-
-            // create import settings
-
 
             var settings = new GlobalImportArgs().Register(
                 _commonImportArgs.Value,
@@ -74,50 +63,51 @@ namespace CP77Tools.Tasks
             settings.Get<XbmImportArgs>().Keep = keep;
             settings.Get<GltfImportArgs>().Keep = keep;
 
-            // a directory was selected to import
-            if (isDirectory)
+            switch (path)
             {
-                await _modTools.ImportFolder(basedir, settings, outDirectory);
-            }
-            // just a single file was selected
-            else
-            {
-                var rawRelative = new RedRelativePath(rawFile.Directory, rawFile.GetRelativePath(rawFile.Directory));
-                // check if the file can be directly imported
-                // if not, rebuild the single file
-                if (!Enum.TryParse(rawRelative.Extension, true, out ERawFileFormat extAsEnum))
-                {
-                    // buffers can not be rebuilt on their own
-                    if (!settings.Get<CommonImportArgs>().Keep)
+                case FileInfo file:
+                    var rawRelative = new RedRelativePath(file.Directory, file.GetRelativePath(file.Directory));
+                    // check if the file can be directly imported
+                    // if not, rebuild the single file
+                    if (!Enum.TryParse(rawRelative.Extension, true, out ERawFileFormat extAsEnum))
                     {
-                        return;
-                    }
+                        // buffers can not be rebuilt on their own
+                        if (!settings.Get<CommonImportArgs>().Keep)
+                        {
+                            return;
+                        }
 
-                    // outdir needs to be the parent dir of the redfile to rebuild !! (user needs to take care of that)
-                    if (_modTools.RebuildBuffer(rawRelative, outDirectory))
-                    {
-                        _loggerService.Success($"Successfully imported {path} to {outDirectory.FullName}");
+                        // outdir needs to be the parent dir of the redfile to rebuild !! (user needs to take care of that)
+                        if (_modTools.RebuildBuffer(rawRelative, outDirectory))
+                        {
+                            _loggerService.Success($"Successfully imported {path} to {outDirectory.FullName}");
+                        }
+                        else
+                        {
+                            _loggerService.Error($"Failed to import {path}");
+                        }
                     }
+                    // the raw file can be imported directly
                     else
                     {
-                        _loggerService.Error($"Failed to import {path}");
-                    }
-                }
-                // the raw file can be imported directly
-                else
-                {
 
-                    if (await _modTools.Import(rawRelative, settings, outDirectory))
-                    {
-                        _loggerService.Success($"Successfully imported {path}");
+                        if (await _modTools.Import(rawRelative, settings, outDirectory))
+                        {
+                            _loggerService.Success($"Successfully imported {path}");
+                        }
+                        else
+                        {
+                            _loggerService.Error($"Failed to import {path}");
+                        }
                     }
-                    else
-                    {
-                        _loggerService.Error($"Failed to import {path}");
-                    }
-                }
 
-
+                    break;
+                case DirectoryInfo directory:
+                    await _modTools.ImportFolder(directory, settings, outDirectory);
+                    break;
+                default:
+                    _loggerService.Error("Not a valid file or directory name.");
+                    return;
             }
         }
     }

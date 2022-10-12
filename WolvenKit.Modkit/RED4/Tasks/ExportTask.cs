@@ -11,9 +11,7 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-        #region Methods
-
-        public void ExportTask(string[] path, DirectoryInfo outDir, EUncookExtension? uncookext, bool? flip, ECookedFileFormat[] forcebuffers)
+        public void ExportTask(FileSystemInfo[] path, DirectoryInfo outDir, EUncookExtension? uncookext, bool? flip, ECookedFileFormat[] forcebuffers)
         {
             if (path == null || path.Length < 1)
             {
@@ -24,40 +22,44 @@ namespace CP77Tools.Tasks
             Parallel.ForEach(path, file => ExportTaskInner(file, outDir, uncookext, flip, forcebuffers));
         }
 
-        private void ExportTaskInner(string path, DirectoryInfo outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers)
+        private void ExportTaskInner(FileSystemInfo path, DirectoryInfo outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers)
         {
             #region checks
 
-            if (string.IsNullOrEmpty(path))
+            if (path is null)
             {
                 _loggerService.Warning("Please fill in an input path.");
                 return;
             }
-
+            if (!path.Exists)
+            {
+                _loggerService.Error("Input path does not exist.");
+                return;
+            }
             if (outDir is not null && !outDir.Exists)
             {
                 _loggerService.Warning("Please fill in a valid outdirectory path.");
                 return;
             }
 
-            var inputFileInfo = new FileInfo(path);
-            var inputDirInfo = new DirectoryInfo(path);
-
-            if (!inputFileInfo.Exists && !inputDirInfo.Exists)
+            List<FileInfo> filesToExport;
+            DirectoryInfo basedir;
+            switch (path)
             {
-                _loggerService.Warning("Input path does not exist.");
-                return;
+                case FileInfo file:
+                    basedir = file.Directory;
+                    filesToExport = new List<FileInfo> { file };
+                    break;
+                case DirectoryInfo directory:
+                    basedir = directory;
+                    filesToExport = directory.GetFiles("*", SearchOption.AllDirectories).ToList();
+                    break;
+                default:
+                    _loggerService.Error("Not a valid file or directory name.");
+                    return;
             }
 
-            var isDirectory = !inputFileInfo.Exists;
-            var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
-
             #endregion checks
-
-
-            var filesToExport = isDirectory
-                ? inputDirInfo.GetFiles("*", SearchOption.AllDirectories).ToList()
-                : new List<FileInfo> { inputFileInfo };
 
             // create extract arguments
             var exportArgs = new GlobalExportArgs().Register(
@@ -123,7 +125,5 @@ namespace CP77Tools.Tasks
 
             return;
         }
-
-        #endregion Methods
     }
 }

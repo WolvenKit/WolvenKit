@@ -6,6 +6,7 @@ using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.Common;
+using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands
 {
@@ -30,7 +31,7 @@ namespace CP77Tools.Commands
                 AddAlias("deserialise");
                 AddAlias("d");
 
-                AddArgument(new Argument<string[]>("path", "Input path to a CR2W file or folder."));
+                AddArgument(new Argument<FileSystemInfo[]>("path", "Input path to a CR2W file or folder."));
 
                 AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory path."));
 
@@ -38,13 +39,27 @@ namespace CP77Tools.Commands
                 AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
 
                 Handler = CommandHandler
-                    .Create<string[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
+                    .Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
             }
 
-            private async Task Action(string[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
+            private async Task Action(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
                 string regex, IHost host)
             {
                 var serviceProvider = host.Services;
+                var logger = serviceProvider.GetRequiredService<ILoggerService>();
+
+                if (path is null || path.Length < 1)
+                {
+                    logger.Error("Please fill in an input path.");
+                    return;
+                }
+
+                if (!deserialize && !serialize)
+                {
+                    logger.Error("Please specify either -s or -d.");
+                    return;
+                }
+
                 var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
                 await consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, ETextConvertFormat.json);
             }
@@ -60,7 +75,7 @@ namespace CP77Tools.Commands
                 AddAlias("serialise");
                 AddAlias("s");
 
-                AddArgument(new Argument<string[]>("path", "Input path to a CR2W file or folder."));
+                AddArgument(new Argument<FileSystemInfo[]>("path", "Input path to a CR2W file or folder."));
 
                 AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory path."));
 
@@ -68,13 +83,27 @@ namespace CP77Tools.Commands
                 AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
 
                 Handler = CommandHandler
-                    .Create<string[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
+                    .Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
             }
 
-            private async Task Action(string[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
+            private async Task Action(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
                 string regex, IHost host)
             {
                 var serviceProvider = host.Services;
+                var logger = serviceProvider.GetRequiredService<ILoggerService>();
+
+                if (path is null || path.Length < 1)
+                {
+                    logger.Error("Please fill in an input path.");
+                    return;
+                }
+
+                if (!deserialize && !serialize)
+                {
+                    logger.Error("Please specify either -s or -d.");
+                    return;
+                }
+
                 var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
                 await consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, ETextConvertFormat.json);
             }

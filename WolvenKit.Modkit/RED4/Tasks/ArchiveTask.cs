@@ -15,66 +15,62 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void ArchiveTask(string[] path, string pattern, string regex, bool diff, bool list)
+        public void ArchiveTask(FileSystemInfo[] path, string pattern, string regex, bool diff, bool list)
         {
             if (path == null || path.Length < 1)
             {
-                _loggerService.Warning("Please fill in an input path.");
+                _loggerService.Error("Please fill in an input path.");
                 return;
             }
 
-            Parallel.ForEach(path, file =>
-            {
-                ArchiveTaskInner(file, pattern, regex, diff, list);
-            });
+            Parallel.ForEach(path, file => ArchiveTaskInner(file, pattern, regex, diff, list));
         }
 
-        private void ArchiveTaskInner(string path, string pattern, string regex, bool diff, bool list)
+        private void ArchiveTaskInner(FileSystemInfo path, string pattern, string regex, bool diff, bool list)
         {
             #region checks
 
-            if (string.IsNullOrEmpty(path))
+            if (path is null)
             {
-                _loggerService.Warning("Please fill in an input path.");
+                _loggerService.Error("Please fill in an input path.");
                 return;
             }
-
-            var inputFileInfo = new FileInfo(path);
-            var inputDirInfo = new DirectoryInfo(path);
-
-            if (!inputFileInfo.Exists && !inputDirInfo.Exists)
+            if (!path.Exists)
             {
-                _loggerService.Warning("Input path does not exist.");
+                _loggerService.Error("Input path does not exist.");
                 return;
             }
-
-            if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
-            {
-                _loggerService.Warning("Input file is not an .archive.");
-                return;
-            }
-            else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
-            {
-                _loggerService.Warning("No .archive file to process in the input directory");
-                return;
-            }
-
-            var isDirectory = !inputFileInfo.Exists;
-            var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
 
             #endregion checks
 
             List<FileInfo> archiveFileInfos;
-            if (isDirectory)
+            switch (path)
             {
-                _archiveManager.LoadFromFolder(basedir);
-                // TODO: use the manager here?
-                archiveFileInfos = _archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
+                case FileInfo file:
+                    if (file.Extension != ".archive")
+                    {
+                        _loggerService.Error("Input file is not an .archive.");
+                        return;
+                    }
+                    archiveFileInfos = new List<FileInfo> { file };
+
+                    break;
+                case DirectoryInfo directory:
+                    archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
+
+                    if (archiveFileInfos.Count == 0)
+                    {
+                        _loggerService.Error("No .archive file to process in the input directory");
+                        return;
+                    }
+
+                    break;
+                default:
+                    _loggerService.Error("Not a valid file or directory name.");
+                    return;
             }
-            else
-            {
-                archiveFileInfos = new List<FileInfo> { inputFileInfo };
-            }
+
+
 
             foreach (var processedarchive in archiveFileInfos)
             {
@@ -111,7 +107,7 @@ namespace CP77Tools.Tasks
                     }
                 }
 
-                //
+                // serialize archive info
                 if (diff)
                 {
                     var json = JsonSerializer.Serialize(ar, new JsonSerializerOptions

@@ -29,7 +29,7 @@ namespace CP77Tools.Tasks
 
     public partial class ConsoleFunctions
     {
-        public void UncookTask(string[] path, UncookTaskOptions options)
+        public void UncookTask(FileSystemInfo[] path, UncookTaskOptions options)
         {
             if (path == null || path.Length < 1)
             {
@@ -43,33 +43,18 @@ namespace CP77Tools.Tasks
             }
         }
 
-        private void UncookTaskInner(string path, UncookTaskOptions options)
+        private void UncookTaskInner(FileSystemInfo path, UncookTaskOptions options)
         {
             #region checks
 
-            if (string.IsNullOrEmpty(path))
+            if (path is null)
             {
                 _loggerService.Warning("Please fill in an input path.");
                 return;
             }
-
-            var inputFileInfo = new FileInfo(path);
-            var inputDirInfo = new DirectoryInfo(path);
-
-            if (!inputFileInfo.Exists && !inputDirInfo.Exists)
+            if (!path.Exists)
             {
-                _loggerService.Warning("Input path does not exist.");
-                return;
-            }
-
-            if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
-            {
-                _loggerService.Warning("Input file is not an .archive.");
-                return;
-            }
-            else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
-            {
-                _loggerService.Warning("No .archive file to process in the input directory");
+                _loggerService.Error("Input path does not exist.");
                 return;
             }
 
@@ -79,10 +64,34 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            var isDirectory = !inputFileInfo.Exists;
-            var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
-
             #endregion checks
+
+            DirectoryInfo basedir;
+            List<FileInfo> archiveFileInfos;
+            switch (path)
+            {
+                case FileInfo file:
+                    if (file.Extension != ".archive")
+                    {
+                        _loggerService.Error("Input file is not an .archive.");
+                        return;
+                    }
+                    archiveFileInfos = new List<FileInfo> { file };
+                    basedir = file.Directory;
+                    break;
+                case DirectoryInfo directory:
+                    archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
+                    if (archiveFileInfos.Count == 0)
+                    {
+                        _loggerService.Error("No .archive file to process in the input directory");
+                        return;
+                    }
+                    basedir = directory;
+                    break;
+                default:
+                    _loggerService.Error("Not a valid file or directory name.");
+                    return;
+            }
 
             var exportArgs = new GlobalExportArgs().Register(
                 _xbmExportArgs.Value,
@@ -138,55 +147,43 @@ namespace CP77Tools.Tasks
                 }
             }
 
-            List<FileInfo> archiveFileInfos;
-            if (isDirectory)
+            // get outdirectory
+            DirectoryInfo outDir;
+            if (options.outpath is null)
             {
-                _archiveManager.LoadFromFolder(basedir);
-                archiveFileInfos = _archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
+                outDir = new DirectoryInfo(basedir.FullName);
             }
             else
             {
-                archiveFileInfos = new List<FileInfo> { inputFileInfo };
+                outDir = options.outpath;
+                if (!outDir.Exists)
+                {
+                    outDir = Directory.CreateDirectory(options.outpath.FullName);
+                }
+            }
+
+            DirectoryInfo rawOutDirInfo = null;
+            if (string.IsNullOrEmpty(options.rawOutDir))
+            {
+                rawOutDirInfo = outDir;
+            }
+            else
+            {
+                rawOutDirInfo = new DirectoryInfo(options.rawOutDir);
+                if (!rawOutDirInfo.Exists)
+                {
+                    rawOutDirInfo = new DirectoryInfo(options.rawOutDir);
+                }
             }
 
             foreach (var fileInfo in archiveFileInfos)
             {
-                // get outdirectory
-                DirectoryInfo outDir;
-                if (options.outpath is null)
-                {
-                    outDir = new DirectoryInfo(basedir.FullName);
-                }
-                else
-                {
-                    outDir = options.outpath;
-                    if (!outDir.Exists)
-                    {
-                        outDir = Directory.CreateDirectory(options.outpath.FullName);
-                    }
-                }
-
-                DirectoryInfo rawOutDirInfo = null;
-                if (string.IsNullOrEmpty(options.rawOutDir))
-                {
-                    rawOutDirInfo = outDir;
-                }
-                else
-                {
-                    rawOutDirInfo = new DirectoryInfo(options.rawOutDir);
-                    if (!rawOutDirInfo.Exists)
-                    {
-                        rawOutDirInfo = new DirectoryInfo(options.rawOutDir);
-                    }
-                }
-
-                // read archive
                 var ar = _wolvenkitFileService.ReadRed4Archive(fileInfo.FullName, _hashService);
 
-                // run
                 if (options.hash != 0)
                 {
                     _modTools.UncookSingle(ar, options.hash, outDir, exportArgs, rawOutDirInfo, options.forcebuffers, options.serialize ?? false);
+
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked one file: {options.hash}");
                 }
                 else

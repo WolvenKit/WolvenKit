@@ -13,7 +13,7 @@ namespace CP77Tools.Tasks
 
         #region Methods
 
-        public void UnbundleTask(string[] path, DirectoryInfo outpath,
+        public void UnbundleTask(FileSystemInfo[] path, DirectoryInfo outpath,
             string hash, string pattern, string regex, bool DEBUG_decompress = false)
         {
             if (path == null || path.Length < 1)
@@ -28,51 +28,49 @@ namespace CP77Tools.Tasks
             }
         }
 
-        private void UnbundleTaskInner(string path, DirectoryInfo outpath,
+        private void UnbundleTaskInner(FileSystemInfo path, DirectoryInfo outpath,
             string hash, string pattern, string regex, bool DEBUG_decompress = false)
         {
             #region checks
 
-            if (string.IsNullOrEmpty(path))
+            if (path is null)
             {
                 _loggerService.Error("Please fill in an input path.");
                 return;
             }
-
-            var inputFileInfo = new FileInfo(path);
-            var inputDirInfo = new DirectoryInfo(path);
-
-            if (!inputFileInfo.Exists && !inputDirInfo.Exists)
+            if (!path.Exists)
             {
                 _loggerService.Error("Input path does not exist.");
                 return;
             }
 
-            if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
-            {
-                _loggerService.Error("Input file is not an .archive.");
-                return;
-            }
-            else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
-            {
-                _loggerService.Warning("No .archive file to process in the input directory.");
-                return;
-            }
-
-            var isDirectory = !inputFileInfo.Exists;
-            var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
-
             #endregion checks
 
+            DirectoryInfo basedir;
             List<FileInfo> archiveFileInfos;
-            if (isDirectory)
+            switch (path)
             {
-                _archiveManager.LoadFromFolder(basedir);
-                archiveFileInfos = _archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
-            }
-            else
-            {
-                archiveFileInfos = new List<FileInfo> { inputFileInfo };
+                case FileInfo file:
+                    if (file.Extension != ".archive")
+                    {
+                        _loggerService.Error("Input file is not an .archive.");
+                        return;
+                    }
+                    archiveFileInfos = new List<FileInfo> { file };
+                    basedir = file.Directory;
+                    break;
+                case DirectoryInfo directory:
+                    archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
+                    if (archiveFileInfos.Count == 0)
+                    {
+                        _loggerService.Error("No .archive file to process in the input directory");
+                        return;
+                    }
+                    basedir = directory;
+                    break;
+                default:
+                    _loggerService.Error("Not a valid file or directory name.");
+                    return;
             }
 
             // get outdirectory

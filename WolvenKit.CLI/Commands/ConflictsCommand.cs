@@ -26,26 +26,29 @@ namespace CP77Tools.Commands
 
         private void Action(DirectoryInfo path, bool structured, IHost host)
         {
+            var serviceProvider = host.Services;
+            var logger = serviceProvider.GetRequiredService<ILoggerService>();
+
             if (!path.Exists)
             {
-                Console.WriteLine("[ERROR] Incorrect input path: Directory does not exist");
+                logger.Error("Incorrect input path: Directory does not exist");
                 return;
             }
 
             // check if game dir
             if (!path.Name.Equals("Cyberpunk 2077"))
             {
-                Console.WriteLine("[ERROR] Incorrect input path: Not game folder");
+                logger.Error("Incorrect input path: Not game folder");
                 return;
             }
             var gameExe = new FileInfo(Path.Combine(path.FullName, "bin", "x64", "Cyberpunk2077.exe"));
             if (!gameExe.Exists)
             {
-                Console.WriteLine("[ERROR] Incorrect input path: Not game folder");
+                logger.Error("Incorrect input path: Not game folder");
                 return;
             }
 
-            var serviceProvider = host.Services;
+
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
             consoleFunctions.ConflictsTask(path, structured);
         }

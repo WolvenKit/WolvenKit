@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands
 {
@@ -18,10 +19,10 @@ namespace CP77Tools.Commands
             AddAlias("unbundle-and-export");
             AddAlias("extract-and-export");
 
-            AddArgument(new Argument<string[]>("path", "Input paths to .archive files or folders."));
+            AddArgument(new Argument<FileSystemInfo[]>("path", "Input paths to .archive files or folders."));
 
             // deprecated. keep for backwards compatibility
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "[Deprecated] Input paths to .archive files or folders."));
+            AddOption(new Option<FileSystemInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input paths to .archive files or folders."));
 
             AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory to extract main files to."));
 
@@ -38,14 +39,22 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
 
             Handler = CommandHandler
-                .Create<string[], DirectoryInfo, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string
+                .Create<FileSystemInfo[], DirectoryInfo, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string
                     , IHost>(Action);
         }
 
-        private void Action(string[] path, DirectoryInfo outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
+        private void Action(FileSystemInfo[] path, DirectoryInfo outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
             string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExportType? meshExportType, string meshExportMaterialRepo, IHost host)
         {
             var serviceProvider = host.Services;
+            var logger = serviceProvider.GetRequiredService<ILoggerService>();
+
+            if (path == null || path.Length < 1)
+            {
+                logger.Warning("Please fill in an input path.");
+                return;
+            }
+
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
             consoleFunctions.UncookTask(path, new UncookTaskOptions
             {

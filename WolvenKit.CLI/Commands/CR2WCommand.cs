@@ -18,10 +18,10 @@ namespace CP77Tools.Commands
 
         public CR2WCommand() : base(Name, Description)
         {
-            AddArgument(new Argument<string[]>("path", "Input path to a CR2W file or folder."));
+            AddArgument(new Argument<FileSystemInfo[]>("path", "Input path to a CR2W file or folder."));
 
             // deprecated. keep for backwards compatibility
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "[Deprecated] Input path to a CR2W file or folder."));
+            AddOption(new Option<FileSystemInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input path to a CR2W file or folder."));
 
             AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory path."));
             AddOption(new Option<bool>(new[] { "--deserialize", "-d" }, "Create a CR2W file from json."));
@@ -31,10 +31,10 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
 
             Handler = CommandHandler
-                .Create<string[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
+                .Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
         }
 
-        private async Task Action(string[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
+        private async Task Action(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
             string regex, IHost host)
         {
             var serviceProvider = host.Services;

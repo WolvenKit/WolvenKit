@@ -12,7 +12,7 @@ namespace CP77Tools.Tasks
         /// </summary>
         /// <param name="path"></param>
         /// <param name="outpath"></param>
-        public void PackTask(string[] path, DirectoryInfo outpath)
+        public void PackTask(DirectoryInfo[] path, DirectoryInfo outpath)
         {
             if (path == null || path.Length < 1)
             {
@@ -23,24 +23,23 @@ namespace CP77Tools.Tasks
             Parallel.ForEach(path, file => PackTaskInner(file, outpath));
         }
 
-        private void PackTaskInner(string path, DirectoryInfo outpath, int cp = 0)
+        private void PackTaskInner(DirectoryInfo path, DirectoryInfo outpath, int cp = 0)
         {
             #region checks
 
-            if (string.IsNullOrEmpty(path))
+            if (path is null)
             {
                 _loggerService.Warning("Please fill in an input path.");
                 return;
             }
 
-            var inputDirInfo = new DirectoryInfo(path);
-            if (!Directory.Exists(path) || !inputDirInfo.Exists)
+            if (!path.Exists)
             {
                 _loggerService.Warning("Input path does not exist.");
                 return;
             }
 
-            var basedir = inputDirInfo;
+            var basedir = path;
             if (basedir?.Parent == null)
             {
                 return;
