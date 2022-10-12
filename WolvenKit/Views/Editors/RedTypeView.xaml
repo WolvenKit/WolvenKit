@@ -277,6 +277,11 @@
                         <editors:RedStringEditor RedString="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedStringEditor>
+                <converters:RedEditorTemplateSelector.RedCNameEditor>
+                    <DataTemplate>
+                        <editors:RedCNameEditor RedString="{Binding Data, Mode=TwoWay}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedCNameEditor>
                 <converters:RedEditorTemplateSelector.RedTweakEditor>
                     <DataTemplate>
                         <editors:RedTweakEditor RedTweak="{Binding Data, Mode=TwoWay}" />

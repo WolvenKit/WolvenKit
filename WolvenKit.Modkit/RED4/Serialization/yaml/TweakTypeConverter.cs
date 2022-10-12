@@ -146,10 +146,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                         }
                         case ETweakType.CResource:
                         {
-                            result = new CResourceAsyncReference<CResource>
-                            {
-                                DepotPath = parser.SafeReadScalarProperty(nameof(CResourceAsyncReference<CResource>.DepotPath))
-                            };
+                            result = new CResourceAsyncReference<CResource>(parser.SafeReadScalarProperty(nameof(CResourceAsyncReference<CResource>.DepotPath)));
                             break;
                         }
                         default:
@@ -299,16 +296,12 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
 
         private CResourceAsyncReference<CResource> ParseCResource(string value)
         {
-            var cres = new CResourceAsyncReference<CResource>();
             if (ulong.TryParse(value, out var key))
             {
-                cres.DepotPath = key;
+                return new CResourceAsyncReference<CResource>(key);
             }
-            else
-            {
-                cres.DepotPath = value;
-            }
-            return cres;
+
+            return new CResourceAsyncReference<CResource>(value);
         }
     }
 }

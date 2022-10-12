@@ -266,22 +266,6 @@ namespace WolvenKit.RED4.Types
             return RedTypeManager.Create(classType).GetProperty(propertyInfo.RedName);
         }
 
-        public static bool IsValueType(Type type)
-        {
-            if (type.IsValueType)
-            {
-                return true;
-            }
-
-            var typeInfo = GetTypeInfo(type);
-            if (typeInfo is { IsValueType: true })
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         public static object GetDefaultValue(Type type)
         {
             if (s_defaultValueCache.TryGetValue(type, out var value))
@@ -290,7 +274,7 @@ namespace WolvenKit.RED4.Types
             }
 
             object result = null;
-            if (IsValueType(type))
+            if (type.IsValueType)
             {
                 result = System.Activator.CreateInstance(type);
             }
@@ -625,7 +609,6 @@ namespace WolvenKit.RED4.Types
 
             public bool IsDynamicType { get; }
 
-            public bool IsValueType { get; }
             public ImmutableList<ExtendedPropertyInfo> PropertyInfos { get; } = ImmutableList<ExtendedPropertyInfo>.Empty;
             public List<ExtendedPropertyInfo> DynamicPropertyInfos { get; } = new();
 
@@ -647,11 +630,6 @@ namespace WolvenKit.RED4.Types
                     {
                         SerializeDefault = clsAttr.SerializeDefault;
                         ChildLevel = clsAttr.ChildLevel;
-                    }
-
-                    if (attribute is REDTypeAttribute typeAttr)
-                    {
-                        IsValueType = typeAttr.IsValueType;
                     }
                 }
 

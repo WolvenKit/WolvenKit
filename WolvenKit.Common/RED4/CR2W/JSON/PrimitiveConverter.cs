@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Semver;
 using Splat;
+using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
@@ -344,6 +345,9 @@ public class ResourceReferenceConverter : JsonConverter<IRedRef>, ICustomRedConv
             throw new JsonException();
         }
 
+        CName depotPath;
+        InternalEnums.EImportFlags flags;
+
         var result = (IRedRef)RedTypeManager.CreateRedType(typeToConvert);
         while (reader.Read())
         {
@@ -366,7 +370,7 @@ public class ResourceReferenceConverter : JsonConverter<IRedRef>, ICustomRedConv
                     if (converter is ICustomRedConverter conv)
                     {
                         reader.Read();
-                        result.DepotPath = (CName?)conv.ReadRedType(ref reader, typeof(CName), options);
+                        depotPath = (CName)conv.ReadRedType(ref reader, typeof(CName), options)!;
                     }
                     else
                     {
@@ -390,7 +394,7 @@ public class ResourceReferenceConverter : JsonConverter<IRedRef>, ICustomRedConv
                         throw new JsonException();
                     }
 
-                    result.Flags = Enum.Parse<InternalEnums.EImportFlags>(str);
+                    flags = Enum.Parse<InternalEnums.EImportFlags>(str);
                     break;
                 }
 

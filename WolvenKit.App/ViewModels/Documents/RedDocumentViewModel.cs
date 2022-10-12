@@ -207,10 +207,13 @@ namespace WolvenKit.ViewModels.Documents
             }
             if (cls is inkTextureAtlas atlas)
             {
-                var file = GetFileFromDepotPath(atlas.Slots[0]?.Texture?.DepotPath);
-                if (file != null)
+                if (atlas.Slots[0] != null)
                 {
-                    TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
+                    var file = GetFileFromDepotPath(atlas.Slots[0].Texture.DepotPath);
+                    if (file != null)
+                    {
+                        TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
+                    }
                 }
             }
             if (cls is inkWidgetLibraryResource library)
@@ -339,7 +342,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public CR2WFile GetFileFromDepotPath(CName depotPath, bool original = false)
         {
-            if (depotPath is null)
+            if (depotPath == CName.Empty)
             {
                 return null;
             }

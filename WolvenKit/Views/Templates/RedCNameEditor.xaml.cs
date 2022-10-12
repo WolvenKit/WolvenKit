@@ -10,12 +10,11 @@ namespace WolvenKit.Views.Editors
     /// <summary>
     /// Interaction logic for RedStringEditor.xaml
     /// </summary>
-    public partial class RedStringEditor : UserControl
+    public partial class RedCNameEditor : UserControl
     {
-        public RedStringEditor()
+        public RedCNameEditor()
         {
             InitializeComponent();
-            //TextBox.TextChanged += TextBox_TextChanged;
 
             // causes things to be redrawn :/
             Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
@@ -30,13 +29,13 @@ namespace WolvenKit.Views.Editors
 
         }
 
-        public CString RedString
+        public CName RedString
         {
-            get => (CString)GetValue(RedStringProperty);
+            get => (CName)GetValue(RedStringProperty);
             set => SetValue(RedStringProperty, value);
         }
         public static readonly DependencyProperty RedStringProperty = DependencyProperty.Register(
-            nameof(RedString), typeof(CString), typeof(RedStringEditor), new PropertyMetadata(default(CString)));
+            nameof(RedString), typeof(CName), typeof(RedCNameEditor), new PropertyMetadata(default(CName)));
 
 
         public string Text
@@ -47,7 +46,7 @@ namespace WolvenKit.Views.Editors
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e) => SetRedValue(TextBox.Text);
 
-        private void SetRedValue(string value) => SetCurrentValue(RedStringProperty, (CString)value);
+        private void SetRedValue(string value) => SetCurrentValue(RedStringProperty, (CName)value);
 
         private string GetValueFromRedValue()
         {
@@ -65,7 +64,5 @@ namespace WolvenKit.Views.Editors
                 throw new ArgumentException(nameof(redvalue));
             }
         }
-
-
     }
 }

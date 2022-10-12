@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
                     entry2.EndPoint = ReadBox();
                     entry2.StartPoint = ReadBox();
 
-                    entry2.AnimationSet = new CResourceReference<animAnimSet> { DepotPath = reader.BaseReader.ReadUInt64() };
+                    entry2.AnimationSet = new CResourceReference<animAnimSet>(reader.BaseReader.ReadUInt64());
 
                     entry1.Unk2.Add(entry2);
                 }
@@ -82,12 +82,12 @@ namespace WolvenKit.RED4.Types
             {
                 var entry1 = new gameSmartObjectAnimationDatabase_App3();
 
-                entry1.AnimRig = new CResourceReference<animRig> { DepotPath = reader.BaseReader.ReadUInt64() };
+                entry1.AnimRig = new CResourceReference<animRig>(reader.BaseReader.ReadUInt64());
 
                 var cnt5 = reader.BaseReader.ReadVLQInt32();
                 for (int j = 0; j < cnt5; j++)
                 {
-                    entry1.AnimationSets.Add(new CResourceReference<animAnimSet> { DepotPath = reader.BaseReader.ReadUInt64() });
+                    entry1.AnimationSets.Add(new CResourceReference<animAnimSet>(reader.BaseReader.ReadUInt64()));
                 }
 
                 var cnt6 = reader.BaseReader.ReadVLQInt32();
@@ -95,7 +95,7 @@ namespace WolvenKit.RED4.Types
                 {
                     var entry2 = new gameSmartObjectAnimationDatabase_App4();
 
-                    entry2.AnimationSet = new CResourceReference<animAnimSet> { DepotPath = reader.BaseReader.ReadUInt64() };
+                    entry2.AnimationSet = new CResourceReference<animAnimSet>(reader.BaseReader.ReadUInt64());
 
                     var cnt7 = reader.BaseReader.ReadVLQInt32();
                     for (int k = 0; k < cnt7; k++)

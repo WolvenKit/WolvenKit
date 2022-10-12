@@ -91,9 +91,9 @@ namespace WolvenKit.Modkit.RED4
                     else
                     {
                         // The external materials can also directly reference MaterialTemplates. To keep it easier for the exporter we can expose these as material instances
-                        var fakeMaterialInstance = new CMaterialInstance()
+                        var fakeMaterialInstance = new CMaterialInstance
                         {
-                            BaseMaterial = new CResourceReference<IMaterial> { DepotPath = path },
+                            BaseMaterial = new CResourceReference<IMaterial>(path),
                             Values = new CArray<CKeyValuePair>()
                         };
 
@@ -578,11 +578,7 @@ namespace WolvenKit.Modkit.RED4
                     path = value.GetString();
                 }
 
-                return new CResourceReference<ITexture>
-                {
-                    DepotPath = path,
-                    Flags = InternalEnums.EImportFlags.Default
-                };
+                return new CResourceReference<ITexture>(path);
             }
 
             if (materialParameterType == typeof(CMaterialParameterFoliageParameters))
@@ -593,11 +589,7 @@ namespace WolvenKit.Modkit.RED4
                     path = value.GetString();
                 }
 
-                return new CResourceReference<CFoliageProfile>
-                {
-                    DepotPath = path,
-                    Flags = InternalEnums.EImportFlags.Default
-                };
+                return new CResourceReference<CFoliageProfile>(path);
             }
 
             if (materialParameterType == typeof(CMaterialParameterGradient))
@@ -608,11 +600,7 @@ namespace WolvenKit.Modkit.RED4
                     path = value.GetString();
                 }
 
-                return new CResourceReference<CGradient>
-                {
-                    DepotPath = path,
-                    Flags = InternalEnums.EImportFlags.Default
-                };
+                return new CResourceReference<CGradient>(path);
             }
 
             if (materialParameterType == typeof(CMaterialParameterHairParameters))
@@ -623,11 +611,7 @@ namespace WolvenKit.Modkit.RED4
                     path = value.GetString();
                 }
 
-                return new CResourceReference<CHairProfile>
-                {
-                    DepotPath = path,
-                    Flags = InternalEnums.EImportFlags.Default
-                };
+                return new CResourceReference<CHairProfile>(path);
             }
 
             if (materialParameterType == typeof(CMaterialParameterMultilayerMask))
@@ -638,11 +622,7 @@ namespace WolvenKit.Modkit.RED4
                     path = value.GetString();
                 }
 
-                return new CResourceReference<Multilayer_Mask>
-                {
-                    DepotPath = path,
-                    Flags = InternalEnums.EImportFlags.Default
-                };
+                return new CResourceReference<Multilayer_Mask>(path);
             }
 
             if (materialParameterType == typeof(CMaterialParameterMultilayerSetup))
@@ -653,11 +633,7 @@ namespace WolvenKit.Modkit.RED4
                     path = value.GetString();
                 }
 
-                return new CResourceReference<Multilayer_Setup>
-                {
-                    DepotPath = path,
-                    Flags = InternalEnums.EImportFlags.Default
-                };
+                return new CResourceReference<Multilayer_Setup>(path);
             }
 
             if (materialParameterType == typeof(CMaterialParameterScalar))
@@ -678,11 +654,7 @@ namespace WolvenKit.Modkit.RED4
                     path = value.GetString();
                 }
 
-                return new CResourceReference<CSkinProfile>
-                {
-                    DepotPath = path,
-                    Flags = InternalEnums.EImportFlags.Default
-                };
+                return new CResourceReference<CSkinProfile>(path);
             }
 
             if (materialParameterType == typeof(CMaterialParameterStructBuffer))
@@ -698,11 +670,7 @@ namespace WolvenKit.Modkit.RED4
                     path = value.GetString();
                 }
 
-                return new CResourceReference<CTerrainSetup>
-                {
-                    DepotPath = path,
-                    Flags = InternalEnums.EImportFlags.Default
-                };
+                return new CResourceReference<CTerrainSetup>(path);
             }
 
             if (materialParameterType == typeof(CMaterialParameterTexture))
@@ -713,11 +681,7 @@ namespace WolvenKit.Modkit.RED4
                     path = value.GetString();
                 }
 
-                return new CResourceReference<ITexture>
-                {
-                    DepotPath = path,
-                    Flags = InternalEnums.EImportFlags.Default
-                };
+                return new CResourceReference<ITexture>(path);
             }
 
             if (materialParameterType == typeof(CMaterialParameterTextureArray))
@@ -728,11 +692,7 @@ namespace WolvenKit.Modkit.RED4
                     path = value.GetString();
                 }
 
-                return new CResourceReference<ITexture>
-                {
-                    DepotPath = path,
-                    Flags = InternalEnums.EImportFlags.Default
-                };
+                return new CResourceReference<ITexture>(path);
             }
 
             if (materialParameterType == typeof(CMaterialParameterVector))
@@ -1144,10 +1104,7 @@ namespace WolvenKit.Modkit.RED4
                             CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
                             EnableMask = true,
                             ResourceVersion = 4,
-                            BaseMaterial = new CResourceReference<IMaterial>
-                            {
-                                DepotPath = mat.BaseMaterial
-                            },
+                            BaseMaterial = new CResourceReference<IMaterial>(mat.BaseMaterial),
                             Values = new CArray<CKeyValuePair>()
                         };
 
@@ -1176,7 +1133,7 @@ namespace WolvenKit.Modkit.RED4
 
                     var fakeMaterialInstance = new CMaterialInstance()
                     {
-                        BaseMaterial = new CResourceReference<IMaterial> { DepotPath = mat.BaseMaterial },
+                        BaseMaterial = new CResourceReference<IMaterial>(mat.BaseMaterial),
                         Values = new CArray<CKeyValuePair>()
                     };
                     var orgChain = GetMaterialChain(fakeMaterialInstance, archives, ref mts);

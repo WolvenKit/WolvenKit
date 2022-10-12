@@ -114,12 +114,4 @@ namespace WolvenKit.RED4.Types
         public bool SerializeDefault { get; set; } = false;
         public bool IsIgnored { get; set; } = false;
     }
-
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public sealed class REDTypeAttribute : Attribute
-    {
-        internal REDTypeAttribute() { }
-
-        public bool IsValueType { get; set; }
-    }
 }

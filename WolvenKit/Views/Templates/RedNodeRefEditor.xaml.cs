@@ -88,15 +88,7 @@ namespace WolvenKit.Views.Editors
             }
         }
 
-        private ulong GetHashFromRedValue()
-        {
-            // this might need to be handled at the class level like enums
-            if (RedNodeRef is null)
-            {
-                return 0;
-            }
-            return RedNodeRef?.GetRedHash() ?? 0;
-        }
+        private ulong GetHashFromRedValue() => RedNodeRef.GetRedHash();
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {

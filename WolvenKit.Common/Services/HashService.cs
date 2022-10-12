@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.Common.Services
 {
@@ -40,9 +40,9 @@ namespace WolvenKit.Common.Services
             Load();
 
             ImportHandler.AddPathHandler = AddProjectPath;
-            CName.ResolveHashHandler = Get;
+            CNamePool.ResolveHashHandler = Get;
 
-            NodeRef.ResolveHashHandler = GetNodeRef;
+            NodeRefPool.ResolveHashHandler = GetNodeRef;
         }
 
         #endregion Constructors

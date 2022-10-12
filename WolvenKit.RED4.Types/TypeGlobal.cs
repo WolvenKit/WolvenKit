@@ -23,10 +23,7 @@ public static class TypeGlobal
 
                 e1.Value = new redResourceReferenceScriptToken
                 {
-                    Resource = new CResourceAsyncReference<CResource>
-                    {
-                        DepotPath = orgStr
-                    }
+                    Resource = new CResourceAsyncReference<CResource>(orgStr)
                 };
 
                 Logger?.Warning($"Invalid in wolven rtti: [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
@@ -39,11 +36,7 @@ public static class TypeGlobal
             {
                 var orgVal = (CResourceReference<inkWidgetLibraryResource>)e1.Value;
 
-                e1.Value = new CResourceAsyncReference<inkWidgetLibraryResource>
-                {
-                    DepotPath = orgVal.DepotPath,
-                    Flags = orgVal.Flags,
-                };
+                e1.Value = new CResourceAsyncReference<inkWidgetLibraryResource>(orgVal.DepotPath, orgVal.Flags);
 
                 Logger?.Warning($"Invalid in wolven rtti: [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
 

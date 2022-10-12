@@ -75,11 +75,6 @@ namespace WolvenKit.Views.Editors
 
         private string GetPathFromRedValue()
         {
-            // this might need to be handled at the class level like enums
-            if (RedTweak is null)
-            {
-                return "";
-            }
             if (RedTweak.ResolvedText == null)
             {
                 return GetHashFromRedValue().ToString();
@@ -89,11 +84,6 @@ namespace WolvenKit.Views.Editors
 
         private ulong GetHashFromRedValue()
         {
-            // this might need to be handled at the class level like enums
-            if (RedTweak is null)
-            {
-                return 0;
-            }
             return (ulong)RedTweak;
         }
 

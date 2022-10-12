@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.Save
             {
                 var entry = new Choices.Entry1();
 
-                entry.Scene = new CResourceReference<scnSceneResource> { DepotPath = reader.ReadUInt64() };
+                entry.Scene = new CResourceReference<scnSceneResource>(reader.ReadUInt64());
 
                 var subEntryCount = reader.ReadUInt32();
                 for (int j = 0; j < subEntryCount; j++)

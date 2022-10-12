@@ -201,10 +201,7 @@ public class TweakDBReader : Red4Reader
     public override IRedArray ReadCArray(List<RedTypeInfo> redTypeInfos, uint size, bool readAdditionalBytes = true) => base.ReadCArray(redTypeInfos, size, false);
 
     public override IRedResourceAsyncReference ReadCResourceAsyncReference(List<RedTypeInfo> redTypeInfos, uint size) =>
-        new CResourceAsyncReference<CResource>
-        {
-            DepotPath = BaseReader.ReadUInt64()
-        };
+        new CResourceAsyncReference<CResource>(BaseReader.ReadUInt64());
 
     public override void ReadClass(RedBaseClass cls, uint size)
     {

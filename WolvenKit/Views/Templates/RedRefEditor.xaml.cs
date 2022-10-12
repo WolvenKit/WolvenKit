@@ -82,8 +82,7 @@ namespace WolvenKit.Views.Editors
             }
 
             var cn = ulong.TryParse(value, out var number) ? (CName)number : (CName)value;
-            var redRef = (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType);
-            redRef.DepotPath = cn;
+            var redRef = (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, cn);
             SetCurrentValue(RedRefProperty, redRef);
             HashBox.SetCurrentValue(TextBox.TextProperty, GetHashFromRedValue().ToString());
         }
@@ -96,14 +95,14 @@ namespace WolvenKit.Views.Editors
         private string GetPathFromRedValue()
         {
             // this might need to be handled at the class level like enums
-            return RedRef is null || RedRef.DepotPath is null
+            return RedRef is null || RedRef.DepotPath == CName.Empty
                 ? ""
                 : string.IsNullOrEmpty((string)RedRef.DepotPath) && RedRef.DepotPath.GetRedHash() != 0 ? GetHashFromRedValue().ToString() : (string)RedRef.DepotPath;
         }
 
         private ulong GetHashFromRedValue() =>
             // this might need to be handled at the class level like enums
-            RedRef is null ? 0 : RedRef.DepotPath?.GetRedHash() ?? 0;
+            RedRef?.DepotPath ?? 0;
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {

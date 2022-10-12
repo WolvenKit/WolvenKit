@@ -51,9 +51,9 @@ namespace WolvenKit.Views.Editors
             {
                 return "null";
             }
-            else if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
+            else if (PropertyType.IsAssignableTo(typeof(IRedString)))
             {
-                var value = (BaseStringType)RedType;
+                var value = ((IRedString)RedType).GetString();
                 if (string.Equals(value, ""))
                 {
                     return "null";
