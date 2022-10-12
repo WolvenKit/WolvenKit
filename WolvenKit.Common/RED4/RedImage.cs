@@ -358,6 +358,8 @@ public class RedImage : IDisposable
         return new RedImage {InternalScratchImage = croppedImage};
     }
 
+    public void FlipV() => InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
+
     public void Convert(Common.DDS.DXGI_FORMAT format)
     {
         if (TexHelper.Instance.IsCompressed(_metadata.Format))

@@ -881,7 +881,7 @@ namespace WolvenKit.Modkit.RED4
 && ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
         }
 
-        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat)
+        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat, bool flipV = false)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
             decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
@@ -895,6 +895,11 @@ namespace WolvenKit.Modkit.RED4
                 if (img.CompressionFormat != null)
                 {
                     texformat = (DXGI_FORMAT)img.CompressionFormat;
+                }
+
+                if (flipV)
+                {
+                    img.FlipV();
                 }
 
                 outstream.Write(img.SaveToDDSMemory());
