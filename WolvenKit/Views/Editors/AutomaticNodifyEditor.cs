@@ -30,14 +30,17 @@ namespace WolvenKit.Views.Editors
 
             if (CurrentMousePosition != PreviousMousePosition)
             {
-                MouseLocation = TransformPosition(CurrentMousePosition);
 
+                //MouseLocation = TransformPosition(CurrentMousePosition);
+                // ^ `TransformPosition` was removed from NodifyEditor. Rather than trying to figure out the "correct" way to fix it,
+                // I hard coded it to what the definition of the function _was_ just to get things to build correctly on Nodify 3.0.0
+                MouseLocation = new Point((ViewportLocation.X + CurrentMousePosition.X) / ViewportZoom, (ViewportLocation.Y + CurrentMousePosition.Y) / ViewportZoom);
                 if (IsMouseCaptured)
                 {
                     // Panning
                     if (e.MiddleButton == MouseButtonState.Pressed)
                     {
-                        Offset -= CurrentMousePosition - PreviousMousePosition;
+                        ViewportLocation -= CurrentMousePosition - PreviousMousePosition;
                         IsPanning = true;
                         e.Handled = true;
                     }

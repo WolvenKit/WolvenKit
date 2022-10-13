@@ -44,7 +44,7 @@
             ItemsSource="{Binding Nodes}"
             PendingConnection="{Binding PendingConnection}"
             SelectedItems="{Binding SelectedNodes}"
-            Offset="{Binding Location}">
+            ViewportLocation="{Binding Location}">
             <editors:AutomaticNodifyEditor.ConnectionTemplate>
                 <DataTemplate>
                     <nodify:Connection
@@ -98,7 +98,7 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type nodify:PendingConnection}">
                                 <Canvas>
-                                    <nodify:DirectionalConnection
+                                    <nodify:LineConnection
                                         ArrowSize="0 0"
                                         Direction="{TemplateBinding Direction}"
                                         Source="{TemplateBinding SourceAnchor}"

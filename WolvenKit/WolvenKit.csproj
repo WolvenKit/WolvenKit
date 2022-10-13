@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-    <PackageReference Include="Nodify" Version="1.7.0" />
+    <PackageReference Include="Nodify" Version="3.0.0" />
     <PackageReference Include="ScottPlot.WPF" Version="4.1.33" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
