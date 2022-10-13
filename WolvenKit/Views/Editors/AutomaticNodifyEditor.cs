@@ -30,17 +30,16 @@ namespace WolvenKit.Views.Editors
 
             if (CurrentMousePosition != PreviousMousePosition)
             {
-
-                //MouseLocation = TransformPosition(CurrentMousePosition);
-                // ^ `TransformPosition` was removed from NodifyEditor. Rather than trying to figure out the "correct" way to fix it,
-                // I hard coded it to what the definition of the function _was_ just to get things to build correctly on Nodify 3.0.0
-                MouseLocation = new Point((ViewportLocation.X + CurrentMousePosition.X) / ViewportZoom, (ViewportLocation.Y + CurrentMousePosition.Y) / ViewportZoom);
+                // All coordinates that the editor works with should be inside the ItemsHost. Translating coordinates is not needed if,
+                // for example, you want to move the viewport to a certain location inside the editor's space. (like focusing a node)
+                MouseLocation = e.GetPosition(ItemsHost);
                 if (IsMouseCaptured)
                 {
                     // Panning
                     if (e.MiddleButton == MouseButtonState.Pressed)
                     {
-                        ViewportLocation -= CurrentMousePosition - PreviousMousePosition;
+                        // Need to scale this by the zoom since the ItemsHost changes its transform based on the mouse delta
+                        ViewportLocation -= (CurrentMousePosition - PreviousMousePosition) / ViewportZoom;
                         IsPanning = true;
                         e.Handled = true;
                     }
