@@ -38,12 +38,12 @@ internal class ArchiveCommand : CommandBase
         if (path is null)
         {
             logger.Error("Please fill in an input path.");
-            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
+            return 1;
         }
         if (path == null || path.Length < 1)
         {
             logger.Error("Please fill in an input path.");
-            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
+            return 1;
         }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();

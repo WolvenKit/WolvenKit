@@ -24,17 +24,18 @@ internal class CR2WCommand : CommandBase
         // deprecated. keep for backwards compatibility
         AddOption(new Option<FileSystemInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input path to a CR2W file or folder."));
 
-        AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory path."));
+        // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+        AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path."));
         AddOption(new Option<bool>(new[] { "--deserialize", "-d" }, "Create a CR2W file from json."));
         AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize the CR2W file to json."));
 
         AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
         AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action));
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, bool, bool, string, string, IHost>(Action));
     }
 
-    private Task<int> Action(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern, string regex, IHost host)
+    private Task<int> Action(FileSystemInfo[] path, string outpath, bool deserialize, bool serialize, string pattern, string regex, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -52,6 +53,6 @@ internal class CR2WCommand : CommandBase
         }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-        return consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, ETextConvertFormat.json);
+        return consoleFunctions.Cr2wTask(path, new DirectoryInfo(outpath), deserialize, serialize, pattern, regex, ETextConvertFormat.json);
     }
 }

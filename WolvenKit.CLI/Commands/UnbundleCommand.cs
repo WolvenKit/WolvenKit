@@ -26,17 +26,18 @@ internal class UnbundleCommand : CommandBase
         // deprecated. keep for backwards compatibility
         AddOption(new Option<FileSystemInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input paths to .archive files or folders."));
 
-        AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory for all input archives."));
+        // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+        AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory for all input archives."));
 
         AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
         AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
         AddOption(new Option<string>(new[] { "--hash" }, "Extract single file with a given hash. If a path is supplied, all hashes will be extracted."));
         AddOption(new Option<bool>(new[] { "--DEBUG_decompress" }, "Decompresses all buffers in the unbundled files."));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, string, string, string, bool, IHost>(Action));
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, string, string, bool, IHost>(Action));
     }
 
-    private int Action(FileSystemInfo[] path, DirectoryInfo outpath, string pattern, string regex, string hash, bool DEBUG_decompress, IHost host)
+    private int Action(FileSystemInfo[] path, string outpath, string pattern, string regex, string hash, bool DEBUG_decompress, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -53,7 +54,7 @@ internal class UnbundleCommand : CommandBase
         //Task.WhenAll(consoleFunctions.UnbundleTaskAsync(path, outpath, hash, pattern, regex, DEBUG_decompress)).Wait();#
         throw new NotImplementedException();
 #else
-        return consoleFunctions.UnbundleTask(path, outpath, hash, pattern, regex, DEBUG_decompress);
+        return consoleFunctions.UnbundleTask(path, new DirectoryInfo(outpath), hash, pattern, regex, DEBUG_decompress);
 #endif
     }
 }

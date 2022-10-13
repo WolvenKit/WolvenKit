@@ -24,7 +24,8 @@ internal class UncookCommand : CommandBase
         // deprecated. keep for backwards compatibility
         AddOption(new Option<FileSystemInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input paths to .archive files or folders."));
 
-        AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory to extract main files to."));
+        // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+        AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory to extract main files to."));
 
         AddOption(new Option<string>(new[] { "--raw", "-or" }, "Optional seperate directory to extract raw files to."));
         AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
@@ -38,10 +39,10 @@ internal class UncookCommand : CommandBase
         AddOption(new Option<MeshExportType?>(new[] { "--mesh-export-type" }, "Mesh export type (Default, WithMaterials, WithRig, Multimesh)."));
         AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string, IHost>(Action));
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string, IHost>(Action));
     }
 
-    private int Action(FileSystemInfo[] path, DirectoryInfo outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
+    private int Action(FileSystemInfo[] path, string outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
         string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExportType? meshExportType, string meshExportMaterialRepo, IHost host)
     {
         var serviceProvider = host.Services;
@@ -56,7 +57,7 @@ internal class UncookCommand : CommandBase
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
         return consoleFunctions.UncookTask(path, new UncookTaskOptions
         {
-            outpath = outpath,
+            outpath = new DirectoryInfo(outpath),
             rawOutDir = raw,
             uext = uext,
             flip = flip,

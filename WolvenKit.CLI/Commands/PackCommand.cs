@@ -20,12 +20,13 @@ internal class PackCommand : CommandBase
         // deprecated. keep for backwards compatibility
         AddOption(new Option<DirectoryInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input folder or folders."));
 
-        AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory to create all archives.\nIf not specified, will output in the same directory."));
+        // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+        AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory to create all archives.\nIf not specified, will output in the same directory."));
 
-        SetInternalHandler(CommandHandler.Create<DirectoryInfo[], DirectoryInfo, IHost>(Action));
+        SetInternalHandler(CommandHandler.Create<DirectoryInfo[], string, IHost>(Action));
     }
 
-    private int Action(DirectoryInfo[] path, DirectoryInfo outpath, IHost host)
+    private int Action(DirectoryInfo[] path, string outpath, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -37,6 +38,6 @@ internal class PackCommand : CommandBase
         }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-        return consoleFunctions.PackTask(path, outpath);
+        return consoleFunctions.PackTask(path, new DirectoryInfo(outpath));
     }
 }

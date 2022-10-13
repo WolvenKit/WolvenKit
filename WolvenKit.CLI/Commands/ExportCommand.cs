@@ -21,16 +21,17 @@ internal class ExportCommand : CommandBase
         // deprecated. keep for backwards compatibility
         AddOption(new Option<FileSystemInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input path to file/directory or list of files/directories."));
 
-        AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory path for all files to export to."));
+        // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+        AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path for all files to export to."));
 
         AddOption(new Option<EUncookExtension?>(new[] { "--uext" }, "Format to uncook textures into (tga, bmp, jpg, png, dds), DDS by default."));
         AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flips textures vertically."));
         AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh."));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action));
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action));
     }
 
-    private int Action(FileSystemInfo[] path, DirectoryInfo outpath, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers, IHost host)
+    private int Action(FileSystemInfo[] path, string outpath, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -42,6 +43,6 @@ internal class ExportCommand : CommandBase
         }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-        return consoleFunctions.ExportTask(path, outpath, uext, flip, forcebuffers);
+        return consoleFunctions.ExportTask(path, new DirectoryInfo(outpath), uext, flip, forcebuffers);
     }
 }

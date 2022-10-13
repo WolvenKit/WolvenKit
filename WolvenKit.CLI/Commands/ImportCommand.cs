@@ -21,14 +21,15 @@ internal class ImportCommand : CommandBase
         // deprecated. keep for backwards compatibility
         AddOption(new Option<FileSystemInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input path for raw files. Can be a file or a folder or a list of files/folders."));
 
-        AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory path.  If used with --keep, this is the folder for the redengine files to rebuild."));
+        // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+        AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path.  If used with --keep, this is the folder for the redengine files to rebuild."));
 
         AddOption(new Option<bool>(new[] { "--keep", "-k" }, "Keep existing CR2W files intact and only append the buffer."));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, bool, IHost>(Action));
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, bool, IHost>(Action));
     }
 
-    private Task<int> Action(FileSystemInfo[] path, DirectoryInfo outpath, bool keep, IHost host)
+    private Task<int> Action(FileSystemInfo[] path, string outpath, bool keep, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -40,6 +41,6 @@ internal class ImportCommand : CommandBase
         }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-        return consoleFunctions.ImportTask(path, outpath, keep);
+        return consoleFunctions.ImportTask(path, new DirectoryInfo(outpath), keep);
     }
 }

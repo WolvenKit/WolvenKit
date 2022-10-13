@@ -49,10 +49,6 @@ internal class Program
         rootCommand.AddCommand(new CR2WCommand());
 #pragma warning restore CS0618 // Type or member is obsolete
 
-        var verbosityOption = new Option<LoggerVerbosity>(new[] { "--verbosity", "-v" }, () => LoggerVerbosity.Normal,
-                                                      "Sets the verbosity level of the command. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].");
-        rootCommand.AddGlobalOption(verbosityOption);
-
         var parser = new CommandLineBuilder(rootCommand)
             .UseDefaults()
             .UseHost(GenericHost.CreateHostBuilder)
