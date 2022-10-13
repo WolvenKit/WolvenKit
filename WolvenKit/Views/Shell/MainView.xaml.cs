@@ -53,7 +53,7 @@ namespace WolvenKit.Views.Shell
 
                         return Observable.Start(() =>
                         {
-                            if (dialog.ShowDialog(Application.Current.MainWindow) == true)
+                            if (dialog.ShowDialog(this) == true)
                             {
                                 ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
                             }
@@ -68,7 +68,7 @@ namespace WolvenKit.Views.Shell
 
                         return Observable.Start(() =>
                         {
-                            if (dialog.ShowDialog(Application.Current.MainWindow) == true)
+                            if (dialog.ShowDialog(this) == true)
                             { }
 
                             interaction.SetOutput(true);
