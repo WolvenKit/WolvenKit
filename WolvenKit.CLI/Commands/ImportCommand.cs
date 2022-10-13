@@ -41,6 +41,6 @@ internal class ImportCommand : CommandBase
         }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-        return consoleFunctions.ImportTask(path, new DirectoryInfo(outpath), keep);
+        return consoleFunctions.ImportTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), keep);
     }
 }

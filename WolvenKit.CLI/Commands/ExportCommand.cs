@@ -43,6 +43,6 @@ internal class ExportCommand : CommandBase
         }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-        return consoleFunctions.ExportTask(path, new DirectoryInfo(outpath), uext, flip, forcebuffers);
+        return consoleFunctions.ExportTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), uext, flip, forcebuffers);
     }
 }

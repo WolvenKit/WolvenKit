@@ -95,6 +95,35 @@ public partial class ConsoleFunctions
                 return ERROR_BAD_ARGUMENTS;
         }
 
+        // get outdirectory
+        DirectoryInfo outDir;
+        if (options.outpath is null)
+        {
+            outDir = new DirectoryInfo(basedir.FullName);
+        }
+        else
+        {
+            outDir = options.outpath;
+            if (!outDir.Exists)
+            {
+                outDir = Directory.CreateDirectory(options.outpath.FullName);
+            }
+        }
+
+        DirectoryInfo rawOutDirInfo = null;
+        if (string.IsNullOrEmpty(options.rawOutDir))
+        {
+            rawOutDirInfo = outDir;
+        }
+        else
+        {
+            rawOutDirInfo = new DirectoryInfo(options.rawOutDir);
+            if (!rawOutDirInfo.Exists)
+            {
+                rawOutDirInfo = new DirectoryInfo(options.rawOutDir);
+            }
+        }
+
         var exportArgs = new GlobalExportArgs().Register(
             _xbmExportArgs.Value,
             _meshExportArgs.Value,
@@ -114,7 +143,7 @@ public partial class ConsoleFunctions
         if (options.meshExportType != null)
         {
             exportArgs.Get<MeshExportArgs>().meshExportType = options.meshExportType.Value;
-            exportArgs.Get<MeshExportArgs>().MaterialRepo = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? options.outpath.FullName : options.meshExportMaterialRepo;
+            exportArgs.Get<MeshExportArgs>().MaterialRepo = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
             exportArgs.Get<MeshExportArgs>().ArchiveDepot = basedir.FullName;
         }
 
@@ -146,35 +175,6 @@ public partial class ConsoleFunctions
                     exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                     exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                 }
-            }
-        }
-
-        // get outdirectory
-        DirectoryInfo outDir;
-        if (options.outpath is null)
-        {
-            outDir = new DirectoryInfo(basedir.FullName);
-        }
-        else
-        {
-            outDir = options.outpath;
-            if (!outDir.Exists)
-            {
-                outDir = Directory.CreateDirectory(options.outpath.FullName);
-            }
-        }
-
-        DirectoryInfo rawOutDirInfo = null;
-        if (string.IsNullOrEmpty(options.rawOutDir))
-        {
-            rawOutDirInfo = outDir;
-        }
-        else
-        {
-            rawOutDirInfo = new DirectoryInfo(options.rawOutDir);
-            if (!rawOutDirInfo.Exists)
-            {
-                rawOutDirInfo = new DirectoryInfo(options.rawOutDir);
             }
         }
 

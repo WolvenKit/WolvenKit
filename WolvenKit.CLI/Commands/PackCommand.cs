@@ -38,6 +38,6 @@ internal class PackCommand : CommandBase
         }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-        return consoleFunctions.PackTask(path, new DirectoryInfo(outpath));
+        return consoleFunctions.PackTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath));
     }
 }

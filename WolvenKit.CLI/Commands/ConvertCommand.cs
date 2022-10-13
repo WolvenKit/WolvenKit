@@ -61,7 +61,7 @@ internal class ConvertCommand : CommandBase
             }
 
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            return consoleFunctions.Cr2wTask(path, new DirectoryInfo(outpath), deserialize, serialize, pattern, regex, ETextConvertFormat.json);
+            return consoleFunctions.Cr2wTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), deserialize, serialize, pattern, regex, ETextConvertFormat.json);
         }
     }
 
@@ -105,7 +105,7 @@ internal class ConvertCommand : CommandBase
             }
 
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            return consoleFunctions.Cr2wTask(path, new DirectoryInfo(outpath), deserialize, serialize, pattern, regex, ETextConvertFormat.json);
+            return consoleFunctions.Cr2wTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), deserialize, serialize, pattern, regex, ETextConvertFormat.json);
         }
     }
 }

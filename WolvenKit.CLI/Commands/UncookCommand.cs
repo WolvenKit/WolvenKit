@@ -57,7 +57,7 @@ internal class UncookCommand : CommandBase
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
         return consoleFunctions.UncookTask(path, new UncookTaskOptions
         {
-            outpath = new DirectoryInfo(outpath),
+            outpath = string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath),
             rawOutDir = raw,
             uext = uext,
             flip = flip,

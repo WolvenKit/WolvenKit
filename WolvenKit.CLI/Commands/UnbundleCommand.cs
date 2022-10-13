@@ -54,7 +54,7 @@ internal class UnbundleCommand : CommandBase
         //Task.WhenAll(consoleFunctions.UnbundleTaskAsync(path, outpath, hash, pattern, regex, DEBUG_decompress)).Wait();#
         throw new NotImplementedException();
 #else
-        return consoleFunctions.UnbundleTask(path, new DirectoryInfo(outpath), hash, pattern, regex, DEBUG_decompress);
+        return consoleFunctions.UnbundleTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), hash, pattern, regex, DEBUG_decompress);
 #endif
     }
 }
