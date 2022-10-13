@@ -1,83 +1,111 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using System.Threading.Tasks;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.Common;
+using WolvenKit.Core.Interfaces;
 
-namespace CP77Tools.Commands
+namespace CP77Tools.Commands;
+
+internal class ConvertCommand : CommandBase
 {
-    public class ConvertCommand : Command
+    private const string s_description = "Convert CR2W (extracted) resource files and convert to json.";
+    private const string s_name = "convert";
+
+    public ConvertCommand() : base(s_name, s_description)
     {
-        private new const string Description = "Target a specific CR2W (extracted) and dump file info.";
-        private new const string Name = "convert";
+        AddCommand(new DeserializeCommand());
+        AddCommand(new SerializeCommand());
+    }
 
-        public ConvertCommand() : base(Name, Description)
+    public class DeserializeCommand : CommandBase
+    {
+        private const string s_description = "Create a CR2W file from json.";
+        private const string s_name = "deserialize";
+
+        public DeserializeCommand() : base(s_name, s_description)
         {
-            AddCommand(new DeserializeCommand());
-            AddCommand(new SerializeCommand());
+            AddAlias("deserialise");
+            AddAlias("d");
+
+            AddArgument(new Argument<FileSystemInfo[]>("path", "Input path to CR2W files or folders."));
+
+            // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path."));
+
+            AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
+            AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
+
+            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, bool, bool, string, string, IHost>(Action));
         }
 
-        public class DeserializeCommand : Command
+        private Task<int> Action(FileSystemInfo[] path, string outpath, bool deserialize, bool serialize, string pattern,
+            string regex, IHost host)
         {
-            private new const string Description = "Create a CR2W file from json.";
-            private new const string Name = "deserialize";
+            var serviceProvider = host.Services;
+            var logger = serviceProvider.GetRequiredService<ILoggerService>();
 
-            public DeserializeCommand() : base(Name, Description)
+            if (path is null || path.Length < 1)
             {
-                AddAlias("deserialise");
-                AddAlias("d");
-
-                AddArgument(new Argument<string[]>("path", "Input path to a CR2W file or folder."));
-
-                AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory path."));
-
-                AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
-                AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
-
-                Handler = CommandHandler
-                    .Create<string[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
+                logger.Error("Please fill in an input path.");
+                return Task.FromResult(ConsoleFunctions.ERROR_BAD_ARGUMENTS);
             }
 
-            private async Task Action(string[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
-                string regex, IHost host)
+            if (!deserialize && !serialize)
             {
-                var serviceProvider = host.Services;
-                var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-                await consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, ETextConvertFormat.json);
+                logger.Error("Please specify either -s or -d.");
+                return Task.FromResult(ConsoleFunctions.ERROR_BAD_ARGUMENTS);
             }
+
+            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+            return consoleFunctions.Cr2wTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), deserialize, serialize, pattern, regex, ETextConvertFormat.json);
+        }
+    }
+
+    public class SerializeCommand : CommandBase
+    {
+        private const string s_description = "Serialize the CR2W file to json.";
+        private const string s_name = "serialize";
+
+        public SerializeCommand() : base(s_name, s_description)
+        {
+            AddAlias("serialise");
+            AddAlias("s");
+
+            AddArgument(new Argument<FileSystemInfo[]>("path", "Input path to a CR2W file or folder."));
+
+            // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path."));
+
+            AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
+            AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
+
+            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, bool, bool, string, string, IHost>(Action));
         }
 
-        public class SerializeCommand : Command
+        private Task<int> Action(FileSystemInfo[] path, string outpath, bool deserialize, bool serialize, string pattern,
+            string regex, IHost host)
         {
-            private new const string Description = "Serialize the CR2W file to json.";
-            private new const string Name = "serialize";
+            var serviceProvider = host.Services;
+            var logger = serviceProvider.GetRequiredService<ILoggerService>();
 
-            public SerializeCommand() : base(Name, Description)
+            if (path is null || path.Length < 1)
             {
-                AddAlias("serialise");
-                AddAlias("s");
-
-                AddArgument(new Argument<string[]>("path", "Input path to a CR2W file or folder."));
-
-                AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory path."));
-
-                AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
-                AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
-
-                Handler = CommandHandler
-                    .Create<string[], DirectoryInfo, bool, bool, string, string, IHost>(Action);
+                logger.Error("Please fill in an input path.");
+                return Task.FromResult(ConsoleFunctions.ERROR_BAD_ARGUMENTS);
             }
 
-            private async Task Action(string[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
-                string regex, IHost host)
+            if (!deserialize && !serialize)
             {
-                var serviceProvider = host.Services;
-                var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-                await consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, ETextConvertFormat.json);
+                logger.Error("Please specify either -s or -d.");
+                return Task.FromResult(ConsoleFunctions.ERROR_BAD_ARGUMENTS);
             }
+
+            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+            return consoleFunctions.Cr2wTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), deserialize, serialize, pattern, regex, ETextConvertFormat.json);
         }
     }
 }
