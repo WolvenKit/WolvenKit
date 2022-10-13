@@ -12,7 +12,7 @@ namespace CP77Tools.Commands
         private const string s_description = "App settings";
         private const string s_name = "settings";
 
-        public SettingsCommand() : base(s_name, s_description) => SetHandler(CommandHandler.Create<IHost>(Action));
+        public SettingsCommand() : base(s_name, s_description) => SetInternalHandler(CommandHandler.Create<IHost>(Action));
 
         private void Action(IHost host)
         {

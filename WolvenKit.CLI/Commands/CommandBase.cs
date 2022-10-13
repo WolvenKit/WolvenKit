@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Hosting;
 using System.CommandLine.Invocation;
+using System.Threading.Tasks;
 using Microsoft.Build.Framework;
 using Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Core.Interfaces;
@@ -11,20 +12,25 @@ internal abstract class CommandBase : Command
 {
     private ICommandHandler _commandHandler;
 
-    private readonly Option<LoggerVerbosity> _verbosityOption = new(new[] { "--verbosity", "-v" }, () => LoggerVerbosity.Normal, "Sets the verbosity level of the command");
+    public Option<LoggerVerbosity> VerbosityOption = new(new[] { "--verbosity", "-v" }, () => LoggerVerbosity.Normal, "Sets the verbosity level of the command");
 
-    public CommandBase(string name, string description) : base(name, description) => this.SetHandler(ActionBase);
+    public CommandBase(string name, string description) : base(name, description)
+    {
+        AddOption(VerbosityOption);
 
-    protected void ActionBase(InvocationContext context)
+        this.SetHandler(ActionBase);
+    }
+
+    protected Task<int> ActionBase(InvocationContext context)
     {
         var host = context.GetHost();
         var logger = host.Services.GetRequiredService<ILoggerService>();
 
-        var verbosityOptionValue = context.ParseResult.GetValueForOption(_verbosityOption);
+        var verbosityOptionValue = context.ParseResult.GetValueForOption(VerbosityOption);
         logger.SetLoggerVerbosity(verbosityOptionValue);
 
-        _commandHandler?.Invoke(context);
+        return Task.FromResult(_commandHandler.Invoke(context));
     }
 
-    internal void SetHandler(ICommandHandler commandHandler) => _commandHandler = commandHandler;
+    internal void SetInternalHandler(ICommandHandler commandHandler) => _commandHandler = commandHandler;
 }

@@ -11,36 +11,40 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-        public void ExportTask(FileSystemInfo[] path, DirectoryInfo outDir, EUncookExtension? uncookext, bool? flip, ECookedFileFormat[] forcebuffers)
+        public int ExportTask(FileSystemInfo[] path, DirectoryInfo outDir, EUncookExtension? uncookext, bool? flip, ECookedFileFormat[] forcebuffers)
         {
             if (path == null || path.Length < 1)
             {
                 _loggerService.Warning("Please fill in an input path.");
-                return;
+                return 1;
             }
 
-            Parallel.ForEach(path, file => ExportTaskInner(file, outDir, uncookext, flip, forcebuffers));
+            var result = 0;
+            Parallel.ForEach(path, file => result += ExportTaskInner(file, outDir, uncookext, flip, forcebuffers));
+            return result;
         }
 
-        private void ExportTaskInner(FileSystemInfo path, DirectoryInfo outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers)
+        private int ExportTaskInner(FileSystemInfo path, DirectoryInfo outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers)
         {
             #region checks
 
             if (path is null)
             {
                 _loggerService.Warning("Please fill in an input path.");
-                return;
+                return 1;
             }
             if (!path.Exists)
             {
                 _loggerService.Error("Input path does not exist.");
-                return;
+                return 1;
             }
             if (outDir is not null && !outDir.Exists)
             {
                 _loggerService.Warning("Please fill in a valid outdirectory path.");
-                return;
+                return 1;
             }
+
+            #endregion checks
 
             List<FileInfo> filesToExport;
             DirectoryInfo basedir;
@@ -56,10 +60,8 @@ namespace CP77Tools.Tasks
                     break;
                 default:
                     _loggerService.Error("Not a valid file or directory name.");
-                    return;
+                    return 1;
             }
-
-            #endregion checks
 
             // create extract arguments
             var exportArgs = new GlobalExportArgs().Register(
@@ -111,6 +113,7 @@ namespace CP77Tools.Tasks
                 }
             }
 
+            var result = 0;
             foreach (var fileInfo in filesToExport)
             {
                 if (_modTools.Export(fileInfo, exportArgs, basedir, outDir, forcebuffers))
@@ -120,10 +123,11 @@ namespace CP77Tools.Tasks
                 else
                 {
                     _loggerService.Error($"Failed to export {path}.");
+                    result += 1;
                 }
             }
 
-            return;
+            return result;
         }
     }
 }

@@ -28,14 +28,14 @@ namespace CP77Tools.Commands
                 AddArgument(new Argument<FileInfo>("path", "Input path."));
                 AddArgument(new Argument<FileInfo>("outpath", () => null, "Output path."));
 
-                SetHandler(CommandHandler.Create<FileInfo, FileInfo, IHost>(Action));
+                SetInternalHandler(CommandHandler.Create<FileInfo, FileInfo, IHost>(Action));
             }
 
-            private void Action(FileInfo path, FileInfo outpath, IHost host)
+            private int Action(FileInfo path, FileInfo outpath, IHost host)
             {
                 var serviceProvider = host.Services;
                 var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-                consoleFunctions.OodleTask(path, outpath, true, false);
+                return consoleFunctions.OodleTask(path, outpath, true, false);
             }
         }
 
@@ -49,14 +49,14 @@ namespace CP77Tools.Commands
                 AddArgument(new Argument<FileInfo>("path", "Input path."));
                 AddArgument(new Argument<FileInfo>("outpath", () => null, "Output path."));
 
-                SetHandler(CommandHandler.Create<FileInfo, FileInfo, IHost>(Action));
+                SetInternalHandler(CommandHandler.Create<FileInfo, FileInfo, IHost>(Action));
             }
 
-            private void Action(FileInfo path, FileInfo outpath, IHost host)
+            private int Action(FileInfo path, FileInfo outpath, IHost host)
             {
                 var serviceProvider = host.Services;
                 var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-                consoleFunctions.OodleTask(path, outpath, false, true);
+                return consoleFunctions.OodleTask(path, outpath, false, true);
             }
         }
     }

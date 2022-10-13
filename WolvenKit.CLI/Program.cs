@@ -14,14 +14,14 @@ internal class Program
 {
 
     [STAThread]
-    public static void Main(string[] args)
+    public static int Main(string[] args)
     {
         Console.CancelKeyPress += new ConsoleCancelEventHandler(CancelHandler);
 
         if (!Oodle.Load())
         {
             Console.Error.WriteLine("Failed to load any oodle libraries. Aborting");
-            return;
+            return 1;
         }
 
         var rootCommand = new RootCommand
@@ -60,7 +60,8 @@ internal class Program
 
         ImportExportArgs.IsCLI = true;
 
-        parser.Invoke(args);
+        var r = parser.Invoke(args);
+        return r;
     }
 
     protected static void CancelHandler(object sender, ConsoleCancelEventArgs args) => Environment.FailFast("Ctrl-C was triggered");

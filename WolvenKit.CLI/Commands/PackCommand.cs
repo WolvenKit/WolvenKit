@@ -4,6 +4,7 @@ using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands
 {
@@ -21,14 +22,22 @@ namespace CP77Tools.Commands
 
             AddOption(new Option<DirectoryInfo>(new[] { "--outpath", "-o" }, "Output directory to create all archives.\nIf not specified, will output in the same directory."));
 
-            SetHandler(CommandHandler.Create<DirectoryInfo[], DirectoryInfo, IHost>(Action));
+            SetInternalHandler(CommandHandler.Create<DirectoryInfo[], DirectoryInfo, IHost>(Action));
         }
 
-        private void Action(DirectoryInfo[] path, DirectoryInfo outpath, IHost host)
+        private int Action(DirectoryInfo[] path, DirectoryInfo outpath, IHost host)
         {
             var serviceProvider = host.Services;
+            var logger = serviceProvider.GetRequiredService<ILoggerService>();
+
+            if (path == null || path.Length < 1)
+            {
+                logger.Error("Please fill in an input path.");
+                return 1;
+            }
+
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.PackTask(path, outpath);
+            return consoleFunctions.PackTask(path, outpath);
         }
     }
 }

@@ -27,10 +27,10 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flips textures vertically."));
             AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh."));
 
-            SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action));
+            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action));
         }
 
-        private void Action(FileSystemInfo[] path, DirectoryInfo outpath, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers, IHost host)
+        private int Action(FileSystemInfo[] path, DirectoryInfo outpath, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers, IHost host)
         {
             var serviceProvider = host.Services;
             var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -38,11 +38,11 @@ namespace CP77Tools.Commands
             if (path is null || path.Length < 1)
             {
                 logger.Error("Please fill in an input path.");
-                return;
+                return 1;
             }
 
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.ExportTask(path, outpath, uext, flip, forcebuffers);
+            return consoleFunctions.ExportTask(path, outpath, uext, flip, forcebuffers);
         }
     }
 }

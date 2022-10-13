@@ -21,6 +21,8 @@ namespace CP77Tools.Tasks
                         _loggerService.Info(FNV1A64HashAlgorithm.HashString(s).ToString());
                     }
                 }
+
+                return 0;
             }
 
             return 1;

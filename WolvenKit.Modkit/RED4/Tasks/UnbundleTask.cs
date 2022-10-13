@@ -10,25 +10,24 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-
-        #region Methods
-
-        public void UnbundleTask(FileSystemInfo[] path, DirectoryInfo outpath,
+        public int UnbundleTask(FileSystemInfo[] path, DirectoryInfo outpath,
             string hash, string pattern, string regex, bool DEBUG_decompress = false)
         {
             if (path == null || path.Length < 1)
             {
                 _loggerService.Error("Please fill in an input path.");
-                return;
+                return 1;
             }
 
+            var result = 0;
             foreach (var file in path)
             {
-                UnbundleTaskInner(file, outpath, hash, pattern, regex, DEBUG_decompress);
+                result += UnbundleTaskInner(file, outpath, hash, pattern, regex, DEBUG_decompress);
             }
+            return result;
         }
 
-        private void UnbundleTaskInner(FileSystemInfo path, DirectoryInfo outpath,
+        private int UnbundleTaskInner(FileSystemInfo path, DirectoryInfo outpath,
             string hash, string pattern, string regex, bool DEBUG_decompress = false)
         {
             #region checks
@@ -36,12 +35,12 @@ namespace CP77Tools.Tasks
             if (path is null)
             {
                 _loggerService.Error("Please fill in an input path.");
-                return;
+                return 1;
             }
             if (!path.Exists)
             {
                 _loggerService.Error("Input path does not exist.");
-                return;
+                return 1;
             }
 
             #endregion checks
@@ -54,7 +53,7 @@ namespace CP77Tools.Tasks
                     if (file.Extension != ".archive")
                     {
                         _loggerService.Error("Input file is not an .archive.");
-                        return;
+                        return 1;
                     }
                     archiveFileInfos = new List<FileInfo> { file };
                     basedir = file.Directory;
@@ -64,13 +63,13 @@ namespace CP77Tools.Tasks
                     if (archiveFileInfos.Count == 0)
                     {
                         _loggerService.Error("No .archive file to process in the input directory");
-                        return;
+                        return 1;
                     }
                     basedir = directory;
                     break;
                 default:
                     _loggerService.Error("Not a valid file or directory name.");
-                    return;
+                    return 1;
             }
 
             // get outdirectory
@@ -88,6 +87,7 @@ namespace CP77Tools.Tasks
                 }
             }
 
+            var result = 0;
             foreach (var fileInfo in archiveFileInfos)
             {
                 // read archive
@@ -111,6 +111,7 @@ namespace CP77Tools.Tasks
                         else
                         {
                             _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNum}");
+                            result += 1;
                         }
                     }
 
@@ -126,17 +127,17 @@ namespace CP77Tools.Tasks
                     else
                     {
                         _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNumber}");
+                        result += 1;
                     }
                 }
                 else
                 {
+                    // TODO return success 
                     _modTools.ExtractAll(ar, outDir, pattern, regex, DEBUG_decompress);
                 }
             }
 
-            return;
+            return result;
         }
-
-        #endregion Methods
     }
 }

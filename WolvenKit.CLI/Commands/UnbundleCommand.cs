@@ -1,6 +1,7 @@
 #define IS_ASYNC
 #undef IS_ASYNC
 
+using System;
 using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
 using System.IO;
@@ -32,10 +33,10 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--hash" }, "Extract single file with a given hash. If a path is supplied, all hashes will be extracted."));
             AddOption(new Option<bool>(new[] { "--DEBUG_decompress" }, "Decompresses all buffers in the unbundled files."));
 
-            SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, string, string, string, bool, IHost>(Action));
+            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, string, string, string, bool, IHost>(Action));
         }
 
-        private void Action(FileSystemInfo[] path, DirectoryInfo outpath, string pattern, string regex, string hash, bool DEBUG_decompress, IHost host)
+        private int Action(FileSystemInfo[] path, DirectoryInfo outpath, string pattern, string regex, string hash, bool DEBUG_decompress, IHost host)
         {
             var serviceProvider = host.Services;
             var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -43,15 +44,16 @@ namespace CP77Tools.Commands
             if (path == null || path.Length < 1)
             {
                 logger.Error("Please fill in an input path.");
-                return;
+                return 1;
             }
 
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
 
 #if IS_ASYNC
-            Task.WhenAll(consoleFunctions.UnbundleTaskAsync(path, outpath, hash, pattern, regex, DEBUG_decompress)).Wait();
+            //Task.WhenAll(consoleFunctions.UnbundleTaskAsync(path, outpath, hash, pattern, regex, DEBUG_decompress)).Wait();#
+            throw new NotImplementedException();
 #else
-            consoleFunctions.UnbundleTask(path, outpath, hash, pattern, regex, DEBUG_decompress);
+            return consoleFunctions.UnbundleTask(path, outpath, hash, pattern, regex, DEBUG_decompress);
 #endif
         }
     }

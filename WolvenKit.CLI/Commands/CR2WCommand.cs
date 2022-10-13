@@ -7,6 +7,7 @@ using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.Common;
+using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands
 {
@@ -30,15 +31,28 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
 
-            SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action));
+            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, bool, bool, string, string, IHost>(Action));
         }
 
-        private async Task Action(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
-            string regex, IHost host)
+        private Task<int> Action(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern, string regex, IHost host)
         {
             var serviceProvider = host.Services;
+            var logger = serviceProvider.GetRequiredService<ILoggerService>();
+
+            if (path is null || path.Length < 1)
+            {
+                logger.Error("Please fill in an input path.");
+                return Task.FromResult(1);
+            }
+
+            if (!deserialize && !serialize)
+            {
+                logger.Error("Please specify either -s or -d.");
+                return Task.FromResult(1);
+            }
+
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            await consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, ETextConvertFormat.json);
+            return consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, ETextConvertFormat.json);
         }
     }
 }

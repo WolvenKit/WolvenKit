@@ -19,14 +19,14 @@ namespace CP77Tools.Commands
 
             AddOption(new Option<bool>(new[] { "--wem", "-w" }, "Convert WEM to OGG."));
 
-            SetHandler(CommandHandler.Create<FileInfo, FileInfo, bool, IHost>(Action));
+            SetInternalHandler(CommandHandler.Create<FileInfo, FileInfo, bool, IHost>(Action));
         }
 
-        private void Action(FileInfo path, FileInfo outpath, bool wem, IHost host)
+        private int Action(FileInfo path, FileInfo outpath, bool wem, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.WwiseTask(path, outpath, wem);
+            return consoleFunctions.WwiseTask(path, outpath, wem);
         }
     }
 }

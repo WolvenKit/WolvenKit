@@ -26,10 +26,10 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool>(new[] { "--diff", "-d" }, "Dump archive json for diff."));
             AddOption(new Option<bool>(new[] { "--list", "-l" }, "List all files in archive."));
 
-            SetHandler(CommandHandler.Create<FileSystemInfo[], string, string, bool, bool, IHost>(Action));
+            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, bool, bool, IHost>(Action));
         }
 
-        public static void Action(FileSystemInfo[] path, string pattern, string regex, bool diff, bool list, IHost host)
+        private static int Action(FileSystemInfo[] path, string pattern, string regex, bool diff, bool list, IHost host)
         {
 
             var serviceProvider = host.Services;
@@ -38,16 +38,16 @@ namespace CP77Tools.Commands
             if (path is null)
             {
                 logger.Error("Please fill in an input path.");
-                return;
+                return 1;
             }
             if (path == null || path.Length < 1)
             {
                 logger.Error("Please fill in an input path.");
-                return;
+                return 1;
             }
 
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.ArchiveTask(path, pattern, regex, diff, list);
+            return consoleFunctions.ArchiveTask(path, pattern, regex, diff, list);
         }
     }
 }

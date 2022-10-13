@@ -13,32 +13,30 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-        public async Task Cr2wTask(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
+        public async Task<int> Cr2wTask(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
         {
             if (path is null || path.Length < 1)
             {
-                _loggerService.Warning("Please fill in an input path.");
-                return;
+                _loggerService.Error("Please fill in an input path.");
+                return 1;
             }
 
             if (!deserialize && !serialize)
             {
                 _loggerService.Error("Please specify either -s or -d.");
-                return;
+                return 1;
             }
 
+            var result = 0;
             foreach (var s in path)
             {
-                await Cr2wTaskInner(s, outpath, deserialize, serialize, pattern, regex, format);
+                result += await Cr2wTaskInner(s, outpath, deserialize, serialize, pattern, regex, format);
             }
 
-            // Parallel.ForEach(path, file =>
-            // {
-            //     Cr2wTaskInner(file, outpath, deserialize, serialize, pattern, regex, format);
-            // });
+            return result;
         }
 
-        private async Task Cr2wTaskInner(FileSystemInfo path, DirectoryInfo outputDirectory, bool deserialize, bool serialize,
+        private async Task<int> Cr2wTaskInner(FileSystemInfo path, DirectoryInfo outputDirectory, bool deserialize, bool serialize,
             string pattern = "", string regex = "", ETextConvertFormat format = ETextConvertFormat.json)
         {
             #region checks
@@ -46,12 +44,12 @@ namespace CP77Tools.Tasks
             if (path is null)
             {
                 _loggerService.Error("Please fill in an input path.");
-                return;
+                return 1;
             }
             if (!path.Exists)
             {
                 _loggerService.Error("Input path does not exist.");
-                return;
+                return 1;
             }
 
             List<FileInfo> fileInfos = new();
@@ -65,7 +63,7 @@ namespace CP77Tools.Tasks
                     break;
                 default:
                     _loggerService.Error("Not a valid file or directory name.");
-                    return;
+                    return 1;
             }
 
             #endregion checks
@@ -109,7 +107,6 @@ namespace CP77Tools.Tasks
             var progress = 0;
 
             foreach (var fileInfo in finalMatchesList)
-            //Parallel.ForEach(finalMatchesList, fileInfo =>
             {
                 var outputDirInfo = outputDirectory is null
                     ? fileInfo.Directory
@@ -117,7 +114,7 @@ namespace CP77Tools.Tasks
                 if (outputDirInfo == null || !outputDirInfo.Exists)
                 {
                     _loggerService.Error("Invalid output directory.");
-                    return;
+                    return 1;
                 }
 
                 if (serialize)
@@ -150,6 +147,8 @@ namespace CP77Tools.Tasks
 
             watch.Stop();
             _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds}ms.");
+
+            return 0;
         }
     }
 }

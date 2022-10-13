@@ -18,38 +18,40 @@ namespace CP77Tools.Tasks
         /// <param name="path">Files or folders to import</param>
         /// <param name="outDir">Outdirectory to create redengine files in</param>
         /// <param name="keep">use existing redengine files in outdirectory</param>
-        public async Task ImportTask(FileSystemInfo[] path, DirectoryInfo outDir, bool keep)
+        public async Task<int> ImportTask(FileSystemInfo[] path, DirectoryInfo outDir, bool keep)
         {
             if (path == null || path.Length < 1)
             {
                 _loggerService.Error("Please fill in an input path.");
-                return;
+                return 1;
             }
 
+            var result = 0;
             foreach (var p in path)
             {
-                await ImportTaskInner(p, outDir, keep);
+                result += await ImportTaskInner(p, outDir, keep);
             }
+            return result;
         }
 
-        private async Task ImportTaskInner(FileSystemInfo path, DirectoryInfo outDirectory, bool keep)
+        private async Task<int> ImportTaskInner(FileSystemInfo path, DirectoryInfo outDirectory, bool keep)
         {
             #region checks
 
             if (path is null)
             {
                 _loggerService.Error("Please fill in an input path.");
-                return;
+                return 1;
             }
             if (!path.Exists)
             {
                 _loggerService.Error("Input path does not exist.");
-                return;
+                return 1;
             }
             if (outDirectory is not null && !outDirectory.Exists)
             {
                 _loggerService.Error("Please fill in a valid outdirectory path.");
-                return;
+                return 1;
             }
 
             #endregion checks
@@ -74,17 +76,19 @@ namespace CP77Tools.Tasks
                         // buffers can not be rebuilt on their own
                         if (!settings.Get<CommonImportArgs>().Keep)
                         {
-                            return;
+                            return 1;
                         }
 
                         // outdir needs to be the parent dir of the redfile to rebuild !! (user needs to take care of that)
                         if (_modTools.RebuildBuffer(rawRelative, outDirectory))
                         {
                             _loggerService.Success($"Successfully imported {path} to {outDirectory.FullName}");
+                            return 0;
                         }
                         else
                         {
                             _loggerService.Error($"Failed to import {path}");
+                            return 1;
                         }
                     }
                     // the raw file can be imported directly
@@ -94,20 +98,20 @@ namespace CP77Tools.Tasks
                         if (await _modTools.Import(rawRelative, settings, outDirectory))
                         {
                             _loggerService.Success($"Successfully imported {path}");
+                            return 0;
                         }
                         else
                         {
                             _loggerService.Error($"Failed to import {path}");
+                            return 1;
                         }
                     }
-
-                    break;
                 case DirectoryInfo directory:
-                    await _modTools.ImportFolder(directory, settings, outDirectory);
-                    break;
+                    var result = await _modTools.ImportFolder(directory, settings, outDirectory);
+                    return result ? 1 : 0;
                 default:
                     _loggerService.Error("Not a valid file or directory name.");
-                    return;
+                    return 1;
             }
         }
     }

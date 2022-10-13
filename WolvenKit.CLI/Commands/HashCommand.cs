@@ -16,14 +16,14 @@ namespace CP77Tools.Commands
         {
             AddArgument(new Argument<string[]>("input", "Create FNV1A hash for given strings."));
 
-            SetHandler(CommandHandler.Create<string[], IHost>(Action));
+            SetInternalHandler(CommandHandler.Create<string[], IHost>(Action));
         }
 
-        private void Action(string[] input, IHost host)
+        private int Action(string[] input, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.HashTask(input);
+            return consoleFunctions.HashTask(input);
         }
     }
 }

@@ -29,39 +29,41 @@ namespace CP77Tools.Tasks
 
     public partial class ConsoleFunctions
     {
-        public void UncookTask(FileSystemInfo[] path, UncookTaskOptions options)
+        public int UncookTask(FileSystemInfo[] path, UncookTaskOptions options)
         {
             if (path == null || path.Length < 1)
             {
-                _loggerService.Warning("Please fill in an input path.");
-                return;
+                _loggerService.Error("Please fill in an input path.");
+                return 1;
             }
 
+            var result = 0;
             foreach (var file in path)
             {
-                UncookTaskInner(file, options);
+                result += UncookTaskInner(file, options);
             }
+            return result;
         }
 
-        private void UncookTaskInner(FileSystemInfo path, UncookTaskOptions options)
+        private int UncookTaskInner(FileSystemInfo path, UncookTaskOptions options)
         {
             #region checks
 
             if (path is null)
             {
-                _loggerService.Warning("Please fill in an input path.");
-                return;
+                _loggerService.Error("Please fill in an input path.");
+                return 1;
             }
             if (!path.Exists)
             {
                 _loggerService.Error("Input path does not exist.");
-                return;
+                return 1;
             }
 
             if (options.meshExportType != null && string.IsNullOrEmpty(options.meshExportMaterialRepo) && options.outpath is null)
             {
-                _loggerService.Warning("When using --mesh-export-type, the --outpath or the --mesh-export-material-repo must be specified.");
-                return;
+                _loggerService.Error("When using --mesh-export-type, the --outpath or the --mesh-export-material-repo must be specified.");
+                return 1;
             }
 
             #endregion checks
@@ -74,7 +76,7 @@ namespace CP77Tools.Tasks
                     if (file.Extension != ".archive")
                     {
                         _loggerService.Error("Input file is not an .archive.");
-                        return;
+                        return 1;
                     }
                     archiveFileInfos = new List<FileInfo> { file };
                     basedir = file.Directory;
@@ -84,13 +86,13 @@ namespace CP77Tools.Tasks
                     if (archiveFileInfos.Count == 0)
                     {
                         _loggerService.Error("No .archive file to process in the input directory");
-                        return;
+                        return 1;
                     }
                     basedir = directory;
                     break;
                 default:
                     _loggerService.Error("Not a valid file or directory name.");
-                    return;
+                    return 1;
             }
 
             var exportArgs = new GlobalExportArgs().Register(
@@ -176,23 +178,31 @@ namespace CP77Tools.Tasks
                 }
             }
 
+            var result = 0;
             foreach (var fileInfo in archiveFileInfos)
             {
                 var ar = _wolvenkitFileService.ReadRed4Archive(fileInfo.FullName, _hashService);
 
                 if (options.hash != 0)
                 {
-                    _modTools.UncookSingle(ar, options.hash, outDir, exportArgs, rawOutDirInfo, options.forcebuffers, options.serialize ?? false);
-
-                    _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked one file: {options.hash}");
+                    if (_modTools.UncookSingle(ar, options.hash, outDir, exportArgs, rawOutDirInfo, options.forcebuffers, options.serialize ?? false))
+                    {
+                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked file: {options.hash}");
+                    }
+                    else
+                    {
+                        _loggerService.Warning($" {ar.ArchiveAbsolutePath}: Failed to uncook file: {options.hash}");
+                        result += 1;
+                    }
                 }
                 else
                 {
+                    // TODO return success
                     _modTools.UncookAll(ar, outDir, exportArgs, options.unbundle, options.pattern, options.regex, rawOutDirInfo, options.forcebuffers, options.serialize ?? false);
                 }
             }
 
-            return;
+            return result;
         }
     }
 }

@@ -38,10 +38,10 @@ namespace CP77Tools.Commands
             AddOption(new Option<MeshExportType?>(new[] { "--mesh-export-type" }, "Mesh export type (Default, WithMaterials, WithRig, Multimesh)."));
             AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
 
-            SetHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string, IHost>(Action));
+            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], DirectoryInfo, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string, IHost>(Action));
         }
 
-        private void Action(FileSystemInfo[] path, DirectoryInfo outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
+        private int Action(FileSystemInfo[] path, DirectoryInfo outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
             string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExportType? meshExportType, string meshExportMaterialRepo, IHost host)
         {
             var serviceProvider = host.Services;
@@ -49,12 +49,12 @@ namespace CP77Tools.Commands
 
             if (path == null || path.Length < 1)
             {
-                logger.Warning("Please fill in an input path.");
-                return;
+                logger.Error("Please fill in an input path.");
+                return 1;
             }
 
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.UncookTask(path, new UncookTaskOptions
+            return consoleFunctions.UncookTask(path, new UncookTaskOptions
             {
                 outpath = outpath,
                 rawOutDir = raw,
