@@ -207,6 +207,14 @@ namespace WolvenKit.ViewModels.Shell
                 return false;
             }
 
+            if (args[1] == "--node_editor_enabled")
+            {
+                var message = $"Node Editor Enabled";
+                _loggerService.Success(message);
+                MessageBox.Show(message);
+                return false;
+            }
+
             if (!File.Exists(args[1]))
             {
                 var message = $"Sorry, '{args[1]}' could not be found";
