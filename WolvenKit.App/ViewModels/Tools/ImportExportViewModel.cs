@@ -585,6 +585,8 @@ namespace WolvenKit.ViewModels.Tools
                     return;
                 }
 
+                var json = SerializeArgs(importArgs);
+
                 var results = param switch
                 {
                     s_selectedInGrid => ImportableItems.Where(_ => _.IsChecked),
@@ -593,7 +595,7 @@ namespace WolvenKit.ViewModels.Tools
 
                 foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
                 {
-                    item.Properties = importArgs;
+                    item.Properties = (ImportArgs)json.Deserialize(importArgs.GetType(), s_jsonSerializerSettings);
                 }
             }
             if (IsExportsSelected)
@@ -603,6 +605,8 @@ namespace WolvenKit.ViewModels.Tools
                     return;
                 }
 
+                var json = SerializeArgs(exportArgs);
+
                 var results = param switch
                 {
                     s_selectedInGrid => ExportableItems.Where(_ => _.IsChecked),
@@ -611,16 +615,17 @@ namespace WolvenKit.ViewModels.Tools
 
                 foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
                 {
-                    item.Properties = exportArgs;
+                    item.Properties = (ExportArgs)json.Deserialize(exportArgs.GetType(), s_jsonSerializerSettings);
                 }
             }
             if (IsConvertsSelected)
             {
-
                 if (current is not ConvertArgs convertArgs)
                 {
                     return;
                 }
+
+                var json = SerializeArgs(convertArgs);
 
                 var results = param switch
                 {
@@ -630,7 +635,7 @@ namespace WolvenKit.ViewModels.Tools
 
                 foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
                 {
-                    item.Properties = convertArgs;
+                    item.Properties = (ConvertArgs)json.Deserialize(convertArgs.GetType(), s_jsonSerializerSettings);
                 }
             }
 
@@ -1136,42 +1141,9 @@ namespace WolvenKit.ViewModels.Tools
 
         public void SaveSettings()
         {
-            var importSettings = new Dictionary<string, JsonObject>();
-            var exportSettings = new Dictionary<string, JsonObject>();
-            var convertSettings = new Dictionary<string, JsonObject>();
-
-            foreach (var importableItem in ImportableItems)
-            {
-                var node = (JsonObject)JsonSerializer.SerializeToNode(importableItem.Properties, importableItem.Properties.GetType(), s_jsonSerializerSettings);
-
-                node.Remove("Changing");
-                node.Remove("Changed");
-                node.Remove("ThrownExceptions");
-
-                importSettings.Add(importableItem.GetBaseFile().RelativePath, node);
-            }
-
-            foreach (var exportableItem in ExportableItems)
-            {
-                var node = (JsonObject)JsonSerializer.SerializeToNode(exportableItem.Properties, exportableItem.Properties.GetType(), s_jsonSerializerSettings);
-
-                node.Remove("Changing");
-                node.Remove("Changed");
-                node.Remove("ThrownExceptions");
-
-                exportSettings.Add(exportableItem.GetBaseFile().RelativePath, node);
-            }
-
-            foreach (var convertableItem in ConvertableItems)
-            {
-                var node = (JsonObject)JsonSerializer.SerializeToNode(convertableItem.Properties, convertableItem.Properties.GetType(), s_jsonSerializerSettings);
-
-                node.Remove("Changing");
-                node.Remove("Changed");
-                node.Remove("ThrownExceptions");
-
-                convertSettings.Add(convertableItem.GetBaseFile().RelativePath, node);
-            }
+            var importSettings = ImportableItems.ToDictionary(importableItem => importableItem.GetBaseFile().RelativePath, SerializeArgs);
+            var exportSettings = ExportableItems.ToDictionary(exportableItem => exportableItem.GetBaseFile().RelativePath, SerializeArgs);
+            var convertSettings = ConvertableItems.ToDictionary(convertableItem => convertableItem.GetBaseFile().RelativePath, SerializeArgs);
 
             var settings = new Dictionary<string, Dictionary<string, JsonObject>>
             {
@@ -1182,6 +1154,18 @@ namespace WolvenKit.ViewModels.Tools
 
             var json = JsonSerializer.Serialize(settings, s_jsonSerializerSettings);
             File.WriteAllText(Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json"), json);
+        }
+
+        private JsonObject SerializeArgs(ImportExportItemViewModel vm) => SerializeArgs(vm.Properties);
+        private JsonObject SerializeArgs(ImportExportArgs args)
+        {
+            var node = (JsonObject)JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings);
+
+            node.Remove("Changing");
+            node.Remove("Changed");
+            node.Remove("ThrownExceptions");
+
+            return node;
         }
     }
 }

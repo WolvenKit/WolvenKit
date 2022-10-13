@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Threading;
 using ReactiveUI;
 using Splat;
+using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
@@ -226,6 +227,21 @@ namespace WolvenKit.Views.Tools
                 }
 
                 ViewModel.SaveSettings();
+
+                if (ViewModel.IsImportsSelected)
+                {
+                    ImportGrid.RefreshColumns();
+                }
+
+                if (ViewModel.IsExportsSelected)
+                {
+                    ExportGrid.RefreshColumns();
+                }
+
+                if (ViewModel.IsConvertsSelected)
+                {
+                    ConvertGrid.RefreshColumns();
+                }
             }
             XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         }
