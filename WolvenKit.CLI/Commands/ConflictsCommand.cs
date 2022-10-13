@@ -32,20 +32,20 @@ internal class ConflictsCommand : CommandBase
         if (!path.Exists)
         {
             logger.Error("Incorrect input path: Directory does not exist");
-            return 1;
+            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
 
         // check if game dir
         if (!path.Name.Equals("Cyberpunk 2077"))
         {
             logger.Error("Incorrect input path: Not game folder");
-            return 1;
+            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
         var gameExe = new FileInfo(Path.Combine(path.FullName, "bin", "x64", "Cyberpunk2077.exe"));
         if (!gameExe.Exists)
         {
             logger.Error("Incorrect input path: Not game folder");
-            return 1;
+            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
 
 

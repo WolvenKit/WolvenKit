@@ -36,7 +36,7 @@ internal class ImportCommand : CommandBase
         if (path == null || path.Length < 1)
         {
             logger.Error("Please fill in an input path.");
-            return Task.FromResult(1);
+            return Task.FromResult(ConsoleFunctions.ERROR_BAD_ARGUMENTS);
         }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();

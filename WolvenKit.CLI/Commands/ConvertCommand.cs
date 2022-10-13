@@ -50,13 +50,13 @@ internal class ConvertCommand : CommandBase
             if (path is null || path.Length < 1)
             {
                 logger.Error("Please fill in an input path.");
-                return Task.FromResult(1);
+                return Task.FromResult(ConsoleFunctions.ERROR_BAD_ARGUMENTS);
             }
 
             if (!deserialize && !serialize)
             {
                 logger.Error("Please specify either -s or -d.");
-                return Task.FromResult(1);
+                return Task.FromResult(ConsoleFunctions.ERROR_BAD_ARGUMENTS);
             }
 
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
@@ -93,13 +93,13 @@ internal class ConvertCommand : CommandBase
             if (path is null || path.Length < 1)
             {
                 logger.Error("Please fill in an input path.");
-                return Task.FromResult(1);
+                return Task.FromResult(ConsoleFunctions.ERROR_BAD_ARGUMENTS);
             }
 
             if (!deserialize && !serialize)
             {
                 logger.Error("Please specify either -s or -d.");
-                return Task.FromResult(1);
+                return Task.FromResult(ConsoleFunctions.ERROR_BAD_ARGUMENTS);
             }
 
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();

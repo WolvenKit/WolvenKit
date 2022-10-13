@@ -18,7 +18,7 @@ public partial class ConsoleFunctions
         if (path == null || path.Length < 1)
         {
             _loggerService.Error("Please fill in an input path.");
-            return 1;
+            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
 
         var result = 0;
@@ -37,12 +37,12 @@ public partial class ConsoleFunctions
         if (path is null)
         {
             _loggerService.Error("Please fill in an input path.");
-            return 1;
+            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
         if (!path.Exists)
         {
             _loggerService.Error("Input path does not exist.");
-            return 1;
+            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
 
         #endregion checks
@@ -54,7 +54,7 @@ public partial class ConsoleFunctions
                 if (file.Extension != ".archive")
                 {
                     _loggerService.Error("Input file is not an .archive.");
-                    return 1;
+                    return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
                 }
                 archiveFileInfos = new List<FileInfo> { file };
 
@@ -65,13 +65,13 @@ public partial class ConsoleFunctions
                 if (archiveFileInfos.Count == 0)
                 {
                     _loggerService.Error("No .archive file to process in the input directory");
-                    return 1;
+                    return ERROR_BAD_ARGUMENTS;
                 }
 
                 break;
             default:
                 _loggerService.Error("Not a valid file or directory name.");
-                return 1;
+                return ERROR_BAD_ARGUMENTS;
         }
 
         foreach (var processedarchive in archiveFileInfos)

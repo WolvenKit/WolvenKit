@@ -34,20 +34,20 @@ public partial class ConsoleFunctions
         if (!path.Exists)
         {
             _loggerService.Error("Incorrect input path");
-            return 1;
+            return ERROR_BAD_ARGUMENTS;
         }
 
         // check if game dir
         if (!path.Name.Equals("Cyberpunk 2077"))
         {
             _loggerService.Error("Incorrect input path: Not game folder");
-            return 1;
+            return ERROR_BAD_ARGUMENTS;
         }
         var gameExe = new FileInfo(Path.Combine(path.FullName, "bin", "x64", "Cyberpunk2077.exe"));
         if (!gameExe.Exists)
         {
             _loggerService.Error("Incorrect input path: Not game folder");
-            return 1;
+            return ERROR_BAD_ARGUMENTS;
         }
 
         var legacyModsDir = new DirectoryInfo(Path.Combine(path.FullName, "archive", "pc", "mod"));
