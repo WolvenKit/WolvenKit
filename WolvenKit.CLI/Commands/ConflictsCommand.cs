@@ -17,7 +17,7 @@ internal class ConflictsCommand : CommandBase
 
     public ConflictsCommand() : base(s_name, s_description)
     {
-        AddArgument(new Argument<DirectoryInfo>("path", () => null, "Path to your Cyberpunk 2077 game folder (if left empty it will use the current working directory)."));
+        AddArgument(new Argument<DirectoryInfo>("path", () => new DirectoryInfo(Path.GetFullPath(Environment.CurrentDirectory)), "Path to your Cyberpunk 2077 game folder (if left empty it will use the current working directory)."));
 
         AddOption(new Option<bool>(new[] { "--structured", "-s" }, "Print structured output (json)."));
 
