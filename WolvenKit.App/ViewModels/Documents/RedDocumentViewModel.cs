@@ -81,18 +81,26 @@ namespace WolvenKit.ViewModels.Documents
 
         public override Task OnSave(object parameter)
         {
-            using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
             var file = GetMainFile();
             if (file.HasValue)
             {
-                var resource = Cr2wFile;
-                if (resource is CR2WFile cr2w)
+                using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
+                if (file.Value is RDTTextViewModel textViewModel)
                 {
-                    using var writer = new CR2WWriter(fs);
-                    writer.WriteFile(cr2w);
+                    using var tw = new StreamWriter(fs);
+                    var text = textViewModel.Document.Text;
+                    tw.Write(text);
+                }
+                else if (file.Value is RDTDataViewModel dataViewModel)
+                {
+                    if (Cr2wFile is CR2WFile cr2w)
+                    {
+                        using var writer = new CR2WWriter(fs);
+                        writer.WriteFile(cr2w);
 
-                    SetIsDirty(false);
-                    _loggerService.Success($"Saved file {FilePath}");
+                        SetIsDirty(false);
+                        _loggerService.Success($"Saved file {FilePath}");
+                    }
                 }
             }
 
@@ -165,10 +173,19 @@ namespace WolvenKit.ViewModels.Documents
             return Task.FromResult(false);
         }
 
-        public Optional<RDTDataViewModel> GetMainFile() => Optional<RDTDataViewModel>.ToOptional(TabItemViewModels
+        public Optional<RedDocumentTabViewModel> GetMainFile()
+        {
+            if (SelectedTabItemViewModel is RDTTextViewModel textVM)
+            {
+                return Optional<RedDocumentTabViewModel>.ToOptional(textVM);
+            }
+
+            var r = TabItemViewModels
             .OfType<RDTDataViewModel>()
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
-            .FirstOrDefault());
+            .FirstOrDefault();
+            return Optional<RedDocumentTabViewModel>.ToOptional(r);
+        }
 
         protected void AddTabForRedType(RedBaseClass cls)
         {

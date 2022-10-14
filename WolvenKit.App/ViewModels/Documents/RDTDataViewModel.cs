@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,12 +13,14 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView.Engine;
 using Syncfusion.Windows.Shared;
-using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Models;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
+using YamlDotNet.Serialization;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -24,7 +28,7 @@ namespace WolvenKit.ViewModels.Documents
     {
         public ViewModelActivator Activator { get; } = new();
 
-        protected readonly IRedType _data;
+        protected IRedType _data;
 
         public bool IsEmbeddedFile { get; set; }
 
@@ -32,50 +36,41 @@ namespace WolvenKit.ViewModels.Documents
         {
             File = file;
             _data = data;
-            Header = _data.GetType().Name;
+
+            // set header
+            if (data is null && file is TweakXLDocumentViewModel)
+            {
+                var ext = Path.GetExtension(file.FilePath);
+                Header = ext switch
+                {
+                    ".yaml" => "TweakXl",
+                    _ => throw new NotImplementedException(),
+                };
+            }
+            else
+            {
+                Header = _data.GetType().Name;
+            }
 
             this.WhenActivated((CompositeDisposable disposables) =>
             {
                 OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
                 OpenImportCommand = new DelegateCommand<ICR2WImport>(async (i) => await ExecuteOpenImport(i));
 
-                if (SelectedChunk == null)
+                if (SelectedChunk == null && Chunks.Count > 0)
                 {
                     SelectedChunk = Chunks[0];
                     SelectedChunks.Add(Chunks[0]);
                 }
-
-                //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
-
-                //this.HandleActivation()
             });
-
-            //RootChunk = Chunks[0];
-
-            //if (Chunks != null)
-            //{
-            //    foreach (ChunkViewModel item in Chunks)
-            //    {
-            //        item.WhenAnyValue(x => x.IsDirty).Subscribe(x => IsDirty |= x);
-            //    }
-            //}
-            //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
         }
 
         public RedBaseClass GetData() => (RedBaseClass)_data;
 
         public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file) => Header = header;
 
-
-        #region properties
-
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
-        //[Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
-
-        //public IReadOnlyList<IRedRef> Imports => _file is CR2WFile cr2w ? cr2w.Imports : new ReadOnlyCollection<IRedRef>(new List<IRedRef>());
-
-        //public List<ICR2WBuffer> Buffers => _file.Buffers;
 
         private List<ChunkViewModel> _chunks;
 
@@ -85,11 +80,10 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (_chunks == null || _chunks.Count == 0)
                 {
-                    _chunks = new List<ChunkViewModel>
+                    _chunks = _data is null ? new() : new List<ChunkViewModel>
                     {
                         GenerateChunks()
                     };
-                    //SelectedChunk = _chunks[0];
                 }
                 return _chunks;
             }
@@ -106,10 +100,6 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public ChunkViewModel RootChunk { get; set; }
 
         [Reactive] public IRedRef SelectedImport { get; set; }
-
-        #endregion
-
-        #region commands
 
         public ICommand OnDemandLoadingCommand { get; private set; }
 
@@ -166,43 +156,33 @@ namespace WolvenKit.ViewModels.Documents
             var _gameController = Locator.Current.GetService<IGameControllerFactory>();
             return _gameController.GetController().AddFileToModModal(key);
         }
+        public override void OnSelected()
+        {
+            // if tweak file, deserialize from text
+            // read tweakXL file
+            if (File is TweakXLDocumentViewModel tweakFile)
+            {
+                try
+                {
+                    // get text tab
+                    var tab = tweakFile.TabItemViewModels.OfType<RDTTextViewModel>().FirstOrDefault();
+                    var text = tab.GetText();
 
-        //public ICommand ExportChunkCommand { get; private set; }
-        //private bool CanExportChunk(ChunkViewModel cvm) => cvm.Properties.Count > 0;
-        //private void ExecuteExportChunk(ChunkViewModel cvm)
-        //{
-        //    Stream myStream;
-        //    var saveFileDialog = new SaveFileDialog();
-
-        //    saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
-        //    saveFileDialog.FilterIndex = 2;
-        //    saveFileDialog.FileName = cvm.Type + ".json";
-        //    saveFileDialog.RestoreDirectory = true;
-
-        //    if (saveFileDialog.ShowDialog() == DialogResult.OK)
-        //    {
-        //        if ((myStream = saveFileDialog.OpenFile()) != null)
-        //        {
-        //            var dto = new RedClassDto(cvm.Data);
-        //            var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
-
-        //            if (string.IsNullOrEmpty(json))
-        //            {
-        //                throw new SerializationException();
-        //            }
-
-        //            myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
-        //            myStream.Close();
-        //        }
-        //    }
-        //}
-
-        #endregion
-
-        #region methods
-
-        //public Red4File GetFile() => _file;
-
-        #endregion
+                    using var reader = new StringReader(text);
+                    var deserializer = new DeserializerBuilder()
+                        .WithTypeConverter(new TweakXLYamlTypeConverter())
+                        .Build();
+                    var file = deserializer.Deserialize<TweakXLFile>(reader);
+                    _data = file;
+                    // refresh
+                    _chunks = null;
+                    _ = Chunks;
+                }
+                catch (Exception ex)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(ex);
+                }
+            }
+        }
     }
 }

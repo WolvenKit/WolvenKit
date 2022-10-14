@@ -24,7 +24,26 @@ namespace WolvenKit
 
         public void Warning(string msg) => Serilog.Log.Warning(msg);
 
-        private void LogExtended(Exception ex) => Serilog.Log.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
+        private void LogExtended(Exception ex)
+        {
+            switch (LoggerVerbosity)
+            {
+                case LoggerVerbosity.Quiet:
+                    break;
+                case LoggerVerbosity.Minimal:
+                case LoggerVerbosity.Normal:
+#if !DEBUG
+                    Serilog.Log.Error($"Message: {ex.Message}");
+                    break;
+#endif
+                case LoggerVerbosity.Detailed:
+                case LoggerVerbosity.Diagnostic:
+                    Serilog.Log.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
+                    break;
+                default:
+                    break;
+            }
 
+        }
     }
 }
