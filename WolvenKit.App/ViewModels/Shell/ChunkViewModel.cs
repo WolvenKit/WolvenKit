@@ -141,7 +141,21 @@ namespace WolvenKit.ViewModels.Shell
                                 var pi = parentData.GetType().GetProperty(propertyName);
                                 if (pi is not null)
                                 {
-                                    pi.SetValue(parentData, Data);
+                                    if (pi.CanWrite)
+                                    {
+                                        pi.SetValue(parentData, Data);
+                                    }
+                                    else
+                                    {
+                                        if (parentData is IRedRef)
+                                        {
+                                            Parent.Data = RedTypeManager.CreateRedType(parentData.RedType, Data);
+                                        }
+                                        else
+                                        {
+                                            throw new Exception();
+                                        }
+                                    }
                                     Tab.File.SetIsDirty(true);
                                     Parent.NotifyChain("Data");
                                 }

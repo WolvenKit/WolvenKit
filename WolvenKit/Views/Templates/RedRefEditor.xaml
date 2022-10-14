@@ -12,26 +12,6 @@
     mc:Ignorable="d">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedRefEditor}}}">
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" MinWidth="50" />
-        </Grid.ColumnDefinitions>
-        <TextBox
-            x:Name="PathBox"
-            helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Text="{Binding Path}" />
-        <TextBox
-            x:Name="HashBox"
-            Grid.Column="1"
-            helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Background="{StaticResource ContentBackgroundAlt}"
-            BorderBrush="{StaticResource BorderAlt}"
-            BorderThickness="1,0,0,0"
-            Foreground="#666666"
-            IsReadOnly="True"
-            PreviewTextInput="NumberValidationTextBox"
-            Text="{Binding Hash}"
-            ToolTip="Depot Hash" />
+        <local:RedCNameEditor RedString="{Binding RedRef.DepotPath, Mode=OneWay}" />
     </Grid>
 </UserControl>
