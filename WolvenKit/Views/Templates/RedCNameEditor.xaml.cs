@@ -1,8 +1,7 @@
-using System;
-using System.Reactive.Linq;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
-using ReactiveUI;
+using System.Windows.Input;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -10,24 +9,9 @@ namespace WolvenKit.Views.Editors
     /// <summary>
     /// Interaction logic for RedStringEditor.xaml
     /// </summary>
-    public partial class RedCNameEditor : UserControl
+    public partial class RedCNameEditor : INotifyPropertyChanged
     {
-        public RedCNameEditor()
-        {
-            InitializeComponent();
-
-            // causes things to be redrawn :/
-            Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
-                handler => TextBox.TextChanged += handler,
-                handler => TextBox.TextChanged -= handler)
-                .Throttle(TimeSpan.FromSeconds(.5))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x =>
-                {
-                    SetRedValue(TextBox.Text);
-                });
-
-        }
+        public RedCNameEditor() => InitializeComponent();
 
         public CName RedString
         {
@@ -40,29 +24,50 @@ namespace WolvenKit.Views.Editors
 
         public string Text
         {
-            get => GetValueFromRedValue();
-            set => SetRedValue(value);
+            get => RedString;
+            set
+            {
+                SetValue(RedStringProperty, (CName)value);
+                OnPropertyChanged(nameof(Hash));
+            }
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e) => SetRedValue(TextBox.Text);
-
-        private void SetRedValue(string value) => SetCurrentValue(RedStringProperty, (CName)value);
-
-        private string GetValueFromRedValue()
+        public ulong Hash
         {
-            var redvalue = (string)RedString;
-            if (redvalue is string redstring)
+            get => RedString;
+            set
             {
-                return redstring;
+                SetValue(RedStringProperty, (CName)value);
+                OnPropertyChanged(nameof(Text));
             }
-            else if (redvalue is null)
+        }
+
+        private void HashBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, e.Text);
+
+            e.Handled = !ulong.TryParse(full, out _);
+        }
+
+        private void HashBox_OnPasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(string)))
             {
-                return "";
+                var text = (string)e.DataObject.GetData(typeof(string));
+                var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text!);
+                if (!ulong.TryParse(full, out _))
+                {
+                    e.CancelCommand();
+                }
             }
             else
             {
-                throw new ArgumentException(nameof(redvalue));
+                e.CancelCommand();
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

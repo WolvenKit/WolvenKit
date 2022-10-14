@@ -1,10 +1,7 @@
-using System;
-using System.Reactive.Linq;
-using System.Text.RegularExpressions;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using ReactiveUI;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -12,87 +9,66 @@ namespace WolvenKit.Views.Editors
     /// <summary>
     /// Interaction logic for RedTweakEditor.xaml
     /// </summary>
-    public partial class RedTweakEditor : UserControl
+    public partial class RedTweakEditor : INotifyPropertyChanged
     {
 
-        public RedTweakEditor()
-        {
-            InitializeComponent();
+        public RedTweakEditor() => InitializeComponent();
 
-            Observable.FromEventPattern<KeyEventHandler, KeyEventArgs>(
-                handler => PathBox.KeyUp += handler,
-                handler => PathBox.KeyUp -= handler)
-                .Throttle(TimeSpan.FromSeconds(.5))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x =>
-                {
-                    SetRedValue(PathBox.Text);
-                });
+        public TweakDBID RedString
+        {
+            get => (TweakDBID)GetValue(RedStringProperty);
+            set => SetValue(RedStringProperty, value);
         }
+        public static readonly DependencyProperty RedStringProperty = DependencyProperty.Register(
+            nameof(RedString), typeof(TweakDBID), typeof(RedTweakEditor), new PropertyMetadata(default(TweakDBID)));
 
-        public TweakDBID RedTweak
+
+        public string Text
         {
-            get => (TweakDBID)GetValue(RedTweakProperty);
-            set => SetValue(RedTweakProperty, value);
-        }
-        public static readonly DependencyProperty RedTweakProperty = DependencyProperty.Register(
-            nameof(RedTweak), typeof(TweakDBID), typeof(RedTweakEditor), new PropertyMetadata(default(TweakDBID)));
-
-
-        public string Path
-        {
-            get => GetPathFromRedValue();
-            set => SetRedValue(value);
+            get => RedString;
+            set
+            {
+                SetValue(RedStringProperty, (TweakDBID)value);
+                OnPropertyChanged(nameof(Hash));
+            }
         }
 
         public ulong Hash
         {
-            get => GetHashFromRedValue();
-            set => SetRedValue(value);
+            get => RedString;
+            set
+            {
+                SetValue(RedStringProperty, (TweakDBID)value);
+                OnPropertyChanged(nameof(Text));
+            }
         }
 
-        private void SetRedValue(string value)
+        private void HashBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (RedTweak == null)
-                return;
-            TweakDBID tdb = null;
-            if (ulong.TryParse(value, out var number))
+            var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, e.Text);
+
+            e.Handled = !ulong.TryParse(full, out _);
+        }
+
+        private void HashBox_OnPasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(string)))
             {
-                tdb = number;
+                var text = (string)e.DataObject.GetData(typeof(string));
+                var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text!);
+                if (!ulong.TryParse(full, out _))
+                {
+                    e.CancelCommand();
+                }
             }
             else
             {
-                tdb = value;
+                e.CancelCommand();
             }
-            SetCurrentValue(RedTweakProperty, tdb);
-            HashBox.SetCurrentValue(TextBox.TextProperty, GetHashFromRedValue().ToString());
         }
 
-        private void SetRedValue(ulong value)
-        {
-            //RedTweak = value;
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        private string GetPathFromRedValue()
-        {
-            if (RedTweak.ResolvedText == null)
-            {
-                return GetHashFromRedValue().ToString();
-            }
-            return RedTweak.ResolvedText;
-        }
-
-        private ulong GetHashFromRedValue()
-        {
-            return (ulong)RedTweak;
-        }
-
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            var regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
-
-
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

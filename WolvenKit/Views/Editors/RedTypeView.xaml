@@ -284,7 +284,7 @@
                 </converters:RedEditorTemplateSelector.RedCNameEditor>
                 <converters:RedEditorTemplateSelector.RedTweakEditor>
                     <DataTemplate>
-                        <editors:RedTweakEditor RedTweak="{Binding Data, Mode=TwoWay}" />
+                        <editors:RedTweakEditor RedString="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedTweakEditor>
                 <converters:RedEditorTemplateSelector.RedUlongEditor>

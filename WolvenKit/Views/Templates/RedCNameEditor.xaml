@@ -6,17 +6,31 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DesignHeight="100"
     d:DesignWidth="400"
     mc:Ignorable="d">
 
-    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedStringEditor}}}">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedCNameEditor}}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="155" />
+        </Grid.ColumnDefinitions>
 
         <TextBox
             x:Name="TextBox"
+            Grid.Column="0"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Text="{Binding Text}" />
-
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+        <TextBox
+            x:Name="HashBox"
+            Grid.Column="1"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            Background="{StaticResource ContentBackgroundAlt}"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="1,0,0,0"
+            DataObject.Pasting="HashBox_OnPasting"
+            Foreground="#666666"
+            PreviewTextInput="HashBox_OnPreviewTextInput"
+            Text="{Binding Hash, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
     </Grid>
 </UserControl>

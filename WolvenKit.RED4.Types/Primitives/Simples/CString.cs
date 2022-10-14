@@ -4,18 +4,21 @@ using System.Diagnostics;
 namespace WolvenKit.RED4.Types
 {
     [RED("String")]
-    [DebuggerDisplay("{_value}", Type = "CString")]
+    [DebuggerDisplay("{Value}", Type = "CString")]
     public readonly struct CString : IRedString, IRedPrimitive<CString>, IEquatable<CString>, IComparable<CString>, IComparable
     {
         public static CString Empty = "\0";
 
-        private readonly string _value = "\0";
+
+        private readonly string _value;
+
+        private string Value => _value ?? "\0";
 
 
         private CString(string value) => _value = value;
 
         public static implicit operator CString(string value) => new(value);
-        public static implicit operator string(CString value) => value._value;
+        public static implicit operator string(CString value) => value.Value;
 
         public static bool operator ==(CString a, CString b) => Equals(a, b);
         public static bool operator !=(CString a, CString b) => !(a == b);
@@ -36,13 +39,13 @@ namespace WolvenKit.RED4.Types
                 throw new ArgumentException();
             }
 
-            return this.CompareTo(other);
+            return CompareTo(other);
         }
 
         public int CompareTo(CString other) => string.Compare(this, other);
 
 
-        public bool Equals(CString other) => string.Equals(_value, other._value);
+        public bool Equals(CString other) => string.Equals(Value, other.Value);
 
         public override bool Equals(object obj)
         {
@@ -51,7 +54,7 @@ namespace WolvenKit.RED4.Types
                 return false;
             }
 
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
             {
                 return false;
             }
@@ -59,6 +62,6 @@ namespace WolvenKit.RED4.Types
             return Equals((CString)obj);
         }
 
-        public override int GetHashCode() => _value.GetHashCode();
+        public override int GetHashCode() => Value.GetHashCode();
     }
 }

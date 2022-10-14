@@ -1,5 +1,8 @@
 using System;
+using System.ComponentModel;
 using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
@@ -10,25 +13,9 @@ namespace WolvenKit.Views.Editors
     /// <summary>
     /// Interaction logic for RedStringEditor.xaml
     /// </summary>
-    public partial class RedStringEditor : UserControl
+    public partial class RedStringEditor : INotifyPropertyChanged
     {
-        public RedStringEditor()
-        {
-            InitializeComponent();
-            //TextBox.TextChanged += TextBox_TextChanged;
-
-            // causes things to be redrawn :/
-            Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
-                handler => TextBox.TextChanged += handler,
-                handler => TextBox.TextChanged -= handler)
-                .Throttle(TimeSpan.FromSeconds(.5))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x =>
-                {
-                    SetRedValue(TextBox.Text);
-                });
-
-        }
+        public RedStringEditor() => InitializeComponent();
 
         public CString RedString
         {
@@ -41,31 +28,12 @@ namespace WolvenKit.Views.Editors
 
         public string Text
         {
-            get => GetValueFromRedValue();
-            set => SetRedValue(value);
+            get => RedString;
+            set => SetValue(RedStringProperty, (CString)value);
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e) => SetRedValue(TextBox.Text);
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        private void SetRedValue(string value) => SetCurrentValue(RedStringProperty, (CString)value);
-
-        private string GetValueFromRedValue()
-        {
-            var redvalue = (string)RedString;
-            if (redvalue is string redstring)
-            {
-                return redstring;
-            }
-            else if (redvalue is null)
-            {
-                return "";
-            }
-            else
-            {
-                throw new ArgumentException(nameof(redvalue));
-            }
-        }
-
-
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
