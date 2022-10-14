@@ -55,6 +55,7 @@ namespace WolvenKit.Common.Extensions
         public static DXGI_FORMAT ToDirectXTexFormat(this DDS.DXGI_FORMAT textureRawFormat) =>
             textureRawFormat switch
             {
+                DDS.DXGI_FORMAT.DXGI_FORMAT_UNKNOWN => DXGI_FORMAT.UNKNOWN,
                 DDS.DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM => DXGI_FORMAT.R8G8B8A8_UNORM,
                 DDS.DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB => DXGI_FORMAT.R8G8B8A8_UNORM_SRGB,
                 DDS.DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_UNORM => DXGI_FORMAT.R16G16B16A16_UNORM,

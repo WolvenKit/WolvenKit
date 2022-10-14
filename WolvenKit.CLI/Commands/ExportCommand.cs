@@ -1,41 +1,48 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
+using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.Common;
+using WolvenKit.Core.Interfaces;
 
-namespace CP77Tools.Commands
+namespace CP77Tools.Commands;
+
+internal class ExportCommand : CommandBase
 {
-    public class ExportCommand : Command
+    private const string s_description = "Export a file or list of files into raw files.";
+    private const string s_name = "export";
+
+    public ExportCommand() : base(s_name, s_description)
     {
-        #region Fields
+        AddArgument(new Argument<FileSystemInfo[]>("path", "Input path to file/directory or list of files/directories."));
 
-        private new const string Description = "Export a file or list of files into raw files.";
-        private new const string Name = "export";
+        // deprecated. keep for backwards compatibility
+        AddOption(new Option<FileSystemInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input path to file/directory or list of files/directories."));
 
-        #endregion Fields
+        // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+        AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path for all files to export to."));
 
-        #region Constructors
+        AddOption(new Option<EUncookExtension?>(new[] { "--uext" }, "Format to uncook textures into (tga, bmp, jpg, png, dds), DDS by default."));
+        AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flips textures vertically."));
+        AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh."));
 
-        public ExportCommand() : base(Name, Description)
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action));
+    }
+
+    private int Action(FileSystemInfo[] path, string outpath, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers, IHost host)
+    {
+        var serviceProvider = host.Services;
+        var logger = serviceProvider.GetRequiredService<ILoggerService>();
+
+        if (path is null || path.Length < 1)
         {
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to file/directory or list of files/directories"));
-            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path"));
-            AddOption(new Option<EUncookExtension?>(new[] { "--uext" }, "Format to uncook textures into (tga, bmp, jpg, png, dds), DDS by default"));
-            AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flips textures vertically"));
-            AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh"));
-
-            Handler = CommandHandler.Create<string[], string, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action);
+            logger.Error("Please fill in an input path.");
+            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
 
-        private void Action(string[] path, string outpath, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers, IHost host)
-        {
-            var serviceProvider = host.Services;
-            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.ExportTask(path, outpath, uext, flip, forcebuffers);
-        }
-
-        #endregion Constructors
+        var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+        return consoleFunctions.ExportTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), uext, flip, forcebuffers);
     }
 }

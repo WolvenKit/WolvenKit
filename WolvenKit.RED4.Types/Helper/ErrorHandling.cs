@@ -25,14 +25,17 @@ public class InvalidDefaultValueEventArgs : ParsingErrorEventArgs
 
 }
 
-public class InvalidEnumValueEventArgs<T> : ParsingErrorEventArgs where T : struct, Enum
+public class InvalidEnumValueEventArgs : ParsingErrorEventArgs
 {
+    public Type EnumType { get; }
     public string StringValue { get; }
-    public T Value { get; set; }
+    public Enum Value { get; set; }
 
-    public InvalidEnumValueEventArgs(string stringValue)
+    public InvalidEnumValueEventArgs(Type enumType, string stringValue)
     {
+        EnumType = enumType;
         StringValue = stringValue;
+
         Value = default;
     }
 }

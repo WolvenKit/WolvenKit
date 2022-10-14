@@ -124,6 +124,12 @@ namespace WolvenKit.Views.Tools
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.OpenRootFolderCommand,
                     view => view.OpenFolderButton);
+                this.BindCommand(ViewModel,
+                    viewModel => viewModel.RefreshCommand,
+                    view => view.RefreshButton);
+
+                // register to KeyUp because KeyDown doesn't forward "F2"
+                this.KeyUp += OnKeyUp;
 
 
             });
@@ -138,6 +144,19 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        private void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.F2 && ViewModel.RenameFileCommand.CanExecute(null))
+            {
+                ViewModel.RenameFileCommand.Execute(null);
+
+            }
+            else if (e.Key == Key.Delete && ViewModel.DeleteFileCommand.CanExecute(null))
+            {
+                ViewModel.DeleteFileCommand.Execute(null);
+
+            }
+        }
         private bool _isfirsttime { get; set; } = true;
 
         private void TreeGrid_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
@@ -337,7 +356,7 @@ namespace WolvenKit.Views.Tools
         {
 
         }
-        private void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
+        private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
             e.Handled = true;
             // this should all be somewhere else, right?
@@ -353,7 +372,7 @@ namespace WolvenKit.Views.Tools
                             targetDirectory = targetFile.FullName;
                         }
                         var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop));
-                        ProcessFileAction(files, targetDirectory, true);
+                        await ProcessFileAction(files, targetDirectory, true);
                     }
                 }
                 else if (e.Data.GetDataPresent("Nodes"))
@@ -380,7 +399,7 @@ namespace WolvenKit.Views.Tools
                                 files.Add(sourceFile.FullName);
                             }
                         }
-                        ProcessFileAction(files, targetDirectory, false);
+                        await ProcessFileAction(files, targetDirectory, false);
                     }
                 }
             }
@@ -396,7 +415,7 @@ namespace WolvenKit.Views.Tools
 
         public bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
 
-        private void ProcessFileAction(List<string> sourceFiles, string targetDirectory, bool onlyCopy)
+        private async Task ProcessFileAction(List<string> sourceFiles, string targetDirectory, bool onlyCopy)
         {
             foreach (var sourceFile in sourceFiles)
             {
@@ -420,10 +439,14 @@ namespace WolvenKit.Views.Tools
                         return;
                     }
 
-                    if (File.Exists(newFile) && MessageBox.Show("File already exists at that location - overwrite it?", "File Overwrite Confirmation", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                    if (File.Exists(newFile))
                     {
-                        return;
+                        if (await Interactions.ShowMessageBoxAsync("File already exists at that location - overwrite it?", "File Overwrite Confirmation", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
+                        {
+                            return;
+                        }
                     }
+
                     if (IsControlBeingHeld || onlyCopy)
                     {
                         File.Copy(sourceFile, newFile, true);

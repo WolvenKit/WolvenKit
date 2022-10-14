@@ -94,33 +94,39 @@ namespace WolvenKit.ViewModels.Tools
 
         private Dictionary<string, Dictionary<string, JsonObject>> _loadedSettings;
 
-        private static JsonSerializerOptions s_jsonSerializerSettings = new() { Converters = { new JsonFileEntryConverter() }, WriteIndented = true };
+        private static JsonSerializerOptions s_jsonSerializerSettings = new()
+        {
+            Converters =
+            {
+                new JsonFileEntryConverter(),
+                new JsonArchiveConverter()
+            }, WriteIndented = true
+        };
 
-#endregion fields
+        #endregion fields
 
-/// <summary>
-/// Import Export ViewModel Constructor
-/// </summary>
-/// <param name="projectManager"></param>
-/// <param name="loggerService"></param>
-/// <param name="messageService"></param>
-/// <param name="watcherService"></param>
-/// <param name="gameController"></param>
-/// <param name="modTools"></param>
-public ImportExportViewModel(
-           IProjectManager projectManager,
-           ILoggerService loggerService,
-           IProgressService<double> progressService,
-           IWatcherService watcherService,
-           INotificationService notificationService,
-           IGameControllerFactory gameController,
-           ISettingsManager settingsManager,
-           IModTools modTools,
-           MeshTools meshTools,
-           IArchiveManager archiveManager,
-           IPluginService pluginService,
-           Red4ParserService parserService
-           ) : base(ToolTitle)
+        /// <summary>
+        /// Import Export ViewModel Constructor
+        /// </summary>
+        /// <param name="projectManager"></param>
+        /// <param name="loggerService"></param>
+        /// <param name="messageService"></param>
+        /// <param name="watcherService"></param>
+        /// <param name="gameController"></param>
+        /// <param name="modTools"></param>
+        public ImportExportViewModel(
+            IProjectManager projectManager,
+            ILoggerService loggerService,
+            IProgressService<double> progressService,
+            IWatcherService watcherService,
+            INotificationService notificationService,
+            IGameControllerFactory gameController,
+            ISettingsManager settingsManager,
+            IModTools modTools,
+            MeshTools meshTools,
+            IArchiveManager archiveManager,
+            IPluginService pluginService,
+            Red4ParserService parserService) : base(ToolTitle)
         {
             _projectManager = projectManager;
             _loggerService = loggerService;
@@ -219,6 +225,15 @@ public ImportExportViewModel(
 
                     SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
                 });
+
+            this
+                .WhenAnyValue(x => x._projectManager.IsProjectLoaded)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(
+                    _ =>
+                    {
+                        ImportSettingsCommand.NotifyCanExecuteChanged();
+                    });
         }
 
         private static bool CheckForMultiImport(Models.FileModel file)
@@ -305,9 +320,8 @@ public ImportExportViewModel(
         #endregion properties
 
         public ICommand AddItemsCommand { get; private set; }
+
         public ICommand RemoveItemsCommand { get; private set; }
-
-
 
         private bool CanAddItems(ObservableCollection<object> items) => true;
 
@@ -571,6 +585,8 @@ public ImportExportViewModel(
                     return;
                 }
 
+                var json = SerializeArgs(importArgs);
+
                 var results = param switch
                 {
                     s_selectedInGrid => ImportableItems.Where(_ => _.IsChecked),
@@ -579,7 +595,7 @@ public ImportExportViewModel(
 
                 foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
                 {
-                    item.Properties = importArgs;
+                    item.Properties = (ImportArgs)json.Deserialize(importArgs.GetType(), s_jsonSerializerSettings);
                 }
             }
             if (IsExportsSelected)
@@ -589,6 +605,8 @@ public ImportExportViewModel(
                     return;
                 }
 
+                var json = SerializeArgs(exportArgs);
+
                 var results = param switch
                 {
                     s_selectedInGrid => ExportableItems.Where(_ => _.IsChecked),
@@ -597,16 +615,17 @@ public ImportExportViewModel(
 
                 foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
                 {
-                    item.Properties = exportArgs;
+                    item.Properties = (ExportArgs)json.Deserialize(exportArgs.GetType(), s_jsonSerializerSettings);
                 }
             }
             if (IsConvertsSelected)
             {
-
                 if (current is not ConvertArgs convertArgs)
                 {
                     return;
                 }
+
+                var json = SerializeArgs(convertArgs);
 
                 var results = param switch
                 {
@@ -616,7 +635,7 @@ public ImportExportViewModel(
 
                 foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
                 {
-                    item.Properties = convertArgs;
+                    item.Properties = (ConvertArgs)json.Deserialize(convertArgs.GetType(), s_jsonSerializerSettings);
                 }
             }
 
@@ -666,7 +685,7 @@ public ImportExportViewModel(
                 var toBeExported = ExportableItems.ToList();
                 foreach (var item in toBeExported)
                 {
-                    success = ExportSingle(item);
+                    success = await ExportSingleAsync(item);
                 }
             }
             if (IsConvertsSelected)
@@ -754,6 +773,8 @@ public ImportExportViewModel(
             return Task.FromResult(false);
         }
 
+        private Task<bool> ExportSingleAsync(ExportableItemViewModel item) => Task.Run(() => ExportSingle(item));
+
         /// <summary>
         /// Export Single Item
         /// </summary>
@@ -827,7 +848,6 @@ public ImportExportViewModel(
         /// </summary>
         public ICommand ProcessSelectedCommand { get; private set; }
 
-
         /// <summary>
         /// Execute Process selected in Import / Export Grid Command
         /// </summary>
@@ -866,7 +886,7 @@ public ImportExportViewModel(
                     var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
                     foreach (var item in toBeConverted)
                     {
-                        success = await Task.Run(() => ExportSingle(item));
+                        success = await ExportSingleAsync(item);
                     }
                 }
                 if (IsConvertsSelected)
@@ -978,6 +998,9 @@ public ImportExportViewModel(
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
 
+        public bool HasActiveProject => _projectManager != null
+            && _projectManager.IsProjectLoaded;
+
         #region Commands
 
         [RelayCommand]
@@ -996,7 +1019,7 @@ public ImportExportViewModel(
             SaveSettings();
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = "HasActiveProject")]
         private void ImportSettings()
         {
             var gammaRegex = new Regex(".*_[de][0-9]*$");
@@ -1118,42 +1141,9 @@ public ImportExportViewModel(
 
         public void SaveSettings()
         {
-            var importSettings = new Dictionary<string, JsonObject>();
-            var exportSettings = new Dictionary<string, JsonObject>();
-            var convertSettings = new Dictionary<string, JsonObject>();
-
-            foreach (var importableItem in ImportableItems)
-            {
-                var node = (JsonObject)JsonSerializer.SerializeToNode(importableItem.Properties, importableItem.Properties.GetType(), s_jsonSerializerSettings);
-
-                node.Remove("Changing");
-                node.Remove("Changed");
-                node.Remove("ThrownExceptions");
-
-                importSettings.Add(importableItem.GetBaseFile().RelativePath, node);
-            }
-
-            foreach (var exportableItem in ExportableItems)
-            {
-                var node = (JsonObject)JsonSerializer.SerializeToNode(exportableItem.Properties, exportableItem.Properties.GetType(), s_jsonSerializerSettings);
-
-                node.Remove("Changing");
-                node.Remove("Changed");
-                node.Remove("ThrownExceptions");
-
-                exportSettings.Add(exportableItem.GetBaseFile().RelativePath, node);
-            }
-
-            foreach (var convertableItem in ConvertableItems)
-            {
-                var node = (JsonObject)JsonSerializer.SerializeToNode(convertableItem.Properties, convertableItem.Properties.GetType(), s_jsonSerializerSettings);
-
-                node.Remove("Changing");
-                node.Remove("Changed");
-                node.Remove("ThrownExceptions");
-
-                convertSettings.Add(convertableItem.GetBaseFile().RelativePath, node);
-            }
+            var importSettings = ImportableItems.ToDictionary(importableItem => importableItem.GetBaseFile().RelativePath, SerializeArgs);
+            var exportSettings = ExportableItems.ToDictionary(exportableItem => exportableItem.GetBaseFile().RelativePath, SerializeArgs);
+            var convertSettings = ConvertableItems.ToDictionary(convertableItem => convertableItem.GetBaseFile().RelativePath, SerializeArgs);
 
             var settings = new Dictionary<string, Dictionary<string, JsonObject>>
             {
@@ -1164,6 +1154,18 @@ public ImportExportViewModel(
 
             var json = JsonSerializer.Serialize(settings, s_jsonSerializerSettings);
             File.WriteAllText(Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json"), json);
+        }
+
+        private JsonObject SerializeArgs(ImportExportItemViewModel vm) => SerializeArgs(vm.Properties);
+        private JsonObject SerializeArgs(ImportExportArgs args)
+        {
+            var node = (JsonObject)JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings);
+
+            node.Remove("Changing");
+            node.Remove("Changed");
+            node.Remove("ThrownExceptions");
+
+            return node;
         }
     }
 }

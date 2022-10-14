@@ -5,12 +5,14 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using DynamicData;
 using HandyControl.Data;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common;
@@ -84,16 +86,16 @@ namespace WolvenKit.Views.Tools
                 // right file list
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.RightItems,
-                        view => view.InnerList.ItemsSource)
+                        view => view.RightFileView.ItemsSource)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
                         viewModel => viewModel.RightSelectedItem,
-                        view => view.InnerList.SelectedItem)
+                        view => view.RightFileView.SelectedItem)
                     .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                      viewModel => viewModel.RightSelectedItems,
-                      view => view.InnerList.SelectedItems)
-                  .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //      viewModel => viewModel.RightSelectedItems,
+                //      view => view.RightFileView.SelectedItems)
+                //  .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.FindUsesCommand,
@@ -116,6 +118,8 @@ namespace WolvenKit.Views.Tools
                       viewModel => viewModel.AddSelectedCommand,
                       view => view.AddSelected)
                   .DisposeWith(disposables);
+
+                LeftNavigation.KeyUp += LeftNavigation_KeyDown;
             });
 
         }
@@ -232,6 +236,42 @@ namespace WolvenKit.Views.Tools
 
         #region leftNavigation
 
+        private void LeftNavigation_KeyDown(object sender, KeyEventArgs e)
+        {            
+            if(e.Key == Key.Right)
+            {                 
+                if(CanNodeExpand())
+                { 
+                    if(!IsNodeExpanded())
+                    { 
+                        ExpandNode();
+                    }
+                    else
+                    {
+                        // select first child node
+                        LeftNavigation.SetCurrentValue(SfGridBase.SelectedIndexProperty, LeftNavigation.SelectedIndex+1);
+                    }
+                }
+            }
+            else if (e.Key == Key.Left)
+            {
+                if(CanNodeExpand() && IsNodeExpanded())
+                { 
+                    CollapseNode();
+                }
+                else
+                {
+                    // select parent node
+                    var node = LeftNavigation.GetNodeAtRowIndex(LeftNavigation.SelectedIndex+1);
+                    if((node != null) && (node.ParentNode != null))
+                    {
+                       var newIndex = LeftNavigation.ResolveToRowIndex(node.ParentNode);
+                        LeftNavigation.SetCurrentValue(SfGridBase.SelectedIndexProperty, newIndex-1);
+                    }
+                }
+            }
+        }
+
         private void LeftNavigation_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
             if (DataContext is not AssetBrowserViewModel vm)
@@ -244,15 +284,18 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (e.AddedItems.First() is TreeGridRowInfo { RowData: RedFileSystemModel model })
+            if (e.AddedItems.First() is TreeGridRowInfo { RowData: RedFileSystemModel model } rowInfo)
             {
                 vm.RightItems.Clear();
+
                 vm.RightItems.AddRange(model.Directories
                     .Select(h => new RedDirectoryViewModel(h.Value))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
                 vm.RightItems.AddRange(model.Files
-                    .Select(h => new RedFileViewModel(ViewModel.LookupGameFile(h)))
+                    .Select(h => new RedFileViewModel(h))
                     .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
+
+                LeftNavigation.ScrollInView(new RowColumnIndex(rowInfo.RowIndex, 0));
             }
         }
 
@@ -300,17 +343,47 @@ namespace WolvenKit.Views.Tools
 
         public void CollapseAllNodes() => LeftNavigation.CollapseAllNodes();
 
+        public bool IsNodeExpanded()
+        {
+            var selectedIndex = LeftNavigation.SelectedIndex + 1;
+            return LeftNavigation.GetNodeAtRowIndex(selectedIndex).IsExpanded;
+        }
+
+        public bool CanNodeExpand()
+        {
+            var selectedIndex = LeftNavigation.SelectedIndex + 1;
+            return LeftNavigation.GetNodeAtRowIndex(selectedIndex).HasChildNodes;
+        }
+
         #endregion
 
         #endregion
 
         #region rightFileGrid
 
-        private void InnerList_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        private void RightFileView_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
             if (ViewModel is not { } vm)
             {
                 return;
+            }
+
+            foreach (var item in e.AddedItems)
+            {
+                if (item is GridRowInfo info && info.RowData is FileSystemViewModel fsvm)
+                {
+                    fsvm.IsChecked = true;
+
+                    RightFileView.ScrollInView(new RowColumnIndex(info.RowIndex, 0));
+                }
+            }
+
+            foreach (var item in e.RemovedItems)
+            {
+                if (item is GridRowInfo info && info.RowData is FileSystemViewModel fsvm)
+                {
+                    fsvm.IsChecked = false;
+                }
             }
 
             var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
@@ -360,7 +433,7 @@ namespace WolvenKit.Views.Tools
             */
         }
 
-        private void InnerList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void RightFileView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var selectedIndex = LeftNavigation.SelectedIndex;
             LeftNavigation.ExpandNode(selectedIndex + 1);
@@ -373,11 +446,11 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (InnerList.SelectedItem == null)
+            if (RightFileView.SelectedItem == null)
             {
                 return;
             }
-            var selected = InnerList.SelectedItem as RedFileViewModel;
+            var selected = RightFileView.SelectedItem as RedFileViewModel;
 
             if (selected != null && !selected.FullName.ToLower().Contains("bk2"))
             {
@@ -429,7 +502,7 @@ namespace WolvenKit.Views.Tools
 
         private void BKExport_Click(object sender, RoutedEventArgs e)
         {
-            //var q = InnerList.SelectedItems[0] as FileEntryViewModel;
+            //var q = RightFileView.SelectedItems[0] as FileEntryViewModel;
 
             //if (!q.Extension.ToLower().Contains("bk2"))
             //{ return; }

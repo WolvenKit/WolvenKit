@@ -208,7 +208,7 @@ namespace WolvenKit.ViewModels.Documents
             }
             if (cls is inkTextureAtlas atlas)
             {
-                var file = GetFileFromDepotPath(atlas.Slots[0].Texture.DepotPath);
+                var file = GetFileFromDepotPath(atlas.Slots[0]?.Texture?.DepotPath);
                 if (file != null)
                 {
                     TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
@@ -354,6 +354,11 @@ namespace WolvenKit.ViewModels.Documents
 
         public CR2WFile GetFileFromDepotPath(CName depotPath, bool original = false)
         {
+            if (depotPath is null)
+            {
+                return null;
+            }
+
             try
             {
                 CR2WFile cr2wFile = null;

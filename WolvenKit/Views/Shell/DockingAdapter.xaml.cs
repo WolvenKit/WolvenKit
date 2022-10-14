@@ -16,8 +16,10 @@ using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Documents;
+using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 using DockState = WolvenKit.Models.Docking.DockState;
@@ -104,15 +106,19 @@ namespace WolvenKit.Views.Shell
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
+        private async void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
         {
             if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
-                if (vm.IsDirty && MessageBox.Show("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                if (vm.IsDirty)
                 {
-                    e.Cancel = true;
-                    return;
+                    if (await Interactions.ShowMessageBoxAsync("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
                 }
+
                 vm.Close.Execute().Subscribe();
 
                 (ItemsSource as IList).Remove(vm);

@@ -1,8 +1,8 @@
-using ReactiveUI;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using ReactiveUI;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.Interaction
@@ -28,6 +28,7 @@ namespace WolvenKit.Interaction
         //custom views
         public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();
         public static readonly Interaction<Unit, bool> ShowLaunchProfilesView = new();
+        public static readonly Interaction<Unit, bool> ShowMaterialRepositoryView = new();
 
     }
 

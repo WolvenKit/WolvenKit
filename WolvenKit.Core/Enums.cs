@@ -92,8 +92,7 @@ namespace WolvenKit.Common
         Error,
         Important,
         Success,
-        Warning,
-        Wcc
+        Warning
     }
 
     public enum EArchiveType

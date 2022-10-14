@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -26,7 +27,7 @@ namespace WolvenKit.ViewModels.Tools
 
         [Browsable(false)] public List<RedFileSystemModel> Directories => _model.Directories.Values.ToList();
 
-        [Browsable(false)] public List<ulong> Files => _model.Files;
+        [Browsable(false)] public List<IGameFile> Files => _model.Files;
 
         public override uint Size => 0;
 

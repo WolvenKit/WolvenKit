@@ -1,4 +1,4 @@
-<reactiveUi:ReactiveUserControl
+<reactiveUi:ReactiveUserControl xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" 
     x:Class="WolvenKit.Views.Tools.AssetBrowserView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -68,6 +68,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="50" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
@@ -81,36 +82,19 @@
                         <iconPacks:PackIconCodicons Kind="FoldUp" />
                     </Button>
 
-                    <ToggleButton
-                        Grid.Column="1"
-                        Margin="5,0,0,0"
-                        VerticalAlignment="Center"
-                        Command="{Binding ToggleModBrowserCommand}"
-                        IsChecked="{Binding IsModBrowserActive}">
+                    <TextBlock Grid.Column="1" Margin="8,0" VerticalAlignment="Center" Text="Mod Browser" />
 
-                        <ToggleButton.Style>
-                            <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">
-
-                                <Setter Property="ToolTip" Value="Switch to installed mod archives" />
-                                <Setter Property="Content" Value="{StaticResource AB_ToggleModButtonIcon_ToMods}" />
-
-                                <Style.Triggers>
-                                    <Trigger Property="IsChecked" Value="True">
-                                        <Setter Property="ToolTip" Value="Switch to game base archives" />
-                                        <Setter Property="Content" Value="{StaticResource AB_ToggleModButtonIcon_ToBase}" />
-                                        <Setter Property="Foreground" Value="DarkViolet" />
-                                        <Setter Property="BorderBrush" Value="DarkViolet" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ToggleButton.Style>
-
-                    </ToggleButton>
+                    <mah:ToggleSwitch
+                        Grid.Column="2"
+                        OffContent=""
+                        OnContent=""
+                        ToolTip="Toggle to browse installed mod archives"
+                        Command="{Binding ToggleModBrowserCommand}" />
 
                     <hc:SearchBar
                         x:Name="FileSearchBar"
-                        Grid.Column="2"
-                        Margin="5,0,0,0"
+                        Grid.Column="3"
+                        Margin="2,0,0,0"
                         VerticalAlignment="Top"
                         hc:InfoElement.Placeholder="Search all game or mod files, e.g. game !quest judy .ent|.app|.mesh"
                         FlowDirection="LeftToRight"
@@ -127,9 +111,9 @@
                 <Grid Grid.Row="2">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" MinWidth="5" />
+                        <ColumnDefinition Width="1*" MinWidth="5" />
                         <ColumnDefinition Width="5" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="4*" />
                     </Grid.ColumnDefinitions>
 
                     <!--  Left Navigation  -->
@@ -265,7 +249,7 @@
                         </Grid.RowDefinitions>
 
                         <syncfusion:SfDataGrid
-                            x:Name="InnerList"
+                            x:Name="RightFileView"
                             AllowDeleting="False"
                             AllowDraggingColumns="False"
                             AllowDraggingRows="False"
@@ -280,16 +264,33 @@
                             CurrentCellBorderThickness="0"
                             EnableDataVirtualization="True"
                             IsManipulationEnabled="False"
-                            MouseDoubleClick="InnerList_MouseDoubleClick"
+                            MouseDoubleClick="RightFileView_MouseDoubleClick"
                             RowHeight="19"
-                            SelectionChanged="InnerList_SelectionChanged"
+                            SelectionChanged="RightFileView_OnSelectionChanged"
                             SelectionMode="Extended">
 
                             <syncfusion:SfDataGrid.RecordContextMenu>
                                 <ContextMenu>
-                                    <MenuItem x:Name="OpenFileOnly" Header="Open without adding to project" />
-                                    <MenuItem x:Name="AddSelected" Header="Add selected items to project" />
+                                    <MenuItem x:Name="AddSelected" Header="Add selected items to project">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconVaadinIcons
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource WolvenKitYellow}"
+                                                Kind="ArrowCircleLeft" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                     <Separator />
+                                    <MenuItem x:Name="OpenFileOnly" Header="Open without adding to project">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconVaadinIcons
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource WolvenKitCyan}"
+                                                Kind="ArrowCircleUp"
+                                                RotationAngle="45" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                     <MenuItem Header="Video">
                                         <MenuItem
                                             x:Name="VidPreviewMenuItem"
@@ -304,6 +305,7 @@
                                     <Separator />
                                     <MenuItem x:Name="RightContextMenuFindUsesMenuItem" Header="Find used files" />
                                     <MenuItem x:Name="RightContextMenuFindUsingMenuItem" Header="Find files using this" />
+                                    <Separator />
                                     <MenuItem x:Name="RightContextMenuCopyPathMenuItem" Header="Copy Relative Path" />
                                 </ContextMenu>
                             </syncfusion:SfDataGrid.RecordContextMenu>
@@ -332,7 +334,7 @@
 
                                 <syncfusion:GridCheckBoxColumn
                                     Width="32"
-                                    AllowEditing="True"
+                                    AllowEditing="False"
                                     AllowFiltering="False"
                                     AllowResizing="False"
                                     HeaderText="#"

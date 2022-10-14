@@ -1,11 +1,11 @@
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.ProjectManagement;
@@ -56,14 +56,7 @@ namespace WolvenKit.Functionality.Services
 
         public ReactiveCommand<string, Unit> OpenProjectCommand { get; set; }
 
-
         #endregion
-
-
-
-
-
-
 
         #region methods
 
@@ -115,7 +108,7 @@ namespace WolvenKit.Functionality.Services
                     return null;
                 }
 
-                EditorProject project = fi.Extension switch
+                var project = fi.Extension switch
                 {
                     //".w3modproj" => await Load<Tw3Project>(location),
                     ".cpmodproj" => await Load<Cp77Project>(location),
@@ -156,11 +149,11 @@ namespace WolvenKit.Functionality.Services
                     Version = obj.Version,
                 };
 
-                string projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
+                var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
                 if (File.Exists(projectHashesFile) && _hashService is HashService hashService)
                 {
-                    string[] paths = await File.ReadAllLinesAsync(projectHashesFile);
-                    foreach (string p in paths)
+                    var paths = await File.ReadAllLinesAsync(projectHashesFile);
+                    foreach (var p in paths)
                     {
                         hashService.AddProjectPath(p);
                     }
@@ -191,7 +184,7 @@ namespace WolvenKit.Functionality.Services
 
                 if (_hashService is HashService hashService)
                 {
-                    System.Collections.Generic.List<string> projectHashes = hashService.GetProjectHashes();
+                    var projectHashes = hashService.GetProjectHashes();
                     if (projectHashes.Count > 0)
                     {
                         await File.WriteAllLinesAsync(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
@@ -209,12 +202,6 @@ namespace WolvenKit.Functionality.Services
         }
 
         #endregion
-
-
-
-
-
-
 
 
         public class CP77Mod

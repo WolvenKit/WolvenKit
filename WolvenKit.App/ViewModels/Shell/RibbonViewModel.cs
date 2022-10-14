@@ -40,7 +40,7 @@ namespace WolvenKit.ViewModels.Shell
             SaveFileCommand = ReactiveCommand.Create(() => MainViewModel.SaveFileCommand.SafeExecute());
             SaveAsCommand = ReactiveCommand.Create(() => MainViewModel.SaveAsCommand.SafeExecute());
             SaveAllCommand = ReactiveCommand.Create(() => MainViewModel.SaveAllCommand.SafeExecute());
-            LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
+
             LaunchProfileCommand = ReactiveCommand.CreateFromTask(LaunchProfileAsync);
 
             /*this.WhenAnyValue(x => x.MainViewModel.ActiveProject).WhereNotNull().Subscribe(p =>
@@ -63,8 +63,7 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> SaveAsCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveAllCommand { get; }
 
-        public ReactiveCommand<Unit, Unit> LaunchOptionsCommand { get; }
-        private async void LaunchOptions() => await Interactions.ShowLaunchProfilesView.Handle(Unit.Default);
+
 
 
 

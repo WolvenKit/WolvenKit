@@ -29,7 +29,7 @@ public class ClassHashHelper
             GenerateClassHashes();
         }
 
-        return _classHashes[hash];
+        return _classHashes.TryGetValue(hash, out var result) ? result : null;
     }
 
     public static ulong GetHashFromType(Type type)

@@ -89,16 +89,16 @@ namespace WolvenKit.ViewModels.Tools
             RenameFileCommand = new DelegateCommand(ExecuteRenameFile, CanRenameFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
 
             CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            ReimportFileCommand = new DelegateCommand(ExecuteReimportFile, CanReimportFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+            ReimportFileCommand = new DelegateCommand(async () => await ExecuteReimportFile(), CanReimportFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
             OpenInFileExplorerCommand = new DelegateCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
 
             OpenRootFolderCommand = new DelegateCommand(ExecuteOpenRootFolder, CanOpenRootFolder).ObservesProperty(() => ActiveProject);
+            RefreshCommand = new DelegateCommand(async () => await ExecuteRefresh(), CanRefresh).ObservesProperty(() => ActiveProject);
 
             Bk2ImportCommand = new DelegateCommand(ExecuteBk2Import, CanBk2Import).ObservesProperty(() => SelectedItem);
             Bk2ExportCommand = new DelegateCommand(ExecuteBk2Export, CanBk2Export).ObservesProperty(() => SelectedItem);
 
             ConvertToJsonCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.json), CanConvertTo).ObservesProperty(() => SelectedItem);
-            ConvertToXmlCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.xml), CanConvertTo).ObservesProperty(() => SelectedItem);
             ConvertFromJsonCommand = new DelegateCommand(ExecuteConvertFromJson, CanConvertFromJson).ObservesProperty(() => SelectedItem);
 
 
@@ -168,6 +168,16 @@ namespace WolvenKit.ViewModels.Tools
 
         #region general commands
 
+        /// <summary>
+        /// Refreshes all files in the Grid
+        /// </summary>
+        public ICommand RefreshCommand { get; private set; }
+        private bool CanRefresh() => ActiveProject != null;
+        private Task ExecuteRefresh() => _watcherService.RefreshAsync(ActiveProject);
+
+        /// <summary>
+        /// Opens the currently selected folder in the tab
+        /// </summary>
         public ICommand OpenRootFolderCommand { get; private set; }
         private bool CanOpenRootFolder() => ActiveProject != null;
         private void ExecuteOpenRootFolder()
@@ -219,7 +229,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand ReimportFileCommand { get; private set; }
         private bool CanReimportFile() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
-        private void ExecuteReimportFile() => Task.Run(() => _gameController.GetController().AddToMod(SelectedItem.Hash));
+        private Task ExecuteReimportFile() => _gameController.GetController().AddFileToModModal(SelectedItem.Hash);
 
         /// <summary>
         /// Cuts selected node to the clipboard.
@@ -431,7 +441,6 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         public ICommand ConvertToJsonCommand { get; private set; }
-        public ICommand ConvertToXmlCommand { get; private set; }
 
         private bool CanConvertTo() => SelectedItem != null
                 && !IsInRawFolder(SelectedItem)

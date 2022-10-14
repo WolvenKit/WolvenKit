@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ReactiveUI;
 using Splat;
+using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
@@ -26,7 +29,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
     private AppViewModel _mainViewModel;
 
 
-    public static MaterialsRepositoryDialog MaterialsRepositoryDia { get; set; }
+    //public static MaterialsRepositoryDialog MaterialsRepositoryDia { get; set; }
 
     public MenuBarView()
     {
@@ -46,6 +49,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                        viewModel => viewModel.MainViewModel.ShowHomePageCommand,
                        view => view.HomeButton)
                    .DisposeWith(disposables);
+
             // File
             this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.NewFileCommand,
@@ -63,6 +67,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.SaveAllCommand,
                     view => view.MenuItemSaveAll)
                 .DisposeWith(disposables);
+
             // Project
             this.BindCommand(ViewModel,
                        viewModel => viewModel.MainViewModel.NewProjectCommand,
@@ -73,7 +78,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                        view => view.MenuItemOpenProject)
                    .DisposeWith(disposables);
 
-
             // Edit
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.ShowSettingsCommand,
@@ -83,23 +87,52 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.ShowProjectSettingsCommand,
                     view => view.ToolbarProjectSettingsButton)
                 .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenLogsCommand,
+                    view => view.ToolbarOpenLogsButton)
+                .DisposeWith(disposables);
 
             // Build
+            // Pack
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.PackModCommand,
-                    view => view.MenuItemPackProject)
+                    view => view.MenuItemPack)
                 .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.PackRedModCommand,
+                    view => view.MenuItemPackRedmod)
+                .DisposeWith(disposables);
+
+            // Install
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.PackInstallModCommand,
                     view => view.MenuItemPackInstallProject)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.PackInstallRunModCommand,
-                    view => view.MenuItemPackInstallRunProject)
-                .DisposeWith(disposables);
+                   viewModel => viewModel.MainViewModel.PackInstallRedModCommand,
+                   view => view.MenuItemPackInstallRedmodProject)
+               .DisposeWith(disposables);
+
+            // Launch
+            this.BindCommand(ViewModel,
+                       viewModel => viewModel.MainViewModel.PackInstallRunCommand,
+                       view => view.ToolbarPackInstallLaunchButton)
+                   .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                       viewModel => viewModel.MainViewModel.PackInstallRedModRunCommand,
+                       view => view.ToolbarPackInstallRedmodLaunchButton)
+                   .DisposeWith(disposables);
+
+            // Hot Reload
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.HotInstallModCommand,
                     view => view.MenuItemHotInstallProject)
+                .DisposeWith(disposables);
+
+            // Launch Profiles
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.LaunchOptionsCommand,
+                    view => view.MenuItemLaunchProfiles)
                 .DisposeWith(disposables);
 
             // View
@@ -109,6 +142,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.ShowSoundModdingToolCommand,
                     view => view.MenuItemShowSoundModdingTool)
                 .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                        viewModel => viewModel.OpenGameFolderCommand,
+                        view => view.MenuItemOpenGameFolder)
+                    .DisposeWith(disposables);
 
             // Game
             this.BindCommand(ViewModel,
@@ -119,28 +156,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                        viewModel => viewModel.MainViewModel.LaunchGameCommand,
                        view => view.ToolbarLaunchSteamButton)
                    .DisposeWith(disposables);
-            this.BindCommand(ViewModel,
-                       viewModel => viewModel.MainViewModel.LaunchGameCommand,
-                       view => view.ToolbarPackInstallLaunchButton)
-                   .DisposeWith(disposables);
-
-            //this.Bind(ViewModel,
-            //       viewModel => viewModel.MainViewModel.SelectedGameCommandIdx,
-            //       view => view.ToolbarLaunchCombobox.SelectedIndex)
-            //   .DisposeWith(disposables);
-            //this.OneWayBind(ViewModel,
-            //        viewModel => viewModel.MainViewModel.SelectedGameCommands,
-            //        view => view.ToolbarLaunchCombobox.ItemsSource)
-            //    .DisposeWith(disposables);
-
-            this.BindCommand(ViewModel,
-                        viewModel => viewModel.UnbundleGameCommand,
-                        view => view.MenuItemUnbundleGame)
-                    .DisposeWith(disposables);
-            this.BindCommand(ViewModel,
-                        viewModel => viewModel.OpenMaterialRepositoryCommand,
-                        view => view.MenuItemOpenMaterialRepository)
-                    .DisposeWith(disposables);
 
             // Extensions
             this.BindCommand(ViewModel,
@@ -151,8 +166,28 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                    viewModel => viewModel.MainViewModel.ShowModsViewCommand,
                    view => view.MenuItemShowModsView)
                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                    view => view.MenuItemCyberpunkBlenderAddonLink,
+                    viewModel => viewModel.MainViewModel.CyberpunkBlenderAddonLink);
 
-
+            // Help
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                    view => view.MenuItemWolvenKitSetupLink,
+                    viewModel => viewModel.MainViewModel.WolvenKitSetupLink);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                    view => view.MenuItemWolvenKitCreatingAModLink,
+                    viewModel => viewModel.MainViewModel.WolvenKitCreatingAModLink);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                    view => view.MenuItemDiscordInvitationLink,
+                    viewModel => viewModel.MainViewModel.DiscordInvitationLink);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                    view => view.MenuItemAboutWolvenKitLink,
+                    viewModel => viewModel.MainViewModel.AboutWolvenKitLink);
 
             // visibility
             this.Bind(ViewModel,
@@ -188,14 +223,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
     private void SetLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.LoadLayoutDefault();
     private void SaveLayoutToProject(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayoutToProject();
-    private void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (MaterialsRepositoryDia == null)
-        {
-            var x = new MaterialsRepositoryDialog();
-            MaterialsRepositoryDia = x;
-            x.Show();
-        }
-    }
+    private async void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e) => await Interactions.ShowMaterialRepositoryView.Handle(Unit.Default);
 
 }

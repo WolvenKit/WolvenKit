@@ -67,6 +67,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
                         });
                     }
                 }
+
+                var ordered = newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files").Files.OrderBy(x => x.Name).ToList();
+                newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files").Files = ordered;
                 Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
 
             }

@@ -1,39 +1,36 @@
 using System.IO;
 using WolvenKit.Core.Wwise;
 
-namespace CP77Tools.Tasks
+namespace CP77Tools.Tasks;
+
+public partial class ConsoleFunctions
 {
-    public partial class ConsoleFunctions
+    public int WwiseTask(FileInfo path, FileInfo outpath, bool wem)
     {
-        public int WwiseTask(string path, string outpath, bool wem)
+        if (path is null)
         {
-            if (string.IsNullOrEmpty(path))
-            {
-                return 0;
-            }
-
-            if (string.IsNullOrEmpty(outpath))
-            {
-                outpath = Path.ChangeExtension(path, ".ogg");
-            }
-
-            if (wem)
-            {
-                var inBuffer = File.ReadAllBytes(path);
-                var oggBuffer = Wem.Convert(inBuffer);
-
-                if (oggBuffer.Length == 0)
-                {
-                    _loggerService.Error($"Failed to convert {path} to OGG");
-                    return 0;
-                }
-
-                File.WriteAllBytes(outpath, oggBuffer);
-
-                _loggerService.Success($"Finished converting {path} to OGG: {outpath}");
-            }
-
-            return 1;
+            return ERROR_BAD_ARGUMENTS;
         }
+
+        outpath ??= new FileInfo(Path.ChangeExtension(path.FullName, ".ogg"));
+
+        if (wem)
+        {
+            var inBuffer = File.ReadAllBytes(path.FullName);
+            var oggBuffer = Wem.Convert(inBuffer);
+
+            if (oggBuffer.Length == 0)
+            {
+                _loggerService.Error($"Failed to convert {path} to OGG");
+                return ERROR_GENERAL_ERROR;
+            }
+
+            File.WriteAllBytes(outpath.FullName, oggBuffer);
+
+            _loggerService.Success($"Finished converting {path} to OGG: {outpath}");
+            return 0;
+        }
+
+        return ERROR_GENERAL_ERROR;
     }
 }

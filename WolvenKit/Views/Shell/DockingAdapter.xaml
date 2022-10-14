@@ -5,6 +5,7 @@
     xmlns:converters1="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:docvm="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:WolvenKit.Views.Shell"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
@@ -454,5 +455,12 @@
                 </DataTemplate>
             </syncfusion:DockingManager.HeaderTemplate>
         </syncfusion:DockingManager>
+
+        <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden">
+            <StackPanel
+                Margin="0,10,10,10"
+                VerticalAlignment="Bottom"
+                hc:Growl.GrowlParent="True" />
+        </ScrollViewer>
     </Grid>
 </UserControl>

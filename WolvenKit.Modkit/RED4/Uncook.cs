@@ -50,8 +50,6 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            #region unbundle main file
-
             using var cr2WStream = new MemoryStream();
             gameFile.Extract(cr2WStream);
 
@@ -81,8 +79,6 @@ namespace WolvenKit.Modkit.RED4
                         cr2WStream.CopyTo(fs);
                     }
                 }
-
-                #endregion unbundle main file
 
                 #region serialize
 
@@ -131,9 +127,121 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Error(e);
                     return false;
                 }
+
+                #endregion extract buffers
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Uncooks a single file by hash. This will both extract and uncook the redengine file
+        /// </summary>
+        /// <param name="archive"></param>
+        /// <param name="hash"></param>
+        /// <param name="outDir"></param>
+        /// <param name="rawOutDir"></param>
+        /// <param name="args"></param>
+        /// <param name="forcebuffers"></param>
+        /// <returns></returns>
+        public async Task<bool> UncookSingleAsync(
+            ICyberGameArchive archive,
+            ulong hash,
+            DirectoryInfo outDir,
+            GlobalExportArgs args,
+            DirectoryInfo rawOutDir = null,
+            ECookedFileFormat[] forcebuffers = null,
+            bool serialize = false)
+        {
+            if (!archive.Files.TryGetValue(hash, out var gameFile))
+            {
+                return false;
+            }
+
+            #region unbundle main file
+
+            using var cr2WStream = new MemoryStream();
+            await gameFile.ExtractAsync(cr2WStream);
+
+            if (archive.Files[hash] is not FileEntry entry)
+            {
+                return false;
+            }
+
+            var relFileFullName = entry.FileName;
+            if (string.IsNullOrEmpty(Path.GetExtension(relFileFullName)))
+            {
+                relFileFullName += ".bin";
+            }
+
+            var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}"));
+
+            // write mainFile
+            if (!WolvenTesting.IsTesting)
+            {
+                if (mainFileInfo.Directory != null)
+                {
+                    Directory.CreateDirectory(mainFileInfo.Directory.FullName);
+                }
+
+                // prevents batch extract to create write conflicts when a single file is referrenced by multiple items
+                if (!File.Exists(mainFileInfo.FullName))
+                {
+                    using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
+                    cr2WStream.Seek(0, SeekOrigin.Begin);
+                    await cr2WStream.CopyToAsync(fs);
+                }
+            }
+
+            #endregion unbundle main file
+
+            #region serialize
+
+            if (serialize)
+            {
+                try
+                {
+                    var jsonOutput = SerializeMainFile(cr2WStream);
+                    var outpath = Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}.json");
+                    await File.WriteAllTextAsync(outpath, jsonOutput);
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error($"{relFileFullName} And unexpected error occured while converting to json: {e.Message}");
+                    _loggerService.Error(e);
+                    return false;
+                }
+            }
+
+            #endregion serialize
+
+            #region extract buffers
+
+            var hasBuffers = (entry.SegmentsEnd - entry.SegmentsStart) > 1;
+            if (!hasBuffers)
+            {
+                return true;
+            }
+
+            // uncook main file buffers to raw out dir
+            if (rawOutDir is null or { Exists: false })
+            {
+                rawOutDir = outDir;
+            }
+
+            try
+            {
+                // wems need the physical infile path
+                args.Get<WemExportArgs>().FileName = mainFileInfo.FullName;
+                return UncookBuffers(cr2WStream, relFileFullName, args, rawOutDir, forcebuffers);
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"{relFileFullName} And unexpected error occured while uncooking: {e.Message}");
+                _loggerService.Error(e);
+                return false;
+            }
 
             #endregion extract buffers
         }
@@ -450,28 +558,6 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private bool HandleEntity(Stream cr2wStream, FileInfo cr2wFileName, EntityExportArgs entExportArgs)
-        {
-            try
-            {
-                switch (entExportArgs.ExportType)
-                {
-                    case EntityExportType.Json:
-                        return DumpEntityPackageAsJson(cr2wStream, cr2wFileName);
-                    case EntityExportType.Gltf:
-                        throw new NotImplementedException("Uncooking Entity/Appearance Resources To Gltf Not Implemented");
-                    default:
-                        break;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error(ex);
-            }
-            return false;
-        }
-
         private static bool HandleOpus(OpusExportArgs opusExportArgs)
         {
             OpusTools opusTools = new(
@@ -769,7 +855,7 @@ namespace WolvenKit.Modkit.RED4
 && ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
         }
 
-        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat)
+        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat, bool flipV = false)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
             decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
@@ -783,6 +869,11 @@ namespace WolvenKit.Modkit.RED4
                 if (img.CompressionFormat != null)
                 {
                     texformat = (DXGI_FORMAT)img.CompressionFormat;
+                }
+
+                if (flipV)
+                {
+                    img.FlipV();
                 }
 
                 outstream.Write(img.SaveToDDSMemory());

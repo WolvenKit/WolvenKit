@@ -119,15 +119,47 @@ namespace WolvenKit.ViewModels.Shell
             OpenFileCommand = ReactiveCommand.CreateFromTask<FileModel>(async (m) => await OpenFileAsync(m));
             OpenRedFileCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
-            PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackModAsync);
-            PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallModAsync);
-            PackInstallRunModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallRunModAsync);
+            // Build
+            PackModCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
+            {
+                CreateBackup = true
+            }));
+            PackRedModCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
+            {
+                CreateBackup = true,
+                IsRedmod = true
+            }));
+
+            PackInstallModCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
+            {
+                Install = true
+            }));
+            PackInstallRedModCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
+            {
+                Install = true,
+                IsRedmod = true,
+            }));
+
+            PackInstallRunCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
+            {
+                Install = true,
+                LaunchGame = true
+            }));
+            PackInstallRedModRunCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
+            {
+                Install = true,
+                IsRedmod = true,
+                DeployWithRedmod = true,
+                LaunchGame = true
+            }));
 
             HotInstallModCommand = ReactiveCommand.CreateFromTask(HotInstallModAsync);
 
+            LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
 
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => IsDialogShown);
 
+            // File
             SaveFileCommand = new DelegateCommand(ExecuteSaveFile, CanSaveFile).ObservesProperty(() => ActiveDocument);
             SaveAsCommand = new DelegateCommand(ExecuteSaveAs, CanSaveFile).ObservesProperty(() => ActiveDocument);
             SaveAllCommand = new DelegateCommand(ExecuteSaveAll, CanSaveAll).ObservesProperty(() => DockedViews);
@@ -141,6 +173,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage).ObservesProperty(() => IsDialogShown);
             ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings).ObservesProperty(() => IsDialogShown);
             ShowProjectSettingsCommand = new DelegateCommand(ExecuteShowProjectSettings, CanShowProjectSettings).ObservesProperty(() => IsDialogShown).ObservesProperty(() => ActiveProject);
+            OpenLogsCommand = new DelegateCommand(ExecuteOpenLogs);
 
             LaunchGameCommand = ReactiveCommand.Create<string>(ExecuteLaunchGame);
 
@@ -193,6 +226,12 @@ namespace WolvenKit.ViewModels.Shell
 
         private void HandleActivation()
         {
+            var thisVersion = WolvenKit.Core.CommonFunctions.GetAssemblyVersion(WolvenKit.Functionality.Constants.AssemblyName);
+            if (thisVersion.ToString().Contains("nightly") && _settingsManager.UpdateChannel != EUpdateChannel.Nightly)
+            {
+                _settingsManager.UpdateChannel = EUpdateChannel.Nightly;
+            }
+
             Observable.Start(() => CheckForUpdatesCommand.Execute(true).Subscribe())
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe();
@@ -264,7 +303,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (checkForCheckForUpdates)
             {
-                if (!_settingsManager.CheckForUpdates)
+                if (_settingsManager.SkipUpdateCheck)
                 {
                     return;
                 }
@@ -286,6 +325,10 @@ namespace WolvenKit.ViewModels.Shell
             // disabled for testing in debug
 #if DEBUG
             var remoteVersion = SemVersion.Parse("8.6", SemVersionStyles.OptionalMinorPatch);
+            if (_settingsManager.UpdateChannel == EUpdateChannel.Nightly)
+            {
+                remoteVersion = SemVersion.Parse("8.7.0-nightly.2022-10-10", SemVersionStyles.OptionalMinorPatch);
+            }
 #else
             var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("wolvenkit"));
             var releases = await client.Repository.Release.GetAll(owner, name);
@@ -451,10 +494,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             try
             {
-                var projectLocation = Path.Combine(project.ProjectPath, project.ProjectName, project.ProjectName + ".cpmodproj");
+                var newProjectname = project.ProjectName.Trim();
+                var projectLocation = Path.Combine(project.ProjectPath, newProjectname, newProjectname + ".cpmodproj");
                 Cp77Project np = new(projectLocation)
                 {
-                    Name = project.ProjectName,
+                    Name = newProjectname,
                     Author = project.Author,
                     Email = project.Email,
                     Version = project.Version
@@ -544,6 +588,9 @@ namespace WolvenKit.ViewModels.Shell
             SetActiveDialog(new ProjectSettingsDialogViewModel());
         }
 
+        public ICommand OpenLogsCommand { get; private set; }
+        private void ExecuteOpenLogs() => Commonfunctions.ShowFolderInExplorer(ISettingsManager.GetAppData());
+
         [Reactive] public int SelectedGameCommandIdx { get; set; }
 
         public record GameLaunchCommand(string Name, EGameLaunchCommand Command);
@@ -552,12 +599,6 @@ namespace WolvenKit.ViewModels.Shell
             Launch,
             SteamLaunch
         }
-        [Reactive]
-        public ObservableCollection<GameLaunchCommand> SelectedGameCommands { get; set; } = new()
-        {
-            new GameLaunchCommand("Launch Game", EGameLaunchCommand.Launch),
-            new GameLaunchCommand("Launch Game with Steam", EGameLaunchCommand.SteamLaunch),
-        };
 
         public ReactiveCommand<string, Unit> LaunchGameCommand { get; private set; }
         private void ExecuteLaunchGame(string stridx)
@@ -567,7 +608,7 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
-            var command = SelectedGameCommands[idx].Command;
+            var command = (EGameLaunchCommand)idx;
             switch (command)
             {
                 case EGameLaunchCommand.Launch:
@@ -614,7 +655,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand ShowSoundModdingToolCommand { get; private set; }
-        private bool CanShowSoundModdingTool() => !IsDialogShown;
+        private bool CanShowSoundModdingTool() => !IsDialogShown && ActiveProject != null;
         private void ExecuteShowSoundModdingTool() => SetActiveDialog(new SoundModdingViewModel
         {
             FileHandler = OpenSoundModdingView
@@ -823,41 +864,43 @@ namespace WolvenKit.ViewModels.Shell
 
         // Pack mod
         public ReactiveCommand<Unit, Unit> PackModCommand { get; private set; }
-        private async Task ExecutePackModAsync()
-        {
-            _watcherService.IsSuspended = true;
-            await _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile() { });
-            _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(ActiveProject);
-        }
-
+        public ReactiveCommand<Unit, Unit> PackRedModCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
-        private async Task ExecutePackInstallModAsync()
-        {
-            _watcherService.IsSuspended = true;
-            await _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile()
-            {
-                Install = true
-            });
-            _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(ActiveProject);
-        }
+        public ReactiveCommand<Unit, Unit> PackInstallRedModCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> PackInstallRunCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> PackInstallRedModRunCommand { get; private set; }
 
-        public ReactiveCommand<Unit, Unit> PackInstallRunModCommand { get; private set; }
-        private async Task ExecutePackInstallRunModAsync()
+        private async Task LaunchAsync(LaunchProfile profile)
         {
             _watcherService.IsSuspended = true;
-            await _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile()
-            {
-                Install = true,
-                LaunchGame = true
-            });
+            await _gameControllerFactory.GetController().LaunchProject(profile);
             _watcherService.IsSuspended = false;
             await _watcherService.RefreshAsync(ActiveProject);
         }
 
         public ReactiveCommand<Unit, Unit> HotInstallModCommand { get; private set; }
         private Task HotInstallModAsync() => Task.Run(() => _gameControllerFactory.GetController().PackProjectHot());
+
+        public ReactiveCommand<Unit, Unit> LaunchOptionsCommand { get; }
+        private async void LaunchOptions() => await Interactions.ShowLaunchProfilesView.Handle(Unit.Default);
+
+        public string CyberpunkBlenderAddonLink = "https://github.com/WolvenKit/Cyberpunk-Blender-add-on";
+        public string WolvenKitSetupLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
+        public string WolvenKitCreatingAModLink = "https://wiki.redmodding.org/wolvenkit/getting-started/creating-a-mod";
+        public string DiscordInvitationLink = "https://discord.gg/Epkq79kd96";
+        public string AboutWolvenKitLink = "https://wiki.redmodding.org/wolvenkit/about";
+
+
+        public ReactiveCommand<string, Unit> OpenExternalLinkCommand = ReactiveCommand.Create<string>(
+            link =>
+            {
+                var ps = new ProcessStartInfo(link)
+                {
+                    UseShellExecute = true,
+                    Verb = "open"
+                };
+                Process.Start(ps);
+            });
 
         public ICommand ShowAssetsCommand { get; private set; }
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;

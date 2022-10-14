@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Xml.Linq;
 using ReactiveUI;
 using Splat;
@@ -20,11 +19,11 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -71,25 +70,18 @@ namespace WolvenKit.Functionality.Controllers
             _pluginService = pluginService;
         }
 
-        public Task HandleStartup()
+        public async Task HandleStartup()
         {
             if (!_initialized)
             {
                 _initialized = true;
 
                 // load archives
-                List<Func<IArchiveManager>> todo = new()
-                {
-                    LoadArchiveManager,
-                };
-                Parallel.ForEach(todo, _ => Task.Run(_));
+                await LoadArchiveManager();
 
                 // requires oodle
                 InitializeBk();
-
             }
-
-            return Task.CompletedTask;
         }
 
         // TODO: Move this somewhere else
@@ -200,34 +192,31 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        private IArchiveManager LoadArchiveManager()
-        {
-            if (_archiveManager != null && _archiveManager.IsManagerLoaded)
+        private Task LoadArchiveManager() =>
+            Task.Run(() =>
             {
-                return _archiveManager;
-            }
+                if (_archiveManager != null && _archiveManager.IsManagerLoaded)
+                {
+                    return;
+                }
 
-            _loggerService.Info("Loading Archive Manager ... ");
-            try
-            {
-                _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                throw;
-            }
-            finally
-            {
-                _loggerService.Success("Finished loading Archive Manager.");
-            }
+                _loggerService.Info("Loading Archive Manager ... ");
+                try
+                {
+                    _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error(e);
+                    throw;
+                }
+                finally
+                {
+                    _loggerService.Success("Finished loading Archive Manager.");
+                }
 
-            LoadCustomHashes();
-
-#pragma warning disable 162
-            return _archiveManager;
-#pragma warning restore 162
-        }
+                LoadCustomHashes();
+            });
 
         #region Packing
 
@@ -645,12 +634,37 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion
 
-        public void AddToMod(ulong hash)
+        public async Task AddFileToModModal(ulong hash)
         {
             var file = _archiveManager.Lookup(hash);
             if (file.HasValue)
             {
-                AddToMod(file.Value);
+                await AddFileToModModal(file.Value);
+            }
+        }
+
+        public async Task AddFileToModModal(IGameFile file)
+        {
+            FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, file.Name));
+            if (diskPathInfo.Exists)
+            {
+                var response = await Interactions.ShowMessageBoxAsync(
+                    $"File exists in project. Overwrite existing file?",
+                    "Add file",
+                    WMessageBoxButtons.YesNo);
+
+                switch (response)
+                {
+                    case WMessageBoxResult.Yes:
+                    {
+                        await Task.Run(() => AddToMod(file));
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                await Task.Run(() => AddToMod(file));
             }
         }
 
@@ -693,23 +707,25 @@ namespace WolvenKit.Functionality.Controllers
 
                         if (File.Exists(diskPathInfo.FullName))
                         {
-                            if (MessageBox.Show($"The file {file.Name} already exists in project - overwrite it with game file?", $"Confirm overwrite: {file.Name}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                            {
-                                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                                file.Extract(fs);
-                                _loggerService.Success($"Overwrote existing file with game file: {file.Name}");
-                            }
-                            else
-                            {
-                                _loggerService.Info($"Declined to overwrite existing file: {file.Name}");
-                            }
+                            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                            file.Extract(fs);
+                            _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
                         }
                         else
                         {
                             Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                            file.Extract(fs);
-                            _loggerService.Success($"Added game file to project: {file.Name}");
+                            try
+                            {
+                                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                                file.Extract(fs);
+                                _loggerService.Info($"Added game file to project: {file.Name}");
+                            }
+                            catch (Exception ex)
+                            {
+                                File.Delete(diskPathInfo.FullName);
+                                _loggerService.Error(ex);
+                            }
+
                         }
                     }
 

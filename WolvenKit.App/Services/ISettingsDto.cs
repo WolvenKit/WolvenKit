@@ -10,7 +10,7 @@ namespace WolvenKit.Functionality.Services
         // than creating unnecessary interfaces.
         public int SettingsVersion { get; }
 
-        public bool CheckForUpdates { get; set; }
+        public bool SkipUpdateCheck { get; set; }
         public EUpdateChannel UpdateChannel { get; set; }
         public bool ShowGuidedTour { get; set; }
         public string ThemeAccentString { get; set; }

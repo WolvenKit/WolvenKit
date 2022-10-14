@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -95,7 +96,7 @@ namespace WolvenKit.ViewModels.Documents
             this.WhenActivated((CompositeDisposable disposables) =>
             {
                 OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
-                OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+                OpenImportCommand = new DelegateCommand<ICR2WImport>(async (i) => await ExecuteOpenImport(i));
 
                 if (SelectedChunk == null)
                 {
@@ -224,7 +225,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public ICommand OnDemandLoadingCommand { get; private set; }
 
-        private bool CanExecuteOnDemandLoading(TreeViewNode node) => node.Content is GroupedChunkViewModel || node.Content is ChunkViewModel cvm && cvm.HasChildren();
+        private bool CanExecuteOnDemandLoading(TreeViewNode node) => node.Content is GroupedChunkViewModel || (node.Content is ChunkViewModel cvm && cvm.HasChildren());
 
         private void ExecuteOnDemandLoading(TreeViewNode node)
         {
@@ -269,18 +270,13 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public ICommand OpenImportCommand { get; private set; }
-        private void ExecuteOpenImport(ICR2WImport input)
+        private Task ExecuteOpenImport(ICR2WImport input)
         {
             var depotpath = input.DepotPath;
             var key = FNV1A64HashAlgorithm.HashString(depotpath);
 
-            var _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
-            var _archiveManager = Locator.Current.GetService<IArchiveManager>();
-
-            if (_archiveManager.Lookup(key).HasValue)
-            {
-                _gameControllerFactory.GetController().AddToMod(key);
-            }
+            var _gameController = Locator.Current.GetService<IGameControllerFactory>();
+            return _gameController.GetController().AddFileToModModal(key);
         }
 
         //public ICommand ExportChunkCommand { get; private set; }

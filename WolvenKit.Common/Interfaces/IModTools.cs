@@ -36,6 +36,16 @@ namespace WolvenKit.Common.Interfaces
             DirectoryInfo rawOutDir = null,
             ECookedFileFormat[] forcebuffers = null,
             bool serialize = false);
+
+        public Task<bool> UncookSingleAsync(
+            ICyberGameArchive archive,
+            ulong hash,
+            DirectoryInfo outDir,
+            GlobalExportArgs args,
+            DirectoryInfo rawOutDir = null,
+            ECookedFileFormat[] forcebuffers = null,
+            bool serialize = false);
+
         void UncookAll(ICyberGameArchive ar, DirectoryInfo outDir, GlobalExportArgs args, bool unbundle = false, string pattern = "", string regex = "", DirectoryInfo rawOutDir = null, ECookedFileFormat[] forcebuffers = null, bool serialize = false);
 
         public bool ConvertToAndWrite(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo);

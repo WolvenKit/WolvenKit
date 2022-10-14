@@ -115,16 +115,28 @@ public class RedImage : IDisposable
 
     #region LoadFromFileFormat
 
-    public static RedImage LoadFromDDSFile(string szFile) =>
-        new() { InternalScratchImage = TexHelper.Instance.LoadFromDDSFile(szFile, DDS_FLAGS.FORCE_DX10_EXT, out _) };
+    public static RedImage LoadFromDDSFile(string szFile, Common.DDS.DXGI_FORMAT format = Common.DDS.DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
+    {
+        var scratchImage = TexHelper.Instance.LoadFromDDSFile(szFile, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
 
-    public static RedImage LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer);
+        if (TexHelper.Instance.IsCompressed(metadata.Format))
+        {
+            scratchImage = scratchImage.Decompress(format.ToDirectXTexFormat());
+        }
+
+        return new()
+        {
+            InternalScratchImage = scratchImage
+        };
+    }
+
+    public static RedImage LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer, DXGI_FORMAT.UNKNOWN);
 
     public static RedImage LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
 
     public static RedImage LoadFromDDSMemory(byte[] buffer, Common.DDS.DXGI_FORMAT format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
 
-    internal static RedImage LoadFromDDSMemory(byte[] buffer, DXGI_FORMAT format = DXGI_FORMAT.UNKNOWN)
+    internal static RedImage LoadFromDDSMemory(byte[] buffer, DXGI_FORMAT format)
     {
         var scratchImage = TexHelper.Instance.LoadFromDDSMemory(buffer, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
 
@@ -345,6 +357,8 @@ public class RedImage : IDisposable
 
         return new RedImage {InternalScratchImage = croppedImage};
     }
+
+    public void FlipV() => InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
 
     public void Convert(Common.DDS.DXGI_FORMAT format)
     {

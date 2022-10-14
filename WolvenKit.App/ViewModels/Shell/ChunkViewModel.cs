@@ -16,7 +16,6 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
@@ -155,7 +154,7 @@ namespace WolvenKit.ViewModels.Shell
             //DoSubscribe();
             // TODO INPC 
             OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef).ObservesProperty(() => Data);
-            AddRefCommand = new DelegateCommand(ExecuteAddRef, CanAddRef).ObservesProperty(() => Data);
+            AddRefCommand = new DelegateCommand(async () => await ExecuteAddRef(), CanAddRef).ObservesProperty(() => Data);
             ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk).ObservesProperty(() => PropertyCount);
             ImportWorldNodeDataCommand = new DelegateCommand(async () => await ExecuteImportWorldNodeDataTask(), CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
             ImportWorldNodeDataWithoutCoordsCommand = new DelegateCommand(async () => await ExecuteImportWorldNodeDataWithoutCoordsTask(), CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
@@ -1240,19 +1239,13 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "SymbolEnum";
                 }
-                if (PropertyType.IsAssignableTo(typeof(IRedRef)))
-                {
-                    return "FileSymlinkFile";
-                }
-                if (PropertyType.IsAssignableTo(typeof(IRedBitField)))
-                {
-                    return "SymbolEnum";
-                }
-                if (PropertyType.IsAssignableTo(typeof(CBool)))
-                {
-                    return "SymbolBoolean";
-                }
-                return PropertyType.IsAssignableTo(typeof(IRedBaseHandle))
+                return PropertyType.IsAssignableTo(typeof(IRedRef))
+                    ? "FileSymlinkFile"
+                    : PropertyType.IsAssignableTo(typeof(IRedBitField))
+                    ? "SymbolEnum"
+                    : PropertyType.IsAssignableTo(typeof(CBool))
+                    ? "SymbolBoolean"
+                    : PropertyType.IsAssignableTo(typeof(IRedBaseHandle))
                     ? "References"
                     : PropertyType.IsAssignableTo(typeof(DataBuffer)) || PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer))
                     ? "GroupByRefType"
@@ -1299,7 +1292,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand AddRefCommand { get; private set; }
         private bool CanAddRef() => Data is IRedRef r && r.DepotPath is not null;
-        private void ExecuteAddRef()
+        private async Task ExecuteAddRef()
         {
             if (Data is IRedRef r)
             {
@@ -1307,14 +1300,8 @@ namespace WolvenKit.ViewModels.Shell
                 //Tab.File.OpenRefAsTab(depotpath);
                 //Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
                 var key = r.DepotPath.GetRedHash();
-
                 var gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
-                var archiveManager = Locator.Current.GetService<IArchiveManager>();
-
-                if (archiveManager.Lookup(key).HasValue)
-                {
-                    gameControllerFactory.GetController().AddToMod(key);
-                }
+                await gameControllerFactory.GetController().AddFileToModModal(key);
             }
         }
 
@@ -1371,13 +1358,29 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (Data == null)
                 {
-                    // TODO: Need info for CStatic, ...
-                    return;
+                    var typeInfo = RedReflection.GetTypeInfo(Parent.ResolvedData);
+                    var propertyInfo = typeInfo.GetPropertyInfoByName(Name);
+
+                    if (propertyInfo.Flags.Equals(Flags.Empty))
+                    {
+                        Data = (IRedType)System.Activator.CreateInstance(propertyInfo.Type);
+                    }
+                    else
+                    {
+                        var flags = propertyInfo.Flags;
+                        Data = (IRedType)System.Activator.CreateInstance(propertyInfo.Type, flags.MoveNext() ? flags.Current : 0);
+                    }
                 }
 
                 var arr = (IRedArray)Data;
 
                 var innerType = arr.InnerType;
+                if (IsValueType(innerType))
+                {
+                    InsertChild(-1, RedTypeManager.CreateRedType(innerType));
+                    return;
+                }
+
                 DialogHandlerDelegate handler = HandleChunk;
                 if (innerType.IsAssignableTo(typeof(IRedBaseHandle)))
                 {
@@ -1388,9 +1391,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     innerType = innerType.GetGenericTypeDefinition();
                 }
+                
                 var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
-                    .Where(p => innerType.IsAssignableFrom(p) && p.IsClass)
+                    .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
                     .Select(x => x.Name));
 
                 // no inheritable
@@ -1463,6 +1467,12 @@ namespace WolvenKit.ViewModels.Shell
             }
             var db = Data as IRedBufferPointer;
             ObservableCollection<string> existing = null;
+            if (db.GetValue().Data is worldNodeDataBuffer worldNodeDataBuffer)
+            {
+                worldNodeDataBuffer.Add(new worldNodeData());
+                RecalculateProperties(worldNodeDataBuffer);
+                return;
+            }
             if (db.GetValue().Data is RedPackage pkg)
             {
                 existing = new ObservableCollection<string>(pkg.Chunks.Select(t => t.GetType().Name).Distinct());
@@ -1494,7 +1504,7 @@ namespace WolvenKit.ViewModels.Shell
             if (sender is not null)
             {
                 var vm = sender as CreateClassDialogViewModel;
-                var instance = RedTypeManager.Create(vm.SelectedClass);
+                var instance = RedTypeManager.CreateRedType(vm.SelectedType);
                 if (!InsertChild(-1, instance))
                 {
                     Locator.Current.GetService<ILoggerService>().Error("Unable to insert child");
@@ -1948,6 +1958,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (RDTDataViewModel.CopiedChunk is IRedBaseHandle sourceHandle)
             {
+                if (Parent is { Data: worldNodeData })
+                {
+                    return false;
+                }
+
                 if (Data is IRedBaseHandle destinationHandle)
                 {
                     return destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().GetType());
@@ -1990,13 +2005,6 @@ namespace WolvenKit.ViewModels.Shell
                 if (Data is IRedCloneable irc)
                 {
                     RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
-                }
-                else if (Data is worldNodeData)
-                {
-                    var tr = RedJsonSerializer.Serialize(Data);
-                    var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-
-                    RDTDataViewModel.CopiedChunk = copied;
                 }
                 else
                 {
@@ -2160,7 +2168,7 @@ namespace WolvenKit.ViewModels.Shell
         public ICommand PasteSelectionCommand { get; private set; }
         private bool CanPasteSelection() => (IsArray || IsInArray)
             && RDTDataViewModel.CopiedChunks.Count > 0
-            && (ArraySelfOrParent?.InnerType.IsAssignableTo(RDTDataViewModel.CopiedChunks.First().GetType()) ?? true);
+            && (ArraySelfOrParent?.InnerType.IsAssignableFrom(RDTDataViewModel.CopiedChunks.First().GetType()) ?? true);
         private void ExecutePasteSelection()
         {
             try

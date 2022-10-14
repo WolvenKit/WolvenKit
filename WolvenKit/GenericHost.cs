@@ -48,19 +48,20 @@ namespace WolvenKit
                     services.AddSingleton<INotificationService, NotificationService>();
                     services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
                     services.AddSingleton<Core.Services.IProgressService<double>, System.ProgressService<double>>();
-
                     services.AddSingleton<MySink>();
                     services.AddSingleton<ILoggerService, SerilogWrapper>();
 
                     // singletons
                     services.AddSingleton<IHashService, HashService>();
-                    //services.AddSingleton<ITweakDBService, TweakDBService>();
+
+                    services.AddSingleton<Red4ParserService>();
+
+                    services.AddSingleton<IArchiveManager, ArchiveManager>();
+
                     services.AddSingleton<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
                     services.AddSingleton<IProjectManager, ProjectManager>();
                     services.AddSingleton<IWatcherService, WatcherService>();
 
-                    services.AddSingleton<IArchiveManager, ArchiveManager>();
-                    services.AddSingleton<MockGameController>();
 
                     services.AddSingleton<GeometryCacheService>();
 
@@ -70,12 +71,12 @@ namespace WolvenKit
                     services.AddSingleton<LocKeyService>();
                     services.AddSingleton<ILocKeyService>(x => x.GetRequiredService<LocKeyService>());
 
-                    // red4 modding tools
-                    services.AddSingleton<Red4ParserService>();
+
                     services.AddSingleton<MeshTools>();
 
                     services.AddSingleton<ModTools>();
                     services.AddSingleton<IModTools>(x => x.GetRequiredService<ModTools>());
+                    services.AddSingleton<MockGameController>();
                     services.AddSingleton<RED4Controller>();
 
                     services.AddSingleton<IGameControllerFactory, GameControllerFactory>();
@@ -110,6 +111,9 @@ namespace WolvenKit
 
                     services.AddTransient<LaunchProfilesViewModel>();
                     services.AddTransient<IViewFor<LaunchProfilesViewModel>, LaunchProfilesView>();
+
+                    services.AddTransient<MaterialsRepositoryViewModel>();
+                    services.AddTransient<IViewFor<MaterialsRepositoryViewModel>, MaterialsRepositoryView>();
 
                     services.AddTransient<NewFileViewModel>();
                     services.AddTransient<IViewFor<NewFileViewModel>, NewFileView>();

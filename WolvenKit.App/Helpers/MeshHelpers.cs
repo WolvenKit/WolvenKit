@@ -120,7 +120,7 @@ namespace WolvenKit.ViewModels.Documents
                     textureCoordinates = new Vector2Collection(mesh.texCoords0.Length);
                     for (var i = 0; i < mesh.texCoords0.Length; i++)
                     {
-                        textureCoordinates.Add(mesh.texCoords0[i].ToVector2());
+                        textureCoordinates.Add(mesh.texCoords0[i].ToVector2Flip());
                     }
                 }
                 else
@@ -612,7 +612,7 @@ namespace WolvenKit.ViewModels.Documents
                     }
 
                     var tmp = i == 0 ? firstStream : await ImageDecoder.RenderToBitmapImageDds(streams[i], Enums.ETextureRawFormat.TRF_Grayscale);
-                    var mask = new TransformedBitmap(tmp, new ScaleTransform(1, -1));
+                    var mask = new TransformedBitmap(tmp, new ScaleTransform(1, 1));
 
                     Bitmap maskBitmap;
                     using (var outStream = new MemoryStream())

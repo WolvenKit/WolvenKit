@@ -81,10 +81,7 @@ namespace WolvenKit.CLI.Services
 
         public ColorConsoleLogger(
             string name,
-            ColorConsoleLoggerConfiguration config)
-        {
-            (_name, _config) = (name, config);
-        }
+            ColorConsoleLoggerConfiguration config) => (_name, _config) = (name, config);
 
         public IDisposable BeginScope<TState>(TState state) => default;
 
@@ -105,37 +102,17 @@ namespace WolvenKit.CLI.Services
             }
 
             var logLevelStr = "";
-            switch (logLevel)
+            logLevelStr = logLevel switch
             {
-                case LogLevel.Trace:
-                    logLevelStr = "Trace";
-                    break;
-                case LogLevel.Debug:
-                    logLevelStr = "Debug";
-                    break;
-
-
-                case LogLevel.Information:
-                    logLevelStr = "Success";
-                    break;
-                case LogLevel.Warning:
-                    logLevelStr = "Information";
-                    break;
-                case LogLevel.Error:
-                    logLevelStr = "Warning";
-                    break;
-                case LogLevel.Critical:
-                    logLevelStr = "Error";
-                    break;
-
-
-                case LogLevel.None:
-                    logLevelStr = "None";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null);
-            }
-
+                LogLevel.Trace => "Trace",
+                LogLevel.Debug => "Debug",
+                LogLevel.Information => "Success",
+                LogLevel.Warning => "Information",
+                LogLevel.Error => "Warning",
+                LogLevel.Critical => "Error",
+                LogLevel.None => "None",
+                _ => throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null),
+            };
             if (_config.EventId == 0 || _config.EventId == eventId.Id)
             {
                 var originalColor = Console.ForegroundColor;

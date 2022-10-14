@@ -5,14 +5,15 @@ using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Threading;
 using ReactiveUI;
 using Splat;
+using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Tools;
@@ -21,6 +22,8 @@ namespace WolvenKit.Views.Tools
 {
     public partial class ImportExportView : ReactiveUserControl<ImportExportViewModel>
     {
+        private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
+
         private PropertyItem _propertyItem;
         private readonly IProjectManager projectManager;
         private readonly Red4ParserService parser;
@@ -54,6 +57,7 @@ namespace WolvenKit.Views.Tools
                         x => x.ExportableItems,
                         x => x.ExportGrid.ItemsSource)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                        x => x.SelectedExport,
                        x => x.ExportGrid.SelectedItem)
@@ -63,6 +67,7 @@ namespace WolvenKit.Views.Tools
                         x => x.ImportableItems,
                         x => x.ImportGrid.ItemsSource)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                        x => x.SelectedImport,
                        x => x.ImportGrid.SelectedItem)
@@ -72,11 +77,11 @@ namespace WolvenKit.Views.Tools
                         x => x.ConvertableItems,
                         x => x.ConvertGrid.ItemsSource)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                        x => x.SelectedConvert,
                        x => x.ConvertGrid.SelectedItem)
                    .DisposeWith(disposables);
-
             });
 
             this.WhenAnyValue(x => x.ViewModel.SelectedObject)
@@ -204,7 +209,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void OnPropertyValueChanged(object sender, PropertyChangedEventArgs e) => OverlayPropertyGrid.RefreshPropertygrid();
+        private void OnPropertyValueChanged(object sender, PropertyChangedEventArgs e) => _dispatcher.Invoke(() => OverlayPropertyGrid.RefreshPropertygrid());
 
         /// <summary>
         /// Confirm Button (Advanced Options)
@@ -222,6 +227,21 @@ namespace WolvenKit.Views.Tools
                 }
 
                 ViewModel.SaveSettings();
+
+                if (ViewModel.IsImportsSelected)
+                {
+                    ImportGrid.RefreshColumns();
+                }
+
+                if (ViewModel.IsExportsSelected)
+                {
+                    ExportGrid.RefreshColumns();
+                }
+
+                if (ViewModel.IsConvertsSelected)
+                {
+                    ConvertGrid.RefreshColumns();
+                }
             }
             XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         }

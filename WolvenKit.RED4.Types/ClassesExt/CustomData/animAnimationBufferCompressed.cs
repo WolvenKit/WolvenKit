@@ -15,6 +15,14 @@ namespace WolvenKit.RED4.Types
         private const int componentRightShift = 13;
         private const int boneIdxRightShift = 0;
 
+        [RED("tempBuffer")]
+        [REDProperty(IsIgnored = true)]
+        public SerializationDeferredDataBuffer TempBuffer
+        {
+            get => GetPropertyValue<SerializationDeferredDataBuffer>();
+            set => SetPropertyValue<SerializationDeferredDataBuffer>(value);
+        }
+
         [RED("animKeys")]
         [REDProperty(IsIgnored = true)]
         public CArray<animKey> AnimKeys
@@ -136,6 +144,10 @@ namespace WolvenKit.RED4.Types
             else if (DefferedBuffer != null)
             {
                 defferedBuffer = new MemoryStream(DefferedBuffer.Buffer.GetBytes());
+            }
+            else if (TempBuffer != null)
+            {
+                defferedBuffer = new MemoryStream(TempBuffer.Buffer.GetBytes());
             }
 
             if (defferedBuffer == null)
@@ -270,7 +282,7 @@ namespace WolvenKit.RED4.Types
                 bw.Write((float)ConstTrackKeys[i].Value);
             }
 
-            DefferedBuffer.Buffer.SetBytes(defferedBuffer.ToByteArray());
+            TempBuffer.Buffer.SetBytes(defferedBuffer.ToByteArray());
         }
     }
 

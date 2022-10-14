@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Types
 {
     [RED("CName")]
     [REDType(IsValueType = true)]
-    public sealed class CName : BaseStringType, IEquatable<CName>
+    public sealed class CName : BaseStringType, IEquatable<CName>, IRedCloneable
     {
         private static readonly ConcurrentDictionary<string, ulong> s_cNameCache = new();
 
@@ -50,6 +50,14 @@ namespace WolvenKit.RED4.Types
 
         [Obsolete("Use GetRedHash instead")]
         public uint GetOldRedHash() => (uint)(_hash & 0xFFFFFFFF);
+
+        #region IRedCloneable
+
+        public object ShallowCopy() => MemberwiseClone();
+
+        public object DeepCopy() => !string.IsNullOrEmpty(_value) ? new CName(_value) : new CName(_hash);
+
+        #endregion IRedCloneable
 
         public static implicit operator CName(string value) => new(value);
         public static implicit operator string(CName value) => value?.ToString(); 
