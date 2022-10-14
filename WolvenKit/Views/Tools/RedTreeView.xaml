@@ -155,20 +155,23 @@
                             <TextBlock Foreground="{StaticResource WolvenKitTan}" Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                     </StackPanel>
-                    <TextBlock
-                        Name="PropertyDescriptor"
+                    <StackPanel
                         Grid.Column="2"
-                        Margin="0,0,4,2"
-                        Style="{StaticResource PropertyValueStyle}"
-                        Text="{Binding Descriptor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        TextTrimming="CharacterEllipsis" />
-                    <TextBlock
-                        Name="PropertyValue"
-                        Grid.Column="2"
-                        Margin="0,0,0,2"
-                        Style="{StaticResource PropertyValueStyle}"
-                        Text="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        TextTrimming="CharacterEllipsis" />
+                        Margin="0,0,4,0"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Name="PropertyDescriptor"
+                            Margin="0,0,4,2"
+                            Style="{StaticResource PropertyValueStyle}"
+                            Text="{Binding Descriptor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            Name="PropertyValue"
+                            Margin="0,0,0,2"
+                            Style="{StaticResource PropertyValueStyle}"
+                            Text="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
                 </Grid>
             </DataTemplate>
 
