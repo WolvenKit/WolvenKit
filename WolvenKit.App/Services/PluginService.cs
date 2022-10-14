@@ -119,7 +119,7 @@ namespace WolvenKit.Functionality.Services
                 if (id == EPlugin.redmod)
                 {
                     var plugin = Plugins.FirstOrDefault(x => x.Id == id);
-                    var redMod = Path.Combine(plugin.InstallPath, "redMod.exe");
+                    var redMod = Path.Combine(installPath, "redMod.exe");
                     if (File.Exists(redMod))
                     {
                         // TODO remoteVersion
@@ -153,6 +153,8 @@ namespace WolvenKit.Functionality.Services
                 {
                     case EPlugin.cyberenginetweaks:
                     case EPlugin.redscript:
+                    case EPlugin.red4ext:
+                    case EPlugin.tweakXL:
                         _pluginIds.Add(item, Path.Combine(_settings.GetRED4GameRootDir()));
                         break;
                     case EPlugin.mlsetupbuilder:
@@ -165,7 +167,7 @@ namespace WolvenKit.Functionality.Services
                         _pluginIds.Add(item, Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin"));
                         break;
                     default:
-                        break;
+                        throw new NotImplementedException();
                 }
             }
         }
@@ -282,6 +284,8 @@ namespace WolvenKit.Functionality.Services
             // extract zip file
             switch (id)
             {
+                case EPlugin.red4ext:
+                case EPlugin.tweakXL:
                 case EPlugin.cyberenginetweaks:
                 case EPlugin.redscript:
                 case EPlugin.mlsetupbuilder:
@@ -290,8 +294,10 @@ namespace WolvenKit.Functionality.Services
                 case EPlugin.wolvenkit_resources:
                     installedFiles = await Task.Run(() => InstallResources(zipPath, pluginViewModel.InstallPath));
                     break;
-                default:
+                case EPlugin.redmod:
                     break;
+                default:
+                    throw new NotImplementedException();
             }
 
             // update list

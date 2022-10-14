@@ -72,6 +72,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files").Files = ordered;
                 Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
 
+                SelectedCategory = Categories.FirstOrDefault();
             }
             catch (Exception e)
             {
@@ -121,8 +122,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
             var project = Locator.Current.GetService<IProjectManager>().ActiveProject as Cp77Project;
             return type switch
             {
-                EWolvenKitFile.Redscript => project.ScriptDirectory,
-                EWolvenKitFile.Tweak => project.TweakDirectory,
+                EWolvenKitFile.TweakXl => project.TweakDirectory,
                 EWolvenKitFile.Cr2w => project.ModDirectory,
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };

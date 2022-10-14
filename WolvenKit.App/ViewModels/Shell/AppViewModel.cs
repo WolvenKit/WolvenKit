@@ -708,8 +708,7 @@ namespace WolvenKit.ViewModels.Shell
             Stream stream = null;
             switch (file.SelectedFile.Type)
             {
-                case EWolvenKitFile.Redscript:
-                case EWolvenKitFile.Tweak:
+                case EWolvenKitFile.TweakXl:
                     if (!string.IsNullOrEmpty(file.SelectedFile.Template))
                     {
                         await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}");
@@ -1149,13 +1148,8 @@ namespace WolvenKit.ViewModels.Shell
                 case EWolvenKitFile.Cr2w:
                     fileViewModel = new RedDocumentViewModel(fullPath);
                     break;
-                case EWolvenKitFile.Redscript:
-                    fileViewModel = new ScriptDocumentViewModel(fullPath);
-                    break;
-                case EWolvenKitFile.Tweak:
-                    fileViewModel = Path.GetExtension(fullPath).ToUpper() == ".YAML"
-                        ? new TweakXLDocumentViewModel(fullPath)
-                        : new TweakDocumentViewModel(fullPath);
+                case EWolvenKitFile.TweakXl:
+                    fileViewModel = new TweakXLDocumentViewModel(fullPath);
                     break;
                 default:
                     break;
@@ -1281,6 +1275,7 @@ namespace WolvenKit.ViewModels.Shell
                 case ".yml":
                 case ".log":
                 case ".ini":
+                    //case ".yaml":
                     ShellExecute();
                     break;
 
@@ -1329,18 +1324,15 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     type = EWolvenKitFile.Cr2w;
                 }
-                var isRedscriptFile = Enum.GetNames<ERedScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
-                if (isRedscriptFile)
-                {
-                    type = EWolvenKitFile.Redscript;
-                }
+
                 var isTweakFile = Enum.GetNames<ETweakExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
                 if (isTweakFile)
                 {
-                    type = EWolvenKitFile.Tweak;
+                    type = EWolvenKitFile.TweakXl;
+                    isRedEngineFile = true;
                 }
 
-                if (isRedEngineFile || isRedscriptFile || isTweakFile)
+                if (isRedEngineFile)
                 {
                     DispatcherHelper.RunOnMainThread(() =>
                     {

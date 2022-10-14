@@ -21,8 +21,7 @@ namespace WolvenKit.Common
     public enum EWolvenKitFile
     {
         Cr2w,
-        Redscript,
-        Tweak
+        TweakXl
     }
 
     public enum ERedScriptExtension
@@ -34,7 +33,6 @@ namespace WolvenKit.Common
 
     public enum ETweakExtension
     {
-        tweak,
         yaml
     }
 

@@ -6,22 +6,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Models;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
 using YamlDotNet.Serialization;
-using WolvenKit.Models;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public class TweakXLDocumentViewModel : RedDocumentViewModel
     {
-
         private TweakDBService _tdbs;
 
-        public TweakXLDocumentViewModel(string path) : base(path)
-        {
-            _tdbs = Locator.Current.GetService<TweakDBService>();
-        }
+        public TweakXLDocumentViewModel(string path) : base(path) => _tdbs = Locator.Current.GetService<TweakDBService>();
 
         public override bool OpenFile(string path)
         {
@@ -38,6 +34,10 @@ namespace WolvenKit.ViewModels.Documents
                         .Build();
 
                     var file = deserializer.Deserialize<TweakXLFile>(reader);
+                    if (file == null)
+                    {
+                        return false;
+                    }
 
                     FilePath = path;
                     _isInitialized = true;
