@@ -23,42 +23,38 @@ namespace WolvenKit.ViewModels.Documents
         {
             _isInitialized = false;
 
-            try
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
-                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    using var reader = new StreamReader(stream);
+                FilePath = path;
 
+                try
+                {
+                    // read tweakXL file
+                    using var reader = new StreamReader(stream);
                     var deserializer = new DeserializerBuilder()
                         .WithTypeConverter(new TweakXLYamlTypeConverter())
                         .Build();
-
                     var file = deserializer.Deserialize<TweakXLFile>(reader);
-                    if (file == null)
-                    {
-                        return false;
-                    }
-
-                    FilePath = path;
-                    _isInitialized = true;
-
                     TabItemViewModels.Add(new RDTDataViewModel(file, this));
 
-                    SelectedIndex = 0;
+                    // read text file
+                    stream.Seek(0, SeekOrigin.Begin);
+                    TabItemViewModels.Add(new RDTTextViewModel(stream, this));
 
-                    SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    _loggerService.Error(ex);
+                    return false;
                 }
 
-                return true;
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                // Not processing this catch in any other way than rejecting to initialize this
-                _isInitialized = false;
+                _isInitialized = true;
+
+                SelectedIndex = 0;
+                SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
             }
 
-            return false;
+            return true;
         }
     }
 }

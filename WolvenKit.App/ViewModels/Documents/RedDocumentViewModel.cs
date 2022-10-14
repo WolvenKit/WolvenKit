@@ -182,10 +182,19 @@ namespace WolvenKit.ViewModels.Documents
             return Task.FromResult(false);
         }
 
-        public Optional<RDTDataViewModel> GetMainFile() => Optional<RDTDataViewModel>.ToOptional(TabItemViewModels
+        public Optional<RedDocumentTabViewModel> GetMainFile()
+        {
+            if (SelectedTabItemViewModel is RDTTextViewModel textVM)
+            {
+                return Optional<RedDocumentTabViewModel>.ToOptional(textVM);
+            }
+
+            var r = TabItemViewModels
             .OfType<RDTDataViewModel>()
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
-            .FirstOrDefault());
+            .FirstOrDefault();
+            return Optional<RedDocumentTabViewModel>.ToOptional(r);
+        }
 
         protected void AddTabForRedType(RedBaseClass cls)
         {

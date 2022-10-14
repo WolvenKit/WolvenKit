@@ -32,5 +32,6 @@ namespace WolvenKit
         public void Debug(string msg) => Serilog.Log.Debug(msg);
 
 
+        }
     }
 }
