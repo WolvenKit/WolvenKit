@@ -6,9 +6,11 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Nodify;
 using ReactiveUI;
+using Splat;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.App;
 using WolvenKit.Common.Conversion;
@@ -66,10 +68,12 @@ namespace WolvenKit.Views.Documents
                       view => view.CustomPG.ViewModel)
                   .DisposeWith(disposables);
 
-                /*if (Globals.ENABLE_NODE_EDITOR)
+
+                var globals = Locator.Current.GetService<IOptions<Globals>>();
+                if (globals.Value.ENABLE_NODE_EDITOR)
                 {
                     Editor.LayoutNodes();
-                }*/
+                }
 
                 //ViewModel.Nodes.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
                 //{
@@ -152,7 +156,6 @@ namespace WolvenKit.Views.Documents
         //}
 
 
-        // ENABLE_NODE_EDITOR
-        //private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e) => Editor.LayoutNodes();
+        private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e) => Editor.LayoutNodes();
     }
 }

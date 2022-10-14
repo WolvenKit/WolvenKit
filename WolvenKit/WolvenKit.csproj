@@ -120,6 +120,9 @@
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="DockStatesDefault.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1588,6 +1591,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
     <None Remove="Assimp32.dll" />
     <None Remove="Assimp64.dll" />
     <None Remove="AssimpNet.dll" />
