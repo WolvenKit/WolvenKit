@@ -30,14 +30,16 @@ namespace WolvenKit.Views.Editors
 
             if (CurrentMousePosition != PreviousMousePosition)
             {
-                MouseLocation = TransformPosition(CurrentMousePosition);
-
+                // All coordinates that the editor works with should be inside the ItemsHost. Translating coordinates is not needed if,
+                // for example, you want to move the viewport to a certain location inside the editor's space. (like focusing a node)
+                MouseLocation = e.GetPosition(ItemsHost);
                 if (IsMouseCaptured)
                 {
                     // Panning
                     if (e.MiddleButton == MouseButtonState.Pressed)
                     {
-                        Offset -= CurrentMousePosition - PreviousMousePosition;
+                        // Need to scale this by the zoom since the ItemsHost changes its transform based on the mouse delta
+                        ViewportLocation -= (CurrentMousePosition - PreviousMousePosition) / ViewportZoom;
                         IsPanning = true;
                         e.Handled = true;
                     }

@@ -168,5 +168,25 @@ namespace WolvenKit
                 //Application.Current.Shutdown();
             }
         }
+
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            if (e.Args.Length > 0)
+            {
+                foreach (var arg in e.Args)
+                {
+                    switch (arg)
+                    {
+                        // Set the global variable to enabled
+                        case "--node_editor_enabled":
+                            WolvenKit.App.Globals.ENABLE_NODE_EDITOR = true;
+                            break;
+                        default:
+                            WolvenKit.App.Globals.ENABLE_NODE_EDITOR = false;
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

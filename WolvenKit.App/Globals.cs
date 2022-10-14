@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace WolvenKit.App;
 public static class Globals
 {
-    public const bool ENABLE_NODE_EDITOR = false;
+    public static bool ENABLE_NODE_EDITOR { get; set; }
 }
