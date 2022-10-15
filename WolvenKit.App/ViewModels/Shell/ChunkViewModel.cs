@@ -358,6 +358,10 @@ namespace WolvenKit.ViewModels.Shell
                     Properties.Add(new ChunkViewModel((IRedType)ary[i], this, null, false, isreadonly));
                 }
             }
+            else if (obj is IRedRef)
+            {
+                // ignore
+            }
             else if (obj is CKeyValuePair kvp)
             {
                 for (var i = 0; i < PropertyCount; i++)
@@ -764,6 +768,10 @@ namespace WolvenKit.ViewModels.Shell
                     if (ResolvedData is IRedArray ary)
                     {
                         count += ary.Count;
+                    }
+                    else if (ResolvedData is IRedRef)
+                    {
+                        // ignore
                     }
                     else if (ResolvedData is CKeyValuePair)
                     {

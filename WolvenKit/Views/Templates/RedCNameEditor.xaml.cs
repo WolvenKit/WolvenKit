@@ -19,27 +19,27 @@ namespace WolvenKit.Views.Editors
             set => SetValue(RedStringProperty, value);
         }
         public static readonly DependencyProperty RedStringProperty = DependencyProperty.Register(
-            nameof(RedString), typeof(CName), typeof(RedCNameEditor), new PropertyMetadata(default(CName)));
+            nameof(RedString), typeof(CName), typeof(RedCNameEditor), new PropertyMetadata(default(CName), OnRedStringChanged));
 
+        private static void OnRedStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is RedCNameEditor view)
+            {
+                view.OnPropertyChanged(nameof(Text));
+                view.OnPropertyChanged(nameof(Hash));
+            }
+        }
 
         public string Text
         {
             get => RedString;
-            set
-            {
-                SetValue(RedStringProperty, (CName)value);
-                OnPropertyChanged(nameof(Hash));
-            }
+            set => SetValue(RedStringProperty, (CName)value);
         }
 
         public ulong Hash
         {
             get => RedString;
-            set
-            {
-                SetValue(RedStringProperty, (CName)value);
-                OnPropertyChanged(nameof(Text));
-            }
+            set => SetValue(RedStringProperty, (CName)value);
         }
 
         private void HashBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
