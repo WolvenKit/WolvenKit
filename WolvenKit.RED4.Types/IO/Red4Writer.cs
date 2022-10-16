@@ -633,10 +633,15 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(IRedResourceReference instance)
         {
-            if (instance.DepotPath == "")
+            if (instance.DepotPath == CName.Empty)
             {
                 _writer.Write((ushort)0);
                 return;
+            }
+
+            if (!instance.DepotPath.IsResolvable)
+            {
+                throw new Exception("Can't write unresolvable path!");
             }
 
             var val = new ImportEntry("", instance.DepotPath, (ushort)instance.Flags);
@@ -647,10 +652,15 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(IRedResourceAsyncReference instance)
         {
-            if (instance.DepotPath == "")
+            if (instance.DepotPath == CName.Empty)
             {
                 _writer.Write((ushort)0);
                 return;
+            }
+
+            if (!instance.DepotPath.IsResolvable)
+            {
+                throw new Exception("Can't write unresolvable path!");
             }
 
             var val = new ImportEntry("", instance.DepotPath, (ushort)instance.Flags);

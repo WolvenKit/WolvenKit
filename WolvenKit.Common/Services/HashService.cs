@@ -92,13 +92,10 @@ namespace WolvenKit.Common.Services
             {
                 return _hashes[key].ToString();
             }
+
             if (_userHashes.ContainsKey(key))
             {
                 return _userHashes[key].ToString();
-            }
-            if (_missing.Contains(key))
-            {
-                return string.Empty;
             }
 
             if (_projectHashes.ContainsKey(key))
@@ -113,7 +110,7 @@ namespace WolvenKit.Common.Services
                 return _additionalhashes[key].ToString();
             }
 
-            return string.Empty;
+            return null;
         }
 
         public string GetNodeRef(ulong key)
