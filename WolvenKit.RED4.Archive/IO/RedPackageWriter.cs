@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             var typeInfo = RedReflection.GetTypeInfo(cls);
 
-            var nonDefaultProperties = new List<RedReflection.ExtendedPropertyInfo>();
+            var nonDefaultProperties = new List<ExtendedPropertyInfo>();
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = cls.GetProperty(propertyInfo.RedName);

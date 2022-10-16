@@ -483,7 +483,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
             throw new JsonException();
         }
 
-        RedReflection.ExtendedTypeInfo? typeInfo = null;
+        ExtendedTypeInfo? typeInfo = null;
 
         RedBaseClass? cls = null;
         string? clsType;
