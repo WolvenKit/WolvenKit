@@ -557,6 +557,7 @@ namespace WolvenKit.RED4.Types
             public Type Type { get; set; }
             public bool IsBitfield { get; set; }
 
+            public List<string> Names { get; set; } = new();
             public Dictionary<string, string> RedNames { get; set; } = new();
 
             public ExtendedEnumInfo(Type type)
@@ -567,8 +568,9 @@ namespace WolvenKit.RED4.Types
                 var valueNames = Enum.GetNames(Type);
                 foreach (var valueName in valueNames)
                 {
-                    var member = Type.GetMember(valueName);
+                    Names.Add(valueName);
 
+                    var member = Type.GetMember(valueName);
                     var redAttr = member[0].GetCustomAttribute<REDAttribute>();
                     if (redAttr != null)
                     {
@@ -579,12 +581,17 @@ namespace WolvenKit.RED4.Types
 
             public string GetCSNameFromRedName(string valueName)
             {
+                if (Names.Contains(valueName))
+                {
+                    return valueName;
+                }
+
                 if (RedNames.ContainsKey(valueName))
                 {
                     return RedNames[valueName];
                 }
 
-                return valueName;
+                return null;
             }
 
             public string GetRedNameFromCSName(string valueName)

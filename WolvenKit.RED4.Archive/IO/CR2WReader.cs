@@ -118,7 +118,7 @@ namespace WolvenKit.RED4.Archive.IO
                 var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
                 if (type != prop.Type)
                 {
-                    var args = new InvalidRTTIEventArgs(prop.Type, type, value);
+                    var args = new InvalidRTTIEventArgs(propName, prop.Type, type, value);
                     if (!HandleParsingError(args))
                     {
                         throw new InvalidRTTIException(propName, prop.Type, type);

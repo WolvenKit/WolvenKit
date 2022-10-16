@@ -235,12 +235,11 @@ public class TweakDBReader : Red4Reader
 
                 if (valueType != propertyInfo.Type)
                 {
-                    var args = new InvalidRTTIEventArgs(propertyInfo.Type, valueType, value);
+                    var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
+                    var args = new InvalidRTTIEventArgs(propName, propertyInfo.Type, valueType, value);
                     if (!HandleParsingError(args))
                     {
-                        var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
                         throw new InvalidRTTIException(propName, propertyInfo.Type, valueType);
-
                     }
                     value = args.Value;
                 }

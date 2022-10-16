@@ -474,6 +474,11 @@ namespace WolvenKit.RED4.Archive.IO
                 dataOffset = (uint)file.BaseStream.Position
             };
 
+            if (chunkData is CDistantLightsResource)
+            {
+                // TODO: Forcing CDistantLightsResource buffers to be inline, please improve
+                file.IsRoot = false;
+            }
             file.WriteClass(chunkData);
 
             result.dataSize = (uint)(file.BaseStream.Position - result.dataOffset);
@@ -599,7 +604,7 @@ namespace WolvenKit.RED4.Archive.IO
                 var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content);
                 SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
 
-                var tuple = new ImportEntry("", embeddedFile.FileName, 8);
+                var tuple = new ImportEntry(CName.Empty, embeddedFile.FileName, 8);
                 if (result.ImportList.All(x => x.DepotPath != tuple.DepotPath))
                 {
                     result.ImportList.Add(tuple);
@@ -697,7 +702,10 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var str in strings)
             {
                 offsetDict.Add(str, (uint)bytes.Count);
-                bytes.AddRange(encoding.GetBytes(str));
+                if (str != CName.Empty)
+                {
+                    bytes.AddRange(encoding.GetBytes(str));
+                }
                 bytes.Add(0);
             }
             return (bytes.ToArray(), offsetDict);

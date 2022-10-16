@@ -60,12 +60,11 @@ namespace WolvenKit.RED4.Archive.IO
 
                     if (fieldType != prop.Type)
                     {
-                        var args = new InvalidRTTIEventArgs(prop.Type, fieldType, value);
+                        var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
+                        var args = new InvalidRTTIEventArgs(propName, prop.Type, fieldType, value);
                         if (!HandleParsingError(args))
                         {
-                            var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
                             throw new InvalidRTTIException(propName, prop.Type, fieldType);
-                            
                         }
                         value = args.Value;
                     }
@@ -126,10 +125,8 @@ namespace WolvenKit.RED4.Archive.IO
             return (IRedBitField)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { Enum.Parse(redTypeInfos[0].RedObjectType, enumString) }, null);
         }
 
-        public override IRedHandle<T> ReadCHandle<T>()
+        public override IRedHandle ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
         {
-            var handle = new CHandle<T>();
-
             int pointer;
             if (header.version == 2)
             {
@@ -144,14 +141,17 @@ namespace WolvenKit.RED4.Archive.IO
                 throw new NotImplementedException(nameof(ReadCHandle));
             }
 
+            var type = RedReflection.GetFullType(redTypeInfos);
+            var result = (IRedHandle)Activator.CreateInstance(type);
+
             if (!HandleQueue.ContainsKey(pointer))
             {
                 HandleQueue.Add(pointer, new List<IRedBaseHandle>());
             }
 
-            HandleQueue[pointer].Add(handle);
+            HandleQueue[pointer].Add(result);
 
-            return handle;
+            return result;
         }
 
         public override IRedWeakHandle ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)

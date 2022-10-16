@@ -5,7 +5,7 @@ using WolvenKit.RED4.Types.Pools;
 namespace WolvenKit.RED4.Types
 {
     [RED("CName")]
-    [DebuggerDisplay("{_hash}", Type = "CName")]
+    [DebuggerDisplay("{GetResolvedText()}", Type = "CName")]
     public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CName>, IComparable<CName>, IComparable
     {
         public static CName Empty = 0;
