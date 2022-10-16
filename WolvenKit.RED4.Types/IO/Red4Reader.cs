@@ -257,6 +257,7 @@ namespace WolvenKit.RED4.IO
 
             var redType = GetStringValue(_reader.ReadUInt16());
             var redTypeInfos = RedReflection.GetRedTypeInfos(redType);
+            CheckRedTypeInfos(ref redTypeInfos);
 
             var size = _reader.ReadUInt32() - 4;
             if (size > 0)
@@ -563,6 +564,22 @@ namespace WolvenKit.RED4.IO
         #endregion RTTI Reader
 
         #region Helper
+
+        protected internal void CheckRedTypeInfos(ref List<RedTypeInfo> redTypeInfos)
+        {
+            for (int i = 0; i < redTypeInfos.Count; i++)
+            {
+                if (redTypeInfos[i] is SpecialRedTypeInfo { SpecialRedType: SpecialRedType.Mixed } specialRedTypeInfo)
+                {
+                    var args = new UnknownTypeEventArgs(specialRedTypeInfo.RedName);
+                    if (!HandleParsingError(args))
+                    {
+                        throw new Exception($"Type \"{specialRedTypeInfo.RedName}\" is not known!");
+                    }
+                    redTypeInfos[i] = args.Result;
+                }
+            }
+        }
 
         protected IRedType ThrowNotImplemented([CallerMemberName] string callerMemberName = "")
         {

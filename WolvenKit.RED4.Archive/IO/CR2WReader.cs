@@ -95,6 +95,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
             var redTypeInfos = RedReflection.GetRedTypeInfos(typename);
+            CheckRedTypeInfos(ref redTypeInfos);
 
             var typeInfo = RedReflection.GetTypeInfo(cls);
 

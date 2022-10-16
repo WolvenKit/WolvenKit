@@ -39,6 +39,7 @@ namespace WolvenKit.RED4.Archive.IO
                 var typeName = GetStringValue(f.typeID);
                 var (fieldType, flags) = RedReflection.GetCSTypeFromRedType(typeName);
                 var redTypeInfos = RedReflection.GetRedTypeInfos(typeName);
+                CheckRedTypeInfos(ref redTypeInfos);
 
                 var prop = typeInfo.GetPropertyInfoByRedName(varName);
                 if (prop == null)

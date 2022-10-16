@@ -41,3 +41,14 @@ public class InvalidEnumValueEventArgs : ParsingErrorEventArgs
         Value = default;
     }
 }
+
+public class UnknownTypeEventArgs : ParsingErrorEventArgs
+{
+    public string RedName { get; }
+    public RedTypeInfo Result { get; set; }
+
+    public UnknownTypeEventArgs(string redName)
+    {
+        RedName = redName;
+    }
+}
