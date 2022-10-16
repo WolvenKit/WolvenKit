@@ -129,6 +129,7 @@ namespace WolvenKit.ViewModels.Tools
             AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
             FindUsesCommand = ReactiveCommand.CreateFromTask(FindUses);
             FindUsingCommand = ReactiveCommand.CreateFromTask(FindUsing);
+            BrowseToFolderCommand = new DelegateCommand(BrowseToFolder, CanOpenFileOnly).ObservesProperty(() => RightSelectedItem);
             LoadAssetBrowserCommand = ReactiveCommand.CreateFromTask(LoadAssetBrowser);
 
             OpenWolvenKitSettingsCommand = new DelegateCommand(OpenWolvenKitSettings, CanOpenWolvenKitSettings);
@@ -285,7 +286,6 @@ namespace WolvenKit.ViewModels.Tools
                     var usedBy = await db.Files.Include("Uses")
                         .Where(x => x.Uses.Any(y => y.Hash == hash))
                         .Select(x => x.Hash)
-                        .ToAsyncEnumerable()
                         .ToListAsync();
 
                     //add all found items to
@@ -348,7 +348,6 @@ namespace WolvenKit.ViewModels.Tools
                     var uses = await db.Files.Include("Archive").Include("Uses")
                         .Where(x => x.Archive.Name == file.ArchiveName && x.Hash == hash)
                         .Select(x => x.Uses.Select(y => y.Hash))
-                        .ToAsyncEnumerable()
                         .ToListAsync();
 
                     //add all found items to
@@ -369,6 +368,33 @@ namespace WolvenKit.ViewModels.Tools
             });
 
             _progressService.IsIndeterminate = false;
+        }
+
+        /// <summary>
+        /// Browse the left side folder tree to the folder containing the selected item. (e.g. for after searching)
+        /// </summary>
+        public ICommand BrowseToFolderCommand { get; private set; }
+        private void BrowseToFolder()
+        {
+            if (RightSelectedItem is RedFileViewModel file)
+            {
+                var fullPath = "";
+                var parentDir = LeftItems.ElementAt(0);
+                parentDir.IsExpanded = true;
+
+                foreach (var dir in file.GetParentPath().Split(Path.DirectorySeparatorChar))
+                {
+                    fullPath += dir;
+                    parentDir = parentDir.Directories
+                        .Where(x => x.Key == fullPath)
+                        .First()
+                        .Value;
+                    parentDir.IsExpanded = true;
+                    fullPath += Path.DirectorySeparatorChar;
+                }
+                MoveToFolder(parentDir);
+                RightSelectedItem = RightItems.Where(x => x.FullName == file.FullName).First();
+            }
         }
 
         /// <summary>
@@ -563,22 +589,8 @@ namespace WolvenKit.ViewModels.Tools
 
             if (list.Count > 0)
             {
-                var fullPath = "";
-                var parentDir = LeftItems.ElementAt(0);
-                parentDir.IsExpanded = true;
-
-                foreach (var dir in file.RelativePath.Split(Path.DirectorySeparatorChar).SkipLast(1))
-                {
-                    fullPath += dir;
-                    parentDir = parentDir.Directories
-                        .Where(x => x.Key == fullPath)
-                        .First()
-                        .Value;
-                    parentDir.IsExpanded = true;
-                    fullPath += Path.DirectorySeparatorChar;
-                }
-                MoveToFolder(parentDir);
-                RightSelectedItem = RightItems.Where(x => x.FullName == file.RelativePath).FirstOrDefault();
+                RightSelectedItem = list.First();
+                BrowseToFolder();
             }
             else
             {
