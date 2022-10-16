@@ -81,19 +81,36 @@ namespace WolvenKit.ViewModels.Documents
 
         public override Task OnSave(object parameter)
         {
-            using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
+            var tmpPath = Path.ChangeExtension(FilePath, ".tmp");
+
+            using var fs = new FileStream(tmpPath, FileMode.Create, FileAccess.ReadWrite);
             var file = GetMainFile();
-            if (file.HasValue)
+            if (file.HasValue && Cr2wFile != null)
             {
-                var resource = Cr2wFile;
-                if (resource is CR2WFile cr2w)
+                try
                 {
                     using var writer = new CR2WWriter(fs);
-                    writer.WriteFile(cr2w);
-
-                    SetIsDirty(false);
-                    _loggerService.Success($"Saved file {FilePath}");
+                    writer.WriteFile(Cr2wFile);
                 }
+                catch (Exception e)
+                {
+                    _loggerService.Error($"Error while saving {FilePath}");
+                    _loggerService.Error(e);
+
+                    fs.Dispose();
+                    File.Delete(tmpPath);
+
+                    return Task.CompletedTask;
+                }
+
+                if (File.Exists(FilePath))
+                {
+                    File.Delete(FilePath);
+                }
+                File.Move(tmpPath, FilePath);
+
+                SetIsDirty(false);
+                _loggerService.Success($"Saved file {FilePath}");
             }
 
             return Task.CompletedTask;
