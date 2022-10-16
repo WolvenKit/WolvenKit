@@ -24,6 +24,7 @@ namespace WolvenKit.Functionality.Services
 
     }
 
+    // NOTE do not change the order of this
     public enum EPlugin
     {
         [Id("CyberEngineTweaks", "yamashi/cyberenginetweaks", @"cet.*\.zip", "Cyberpunk 2077 tweaks, hacks and scripting framework.")]
@@ -35,7 +36,11 @@ namespace WolvenKit.Functionality.Services
         [Id("Wolvenkit Resources", "WolvenKit/Wolvenkit-Resources", @"resources.zip", "Resource depot for Wolvenkit.")]
         wolvenkit_resources,
         [Id("RedMod", "", @"redmod.zip", "RedMod tools.")]
-        redmod
+        redmod,
+        [Id("Red4Ext", "WopsS/RED4ext", @"red4ext.*\.zip", "A script extender for REDengine 4 (Cyberpunk 2077).")]
+        red4ext,
+        [Id("TweakXL", "psiberx/cp2077-tweak-xl", @"TweakXL.*\.zip", "Cyberpunk 2077 mod that allows you to modify TweakDB.")]
+        tweakXL,
     }
 
     [AttributeUsage(AttributeTargets.Field)]

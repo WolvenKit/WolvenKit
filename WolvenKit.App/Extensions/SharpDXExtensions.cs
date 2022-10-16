@@ -5,6 +5,7 @@ namespace WolvenKit.Functionality.Extensions
     public static class SharpDXExtensions
     {
         public static SharpDX.Vector2 ToVector2(this System.Numerics.Vector2 v) => new(v.X, v.Y);
+        public static SharpDX.Vector2 ToVector2Flip(this System.Numerics.Vector2 v) => new(v.X, v.Y * -1);
 
         public static SharpDX.Vector3 ToVector3(this System.Numerics.Vector3 v) => new(v.X, v.Y, v.Z);
 

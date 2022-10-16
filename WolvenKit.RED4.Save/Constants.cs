@@ -52,6 +52,7 @@ namespace WolvenKit.RED4.Save
         }
         public static class NodeNames
         {
+            public const string ARCADE_SYSTEM = "ArcadeSystem";
             public const string C_ATTITUDE_MANAGER = "CAttitudeManager";
             public const string C_COVER_MANAGER = "CCoverManager";
             public const string CHARACTER_CUSTOMIZATION_APPEARANCES_NODE = "CharacetrCustomization_Appearances";
@@ -100,6 +101,8 @@ namespace WolvenKit.RED4.Save
             public const string TIER_SYSTEM = "tierSystem";
             public const string TIME_CORE = "\"Core\"";
             public const string UNIQUE_ITEM_COUNTER = "UniqueItemCounter";
+            public const string WARDROBE_SYSTEM = "WardrobeSystem";
+            public const string WARDROBE_SYSTEM_CLOTHING_SETS = "WardrobeSystem_ClothingSets";
             public const string WORKSPOT_INSTANCES_SAVEDATA = "WorkspotInstancesSavedata";
         }
     }

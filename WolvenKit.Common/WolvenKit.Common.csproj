@@ -34,7 +34,6 @@
     <EmbeddedResource Include="Resources\noderefs.kark" />
     <EmbeddedResource Include="Resources\usedhashes.kark" />
     <EmbeddedResource Include="Resources\tweakdbstr.kark" />
-    <EmbeddedResource Include="Resources\tweakdbstr_add.kark" />
   </ItemGroup>
 
   <ItemGroup>

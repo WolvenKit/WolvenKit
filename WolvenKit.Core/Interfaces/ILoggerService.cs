@@ -1,14 +1,13 @@
-using DynamicData;
 using System;
-using WolvenKit.Common.Services;
+using DynamicData;
+using Microsoft.Build.Framework;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Core.Interfaces;
 
 public interface ILoggerService
 {
-    public void Log(string msg, Logtype type = Logtype.Normal);
-
     public void Info(string s);
 
     public void Warning(string s);
@@ -25,4 +24,8 @@ public interface ILoggerService
 
 
     public void Error(Exception exception);
+
+    public LoggerVerbosity LoggerVerbosity { get; }
+
+    public void SetLoggerVerbosity(LoggerVerbosity verbosity);
 }

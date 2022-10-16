@@ -120,7 +120,7 @@ namespace WolvenKit.ViewModels.Documents
                     textureCoordinates = new Vector2Collection(mesh.texCoords0.Length);
                     for (var i = 0; i < mesh.texCoords0.Length; i++)
                     {
-                        textureCoordinates.Add(mesh.texCoords0[i].ToVector2());
+                        textureCoordinates.Add(mesh.texCoords0[i].ToVector2Flip());
                     }
                 }
                 else

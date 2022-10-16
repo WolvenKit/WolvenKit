@@ -59,28 +59,11 @@
                             <documents:RedDocumentView />
                         </Grid>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type docvm:TweakDocumentViewModel}">
-                        <Grid>
-                            <documents:TweakDocumentView />
-                        </Grid>
-                    </DataTemplate>
                     <DataTemplate DataType="{x:Type docvm:ScriptDocumentViewModel}">
                         <Grid>
                             <documents:ScriptDocumentView />
                         </Grid>
                     </DataTemplate>
-
-                    <!--<DataTemplate DataType="{x:Type viewmodels:CodeEditorViewModel}">
-                        <Grid>
-                            <views:CodeEditorView />
-                        </Grid>
-                    </DataTemplate>-->
-
-                    <!--<DataTemplate DataType="{x:Type viewmodels:VisualEditorViewModel}">
-                        <Grid>
-                            <views1:VisualEditorView />
-                        </Grid>
-                    </DataTemplate>-->
 
                 </ResourceDictionary>
 

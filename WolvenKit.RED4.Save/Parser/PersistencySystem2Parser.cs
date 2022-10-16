@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.IO;
@@ -9,8 +10,7 @@ namespace WolvenKit.RED4.Save;
 public class PS2Entry
 {
     public ulong Id { get; set; }
-    public Type? Type { get; set; }
-    public RedBaseClass? Data { get; set; }
+    public RedBaseClass Data { get; set; }
 }
 
 public class PersistencySystem2 : INodeData
@@ -18,6 +18,12 @@ public class PersistencySystem2 : INodeData
     public List<uint> Ids { get; set; } = new();
     public uint Unk1 { get; set; }
     public List<PS2Entry> Entries { get; set; } = new();
+}
+
+public class UnknownRedClass : RedBaseClass
+{
+    public ulong Hash { get; set; } = 0;
+    public byte[] Buffer { get; set; } = Array.Empty<byte>();
 }
 
 public class PersistencySystem2Reader : Red4Reader
@@ -40,10 +46,8 @@ public class PersistencySystem2Reader : Red4Reader
 
     public long Remaining => BaseStream.Length - BaseStream.Position;
 
-    public override RedBaseClass ReadClass(Type type, uint size)
+    public override void ReadClass(RedBaseClass instance, uint size)
     {
-        var instance = RedTypeManager.Create(type);
-
         while (Remaining != 0)
         {
             var propNameHash = BaseReader.ReadUInt64();
@@ -52,7 +56,7 @@ public class PersistencySystem2Reader : Red4Reader
                 break;
             }
 
-            var propertyInfo = ClassHashHelper.GetPropertyInfo(type, propNameHash);
+            var propertyInfo = ClassHashHelper.GetPropertyInfo(instance.GetType(), propNameHash);
             if (propertyInfo == null)
             {
                 throw new Exception();
@@ -71,6 +75,13 @@ public class PersistencySystem2Reader : Red4Reader
             var value = Read(redTypeInfos, (uint)Remaining);
             instance.SetProperty(propertyInfo.RedName, value);
         }
+    }
+
+    public override RedBaseClass ReadClass(Type type, uint size)
+    {
+        var instance = RedTypeManager.Create(type);
+
+        ReadClass(instance, size);
 
         return instance;
     }
@@ -247,19 +258,46 @@ public class PersistencySystem2Parser : INodeParser
                 var classHash = reader.ReadUInt64();
                 var size = reader.ReadUInt32();
 
+                Type? type = null;
                 if (classHash != 0)
                 {
-                    entry.Type = ClassHashHelper.GetTypeFromHash(classHash)!;
+                    type = ClassHashHelper.GetTypeFromHash(classHash)!;
                 }
 
-                if (size != 0 && classHash != 0)
+                var startPos = reader.BaseStream.Position;
+                if (type != null)
                 {
-                    using var subMemory = new MemoryStream(reader.ReadBytes((int)size));
-                    using var subReader = new PersistencySystem2Reader(subMemory);
+                    try
+                    {
+                        var instance1 = RedTypeManager.Create(type);
+                        if (size != 0)
+                        {
+                            using var subMemory = new MemoryStream(reader.ReadBytes((int)size));
+                            using var subReader = new PersistencySystem2Reader(subMemory);
 
-                    entry.Data = subReader.ReadClass(entry.Type, size);
+                            subReader.ReadClass(instance1, size);
+                        }
+                        entry.Data = instance1;
+
+                        result.Entries.Add(entry);
+                        continue;
+                    }
+                    catch (Exception)
+                    {
+                        // could not resolve a property, fall back to Unknown cls
+                    }
                 }
+
+                reader.BaseStream.Position = startPos;
+
+                var instance2 = new UnknownRedClass { Hash = classHash };
+                if (size != 0)
+                {
+                    instance2.Buffer = reader.ReadBytes((int)size);
+                }
+                entry.Data = instance2;
             }
+
             result.Entries.Add(entry);
         }
 
@@ -284,17 +322,16 @@ public class PersistencySystem2Parser : INodeParser
             writer.Write(entry.Id);
             if (entry.Id != 0)
             {
-                if (entry.Type != null)
+                if (entry.Data is UnknownRedClass unk)
                 {
-                    writer.Write(ClassHashHelper.GetHashFromType(entry.Type));
+                    writer.Write(unk.Hash);
+                    writer.Write(unk.Buffer.Length);
+                    writer.Write(unk.Buffer);
                 }
                 else
                 {
-                    writer.Write((ulong)0);
-                }
+                    writer.Write(ClassHashHelper.GetHashFromType(entry.Data.GetType()));
 
-                if (entry.Data != null)
-                {
                     using var subMemory = new MemoryStream();
                     using var subWriter = new PersistencySystem2Writer(subMemory);
 
@@ -303,10 +340,6 @@ public class PersistencySystem2Parser : INodeParser
                     var bytes = subMemory.ToArray()[..^8];
                     writer.Write(bytes.Length);
                     writer.Write(bytes);
-                }
-                else
-                {
-                    writer.Write(0);
                 }
             }
         }

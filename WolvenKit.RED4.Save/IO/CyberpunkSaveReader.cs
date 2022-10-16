@@ -57,7 +57,7 @@ public class CyberpunkSaveReader
             return result;
         }
 
-        if (((CyberpunkSaveHeaderStruct)info).gameVersion != (ulong)Enums.gameGameVersion.CP77_Patch_1_5_Actual_Hotfix1)
+        if (((CyberpunkSaveHeaderStruct)info).gameVersion != (ulong)Enums.gameGameVersion.CP77_Patch_1_6)
         {
             file = null;
             return EFileReadErrorCodes.UnsupportedVersion;

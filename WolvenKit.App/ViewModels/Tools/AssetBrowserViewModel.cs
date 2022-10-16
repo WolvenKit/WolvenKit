@@ -606,11 +606,11 @@ namespace WolvenKit.ViewModels.Tools
                     if (e is RegexMatchTimeoutException rex)
                     {
                         // C# heredoc pls
-                        _loggerService.Log($@"Search took too long! Try to simplify or use refinements? Careful with !. Error: {rex.Message}", Logtype.Error);
+                        _loggerService.Error($@"Search took too long! Try to simplify or use refinements? Careful with !. Error: {rex.Message}");
                     }
                     else
                     {
-                        _loggerService.Log($"Search error: {e.Message}", Logtype.Error);
+                        _loggerService.Error($"Search error: {e.Message}");
                     }
                 }
             }
