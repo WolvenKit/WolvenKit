@@ -1,7 +1,10 @@
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Splat;
+using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -11,7 +14,14 @@ namespace WolvenKit.Views.Editors
     /// </summary>
     public partial class RedCNameEditor : INotifyPropertyChanged
     {
-        public RedCNameEditor() => InitializeComponent();
+        private readonly ISettingsManager _settingsManager;
+
+        public RedCNameEditor()
+        {
+            InitializeComponent();
+
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+        }
 
         public CName RedString
         {
@@ -36,17 +46,44 @@ namespace WolvenKit.Views.Editors
             set => SetValue(RedStringProperty, (CName)value);
         }
 
-        public ulong Hash
+        public string Hash
         {
-            get => RedString;
-            set => SetValue(RedStringProperty, (CName)value);
+            get
+            {
+                if (_settingsManager.ShowCNameAsHex)
+                {
+                    return ((ulong)RedString).ToString("X");
+                }
+                else
+                {
+                    return ((ulong)RedString).ToString();
+                }
+            }
+            set
+            {
+                if (_settingsManager.ShowCNameAsHex)
+                {
+                    SetValue(RedStringProperty, (CName)ulong.Parse(value, NumberStyles.HexNumber));
+                }
+                else
+                {
+                    SetValue(RedStringProperty, (CName)ulong.Parse(value));
+                }
+            }
         }
 
         private void HashBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, e.Text);
 
-            e.Handled = !ulong.TryParse(full, out _);
+            if (_settingsManager.ShowCNameAsHex)
+            {
+                e.Handled = !ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _);
+            }
+            else
+            {
+                e.Handled = !ulong.TryParse(full, out _);
+            }
         }
 
         private void HashBox_OnPasting(object sender, DataObjectPastingEventArgs e)
@@ -55,9 +92,20 @@ namespace WolvenKit.Views.Editors
             {
                 var text = (string)e.DataObject.GetData(typeof(string));
                 var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text!);
-                if (!ulong.TryParse(full, out _))
+
+                if (_settingsManager.ShowCNameAsHex)
                 {
-                    e.CancelCommand();
+                    if (!ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _))
+                    {
+                        e.CancelCommand();
+                    }
+                }
+                else
+                {
+                    if (!ulong.TryParse(full, out _))
+                    {
+                        e.CancelCommand();
+                    }
                 }
             }
             else

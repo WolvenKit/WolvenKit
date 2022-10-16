@@ -1,7 +1,10 @@
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Splat;
+using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -11,8 +14,14 @@ namespace WolvenKit.Views.Editors
     /// </summary>
     public partial class RedTweakEditor : INotifyPropertyChanged
     {
+        private readonly ISettingsManager _settingsManager;
 
-        public RedTweakEditor() => InitializeComponent();
+        public RedTweakEditor()
+        {
+            InitializeComponent();
+
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+        }
 
         public TweakDBID RedString
         {
@@ -20,26 +29,47 @@ namespace WolvenKit.Views.Editors
             set => SetValue(RedStringProperty, value);
         }
         public static readonly DependencyProperty RedStringProperty = DependencyProperty.Register(
-            nameof(RedString), typeof(TweakDBID), typeof(RedTweakEditor), new PropertyMetadata(default(TweakDBID)));
+            nameof(RedString), typeof(TweakDBID), typeof(RedTweakEditor), new PropertyMetadata(default(TweakDBID), OnRedStringChanged));
+
+        private static void OnRedStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is RedTweakEditor view)
+            {
+                view.OnPropertyChanged(nameof(Text));
+                view.OnPropertyChanged(nameof(Hash));
+            }
+        }
 
 
         public string Text
         {
             get => RedString;
-            set
-            {
-                SetValue(RedStringProperty, (TweakDBID)value);
-                OnPropertyChanged(nameof(Hash));
-            }
+            set => SetValue(RedStringProperty, (TweakDBID)value);
         }
 
-        public ulong Hash
+        public string Hash
         {
-            get => RedString;
+            get
+            {
+                if (_settingsManager.ShowTweakDBIDAsHex)
+                {
+                    return ((ulong)RedString).ToString("X");
+                }
+                else
+                {
+                    return ((ulong)RedString).ToString();
+                }
+            }
             set
             {
-                SetValue(RedStringProperty, (TweakDBID)value);
-                OnPropertyChanged(nameof(Text));
+                if (_settingsManager.ShowTweakDBIDAsHex)
+                {
+                    SetValue(RedStringProperty, (TweakDBID)ulong.Parse(value, NumberStyles.HexNumber));
+                }
+                else
+                {
+                    SetValue(RedStringProperty, (TweakDBID)ulong.Parse(value));
+                }
             }
         }
 
@@ -47,7 +77,14 @@ namespace WolvenKit.Views.Editors
         {
             var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, e.Text);
 
-            e.Handled = !ulong.TryParse(full, out _);
+            if (_settingsManager.ShowTweakDBIDAsHex)
+            {
+                e.Handled = !ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _);
+            }
+            else
+            {
+                e.Handled = !ulong.TryParse(full, out _);
+            }
         }
 
         private void HashBox_OnPasting(object sender, DataObjectPastingEventArgs e)
@@ -56,9 +93,20 @@ namespace WolvenKit.Views.Editors
             {
                 var text = (string)e.DataObject.GetData(typeof(string));
                 var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text!);
-                if (!ulong.TryParse(full, out _))
+
+                if (_settingsManager.ShowTweakDBIDAsHex)
                 {
-                    e.CancelCommand();
+                    if (!ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _))
+                    {
+                        e.CancelCommand();
+                    }
+                }
+                else
+                {
+                    if (!ulong.TryParse(full, out _))
+                    {
+                        e.CancelCommand();
+                    }
                 }
             }
             else

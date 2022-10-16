@@ -47,7 +47,10 @@ namespace WolvenKit.Functionality.Services
                 nameof(ReddbHash),
                 nameof(TreeViewGroups),
                 nameof(TreeViewGroupSize),
-                nameof(ShowAdvancedOptions)
+                nameof(ShowAdvancedOptions),
+                nameof(ShowCNameAsHex),
+                nameof(ShowNodeRefAsHex),
+                nameof(ShowTweakDBIDAsHex)
                 )
               .Subscribe(_ =>
               {
@@ -195,6 +198,21 @@ namespace WolvenKit.Functionality.Services
         [Display(Name = "Show advanced Options")]
         [Reactive]
         public bool ShowAdvancedOptions { get; set; }
+
+        [Category("Display")]
+        [Display(Name = "Show CName hashes as hex")]
+        [Reactive]
+        public bool ShowCNameAsHex { get; set; }
+
+        [Category("Display")]
+        [Display(Name = "Show NodeRef hashes as hex")]
+        [Reactive]
+        public bool ShowNodeRefAsHex { get; set; }
+
+        [Category("Display")]
+        [Display(Name = "Show TweakDBID hashes as hex")]
+        [Reactive]
+        public bool ShowTweakDBIDAsHex { get; set; }
 
         [Reactive]
         [Browsable(false)]
