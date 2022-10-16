@@ -305,6 +305,7 @@
                                     <Separator />
                                     <MenuItem x:Name="RightContextMenuFindUsesMenuItem" Header="Find used files" />
                                     <MenuItem x:Name="RightContextMenuFindUsingMenuItem" Header="Find files using this" />
+                                    <MenuItem x:Name="RightContextMenuBrowseToFolder" Header="Browse to asset folder" />
                                     <Separator />
                                     <MenuItem x:Name="RightContextMenuCopyPathMenuItem" Header="Copy Relative Path" />
                                 </ContextMenu>
