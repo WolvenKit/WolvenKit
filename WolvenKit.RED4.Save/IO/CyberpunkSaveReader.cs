@@ -5,7 +5,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save.IO;
 
-public class CyberpunkSaveReader
+public class CyberpunkSaveReader : IErrorHandler
 {
     private BinaryReader _reader;
 
@@ -137,7 +137,15 @@ public class CyberpunkSaveReader
             {
                 if (!node.ReadByParent)
                 {
-                    ParserHelper.ReadNode(reader, node);
+                    reader.BaseStream.Position = node.Offset;
+                    reader.ReadInt32(); // nodeId
+                    var parser = ParserHelper.GetParser(node.Name);
+                    if (parser is IErrorHandler errorHandler)
+                    {
+                        errorHandler.ParsingError += HandleParsingError;
+                    }
+
+                    parser.Read(reader, node);
                 }
             }
         }
@@ -255,4 +263,7 @@ public class CyberpunkSaveReader
         }
     }
 
+    public event ParsingErrorEventHandler? ParsingError;
+
+    protected virtual bool HandleParsingError(ParsingErrorEventArgs e) => ParsingError != null && ParsingError.Invoke(e);
 }
