@@ -129,7 +129,7 @@ namespace WolvenKit.ViewModels.Tools
             AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
             FindUsesCommand = ReactiveCommand.CreateFromTask(FindUses);
             FindUsingCommand = ReactiveCommand.CreateFromTask(FindUsing);
-            BrowseToFolderCommand = new DelegateCommand(BrowseToFolder, CanOpenFileOnly).ObservesProperty(() => RightSelectedItem);
+            BrowseToFolderCommand = new DelegateCommand(BrowseToFolder, CanBrowseToFolder).ObservesProperty(() => RightSelectedItem);
             LoadAssetBrowserCommand = ReactiveCommand.CreateFromTask(LoadAssetBrowser);
 
             OpenWolvenKitSettingsCommand = new DelegateCommand(OpenWolvenKitSettings, CanOpenWolvenKitSettings);
@@ -374,6 +374,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Browse the left side folder tree to the folder containing the selected item. (e.g. for after searching)
         /// </summary>
         public ICommand BrowseToFolderCommand { get; private set; }
+        private bool CanBrowseToFolder() => RightSelectedItem is RedFileViewModel;
         private void BrowseToFolder()
         {
             if (RightSelectedItem is RedFileViewModel file)
