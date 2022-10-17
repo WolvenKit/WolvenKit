@@ -539,6 +539,22 @@
                             Kind="NotificationClearAll" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.RegenerateAppearanceVisualControllerCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Regenerate Appearance Dependencies"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Refresh" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </ContextMenu>
 
             <converters:TreeViewItemTemplateSelector x:Key="itemTemplateSelector" x:Name="itemTemplateSelector">

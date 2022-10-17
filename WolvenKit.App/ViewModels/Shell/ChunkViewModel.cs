@@ -179,6 +179,8 @@ namespace WolvenKit.ViewModels.Shell
 
             SaveBufferToDiskCommand = new DelegateCommand(ExecuteSaveBufferToDisk, CanSaveBufferToDisk).ObservesProperty(() => Data);
             LoadBufferFromDiskCommand = new DelegateCommand(ExecuteLoadBufferFromDisk, CanLoadBufferFromDisk).ObservesProperty(() => PropertyType);
+
+            RegenerateAppearanceVisualControllerCommand = new DelegateCommand(ExecuteRegenerateAppearanceVisualController, CanRegenerateAppearanceVisualController);
         }
 
 
@@ -1490,6 +1492,53 @@ namespace WolvenKit.ViewModels.Shell
             ((IRedBufferWrapper)Data!).Buffer.SetBytes(File.ReadAllBytes(dlg.FileName));
 
             Tab.File.SetIsDirty(true);
+        }
+
+        public ICommand RegenerateAppearanceVisualControllerCommand { get; }
+        private bool CanRegenerateAppearanceVisualController() => Name == "components" && Data is CArray<entIComponent>;
+        private void ExecuteRegenerateAppearanceVisualController()
+        {
+            if (Data is not CArray<entIComponent> arr)
+            {
+                throw new Exception();
+            }
+
+            entVisualControllerComponent vc = null; 
+            var list = new CArray<entVisualControllerDependency>();
+
+            foreach (var component in arr)
+            {
+                if (component is entMeshComponent c1)
+                {
+                    list.Add(new entVisualControllerDependency()
+                    {
+                        AppearanceName = (CName)c1.MeshAppearance.DeepCopy(),
+                        ComponentName = (CName)c1.Name.DeepCopy(),
+                        Mesh = (CResourceAsyncReference<CMesh>)c1.Mesh.DeepCopy()
+                    });
+                }
+
+                if (component is entSkinnedMeshComponent c2)
+                {
+                    list.Add(new entVisualControllerDependency()
+                    {
+                        AppearanceName = (CName)c2.MeshAppearance.DeepCopy(),
+                        ComponentName = (CName)c2.Name.DeepCopy(),
+                        Mesh = (CResourceAsyncReference<CMesh>)c2.Mesh.DeepCopy()
+                    });
+                }
+
+                if (component is entVisualControllerComponent c3)
+                {
+                    vc = c3;
+                }
+            }
+
+            if (vc != null)
+            {
+                vc.AppearanceDependency = list;
+                RecalculateProperties();
+            }
         }
 
         public ICommand AddItemToCompiledDataCommand { get; private set; }
