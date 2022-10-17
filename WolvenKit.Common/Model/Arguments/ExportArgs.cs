@@ -241,6 +241,12 @@ namespace WolvenKit.Common.Model.Arguments
         public string MaterialRepo { get; set; }
 
         /// <summary>
+        /// Experimental merged export
+        /// </summary>
+        [Browsable(false)]
+        public bool ExperimentalMergedExport { get; set; } = false;
+
+        /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>

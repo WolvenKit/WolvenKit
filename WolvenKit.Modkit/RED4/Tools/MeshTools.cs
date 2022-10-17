@@ -9,6 +9,7 @@ using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive.CR2W;
@@ -71,15 +72,15 @@ namespace WolvenKit.Modkit.RED4.Tools
             return true;
         }
 
-        public bool ExportMesh(Stream meshStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportMesh(Stream meshStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _red4ParserService.ReadRed4File(meshStream);
-            return ExportMesh(cr2w, outfile, lodFilter, isGLBinary, vmode);
+            return ExportMesh(cr2w, outfile, meshExportArgs, vmode);
         }
 
-        public static bool ExportMesh(CR2WFile cr2w, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
+        public static bool ExportMesh(CR2WFile cr2w, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var model = GetModel(cr2w, lodFilter);
+            var model = GetModel(cr2w, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport);
 
             if (model == null)
             {
@@ -92,7 +93,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 return true;
             }
 
-            if (isGLBinary)
+            if (meshExportArgs.isGLBinary)
             {
                 model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
             }
@@ -104,7 +105,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             return true;
         }
 
-        public static ModelRoot GetModel(CR2WFile cr2w, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue)
+        public static ModelRoot GetModel(CR2WFile cr2w, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false)
         {
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -122,14 +123,14 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
-            var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter, chunkMask);
+            var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter, chunkMask, mergeMeshes);
 
             if (includeRig)
             {
                 UpdateSkinningParamCloth(ref expMeshes, cr2w);
             }
 
-            var model = RawMeshesToGLTF(expMeshes, rig);
+            var model = RawMeshesToGLTF(expMeshes, rig, mergeMeshes);
 
             return model;
         }
@@ -491,7 +492,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             return meshesInfo;
         }
-        public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool lodFilter, ulong chunkMask = ulong.MaxValue)
+        public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool lodFilter, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false)
         {
             var gbr = new BinaryReader(gfs);
 
@@ -506,7 +507,8 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 var meshContainer = new RawMeshContainer
                 {
-                    positions = new Vec3[info.vertCounts[index]]
+                    positions = new Vec3[info.vertCounts[index]],
+                    lod = info.LODLvl[index]
                 };
 
                 // getting positions
@@ -682,7 +684,10 @@ namespace WolvenKit.Modkit.RED4.Tools
                     meshContainer.indices[i] = gbr.ReadUInt16();
                 }
 
-                meshContainer.name = "submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
+                
+                meshContainer.name = mergeMeshes ? 
+                    info.appearances.Keys.FirstOrDefault("default") : 
+                    "submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
 
                 meshContainer.materialNames = new string[info.appearances.Count];
                 var apps = info.appearances.Keys.ToList();
@@ -744,7 +749,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
         }
 
-        public static void AddSubmeshesToModel(List<RawMeshContainer> meshes, Skin skin, ref ModelRoot model, IVisualNodeContainer parent, Dictionary<string, Material> materials = null)
+        public static void AddSubmeshesToModel(List<RawMeshContainer> meshes, Skin skin, ref ModelRoot model, IVisualNodeContainer parent, Dictionary<string, Material> materials = null, bool mergeMeshes = false)
         {
             var mat = model.CreateMaterial("Default");
             mat.WithPBRMetallicRoughness().WithDefault();
@@ -854,9 +859,26 @@ namespace WolvenKit.Modkit.RED4.Tools
             var buffer = model.UseBuffer(ms.ToArray());
             var BuffViewoffset = 0;
 
+            var nodes = new Dictionary<uint, Node>();
             foreach (var mesh in meshes)
             {
-                var mes = model.CreateMesh(mesh.name);
+                Mesh mes = null;
+                Node node = null;
+                if(mergeMeshes)
+                {
+                    if(!nodes.ContainsKey(mesh.lod))
+                    {
+                        nodes[mesh.lod] = parent.CreateNode();
+                        nodes[mesh.lod].Mesh = model.CreateMesh($"{mesh.name}_LOD{mesh.lod}");
+                    }
+                    node = nodes[mesh.lod];
+                    mes = nodes[mesh.lod].Mesh;
+                } 
+                else 
+                {
+                    node = parent.CreateNode(mesh.name);
+                    mes = model.CreateMesh(mesh.name);
+                }
                 var prim = mes.CreatePrimitive();
                 if (materials != null && materials.ContainsKey(mesh.materialNames[0]))
                 {
@@ -965,7 +987,6 @@ namespace WolvenKit.Modkit.RED4.Tools
                     prim.SetIndexAccessor(acc);
                     BuffViewoffset += mesh.indices.Length * 2;
                 }
-                var node = parent.CreateNode(mesh.name);
                 node.Mesh = mes;
                 if (skin != null && mesh.weightCount > 0)
                 {
@@ -999,9 +1020,10 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
         }
 
-        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature rig)
+        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature rig, bool mergeMeshes = false)
         {
             var model = ModelRoot.CreateModel();
+            model.Extras = SharpGLTF.IO.JsonContent.Serialize(new { ExperimentalMergedMeshes = mergeMeshes });
 
             Skin skin = null;
             if (rig != null)
@@ -1010,7 +1032,26 @@ namespace WolvenKit.Modkit.RED4.Tools
                 skin.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
             }
 
-            AddSubmeshesToModel(meshes, skin, ref model, model.UseScene(0));
+            Dictionary<string, Material> materials = null;
+            
+            if(mergeMeshes){
+                materials = new Dictionary<string, Material>();
+
+                foreach (var mesh in meshes)
+                {
+                    foreach (var material in mesh.materialNames)
+                    {
+                        if (!materials.ContainsKey(material))
+                        {
+                            materials[material] = model.CreateMaterial(material);
+                            materials[material].WithPBRMetallicRoughness();
+                            materials[material].DoubleSided = true;
+                        }
+                    }
+                }
+            }
+
+            AddSubmeshesToModel(meshes, skin, ref model, model.UseScene(0), materials, mergeMeshes);
 
             model.UseScene(0).Name = "Scene";
             model.DefaultScene = model.UseScene(0);
