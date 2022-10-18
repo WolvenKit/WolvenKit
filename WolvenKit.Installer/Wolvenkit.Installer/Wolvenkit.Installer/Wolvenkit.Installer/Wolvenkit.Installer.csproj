@@ -10,6 +10,7 @@
     <UseWinUI>true</UseWinUI>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="ItemTemplates.xaml" />
     <None Remove="Pages\AvailablePage.xaml" />
     <None Remove="Pages\InstalledPage.xaml" />
     <None Remove="SettingsPage.xaml" />
@@ -44,6 +45,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\" />
+    <Folder Include="Assets\ControlImages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="ItemTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

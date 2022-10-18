@@ -10,12 +10,12 @@ using Wolvenkit.Installer.Services;
 namespace Wolvenkit.Installer.ViewModel;
 
 [ObservableObject]
-public partial class MainViewModel
+internal partial class MainViewModel
 {
     private readonly IDialogService _dialogService;
     //private readonly IFileService _fileService;
 
-    public MainViewModel(IDialogService dialogService /*, IFileService fileService*/) => _dialogService = dialogService;//_fileService = fileService;
+    internal MainViewModel(IDialogService dialogService /*, IFileService fileService*/) => _dialogService = dialogService;//_fileService = fileService;
 
 
 }

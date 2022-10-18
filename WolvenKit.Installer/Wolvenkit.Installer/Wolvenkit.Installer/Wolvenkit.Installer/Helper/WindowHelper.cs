@@ -16,7 +16,10 @@ public class WindowHelper
 {
     public static Window CreateWindow()
     {
-        var newWindow = new MainWindow();
+        var newWindow = new MainWindow
+        {
+            ExtendsContentIntoTitleBar = true,
+        };
         TrackWindow(newWindow);
         return newWindow;
     }

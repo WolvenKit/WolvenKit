@@ -33,12 +33,13 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
         Title = "WolvenKit Installer";
 
-        ViewModel = App.Current.Services.GetService<MainViewModel>();
+        SetTitleBar(AppTitleBar);
     }
 
-    public MainViewModel ViewModel { get; set; }
+    internal MainViewModel ViewModel => App.Current.Services.GetService<MainViewModel>();
 
     public Microsoft.UI.Xaml.Controls.NavigationView NavigationView => NavigationViewControl;
 

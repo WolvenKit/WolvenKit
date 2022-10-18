@@ -1,5 +1,5 @@
-<!-- Copyright (c) Microsoft Corporation. All rights reserved. -->
-<!-- Licensed under the MIT License. See LICENSE in the project root for license information. -->
+<!--  Copyright (c) Microsoft Corporation. All rights reserved.  -->
+<!--  Licensed under the MIT License. See LICENSE in the project root for license information.  -->
 
 <Application
     x:Class="Wolvenkit.Installer.App"
@@ -10,49 +10,50 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <!-- Other merged dictionaries here -->
-                
-                
-                
-
+                <!--  Other merged dictionaries here  -->
+                <local:ItemTemplates />
             </ResourceDictionary.MergedDictionaries>
-            
-            <!-- Other app resources here -->
+
+            <!--  Other app resources here  -->
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
-                    <SolidColorBrush x:Key="HomePageBackgroundBrush" Color="Transparent"/>
-                    <SolidColorBrush x:Key="PageHeaderForegroundBrush" Color="Black"/>
+                    <SolidColorBrush x:Key="HomePageBackgroundBrush" Color="Transparent" />
+                    <SolidColorBrush x:Key="PageHeaderForegroundBrush" Color="Black" />
                     <StaticResource x:Key="ControlExampleDisplayBrush" ResourceKey="SolidBackgroundFillColorBaseBrush" />
                     <SolidColorBrush x:Key="SearchBoxBorderBrush" Color="Transparent" />
                     <Thickness x:Key="SearchBoxBorderThickness">0</Thickness>
                     <Thickness x:Key="ControlExampleDisplayBorderThickness">0</Thickness>
-                    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent"/>
+                    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
-                    <SolidColorBrush x:Key="HomePageBackgroundBrush" Color="Transparent"/>
-                    <SolidColorBrush x:Key="PageHeaderForegroundBrush" Color="White"/>
+                    <SolidColorBrush x:Key="HomePageBackgroundBrush" Color="Transparent" />
+                    <SolidColorBrush x:Key="PageHeaderForegroundBrush" Color="White" />
                     <StaticResource x:Key="ControlExampleDisplayBrush" ResourceKey="SolidBackgroundFillColorBaseBrush" />
                     <SolidColorBrush x:Key="SearchBoxBorderBrush" Color="Transparent" />
                     <Thickness x:Key="SearchBoxBorderThickness">0</Thickness>
                     <Thickness x:Key="ControlExampleDisplayBorderThickness">0</Thickness>
-                    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent"/>
+                    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="HighContrast">
                     <SolidColorBrush x:Key="HomePageBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
-                    <SolidColorBrush x:Key="PageHeaderForegroundBrush" Color="{ThemeResource SystemColorWindowTextColor}"/>
+                    <SolidColorBrush x:Key="PageHeaderForegroundBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
                     <SolidColorBrush x:Key="ControlExampleDisplayBrush" Color="{ThemeResource SystemColorWindowColor}" />
                     <SolidColorBrush x:Key="SearchBoxBorderBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
                     <Thickness x:Key="SearchBoxBorderThickness">2</Thickness>
                     <Thickness x:Key="ControlExampleDisplayBorderThickness">1</Thickness>
-                    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent"/>
+                    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
             <CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
 
             <x:String x:Key="ControlsName">All controls</x:String>
-            <x:String x:Key="AppTitleName">WinUI 3 Gallery</x:String>
-            <x:String x:Key="WinUIVersion">WinAppSDK 1.1</x:String>
+            <x:String x:Key="AppTitleName">WolvenKit Installer</x:String>
+            <x:String x:Key="WinUIVersion">Version 0.1</x:String>
+
+            <Style x:Key="IndentedGridViewItemStyle" TargetType="GridViewItem" BasedOn="{StaticResource DefaultGridViewItemStyle}">
+                <Setter Property="Margin" Value="12,0,0,12" />
+            </Style>
 
         </ResourceDictionary>
     </Application.Resources>

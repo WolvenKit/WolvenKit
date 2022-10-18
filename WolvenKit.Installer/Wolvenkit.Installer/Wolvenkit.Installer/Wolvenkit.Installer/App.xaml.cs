@@ -64,7 +64,8 @@ public partial class App : Application
     {
         // No matter what our destination is, we're going to need control data loaded - let's knock that out now.
         // We'll never need to do this again.
-        // await ControlInfoDataSource.Instance.GetGroupsAsync();
+        var library = App.Current.Services.GetService<ILibraryService>();
+        await library.LoadAsync();
 
         //var rootFrame = GetRootFrame();
 
@@ -163,11 +164,15 @@ public partial class App : Application
     {
         ServiceCollection services = new();
 
+        services.AddSingleton<ILibraryService, LibraryService>();
+
+
         services.AddTransient<IDialogService, DialogService>();
         //services.AddTransient<IFileService, FileService>();
 
         // Viewmodels
         services.AddTransient<MainViewModel>();
+        services.AddTransient<InstalledViewModel>();
 
 
         return services.BuildServiceProvider();

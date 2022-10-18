@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Wolvenkit.Installer.Services;
-public interface IDialogService
+internal interface IDialogService
 {
     Task DisplayAlert(string title, string message, string cancel);
 }
