@@ -25,6 +25,8 @@ public record UncookTaskOptions
     public bool? serialize { get; init; }
     public MeshExportType? meshExportType { get; init; }
     public string meshExportMaterialRepo { get; init; }
+    public bool? meshExportLodFilter { get; init; }
+    public bool? meshExportExperimentalMergedExport { get; init; }
 }
 
 public partial class ConsoleFunctions
@@ -145,6 +147,14 @@ public partial class ConsoleFunctions
             exportArgs.Get<MeshExportArgs>().meshExportType = options.meshExportType.Value;
             exportArgs.Get<MeshExportArgs>().MaterialRepo = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
             exportArgs.Get<MeshExportArgs>().ArchiveDepot = basedir.FullName;
+        }
+
+        if(options.meshExportExperimentalMergedExport == true){
+            exportArgs.Get<MeshExportArgs>().ExperimentalMergedExport = true;
+        }
+
+        if(options.meshExportLodFilter == true){
+            exportArgs.Get<MeshExportArgs>().LodFilter = true;
         }
 
         var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;

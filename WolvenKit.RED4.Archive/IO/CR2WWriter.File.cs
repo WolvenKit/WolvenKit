@@ -333,7 +333,7 @@ namespace WolvenKit.RED4.Archive.IO
                 using var ms = new MemoryStream();
                 using var listWriter = new CR2WListWriter(ms);
 
-                listWriter.WriteList(list, _file.RootChunk);
+                listWriter.WriteList(list, buffer.Parent);
                 //listWriter.WriteList(list);
 
                 var newData = ms.ToArray();

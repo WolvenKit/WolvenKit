@@ -38,12 +38,16 @@ internal class UncookCommand : CommandBase
         AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize to JSON"));
         AddOption(new Option<MeshExportType?>(new[] { "--mesh-export-type" }, "Mesh export type (Default, WithMaterials, WithRig, Multimesh)."));
         AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
+        AddOption(new Option<bool>(new[] { "--mesh-export-lod-filter" }, "Filter out lod models."));
+        AddOption(new Option<bool>(new[] { "--mesh-export-experimental-merged-export" }, "[EXPERIMENTAL] Merged mesh export. (Only supports Default or WithMaterials, re-import not supported)"));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], bool?, MeshExportType?, string, IHost>(Action));
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], 
+        bool?, MeshExportType?, string, bool?, bool?, IHost>(Action));
     }
 
     private int Action(FileSystemInfo[] path, string outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
-        string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExportType? meshExportType, string meshExportMaterialRepo, IHost host)
+        string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExportType? meshExportType, string meshExportMaterialRepo, 
+        bool? meshExportLodFilter, bool? meshExportExperimentalMergedExport, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -68,7 +72,9 @@ internal class UncookCommand : CommandBase
             forcebuffers = forcebuffers,
             serialize = serialize,
             meshExportType = meshExportType,
-            meshExportMaterialRepo = meshExportMaterialRepo
+            meshExportMaterialRepo = meshExportMaterialRepo,
+            meshExportLodFilter = meshExportLodFilter,
+            meshExportExperimentalMergedExport = meshExportExperimentalMergedExport
         });
     }
 }

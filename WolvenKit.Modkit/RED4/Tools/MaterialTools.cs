@@ -27,8 +27,15 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
-        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<ICyberGameArchive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, MeshExportArgs meshArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
+            var archives = meshArgs.Archives;
+            var matRepo = meshArgs.MaterialRepo;
+            var eUncookExtension = meshArgs.MaterialUncookExtension;
+            var isGLBinary = meshArgs.isGLBinary;
+            var LodFilter = meshArgs.LodFilter;
+            var mergeMeshes = meshArgs.ExperimentalMergedExport;
+
             if (matRepo == null)
             {
                 throw new Exception("Depot path is not set: Choose a Depot location within Settings for generating materials.");
@@ -49,7 +56,7 @@ namespace WolvenKit.Modkit.RED4
 
             var Rig = MeshTools.GetOrphanRig(cMesh);
 
-            var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
+            var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig, mergeMeshes);
 
             ParseMaterials(cr2w, meshStream, outfile, archives, matRepo, eUncookExtension);
 

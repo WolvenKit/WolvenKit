@@ -20,19 +20,21 @@ namespace WolvenKit.RED4.Archive.IO
             _ms = ms;
         }
 
-        public void WriteList(CR2WList list, RedBaseClass root)
+        public void WriteList(CR2WList list, RedBaseClass parent)
         {
-            if (root is meshMeshMaterialBuffer mmmb)
+            if (parent is not meshMeshMaterialBuffer mmmb)
             {
-                list.Files = new();
-                foreach (var material in mmmb.Materials)
+                return;
+            }
+
+            list.Files = new();
+            foreach (var material in mmmb.Materials)
+            {
+                var file = new CR2WFile()
                 {
-                    var file = new CR2WFile()
-                    {
-                        RootChunk = material
-                    };
-                    list.Files.Add(file);
-                }
+                    RootChunk = material
+                };
+                list.Files.Add(file);
             }
 
             var headers = new CArray<meshLocalMaterialHeader>();
@@ -41,17 +43,15 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 var header = new meshLocalMaterialHeader();
                 var ms = new MemoryStream();
-                var cr2wWriter = new CR2WWriter(ms) { IsRoot = false };
+                var cr2wWriter = new CR2WWriter(ms);
                 cr2wWriter.WriteFile(file);
                 header.Offset = (CUInt32)(_ms.Position - starting_position);
                 _ms.Write(ms.ToArray());
                 header.Size = (CUInt32)(_ms.Position - header.Offset);
                 headers.Add(header);
             }
-            if (root is CMesh mesh)
-            {
-                mesh.LocalMaterialBuffer.RawDataHeaders = headers;
-            }
+
+            mmmb.RawDataHeaders = headers;
         }
 
         #region IDisposable
