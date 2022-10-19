@@ -345,15 +345,20 @@ public class ResourceReferenceConverter : JsonConverter<IRedRef>, ICustomRedConv
             throw new JsonException();
         }
 
-        CName depotPath;
-        InternalEnums.EImportFlags flags;
+        CName? depotPath = null;
+        InternalEnums.EImportFlags? flags = null;
 
         var result = (IRedRef)RedTypeManager.CreateRedType(typeToConvert);
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)
             {
-                return result;
+                if (depotPath == null || flags == null)
+                {
+                    throw new JsonException();
+                }
+
+                return (IRedRef)RedTypeManager.CreateRedType(typeToConvert, depotPath, flags);
             }
 
             if (reader.TokenType != JsonTokenType.PropertyName)
