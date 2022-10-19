@@ -1529,9 +1529,9 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     list.Add(new entVisualControllerDependency()
                     {
-                        AppearanceName = (CName)c1.MeshAppearance.DeepCopy(),
-                        ComponentName = (CName)c1.Name.DeepCopy(),
-                        Mesh = (CResourceAsyncReference<CMesh>)c1.Mesh.DeepCopy()
+                        AppearanceName = c1.MeshAppearance,
+                        ComponentName = c1.Name,
+                        Mesh = c1.Mesh
                     });
                 }
 
@@ -1539,9 +1539,9 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     list.Add(new entVisualControllerDependency()
                     {
-                        AppearanceName = (CName)c2.MeshAppearance.DeepCopy(),
-                        ComponentName = (CName)c2.Name.DeepCopy(),
-                        Mesh = (CResourceAsyncReference<CMesh>)c2.Mesh.DeepCopy()
+                        AppearanceName = c2.MeshAppearance,
+                        ComponentName = c2.Name,
+                        Mesh = c2.Mesh
                     });
                 }
 
