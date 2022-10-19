@@ -24,24 +24,21 @@ public class InventoryHelper
         public List<ItemData> Items { get; set; } = new();
     }
 
-    // TODO [WolvenKit.RED4.Save]: Probably gameItemID, will check later
-    public class HeaderThing : IEquatable<HeaderThing>
+    public class gameItemIdWrapper : IEquatable<gameItemIdWrapper>
     {
-        public uint Seed { get; set; }
-        public byte UnknownByte1 { get; set; }
-        public ushort UnknownBytes2 { get; set; }
-        public byte UnknownByte3 { get; set; }
+        public gameItemID ItemId { get; set; }
+        public Enums.gameEItemIDFlag Flag { get; set; }
 
         public byte Kind =>
-            UnknownByte1 switch
+            (byte)ItemId.Flags switch
             {
                 1 => 2,
                 2 => 1,
                 3 => 0,
-                _ => (byte)(Seed != 2 ? 2 : 1)
+                _ => (byte)(ItemId.RngSeed != 2 ? 2 : 1)
             };
 
-        public bool Equals(HeaderThing? other)
+        public bool Equals(gameItemIdWrapper? other)
         {
             if (ReferenceEquals(null, other))
             {
@@ -53,7 +50,7 @@ public class InventoryHelper
                 return true;
             }
 
-            return Seed == other.Seed && UnknownByte1 == other.UnknownByte1 && UnknownBytes2 == other.UnknownBytes2 && UnknownByte3 == other.UnknownByte3;
+            return ItemId.Equals(other.ItemId) && Flag == other.Flag;
         }
 
         public override bool Equals(object? obj)
@@ -73,30 +70,28 @@ public class InventoryHelper
                 return false;
             }
 
-            return Equals((HeaderThing)obj);
+            return Equals((gameItemIdWrapper)obj);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                var hashCode = (int)Seed;
-                hashCode = (hashCode * 397) ^ UnknownByte1.GetHashCode();
-                hashCode = (hashCode * 397) ^ UnknownBytes2.GetHashCode();
-                hashCode = (hashCode * 397) ^ UnknownByte3.GetHashCode();
+                var hashCode = ItemId.GetHashCode();
+                hashCode = (hashCode * 397) ^ Flag.GetHashCode();
                 return hashCode;
             }
         }
 
-        public static bool operator ==(HeaderThing? left, HeaderThing? right) => Equals(left, right);
+        public static bool operator ==(gameItemIdWrapper? left, gameItemIdWrapper? right) => Equals(left, right);
 
-        public static bool operator !=(HeaderThing? left, HeaderThing? right) => !Equals(left, right);
+        public static bool operator !=(gameItemIdWrapper? left, gameItemIdWrapper? right) => !Equals(left, right);
     }
 
     public class NextItemEntry : IEquatable<NextItemEntry>
     {
         public TweakDBID ItemTdbId { get; set; }
-        public HeaderThing Header { get; set; }
+        public gameItemIdWrapper Header { get; set; }
 
         public bool Equals(NextItemEntry? other)
         {
@@ -174,8 +169,8 @@ public class InventoryHelper
     public class ItemModData
     {
         public TweakDBID ItemTdbId { get; set; }
-        public HeaderThing Header { get; set; }
-        public string UnknownString { get; set; }
+        public gameItemIdWrapper Header { get; set; }
+        public string AppearanceName { get; set; }
         public TweakDBID AttachmentSlotTdbId { get; set; }
         public List<ItemModData> Children { get; set; } = new();
         public uint Unknown2 { get; set; }
@@ -189,59 +184,32 @@ public class InventoryHelper
         public uint Quantity { get; set; }
     }
 
-    public static HeaderThing ReadHeaderThing(BinaryReader reader) =>
+    public static gameItemIdWrapper ReadHeaderThing(BinaryReader reader) =>
         new()
         {
-            Seed = reader.ReadUInt32(),
-            UnknownByte1 = reader.ReadByte(),
-            UnknownBytes2 = reader.ReadUInt16(),
-            UnknownByte3 = reader.ReadByte()
+            ItemId = new gameItemID
+            {
+                Id = reader.ReadUInt64(),
+                RngSeed = reader.ReadUInt32(),
+                Flags = reader.ReadByte(),
+                UniqueCounter = reader.ReadUInt16()
+            },
+            Flag = (Enums.gameEItemIDFlag)reader.ReadByte()
         };
 
-    private static void WriteHeaderThing(BinaryWriter writer, HeaderThing itemHeader)
+    public static void WriteHeaderThing(BinaryWriter writer, gameItemIdWrapper itemHeader)
     {
-        writer.Write(itemHeader.Seed);
-        writer.Write(itemHeader.UnknownByte1);
-        writer.Write(itemHeader.UnknownBytes2);
-        writer.Write(itemHeader.UnknownByte3);
-    }
-
-    public static NextItemEntry ReadNextItemEntry(byte[] bytes)
-    {
-        using var ms = new MemoryStream(bytes);
-        using var br = new BinaryReader(ms);
-
-        return ReadNextItemEntry(br);
-    }
-
-    public static NextItemEntry ReadNextItemEntry(BinaryReader reader) =>
-        new() {
-            ItemTdbId = reader.ReadUInt64(),
-            Header = ReadHeaderThing(reader)
-        };
-
-    public static void WriteNextItemEntry(NodeWriter writer, NextItemEntry item)
-    {
-        writer.Write((ulong)item.ItemTdbId);
-        WriteHeaderThing(writer, item.Header);
-    }
-
-    public static byte[] GetNextItemEntryBytes(NextItemEntry item)
-    {
-        using var ms = new MemoryStream();
-        using var writer = new BinaryWriter(ms);
-
-        writer.Write((ulong)item.ItemTdbId);
-        WriteHeaderThing(writer, item.Header);
-
-        return ms.ToArray();
+        writer.Write((ulong)itemHeader.ItemId.Id);
+        writer.Write(itemHeader.ItemId.RngSeed);
+        writer.Write(itemHeader.ItemId.Flags);
+        writer.Write(itemHeader.ItemId.UniqueCounter);
+        writer.Write((byte)itemHeader.Flag);
     }
 
     public static ItemData ReadItemData(BinaryReader reader)
     {
         var result = new ItemData();
 
-        result.ItemTdbId = reader.ReadUInt64();
         result.Header = ReadHeaderThing(reader);
         result.Flags = (ItemFlag)reader.ReadByte();
         result.CreationTime = reader.ReadUInt32();
@@ -341,9 +309,8 @@ public class InventoryHelper
     {
         var result = new ItemModData();
 
-        result.ItemTdbId = reader.ReadUInt64();
         result.Header = ReadHeaderThing(reader);
-        result.UnknownString = reader.ReadLengthPrefixedString();
+        result.AppearanceName = reader.ReadLengthPrefixedString();
         result.AttachmentSlotTdbId = reader.ReadUInt64();
         var count = reader.ReadVLQInt32();
         for (var i = 0; i < count; ++i)
@@ -363,7 +330,7 @@ public class InventoryHelper
     {
         writer.Write((ulong)mod.ItemTdbId);
         WriteHeaderThing(writer, mod.Header);
-        writer.WriteLengthPrefixedString(mod.UnknownString);
+        writer.WriteLengthPrefixedString(mod.AppearanceName);
         writer.Write((ulong)mod.AttachmentSlotTdbId);
         writer.WriteVLQInt32(mod.Children.Count);
         foreach (var child in mod.Children)
