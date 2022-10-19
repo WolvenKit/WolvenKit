@@ -7,12 +7,12 @@ namespace WolvenKit.RED4.Types
     [DebuggerDisplay("{Value}", Type = "CString")]
     public readonly struct CString : IRedString, IRedPrimitive<CString>, IEquatable<CString>, IComparable<CString>, IComparable
     {
-        public static CString Empty = "\0";
+        public static CString Empty = string.Empty;
 
 
         private readonly string _value;
 
-        private string Value => _value ?? "\0";
+        private string Value => _value ?? string.Empty;
 
 
         private CString(string value) => _value = value;

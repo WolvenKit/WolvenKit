@@ -23,7 +23,15 @@ namespace WolvenKit.Views.Editors
             set => SetValue(RedStringProperty, value);
         }
         public static readonly DependencyProperty RedStringProperty = DependencyProperty.Register(
-            nameof(RedString), typeof(CString), typeof(RedStringEditor), new PropertyMetadata(default(CString)));
+            nameof(RedString), typeof(CString), typeof(RedStringEditor), new PropertyMetadata(default(CString), OnRedStringChanged));
+
+        private static void OnRedStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is RedStringEditor view)
+            {
+                view.OnPropertyChanged(nameof(Text));
+            }
+        }
 
 
         public string Text

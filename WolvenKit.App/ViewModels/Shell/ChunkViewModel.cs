@@ -1608,7 +1608,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var vm = sender as SelectRedTypeDialogViewModel;
 
-                var instance = new CKeyValuePair("", (IRedType)System.Activator.CreateInstance(vm.SelectedType));
+                var instance = new CKeyValuePair(CName.Empty, (IRedType)System.Activator.CreateInstance(vm.SelectedType));
                 InsertChild(-1, instance);
             }
         }
