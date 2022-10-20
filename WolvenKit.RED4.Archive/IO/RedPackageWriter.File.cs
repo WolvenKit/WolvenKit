@@ -108,17 +108,7 @@ namespace WolvenKit.RED4.Archive.IO
 
                     foreach (var chunk in _file.Chunks)
                     {
-                        ulong hash;
-                        if (chunk is DynamicBaseClass dbc)
-                        {
-                            hash = FNV1A64HashAlgorithm.HashString(dbc.ClassName);
-                        }
-                        else
-                        {
-                            hash = FNV1A64HashAlgorithm.HashString(chunk.GetType().Name);
-                        }
-
-                        chunkDict.Add(hash, chunk);
+                        chunkDict.Add(FNV1A64HashAlgorithm.HashString(GetClassName(chunk)), chunk);
                     }
 
                     chunkDict = chunkDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
