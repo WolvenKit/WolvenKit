@@ -22,36 +22,38 @@ namespace WolvenKit.RED4.Archive.IO
 
         public void WriteList(CR2WList list, RedBaseClass parent)
         {
-            if (parent is not meshMeshMaterialBuffer mmmb)
+            var meshMeshMaterialBuffer = parent as meshMeshMaterialBuffer;
+            if (meshMeshMaterialBuffer != null)
             {
-                return;
-            }
-
-            list.Files = new();
-            foreach (var material in mmmb.Materials)
-            {
-                var file = new CR2WFile()
+                list.Files = new();
+                foreach (var material in meshMeshMaterialBuffer.Materials)
                 {
-                    RootChunk = material
-                };
-                list.Files.Add(file);
+                    var file = new CR2WFile()
+                    {
+                        RootChunk = material
+                    };
+                    list.Files.Add(file);
+                }
             }
 
             var headers = new CArray<meshLocalMaterialHeader>();
-            var starting_position = _ms.Position;
+            var startingPosition = _ms.Position;
             foreach (var file in list.Files)
             {
                 var header = new meshLocalMaterialHeader();
                 var ms = new MemoryStream();
-                var cr2wWriter = new CR2WWriter(ms);
+                var cr2wWriter = new CR2WWriter(ms) {IsRoot = meshMeshMaterialBuffer != null};
                 cr2wWriter.WriteFile(file);
-                header.Offset = (CUInt32)(_ms.Position - starting_position);
+                header.Offset = (CUInt32)(_ms.Position - startingPosition);
                 _ms.Write(ms.ToArray());
                 header.Size = (CUInt32)(_ms.Position - header.Offset);
                 headers.Add(header);
             }
 
-            mmmb.RawDataHeaders = headers;
+            if (meshMeshMaterialBuffer != null)
+            {
+                meshMeshMaterialBuffer.RawDataHeaders = headers;
+            }
         }
 
         #region IDisposable
