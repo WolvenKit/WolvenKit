@@ -3,10 +3,11 @@ using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.RED4.Save.IO;
 
-public class CyberpunkSaveWriter
+public class CyberpunkSaveWriter : IDisposable
 {
-    private BinaryWriter _writer;
-    private Encoding _encoding;
+    private readonly BinaryWriter _writer;
+    private readonly Encoding _encoding;
+    private bool _disposed;
 
     private CyberpunkSaveFile _file;
 
@@ -26,42 +27,30 @@ public class CyberpunkSaveWriter
         _encoding = encoding;
     }
 
-    public byte[] WriteFile(CyberpunkSaveFile file, bool compress = true)
+    public void WriteFile(CyberpunkSaveFile file, bool compress = true)
     {
         _file = file;
 
-        byte[] result;
+        _writer.Write(CyberpunkSaveFile.MAGIC);
+        _writer.Write(file.FileHeader);
 
-        using (var stream = new MemoryStream())
+        var uncompressedData = GetNodeData(out var nodeInfos);
+        NodeInfos = nodeInfos;
+
+        var dataOffset = (int)(_writer.BaseStream.Position + 8 + (_file.CompressionSettings.TableEntriesCount * 12));
+        foreach (var nodeInfo in nodeInfos)
         {
-            using (var writer = new BinaryWriter(stream, Encoding.ASCII))
-            {
-                writer.Write(CyberpunkSaveFile.MAGIC);
-                writer.Write(file.FileHeader);
-
-                var uncompressedData = GetNodeData(out var nodeInfos);
-                NodeInfos = nodeInfos;
-
-                var dataOffset = (int)(writer.BaseStream.Position + 8 + (_file.CompressionSettings.TableEntriesCount * 12));
-                foreach (var nodeInfo in nodeInfos)
-                {
-                    nodeInfo.Offset += dataOffset;
-                }
-
-                Compression.Write(writer, uncompressedData, _file.CompressionSettings, compress);
-
-                var lastBlockOffset = (int)writer.BaseStream.Position;
-                var footerWithoutLast8Bytes = BuildFooterWithoutLastEightBytes(nodeInfos);
-
-                writer.Write(footerWithoutLast8Bytes);
-                writer.Write(lastBlockOffset);
-                writer.Write(Encoding.ASCII.GetBytes(Constants.Magic.END_OF_FILE));
-            }
-
-            result = stream.ToArray();
+            nodeInfo.Offset += dataOffset;
         }
 
-        return result;
+        Compression.Write(_writer, uncompressedData, _file.CompressionSettings, compress);
+
+        var lastBlockOffset = (int)_writer.BaseStream.Position;
+        var footerWithoutLast8Bytes = BuildFooterWithoutLastEightBytes(nodeInfos);
+
+        _writer.Write(footerWithoutLast8Bytes);
+        _writer.Write(lastBlockOffset);
+        _writer.Write(Encoding.ASCII.GetBytes(Constants.Magic.END_OF_FILE));
     }
 
     private byte[] GetNodeData(out List<NodeInfo> nodeInfos)
@@ -107,4 +96,24 @@ public class CyberpunkSaveWriter
         }
         return result;
     }
+
+    #region IDisposable
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _writer.Close();
+            }
+            _disposed = true;
+        }
+    }
+
+    public void Dispose() => Dispose(true);
+
+    public virtual void Close() => Dispose(true);
+
+    #endregion IDisposable
 }
