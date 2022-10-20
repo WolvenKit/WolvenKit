@@ -6,19 +6,16 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Dialogs;
-using static Microsoft.WindowsAPICodePack.PortableDevices.PropertySystem.Properties;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -246,16 +243,36 @@ namespace WolvenKit.Functionality.Services
             var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
 
             // download asset
-            var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("wolvenkit"));
-            var releases = await client.Repository.Release.GetAll(id.GetUrl().Split('/').First(), id.GetUrl().Split('/').Last());
-            var latest = releases[0];
-            var assets = latest.Assets.ToList();
-            var asset = assets.Where(x => Regex.IsMatch(x.Name, id.GetFile()));
+            var header = $"wolvenkit";
+            var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue(header));
+            IEnumerable<Octokit.ReleaseAsset> asset = new List<Octokit.ReleaseAsset>();
+            try
+            {
+                var releases = await client.Repository.Release.GetAll(id.GetUrl().Split('/').First(), id.GetUrl().Split('/').Last());
+                var latest = releases[0];
+                var assets = latest.Assets.ToList();
+                asset = assets.Where(x => Regex.IsMatch(x.Name, id.GetFile()));
+            }
+            catch (Octokit.ApiException)
+            {
+                // Prior to first API call, this will be null, because it only deals with the last call.
+                var apiInfo = client.GetLastApiInfo();
+                var rateLimit = apiInfo?.RateLimit;
+                var howManyRequestsCanIMakePerHour = rateLimit?.Limit;
+                var howManyRequestsDoIHaveLeft = rateLimit?.Remaining;
+                var whenDoesTheLimitReset = rateLimit?.Reset; // UTC time
+                _loggerService.Info($"[Update] {howManyRequestsDoIHaveLeft}/{howManyRequestsCanIMakePerHour} - reset: {whenDoesTheLimitReset ?? whenDoesTheLimitReset.Value.ToLocalTime()}");
+
+                _loggerService.Error("API rate limit exceeded");
+
+                return;
+            }
 
             if (!asset.Any())
             {
                 return;
             }
+
             var contentUrl = asset.First().BrowserDownloadUrl;
 
             var zipPath = Path.Combine(Path.GetTempPath(), contentUrl.Split('/').Last());
