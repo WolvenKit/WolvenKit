@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,7 +25,6 @@ using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -314,19 +312,29 @@ namespace WolvenKit.ViewModels.Shell
                     break;
             }
 
-            // disabled for testing in debug
-#if DEBUG
-            var remoteVersion = SemVersion.Parse("8.6", SemVersionStyles.OptionalMinorPatch);
-            if (_settingsManager.UpdateChannel == EUpdateChannel.Nightly)
+            SemVersion remoteVersion = null;
+            var header = $"wolvenkit";
+            var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue(header));
+            try
             {
-                remoteVersion = SemVersion.Parse("8.7.0-nightly.2022-10-10", SemVersionStyles.OptionalMinorPatch);
+                var releases = await client.Repository.Release.GetAll(owner, name);
+                var latest = releases[0];
+                remoteVersion = SemVersion.Parse(latest.TagName, SemVersionStyles.OptionalMinorPatch);
             }
-#else
-            var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("wolvenkit"));
-            var releases = await client.Repository.Release.GetAll(owner, name);
-            var latest = releases[0];
-            var remoteVersion = SemVersion.Parse(latest.TagName, SemVersionStyles.OptionalMinorPatch);
-#endif
+            catch (Octokit.ApiException)
+            {
+                // Prior to first API call, this will be null, because it only deals with the last call.
+                var apiInfo = client.GetLastApiInfo();
+                var rateLimit = apiInfo?.RateLimit;
+                var howManyRequestsCanIMakePerHour = rateLimit?.Limit;
+                var howManyRequestsDoIHaveLeft = rateLimit?.Remaining;
+                var whenDoesTheLimitReset = rateLimit?.Reset; // UTC time
+                _loggerService.Info($"[Update] {howManyRequestsDoIHaveLeft}/{howManyRequestsCanIMakePerHour} - reset: {whenDoesTheLimitReset.Value.ToLocalTime()}");
+
+                _loggerService.Error("API rate limit exceeded");
+
+                return;
+            }
 
             var thisVersion = WolvenKit.Core.CommonFunctions.GetAssemblyVersion(WolvenKit.Functionality.Constants.AssemblyName);
 

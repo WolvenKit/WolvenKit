@@ -43,7 +43,7 @@ Due to practical reasons this won't be strictly enforced, however you should fol
 * Keep It Simple Stupid (a.k.a. KISS): the simplest solution is more than sufficient.
 * You Ain't Gonna Need It (a.k.a. YAGNI): create a solution for the problem at hand, not for the ones you think may happen later on. Can you predict the future?
 * Don't Repeat Yourself (a.k.a. DRY): avoid duplication within a component, a source control repository or a bounded context, without forgeting the Rule of Three heuristc. [https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)/](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming))
-* The four principles of object-oriented programming: encapsulation, abstraction, inheritance and polymorphism. [http://codebetter.com/raymondlewallen/2005/07/19/4-major-principles-of-object-oriented-programming](http://codebetter.com/raymondlewallen/2005/07/19/4-major-principles-of-object-oriented-programming)
+* The four principles of object-oriented programming: encapsulation, abstraction, inheritance and polymorphism.
 
 ### As well as
 
