@@ -3,6 +3,7 @@ using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.Hosting;
 
 namespace CP77Tools.Commands;
@@ -19,12 +20,31 @@ internal class SettingsCommand : CommandBase
         var basedir = AppDomain.CurrentDomain.BaseDirectory;
         var settingsPath = Path.Combine(basedir, "appsettings.json");
         Console.WriteLine($"Opening {settingsPath}");
-        new Process
-        {
-            StartInfo = new ProcessStartInfo(settingsPath)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            new Process
             {
-                UseShellExecute = true
+                StartInfo = new ProcessStartInfo(settingsPath)
+                {
+                    UseShellExecute = true
+                }
+            }.Start();
+        } else {
+            var editorCommand = System.Environment.GetEnvironmentVariable("EDITOR");
+            if (editorCommand == null) {
+                throw new Exception("EDITOR environment variable unset!");
             }
-        }.Start();
+            var proc = new Process
+            {
+                StartInfo = new ProcessStartInfo(settingsPath)
+                {
+                    UseShellExecute = false,
+                    FileName = editorCommand,
+                    Arguments = $"\"{settingsPath}\"",
+                    CreateNoWindow = true,
+                }
+            };
+            proc.Start();
+            proc.WaitForExit();
+        }
     }
 }
