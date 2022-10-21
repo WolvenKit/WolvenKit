@@ -139,6 +139,13 @@ public static class RedJsonSerializer
         }
     }
 
+    public static T? Deserialize<T>(string json, SemVersion version)
+    {
+        SetVersion(version);
+
+        return Deserialize<T>(json);
+    }
+
     public static object? Deserialize(Type type, JsonElement element)
     {
         s_bufferResolver.Begin();
