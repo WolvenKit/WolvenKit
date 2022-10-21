@@ -13,7 +13,11 @@
     <None Remove="ItemTemplates.xaml" />
     <None Remove="Pages\AvailablePage.xaml" />
     <None Remove="Pages\InstalledPage.xaml" />
+    <None Remove="Resources\AvailableApps.json" />
     <None Remove="SettingsPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\AvailableApps.json" />
   </ItemGroup>
 
   <ItemGroup>

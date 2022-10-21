@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Wolvenkit.Installer.Services;
-internal interface IDialogService
+public interface IDialogService
 {
     Task DisplayAlert(string title, string message, string cancel);
 }
 
-internal class DialogService : IDialogService
+public class DialogService : IDialogService
 {
     public async Task DisplayAlert(string title, string message, string cancel)
     {

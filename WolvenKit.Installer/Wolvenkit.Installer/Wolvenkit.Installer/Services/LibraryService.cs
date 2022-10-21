@@ -11,7 +11,7 @@ internal class LibraryService : ILibraryService
 {
     public const string FileName = "library.json";
 
-    public List<AppModel> Apps { get; private set; }
+    public List<PackageModel> Apps { get; private set; }
 
     public static string GetAppData()
     {
@@ -33,7 +33,7 @@ internal class LibraryService : ILibraryService
             try
             {
                 var json = await File.ReadAllTextAsync(file);
-                var installed = System.Text.Json.JsonSerializer.Deserialize<List<AppModel>>(json, new System.Text.Json.JsonSerializerOptions()
+                var installed = System.Text.Json.JsonSerializer.Deserialize<List<PackageModel>>(json, new System.Text.Json.JsonSerializerOptions()
                 {
                     WriteIndented = true,
                     DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
@@ -48,7 +48,7 @@ internal class LibraryService : ILibraryService
         }
         else
         {
-            Apps = new List<AppModel>();
+            Apps = new List<PackageModel>();
         }
 
         // dng
@@ -59,7 +59,7 @@ internal class LibraryService : ILibraryService
 
 internal interface ILibraryService
 {
-    List<AppModel> Apps { get; }
+    List<PackageModel> Apps { get; }
 
     Task LoadAsync();
 

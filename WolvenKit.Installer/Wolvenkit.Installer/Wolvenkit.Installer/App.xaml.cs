@@ -67,8 +67,6 @@ public partial class App : Application
         var library = App.Current.Services.GetService<ILibraryService>();
         await library.LoadAsync();
 
-        //var rootFrame = GetRootFrame();
-
         ThemeHelper.Initialize();
 
         var targetPageType = typeof(InstalledPage);
@@ -78,54 +76,8 @@ public partial class App : Application
         {
             if (args.Kind == ActivationKind.Launch)
             {
-                //if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                //{
-                //    try
-                //    {
-                //        await SuspensionManager.RestoreAsync();
-                //    }
-                //    catch (SuspensionManagerException)
-                //    {
-                //        //Something went wrong restoring state.
-                //        //Assume there is no state and continue
-                //    }
-                //}
-
                 targetPageArguments = ((Windows.ApplicationModel.Activation.LaunchActivatedEventArgs)args).Arguments;
             }
-            //else if (args.Kind == ActivationKind.Protocol)
-            //{
-            //    Match match;
-
-            //    string targetId = string.Empty;
-
-            //    switch (((ProtocolActivatedEventArgs)args).Uri?.AbsoluteUri)
-            //    {
-            //        case string s when IsMatching(s, "(/*)category/(.*)"):
-            //            targetId = match.Groups[2]?.ToString();
-            //            if (targetId == "AllControls")
-            //            {
-            //                targetPageType = typeof(AllControlsPage);
-            //            }
-            //            else if (targetId == "NewControls")
-            //            {
-            //                targetPageType = typeof(NewControlsPage);
-            //            }
-            //            else if (ControlInfoDataSource.Instance.Groups.Any(g => g.UniqueId == targetId))
-            //            {
-            //                targetPageType = typeof(SectionPage);
-            //            }
-            //            break;
-            //    }
-
-            //    targetPageArguments = targetId;
-
-            //    bool IsMatching(string parent, string expression)
-            //    {
-            //        match = Regex.Match(parent, expression);
-            //        return match.Success;
-            //    }
-            //}
         }
 
         MainRoot = StartupWindow.Content as FrameworkElement;
@@ -166,13 +118,14 @@ public partial class App : Application
 
         services.AddSingleton<ILibraryService, LibraryService>();
 
+        services.AddSingleton<IDialogService, DialogService>();
+        services.AddSingleton<INotificationService, NotificationService>();
 
-        services.AddTransient<IDialogService, DialogService>();
-        //services.AddTransient<IFileService, FileService>();
 
         // Viewmodels
-        services.AddTransient<MainViewModel>();
+        services.AddSingleton<MainViewModel>();
         services.AddTransient<InstalledViewModel>();
+        services.AddTransient<AvailableViewModel>();
 
 
         return services.BuildServiceProvider();

@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Wolvenkit.Installer.Models;
-internal class AppModel
+internal class PackageModel
 {
-    public AppModel(string idStr, string version)
+    public PackageModel(string idStr, string version)
     {
         Version = version;
         IdStr = idStr;

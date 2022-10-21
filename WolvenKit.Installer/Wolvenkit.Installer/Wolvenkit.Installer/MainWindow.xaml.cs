@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -37,9 +38,13 @@ public sealed partial class MainWindow : Window
         Title = "WolvenKit Installer";
 
         SetTitleBar(AppTitleBar);
+
+
     }
 
-    internal MainViewModel ViewModel => App.Current.Services.GetService<MainViewModel>();
+
+
+    public MainViewModel ViewModel => App.Current.Services.GetService<MainViewModel>();
 
     public Microsoft.UI.Xaml.Controls.NavigationView NavigationView => NavigationViewControl;
 

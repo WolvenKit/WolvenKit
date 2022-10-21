@@ -23,32 +23,14 @@ internal partial class InstalledViewModel
 
         foreach (var item in _libraryService.Apps)
         {
-            InstalledApps.Add(new AppViewModel(item.IdStr, "", item.Version, false)
+            InstalledApps.Add(new PackageViewModel(item.IdStr, "", item.Version, false)
             {
                 ImagePath = "ms-appx:///Assets/ControlImages/Acrylic.png"
             });
         }
     }
 
-    public ObservableCollection<AppViewModel> InstalledApps { get; set; } = new();
+    public ObservableCollection<PackageViewModel> InstalledApps { get; set; } = new();
 
 
-}
-
-[ObservableObject]
-internal partial class AppViewModel
-{
-    public AppViewModel(string title, string imagePath, string version, bool installed)
-    {
-        Title = title;
-        ImagePath = imagePath;
-        Version = version;
-        Installed = installed;
-    }
-
-    public string Title { get; set; }
-    public string ImagePath { get; set; }
-    public string Version { get; set; }
-    public bool Installed { get; set; }
-    //public string BadgeString { get; set; }
 }
