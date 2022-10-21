@@ -69,21 +69,7 @@ public partial class MainViewModel
     /// Get remote versions
     /// </summary>
     /// <returns></returns>
-    private async Task InitAsync()
-    {
-        await _libraryService.InitAsync();
-
-        for (var i = 0; i < 10; i++)
-        {
-            // thread safety
-            //Text += "-G";
-            //Progress += 10;
-
-            await Task.Delay(500).ConfigureAwait(false);
-        }
-
-
-    }
+    private async Task InitAsync() => await _libraryService.InitAsync();//for (var i = 0; i < 10; i++)//{//    // thread safety//    //Text += "-G";//    //Progress += 10;//    await Task.Delay(500).ConfigureAwait(false);//}
 
     [RelayCommand]
     private async Task Refresh()

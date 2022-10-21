@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -14,9 +15,9 @@ namespace Wolvenkit.Installer.Services;
 
 public interface ILibraryService
 {
-    List<PackageModel> Apps { get; }
+    ObservableCollection<PackageViewModel> InstalledPackages { get; }
 
-    List<RemotePackageViewModel> RemotePackageViewModels { get; set; }
+    ObservableCollection<RemotePackageViewModel> RemotePackages { get; set; }
 
     Task CheckForUpdateAsync(string id);
     Task InstallAsync(string id);
@@ -27,8 +28,8 @@ public class LibraryService : ILibraryService
 {
     public const string FileName = "library.json";
 
-    public List<PackageModel> Apps { get; private set; }
-    public List<RemotePackageViewModel> RemotePackageViewModels { get; set; } = new();
+    public ObservableCollection<PackageViewModel> InstalledPackages { get; private set; } = new();
+    public ObservableCollection<RemotePackageViewModel> RemotePackages { get; set; } = new();
 
     public static string GetAppData()
     {
@@ -62,7 +63,7 @@ public class LibraryService : ILibraryService
 
             // TODO check if installed
 
-            RemotePackageViewModels.Add(new(item, "", EPackageStatus.NotInstalled));
+            RemotePackages.Add(new(item, "", EPackageStatus.NotInstalled));
         }
     }
 
@@ -80,7 +81,15 @@ public class LibraryService : ILibraryService
                     WriteIndented = true,
                     DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
                 });
-                Apps = installed;
+                //Apps = new(installed);
+
+                foreach (var item in installed)
+                {
+                    InstalledPackages.Add(new PackageViewModel(item.IdStr, "ms-appx:///Assets/ControlImages/Acrylic.png", item.Version, false)
+                    {
+                    });
+                }
+
             }
             catch (Exception ex)
             {
@@ -90,12 +99,12 @@ public class LibraryService : ILibraryService
         }
         else
         {
-            Apps = new List<PackageModel>();
+            InstalledPackages = new();
         }
 
         // dng
-        Apps.Add(new("TEST", "1.0"));
-        Apps.Add(new("TEST2", "2.0"));
+        InstalledPackages.Add(new("TEST", "ms-appx:///Assets/ControlImages/Acrylic.png", "1.0", false));
+        InstalledPackages.Add(new("TEST2", "ms-appx:///Assets/ControlImages/Acrylic.png", "2.0", false));
     }
 
 

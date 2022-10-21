@@ -3,7 +3,7 @@
 namespace Wolvenkit.Installer.ViewModel;
 
 [ObservableObject]
-internal partial class PackageViewModel
+public partial class PackageViewModel
 {
     public PackageViewModel(string title, string imagePath, string version, bool installed)
     {

@@ -9,15 +9,13 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Wolvenkit.Installer.Models;
+using Wolvenkit.Installer.Services;
 
 namespace Wolvenkit.Installer.ViewModel;
 internal class AvailableViewModel
 {
-    public AvailableViewModel()
-    {
+    public ILibraryService LibraryService { get; }
 
+    public AvailableViewModel(ILibraryService libraryService) => LibraryService = libraryService;
 
-    }
-
-    public ObservableCollection<RemotePackageViewModel> AvailableApps { get; } = new();
 }

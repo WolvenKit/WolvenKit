@@ -14,9 +14,9 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <GridView
-            x:Name="itemGridView"
+            x:Name="availableGridView"
             Margin="31,31,0,0"
-            AutomationProperties.AutomationId="ItemGridView"
+            AutomationProperties.AutomationId="availableGridView"
             AutomationProperties.Name="Items In Group"
             ContainerContentChanging="OnItemGridViewContainerContentChanging"
             IsItemClickEnabled="True"
@@ -24,7 +24,7 @@
             ItemClick="OnItemGridViewItemClick"
             ItemContainerStyle="{StaticResource IndentedGridViewItemStyle}"
             ItemTemplate="{StaticResource ControlItemTemplate}"
-            ItemsSource="{x:Bind ViewModel.AvailableApps, Mode=OneWay}"
+            ItemsSource="{x:Bind ViewModel.LibraryService.RemotePackages, Mode=OneWay}"
             KeyDown="OnItemGridViewKeyDown"
             Loaded="OnItemGridViewLoaded"
             SelectionMode="None"

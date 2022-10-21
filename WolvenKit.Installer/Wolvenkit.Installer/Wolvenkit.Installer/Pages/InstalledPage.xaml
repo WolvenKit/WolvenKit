@@ -24,7 +24,7 @@
             ItemClick="OnItemGridViewItemClick"
             ItemContainerStyle="{StaticResource IndentedGridViewItemStyle}"
             ItemTemplate="{StaticResource ControlItemTemplate}"
-            ItemsSource="{x:Bind ViewModel.InstalledApps, Mode=OneWay}"
+            ItemsSource="{x:Bind ViewModel.LibraryService.InstalledPackages, Mode=OneWay}"
             KeyDown="OnItemGridViewKeyDown"
             Loaded="OnItemGridViewLoaded"
             SelectionMode="None"
