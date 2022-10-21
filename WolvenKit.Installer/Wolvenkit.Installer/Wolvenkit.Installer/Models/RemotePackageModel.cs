@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Wolvenkit.Installer.Models;
-internal class RemotePackageModel
+public class RemotePackageModel
 {
     public string Url { get; set; }
     public string Name { get; set; }

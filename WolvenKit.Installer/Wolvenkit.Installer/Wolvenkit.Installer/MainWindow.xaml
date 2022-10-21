@@ -39,6 +39,7 @@
 
         <!--    -->
         <NavigationView
+            IsEnabled="{x:Bind ViewModel.Loaded, Mode=OneWay}"
             x:Name="NavigationViewControl"
             Grid.Column="1"
             AlwaysShowHeader="True"
@@ -121,11 +122,12 @@
                         IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}"
                         Value="{x:Bind ViewModel.Progress, Mode=OneWay}" />
 
-                    <Button Content="BUTTON"
+                    <Button
                         Grid.Row="3"
                         Width="500"
                         Height="50"
-                        Command="{x:Bind ViewModel.RefreshCommand}" />
+                        Command="{x:Bind ViewModel.RefreshCommand}"
+                        Content="BUTTON" />
 
                 </Grid>
 

@@ -15,22 +15,7 @@ internal class AvailableViewModel
 {
     public AvailableViewModel()
     {
-        using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"Wolvenkit.Installer.Resources.AvailableApps.json");
 
-
-        var apps = JsonSerializer.Deserialize<List<RemotePackageModel>>(stream,
-            new JsonSerializerOptions()
-            {
-                WriteIndented = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            });
-
-        //var ordered = apps.OrderBy(x => x.Category).ToList();
-
-        foreach (var item in apps)
-        {
-
-        }
 
     }
 

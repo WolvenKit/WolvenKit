@@ -16,10 +16,15 @@ namespace Wolvenkit.Installer.ViewModel;
 public partial class MainViewModel
 {
     private readonly IDialogService _dialogService;
+    private readonly ILibraryService _libraryService;
 
-    public MainViewModel(IDialogService dialogService, INotificationService notificationService)
+    public MainViewModel(
+        IDialogService dialogService,
+        ILibraryService libraryService,
+        INotificationService notificationService)
     {
         _dialogService = dialogService;
+        _libraryService = libraryService;
         NotificationService = notificationService;
 
         Text = "DEBUG";
@@ -41,6 +46,12 @@ public partial class MainViewModel
     [ObservableProperty]
     private bool isIndeterminate;
 
+    [ObservableProperty]
+    private bool loaded;
+
+    /// <summary>
+    /// Load everything expensive and unlock the app afterwards
+    /// </summary>
     private async void Init()
     {
         IsIndeterminate = true;
@@ -50,22 +61,28 @@ public partial class MainViewModel
 
         NotificationService.CloseBanner();
         IsIndeterminate = false;
+
+        Loaded = true;
     }
 
+    /// <summary>
+    /// Get remote versions
+    /// </summary>
+    /// <returns></returns>
     private async Task InitAsync()
     {
+        await _libraryService.InitAsync();
+
+        for (var i = 0; i < 10; i++)
+        {
+            // thread safety
+            //Text += "-G";
+            //Progress += 10;
+
+            await Task.Delay(500).ConfigureAwait(false);
+        }
 
 
-
-
-        //for (var i = 0; i < 10; i++)
-        //{
-        //    // thread safety
-        //    //Text += "-G";
-        //    //Progress += 10;
-
-        //    await Task.Delay(500).ConfigureAwait(false);
-        //}
     }
 
     [RelayCommand]

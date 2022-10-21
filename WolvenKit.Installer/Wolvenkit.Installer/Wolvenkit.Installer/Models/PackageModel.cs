@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Wolvenkit.Installer.Models;
-internal class PackageModel
+public class PackageModel
 {
     public PackageModel(string idStr, string version)
     {

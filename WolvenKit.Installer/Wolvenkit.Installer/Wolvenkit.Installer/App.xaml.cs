@@ -60,12 +60,12 @@ public partial class App : Application
         EnsureWindow();
     }
 
-    private async void EnsureWindow(IActivatedEventArgs args = null)
+    private void EnsureWindow(IActivatedEventArgs args = null)
     {
         // No matter what our destination is, we're going to need control data loaded - let's knock that out now.
         // We'll never need to do this again.
-        var library = App.Current.Services.GetService<ILibraryService>();
-        await library.LoadAsync();
+        //var library = App.Current.Services.GetService<ILibraryService>();
+        //await library.LoadAsync();
 
         ThemeHelper.Initialize();
 
@@ -117,13 +117,12 @@ public partial class App : Application
         ServiceCollection services = new();
 
         services.AddSingleton<ILibraryService, LibraryService>();
-
-        services.AddSingleton<IDialogService, DialogService>();
-        services.AddSingleton<INotificationService, NotificationService>();
+        services.AddTransient<IDialogService, DialogService>();
+        services.AddTransient<INotificationService, NotificationService>();
 
 
         // Viewmodels
-        services.AddSingleton<MainViewModel>();
+        services.AddTransient<MainViewModel>();
         services.AddTransient<InstalledViewModel>();
         services.AddTransient<AvailableViewModel>();
 
