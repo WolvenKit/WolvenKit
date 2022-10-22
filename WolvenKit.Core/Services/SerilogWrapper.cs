@@ -20,7 +20,7 @@ namespace WolvenKit
         public void Important(string msg) => Serilog.Log.Information(msg);
         public void Info(string msg) => Serilog.Log.Information(msg);
         public void SetLoggerVerbosity(LoggerVerbosity verbosity) => LoggerVerbosity = verbosity;
-        public void Success(string msg) => Serilog.Log.Debug(msg); //TODO
+        public void Success(string msg) => Serilog.Log.ForContext("IsSuccess", true).Information(msg); //TODO
 
         public void Warning(string msg) => Serilog.Log.Warning(msg);
 

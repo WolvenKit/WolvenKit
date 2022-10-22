@@ -77,6 +77,12 @@ namespace WolvenKit.Views.Tools
         private void AddLog(LogEvent item)
         {
             var level = item.Level;
+            if (item.Properties.TryGetValue("IsSuccess", out var val) && val is ScalarValue { Value: true })
+            {
+                // ... 
+                level = LogEventLevel.Debug;
+            }
+
             var paragraph = new Paragraph()
             {
                 LineHeight = 1
