@@ -30,18 +30,25 @@ internal class SettingsCommand : CommandBase
             }.Start();
         } else {
             var editorCommand = System.Environment.GetEnvironmentVariable("EDITOR");
+            ProcessStartInfo psInfo;
             if (editorCommand == null) {
-                throw new Exception("EDITOR environment variable unset!");
-            }
-            var proc = new Process
-            {
-                StartInfo = new ProcessStartInfo(settingsPath)
+                Console.WriteLine("$EDITOR not set, please set it if you would like to open the settings in a CLI text editor.");
+                psInfo = new ProcessStartInfo(settingsPath)
+                {
+                    UseShellExecute = false,
+                };
+            } else {
+                psInfo = new ProcessStartInfo(settingsPath)
                 {
                     UseShellExecute = false,
                     FileName = editorCommand,
                     Arguments = $"\"{settingsPath}\"",
                     CreateNoWindow = true,
-                }
+                };
+            }
+            var proc = new Process
+            {
+                StartInfo = psInfo
             };
             proc.Start();
             proc.WaitForExit();
