@@ -1820,7 +1820,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else
             {
-                Locator.Current.GetService<ILoggerService>().Warning("could not recognize the format of your JSON");
+                Locator.Current.GetService<ILoggerService>().Warning("Could not recognize the format of your JSON");
                 return false;
             }
 
@@ -1832,13 +1832,12 @@ namespace WolvenKit.ViewModels.Shell
 
             //var ad = Locator.Current.GetService<AppViewModel>().ActiveDocument;
             var currentfile = new FileModel(Tab.File.FilePath,
-                Locator.Current.GetService<AppViewModel>().ActiveProject);
+            Locator.Current.GetService<AppViewModel>().ActiveProject);
 
             Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
-            //QuickToJSON(Parent.Parent.Data);
             await Refresh();
 
-            Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
+            Locator.Current.GetService<ILoggerService>().Success($"Successfully imported from JSON");
             return true;
         }
 
