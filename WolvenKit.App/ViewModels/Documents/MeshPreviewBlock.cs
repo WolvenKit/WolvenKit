@@ -322,10 +322,8 @@ namespace WolvenKit.ViewModels.Documents
                     SelectedItem = group;
                     e.Handled = true;
                 }
-                if (e.HitTestResult.ModelHit is SubmeshComponent lod)
+                if (e.HitTestResult.ModelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
                 {
-                    var instance = lod.Parent as MeshComponent;
-                    var mesh = instance.Parent as MeshComponent;
                     Locator.Current.GetService<ILoggerService>().Info("Mesh Name: " + mesh.Name);
                 }
             }
