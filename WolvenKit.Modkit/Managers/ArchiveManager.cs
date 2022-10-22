@@ -261,36 +261,60 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <summary>
         /// Loads bundles from specified mods and dlc folder
         /// </summary>
-        public override void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir)
+        public override void LoadModsArchives(FileInfo executable)
         {
-            ModArchives.Clear();
-
-            if (!modsDir.Exists)
+            var di = executable.Directory;
+            if (di?.Parent?.Parent is null)
+            {
+                return;
+            }
+            if (!di.Exists)
             {
                 return;
             }
 
-            //var sw = new Stopwatch();
-            //sw.Start();
+            ModArchives.Clear();
 
-            foreach (var file in Directory.GetFiles(modsDir.FullName, "*.archive", SearchOption.AllDirectories))
+            var modsDirs = new DirectoryInfo[]
+            {
+                new(Path.Combine(di.Parent.Parent.FullName, "mods")),
+                new(Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "mod")),
+            };
+
+            var files = new List<string>();
+            foreach (var modsDir in modsDirs)
+            {
+                if (!modsDir.Exists)
+                {
+                    continue;
+                }
+
+                foreach (var file in Directory.GetFiles(modsDir.FullName, "*.archive", SearchOption.AllDirectories))
+                {
+                    files.Add(file);
+                }
+            }
+
+            files.Sort(string.CompareOrdinal);
+            files.Reverse();
+
+            foreach (var file in files)
             {
                 LoadModArchive(file);
             }
 
-            //sw.Stop();
-            //var ms = sw.ElapsedMilliseconds;
-
-            //if (rebuildtree)
+            foreach (var modArchive in ModArchives.Items)
             {
-                RebuildModRoot();
-
-                _modCache.Edit(innerCache =>
-                {
-                    innerCache.Clear();
-                    innerCache.Add(ModRoots);
-                });
+                modArchive.ArchiveRelativePath = Path.GetRelativePath(di.Parent.Parent.FullName, modArchive.ArchiveAbsolutePath);
             }
+
+            RebuildModRoot();
+
+            _modCache.Edit(innerCache =>
+            {
+                innerCache.Clear();
+                innerCache.Add(ModRoots);
+            });
 
             IsManagerLoaded = true;
         }

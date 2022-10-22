@@ -30,10 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(18)] 
 		[RED("data")] 
-		public InventoryItemData Data
+		public gameInventoryItemData Data
 		{
-			get => GetPropertyValue<InventoryItemData>();
-			set => SetPropertyValue<InventoryItemData>(value);
+			get => GetPropertyValue<gameInventoryItemData>();
+			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
 		[Ordinal(19)] 
@@ -44,10 +44,26 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
+		[Ordinal(20)] 
+		[RED("notificationListenerID")] 
+		public CInt32 NotificationListenerID
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("immediateNotificationListener")] 
+		public CWeakHandle<ImmediateNotificationListener> ImmediateNotificationListener
+		{
+			get => GetPropertyValue<CWeakHandle<ImmediateNotificationListener>>();
+			set => SetPropertyValue<CWeakHandle<ImmediateNotificationListener>>(value);
+		}
+
 		public ItemDisplayVirtualController()
 		{
 			ItemDisplayWidget = new();
-			Data = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			Data = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 
 			PostConstruct();
 		}

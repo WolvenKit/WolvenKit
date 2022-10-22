@@ -1,0 +1,161 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.MaterialsRepositoryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Depot Generator"
+    Width="800"
+    Height="450"
+    d:DataContext="{d:DesignInstance Type=dialogs:MaterialsRepositoryViewModel}"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    SizeToContent="Height"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources AccentColor="{StaticResource MahApps.Brushes.AccentBase}" RequestedTheme="Dark" />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Background="{DynamicResource RegionBrush}" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type hc:Window}}}">
+
+        <StackPanel HorizontalAlignment="Stretch">
+
+            <Grid Margin="16">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Text="Depot Path" />
+                <TextBox
+                    x:Name="MaterialsTextBox"
+                    Grid.Column="1"
+                    Margin="12,0,0,0"
+                    IsReadOnly="True"
+                    PreviewMouseDown="MaterialsButton_Click"
+                    ToolTip="The Depot Path is the output folder for extracted files" />
+            </Grid>
+
+            <Button
+                x:Name="OpenMaterialRepositoryButton"
+                Margin="16,0"
+                HorizontalAlignment="Stretch"
+                Content="Open Depot Folder" />
+
+            <Grid Margin="16,48,16,16">
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Button
+                    x:Name="GenerateMaterialsButton"
+                    Grid.Column="0"
+                    Width="190"
+                    Height="48"
+                    HorizontalAlignment="Left"
+                    ToolTip="Extracts all material files from archives and exports textures to selected format">
+                    <Button.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <iconPacks:PackIconForkAwesome
+                                Padding="0,0,2,2"
+                                Foreground="{StaticResource WolvenKitTan}"
+                                Kind="PictureOutline" />
+                            <iconPacks:PackIconForkAwesome
+                                Padding="6,6,-3,-3"
+                                Foreground="{StaticResource ContentBackgroundAlt2}"
+                                Kind="Circle" />
+                            <iconPacks:PackIconForkAwesome Padding="8,8,-1,-1" Kind="Cog" />
+                            <TextBlock Grid.Column="1" Text="Generate Materials" />
+                        </Grid>
+                    </Button.Content>
+                </Button>
+
+                <ComboBox Grid.Column="1" x:Name="MaterialExtensionCombobox" Margin="0,0,10,0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate >
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+
+
+                <StackPanel Grid.Column="2">
+                    <Border
+                        Height="48"
+                        VerticalAlignment="Stretch"
+                        Style="{StaticResource BorderTipWarning}">
+                        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Requires 12.3 GB disk space using PNG, or up to 56.2 GB using other formats. Generating Materials is extremely resource intensive!" />
+                    </Border>
+                </StackPanel>
+                
+                
+            </Grid>
+
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    x:Name="UnbundleGameButton"
+                    Grid.Column="0"
+                    Width="190"
+                    Height="48"
+                    HorizontalAlignment="Left"
+                    ToolTip="Extracts all game files from archives">
+                    <Button.Content>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <iconPacks:PackIconForkAwesome
+                                Padding="0,0,2,2"
+                                Foreground="{StaticResource WolvenKitTan}"
+                                Kind="Archive" />
+                            <iconPacks:PackIconForkAwesome
+                                Padding="6,6,-3,-3"
+                                Foreground="{StaticResource ContentBackgroundAlt2}"
+                                Kind="Circle" />
+                            <iconPacks:PackIconForkAwesome Padding="8,8,-1,-1" Kind="Cog" />
+                            <TextBlock Grid.Column="1" Text="Unbundle Game" />
+                        </Grid>
+                    </Button.Content>
+                </Button>
+                <StackPanel Grid.Column="1">
+                    <Border
+                        Height="48"
+                        VerticalAlignment="Stretch"
+                        Style="{StaticResource BorderTipWarning}">
+                        <TextBlock VerticalAlignment="Center" Text="Requires 71.2 GB disk space and is extremely resource intensive. Not necessary for most modding workflows." />
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+        </StackPanel>
+    </Grid>
+</Window>

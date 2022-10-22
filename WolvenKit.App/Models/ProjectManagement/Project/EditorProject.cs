@@ -39,8 +39,7 @@ namespace WolvenKit.ProjectManagement.Project
         public abstract GameType GameType { get; }
 
         public abstract string PackedRootDirectory { get; }
-        public abstract string PackedArchiveDirectory { get; }
-
+        public abstract string PackedRedModDirectory { get; }
 
         public bool IsDirty { get; set; }
 
@@ -48,12 +47,12 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var oldDir = Path.Combine(ProjectDirectory, "files");
+                string oldDir = Path.Combine(ProjectDirectory, "files");
                 if (Directory.Exists(oldDir))
                 {
                     return oldDir;
                 }
-                var dir = Path.Combine(ProjectDirectory, "source");
+                string dir = Path.Combine(ProjectDirectory, "source");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -67,12 +66,12 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var oldDir = Path.Combine(FileDirectory, "Mod");
+                string oldDir = Path.Combine(FileDirectory, "Mod");
                 if (Directory.Exists(oldDir))
                 {
                     return oldDir;
                 }
-                var dir = Path.Combine(FileDirectory, "archive");
+                string dir = Path.Combine(FileDirectory, "archive");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -86,7 +85,7 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(ProjectDirectory, "_backups");
+                string dir = Path.Combine(ProjectDirectory, "_backups");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -100,12 +99,12 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var oldDir = Path.Combine(FileDirectory, "Raw");
+                string oldDir = Path.Combine(FileDirectory, "Raw");
                 if (DirExistsMatchCase(oldDir))
                 {
                     return oldDir;
                 }
-                var dir = Path.Combine(FileDirectory, "raw");
+                string dir = Path.Combine(FileDirectory, "raw");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -124,8 +123,8 @@ namespace WolvenKit.ProjectManagement.Project
             }
 
             // Figure out if the case (of the final part) is the same
-            var thisDir = Path.GetFileName(path);
-            var actualDir = Path.GetFileName(Directory.GetDirectories(Path.GetDirectoryName(path), thisDir)[0]);
+            string thisDir = Path.GetFileName(path);
+            string actualDir = Path.GetFileName(Directory.GetDirectories(Path.GetDirectoryName(path), thisDir)[0]);
             return thisDir == actualDir;
         }
 
@@ -176,12 +175,8 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var oldDir = Path.Combine(Path.GetDirectoryName(Location), Name);
-                if (Directory.Exists(oldDir))
-                {
-                    return oldDir;
-                }
-                return Path.GetDirectoryName(Location);
+                string oldDir = Path.Combine(Path.GetDirectoryName(Location), Name);
+                return Directory.Exists(oldDir) ? oldDir : Path.GetDirectoryName(Location);
             }
         }
 
@@ -197,37 +192,21 @@ namespace WolvenKit.ProjectManagement.Project
 
         #region implements IEquatable
 
-        public bool Equals(EditorProject other)
-        {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
+        public bool Equals(EditorProject other) => other is not null && (ReferenceEquals(this, other) || string.Equals(Location, other.Location));
 
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            return string.Equals(Location, other.Location);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            return obj.GetType() == GetType() && Equals((EditorProject)obj);
-        }
+        public override bool Equals(object obj) => obj is not null && (ReferenceEquals(this, obj) || (obj.GetType() == GetType() && Equals((EditorProject)obj)));
 
         public override int GetHashCode() => Location != null ? Location.GetHashCode() : 0;
+        public ModInfo GetInfo()
+        {
+            ModInfo modInfo = new()
+            {
+                Name = Name,
+                Description = Description,
+                Version = Version
+            };
+            return modInfo;
+        }
 
         #endregion implements IEquatable
 

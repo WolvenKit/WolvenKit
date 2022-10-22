@@ -10,13 +10,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
-		
-		[RED("restrictionName")]
-		[REDProperty(IsIgnored = true)]
-		public CName RestrictionName
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
 	}
 }

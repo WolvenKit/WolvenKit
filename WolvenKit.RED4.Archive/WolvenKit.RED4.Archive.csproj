@@ -2,17 +2,30 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Configurations>Release;Debug</Configurations>
+    <Version>1.60.0</Version>
     <Platforms>x64</Platforms>
-    <PackageVersion>0.1.0</PackageVersion>
-    <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <FileVersion>0.1.0.0</FileVersion>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+    <PropertyGroup>
+        <PackageId>WolvenKit.RED4.Archive</PackageId>
+        <Product>WolvenKit.RED4.Archive</Product>
+        <Description>Core file formats for the WolvenKit Mod Editor.</Description>
+
+        <Company>WolvenKit</Company>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <PackageOutputPath>./nupkg</PackageOutputPath>
+    </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj" />
   </ItemGroup>
 

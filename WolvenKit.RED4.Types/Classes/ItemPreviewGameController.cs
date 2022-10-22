@@ -4,7 +4,23 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemPreviewGameController : gameuiItemPreviewGameController
 	{
-		[Ordinal(10)] 
+		[Ordinal(11)] 
+		[RED("colliderWidgetRef")] 
+		public inkWidgetReference ColliderWidgetRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("colliderWidget")] 
+		public CWeakHandle<inkWidget> ColliderWidget
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("itemNameText")] 
 		public inkTextWidgetReference ItemNameText
 		{
@@ -12,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("itemLevelText")] 
 		public inkTextWidgetReference ItemLevelText
 		{
@@ -20,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("itemRarityWidget")] 
 		public inkWidgetReference ItemRarityWidget
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("data")] 
 		public CHandle<InventoryItemPreviewData> Data
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryItemPreviewData>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("isMouseDown")] 
 		public CBool IsMouseDown
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("c_ITEM_ROTATION_SPEED")] 
 		public CFloat C_ITEM_ROTATION_SPEED
 		{
@@ -54,10 +70,11 @@ namespace WolvenKit.RED4.Types
 
 		public ItemPreviewGameController()
 		{
+			ColliderWidgetRef = new();
 			ItemNameText = new();
 			ItemLevelText = new();
 			ItemRarityWidget = new();
-			C_ITEM_ROTATION_SPEED = 4.000000F;
+			C_ITEM_ROTATION_SPEED = 2.000000F;
 
 			PostConstruct();
 		}

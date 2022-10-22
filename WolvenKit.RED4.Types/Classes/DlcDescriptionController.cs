@@ -36,12 +36,53 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("settingSelectorRef")] 
+		public inkWidgetReference SettingSelectorRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("settingSelector")] 
+		public CWeakHandle<inkSettingsSelectorController> SettingSelector
+		{
+			get => GetPropertyValue<CWeakHandle<inkSettingsSelectorController>>();
+			set => SetPropertyValue<CWeakHandle<inkSettingsSelectorController>>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("settingsListener")] 
+		public CHandle<DLCSettingsVarListener> SettingsListener
+		{
+			get => GetPropertyValue<CHandle<DLCSettingsVarListener>>();
+			set => SetPropertyValue<CHandle<DLCSettingsVarListener>>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("settingVar")] 
+		public CHandle<userSettingsVar> SettingVar
+		{
+			get => GetPropertyValue<CHandle<userSettingsVar>>();
+			set => SetPropertyValue<CHandle<userSettingsVar>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("isPreGame")] 
+		public CBool IsPreGame
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public DlcDescriptionController()
 		{
 			TitleRef = new();
 			DescriptionRef = new();
 			GuideRef = new();
 			ImageRef = new();
+			SettingSelectorRef = new();
 
 			PostConstruct();
 		}

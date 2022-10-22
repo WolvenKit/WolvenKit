@@ -41,7 +41,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
                 var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
-                if (meshCr2w != null && meshCr2w.RootChunk is CMesh mesh && mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob rendBlob)
+                if (meshCr2w != null && meshCr2w.RootChunk is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob rendBlob)
                 {
                     newRig = MeshTools.GetOrphanRig(mesh);
                 }

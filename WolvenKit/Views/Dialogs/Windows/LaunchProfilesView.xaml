@@ -1,0 +1,179 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.LaunchProfilesView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:dialogs1="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    Title="Launch Profiles"
+    Width="800"
+    Height="600"
+    WindowStartupLocation="CenterOwner">
+
+    <Grid
+        Margin="1"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
+
+        <Grid.Resources>
+
+            <Style x:Key="WolvenKitToolBarButtonIcon" TargetType="{x:Type iconPacks:PackIconControlBase}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Value="False">
+                        <Setter Property="Foreground" Value="{StaticResource Border}" />
+                        <Setter Property="Opacity" Value="0.5" />
+                    </DataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Foreground, RelativeSource={RelativeSource Self}}" Value="{StaticResource Border}" />
+                            <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" Value="False" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="Opacity" Value="1.0" />
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
+        </Grid.Resources>
+
+        <syncfusion:WizardControl
+            x:Name="WizardControl"
+            CancelButtonCancelsWindow="True"
+            FinishButtonClosesWindow="True">
+
+            <syncfusion:WizardPage
+                BackVisibility="Collapsed"
+                CancelVisibility="Visible"
+                FinishVisibility="Visible"
+                HelpVisibility="Collapsed"
+                NextVisibility="Collapsed"
+                PageType="Exterior">
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <!--  Names Grid  -->
+                    <Grid Grid.Column="0" Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!--  Buttons  -->
+                        <Grid Grid.Row="0" Height="25">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <!--<ColumnDefinition />-->
+                            </Grid.ColumnDefinitions>
+
+                            <Button
+                                x:Name="ToolbarNewItem"
+                                Grid.Column="0"
+                                ToolTip="Add new Launch Profile">
+                                <StackPanel Orientation="Horizontal">
+                                    <iconPacks:PackIconCodicons
+                                        Padding="0,1,0,1"
+                                        Foreground="{StaticResource WolvenKitYellow}"
+                                        Kind="NewFile"
+                                        Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                                    <TextBlock Padding="5,0,0,0" Text="New" />
+                                </StackPanel>
+                            </Button>
+
+                            <Button
+                                x:Name="ToolbarDuplicateItem"
+                                Grid.Column="1"
+                                ToolTip="Duplicate Launch Profile">
+                                <StackPanel Orientation="Horizontal">
+                                    <iconPacks:PackIconCodicons
+                                        Padding="0,1,0,1"
+                                        Foreground="{StaticResource WolvenKitCyan}"
+                                        Kind="Copy"
+                                        Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                                    <TextBlock Padding="5,0,0,0" Text="Duplicate" />
+                                </StackPanel>
+                            </Button>
+
+                            <Button
+                                x:Name="ToolbarDeleteItem"
+                                Grid.Column="2"
+                                ToolTip="Delete Launch Profile">
+                                <StackPanel Orientation="Horizontal">
+                                    <iconPacks:PackIconCodicons
+                                        Padding="0,1,0,1"
+                                        Foreground="{StaticResource WolvenKitRed}"
+                                        Kind="Remove"
+                                        Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                                    <TextBlock Padding="5,0,0,0" Text="Delete" />
+                                </StackPanel>
+                            </Button>
+
+                            <!--<Button
+                                x:Name="ToolbarRenameItem"
+                                Grid.Column="3"
+                                ToolTip="Rename Launch Profile">
+                                <StackPanel Orientation="Horizontal">
+                                    <iconPacks:PackIconCodicons
+                                        Padding="0,1,0,1"
+                                        Foreground="{StaticResource WolvenKitTan}"
+                                        Kind="Edit"
+                                        Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                                    <TextBlock Padding="5,0,0,0" Text="Rename" />
+                                </StackPanel>
+                            </Button>-->
+
+                        </Grid>
+
+                        <!--  DataGrid  -->
+                        <syncfusion:SfDataGrid
+                            x:Name="ProfilesListView"
+                            Grid.Row="1"
+                            Margin="0,10,0,0"
+                            AllowDeleting="False"
+                            AllowDraggingRows="True"
+                            AllowDrop="True"
+                            AllowFiltering="False"
+                            AutoGenerateColumns="False"
+                            ColumnSizer="Star"
+                            ItemsSource="{Binding LaunchProfiles}"
+                            SelectedItem="{Binding SelectedLaunchProfile}"
+                            >
+
+                            <syncfusion:SfDataGrid.Columns>
+                                <syncfusion:GridTextColumn
+                                    AllowEditing="True"
+                                    HeaderText="Name"
+                                    MappingName="Name" />
+                            </syncfusion:SfDataGrid.Columns>
+
+                        </syncfusion:SfDataGrid>
+
+                    </Grid>
+
+                    <!--  PropertyGrid  -->
+                    <Grid Grid.Column="2" Margin="5">
+                        <syncfusion:PropertyGrid
+                            x:Name="ProfilePropertyGrid"
+                            AutoGeneratingPropertyGridItem="ProfilePropertyGrid_AutoGeneratingPropertyGridItem"
+                            EnableGrouping="True"
+                            SelectedObject="{Binding SelectedLaunchProfile.Profile}" />
+                    </Grid>
+
+                </Grid>
+
+            </syncfusion:WizardPage>
+
+        </syncfusion:WizardControl>
+    </Grid>
+
+</Window>

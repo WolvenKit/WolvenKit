@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryWeaponDisplayController : InventoryItemDisplayController
 	{
-		[Ordinal(90)] 
+		[Ordinal(99)] 
 		[RED("weaponSpecyficModsRoot")] 
 		public inkCompoundWidgetReference WeaponSpecyficModsRoot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(100)] 
 		[RED("statsWrapper")] 
 		public inkWidgetReference StatsWrapper
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(101)] 
 		[RED("dpsText")] 
 		public inkTextWidgetReference DpsText
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(102)] 
 		[RED("damageTypeIndicatorImage")] 
 		public inkImageWidgetReference DamageTypeIndicatorImage
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(103)] 
 		[RED("dpsWrapper")] 
 		public inkWidgetReference DpsWrapper
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(104)] 
 		[RED("dpsValue")] 
 		public inkTextWidgetReference DpsValue
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(105)] 
 		[RED("silencerIcon")] 
 		public inkWidgetReference SilencerIcon
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(106)] 
 		[RED("scopeIcon")] 
 		public inkWidgetReference ScopeIcon
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(107)] 
 		[RED("weaponAttachmentsDisplay")] 
 		public CArray<CWeakHandle<InventoryItemPartDisplay>> WeaponAttachmentsDisplay
 		{

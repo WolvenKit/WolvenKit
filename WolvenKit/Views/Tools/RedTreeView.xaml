@@ -155,20 +155,23 @@
                             <TextBlock Foreground="{StaticResource WolvenKitTan}" Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                     </StackPanel>
-                    <TextBlock
-                        Name="PropertyDescriptor"
+                    <StackPanel
                         Grid.Column="2"
-                        Margin="0,0,4,2"
-                        Style="{StaticResource PropertyValueStyle}"
-                        Text="{Binding Descriptor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        TextTrimming="CharacterEllipsis" />
-                    <TextBlock
-                        Name="PropertyValue"
-                        Grid.Column="2"
-                        Margin="0,0,0,2"
-                        Style="{StaticResource PropertyValueStyle}"
-                        Text="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        TextTrimming="CharacterEllipsis" />
+                        Margin="0,0,4,0"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Name="PropertyDescriptor"
+                            Margin="0,0,4,2"
+                            Style="{StaticResource PropertyValueStyle}"
+                            Text="{Binding Descriptor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextTrimming="CharacterEllipsis" />
+                        <TextBlock
+                            Name="PropertyValue"
+                            Margin="0,0,0,2"
+                            Style="{StaticResource PropertyValueStyle}"
+                            Text="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
                 </Grid>
             </DataTemplate>
 
@@ -255,6 +258,38 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Kind="ContentDuplicate" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.SaveBufferToDiskCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Save Buffer To Disk"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ContentSave" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.LoadBufferFromDiskCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Load Buffer From Disk"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="FolderOpen" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -502,6 +537,22 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Kind="NotificationClearAll" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.RegenerateAppearanceVisualControllerCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Regenerate Appearance Dependencies"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Refresh" />
                     </MenuItem.Icon>
                 </MenuItem>
             </ContextMenu>

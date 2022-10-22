@@ -50,160 +50,170 @@ namespace WolvenKit.ViewModels.Documents
             library = _data as inkWidgetLibraryResource;
         }
 
-        public async Task LoadResources() => await Task.Run(async () =>
-                                                      {
-                                                          var tasks = new List<Task>
-                                                          {
+        public async Task LoadResources()
+        {
+            await Task.Run(async () =>
+            {
+                var tasks = new List<Task>
+                {
                     LoadAnimations()
-                                                          };
+                };
 
-                                                          foreach (var f in library.ExternalDependenciesForInternalItems)
-                                                          {
-                                                              var itemPath = (string)f.DepotPath;
-                                                              if (Path.GetExtension(itemPath) == ".inkatlas")
-                                                              {
-                                                                  tasks.Add(LoadInkAtlasAsync(itemPath));
-                                                              }
-                                                              else if (Path.GetExtension(itemPath) == ".inkfontfamily")
-                                                              {
-                                                                  tasks.Add(LoadFont(itemPath));
-                                                              }
-                                                              else if (Path.GetExtension(itemPath) == ".inkstyle")
-                                                              {
-                                                                  tasks.Add(LoadStyle(itemPath));
-                                                              }
-                                                          }
+                foreach (var f in library.ExternalDependenciesForInternalItems)
+                {
+                    var itemPath = (string)f.DepotPath;
+                    if (Path.GetExtension(itemPath) == ".inkatlas")
+                    {
+                        tasks.Add(LoadInkAtlasAsync(itemPath));
+                    }
+                    else if (Path.GetExtension(itemPath) == ".inkfontfamily")
+                    {
+                        tasks.Add(LoadFont(itemPath));
+                    }
+                    else if (Path.GetExtension(itemPath) == ".inkstyle")
+                    {
+                        tasks.Add(LoadStyle(itemPath));
+                    }
+                }
 
-                                                          await Task.WhenAll(tasks);
-                                                      });
+                await Task.WhenAll(tasks);
+            });
+        }
 
-        public Task LoadAnimations() => Task.Run(() =>
-                                                 {
-                                                     inkAnimations = new();
+        public Task LoadAnimations()
+        {
+            return Task.Run(() =>
+            {
+                inkAnimations = new();
 
-                                                     var animFile = File.GetFileFromDepotPath(library.AnimationLibraryResRef?.DepotPath ?? null);
+                var animFile = File.GetFileFromDepotPath(library.AnimationLibraryResRef?.DepotPath ?? null);
 
-                                                     if (animFile != null && animFile.RootChunk is inkanimAnimationLibraryResource alr)
-                                                     {
-                                                         foreach (var seq in alr.Sequences)
-                                                         {
-                                                             inkAnimations.Add((inkanimSequence)seq.GetValue());
-                                                         }
-                                                     }
-                                                 });
+                if (animFile != null && animFile.RootChunk is inkanimAnimationLibraryResource alr)
+                {
+                    foreach (var seq in alr.Sequences)
+                    {
+                        inkAnimations.Add((inkanimSequence)seq.GetValue());
+                    }
+                }
+            });
+        }
 
-        public Task LoadFont(string path) => Task.Run(() =>
-                                                      {
-                                                          if (Application.Current.Resources.Contains(path))
-                                                          {
-                                                              return;
-                                                          }
+        public Task LoadFont(string path)
+        {
+            return Task.Run(() =>
+            {
+                if (Application.Current.Resources.Contains(path))
+                {
+                    return;
+                }
 
-                                                          Application.Current.Resources.Add(path, false);
+                Application.Current.Resources.Add(path, false);
 
-                                                          var ffFile = File.GetFileFromDepotPath(path);
-                                                          if (ffFile == null || ffFile.RootChunk is not inkFontFamilyResource ffr)
-                                                          {
-                                                              return;
-                                                          }
+                var ffFile = File.GetFileFromDepotPath(path);
+                if (ffFile == null || ffFile.RootChunk is not inkFontFamilyResource ffr)
+                {
+                    return;
+                }
 
-                                                          foreach (var fs in ffr.FontStyles)
-                                                          {
-                                                              var key = "FontCollection/" + path + "#" + fs.StyleName;
-                                                              if (!Application.Current.Resources.Contains(key))
-                                                              {
-                                                                  var fontFile = File.GetFileFromDepotPath(fs.Font.DepotPath);
-                                                                  if (fontFile == null || fontFile.RootChunk is not rendFont rf)
-                                                                  {
-                                                                      continue;
-                                                                  }
+                foreach (var fs in ffr.FontStyles)
+                {
+                    var key = "FontCollection/" + path + "#" + fs.StyleName;
+                    if (!Application.Current.Resources.Contains(key))
+                    {
+                        var fontFile = File.GetFileFromDepotPath(fs.Font.DepotPath);
+                        if (fontFile == null || fontFile.RootChunk is not rendFont rf)
+                        {
+                            continue;
+                        }
 
-                                                                  PrivateFontCollection pfc = new();
-                                                                  var fontBytes = rf.FontBuffer.Buffer.GetBytes();
-                                                                  var ptrData = Marshal.AllocCoTaskMem(fontBytes.Length);
-                                                                  Marshal.Copy(fontBytes, 0, ptrData, fontBytes.Length);
-                                                                  pfc.AddMemoryFont(ptrData, fontBytes.Length);
-                                                                  Marshal.FreeCoTaskMem(ptrData);
+                        PrivateFontCollection pfc = new();
+                        var fontBytes = rf.FontBuffer.Buffer.GetBytes();
+                        var ptrData = Marshal.AllocCoTaskMem(fontBytes.Length);
+                        Marshal.Copy(fontBytes, 0, ptrData, fontBytes.Length);
+                        pfc.AddMemoryFont(ptrData, fontBytes.Length);
+                        Marshal.FreeCoTaskMem(ptrData);
 
-                                                                  Application.Current.Resources.Add(key, pfc);
-                                                              }
-                                                          }
+                        Application.Current.Resources.Add(key, pfc);
+                    }
+                }
 
-                                                          Application.Current.Resources[path] = true;
-                                                      });
+                Application.Current.Resources[path] = true;
+            });
+        }
 
-        public Task LoadStyle(string path) => Task.Run(() =>
-                                                       {
-                                                           var styleFile = File.GetFileFromDepotPath(path);
+        public Task LoadStyle(string path)
+        {
+            return Task.Run(() =>
+            {
+                var styleFile = File.GetFileFromDepotPath(path);
 
-                                                           if (styleFile == null || styleFile.RootChunk is not inkStyleResource sr)
-                                                           {
-                                                               return;
-                                                           }
+                if (styleFile == null || styleFile.RootChunk is not inkStyleResource sr)
+                {
+                    return;
+                }
 
-                                                           if (!Themes.Contains("Default"))
-                                                           {
-                                                               Themes.Add("Default");
-                                                           }
-                                                           CurrentTheme = "Default";
+                if (!Themes.Contains("Default"))
+                {
+                    Themes.Add("Default");
+                }
+                CurrentTheme = "Default";
 
-                                                           foreach (var style in sr.Styles)
-                                                           {
-                                                               if (!StyleStates.Contains(style.State))
-                                                               {
-                                                                   StyleStates.Add(style.State);
-                                                               }
+                foreach (var style in sr.Styles)
+                {
+                    if (!StyleStates.Contains(style.State))
+                    {
+                        StyleStates.Add(style.State);
+                    }
 
-                                                               foreach (var prop in style.Properties)
-                                                               {
-                                                                   var key = "CVariant/Default/" + prop.PropertyPath + "#" + style.State;
-                                                                   if (!Application.Current.Resources.Contains(key))
-                                                                   {
-                                                                       Application.Current.Resources.Add(key, prop.Value);
-                                                                   }
-                                                               }
-                                                           }
+                    foreach (var prop in style.Properties)
+                    {
+                        var key = "CVariant/Default/" + prop.PropertyPath + "#" + style.State;
+                        if (!Application.Current.Resources.Contains(key))
+                        {
+                            Application.Current.Resources.Add(key, prop.Value);
+                        }
+                    }
+                }
 
-                                                           if (StyleStates.Count > 0)
-                                                           {
-                                                               CurrentStyleState = StyleStates[0];
-                                                           }
+                if (StyleStates.Count > 0)
+                {
+                    CurrentStyleState = StyleStates[0];
+                }
 
-                                                           foreach (var theme in sr.Themes)
-                                                           {
-                                                               var themeFile = File.GetFileFromDepotPath(theme.StyleResource.DepotPath);
-                                                               if (themeFile == null || themeFile.RootChunk is not inkStyleResource isr)
-                                                               {
-                                                                   continue;
-                                                               }
+                foreach (var theme in sr.Themes)
+                {
+                    var themeFile = File.GetFileFromDepotPath(theme.StyleResource.DepotPath);
+                    if (themeFile == null || themeFile.RootChunk is not inkStyleResource isr)
+                    {
+                        continue;
+                    }
 
-                                                               foreach (var style in isr.Styles)
-                                                               {
-                                                                   if (!StyleStates.Contains(style.State))
-                                                                   {
-                                                                       StyleStates.Add(style.State);
-                                                                   }
+                    foreach (var style in isr.Styles)
+                    {
+                        if (!StyleStates.Contains(style.State))
+                        {
+                            StyleStates.Add(style.State);
+                        }
 
-                                                                   foreach (var prop in style.Properties)
-                                                                   {
-                                                                       var key = "CVariant/" + theme.ThemeID + "/" + prop.PropertyPath + "#" + style.State;
-                                                                       if (!Application.Current.Resources.Contains(key))
-                                                                       {
-                                                                           Application.Current.Resources.Add(key, prop.Value);
-                                                                       }
-                                                                   }
-                                                               }
+                        foreach (var prop in style.Properties)
+                        {
+                            var key = "CVariant/" + theme.ThemeID + "/" + prop.PropertyPath + "#" + style.State;
+                            if (!Application.Current.Resources.Contains(key))
+                            {
+                                Application.Current.Resources.Add(key, prop.Value);
+                            }
+                        }
+                    }
 
-                                                               if (!Themes.Contains(theme.ThemeID))
-                                                               {
-                                                                   Themes.Add(theme.ThemeID);
-                                                               }
-                                                           }
-                                                       });
+                    if (!Themes.Contains(theme.ThemeID))
+                    {
+                        Themes.Add(theme.ThemeID);
+                    }
+                }
+            });
+        }
 
-        public Task LoadInkAtlasAsync(string path) => Task.Run(() => LoadInkAtlas(path));
-
-        public void LoadInkAtlas(string path)
+        public async Task LoadInkAtlasAsync(string path)
         {
             if (Application.Current.Resources.Contains(path))
             {
@@ -225,18 +235,18 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             using var ddsstream = new MemoryStream();
-            if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _))
+            if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _, out var decompressedFormat))
             {
                 return;
             }
 
-            var qa = ImageDecoder.RenderToBitmapSourceDds(ddsstream);
-            if (qa.Result == null)
+            var qa = await ImageDecoder.RenderToBitmapImageDds(ddsstream, decompressedFormat);
+            if (qa is null)
             {
                 return;
             }
 
-            var image = new TransformedBitmap(qa.Result, new ScaleTransform(1, -1));
+            var image = new TransformedBitmap(qa, new ScaleTransform(1, -1));
 
             foreach (var part in atlas.Slots[0].Parts)
             {

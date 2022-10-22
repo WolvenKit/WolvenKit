@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ReactiveUI;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
 {
@@ -22,14 +23,24 @@ namespace WolvenKit.Views.Dialogs
     /// </summary>
     public partial class SelectRedTypeDialog : ReactiveUserControl<SelectRedTypeDialogViewModel>
     {
-        #region Constructors
 
         public SelectRedTypeDialog()
         {
             InitializeComponent();
+
+            this.WhenActivated(disposables =>
+            {
+
+
+                this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
+                    .DisposeWith(disposables);
+
+            });
         }
 
-        #endregion Constructors
 
         private void SetSelectedType(object sender, System.Windows.RoutedEventArgs e) => ViewModel.SelectedTypeString = (sender as Button).Content.ToString();
     }

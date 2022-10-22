@@ -15,6 +15,8 @@
     <None Remove="Resources\4_oodle.kark" />
     <None Remove="Resources\5_oodle.kark" />
     <None Remove="Resources\6_oodle.kark" />
+	<None Remove="Resources\552019.ogg" />
+	<None Remove="Resources\552019.wem" />
     <None Remove="Resources\h0_001_wa_c__judy_d02.bmp" />
     <None Remove="Resources\h0_001_wa_c__judy_d02.dds" />
     <None Remove="Resources\h0_001_wa_c__judy_d02.jpg" />
@@ -47,6 +49,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\6_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\552019.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\552019.wem">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\h0_001_wa_c__judy_d02.bmp">
@@ -91,7 +99,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="2.2.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
     <PackageReference Include="coverlet.collector" Version="3.1.2">

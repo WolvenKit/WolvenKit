@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Semver;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Common.Conversion;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.JSON;
@@ -61,7 +64,7 @@ public class CKeyValuePairConverter : JsonConverter<CKeyValuePair>, ICustomRedCo
             throw new JsonException();
         }
 
-        if (RedJsonSerializer.IsVersion("0.0.2") && propertyName != "$type")
+        if (RedJsonSerializer.IsNewerThen("0.0.1") && propertyName != "$type")
         {
             throw new JsonException();
         }
@@ -454,17 +457,14 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
 
     public RedBaseClass? CustomRead(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options, string? refId)
     {
-        if (RedJsonSerializer.IsVersion("0.0.1"))
+        if (RedJsonSerializer.IsOlderThen("0.0.2"))
         {
             return CustomReadV1(ref reader, typeToConvert, options, refId);
         }
-
-        if (RedJsonSerializer.IsVersion("0.0.2"))
+        else
         {
             return CustomReadV2(ref reader, typeToConvert, options, refId);
         }
-
-        throw new JsonException("Unsupported version");
     }
 
     public RedBaseClass? CustomReadV1(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options, string? refId)
@@ -755,18 +755,372 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
 
 public class Red4FileConverterFactory : JsonConverterFactory
 {
-    private readonly RedPackageConverter _redPackageConverter = new();
+    private readonly CR2WFileConverter _cr2wFileConverter;
+    private readonly RedPackageConverter _redPackageConverter;
+
+    public Red4FileConverterFactory(ReferenceResolver<RedBaseClass> classResolver)
+    {
+        _cr2wFileConverter = new(classResolver);
+        _redPackageConverter = new();
+    }
 
     public override bool CanConvert(Type typeToConvert) => typeToConvert.IsSubclassOf(typeof(Red4File));
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
+        if (typeToConvert == typeof(CR2WFile))
+        {
+            return _cr2wFileConverter;
+        }
+
         if (typeToConvert == typeof(RedPackage))
         {
             return _redPackageConverter;
         }
 
         throw new NotSupportedException("CreateConverter got called on a type that this converter factory doesn't support");
+    }
+}
+
+public class CR2WFileConverter : JsonConverter<CR2WFile>, ICustomRedConverter
+{
+    private readonly ReferenceResolver<RedBaseClass> _referenceResolver;
+
+    public CR2WFileConverter(ReferenceResolver<RedBaseClass> classResolver)
+    {
+        _referenceResolver = classResolver;
+    }
+
+    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
+
+    public override CR2WFile Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        switch (RedJsonSerializer.GetDataType())
+        {
+            case DataTypes.CR2W:
+            {
+                return ReadRegular(ref reader, options);
+            }
+
+            case DataTypes.CR2WFlat:
+            {
+                return ReadFlat(ref reader, options);
+            }
+
+            default:
+            {
+                throw new JsonException();
+            }
+        }
+    }
+
+    private CR2WFile ReadRegular(ref Utf8JsonReader reader, JsonSerializerOptions options)
+    {
+        if (reader.TokenType != JsonTokenType.StartObject)
+        {
+            throw new JsonException();
+        }
+
+        var result = new CR2WFile();
+
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndObject)
+            {
+                break;
+            }
+
+            if (reader.TokenType != JsonTokenType.PropertyName)
+            {
+                throw new JsonException();
+            }
+
+            var propertyName = reader.GetString();
+            reader.Read();
+
+            switch (propertyName)
+            {
+                case "Version":
+                {
+                    if (reader.TokenType != JsonTokenType.Number)
+                    {
+                        throw new JsonException();
+                    }
+
+                    result.MetaData.Version = reader.GetUInt32();
+
+                    break;
+                }
+
+                case "BuildVersion":
+                {
+                    if (reader.TokenType != JsonTokenType.Number)
+                    {
+                        throw new JsonException();
+                    }
+
+                    result.MetaData.BuildVersion = reader.GetUInt32();
+
+                    break;
+                }
+
+                case "RootChunk":
+                {
+                    var converter = options.GetConverter(typeof(RedBaseClass));
+                    if (converter is ICustomRedConverter conv)
+                    {
+                        result.RootChunk = (RedBaseClass?)conv.ReadRedType(ref reader, typeof(RedBaseClass), options);
+                    }
+                    else
+                    {
+                        throw new JsonException();
+                    }
+
+                    break;
+                }
+
+                case "EmbeddedFiles":
+                {
+                    if (reader.TokenType != JsonTokenType.StartArray)
+                    {
+                        throw new JsonException();
+                    }
+
+                    while (reader.Read())
+                    {
+                        if (reader.TokenType == JsonTokenType.EndArray)
+                        {
+                            break;
+                        }
+
+                        result.EmbeddedFiles.Add(JsonSerializer.Deserialize<CR2WEmbedded>(ref reader, options));
+                    }
+
+                    break;
+                }
+
+                default:
+                {
+                    throw new JsonException();
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private CR2WFile ReadFlat(ref Utf8JsonReader reader, JsonSerializerOptions options)
+    {
+        if (reader.TokenType != JsonTokenType.StartObject)
+        {
+            throw new JsonException();
+        }
+
+        var result = new CR2WFile();
+
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndObject)
+            {
+                break;
+            }
+
+            if (reader.TokenType != JsonTokenType.PropertyName)
+            {
+                throw new JsonException();
+            }
+
+            var propertyName = reader.GetString();
+            reader.Read();
+
+            switch (propertyName)
+            {
+                case "Version":
+                {
+                    if (reader.TokenType != JsonTokenType.Number)
+                    {
+                        throw new JsonException();
+                    }
+
+                    result.MetaData.Version = reader.GetUInt32();
+
+                    break;
+                }
+
+                case "BuildVersion":
+                {
+                    if (reader.TokenType != JsonTokenType.Number)
+                    {
+                        throw new JsonException();
+                    }
+
+                    result.MetaData.BuildVersion = reader.GetUInt32();
+
+                    break;
+                }
+
+                case "RootChunk":
+                {
+                    if (reader.TokenType != JsonTokenType.StartObject)
+                    {
+                        throw new JsonException();
+                    }
+
+                    result.RootChunk = JsonSerializer.Deserialize<RedBaseClass>(ref reader, options);
+
+                    break;
+                }
+
+                case "EmbeddedFiles":
+                {
+                    if (reader.TokenType != JsonTokenType.StartArray)
+                    {
+                        throw new JsonException();
+                    }
+
+                    while (reader.Read())
+                    {
+                        if (reader.TokenType == JsonTokenType.EndArray)
+                        {
+                            break;
+                        }
+
+                        result.EmbeddedFiles.Add(JsonSerializer.Deserialize<CR2WEmbedded>(ref reader, options));
+                    }
+
+                    break;
+                }
+
+                case "ChunkReferences":
+                {
+                    if (reader.TokenType != JsonTokenType.StartArray)
+                    {
+                        throw new JsonException();
+                    }
+
+                    var chunkList = JsonSerializer.Deserialize<List<JsonElement>>(ref reader, options)!;
+
+                    for (var i = 0; i < chunkList.Count; i++)
+                    {
+                        string? type;
+
+                        if (RedJsonSerializer.IsOlderThen("0.0.2"))
+                        {
+                            type = chunkList[i].GetProperty("Type").GetString();
+                        }
+                        else
+                        {
+                            type = chunkList[i].GetProperty("$type").GetString();
+                        }
+
+                        if (type == null)
+                        {
+                            throw new JsonException();
+                        }
+
+                        _referenceResolver.AddReference(i.ToString(), RedTypeManager.Create(type));
+                    }
+
+                    var conv = (RedClassConverter)options.GetConverter(typeof(RedBaseClass));
+                    for (var i = 0; i < chunkList.Count; i++)
+                    {
+                        var bufferWriter = new ArrayBufferWriter<byte>();
+                        using (var writer = new Utf8JsonWriter(bufferWriter))
+                        {
+                            chunkList[i].WriteTo(writer);
+                        }
+
+                        var subReader = new Utf8JsonReader(bufferWriter.WrittenSpan, reader.CurrentState.Options);
+                        subReader.Read();
+
+                        conv.CustomRead(ref subReader, typeof(RedBaseClass), options, i.ToString());
+                    }
+
+                    break;
+                }
+
+                default:
+                {
+                    throw new JsonException();
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public override void Write(Utf8JsonWriter writer, CR2WFile value, JsonSerializerOptions options)
+    {
+        switch (RedJsonSerializer.GetDataType())
+        {
+            case DataTypes.CR2W:
+            {
+                WriteRegular(writer, value, options);
+                break;
+            }
+
+            case DataTypes.CR2WFlat:
+            {
+                WriteFlat(writer, value, options);
+                break;
+            }
+
+            default:
+            {
+                throw new JsonException();
+            }
+        }
+    }
+
+    private void WriteRegular(Utf8JsonWriter writer, CR2WFile value, JsonSerializerOptions options)
+    {
+        writer.WriteStartObject();
+
+        writer.WriteNumber("Version", value.MetaData.Version);
+        writer.WriteNumber("BuildVersion", value.MetaData.BuildVersion);
+
+        writer.WritePropertyName("RootChunk");
+        JsonSerializer.Serialize(writer, value.RootChunk, options);
+
+        writer.WritePropertyName("EmbeddedFiles");
+        writer.WriteStartArray();
+        foreach (var embeddedFile in value.EmbeddedFiles)
+        {
+            JsonSerializer.Serialize(writer, embeddedFile, options);
+        }
+        writer.WriteEndArray();
+
+        writer.WriteEndObject();
+    }
+
+    private void WriteFlat(Utf8JsonWriter writer, CR2WFile value, JsonSerializerOptions options)
+    {
+        /*var chunks = value.GetChunkList();
+        foreach (var chunk in chunks)
+        {
+            _referenceResolver.GetReference(chunk, out _);
+        }
+
+        writer.WriteStartObject();
+
+        writer.WriteNumber("Version", value.Data.MetaData.Version);
+        writer.WriteNumber("BuildVersion", value.Data.MetaData.BuildVersion);
+
+        writer.WritePropertyName("ChunkReferences");
+        JsonSerializer.Serialize(writer, chunks, options);
+
+        writer.WritePropertyName("RootChunk");
+        JsonSerializer.Serialize(writer, value.Data.RootChunk, options);
+
+        writer.WritePropertyName("EmbeddedFiles");
+        writer.WriteStartArray();
+        foreach (var embeddedFile in value.Data.EmbeddedFiles)
+        {
+            JsonSerializer.Serialize(writer, embeddedFile, options);
+        }
+        writer.WriteEndArray();
+
+        writer.WriteEndObject();*/
     }
 }
 
@@ -786,11 +1140,22 @@ public class RedPackageConverter : JsonConverter<RedPackage>, ICustomRedConverte
             throw new JsonException();
         }
 
+        Dictionary<int, CRUID>? cruidDict = null;
+
         var result = new RedPackage();
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)
             {
+                if (cruidDict != null)
+                {
+                    foreach (var (index, cruid) in cruidDict)
+                    {
+                        result.RootCruids.Add(cruid);
+                        result.ChunkDictionary.Add(result.Chunks[index], cruid);
+                    }
+                }
+
                 return result;
             }
 
@@ -835,6 +1200,18 @@ public class RedPackageConverter : JsonConverter<RedPackage>, ICustomRedConverte
                     }
 
                     result.CruidIndex = reader.GetInt16();
+                    break;
+                }
+
+                case "CruidDict":
+                {
+                    reader.Read();
+                    if (reader.TokenType != JsonTokenType.StartObject)
+                    {
+                        throw new JsonException();
+                    }
+
+                    cruidDict = JsonSerializer.Deserialize<Dictionary<int, CRUID>>(ref reader, options);
                     break;
                 }
 
@@ -907,13 +1284,27 @@ public class RedPackageConverter : JsonConverter<RedPackage>, ICustomRedConverte
         writer.WriteNumber("Sections", value.Sections);
         writer.WriteNumber("CruidIndex", value.CruidIndex);
 
-        writer.WritePropertyName("RootCruids");
-        writer.WriteStartArray();
-        foreach (var cruid in value.RootCruids)
+        var cruidToChunkDict = new Dictionary<int, CRUID>();
+        foreach (var (chunk, cruid) in value.ChunkDictionary)
         {
-            writer.WriteNumberValue(cruid);
+            var index = -1;
+            for (var i = 0; i < value.Chunks.Count; i++)
+            {
+                if (ReferenceEquals(chunk, value.Chunks[i]))
+                {
+                    index = i;
+                }
+            }
+
+            if (index == -1)
+            {
+                throw new JsonException();
+            }
+
+            cruidToChunkDict.Add(index, cruid);
         }
-        writer.WriteEndArray();
+        writer.WritePropertyName("CruidDict");
+        JsonSerializer.Serialize(writer, cruidToChunkDict, options);
 
         writer.WritePropertyName("Chunks");
         writer.WriteStartArray();

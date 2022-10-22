@@ -11,14 +11,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
-		[RED("invert")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Invert
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("maxAmount")]
 		[REDProperty(IsIgnored = true)]
 		public CInt32 MaxAmount
@@ -33,14 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
-		}
-		
-		[RED("optionalFastExit")]
-		[REDProperty(IsIgnored = true)]
-		public CBool OptionalFastExit
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

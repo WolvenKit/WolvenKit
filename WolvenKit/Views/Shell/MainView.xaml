@@ -4,16 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dialogVMs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:dialogVMs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:dialogs="clr-namespace:WolvenKit.Views.Dialogs"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:hpv="clr-namespace:WolvenKit.Views.HomePage"
     xmlns:hpvm="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
     xmlns:shell="clr-namespace:WolvenKit.Views.Shell"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-    xmlns:wizardVMs="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
-    xmlns:wizards="clr-namespace:WolvenKit.Views.Wizards"
     Title="{Binding Title}"
     MinWidth="960"
     MinHeight="600"
@@ -22,98 +19,24 @@
     Background="Transparent"
     Icon="TaskBarIcon.ico"
     IconAlignment="Left"
-    ResizeBorderBrush="Transparent"
+    LeftHeaderItemsSource="{DynamicResource leftHeaderItems}"
+    Loaded="ChromelessWindow_Loaded"
+    Closing="ChromelessWindow_Closing"
     ResizeMode="CanResizeWithGrip"
-    ShowIcon="False"
+    RightHeaderItemsSource="{DynamicResource rightHeaderItems}"
+    ShowIcon="True"
     SizeToContent="Manual"
-    TitleBarBackground="Transparent"
-    TitleBarHeight="32"
-    TitleFontSize="12"
-    TitleTextAlignment="Left"
+    TitleTextAlignment="Right"
     UseLayoutRounding="True"
     UseNativeChrome="True">
     <!--  TextBlock Text="{Binding Title}" FontSize="{Binding TitileFontSize}" VerticalAlignment="Center" Margin="10,0,0,0" Opacity="{Binding Opacity, ElementName=ModalOverlay}"/  -->
 
-    <syncfusion:ChromelessWindow.Style>
-        <Style BasedOn="{StaticResource SyncfusionChromelessWindowStyle}" TargetType="{x:Type syncfusion:ChromelessWindow}">
-            <Setter Property="ResizeBorderThickness" Value="5,3,5,7" />
-            <Setter Property="TitleBarForeground" Value="#ffefefef" />
-            <Setter Property="TitleBarTemplate">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type syncfusion:TitleBar}">
-                        <Border
-                            Name="border"
-                            Width="Auto"
-                            Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ChromelessWindow}}, Path=TitleBarBackground}"
-                            BorderThickness="{StaticResource MaterialDark.BorderThickness}"
-                            CornerRadius="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type syncfusion:ChromelessWindow}}, Path=CornerRadius, Converter={StaticResource CRConvert}, ConverterParameter=Top}">
-                            <ContentPresenter
-                                Margin="5,0,0,0"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center" />
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="WindowState" Value="{x:Static WindowState.Maximized}">
-                    <Setter Property="ResizeBorderThickness" Value="0,0,0,0" />
-                    <Setter Property="Margin" Value="0,0,0,0" />
-                </Trigger>
-                <DataTrigger Binding="{Binding ShouldOverlayShow}" Value="True">
-                    <Setter Property="TitleBarForeground" Value="#00efefef" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ShouldOverlayShow}" Value="True">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ColorAnimation
-                                    Storyboard.TargetProperty="TitleBarForeground.(SolidColorBrush.Color)"
-                                    From="#ffefefef"
-                                    To="#00efefef"
-                                    Duration="0:0:0.3" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-                    <DataTrigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ColorAnimation
-                                    Storyboard.TargetProperty="TitleBarForeground.(SolidColorBrush.Color)"
-                                    From="#00efefef"
-                                    To="#ffefefef"
-                                    Duration="0:0:0.3" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.ExitActions>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ShouldDialogShow}" Value="True">
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ColorAnimation
-                                    Storyboard.TargetProperty="TitleBarForeground.(SolidColorBrush.Color)"
-                                    From="#ffefefef"
-                                    To="#22efefef"
-                                    Duration="0:0:0.3" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-                    <DataTrigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <ColorAnimation
-                                    Storyboard.TargetProperty="TitleBarForeground.(SolidColorBrush.Color)"
-                                    From="#22efefef"
-                                    To="#ffefefef"
-                                    Duration="0:0:0.3" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.ExitActions>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </syncfusion:ChromelessWindow.Style>
+    <syncfusion:ChromelessWindow.Resources>
+        <shell:MyObservableCollection x:Key="leftHeaderItems">
+            <shell:MenuBarView />
+        </shell:MyObservableCollection>
+    </syncfusion:ChromelessWindow.Resources>
+
     <syncfusion:ChromelessWindow.InputBindings>
         <KeyBinding
             Key="N"
@@ -129,9 +52,9 @@
             Modifiers="Control" />
         <KeyBinding Key="Esc" Command="{Binding CloseModalCommand}" />
     </syncfusion:ChromelessWindow.InputBindings>
-    <!--  ResizeBorderBrush="#1f1f1f"  -->
 
-    <Grid Margin="0,-32,0,0">
+    <Grid>
+
         <Border Margin="-6,-4,-6,-8" IsHitTestVisible="False">
             <Grid>
                 <Rectangle
@@ -184,8 +107,11 @@
                     Stroke="Black" />
             </Grid>
         </Border>
+
         <!--  Border Name="WindowMask" CornerRadius="0" Background="Black" BorderThickness="1" /  -->
+
         <Grid Background="{DynamicResource ContentBackgroundAlt2}">
+
             <Grid.Resources>
                 <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
                 <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -196,17 +122,15 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <!--Grid.OpacityMask>
-                <VisualBrush Visual="{Binding ElementName=WindowMask}" />
-            </Grid.OpacityMask-->
 
             <Grid Grid.RowSpan="3" Panel.ZIndex="1000">
+
                 <Grid.Resources>
                     <DataTemplate DataType="{x:Type dialogVMs:NewFileViewModel}">
                         <dialogs:NewFileView ViewModel="{Binding}" />
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type dialogVMs:PluginsToolViewModel}">
-                        <dialogs:PluginsToolView ViewModel="{Binding}" />
+                    <DataTemplate DataType="{x:Type dialogVMs:SoundModdingViewModel}">
+                        <dialogs:SoundModdingView ViewModel="{Binding}" />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type dialogVMs:CreateClassDialogViewModel}">
                         <dialogs:CreateClassDialog ViewModel="{Binding}" />
@@ -214,12 +138,16 @@
                     <DataTemplate DataType="{x:Type dialogVMs:SelectRedTypeDialogViewModel}">
                         <dialogs:SelectRedTypeDialog ViewModel="{Binding}" />
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type wizardVMs:ProjectWizardViewModel}">
-                        <wizards:ProjectWizardView ViewModel="{Binding}" />
+                    <DataTemplate DataType="{x:Type dialogVMs:ProjectWizardViewModel}">
+                        <dialogs:ProjectWizardView ViewModel="{Binding}" />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type hpvm:HomePageViewModel}">
                         <hpv:HomePageView ViewModel="{Binding}" />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:ProjectSettingsDialogViewModel}">
+                        <dialogs:ProjectSettingsDialog ViewModel="{Binding}" />
+                    </DataTemplate>
+
                     <Storyboard x:Key="OverlayFadeIn">
                         <DoubleAnimation
                             FillBehavior="HoldEnd"
@@ -234,6 +162,7 @@
                             <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
                         </BooleanAnimationUsingKeyFrames>
                     </Storyboard>
+
                     <Storyboard x:Key="OverlayFadeOut" Completed="FadeOut_Completed">
                         <DoubleAnimation
                             Storyboard.TargetProperty="Opacity"
@@ -248,7 +177,9 @@
                             <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
                         </BooleanAnimationUsingKeyFrames>
                     </Storyboard>
+
                 </Grid.Resources>
+
                 <ContentControl
                     Grid.RowSpan="5"
                     Grid.ColumnSpan="5"
@@ -269,7 +200,9 @@
                         </Style>
                     </ContentControl.Style>
                 </ContentControl>
+
                 <Border Name="ModalDialog">
+
                     <Border.Style>
                         <Style TargetType="{x:Type Border}">
                             <Style.Triggers>
@@ -284,6 +217,7 @@
                             </Style.Triggers>
                         </Style>
                     </Border.Style>
+
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*" />
@@ -437,12 +371,12 @@
                                 CornerRadius="8" />
                         </Grid>
                     </Grid>
+
                 </Border>
+
             </Grid>
 
             <shell:RibbonView Grid.Row="0" Margin="0,0,0,0" />
-
-            <shell:StatusBarView Grid.Row="2" Margin="0,0,0,0" />
 
             <shell:DockingAdapter
                 x:Name="dockingAdapter"
@@ -450,11 +384,9 @@
                 Margin="5,2,5,0"
                 Background="{StaticResource ContentBackground}" />
 
+            <shell:StatusBarView Grid.Row="2" Margin="0,0,0,0" />
+
         </Grid>
-        <Border
-            Name="WindowBorder"
-            BorderBrush="{StaticResource ContentBackgroundAlt4}"
-            BorderThickness="1"
-            IsHitTestVisible="False" />
+
     </Grid>
 </syncfusion:ChromelessWindow>

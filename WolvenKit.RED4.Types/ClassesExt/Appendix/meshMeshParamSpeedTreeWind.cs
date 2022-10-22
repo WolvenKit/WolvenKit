@@ -13,6 +13,11 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CByteArray>(value);
         }
 
+        partial void PostConstruct()
+        {
+            Buffer = new CByteArray();
+        }
+
         public void Read(Red4Reader reader, uint size)
         {
             Buffer = reader.BaseReader.ReadBytes((int)size);

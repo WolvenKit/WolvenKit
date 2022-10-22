@@ -2,40 +2,21 @@
 <WolvenKitFileDefinitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Categories>
     <FileCategoryModel>
-      <Name>Redscript</Name>
-      <Files>
-        <AddFileModel>
-          <Name>Redscript file</Name>
-          <Description>A blank redscript file</Description>
-          <Extension>reds</Extension>
-          <Type>Redscript</Type>
-          <Template></Template>
-        </AddFileModel>
-      </Files>
-    </FileCategoryModel>
-    <FileCategoryModel>
-      <Name>TweakDB</Name>
-      <Files>
-        <AddFileModel>
-          <Name>Tweak file</Name>
-          <Description>A blank tweak delta file</Description>
-          <Extension>tweak</Extension>
-          <Type>Tweak</Type>
-          <Template></Template>
-        </AddFileModel>
-        <AddFileModel>
-          <Name>Vehicle Template</Name>
-          <Description>The default records and flats for a vehicle</Description>
-          <Extension>tweak</Extension>
-          <Type>Tweak</Type>
-          <Template>VehicleTemplate.tweak</Template>
-        </AddFileModel>
-      </Files>
-    </FileCategoryModel>
-    <FileCategoryModel>
       <Name>CR2W Files</Name>
       <Files>
       </Files>
     </FileCategoryModel>
+	<FileCategoryModel>
+		<Name>TweakDB</Name>
+		<Files>
+			<AddFileModel>
+				<Name>TweakXL file</Name>
+				<Description>A blank tweak file</Description>
+				<Extension>yaml</Extension>
+				<Type>TweakXl</Type>
+				<Template></Template>
+			</AddFileModel>
+		</Files>
+	</FileCategoryModel>
   </Categories>
 </WolvenKitFileDefinitions>

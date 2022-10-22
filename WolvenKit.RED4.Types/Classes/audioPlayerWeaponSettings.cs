@@ -141,6 +141,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(27)] 
+		[RED("reloadSound")] 
+		public CName ReloadSound
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("triggerEffectSingle")] 
 		public CName TriggerEffectSingle
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("triggerEffectAiming")] 
 		public CName TriggerEffectAiming
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("triggerEffectAuto")] 
 		public CName TriggerEffectAuto
 		{

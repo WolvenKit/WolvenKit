@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HackingContainer : BaseSkillCheckContainer
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("hackingCheck")] 
 		public CHandle<HackingSkillCheck> HackingCheck
 		{

@@ -1,14 +1,21 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using DynamicData.Binding;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -23,6 +30,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
@@ -30,10 +38,12 @@ using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Tools
 {
-    public class ImportExportViewModel : ToolViewModel
+    public partial class ImportExportViewModel : ToolViewModel
     {
         #region fields
 
@@ -63,6 +73,8 @@ namespace WolvenKit.ViewModels.Tools
         private readonly MeshTools _meshTools;
         private readonly ISettingsManager _settingsManager;
         private readonly IArchiveManager _archiveManager;
+        private readonly IPluginService _pluginService;
+        private readonly Red4ParserService _parserService;
 
         /// <summary>
         /// Private NameOf Selected Item in Grid.
@@ -80,6 +92,17 @@ namespace WolvenKit.ViewModels.Tools
 
         private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
 
+        private Dictionary<string, Dictionary<string, JsonObject>> _loadedSettings;
+
+        private static JsonSerializerOptions s_jsonSerializerSettings = new()
+        {
+            Converters =
+            {
+                new JsonFileEntryConverter(),
+                new JsonArchiveConverter()
+            }, WriteIndented = true
+        };
+
         #endregion fields
 
         /// <summary>
@@ -92,17 +115,18 @@ namespace WolvenKit.ViewModels.Tools
         /// <param name="gameController"></param>
         /// <param name="modTools"></param>
         public ImportExportViewModel(
-           IProjectManager projectManager,
-           ILoggerService loggerService,
-           IProgressService<double> progressService,
-           IWatcherService watcherService,
-           INotificationService notificationService,
-           IGameControllerFactory gameController,
-           ISettingsManager settingsManager,
-           IModTools modTools,
-           MeshTools meshTools,
-           IArchiveManager archiveManager
-           ) : base(ToolTitle)
+            IProjectManager projectManager,
+            ILoggerService loggerService,
+            IProgressService<double> progressService,
+            IWatcherService watcherService,
+            INotificationService notificationService,
+            IGameControllerFactory gameController,
+            ISettingsManager settingsManager,
+            IModTools modTools,
+            MeshTools meshTools,
+            IArchiveManager archiveManager,
+            IPluginService pluginService,
+            Red4ParserService parserService) : base(ToolTitle)
         {
             _projectManager = projectManager;
             _loggerService = loggerService;
@@ -114,6 +138,8 @@ namespace WolvenKit.ViewModels.Tools
             _settingsManager = settingsManager;
             _meshTools = meshTools;
             _archiveManager = archiveManager;
+            _pluginService = pluginService;
+            _parserService = parserService;
 
             SetupToolDefaults();
             SideInDockedMode = DockSide.Tabbed;
@@ -162,8 +188,35 @@ namespace WolvenKit.ViewModels.Tools
             //    SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
             //});
 
+            this.WhenAnyValue(x => x._projectManager.ActiveProject)
+                .Subscribe(project =>
+                {
+                    _loadedSettings = null;
+                    if (project != null)
+                    {
+                        LoadSettings();
+                    }
+                });
 
-            this.WhenAnyValue(x => x.SelectedExport, y => y.SelectedImport, z => z.SelectedConvert)
+            ImportableItems.ObserveCollectionChanges()
+                .Subscribe(item =>
+                {
+                    SetSetting("import", item);
+                });
+
+            ExportableItems.ObserveCollectionChanges()
+                .Subscribe(item =>
+                {
+                    SetSetting("export", item);
+                });
+
+            ConvertableItems.ObserveCollectionChanges()
+                .Subscribe(item =>
+                {
+                    SetSetting("convert", item);
+                });
+
+            this.WhenAnyValue(x => x.SelectedExport, x => x.IsExportsSelected, y => y.SelectedImport, y => y.IsImportsSelected, z => z.SelectedConvert, z => z.IsConvertsSelected)
                 .Subscribe(b =>
                 {
                     var x = b.Item1;
@@ -172,6 +225,15 @@ namespace WolvenKit.ViewModels.Tools
 
                     SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
                 });
+
+            this
+                .WhenAnyValue(x => x._projectManager.IsProjectLoaded)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(
+                    _ =>
+                    {
+                        ImportSettingsCommand.NotifyCanExecuteChanged();
+                    });
         }
 
         private static bool CheckForMultiImport(Models.FileModel file)
@@ -258,9 +320,8 @@ namespace WolvenKit.ViewModels.Tools
         #endregion properties
 
         public ICommand AddItemsCommand { get; private set; }
+
         public ICommand RemoveItemsCommand { get; private set; }
-
-
 
         private bool CanAddItems(ObservableCollection<object> items) => true;
 
@@ -394,12 +455,13 @@ namespace WolvenKit.ViewModels.Tools
                 switch (argType)
                 {
                     case nameof(MeshExportArgs.MultiMeshMeshes):
-                        fetchExtension = ERedExtension.mesh;
                         selectedEntries = meshExportArgs.MultiMeshMeshes;
+                        fetchExtension = ERedExtension.mesh;
                         break;
 
                     case nameof(MeshExportArgs.MultiMeshRigs):
                         selectedEntries = meshExportArgs.MultiMeshRigs;
+                        fetchExtension = ERedExtension.rig;
                         break;
 
                     case nameof(MeshExportArgs.Rig):
@@ -523,6 +585,8 @@ namespace WolvenKit.ViewModels.Tools
                     return;
                 }
 
+                var json = SerializeArgs(importArgs);
+
                 var results = param switch
                 {
                     s_selectedInGrid => ImportableItems.Where(_ => _.IsChecked),
@@ -531,7 +595,7 @@ namespace WolvenKit.ViewModels.Tools
 
                 foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
                 {
-                    item.Properties = importArgs;
+                    item.Properties = (ImportArgs)json.Deserialize(importArgs.GetType(), s_jsonSerializerSettings);
                 }
             }
             if (IsExportsSelected)
@@ -541,6 +605,8 @@ namespace WolvenKit.ViewModels.Tools
                     return;
                 }
 
+                var json = SerializeArgs(exportArgs);
+
                 var results = param switch
                 {
                     s_selectedInGrid => ExportableItems.Where(_ => _.IsChecked),
@@ -549,16 +615,17 @@ namespace WolvenKit.ViewModels.Tools
 
                 foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
                 {
-                    item.Properties = exportArgs;
+                    item.Properties = (ExportArgs)json.Deserialize(exportArgs.GetType(), s_jsonSerializerSettings);
                 }
             }
             if (IsConvertsSelected)
             {
-
                 if (current is not ConvertArgs convertArgs)
                 {
                     return;
                 }
+
+                var json = SerializeArgs(convertArgs);
 
                 var results = param switch
                 {
@@ -568,10 +635,11 @@ namespace WolvenKit.ViewModels.Tools
 
                 foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
                 {
-                    item.Properties = convertArgs;
+                    item.Properties = (ConvertArgs)json.Deserialize(convertArgs.GetType(), s_jsonSerializerSettings);
                 }
             }
 
+            SaveSettings();
             _notificationService.Success($"Template has been copied to the selected items.");
         }
 
@@ -617,7 +685,7 @@ namespace WolvenKit.ViewModels.Tools
                 var toBeExported = ExportableItems.ToList();
                 foreach (var item in toBeExported)
                 {
-                    success = await ExportSingle(item);
+                    success = await ExportSingleAsync(item);
                 }
             }
             if (IsConvertsSelected)
@@ -625,7 +693,7 @@ namespace WolvenKit.ViewModels.Tools
                 var toBeConverted = ConvertableItems.ToList();
                 foreach (var itemViewModel in toBeConverted)
                 {
-                    success = await Task.Run(() => ConvertSingle(itemViewModel));
+                    success = await ConvertSingle(itemViewModel);
                 }
 
             }
@@ -637,14 +705,14 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        private async Task<bool> ImportWavs(List<string> wavs)
+        private Task<bool> ImportWavs(List<string> wavs)
         {
             var proj = _projectManager.ActiveProject;
             if (_gameController.GetController() is RED4Controller cp77Controller)
             {
                 var soundbanksArchive = _archiveManager.Archives.Items
                     .Cast<Archive>()
-                    .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
+                    .FirstOrDefault(_ => _.Name.Equals($"{EVanillaArchives.audio_2_soundbanks}.archive"));
 
                 OpusTools opusTools = new(
                     soundbanksArchive,
@@ -652,21 +720,21 @@ namespace WolvenKit.ViewModels.Tools
                     proj.RawDirectory,
                     true);
 
-                return await Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
+                return Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
             }
 
-            return false;
+            return Task.FromResult(false);
         }
 
         /// <summary>
         /// Import Single item
         /// </summary>
         /// <param name="item"></param>
-        private async Task<bool> ImportSingle(ImportableItemViewModel item)
+        private Task<bool> ImportSingle(ImportableItemViewModel item)
         {
             if (_gameController.GetController() is not RED4Controller cp77Controller)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             var proj = _projectManager.ActiveProject;
@@ -682,20 +750,36 @@ namespace WolvenKit.ViewModels.Tools
                         gltfImportArgs.Archives.Insert(0, new FileSystemArchive(cp77Proj.ModDirectory));
                     }
                 }
+
+                if (item.Properties is ReImportArgs reImportArgs)
+                {
+                    if (!_pluginService.IsInstalled(EPlugin.redmod))
+                    {
+                        _loggerService.Error("Redmod plugin needs to be installed to import animations");
+                        return Task.FromResult(false);
+                    }
+
+                    reImportArgs.Depot = proj.ModDirectory;
+                    reImportArgs.RedMod = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+                }
+
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
                 var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
-                return await Task.Run(() => _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory)));
+
+                return _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
             }
 
-            return false;
+            return Task.FromResult(false);
         }
+
+        private Task<bool> ExportSingleAsync(ExportableItemViewModel item) => Task.Run(() => ExportSingle(item));
 
         /// <summary>
         /// Export Single Item
         /// </summary>
         /// <param name="item"></param>
-        private async Task<bool> ExportSingle(ExportableItemViewModel item)
+        private bool ExportSingle(ExportableItemViewModel item)
         {
             var proj = _projectManager.ActiveProject;
             var fi = new FileInfo(item.FullName);
@@ -751,9 +835,9 @@ namespace WolvenKit.ViewModels.Tools
                     }
                 }
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
-                return await Task.Run(() => _modTools.Export(fi, settings,
+                return _modTools.Export(fi, settings,
                     new DirectoryInfo(proj.ModDirectory),
-                    new DirectoryInfo(proj.RawDirectory)));
+                    new DirectoryInfo(proj.RawDirectory));
             }
 
             return false;
@@ -763,7 +847,6 @@ namespace WolvenKit.ViewModels.Tools
         /// Process selected in Import / Export Grid Command
         /// </summary>
         public ICommand ProcessSelectedCommand { get; private set; }
-
 
         /// <summary>
         /// Execute Process selected in Import / Export Grid Command
@@ -803,7 +886,7 @@ namespace WolvenKit.ViewModels.Tools
                     var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
                     foreach (var item in toBeConverted)
                     {
-                        success = await ExportSingle(item);
+                        success = await ExportSingleAsync(item);
                     }
                 }
                 if (IsConvertsSelected)
@@ -914,5 +997,175 @@ namespace WolvenKit.ViewModels.Tools
         /// Setup Tool defaults for tool window.
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
+
+        public bool HasActiveProject => _projectManager != null
+            && _projectManager.IsProjectLoaded;
+
+        #region Commands
+
+        [RelayCommand]
+        private void ResetSettings()
+        {
+            foreach (var importableItem in ImportableItems)
+            {
+                if (!importableItem.IsChecked)
+                {
+                    continue;
+                }
+
+                importableItem.Properties = (ImportExportArgs)System.Activator.CreateInstance(importableItem.Properties.GetType());
+            }
+
+            SaveSettings();
+        }
+
+        [RelayCommand(CanExecute = "HasActiveProject")]
+        private void ImportSettings()
+        {
+            var gammaRegex = new Regex(".*_[de][0-9]*$");
+
+            foreach (var importableItem in ImportableItems)
+            {
+                if (!importableItem.IsChecked)
+                {
+                    continue;
+                }
+
+                if (importableItem.Properties is not XbmImportArgs xbmImportArgs)
+                {
+                    continue;
+                }
+
+                if (_parserService != null)
+                {
+                    if (importableItem.GetModFile("xbm") is { } modFile)
+                    {
+                        using var fs = File.OpenRead(modFile);
+
+                        if (_parserService.TryReadRed4File(fs, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
+                        {
+                            xbmImportArgs.RawFormat = Enum.Parse<SupportedRawFormats>(bitmap.Setup.RawFormat.ToString());
+                            xbmImportArgs.Compression = Enum.Parse<SupportedCompressionFormats>(bitmap.Setup.Compression.ToString());
+                            xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
+                            xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
+                            xbmImportArgs.TextureGroup = bitmap.Setup.Group;
+                            xbmImportArgs.IsStreamable = bitmap.Setup.IsStreamable;
+                            xbmImportArgs.PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC;
+                            xbmImportArgs.PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole;
+                            xbmImportArgs.AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade;
+                            xbmImportArgs.AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold;
+
+                            _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Loaded from project file");
+
+                            continue;
+                        }
+
+                        _loggerService?.Warning($"Load settings for \"{importableItem.Name}\": Project file couldn't be read");
+                    }
+
+                    if (importableItem.GetArchiveFile("xbm") is { } archiveFile)
+                    {
+                        using var ms = new MemoryStream();
+                        archiveFile.Extract(ms);
+
+                        if (_parserService.TryReadRed4File(ms, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
+                        {
+                            xbmImportArgs.RawFormat = Enum.Parse<SupportedRawFormats>(bitmap.Setup.RawFormat.ToString());
+                            xbmImportArgs.Compression = Enum.Parse<SupportedCompressionFormats>(bitmap.Setup.Compression.ToString());
+                            xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
+                            xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
+                            xbmImportArgs.TextureGroup = bitmap.Setup.Group;
+                            xbmImportArgs.IsStreamable = bitmap.Setup.IsStreamable;
+                            xbmImportArgs.PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC;
+                            xbmImportArgs.PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole;
+                            xbmImportArgs.AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade;
+                            xbmImportArgs.AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold;
+
+                            _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Loaded from archive file");
+
+                            continue;
+                        }
+
+                        _loggerService?.Warning($"Load settings for \"{importableItem.Name}\": Archive file couldn't be read");
+                    }
+                }
+
+                xbmImportArgs.IsGamma = gammaRegex.IsMatch(Path.GetFileNameWithoutExtension(importableItem.Name));
+
+                _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Parsed filename");
+            }
+
+            SaveSettings();
+        }
+
+        #endregion Commands
+
+        public void LoadSettings()
+        {
+            var fileName = Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json");
+            if (!File.Exists(fileName))
+            {
+                return;
+            }
+
+            var json = File.ReadAllText(fileName);
+            _loadedSettings = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, JsonObject>>>(json, s_jsonSerializerSettings);
+        }
+
+        private void SetSetting(string type, IEventPattern<object, NotifyCollectionChangedEventArgs> item)
+        {
+            if (_loadedSettings == null)
+            {
+                return;
+            }
+
+            if (item.EventArgs.Action == NotifyCollectionChangedAction.Reset && item.Sender is IList list)
+            {
+                foreach (var entry in list)
+                {
+                    if (entry is ImportExportItemViewModel vm && _loadedSettings[type].TryGetValue(vm.GetBaseFile().RelativePath, out var args))
+                    {
+                        vm.Properties = (ImportExportArgs)args.Deserialize(vm.Properties.GetType(), s_jsonSerializerSettings);
+                    }
+                }
+            }
+
+            if (item.EventArgs.Action == NotifyCollectionChangedAction.Add && item.EventArgs.NewItems[0] is ImportExportItemViewModel vm2)
+            {
+                if (_loadedSettings[type].TryGetValue(vm2.GetBaseFile().RelativePath, out var args))
+                {
+                    vm2.Properties = (ImportExportArgs)args.Deserialize(vm2.Properties.GetType(), s_jsonSerializerSettings);
+                }
+            }
+        }
+
+        public void SaveSettings()
+        {
+            var importSettings = ImportableItems.ToDictionary(importableItem => importableItem.GetBaseFile().RelativePath, SerializeArgs);
+            var exportSettings = ExportableItems.ToDictionary(exportableItem => exportableItem.GetBaseFile().RelativePath, SerializeArgs);
+            var convertSettings = ConvertableItems.ToDictionary(convertableItem => convertableItem.GetBaseFile().RelativePath, SerializeArgs);
+
+            var settings = new Dictionary<string, Dictionary<string, JsonObject>>
+            {
+                { "import", importSettings },
+                { "export", exportSettings },
+                { "convert", convertSettings },
+            };
+
+            var json = JsonSerializer.Serialize(settings, s_jsonSerializerSettings);
+            File.WriteAllText(Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json"), json);
+        }
+
+        private JsonObject SerializeArgs(ImportExportItemViewModel vm) => SerializeArgs(vm.Properties);
+        private JsonObject SerializeArgs(ImportExportArgs args)
+        {
+            var node = (JsonObject)JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings);
+
+            node.Remove("Changing");
+            node.Remove("Changed");
+            node.Remove("ThrownExceptions");
+
+            return node;
+        }
     }
 }

@@ -1,6 +1,6 @@
 using System.Reactive.Disposables;
 using ReactiveUI;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
 {
@@ -37,6 +37,12 @@ namespace WolvenKit.Views.Dialogs
                 this.Bind(ViewModel,
                     vm => vm.FileName,
                     v => v.FileName.Text)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
                     .DisposeWith(disposables);
             });
 

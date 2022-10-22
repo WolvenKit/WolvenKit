@@ -34,13 +34,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
-		
-		[RED("unlockedBy")]
-		[REDProperty(IsIgnored = true)]
-		public CString UnlockedBy
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
-		}
 	}
 }

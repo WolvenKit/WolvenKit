@@ -1,22 +1,31 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Views.Shell
 {
+    public class MyObservableCollection : ObservableCollection<object> { }
+
     public partial class MainView : IViewFor<AppViewModel>
     {
         public AppViewModel ViewModel { get; set; }
@@ -36,71 +45,35 @@ namespace WolvenKit.Views.Shell
 
             this.WhenActivated(disposables =>
             {
-                // interactions
-
-                Interactions.AddNewFile.RegisterHandler(interaction =>
-                {
-                    var dialog = new DialogHostView();
-                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<NewFileViewModel>();
-                    //dialog.Height = 600;
-                    //dialog.Width = 700;
-
-                    return Observable.Start(() =>
+                Interactions.ShowConfirmation.RegisterHandler(interaction => interaction.SetOutput(ShowConfirmation(interaction.Input)));
+                Interactions.ShowLaunchProfilesView.RegisterHandler(
+                    interaction =>
                     {
-                        var result = dialog.ShowDialog() == true;
-                        if (result)
-                        {
-                            var innerVm = (NewFileViewModel)dialog.ViewModel.HostedViewModel;
-                            var model = innerVm.SelectedFile;
-                            var filename = innerVm.FileName;
+                        LaunchProfilesView dialog = new();
 
-                            interaction.SetOutput((model, filename));
-                        }
-                        else
+                        return Observable.Start(() =>
                         {
-                            interaction.SetOutput((null, null));
-                        }
-                    }, RxApp.MainThreadScheduler);
-                });
-
-                Interactions.NewProjectInteraction.RegisterHandler(interaction =>
-                {
-                    var dialog = new DialogHostView();
-                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<ProjectWizardViewModel>();
-
-                    return Observable.Start(() =>
-                    {
-                        var result = "";
-                        if (dialog.ShowDialog() == true)
-                        {
-                            var innerVm = (ProjectWizardViewModel)dialog.ViewModel.HostedViewModel;
-                            var projectLocation = Path.Combine(innerVm.ProjectPath, innerVm.ProjectName);
-                            var projectFile = Path.Combine(projectLocation, innerVm.ProjectName);
-                            var type = innerVm.ProjectType.First();
-                            switch (type)
+                            if (dialog.ShowDialog(this) == true)
                             {
-                                case ProjectWizardViewModel.WitcherGameName:
-                                    projectFile += ".w3modproj";
-                                    break;
-                                case ProjectWizardViewModel.CyberpunkGameName:
-                                    projectFile += ".cpmodproj";
-                                    break;
+                                ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
                             }
 
-                            result = projectFile;
-                        }
+                            interaction.SetOutput(true);
+                        }, RxApp.MainThreadScheduler);
+                    });
+                Interactions.ShowMaterialRepositoryView.RegisterHandler(
+                    interaction =>
+                    {
+                        MaterialsRepositoryView dialog = new();
 
-                        interaction.SetOutput(result);
-                    }, RxApp.MainThreadScheduler);
-                });
+                        return Observable.Start(() =>
+                        {
+                            if (dialog.ShowDialog(this) == true)
+                            { }
 
-                Interactions.ShowConfirmation.RegisterHandler(interaction =>
-                {
-                    interaction.SetOutput(ShowConfirmation(interaction.Input));
-                });
-
-
-
+                            interaction.SetOutput(true);
+                        }, RxApp.MainThreadScheduler);
+                    });
 
                 this.Bind(ViewModel,
                     vm => vm.ActiveDocument,
@@ -112,6 +85,9 @@ namespace WolvenKit.Views.Shell
                     .DisposeWith(disposables);
 
                 this.WhenAnyValue(x => x.ViewModel.ActiveProject).Subscribe(_ => dockingAdapter.OnActiveProjectChanged());
+
+                //set ready status
+                ViewModel.SetStatusReady();
             });
         }
 
@@ -126,7 +102,7 @@ namespace WolvenKit.Views.Shell
             var image = input.Item3;
             var buttons = input.Item4;
 
-            var messageBox = new MessageBoxModel
+            MessageBoxModel messageBox = new()
             {
                 Text = text,
                 Caption = caption,
@@ -134,9 +110,12 @@ namespace WolvenKit.Views.Shell
                 Buttons = GetAdonisButtons(buttons)
             };
 
-            return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(messageBox);
+            var result = WMessageBoxResult.None;
+            DispatcherHelper.RunOnMainThread(() => result = (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox));
 
+            return result;
 
+            // local methods
             AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage image) => (AdonisUI.Controls.MessageBoxImage)image;
 
             IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttons)
@@ -166,6 +145,15 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        protected override void OnClosing(CancelEventArgs e) => Application.Current.Shutdown();
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            dockingAdapter.SaveLayout();
+            Application.Current.Shutdown();
+        }
+
+        // This is called before this.WhenActivated
+        private void ChromelessWindow_Loaded(object sender, RoutedEventArgs e) { }
+        // This is never called 
+        private void ChromelessWindow_Closing(object sender, CancelEventArgs e) { }
     }
 }

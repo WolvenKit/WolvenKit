@@ -3,17 +3,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Net.NetworkInformation;
-using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Microsoft.Web.WebView2.Core;
-using Octokit;
 using ReactiveUI;
 using Splat;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
@@ -93,16 +91,6 @@ namespace WolvenKit
             Directory.CreateDirectory(webViewData);
             WebView2Helper.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, webViewData, null);
         }
-
-        /// <summary>
-        /// Initialize Github RPC
-        /// </summary>
-        public static void InitializeGitHub() =>
-            StaticReferences.Githubclient =
-                new GitHubClient(new ProductHeaderValue("WolvenKit"))
-                {
-                    Credentials = Github_Helpers.GhubAuth("wolvenbot", "botwolven1")
-                };
 
         /// <summary>
         /// Initialize everything related to Theming.

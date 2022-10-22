@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemTooltipTransmogModule : ItemTooltipModuleController
 	{
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("buttonHintWidgetRef")] 
 		public inkWidgetReference ButtonHintWidgetRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("labelRef")] 
 		public inkTextWidgetReference LabelRef
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("buttonHint")] 
 		public CWeakHandle<LabelInputDisplayController> ButtonHint
 		{

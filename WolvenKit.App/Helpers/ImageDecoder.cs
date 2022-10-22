@@ -1,152 +1,96 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using ImageMagick;
-using Pfim;
-using Splat;
-using WolvenKit.Common.Services;
-
-//using SkiaSharp;
-//using SkiaSharp.Views.WPF;
-
+using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Functionality.Other
 {
     public static class ImageDecoder
     {
-        public static async Task<BitmapSource> RenderToBitmapSourceDds(Stream stream)
+        private static BitmapImage CreateBitmapImage(RedImage img)
         {
-            try
-            {
-                stream.Seek(0, SeekOrigin.Begin);
-                var image = Pfim.Pfim.FromStream(stream);
-                await stream.DisposeAsync().ConfigureAwait(false);
-                var pinnedArray = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
-                var addr = pinnedArray.AddrOfPinnedObject();
-                var pfimPic = BitmapSource.Create(image.Width, image.Height, 96.0, 96.0,
-                    PixelFormat(image), null, addr, image.DataLen, image.Stride);
-                image.Dispose();
-                pfimPic.Freeze();
-                // yes
-                //return new TransformedBitmap(pfimPic, new ScaleTransform(1, -1));
-                return pfimPic;
-            }
-            catch (Exception e)
-            {
-                Locator.Current.GetService<ILoggerService>()?.Error(e);
+            var bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(img.GetPreview());
+            bitmapImage.EndInit();
 
-                return null;
-            }
+            return bitmapImage;
         }
 
+        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, WolvenKit.Common.DDS.DXGI_FORMAT format) => 
+            Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
+
+        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, Enums.ETextureRawFormat format) => 
+            Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
 
         /// <summary>
         /// Decodes image from file to BitMapSource
         /// </summary>
         /// <param name="file">Absolute path of the file</param>
         /// <returns></returns>
-        public static async Task<BitmapSource> RenderToBitmapSource(string file)
-        {
-            try
+        public static Task<BitmapImage> RenderToBitmapImage(string file) =>
+            Task.Run(() =>
             {
-                var ext = Path.GetExtension(file).ToUpperInvariant();
-                FileStream filestream;
-                switch (ext)
+                try
                 {
-                    //case ".JPG":
-                    //case ".JPEG":
-                    //case ".JPE":
-                    //case ".PNG":
-                    //case ".BMP":
-                    //case ".TIF":
-                    //case ".TIFF":
-                    //case ".GIF":
-                    //case ".ICO":
-                    //case ".JFIF":
-                    //case ".WEBP":
-                    //case ".WBMP":
-                    //    filestream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                    //    var sKBitmap = SKBitmap.Decode(filestream);
-                    //    await filestream.DisposeAsync().ConfigureAwait(false);
+                    var ext = Path.GetExtension(file).ToUpperInvariant();
 
-                    //    if (sKBitmap == null)
-                    //    {
-                    //        return null;
-                    //    }
+                    RedImage image;
+                    switch (ext)
+                    {
+                        case ".JPG":
+                        case ".JPEG":
+                        case ".JPE":
+                        {
+                            image = RedImage.LoadFromJPGFile(file);
+                            break;
+                        }
+                        case ".PNG":
+                        {
+                            image = RedImage.LoadFromPNGFile(file);
+                            break;
+                        }
+                        case ".BMP":
+                        {
+                            image = RedImage.LoadFromBMPFile(file);
+                            break;
+                        }
 
-                    //    var skPic = sKBitmap.ToWriteableBitmap();
-                    //    skPic.Freeze();
-                    //    sKBitmap.Dispose();
-                    //    return skPic;
+                        case ".TIF":
+                        case ".TIFF":
+                        {
+                            image = RedImage.LoadFromTIFFFile(file);
+                            break;
+                        }
 
-                    case ".DDS":
-                    case ".TGA": // TODO some tga files are created upside down https://github.com/Ruben2776/PicView/issues/22
-                        filestream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                        var image = Pfim.Pfim.FromStream(filestream);
-                        await filestream.DisposeAsync().ConfigureAwait(false);
-                        var pinnedArray = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
-                        var addr = pinnedArray.AddrOfPinnedObject();
-                        var pfimPic = BitmapSource.Create(image.Width, image.Height, 96.0, 96.0,
-                            PixelFormat(image), null, addr, image.DataLen, image.Stride);
-                        image.Dispose();
-                        pfimPic.Freeze();
-                        return pfimPic;
+                        case ".DDS":
+                        {
+                            image = RedImage.LoadFromDDSFile(file);
+                            break;
+                        }
 
-                    case ".PSD":
-                    case ".PSB":
-                    case ".SVG":
-                    case ".XCF":
-                        filestream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                        var transMagick = new MagickImage();
-                        transMagick.Read(filestream);
-                        await filestream.DisposeAsync().ConfigureAwait(false);
+                        case ".TGA": // TODO some tga files are created upside down https://github.com/Ruben2776/PicView/issues/22
+                        {
+                            image = RedImage.LoadFromTGAFile(file);
+                            break;
+                        }
 
-                        transMagick.Quality = 100;
-                        transMagick.ColorSpace = ColorSpace.Transparent;
+                        default:
+                            throw new NotImplementedException();
+                    }
 
-                        var psd = transMagick.ToBitmapSource();
-                        transMagick.Dispose();
-                        psd.Freeze();
-
-                        return psd;
-
-                    default: // some formats cause exceptions when using filestream, so defaulting to reading from file
-                        var magick = new MagickImage();
-                        magick.Read(file);
-
-                        // Set values for maximum quality
-                        magick.Quality = 100;
-
-                        var pic = magick.ToBitmapSource();
-                        magick.Dispose();
-                        pic.Freeze();
-
-                        return pic;
+                    return CreateBitmapImage(image);
                 }
-            }
-            catch
-            {
-
-                return null;
-            }
-        }
-
-        private static PixelFormat PixelFormat(IImage image) => image.Format switch
-        {
-            ImageFormat.Rgb24 => PixelFormats.Bgr24,
-            ImageFormat.Rgba32 => PixelFormats.Bgr32,
-            ImageFormat.Rgb8 => PixelFormats.Gray8,
-            ImageFormat.R5g5b5a1 or ImageFormat.R5g5b5 => PixelFormats.Bgr555,
-            ImageFormat.R5g6b5 => PixelFormats.Bgr565,
-            _ => throw new Exception($"Unable to convert {image.Format} to WPF PixelFormat"),
-        };
-
-
+                catch
+                {
+                    return null;
+                }
+            });
     }
 
     public class XenConverter : IValueConverter
@@ -155,7 +99,7 @@ namespace WolvenKit.Functionality.Other
         {
             if (value != null && (value as string) != "")
             {
-                var q = ImageDecoder.RenderToBitmapSource(value as string);
+                var q = ImageDecoder.RenderToBitmapImage(value as string);
                 return q;
             }
 
@@ -164,6 +108,5 @@ namespace WolvenKit.Functionality.Other
 
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
-
     }
 }

@@ -1,41 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
-      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-      <Platforms>x64</Platforms>
-  </PropertyGroup>
+    <Version>8.7.0</Version>
+    <Platforms>x64</Platforms>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="ViewModels\Others\**" />
     <Compile Remove="ViewModels\Shared\**" />
-    <Compile Remove="ViewModels\Wizards\PublishWizard\**" />
     <EmbeddedResource Remove="ViewModels\Others\**" />
     <EmbeddedResource Remove="ViewModels\Shared\**" />
-    <EmbeddedResource Remove="ViewModels\Wizards\PublishWizard\**" />
     <None Remove="ViewModels\Others\**" />
     <None Remove="ViewModels\Shared\**" />
-    <None Remove="ViewModels\Wizards\PublishWizard\**" />
     <Page Remove="ViewModels\Others\**" />
     <Page Remove="ViewModels\Shared\**" />
-    <Page Remove="ViewModels\Wizards\PublishWizard\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,16 +31,13 @@
     <Compile Remove="Models\IWolvenkitView.cs" />
     <Compile Remove="ViewModels\Documents\IDocumentViewModel_old.cs" />
     <Compile Remove="ViewModels\HomePage\Pages\RecentlyUsedItemsViewModel.cs" />
-    <Compile Remove="ViewModels\Wizards\PublishWizardViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Resources\VehicleTemplate.tweak" />
     <None Remove="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\VehicleTemplate.tweak" />
     <EmbeddedResource Include="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
@@ -69,40 +49,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Octokit" Version="3.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+    <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ReactiveUI" Version="18.3.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="18.3.1" />
+    <PackageReference Include="ReactiveUI.Validation" Version="3.0.1" />
     <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
-    <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.21.0" />
-    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.21.0" />
-    <PackageReference Include="gpm.Installer" Version="0.2.4" />
-    <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="6.0.0" />
-    <PackageReference Include="Nodify" Version="1.8.0" /> 
+    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.22.0" />
     <PackageReference Include="morelinq" Version="3.3.2" /> 
     <PackageReference Include="Prism.Core" Version="8.1.97" />
-    <PackageReference Include="SharpZipLib" Version="1.3.3" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.4.0.38" />
-    <PackageReference Include="WinCopies.WindowsAPICodePack" Version="2.11.0" />
-    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.11.0" />
-    <PackageReference Include="Discord.Net" Version="3.7.2" />
-    <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="11.1.2" />
-    <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="5.0.2" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="20.2.0.49" />
+    <PackageReference Include="WinCopies.WindowsAPICodePack" Version="2.12.0" />
+    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.12.0.2" />
+    <PackageReference Include="Discord.Net" Version="3.8.0" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="NAudio" Version="2.1.0" />
-    <PackageReference Include="ReactiveUI" Version="18.0.10" />
-    <PackageReference Include="ReactiveUI.Fody" Version="18.0.10" />
-    <PackageReference Include="ReactiveUI.Validation" Version="2.2.1" />
-    <PackageReference Include="Pfim" Version="0.10.3" />
-    <PackageReference Include="YamlDotNet" Version="11.2.1" />
-    <PackageReference Include="Serilog" Version="2.11.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\WolvenKitFileDefinitions.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\VehicleTemplate.tweak" />
   </ItemGroup>
 
 </Project>

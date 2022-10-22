@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData.Kernel;
 using Prism.Commands;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
@@ -49,18 +52,14 @@ namespace WolvenKit.ViewModels.Documents
             if (_projectManager.ActiveProject != null)
             {
                 // assume files that don't exist are relative paths
-                if (File.Exists(path))
-                {
-                    RelativePath = Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path);
-                }
-                else
-                {
-                    RelativePath = path;
-                }
+                RelativePath = File.Exists(path) ? Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path) : path;
             }
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
             NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile);
+
+            this.WhenAnyValue(x => x.SelectedTabItemViewModel)
+                .Subscribe(x => x?.OnSelected());
         }
 
         #region properties
@@ -143,18 +142,18 @@ namespace WolvenKit.ViewModels.Documents
             return false;
         }
 
-        public override async Task<bool> OpenFileAsync(string path)
+        public override Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;
 
             try
             {
-                await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     OpenStream(stream, path);
                 }
 
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception e)
             {
@@ -163,7 +162,7 @@ namespace WolvenKit.ViewModels.Documents
                 _isInitialized = false;
             }
 
-            return false;
+            return Task.FromResult(false);
         }
 
         public Optional<RDTDataViewModel> GetMainFile() => Optional<RDTDataViewModel>.ToOptional(TabItemViewModels
@@ -176,6 +175,14 @@ namespace WolvenKit.ViewModels.Documents
             if (cls is CBitmapTexture xbm)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(xbm, this));
+            }
+            if (cls is CCubeTexture cube)
+            {
+                TabItemViewModels.Add(new RDTTextureViewModel(cube, this));
+            }
+            if (cls is CTextureArray texa)
+            {
+                TabItemViewModels.Add(new RDTTextureViewModel(texa, this));
             }
             if (cls is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
@@ -200,7 +207,7 @@ namespace WolvenKit.ViewModels.Documents
             }
             if (cls is inkTextureAtlas atlas)
             {
-                var file = GetFileFromDepotPath(atlas.Slots[0].Texture.DepotPath);
+                var file = GetFileFromDepotPath(atlas.Slots[0]?.Texture?.DepotPath);
                 if (file != null)
                 {
                     TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
@@ -307,7 +314,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             var app = Locator.Current.GetService<AppViewModel>();
             app.CloseDialogCommand.Execute(null);
-            if (sender is not null && sender is CreateClassDialogViewModel dvm)
+            if (sender is not null and CreateClassDialogViewModel dvm)
             {
                 var instance = RedTypeManager.Create(dvm.SelectedClass);
 
@@ -332,17 +339,22 @@ namespace WolvenKit.ViewModels.Documents
 
         public CR2WFile GetFileFromDepotPath(CName depotPath, bool original = false)
         {
-            CR2WFile cr2wFile = null;
+            if (depotPath is null)
+            {
+                return null;
+            }
 
             try
             {
+                CR2WFile cr2wFile = null;
+
                 if (!original)
                 {
                     var projectManager = Locator.Current.GetService<IProjectManager>();
                     if (projectManager.ActiveProject != null)
                     {
                         string path = null;
-                        if ((string)depotPath != null)
+                        if (!string.IsNullOrEmpty(depotPath))
                         {
                             path = Path.Combine(projectManager.ActiveProject.ModDirectory, (string)depotPath);
                         }
@@ -357,52 +369,31 @@ namespace WolvenKit.ViewModels.Documents
 
                         if (path != null && File.Exists(path))
                         {
-                            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                            {
-                                using var reader = new BinaryReader(stream);
-                                cr2wFile = _parser.ReadRed4File(reader);
-                            }
-
-                            cr2wFile.MetaData.FileName = depotPath;
-
-                            lock (Files)
-                            {
-                                foreach (var res in cr2wFile.EmbeddedFiles)
-                                {
-                                    if (!Files.ContainsKey(res.FileName))
-                                    {
-                                        Files.Add(res.FileName, new CR2WFile()
-                                        {
-                                            RootChunk = res.Content
-                                        });
-                                    }
-                                }
-                            }
-
-                            return cr2wFile;
+                            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                            using var reader = new BinaryReader(stream);
+                            cr2wFile = _parser.ReadRed4File(reader);
                         }
                     }
                 }
-            }
-            catch (NullReferenceException)
-            {
-                var _archiveManager = Locator.Current.GetService<IArchiveManager>();
-                var file = _archiveManager.Lookup(depotPath.GetRedHash());
-                if (file.HasValue && file.Value is FileEntry fe)
+
+                if (cr2wFile == null)
                 {
-                    using (var stream = new MemoryStream())
+                    var _archiveManager = Locator.Current.GetService<IArchiveManager>();
+                    var file = _archiveManager.Lookup(depotPath.GetRedHash());
+                    if (file.HasValue && file.Value is FileEntry fe)
                     {
+                        using var stream = new MemoryStream();
                         fe.Extract(stream);
-                        using var reader = new BinaryReader(stream);
-                        cr2wFile = _parser.ReadRed4File(reader);
-                        if (cr2wFile == null)
-                        {
-                            return null;
-                        }
-                        if ((string)depotPath != null)
-                        {
-                            cr2wFile.MetaData.FileName = depotPath;
-                        }
+
+                        cr2wFile = _parser.ReadRed4File(stream);
+                    }
+                }
+
+                if (cr2wFile != null)
+                {
+                    if (!string.IsNullOrEmpty(depotPath))
+                    {
+                        cr2wFile.MetaData.FileName = depotPath;
                     }
 
                     lock (Files)
@@ -418,10 +409,16 @@ namespace WolvenKit.ViewModels.Documents
                             }
                         }
                     }
+
+                    return cr2wFile;
                 }
             }
+            catch (Exception)
+            {
+                // ignore
+            }
 
-            return cr2wFile;
+            return null;
         }
 
         public RedDocumentTabViewModel OpenRefAsTab(string path)

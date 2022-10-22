@@ -6,21 +6,13 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(0)] 
 		[RED("itemData")] 
-		public InventoryItemData ItemData
+		public gameInventoryItemData ItemData
 		{
-			get => GetPropertyValue<InventoryItemData>();
-			set => SetPropertyValue<InventoryItemData>(value);
+			get => GetPropertyValue<gameInventoryItemData>();
+			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
 		[Ordinal(1)] 
-		[RED("actionName")] 
-		public CHandle<inkActionName> ActionName
-		{
-			get => GetPropertyValue<CHandle<inkActionName>>();
-			set => SetPropertyValue<CHandle<inkActionName>>(value);
-		}
-
-		[Ordinal(2)] 
 		[RED("displayContext")] 
 		public CEnum<gameItemDisplayContext> DisplayContext
 		{
@@ -28,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameItemDisplayContext>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("display")] 
 		public CWeakHandle<InventoryItemDisplayController> Display
 		{
@@ -36,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("isBuybackStack")] 
 		public CBool IsBuybackStack
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("toggleVisibilityRequest")] 
 		public CBool ToggleVisibilityRequest
 		{
@@ -52,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("transmogItem")] 
 		public gameItemID TransmogItem
 		{
@@ -60,7 +52,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("uiInventoryItem")] 
+		public CHandle<UIInventoryItem> UiInventoryItem
+		{
+			get => GetPropertyValue<CHandle<UIInventoryItem>>();
+			set => SetPropertyValue<CHandle<UIInventoryItem>>(value);
+		}
+
 		[Ordinal(7)] 
+		[RED("displayContextData")] 
+		public CWeakHandle<ItemDisplayContextData> DisplayContextData
+		{
+			get => GetPropertyValue<CWeakHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CWeakHandle<ItemDisplayContextData>>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("evt")] 
 		public CHandle<inkPointerEvent> Evt
 		{
@@ -68,9 +76,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkPointerEvent>>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("actionName")] 
+		public CHandle<inkActionName> ActionName
+		{
+			get => GetPropertyValue<CHandle<inkActionName>>();
+			set => SetPropertyValue<CHandle<inkActionName>>(value);
+		}
+
 		public ItemDisplayClickEvent()
 		{
-			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			ItemData = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 			TransmogItem = new();
 
 			PostConstruct();

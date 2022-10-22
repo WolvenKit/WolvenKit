@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,15 +12,13 @@ using ReactiveUI;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Wizards;
-using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit
 {
@@ -54,8 +54,7 @@ namespace WolvenKit
         {
             Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
             {
-                var dialog = new DialogHostView();
-                dialog.ViewModel.HostedViewModel = Locator.Current.GetService<FirstSetupWizardViewModel>();
+                var dialog = new FirstSetupView();
 
                 return Observable.Start(() =>
                 {
@@ -72,6 +71,7 @@ namespace WolvenKit
             //ApplicationHelper.StartProfileOptimization();
 
             loggerService.Info("Starting application");
+            loggerService.Info($"Version: {settings.GetVersionNumber()}");
             await Initializations.InitializeWebview2(loggerService);
 
             loggerService.Info("Initializing red database");
@@ -86,14 +86,19 @@ namespace WolvenKit
             loggerService.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
-            loggerService.Info("Initializing Github API");
-            Initializations.InitializeGitHub();
-
             // Some things can only be initialized after base.OnStartup(e);
             base.OnStartup(e);
 
             //loggerService.Info("Initializing NodeNetwork.");
             //NNViewRegistrar.RegisterSplat();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            Log.Information("Exiting application...");
+            Log.CloseAndFlush();
+
+            base.OnExit(e);
         }
 
         private IServiceProvider Container { get; set; }
@@ -118,18 +123,37 @@ namespace WolvenKit
             var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
-              .MinimumLevel.Debug()
-              .WriteTo.Console()
-              .WriteTo.MySink(_host.Services.GetService<MySink>())
-              .WriteTo.File(path, outputTemplate: outputTemplate, rollingInterval: RollingInterval.Day)
-              .CreateLogger();
+#if DEBUG
+                .MinimumLevel.Debug()
+                .WriteTo.Async(a => a.Console(), bufferSize: 1000)
+#else
+                .MinimumLevel.Information()
+#endif
+                .WriteTo.MySink(_host.Services.GetService<MySink>())
+                .WriteTo.Async(
+                    a => a.File(
+                        path,
+                        outputTemplate: outputTemplate,
+                        rollingInterval: RollingInterval.Day,
+                        fileSizeLimitBytes: 100 * 1000 * 1024, // MaxFileSize: 100 MB
+                        retainedFileCountLimit: 10,
+                        buffered: true, // Allow internal buffering.
+                        flushToDiskInterval: TimeSpan.FromMinutes(1)), // Write once per minute.
+                    bufferSize: 1000)
+                .CreateLogger();
         }
 
         //https://stackoverflow.com/a/46804709/16407587
         private void SetupExceptionHandling()
         {
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+            {
                 LogUnhandledException((Exception)e.ExceptionObject, "AppDomain.CurrentDomain.UnhandledException");
+                if (e.IsTerminating) // And we have no choice but to exit, flush/write any pending logs.
+                {
+                    Log.CloseAndFlush();
+                }
+            };
 
             DispatcherUnhandledException += (s, e) =>
             {
@@ -142,6 +166,43 @@ namespace WolvenKit
                 LogUnhandledException(e.Exception, "TaskScheduler.UnobservedTaskException");
                 e.SetObserved();
             };
+
+            RxApp.DefaultExceptionHandler = new DefaultObserverExceptionHandler();
+        }
+
+        /// <summary>
+        /// This isn't great but can used until each TaskCommand ThrownExceptions can be properly subscribed to.
+        /// </summary>
+        // https://www.reactiveui.net/docs/handbook/default-exception-handler/
+        public class DefaultObserverExceptionHandler : IObserver<Exception>
+        {
+            public void OnNext(Exception ex)
+            {
+                if (Debugger.IsAttached) // If we're debugging, break.
+                {
+                    Debugger.Break();
+                }
+
+                LogUnhandledException(ex, "RxApp.DefaultExceptionHandler");
+            }
+
+            public void OnError(Exception ex)
+            {
+                if (Debugger.IsAttached) // If we're debugging, break.
+                {
+                    Debugger.Break();
+                }
+
+                LogUnhandledException(ex, "RxApp.DefaultExceptionHandler");
+            }
+
+            public void OnCompleted()
+            {
+                if (Debugger.IsAttached) // If we're debugging, break.
+                {
+                    Debugger.Break();
+                }
+            }
         }
 
         private static void LogUnhandledException(Exception exception, string source)
@@ -166,7 +227,7 @@ namespace WolvenKit
             finally
             {
                 _logger.Error(exception);
-                Application.Current.Shutdown();
+                //Application.Current.Shutdown();
             }
         }
     }

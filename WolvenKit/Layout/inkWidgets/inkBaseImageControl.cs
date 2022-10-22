@@ -54,7 +54,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public string TexturePart { get; set; }
 
-        public SizeF RenderedSize = new SizeF();
+        public SizeF RenderedSize = new();
 
         //public override double Width => Widget.FitToContent ? OriginalImageSize.Width : Widget.Size.X;
         //public override double Height => Widget.FitToContent ? OriginalImageSize.Height : Widget.Size.Y;
@@ -84,7 +84,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     return;
                 }
 
-                WidgetView.ViewModel.LoadInkAtlas(TextureAtlas);
+                _ = WidgetView.ViewModel.LoadInkAtlasAsync(TextureAtlas);
 
                 OriginalImageSource = (ImageSource)Application.Current.TryFindResource("ImageSource/" + TextureAtlas + "#" + TexturePart);
 
@@ -185,14 +185,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         }
 
                         gfx.DrawImage(sourceBitmap, new Rectangle(
-                            Rect.Left, 0, (destBitmap.Width - Rect.Left - Rect.Right), Rect.Top),
+                            Rect.Left, 0, destBitmap.Width - Rect.Left - Rect.Right, Rect.Top),
                             Rect.Left + (Rect.Right == 0 ? -1 : 0) + (Rect.Left == 0 ? -1 : 0), 0, Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Rect.Top,
                             GraphicsUnit.Pixel, attributes);
                         if (Rect.Right != 0)
                         {
                             gfx.DrawImage(sourceBitmap, new Rectangle(
-                                (destBitmap.Width - Rect.Right), 0, (Rect.Right), Rect.Top),
-                                (OriginalImageSize.Width - Rect.Right), 0, (Rect.Right), Rect.Top,
+                                destBitmap.Width - Rect.Right, 0, Rect.Right, Rect.Top),
+                                OriginalImageSize.Width - Rect.Right, 0, Rect.Right, Rect.Top,
                                 GraphicsUnit.Pixel, attributes);
                         }
                     }
@@ -206,14 +206,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     }
 
                     gfx.DrawImage(sourceBitmap, new Rectangle(
-                        Rect.Left, Rect.Top, (destBitmap.Width - Rect.Left - Rect.Right), (destBitmap.Height - Rect.Top - Rect.Bottom)),
+                        Rect.Left, Rect.Top, destBitmap.Width - Rect.Left - Rect.Right, destBitmap.Height - Rect.Top - Rect.Bottom),
                         Rect.Left + (Rect.Right == 0 ? -1 : 0) + (Rect.Left == 0 ? -1 : 0), Rect.Top + (Rect.Bottom == 0 ? -1 : 0) + (Rect.Top == 0 ? -1 : 0), Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
                         GraphicsUnit.Pixel, attributes);
                     if (Rect.Right != 0)
                     {
                         gfx.DrawImage(sourceBitmap, new Rectangle(
-                            (destBitmap.Width - Rect.Right), Rect.Top, (Rect.Right), (destBitmap.Height - Rect.Top - Rect.Bottom)),
-                            (OriginalImageSize.Width - Rect.Right), Rect.Top + (Rect.Bottom == 0 ? -1 : 0) + (Rect.Top == 0 ? -1 : 0), (Rect.Right), Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
+                            destBitmap.Width - Rect.Right, Rect.Top, Rect.Right, destBitmap.Height - Rect.Top - Rect.Bottom),
+                            OriginalImageSize.Width - Rect.Right, Rect.Top + (Rect.Bottom == 0 ? -1 : 0) + (Rect.Top == 0 ? -1 : 0), Rect.Right, Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
                             GraphicsUnit.Pixel, attributes);
                     }
 
@@ -222,20 +222,20 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         if (Rect.Left != 0)
                         {
                             gfx.DrawImage(sourceBitmap, new Rectangle(
-                            0, (destBitmap.Height - Rect.Bottom), Rect.Left, Rect.Bottom),
-                            0, (OriginalImageSize.Height - Rect.Bottom), Rect.Left, Rect.Bottom,
+                            0, destBitmap.Height - Rect.Bottom, Rect.Left, Rect.Bottom),
+                            0, OriginalImageSize.Height - Rect.Bottom, Rect.Left, Rect.Bottom,
                             GraphicsUnit.Pixel, attributes);
                         }
 
                         gfx.DrawImage(sourceBitmap, new Rectangle(
-                            Rect.Left, (destBitmap.Height - Rect.Bottom), (destBitmap.Width - Rect.Left - Rect.Right), Rect.Bottom),
-                            Rect.Left + (Rect.Right == 0 ? -1 : 0) + (Rect.Left == 0 ? -1 : 0), (OriginalImageSize.Height - Rect.Bottom), Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Rect.Bottom,
+                            Rect.Left, destBitmap.Height - Rect.Bottom, destBitmap.Width - Rect.Left - Rect.Right, Rect.Bottom),
+                            Rect.Left + (Rect.Right == 0 ? -1 : 0) + (Rect.Left == 0 ? -1 : 0), OriginalImageSize.Height - Rect.Bottom, Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Rect.Bottom,
                             GraphicsUnit.Pixel, attributes);
                         if (Rect.Right != 0)
                         {
                             gfx.DrawImage(sourceBitmap, new Rectangle(
-                            (destBitmap.Width - Rect.Right), (destBitmap.Height - Rect.Bottom), (Rect.Right), Rect.Bottom),
-                            (OriginalImageSize.Width - Rect.Right), (OriginalImageSize.Height - Rect.Bottom), (Rect.Right), Rect.Bottom,
+                            destBitmap.Width - Rect.Right, destBitmap.Height - Rect.Bottom, Rect.Right, Rect.Bottom),
+                            OriginalImageSize.Width - Rect.Right, OriginalImageSize.Height - Rect.Bottom, Rect.Right, Rect.Bottom,
                             GraphicsUnit.Pixel, attributes);
                         }
                     }
@@ -377,41 +377,31 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static TileMode ToTileMode(Enums.inkBrushTileType? tile)
         {
-            switch (tile)
+            return tile switch
             {
-                case Enums.inkBrushTileType.NoTile:
-                    return TileMode.None;
-                default:
-                    return TileMode.Tile;
-            }
+                Enums.inkBrushTileType.NoTile => TileMode.None,
+                _ => TileMode.Tile,
+            };
         }
 
         public static AlignmentX ToAlignmentX(Enums.inkEHorizontalAlign? type)
         {
-            switch (type)
+            return type switch
             {
-                case Enums.inkEHorizontalAlign.Left:
-                    return AlignmentX.Left;
-                case Enums.inkEHorizontalAlign.Right:
-                    return AlignmentX.Right;
-                case Enums.inkEHorizontalAlign.Center:
-                default:
-                    return AlignmentX.Center;
-            }
+                Enums.inkEHorizontalAlign.Left => AlignmentX.Left,
+                Enums.inkEHorizontalAlign.Right => AlignmentX.Right,
+                _ => AlignmentX.Center,
+            };
         }
 
         public static AlignmentY ToAlignmentY(Enums.inkEVerticalAlign? type)
         {
-            switch (type)
+            return type switch
             {
-                case Enums.inkEVerticalAlign.Top:
-                    return AlignmentY.Top;
-                case Enums.inkEVerticalAlign.Bottom:
-                    return AlignmentY.Bottom;
-                case Enums.inkEVerticalAlign.Center:
-                default:
-                    return AlignmentY.Center;
-            }
+                Enums.inkEVerticalAlign.Top => AlignmentY.Top,
+                Enums.inkEVerticalAlign.Bottom => AlignmentY.Bottom,
+                _ => AlignmentY.Center,
+            };
         }
 
         protected override void Render(DrawingContext dc)
@@ -437,14 +427,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         protected override SizeF MeasureCore(SizeF availableSize)
         {
-            if (Widget.FitToContent && OriginalImageSource != null)
-            {
-                return MeasureForDimensions(new SizeF(OriginalImageSource.Width, OriginalImageSource.Height), availableSize);
-            }
-            else
-            {
-                return MeasureForDimensions(new SizeF(Width, Height), availableSize);
-            }
+            return Widget.FitToContent && OriginalImageSource != null
+                ? MeasureForDimensions(new SizeF(OriginalImageSource.Width, OriginalImageSource.Height), availableSize)
+                : MeasureForDimensions(new SizeF(Width, Height), availableSize);
             //return base.MeasureCore(availableSize);
         }
 

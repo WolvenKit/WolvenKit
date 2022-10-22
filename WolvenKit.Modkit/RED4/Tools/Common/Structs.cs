@@ -90,6 +90,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public string name { get; set; }
         public uint weightCount { get; set; }
         public string[] materialNames { get; set; }
+        public uint lod { get; set; }
     }
     public class Re4MeshContainer
     {

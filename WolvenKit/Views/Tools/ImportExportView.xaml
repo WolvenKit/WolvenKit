@@ -1,21 +1,21 @@
 <reactiveUi:ReactiveUserControl
-    x:TypeArguments="tools:ImportExportViewModel"
     x:Class="WolvenKit.Views.Tools.ImportExportView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:I="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:layout="clr-namespace:WolvenKit.Layout"
     xmlns:local="clr-namespace:WolvenKit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
-    xmlns:layout="clr-namespace:WolvenKit.Layout"
     d:DataContext="{d:DesignInstance Type=tools:ImportExportViewModel}"
+    x:TypeArguments="tools:ImportExportViewModel"
     mc:Ignorable="d">
 
     <Grid>
@@ -35,7 +35,7 @@
             Grid.RowSpan="3"
             Grid.ColumnSpan="3"
             Background="Gray">
-            
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
@@ -44,7 +44,7 @@
 
             <!--  Switch Views  -->
             <Grid Grid.Row="0" Background="{DynamicResource ContentBackgroundAlt2}">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <RadioButton
                         x:Name="ImportCheckBox"
                         Margin="5,2,5,2"
@@ -54,8 +54,8 @@
                         IsChecked="{Binding IsImportsSelected}" />
                     <RadioButton
                         x:Name="ExportCheckBox"
-                        Background="Transparent"
                         Margin="0,0,5,0"
+                        Background="Transparent"
                         Content="EXPORT"
                         GroupName="bob"
                         IsChecked="{Binding IsExportsSelected}" />
@@ -74,22 +74,22 @@
             <syncfusion:SfDataGrid
                 x:Name="ConvertGrid"
                 Grid.Row="1"
-                BorderThickness="0,1,0,1"
                 AllowEditing="True"
                 AllowFiltering="True"
-                CellDoubleTapped="SfDataGrid_CellDoubleTapped"
                 AllowResizingColumns="True"
                 AllowSorting="True"
                 AutoGenerateColumns="False"
+                BorderThickness="0,1,0,1"
+                CellDoubleTapped="SfDataGrid_CellDoubleTapped"
                 ColumnSizer="Auto"
                 SelectionMode="Extended"
                 Visibility="{Binding IsConvertsSelected, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridCheckBoxColumn
+                        Width="50"
                         AllowEditing="True"
                         HeaderText="#"
-                        Width="50"
                         MappingName="IsChecked">
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
@@ -113,21 +113,25 @@
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Properties" />
                 </syncfusion:SfDataGrid.Columns>
-                <I:Interaction.Behaviors>
-                    <layout:Behaviour />
-                </I:Interaction.Behaviors>
+
+                <syncfusion:SfDataGrid.RecordContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
+                    </ContextMenu>
+                </syncfusion:SfDataGrid.RecordContextMenu>
+
             </syncfusion:SfDataGrid>
 
             <!--  Data Grid Exports  -->
             <syncfusion:SfDataGrid
                 x:Name="ExportGrid"
                 Grid.Row="1"
-                BorderThickness="0,1,0,1"
                 AllowEditing="True"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
                 AllowSorting="True"
                 AutoGenerateColumns="False"
+                BorderThickness="0,1,0,1"
                 CellDoubleTapped="SfDataGrid_CellDoubleTapped"
                 ColumnSizer="Auto"
                 SelectionMode="Extended"
@@ -136,19 +140,16 @@
                 <syncfusion:SfDataGrid.Columns>
 
                     <syncfusion:GridCheckBoxColumn
+                        Width="50"
                         HeaderText="#"
-                        MappingName="IsChecked"
-                        Width="50">
+                        MappingName="IsChecked">
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
-                                <CheckBox
-                                    Command="layout:SFDataGridCommands.CheckAndUnCheck"
-                                    CommandParameter="{Binding ElementName=ExportGrid}"
-                                    />
+                                <CheckBox Command="layout:SFDataGridCommands.CheckAndUnCheck" CommandParameter="{Binding ElementName=ExportGrid}" />
                             </DataTemplate>
                         </syncfusion:GridCheckBoxColumn.HeaderTemplate>
                     </syncfusion:GridCheckBoxColumn>
-                    
+
                     <syncfusion:GridTextColumn
                         AllowEditing="False"
                         ColumnSizer="Star"
@@ -162,74 +163,117 @@
                         HeaderText="Export Task"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Properties" />
-                    
+
                 </syncfusion:SfDataGrid.Columns>
-                
-                <I:Interaction.Behaviors>
-                    <layout:Behaviour />
-                </I:Interaction.Behaviors>
-                
+
+                <syncfusion:SfDataGrid.RecordContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
+                    </ContextMenu>
+                </syncfusion:SfDataGrid.RecordContextMenu>
+
             </syncfusion:SfDataGrid>
 
             <!--  Data Grid Imports  -->
-            <syncfusion:SfDataGrid
-                x:Name="ImportGrid"
+            <Grid
                 Grid.Row="1"
-                BorderThickness="0,1,0,1"
-                AllowEditing="True"
-                AllowFiltering="True"
-                AllowResizingColumns="True"
-                AllowSorting="True"
-                AutoGenerateColumns="False"
-                CellDoubleTapped="SfDataGrid_CellDoubleTapped"
-                ColumnSizer="Auto"
-                SelectionMode="Extended"
+                Background="{DynamicResource ContentBackgroundAlt2}"
                 Visibility="{Binding IsImportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <syncfusion:SfDataGrid.Columns>
-                    <syncfusion:GridCheckBoxColumn
-                        AllowEditing="True"
-                        HeaderText="#"
-                        Width="50"
-                        MappingName="IsChecked">
-                        <syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <CheckBox
-                                    Command="layout:SFDataGridCommands.CheckAndUnCheck"
-                                    CommandParameter="{Binding ElementName=ImportGrid}"
-                                    IsChecked="{Binding Path=IsHeaderChecked}" />
-                            </DataTemplate>
-                        </syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                    </syncfusion:GridCheckBoxColumn>
-                    <syncfusion:GridTextColumn
-                        AllowEditing="False"
-                        ColumnSizer="Star"
-                        HeaderText="Name"
-                        HorizontalHeaderContentAlignment="Left"
-                        MappingName="Name" />
-                    <syncfusion:GridTextColumn
-                        AllowEditing="False"
-                        ColumnSizer="AutoLastColumnFill"
-                        HeaderText="Import Task"
-                        HorizontalHeaderContentAlignment="Left"
-                        MappingName="Properties" />
-                </syncfusion:SfDataGrid.Columns>
-                <I:Interaction.Behaviors>
-                    <layout:Behaviour />
-                </I:Interaction.Behaviors>
-            </syncfusion:SfDataGrid>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Button
+                        Margin="4"
+                        Padding="4"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource ContentBackground}"
+                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                        BorderThickness="1"
+                        Command="{Binding ResetSettingsCommand}"
+                        FontSize="12"
+                        Style="{DynamicResource ButtonCustom}">
+                        <TextBlock Margin="1" Text="Reset Settings" />
+                    </Button>
+                    <Button
+                        Margin="4"
+                        Padding="4"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource ContentBackground}"
+                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                        BorderThickness="1"
+                        Command="{Binding ImportSettingsCommand}"
+                        FontSize="12"
+                        Style="{DynamicResource ButtonCustom}">
+                        <TextBlock Margin="1" Text="Load Settings" />
+                    </Button>
+                </StackPanel>
+
+                <syncfusion:SfDataGrid
+                    x:Name="ImportGrid"
+                    Grid.Row="1"
+                    AllowEditing="True"
+                    AllowFiltering="True"
+                    AllowResizingColumns="True"
+                    AllowSorting="True"
+                    AutoGenerateColumns="False"
+                    BorderThickness="0,1,0,1"
+                    CellDoubleTapped="SfDataGrid_CellDoubleTapped"
+                    ColumnSizer="Auto"
+                    SelectionMode="Extended">
+
+                    <syncfusion:SfDataGrid.Columns>
+                        <syncfusion:GridCheckBoxColumn
+                            Width="50"
+                            AllowEditing="True"
+                            HeaderText="#"
+                            MappingName="IsChecked">
+                            <syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        Command="layout:SFDataGridCommands.CheckAndUnCheck"
+                                        CommandParameter="{Binding ElementName=ImportGrid}"
+                                        IsChecked="{Binding Path=IsHeaderChecked}" />
+                                </DataTemplate>
+                            </syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                        </syncfusion:GridCheckBoxColumn>
+                        <syncfusion:GridTextColumn
+                            AllowEditing="False"
+                            ColumnSizer="Star"
+                            HeaderText="Name"
+                            HorizontalHeaderContentAlignment="Left"
+                            MappingName="Name" />
+                        <syncfusion:GridTextColumn
+                            AllowEditing="False"
+                            ColumnSizer="AutoLastColumnFill"
+                            HeaderText="Import Task"
+                            HorizontalHeaderContentAlignment="Left"
+                            MappingName="Properties" />
+                    </syncfusion:SfDataGrid.Columns>
+
+                    <syncfusion:SfDataGrid.RecordContextMenu>
+                        <ContextMenu>
+                            <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
+                        </ContextMenu>
+                    </syncfusion:SfDataGrid.RecordContextMenu>
+
+                </syncfusion:SfDataGrid>
+            </Grid>
 
             <!--  Bottom Button Panel Main  -->
-            <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}" >
+            <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="220" Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto" MinWidth="220" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal"
+                <StackPanel
+                    Grid.Column="0"
                     Margin="6,4,6,4"
-                    Grid.Column="0">
+                    Orientation="Horizontal">
 
                     <Button
                         Margin="0,0,4,0"
@@ -243,14 +287,14 @@
                         Style="{DynamicResource ButtonCustom}">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons
-                                    Width="13"
-                                    Height="13"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Margin="2"
-                                    Kind="DebugStart" />
+                                Width="13"
+                                Height="13"
+                                Margin="2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="DebugStart" />
 
-                            <TextBlock Text="Process Selected" Margin="1"/>
+                            <TextBlock Margin="1" Text="Process Selected" />
                         </StackPanel>
                     </Button>
 
@@ -268,22 +312,23 @@
                             <iconPacks:PackIconCodicons
                                 Width="13"
                                 Height="13"
+                                Margin="2"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Margin="2"
                                 Kind="RunAll" />
 
-                            <TextBlock Text="Process All" Margin="1"/>
+                            <TextBlock Margin="1" Text="Process All" />
                         </StackPanel>
                     </Button>
 
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal"
-                    Margin="6,4,6,4"
+                <StackPanel
                     Grid.Column="1"
+                    Margin="6,4,6,4"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
 
                     <ToggleButton
                         Margin="0,0,4,0"
@@ -301,18 +346,19 @@
 
                     <TextBlock
                         x:Name="CurrentSelectedItemButtonbar"
-                        VerticalAlignment="Center"
                         HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
                         FontSize="11"
                         Text="{Binding CurrentSelectedInGridName}" />
-                    
+
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal"
-                    Margin="6,4,6,4"
+                <StackPanel
                     Grid.Column="2"
+                    Margin="6,4,6,4"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
 
                     <StackPanel
                         HorizontalAlignment="Right"
@@ -320,8 +366,8 @@
                         Orientation="Horizontal">
 
                         <Button
-                            Padding="4"
                             Margin="0,0,6,0"
+                            Padding="4"
                             VerticalAlignment="Center"
                             Background="{DynamicResource ContentBackground}"
                             BorderBrush="{DynamicResource ContentBackgroundAlt}"
@@ -329,28 +375,28 @@
                             Command="{Binding CopyArgumentsTemplateToCommand}"
                             CommandParameter="{Binding Path=SelectedItem.Content, ElementName=ToThese}"
                             FontSize="12"
-                            ToolTip="Copy I/O settings from selected file"
-                            Style="{DynamicResource ButtonCustom}">
+                            Style="{DynamicResource ButtonCustom}"
+                            ToolTip="Copy I/O settings from selected file">
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:PackIconForkAwesome
                                     Width="13"
                                     Height="13"
+                                    Margin="2"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Margin="2"
                                     Kind="FilesOutline" />
-                                <TextBlock Text="Copy Settings" Margin="1" />
+                                <TextBlock Margin="1" Text="Copy Settings" />
                             </StackPanel>
                         </Button>
                         <syncfusion:ComboBoxAdv
                             x:Name="ToThese"
                             Margin="0,0,0,0"
+                            Padding="6,6,0,6"
                             VerticalAlignment="Center"
                             FontSize="12"
-                            Padding="6,6,0,6"
-                            ToolTip="Destination for copied settings"
                             SelectedIndex="0"
-                            Text="apply">
+                            Text="apply"
+                            ToolTip="Destination for copied settings">
 
                             <syncfusion:ComboBoxItemAdv Content="Selected in Grid" />
                             <syncfusion:ComboBoxItemAdv Content="All in Grid" />
@@ -359,7 +405,7 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
-            
+
         </Grid>
 
         <!--  Special Import / Export Options  -->
@@ -369,6 +415,7 @@
             Grid.ColumnSpan="4"
             Background="{DynamicResource ContentBackgroundAlt2}"
             Visibility="Collapsed">
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="80" />
                 <RowDefinition Height="5*" />
@@ -413,9 +460,7 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Margin="8,2">
+                <StackPanel Grid.Row="1" Margin="8,2">
                     <CheckBox
                         x:Name="ApplyToAllCheckbox"
                         Margin="8"
@@ -427,7 +472,7 @@
                         Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}" />
                 </StackPanel>
 
-                    <Button
+                <Button
                     Width="80"
                     Height="39"
                     Margin="8,0"
@@ -445,16 +490,42 @@
                 Grid.Row="1"
                 Margin="2"
                 Background="{DynamicResource ContentBackgroundAlt}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--  Additional options  -->
+                <StackPanel
+                    x:Name="AddSettingsRe"
+                    Grid.Row="0"
+                    Orientation="Vertical"
+                    Visibility="Collapsed">
+                    <hc:ComboBox
+                        x:Name="AnimsetComboBox"
+                        hc:TitleElement.Title="Animset"
+                        SelectionChanged="AnimsetComboBox_SelectionChanged" />
+
+                    <hc:ComboBox
+                        x:Name="AnimNameComboBox"
+                        hc:TitleElement.Title="Animation to rename"
+                        SelectionChanged="AnimNameComboBox_SelectionChanged" />
+                </StackPanel>
+
+                <!--  PropertyGrid  -->
                 <syncfusion:PropertyGrid
                     x:Name="OverlayPropertyGrid"
+                    Grid.Row="1"
+                    AutoGeneratingPropertyGridItem="OverlayPropertyGrid_AutoGeneratingPropertyGridItem"
                     ButtonPanelVisibility="Hidden"
-                    SearchBoxVisibility="Hidden"
                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
                     CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"
                     DescriptionPanelVisibility="Visible"
                     EnableGrouping="True"
                     PropertyExpandMode="NestedMode"
-                    AutoGeneratingPropertyGridItem="OverlayPropertyGrid_AutoGeneratingPropertyGridItem"
+                    ReadOnlyBackground="{DynamicResource ContentBackgroundAlt}"
+                    SearchBoxVisibility="Hidden"
                     SortDirection="{x:Null}" />
             </Grid>
         </Grid>
@@ -465,7 +536,6 @@
             Grid.ColumnSpan="4"
             Background="Gray"
             Visibility="{Binding IsProcessing, Converter={StaticResource boolToVisibilityConverter}}">
-            <syncfusion:SfBusyIndicator AnimationType="Gear" />
             <TextBlock
                 x:Name="ImportExportOverlayText"
                 Margin="0,65,0,0"
@@ -474,6 +544,7 @@
                 Text="Files are being processed..." />
         </Grid>
 
+        <!--  Help Overlay  -->
         <Grid
             x:Name="HelpOverlay"
             Grid.RowSpan="4"

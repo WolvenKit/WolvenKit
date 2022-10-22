@@ -11,14 +11,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 		
-		[RED("duration")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID Duration
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
 		[RED("effectors")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> Effectors

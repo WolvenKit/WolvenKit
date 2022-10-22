@@ -19,4 +19,12 @@ namespace WolvenKit.Functionality.WKitGlobal
         cpmodproj,
         w3modproj
     }
+
+    public enum EAppStatus
+    {
+        None,
+        Loaded,
+        Busy,
+        Ready
+    }
 }

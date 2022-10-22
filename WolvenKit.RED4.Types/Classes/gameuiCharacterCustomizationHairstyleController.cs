@@ -12,14 +12,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(5)] 
-		[RED("forceDissolveAppearances")] 
-		public CBool ForceDissolveAppearances
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
 		public gameuiCharacterCustomizationHairstyleController()
 		{
 			Name = "Component";

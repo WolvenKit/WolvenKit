@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
@@ -25,6 +26,7 @@ namespace WolvenKit.Common.Services
         private readonly Dictionary<ulong, SAsciiString> _hashes = new();
         private readonly Dictionary<ulong, SAsciiString> _additionalhashes = new();
         private readonly Dictionary<ulong, SAsciiString> _userHashes = new();
+        private readonly Dictionary<ulong, SAsciiString> _projectHashes = new();
         private readonly Dictionary<ulong, SAsciiString> _noderefs = new();
 
         private readonly List<ulong> _missing = new();
@@ -36,7 +38,10 @@ namespace WolvenKit.Common.Services
         public HashService()
         {
             Load();
+
+            ImportHandler.AddPathHandler = AddProjectPath;
             CName.ResolveHashHandler = Get;
+
             NodeRef.ResolveHashHandler = GetNodeRef;
         }
 
@@ -96,6 +101,10 @@ namespace WolvenKit.Common.Services
                 return string.Empty;
             }
 
+            if (_projectHashes.ContainsKey(key))
+            {
+                return _projectHashes[key].ToString();
+            }
 
             // load additional
             LoadAdditional();
@@ -134,7 +143,36 @@ namespace WolvenKit.Common.Services
             }
         }
 
+        public void ClearProjectHashes() => _projectHashes.Clear();
 
+        public void AddProjectPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            var hash = FNV1A64HashAlgorithm.HashString(path);
+
+            if (_hashes.ContainsKey(hash))
+            {
+                return;
+            }
+
+            if (_userHashes.ContainsKey(hash))
+            {
+                return;
+            }
+
+            if (_projectHashes.ContainsKey(hash))
+            {
+                return;
+            }
+
+            _projectHashes.Add(hash, new SAsciiString(path));
+        }
+
+        public List<string> GetProjectHashes() => _projectHashes.Select(pair => pair.Value.ToString()).ToList();
 
 
         private void LoadAdditional()
@@ -156,15 +194,20 @@ namespace WolvenKit.Common.Services
             LoadAdditional();
 
             // user hashes
-            var assemblyPath = Path.GetDirectoryName(AppContext.BaseDirectory);
-            var userHashesPath = Path.Combine(assemblyPath ?? throw new InvalidOperationException(), s_userHashes);
+            LoadUserHashesFrom(Path.GetDirectoryName(AppContext.BaseDirectory));
+            LoadUserHashesFrom(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit"));
+
+            LoadMissingHashes();
+        }
+
+        private void LoadUserHashesFrom(string path)
+        {
+            var userHashesPath = Path.Combine(path ?? throw new InvalidOperationException(), s_userHashes);
             if (File.Exists(userHashesPath))
             {
                 using var userFs = new FileStream(userHashesPath, FileMode.Open, FileAccess.Read);
                 ReadHashes(userFs, _userHashes);
             }
-
-            LoadMissingHashes();
         }
 
         private void LoadEmbeddedHashes(string resourceName, Dictionary<ulong, SAsciiString> hashDictionary)

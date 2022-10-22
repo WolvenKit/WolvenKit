@@ -17,7 +17,7 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
@@ -53,8 +53,6 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IGameControllerFactory _gameController;
         private readonly IPluginService _pluginService;
         private readonly ISettingsManager _settingsManager;
-
-        private EditorProject ActiveProject => _projectManager.ActiveProject;
         private readonly IObservableList<FileModel> _observableList;
 
         #endregion fields
@@ -83,7 +81,31 @@ namespace WolvenKit.ViewModels.Tools
 
             SideInDockedMode = DockSide.Left;
 
-            SetupCommands();
+            CutFileCommand = new DelegateCommand(ExecuteCutFile, CanCutFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+            CopyFileCommand = new DelegateCommand(CopyFile, CanCopyFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+            PasteFileCommand = new DelegateCommand(PasteFile, CanPasteFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+
+            DeleteFileCommand = new DelegateCommand(ExecuteDeleteFile, CanDeleteFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+            RenameFileCommand = new DelegateCommand(ExecuteRenameFile, CanRenameFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+
+            CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+            ReimportFileCommand = new DelegateCommand(async () => await ExecuteReimportFile(), CanReimportFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+            OpenInFileExplorerCommand = new DelegateCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+
+            OpenRootFolderCommand = new DelegateCommand(ExecuteOpenRootFolder, CanOpenRootFolder).ObservesProperty(() => ActiveProject);
+            RefreshCommand = new DelegateCommand(async () => await ExecuteRefresh(), CanRefresh).ObservesProperty(() => ActiveProject);
+
+            Bk2ImportCommand = new DelegateCommand(ExecuteBk2Import, CanBk2Import).ObservesProperty(() => SelectedItem);
+            Bk2ExportCommand = new DelegateCommand(ExecuteBk2Export, CanBk2Export).ObservesProperty(() => SelectedItem);
+
+            ConvertToJsonCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.json), CanConvertTo).ObservesProperty(() => SelectedItem);
+            ConvertFromJsonCommand = new DelegateCommand(ExecuteConvertFromJson, CanConvertFromJson).ObservesProperty(() => SelectedItem);
+
+
+            OpenInAssetBrowserCommand = new DelegateCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+            OpenInMlsbCommand = new DelegateCommand(ExecuteOpenInMlsb, CanOpenInMlsb).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
+
+
             SetupToolDefaults();
 
             _watcherService.Files
@@ -99,18 +121,28 @@ namespace WolvenKit.ViewModels.Tools
 
             this.WhenAnyValue(x => x.SelectedItem).Subscribe(model =>
             {
-                if (model != null)
+                if (model is not null)
                 {
                     Locator.Current.GetService<AppViewModel>().FileSelectedCommand.SafeExecute(model);
                 }
             });
 
+            this.WhenAnyValue(x => x._projectManager.ActiveProject).Subscribe(proj =>
+            {
+                if (proj is not null)
+                {
+                    ActiveProject = proj;
+                }
+            });
         }
 
 
         #endregion constructors
 
         #region properties
+
+        public AppViewModel MainViewModel => Locator.Current.GetService<AppViewModel>();
+        [Reactive] private EditorProject ActiveProject { get; set; }
 
         public ReactiveCommand<Unit, Unit> ExpandAll { get; private set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; private set; }
@@ -136,6 +168,16 @@ namespace WolvenKit.ViewModels.Tools
 
         #region general commands
 
+        /// <summary>
+        /// Refreshes all files in the Grid
+        /// </summary>
+        public ICommand RefreshCommand { get; private set; }
+        private bool CanRefresh() => ActiveProject != null;
+        private Task ExecuteRefresh() => _watcherService.RefreshAsync(ActiveProject);
+
+        /// <summary>
+        /// Opens the currently selected folder in the tab
+        /// </summary>
         public ICommand OpenRootFolderCommand { get; private set; }
         private bool CanOpenRootFolder() => ActiveProject != null;
         private void ExecuteOpenRootFolder()
@@ -168,12 +210,6 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        public ICommand OpenFileCommand { get; private set; }
-        private bool CanOpenFile() => true;
-        private void ExecuteOpenFile() =>
-            // TODO: Handle command logic here
-            Locator.Current.GetService<AppViewModel>().OpenFileAsyncCommand.SafeExecute(SelectedItem);
-
         /// <summary>
         /// Copies selected node to the clipboard.
         /// </summary>
@@ -193,7 +229,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand ReimportFileCommand { get; private set; }
         private bool CanReimportFile() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
-        private void ExecuteReimportFile() => Task.Run(() => _gameController.GetController().AddToMod(SelectedItem.Hash));
+        private Task ExecuteReimportFile() => _gameController.GetController().AddFileToModModal(SelectedItem.Hash);
 
         /// <summary>
         /// Cuts selected node to the clipboard.
@@ -211,44 +247,9 @@ namespace WolvenKit.ViewModels.Tools
         private bool CanDeleteFile()
         {
             var b = ActiveProject != null && SelectedItem != null;
-            if (!b)
-            {
-                return false;
-            }
-
-            //if (ActiveProject is Tw3Project tw3Project)
-            //{
-            //    var item = SelectedItem.FullName;
-            //    b &= !(item == tw3Project.ModDirectory
-            //           || item == tw3Project.DlcDirectory
-            //           || item == tw3Project.RawDirectory
-            //           || item == tw3Project.RadishDirectory
-            //           || item == tw3Project.ModCookedDirectory
-            //           || item == tw3Project.ModUncookedDirectory
-            //           || item == tw3Project.DlcCookedDirectory
-            //           || item == tw3Project.DlcUncookedDirectory
-            //        );
-            //}
-
-            return b;
+            return b && b;
         }
-        /*
-                /// <summary>
-                /// Test stuff selected node.
-                /// </summary>
-                public ICommand TeststuffCommand { get; private set; }
-
-                private async void Teststuff()
-                {
-                    var selected = SelectedItems.OfType<FileModel>().ToList();
-                    var delete = await Interactions.DeleteFiles.Handle(selected.Select(_ => _.Name));
-                    if (!delete)
-                    {
-                        return;
-                    }
-                }*/
-
-        private async void ExecuteDeleteFile()
+        public async void ExecuteDeleteFile()
         {
             var selected = SelectedItems.OfType<FileModel>().ToList();
             var delete = await Interactions.DeleteFiles.Handle(selected.Select(_ => _.Name));
@@ -440,7 +441,6 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         public ICommand ConvertToJsonCommand { get; private set; }
-        public ICommand ConvertToXmlCommand { get; private set; }
 
         private bool CanConvertTo() => SelectedItem != null
                 && !IsInRawFolder(SelectedItem)
@@ -654,47 +654,6 @@ namespace WolvenKit.ViewModels.Tools
         #region Methods
 
         private void OnNext(IChangeSet<FileModel, ulong> obj) => BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
-
-
-        /// <summary>
-        /// Initialize commands for this window.
-        /// </summary>
-        private void SetupCommands()
-        {
-            OpenFileCommand = new DelegateCommand(ExecuteOpenFile, CanOpenFile);
-            CutFileCommand = new DelegateCommand(ExecuteCutFile, CanCutFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            CopyFileCommand = new DelegateCommand(CopyFile, CanCopyFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            PasteFileCommand = new DelegateCommand(PasteFile, CanPasteFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            DeleteFileCommand = new DelegateCommand(ExecuteDeleteFile, CanDeleteFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            //TeststuffCommand = new DelegateCommand(Teststuff, CanDeleteFile);
-            RenameFileCommand = new DelegateCommand(ExecuteRenameFile, CanRenameFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            ReimportFileCommand = new DelegateCommand(ExecuteReimportFile, CanReimportFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            OpenInFileExplorerCommand = new DelegateCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-
-            OpenRootFolderCommand = new DelegateCommand(ExecuteOpenRootFolder, CanOpenRootFolder).ObservesProperty(() => ActiveProject);
-
-            Bk2ImportCommand = new DelegateCommand(ExecuteBk2Import, CanBk2Import).ObservesProperty(() => SelectedItem);
-            Bk2ExportCommand = new DelegateCommand(ExecuteBk2Export, CanBk2Export).ObservesProperty(() => SelectedItem);
-
-            //CountUrlBytesCommand = new DelegateCommand(async () =>
-            //{
-            //    ByteCount = await MyService.DownloadAndCountBytesAsync(Url);
-            //});
-            ConvertToJsonCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.json), CanConvertTo).ObservesProperty(() => SelectedItem);
-            ConvertToXmlCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.xml), CanConvertTo).ObservesProperty(() => SelectedItem);
-            ConvertFromJsonCommand = new DelegateCommand(ExecuteConvertFromJson, CanConvertFromJson).ObservesProperty(() => SelectedItem);
-
-            //PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);
-
-            //CookCommand = new DelegateCommand(Cook, CanCook);
-            //FastRenderCommand = new DelegateCommand(ExecuteFastRender, CanFastRender);
-            //ExportMeshCommand = new DelegateCommand(ExportMesh, CanExportMesh);
-            //AddAllImportsCommand = new DelegateCommand(AddAllImports, CanAddAllImports);
-            //ExportJsonCommand = new DelegateCommand(ExecuteExportJson, CanExportJson);
-            OpenInAssetBrowserCommand = new DelegateCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            OpenInMlsbCommand = new DelegateCommand(ExecuteOpenInMlsb, CanOpenInMlsb).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-        }
 
         /// <summary>
         /// Initialize Avalondock specific defaults that are specific to this tool window.

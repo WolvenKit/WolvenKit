@@ -43,7 +43,7 @@ namespace WolvenKit.Common.Model
 
         public abstract void LoadModArchive(string filename);
 
-        public abstract void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir);
+        public abstract void LoadModsArchives(FileInfo executable);
 
         protected static string GetModFolder(string path)
         {
@@ -82,7 +82,7 @@ namespace WolvenKit.Common.Model
                 }
 
                 // add file to the last directory in path
-                currentNode.Files.Add(key);
+                currentNode.Files.Add(model);
             }
             //);
         }
@@ -93,7 +93,7 @@ namespace WolvenKit.Common.Model
 
             foreach (var archive in ModArchives.Items)
             {
-                var modroot = new RedFileSystemModel(archive.Name);
+                var modroot = new RedFileSystemModel(archive.ArchiveRelativePath);
 
                 // loop through all files
                 //Parallel.ForEach(archive.Files, item =>
@@ -116,7 +116,7 @@ namespace WolvenKit.Common.Model
                     }
 
                     // add file to the last directory in path
-                    currentNode.Files.Add(item.Key);
+                    currentNode.Files.Add(item.Value);
                 }
                 //);
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.CRC;
 using WolvenKit.Core.Extensions;
@@ -91,17 +92,20 @@ public class TweakDBStringHelper
         bw.Write(_flatHashes.Count);
         bw.Write(_queryHashes.Count);
 
-        foreach (var (hash, str) in _recordHashes)
+        var recordHashes = _recordHashes.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+        foreach (var (hash, str) in recordHashes)
         {
             bw.WriteLengthPrefixedString(str);
         }
 
-        foreach (var (hash, str) in _flatHashes)
+        var flatHashes = _flatHashes.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+        foreach (var (hash, str) in flatHashes)
         {
             bw.WriteLengthPrefixedString(str);
         }
 
-        foreach (var (hash, str) in _queryHashes)
+        var queryHashes = _queryHashes.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+        foreach (var (hash, str) in queryHashes)
         {
             bw.WriteLengthPrefixedString(str);
         }

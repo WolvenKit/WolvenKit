@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ReactiveUI;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Common.Model
 {
@@ -21,7 +22,7 @@ namespace WolvenKit.Common.Model
 
         public IEnumerable<RedFileSystemModel> RedFileSystemModels => Directories.Values.OrderBy(x => x.Name);
 
-        public List<ulong> Files { get; } = new();
+        public List<IGameFile> Files { get; } = new();
 
         public string Extension => IsExpanded
             ? nameof(ECustomImageKeys.OpenDirImageKey)

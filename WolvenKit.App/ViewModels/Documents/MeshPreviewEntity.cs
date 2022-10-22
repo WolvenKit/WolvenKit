@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +8,7 @@ using Microsoft.Win32;
 using Prism.Commands;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;

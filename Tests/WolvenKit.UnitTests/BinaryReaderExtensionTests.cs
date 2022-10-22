@@ -12,7 +12,7 @@ namespace WolvenKit.UnitTests
 
         private static readonly RecyclableMemoryStreamManager s_streamManager = new();
 
-        private static BinaryReader GetReaderFromByteArray(byte[] input) => new BinaryReader(s_streamManager.GetStream(input));
+        private static BinaryReader GetReaderFromByteArray(byte[] input) => new(s_streamManager.GetStream(input));
 
         #endregion
 

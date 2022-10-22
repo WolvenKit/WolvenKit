@@ -2,44 +2,40 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <PackageId>WolvenKit.Core</PackageId>
-      <Company>WolvenKit</Company>
-      <Product>WolvenKit.Core</Product>
-      <Description>Core file formats for the WolvenKit Mod Editor.</Description>
-      <PackageLicenseExpression>MIT</PackageLicenseExpression>
-      <PackageProjectUrl>https://github.com/WolvenKit/Wolven-kit</PackageProjectUrl>
-      <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
-      <RepositoryType>git</RepositoryType>
-      <PackageTags>wolvenkit, witcher3, cyberpunk2077</PackageTags>
-      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-      <Version>1.4</Version>
-      <PackageOutputPath>./nupkg</PackageOutputPath>
-      <Platforms>x64</Platforms>
-      <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>1.60.0</Version>
+    <Platforms>x64</Platforms>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+      
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>WolvenKit.Core</PackageId>
+        <Product>WolvenKit.Core</Product>
+        <Description>Core file formats for the WolvenKit Mod Editor.</Description>
+
+        <Company>WolvenKit</Company>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <PackageOutputPath>./nupkg</PackageOutputPath>
+    </PropertyGroup>
 
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
         <DefineConstants>_WINDOWS</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))"> 
         <DefineConstants>_LINUX</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
         <DefineConstants>_OSX</DefineConstants>
     </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="lib\kraken.dll" />
-    <None Remove="lib\libkraken.so" />
-    <None Remove="lib\libkraken.dylib" />
-  </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="lib\wwtools.dll" />
-      <None Remove="lib\libwwtools.so" />
-    </ItemGroup>
 
   <ItemGroup>
     <ContentWithTargetPath Include="lib\kraken.dll">
@@ -54,30 +50,25 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>libkraken.dylib</TargetPath>
     </ContentWithTargetPath>
-  </ItemGroup>
-
-    <ItemGroup>
-        <ContentWithTargetPath Include="lib\wwtools.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-            <TargetPath>wwtools.dll</TargetPath>
-        </ContentWithTargetPath>
-        <ContentWithTargetPath Include="lib\libwwtools.so">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-            <TargetPath>libwwtools.so</TargetPath>
-        </ContentWithTargetPath>
+    <ContentWithTargetPath Include="lib\wwtools.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <TargetPath>wwtools.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="lib\libwwtools.so">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <TargetPath>libwwtools.so</TargetPath>
+    </ContentWithTargetPath>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="DynamicData" Version="7.8.6" />
-        <PackageReference Include="CsvHelper" Version="27.2.1" />
-        <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-        <PackageReference Include="protobuf-net.Core" Version="3.1.4" />
-        <PackageReference Include="ReactiveUI" Version="18.0.10" />
-        <PackageReference Include="semver" Version="2.1.0" />
+        <PackageReference Include="Microsoft.Build.Framework" Version="17.3.1" />
+        <PackageReference Include="protobuf-net.Core" Version="3.1.17" />
+        <PackageReference Include="ReactiveUI" Version="18.3.1" />
+        <PackageReference Include="semver" Version="2.2.0" />
         <PackageReference Include="System.Reflection.MetadataLoadContext" Version="6.0.0" />
-        <PackageReference Include="Serilog" Version="2.11.0" />
-        <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+        <PackageReference Include="Serilog" Version="2.12.0" />
     </ItemGroup>
+
+
 
 </Project>

@@ -1,11 +1,17 @@
 using System;
+using System.IO;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
+using WolvenKit.ProjectManagement.Project;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -16,7 +22,7 @@ namespace WolvenKit.ViewModels.Tools
     {
         public ImportExportItemViewModel()
         {
-
+            
         }
 
 
@@ -41,6 +47,42 @@ namespace WolvenKit.ViewModels.Tools
         public EExportState ExportState => BaseFile.IsImportable ? EExportState.Importable : EExportState.Exportable;
 
         public FileModel GetBaseFile() => BaseFile;
+
+        public IGameFile GetArchiveFile(string extension)
+        {
+            var archiveManager = Locator.Current.GetService<IArchiveManager>();
+            if (archiveManager != null)
+            {
+                var hash = FNV1A64HashAlgorithm.HashString(Path.ChangeExtension(BaseFile.RelativePath, extension));
+
+                var archiveFile = archiveManager.Lookup(hash);
+                if (archiveFile.HasValue)
+                {
+                    return archiveFile.Value;
+                }
+            }
+
+            return null;
+        }
+
+        public string GetModFile(string extension)
+        {
+            var projectManager = Locator.Current.GetService<IProjectManager>();
+            if (projectManager is { ActiveProject: Cp77Project project })
+            {
+                var tmp = Path.ChangeExtension(BaseFile.RelativePath, extension);
+
+                foreach (var modFile in project.ModFiles)
+                {
+                    if (modFile == tmp)
+                    {
+                        return Path.Combine(project.ModDirectory, modFile);
+                    }
+                }
+            }
+
+            return null;
+        }
     }
 
     public class ImportableItemViewModel : ImportExportItemViewModel
@@ -74,6 +116,7 @@ namespace WolvenKit.ViewModels.Tools
                 ERawFileFormat.png => new XbmImportArgs(),
                 ERawFileFormat.tiff => new XbmImportArgs(),
                 ERawFileFormat.masklist => new MlmaskImportArgs(),
+                ERawFileFormat.re => new ReImportArgs(),
                 _ => new CommonImportArgs()
             };
         }
@@ -122,6 +165,7 @@ namespace WolvenKit.ViewModels.Tools
                 //ECookedFileFormat.json => new CommonExportArgs(),
                 ECookedFileFormat.mlmask => new MlmaskExportArgs(),
                 ECookedFileFormat.cubemap => new CommonExportArgs(),
+                ECookedFileFormat.xcube => new CommonExportArgs(),
                 ECookedFileFormat.envprobe => new CommonExportArgs(),
                 ECookedFileFormat.texarray => new CommonExportArgs(),
                 ECookedFileFormat.ent => new EntityExportArgs(),
@@ -130,6 +174,7 @@ namespace WolvenKit.ViewModels.Tools
                 //ECookedFileFormat.ent => new EntityExportArgs(),
                 //ECookedFileFormat.app => new EntityExportArgs(),
                 ECookedFileFormat.anims => new AnimationExportArgs(),
+                ECookedFileFormat.inkatlas => new InkAtlasExportArgs(),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

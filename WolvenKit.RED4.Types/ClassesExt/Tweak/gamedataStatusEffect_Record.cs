@@ -3,7 +3,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataStatusEffect_Record
 	{
-		[RED("additionalParam")]
+        [RED("additionalParam")]
 		[REDProperty(IsIgnored = true)]
 		public CName AdditionalParam
 		{
@@ -18,32 +18,8 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
-		
-		[RED("canReapply")]
-		[REDProperty(IsIgnored = true)]
-		public CBool CanReapply
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("debugTags")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<CName> DebugTags
-		{
-			get => GetPropertyValue<CArray<CName>>();
-			set => SetPropertyValue<CArray<CName>>(value);
-		}
-		
-		[RED("displayName")]
-		[REDProperty(IsIgnored = true)]
-		public CString DisplayName
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
-		}
-		
-		[RED("duration")]
+
+        [RED("duration")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Duration
 		{
@@ -59,36 +35,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
-		[RED("effectors")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> Effectors
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("expModifier")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat ExpModifier
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("gameplayTags")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<CName> GameplayTags
 		{
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
-		}
-		
-		[RED("iconPath")]
-		[REDProperty(IsIgnored = true)]
-		public CString IconPath
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
 		}
 		
 		[RED("immunityStats")]
@@ -113,14 +65,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("maxDuration")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID MaxDuration
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("maxStacks")]
@@ -217,14 +161,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
-		[RED("vfx")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<CName> Vfx
-		{
-			get => GetPropertyValue<CArray<CName>>();
-			set => SetPropertyValue<CArray<CName>>(value);
 		}
 		
 		[RED("VFX")]

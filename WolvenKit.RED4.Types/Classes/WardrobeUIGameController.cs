@@ -29,14 +29,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("mainScreenWidget")] 
-		public inkWidgetReference MainScreenWidget
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(7)] 
 		[RED("setGridWidget")] 
 		public inkCompoundWidgetReference SetGridWidget
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -52,12 +44,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
 			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("equipmentSystem")] 
+		public CWeakHandle<EquipmentSystem> EquipmentSystem
+		{
+			get => GetPropertyValue<CWeakHandle<EquipmentSystem>>();
+			set => SetPropertyValue<CWeakHandle<EquipmentSystem>>(value);
 		}
 
 		[Ordinal(10)] 
@@ -94,10 +94,98 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(14)] 
 		[RED("sets")] 
-		public CArray<ClothingSet> Sets
+		public CArray<CHandle<gameClothingSet>> Sets
 		{
-			get => GetPropertyValue<CArray<ClothingSet>>();
-			set => SetPropertyValue<CArray<ClothingSet>>(value);
+			get => GetPropertyValue<CArray<CHandle<gameClothingSet>>>();
+			set => SetPropertyValue<CArray<CHandle<gameClothingSet>>>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("currentSetController")] 
+		public CWeakHandle<ClothingSetController> CurrentSetController
+		{
+			get => GetPropertyValue<CWeakHandle<ClothingSetController>>();
+			set => SetPropertyValue<CWeakHandle<ClothingSetController>>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("maxSetsAmount")] 
+		public CInt32 MaxSetsAmount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("setControllers")] 
+		public CArray<CWeakHandle<ClothingSetController>> SetControllers
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<ClothingSetController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<ClothingSetController>>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("confirmationRequestToken")] 
+		public CHandle<inkGameNotificationToken> ConfirmationRequestToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("deletedSetController")] 
+		public CWeakHandle<ClothingSetController> DeletedSetController
+		{
+			get => GetPropertyValue<CWeakHandle<ClothingSetController>>();
+			set => SetPropertyValue<CWeakHandle<ClothingSetController>>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("introAnimProxy")] 
+		public CHandle<inkanimProxy> IntroAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("outroAnimProxy")] 
+		public CHandle<inkanimProxy> OutroAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("introFinished")] 
+		public CBool IntroFinished
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("finalEquippedSet")] 
+		public CEnum<gameWardrobeClothingSetIndex> FinalEquippedSet
+		{
+			get => GetPropertyValue<CEnum<gameWardrobeClothingSetIndex>>();
+			set => SetPropertyValue<CEnum<gameWardrobeClothingSetIndex>>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("equipmentBlackboard")] 
+		public CWeakHandle<gameIBlackboard> EquipmentBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("equipmentInProgressCallback")] 
+		public CHandle<redCallbackObject> EquipmentInProgressCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		public WardrobeUIGameController()
@@ -105,9 +193,10 @@ namespace WolvenKit.RED4.Types
 			TooltipsManagerRef = new();
 			ButtonHintsManagerRef = new();
 			SetEditorWidget = new();
-			MainScreenWidget = new();
 			SetGridWidget = new();
 			Sets = new();
+			MaxSetsAmount = 6;
+			SetControllers = new();
 
 			PostConstruct();
 		}

@@ -12,27 +12,26 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class TweakBrowserView : ReactiveUserControl<TweakBrowserViewModel>
     {
+        public TweakBrowserViewModel Context => (TweakBrowserViewModel)DataContext;
+
         public TweakBrowserView()
         {
             InitializeComponent();
-            //this.WhenActivated(disposables =>
-            //{
-            //    this.OneWayBind(ViewModel,
-            //            viewModel => viewModel.SelectedRecord,
-            //            view => view.redTreeView.ItemsSource)
-            //        .DisposeWith(disposables);
-            //});
+
+            this.WhenActivated(disposables =>
+            {
+                Context.LoadTweakDB();
+            });
         }
+
         private void TextBox_KeyEnterUpdate(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                TextBox tBox = (TextBox)sender;
-                DependencyProperty prop = TextBox.TextProperty;
+                var tBox = (TextBox)sender;
+                var prop = TextBox.TextProperty;
 
-                BindingExpression binding = BindingOperations.GetBindingExpression(tBox, prop);
-                if (binding != null)
-                { binding.UpdateSource(); }
+                BindingOperations.GetBindingExpression(tBox, prop)?.UpdateSource();
             }
         }
     }
