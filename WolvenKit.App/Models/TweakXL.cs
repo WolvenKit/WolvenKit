@@ -39,7 +39,7 @@ namespace WolvenKit.Models
 
     public class TweakXL : ITweakXLItem, IBrowsableType, IBrowsableDictionary
     {
-        public TweakDBID ID { get; set; } = new();
+        public TweakDBID ID { get; set; }
 
         public TweakDBID Base { get; set; }
 
@@ -64,7 +64,7 @@ namespace WolvenKit.Models
 
         public virtual IEnumerable<string> GetPropertyNames()
         {
-            if (ID != null)
+            if (ID != TweakDBID.Empty)
             {
                 yield return "ID";
             }
@@ -72,11 +72,11 @@ namespace WolvenKit.Models
             {
                 yield return "Value";
             }
-            if (Base != null)
+            if (Base != TweakDBID.Empty)
             {
                 yield return "Base";
             }
-            if (Type != null)
+            if (Type != CString.Empty)
             {
                 yield return "Type";
             }
@@ -129,11 +129,11 @@ namespace WolvenKit.Models
 
         public IEnumerable<string> GetPropertyNames()
         {
-            if (ID != null)
+            if (ID != TweakDBID.Empty)
             {
                 yield return "ID";
             }
-            if (Type != null)
+            if (Type != CString.Empty)
             {
                 yield return "Type";
             }
@@ -290,7 +290,7 @@ namespace WolvenKit.Models
                         if (parser.TryConsume<Scalar>(out var s))
                         {
                             Type childType = null;
-                            if (tweak.Base != null && propertyName != null)
+                            if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
                                 childType = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName);
                             }
@@ -305,7 +305,7 @@ namespace WolvenKit.Models
                                 childID = childID + "." + propertyName;
                             }
                             Type childType = null;
-                            if (tweak.Base != null && propertyName != null)
+                            if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
                                 childType = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName);
                             }
@@ -319,7 +319,7 @@ namespace WolvenKit.Models
                             {
                                 ((TweakXLSequence)propertyValue).ID = id + "." + propertyName;
                             }
-                            if (tweak.Base != null && propertyName != null)
+                            if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
                                 ((TweakXLSequence)propertyValue).Type = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName).Name;
                             }

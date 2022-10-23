@@ -1,28 +1,18 @@
-using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using Splat;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO
 {
     public partial class RedPackageReader : IBufferReader
     {
         private RedPackageHeader header;
-        private IHashService _hashService;
 
         public virtual EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
         {
-            _hashService = Locator.Current.GetService<IHashService>();
-
             var chunks = new List<RedBaseClass>();
 
             var result = new RedPackage();
@@ -162,14 +152,12 @@ namespace WolvenKit.RED4.Archive.IO
             };
             if (Settings.ImportsAsHash)
             {
-                import.Hash = _reader.ReadUInt64();
-                import.DepotPath = _hashService.Get(import.Hash);
+                import.DepotPath = _reader.ReadUInt64();
             }
             else
             {
                 var bytes = _reader.ReadBytes(r.size);
                 import.DepotPath = Encoding.UTF8.GetString(bytes.ToArray());
-                import.Hash = FNV1A64HashAlgorithm.HashString(import.DepotPath);
 
                 if (CollectData)
                 {
@@ -211,9 +199,7 @@ namespace WolvenKit.RED4.Archive.IO
 
     public class PackageImport : IRedImport
     {
-        public string DepotPath { get; set; }
-
-        public ulong Hash { get; set; }
+        public CName DepotPath { get; set; }
         public InternalEnums.EImportFlags Flags { get; set; }
     }
 }

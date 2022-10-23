@@ -25,6 +25,9 @@ namespace WolvenKit.Functionality.Services
             TreeViewGroups = settings.TreeViewGroups;
             TreeViewGroupSize = settings.TreeViewGroupSize;
             ShowAdvancedOptions = settings.ShowAdvancedOptions;
+            ShowCNameAsHex = settings.ShowCNameAsHex;
+            ShowNodeRefAsHex = settings.ShowNodeRefAsHex;
+            ShowTweakDBIDAsHex = settings.ShowTweakDBIDAsHex;
             LaunchProfiles = settings.LaunchProfiles;
 
             if (settings.SettingsVersion != 2)
@@ -48,6 +51,9 @@ namespace WolvenKit.Functionality.Services
         public bool TreeViewGroups { get; set; }
         public uint TreeViewGroupSize { get; set; }
         public bool ShowAdvancedOptions { get; set; }
+        public bool ShowCNameAsHex { get; set; }
+        public bool ShowNodeRefAsHex { get; set; }
+        public bool ShowTweakDBIDAsHex { get; set; }
         public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; }
 
         public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
@@ -72,6 +78,9 @@ namespace WolvenKit.Functionality.Services
             settingsManager.TreeViewGroups = TreeViewGroups;
             settingsManager.TreeViewGroupSize = TreeViewGroupSize;
             settingsManager.ShowAdvancedOptions = ShowAdvancedOptions;
+            settingsManager.ShowCNameAsHex = ShowCNameAsHex;
+            settingsManager.ShowNodeRefAsHex = ShowNodeRefAsHex;
+            settingsManager.ShowTweakDBIDAsHex = ShowTweakDBIDAsHex;
             settingsManager.LaunchProfiles = LaunchProfiles;
 
             return settingsManager;

@@ -23,13 +23,10 @@ public static class TypeGlobal
 
                 e1.Value = new redResourceReferenceScriptToken
                 {
-                    Resource = new CResourceAsyncReference<CResource>
-                    {
-                        DepotPath = orgStr
-                    }
+                    Resource = new CResourceAsyncReference<CResource>(orgStr)
                 };
 
-                Logger?.Warning($"Invalid in wolven rtti: [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
+                Logger?.Warning($"Invalid in wolven rtti for \"{e1.PropertyName}\": [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
 
                 return true;
             }
@@ -39,13 +36,25 @@ public static class TypeGlobal
             {
                 var orgVal = (CResourceReference<inkWidgetLibraryResource>)e1.Value;
 
-                e1.Value = new CResourceAsyncReference<inkWidgetLibraryResource>
+                e1.Value = new CResourceAsyncReference<inkWidgetLibraryResource>(orgVal.DepotPath, orgVal.Flags);
+
+                Logger?.Warning($"Invalid in wolven rtti for \"{e1.PropertyName}\": [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
+
+                return true;
+            }
+
+            if (e1.PropertyName == "SsimpleBanerData.content" &&
+                e1.ExpectedType == typeof(redResourceReferenceScriptToken) && 
+                e1.ActualType == typeof(CName))
+            {
+                var orgStr = (string)(CName)e1.Value;
+
+                e1.Value = new redResourceReferenceScriptToken
                 {
-                    DepotPath = orgVal.DepotPath,
-                    Flags = orgVal.Flags,
+                    Resource = new CResourceAsyncReference<CResource>(orgStr)
                 };
 
-                Logger?.Warning($"Invalid in wolven rtti: [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
+                Logger?.Warning($"Invalid in wolven rtti for \"{e1.PropertyName}\": [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
 
                 return true;
             }

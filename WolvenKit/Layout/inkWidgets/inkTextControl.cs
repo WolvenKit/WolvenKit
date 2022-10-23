@@ -150,7 +150,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 return;
             }
 
-            var fontPath = TextWidget.FontFamily.DepotPath?.ToString() ?? "";
+            var fontPath = TextWidget.FontFamily.DepotPath;
 
             var fontCollection = (FontCollection)Application.Current.TryFindResource("FontCollection/" + fontPath + "#" + _fontStyle);
 

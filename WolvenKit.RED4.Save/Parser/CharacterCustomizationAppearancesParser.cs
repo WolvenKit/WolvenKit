@@ -454,7 +454,7 @@ namespace WolvenKit.RED4.Save
                 var entry = new CharacterCustomizationAppearances.HashValueEntry();
                 // CSE is doing a version check here on ArchiveVersion < 195
                 // Unt64 only read if ArchiveVersion >= 195, otherwise: https://github.com/PixelRick/CyberpunkSaveEditor/blob/7c47c6c7ce099c714e2ba43515380f99a2422c20/Source/cserialization/cnodes/CCharacterCustomization.hpp#L74
-                entry.Hash = new CResourceReference<appearanceAppearanceResource> { DepotPath = reader.ReadUInt64() };
+                entry.Hash = new CResourceReference<appearanceAppearanceResource>(reader.ReadUInt64());
                 entry.FirstString = reader.ReadLengthPrefixedString();
                 entry.SecondString = reader.ReadLengthPrefixedString();
                 entry.TrailingBytes = reader.ReadBytes(8);

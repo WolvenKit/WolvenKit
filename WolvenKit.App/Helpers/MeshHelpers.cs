@@ -471,7 +471,7 @@ namespace WolvenKit.ViewModels.Documents
             var dictionary = material.Values;
 
             var mat = material.Instance;
-            while (mat != null && mat.BaseMaterial != null)
+            while (mat != null && mat.BaseMaterial.DepotPath != CName.Empty)
             {
                 var baseMaterialFile = File.GetFileFromDepotPathOrCache(mat.BaseMaterial.DepotPath);
 
@@ -599,7 +599,7 @@ namespace WolvenKit.ViewModels.Documents
                         break;
                     }
 
-                    if (layer.Material == null)
+                    if (layer.Material.DepotPath == CName.Empty)
                     {
                         goto SkipLayer;
                     }
@@ -623,7 +623,7 @@ namespace WolvenKit.ViewModels.Documents
                         maskBitmap = new Bitmap(outStream);
                     }
 
-                    if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material == null)
+                    if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material.DepotPath == CName.Empty)
                     {
                         goto SkipColor;
                     }

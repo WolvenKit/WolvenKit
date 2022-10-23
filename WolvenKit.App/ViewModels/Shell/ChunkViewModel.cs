@@ -30,6 +30,7 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using static WolvenKit.RED4.Types.RedReflection;
 using static WolvenKit.ViewModels.Dialogs.DialogViewModel;
+using IRedString = WolvenKit.RED4.Types.IRedString;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -140,7 +141,21 @@ namespace WolvenKit.ViewModels.Shell
                                 var pi = parentData.GetType().GetProperty(propertyName);
                                 if (pi is not null)
                                 {
-                                    pi.SetValue(parentData, Data);
+                                    if (pi.CanWrite)
+                                    {
+                                        pi.SetValue(parentData, Data);
+                                    }
+                                    else
+                                    {
+                                        if (parentData is IRedRef)
+                                        {
+                                            Parent.Data = RedTypeManager.CreateRedType(parentData.RedType, Data);
+                                        }
+                                        else
+                                        {
+                                            throw new Exception();
+                                        }
+                                    }
                                     Tab.File.SetIsDirty(true);
                                     Parent.NotifyChain("Data");
                                 }
@@ -326,9 +341,9 @@ namespace WolvenKit.ViewModels.Shell
                 //    Properties.Add(new ChunkViewModel(record, this, "record"));
                 //}
             }
-            else if (obj is BaseStringType str)
+            else if (obj is IRedString str)
             {
-                var s = (string)str;
+                var s = str.GetString();
                 if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey))
                 {
                     obj = Locator.Current.GetService<LocKeyService>().GetEntry(locKey);
@@ -347,6 +362,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     Properties.Add(new ChunkViewModel((IRedType)ary[i], this, null, false, isreadonly));
                 }
+            }
+            else if (obj is IRedRef)
+            {
+                // ignore
             }
             else if (obj is CKeyValuePair kvp)
             {
@@ -685,9 +704,9 @@ namespace WolvenKit.ViewModels.Shell
                         return type;
                     }
                 }
-                if (Data is BaseStringType str)
+                if (Data is IRedString str)
                 {
-                    var s = (string)str;
+                    var s = str.GetString();
                     if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var _))
                     {
                         return typeof(localizationPersistenceOnScreenEntry);
@@ -755,6 +774,10 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         count += ary.Count;
                     }
+                    else if (ResolvedData is IRedRef)
+                    {
+                        // ignore
+                    }
                     else if (ResolvedData is CKeyValuePair)
                     {
                         count += 2;
@@ -771,9 +794,9 @@ namespace WolvenKit.ViewModels.Shell
                             count += 1;
                         }
                     }
-                    else if (ResolvedData is BaseStringType str)
+                    else if (ResolvedData is IRedString str)
                     {
-                        var s = (string)str;
+                        var s = str.GetString();
                         if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey))
                         {
                             // not actual
@@ -949,21 +972,15 @@ namespace WolvenKit.ViewModels.Shell
                 Value = "null";
             }
 
-            if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
+            if (PropertyType.IsAssignableTo(typeof(IRedString)))
             {
-                var value = (BaseStringType)Data;
-                Value = value is NodeRef rn
-                    ? rn.GetResolvedText() is var text && !string.IsNullOrEmpty(text)
-                        ? text
-                        : rn.GetRedHash() != 0 ? rn.GetRedHash().ToString() : "null"
-                    : "null";
+                var value = ((IRedString)Data).GetString();
                 if (!string.IsNullOrEmpty(value))
                 {
                     Value = value;
-                    if (Value is not null && Value.StartsWith("LocKey#") && ulong.TryParse(Value[7..], out var key))
+                    if (Value.StartsWith("LocKey#") && ulong.TryParse(Value[7..], out var key))
                     {
                         Value = "";
-                        //    Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(key);
                     }
                 }
             }
@@ -1088,9 +1105,9 @@ namespace WolvenKit.ViewModels.Shell
                 Descriptor = ((ulong)locKey).ToString();
                 //Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(value);
             }
-            else if (Data is BaseStringType str)
+            else if (Data is IRedString str)
             {
-                var s = (string)str;
+                var s = str.GetString();
                 if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey2))
                 {
                     Descriptor = locKey2.ToString();
@@ -1222,7 +1239,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "SymbolNumeric";
                 }
-                if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
+                if (PropertyType.IsAssignableTo(typeof(IRedString)))
                 {
                     return "SymbolString";
                 }
@@ -1265,7 +1282,7 @@ namespace WolvenKit.ViewModels.Shell
         public bool CanBeDroppedOn(ChunkViewModel target) => PropertyType == target.PropertyType;
 
         public ICommand OpenRefCommand { get; private set; }
-        private bool CanOpenRef() => Data is IRedRef r && r.DepotPath is not null;
+        private bool CanOpenRef() => Data is IRedRef r && r.DepotPath != CName.Empty;
         private void ExecuteOpenRef()
         {
             if (Data is IRedRef r)
@@ -1286,7 +1303,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand AddRefCommand { get; private set; }
-        private bool CanAddRef() => Data is IRedRef r && r.DepotPath is not null;
+        private bool CanAddRef() => Data is IRedRef r && r.DepotPath != CName.Empty;
         private async Task ExecuteAddRef()
         {
             if (Data is IRedRef r)
@@ -1370,7 +1387,7 @@ namespace WolvenKit.ViewModels.Shell
                 var arr = (IRedArray)Data;
 
                 var innerType = arr.InnerType;
-                if (IsValueType(innerType))
+                if (innerType.IsValueType)
                 {
                     InsertChild(-1, RedTypeManager.CreateRedType(innerType));
                     return;
@@ -1512,9 +1529,9 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     list.Add(new entVisualControllerDependency()
                     {
-                        AppearanceName = (CName)c1.MeshAppearance.DeepCopy(),
-                        ComponentName = (CName)c1.Name.DeepCopy(),
-                        Mesh = (CResourceAsyncReference<CMesh>)c1.Mesh.DeepCopy()
+                        AppearanceName = c1.MeshAppearance,
+                        ComponentName = c1.Name,
+                        Mesh = c1.Mesh
                     });
                 }
 
@@ -1522,9 +1539,9 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     list.Add(new entVisualControllerDependency()
                     {
-                        AppearanceName = (CName)c2.MeshAppearance.DeepCopy(),
-                        ComponentName = (CName)c2.Name.DeepCopy(),
-                        Mesh = (CResourceAsyncReference<CMesh>)c2.Mesh.DeepCopy()
+                        AppearanceName = c2.MeshAppearance,
+                        ComponentName = c2.Name,
+                        Mesh = c2.Mesh
                     });
                 }
 
@@ -1591,7 +1608,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var vm = sender as SelectRedTypeDialogViewModel;
 
-                var instance = new CKeyValuePair("", (IRedType)System.Activator.CreateInstance(vm.SelectedType));
+                var instance = new CKeyValuePair(CName.Empty, (IRedType)System.Activator.CreateInstance(vm.SelectedType));
                 InsertChild(-1, instance);
             }
         }

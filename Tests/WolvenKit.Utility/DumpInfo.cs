@@ -381,7 +381,7 @@ namespace WolvenKit.Utility
 
             var stringHelper = new TweakDBStringHelper();
             stringHelper.Load(tweakDbStrPath);
-            TweakDBID.ResolveHashHandler = stringHelper.GetString;
+            TweakDBIDPool.ResolveHashHandler = stringHelper.GetString;
 
             using var fh = File.OpenRead(s_tweakDbPath);
             using var reader2 = new TweakDBReader(fh);

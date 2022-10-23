@@ -1,13 +1,8 @@
-using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using ReactiveUI;
 using Splat;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Types;
@@ -15,65 +10,64 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.Views.Editors
 {
     /// <summary>
-    /// Interaction logic for RedNodeRefEditor.xaml
+    /// Interaction logic for RedStringEditor.xaml
     /// </summary>
-    public partial class RedNodeRefEditor : INotifyPropertyChanged
+    public partial class RedCNameEditor : INotifyPropertyChanged
     {
         private readonly ISettingsManager _settingsManager;
 
-        public RedNodeRefEditor()
+        public RedCNameEditor()
         {
             InitializeComponent();
 
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
         }
 
-        public NodeRef RedNodeRef
+        public CName RedString
         {
-            get => (NodeRef)GetValue(RedNodeRefProperty);
-            set => SetValue(RedNodeRefProperty, value);
+            get => (CName)GetValue(RedStringProperty);
+            set => SetValue(RedStringProperty, value);
         }
-        public static readonly DependencyProperty RedNodeRefProperty = DependencyProperty.Register(
-            nameof(RedNodeRef), typeof(NodeRef), typeof(RedNodeRefEditor), new PropertyMetadata(default(NodeRef), OnRedNodeRefChanged));
+        public static readonly DependencyProperty RedStringProperty = DependencyProperty.Register(
+            nameof(RedString), typeof(CName), typeof(RedCNameEditor), new PropertyMetadata(default(CName), OnRedStringChanged));
 
-        private static void OnRedNodeRefChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnRedStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is RedNodeRefEditor view)
+            if (d is RedCNameEditor view)
             {
-                view.OnPropertyChanged(nameof(Path));
+                view.OnPropertyChanged(nameof(Text));
                 view.OnPropertyChanged(nameof(Hash));
             }
         }
 
-
-        public string Path
+        public string Text
         {
-            get => RedNodeRef;
-            set => SetValue(RedNodeRefProperty, (NodeRef)value);
+            get => RedString;
+            set => SetValue(RedStringProperty, (CName)value);
         }
 
         public string Hash
         {
             get
             {
-                if (_settingsManager.ShowNodeRefAsHex)
+                if (_settingsManager.ShowCNameAsHex)
                 {
-                    return ((ulong)RedNodeRef).ToString("X");
+                    return ((ulong)RedString).ToString("X");
                 }
                 else
                 {
-                    return ((ulong)RedNodeRef).ToString();
+                    return ((ulong)RedString).ToString();
                 }
             }
             set
             {
-                if (_settingsManager.ShowNodeRefAsHex)
+                if (_settingsManager.ShowCNameAsHex)
                 {
-                    SetValue(RedNodeRefProperty, (NodeRef)ulong.Parse(value, NumberStyles.HexNumber));
+                    SetValue(RedStringProperty, (CName)ulong.Parse(value, NumberStyles.HexNumber));
                 }
                 else
                 {
-                    SetValue(RedNodeRefProperty, (NodeRef)ulong.Parse(value));
+                    SetValue(RedStringProperty, (CName)ulong.Parse(value));
                 }
             }
         }
@@ -82,7 +76,7 @@ namespace WolvenKit.Views.Editors
         {
             var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, e.Text);
 
-            if (_settingsManager.ShowNodeRefAsHex)
+            if (_settingsManager.ShowCNameAsHex)
             {
                 e.Handled = !ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _);
             }
@@ -99,7 +93,7 @@ namespace WolvenKit.Views.Editors
                 var text = (string)e.DataObject.GetData(typeof(string));
                 var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text!);
 
-                if (_settingsManager.ShowNodeRefAsHex)
+                if (_settingsManager.ShowCNameAsHex)
                 {
                     if (!ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _))
                     {
