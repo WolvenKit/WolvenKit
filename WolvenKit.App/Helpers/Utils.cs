@@ -338,6 +338,8 @@ namespace WolvenKit.ViewModels.Shell
                 wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
                 wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
 
+                current.QuestPrefabRefHash = Convert.ToUInt64(current.GetHashCode()); // Add hash to make object interactible and persistent
+
                 if (line.isdoor is bool b && b)
                 {
                     var eeid = new entEntityInstanceData();
