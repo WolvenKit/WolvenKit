@@ -1,6 +1,5 @@
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Save.IO;
-using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
 
@@ -16,11 +15,8 @@ public class WardrobeSystem : INodeData
 
 public class WardrobeSystemEntry : INodeData
 {
-    public string Unknown1 { get; set; }
-    public TweakDBID Unknown2 { get; set; } // gameItemID.id? 
-    public uint Unknown3 { get; set; } // gameItemID.rngSeed? 
-    public ushort Unknown4 { get; set; }
-    public ushort Unknown5 { get; set; }
+    public string AppearanceName { get; set; }
+    public InventoryHelper.gameItemIdWrapper ItemId { get; set; }
 }
 
 public class WardrobeSystemParser : INodeParser
@@ -35,11 +31,8 @@ public class WardrobeSystemParser : INodeParser
         for (int i = 0; i < cnt; i++)
         {
             var entry = new WardrobeSystemEntry();
-            entry.Unknown1 = reader.ReadLengthPrefixedString();
-            entry.Unknown2 = reader.ReadUInt64();
-            entry.Unknown3 = reader.ReadUInt32();
-            entry.Unknown4 = reader.ReadUInt16();
-            entry.Unknown5 = reader.ReadUInt16();
+            entry.AppearanceName = reader.ReadLengthPrefixedString();
+            entry.ItemId = InventoryHelper.ReadHeaderThing(reader);
 
             data.Entries.Add(entry);
         }
@@ -54,11 +47,8 @@ public class WardrobeSystemParser : INodeParser
         writer.Write(data.Entries.Count);
         foreach (var entry in data.Entries)
         {
-            writer.WriteLengthPrefixedString(entry.Unknown1);
-            writer.Write((ulong)entry.Unknown2);
-            writer.Write(entry.Unknown3);
-            writer.Write(entry.Unknown4);
-            writer.Write(entry.Unknown5);
+            writer.WriteLengthPrefixedString(entry.AppearanceName);
+            InventoryHelper.WriteHeaderThing(writer, entry.ItemId);
         }
     }
 }
