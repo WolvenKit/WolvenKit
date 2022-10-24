@@ -17,9 +17,9 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <VersionPrefix>8.7.0</VersionPrefix>
+    <VersionPrefix>8.7.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-    <InformationalVersion>8.7.0</InformationalVersion>
+    <InformationalVersion>8.7.1</InformationalVersion>
     <Description>WPF</Description>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Product>WolvenKit</Product>
