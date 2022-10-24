@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
@@ -14,6 +15,7 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Dialogs;
 
@@ -25,16 +27,19 @@ namespace WolvenKit.Functionality.Services
 
         private readonly ILoggerService _loggerService;
         private readonly ISettingsManager _settings;
+        private readonly IProgressService<double> _progressService;
 
         private readonly HttpClient _client = new();
         private readonly Dictionary<EPlugin, string> _pluginIds = new();
 
         public PluginService(
             ILoggerService loggerService,
+            IProgressService<double> progressService,
             ISettingsManager settingsManager)
         {
             _loggerService = loggerService;
             _settings = settingsManager;
+            _progressService = progressService;
         }
 
         [Reactive] public ObservableCollection<PluginViewModel> Plugins { get; set; } = new ObservableCollection<PluginViewModel>();
@@ -86,7 +91,7 @@ namespace WolvenKit.Functionality.Services
                     // is installed
                     if (!string.IsNullOrEmpty(model.Version) && model.Files.Count > 0)
                     {
-                        Plugins.Add(new PluginViewModel(this, _loggerService, model, installPath)
+                        Plugins.Add(new PluginViewModel(this, _loggerService, _progressService, model, installPath)
                         {
                             Status = EPluginStatus.Outdated, // TODO plugins: make this better
                         });
@@ -96,7 +101,7 @@ namespace WolvenKit.Functionality.Services
                         // TODO plugins: some smart check if something is installed
 
 
-                        Plugins.Add(new PluginViewModel(this, _loggerService, model, installPath)
+                        Plugins.Add(new PluginViewModel(this, _loggerService, _progressService, model, installPath)
                         {
                             Status = EPluginStatus.NotInstalled,
                         });
@@ -105,7 +110,7 @@ namespace WolvenKit.Functionality.Services
                 else
                 {
                     // this should only happen the very first time
-                    Plugins.Add(new PluginViewModel(this, _loggerService, new PluginModel(id, null, new()), installPath)
+                    Plugins.Add(new PluginViewModel(this, _loggerService, _progressService, new PluginModel(id, null, new()), installPath)
                     {
                         Status = EPluginStatus.NotInstalled
                     });
@@ -234,67 +239,79 @@ namespace WolvenKit.Functionality.Services
                 return;
             }
 
+            _progressService.IsIndeterminate = true;
+
+            // check remote version (no github API call)
             var response = await CheckForUpdateAsync(id);
             if (response is null)
             {
                 return;
             }
+            var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last().TrimStart('v');
 
-            var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
+            var fileName = id.GetFile().Replace(@".*\", version);
+            // TODO check if asset is already downloaded
+            var testZipPath = Path.Combine(Path.GetTempPath(), fileName);
+            var zipPath = testZipPath;
 
-            // download asset
-            var header = $"wolvenkit";
-            var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue(header));
-            IEnumerable<Octokit.ReleaseAsset> asset = new List<Octokit.ReleaseAsset>();
-            try
+            if (!File.Exists(testZipPath))
             {
-                var releases = await client.Repository.Release.GetAll(id.GetUrl().Split('/').First(), id.GetUrl().Split('/').Last());
-                var latest = releases[0];
-                var assets = latest.Assets.ToList();
-                asset = assets.Where(x => Regex.IsMatch(x.Name, id.GetFile()));
-            }
-            catch (Octokit.ApiException)
-            {
-                // Prior to first API call, this will be null, because it only deals with the last call.
-                var apiInfo = client.GetLastApiInfo();
-                var rateLimit = apiInfo?.RateLimit;
-                var howManyRequestsCanIMakePerHour = rateLimit?.Limit;
-                var howManyRequestsDoIHaveLeft = rateLimit?.Remaining;
-                var whenDoesTheLimitReset = rateLimit?.Reset; // UTC time
-                _loggerService.Info($"[Update] {howManyRequestsDoIHaveLeft}/{howManyRequestsCanIMakePerHour} - reset: {whenDoesTheLimitReset ?? whenDoesTheLimitReset.Value.ToLocalTime()}");
-
-                _loggerService.Error("API rate limit exceeded");
-
-                return;
-            }
-
-            if (!asset.Any())
-            {
-                return;
-            }
-
-            var contentUrl = asset.First().BrowserDownloadUrl;
-
-            var zipPath = Path.Combine(Path.GetTempPath(), contentUrl.Split('/').Last());
-
-            // TODO plugins remove this check it is ambigous
-            if (!File.Exists(zipPath))
-            {
-                response = await _client.GetAsync(new Uri(contentUrl));
+                // query github api
+                var header = $"wolvenkit";
+                var ghClient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue(header));
+                IEnumerable<Octokit.ReleaseAsset> asset = new List<Octokit.ReleaseAsset>();
                 try
                 {
-                    response.EnsureSuccessStatusCode();
+                    var releases = await ghClient.Repository.Release.GetAll(id.GetUrl().Split('/').First(), id.GetUrl().Split('/').Last());
+                    var latest = releases[0];
+                    var assets = latest.Assets.ToList();
+                    asset = assets.Where(x => Regex.IsMatch(x.Name, id.GetFile()));
                 }
-                catch (HttpRequestException ex)
+                catch (Octokit.ApiException)
                 {
-                    _loggerService.Error($"Failed to respond to url: {contentUrl}");
-                    _loggerService.Error(ex);
+                    // Prior to first API call, this will be null, because it only deals with the last call.
+                    var apiInfo = ghClient.GetLastApiInfo();
+                    var rateLimit = apiInfo?.RateLimit;
+                    var howManyRequestsCanIMakePerHour = rateLimit?.Limit;
+                    var howManyRequestsDoIHaveLeft = rateLimit?.Remaining;
+                    var whenDoesTheLimitReset = rateLimit?.Reset; // UTC time
+                    _loggerService.Info($"[Update] {howManyRequestsDoIHaveLeft}/{howManyRequestsCanIMakePerHour} - reset: {whenDoesTheLimitReset ?? whenDoesTheLimitReset.Value.ToLocalTime()}");
+
+                    _loggerService.Error("API rate limit exceeded");
+
                     return;
                 }
 
-                await using var fs = new FileStream(zipPath, System.IO.FileMode.Create);
-                await response.Content.CopyToAsync(fs);
+                if (!asset.Any())
+                {
+                    return;
+                }
+
+                // download 
+                var contentUrl = asset.First().BrowserDownloadUrl;
+                zipPath = Path.Combine(Path.GetTempPath(), contentUrl.Split('/').Last());
+
+                if (!File.Exists(zipPath))
+                {
+                    response = await _client.GetAsync(new Uri(contentUrl));
+                    try
+                    {
+                        response.EnsureSuccessStatusCode();
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        _loggerService.Error($"Failed to respond to url: {contentUrl}");
+                        _loggerService.Error(ex);
+                        return;
+                    }
+
+                    await using var fs = new FileStream(zipPath, System.IO.FileMode.Create);
+                    // TODO report progress here
+                    await response.Content.CopyToAsync(fs);
+                }
             }
+
+            _progressService.IsIndeterminate = false;
 
             var pluginViewModel = Plugins.FirstOrDefault(x => x.Id == id);
             var installedFiles = new List<string>();
@@ -394,6 +411,10 @@ namespace WolvenKit.Functionality.Services
                 }
 
                 using var archive = ZipFile.OpenRead(zipPath);
+
+                var progress = 0;
+                _progressService.IsIndeterminate = false;
+                _progressService.Report(10);
                 foreach (var entry in archive.Entries)
                 {
                     // Gets the full path to ensure that relative segments are removed.
@@ -411,10 +432,22 @@ namespace WolvenKit.Functionality.Services
                         // Ordinal match is safest, case-sensitive volumes can be mounted within volumes that are case-insensitive.
                         if (destinationPath.StartsWith(extractPath, StringComparison.Ordinal))
                         {
+                            var folder = Path.GetDirectoryName(destinationPath);
+                            if (folder != null)
+                            {
+                                if (!Directory.Exists(folder))
+                                {
+                                    Directory.CreateDirectory(folder);
+                                }
+                            }
+
                             entry.ExtractToFile(destinationPath, true);
                             files.Add(destinationPath);
                         }
                     }
+
+                    progress++;
+                    _progressService.Report(progress / (float)archive.Entries.Count);
                 }
             }
             catch (Exception ex)

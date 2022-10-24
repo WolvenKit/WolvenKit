@@ -166,7 +166,7 @@ namespace WolvenKit.ViewModels.Tools
                 .WhenAnyValue(_ => _.CP77ExecutablePath)
                 .Subscribe(execPath =>
                 {
-                    if (string.IsNullOrEmpty(execPath))
+                    if (string.IsNullOrEmpty(execPath) || !File.Exists(execPath))
                     {
                         _archiveDirNotFound = true;
                     }

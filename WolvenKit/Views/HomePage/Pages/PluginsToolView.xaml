@@ -173,11 +173,11 @@
                         </Grid>
 
                         <Grid Grid.Row="1">
-                            <ProgressBar
+                            <syncfusion:SfLinearProgressBar
                                 x:Name="StatusBarProgressBar"
                                 Height="10"
-                                Margin="0,0,0,0"
-                                IsIndeterminate="{Binding IsBusy}"
+                                IsIndeterminate="{Binding IsIndeterminate}"
+                                Progress="{Binding Progress}"
                                 Visibility="{Binding IsBusy, Converter={StaticResource boolToVisibilityConverter}}" />
                         </Grid>
                     </Grid>

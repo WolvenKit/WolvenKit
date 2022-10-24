@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
@@ -46,6 +47,8 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Tools;
+using static Microsoft.WindowsAPICodePack.PortableDevices.PropertySystem.Properties;
+using static WolvenKit.Common.Wcc.Wcc_lite;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
@@ -312,27 +315,22 @@ namespace WolvenKit.ViewModels.Shell
                     break;
             }
 
-            SemVersion remoteVersion = null;
-            var header = $"wolvenkit";
-            var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue(header));
+            // get remote version without GitHub API calls
+            SemVersion remoteVersion;
+            var githuburl = $@"https://github.com/{owner}/{name}/releases/latest";
             try
             {
-                var releases = await client.Repository.Release.GetAll(owner, name);
-                var latest = releases[0];
-                remoteVersion = SemVersion.Parse(latest.TagName, SemVersionStyles.OptionalMinorPatch);
+                HttpClient _client = new();
+                var response = await _client.GetAsync(new Uri(githuburl));
+                response.EnsureSuccessStatusCode();
+
+                var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
+                remoteVersion = SemVersion.Parse(version, SemVersionStyles.OptionalMinorPatch);
             }
-            catch (Octokit.ApiException)
+            catch (HttpRequestException ex)
             {
-                // Prior to first API call, this will be null, because it only deals with the last call.
-                var apiInfo = client.GetLastApiInfo();
-                var rateLimit = apiInfo?.RateLimit;
-                var howManyRequestsCanIMakePerHour = rateLimit?.Limit;
-                var howManyRequestsDoIHaveLeft = rateLimit?.Remaining;
-                var whenDoesTheLimitReset = rateLimit?.Reset; // UTC time
-                _loggerService.Info($"[Update] {howManyRequestsDoIHaveLeft}/{howManyRequestsCanIMakePerHour} - reset: {whenDoesTheLimitReset.Value.ToLocalTime()}");
-
-                _loggerService.Error("API rate limit exceeded");
-
+                _loggerService.Error($"Failed to respond to url: {githuburl}");
+                _loggerService.Error(ex);
                 return;
             }
 

@@ -13,8 +13,6 @@ namespace WolvenKit.Views.HomePage.Pages
 {
     public partial class SettingsPageView : ReactiveUserControl<SettingsPageViewModel>
     {
-        #region Constructors
-
         public SettingsPageView()
         {
             InitializeComponent();
@@ -41,14 +39,7 @@ namespace WolvenKit.Views.HomePage.Pages
             });
         }
 
-        #endregion Constructors
-
-        #region properties
-
         public ItemCollection AccordionItems { get; set; }
-
-
-        #endregion
 
         private void ExitRestart_Click(object sender, RoutedEventArgs e)
         {
