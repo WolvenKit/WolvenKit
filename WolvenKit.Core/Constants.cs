@@ -1,3 +1,5 @@
+using Serilog.Core;
+
 namespace WolvenKit.Core
 {
     public static class Constants
@@ -5,5 +7,7 @@ namespace WolvenKit.Core
         public const string Red3Exe = "witcher3.exe";
         public const string Red4Exe = "Cyberpunk2077.exe";
         public const string Oodle = "oo2ext_7_win64.dll";
+
+        public const string IsSuccess = "IsSuccess";
     }
 }

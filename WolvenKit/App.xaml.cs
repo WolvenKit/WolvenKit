@@ -123,11 +123,10 @@ namespace WolvenKit
             var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
-#if DEBUG
                 .MinimumLevel.Debug()
+#if DEBUG
+       
                 .WriteTo.Async(a => a.Console(), bufferSize: 1000)
-#else
-                .MinimumLevel.Information()
 #endif
                 .WriteTo.MySink(_host.Services.GetService<MySink>())
                 .WriteTo.Async(

@@ -1,6 +1,7 @@
 using System;
 using DynamicData;
 using Microsoft.Build.Framework;
+using Serilog.Core;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
@@ -13,18 +14,23 @@ namespace WolvenKit
 
         public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
 
+        public void SetLoggerVerbosity(LoggerVerbosity verbosity) => LoggerVerbosity = verbosity;
 
+        // error
         public void Error(string msg) => Serilog.Log.Error(msg);
         public void Error(Exception exception) => LogExtended(exception);
+        private void LogExtended(Exception ex) => Serilog.Log.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
 
-        public void Important(string msg) => Serilog.Log.Information(msg);
-        public void Info(string msg) => Serilog.Log.Information(msg);
-        public void SetLoggerVerbosity(LoggerVerbosity verbosity) => LoggerVerbosity = verbosity;
-        public void Success(string msg) => Serilog.Log.ForContext("IsSuccess", true).Information(msg); //TODO
-
+        // warning
         public void Warning(string msg) => Serilog.Log.Warning(msg);
 
-        private void LogExtended(Exception ex) => Serilog.Log.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
+        // information
+        public void Info(string msg) => Serilog.Log.Information(msg);
+        public void Success(string msg) => Serilog.Log.ForContext(Core.Constants.IsSuccess, true).Information(msg); //TODO
+
+        // debug
+        public void Debug(string msg) => Serilog.Log.Debug(msg);
+
 
     }
 }

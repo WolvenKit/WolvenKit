@@ -19,11 +19,11 @@ namespace WolvenKit.CLI.Services
         public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
 
 
+        public void Debug(string msg) => LogString(msg, Logtype.Debug);
 
         public void Success(string msg) => LogString(msg, Logtype.Success);
 
         public void Info(string msg) => LogString(msg, Logtype.Important);
-        public void Important(string msg) => LogString(msg, Logtype.Important);
 
         public void Warning(string msg) => LogString(msg, Logtype.Warning);
 
@@ -62,6 +62,9 @@ namespace WolvenKit.CLI.Services
 
             switch (type)
             {
+                case Logtype.Debug:
+                    _logger.LogDebug(message);
+                    break;
                 case Logtype.Normal:
                     _logger.LogDebug(message);
                     break;
@@ -83,5 +86,6 @@ namespace WolvenKit.CLI.Services
         }
 
         public void SetLoggerVerbosity(LoggerVerbosity verbosity) => LoggerVerbosity = verbosity;
+
     }
 }

@@ -112,12 +112,12 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return 0;
             }
 
-            if (ReferenceEquals(null, x))
+            if (x is null)
             {
                 return -1;
             }
 
-            if (ReferenceEquals(null, y))
+            if (y is null)
             {
                 return 1;
             }
@@ -129,12 +129,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             baseY = baseY[..baseY.IndexOf("_", StringComparison.Ordinal)];
 
             var retVal = s_loadOrder.IndexOf(baseX).CompareTo(s_loadOrder.IndexOf(baseY));
-            if (retVal != 0)
-            {
-                return retVal;
-            }
-
-            return string.Compare(x, y, StringComparison.Ordinal);
+            return retVal != 0 ? retVal : string.Compare(x, y, StringComparison.Ordinal);
         }
 
         #endregion
@@ -183,19 +178,31 @@ namespace WolvenKit.RED4.CR2W.Archive
             var archivedir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
 
             var sw = new Stopwatch();
+            var sw2 = new Stopwatch();
             sw.Start();
+            sw2.Start();
 
             var archiveFiles = Directory.GetFiles(archivedir, "*.archive").ToList();
             archiveFiles.Sort(CompareArchives);
 
+            var cnt = 0;
             foreach (var file in archiveFiles)
             {
+                sw.Restart();
+
                 LoadArchive(file);
+                cnt++;
+
+                _logger.Debug($"Loaded archive {Path.GetFileName(file)} {cnt}/{archiveFiles.Count} in {sw.ElapsedMilliseconds}ms");
             }
 
             if (rebuildtree)
             {
+                sw.Restart();
+
                 RebuildGameRoot();
+
+                _logger.Debug($"Finished rebuilding root in {sw.ElapsedMilliseconds}ms");
 
                 _rootCache.Edit(innerCache =>
                 {
@@ -205,8 +212,8 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             sw.Stop();
-            var ms = sw.ElapsedMilliseconds;
-            _logger.Info($"Archive Manager loaded in {ms}ms");
+            sw2.Stop();
+            _logger.Success($"Archive Manager loaded in {sw2.ElapsedMilliseconds}ms");
 
             IsManagerLoaded = true;
         }
@@ -363,18 +370,13 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <returns></returns>
         public override Optional<IGameFile> Lookup(ulong hash)
         {
-            if (IsModBrowserActive)
-            {
-                return Optional<IGameFile>.ToOptional(
+            return IsModBrowserActive
+                ? Optional<IGameFile>.ToOptional(
                     (from item in ModArchives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
-                .FirstOrDefault());
-            }
-            else
-            {
-                return Optional<IGameFile>.ToOptional(
+                .FirstOrDefault())
+                : Optional<IGameFile>.ToOptional(
                     (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
                 .FirstOrDefault());
-            }
         }
 
         /// <summary>
@@ -429,14 +431,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 }
                 else
                 {
-                    if (i == splits.Length - 1)
-                    {
-                        return currentDir;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return i == splits.Length - 1 ? currentDir : null;
                 }
             }
             return null;

@@ -14,9 +14,9 @@ public interface ILoggerService
 
     public void Error(string msg);
 
-    public void Important(string msg);
-
     public void Success(string msg);
+
+    public void Debug(string msg);
 
 
 
