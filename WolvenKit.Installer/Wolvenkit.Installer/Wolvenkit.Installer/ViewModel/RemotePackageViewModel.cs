@@ -8,7 +8,7 @@ public partial class RemotePackageViewModel
 {
     private readonly RemotePackageModel _model;
 
-    public RemotePackageViewModel(RemotePackageModel model, string version, EPackageStatus status)
+    public RemotePackageViewModel(RemotePackageModel model, string version, EPackageStatus status, string imagePath)
     {
         _model = model;
 
@@ -17,6 +17,7 @@ public partial class RemotePackageViewModel
 
         Version = version;
         Status = status;
+        ImagePath = imagePath;
     }
 
     public string Name { get; }
@@ -24,7 +25,11 @@ public partial class RemotePackageViewModel
     public string Description { get; }
 
 
+
+
     // Local
+    public string ImagePath { get; set; }
+
     public string Version { get; }
     public EPackageStatus Status { get; }
 }

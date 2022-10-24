@@ -16,7 +16,6 @@ namespace Wolvenkit.Installer.Services;
 public interface ILibraryService
 {
     ObservableCollection<PackageViewModel> InstalledPackages { get; }
-
     ObservableCollection<RemotePackageViewModel> RemotePackages { get; set; }
 
     Task CheckForUpdateAsync(string id);
@@ -28,7 +27,8 @@ public class LibraryService : ILibraryService
 {
     public const string FileName = "library.json";
 
-    public ObservableCollection<PackageViewModel> InstalledPackages { get; private set; } = new();
+
+    public ObservableCollection<PackageViewModel> InstalledPackages { get; set; } = new();
     public ObservableCollection<RemotePackageViewModel> RemotePackages { get; set; } = new();
 
     public static string GetAppData()
@@ -63,7 +63,7 @@ public class LibraryService : ILibraryService
 
             // TODO check if installed
 
-            RemotePackages.Add(new(item, "", EPackageStatus.NotInstalled));
+            RemotePackages.Add(new(item, "", EPackageStatus.NotInstalled, "ms-appx:///Assets/ControlImages/Acrylic.png"));
         }
     }
 
@@ -106,7 +106,6 @@ public class LibraryService : ILibraryService
         InstalledPackages.Add(new("TEST", "ms-appx:///Assets/ControlImages/Acrylic.png", "1.0", false));
         InstalledPackages.Add(new("TEST2", "ms-appx:///Assets/ControlImages/Acrylic.png", "2.0", false));
     }
-
 
     public async Task CheckForUpdateAsync(string id) => await Task.Delay(1000);
 

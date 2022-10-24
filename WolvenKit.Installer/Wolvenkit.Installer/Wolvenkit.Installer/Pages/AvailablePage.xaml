@@ -17,18 +17,20 @@
             x:Name="availableGridView"
             Margin="31,31,0,0"
             AutomationProperties.AutomationId="availableGridView"
-            AutomationProperties.Name="Items In Group"
             ContainerContentChanging="OnItemGridViewContainerContentChanging"
             IsItemClickEnabled="True"
             IsSwipeEnabled="False"
             ItemClick="OnItemGridViewItemClick"
-            ItemContainerStyle="{StaticResource IndentedGridViewItemStyle}"
-            ItemTemplate="{StaticResource ControlItemTemplate}"
             ItemsSource="{x:Bind ViewModel.LibraryService.RemotePackages, Mode=OneWay}"
             KeyDown="OnItemGridViewKeyDown"
             Loaded="OnItemGridViewLoaded"
             SelectionMode="None"
-            SizeChanged="OnItemGridViewSizeChanged" />
+            SizeChanged="OnItemGridViewSizeChanged"
+            
+            ItemContainerStyle="{StaticResource IndentedGridViewItemStyle}"
+            ItemTemplate="{StaticResource ControlItemTemplate2}"
+            
+            />
 
 
     </Grid>
