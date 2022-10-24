@@ -35,7 +35,7 @@ internal class SettingsCommand : CommandBase
                 Console.WriteLine("$EDITOR not set, please set it if you would like to open the settings in a CLI text editor.");
                 psInfo = new ProcessStartInfo(settingsPath)
                 {
-                    UseShellExecute = false,
+                    UseShellExecute = true,
                 };
             } else {
                 psInfo = new ProcessStartInfo(settingsPath)
