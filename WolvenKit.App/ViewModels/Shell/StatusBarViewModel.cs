@@ -75,7 +75,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public double Progress => _progress.Value;
 
-        //public bool IsIndeterminate => _isIndeterminate.Value;
+        //public bool IsIndeterminate => _isIndeterminate.Value; // TODO ???
 
         [Reactive] public bool IsIndeterminate { get; set; }
 

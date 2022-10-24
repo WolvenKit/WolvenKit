@@ -17,9 +17,9 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <VersionPrefix>8.7.0</VersionPrefix>
+    <VersionPrefix>8.7.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-    <InformationalVersion>8.7.0</InformationalVersion>
+    <InformationalVersion>8.7.1</InformationalVersion>
     <Description>WPF</Description>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Product>WolvenKit</Product>
@@ -1039,6 +1039,9 @@
     <Compile Update="Views\Templates\RedChunkMaskEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Templates\RedCNameEditor.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Templates\RedUlongEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1809,6 +1812,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Templates\RedChunkMaskEditor.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Templates\RedCNameEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

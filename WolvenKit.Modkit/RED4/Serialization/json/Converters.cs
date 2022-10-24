@@ -236,11 +236,11 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                 var text = reader.GetString();
                 if (ulong.TryParse(text, out var hash))
                 {
-                    return new CResourceAsyncReference<CResource> { DepotPath = hash };
+                    return new CResourceAsyncReference<CResource>(hash);
                 }
                 else
                 {
-                    return new CResourceAsyncReference<CResource> { DepotPath = text };
+                    return new CResourceAsyncReference<CResource>(text);
                 }
             }
 

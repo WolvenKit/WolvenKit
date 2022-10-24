@@ -5,9 +5,10 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save.IO;
 
-public class CyberpunkSaveReader
+public class CyberpunkSaveReader : IDisposable, IErrorHandler
 {
-    private BinaryReader _reader;
+    private readonly BinaryReader _reader;
+    private bool _disposed;
 
     private CyberpunkSaveFile? _csavFile;
 
@@ -137,7 +138,15 @@ public class CyberpunkSaveReader
             {
                 if (!node.ReadByParent)
                 {
-                    ParserHelper.ReadNode(reader, node);
+                    reader.BaseStream.Position = node.Offset;
+                    reader.ReadInt32(); // nodeId
+                    var parser = ParserHelper.GetParser(node.Name);
+                    if (parser is IErrorHandler errorHandler)
+                    {
+                        errorHandler.ParsingError += HandleParsingError;
+                    }
+
+                    parser.Read(reader, node);
                 }
             }
         }
@@ -255,4 +264,27 @@ public class CyberpunkSaveReader
         }
     }
 
+    public event ParsingErrorEventHandler? ParsingError;
+
+    protected virtual bool HandleParsingError(ParsingErrorEventArgs e) => ParsingError != null && ParsingError.Invoke(e);
+
+    #region IDisposable
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                _reader.Close();
+            }
+            _disposed = true;
+        }
+    }
+
+    public void Dispose() => Dispose(true);
+
+    public virtual void Close() => Dispose(true);
+
+    #endregion IDisposable
 }

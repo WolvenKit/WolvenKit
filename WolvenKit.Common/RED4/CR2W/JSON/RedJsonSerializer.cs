@@ -128,10 +128,11 @@ public static class RedJsonSerializer
         s_bufferResolver.Begin();
         s_classResolver.Begin();
 
+        SetHeader(new JsonHeader());
+
         try
         {
-            var result = JsonSerializer.Deserialize<T>(json, Options);
-            return result;
+            return JsonSerializer.Deserialize<T>(json, Options);
         }
         finally
         {
@@ -144,18 +145,21 @@ public static class RedJsonSerializer
         s_bufferResolver.Begin();
         s_classResolver.Begin();
 
-        if (element.ValueKind == JsonValueKind.Object)
+        SetHeader(new JsonHeader());
+
+        if (element.ValueKind == JsonValueKind.Object && !element.TryGetProperty("$type", out _))
         {
-            SetVersion(element.TryGetProperty("$type", out _)
-                ? SemVersion.Parse("0.0.2", SemVersionStyles.Strict)
-                : SemVersion.Parse("0.0.1", SemVersionStyles.Strict));
+            SetVersion(SemVersion.Parse("0.0.1", SemVersionStyles.Strict));
         }
 
-        var result = element.Deserialize(type, Options);
-
-        CleanUp();
-
-        return result;
+        try
+        {
+            return element.Deserialize(type, Options);
+        }
+        finally
+        {
+            CleanUp();
+        }
     }
 
     private static void CleanUp()

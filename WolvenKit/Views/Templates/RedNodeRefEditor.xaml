@@ -15,12 +15,13 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" MinWidth="50" />
+            <ColumnDefinition Width="155" />
         </Grid.ColumnDefinitions>
         <TextBox
-            x:Name="PathBox"
+            x:Name="TextBox"
+            Grid.Column="0"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Text="{Binding Path}" />
+            Text="{Binding Path, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
         <TextBox
             x:Name="HashBox"
             Grid.Column="1"
@@ -28,10 +29,9 @@
             Background="{StaticResource ContentBackgroundAlt}"
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="1,0,0,0"
+            DataObject.Pasting="HashBox_OnPasting"
             Foreground="#666666"
-            IsReadOnly="True"
-            PreviewTextInput="NumberValidationTextBox"
-            Text="{Binding Hash}"
-            ToolTip="Depot Hash" />
+            PreviewTextInput="HashBox_OnPreviewTextInput"
+            Text="{Binding Hash, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
     </Grid>
 </UserControl>

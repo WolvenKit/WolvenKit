@@ -48,13 +48,7 @@ namespace WolvenKit.RED4.Save
                 writer.Write(subInventory.Items.Count);
                 foreach (var itemData in subInventory.Items)
                 {
-                    var nextItemEntry = new InventoryHelper.NextItemEntry
-                    {
-                        ItemTdbId = itemData.ItemTdbId,
-                        Header = itemData.Header
-                    };
-
-                    InventoryHelper.WriteNextItemEntry(writer, nextItemEntry);
+                    InventoryHelper.WriteHeaderThing(writer, itemData.Header);
 
                     var subNode = new NodeEntry
                     {
@@ -83,14 +77,14 @@ namespace WolvenKit.RED4.Save
 
             for (int i = 0; i < cnt; i++)
             {
-                var nextItemHeader = InventoryHelper.ReadNextItemEntry(reader);
+                var nextItemHeader = InventoryHelper.ReadHeaderThing(reader);
 
                 reader.ReadUInt32(); // nodeId
                 parser.Read(reader, node.Children[offset + i]);
 
                 var item = (InventoryHelper.ItemData)node.Children[offset + i].Value;
 
-                if (!nextItemHeader.Equals(item))
+                if (!nextItemHeader.Equals(item.Header))
                 {
                     throw new InvalidDataException($"Expected next item to be '{nextItemHeader}' but found '{item}'");
                 }

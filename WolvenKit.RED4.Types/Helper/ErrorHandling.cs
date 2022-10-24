@@ -8,12 +8,14 @@ public delegate bool ParsingErrorEventHandler(ParsingErrorEventArgs e);
 
 public class InvalidRTTIEventArgs : ParsingErrorEventArgs
 {
+    public string PropertyName { get; }
     public Type ExpectedType { get; }
     public Type ActualType { get; }
     public IRedType Value { get; set; }
 
-    public InvalidRTTIEventArgs(Type expectedType, Type actualType, IRedType value)
+    public InvalidRTTIEventArgs(string propertyName, Type expectedType, Type actualType, IRedType value)
     {
+        PropertyName = propertyName;
         ExpectedType = expectedType;
         ActualType = actualType;
         Value = value;
@@ -37,5 +39,16 @@ public class InvalidEnumValueEventArgs : ParsingErrorEventArgs
         StringValue = stringValue;
 
         Value = default;
+    }
+}
+
+public class UnknownTypeEventArgs : ParsingErrorEventArgs
+{
+    public string RedName { get; }
+    public RedTypeInfo Result { get; set; }
+
+    public UnknownTypeEventArgs(string redName)
+    {
+        RedName = redName;
     }
 }

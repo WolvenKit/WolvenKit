@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.Common.Services
 {
@@ -40,9 +40,9 @@ namespace WolvenKit.Common.Services
             Load();
 
             ImportHandler.AddPathHandler = AddProjectPath;
-            CName.ResolveHashHandler = Get;
+            CNamePool.ResolveHashHandler = Get;
 
-            NodeRef.ResolveHashHandler = GetNodeRef;
+            NodeRefPool.ResolveHashHandler = GetNodeRef;
         }
 
         #endregion Constructors
@@ -92,13 +92,10 @@ namespace WolvenKit.Common.Services
             {
                 return _hashes[key].ToString();
             }
+
             if (_userHashes.ContainsKey(key))
             {
                 return _userHashes[key].ToString();
-            }
-            if (_missing.Contains(key))
-            {
-                return string.Empty;
             }
 
             if (_projectHashes.ContainsKey(key))
@@ -113,7 +110,7 @@ namespace WolvenKit.Common.Services
                 return _additionalhashes[key].ToString();
             }
 
-            return string.Empty;
+            return null;
         }
 
         public string GetNodeRef(ulong key)

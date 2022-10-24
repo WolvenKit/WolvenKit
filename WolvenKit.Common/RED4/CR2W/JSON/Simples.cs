@@ -55,7 +55,7 @@ public class CNameConverter : JsonConverter<CName>, ICustomRedConverter
     public override void Write(Utf8JsonWriter writer, CName value, JsonSerializerOptions options)
     {
         var resolved = value.GetResolvedText();
-        if (!string.IsNullOrEmpty(resolved))
+        if (!string.IsNullOrEmpty(resolved) && resolved != "None")
         {
             writer.WriteStringValue(resolved);
         }

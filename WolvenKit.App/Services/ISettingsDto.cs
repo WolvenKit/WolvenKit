@@ -23,6 +23,9 @@ namespace WolvenKit.Functionality.Services
         public bool TreeViewGroups { get; set; }
         public uint TreeViewGroupSize { get; set; }
         public bool ShowAdvancedOptions { get; set; }
+        public bool ShowCNameAsHex { get; set; }
+        public bool ShowNodeRefAsHex { get; set; }
+        public bool ShowTweakDBIDAsHex { get; set; }
         public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; }
     }
 }

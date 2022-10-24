@@ -39,7 +39,7 @@ namespace WolvenKit.Functionality.Services
         redmod,
         [Id("Red4Ext", "WopsS/RED4ext", @"red4ext.*\.zip", "A script extender for REDengine 4 (Cyberpunk 2077).")]
         red4ext,
-        [Id("TweakXL", "psiberx/cp2077-tweak-xl", @"TweakXL.*\.zip", "Cyberpunk 2077 mod that allows you to modify TweakDB.")]
+        [Id("TweakXL", "psiberx/cp2077-tweak-xl", @"TweakXL-.*\.zip", "Cyberpunk 2077 mod that allows you to modify TweakDB.")]
         tweakXL,
     }
 

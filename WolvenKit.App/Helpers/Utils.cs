@@ -334,9 +334,11 @@ namespace WolvenKit.ViewModels.Shell
 
                 //gotta figure out colliders
                 wen.IsVisibleInGame = visible;
-                wen.EntityTemplate.DepotPath = line.template_path;
+                wen.EntityTemplate = new CResourceAsyncReference<entEntityTemplate>(line.template_path);
                 wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
                 wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
+
+                current.QuestPrefabRefHash = Convert.ToUInt64(current.GetHashCode()); // Add hash to make object interactible and persistent
 
                 if (line.isdoor is bool b && b)
                 {
@@ -381,7 +383,7 @@ namespace WolvenKit.ViewModels.Shell
             //cmesh.RemoveFromRainMap = true;
             //cmesh.OccluderType = visWorldOccluderType.Exterior;
 
-            cmesh.Mesh.DepotPath = line.template_path;
+            cmesh.Mesh = new CResourceAsyncReference<CMesh>(line.template_path);
             cmesh.MeshAppearance = string.IsNullOrEmpty(line.app) ? "default" : line.app;
 
             ((IRedArray)wss.Nodes).Insert(index, wenh);

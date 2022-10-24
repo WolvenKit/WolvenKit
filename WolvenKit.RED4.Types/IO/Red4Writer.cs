@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.IO
 
         public Red4Writer(Stream output, Encoding encoding, bool leaveOpen)
         {
-            StringCacheList.Add("");
+            StringCacheList.Add(CName.Empty);
 
             _writer = new BinaryWriter(output, encoding, leaveOpen);
             _encoding = encoding;
@@ -496,11 +496,6 @@ namespace WolvenKit.RED4.IO
             var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());
             var valueName = typeInfo.GetRedNameFromCSName(instance.ToEnumString());
 
-            if (valueName == "None")
-            {
-                valueName = "";
-            }
-            
             CNameRef.Add(_writer.BaseStream.Position, valueName);
             _writer.Write(GetStringIndex(valueName));
         }
@@ -633,13 +628,18 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(IRedResourceReference instance)
         {
-            if (instance.DepotPath == "")
+            if (instance.DepotPath == CName.Empty)
             {
                 _writer.Write((ushort)0);
                 return;
             }
 
-            var val = new ImportEntry("", instance.DepotPath, (ushort)instance.Flags);
+            if (!instance.DepotPath.IsResolvable)
+            {
+                throw new Exception("Can't write unresolvable path!");
+            }
+
+            var val = new ImportEntry(CName.Empty, instance.DepotPath, (ushort)instance.Flags);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));
@@ -647,13 +647,18 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(IRedResourceAsyncReference instance)
         {
-            if (instance.DepotPath == "")
+            if (instance.DepotPath == CName.Empty)
             {
                 _writer.Write((ushort)0);
                 return;
             }
 
-            var val = new ImportEntry("", instance.DepotPath, (ushort)instance.Flags);
+            if (!instance.DepotPath.IsResolvable)
+            {
+                throw new Exception("Can't write unresolvable path!");
+            }
+
+            var val = new ImportEntry(CName.Empty, instance.DepotPath, (ushort)instance.Flags);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));

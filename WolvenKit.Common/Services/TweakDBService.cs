@@ -39,7 +39,7 @@ namespace WolvenKit.Common.Services
                 s_stringHelper.Load(userStrsPath);
             }
 
-            TweakDBID.ResolveHashHandler = s_stringHelper.GetString;
+            TweakDBIDPool.ResolveHashHandler = s_stringHelper.GetString;
         }
 
         private void OnLoadDB()

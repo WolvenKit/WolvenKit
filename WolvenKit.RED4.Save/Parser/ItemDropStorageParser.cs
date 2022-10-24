@@ -41,12 +41,12 @@ namespace WolvenKit.RED4.Save
             {
                 node.Children[i].ReadByParent = true;
 
-                var nextItemHeader = InventoryHelper.ReadNextItemEntry(reader);
+                var nextItemHeader = InventoryHelper.ReadHeaderThing(reader);
 
                 reader.ReadUInt32(); // nodeId
                 var item = InventoryHelper.ReadItemData(reader);
 
-                if (!nextItemHeader.Equals(item))
+                if (!nextItemHeader.Equals(item.Header))
                 {
                     throw new InvalidDataException($"Expected next item to be '{nextItemHeader}' but found '{item}'");
                 }
@@ -71,13 +71,7 @@ namespace WolvenKit.RED4.Save
             writer.Write(value.Items.Count);
             foreach (var itemData in value.Items)
             {
-                var nextItemEntry = new InventoryHelper.NextItemEntry
-                {
-                    ItemTdbId = itemData.ItemTdbId,
-                    Header = itemData.Header
-                };
-
-                InventoryHelper.WriteNextItemEntry(writer, nextItemEntry);
+                InventoryHelper.WriteHeaderThing(writer, itemData.Header);
 
                 var subNode = new NodeEntry
                 {

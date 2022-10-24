@@ -108,17 +108,7 @@ namespace WolvenKit.RED4.Archive.IO
 
                     foreach (var chunk in _file.Chunks)
                     {
-                        ulong hash;
-                        if (chunk is DynamicBaseClass dbc)
-                        {
-                            hash = FNV1A64HashAlgorithm.HashString(dbc.ClassName);
-                        }
-                        else
-                        {
-                            hash = FNV1A64HashAlgorithm.HashString(chunk.GetType().Name);
-                        }
-
-                        chunkDict.Add(hash, chunk);
+                        chunkDict.Add(FNV1A64HashAlgorithm.HashString(GetClassName(chunk)), chunk);
                     }
 
                     chunkDict = chunkDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
@@ -282,9 +272,9 @@ namespace WolvenKit.RED4.Archive.IO
             StringCacheList.Clear();
             foreach (var stringInfo in _chunkStringList)
             {
-                if (stringInfo.Value.List.Contains(""))
+                if (stringInfo.Value.List.Contains(CName.Empty))
                 {
-                    stringInfo.Value.List.Remove("");
+                    stringInfo.Value.List.Remove(CName.Empty);
                 }
 
                 StringCacheList.AddRange(stringInfo.Value.List);
@@ -373,7 +363,7 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             file.GenerateStringDictionary();
-            file.StringCacheList.Remove("");
+            file.StringCacheList.Remove(CName.Empty);
 
             for (var i = 0; i < chunkDesc.Count; i++)
             {

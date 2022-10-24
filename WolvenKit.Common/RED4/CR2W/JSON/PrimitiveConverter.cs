@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Semver;
 using Splat;
+using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
@@ -344,12 +345,20 @@ public class ResourceReferenceConverter : JsonConverter<IRedRef>, ICustomRedConv
             throw new JsonException();
         }
 
+        CName? depotPath = null;
+        InternalEnums.EImportFlags? flags = null;
+
         var result = (IRedRef)RedTypeManager.CreateRedType(typeToConvert);
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)
             {
-                return result;
+                if (depotPath == null || flags == null)
+                {
+                    throw new JsonException();
+                }
+
+                return (IRedRef)RedTypeManager.CreateRedType(typeToConvert, depotPath, flags);
             }
 
             if (reader.TokenType != JsonTokenType.PropertyName)
@@ -366,7 +375,7 @@ public class ResourceReferenceConverter : JsonConverter<IRedRef>, ICustomRedConv
                     if (converter is ICustomRedConverter conv)
                     {
                         reader.Read();
-                        result.DepotPath = (CName?)conv.ReadRedType(ref reader, typeof(CName), options);
+                        depotPath = (CName)conv.ReadRedType(ref reader, typeof(CName), options)!;
                     }
                     else
                     {
@@ -390,7 +399,7 @@ public class ResourceReferenceConverter : JsonConverter<IRedRef>, ICustomRedConv
                         throw new JsonException();
                     }
 
-                    result.Flags = Enum.Parse<InternalEnums.EImportFlags>(str);
+                    flags = Enum.Parse<InternalEnums.EImportFlags>(str);
                     break;
                 }
 
@@ -479,7 +488,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
             throw new JsonException();
         }
 
-        RedReflection.ExtendedTypeInfo? typeInfo = null;
+        ExtendedTypeInfo? typeInfo = null;
 
         RedBaseClass? cls = null;
         string? clsType;

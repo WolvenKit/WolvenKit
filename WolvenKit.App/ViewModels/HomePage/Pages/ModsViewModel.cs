@@ -100,11 +100,12 @@ namespace WolvenKit.ViewModels.HomePage
             }
             else
             {
-                var enabledMods = GetEnabledMods().ToList();
+                var enabledMods = GetEnabledMods().OrderBy(x => x.LoadOrder).ToList();
 
                 IsProcessing = true;
 
-                var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
+                var rttiSchemaPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
+                var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"  -rttiSchemaPath=\"{rttiSchemaPath}\" -force";
 
                 var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
                 args += $" -mod={modsStr}";

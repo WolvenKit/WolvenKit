@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 
         public static IRedType CreateRedType(Type type, params object[] args) => (IRedType)System.Activator.CreateInstance(type, args);
 
-        public static IRedType CreateRedType(string redTypeName)
+        public static IRedType CreateRedType(string redTypeName, params object[] args)
         {
             var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName);
             if (type == null)
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
                 throw new TypeNotFoundException(redTypeName);
             }
 
-            return CreateRedType(type);
+            return CreateRedType(type, args);
         }
     }
 }

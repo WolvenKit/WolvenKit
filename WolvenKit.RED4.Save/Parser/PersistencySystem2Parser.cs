@@ -1,9 +1,11 @@
 using System;
+using System.Reflection;
 using System.Text;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Save.IO;
 using WolvenKit.RED4.Types;
+using Activator = System.Activator;
 
 namespace WolvenKit.RED4.Save;
 
@@ -70,7 +72,9 @@ public class PersistencySystem2Reader : Red4Reader
                 throw new Exception();
             }
 
-            var value = Read(propertyInfo.Type, (uint)Remaining, propertyInfo.Flags);
+            var redTypeInfos = RedReflection.GetRedTypeInfos(propertyInfo.Type, propertyInfo.Flags);
+
+            var value = Read(redTypeInfos, (uint)Remaining);
             instance.SetProperty(propertyInfo.RedName, value);
         }
     }
@@ -96,68 +100,40 @@ public class PersistencySystem2Reader : Red4Reader
         return BaseReader.ReadUInt64();
     }
 
-    public override CEnum<T> ReadCEnum<T>()
+    public override IRedEnum ReadCEnum(List<RedTypeInfo> redTypeInfos, uint size)
     {
-        var remaining = Remaining;
-        var sizeType = Enum.GetUnderlyingType(typeof(T));
+        var type = redTypeInfos[0].RedObjectType;
+        var sizeType = Enum.GetUnderlyingType(type);
 
-        if (sizeType == typeof(sbyte))
+        var obj = Type.GetTypeCode(sizeType) switch
         {
-            return (Enum)Enum.ToObject(typeof(T), BaseReader.ReadSByte());
-        }
-        if (sizeType == typeof(byte))
-        {
-            return (Enum)Enum.ToObject(typeof(T), BaseReader.ReadByte());
-        }
-        if (sizeType == typeof(short))
-        {
-            return (Enum)Enum.ToObject(typeof(T), BaseReader.ReadInt16());
-        }
-        if (sizeType == typeof(ushort))
-        {
-            return (Enum)Enum.ToObject(typeof(T), BaseReader.ReadUInt16());
-        }
-        if (sizeType == typeof(int))
-        {
-            return (Enum)Enum.ToObject(typeof(T), BaseReader.ReadInt32());
-        }
-        if (sizeType == typeof(uint))
-        {
-            return (Enum)Enum.ToObject(typeof(T), BaseReader.ReadUInt32());
-        }
-        if (sizeType == typeof(long))
-        {
-            return (Enum)Enum.ToObject(typeof(T), BaseReader.ReadInt64());
-        }
-        if (sizeType == typeof(ulong))
-        {
-            return (Enum)Enum.ToObject(typeof(T), BaseReader.ReadUInt64());
-        }
+            TypeCode.SByte => Enum.ToObject(type, BaseReader.ReadSByte()),
+            TypeCode.Byte => Enum.ToObject(type, BaseReader.ReadByte()),
+            TypeCode.Int16 => Enum.ToObject(type, BaseReader.ReadInt16()),
+            TypeCode.UInt16 => Enum.ToObject(type, BaseReader.ReadUInt16()),
+            TypeCode.Int32 => Enum.ToObject(type, BaseReader.ReadInt32()),
+            TypeCode.UInt32 => Enum.ToObject(type, BaseReader.ReadUInt32()),
+            TypeCode.Int64 => Enum.ToObject(type, BaseReader.ReadInt64()),
+            TypeCode.UInt64 => Enum.ToObject(type, BaseReader.ReadUInt64()),
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
-        throw new Exception();
+        var fullType = RedReflection.GetFullType(redTypeInfos);
+        return (IRedEnum)Activator.CreateInstance(fullType, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { obj }, null)!;
     }
 
-    public override IRedHandle<T> ReadCHandle<T>()
+    public override IRedHandle ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
+        var type = RedReflection.GetFullType(redTypeInfos);
+        var result = (IRedHandle)Activator.CreateInstance(type);
+
         var clsType = ClassHashHelper.GetTypeFromHash(BaseReader.ReadUInt64())!;
-        return (CHandle<T>)ReadClass(clsType, (uint)Remaining);
+        result.SetValue(ReadClass(clsType, (uint)Remaining));
+
+        return result;
     }
 
-    public override IRedArray<T> ReadCArray<T>(uint size)
-    {
-        var array = new CArray<T>();
-
-        var elementCount = _reader.ReadUInt32();
-
-        var i = 0;
-        for (; i < elementCount; i++)
-        {
-            var element = ReadArrayItem(i, typeof(T), Flags.Empty);
-            array.Add((T)element);
-        }
-
-        return array;
-    }
+    public override IRedArray ReadCArray(List<RedTypeInfo> redTypeInfos, uint size, bool readAdditionalBytes = true) => base.ReadCArray(redTypeInfos, size, false);
 }
 
 public class PersistencySystem2Writer : Red4Writer

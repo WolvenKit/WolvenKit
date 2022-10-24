@@ -8,7 +8,9 @@ namespace WolvenKit.Converters
     public class EditableVariableDataTemplateSelector : DataTemplateSelector
     {
         public DataTemplate CommmonTemplate { get; set; }
+        public DataTemplate CNameTemplateView { get; set; }
         public DataTemplate StringTemplateView { get; set; }
+        public DataTemplate NodeRefTemplateView { get; set; }
         public DataTemplate RedboolTemplate { get; set; }
         public DataTemplate NumericTemplate { get; set; }
         public DataTemplate EnumTemplate { get; set; }
@@ -26,7 +28,9 @@ namespace WolvenKit.Converters
             variable switch
             {
                 IRedPrimitive<bool> => RedboolTemplate,        //done in PG
-                BaseStringType => StringTemplateView,   //done in PG
+                CString => StringTemplateView,   //done in PG
+                CName => CNameTemplateView,   //done in PG
+                NodeRef => NodeRefTemplateView,   //done in PG
                 IRedInteger => NumericTemplate, //done in PG
                 IRedEnum => EnumTemplate,           //done in PG
                 IRedBaseHandle => HandleTemplateView, //done in PG

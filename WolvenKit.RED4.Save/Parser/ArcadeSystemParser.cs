@@ -16,10 +16,12 @@ public class ArcadeSystemParser : INodeParser
         var data = new ArcadeSystem();
 
         var cnt = reader.ReadUInt32();
-        for (int i = 0; i < cnt; i++)
+        for (var i = 0; i < cnt; i++)
         {
             data.HighScores.Add(reader.ReadSingle());
         }
+
+        node.Value = data;
     }
 
     public void Write(NodeWriter writer, NodeEntry node)

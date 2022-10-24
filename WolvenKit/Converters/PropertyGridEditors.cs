@@ -15,9 +15,17 @@ namespace WolvenKit.Converters
     {
         public static ITypeEditor GetPropertyEditor(Type PropertyType)
         {
-            if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
+            if (PropertyType.IsAssignableTo(typeof(CString)))
             {
-                return new TextEditor();
+                return new StringEditor();
+            }
+            if (PropertyType.IsAssignableTo(typeof(CName)))
+            {
+                return new CNameEditor();
+            }
+            if (PropertyType.IsAssignableTo(typeof(NodeRef)))
+            {
+                return new NodeRefEditor();
             }
             if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
             {
@@ -335,7 +343,89 @@ namespace WolvenKit.Converters
             }
         }
 
-        public class TextEditor : ITypeEditor
+        public class CNameEditor : ITypeEditor
+        {
+            private RedCNameEditor _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                if (info.CanWrite)
+                {
+                    var binding = new Binding("Value")
+                    {
+                        Mode = BindingMode.TwoWay,
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true,
+                    };
+                    BindingOperations.SetBinding(_editor, RedCNameEditor.RedStringProperty, binding);
+                }
+                else
+                {
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                    var binding = new Binding("Value")
+                    {
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true
+                    };
+                    BindingOperations.SetBinding(_editor, RedCNameEditor.RedStringProperty, binding);
+                }
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new RedCNameEditor();
+
+                return _editor;
+            }
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
+        }
+
+        public class NodeRefEditor : ITypeEditor
+        {
+            private RedNodeRefEditor _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                if (info.CanWrite)
+                {
+                    var binding = new Binding("Value")
+                    {
+                        Mode = BindingMode.TwoWay,
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true,
+                    };
+                    BindingOperations.SetBinding(_editor, RedNodeRefEditor.RedNodeRefProperty, binding);
+                }
+                else
+                {
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                    var binding = new Binding("Value")
+                    {
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true
+                    };
+                    BindingOperations.SetBinding(_editor, RedNodeRefEditor.RedNodeRefProperty, binding);
+                }
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new RedNodeRefEditor();
+
+                return _editor;
+            }
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
+        }
+
+        public class StringEditor : ITypeEditor
         {
             private RedStringEditor _editor;
 

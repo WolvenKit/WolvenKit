@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.Archive.IO
 
                 t.QuestPrefabRefHash = _reader.ReadUInt64();
                 t.UkHash1 = _reader.ReadUInt64();
-                t.CookedPrefabData.DepotPath = _reader.ReadUInt64();
+                t.CookedPrefabData = new CResourceReference<worldCookedPrefabData>(_reader.ReadUInt64());
 
                 t.MaxStreamingDistance = _reader.ReadSingle();
                 t.UkFloat1 = _reader.ReadSingle();

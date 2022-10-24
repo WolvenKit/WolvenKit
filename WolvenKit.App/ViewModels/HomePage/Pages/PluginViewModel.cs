@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 
@@ -17,13 +19,20 @@ namespace WolvenKit.ViewModels.Dialogs
     {
         private readonly IPluginService _pluginService;
         private readonly ILoggerService _loggerService;
+        private readonly IProgressService<double> _progressService;
 
         private PluginModel _pluginModel;
 
-        public PluginViewModel(IPluginService pluginService, ILoggerService loggerService, PluginModel plugin, string installPath)
+        public PluginViewModel(
+            IPluginService pluginService,
+            ILoggerService loggerService,
+            IProgressService<double> progressService,
+            PluginModel plugin,
+            string installPath)
         {
             _pluginService = pluginService;
             _loggerService = loggerService;
+            _progressService = progressService;
 
             _pluginModel = plugin;
 
@@ -57,6 +66,18 @@ namespace WolvenKit.ViewModels.Dialogs
                         break;
                 }
             });
+
+            _ = Observable.FromEventPattern<EventHandler<double>, double>(
+                handler => _progressService.ProgressChanged += handler,
+                handler => _progressService.ProgressChanged -= handler)
+                .Select(_ => _.EventArgs * 100)
+                .ToProperty(this, x => x.Progress, out _progress);
+
+            _ = _progressService
+                .WhenAnyValue(x => x.IsIndeterminate)
+                .ToProperty(this, x => x.IsIndeterminate, out _isIndeterminate);
+
+            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => IsIndeterminate = b);
         }
 
         public EPlugin Id => _pluginModel.Id;
@@ -68,7 +89,13 @@ namespace WolvenKit.ViewModels.Dialogs
         [Reactive] public string Version { get; set; }
         [Reactive] public EPluginStatus Status { get; set; }
         [Reactive] public string Label { get; set; }
+
+        private readonly ObservableAsPropertyHelper<bool> _isIndeterminate;
+        [Reactive] public bool IsIndeterminate { get; set; }
         [Reactive] public bool IsBusy { get; set; }
+
+        private readonly ObservableAsPropertyHelper<double> _progress;
+        public double Progress => _progress.Value;
         [Reactive] public bool IsNotInstalled { get; set; }
         [Reactive] public bool IsOpenEnabled { get; set; } // = IsInstalled
 
@@ -115,6 +142,7 @@ namespace WolvenKit.ViewModels.Dialogs
             }
 
             IsBusy = false;
+            _progressService.IsIndeterminate = false;
         }
 
         internal PluginModel GetModel() => _pluginModel;
