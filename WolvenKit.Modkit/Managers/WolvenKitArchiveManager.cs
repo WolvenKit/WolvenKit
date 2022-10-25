@@ -2,12 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Kernel;
 using ProtoBuf;
 using ReactiveUI;
+using Splat;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Model
 {
@@ -56,35 +62,39 @@ namespace WolvenKit.Common.Model
 
         protected void RebuildGameRoot()
         {
+            var hashService = Locator.Current.GetService<IHashService>();
+            if (hashService == null)
+            {
+                throw new Exception();
+            }
+
             RootNode = new RedFileSystemModel(TypeName.ToString());
 
-            // loop through all files
-            var allfiles = Archives.Items.SelectMany(x => x.Files);
+            var allFiles = Archives.Items.SelectMany(x => x.Files);
 
-            //Parallel.ForEach(allfiles, file =>
-            foreach (var file in allfiles)
+            Parallel.ForEach(allFiles, (file) =>
             {
-                var model = file.Value;
-                var key = file.Key;
-                var currentNode = RootNode;
-                var parts = model.Name.Split('\\');
-
-                // loop through path
-                var fullpath = "";
-                for (var i = 0; i < parts.Length - 1; i++)
+                var path = hashService.Get(file.Key);
+                if (path == null)
                 {
-                    var part = parts[i];
-                    fullpath += part + Path.DirectorySeparatorChar;
-
-                    var dirPath = fullpath.TrimEnd(Path.DirectorySeparatorChar);
-                    var x = currentNode.Directories.GetOrAdd(dirPath, new RedFileSystemModel(dirPath));
-                    currentNode = x;
+                    RootNode.Files.Add(file.Value);
+                    return;
                 }
 
-                // add file to the last directory in path
-                currentNode.Files.Add(model);
-            }
-            //);
+                var lastNode = RootNode;
+
+                var sb = new StringBuilder();
+                for (var i = 0; i < path.Length; i++)
+                {
+                    sb.Append(path[i]);
+                    if (path[i] == '\\')
+                    {
+                        var str = sb.ToString();
+                        lastNode = lastNode.Directories.GetOrAdd(str, new RedFileSystemModel(str));
+                    }
+                }
+                lastNode.Files.Add(file.Value);
+            });
         }
 
         protected void RebuildModRoot()

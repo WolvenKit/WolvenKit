@@ -13,5 +13,7 @@ namespace WolvenKit.Common.Services
         public IEnumerable<ulong> GetAllHashes();
 
         public IEnumerable<ulong> GetMissingHashes();
+
+        public string GetGuessedExtension(ulong key);
     }
 }

@@ -14,9 +14,9 @@ namespace WolvenKit.Common.Model
             FullName = fullname;
         }
 
-        public string Name => Path.GetFileName(FullName);
+        public string Name => _name ??= new DirectoryInfo(FullName).Name;
 
-        public string FullName { get; set; }
+        public string FullName { get; }
 
         public ConcurrentDictionary<string, RedFileSystemModel> Directories { get; } = new();
 
@@ -29,6 +29,7 @@ namespace WolvenKit.Common.Model
             : nameof(ECustomImageKeys.ClosedDirImageKey);
 
         private bool _isExpanded;
+        private string _name;
 
         public bool IsExpanded
         {
