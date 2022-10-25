@@ -124,6 +124,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
             {
                 EWolvenKitFile.TweakXl => project.TweakDirectory,
                 EWolvenKitFile.Cr2w => project.ModDirectory,
+                EWolvenKitFile.ArchiveXl => project.ArchiveXLDirectory,
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
         }

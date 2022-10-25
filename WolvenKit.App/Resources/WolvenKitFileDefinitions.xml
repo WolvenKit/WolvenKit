@@ -18,5 +18,17 @@
 			</AddFileModel>
 		</Files>
 	</FileCategoryModel>
+	<FileCategoryModel>
+		<Name>ArchiveXL</Name>
+		<Files>
+			<AddFileModel>
+				<Name>ArchiveXL file</Name>
+				<Description>A blank .xl file</Description>
+				<Extension>archive.xl</Extension>
+				<Type>ArchiveXl</Type>
+				<Template></Template>
+			</AddFileModel>
+		</Files>
+	</FileCategoryModel>
   </Categories>
 </WolvenKitFileDefinitions>

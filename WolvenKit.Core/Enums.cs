@@ -21,7 +21,8 @@ namespace WolvenKit.Common
     public enum EWolvenKitFile
     {
         Cr2w,
-        TweakXl
+        TweakXl,
+        ArchiveXl
     }
 
     public enum ERedScriptExtension

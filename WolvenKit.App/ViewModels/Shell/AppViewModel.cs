@@ -714,6 +714,7 @@ namespace WolvenKit.ViewModels.Shell
             Stream stream = null;
             switch (file.SelectedFile.Type)
             {
+                case EWolvenKitFile.ArchiveXl:
                 case EWolvenKitFile.TweakXl:
                     if (!string.IsNullOrEmpty(file.SelectedFile.Template))
                     {
