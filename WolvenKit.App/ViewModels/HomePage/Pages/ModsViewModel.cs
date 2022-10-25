@@ -12,6 +12,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Helpers;
 using WolvenKit.Interaction;
@@ -24,9 +25,8 @@ namespace WolvenKit.ViewModels.HomePage
     {
         private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
-        private readonly IProjectManager _projectManager;
         private readonly IPluginService _pluginService;
-        private readonly AppViewModel _mainViewModel;
+        private readonly IProgressService<double> _progressService;
 
         private readonly JsonSerializerOptions _options = new()
         {
@@ -40,10 +40,8 @@ namespace WolvenKit.ViewModels.HomePage
         {
             _settings = Locator.Current.GetService<ISettingsManager>();
             _logger = Locator.Current.GetService<ILoggerService>();
-            _projectManager = Locator.Current.GetService<IProjectManager>();
             _pluginService = Locator.Current.GetService<IPluginService>();
-
-            _mainViewModel = Locator.Current.GetService<AppViewModel>();
+            _progressService = Locator.Current.GetService<IProgressService<double>>();
 
             RefreshCommand = ReactiveCommand.Create(() => Refresh());
             DeployCommand = ReactiveCommand.Create(() => Deploy());
@@ -60,8 +58,17 @@ namespace WolvenKit.ViewModels.HomePage
                 .Take(1)
                 .Subscribe(x => LoadMods());
 
+            _ = Observable.FromEventPattern<EventHandler<double>, double>(
+                handler => _progressService.ProgressChanged += handler,
+                handler => _progressService.ProgressChanged -= handler)
+                .Select(_ => _.EventArgs * 100)
+                .ToProperty(this, x => x.Progress, out _progress);
         }
 
+        private readonly ObservableAsPropertyHelper<double> _progress;
+        public double Progress => _progress.Value;
+
+        [Reactive] public bool LoadOrderChanged { get; private set; }
         [Reactive] public ObservableCollection<ModInfoViewModel> Mods { get; set; } = new();
         [Reactive] public ModInfoViewModel SelectedMod { get; set; }
         [Reactive] public IEnumerable<ModInfoViewModel> SelectedMods { get; set; }
@@ -100,20 +107,31 @@ namespace WolvenKit.ViewModels.HomePage
             }
             else
             {
+                _progressService.Report(0);
+
                 var enabledMods = GetEnabledMods().OrderBy(x => x.LoadOrder).ToList();
 
                 IsProcessing = true;
 
                 var rttiSchemaPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
-                var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"  -rttiSchemaPath=\"{rttiSchemaPath}\" -force";
+                var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"  -rttiSchemaPath=\"{rttiSchemaPath}\"";
+
+                if (LoadOrderChanged)
+                {
+                    args += " -force";
+                }
 
                 var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
                 args += $" -mod={modsStr}";
 
                 _logger.Info($"WorkDir: {redmodPath}");
                 _logger.Info($"Running commandlet: {args}");
-                var result = await ProcessUtil.RunProcessAsync(redmodPath, args);
 
+                _progressService.Report(0.1);
+
+                var result = await ProcessUtil.RunRedmodAsync(redmodPath, args, progress: _progressService);
+
+                _progressService.Report(1.0);
                 IsProcessing = false;
 
                 if (!result)
@@ -131,9 +149,11 @@ namespace WolvenKit.ViewModels.HomePage
                         "RedMod deploy",
                         WMessageBoxButtons.Ok,
                         WMessageBoxImage.Exclamation);
-                }
-                return result;
 
+                    SetLoadOrderChanged(false);
+                }
+
+                return result;
             }
         }
 
@@ -284,5 +304,7 @@ namespace WolvenKit.ViewModels.HomePage
 
             _logger.Info($"Found {Mods.Count} mods.");
         }
+
+        public void SetLoadOrderChanged(bool v) => LoadOrderChanged = v;
     }
 }

@@ -71,12 +71,11 @@ namespace WolvenKit.Views.HomePage.Pages
                         m.LoadOrder = idx;
                     }
                 }
+
+                ViewModel.SetLoadOrderChanged(true);
             }
         }
 
-        private void RemoveModMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            ViewModel.RemoveCommand.SafeExecute();
-        }
+        private void RemoveModMenuItem_Click(object sender, System.Windows.RoutedEventArgs e) => ViewModel.RemoveCommand.SafeExecute();
     }
 }
