@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
@@ -21,7 +22,7 @@ namespace WolvenKit.Common.Services
         private const string s_unused = "WolvenKit.Common.Resources.unusedhashes.kark";
         private const string s_noderefs = "WolvenKit.Common.Resources.noderefs.kark";
         private const string s_userHashes = "user_hashes.txt";
-        private const string s_missing = "WolvenKit.Common.Resources.missinghashes.txt";
+        private const string s_missing = "WolvenKit.Common.Resources.missinghashes.json";
 
         private readonly Dictionary<ulong, SAsciiString> _hashes = new();
         private readonly Dictionary<ulong, SAsciiString> _additionalhashes = new();
@@ -29,7 +30,7 @@ namespace WolvenKit.Common.Services
         private readonly Dictionary<ulong, SAsciiString> _projectHashes = new();
         private readonly Dictionary<ulong, SAsciiString> _noderefs = new();
 
-        private readonly List<ulong> _missing = new();
+        private Dictionary<ulong, string> _missing = new();
 
         #endregion Fields
 
@@ -58,7 +59,7 @@ namespace WolvenKit.Common.Services
             return _hashes.Keys.Concat(_userHashes.Keys).Concat(_additionalhashes.Keys);
         }
 
-        public IEnumerable<ulong> GetMissingHashes() => _missing;
+        public IEnumerable<ulong> GetMissingHashes() => _missing.Keys;
 
         public bool Contains(ulong key)
         {
@@ -70,7 +71,7 @@ namespace WolvenKit.Common.Services
             {
                 return true;
             }
-            if (_missing.Contains(key))
+            if (_missing.ContainsKey(key))
             {
                 return false;
             }
@@ -84,6 +85,15 @@ namespace WolvenKit.Common.Services
             }
 
             return false;
+        }
+
+        public string GetGuessedExtension(ulong key)
+        {
+            if (_missing.TryGetValue(key, out var ext))
+            {
+                return ext;
+            }
+            return null;
         }
 
         public string Get(ulong key)
@@ -236,24 +246,12 @@ namespace WolvenKit.Common.Services
 
         private void LoadMissingHashes()
         {
-            _missing.Clear();
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s_missing);
             if (stream == null)
             {
                 throw new FileNotFoundException(s_missing);
             }
-            using var sr = new StreamReader(stream);
-            string line;
-            while ((line = sr.ReadLine()) != null)
-            {
-                var hash = ulong.Parse(line);
-
-                if (!Contains(hash))
-                {
-                    _missing.Add(hash);
-                }
-
-            }
+            _missing = JsonSerializer.Deserialize<Dictionary<ulong, string>>(stream);
         }
 
         private void ReadHashes(Stream memoryStream, IDictionary<ulong, SAsciiString> hashDict)
