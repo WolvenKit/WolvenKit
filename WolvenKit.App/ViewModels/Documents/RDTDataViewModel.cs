@@ -40,10 +40,12 @@ namespace WolvenKit.ViewModels.Documents
             // set header
             if (data is null && file is TweakXLDocumentViewModel)
             {
-                var ext = Path.GetExtension(file.FilePath);
+                var ext = Path.GetExtension(file.FilePath).ToLower();
                 Header = ext switch
                 {
-                    ".yaml" => "TweakXl",
+                    ".yaml" => "TweakXL",
+                    ".yml" => "TweakXL",
+                    ".xl" => "TweakXL",
                     _ => throw new NotImplementedException(),
                 };
             }
@@ -65,7 +67,10 @@ namespace WolvenKit.ViewModels.Documents
             });
         }
 
-        public RedBaseClass GetData() => (RedBaseClass)_data;
+        public IRedType GetData()
+        {
+            return _data;
+        }
 
         public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file) => Header = header;
 
