@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Reflection;
+using System.Xml;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.DDS;
@@ -29,7 +32,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTTextViewModel(Stream stream, RedDocumentViewModel file)
         {
-            Header = "Text";
+            Header = "Source YAML";
             File = file;
 
             SetupText(stream);
@@ -37,12 +40,27 @@ namespace WolvenKit.ViewModels.Documents
 
         private void SetupText(Stream stream)
         {
+            using (var xshdStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.YAML.xhsd"))
+            {
+                var xmlreader = XmlReader.Create(xshdStream);
+
+                var hlManager = HighlightingManager.Instance;
+                var hlXshdDef = HighlightingLoader.LoadXshd(xmlreader);
+                var hlDef = HighlightingLoader.Load(hlXshdDef, hlManager);
+
+                hlManager.RegisterHighlighting("yaml", new string[]
+                {
+                "yaml",
+                "yml",
+                "xl"
+                }, hlDef);
+            };
+
             using var sr = new StreamReader(stream);
             Document = new TextDocument(sr.ReadToEnd());
 
-            var hlManager = HighlightingManager.Instance;
             var ext = Path.GetExtension(FilePath);
-            var def = hlManager.GetDefinitionByExtension("yaml");
+            var def = HighlightingManager.Instance.GetDefinitionByExtension("yaml");
             if (def != null)
             {
                 HighlightingDefinition = def;
@@ -62,7 +80,7 @@ namespace WolvenKit.ViewModels.Documents
                 var serializer = new SerializerBuilder()
                     .WithTypeConverter(new TweakXLYamlTypeConverter())
                     .Build();
-                var file = serializer.Serialize(obj);
+                //var file = serializer.Serialize(obj);
 
                 // refresh
 

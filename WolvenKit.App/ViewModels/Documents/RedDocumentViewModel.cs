@@ -37,6 +37,7 @@ namespace WolvenKit.ViewModels.Documents
 
     public class RedDocumentViewModel : DocumentViewModel
     {
+        protected readonly HashSet<string> _embedHashSet;
         protected readonly ILoggerService _loggerService;
         protected readonly Red4ParserService _parser;
         protected readonly IHashService _hashService;
@@ -45,6 +46,12 @@ namespace WolvenKit.ViewModels.Documents
 
         public RedDocumentViewModel(string path) : base(path)
         {
+            _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "yaml",
+                "yml",
+                "xl"
+            };
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _parser = Locator.Current.GetService<Red4ParserService>();
             _hashService = Locator.Current.GetService<IHashService>();
@@ -56,7 +63,7 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
-            NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile);
+            NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile, CanExecuteNewEmbeddedFile);
 
             this.WhenAnyValue(x => x.SelectedTabItemViewModel)
                 .Subscribe(x => x?.OnSelected());
@@ -325,6 +332,7 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public ICommand NewEmbeddedFileCommand { get; private set; }
+        private bool CanExecuteNewEmbeddedFile() => !_embedHashSet.Contains(Extension);
         private void ExecuteNewEmbeddedFile()
         {
             var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
