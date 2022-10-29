@@ -22,7 +22,7 @@ namespace WolvenKit.Common.Model
 
         public IEnumerable<RedFileSystemModel> RedFileSystemModels => Directories.Values.OrderBy(x => x.Name);
 
-        public List<IGameFile> Files { get; } = new();
+        public ConcurrentQueue<IGameFile> Files { get; } = new();
 
         public string Extension => IsExpanded
             ? nameof(ECustomImageKeys.OpenDirImageKey)

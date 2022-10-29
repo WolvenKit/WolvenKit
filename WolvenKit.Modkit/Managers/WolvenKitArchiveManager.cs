@@ -77,7 +77,7 @@ namespace WolvenKit.Common.Model
                 var path = hashService.Get(file.Key);
                 if (path == null)
                 {
-                    RootNode.Files.Add(file.Value);
+                    RootNode.Files.Enqueue(file.Value);
                     return;
                 }
 
@@ -99,7 +99,7 @@ namespace WolvenKit.Common.Model
                     }
                     sb.Append(path[i]);
                 }
-                lastNode.Files.Add(file.Value);
+                lastNode.Files.Enqueue(file.Value);
             });
         }
 
@@ -132,7 +132,7 @@ namespace WolvenKit.Common.Model
                     }
 
                     // add file to the last directory in path
-                    currentNode.Files.Add(item.Value);
+                    currentNode.Files.Enqueue(item.Value);
                 }
                 //);
 
