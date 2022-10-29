@@ -168,17 +168,17 @@ namespace WolvenKit.Common
 
     public enum EConvertableFileFormat
     {
-        gltf,
-        glb,
-        x,
-        stp,
-        obj,
-        stl,
-        ply,
-        assbin,
-        assxml,
-        x3d,
-        fbx,
+        //gltf,
+        //glb,
+        //x,
+        //stp,
+        //obj,
+        //stl,
+        //ply,
+        //assbin,
+        //assxml,
+        //x3d,
+        //fbx,
 
     }
 
