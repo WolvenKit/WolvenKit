@@ -86,12 +86,18 @@ namespace WolvenKit.Common.Model
                 var sb = new StringBuilder();
                 for (var i = 0; i < path.Length; i++)
                 {
-                    sb.Append(path[i]);
                     if (path[i] == '\\')
                     {
                         var str = sb.ToString();
-                        lastNode = lastNode.Directories.GetOrAdd(str, new RedFileSystemModel(str));
+
+                        if (!lastNode.Directories.TryGetValue(str, out var tmpNode))
+                        {
+                            tmpNode = new RedFileSystemModel(str);
+                            lastNode.Directories.TryAdd(str, tmpNode);
+                        }
+                        lastNode = tmpNode;
                     }
+                    sb.Append(path[i]);
                 }
                 lastNode.Files.Add(file.Value);
             });
