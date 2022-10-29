@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -6,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
@@ -244,10 +246,10 @@ namespace WolvenKit.ViewModels.Tools
 
         private void Load(object sender, EventArgs eventArgs)
         {
-            var records = _tweakDB.GetRecords().Select(x => new TweakEntry(x, _tweakDB, true)).ToList();
-            var flats = _tweakDB.GetFlats().Select(x => new TweakEntry(x, _tweakDB)).ToList();
-            var queries = _tweakDB.GetQueries().Select(x => new TweakEntry(x, _tweakDB)).ToList();
-            var groupTags = _tweakDB.GetGroupTags().Select(x => new TweakEntry(x, _tweakDB)).ToList();
+            var records = PrepareList(_tweakDB.GetRecords(), true);
+            var flats = PrepareList(_tweakDB.GetFlats());
+            var queries = PrepareList(_tweakDB.GetQueries());
+            var groupTags = PrepareList(_tweakDB.GetGroupTags());
 
             var classes = new List<string> { "" };
             foreach (var record in records)
@@ -259,11 +261,9 @@ namespace WolvenKit.ViewModels.Tools
             }
             classes.Sort();
 
-
             _dispatcher.Invoke(() =>
             {
-                RecordTypes = classes.ToList();
-                RecordTypes.Sort();
+                RecordTypes = classes;
 
                 Records = CollectionViewSource.GetDefaultView(records);
                 Records.Filter = Filter;
@@ -280,8 +280,18 @@ namespace WolvenKit.ViewModels.Tools
                 Refresh();
 
                 LoadVisibility = Visibility.Collapsed;
-                _notificationService.Success($"Asset Browser is initialized");
+                _notificationService.Success($"Tweak Browser is initialized");
             });
+
+            List<TweakEntry> PrepareList(List<TweakDBID> tweaks, bool isRecord = false)
+            {
+                var tmpRecords = new ConcurrentQueue<TweakEntry>();
+                Parallel.ForEach(tweaks, record =>
+                {
+                    tmpRecords.Enqueue(new TweakEntry(record, _tweakDB, isRecord));
+                });
+                return tmpRecords.AsParallel().OrderBy(x => x.DisplayName).ToList();
+            }
         }
 
         private void Refresh()

@@ -79,19 +79,10 @@ namespace WolvenKit.RED4.TweakDB
             return _flatDictionary.ContainsKey(id);
         }
 
-        public List<TweakDBID> GetRecords(bool sortByName = false)
-        {
-            var list = _flatDictionary.Keys
+        public List<TweakDBID> GetRecords() =>
+            _flatDictionary.Keys
                 .Select(x => (TweakDBID)x)
                 .ToList();
-
-            if (sortByName)
-            {
-                list.Sort((a, b) => string.Compare(a.GetResolvedText(), b.GetResolvedText(), StringComparison.InvariantCulture));
-            }
-
-            return list;
-        }
 
         public IRedType GetValue(string name)
         {

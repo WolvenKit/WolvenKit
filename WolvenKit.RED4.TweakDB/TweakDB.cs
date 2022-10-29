@@ -88,10 +88,10 @@ namespace WolvenKit.RED4.TweakDB
             return null;
         }
 
-        public List<TweakDBID> GetRecords() => Records.GetRecords(true);
-        public List<TweakDBID> GetFlats() => Flats.GetRecords(true);
-        public List<TweakDBID> GetQueries() => Queries.GetRecords(true);
-        public List<TweakDBID> GetGroupTags() => GroupTags.GetRecords(true);
+        public List<TweakDBID> GetRecords() => Records.GetRecords();
+        public List<TweakDBID> GetFlats() => Flats.GetRecords();
+        public List<TweakDBID> GetQueries() => Queries.GetRecords();
+        public List<TweakDBID> GetGroupTags() => GroupTags.GetRecords();
 
         public Type GetRecordType(TweakDBID targetId)
         {
