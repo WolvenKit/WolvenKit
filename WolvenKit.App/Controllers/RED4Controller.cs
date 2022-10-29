@@ -424,7 +424,7 @@ namespace WolvenKit.Functionality.Controllers
 
         private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options)
         {
-            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
             if (modfiles.Any())
             {
                 _modTools.Pack(
@@ -437,7 +437,8 @@ namespace WolvenKit.Functionality.Controllers
         }
         private static bool PackTweakXlFiles(Cp77Project cp77Proj)
         {
-            var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.yaml", SearchOption.AllDirectories);
+            var tweakFiles = Directory.EnumerateFiles(cp77Proj.TweakDirectory, "*", SearchOption.AllDirectories)
+                .Where(file => file.EndsWith(".yaml") || file.EndsWith(".yml"));
             foreach (var f in tweakFiles)
             {
                 var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.TweakDirectory, f));
@@ -454,7 +455,7 @@ namespace WolvenKit.Functionality.Controllers
         }
         private static bool PackArchiveXlFiles(Cp77Project cp77Proj, LaunchProfile options)
         {
-            var archiveXlFiles = Directory.GetFiles(cp77Proj.ArchiveXLDirectory, "*.archive.xl", SearchOption.AllDirectories);
+            var archiveXlFiles = Directory.EnumerateFiles(cp77Proj.ArchiveXLDirectory, "*.archive.xl", SearchOption.AllDirectories);
             foreach (var f in archiveXlFiles)
             {
                 var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.ArchiveXLDirectory, f));

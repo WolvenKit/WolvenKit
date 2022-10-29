@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -27,10 +28,10 @@ namespace WolvenKit.Views.Documents
                     SetCurrentValue(ViewModelProperty, vm);
                 }
 
-                //this.Bind(ViewModel,
-                //       viewModel => viewModel.IsDirty,
-                //       view => view.textEditor.IsModified)
-                //   .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                       viewModel => viewModel.IsDirty,
+                       view => view.textEditor.IsModified)
+                   .DisposeWith(disposables);
                 //this.OneWayBind(ViewModel,
                 //        viewModel => viewModel.IsReadOnly,
                 //        view => view.textEditor.IsReadOnly)
@@ -43,6 +44,5 @@ namespace WolvenKit.Views.Documents
 
             });
         }
-
     }
 }

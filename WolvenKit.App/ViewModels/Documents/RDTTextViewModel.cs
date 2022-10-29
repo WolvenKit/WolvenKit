@@ -1,30 +1,22 @@
+using DynamicData.Binding;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.DDS;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Other;
-using WolvenKit.Interaction;
 using WolvenKit.Models;
-using WolvenKit.Modkit.RED4;
-using WolvenKit.Modkit.RED4.Serialization;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Serialization;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class RDTTextViewModel : RedDocumentTabViewModel
+    public class RDTTextViewModel : RedDocumentTabViewModel, INotifyPropertyChanged
     {
         protected readonly IRedType _data;
 
@@ -36,6 +28,13 @@ namespace WolvenKit.ViewModels.Documents
             File = file;
 
             SetupText(stream);
+
+            this.WhenAnyPropertyChanged(nameof(IsDirty))
+                .Do(x =>
+                {
+                    File.SetIsDirty(IsDirty);
+                })
+                .Subscribe();
         }
 
         private void SetupText(Stream stream)
@@ -93,5 +92,6 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public IHighlightingDefinition HighlightingDefinition { get; set; }
 
         public string GetText() => Document.Text;
+        [Reactive] public bool IsDirty { get; protected set; }
     }
 }

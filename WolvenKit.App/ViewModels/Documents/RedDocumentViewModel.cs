@@ -92,33 +92,40 @@ namespace WolvenKit.ViewModels.Documents
 
             using var fs = new FileStream(tmpPath, FileMode.Create, FileAccess.ReadWrite);
             var file = GetMainFile();
-            if (file.HasValue && Cr2wFile != null)
+
+            try
             {
-                try
+                if (file.Value is RDTTextViewModel textViewModel)
+                {
+                    using var tw = new StreamWriter(fs);
+                    var text = textViewModel.Document.Text;
+                    tw.Write(text);
+                }
+                else if (file.HasValue && Cr2wFile != null)
                 {
                     using var writer = new CR2WWriter(fs);
                     writer.WriteFile(Cr2wFile);
                 }
-                catch (Exception e)
-                {
-                    _loggerService.Error($"Error while saving {FilePath}");
-                    _loggerService.Error(e);
-
-                    fs.Dispose();
-                    File.Delete(tmpPath);
-
-                    return Task.CompletedTask;
-                }
-
-                if (File.Exists(FilePath))
-                {
-                    File.Delete(FilePath);
-                }
-                File.Move(tmpPath, FilePath);
-
-                SetIsDirty(false);
-                _loggerService.Success($"Saved file {FilePath}");
             }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Error while saving {FilePath}");
+                _loggerService.Error(e);
+
+                fs.Dispose();
+                File.Delete(tmpPath);
+
+                return Task.CompletedTask;
+            }
+
+            if (File.Exists(FilePath))
+            {
+                File.Delete(FilePath);
+            }
+            File.Move(tmpPath, FilePath);
+
+            SetIsDirty(false);
+            _loggerService.Success($"Saved file {FilePath}");
 
             return Task.CompletedTask;
         }
