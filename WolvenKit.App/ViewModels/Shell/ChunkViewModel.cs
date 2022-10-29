@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -62,6 +63,8 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public string Descriptor { get; private set; }
         [Reactive] public bool IsDefault { get; private set; }
         [Reactive] public bool IsReadOnly { get; set; }
+
+        private const BindingFlags s_defaultLookup = BindingFlags.Instance | BindingFlags.Public;
 
         #region Constructors
 
@@ -420,7 +423,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (sddb.Data is not null)
                 {
-                    var pis = sddb.Data.GetType().GetProperties();
+                    var pis = sddb.Data.GetType().GetProperties(s_defaultLookup);
                     foreach (var pi in pis)
                     {
                         var value = pi.GetValue(sddb.Data);
@@ -479,7 +482,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (db.Data is not null)
                 {
-                    var pis = db.Data.GetType().GetProperties();
+                    var pis = db.Data.GetType().GetProperties(s_defaultLookup);
                     foreach (var pi in pis)
                     {
                         var value = pi.GetValue(db.Data);
@@ -518,7 +521,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    var pis = Data.GetType().GetProperties();
+                    var pis = Data.GetType().GetProperties(s_defaultLookup);
                     foreach (var pi in pis)
                     {
                         var value = Data is not null ? pi.GetValue(Data) : null;
@@ -824,7 +827,7 @@ namespace WolvenKit.ViewModels.Shell
                         }
                         else if (sddb.Data is not null)
                         {
-                            count += sddb.Data.GetType().GetProperties().Count();
+                            count += sddb.Data.GetType().GetProperties(s_defaultLookup).Count();
                         }
                     }
                     else if (ResolvedData is SharedDataBuffer sdb)
@@ -878,7 +881,7 @@ namespace WolvenKit.ViewModels.Shell
                         }
                         else
                         {
-                            var pis = Data.GetType().GetProperties();
+                            var pis = Data.GetType().GetProperties(s_defaultLookup);
                             count += pis.Count();
                         }
                         if (Data is worldNodeData)
