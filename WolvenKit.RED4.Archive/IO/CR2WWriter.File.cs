@@ -404,11 +404,20 @@ namespace WolvenKit.RED4.Archive.IO
                 throw new TodoException();
             }
 
-            var compBuf = buffer.GetCompressedBytes();
+            var isInplaceCompressedBuffer =
+                buffer.ParentTypes.First() is "animAnimationBufferCompressed.inplaceCompressedBuffer"
+                    or "animAnimationBufferSimd.inplaceCompressedBuffer";
+
+            var compBuf = buffer.GetCompressedBytes(isInplaceCompressedBuffer);
             writer.Write(compBuf);
 
             result.diskSize = (uint)compBuf.Length;
             result.crc32 = Crc32Algorithm.Compute(compBuf);
+
+            if (isInplaceCompressedBuffer)
+            {
+                result.memSize = result.diskSize;
+            }
 
             return result;
         }
