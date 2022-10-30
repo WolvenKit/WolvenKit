@@ -1158,6 +1158,9 @@ namespace WolvenKit.ViewModels.Shell
                 case EWolvenKitFile.TweakXl:
                     fileViewModel = new TweakXLDocumentViewModel(fullPath);
                     break;
+                case EWolvenKitFile.WScript:
+                    fileViewModel = new WScriptDocumentViewModel(fullPath);
+                    break;
                 default:
                     break;
             }
@@ -1336,6 +1339,13 @@ namespace WolvenKit.ViewModels.Shell
                 if (isTweakFile)
                 {
                     type = EWolvenKitFile.TweakXl;
+                    isRedEngineFile = true;
+                }
+
+                var isWScriptFile = Enum.GetNames<EWScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+                if (isWScriptFile)
+                {
+                    type = EWolvenKitFile.WScript;
                     isRedEngineFile = true;
                 }
 

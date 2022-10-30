@@ -22,7 +22,8 @@ namespace WolvenKit.Common
     {
         Cr2w,
         TweakXl,
-        ArchiveXl
+        ArchiveXl,
+        WScript
     }
 
     public enum ERedScriptExtension
@@ -35,6 +36,11 @@ namespace WolvenKit.Common
     public enum ETweakExtension
     {
         yaml
+    }
+
+    public enum EWScriptExtension
+    {
+        wsc
     }
 
     public enum EUpdateChannel
