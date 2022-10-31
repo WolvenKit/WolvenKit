@@ -27,17 +27,6 @@ public class WKitScripting
         _redParserService = Locator.Current.GetService<Red4ParserService>();
     }
 
-    public void Info(object data)
-    {
-        _loggerService.Info(data.ToString());
-    }
-
-
-    public void Error(object data)
-    {
-        _loggerService.Error(data.ToString());
-    }
-
     [Description("GetFileFromBase")]
     public virtual IGameFile GetFileFromBase(string path)
     {

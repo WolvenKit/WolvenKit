@@ -33,6 +33,7 @@ public class ScriptService
                 engine.DocumentSettings.SearchPath = searchPath;
             }
 
+            engine.AddHostObject("logger", _loggerService);
             foreach (var kvp in hostObjects)
             {
                 engine.AddHostObject(kvp.Key, kvp.Value);
