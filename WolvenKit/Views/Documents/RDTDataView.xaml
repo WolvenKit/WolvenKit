@@ -10,13 +10,15 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:nodify="https://miroiu.github.io/nodify"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
     xmlns:treeViewEngine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
-    xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types"
+    xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types" 
+    xmlns:app="clr-namespace:WolvenKit.App;assembly=WolvenKit.App"
     Margin="0"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTDataViewModel}}"
     d:DesignHeight="450"
@@ -55,6 +57,12 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
         <tools:RedTreeView
             x:Name="RedTreeView"
             Grid.Column="0"
@@ -70,6 +78,256 @@
         <!--
             ViewModel="{Binding}"
         -->
+
+        <!-- ENABLE_NODE_EDITOR -->
+        <!--  Grid Splitter  -->
+
+        <GridSplitter
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            Height="5"
+            HorizontalAlignment="Stretch"
+            Background="{StaticResource BorderAlt}" />
+
+        <!--
+            Offset="{Binding Location}"
+            Connections="{Binding Connections}"
+            FooterTemplate="{StaticResource FooterTemplate}"
+            <editors:AutomaticNodifyEditor.Style>
+                <Style BasedOn="{StaticResource {x:Type editors:AutomaticNodifyEditor}}" TargetType="{x:Type editors:AutomaticNodifyEditor}">
+                    <Setter Property="ConnectionTemplate" Value="{StaticResource ConnectionTemplate}" />
+                </Style>
+            </editors:AutomaticNodifyEditor.Style>
+                    Style="{StaticResource ConnectionStyle}"
+                    Target="{Binding Input.Anchor}"
+                    Source="{Binding Output.Anchor}"
+        -->
+        
+        <editors:AutomaticNodifyEditor
+            x:Name="Editor"
+            Grid.Row="2"
+            Grid.ColumnSpan="3"
+            Background="{StaticResource ContentBackground}"
+            Connections="{Binding References}"
+            DisplayConnectionsOnTop="True"
+            EnableRealtimeSelection="True"
+            
+            ItemsSource="{Binding Nodes}">
+            
+            <editors:AutomaticNodifyEditor.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Click="AutolayoutNodes_MenuItem" Header="Rearrange Nodes" />
+                </ContextMenu>
+            </editors:AutomaticNodifyEditor.ContextMenu>
+            
+            <editors:AutomaticNodifyEditor.ConnectionTemplate>
+                <DataTemplate>
+                    <nodify:Connection
+                        Direction="Forward"
+                        OffsetMode="Edge"
+                        Source="{Binding Source.Anchor}"
+                        SourceOffset="12,0"
+                        Target="{Binding Destination.Anchor}"
+                        TargetOffset="12,0">
+                        <nodify:Connection.Style>
+                            <Style TargetType="{x:Type nodify:BaseConnection}">
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="ToolTip" Value="Double click to split" />
+                                <Setter Property="Stroke" Value="#33FFFFFF" />
+                                <Setter Property="StrokeThickness" Value="2" />
+                                <!--Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding Input.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Output.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" />
+                                    </DataTrigger>
+                                </Style.Triggers--> 
+                            </Style>
+                        </nodify:Connection.Style>
+                    </nodify:Connection>
+                </DataTemplate>
+            </editors:AutomaticNodifyEditor.ConnectionTemplate>
+            
+            <editors:AutomaticNodifyEditor.Resources>
+                <Style BasedOn="{StaticResource {x:Type nodify:Connector}}" TargetType="{x:Type nodify:Connector}">
+                    <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
+                    <Setter Property="IsConnected" Value="{Binding IsConnected}" />
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type nodify:NodeInput}}" TargetType="{x:Type nodify:NodeInput}">
+                    <Setter Property="Header" Value="" />
+                    <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
+                    <Setter Property="IsConnected" Value="{Binding IsConnected}" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
+                </Style>
+                <Style BasedOn="{StaticResource {x:Type nodify:NodeOutput}}" TargetType="{x:Type nodify:NodeOutput}">
+                    <Setter Property="Header" Value="{Binding Property}" />
+                    <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
+                    <Setter Property="IsConnected" Value="{Binding IsConnected}" />
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
+                    <Setter Property="ToolTip" Value="{Binding Type}" />
+                </Style>
+                <DataTemplate x:Key="DetailedHeaderTemplate">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Margin="0" Text="{Binding Name}" />
+                        <ItemsControl ItemsSource="{Binding Properties}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel MaxWidth="200" Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="0,0,4,0"
+                                            Foreground="#999999"
+                                            Text="{Binding Name}"
+                                            TextTrimming="CharacterEllipsis"
+                                            ToolTip="{Binding Name}" />
+                                        <TextBlock
+                                            HorizontalAlignment="Right"
+                                            Text="{Binding Value}"
+                                            TextAlignment="Right"
+                                            TextTrimming="CharacterEllipsis"
+                                            ToolTip="{Binding Value}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
+                    <nodify:Node
+                        Footer="{Binding}"
+                        Header="{Binding}"
+                        Input="{Binding Inputs}"
+                        Output="{Binding Outputs}">
+                        <nodify:Node.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding RelativePath}" />
+                                    <Button
+                                        Grid.Column="2"
+                                        Margin="5,0,0,0"
+                                        Background="Transparent"
+                                        Command="{Binding OpenSelfCommand}"
+                                        Style="{StaticResource ButtonCustom}"
+                                        ToolTip="Open in new tab">
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <!--
+                                                TextBlock
+                                                Margin="0,0,3,0"
+                                                Foreground="{StaticResource WolvenKitCyan}"
+                                                Text="Open File" /
+                                            -->
+
+                                            <iconPacks:PackIconVaadinIcons
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource WolvenKitCyan}"
+                                                Kind="ArrowCircleUp"
+                                                RotationAngle="45" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </nodify:Node.HeaderTemplate>
+                        <nodify:Node.FooterTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="5,4,0,4"
+                                        Foreground="{StaticResource WolvenKitTan}"
+                                        Text="{Binding Type}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </nodify:Node.FooterTemplate>
+                    </nodify:Node>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type documents:CNameWrapper}">
+                    <nodify:Node
+                        Footer="{Binding}"
+                        Header="{Binding}"
+                        Input="{Binding Inputs}">
+                        <nodify:Node.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding CName}" />
+                                    <Button
+                                        Grid.Column="2"
+                                        Margin="5,0,0,0"
+                                        Background="Transparent"
+                                        Command="{Binding OpenRefCommand}"
+                                        Style="{StaticResource ButtonCustom}"
+                                        ToolTip="Open in new tab">
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <!--
+                                                TextBlock
+                                                Margin="0,0,3,0"
+                                                Foreground="{StaticResource WolvenKitCyan}"
+                                                Text="Open File" /
+                                            -->
+
+                                            <iconPacks:PackIconVaadinIcons
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource WolvenKitCyan}"
+                                                Kind="ArrowCircleUp"
+                                                RotationAngle="45" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </nodify:Node.HeaderTemplate>
+                        <nodify:Node.FooterTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <Button
+                                        Grid.Column="2"
+                                        Margin="0,2,5,2"
+                                        Background="Transparent"
+                                        Command="{Binding LoadRefCommand}"
+                                        Style="{StaticResource ButtonCustom}"
+                                        ToolTip="Load References">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock
+                                                Margin="0,0,3,0"
+                                                Foreground="{StaticResource WolvenKitYellow}"
+                                                Text="Load References" />
+                                            <iconPacks:PackIconVaadinIcons
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource WolvenKitYellow}"
+                                                Kind="ArrowCircleRight" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </nodify:Node.FooterTemplate>
+                    </nodify:Node>
+                </DataTemplate>
+            </editors:AutomaticNodifyEditor.Resources>
+            
+            <editors:AutomaticNodifyEditor.ItemContainerStyle>
+                <Style BasedOn="{StaticResource {x:Type nodify:ItemContainer}}" TargetType="{x:Type nodify:ItemContainer}">
+                    <Setter Property="Location" Value="{Binding Location}" />
+
+                    <!--  Setter Property="IsSelected" Value="{Binding IsSelected}" /  -->
+
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <SolidColorBrush Opacity="0.5" Color="Black" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitCyan}" />
+                </Style>
+            </editors:AutomaticNodifyEditor.ItemContainerStyle>
+            
+        </editors:AutomaticNodifyEditor>
 
     </Grid>
 

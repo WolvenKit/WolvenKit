@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64</Platforms>
     <TargetFramework>net6.0-windows</TargetFramework>
@@ -35,6 +35,8 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="Nodify" Version="4.1.0" />
+    <PackageReference Include="ScottPlot.WPF" Version="4.1.33" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
     <PackageReference Include="protobuf-net" Version="3.1.17" />
@@ -118,6 +120,9 @@
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="DockStatesDefault.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1589,6 +1594,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.json" />
     <None Remove="Assimp32.dll" />
     <None Remove="Assimp64.dll" />
     <None Remove="AssimpNet.dll" />

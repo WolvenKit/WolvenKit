@@ -6,10 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData.Kernel;
+using Microsoft.Extensions.Options;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -41,6 +43,9 @@ namespace WolvenKit.ViewModels.Documents
         protected readonly Red4ParserService _parser;
         protected readonly IHashService _hashService;
         protected readonly IProjectManager _projectManager;
+        protected readonly IOptions<Globals> _globals;
+
+
         public CR2WFile Cr2wFile;
 
         public RedDocumentViewModel(string path) : base(path)
@@ -49,6 +54,8 @@ namespace WolvenKit.ViewModels.Documents
             _parser = Locator.Current.GetService<Red4ParserService>();
             _hashService = Locator.Current.GetService<IHashService>();
             _projectManager = Locator.Current.GetService<IProjectManager>();
+            _globals = Locator.Current.GetService<IOptions<Globals>>();
+
             if (_projectManager.ActiveProject != null)
             {
                 // assume files that don't exist are relative paths
@@ -255,7 +262,17 @@ namespace WolvenKit.ViewModels.Documents
             }
             if (cls is graphGraphResource ggr)
             {
-                TabItemViewModels.Add(new RDTGraphViewModel(ggr, this));
+                if (_globals.Value.ENABLE_NODE_EDITOR)
+                {
+                    TabItemViewModels.Add(new RDTGraphViewModel(ggr, this));
+                }
+            }
+            if (cls is scnSceneResource ssr)
+            {
+                if (_globals.Value.ENABLE_NODE_EDITOR)
+                {
+                    TabItemViewModels.Add(new RDTGraphViewModel(ssr, this));
+                }
             }
         }
 
