@@ -456,11 +456,14 @@
             </syncfusion:DockingManager.HeaderTemplate>
         </syncfusion:DockingManager>
 
-        <ScrollViewer HorizontalAlignment="Right" VerticalScrollBarVisibility="Hidden">
+        <hc:ScrollViewer
+            HorizontalAlignment="Right"
+            IsPenetrating="True"
+            VerticalScrollBarVisibility="Hidden">
             <StackPanel
                 Margin="0,10,10,10"
                 VerticalAlignment="Bottom"
                 hc:Growl.GrowlParent="True" />
-        </ScrollViewer>
+        </hc:ScrollViewer>
     </Grid>
 </UserControl>
