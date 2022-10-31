@@ -125,6 +125,17 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
+        public static string GetWScriptDir()
+        {
+            var dir = Path.Combine(GetAppData(), "WScript");
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            return dir;
+        }
+
 
         Color GetThemeAccent();
 

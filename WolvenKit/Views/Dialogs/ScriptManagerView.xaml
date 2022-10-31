@@ -1,0 +1,96 @@
+﻿<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.Dialogs.ScriptManagerView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    d:DataContext="{d:DesignInstance Type=dialogs:ScriptManagerViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:TypeArguments="dialogs:ScriptManagerViewModel"
+    Background="{StaticResource ContentBackgroundAlt3}"
+    mc:Ignorable="d">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0">
+            <Button
+                x:Name="CloseButton"
+                Margin="0,0,0,10"
+                HorizontalAlignment="Right">
+                <iconPacks:PackIconMaterial
+                    Width="17"
+                    Height="13"
+                    Foreground="Gray"
+                    Kind="Close" />
+            </Button>
+        </DockPanel>
+
+        <ListView
+            x:Name="ScriptsListView"
+            Grid.Row="1"
+            MinHeight="450"
+            Background="{StaticResource ContentBackgroundAlt2}">
+            <ListView.Resources>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_OnDoubleClick" />
+                </Style>
+            </ListView.Resources>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel Width="250">
+                        <TextBlock
+                            Margin="2,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="{Binding}" />
+                        <Button
+                            HorizontalAlignment="Right"
+                            Background="Transparent"
+                            BorderBrush="Transparent">
+                            <iconPacks:PackIconMaterial
+                                Width="17"
+                                Height="13"
+                                Padding="1"
+                                Foreground="Red"
+                                Kind="Delete" />
+                        </Button>
+                    </DockPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Border
+            Grid.Row="2"
+            Width="250"
+            Margin="5">
+            <hc:TextBox
+                x:Name="FileNameTextBox"
+                hc:InfoElement.Title="Name: "
+                hc:InfoElement.TitlePlacement="Left"
+                FlowDirection="LeftToRight" />
+        </Border>
+
+        <DockPanel Grid.Row="3" Width="250">
+            <Button
+                x:Name="AddButton"
+                Width="100"
+                Content="Add" />
+            <Button
+                x:Name="DeleteButton"
+                Width="100"
+                HorizontalAlignment="Right"
+                Content="Delete" />
+        </DockPanel>
+
+    </Grid>
+</reactiveUi:ReactiveUserControl>

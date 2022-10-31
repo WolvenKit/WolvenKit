@@ -1,6 +1,9 @@
 ﻿using Microsoft.ClearScript.V8;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Reflection;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.Scripting;
@@ -18,6 +21,9 @@ public class ScriptService
 
     public void Execute(string code, Dictionary<string, object> hostObjects)
     {
+        var sw = new Stopwatch();
+        sw.Start();
+
         using (var engine = new V8ScriptEngine())
         {
             foreach (var kvp in hostObjects)
@@ -29,10 +35,13 @@ public class ScriptService
             {
                 engine.Execute(code);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _loggerService.Error("Fatal error while executing script");
+                _loggerService.Error(ex);
             }
         }
+
+        sw.Stop();
+        _loggerService.Info($"Execution time: {sw.Elapsed}");
     }
 }

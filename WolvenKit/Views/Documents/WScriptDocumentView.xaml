@@ -48,11 +48,11 @@
             x:Name="ScriptTextEditor"
             Grid.Row="1"
             Margin="0"
-            Background="{StaticResource ContentBackground}"
+            Background="White"
             Document="{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             FontFamily="Consolas"
             FontSize="10pt"
-            Foreground="{StaticResource ContentForeground}"
+            Foreground="Black"
             ShowLineNumbers="True"
             SyntaxHighlighting="JavaScript" />
 

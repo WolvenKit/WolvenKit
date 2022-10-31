@@ -40,7 +40,7 @@ namespace WolvenKit.Common
 
     public enum EWScriptExtension
     {
-        wsc
+        wscript
     }
 
     public enum EUpdateChannel
