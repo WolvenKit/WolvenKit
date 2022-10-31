@@ -48,23 +48,10 @@
             </ListView.Resources>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <DockPanel Width="250">
-                        <TextBlock
-                            Margin="2,0,0,0"
-                            VerticalAlignment="Center"
-                            Text="{Binding}" />
-                        <Button
-                            HorizontalAlignment="Right"
-                            Background="Transparent"
-                            BorderBrush="Transparent">
-                            <iconPacks:PackIconMaterial
-                                Width="17"
-                                Height="13"
-                                Padding="1"
-                                Foreground="Red"
-                                Kind="Delete" />
-                        </Button>
-                    </DockPanel>
+                    <TextBlock
+                        Margin="2,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="{Binding}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

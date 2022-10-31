@@ -80,7 +80,7 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
             return;
         }
 
-        File.Create(Path.Combine(ISettingsManager.GetWScriptDir(), FileName));
+        File.Create(Path.Combine(ISettingsManager.GetWScriptDir(), FileName)).Close();
         Scripts.Add(FileName);
     }
 
