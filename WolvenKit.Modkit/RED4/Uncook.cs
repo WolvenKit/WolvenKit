@@ -561,7 +561,6 @@ namespace WolvenKit.Modkit.RED4
         private static bool HandleOpus(OpusExportArgs opusExportArgs)
         {
             OpusTools opusTools = new(
-                opusExportArgs.SoundbanksArchive,
                 opusExportArgs.ModFolderPath,
                 opusExportArgs.RawFolderPath,
                 opusExportArgs.UseMod);

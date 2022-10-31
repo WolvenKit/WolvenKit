@@ -526,15 +526,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             var proj = _projectManager.ActiveProject;
 
-            if (_gameController.GetController() is RED4Controller cp77Controller)
-            {
-                opusExportArgs.SoundbanksArchive = _archiveManager.Archives.Items
-                    .Cast<Archive>()
-                    .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
-            }
-
             OpusTools opusTools = new(
-                opusExportArgs.SoundbanksArchive,
                 proj.ModDirectory,
                 proj.RawDirectory,
                 opusExportArgs.UseMod);
@@ -710,12 +702,7 @@ namespace WolvenKit.ViewModels.Tools
             var proj = _projectManager.ActiveProject;
             if (_gameController.GetController() is RED4Controller cp77Controller)
             {
-                var soundbanksArchive = _archiveManager.Archives.Items
-                    .Cast<Archive>()
-                    .FirstOrDefault(_ => _.Name.Equals($"{EVanillaArchives.audio_2_soundbanks}.archive"));
-
                 OpusTools opusTools = new(
-                    soundbanksArchive,
                     proj.ModDirectory,
                     proj.RawDirectory,
                     true);
@@ -810,13 +797,6 @@ namespace WolvenKit.ViewModels.Tools
                 }
                 if (item.Properties is OpusExportArgs opusExportArgs)
                 {
-                    if (_gameController.GetController() is RED4Controller cp77Controller)
-                    {
-                        opusExportArgs.SoundbanksArchive = _archiveManager.Archives.Items
-                            .Cast<Archive>()
-                            .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
-                    }
-
                     opusExportArgs.RawFolderPath = proj.RawDirectory;
                     opusExportArgs.ModFolderPath = proj.ModDirectory;
                 }

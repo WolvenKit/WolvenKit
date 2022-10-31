@@ -31,9 +31,6 @@ namespace WolvenKit.Common.Model.Arguments
         public List<uint> SelectedForExport { get; set; } = new();
 
         [Browsable(false)]
-        public ICyberGameArchive SoundbanksArchive { get; set; }
-
-        [Browsable(false)]
         public string ModFolderPath { get; set; }
 
         [Browsable(false)]

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Splat;
+using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
@@ -18,9 +20,16 @@ namespace WolvenKit.Modkit.RED4.Opus
         public OpusInfo Info { get; set; }
         private readonly bool _isModded;
 
-        public OpusTools(ICyberGameArchive soundbanks, string modFolder, string rawFolder, bool useMod = false) //audio_2_soundbanks.archive
+        public OpusTools(string modFolder, string rawFolder, bool useMod = false) //audio_2_soundbanks.archive
         {
-            _soundBanks = soundbanks;
+            var archiveManager = Locator.Current.GetService<IArchiveManager>();
+            if (archiveManager != null)
+            {
+                _soundBanks = archiveManager.Archives.Items
+                    .Cast<Archive>()
+                    .FirstOrDefault(_ => _.Name.Equals($"{EVanillaArchives.audio_2_soundbanks}.archive"));
+            }
+
             _modFolder = new DirectoryInfo(modFolder);
             _rawFolder = new DirectoryInfo(rawFolder);
             _isModded = useMod;
