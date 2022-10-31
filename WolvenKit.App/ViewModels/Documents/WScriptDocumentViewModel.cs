@@ -108,6 +108,8 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         using var bw = new StreamWriter(fs);
         bw.Write(Document.Text);
 
+        SetIsDirty(false);
+
         return Task.CompletedTask;
     }
 

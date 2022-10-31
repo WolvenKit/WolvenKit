@@ -37,6 +37,7 @@ public partial class WScriptDocumentView
 
     private void ScriptTextEditor_TextArea_TextEntered(object sender, TextCompositionEventArgs e)
     {
+        ViewModel.SetIsDirty(true);
         if (e.Text == ".")
         {
             ShowCompletionWindow();
