@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Nodify;
+using System.Windows.Input;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
-using WolvenKit.Functionality.Interfaces;
-using System.Windows.Input;
 using Microsoft.Msagl.Layout.MDS;
+using Nodify;
+using WolvenKit.Functionality.Interfaces;
 
 namespace WolvenKit.Views.Editors
 {
@@ -40,6 +40,10 @@ namespace WolvenKit.Views.Editors
                 {
                     if (ic.DataContext is INode nvm)
                     {
+                        // TODO miroiu You can bind to the ActualSize of the ItemContainer in v2.0.0 and move the layout logic into the view model.
+                        // Here's an example of properties that you can bind to the editor if you need more control over it.
+                        // And there are also some useful methods exposed. https://github.com/miroiu/nodify/blob/feature/new-blueprint/Nodifier/Graph/Graph.Editor.cs
+
                         // without UpdateLayout(), these were 0, so backups were needed
                         var width = ic.ActualWidth != 0 ? ic.ActualWidth : 300;
                         var height = ic.ActualHeight != 0 ? ic.ActualHeight : 40;
@@ -109,8 +113,9 @@ namespace WolvenKit.Views.Editors
                     }
                 }
 
+                // TODO check if this is needed
                 // center to 0,0 since we're subtracting the graph's center from each location
-                BringIntoView(new Point(0, 0));
+                //BringIntoView(new Point(0, 0));
                 return true;
             }
             catch (InvalidOperationException)

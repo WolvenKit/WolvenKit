@@ -25,12 +25,8 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
+            // TODO miroiu There's a SplitCommand and DisconnectCommand on the connection that you can bind to in v2.0.0.
             EventManager.RegisterClassHandler(typeof(BaseConnection), MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnConnectionInteraction));
-
-            this.WhenActivated(disposables =>
-            {
-                //Editor.LayoutNodes();
-            });
         }
 
         private void OnConnectionInteraction(object sender, MouseButtonEventArgs e)

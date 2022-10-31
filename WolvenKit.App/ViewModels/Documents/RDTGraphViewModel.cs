@@ -298,6 +298,7 @@ namespace WolvenKit.ViewModels.Documents
             };
         }
 
+        // TODO miroiu You could bind to the ActualSize of the ItemContainer if that's what you need here.
         public virtual Size GetSize()
         {
             var size = new Size(200, 0);
