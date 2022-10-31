@@ -2593,7 +2593,7 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public System.Windows.Point Location { get; set; }
 
         public ICommand OpenSelfCommand { get; private set; }
-        private bool CanOpenSelf() => RelativePath != null && _tab == null;
+        private bool CanOpenSelf() => RelativePath != CName.Empty && _tab == null;
         private void ExecuteOpenSelf() => Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
     }
 }

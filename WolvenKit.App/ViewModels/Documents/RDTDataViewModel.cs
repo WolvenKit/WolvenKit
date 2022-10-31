@@ -58,11 +58,11 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public ICommand OpenRefCommand { get; private set; }
-        private bool CanOpenRef() => CName != null && DataViewModel.File.RelativePath != CName;
+        private bool CanOpenRef() => CName != CName.Empty && DataViewModel.File.RelativePath != CName;
         private void ExecuteOpenRef() => Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(CName);
 
         public ICommand LoadRefCommand { get; private set; }
-        private bool CanLoadRef() => CName != null;
+        private bool CanLoadRef() => CName != CName.Empty;
         private void ExecuteLoadRef()
         {
             var cr2w = DataViewModel.File.GetFileFromDepotPathOrCache(CName);
@@ -321,7 +321,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (!_nodePaths.Contains(reference.Destination.File))
                 {
-                    if (reference.Destination.File != null)
+                    if (reference.Destination.File != CName.Empty)
                     {
                         Nodes.Add(new CNameWrapper(this, reference.Destination));
                         _nodePaths.Add(reference.Destination.File);

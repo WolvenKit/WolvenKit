@@ -475,7 +475,7 @@ namespace WolvenKit.ViewModels.Documents
             foreach (var component in chunks)
             {
                 var scale = new Vector3() { X = 1, Y = 1, Z = 1 };
-                CName depotPath = null;
+                var depotPath = CName.Empty;
                 var enabled = true;
                 var meshApp = "default";
                 var chunkMask = 18446744073709551615;
@@ -505,7 +505,7 @@ namespace WolvenKit.ViewModels.Documents
                     }
                 }
 
-                if (component is entIPlacedComponent epc && depotPath != null && depotPath.GetRedHash() != 0)
+                if (component is entIPlacedComponent epc && depotPath != CName.Empty && depotPath.GetRedHash() != 0)
                 {
                     var meshFile = File.GetFileFromDepotPathOrCache(depotPath);
 

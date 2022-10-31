@@ -405,6 +405,7 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             var isInplaceCompressedBuffer =
+                buffer.ParentTypes.Count > 0 &&
                 buffer.ParentTypes.First() is "animAnimationBufferCompressed.inplaceCompressedBuffer"
                     or "animAnimationBufferSimd.inplaceCompressedBuffer";
 
