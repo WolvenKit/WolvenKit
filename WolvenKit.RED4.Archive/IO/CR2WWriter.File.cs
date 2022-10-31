@@ -204,77 +204,82 @@ namespace WolvenKit.RED4.Archive.IO
             BaseStream.WriteStruct(fileHeader);
             BaseStream.WriteStructs(tableHeaders);
 
-            //for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
-            //{
-            //    var newInfo = dataCollection.ChunkInfoList[i];
-            //    var oldInfo = _file.Info.ExportInfo[i];
-            //
-            //    if ((newInfo.dataOffset + afterHeaderPosition) != oldInfo.dataOffset)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.dataSize != oldInfo.dataSize)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.parentID != oldInfo.parentID)
-            //    {
-            //        throw new TodoException("Invalid parent id");
-            //    }
-            //
-            //    if (newInfo.className != oldInfo.className)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.objectFlags != oldInfo.objectFlags)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.template != oldInfo.template)
-            //    {
-            //
-            //    }
-            //}
-            //
-            //for (int i = 0; i < dataCollection.BufferInfoList.Count; i++)
-            //{
-            //    var newInfo = dataCollection.BufferInfoList[i];
-            //    var oldInfo = _file.Info.BufferInfo[i];
-            //
-            //    if (newInfo.index != oldInfo.index)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.crc32 != oldInfo.crc32)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.diskSize != oldInfo.diskSize)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.flags != oldInfo.flags)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.memSize != oldInfo.memSize)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.offset != oldInfo.offset)
-            //    {
-            //
-            //    }
-            //}
+            // CheckData(dataCollection, afterHeaderPosition);
+        }
+
+        private void CheckData(DataCollection dataCollection, int afterHeaderPosition)
+        {
+            for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
+            {
+                var newInfo = dataCollection.ChunkInfoList[i];
+                var oldInfo = _file.Info.ExportInfo[i];
+
+                if ((newInfo.dataOffset + afterHeaderPosition) != oldInfo.dataOffset)
+                {
+
+                }
+
+                if (newInfo.dataSize != oldInfo.dataSize)
+                {
+
+                }
+
+                if (newInfo.parentID != oldInfo.parentID)
+                {
+                    throw new TodoException("Invalid parent id");
+                }
+
+                if (newInfo.className != oldInfo.className)
+                {
+
+                }
+
+                if (newInfo.objectFlags != oldInfo.objectFlags)
+                {
+
+                }
+
+                if (newInfo.template != oldInfo.template)
+                {
+
+                }
+            }
+
+            for (int i = 0; i < dataCollection.BufferInfoList.Count; i++)
+            {
+                var newInfo = dataCollection.BufferInfoList[i];
+                var oldInfo = _file.Info.BufferInfo[i];
+
+                if (newInfo.index != oldInfo.index)
+                {
+
+                }
+
+                if (newInfo.crc32 != oldInfo.crc32)
+                {
+
+                }
+
+                if (newInfo.diskSize != oldInfo.diskSize)
+                {
+
+                }
+
+                if (newInfo.flags != oldInfo.flags)
+                {
+
+                }
+
+                if (newInfo.memSize != oldInfo.memSize)
+                {
+
+                }
+
+                if (newInfo.offset != oldInfo.offset)
+                {
+
+                }
+            }
         }
 
         #region Write Sections
@@ -286,9 +291,39 @@ namespace WolvenKit.RED4.Archive.IO
             if (buffer.Data is RedPackage p4)
             {
                 using var ms = new MemoryStream();
-                using var packageWriter = new RedPackageWriter(ms) { IsRoot = false };
+                if (buffer.Parent is appearanceAppearanceDefinition aad)
+                {
+                    using var packageWriter = new appearanceAppearanceDefinitionWriter(ms) { IsRoot = false };
+                    packageWriter.Settings.ImportsAsHash = true;
 
-                packageWriter.WritePackage(p4);
+                    packageWriter.WritePackage(aad, p4);
+                }
+                else if (buffer.Parent is entEntityTemplate eet)
+                {
+                    using var packageWriter = new entEntityTemplateWriter(ms) { IsRoot = false };
+
+                    if (_file.RootChunk.GetType() == typeof(appearanceAppearanceResource))
+                    {
+                        packageWriter.Settings.ImportsAsHash = true;
+                    }
+
+                    packageWriter.WritePackage(eet, p4);
+                }
+                else
+                {
+                    using var packageWriter = new RedPackageWriter(ms) { IsRoot = false };
+
+                    if (_file.RootChunk.GetType() == typeof(gamePersistentStateDataResource))
+                    {
+                        packageWriter.Settings.RedPackageType = RedPackageType.SaveResource;
+                    }
+                    else if (_file.RootChunk.GetType() == typeof(inkWidgetLibraryResource))
+                    {
+                        packageWriter.Settings.RedPackageType = RedPackageType.InkLibResource;
+                    }
+
+                    packageWriter.WritePackage(p4);
+                }
 
                 buffer.SetBytes(ms.ToArray());
             }
@@ -298,7 +333,7 @@ namespace WolvenKit.RED4.Archive.IO
                 using var ms = new MemoryStream();
                 using var listWriter = new CR2WListWriter(ms);
 
-                listWriter.WriteList(list, _file.RootChunk);
+                listWriter.WriteList(list, buffer.Parent);
                 //listWriter.WriteList(list);
 
                 var newData = ms.ToArray();
@@ -312,6 +347,30 @@ namespace WolvenKit.RED4.Archive.IO
                 using var transformWriter = new worldNodeDataWriter(ms);
 
                 transformWriter.WriteBuffer(ssb);
+
+                var newData = ms.ToArray();
+
+                buffer.SetBytes(newData);
+            }
+
+            if (buffer.Data is CollisionBuffer cb)
+            {
+                using var ms = new MemoryStream();
+                using var collisionWriter = new CollisionWriter(ms);
+
+                collisionWriter.WriteBuffer(cb, (worldCollisionNode)buffer.Parent);
+
+                var newData = ms.ToArray();
+
+                buffer.SetBytes(newData);
+            }
+
+            if (buffer.Data is CookedInstanceTransformsBuffer citb)
+            {
+                using var ms = new MemoryStream();
+                using var cookedInstanceTransformsWriter = new CookedInstanceTransformsWriter(ms);
+
+                cookedInstanceTransformsWriter.WriteBuffer(citb);
 
                 var newData = ms.ToArray();
 
@@ -345,11 +404,20 @@ namespace WolvenKit.RED4.Archive.IO
                 throw new TodoException();
             }
 
-            var compBuf = buffer.GetCompressedBytes();
+            var isInplaceCompressedBuffer =
+                buffer.ParentTypes.First() is "animAnimationBufferCompressed.inplaceCompressedBuffer"
+                    or "animAnimationBufferSimd.inplaceCompressedBuffer";
+
+            var compBuf = buffer.GetCompressedBytes(isInplaceCompressedBuffer);
             writer.Write(compBuf);
 
             result.diskSize = (uint)compBuf.Length;
             result.crc32 = Crc32Algorithm.Compute(compBuf);
+
+            if (isInplaceCompressedBuffer)
+            {
+                result.memSize = result.diskSize;
+            }
 
             return result;
         }
@@ -415,6 +483,11 @@ namespace WolvenKit.RED4.Archive.IO
                 dataOffset = (uint)file.BaseStream.Position
             };
 
+            if (chunkData is CDistantLightsResource)
+            {
+                // TODO: Forcing CDistantLightsResource buffers to be inline, please improve
+                file.IsRoot = false;
+            }
             file.WriteClass(chunkData);
 
             result.dataSize = (uint)(file.BaseStream.Position - result.dataOffset);
@@ -456,12 +529,14 @@ namespace WolvenKit.RED4.Archive.IO
             public byte[] BufferData { get; set; }
         }
 
+        protected override void GenerateBufferBytes(RedBuffer buffer) => WriteBufferData(buffer);
+
         private DataCollection GenerateData()
         {
             var result = new DataCollection();
 
             using var ms = new MemoryStream();
-            using var file = new CR2WWriter(ms) { IsRoot = IsRoot };
+            using var file = new CR2WWriter(ms) { IsRoot = IsRoot, _file = _file };
 
             file._chunkInfos = _chunkInfos;
 
@@ -529,11 +604,6 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            foreach (var kvp in file.BufferRef)
-            {
-                WriteBufferData(kvp.Value);
-            }
-
             file.GenerateStringDictionary();
             result.StringList = file.StringCacheList.ToList();
             result.ImportList = file.ImportCacheList.ToList();
@@ -543,8 +613,8 @@ namespace WolvenKit.RED4.Archive.IO
                 var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content);
                 SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
 
-                var tuple = new ImportEntry("", (CName)embeddedFile.FileName, (ushort)8);
-                if (!result.ImportList.Contains(tuple))
+                var tuple = new ImportEntry(CName.Empty, embeddedFile.FileName, 8);
+                if (result.ImportList.All(x => x.DepotPath != tuple.DepotPath))
                 {
                     result.ImportList.Add(tuple);
                 }
@@ -641,7 +711,10 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var str in strings)
             {
                 offsetDict.Add(str, (uint)bytes.Count);
-                bytes.AddRange(encoding.GetBytes(str));
+                if (str != CName.Empty)
+                {
+                    bytes.AddRange(encoding.GetBytes(str));
+                }
                 bytes.Add(0);
             }
             return (bytes.ToArray(), offsetDict);

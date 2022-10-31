@@ -16,10 +16,10 @@ public sealed class DataTypes
 
 public class JsonHeader
 {
-    public SemVersion WolvenKitVersion { get; } = CommonFunctions.GetAssemblyVersion(Assembly.GetEntryAssembly());
-    public SemVersion WKitJsonVersion { get; } = "0.0.1";
-    public int GameVersion { get; } = (int)Enums.gameGameVersion.Current;
-    public string ExportedDateTime { get; } = DateTime.UtcNow.ToString("o");
+    public SemVersion WolvenKitVersion { get; set; } = CommonFunctions.GetAssemblyVersion(Assembly.GetEntryAssembly());
+    public SemVersion WKitJsonVersion { get; set; } = SemVersion.Parse("0.0.3", SemVersionStyles.Strict);
+    public int GameVersion { get; set; } = (int)Enums.gameGameVersion.Current;
+    public string ExportedDateTime { get; set; } = DateTime.UtcNow.ToString("o");
     public string DataType { get; set; } = DataTypes.Custom;
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

@@ -11,28 +11,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("detectionMultiplier")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat DetectionMultiplier
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("halfHeight")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat HalfHeight
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("name")]
-		[REDProperty(IsIgnored = true)]
-		public CName Name
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
 		}
 		
 		[RED("position")]

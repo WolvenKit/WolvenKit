@@ -1,40 +1,52 @@
+using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
+using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Types;
 
-namespace CP77Tools.Commands
+namespace CP77Tools.Commands;
+
+internal class ArchiveCommand : CommandBase
 {
-    public class ArchiveCommand : Command
+    private const string s_description = "Display information of an .archive file.";
+    private const string s_name = "archive";
+
+    public ArchiveCommand() : base(s_name, s_description)
     {
-        #region Fields
+        AddAlias("archiveinfo");
 
-        private new const string Description = "Target an archive to display information of it.";
-        private new const string Name = "archive";
+        AddArgument(new Argument<FileSystemInfo[]>("path", "Input archives path. Can be a file or a folder or a list of files/folders."));
 
-        #endregion Fields
+        AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
+        AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
+        AddOption(new Option<bool>(new[] { "--diff", "-d" }, "Dump archive json for diff."));
+        AddOption(new Option<bool>(new[] { "--list", "-l" }, "List all files in archive."));
 
-        #region Constructors
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, bool, bool, IHost>(Action));
+    }
 
-        public ArchiveCommand() : base(Name, Description)
+    private static int Action(FileSystemInfo[] path, string pattern, string regex, bool diff, bool list, IHost host)
+    {
+
+        var serviceProvider = host.Services;
+        var logger = serviceProvider.GetRequiredService<ILoggerService>();
+
+        if (path is null)
         {
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input archives path. Can be a file or a folder or a list of files/folders"));
-            AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
-            AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
-            AddOption(new Option<bool>(new[] { "--diff", "-d" }, "Dump archive json for diff"));
-            AddOption(new Option<bool>(new[] { "--list", "-l" }, "List all files in archive"));
-
-            Handler = CommandHandler.Create<string[], string, string, bool, bool, IHost>(Action);
+            logger.Error("Please fill in an input path.");
+            return 1;
+        }
+        if (path == null || path.Length < 1)
+        {
+            logger.Error("Please fill in an input path.");
+            return 1;
         }
 
-        private void Action(string[] path, string pattern, string regex, bool diff, bool list, IHost host)
-        {
-            var serviceProvider = host.Services;
-            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.ArchiveTask(path, pattern, regex, diff, list);
-        }
-
-        #endregion Constructors
+        var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+        return consoleFunctions.ArchiveTask(path, pattern, regex, diff, list);
     }
 }

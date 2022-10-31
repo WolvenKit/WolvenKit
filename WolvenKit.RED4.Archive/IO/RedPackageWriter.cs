@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             var typeInfo = RedReflection.GetTypeInfo(cls);
 
-            var nonDefaultProperties = new List<RedReflection.ExtendedPropertyInfo>();
+            var nonDefaultProperties = new List<ExtendedPropertyInfo>();
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = cls.GetProperty(propertyInfo.RedName);
@@ -100,6 +100,15 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 app.Write(this);
             }
+        }
+
+        public override void Write(IRedEnum instance)
+        {
+            var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());
+            var valueName = typeInfo.GetRedNameFromCSName(instance.ToEnumString());
+
+            CNameRef.Add(_writer.BaseStream.Position, valueName);
+            _writer.Write(GetStringIndex(valueName));
         }
 
         public override void Write(IRedBitField instance)
@@ -172,14 +181,13 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write(IRedResourceReference instance)
         {
-            // TODO: Find a better way (written as -1)
-            if (instance.DepotPath == "INVALID")
+            if (instance.DepotPath == CName.Empty)
             {
                 _writer.Write((short)-1);
                 return;
             }
 
-            var val = new ImportEntry("", instance.DepotPath, (ushort)1);
+            var val = new ImportEntry(CName.Empty, instance.DepotPath, (ushort)1);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));
@@ -187,14 +195,13 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write(IRedResourceAsyncReference instance)
         {
-            // TODO: Find a better way (written as -1)
-            if (instance.DepotPath == "INVALID")
+            if (instance.DepotPath == CName.Empty)
             {
                 _writer.Write((short)-1);
                 return;
             }
 
-            var val = new ImportEntry("", instance.DepotPath, (ushort)0);
+            var val = new ImportEntry(CName.Empty, instance.DepotPath, (ushort)0);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));

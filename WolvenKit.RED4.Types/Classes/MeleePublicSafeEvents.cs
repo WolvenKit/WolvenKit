@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MeleePublicSafeEvents : MeleeEventsTransition
+	public partial class MeleePublicSafeEvents : MeleeRumblingEvents
 	{
 		[Ordinal(1)] 
 		[RED("unequipTime")] 

@@ -42,13 +42,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<gamedataLocKeyWrapper>();
 			set => SetPropertyValue<gamedataLocKeyWrapper>(value);
 		}
-		
-		[RED("revealOrder")]
-		[REDProperty(IsIgnored = true)]
-		public CInt32 RevealOrder
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
-		}
 	}
 }

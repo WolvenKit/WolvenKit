@@ -20,6 +20,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CVariant>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("title")] 
+		public CString Title
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("overrideCurrentNotification")] 
+		public CBool OverrideCurrentNotification
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public UIInGameNotificationEvent()
 		{
 			PostConstruct();

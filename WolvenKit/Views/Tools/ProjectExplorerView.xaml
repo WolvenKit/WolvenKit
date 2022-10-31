@@ -6,6 +6,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:WolvenKit.Views.Tools"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
@@ -18,11 +19,14 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
+
         <ResourceDictionary>
+
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
+
             <DataTemplate x:Key="DragDropTemplate">
                 <Border
                     x:Name="border"
@@ -52,14 +56,14 @@
                     <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                 </MenuItem>
 
-                <MenuItem Command="{Binding OpenInMlsbCommand}" Header="Open in MlSetupbuilder"/>
+                <MenuItem Command="{Binding OpenInMlsbCommand}" Header="Open in MlSetupbuilder" />
 
                 <Separator />
 
                 <MenuItem
                     x:Name="ConvertToJsonMenuItem"
                     Command="{Binding ConvertToJsonCommand}"
-                    Header="Export to JSON"
+                    Header="Convert to JSON"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>
@@ -92,27 +96,6 @@
                 </MenuItem>
 
                 <MenuItem
-                    x:Name="ConvertToXmlMenuItem"
-                    Command="{Binding ConvertToXmlCommand}"
-                    Header="Convert to XML"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <Grid>
-                            <iconPacks:PackIconCodicons
-                                Width="13"
-                                Height="13"
-                                Padding="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="Code" />
-                        </Grid>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <!--<MenuItem x:Name="ConvertFromXmlMenuItem"
-                                        Command="{Binding ConvertFromXmlCommand}"
-                                        Header="Convert from JSON" />-->
-
-                <MenuItem
                     x:Name="BKImport"
                     Command="{Binding Bk2ImportCommand}"
                     Header="Import Avi to BK2"
@@ -124,8 +107,8 @@
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}" />
 
                 <Separator />
-                
-                <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete">
+
+                <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" InputGestureText="Del">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Width="13"
@@ -135,7 +118,7 @@
                             Kind="Trash" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding RenameFileCommand}" Header="Rename">
+                <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" InputGestureText="F2">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Width="13"
@@ -168,7 +151,8 @@
                 <Separator />
 
                 <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
-                <MenuItem Command="{Binding OpenInAssetBrowserCommand}"
+                <MenuItem
+                    Command="{Binding OpenInAssetBrowserCommand}"
                     Header="Open in Asset Browser"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
@@ -180,7 +164,8 @@
                             Kind="ArrowCircleRight" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding ReimportFileCommand}"
+                <MenuItem
+                    Command="{Binding ReimportFileCommand}"
                     Header="Replace with original"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
@@ -196,11 +181,12 @@
                 <Separator />
 
                 <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
-               
+
             </ContextMenu>
 
             <DataTemplate x:Key="TreeGridCellTemplate">
                 <Grid>
+
                     <Grid.Resources>
                         <Style x:Key="WolvenKitTreeGridButton" TargetType="{x:Type helpers:TreeGridButton}">
                             <Setter Property="Border.Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}" />
@@ -270,11 +256,13 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Resources>
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="13" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+
                     <others:FileIcon
                         Width="13"
                         Height="19"
@@ -290,9 +278,28 @@
                         Grid.Column="2"
                         Background="{StaticResource ContentBackground}"
                         Orientation="Horizontal">
+
+                        <helpers:TreeGridButton
+                            BorderBrush="{StaticResource WolvenKitYellow}"
+                            Command="{Binding ViewModel.OpenInFileExplorerCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
+                            CommandParameter="{Binding}"
+                            HoverBackground="{StaticResource WolvenKitYellowShadow}"
+                            Style="{StaticResource WolvenKitTreeGridButton}"
+                            ToolTip="Open in Explorer">
+                            <helpers:TreeGridButton.Content>
+                                <iconPacks:PackIconMaterial
+                                    Width="11"
+                                    Height="11"
+                                    Margin="-1,0,0,0"
+                                    Foreground="#222"
+                                    Kind="FolderOpen" />
+                            </helpers:TreeGridButton.Content>
+                        </helpers:TreeGridButton>
+
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitCyan}"
-                            Command="{Binding OpenFileCommand}"
+                            Command="{Binding ViewModel.MainViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
+                            CommandParameter="{Binding}"
                             HoverBackground="{StaticResource WolvenKitCyanShadow}"
                             Style="{StaticResource WolvenKitTreeGridButton}"
                             ToolTip="Open this file">
@@ -305,9 +312,11 @@
                                     Kind="OpenInNew" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
+
                         <helpers:TreeGridButton
+                            syncfusion:FocusManagerHelper.FocusedElement="True"
                             BorderBrush="{StaticResource WolvenKitRed}"
-                            Command="{Binding DeleteFileCommand}"
+                            Command="{Binding ViewModel.DeleteFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             HoverBackground="{StaticResource WolvenKitRedShadow}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             ToolTip="Delete this file/folder">
@@ -319,11 +328,14 @@
                                     Kind="Trash" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
+
                         <helpers:TreeGridButton
                             Width="0"
                             Margin="0,0,10,0"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}" />
+
                     </StackPanel>
+
                 </Grid>
             </DataTemplate>
 
@@ -361,6 +373,7 @@
                         TextTrimming="CharacterEllipsis" />
                 </Grid>
             </DataTemplate>
+
             <Style
                 x:Key="WolvenKitPESourceTabs"
                 BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
@@ -406,10 +419,11 @@
             </Style>
 
         </ResourceDictionary>
+
     </UserControl.Resources>
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-        <Grid.Resources />
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -426,8 +440,9 @@
             CloseButtonType="Hide"
             SelectedIndex="{Binding SelectedTabIndex}"
             ShowTabItemContextMenu="False"
-            ShowTabListContextMenu="False"
-            Style="{StaticResource WolvenKitTabControl}">
+            Style="{StaticResource WolvenKitTabControl}"
+            TabListContextMenuOptions="Default">
+
             <syncfusion:TabItemExt>
                 <syncfusion:TabItemExt.Style>
                     <Style BasedOn="{StaticResource SyncfusionTabItemExtStyle}" TargetType="{x:Type syncfusion:TabItemExt}">
@@ -506,6 +521,7 @@
                     </Style>
                 </syncfusion:TabItemExt.Style>
             </syncfusion:TabItemExt>
+
         </syncfusion:TabControlExt>
 
         <Border
@@ -574,14 +590,26 @@
                             Kind="ArrowsCollapse" />
                     </Button>
                     <Button
+                        x:Name="RefreshButton"
+                        Margin="3,0,0,0"
+                        ToolTip="Refresh all Files">
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Foreground="CornflowerBlue"
+                            Kind="Refresh" />
+                    </Button>
+                    <Button
                         x:Name="OpenFolderButton"
                         Margin="3,0,0,0"
                         ToolTip="Open Root Folder">
                         <iconPacks:PackIconCodicons
                             Width="13"
                             Height="13"
+                            Foreground="Yellow"
                             Kind="RootFolderOpened" />
                     </Button>
+
                     <ToggleButton
                         Margin="3,0,0,0"
                         hc:VisualElement.HighlightBackground="{StaticResource WolvenKitRed}"
@@ -605,6 +633,7 @@
             </Grid>
         </Border>
 
+        <!--  Hierarchical Tree View  -->
         <syncfusion:SfTreeGrid
             Name="TreeGrid"
             Grid.Row="2"
@@ -667,8 +696,7 @@
             </syncfusion:SfTreeGrid.Columns>
         </syncfusion:SfTreeGrid>
 
-
-
+        <!--  Flat Tree View  -->
         <syncfusion:SfTreeGrid
             Name="TreeGridFlat"
             Grid.Row="2"
@@ -737,5 +765,6 @@
                     MappingName="Extension" />
             </syncfusion:SfTreeGrid.Columns>
         </syncfusion:SfTreeGrid>
+
     </Grid>
 </reactiveUi:ReactiveUserControl>

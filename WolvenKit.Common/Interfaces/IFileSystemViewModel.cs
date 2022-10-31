@@ -13,6 +13,7 @@ namespace WolvenKit.Common.Interfaces
         public uint Size { get; }
 
         public string SizeString { get; }
+        bool IsChecked { get; set; }
 
         //public ulong Key { get; }
 

@@ -1,29 +1,34 @@
-using gpm.Installer;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReactiveUI;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using WolvenKit.App;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
 using WolvenKit.ViewModels;
-using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Shared;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
-using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Dialogs.Windows;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Shell;
@@ -36,6 +41,13 @@ namespace WolvenKit
     {
         public static IHostBuilder CreateHostBuilder() => Host
                 .CreateDefaultBuilder()
+                .ConfigureAppConfiguration((hostingContext, configuration) =>
+                {
+                    var assemblyFolder = Path.GetDirectoryName(System.AppContext.BaseDirectory);
+
+                    configuration.SetBasePath(assemblyFolder);
+                    configuration.AddJsonFile("appsettings.json");
+                })
                 .ConfigureServices(services =>
                 {
                     services.UseMicrosoftDependencyResolver();
@@ -48,19 +60,20 @@ namespace WolvenKit
                     services.AddSingleton<INotificationService, NotificationService>();
                     services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
                     services.AddSingleton<Core.Services.IProgressService<double>, System.ProgressService<double>>();
-
                     services.AddSingleton<MySink>();
                     services.AddSingleton<ILoggerService, SerilogWrapper>();
 
                     // singletons
                     services.AddSingleton<IHashService, HashService>();
-                    //services.AddSingleton<ITweakDBService, TweakDBService>();
+
+                    services.AddSingleton<Red4ParserService>();
+
+                    services.AddSingleton<IArchiveManager, ArchiveManager>();
+
                     services.AddSingleton<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
                     services.AddSingleton<IProjectManager, ProjectManager>();
                     services.AddSingleton<IWatcherService, WatcherService>();
 
-                    services.AddSingleton<IArchiveManager, ArchiveManager>();
-                    services.AddSingleton<MockGameController>();
 
                     services.AddSingleton<GeometryCacheService>();
 
@@ -70,25 +83,22 @@ namespace WolvenKit
                     services.AddSingleton<LocKeyService>();
                     services.AddSingleton<ILocKeyService>(x => x.GetRequiredService<LocKeyService>());
 
-                    // red4 modding tools
-                    services.AddSingleton<Red4ParserService>();
+
                     services.AddSingleton<MeshTools>();
 
                     services.AddSingleton<ModTools>();
                     services.AddSingleton<IModTools>(x => x.GetRequiredService<ModTools>());
+                    services.AddSingleton<MockGameController>();
                     services.AddSingleton<RED4Controller>();
-
-                    // red3 modding tools
-                    //services.AddSingleton<Red3ModTools>();
-                    //services.AddSingleton<Tw3Controller>();
 
                     services.AddSingleton<IGameControllerFactory, GameControllerFactory>();
 
                     services.AddSingleton<AppViewModel>();
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
-                    services.AddGpmInstaller();
                     services.AddSingleton<IPluginService, PluginService>();
+
+                    services.AddSingleton<ScriptService>();
 
 
                     // register views
@@ -97,6 +107,9 @@ namespace WolvenKit
                     services.AddSingleton<RibbonViewModel>();
                     services.AddSingleton<IViewFor<RibbonViewModel>, RibbonView>();
 
+                    services.AddSingleton<MenuBarViewModel>();
+                    services.AddSingleton<IViewFor<MenuBarViewModel>, MenuBarView>();
+
                     services.AddSingleton<StatusBarViewModel>();
                     services.AddSingleton<IViewFor<StatusBarViewModel>, StatusBarView>();
 
@@ -104,26 +117,32 @@ namespace WolvenKit
 
                     #region dialogs
 
-                    services.AddTransient<DialogHostViewModel>();
-                    services.AddTransient<IViewFor<DialogHostViewModel>, DialogHostView>();
-
-                    //services.AddTransient<CreateClassDialogViewModel>();
-                    //services.AddTransient<IViewFor<CreateClassDialogViewModel>, CreateClassDialog>();
-
                     services.AddTransient<InputDialogViewModel>();
                     services.AddTransient<IViewFor<InputDialogViewModel>, InputDialogView>();
-
-                    //services.AddSingleton<MaterialsRepositoryDialogViewModel>();
-                    //services.AddSingleton<IViewFor<MaterialsRepositoryDialogViewModel>, MaterialsRepositoryDialog>();
 
                     services.AddTransient<RenameDialogViewModel>();
                     services.AddTransient<IViewFor<RenameDialogViewModel>, RenameDialog>();
 
+                    services.AddTransient<LaunchProfilesViewModel>();
+                    services.AddTransient<IViewFor<LaunchProfilesViewModel>, LaunchProfilesView>();
+
+                    services.AddTransient<MaterialsRepositoryViewModel>();
+                    services.AddTransient<IViewFor<MaterialsRepositoryViewModel>, MaterialsRepositoryView>();
+
                     services.AddTransient<NewFileViewModel>();
                     services.AddTransient<IViewFor<NewFileViewModel>, NewFileView>();
 
-                    services.AddTransient<PluginsToolViewModel>();
-                    services.AddTransient<IViewFor<PluginsToolViewModel>, PluginsToolView>();
+                    services.AddTransient<SoundModdingViewModel>();
+                    services.AddTransient<IViewFor<SoundModdingViewModel>, SoundModdingView>();
+
+                    services.AddTransient<FirstSetupViewModel>();
+                    services.AddTransient<IViewFor<FirstSetupViewModel>, FirstSetupView>();
+
+                    services.AddTransient<InstallerWizardViewModel>();
+                    services.AddTransient<IViewFor<InstallerWizardViewModel>, InstallerWizardView>();
+
+                    services.AddTransient<ProjectWizardViewModel>();
+                    services.AddTransient<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
 
                     #endregion
 
@@ -167,9 +186,6 @@ namespace WolvenKit
                     services.AddSingleton<HomePageViewModel>();
                     services.AddTransient<IViewFor<HomePageViewModel>, HomePageView>();
 
-                    services.AddTransient<DebugPageViewModel>();
-                    services.AddTransient<IViewFor<DebugPageViewModel>, DebugPageView>();
-
                     services.AddTransient<GithubPageViewModel>();
                     services.AddTransient<IViewFor<GithubPageViewModel>, GithubPageView>();
 
@@ -185,6 +201,12 @@ namespace WolvenKit
                     services.AddTransient<WikiPageViewModel>();
                     services.AddTransient<IViewFor<WikiPageViewModel>, WikiPageView>();
 
+                    services.AddTransient<ModsViewModel>();
+                    services.AddTransient<IViewFor<ModsViewModel>, ModsView>();
+
+                    services.AddTransient<PluginsToolViewModel>();
+                    services.AddTransient<IViewFor<PluginsToolViewModel>, PluginsToolView>();
+
                     #endregion
 
                     #region shared
@@ -194,24 +216,8 @@ namespace WolvenKit
 
                     #endregion
 
-                    #region wizards
-
-                    services.AddTransient<BugReportWizardViewModel>();
-                    services.AddTransient<IViewFor<BugReportWizardViewModel>, BugReportWizardView>();
-
-                    services.AddTransient<FeedbackWizardViewModel>();
-                    services.AddTransient<IViewFor<FeedbackWizardViewModel>, FeedbackWizardView>();
-
-                    services.AddTransient<FirstSetupWizardViewModel>();
-                    services.AddTransient<IViewFor<FirstSetupWizardViewModel>, FirstSetupWizardView>();
-
-                    services.AddTransient<InstallerWizardViewModel>();
-                    services.AddTransient<IViewFor<InstallerWizardViewModel>, InstallerWizardView>();
-
-                    services.AddTransient<ProjectWizardViewModel>();
-                    services.AddTransient<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
-
-                    #endregion
+                    // bind options
+                    services.AddOptions<Globals>().Bind(hostContext.Configuration.GetSection("Globals"));
 
                 })
                 .UseEnvironment(Environments.Development);

@@ -3,14 +3,6 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataLootTable_Record
 	{
-		[RED("itemID")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID ItemID
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
 		[RED("lootGenerationType")]
 		[REDProperty(IsIgnored = true)]
 		public CString LootGenerationType

@@ -3,22 +3,6 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataItem_Record
 	{
-		[RED("angle")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat Angle
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("angleInterpolationDuration")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AngleInterpolationDuration
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("animationParameters")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<CName> AnimationParameters
@@ -83,28 +67,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CBool>>(value);
 		}
 		
-		[RED("applyAdditiveProjectileSpiraling")]
-		[REDProperty(IsIgnored = true)]
-		public CBool ApplyAdditiveProjectileSpiraling
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("attachmentSlots")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> AttachmentSlots
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("attack")]
-		[REDProperty(IsIgnored = true)]
-		public CString Attack
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
 		}
 		
 		[RED("audioName")]
@@ -129,22 +97,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
-		}
-		
-		[RED("bendFactor")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat BendFactor
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("bendTimeRatio")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat BendTimeRatio
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
 		}
 		
 		[RED("blueprint")]
@@ -179,54 +131,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 		
-		[RED("canTargetDevices")]
-		[REDProperty(IsIgnored = true)]
-		public CBool CanTargetDevices
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("canTargetVehicles")]
-		[REDProperty(IsIgnored = true)]
-		public CBool CanTargetVehicles
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("chargeActionChargeCost")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat ChargeActionChargeCost
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("chargeActionlaunchMode")]
-		[REDProperty(IsIgnored = true)]
-		public CName ChargeActionlaunchMode
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
-		[RED("collisionAction")]
-		[REDProperty(IsIgnored = true)]
-		public CName CollisionAction
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
-		[RED("collisionActionCharged")]
-		[REDProperty(IsIgnored = true)]
-		public CName CollisionActionCharged
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
 		[RED("connections")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> Connections
@@ -259,30 +163,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("cyberwareType")]
-		[REDProperty(IsIgnored = true)]
-		public CName CyberwareType
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
-		[RED("deepWaterDepth")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat DeepWaterDepth
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("detonationDelay")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat DetonationDelay
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("displayName")]
 		[REDProperty(IsIgnored = true)]
 		public gamedataLocKeyWrapper DisplayName
@@ -307,36 +187,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("effectors")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> Effectors
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
 		[RED("enableNpcRPGData")]
 		[REDProperty(IsIgnored = true)]
 		public CBool EnableNpcRPGData
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("endLeanAngle")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat EndLeanAngle
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("energyLossFactor")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat EnergyLossFactor
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
 		}
 		
 		[RED("entityName")]
@@ -411,44 +267,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 		
-		[RED("gravitySimulation")]
-		[REDProperty(IsIgnored = true)]
-		public Vector3 GravitySimulation
-		{
-			get => GetPropertyValue<Vector3>();
-			set => SetPropertyValue<Vector3>(value);
-		}
-		
 		[RED("hairSkinnedMeshComponents")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<CName> HairSkinnedMeshComponents
 		{
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
-		}
-		
-		[RED("halfLeanAngle")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat HalfLeanAngle
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("hideCooldownUI")]
-		[REDProperty(IsIgnored = true)]
-		public CBool HideCooldownUI
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("hideDurationUI")]
-		[REDProperty(IsIgnored = true)]
-		public CBool HideDurationUI
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("icon")]
@@ -465,14 +289,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
-		}
-		
-		[RED("interpolationTimeRatio")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat InterpolationTimeRatio
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
 		}
 		
 		[RED("isCached")]
@@ -494,14 +310,6 @@ namespace WolvenKit.RED4.Types
 		[RED("isGarment")]
 		[REDProperty(IsIgnored = true)]
 		public CBool IsGarment
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("isIKEnabled")]
-		[REDProperty(IsIgnored = true)]
-		public CBool IsIKEnabled
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -555,30 +363,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("launchTrajectory")]
-		[REDProperty(IsIgnored = true)]
-		public CName LaunchTrajectory
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
-		[RED("lifetime")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat Lifetime
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("linearTimeRatio")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat LinearTimeRatio
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("localizedDescription")]
 		[REDProperty(IsIgnored = true)]
 		public gamedataLocKeyWrapper LocalizedDescription
@@ -601,14 +385,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("maxBounceCount")]
-		[REDProperty(IsIgnored = true)]
-		public CInt32 MaxBounceCount
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
 		}
 		
 		[RED("minigameInstance")]
@@ -643,44 +419,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("objectActions")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> ObjectActions
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
 		[RED("OnAttach")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> OnAttach
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("onCollisionStimBroadcastLifetime")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat OnCollisionStimBroadcastLifetime
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("onCollisionStimBroadcastRadius")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat OnCollisionStimBroadcastRadius
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("onCollisionStimType")]
-		[REDProperty(IsIgnored = true)]
-		public CName OnCollisionStimType
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
 		}
 		
 		[RED("OnEquip")]
@@ -739,20 +483,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
-		[RED("price")]
+		[RED("previewBBoxOverride")]
 		[REDProperty(IsIgnored = true)]
-		public TweakDBID Price
+		public CArray<Vector3> PreviewBBoxOverride
 		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
-		[RED("projectileTemplateName")]
-		[REDProperty(IsIgnored = true)]
-		public CName ProjectileTemplateName
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
+			get => GetPropertyValue<CArray<Vector3>>();
+			set => SetPropertyValue<CArray<Vector3>>(value);
 		}
 		
 		[RED("quality")]
@@ -766,78 +502,6 @@ namespace WolvenKit.RED4.Types
 		[RED("qualityRestrictedByParent")]
 		[REDProperty(IsIgnored = true)]
 		public CBool QualityRestrictedByParent
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("quickActionChargeCost")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat QuickActionChargeCost
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("quickActionlaunchMode")]
-		[REDProperty(IsIgnored = true)]
-		public CName QuickActionlaunchMode
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
-		[RED("rampDownDistanceEnd")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat RampDownDistanceEnd
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("rampDownDistanceStart")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat RampDownDistanceStart
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("rampDownFactor")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat RampDownFactor
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("rampUpDistanceEnd")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat RampUpDistanceEnd
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("rampUpDistanceStart")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat RampUpDistanceStart
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("randomizeDirection")]
-		[REDProperty(IsIgnored = true)]
-		public CBool RandomizeDirection
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("randomizePhase")]
-		[REDProperty(IsIgnored = true)]
-		public CBool RandomizePhase
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -859,52 +523,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
-		[RED("returnTimeMargin")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat ReturnTimeMargin
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("savable")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Savable
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("secondaryAttack")]
-		[REDProperty(IsIgnored = true)]
-		public CString SecondaryAttack
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
-		}
-		
 		[RED("sellPrice")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> SellPrice
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("shardType")]
-		[REDProperty(IsIgnored = true)]
-		public CName ShardType
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
-		[RED("sinkingDetonationDelay")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat SinkingDetonationDelay
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
 		}
 		
 		[RED("slotPartList")]
@@ -931,52 +555,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
-		[RED("startVelocity")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat StartVelocity
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("startVelocityCharged")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat StartVelocityCharged
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("stateMachineName")]
 		[REDProperty(IsIgnored = true)]
 		public CName StateMachineName
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
-		}
-		
-		[RED("statModifierGroups")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> StatModifierGroups
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("statModifiers")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> StatModifiers
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("statPools")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> StatPools
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
 		[RED("tags")]
@@ -1025,46 +609,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
-		}
-		
-		[RED("waterDetonationImpulseRadius")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat WaterDetonationImpulseRadius
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("waterDetonationImpulseStrength")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat WaterDetonationImpulseStrength
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("waterSurfaceImpactImpulseRadius")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat WaterSurfaceImpactImpulseRadius
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("waterSurfaceImpactImpulseStrength")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat WaterSurfaceImpactImpulseStrength
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("weakspots")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> Weakspots
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 	}
 }

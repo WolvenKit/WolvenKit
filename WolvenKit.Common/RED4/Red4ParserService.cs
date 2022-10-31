@@ -5,18 +5,24 @@ using System.IO;
 using System.Text;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W
 {
     public class Red4ParserService : IRedParserService
     {
         private readonly IHashService _hashService;
+        private readonly ILoggerService _loggerService;
 
-        public Red4ParserService(IHashService hashService)
+        public Red4ParserService(IHashService hashService, ILoggerService loggerService)
         {
             _hashService = hashService;
+            _loggerService = loggerService;
+
+            TypeGlobal.Logger = loggerService;
         }
 
 
@@ -31,8 +37,7 @@ namespace WolvenKit.RED4.CR2W
             }
             catch (Exception e)
             {
-                var logger = Locator.Current.GetService<ILoggerService>();
-                logger?.Error(e);
+                _loggerService.Error(e);
 
                 archiveFile = null;
                 return false;
@@ -58,6 +63,8 @@ namespace WolvenKit.RED4.CR2W
                 // TODO: Shouldn't be done here...
                 stream.Seek(0, SeekOrigin.Begin);
                 using var reader = new CR2WReader(stream, Encoding.Default, true);
+                reader.ParsingError += TypeGlobal.OnParsingError;
+
                 return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
@@ -83,6 +90,8 @@ namespace WolvenKit.RED4.CR2W
                 // TODO: Shouldn't be done here...
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 using var reader = new CR2WReader(br);
+                reader.ParsingError += TypeGlobal.OnParsingError;
+
                 return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
@@ -214,12 +223,7 @@ namespace WolvenKit.RED4.CR2W
 
             stream.Seek(-4, SeekOrigin.Current);
 
-            if (magic != CR2WFile.MAGIC)
-            {
-                return false;
-            }
-
-            return true;
+            return magic == CR2WFile.MAGIC;
         }
 
         #endregion Methods

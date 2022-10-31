@@ -3,17 +3,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Net.NetworkInformation;
-using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Microsoft.Web.WebView2.Core;
-using Octokit;
 using ReactiveUI;
 using Splat;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
@@ -95,16 +93,6 @@ namespace WolvenKit
         }
 
         /// <summary>
-        /// Initialize Github RPC
-        /// </summary>
-        public static void InitializeGitHub() =>
-            StaticReferences.Githubclient =
-                new GitHubClient(new ProductHeaderValue("WolvenKit"))
-                {
-                    Credentials = Github_Helpers.GhubAuth("wolvenbot", "botwolven1")
-                };
-
-        /// <summary>
         /// Initialize everything related to Theming.
         /// </summary>
         public static void InitializeThemeHelper()
@@ -128,12 +116,7 @@ namespace WolvenKit
             SfSkinManager.ApplyStylesOnApplication = true;
         }
 
-        public static void InitializeLicenses()
-        {
-            Ab3d.Licensing.PowerToys.LicenseHelper.SetLicense(licenseOwner: "WolvenKit", licenseType: "FreeNonCommercialLicense-TeamDeveloperLicense", license: "9E18-4A3E-3951-8E9C-3686-ACE4-685B-6145-5799-42A9-F82C-C195-5495-5907-4F8D-38B7-661D-386C-5461-9B7C-70AE-46DC-F3CA-1B12");
-            Ab3d.Licensing.DXEngine.LicenseHelper.SetLicense(licenseOwner: "WolvenKit", licenseType: "FreeNonCommercialLicense-TeamDeveloperLicense", license: "F564-4078-3E78-F218-D27F-B191-4A32-AD76-2002-F1B1-EE27-7B15-5316-4CEA-5281-FF84-5B56-BECD-12CA-F307-E847-E014-7378-032C");
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDM1MDYwQDMxMzkyZTMxMmUzMGNBRjJJdnZoVnJjaklqMTVNL0FNR0JJR3dqR0Fac21YalpQOVEyTkd6bms9");
-        }
+        public static void InitializeLicenses() => Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDM1MDYwQDMxMzkyZTMxMmUzMGNBRjJJdnZoVnJjaklqMTVNL0FNR0JJR3dqR0Fac21YalpQOVEyTkd6bms9");
 
         public static /*async Task*/ void InitializeShell(ISettingsManager settings)
         {

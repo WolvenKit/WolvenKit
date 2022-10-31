@@ -12,8 +12,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Other;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Types;
 using Application = System.Windows.Application;
@@ -24,7 +23,6 @@ namespace WolvenKit.ViewModels.Documents
     {
         protected readonly RedBaseClass _data;
         public inkWidgetLibraryResource library;
-        public RedDocumentViewModel File;
 
         [Reactive] public Dictionary<object, inkTextWidget> TextWidgets { get; set; } = new();
 
@@ -56,9 +54,10 @@ namespace WolvenKit.ViewModels.Documents
         {
             await Task.Run(async () =>
             {
-                var tasks = new List<Task>();
-
-                tasks.Add(LoadAnimations());
+                var tasks = new List<Task>
+                {
+                    LoadAnimations()
+                };
 
                 foreach (var f in library.ExternalDependenciesForInternalItems)
                 {
@@ -87,7 +86,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 inkAnimations = new();
 
-                var animFile = File.GetFileFromDepotPath(library.AnimationLibraryResRef?.DepotPath ?? null);
+                var animFile = File.GetFileFromDepotPath(library.AnimationLibraryResRef.DepotPath);
 
                 if (animFile != null && animFile.RootChunk is inkanimAnimationLibraryResource alr)
                 {
@@ -214,15 +213,7 @@ namespace WolvenKit.ViewModels.Documents
             });
         }
 
-        public Task LoadInkAtlasAsync(string path)
-        {
-            return Task.Run(() =>
-            {
-                LoadInkAtlas(path);
-            });
-        }
-
-        public void LoadInkAtlas(string path)
+        public async Task LoadInkAtlasAsync(string path)
         {
             if (Application.Current.Resources.Contains(path))
             {
@@ -237,25 +228,30 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            var xbmFile = File.GetFileFromDepotPath(atlas?.Slots[0]?.Texture?.DepotPath ?? null);
+            if (atlas.Slots[0] == null)
+            {
+                return;
+            }
+
+            var xbmFile = File.GetFileFromDepotPath(atlas.Slots[0].Texture.DepotPath);
             if (xbmFile == null || xbmFile.RootChunk is not CBitmapTexture xbm)
             {
                 return;
             }
 
             using var ddsstream = new MemoryStream();
-            if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _))
+            if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _, out var decompressedFormat))
             {
                 return;
             }
 
-            var qa = ImageDecoder.RenderToBitmapSourceDds(ddsstream);
-            if (qa.Result == null)
+            var qa = await ImageDecoder.RenderToBitmapImageDds(ddsstream, decompressedFormat);
+            if (qa is null)
             {
                 return;
             }
 
-            var image = new TransformedBitmap(qa.Result, new ScaleTransform(1, -1));
+            var image = new TransformedBitmap(qa, new ScaleTransform(1, -1));
 
             foreach (var part in atlas.Slots[0].Parts)
             {
@@ -264,8 +260,8 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     var Left = part.ClippingRectInUVCoords.Left * xbm.Width;
                     var Top = part.ClippingRectInUVCoords.Top * xbm.Height;
-                    var Width = part.ClippingRectInUVCoords.Right * xbm.Width - Left;
-                    var Height = part.ClippingRectInUVCoords.Bottom * xbm.Height - Top;
+                    var Width = (part.ClippingRectInUVCoords.Right * xbm.Width) - Left;
+                    var Height = (part.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
                     var partImage = new CroppedBitmap(image, new Int32Rect((int)Math.Round(Left), (int)Math.Round(Top), (int)Math.Round(Width), (int)Math.Round(Height)));
                     partImage.Freeze();
 
@@ -311,10 +307,8 @@ namespace WolvenKit.ViewModels.Documents
                     var dto = new inkWidgetSerializer(widget);
                     var x = new XmlSerializer(typeof(inkWidgetSerializer));
 
-                    using (var xmlWriter = XmlWriter.Create(myStream, new XmlWriterSettings { Indent = true }))
-                    {
-                        x.Serialize(xmlWriter, dto);
-                    }
+                    using var xmlWriter = XmlWriter.Create(myStream, new XmlWriterSettings { Indent = true });
+                    x.Serialize(xmlWriter, dto);
                     //var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
 
                     //if (string.IsNullOrEmpty(xml))

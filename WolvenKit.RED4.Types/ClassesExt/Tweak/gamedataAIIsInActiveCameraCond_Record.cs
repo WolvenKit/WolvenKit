@@ -11,14 +11,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("invert")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Invert
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("radius")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Radius

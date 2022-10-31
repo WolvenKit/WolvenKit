@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemTooltipBottomModule : ItemTooltipModuleController
 	{
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("weightWrapper")] 
 		public inkWidgetReference WeightWrapper
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("priceWrapper")] 
 		public inkWidgetReference PriceWrapper
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("weightText")] 
 		public inkTextWidgetReference WeightText
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("priceText")] 
 		public inkTextWidgetReference PriceText
 		{

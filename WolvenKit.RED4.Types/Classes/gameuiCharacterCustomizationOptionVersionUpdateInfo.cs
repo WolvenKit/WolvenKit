@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("optionPrereqs")] 
+		public CArray<gameuiCharacterCustomizationOptionVersionPrereq> OptionPrereqs
+		{
+			get => GetPropertyValue<CArray<gameuiCharacterCustomizationOptionVersionPrereq>>();
+			set => SetPropertyValue<CArray<gameuiCharacterCustomizationOptionVersionPrereq>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("newOptionName")] 
 		public CName NewOptionName
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("newDefinitionName")] 
 		public CName NewDefinitionName
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("replaceCurOption")] 
 		public CBool ReplaceCurOption
 		{
@@ -47,6 +55,7 @@ namespace WolvenKit.RED4.Types
 		public gameuiCharacterCustomizationOptionVersionUpdateInfo()
 		{
 			CurOptionNames = new();
+			OptionPrereqs = new();
 
 			PostConstruct();
 		}

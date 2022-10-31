@@ -2,152 +2,141 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 
-namespace CP77Tools.Tasks
+namespace CP77Tools.Tasks;
+
+public partial class ConsoleFunctions
 {
-    public partial class ConsoleFunctions
+    public int UnbundleTask(FileSystemInfo[] path, DirectoryInfo outpath,
+        string hash, string pattern, string regex, bool DEBUG_decompress = false)
     {
-
-        #region Methods
-
-        public void UnbundleTask(string[] path, string outpath,
-            string hash, string pattern, string regex, bool DEBUG_decompress = false)
+        if (path == null || path.Length < 1)
         {
-            if (path == null || path.Length < 1)
-            {
-                _loggerService.Warning("Please fill in an input path.");
-                return;
-            }
-
-            Parallel.ForEach(path, file =>
-            {
-                UnbundleTaskInner(file, outpath, hash, pattern, regex, DEBUG_decompress);
-            });
+            _loggerService.Error("Please fill in an input path.");
+            return ERROR_BAD_ARGUMENTS;
         }
 
-        private void UnbundleTaskInner(string path, string outpath,
-            string hash, string pattern, string regex, bool DEBUG_decompress = false)
+        var result = 0;
+        foreach (var file in path)
         {
-            #region checks
+            result += UnbundleTaskInner(file, outpath, hash, pattern, regex, DEBUG_decompress);
+        }
+        return result > 0 ? ERROR_COMPLETED_WITH_ERRORS : 0;
+    }
 
-            if (string.IsNullOrEmpty(path))
-            {
-                _loggerService.Warning("Please fill in an input path.");
-                return;
-            }
+    private int UnbundleTaskInner(FileSystemInfo path, DirectoryInfo outpath,
+        string hash, string pattern, string regex, bool DEBUG_decompress = false)
+    {
+        #region checks
 
-            var inputFileInfo = new FileInfo(path);
-            var inputDirInfo = new DirectoryInfo(path);
+        if (path is null)
+        {
+            _loggerService.Error("Please fill in an input path.");
+            return ERROR_BAD_ARGUMENTS;
+        }
+        if (!path.Exists)
+        {
+            _loggerService.Error("Input path does not exist.");
+            return ERROR_BAD_ARGUMENTS;
+        }
 
-            if (!inputFileInfo.Exists && !inputDirInfo.Exists)
-            {
-                _loggerService.Warning("Input path does not exist.");
-                return;
-            }
+        #endregion checks
 
-            if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
-            {
-                _loggerService.Warning("Input file is not an .archive.");
-                return;
-            }
-            else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
-            {
-                _loggerService.Warning("No .archive file to process in the input directory.");
-                return;
-            }
-
-            var isDirectory = !inputFileInfo.Exists;
-            var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
-
-            #endregion checks
-
-            List<FileInfo> archiveFileInfos;
-            if (isDirectory)
-            {
-                _archiveManager.LoadFromFolder(basedir);
-                // TODO: use the manager here?
-                archiveFileInfos = _archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
-            }
-            else
-            {
-                archiveFileInfos = new List<FileInfo> { inputFileInfo };
-            }
-
-            foreach (var fileInfo in archiveFileInfos)
-            {
-                // get outdirectory
-                DirectoryInfo outDir;
-                if (string.IsNullOrEmpty(outpath))
+        DirectoryInfo basedir;
+        List<FileInfo> archiveFileInfos;
+        switch (path)
+        {
+            case FileInfo file:
+                if (file.Extension != ".archive")
                 {
-                    outDir = new DirectoryInfo(Path.Combine(
-                        basedir.FullName,
-                        fileInfo.Name.Replace(".archive", "")));
+                    _loggerService.Error("Input file is not an .archive.");
+                    return ERROR_BAD_ARGUMENTS;
                 }
-                else
+                archiveFileInfos = new List<FileInfo> { file };
+                basedir = file.Directory;
+                break;
+            case DirectoryInfo directory:
+                archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
+                if (archiveFileInfos.Count == 0)
                 {
-                    outDir = new DirectoryInfo(outpath);
-                    if (!outDir.Exists)
-                    {
-                        outDir = new DirectoryInfo(outpath);
-                    }
-
-                    if (inputDirInfo.Exists)
-                    {
-                        outDir = new DirectoryInfo(Path.Combine(
-                            outDir.FullName,
-                            fileInfo.Name.Replace(".archive", "")));
-                    }
+                    _loggerService.Error("No .archive file to process in the input directory");
+                    return ERROR_BAD_ARGUMENTS;
                 }
+                basedir = directory;
+                break;
+            default:
+                _loggerService.Error("Not a valid file or directory name.");
+                return ERROR_BAD_ARGUMENTS;
+        }
 
-                // read archive
-                var ar = _wolvenkitFileService.ReadRed4Archive(fileInfo.FullName, _hashService);
+        // get outdirectory
+        DirectoryInfo outDir;
+        if (outpath is null)
+        {
+            outDir = new DirectoryInfo(basedir.FullName);
+        }
+        else
+        {
+            outDir = outpath;
+            if (!outDir.Exists)
+            {
+                outDir = Directory.CreateDirectory(outpath.FullName);
+            }
+        }
 
-                var isHash = ulong.TryParse(hash, out var hashNumber);
+        var result = 0;
+        foreach (var fileInfo in archiveFileInfos)
+        {
+            // read archive
+            var ar = _wolvenkitFileService.ReadRed4Archive(fileInfo.FullName, _hashService);
 
-                // run
-                if (!isHash && File.Exists(hash))
+            var isHash = ulong.TryParse(hash, out var hashNumber);
+
+            // run
+            if (!isHash && File.Exists(hash))
+            {
+                var hashlist = File.ReadAllLines(hash)
+                    .ToList().Select(_ => ulong.TryParse(_, out var res) ? res : 0);
+                _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
+                foreach (var hashNum in hashlist)
                 {
-                    var hashlist = File.ReadAllLines(hash)
-                        .ToList().Select(_ => ulong.TryParse(_, out var res) ? res : 0);
-                    _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
-                    foreach (var hashNum in hashlist)
-                    {
-                        var r = ModTools.ExtractSingle(ar, hashNum, outDir, DEBUG_decompress);
-                        if (r > 0)
-                        {
-                            _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNum}");
-                        }
-                        else
-                        {
-                            _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNum}");
-                        }
-                    }
-
-                    _loggerService.Success($"Bulk extraction from hashlist file completed.");
-                }
-                else if (isHash && hashNumber != 0)
-                {
-                    var r = ModTools.ExtractSingle(ar, hashNumber, outDir, DEBUG_decompress);
+                    var r = ModTools.ExtractSingle(ar, hashNum, outDir, DEBUG_decompress);
                     if (r > 0)
                     {
-                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}");
+                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNum}");
                     }
                     else
                     {
-                        _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNumber}");
+                        _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNum}");
+                        result += 1;
                     }
+                }
+
+                _loggerService.Success($"Bulk extraction from hashlist file completed.");
+            }
+            else if (isHash && hashNumber != 0)
+            {
+                var r = ModTools.ExtractSingle(ar, hashNumber, outDir, DEBUG_decompress);
+                if (r > 0)
+                {
+                    _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}");
                 }
                 else
                 {
-                    _modTools.ExtractAll(ar, outDir, pattern, regex, DEBUG_decompress);
+                    _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNumber}");
+                    result += 1;
                 }
             }
-
-            return;
+            else
+            {
+                // TODO return success 
+                _modTools.ExtractAll(ar, outDir, pattern, regex, DEBUG_decompress);
+            }
         }
 
-        #endregion Methods
+        return result > 0 ? ERROR_COMPLETED_WITH_ERRORS : 0;
     }
 }

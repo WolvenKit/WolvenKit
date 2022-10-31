@@ -133,6 +133,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(18)] 
+		[RED("displayContextData")] 
+		public CHandle<ItemDisplayContextData> DisplayContextData
+		{
+			get => GetPropertyValue<CHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("libraryPath")] 
 		public inkWidgetLibraryReference LibraryPath
 		{

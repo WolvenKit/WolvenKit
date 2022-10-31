@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using ProtoBuf;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
@@ -103,14 +104,28 @@ namespace WolvenKit.RED4.Archive
         public void SetHashService(IHashService hashService) => _hashService = hashService;
 
 
-        public void Extract(Stream output)
+        public void Extract(Stream output) => Extract(output, false);
+
+        public Task ExtractAsync(Stream output) => ExtractAsync(output, false);
+
+        public void Extract(Stream output, bool decompressBuffers)
         {
-            if (Archive is not Archive ar)
+            if (Archive is not ICyberGameArchive ar)
             {
                 throw new InvalidParsingException($"{Archive.ArchiveAbsolutePath} is not a cyberpunk77 archive.");
             }
 
-            ar.CopyFileToStream(output, NameHash64, false);
+            ar.CopyFileToStream(output, NameHash64, decompressBuffers);
+        }
+
+        public async Task ExtractAsync(Stream output, bool decompressBuffers = false)
+        {
+            if (Archive is not ICyberGameArchive ar)
+            {
+                throw new InvalidParsingException($"{Archive.ArchiveAbsolutePath} is not a cyberpunk77 archive.");
+            }
+
+            await ar.CopyFileToStreamAsync(output, NameHash64, decompressBuffers);
         }
 
         private string GetNameString()

@@ -2,36 +2,10 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Media;
-using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 
 namespace WolvenKit.Functionality.Services
 {
-    public interface ISettingsDto
-    {
-        #region Properties
-
-        // I wish there was a better way to inject deps
-        // than creating unnecessary interfaces.
-        public string SettingsVersion { get; }
-        public bool CheckForUpdates { get; set; }
-        public EUpdateChannel UpdateChannel { get; set; }
-        public bool ShowGuidedTour { get; set; }
-        public string ThemeAccentString { get; set; }
-        public string CP77GameDirPath { get; set; }
-        public string CP77ExecutablePath { get; set; }
-        public string CP77LaunchCommand { get; set; }
-        public string CP77LaunchOptions { get; set; }
-        public bool ShowFilePreview { get; set; }
-        public string ReddbHash { get; set; }
-        public string MaterialRepositoryPath { get; set; }
-        public string W3ExecutablePath { get; set; }
-        public string WccLitePath { get; set; }
-
-        public bool TreeViewGroups { get; set; }
-        public uint TreeViewGroupSize { get; set; }
-
-        #endregion Properties
-    }
 
     public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     {
@@ -51,14 +25,6 @@ namespace WolvenKit.Functionality.Services
 
         string GetRED4OodleDll();
 
-        string GetW3GameContentDir();
-
-        string GetW3GameDlcDir();
-
-        string GetW3GameModDir();
-
-        string GetW3GameRootDir();
-
         string GetRED4GameRootDir();
 
         string GetRED4GameExecutablePath();
@@ -67,13 +33,13 @@ namespace WolvenKit.Functionality.Services
 
         string GetRED4GameLaunchOptions();
 
+        public string GetRED4GameLegacyModDir();
         public string GetRED4GameModDir();
 
 
         public static string GetAppData()
         {
-            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding",
-                "WolvenKit");
+            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -104,8 +70,6 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        public static string GetXBMDumpPath() => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "__xbmdump_3768555366.csv");
-
         public static string GetTemp_AudioPath()
         {
             var dir = Path.Combine(GetAppData(), "Temp_Audio");
@@ -120,17 +84,6 @@ namespace WolvenKit.Functionality.Services
         public static string GetTemp_OBJPath()
         {
             var dir = Path.Combine(GetAppData(), "Temp_OBJ");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public static string GetTemp_MeshPath()
-        {
-            var dir = Path.Combine(GetAppData(), "Temp_Mesh");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -164,6 +117,17 @@ namespace WolvenKit.Functionality.Services
         public static string GetWebViewDataPath()
         {
             var dir = Path.Combine(GetAppData(), "WebViewData");
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            return dir;
+        }
+
+        public static string GetWScriptDir()
+        {
+            var dir = Path.Combine(GetAppData(), "WScript");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);

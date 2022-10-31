@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.IO
 
         public Red4Writer(Stream output, Encoding encoding, bool leaveOpen)
         {
-            StringCacheList.Add("");
+            StringCacheList.Add(CName.Empty);
 
             _writer = new BinaryWriter(output, encoding, leaveOpen);
             _encoding = encoding;
@@ -269,8 +269,15 @@ namespace WolvenKit.RED4.IO
 
         public List<RedBuffer> BufferStack = new();
 
+        protected virtual void GenerateBufferBytes(RedBuffer buffer)
+        {
+
+        }
+
         public virtual void Write(DataBuffer val)
         {
+            GenerateBufferBytes(val.Buffer);
+
             if (val.Buffer.IsEmpty)
             {
                 _writer.Write(0x80000000);
@@ -299,11 +306,19 @@ namespace WolvenKit.RED4.IO
         public virtual void Write(NodeRef val) => _writer.WriteLengthPrefixedString(val);
         public virtual void Write(SerializationDeferredDataBuffer val)
         {
+            GenerateBufferBytes(val.Buffer);
+
             BufferRef.Add(_writer.BaseStream.Position, val.Buffer);
             _writer.Write((ushort)(GetRedBufferIndex(val.Buffer) + 1));
         }
 
-        public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer.GetBytes());
+        public virtual void Write(SharedDataBuffer val)
+        {
+            GenerateBufferBytes(val.Buffer);
+
+            _writer.Write(val.Buffer.GetBytes());
+        }
+
         public virtual void Write(TweakDBID val) => _writer.Write((ulong)val);
         public virtual void Write(gamedataLocKeyWrapper val) => _writer.Write((ulong)val);
 
@@ -480,7 +495,7 @@ namespace WolvenKit.RED4.IO
         {
             var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());
             var valueName = typeInfo.GetRedNameFromCSName(instance.ToEnumString());
-            
+
             CNameRef.Add(_writer.BaseStream.Position, valueName);
             _writer.Write(GetStringIndex(valueName));
         }
@@ -613,13 +628,18 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(IRedResourceReference instance)
         {
-            if (instance.DepotPath == "")
+            if (instance.DepotPath == CName.Empty)
             {
                 _writer.Write((ushort)0);
                 return;
             }
 
-            var val = new ImportEntry("", instance.DepotPath, (ushort)instance.Flags);
+            if (!instance.DepotPath.IsResolvable)
+            {
+                throw new Exception("Can't write unresolvable path!");
+            }
+
+            var val = new ImportEntry(CName.Empty, instance.DepotPath, (ushort)instance.Flags);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));
@@ -627,13 +647,18 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(IRedResourceAsyncReference instance)
         {
-            if (instance.DepotPath == "")
+            if (instance.DepotPath == CName.Empty)
             {
                 _writer.Write((ushort)0);
                 return;
             }
 
-            var val = new ImportEntry("", instance.DepotPath, (ushort)instance.Flags);
+            if (!instance.DepotPath.IsResolvable)
+            {
+                throw new Exception("Can't write unresolvable path!");
+            }
+
+            var val = new ImportEntry(CName.Empty, instance.DepotPath, (ushort)instance.Flags);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));

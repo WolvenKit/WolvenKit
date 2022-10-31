@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,8 +16,9 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class NewFileViewModel : DialogViewModel
     {
@@ -26,7 +28,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
         public NewFileViewModel()
         {
-            CreateCommand = ReactiveCommand.Create(() =>
+            OkCommand = ReactiveCommand.Create(() =>
             {
                 IsCreating = true;
                 FileHandler(this);
@@ -34,38 +36,43 @@ namespace WolvenKit.ViewModels.Dialogs
                 x => x.FileName, x => x.FullPath, x => x.IsCreating,
                 (file, path, isCreating) =>
                     !isCreating &&
-                    file != null &&
+                    file is not null &&
                     !string.IsNullOrEmpty(file) &&
                     !File.Exists(path)));
 
-            CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
+#pragma warning disable IDE0053 // Use expression body for lambda expressions
+            CancelCommand = ReactiveCommand.Create(() => { FileHandler(null); });
+#pragma warning restore IDE0053 // Use expression body for lambda expressions
 
             Title = "Create new file";
 
             try
             {
-                var serializer = new XmlSerializer(typeof(WolvenKitFileDefinitions));
-                using (var stream = Assembly.GetExecutingAssembly()
-                    .GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml"))
+                using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml");
+
+                XmlSerializer serializer = new(typeof(WolvenKitFileDefinitions));
+                var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
+                foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
                 {
-                    var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
-                    foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
+                    if (CommonFunctions.GetResourceClassesFromExtension(ext) is not null)
                     {
-                        if (CommonFunctions.GetResourceClassesFromExtension(ext) != null)
+                        var resourceFiles = newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files");
+                        resourceFiles.Files.Add(new AddFileModel()
                         {
-                            newdef.Categories[2].Files.Add(new AddFileModel()
-                            {
-                                Name = CommonFunctions.GetResourceClassesFromExtension(ext),
-                                Description = $"A .{ext} File",
-                                Extension = ext.ToString(),
-                                Type = EWolvenKitFile.Cr2w,
-                                Template = ""
-                            });
-                        }
+                            Name = CommonFunctions.GetResourceClassesFromExtension(ext),
+                            Description = $"A .{ext} File",
+                            Extension = ext.ToString(),
+                            Type = EWolvenKitFile.Cr2w,
+                            Template = ""
+                        });
                     }
-                    Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
                 }
 
+                var ordered = newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files").Files.OrderBy(x => x.Name).ToList();
+                newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files").Files = ordered;
+                Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
+
+                SelectedCategory = Categories.FirstOrDefault();
             }
             catch (Exception e)
             {
@@ -73,27 +80,13 @@ namespace WolvenKit.ViewModels.Dialogs
                 throw;
             }
 
-            //CanCreate = Observable.Empty<bool>().StartsWith(false);
-
-            //=> FileName != null && !string.IsNullOrEmpty(FileName) && !File.Exists(FullPath);
-
 
             this.WhenAnyValue(x => x.SelectedFile)
-                .Subscribe(x =>
-                {
-                    if (x != null)
-                    {
-                        FileName = $"{x.Name.Split(' ').First()}1.{x.Extension.ToLower()}";
-                    }
-                    else
-                    {
-                        FileName = null;
-                    }
-                });
+                .Subscribe(x => FileName = x is not null ? $"{x.Name.Split(' ').First()}1.{x.Extension.ToLower()}" : null);
             this.WhenAnyValue(x => x.FileName)
                 .Subscribe(x =>
                 {
-                    if (SelectedFile != null && x != null)
+                    if (SelectedFile is not null && x is not null)
                     {
                         FullPath = Path.Combine(GetDefaultDir(SelectedFile.Type), x);
                         WhyNotCreate = File.Exists(FullPath) ? "Filename already in use" : "";
@@ -120,50 +113,18 @@ namespace WolvenKit.ViewModels.Dialogs
 
         [Reactive] public AddFileModel SelectedFile { get; set; }
 
-        public ICommand CreateCommand { get; private set; }
-        public ICommand CancelCommand { get; private set; }
+        public override ReactiveCommand<Unit, Unit> OkCommand { get; }
+        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
         [Reactive] public string WhyNotCreate { get; set; }
-        //private async Task ExecuteCreate()
-        //{
-
-        //    //var fullPath = string.IsNullOrEmpty(inputDir)
-        //    //? Path.Combine(GetDefaultDir(SelectedFile.Type), filename)
-        //    //: Path.Combine(inputDir, filename);
-
-        //    switch (SelectedFile.Type)
-        //    {
-        //        case EWolvenKitFile.Redscript:
-        //        case EWolvenKitFile.Tweak:
-        //            if (!string.IsNullOrEmpty(SelectedFile.Template))
-        //            {
-        //                await using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{SelectedFile.Template}"))
-        //                {
-        //                    using var fileStream = new FileStream(FullPath, FileMode.Create, FileAccess.Write);
-        //                    resource.CopyTo(fileStream);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                File.Create(FullPath);
-        //            }
-        //            break;
-        //        case EWolvenKitFile.Cr2w:
-        //            //CreateCr2wFile(SelectedFile);
-        //            break;
-        //    }
-
-        //    // Open file
-        //    await Locator.Current.GetService<AppViewModel>().RequestFileOpen(FullPath);
-        //}
 
         private string GetDefaultDir(EWolvenKitFile type)
         {
             var project = Locator.Current.GetService<IProjectManager>().ActiveProject as Cp77Project;
             return type switch
             {
-                EWolvenKitFile.Redscript => project.ScriptDirectory,
-                EWolvenKitFile.Tweak => project.TweakDirectory,
+                EWolvenKitFile.TweakXl => project.TweakDirectory,
                 EWolvenKitFile.Cr2w => project.ModDirectory,
+                EWolvenKitFile.ArchiveXl => project.ArchiveXLDirectory,
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
         }

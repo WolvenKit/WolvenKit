@@ -1,21 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
@@ -97,7 +92,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             LocKeys = CollectionViewSource.GetDefaultView(_locKey.GetEntries());
             LocKeys.SortDescriptions.Add(new SortDescription("SecondaryKey", ListSortDirection.Ascending));
-            this.RaisePropertyChanged("LocKeys");
+            this.RaisePropertyChanged(nameof(LocKeys));
         }
 
         public ICollectionView LocKeys { get; set; }
@@ -127,7 +122,7 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     LocKeys.Filter = null;
                 }
-                this.RaisePropertyChanged("SearchText");
+                this.RaisePropertyChanged(nameof(SearchText));
             }
         }
 
@@ -138,17 +133,21 @@ namespace WolvenKit.ViewModels.Tools
             set
             {
                 _selectedLocKey = value;
-                this.RaisePropertyChanged("SelectedLocKey");
+                this.RaisePropertyChanged(nameof(SelectedLocKey));
                 if (_selectedLocKey != null)
                 {
                     SelectedChunk.Clear();
-                    SelectedChunk.Add(new ChunkViewModel(_selectedLocKey, null));
+                    SelectedChunk.Add(new ChunkViewModel(_selectedLocKey)
+                    {
+                        IsReadOnly = true,
+                        IsExpanded = true
+                    });
                 }
                 else
                 {
                     SelectedChunk.Clear();
                 }
-                this.RaisePropertyChanged("SelectedChunk");
+                this.RaisePropertyChanged(nameof(SelectedChunk));
             }
         }
 

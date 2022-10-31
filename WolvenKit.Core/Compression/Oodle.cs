@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Serilog;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 
@@ -80,13 +79,13 @@ public static class Oodle
     public const uint KARK = 1263681867; // 0x4b, 0x41, 0x52, 0x4b
 
     public static bool Load()
-    {   
+    {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             // try get oodle dll from game
             if (TryCopyOodleLib())
             {
-                var result = OodleLib.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll"));
+                var result = OodleLib.Load(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "oo2ext_7_win64.dll"));
                 if (result)
                 {
                     CompressionSettings.Get().CompressionLevel = CompressionLevel.Optimal2;
@@ -98,29 +97,18 @@ public static class Oodle
             return true;
         }
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            return true;
-        }
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            return true;
-        }
-        throw new NotImplementedException();
+        return RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+|| (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? true : throw new NotImplementedException());
     }
 
     public static bool IsCompressed(byte[] buf) => buf.Length >= 4 && buf[0] == 0x4B && buf[1] == 0x41 && buf[2] == 0x52 && buf[3] == 0x4B;
     public static bool IsCompressed(Stream stream) => stream.PeekFourCC() == 0x4B52414B;
 
-    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf)
-    {
-        return CompressBuffer(rawBuf, out compBuf, CompressionSettings.Get().CompressionLevel);
-    }
+    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf, bool forceCompression) => CompressBuffer(rawBuf, out compBuf, CompressionSettings.Get().CompressionLevel, forceCompression);
 
-    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf, CompressionLevel compressionLevel)
+    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf, CompressionLevel compressionLevel, bool forceCompression)
     {
-        if (rawBuf.Length > 256)
+        if (forceCompression || rawBuf.Length > 256)
         {
             //var compressedBufferSizeNeeded = GetCompressedBufferSizeNeeded(rawBuf.Length);
             //var compressedBuffer = new byte[compressedBufferSizeNeeded];
@@ -128,13 +116,26 @@ public static class Oodle
 
             var compressedSize = Oodle.Compress(rawBuf, ref compressedBuffer, false, compressionLevel);
 
-            var outArray = new byte[compressedSize + 8];
+            byte[] outArray;
+            if (forceCompression && rawBuf.Length <= 256)
+            {
+                outArray = new byte[compressedSize + 10];
 
-            Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
-            Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
-            Array.Copy(compressedBuffer.ToArray(), 0, outArray, 8, compressedSize);
+                Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
+                Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
+                Array.Copy(new byte[] {0xCC, 0x06}, 0, outArray, 8, 2);
+                Array.Copy(compressedBuffer.ToArray(), 0, outArray, 10, compressedSize);
+            }
+            else
+            {
+                outArray = new byte[compressedSize + 8];
 
-            if (rawBuf.Length > outArray.Length)
+                Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
+                Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
+                Array.Copy(compressedBuffer.ToArray(), 0, outArray, 8, compressedSize);
+            }
+
+            if (forceCompression || rawBuf.Length > outArray.Length)
             {
                 compBuf = outArray;
                 return Status.Compressed;
@@ -196,24 +197,15 @@ public static class Oodle
         var compressedBufferSizeNeeded = Oodle.GetCompressedBufferSizeNeeded(inputCount);
         var compressedBuffer = new byte[compressedBufferSizeNeeded];
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            result = CompressionSettings.Get().UseOodle
+        result = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? CompressionSettings.Get().UseOodle
                 ? OodleLib.OodleLZ_Compress(inputBuffer, compressedBuffer, compressor, level)
-                : KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level);
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            result = KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level);
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            result = KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level);
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
+                : KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level)
+            : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                ? KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level)
+                : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                            ? KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level)
+                            : throw new NotImplementedException();
 
 
         if (result == 0 || inputCount <= (result + 8))
@@ -247,26 +239,15 @@ public static class Oodle
 
     public static long Decompress(byte[] inputBuffer, byte[] outputBuffer)
     {
-        var result = 0;
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            result = CompressionSettings.Get().UseOodle
+        var result = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? CompressionSettings.Get().UseOodle
                 ? OodleLib.OodleLZ_Decompress(inputBuffer, outputBuffer)
-                : KrakenNative.Decompress(inputBuffer, outputBuffer);
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            result = KrakenNative.Decompress(inputBuffer, outputBuffer);
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            result = KrakenNative.Decompress(inputBuffer, outputBuffer);
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
+                : KrakenNative.Decompress(inputBuffer, outputBuffer)
+            : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                ? KrakenNative.Decompress(inputBuffer, outputBuffer)
+                : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                            ? KrakenNative.Decompress(inputBuffer, outputBuffer)
+                            : throw new NotImplementedException();
 
         return result;
     }
@@ -386,16 +367,15 @@ public static class Oodle
     /// <returns></returns>
     public static int GetCompressedBufferSizeNeeded(int count)
     {
-        var n = ((count + 0x3ffff + ((uint)(count + 0x3ffff >> 0x3f) & 0x3ffff))
-                 >> 0x12) * 0x112 + count;
+        var n = (((count + 0x3ffff + ((uint)((count + 0x3ffff) >> 0x3f) & 0x3ffff))
+                 >> 0x12) * 0x112) + count;
         //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
         return (int)n;
     }
 
     private static bool TryCopyOodleLib()
     {
-        var ass = AppDomain.CurrentDomain.BaseDirectory;
-        var destFileName = Path.Combine(ass, "oo2ext_7_win64.dll");
+        var destFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "oo2ext_7_win64.dll");
         if (File.Exists(destFileName))
         {
             return true;
@@ -449,7 +429,7 @@ public static class Oodle
         const string gameName = "Cyberpunk 2077";
         const string exeName = "Cyberpunk2077.exe";
         var exePath = "";
-        StrDelegate strDelegate = msg => cp77exe = msg;
+        void strDelegate(string msg) => cp77exe = msg;
 
         try
         {
@@ -469,7 +449,7 @@ public static class Oodle
                     }
                 }
 
-                strDelegate.Invoke(exePath);
+                strDelegate(exePath);
             });
             Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
             {
@@ -490,7 +470,7 @@ public static class Oodle
                     }
                 }
 
-                strDelegate.Invoke(exePath);
+                strDelegate(exePath);
             });
 
             if (File.Exists(cp77exe))
@@ -517,4 +497,65 @@ public static class Oodle
 
         return cp77BinDir;
     }
+
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="outpath"></param>
+    /// <param name="decompress"></param>
+    /// <param name="compress"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public static int OodleTask(string path, string outpath, bool decompress, bool compress)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return 0;
+        }
+
+        if (string.IsNullOrEmpty(outpath))
+        {
+            outpath = Path.ChangeExtension(path, ".kark");
+        }
+
+        if (decompress)
+        {
+            var file = File.ReadAllBytes(path);
+            using var ms = new MemoryStream(file);
+            using var br = new BinaryReader(ms);
+
+            var oodleCompression = br.ReadBytes(4);
+            if (!oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b }))
+            {
+                throw new NotImplementedException();
+            }
+
+            var size = br.ReadUInt32();
+
+            var buffer = br.ReadBytes(file.Length - 8);
+
+            var unpacked = new byte[size];
+            var unpackedSize = Oodle.Decompress(buffer, unpacked);
+
+            using var msout = new MemoryStream();
+            using var bw = new BinaryWriter(msout);
+            bw.Write(unpacked);
+
+            File.WriteAllBytes($"{outpath}", msout.ToArray());
+        }
+
+        if (compress)
+        {
+            var inbuffer = File.ReadAllBytes(path);
+            IEnumerable<byte> outBuffer = new List<byte>();
+
+            var r = Oodle.Compress(inbuffer, ref outBuffer, true);
+
+            File.WriteAllBytes(outpath, outBuffer.ToArray());
+        }
+
+        return 1;
+    }
+
 }

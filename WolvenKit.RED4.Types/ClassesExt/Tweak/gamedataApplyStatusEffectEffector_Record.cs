@@ -3,6 +3,14 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataApplyStatusEffectEffector_Record
 	{
+		[RED("applicationTarget")]
+		[REDProperty(IsIgnored = true)]
+		public CName ApplicationTarget
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("count")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Count
@@ -11,33 +19,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("effectorChance")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat EffectorChance
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("instigator")]
-		[REDProperty(IsIgnored = true)]
-		public CString Instigator
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
-		}
-		
 		[RED("inverted")]
 		[REDProperty(IsIgnored = true)]
 		public CBool Inverted
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("isRandom")]
-		[REDProperty(IsIgnored = true)]
-		public CBool IsRandom
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -49,6 +33,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("statusEffect")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID StatusEffect
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 	}
 }

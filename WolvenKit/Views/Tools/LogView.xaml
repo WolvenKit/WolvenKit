@@ -1,22 +1,21 @@
 <reactiveUi:ReactiveUserControl
-    x:TypeArguments="tools:LogViewModel"
-     x:Class="WolvenKit.Views.Tools.LogView"
-     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-     xmlns:reactiveUi="http://reactiveui.net"
-     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-     xmlns:hc="https://handyorg.github.io/handycontrol"
-     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    x:Class="WolvenKit.Views.Tools.LogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
-     xmlns:sfgrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:sfgrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
-     d:DesignHeight="450"
-     d:DesignWidth="800"
-     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=tools:LogViewModel}"
- >
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:TypeArguments="tools:LogViewModel"
+    mc:Ignorable="d">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -29,86 +28,79 @@
 
     <Grid>
         <Grid.Resources>
-            <converters:LogColorConverter x:Key="Converter"/>
+            <converters:LogColorConverter x:Key="Converter" />
             <!--<Style TargetType="sfgrid:VirtualizingCellsControl" x:Key="CustomRowStyle">
                 <Setter Property="Foreground" Value="{Binding Path=Level, Converter={StaticResource Converter}}" />
             </Style>-->
         </Grid.Resources>
 
-        <!-- <syncfusion:SfDataGrid x:Name="ListView" -->
-        <!--                        AutoGenerateColumns="False" -->
-        <!--                        ColumnSizer="AutoLastColumnFill" -->
-        <!--                        AllowResizingColumns="True" -->
-        <!--                        AllowFiltering="True" -->
-        <!--                        AllowEditing="False" -->
-        <!--                        AllowSorting="True" -->
-        <!--                        ItemsSource="{Binding LogEntries}" -->
-        <!--                        RowStyle="{StaticResource CustomRowStyle}" -->
-        <!-- > -->
+        <!--  <syncfusion:SfDataGrid x:Name="ListView"  -->
+        <!--  AutoGenerateColumns="False"  -->
+        <!--  ColumnSizer="AutoLastColumnFill"  -->
+        <!--  AllowResizingColumns="True"  -->
+        <!--  AllowFiltering="True"  -->
+        <!--  AllowEditing="False"  -->
+        <!--  AllowSorting="True"  -->
+        <!--  ItemsSource="{Binding LogEntries}"  -->
+        <!--  RowStyle="{StaticResource CustomRowStyle}"  -->
+        <!--  >  -->
         <!--     <syncfusion:SfDataGrid.Columns> -->
-        <!-- -->
+        <!--    -->
         <!--         <syncfusion:GridTextColumn MappingName="Level" /> -->
-        <!-- -->
+        <!--    -->
         <!--         <syncfusion:GridTextColumn MappingName="Message" /> -->
-        <!-- -->
+        <!--    -->
         <!--     </syncfusion:SfDataGrid.Columns> -->
         <!-- </syncfusion:SfDataGrid> -->
 
         <RichTextBox
-            VerticalScrollBarVisibility="Visible"
             x:Name="LogRichTextBox"
-            IsReadOnly="True"
-            BorderThickness="0"
-            Background="#131313"
             Margin="0"
-            Padding="0,4"/>
+            Padding="0,4"
+            Background="#131313"
+            BorderThickness="0"
+            IsReadOnly="True"
+            VerticalScrollBarVisibility="Visible" />
 
         <hc:UniformSpacingPanel
-         Grid.Row="1"
-         Margin="0,5,5,5"
-         HorizontalAlignment="Right"
-         VerticalAlignment="Bottom"
-         FlowDirection="RightToLeft"
-         Orientation="Horizontal"
-         Spacing="15"
-         Visibility="Visible"
-         >
+            Grid.Row="1"
+            Margin="0,5,5,5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            FlowDirection="RightToLeft"
+            Orientation="Horizontal"
+            Spacing="15"
+            Visibility="Visible">
             <Button
-             BorderThickness="1"
-             Click="Button_Click"
-             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
-             >
+                BorderThickness="1"
+                Click="Button_Click"
+                Style="{StaticResource MahApps.Styles.Button.Chromeless}">
                 <iconPacks:PackIconCodicons
-                 Width="15"
-                 Height="15"
-                 Kind="ClearAll"
-                 />
+                    Width="15"
+                    Height="15"
+                    Kind="ClearAll" />
             </Button>
 
             <Button
-             BorderThickness="1"
-             Click="Button_Click"
-             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
-             Visibility="Collapsed"
-             >
+                BorderThickness="1"
+                Click="Button_Click"
+                Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                Visibility="Collapsed">
                 <iconPacks:PackIconOcticons
-                 Width="15"
-                 Height="15"
-                 Kind="Clippy"
-                 />
+                    Width="15"
+                    Height="15"
+                    Kind="Clippy" />
             </Button>
 
             <Button
-             BorderThickness="1"
-             Click="Button_Click"
-             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
-             Visibility="Collapsed"
-             >
+                BorderThickness="1"
+                Click="Button_Click"
+                Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                Visibility="Collapsed">
                 <iconPacks:PackIconUnicons
-                 Width="15"
-                 Height="15"
-                 Kind="PaintTool"
-                 />
+                    Width="15"
+                    Height="15"
+                    Kind="PaintTool" />
             </Button>
         </hc:UniformSpacingPanel>
     </Grid>

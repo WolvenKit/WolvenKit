@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SharpGLTF.Schema2;
+using SharpGLTF.Validation;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
@@ -19,7 +20,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<Archive> archives, string modFolder, bool isGLBinary = true)
+        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<ICyberGameArchive> archives, string modFolder, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(targetStream);
             if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh morphBlob || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendblob)
@@ -33,14 +34,14 @@ namespace WolvenKit.Modkit.RED4
                 var meshStream = new MemoryStream();
                 foreach (var ar in archives)
                 {
-                    if (ar.Files.ContainsKey(hash))
+                    if (ar.Files.TryGetValue(hash, out var gameFile))
                     {
-                        ExtractSingleToStream(ar, hash, meshStream);
+                        gameFile.Extract(meshStream);
                         break;
                     }
                 }
                 var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
-                if (meshCr2w != null && meshCr2w.RootChunk is CMesh baseMeshBlob && baseMeshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob)
+                if (meshCr2w != null && meshCr2w.RootChunk is CMesh baseMeshBlob && baseMeshBlob.RenderResourceBlob != null && baseMeshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob)
                 {
                     Rig = MeshTools.GetOrphanRig(baseMeshBlob);
                 }
@@ -82,11 +83,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (isGLBinary)
             {
-                model.SaveGLB(outfile.FullName);
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName);
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
             var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_textures");

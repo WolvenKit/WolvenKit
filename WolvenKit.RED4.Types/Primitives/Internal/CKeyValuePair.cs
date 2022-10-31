@@ -2,7 +2,7 @@ using System;
 
 namespace WolvenKit.RED4.Types;
 
-public sealed class CKeyValuePair : IRedType, IEquatable<CKeyValuePair>
+public sealed class CKeyValuePair : IRedType, IEquatable<CKeyValuePair>, IRedCloneable
 {
     public CKeyValuePair(CName key, IRedType value)
     {
@@ -59,4 +59,24 @@ public sealed class CKeyValuePair : IRedType, IEquatable<CKeyValuePair>
     }
 
     public override int GetHashCode() => HashCode.Combine(Key, Value);
+
+    public object ShallowCopy()
+    {
+        return MemberwiseClone();
+    }
+
+    public object DeepCopy()
+    {
+        IRedType otherValue;
+        if (Value is IRedCloneable cl)
+        {
+            otherValue = (IRedType)cl.DeepCopy();
+        }
+        else
+        {
+            otherValue = Value;
+        }
+        return new CKeyValuePair(Key, otherValue);
+
+    }
 }

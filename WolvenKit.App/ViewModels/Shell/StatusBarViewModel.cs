@@ -1,14 +1,10 @@
 using System;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
-using gpm.Installer;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -22,7 +18,6 @@ namespace WolvenKit.ViewModels.Shell
         public ISettingsManager _settingsManager { get; set; }
         private readonly ILoggerService _loggerService;
 
-        private readonly AutoInstallerService _autoInstallerService;
         private readonly IProjectManager _projectManager;
         private readonly IProgressService<double> _progressService;
 
@@ -40,12 +35,9 @@ namespace WolvenKit.ViewModels.Shell
             ISettingsManager settingsManager,
             IProjectManager projectManager,
             ILoggerService loggerService,
-            IProgressService<double> progressService,
-
-            AutoInstallerService autoInstallerService
+            IProgressService<double> progressService
             )
         {
-            _autoInstallerService = autoInstallerService;
             _settingsManager = settingsManager;
             _projectManager = projectManager;
             _progressService = progressService;
@@ -54,7 +46,6 @@ namespace WolvenKit.ViewModels.Shell
             IsLoading = false;
             LoadingString = "";
 
-            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(CheckForUpdates);
 
             _projectManager
                 .WhenAnyValue(
@@ -75,10 +66,7 @@ namespace WolvenKit.ViewModels.Shell
                 .WhenAnyValue(x => x.IsIndeterminate)
                 .ToProperty(this, x => x.IsIndeterminate, out _isIndeterminate);
 
-            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b =>
-            {
-                IsIndeterminate = b;
-            });
+            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => IsIndeterminate = b);
         }
 
         #endregion Constructors
@@ -87,7 +75,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public double Progress => _progress.Value;
 
-        //public bool IsIndeterminate => _isIndeterminate.Value;
+        //public bool IsIndeterminate => _isIndeterminate.Value; // TODO ???
 
         [Reactive] public bool IsIndeterminate { get; set; }
 
@@ -104,37 +92,6 @@ namespace WolvenKit.ViewModels.Shell
         public object VersionNumber => _settingsManager.GetVersionNumber();
 
         #endregion Properties
-
-        public ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; }
-        private async Task CheckForUpdates()
-        {
-            // 1 API call
-            if (!(await _autoInstallerService.CheckForUpdate())
-                .Out(out var release))
-            {
-                return;
-            }
-
-            if (release.TagName.Equals(_settingsManager.GetVersionNumber()))
-            {
-                return;
-            }
-
-            _loggerService.Success($"WolvenKit update available: {release.TagName}");
-            _settingsManager.IsUpdateAvailable = true;
-
-            var result = await Interactions.ShowMessageBoxAsync("An update is ready to install for WolvenKit. Exit the app and install it?", "Update available");
-            switch (result)
-            {
-                case WMessageBoxResult.OK:
-                case WMessageBoxResult.Yes:
-                    if (await _autoInstallerService.Update()) // 1 API call
-                    {
-
-                    }
-                    break;
-            }
-        }
 
     }
 }

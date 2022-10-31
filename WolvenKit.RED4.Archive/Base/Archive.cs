@@ -12,8 +12,16 @@ using WolvenKit.Core.Interfaces;
 namespace WolvenKit.RED4.Archive
 {
     [ProtoContract]
-    public class Archive : ICyberGameArchive
+    public class Archive : ICyberGameArchive, IDisposable
     {
+        #region Fields
+
+        private MemoryMappedFile _mmf;
+
+        private bool _disposed;
+
+        #endregion
+
         #region constructors
 
         public Archive()
@@ -33,6 +41,8 @@ namespace WolvenKit.RED4.Archive
 
         [ProtoMember(3)] public Index Index { get; set; }
 
+        [ProtoMember(4)] public string ArchiveRelativePath { get; set; }
+
 
         public Dictionary<ulong, IGameFile> Files { get; }
 
@@ -42,13 +52,24 @@ namespace WolvenKit.RED4.Archive
 
         public int FileCount => Files?.Count ?? 0;
 
-
-
         #endregion properties
 
         #region methods
 
-        public MemoryMappedFile GetMemoryMappedFile() => MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
+        public MemoryMappedViewStream GetViewStream(ulong offset, uint size)
+        {
+            _mmf ??= MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
+            return _mmf.CreateViewStream((long)offset, size, MemoryMappedFileAccess.Read);
+        }
+
+        public void ReleaseFileHandle()
+        {
+            if (_mmf != null)
+            {
+                _mmf.Dispose();
+                _mmf = null;
+            }
+        }
 
         /// <summary>
         ///
@@ -70,7 +91,7 @@ namespace WolvenKit.RED4.Archive
             return b;
         }
 
-        public void CopyFileToStreamWithoutBuffers(Stream stream, ulong hash, MemoryMappedFile mmf = null)
+        public void CopyFileToStreamWithoutBuffers(Stream stream, ulong hash)
         {
             if (!Files.ContainsKey(hash))
             {
@@ -82,7 +103,7 @@ namespace WolvenKit.RED4.Archive
             var nextIndex = (int)entry.SegmentsEnd;
 
             // decompress main file
-            CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true, mmf);
+            CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true);
         }
 
         /// <summary>
@@ -91,7 +112,7 @@ namespace WolvenKit.RED4.Archive
         /// <param name="stream"></param>
         /// <param name="hash"></param>
         /// <param name="decompressBuffers"></param>
-        public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers, MemoryMappedFile mmf = null)
+        public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers)
         {
             if (!Files.ContainsKey(hash))
             {
@@ -103,55 +124,14 @@ namespace WolvenKit.RED4.Archive
             var nextIndex = (int)entry.SegmentsEnd;
 
             // decompress main file
-            CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true, mmf);
+            CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true);
 
             //var bufferSegments = new List<FileSegment>();
             for (var j = startIndex + 1; j < nextIndex; j++)
             {
                 var offsetEntry = Index.FileSegments[j];
-                CopyFileSegmentToStream(stream, offsetEntry, decompressBuffers, mmf);
+                CopyFileSegmentToStream(stream, offsetEntry, decompressBuffers);
             }
-            //for (var j = startIndex + 1; j < nextIndex; j++)
-            //{
-            //    bufferSegments.Add(Index.FileSegments[j]);
-            //}
-
-            //if (bufferSegments.Count < 1)
-            //{
-            //    return;
-            //}
-
-            //var cOffsets = new List<ulong> {bufferSegments[0].Offset};
-            //var cSizes = new List<ulong>();
-
-            //var lastOffset = bufferSegments[0].Offset;
-            //ulong currentSize = 0;
-            //foreach (var segment in bufferSegments)
-            //{
-            //    if (lastOffset == segment.Offset)
-            //    {
-            //        lastOffset += segment.ZSize;
-            //    }
-            //    else
-            //    {
-            //        cSizes.Add(currentSize);
-            //        cOffsets.Add(segment.Offset);
-            //        lastOffset = segment.Offset + segment.ZSize;
-            //        currentSize = 0;
-            //    }
-
-            //    currentSize += segment.ZSize;
-            //}
-            //cSizes.Add(currentSize);
-
-            //for (var i = 0; i < cOffsets.Count; i++)
-            //{
-            //    var curOffset = cOffsets[i];
-            //    var curSize = cSizes[i];
-
-            //    using var vs = mmf.CreateViewStream((long)curOffset, (long)curSize, MemoryMappedFileAccess.Read);
-            //    vs.CopyTo(stream);
-            //}
         }
 
         /// <summary>
@@ -160,7 +140,7 @@ namespace WolvenKit.RED4.Archive
         /// <param name="stream"></param>
         /// <param name="hash"></param>
         /// <param name="decompressBuffers"></param>
-        public async Task CopyFileToStreamAsync(Stream stream, ulong hash, bool decompressBuffers, MemoryMappedFile mmf = null)
+        public async Task CopyFileToStreamAsync(Stream stream, ulong hash, bool decompressBuffers)
         {
             if (!Files.ContainsKey(hash))
             {
@@ -172,49 +152,13 @@ namespace WolvenKit.RED4.Archive
             var nextIndex = (int)entry.SegmentsEnd;
 
             // decompress main file
-            await CopyFileSegmentToStreamAsync(stream, Index.FileSegments[startIndex], true, mmf);
+            await CopyFileSegmentToStreamAsync(stream, Index.FileSegments[startIndex], true);
 
-            var bufferSegments = new List<FileSegment>();
+            //var bufferSegments = new List<FileSegment>();
             for (var j = startIndex + 1; j < nextIndex; j++)
             {
-                bufferSegments.Add(Index.FileSegments[j]);
-            }
-
-            if (bufferSegments.Count < 1)
-            {
-                return;
-            }
-
-            var cOffsets = new List<ulong> { bufferSegments[0].Offset };
-            var cSizes = new List<ulong>();
-
-            var lastOffset = bufferSegments[0].Offset;
-            ulong currentSize = 0;
-            foreach (var segment in bufferSegments)
-            {
-                if (lastOffset == segment.Offset)
-                {
-                    lastOffset += segment.ZSize;
-                }
-                else
-                {
-                    cSizes.Add(currentSize);
-                    cOffsets.Add(segment.Offset);
-                    lastOffset = segment.Offset + segment.ZSize;
-                    currentSize = 0;
-                }
-
-                currentSize += segment.ZSize;
-            }
-            cSizes.Add(currentSize);
-
-            for (var i = 0; i < cOffsets.Count; i++)
-            {
-                var curOffset = cOffsets[i];
-                var curSize = cSizes[i];
-
-                await using var vs = mmf.CreateViewStream((long)curOffset, (long)curSize, MemoryMappedFileAccess.Read);
-                await vs.CopyToAsync(stream);
+                var offsetEntry = Index.FileSegments[j];
+                await CopyFileSegmentToStreamAsync(stream, offsetEntry, decompressBuffers);
             }
         }
 
@@ -225,13 +169,11 @@ namespace WolvenKit.RED4.Archive
         /// <param name="outStream"></param>
         /// <param name="offsetEntry"></param>
         /// <param name="decompress"></param>
-        private void CopyFileSegmentToStream(Stream outStream, FileSegment offsetEntry, bool decompress, MemoryMappedFile mmf = null)
+        private void CopyFileSegmentToStream(Stream outStream, FileSegment offsetEntry, bool decompress)
         {
             var zSize = offsetEntry.ZSize;
 
-            mmf ??= GetMemoryMappedFile();
-
-            using var vs = mmf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
+            using var vs = GetViewStream(offsetEntry.Offset, zSize);
             if (!decompress)
             {
                 vs.CopyTo(outStream);
@@ -250,13 +192,11 @@ namespace WolvenKit.RED4.Archive
         /// <param name="outStream"></param>
         /// <param name="offsetEntry"></param>
         /// <param name="decompress"></param>
-        private async Task CopyFileSegmentToStreamAsync(Stream outStream, FileSegment offsetEntry, bool decompress, MemoryMappedFile mmf = null)
+        private async Task CopyFileSegmentToStreamAsync(Stream outStream, FileSegment offsetEntry, bool decompress)
         {
             var zSize = offsetEntry.ZSize;
 
-            mmf ??= GetMemoryMappedFile();
-
-            await using var vs = mmf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
+            await using var vs = GetViewStream(offsetEntry.Offset, zSize);
             if (!decompress)
             {
                 await vs.CopyToAsync(outStream);
@@ -267,6 +207,35 @@ namespace WolvenKit.RED4.Archive
                 await vs.DecompressAndCopySegmentAsync(outStream, zSize, size);
             }
         }
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _mmf.Dispose();
+                }
+
+                _disposed = true;
+            }
+        }
+
+        ~Archive()
+        {
+            Dispose(disposing: false);
+        }
+
+        #endregion
+
         #endregion methods
     }
 }

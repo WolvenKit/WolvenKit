@@ -5,7 +5,7 @@ using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Types
 {
-    public partial class RedBaseClass : IRedType, IRedCloneable, IEquatable<RedBaseClass>
+    public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBaseClass>
     {
         public RedBaseClass()
         {
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
                 }
 
                 var propTypeInfo = RedReflection.GetTypeInfo(propertyInfo.Type);
-                if (propertyInfo.Type.IsValueType || propTypeInfo.IsValueType)
+                if (propertyInfo.Type.IsValueType)
                 {
                     if (propertyInfo.Flags.Equals(Flags.Empty))
                     {

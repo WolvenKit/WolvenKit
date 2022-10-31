@@ -32,9 +32,15 @@ namespace WolvenKit.RED4
         /// <summary>
         /// </summary>
         /// <returns>The compressed byte[]</returns>
-        public byte[] GetCompressedBytes()
+        public byte[] GetCompressedBytes(bool forceCompression = false)
         {
-            Oodle.CompressBuffer(_bytes, out var result);
+            Oodle.CompressBuffer(_bytes, out var result, forceCompression);
+            return result;
+        }
+
+        public byte[] GetCompressedBytes(Oodle.CompressionLevel compressionLevel, bool forceCompression = false)
+        {
+            Oodle.CompressBuffer(_bytes, out var result, compressionLevel, forceCompression);
             return result;
         }
 

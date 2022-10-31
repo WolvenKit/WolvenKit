@@ -68,10 +68,15 @@ namespace WolvenKit.Views.Editors
         private void SetRedValueFromSelect(string value)
         {
             ulong i = 0;
-            foreach (var item in value?.Split(", ") ?? Array.Empty<string>())
+
+            if (!string.IsNullOrEmpty(value))
             {
-                i |= (1UL << int.Parse(item));
+                foreach (var item in value.Split(", "))
+                {
+                    i |= 1UL << int.Parse(item);
+                }
             }
+
             SetCurrentValue(RedNumberProperty, (CUInt64)i);
             OnPropertyChanged("Text");
         }

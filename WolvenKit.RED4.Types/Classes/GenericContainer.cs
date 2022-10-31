@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class GenericContainer : BaseSkillCheckContainer
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("hackingCheck")] 
 		public CHandle<HackingSkillCheck> HackingCheck
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HackingSkillCheck>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("engineeringCheck")] 
 		public CHandle<EngineeringSkillCheck> EngineeringCheck
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<EngineeringSkillCheck>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("demolitionCheck")] 
 		public CHandle<DemolitionSkillCheck> DemolitionCheck
 		{

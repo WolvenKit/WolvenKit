@@ -190,10 +190,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(24)] 
 		[RED("selectedItemData")] 
-		public InventoryItemData SelectedItemData
+		public gameInventoryItemData SelectedItemData
 		{
-			get => GetPropertyValue<InventoryItemData>();
-			set => SetPropertyValue<InventoryItemData>(value);
+			get => GetPropertyValue<gameInventoryItemData>();
+			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
 		[Ordinal(25)] 
@@ -325,7 +325,7 @@ namespace WolvenKit.RED4.Types
 			BlockedText = new();
 			IngredientsListContainer = new();
 			IngredientsControllerList = new();
-			SelectedItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			SelectedItemData = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 			Filters = new();
 
 			PostConstruct();

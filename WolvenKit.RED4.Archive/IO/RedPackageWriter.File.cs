@@ -34,7 +34,7 @@ namespace WolvenKit.RED4.Archive.IO
             WriteHeader();
 
             var chunkList = file.Chunks;
-            if (_file.Settings.RedPackageType == RedPackageType.Default)
+            if (Settings.RedPackageType == RedPackageType.Default)
             {
                 short cruidsIndex = -1;
                 var cruids = new List<CRUID>();
@@ -83,10 +83,10 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            if (_file.Settings.RedPackageType is RedPackageType.SaveResource or RedPackageType.ScriptableSystem)
+            if (Settings.RedPackageType is RedPackageType.SaveResource or RedPackageType.ScriptableSystem)
             {
                 IList<CRUID> cruids = new List<CRUID>();
-                if (_file.Settings.RedPackageType is RedPackageType.SaveResource)
+                if (Settings.RedPackageType is RedPackageType.SaveResource)
                 {
                     foreach (var chunk in file.Chunks)
                     {
@@ -102,23 +102,13 @@ namespace WolvenKit.RED4.Archive.IO
                     }
                 }
 
-                if (_file.Settings.RedPackageType is RedPackageType.ScriptableSystem)
+                if (Settings.RedPackageType is RedPackageType.ScriptableSystem)
                 {
                     var chunkDict = new Dictionary<ulong, RedBaseClass>();
 
                     foreach (var chunk in _file.Chunks)
                     {
-                        ulong hash;
-                        if (chunk is DynamicBaseClass dbc)
-                        {
-                            hash = FNV1A64HashAlgorithm.HashString(dbc.ClassName);
-                        }
-                        else
-                        {
-                            hash = FNV1A64HashAlgorithm.HashString(chunk.GetType().Name);
-                        }
-
-                        chunkDict.Add(hash, chunk);
+                        chunkDict.Add(FNV1A64HashAlgorithm.HashString(GetClassName(chunk)), chunk);
                     }
 
                     chunkDict = chunkDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
@@ -227,8 +217,10 @@ namespace WolvenKit.RED4.Archive.IO
             var refData = new List<byte>();
             foreach (var reff in refs)
             {
-                if (_file.Settings.ImportsAsHash)
+                if (Settings.ImportsAsHash)
                 {
+                    ImportHandler.AddPathHandler?.Invoke(reff.DepotPath);
+
                     refDesc.Add(new RedPackageImportHeader
                     {
                         offset = (uint)refData.Count + position,
@@ -280,9 +272,9 @@ namespace WolvenKit.RED4.Archive.IO
             StringCacheList.Clear();
             foreach (var stringInfo in _chunkStringList)
             {
-                if (stringInfo.Value.List.Contains(""))
+                if (stringInfo.Value.List.Contains(CName.Empty))
                 {
-                    stringInfo.Value.List.Remove("");
+                    stringInfo.Value.List.Remove(CName.Empty);
                 }
 
                 StringCacheList.AddRange(stringInfo.Value.List);
@@ -371,7 +363,7 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             file.GenerateStringDictionary();
-            file.StringCacheList.Remove("");
+            file.StringCacheList.Remove(CName.Empty);
 
             for (var i = 0; i < chunkDesc.Count; i++)
             {

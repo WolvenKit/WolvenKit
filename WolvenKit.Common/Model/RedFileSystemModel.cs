@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ReactiveUI;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Common.Model
 {
@@ -13,21 +14,22 @@ namespace WolvenKit.Common.Model
             FullName = fullname;
         }
 
-        public string Name => Path.GetFileName(FullName);
+        public string Name => _name ??= new DirectoryInfo(FullName).Name;
 
-        public string FullName { get; set; }
+        public string FullName { get; }
 
         public ConcurrentDictionary<string, RedFileSystemModel> Directories { get; } = new();
 
         public IEnumerable<RedFileSystemModel> RedFileSystemModels => Directories.Values.OrderBy(x => x.Name);
 
-        public List<ulong> Files { get; } = new();
+        public ConcurrentQueue<IGameFile> Files { get; } = new();
 
         public string Extension => IsExpanded
             ? nameof(ECustomImageKeys.OpenDirImageKey)
             : nameof(ECustomImageKeys.ClosedDirImageKey);
 
         private bool _isExpanded;
+        private string _name;
 
         public bool IsExpanded
         {

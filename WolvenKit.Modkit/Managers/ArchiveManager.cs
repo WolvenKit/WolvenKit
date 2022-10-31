@@ -112,12 +112,12 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return 0;
             }
 
-            if (ReferenceEquals(null, x))
+            if (x is null)
             {
                 return -1;
             }
 
-            if (ReferenceEquals(null, y))
+            if (y is null)
             {
                 return 1;
             }
@@ -129,12 +129,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             baseY = baseY[..baseY.IndexOf("_", StringComparison.Ordinal)];
 
             var retVal = s_loadOrder.IndexOf(baseX).CompareTo(s_loadOrder.IndexOf(baseY));
-            if (retVal != 0)
-            {
-                return retVal;
-            }
-
-            return string.Compare(x, y, StringComparison.Ordinal);
+            return retVal != 0 ? retVal : string.Compare(x, y, StringComparison.Ordinal);
         }
 
         #endregion
@@ -183,19 +178,31 @@ namespace WolvenKit.RED4.CR2W.Archive
             var archivedir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
 
             var sw = new Stopwatch();
+            var sw2 = new Stopwatch();
             sw.Start();
+            sw2.Start();
 
             var archiveFiles = Directory.GetFiles(archivedir, "*.archive").ToList();
             archiveFiles.Sort(CompareArchives);
 
+            var cnt = 0;
             foreach (var file in archiveFiles)
             {
+                sw.Restart();
+
                 LoadArchive(file);
+                cnt++;
+
+                _logger.Debug($"Loaded archive {Path.GetFileName(file)} {cnt}/{archiveFiles.Count} in {sw.ElapsedMilliseconds}ms");
             }
 
             if (rebuildtree)
             {
+                sw.Restart();
+
                 RebuildGameRoot();
+
+                _logger.Debug($"Finished rebuilding root in {sw.ElapsedMilliseconds}ms");
 
                 _rootCache.Edit(innerCache =>
                 {
@@ -205,8 +212,8 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             sw.Stop();
-            var ms = sw.ElapsedMilliseconds;
-            _logger.Info($"Archive Manager loaded in {ms}ms");
+            sw2.Stop();
+            _logger.Success($"Archive Manager loaded in {sw2.ElapsedMilliseconds}ms");
 
             IsManagerLoaded = true;
         }
@@ -261,36 +268,60 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <summary>
         /// Loads bundles from specified mods and dlc folder
         /// </summary>
-        public override void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir)
+        public override void LoadModsArchives(FileInfo executable)
         {
-            ModArchives.Clear();
-
-            if (!modsDir.Exists)
+            var di = executable.Directory;
+            if (di?.Parent?.Parent is null)
+            {
+                return;
+            }
+            if (!di.Exists)
             {
                 return;
             }
 
-            //var sw = new Stopwatch();
-            //sw.Start();
+            ModArchives.Clear();
 
-            foreach (var file in Directory.GetFiles(modsDir.FullName, "*.archive", SearchOption.AllDirectories))
+            var modsDirs = new DirectoryInfo[]
+            {
+                new(Path.Combine(di.Parent.Parent.FullName, "mods")),
+                new(Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "mod")),
+            };
+
+            var files = new List<string>();
+            foreach (var modsDir in modsDirs)
+            {
+                if (!modsDir.Exists)
+                {
+                    continue;
+                }
+
+                foreach (var file in Directory.GetFiles(modsDir.FullName, "*.archive", SearchOption.AllDirectories))
+                {
+                    files.Add(file);
+                }
+            }
+
+            files.Sort(string.CompareOrdinal);
+            files.Reverse();
+
+            foreach (var file in files)
             {
                 LoadModArchive(file);
             }
 
-            //sw.Stop();
-            //var ms = sw.ElapsedMilliseconds;
-
-            //if (rebuildtree)
+            foreach (var modArchive in ModArchives.Items)
             {
-                RebuildModRoot();
-
-                _modCache.Edit(innerCache =>
-                {
-                    innerCache.Clear();
-                    innerCache.Add(ModRoots);
-                });
+                modArchive.ArchiveRelativePath = Path.GetRelativePath(di.Parent.Parent.FullName, modArchive.ArchiveAbsolutePath);
             }
+
+            RebuildModRoot();
+
+            _modCache.Edit(innerCache =>
+            {
+                innerCache.Clear();
+                innerCache.Add(ModRoots);
+            });
 
             IsManagerLoaded = true;
         }
@@ -339,18 +370,13 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <returns></returns>
         public override Optional<IGameFile> Lookup(ulong hash)
         {
-            if (IsModBrowserActive)
-            {
-                return Optional<IGameFile>.ToOptional(
+            return IsModBrowserActive
+                ? Optional<IGameFile>.ToOptional(
                     (from item in ModArchives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
-                .FirstOrDefault());
-            }
-            else
-            {
-                return Optional<IGameFile>.ToOptional(
+                .FirstOrDefault())
+                : Optional<IGameFile>.ToOptional(
                     (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
                 .FirstOrDefault());
-            }
         }
 
         /// <summary>
@@ -405,14 +431,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 }
                 else
                 {
-                    if (i == splits.Length - 1)
-                    {
-                        return currentDir;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return i == splits.Length - 1 ? currentDir : null;
                 }
             }
             return null;

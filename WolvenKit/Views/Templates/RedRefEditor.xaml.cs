@@ -1,60 +1,36 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Templates;
+using YamlDotNet.Core.Tokens;
 
 namespace WolvenKit.Views.Editors
 {
     /// <summary>
     /// Interaction logic for RedRefEditor.xaml
     /// </summary>
-    public partial class RedRefEditor : UserControl
+    public partial class RedRefEditor : INotifyPropertyChanged
     {
-        //[ObservableAsProperty] public bool IsHashEditable { get; }
+        public IEnumerable<InternalEnums.EImportFlags> EnumValues => Enum.GetValues(typeof(InternalEnums.EImportFlags)).Cast<InternalEnums.EImportFlags>();
 
         public RedRefEditor()
         {
             InitializeComponent();
 
-            //this.WhenActivated(disposables =>
-            //{
-            //this.Bind(ViewModel,
-            //        vm => vm.Data,
-            //        v => v.RedRef,
-            //        (IRedType redType) =>
-            //        {
-            //            return (IRedRef)redType;
-            //        },
-            //        (IRedRef redRef) =>
-            //        {
-            //            return (IRedType)redRef;
-            //        })
-            //   .DisposeWith(disposables);
-
-            //this.OneWayBind(ViewModel,
-            //        vm => (vm.Data as IRedRef).DepotPath.GetRedHash(),
-            //        v => v.HashBox.Text)
-            //   .DisposeWith(disposables);
-
-            Observable.FromEventPattern<KeyEventHandler, KeyEventArgs>(
-                handler => PathBox.KeyUp += handler,
-                handler => PathBox.KeyUp -= handler)
-                .Throttle(TimeSpan.FromSeconds(.5))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x =>
-                {
-                    SetRedValue(PathBox.Text);
-                });
-
-            //this.WhenAnyValue(x => x.Path)
-            //    .Select(x => x != "")
-            //    .ToPropertyEx(this, x => x.IsHashEditable);
-            //});
+            DepotPathEditor.PropertyChanged += DepotPathEditor_OnPropertyChanged;
+            FlagsComboBox.SelectionChanged += FlagsComboBox_OnSelectionChanged;
         }
+
 
         public IRedRef RedRef
         {
@@ -65,72 +41,30 @@ namespace WolvenKit.Views.Editors
             nameof(RedRef), typeof(IRedRef), typeof(RedRefEditor), new PropertyMetadata(default(IRedRef)));
 
 
-        public string Path
+        private void DepotPathEditor_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            get => GetPathFromRedValue();
-            set => SetRedValue(value);
-        }
-
-        public ulong Hash
-        {
-            get => GetHashFromRedValue();
-            set => SetRedValue(value);
-        }
-
-        private void SetRedValue(string value)
-        {
-            if (RedRef == null)
-                return;
-            CName cn = null;
-            if (ulong.TryParse(value, out var number))
+            if (sender is RedCNameEditor depotPathEditor)
             {
-                cn = number;
+                if (RedRef != null && RedRef.DepotPath != depotPathEditor.RedString)
+                {
+                    SetCurrentValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, depotPathEditor.RedString, RedRef.Flags));
+                }
             }
-            else
-            {
-                cn = value;
-            }
-            var redRef = (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType);
-            redRef.DepotPath = cn;
-            SetCurrentValue(RedRefProperty, redRef);
-            HashBox.SetCurrentValue(TextBox.TextProperty, GetHashFromRedValue().ToString());
         }
 
-        private void SetRedValue(ulong value)
+        private void FlagsComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //RedRef.DepotPath = value;
-        }
-
-        private string GetPathFromRedValue()
-        {
-            // this might need to be handled at the class level like enums
-            if (RedRef is null || RedRef.DepotPath is null)
+            if (sender is ComboBox { SelectedItem: InternalEnums.EImportFlags flags })
             {
-                return "";
+                if (RedRef != null && RedRef.Flags != flags)
+                {
+                    SetCurrentValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, RedRef.DepotPath, flags));
+                }
             }
-            if ((string)RedRef.DepotPath == null && RedRef.DepotPath.GetRedHash() != 0)
-            {
-                return GetHashFromRedValue().ToString();
-            }
-            return RedRef.DepotPath;
         }
 
-        private ulong GetHashFromRedValue()
-        {
-            // this might need to be handled at the class level like enums
-            if (RedRef is null)
-            {
-                return 0;
-            }
-            return RedRef.DepotPath?.GetRedHash() ?? 0;
-        }
-
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            var regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
-
-
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

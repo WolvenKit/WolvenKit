@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO
@@ -19,24 +20,39 @@ namespace WolvenKit.RED4.Archive.IO
             _ms = ms;
         }
 
-        public void WriteList(CR2WList list, RedBaseClass root)
+        public void WriteList(CR2WList list, RedBaseClass parent)
         {
+            var meshMeshMaterialBuffer = parent as meshMeshMaterialBuffer;
+            if (meshMeshMaterialBuffer != null)
+            {
+                list.Files = new();
+                foreach (var material in meshMeshMaterialBuffer.Materials)
+                {
+                    var file = new CR2WFile()
+                    {
+                        RootChunk = material
+                    };
+                    list.Files.Add(file);
+                }
+            }
+
             var headers = new CArray<meshLocalMaterialHeader>();
-            var starting_position = _ms.Position;
+            var startingPosition = _ms.Position;
             foreach (var file in list.Files)
             {
                 var header = new meshLocalMaterialHeader();
                 var ms = new MemoryStream();
-                var cr2wWriter = new CR2WWriter(ms) { IsRoot = false };
+                var cr2wWriter = new CR2WWriter(ms) {IsRoot = meshMeshMaterialBuffer != null};
                 cr2wWriter.WriteFile(file);
-                header.Offset = (CUInt32)(_ms.Position - starting_position);
+                header.Offset = (CUInt32)(_ms.Position - startingPosition);
                 _ms.Write(ms.ToArray());
                 header.Size = (CUInt32)(_ms.Position - header.Offset);
                 headers.Add(header);
             }
-            if (root is CMesh mesh)
+
+            if (meshMeshMaterialBuffer != null)
             {
-                mesh.LocalMaterialBuffer.RawDataHeaders = headers;
+                meshMeshMaterialBuffer.RawDataHeaders = headers;
             }
         }
 

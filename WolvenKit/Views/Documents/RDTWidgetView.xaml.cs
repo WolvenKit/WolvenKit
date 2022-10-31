@@ -10,8 +10,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using Prism.Commands;
 using ReactiveUI;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Layout.inkWidgets;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -47,7 +47,7 @@ namespace WolvenKit.Views.Documents
                         x => x.TextWidgetList.ItemsSource)
                     .DisposeWith(disposables);
 
-                ExportWidgetCommand = new DelegateCommand((w) => ViewModel.ExportWidget((inkWidget)w));
+                ExportWidgetCommand = new DelegateCommand<object>((w) => ViewModel.ExportWidget((inkWidget)w));
 
                 if (!ResourcesLoaded)
                 {
@@ -208,8 +208,8 @@ namespace WolvenKit.Views.Documents
             var zoom = e.Delta > 0 ? 1.189207115 : (1 / 1.189207115);
 
             var CursorPosCanvas = e.GetPosition(WidgetPreviewCanvas);
-            pan.X += Math.Round(-(CursorPosCanvas.X - WidgetPreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoom - 1.0));
-            pan.Y += Math.Round(-(CursorPosCanvas.Y - WidgetPreviewCanvas.RenderSize.Height / 2.0 - pan.Y) * (zoom - 1.0));
+            pan.X += Math.Round(-(CursorPosCanvas.X - (WidgetPreviewCanvas.RenderSize.Width / 2.0) - pan.X) * (zoom - 1.0));
+            pan.Y += Math.Round(-(CursorPosCanvas.Y - (WidgetPreviewCanvas.RenderSize.Height / 2.0) - pan.Y) * (zoom - 1.0));
             end.X = pan.X;
             end.Y = pan.Y;
 
@@ -228,7 +228,7 @@ namespace WolvenKit.Views.Documents
             {
                 RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.HighQuality);
             }
-            ZoomText.SetCurrentValue(TextBlock.TextProperty, $"{(scale * 100).ToString("F1")}%");
+            ZoomText.SetCurrentValue(TextBlock.TextProperty, $"{scale * 100:F1}%");
         }
 
         public void SetRealPixelZoom(object sender, RoutedEventArgs e)
@@ -303,10 +303,8 @@ namespace WolvenKit.Views.Documents
                     BitmapEncoder encoder = new TiffBitmapEncoder();
                     encoder.Frames.Add(BitmapFrame.Create(bitmap));
 
-                    using (var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create))
-                    {
-                        encoder.Save(fileStream);
-                    }
+                    using var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create);
+                    encoder.Save(fileStream);
                 }
             }
 

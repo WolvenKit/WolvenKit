@@ -1,0 +1,249 @@
+<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.HomePage.Pages.ModsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:homepage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:WolvenKit.Views.HomePage.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    d:DataContext="{d:DesignInstance Type=homepage:ModsViewModel}"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    x:TypeArguments="homepage:ModsViewModel"
+    Background="{StaticResource ContentBackgroundAlt3}"
+    mc:Ignorable="d">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <StackPanel
+            Grid.Row="0"
+            Height="85"
+            Margin="25,0,5,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Foreground="White"
+                Text="Mod Manager" />
+
+        </StackPanel>
+
+        <!--  Separator  -->
+        <Separator Grid.Row="1" />
+
+        <Grid Grid.Row="2">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  Toolbar  -->
+            <Grid Grid.Row="0" Margin="10,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+
+                <syncfusion:RibbonButton
+                    x:Name="ButtonRefresh"
+                    Grid.Column="0"
+                    Margin="5"
+                    Command="{Binding RefreshCommand}"
+                    IconStretch="Fill"
+                    IconType="Icon"
+                    Label="Refresh"
+                    SizeForm="Small">
+                    <syncfusion:RibbonButton.IconTemplate>
+                        <DataTemplate>
+                            <iconPacks:PackIconCodicons
+                                Width="auto"
+                                Height="auto"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Foreground="CornflowerBlue"
+                                Kind="Refresh" />
+                        </DataTemplate>
+                    </syncfusion:RibbonButton.IconTemplate>
+                </syncfusion:RibbonButton>
+
+                <syncfusion:RibbonButton
+                    x:Name="ButtonDeploy"
+                    Grid.Column="1"
+                    Margin="5"
+                    Command="{Binding DeployCommand}"
+                    IconStretch="Fill"
+                    IconType="Icon"
+                    Label="Deploy"
+                    SizeForm="Small">
+                    <syncfusion:RibbonButton.IconTemplate>
+                        <DataTemplate>
+                            <iconPacks:PackIconCodicons
+                                Width="auto"
+                                Height="auto"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Foreground="Red"
+                                Kind="DesktopDownload" />
+                        </DataTemplate>
+                    </syncfusion:RibbonButton.IconTemplate>
+                </syncfusion:RibbonButton>
+
+                <syncfusion:RibbonButton
+                    x:Name="ButtonLaunchGame"
+                    Grid.Column="2"
+                    Margin="5"
+                    Command="{Binding LaunchGameCommand}"
+                    IconStretch="Fill"
+                    IconType="Icon"
+                    Label="Launch Game"
+                    SizeForm="Small">
+                    <syncfusion:RibbonButton.IconTemplate>
+                        <DataTemplate>
+                            <iconPacks:PackIconCodicons
+                                Width="auto"
+                                Height="auto"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Foreground="ForestGreen"
+                                Kind="DebugStart" />
+                        </DataTemplate>
+                    </syncfusion:RibbonButton.IconTemplate>
+                </syncfusion:RibbonButton>
+
+                <syncfusion:RibbonButton
+                    x:Name="ButtonOpenModFolder"
+                    Grid.Column="4"
+                    Margin="5"
+                    Command="{Binding OpenModFolderCommand}"
+                    IconStretch="Fill"
+                    IconType="Icon"
+                    Label="Open Mods Folder"
+                    SizeForm="Small">
+                    <syncfusion:RibbonButton.IconTemplate>
+                        <DataTemplate>
+                            <iconPacks:PackIconCodicons
+                                Width="auto"
+                                Height="auto"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Foreground="Goldenrod"
+                                Kind="FolderOpened" />
+                        </DataTemplate>
+                    </syncfusion:RibbonButton.IconTemplate>
+                </syncfusion:RibbonButton>
+
+            </Grid>
+
+            <!--  DataGrid  -->
+            <syncfusion:SfDataGrid
+                x:Name="DataGridEvents"
+                Grid.Row="1"
+                Margin="5"
+                d:ItemsSource="{d:SampleData ItemCount=5}"
+                AllowDraggingColumns="True"
+                AllowDraggingRows="True"
+                AllowDrop="True"
+                AllowFiltering="True"
+                AllowResizingColumns="True"
+                AutoGenerateColumns="False"
+                ColumnSizer="AutoLastColumnFill"
+                ItemsSource="{Binding Mods}"
+                RowDropIndicatorMode="Line"
+                SelectedItem="{Binding SelectedMod}"
+                SelectionMode="Extended">
+
+                <syncfusion:SfDataGrid.Columns>
+
+                    <syncfusion:GridTextColumn
+                        AllowEditing="False"
+                        HeaderText="#"
+                        MappingName="LoadOrder"
+                        TextAlignment="Center" />
+
+                    <syncfusion:GridCheckBoxColumn
+                        AllowEditing="True"
+                        HeaderText="Enabled"
+                        MappingName="IsEnabled" />
+
+                    <syncfusion:GridTextColumn
+                        AllowEditing="False"
+                        HeaderText="Name"
+                        MappingName="Name" />
+
+                    <!--<syncfusion:GridTemplateColumn MappingName="Name">
+                    <syncfusion:GridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="2,0,0,0"/>
+
+                            </Grid>
+                        </DataTemplate>
+                    </syncfusion:GridTemplateColumn.CellTemplate>
+                </syncfusion:GridTemplateColumn>-->
+
+                </syncfusion:SfDataGrid.Columns>
+
+                <syncfusion:SfDataGrid.RecordContextMenu>
+                    <ContextMenu>
+                        <MenuItem
+                            x:Name="RemoveModMenuItem"
+                            Click="RemoveModMenuItem_Click"
+                            Header="Remove Mod" />
+                    </ContextMenu>
+                </syncfusion:SfDataGrid.RecordContextMenu>
+
+            </syncfusion:SfDataGrid>
+
+        </Grid>
+
+        <!--  Overlay  -->
+        <Grid
+            Grid.Row="2"
+            Grid.RowSpan="2"
+            Background="Transparent"
+            Visibility="{Binding IsProcessing, Converter={StaticResource boolToVisibilityConverter}}">
+            
+            <syncfusion:SfBusyIndicator AnimationType="Gear" />
+            <TextBlock
+                x:Name="ImportExportOverlayText"
+                Margin="0,65,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="Mods are being deployed ..." />
+            <syncfusion:SfLinearProgressBar
+                x:Name="DeploymentProgressBar"
+                Height="20"
+                Margin="50,150,50,0"
+                Progress="{Binding Progress}" />
+
+        </Grid>
+
+
+    </Grid>
+</reactiveUi:ReactiveUserControl>

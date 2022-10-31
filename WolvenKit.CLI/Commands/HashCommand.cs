@@ -1,38 +1,28 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace CP77Tools.Commands
+namespace CP77Tools.Commands;
+
+internal class HashCommand : CommandBase
 {
-    public class HashCommand : Command
+    private const string s_description = "Some helper functions related to hashes.";
+    private const string s_name = "hash";
+
+    public HashCommand() : base(s_name, s_description)
     {
-        #region Fields
+        AddArgument(new Argument<string[]>("input", "Create FNV1A hash for given strings."));
 
-        private new const string Description = "Some helper functions related to hashes.";
-        private new const string Name = "hash";
+        SetInternalHandler(CommandHandler.Create<string[], IHost>(Action));
+    }
 
-        #endregion Fields
-
-        #region Constructors
-
-        public HashCommand() : base(Name, Description)
-        {
-            AddOption(new Option<string[]>(new[] { "--input", "-i" }, "Create FNV1A hash of a given string."));
-            AddOption(new Option<DirectoryInfo>(new[] { "--missing", "-m" }, "List missing hashes."));
-
-            Handler = CommandHandler.Create<string[], DirectoryInfo, IHost>(Action);
-        }
-
-        private void Action(string[] input, DirectoryInfo missing, IHost host)
-        {
-            var serviceProvider = host.Services;
-            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.HashTask(input, missing);
-        }
-
-        #endregion Constructors
+    private int Action(string[] input, IHost host)
+    {
+        var serviceProvider = host.Services;
+        var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+        return consoleFunctions.HashTask(input);
     }
 }

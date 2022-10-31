@@ -50,13 +50,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
-		
-		[RED("tag")]
-		[REDProperty(IsIgnored = true)]
-		public CName Tag
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
 	}
 }

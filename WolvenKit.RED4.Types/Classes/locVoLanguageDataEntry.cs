@@ -21,8 +21,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("lenghtMapReport")] 
-		public CResourceAsyncReference<JsonResource> LenghtMapReport
+		[RED("lengthMapReport")] 
+		public CResourceAsyncReference<JsonResource> LengthMapReport
 		{
 			get => GetPropertyValue<CResourceAsyncReference<JsonResource>>();
 			set => SetPropertyValue<CResourceAsyncReference<JsonResource>>(value);

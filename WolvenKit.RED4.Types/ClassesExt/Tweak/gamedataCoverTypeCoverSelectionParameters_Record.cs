@@ -19,28 +19,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("scoreOnlyForCombatTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool ScoreOnlyForCombatTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("shootingSpotScore")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat ShootingSpotScore
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("vaidateOnlyForCombatTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool VaidateOnlyForCombatTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

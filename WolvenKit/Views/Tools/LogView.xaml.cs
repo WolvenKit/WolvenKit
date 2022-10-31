@@ -3,10 +3,12 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Threading;
 using DynamicData;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
+using WolvenKit.Common;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
@@ -16,9 +18,6 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class LogView : ReactiveUserControl<LogViewModel>
     {
-
-        #region Constructors
-
         public LogView()
         {
             InitializeComponent();
@@ -76,88 +75,64 @@ namespace WolvenKit.Views.Tools
                 }
             }
         }
-        //private void OnNext(IChangeSet<LogEntry> obj)
-        //{
-        //    foreach (var change in obj)
-        //    {
-        //        switch (change.Reason)
-        //        {
-        //            case ListChangeReason.Add:
-        //                var item = change.Item.Current;
-        //                AddLog(item);
-        //                break;
-        //            case ListChangeReason.AddRange:
-        //                foreach (var logEntry in change.Range)
-        //                {
-        //                    AddLog(logEntry);
-        //                }
-        //                break;
-        //            case ListChangeReason.Replace:
-        //            case ListChangeReason.Remove:
-        //            case ListChangeReason.RemoveRange:
-        //            case ListChangeReason.Refresh:
-        //            case ListChangeReason.Moved:
-        //            case ListChangeReason.Clear:
-        //                break;
-        //            default:
-        //                throw new ArgumentOutOfRangeException();
-        //        }
-        //    }
-        //}
 
         private void AddLog(LogEvent item)
         {
-            var level = item.Level;
+            var level = ToLogtype(item.Level);
+
+#if !DEBUG
+            // don't log Debug on release build
+            if (level == Logtype.Debug)
+            {
+                return;
+            }
+#endif
+
+            if (item.Properties.TryGetValue(Core.Constants.IsSuccess, out var val) && val is ScalarValue { Value: true })
+            {
+                // ... 
+                level = Logtype.Success;
+            }
+
             var paragraph = new Paragraph()
             {
                 LineHeight = 1
             };
-            var run = new Run($"[{DateTime.Now.ToString()}] {item.RenderMessage()}")
+            var run = new Run($"[{DateTime.Now}] {item.RenderMessage()}")
             {
-                Foreground = GetBrushForLevel(level)
+                Foreground = GetBrushForLevel(level),
+                FontSize = 12,
             };
             paragraph.Inlines.Add(run);
             LogRichTextBox.Document.Blocks.Add(paragraph);
-            LogRichTextBox.ScrollToEnd();
+
+            Dispatcher.InvokeAsync(() => LogRichTextBox.ScrollToEnd(), DispatcherPriority.Background);
         }
 
-        //private void AddLog(LogEntry item)
-        //{
-        //    var level = item.Level;
-        //    var paragraph = new Paragraph()
-        //    {
-        //        LineHeight = 1
-        //    };
-        //    var run = new Run(item.ToString())
-        //    {
-        //        Foreground = GetBrushForLevel(level)
-        //    };
-        //    paragraph.Inlines.Add(run);
-        //    LogRichTextBox.Document.Blocks.Add(paragraph);
-        //    LogRichTextBox.ScrollToEnd();
-        //}
-
-        private Brush GetBrushForLevel(LogEventLevel level) => level switch
+        private Logtype ToLogtype(LogEventLevel level)
         {
-            //Logtype.Normal or Logtype.Wcc => Brushes.White,
-            LogEventLevel.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
-            LogEventLevel.Information => (Brush)Application.Current.FindResource("WolvenKitYellow"),
-            LogEventLevel.Debug => (Brush)Application.Current.FindResource("WolvenKitCyan"),
-            LogEventLevel.Warning => (Brush)Application.Current.FindResource("WolvenKitPurple"),
+            return level switch
+            {
+                LogEventLevel.Verbose => Logtype.Debug,
+                LogEventLevel.Debug => Logtype.Debug,
+                LogEventLevel.Information => Logtype.Important,
+                LogEventLevel.Warning => Logtype.Warning,
+                LogEventLevel.Error => Logtype.Error,
+                LogEventLevel.Fatal => Logtype.Error,
+                _ => Logtype.Normal,
+            };
+        }
+
+        private Brush GetBrushForLevel(Logtype level) => level switch
+        {
+            Logtype.Normal or Logtype.Debug => Brushes.White,
+            Logtype.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
+            Logtype.Warning => (Brush)Application.Current.FindResource("WolvenKitPurple"),
+            Logtype.Important => (Brush)Application.Current.FindResource("WolvenKitYellow"),
+            Logtype.Success => (Brush)Application.Current.FindResource("WolvenKitCyan"),
+
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
         };
-
-        //private Brush GetBrushForLevel(Logtype level) => level switch
-        //{
-        //    Logtype.Normal or Logtype.Wcc => Brushes.White,
-        //    Logtype.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
-        //    Logtype.Important => (Brush)Application.Current.FindResource("WolvenKitYellow"),
-        //    Logtype.Success => (Brush)Application.Current.FindResource("WolvenKitCyan"),
-        //    Logtype.Warning => (Brush)Application.Current.FindResource("WolvenKitPurple"),
-        //    _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
-        //};
-
-        #endregion Constructors
 
         private void Button_Click(object sender, RoutedEventArgs e) => LogRichTextBox.Document.Blocks.Clear();
     }

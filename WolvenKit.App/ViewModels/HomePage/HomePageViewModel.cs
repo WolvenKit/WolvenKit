@@ -1,15 +1,26 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.HomePage
 {
+    public enum EHomePage
+    {
+        Welcome,
+        Mods,
+        Plugins,
+        Settings,
+        Wiki,
+        Github,
+        Website
+    }
+
     public class HomePageViewModel : ReactiveObject
     {
         // #needs_MVVM
@@ -17,18 +28,20 @@ namespace WolvenKit.ViewModels.HomePage
         #region Fields
 
         private readonly ISettingsManager _settingsManager;
+        private readonly IPluginService _pluginService;
 
         #endregion Fields
 
         #region Constructors
 
-        public HomePageViewModel(ISettingsManager settingsManager)
+        public HomePageViewModel(ISettingsManager settingsManager, IPluginService pluginService)
         {
             _settingsManager = settingsManager;
+            _pluginService = pluginService;
 
-            CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
-            RestoreWindow = new RelayCommand(ExecuteRestoreWindow);
-            MinimizeWindow = new RelayCommand(ExecuteMinimizeWindow);
+            CloseHomePage = new DelegateCommand(ExecuteHome, CanHome);
+            RestoreWindow = new DelegateCommand(ExecuteRestoreWindow);
+            MinimizeWindow = new DelegateCommand(ExecuteMinimizeWindow);
 
             CurrentWindowState = WindowState.Normal;
         }
@@ -86,6 +99,8 @@ namespace WolvenKit.ViewModels.HomePage
             var main = Locator.Current.GetService<AppViewModel>();
             main.CloseModalCommand.Execute(null);
         }
+
+        public void NavigateTo(EHomePage page) => SelectedIndex = (int)page;
 
         #endregion Methods
     }

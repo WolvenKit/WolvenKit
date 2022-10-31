@@ -44,20 +44,10 @@ public class RecordsPool : IEnumerable<(TweakDBID id, Type type)>
         return _records.ContainsKey(hash);
     }
 
-    public List<TweakDBID> GetResolvableRecords(bool sortByName = false)
-    {
-        var list = _records.Keys
+    public List<TweakDBID> GetRecords() =>
+        _records.Keys
             .Select(x => (TweakDBID)x)
-            .Where(x => x.GetResolvedText() != null)
             .ToList();
-
-        if (sortByName)
-        {
-            list.Sort((a, b) => string.Compare(a.GetResolvedText(), b.GetResolvedText(), StringComparison.InvariantCulture));
-        }
-        
-        return list;
-    }
 
     public Type GetRecord(ulong hash)
     {

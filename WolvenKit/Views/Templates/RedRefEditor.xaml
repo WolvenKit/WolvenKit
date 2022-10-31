@@ -1,35 +1,49 @@
-<UserControl x:Class="WolvenKit.Views.Editors.RedRefEditor"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WolvenKit.Views.Editors"
-             xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
-             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-             mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="400">
+<UserControl
+    x:Class="WolvenKit.Views.Editors.RedRefEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:object="clr-namespace:Microsoft.WindowsAPICodePack.PortableDevices.CommandSystem.Object;assembly=WinCopies.WindowsAPICodePack.COMNative"
+    xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types"
+    d:DesignHeight="100"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedRefEditor}}}">
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="27" />
+            <RowDefinition Height="27" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" MinWidth="50" />
         </Grid.ColumnDefinitions>
-        <TextBox
-            x:Name="PathBox"
-            helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Text="{Binding Path}" />
-        <TextBox
-            x:Name="HashBox"
-            helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Text="{Binding Hash}"
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Text="DepotPath" />
+        <local:RedCNameEditor
+            x:Name="DepotPathEditor"
+            Grid.Row="0"
             Grid.Column="1"
-            ToolTip="Depot Hash"
-            PreviewTextInput="NumberValidationTextBox" 
-            IsReadOnly="True"
-            Foreground="#666666"
-            Background="{StaticResource ContentBackgroundAlt}"
-            BorderBrush="{StaticResource BorderAlt}"
-            BorderThickness="1,0,0,0"/>
+            RedString="{Binding RedRef.DepotPath, Mode=OneWay}" />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Text="Flags" />
+        <ComboBox
+            Name="FlagsComboBox"
+            Grid.Row="1"
+            Grid.Column="1"
+            ItemsSource="{Binding EnumValues}"
+            SelectedItem="{Binding RedRef.Flags, Mode=OneWay}" />
     </Grid>
 </UserControl>

@@ -2,11 +2,14 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.Common;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
@@ -15,7 +18,9 @@ using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -32,22 +37,21 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
         public bool UncookSingle(
-            Archive archive,
+            ICyberGameArchive archive,
             ulong hash,
             DirectoryInfo outDir,
             GlobalExportArgs args,
             DirectoryInfo rawOutDir = null,
-            ECookedFileFormat[] forcebuffers = null)
+            ECookedFileFormat[] forcebuffers = null,
+            bool serialize = false)
         {
-            if (!archive.Files.ContainsKey(hash))
+            if (!archive.Files.TryGetValue(hash, out var gameFile))
             {
                 return false;
             }
 
-            #region unbundle main file
-
             using var cr2WStream = new MemoryStream();
-            ExtractSingleToStream(archive, hash, cr2WStream);
+            gameFile.Extract(cr2WStream);
 
             if (archive.Files[hash] is FileEntry entry)
             {
@@ -67,12 +71,35 @@ namespace WolvenKit.Modkit.RED4
                         Directory.CreateDirectory(mainFileInfo.Directory.FullName);
                     }
 
-                    using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
-                    cr2WStream.Seek(0, SeekOrigin.Begin);
-                    cr2WStream.CopyTo(fs);
+                    // prevents batch extract to create write conflicts when a single file is referrenced by multiple items
+                    if (!File.Exists(mainFileInfo.FullName))
+                    {
+                        using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
+                        cr2WStream.Seek(0, SeekOrigin.Begin);
+                        cr2WStream.CopyTo(fs);
+                    }
                 }
 
-                #endregion unbundle main file
+                #region serialize
+
+                if (serialize)
+                {
+                    try
+                    {
+                        var jsonOutput = SerializeMainFile(cr2WStream);
+                        var outpath = Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}.json");
+                        File.WriteAllText(outpath, jsonOutput);
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error($"{relFileFullName} And unexpected error occured while converting to json: {e.Message}");
+                        _loggerService.Error(e);
+                        return false;
+                    }
+                }
+
+                #endregion serialize
 
                 #region extract buffers
 
@@ -100,9 +127,121 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Error(e);
                     return false;
                 }
+
+                #endregion extract buffers
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Uncooks a single file by hash. This will both extract and uncook the redengine file
+        /// </summary>
+        /// <param name="archive"></param>
+        /// <param name="hash"></param>
+        /// <param name="outDir"></param>
+        /// <param name="rawOutDir"></param>
+        /// <param name="args"></param>
+        /// <param name="forcebuffers"></param>
+        /// <returns></returns>
+        public async Task<bool> UncookSingleAsync(
+            ICyberGameArchive archive,
+            ulong hash,
+            DirectoryInfo outDir,
+            GlobalExportArgs args,
+            DirectoryInfo rawOutDir = null,
+            ECookedFileFormat[] forcebuffers = null,
+            bool serialize = false)
+        {
+            if (!archive.Files.TryGetValue(hash, out var gameFile))
+            {
+                return false;
+            }
+
+            #region unbundle main file
+
+            using var cr2WStream = new MemoryStream();
+            await gameFile.ExtractAsync(cr2WStream);
+
+            if (archive.Files[hash] is not FileEntry entry)
+            {
+                return false;
+            }
+
+            var relFileFullName = entry.FileName;
+            if (string.IsNullOrEmpty(Path.GetExtension(relFileFullName)))
+            {
+                relFileFullName += ".bin";
+            }
+
+            var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}"));
+
+            // write mainFile
+            if (!WolvenTesting.IsTesting)
+            {
+                if (mainFileInfo.Directory != null)
+                {
+                    Directory.CreateDirectory(mainFileInfo.Directory.FullName);
+                }
+
+                // prevents batch extract to create write conflicts when a single file is referrenced by multiple items
+                if (!File.Exists(mainFileInfo.FullName))
+                {
+                    using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
+                    cr2WStream.Seek(0, SeekOrigin.Begin);
+                    await cr2WStream.CopyToAsync(fs);
+                }
+            }
+
+            #endregion unbundle main file
+
+            #region serialize
+
+            if (serialize)
+            {
+                try
+                {
+                    var jsonOutput = SerializeMainFile(cr2WStream);
+                    var outpath = Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}.json");
+                    await File.WriteAllTextAsync(outpath, jsonOutput);
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error($"{relFileFullName} And unexpected error occured while converting to json: {e.Message}");
+                    _loggerService.Error(e);
+                    return false;
+                }
+            }
+
+            #endregion serialize
+
+            #region extract buffers
+
+            var hasBuffers = (entry.SegmentsEnd - entry.SegmentsStart) > 1;
+            if (!hasBuffers)
+            {
+                return true;
+            }
+
+            // uncook main file buffers to raw out dir
+            if (rawOutDir is null or { Exists: false })
+            {
+                rawOutDir = outDir;
+            }
+
+            try
+            {
+                // wems need the physical infile path
+                args.Get<WemExportArgs>().FileName = mainFileInfo.FullName;
+                return UncookBuffers(cr2WStream, relFileFullName, args, rawOutDir, forcebuffers);
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"{relFileFullName} And unexpected error occured while uncooking: {e.Message}");
+                _loggerService.Error(e);
+                return false;
+            }
 
             #endregion extract buffers
         }
@@ -120,21 +259,22 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
         public void UncookAll(
-            Archive ar,
+            ICyberGameArchive ar,
             DirectoryInfo outDir,
             GlobalExportArgs args,
             bool unbundle = false,
             string pattern = "",
             string regex = "",
             DirectoryInfo rawOutDir = null,
-            ECookedFileFormat[] forcebuffers = null)
+            ECookedFileFormat[] forcebuffers = null,
+            bool serialize = false)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
-            var totalInArchiveCount = ar.FileCount;
+            var totalInArchiveCount = ar.Files?.Count ?? 0;
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
@@ -177,7 +317,7 @@ namespace WolvenKit.Modkit.RED4
             //foreach (var info in finalMatchesList)
             Parallel.ForEach(finalMatchesList, info =>
             {
-                if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir, forcebuffers))
+                if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir, forcebuffers, serialize))
                 {
                     extractedList.Add(info.FileName);
                 }
@@ -298,10 +438,7 @@ namespace WolvenKit.Modkit.RED4
                     // settings.Get<MorphTargetExportArgs>().ModFolderPath.  In the context of the CLI, output directory
                     // (i.e. -o argument) can be used to provide the correct absolute pathname.
                     var modFolderPath = settings.Get<MorphTargetExportArgs>().ModFolderPath;
-                    if (modFolderPath == null)
-                    {
-                        modFolderPath = rawOutDir.FullName;
-                    }
+                    modFolderPath ??= rawOutDir.FullName;
                     return ExportMorphTargets(cr2wStream, outfile, settings.Get<MorphTargetExportArgs>().Archives, modFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
                 case ECookedFileFormat.anims:
                     try
@@ -322,17 +459,15 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    DXGI_FORMAT texformat;
-
                     if (WolvenTesting.IsTesting)
                     {
                         using var ms = new MemoryStream();
-                        return ConvertXbmToDdsStream(cr2wStream, ms, out texformat);
+                        return ConvertXbmToDdsStream(cr2wStream, ms, out _, out _);
                     }
 
                     using (var ms = new MemoryStream())
                     {
-                        if (!ConvertXbmToDdsStream(cr2wStream, ms, out texformat))
+                        if (!ConvertXbmToDdsStream(cr2wStream, ms, out _, out var decompressedFormat))
                         {
                             return false;
                         }
@@ -342,7 +477,7 @@ namespace WolvenKit.Modkit.RED4
                         if (xbmargs.UncookExtension != EUncookExtension.dds)
                         {
                             ms.Seek(0, SeekOrigin.Begin);
-                            return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs);
+                            return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs, decompressedFormat);
                         }
                         else
                         {
@@ -370,6 +505,7 @@ namespace WolvenKit.Modkit.RED4
                 //case ECookedFileFormat.json:
                 //    return true;
                 case ECookedFileFormat.cubemap:
+                case ECookedFileFormat.xcube:
                 {
                     if (WolvenTesting.IsTesting)
                     {
@@ -413,31 +549,13 @@ namespace WolvenKit.Modkit.RED4
                     using var ttfStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookFont(cr2wStream, ttfStream);
                 }
+                case ECookedFileFormat.inkatlas:
+                {
+                    return UncookInkAtlas(cr2wStream, outfile);
+                }
                 default:
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
-        }
-
-        private bool HandleEntity(Stream cr2wStream, FileInfo cr2wFileName, EntityExportArgs entExportArgs)
-        {
-            try
-            {
-                switch (entExportArgs.ExportType)
-                {
-                    case EntityExportType.Json:
-                        return DumpEntityPackageAsJson(cr2wStream, cr2wFileName);
-                    case EntityExportType.Gltf:
-                        throw new NotImplementedException("Uncooking Entity/Appearance Resources To Gltf Not Implemented");
-                    default:
-                        break;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error(ex);
-            }
-            return false;
         }
 
         private static bool HandleOpus(OpusExportArgs opusExportArgs)
@@ -458,6 +576,87 @@ namespace WolvenKit.Modkit.RED4
             }
 
             return true;
+        }
+
+        private string SerializeMainFile(Stream redstream)
+        {
+            var cr2w = _wolvenkitFileService.ReadRed4File(redstream);
+            var dto = new RedFileDto(cr2w);
+            var json = RedJsonSerializer.Serialize(dto);
+
+            return json;
+        }
+
+        private bool UncookInkAtlas(Stream redStream, FileInfo outFile)
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return false;
+            }
+
+            if (!_wolvenkitFileService.TryReadRed4File(redStream, out var cr2w))
+            {
+                return false;
+            }
+
+            if (cr2w.RootChunk is not inkTextureAtlas inkTextureAtlas)
+            {
+                return false;
+            }
+
+            if (inkTextureAtlas.ActiveTexture != Enums.inkTextureType.StaticTexture)
+            {
+                // only static for now
+                return false;
+            }
+
+            if (inkTextureAtlas.Texture.DepotPath != 0)
+            {
+                ExtractParts(inkTextureAtlas.Texture.DepotPath, inkTextureAtlas.Parts, Path.Combine(outFile.FullName, "main"));
+            }
+
+            if (inkTextureAtlas.Slots[0] != null && inkTextureAtlas.Slots[0].Texture.DepotPath != 0)
+            {
+                ExtractParts(inkTextureAtlas.Slots[0].Texture.DepotPath, inkTextureAtlas.Slots[0].Parts, Path.Combine(outFile.FullName, "2160p"));
+            }
+
+            if (inkTextureAtlas.Slots[1] != null && inkTextureAtlas.Slots[1].Texture.DepotPath != 0)
+            {
+                ExtractParts(inkTextureAtlas.Slots[1].Texture.DepotPath, inkTextureAtlas.Slots[1].Parts, Path.Combine(outFile.FullName, "1080p"));
+            }
+
+            if (inkTextureAtlas.Slots[2] != null && inkTextureAtlas.Slots[2].Texture.DepotPath != 0)
+            {
+                ExtractParts(inkTextureAtlas.Slots[2].Texture.DepotPath, inkTextureAtlas.Slots[2].Parts, Path.Combine(outFile.FullName, "720p"));
+            }
+
+            return false;
+
+            void ExtractParts(CName texturePath, CArray<inkTextureAtlasMapper> parts, string outDir)
+            {
+                var xbmFile = _archiveManager.Lookup(texturePath);
+                if (xbmFile.HasValue)
+                {
+                    Directory.CreateDirectory(outDir);
+
+                    using var ms = new MemoryStream();
+                    xbmFile.Value.Extract(ms);
+                    ms.Seek(0, SeekOrigin.Begin);
+
+                    var img = RedImage.FromRedFile(_wolvenkitFileService.ReadRed4File(ms));
+
+                    foreach (var part in parts)
+                    {
+                        var x = Math.Round(part.ClippingRectInUVCoords.Left * img.Metadata.Width);
+                        var y = Math.Round(part.ClippingRectInUVCoords.Top * img.Metadata.Height);
+                        var width = Math.Round(part.ClippingRectInUVCoords.Right * img.Metadata.Width) - x;
+                        var height = Math.Round(part.ClippingRectInUVCoords.Bottom * img.Metadata.Height) - y;
+
+                        var croppedImg = img.Crop((int)x, (int)y, (int)width, (int)height);
+                        croppedImg.SaveToPNG(Path.Combine(outDir, $"{part.PartName}.png"));
+                    }
+                }
+            }
         }
 
         private bool UncookFont(Stream redstream, Stream outstream)
@@ -482,11 +681,10 @@ namespace WolvenKit.Modkit.RED4
             switch (meshargs.meshExportType)
             {
                 case MeshExportType.Default:
-                    return _meshTools.ExportMesh(cr2wStream, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
+                    return _meshTools.ExportMesh(cr2wStream, cr2wFileName, meshargs);
 
                 case MeshExportType.WithMaterials:
-                    return ExportMeshWithMaterials(cr2wStream, cr2wFileName, meshargs.Archives, meshargs.MaterialRepo,
-                        meshargs.MaterialUncookExtension, meshargs.isGLBinary, meshargs.LodFilter);
+                    return ExportMeshWithMaterials(cr2wStream, cr2wFileName, meshargs);
 
                 case MeshExportType.WithRig:
                 {
@@ -547,7 +745,7 @@ namespace WolvenKit.Modkit.RED4
 
             var arg = infile.ToEscapedPath() + " -o " + outfile.ToEscapedPath();
             var si = new ProcessStartInfo(
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "vgmstream", "test.exe"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "test.exe"),
                     arg
                 )
             {
@@ -592,20 +790,8 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount;
-            var mipCount = blob.Header.TextureInfo.MipCount;
-            var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            var height = blob.Header.SizeInfo.Height;
-            var width = blob.Header.SizeInfo.Width;
-
-            var texformat = CommonFunctions.GetDXGIFormat(texa.Setup.Compression, texa.Setup.RawFormat, _loggerService);
-
-            DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-
-            outstream.Write(blob.TextureData.Buffer.GetBytes());
+            var image = RedImage.FromTexArray(texa);
+            outstream.Write(image.SaveToDDSMemory());
 
             return true;
         }
@@ -619,20 +805,8 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount;
-            var mipCount = blob.Header.TextureInfo.MipCount;
-            var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            var height = blob.Header.SizeInfo.Height;
-            var width = blob.Header.SizeInfo.Width;
-
-            const DXGI_FORMAT texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-
-            DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-
-            outstream.Write(blob.TextureData.Buffer.GetBytes());
+            var image = RedImage.FromEnvProbe(refl);
+            outstream.Write(image.SaveToDDSMemory());
 
             return true;
         }
@@ -646,20 +820,8 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount;
-            var mipCount = blob.Header.TextureInfo.MipCount;
-            var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            var height = blob.Header.SizeInfo.Height;
-            var width = blob.Header.SizeInfo.Width;
-
-            var texformat = CommonFunctions.GetDXGIFormat(ctex.Setup.Compression, ctex.Setup.RawFormat, _loggerService);
-
-            DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-
-            outstream.Write(blob.TextureData.Buffer.GetBytes());
+            var image = RedImage.FromCubeMap(ctex);
+            outstream.Write(image.SaveToDDSMemory());
 
             return true;
         }
@@ -682,79 +844,45 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat)
+        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+            decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
             // read the cr2wfile
-            if (!_wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w))
-            {
-                return false;
-            }
-
-            return ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat);
+            return _wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w)
+&& ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
         }
 
-        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat)
+        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat, bool flipV = false)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+            decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
-            rendRenderTextureBlobPC blob = null;
-            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-            var compression = Enums.ETextureCompression.TCM_None;
-
-            if (cls is CBitmapTexture xbm)
+            try
             {
-                if (xbm.RenderTextureResource.RenderResourceBlobPC != null &&
-                    xbm.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC xbmBlob)
-                {
-                    blob = xbmBlob;
-                }
-                rawfmt = xbm.Setup.RawFormat;
-                compression = xbm.Setup.Compression;
-            }
+                var img = RedImage.FromRedClass(cls);
 
-            if (cls is CMesh mesh)
-            {
-                if (mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC meshBlob)
+                texformat = img.Metadata.Format;
+                decompressedFormat = img.Metadata.Format;
+                if (img.CompressionFormat != null)
                 {
-                    blob = meshBlob;
+                    texformat = (DXGI_FORMAT)img.CompressionFormat;
                 }
-            }
 
-            if (cls is CReflectionProbeDataResource probe)
-            {
-                if (probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC probeBlob)
+                if (flipV)
                 {
-                    blob = probeBlob;
+                    img.FlipV();
                 }
-            }
 
-            if (blob == null)
+                outstream.Write(img.SaveToDDSMemory());
+
+                return true;
+            }
+            catch (Exception)
             {
                 return false;
             }
-
-            #region get xbm data
-
-            var width = blob.Header.SizeInfo.Width;
-            var height = blob.Header.SizeInfo.Height;
-            var mipCount = blob.Header.TextureInfo.MipCount;
-            var sliceCount = blob.Header.TextureInfo.SliceCount;
-            var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, null);
-
-            #endregion get xbm data
-
-            // extract and write dds to stream
-            DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-
-            outstream.Write(blob.TextureData.Buffer.GetBytes());
-
-            return true;
         }
     }
 }

@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Splat;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
-using Splat;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit.Models
 {
@@ -42,7 +39,7 @@ namespace WolvenKit.Models
 
     public class TweakXL : ITweakXLItem, IBrowsableType, IBrowsableDictionary
     {
-        public TweakDBID ID { get; set; } = new();
+        public TweakDBID ID { get; set; }
 
         public TweakDBID Base { get; set; }
 
@@ -67,7 +64,7 @@ namespace WolvenKit.Models
 
         public virtual IEnumerable<string> GetPropertyNames()
         {
-            if (ID != null)
+            if (ID != TweakDBID.Empty)
             {
                 yield return "ID";
             }
@@ -75,11 +72,11 @@ namespace WolvenKit.Models
             {
                 yield return "Value";
             }
-            if (Base != null)
+            if (Base != TweakDBID.Empty)
             {
                 yield return "Base";
             }
-            if (Type != null)
+            if (Type != CString.Empty)
             {
                 yield return "Type";
             }
@@ -132,11 +129,11 @@ namespace WolvenKit.Models
 
         public IEnumerable<string> GetPropertyNames()
         {
-            if (ID != null)
+            if (ID != TweakDBID.Empty)
             {
                 yield return "ID";
             }
-            if (Type != null)
+            if (Type != CString.Empty)
             {
                 yield return "Type";
             }
@@ -241,6 +238,7 @@ namespace WolvenKit.Models
         {
             // TODO get parent type & property name, look-up type if ambiguous?
             // TODO parse type strings
+            // TODO Maybe this can be done with some is magic.
             if (type == typeof(TweakDBID))
             {
                 return (TweakDBID)s.Value;
@@ -292,7 +290,7 @@ namespace WolvenKit.Models
                         if (parser.TryConsume<Scalar>(out var s))
                         {
                             Type childType = null;
-                            if (tweak.Base != null && propertyName != null)
+                            if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
                                 childType = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName);
                             }
@@ -301,13 +299,13 @@ namespace WolvenKit.Models
                         // embedded record
                         else if (parser.Current is MappingStart)
                         {
-                            string childID = id;
+                            var childID = id;
                             if (childID != null && propertyName != null)
                             {
                                 childID = childID + "." + propertyName;
                             }
                             Type childType = null;
-                            if (tweak.Base != null && propertyName != null)
+                            if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
                                 childType = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName);
                             }
@@ -321,7 +319,7 @@ namespace WolvenKit.Models
                             {
                                 ((TweakXLSequence)propertyValue).ID = id + "." + propertyName;
                             }
-                            if (tweak.Base != null && propertyName != null)
+                            if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
                                 ((TweakXLSequence)propertyValue).Type = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName).Name;
                             }
@@ -343,7 +341,7 @@ namespace WolvenKit.Models
                         {
                             tweak.Base = (TweakDBID)propertyValue.ToString();
                         }
-                        else if (propertyName != null && propertyName != "")
+                        else if (propertyName is not null and not "")
                         {
                             tweak.Properties[propertyName] = propertyValue;
                         }
@@ -362,8 +360,10 @@ namespace WolvenKit.Models
             {
                 if (s.Tag == "!append")
                 {
-                    var tweak = new TweakXLAppend();
-                    tweak.ID = ReadScalar(s).ToString();
+                    var tweak = new TweakXLAppend
+                    {
+                        ID = ReadScalar(s).ToString()
+                    };
                     return tweak;
                 }
                 else
@@ -380,7 +380,7 @@ namespace WolvenKit.Models
                     {
                         tweak.ID = id;
                     }
-                    tweak.Value = (IRedType)ReadScalar(s);
+                    tweak.Value = ReadScalar(s);
                     return tweak;
                 }
             }

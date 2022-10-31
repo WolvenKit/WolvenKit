@@ -6,6 +6,9 @@ namespace WolvenKit.RED4.Types
 {
     public interface IRedBaseHandle : IRedType
     {
+        /// <summary>
+        /// Acceptable type or interface for the handle
+        /// </summary>
         public Type InnerType { get; }
 
         public RedBaseClass GetValue();

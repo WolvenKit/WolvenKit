@@ -5,20 +5,20 @@ using System.IO;
 using System.Text.Json;
 using Splat;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Modkit.RED4.Opus
 {
     public class OpusTools
     {
-        private readonly Archive _soundBanks;
+        private readonly ICyberGameArchive _soundBanks;
         private readonly DirectoryInfo _modFolder;
         private readonly DirectoryInfo _rawFolder;
         public OpusInfo Info { get; set; }
         private readonly bool _isModded;
 
-        public OpusTools(Archive soundbanks, string modFolder, string rawFolder, bool useMod = false) //audio_2_soundbanks.archive
+        public OpusTools(ICyberGameArchive soundbanks, string modFolder, string rawFolder, bool useMod = false) //audio_2_soundbanks.archive
         {
             _soundBanks = soundbanks;
             _modFolder = new DirectoryInfo(modFolder);

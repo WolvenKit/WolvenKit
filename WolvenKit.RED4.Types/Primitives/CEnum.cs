@@ -16,15 +16,22 @@ namespace WolvenKit.RED4.Types
 
         public static CEnum<T> Parse<T>(string value) where T : struct, Enum
         {
+            var success = TryParse(value, out T result);
+            Debug.Assert(success);
+            return result;
+        }
+
+        public static bool TryParse<T>(string value, out T result) where T : struct, Enum
+        {
             var typeInfo = RedReflection.GetEnumTypeInfo(typeof(T));
             value = typeInfo.GetCSNameFromRedName(value);
 
-            if (Enum.TryParse<T>(value, out var result))
+            if (Enum.TryParse(value, out result))
             {
-                return result;
+                return true;
             }
 
-            throw new Exception($"CEnum \"{typeof(T).Name}.{value}\" could not be found!");
+            return false;
         }
     }
 
@@ -54,7 +61,7 @@ namespace WolvenKit.RED4.Types
 
         public override string ToString() => _value.ToString();
         public string ToEnumString() => _value.ToString();
-
+        public object GetEnumValue() => _value;
 
         public override bool Equals(object obj)
         {

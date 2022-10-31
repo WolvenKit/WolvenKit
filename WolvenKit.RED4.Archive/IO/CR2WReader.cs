@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
@@ -94,6 +94,8 @@ namespace WolvenKit.RED4.Archive.IO
             var size = _reader.ReadUInt32();
 
             var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
+            var redTypeInfos = RedReflection.GetRedTypeInfos(typename);
+            CheckRedTypeInfos(ref redTypeInfos);
 
             var typeInfo = RedReflection.GetTypeInfo(cls);
 
@@ -106,25 +108,33 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (prop.IsDynamic)
             {
-                value = Read(type, size - 4, flags);
+                value = Read(redTypeInfos, size - 4);
+
                 cls.SetProperty(varName, value);
             }
             else
             {
-                value = Read(prop.Type, size - 4, prop.Flags.Clone());
+                value = Read(redTypeInfos, size - 4);
 
                 var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
                 if (type != prop.Type)
                 {
-                    throw new InvalidRTTIException(propName, prop.Type, type);
+                    var args = new InvalidRTTIEventArgs(propName, prop.Type, type, value);
+                    if (!HandleParsingError(args))
+                    {
+                        throw new InvalidRTTIException(propName, prop.Type, type);
+                    }
+                    value = args.Value;
                 }
 
-#if DEBUG
                 if (!typeInfo.SerializeDefault && !prop.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varName, value))
                 {
-                    throw new InvalidParsingException($"Invalid default val for: \"{propName}\"");
+                    var args = new InvalidDefaultValueEventArgs();
+                    if (!HandleParsingError(args))
+                    {
+                        throw new InvalidParsingException($"Invalid default val for: \"{propName}\"");
+                    }
                 }
-#endif
 
                 cls.SetProperty(prop.RedName, value);
             }
@@ -171,6 +181,8 @@ namespace WolvenKit.RED4.Archive.IO
                 using var br = new BinaryReader(ms, Encoding.Default, true);
 
                 using var cr2wReader = new CR2WReader(br);
+                cr2wReader.ParsingError += HandleParsingError;
+
                 var readResult = cr2wReader.ReadFile(out var c, true);
                 if (readResult == EFileReadErrorCodes.NoCr2w)
                 {

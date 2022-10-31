@@ -36,16 +36,17 @@ namespace WolvenKit.RED4.Archive.IO
                     {
                         if (animation.AnimBuffer.GetValue() is animAnimationBufferCompressed animBuff)
                         {
-                            if (animBuff.DataAddress != null && animBuff.InplaceCompressedBuffer == null)
+                            if (animBuff.DataAddress != null && animBuff.InplaceCompressedBuffer == null && animBuff.DefferedBuffer == null)
                             {
                                 //var defferedBuffer = new MemoryStream();
                                 var dataAddr = animBuff.DataAddress;
                                 var bytes = new byte[dataAddr.ZeInBytes];
                                 animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Seek(dataAddr.FsetInBytes, SeekOrigin.Begin);
                                 animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Read(bytes, 0, (int)((uint)dataAddr.ZeInBytes));
-                                animBuff.DefferedBuffer = new SerializationDeferredDataBuffer(bytes);
+                                animBuff.TempBuffer = new SerializationDeferredDataBuffer(bytes);
                             }
-                            animBuff.ReadBuffer();
+                            // super intensive, and not really needed in the GUI
+                            //animBuff.ReadBuffer();
                         }
                     }
                 }

@@ -1,17 +1,34 @@
 using System;
+using System.Linq;
+using System.IO;
+using System.ComponentModel;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Threading;
 using ReactiveUI;
 using Splat;
+using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Services;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
 {
     public partial class ImportExportView : ReactiveUserControl<ImportExportViewModel>
     {
+        private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
+
+        private PropertyItem _propertyItem;
+        private readonly IProjectManager projectManager;
+        private readonly Red4ParserService parser;
+        private ISettingsManager _settingsManager;
+
         /// <summary>
         /// Constructor I/E Tool.
         /// </summary>
@@ -19,8 +36,14 @@ namespace WolvenKit.Views.Tools
         {
             InitializeComponent();
 
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+
             ViewModel = Locator.Current.GetService<ImportExportViewModel>();
             DataContext = ViewModel;
+
+            projectManager = Locator.Current.GetService<IProjectManager>();
+            parser = Locator.Current.GetService<Red4ParserService>();
+
 
             this.WhenActivated(disposables =>
             {
@@ -34,6 +57,7 @@ namespace WolvenKit.Views.Tools
                         x => x.ExportableItems,
                         x => x.ExportGrid.ItemsSource)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                        x => x.SelectedExport,
                        x => x.ExportGrid.SelectedItem)
@@ -43,6 +67,7 @@ namespace WolvenKit.Views.Tools
                         x => x.ImportableItems,
                         x => x.ImportGrid.ItemsSource)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                        x => x.SelectedImport,
                        x => x.ImportGrid.SelectedItem)
@@ -52,14 +77,33 @@ namespace WolvenKit.Views.Tools
                         x => x.ConvertableItems,
                         x => x.ConvertGrid.ItemsSource)
                     .DisposeWith(disposables);
+
                 this.Bind(ViewModel,
                        x => x.SelectedConvert,
                        x => x.ConvertGrid.SelectedItem)
                    .DisposeWith(disposables);
-
             });
 
+            this.WhenAnyValue(x => x.ViewModel.SelectedObject)
+                .Buffer(2, 1)
+                .Subscribe(x =>
+                {
+                    if (x[0] is { } oldValue)
+                    {
+                        oldValue.Properties.PropertyChanged -= OnPropertyValueChanged;
+                    }
 
+                    if (x[1] is { } newValue)
+                    {
+                        newValue.Properties.PropertyChanged += OnPropertyValueChanged;
+                    }
+                });
+
+            this.WhenAnyValue(x => x._settingsManager.ShowAdvancedOptions)
+                .Subscribe(_ =>
+                {
+                    OverlayPropertyGrid.RefreshPropertygrid();
+                });
         }
 
         /// <summary>
@@ -67,21 +111,65 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e)
+        private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e) => ShowSettings();
+
+        private void ShowSettings_OnClick(object sender, RoutedEventArgs e) => ShowSettings();
+
+        private void ShowSettings()
         {
-            if (ViewModel is not ImportExportViewModel vm)
+            if (ViewModel == null)
             {
                 return;
             }
-            if (vm.IsImportsSelected)
+
+            if (ViewModel.IsImportsSelected)
             {
                 if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport)
                 {
-                    if (Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat _))
+                    if (Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat rawExtension))
                     {
                         XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
                         XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Extension);
                         XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Name);
+
+                        if (rawExtension == ERawFileFormat.re)
+                        {
+                            var mod = projectManager.ActiveProject;
+                            var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
+                            var depotPaths = animsets.Select(x => x.Substring(mod.ModDirectory.Length + 1));
+
+                            AddSettingsRe.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+
+                            AnimsetComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, depotPaths);
+
+                            // set defaults if no change in selection
+                            if (selectedImport.Properties is ReImportArgs args)
+                            {
+                                if (AnimsetComboBox.SelectedItem is not string selectedItem)
+                                {
+                                    return;
+                                }
+                                if (string.IsNullOrEmpty(selectedItem))
+                                {
+                                    return;
+                                }
+
+                                args.Animset = selectedItem;
+                                //args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
+
+                                if (AnimNameComboBox.SelectedItem is not string selectedName)
+                                {
+                                    return;
+                                }
+                                if (string.IsNullOrEmpty(selectedName))
+                                {
+                                    return;
+                                }
+
+                                args.AnimationToRename = selectedName;
+                            }
+
+                        }
                     }
                     else
                     {
@@ -89,7 +177,8 @@ namespace WolvenKit.Views.Tools
                     }
                 }
             }
-            if (vm.IsExportsSelected)
+
+            if (ViewModel.IsExportsSelected)
             {
                 if (ExportGrid.SelectedItem is ImportExportItemViewModel selectedExport)
                 {
@@ -103,7 +192,8 @@ namespace WolvenKit.Views.Tools
                     { throw new ArgumentOutOfRangeException(); }
                 }
             }
-            if (vm.IsConvertsSelected)
+
+            if (ViewModel.IsConvertsSelected)
             {
                 if (ConvertGrid.SelectedItem is ImportExportItemViewModel selectedconvert)
                 {
@@ -116,10 +206,10 @@ namespace WolvenKit.Views.Tools
                     else
                     { throw new ArgumentOutOfRangeException(); }
                 }
-
             }
-
         }
+
+        private void OnPropertyValueChanged(object sender, PropertyChangedEventArgs e) => _dispatcher.Invoke(() => OverlayPropertyGrid.RefreshPropertygrid());
 
         /// <summary>
         /// Confirm Button (Advanced Options)
@@ -128,12 +218,29 @@ namespace WolvenKit.Views.Tools
         /// <param name="e"></param>
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel is ImportExportViewModel vm)
+            if (ViewModel != null)
             {
                 if (ApplyToAllCheckbox.IsChecked != null && ApplyToAllCheckbox.IsChecked.Value)
                 {
-                    vm.CopyArgumentsTemplateToCommand.SafeExecute("All in Grid");
+                    ViewModel.CopyArgumentsTemplateToCommand.SafeExecute("All in Grid");
                     ApplyToAllCheckbox.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, false);
+                }
+
+                ViewModel.SaveSettings();
+
+                if (ViewModel.IsImportsSelected)
+                {
+                    ImportGrid.RefreshColumns();
+                }
+
+                if (ViewModel.IsExportsSelected)
+                {
+                    ExportGrid.RefreshColumns();
+                }
+
+                if (ViewModel.IsConvertsSelected)
+                {
+                    ConvertGrid.RefreshColumns();
                 }
             }
             XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
@@ -146,7 +253,7 @@ namespace WolvenKit.Views.Tools
         /// <param name="e"></param>
         private void CancelSelectingClick(object sender, RoutedEventArgs e) => XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
-        private PropertyItem _propertyItem;
+        
 
         /// <summary>
         /// Override PG Collection Editor
@@ -202,7 +309,79 @@ namespace WolvenKit.Views.Tools
                 case nameof(ReactiveObject.Changing):
                 case nameof(ReactiveObject.ThrownExceptions):
                     e.Cancel = true;
-                    break;
+                    return;
+            }
+
+            if (ViewModel?.SelectedObject.Properties is XbmImportArgs)
+            {
+                if (e.DisplayName == "Use existing file")
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                if (!_settingsManager.ShowAdvancedOptions)
+                {
+                    if (e.Category is "Image Import Settings" or "XBM Import Settings")
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void AnimsetComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ViewModel is not ImportExportViewModel vm)
+            {
+                return;
+            }
+            if (vm.IsImportsSelected
+                && ImportGrid.SelectedItem is ImportableItemViewModel selectedImport
+                && selectedImport.Properties is ReImportArgs args)
+            {
+                if (AnimsetComboBox.SelectedItem is not string selectedItem)
+                {
+                    return;
+                }
+
+                args.Animset = selectedItem;
+                //args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
+
+                // parse animset and populate the animnameBox
+                var path = Path.Combine(projectManager.ActiveProject.ModDirectory, selectedItem);
+                if (File.Exists(path))
+                {
+                    using var fs = new FileStream(path, FileMode.Open);
+                    if (parser.TryReadRed4File(fs, out var originalFile))
+                    {
+                        if (originalFile.RootChunk is animAnimSet animset)
+                        {
+                            var animnames = animset.Animations.Select(x => x.Chunk.Animation.Chunk.Name.ToString());
+                            AnimNameComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animnames);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void AnimNameComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ViewModel is not ImportExportViewModel vm)
+            {
+                return;
+            }
+            if (vm.IsImportsSelected
+                && ImportGrid.SelectedItem is ImportableItemViewModel selectedImport
+                && selectedImport.Properties is ReImportArgs args)
+            {
+                if (AnimNameComboBox.SelectedItem is not string selectedItem)
+                {
+                    return;
+                }
+
+                args.AnimationToRename = selectedItem;
             }
         }
     }

@@ -149,6 +149,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(20)] 
+		[RED("spawnedModules")] 
+		public CArray<CWeakHandle<ItemTooltipModuleController>> SpawnedModules
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<ItemTooltipModuleController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<ItemTooltipModuleController>>>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("itemEquippedController")] 
 		public CWeakHandle<ItemTooltipEquippedModule> ItemEquippedController
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipEquippedModule>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("itemHeaderController")] 
 		public CWeakHandle<ItemTooltipHeaderController> ItemHeaderController
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipHeaderController>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("itemIconController")] 
 		public CWeakHandle<ItemTooltipIconModule> ItemIconController
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipIconModule>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("itemWeaponInfoController")] 
 		public CWeakHandle<ItemTooltipWeaponInfoModule> ItemWeaponInfoController
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipWeaponInfoModule>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("itemClothingInfoController")] 
 		public CWeakHandle<ItemTooltipClothingInfoModule> ItemClothingInfoController
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipClothingInfoModule>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("itemGrenadeInfoController")] 
 		public CWeakHandle<ItemTooltipGrenadeInfoModule> ItemGrenadeInfoController
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipGrenadeInfoModule>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("itemRequirementsController")] 
 		public CWeakHandle<ItemTooltipRequirementsModule> ItemRequirementsController
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipRequirementsModule>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("itemDetailsController")] 
 		public CWeakHandle<ItemTooltipDetailsModule> ItemDetailsController
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipDetailsModule>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("itemRecipeDataController")] 
 		public CWeakHandle<ItemTooltipRecipeDataModule> ItemRecipeDataController
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipRecipeDataModule>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("itemEvolutionController")] 
 		public CWeakHandle<ItemTooltipEvolutionModule> ItemEvolutionController
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipEvolutionModule>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("itemCraftedController")] 
 		public CWeakHandle<ItemTooltipCraftedModule> ItemCraftedController
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipCraftedModule>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("itemBottomController")] 
 		public CWeakHandle<ItemTooltipBottomModule> ItemBottomController
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipBottomModule>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("DEBUG_showAdditionalInfo")] 
 		public CBool DEBUG_showAdditionalInfo
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("data")] 
 		public CHandle<MinimalItemTooltipData> Data
 		{
@@ -260,12 +268,60 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MinimalItemTooltipData>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
+		[RED("itemData")] 
+		public CHandle<UIInventoryItem> ItemData
+		{
+			get => GetPropertyValue<CHandle<UIInventoryItem>>();
+			set => SetPropertyValue<CHandle<UIInventoryItem>>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("comparisonData")] 
+		public CHandle<UIInventoryItemComparisonManager> ComparisonData
+		{
+			get => GetPropertyValue<CHandle<UIInventoryItemComparisonManager>>();
+			set => SetPropertyValue<CHandle<UIInventoryItemComparisonManager>>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("player")] 
+		public CWeakHandle<PlayerPuppet> Player
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
+		[Ordinal(38)] 
 		[RED("requestedModules")] 
 		public CArray<CName> RequestedModules
 		{
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		[Ordinal(39)] 
+		[RED("tooltipDisplayContext")] 
+		public CEnum<InventoryTooltipDisplayContext> TooltipDisplayContext
+		{
+			get => GetPropertyValue<CEnum<InventoryTooltipDisplayContext>>();
+			set => SetPropertyValue<CEnum<InventoryTooltipDisplayContext>>(value);
+		}
+
+		[Ordinal(40)] 
+		[RED("itemDisplayContext")] 
+		public CEnum<gameItemDisplayContext> ItemDisplayContext
+		{
+			get => GetPropertyValue<CEnum<gameItemDisplayContext>>();
+			set => SetPropertyValue<CEnum<gameItemDisplayContext>>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("priceOverride")] 
+		public CInt32 PriceOverride
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public ItemTooltipCommonController()
@@ -288,6 +344,7 @@ namespace WolvenKit.RED4.Types
 			DescriptionText = new();
 			DEBUG_iconErrorWrapper = new();
 			DEBUG_iconErrorText = new();
+			SpawnedModules = new();
 			RequestedModules = new();
 
 			PostConstruct();

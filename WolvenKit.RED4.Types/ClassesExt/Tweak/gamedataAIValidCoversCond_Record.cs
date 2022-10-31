@@ -19,14 +19,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 		
-		[RED("invert")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Invert
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("limitToRings")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> LimitToRings

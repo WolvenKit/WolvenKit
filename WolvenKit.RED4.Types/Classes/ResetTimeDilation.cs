@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("global")] 
+		public CBool Global
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public ResetTimeDilation()
 		{
 			PostConstruct();

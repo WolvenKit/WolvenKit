@@ -11,14 +11,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
-		[RED("journalEntry")]
-		[REDProperty(IsIgnored = true)]
-		public CString JournalEntry
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
-		}
-		
 		[RED("removeAfterUse")]
 		[REDProperty(IsIgnored = true)]
 		public CBool RemoveAfterUse

@@ -1,23 +1,17 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
-using HelixToolkit.SharpDX.Core;
-using HelixToolkit.Wpf.SharpDX;
-using ReactiveUI;
 using System.Reactive.Disposables;
-using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Types;
 using System.Windows.Input;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Modkit.RED4;
-using Splat;
+using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
-using WolvenKit.Common.Services;
+using Prism.Commands;
+using ReactiveUI;
+using Splat;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -33,11 +27,13 @@ namespace WolvenKit.ViewModels.Documents
             _data = ent;
 
             ShowExportEntity = true;
-            ExportEntity = new DelegateCommand((e) =>
+            ExportEntity = new DelegateCommand(() =>
             {
-                var dlg = new SaveFileDialog();
-                dlg.FileName = Path.GetFileNameWithoutExtension(file.RelativePath) + ".glb";
-                dlg.Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*";
+                var dlg = new SaveFileDialog
+                {
+                    FileName = Path.GetFileNameWithoutExtension(file.RelativePath) + ".glb",
+                    Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
+                };
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
                     var outFile = new FileInfo(dlg.FileName);
@@ -53,10 +49,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
             });
 
-            this.WhenActivated((CompositeDisposable disposables) =>
-            {
-                RenderEntitySolo();
-            });
+            this.WhenActivated((CompositeDisposable disposables) => RenderEntitySolo());
         }
 
         public void RenderEntitySolo()
@@ -70,9 +63,11 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public Element3D RenderEntity(entEntityTemplate ent, Appearance appearance = null, string appearanceName = null)
-        { 
+        {
             if (ent.CompiledData.Data is not RedPackage pkg)
+            {
                 return null;
+            }
 
             if (ent.Appearances.Count > 0)
             {
@@ -84,7 +79,9 @@ namespace WolvenKit.ViewModels.Documents
                         foreach (var slot in slotset.Slots)
                         {
                             if (!slots.ContainsKey(slot.SlotName))
+                            {
                                 slots.Add(slot.SlotName, slot.BoneName);
+                            }
                         }
 
                         string bindName = null, slotName = null;
@@ -113,7 +110,7 @@ namespace WolvenKit.ViewModels.Documents
                         if (rigFile.RootChunk is animRig rig)
                         {
                             var rigBones = new List<RigBone>();
-                            for (int i = 0; i < rig.BoneNames.Count; i++)
+                            for (var i = 0; i < rig.BoneNames.Count; i++)
                             {
                                 var rigBone = new RigBone()
                                 {
@@ -149,7 +146,7 @@ namespace WolvenKit.ViewModels.Documents
 
                 foreach (var rig in Rigs.Values)
                 {
-                    if (rig.BindName != null && Rigs.ContainsKey(rig.BindName))
+                    if (rig.BindName is not null && Rigs.ContainsKey(rig.BindName))
                     {
                         Rigs[rig.BindName].AddChild(rig);
                     }
@@ -193,29 +190,32 @@ namespace WolvenKit.ViewModels.Documents
                             Models = LoadMeshs(appPkg.Chunks),
                         };
 
-                        foreach (var model in a.Models)
+                        if (a.Models is not null)
                         {
-                            if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel != null)
+                            foreach (var model in a.Models)
                             {
-                                parentModel.AddModel(model);
-                            }
-                            else
-                            {
-                                a.BindableModels.Add(model);
-                            }
-                            foreach (var material in model.Materials)
-                            {
-                                a.RawMaterials[material.Name] = material;
-                            }
-                            model.Meshes = MakeMesh((CMesh)model.MeshFile.RootChunk, model.ChunkMask, model.AppearanceIndex);
-
-                            foreach (var m in model.Meshes)
-                            {
-                                if (!a.LODLUT.ContainsKey(m.LOD))
+                                if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel is not null)
                                 {
-                                    a.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                                    parentModel.AddModel(model);
                                 }
-                                a.LODLUT[m.LOD].Add(m);
+                                else
+                                {
+                                    a.BindableModels.Add(model);
+                                }
+                                foreach (var material in model.Materials)
+                                {
+                                    a.RawMaterials[material.Name] = material;
+                                }
+                                model.Meshes = MakeMesh((CMesh)model.MeshFile.RootChunk, model.ChunkMask, model.AppearanceIndex);
+
+                                foreach (var m in model.Meshes)
+                                {
+                                    if (!a.LODLUT.ContainsKey(m.LOD))
+                                    {
+                                        a.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                                    }
+                                    a.LODLUT[m.LOD].Add(m);
+                                }
                             }
                         }
 

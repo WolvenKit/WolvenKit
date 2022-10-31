@@ -1,10 +1,15 @@
 using System;
+using System.ComponentModel;
+using System.Globalization;
 using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
+using Splat;
+using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -12,23 +17,15 @@ namespace WolvenKit.Views.Editors
     /// <summary>
     /// Interaction logic for RedNodeRefEditor.xaml
     /// </summary>
-    public partial class RedNodeRefEditor : UserControl
+    public partial class RedNodeRefEditor : INotifyPropertyChanged
     {
-        //[ObservableAsProperty] public bool IsHashEditable { get; }
+        private readonly ISettingsManager _settingsManager;
 
         public RedNodeRefEditor()
         {
             InitializeComponent();
 
-            Observable.FromEventPattern<KeyEventHandler, KeyEventArgs>(
-                handler => PathBox.KeyUp += handler,
-                handler => PathBox.KeyUp -= handler)
-                .Throttle(TimeSpan.FromSeconds(.5))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x =>
-                {
-                    SetRedValue(PathBox.Text);
-                });
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
         }
 
         public NodeRef RedNodeRef
@@ -37,73 +34,94 @@ namespace WolvenKit.Views.Editors
             set => SetValue(RedNodeRefProperty, value);
         }
         public static readonly DependencyProperty RedNodeRefProperty = DependencyProperty.Register(
-            nameof(RedNodeRef), typeof(NodeRef), typeof(RedNodeRefEditor), new PropertyMetadata(default(NodeRef)));
+            nameof(RedNodeRef), typeof(NodeRef), typeof(RedNodeRefEditor), new PropertyMetadata(default(NodeRef), OnRedNodeRefChanged));
+
+        private static void OnRedNodeRefChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is RedNodeRefEditor view)
+            {
+                view.OnPropertyChanged(nameof(Path));
+                view.OnPropertyChanged(nameof(Hash));
+            }
+        }
 
 
         public string Path
         {
-            get => GetPathFromRedValue();
-            set => SetRedValue(value);
+            get => RedNodeRef;
+            set => SetValue(RedNodeRefProperty, (NodeRef)value);
         }
 
-        public ulong Hash
+        public string Hash
         {
-            get => GetHashFromRedValue();
-            set => SetRedValue(value);
-        }
-
-        private void SetRedValue(string value)
-        {
-            NodeRef cn = null;
-            if (ulong.TryParse(value, out var number))
+            get
             {
-                cn = number;
+                if (_settingsManager.ShowNodeRefAsHex)
+                {
+                    return ((ulong)RedNodeRef).ToString("X");
+                }
+                else
+                {
+                    return ((ulong)RedNodeRef).ToString();
+                }
+            }
+            set
+            {
+                if (_settingsManager.ShowNodeRefAsHex)
+                {
+                    SetValue(RedNodeRefProperty, (NodeRef)ulong.Parse(value, NumberStyles.HexNumber));
+                }
+                else
+                {
+                    SetValue(RedNodeRefProperty, (NodeRef)ulong.Parse(value));
+                }
+            }
+        }
+
+        private void HashBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, e.Text);
+
+            if (_settingsManager.ShowNodeRefAsHex)
+            {
+                e.Handled = !ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _);
             }
             else
             {
-                cn = value;
+                e.Handled = !ulong.TryParse(full, out _);
             }
-            SetCurrentValue(RedNodeRefProperty, cn);
-            HashBox.SetCurrentValue(TextBox.TextProperty, GetHashFromRedValue().ToString());
         }
 
-        private void SetRedValue(ulong value)
+        private void HashBox_OnPasting(object sender, DataObjectPastingEventArgs e)
         {
-            //RedNodeRef = value;
-        }
+            if (e.DataObject.GetDataPresent(typeof(string)))
+            {
+                var text = (string)e.DataObject.GetData(typeof(string));
+                var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text!);
 
-        private string GetPathFromRedValue()
-        {
-            if (RedNodeRef.GetResolvedText() != null)
-            {
-                return RedNodeRef.GetResolvedText();
-            }
-            else if (RedNodeRef.GetRedHash() != 0)
-            {
-                return GetHashFromRedValue().ToString();
+                if (_settingsManager.ShowNodeRefAsHex)
+                {
+                    if (!ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _))
+                    {
+                        e.CancelCommand();
+                    }
+                }
+                else
+                {
+                    if (!ulong.TryParse(full, out _))
+                    {
+                        e.CancelCommand();
+                    }
+                }
             }
             else
             {
-                return "";
+                e.CancelCommand();
             }
         }
 
-        private ulong GetHashFromRedValue()
-        {
-            // this might need to be handled at the class level like enums
-            if (RedNodeRef is null)
-            {
-                return 0;
-            }
-            return RedNodeRef?.GetRedHash() ?? 0;
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            var regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
-
-
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

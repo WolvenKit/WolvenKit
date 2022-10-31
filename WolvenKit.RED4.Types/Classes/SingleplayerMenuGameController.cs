@@ -21,6 +21,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("continuetooltipContainer")] 
+		public inkCompoundWidgetReference ContinuetooltipContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("onlineSystem")] 
+		public CWeakHandle<gameIOnlineSystem> OnlineSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameIOnlineSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameIOnlineSystem>>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("requestHandler")] 
+		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
+		{
+			get => GetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>();
+			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -28,7 +52,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
+		[RED("continueGameTooltipController")] 
+		public CWeakHandle<ContinueGameTooltip> ContinueGameTooltipController
+		{
+			get => GetPropertyValue<CWeakHandle<ContinueGameTooltip>>();
+			set => SetPropertyValue<CWeakHandle<ContinueGameTooltip>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("dataSyncStatus")] 
+		public CEnum<servicesCloudSavesQueryStatus> DataSyncStatus
+		{
+			get => GetPropertyValue<CEnum<servicesCloudSavesQueryStatus>>();
+			set => SetPropertyValue<CEnum<servicesCloudSavesQueryStatus>>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("savesCount")] 
 		public CInt32 SavesCount
 		{
@@ -36,10 +76,35 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(16)] 
+		[RED("savesReady")] 
+		public CBool SavesReady
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("isOffline")] 
+		public CBool IsOffline
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("isModded")] 
+		public CBool IsModded
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SingleplayerMenuGameController()
 		{
 			ButtonHintsManagerRef = new();
 			GogButtonWidgetRef = new();
+			ContinuetooltipContainer = new();
 
 			PostConstruct();
 		}

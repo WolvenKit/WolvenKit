@@ -22,10 +22,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(4)] 
 		[RED("data")] 
-		public CHandle<ClothingSetIconsPopupOpenData> Data
+		public CHandle<ClothingSetIconsPopupData> Data
 		{
-			get => GetPropertyValue<CHandle<ClothingSetIconsPopupOpenData>>();
-			set => SetPropertyValue<CHandle<ClothingSetIconsPopupOpenData>>(value);
+			get => GetPropertyValue<CHandle<ClothingSetIconsPopupData>>();
+			set => SetPropertyValue<CHandle<ClothingSetIconsPopupData>>(value);
 		}
 
 		[Ordinal(5)] 

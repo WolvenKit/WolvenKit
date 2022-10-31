@@ -2,9 +2,9 @@
 
 on:
   push:
-    branches: [develop, master, main]
+    branches: [main]
   pull_request:
-    branches: [develop, master, main]
+    branches: [main]
 
 jobs:
   analyze:
@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
@@ -29,7 +29,7 @@ jobs:
           languages: ${{ matrix.language }}
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.x
 

@@ -10,8 +10,6 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
-        #region Methods
-
         /// <summary>
         /// Exports (Uncooks) a physical REDengine file into its raw file
         /// </summary>
@@ -22,8 +20,6 @@ namespace WolvenKit.Modkit.RED4
         public bool Export(FileInfo cr2wfile, GlobalExportArgs args, DirectoryInfo basedir = null,
             DirectoryInfo rawoutdir = null, ECookedFileFormat[] forcebuffers = null)
         {
-            #region checks
-
             if (cr2wfile is null or { Exists: false })
             {
                 return false;
@@ -48,8 +44,6 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            #endregion checks
-
             var ext = Path.GetExtension(cr2wfile.FullName).TrimStart('.');
 
             // read file
@@ -61,7 +55,5 @@ namespace WolvenKit.Modkit.RED4
             var relpath = cr2wfile.FullName.RelativePath(basedir);
             return UncookBuffers(fs, relpath, args, rawoutdir, forcebuffers);
         }
-
-        #endregion Methods
     }
 }

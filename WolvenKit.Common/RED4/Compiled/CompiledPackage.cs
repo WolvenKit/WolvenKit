@@ -213,7 +213,7 @@ namespace WolvenKit.Common.RED4.Compiled
     {
         private readonly CompiledPackage _package;
         public uint DepotPathIdx { get; private set; }
-        public string DepotPath => _package.RefTableasStr[DepotPathIdx];
+        public CName DepotPath => _package.RefTableasStr[DepotPathIdx];
         public string ClassNameStr { get; private set; } = "NAME NOT FOUND";
         public ushort ClassName { get; private set; } = 0;
         public ushort Flags { get; private set; } = 4;

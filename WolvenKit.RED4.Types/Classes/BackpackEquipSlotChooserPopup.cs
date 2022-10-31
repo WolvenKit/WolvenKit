@@ -118,10 +118,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(16)] 
 		[RED("comparisonResolver")] 
-		public CHandle<ItemPreferredComparisonResolver> ComparisonResolver
+		public CHandle<InventoryItemPreferredComparisonResolver> ComparisonResolver
 		{
-			get => GetPropertyValue<CHandle<ItemPreferredComparisonResolver>>();
-			set => SetPropertyValue<CHandle<ItemPreferredComparisonResolver>>(value);
+			get => GetPropertyValue<CHandle<InventoryItemPreferredComparisonResolver>>();
+			set => SetPropertyValue<CHandle<InventoryItemPreferredComparisonResolver>>(value);
 		}
 
 		[Ordinal(17)] 

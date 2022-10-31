@@ -1,10 +1,7 @@
 using System;
-using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using Microsoft.IO;
-using WolvenKit.Common.FNV1A;
+using System.Linq;
 using WolvenKit.Core.CRC;
 using WolvenKit.RED4.Types;
 
@@ -81,6 +78,11 @@ namespace WolvenKit.RED4.TweakDB
         {
             return _flatDictionary.ContainsKey(id);
         }
+
+        public List<TweakDBID> GetRecords() =>
+            _flatDictionary.Keys
+                .Select(x => (TweakDBID)x)
+                .ToList();
 
         public IRedType GetValue(string name)
         {

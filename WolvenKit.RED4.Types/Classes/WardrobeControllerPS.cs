@@ -6,16 +6,26 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(104)] 
 		[RED("clothingSets")] 
-		public CArray<ClothingSet> ClothingSets
+		public CArray<CHandle<gameClothingSet>> ClothingSets
 		{
-			get => GetPropertyValue<CArray<ClothingSet>>();
-			set => SetPropertyValue<CArray<ClothingSet>>(value);
+			get => GetPropertyValue<CArray<CHandle<gameClothingSet>>>();
+			set => SetPropertyValue<CArray<CHandle<gameClothingSet>>>(value);
+		}
+
+		[Ordinal(105)] 
+		[RED("hasInteraction")] 
+		public CBool HasInteraction
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public WardrobeControllerPS()
 		{
 			DeviceName = "LocKey#2120";
 			TweakDBRecord = 70419249436;
+			ShouldScannerShowStatus = false;
+			ShouldScannerShowNetwork = false;
 			ClothingSets = new();
 
 			PostConstruct();

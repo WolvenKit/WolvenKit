@@ -7,17 +7,19 @@ using System.Text.RegularExpressions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
-using WolvenKit.RED4.TweakDB.Helper;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.TweakDB;
 
+/// <summary>
+/// TODO logging?
+/// </summary>
 public class TweakDBReader : Red4Reader
 {
     private const uint s_recordSeed = 0x5EEDBA5E;
 
-    private static readonly Dictionary<ulong, Type> s_typeHashes = new();
+    private static readonly Dictionary<ulong, List<RedTypeInfo>> s_typeHashes = new();
     private static readonly Dictionary<uint, Type> s_recordHashes = new();
 
     public TweakDBReader(Stream input) : base(input)
@@ -40,13 +42,11 @@ public class TweakDBReader : Red4Reader
     {
         foreach (var enumType in Enum.GetValues<ETweakType>())
         {
-            var type = GetTypeFromEnum(enumType);
-            var arrType = typeof(CArray<>).MakeGenericType(type);
+            var redName = GetRedTypeFromEnum(enumType);
+            s_typeHashes.Add(FNV1A64HashAlgorithm.HashString(redName), RedReflection.GetRedTypeInfos(redName));
 
-            var redName = RedReflection.GetRedTypeFromCSType(type);
-
-            s_typeHashes.Add(FNV1A64HashAlgorithm.HashString(redName), type);
-            s_typeHashes.Add(FNV1A64HashAlgorithm.HashString($"array:{redName}"), arrType);
+            redName = $"array:{redName}";
+            s_typeHashes.Add(FNV1A64HashAlgorithm.HashString(redName), RedReflection.GetRedTypeInfos(redName));
         }
 
         var gameDataRegex = new Regex("gamedata(.*)_Record");
@@ -80,8 +80,8 @@ public class TweakDBReader : Red4Reader
 
         ReadFlats(fileHeader.flatsOffset, file.Flats);
         ReadRecords(fileHeader.recordsOffset, file.Records);
-        file.Queries = ReadQueries(fileHeader.queriesOffset);
-        file.GroupTags = ReadGroupTags(fileHeader.groupTagsOffset);
+        ReadQueries(fileHeader.queriesOffset, file.Queries);
+        ReadGroupTags(fileHeader.groupTagsOffset, file.GroupTags);
 
         return EFileReadErrorCodes.NoError;
     }
@@ -92,7 +92,7 @@ public class TweakDBReader : Red4Reader
 
         var flatTypeCounts = new Dictionary<ulong, uint>();
         var numFlatTypes = BaseReader.ReadInt32();
-        for (int i = 0; i < numFlatTypes; i++)
+        for (var i = 0; i < numFlatTypes; i++)
         {
             var typeHash = BaseReader.ReadUInt64();
             var typeCount = BaseReader.ReadUInt32();
@@ -103,16 +103,16 @@ public class TweakDBReader : Red4Reader
         foreach (var (typeHash, typeCount) in flatTypeCounts)
         {
             flatTypeValues[typeHash] = new List<IRedType>();
-            var type = s_typeHashes[typeHash];
+            var redTypeInfos = s_typeHashes[typeHash];
 
             var numValues = BaseReader.ReadUInt32();
-            for (int j = 0; j < numValues; j++)
+            for (var j = 0; j < numValues; j++)
             {
-                flatTypeValues[typeHash].Add(Read(type));
+                flatTypeValues[typeHash].Add(Read(redTypeInfos));
             }
 
             var numKeys = BaseReader.ReadUInt32();
-            for (int j = 0; j < numKeys; j++)
+            for (var j = 0; j < numKeys; j++)
             {
                 var keyHash = ReadTweakDBID();
                 var valueIndex = BaseReader.ReadInt32();
@@ -127,105 +127,87 @@ public class TweakDBReader : Red4Reader
         Position = offset;
 
         var numRecords = BaseReader.ReadInt32();
-        for (int i = 0; i < numRecords; i++)
+        for (var i = 0; i < numRecords; i++)
         {
-            pool.Add(BaseReader.ReadUInt64(), s_recordHashes[BaseReader.ReadUInt32()]);
+            var id = BaseReader.ReadUInt64();
+            var key = BaseReader.ReadUInt32();
+
+            if (s_recordHashes.ContainsKey(key))
+            {
+                pool.Add(id, s_recordHashes[key]);
+            }
         }
     }
 
-    private Dictionary<TweakDBID, List<TweakDBID>> ReadQueries(int offset)
+    private void ReadQueries(int offset, QueriesPool pool)
     {
-        var result = new Dictionary<TweakDBID, List<TweakDBID>>();
-
-
         Position = offset;
 
         var numQueries = BaseReader.ReadInt32();
-        for (int i = 0; i < numQueries; i++)
+        for (var i = 0; i < numQueries; i++)
         {
+            var entries = new List<TweakDBID>();
+
             var tdbName = ReadTweakDBID();
-            result.Add(tdbName, new List<TweakDBID>());
-
             var numResults = BaseReader.ReadUInt32();
-            for (int j = 0; j < numResults; j++)
+            for (var j = 0; j < numResults; j++)
             {
-                result[tdbName].Add(ReadTweakDBID());
+                entries.Add(ReadTweakDBID());
             }
-        }
 
-        return result;
+            pool.Add((ulong)tdbName, entries);
+        }
     }
 
-    private Dictionary<TweakDBID, byte> ReadGroupTags(int offset)
+    private void ReadGroupTags(int offset, GroupTagsPool pool)
     {
-        var result = new Dictionary<TweakDBID, byte>();
-
-
         Position = offset;
 
         var numGroupTags = BaseReader.ReadInt32();
-        for (int i = 0; i < numGroupTags; i++)
+        for (var i = 0; i < numGroupTags; i++)
         {
-            result.Add(ReadTweakDBID(), BaseReader.ReadByte());
+            pool.Add((ulong)ReadTweakDBID(), BaseReader.ReadByte());
         }
-
-        return result;
     }
 
-    private static Type GetTypeFromEnum(ETweakType enumType)
+    private static string GetRedTypeFromEnum(ETweakType enumType)
         => enumType switch
         {
-            ETweakType.CName => typeof(CName),
-            ETweakType.CString => typeof(CString),
-            ETweakType.TweakDBID => typeof(TweakDBID),
-            ETweakType.CResource => typeof(CResourceAsyncReference<CResource>),
-            ETweakType.CFloat => typeof(CFloat),
-            ETweakType.CBool => typeof(CBool),
-            ETweakType.CUint8 => typeof(CUInt8),
-            ETweakType.CUint16 => typeof(CUInt16),
-            ETweakType.CUint32 => typeof(CUInt32),
-            ETweakType.CUint64 => typeof(CUInt64),
-            ETweakType.CInt8 => typeof(CInt8),
-            ETweakType.CInt16 => typeof(CInt16),
-            ETweakType.CInt32 => typeof(CInt32),
-            ETweakType.CInt64 => typeof(CInt64),
-            ETweakType.CColor => typeof(CColor),
-            ETweakType.CEulerAngles => typeof(EulerAngles),
-            ETweakType.CQuaternion => typeof(Quaternion),
-            ETweakType.CVector2 => typeof(Vector2),
-            ETweakType.CVector3 => typeof(Vector3),
-            ETweakType.LocKey => typeof(gamedataLocKeyWrapper),
+            ETweakType.CName => "CName",
+            ETweakType.CString => "String",
+            ETweakType.TweakDBID => "TweakDBID",
+            ETweakType.CResource => "raRef:CResource",
+            ETweakType.CFloat => "Float",
+            ETweakType.CBool => "Bool",
+            ETweakType.CUint8 => "Uint8",
+            ETweakType.CUint16 => "Uint16",
+            ETweakType.CUint32 => "Uint32",
+            ETweakType.CUint64 => "Uint64",
+            ETweakType.CInt8 => "Int8",
+            ETweakType.CInt16 => "Int16",
+            ETweakType.CInt32 => "Int32",
+            ETweakType.CInt64 => "Int64",
+            ETweakType.CColor => "Color",
+            ETweakType.CEulerAngles => "EulerAngles",
+            ETweakType.CQuaternion => "Quaternion",
+            ETweakType.CVector2 => "Vector2",
+            ETweakType.CVector3 => "Vector3",
+            ETweakType.LocKey => "gamedataLocKeyWrapper",
             _ => throw new ArgumentOutOfRangeException(nameof(enumType))
         };
 
     public override CName ReadCName() => BaseReader.ReadLengthPrefixedString();
 
-    public override IRedArray<T> ReadCArray<T>(uint size)
+    public override IRedArray ReadCArray(List<RedTypeInfo> redTypeInfos, uint size, bool readAdditionalBytes = true) => base.ReadCArray(redTypeInfos, size, false);
+
+    public override IRedResourceAsyncReference ReadCResourceAsyncReference(List<RedTypeInfo> redTypeInfos, uint size) =>
+        new CResourceAsyncReference<CResource>(BaseReader.ReadUInt64());
+
+    public override void ReadClass(RedBaseClass cls, uint size)
     {
-        var array = new CArray<T>();
-
-        var cnt = BaseReader.ReadInt32();
-        for (int i = 0; i < cnt; i++)
-        {
-            array.Add(Read(typeof(T)));
-        }
-
-        return array;
-    }
-
-    public override IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>() =>
-        new CResourceAsyncReference<T>
-        {
-            DepotPath = BaseReader.ReadUInt64()
-        };
-
-    public override RedBaseClass ReadClass(Type type, uint size)
-    {
-        var instance = RedTypeManager.Create(type);
-
         var unk1 = BaseReader.ReadByte();
 
-        var typeInfo = RedReflection.GetTypeInfo(instance);
+        var typeInfo = RedReflection.GetTypeInfo(cls);
         while (true)
         {
             var varName = BaseReader.ReadLengthPrefixedString();
@@ -235,30 +217,35 @@ public class TweakDBReader : Red4Reader
             }
             var valueTypeName = BaseReader.ReadLengthPrefixedString();
             var (valueType, valueFlags) = RedReflection.GetCSTypeFromRedType(valueTypeName);
+            var redTypeInfos = RedReflection.GetRedTypeInfos(valueTypeName);
 
             BaseReader.ReadUInt32();
 
-            var propertyInfo = RedReflection.GetPropertyByRedName(type, varName);
+            var propertyInfo = RedReflection.GetPropertyByRedName(cls.GetType(), varName);
             IRedType value;
 
             if (propertyInfo == null)
             {
-                value = Read(valueType, 0, Flags.Empty);
-                instance.SetProperty(varName, value);
+                value = Read(redTypeInfos);
+                cls.SetProperty(varName, value);
             }
             else
             {
+                value = Read(redTypeInfos);
+
                 if (valueType != propertyInfo.Type)
                 {
-                    var propName = $"{RedReflection.GetRedTypeFromCSType(instance.GetType())}.{varName}";
-                    throw new InvalidRTTIException(propName, propertyInfo.Type, valueType);
+                    var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
+                    var args = new InvalidRTTIEventArgs(propName, propertyInfo.Type, valueType, value);
+                    if (!HandleParsingError(args))
+                    {
+                        throw new InvalidRTTIException(propName, propertyInfo.Type, valueType);
+                    }
+                    value = args.Value;
                 }
 
-                value = Read(propertyInfo.Type, 0, propertyInfo.Flags);
-                instance.SetProperty(propertyInfo.RedName, value);
+                cls.SetProperty(propertyInfo.RedName, value);
             }
         }
-
-        return instance;
     }
 }

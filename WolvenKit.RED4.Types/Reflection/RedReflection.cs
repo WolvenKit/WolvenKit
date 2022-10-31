@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using WolvenKit.RED4.Types.Exceptions;
@@ -11,13 +10,30 @@ namespace WolvenKit.RED4.Types
     public static class RedReflection
     {
         private static readonly ConcurrentDictionary<Type, object> s_defaultValueCache = new();
-        private static readonly Dictionary<string, Type> _redTypeCache = new();
-        private static Dictionary<Type, string> _redTypeCacheReverse = new();
+        private static readonly Dictionary<string, Type> s_redTypeCache = new();
+        private static readonly Dictionary<Type, string> s_redTypeCacheReverse = new();
 
-        private static readonly Dictionary<string, ExtendedEnumInfo> _redEnumCache = new();
+        private static readonly Dictionary<string, ExtendedEnumInfo> s_redEnumCache = new();
 
         private static readonly ConcurrentDictionary<Type, ExtendedTypeInfo> s_typeInfoCache = new();
         private static readonly ConcurrentDictionary<string, ExtendedTypeInfo> s_dynamicTypeInfoCache = new();
+
+        private static readonly ConcurrentDictionary<int, string> s_csTypeCache = new();
+        private static readonly ConcurrentDictionary<string, (Type, Flags)> s_csTypeCache2 = new();
+
+
+        static RedReflection()
+        {
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                AddRedType(type);
+            }
+
+            foreach (var type in typeof(Enums).GetNestedTypes())
+            {
+                AddEnumType(type);
+            }
+        }
 
         public static ExtendedTypeInfo GetTypeInfo(IRedType value)
         {
@@ -56,35 +72,13 @@ namespace WolvenKit.RED4.Types
             return result;
         }
 
-        public static Dictionary<string, Type> GetTypes() => new(_redTypeCache);
-
-        public static IEnumerable<Type> GetSubClassesOf(Type type) => _redTypeCache?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
-
-        public static ExtendedPropertyInfo GetPropertyByName(Type type, string propertyName)
-        {
-            var typeInfo = GetTypeInfo(type);
-
-            return typeInfo.PropertyInfos.FirstOrDefault(p => p.Name == propertyName);
-        }
+        public static Dictionary<string, Type> GetTypes() => new(s_redTypeCache);
 
         public static ExtendedPropertyInfo GetNativePropertyInfo(Type classType, string propertyName) =>
             GetTypeInfo(classType).GetNativePropertyInfoByName(propertyName);
 
-        public static object GetClassDefaultValue(Type classType, string propertyName)
-        {
-            var propertyInfo = GetNativePropertyInfo(classType, propertyName);
-            if (propertyInfo == null)
-            {
-                throw new PropertyNotFoundException($"{classType.Name}.{propertyName}");
-            }
-
-            return GetClassDefaultValue(classType, propertyInfo);
-        }
-
-        public static object GetClassDefaultValue(Type classType, ExtendedPropertyInfo propertyInfo)
-        {
-            return RedTypeManager.Create(classType).GetProperty(propertyInfo.RedName);
-        }
+        public static object GetClassDefaultValue(Type classType, ExtendedPropertyInfo propertyInfo) =>
+            RedTypeManager.Create(classType).GetProperty(propertyInfo.RedName);
 
         public static object GetDefaultValue(Type type)
         {
@@ -99,12 +93,6 @@ namespace WolvenKit.RED4.Types
                 result = System.Activator.CreateInstance(type);
             }
 
-            var typeInfo = GetTypeInfo(type);
-            if (typeInfo is { IsValueType: true })
-            {
-                result = System.Activator.CreateInstance(type);
-            }
-
             s_defaultValueCache.TryAdd(type, result);
 
             return result;
@@ -114,11 +102,6 @@ namespace WolvenKit.RED4.Types
         {
             var typeInfo = GetTypeInfo(type);
 
-            return typeInfo.PropertyInfos.FirstOrDefault(p => p.RedName == redPropertyName);
-        }
-
-        public static ExtendedPropertyInfo GetPropertyByRedName(ExtendedTypeInfo typeInfo, string redPropertyName)
-        {
             return typeInfo.PropertyInfos.FirstOrDefault(p => p.RedName == redPropertyName);
         }
 
@@ -141,29 +124,20 @@ namespace WolvenKit.RED4.Types
                 extendedPropertyInfo._isDefaultSet = true;
             }
 
-            return object.Equals(extendedPropertyInfo.DefaultValue, value);
+            return Equals(extendedPropertyInfo.DefaultValue, value);
         }
 
-        public static string GetTypeRedName(Type type)
-        {
-            return _redTypeCacheReverse.ContainsKey(type) ? _redTypeCacheReverse[type] : null;
-        }
+        public static string GetTypeRedName(Type type) =>
+            s_redTypeCacheReverse.ContainsKey(type) ? s_redTypeCacheReverse[type] : null;
 
-        public static string GetEnumRedName(Type type)
-        {
-            return _redEnumCache.FirstOrDefault(t => t.Value.Type == type).Key;
-        }
+        public static string GetEnumRedName(Type type) => s_redEnumCache.FirstOrDefault(t => t.Value.Type == type).Key;
 
-        public static ExtendedEnumInfo GetEnumTypeInfo(Type type)
-        {
-            return _redEnumCache.FirstOrDefault(t => t.Value.Type == type).Value;
-        }
-
-        private static readonly ConcurrentDictionary<string, (Type, Flags)> _csTypeCache2 = new();
+        public static ExtendedEnumInfo GetEnumTypeInfo(Type type) =>
+            s_redEnumCache.FirstOrDefault(t => t.Value.Type == type).Value;
 
         public static (Type type, Flags flags) GetCSTypeFromRedType(string redTypeName)
         {
-            if (_csTypeCache2.TryGetValue(redTypeName, out var tuple))
+            if (s_csTypeCache2.TryGetValue(redTypeName, out var tuple))
             {
                 return (tuple.Item1, tuple.Item2.Clone());
             }
@@ -172,7 +146,7 @@ namespace WolvenKit.RED4.Types
             List<int> flagValues = new();
 
             var subTypes = redTypeName.Split(':');
-            for (int i = subTypes.Length - 1; i >= 0; i--)
+            for (var i = subTypes.Length - 1; i >= 0; i--)
             {
                 var subType = subTypes[i];
 
@@ -191,20 +165,13 @@ namespace WolvenKit.RED4.Types
                     subType = subType.Substring(strVal.Length + 2);
                 }
 
-                if (_redTypeCache.TryGetValue(subType, out var tType))
+                if (s_redTypeCache.TryGetValue(subType, out var tType))
                 {
-                    if (type == null)
-                    {
-                        type = tType;
-                    }
-                    else
-                    {
-                        type = tType.MakeGenericType(type);
-                    }
+                    type = type == null ? tType : tType.MakeGenericType(type);
 
                     if (isFixedArray)
                     {
-                        for (int j = 0; j < flagValues.Count; j++)
+                        for (var j = 0; j < flagValues.Count; j++)
                         {
                             type = typeof(CArrayFixedSize<>).MakeGenericType(type);
                         }
@@ -213,18 +180,13 @@ namespace WolvenKit.RED4.Types
                     continue;
                 }
 
-                if (_redEnumCache.TryGetValue(subType, out var eType))
+                if (s_redEnumCache.TryGetValue(subType, out var eType))
                 {
                     if (type == null)
                     {
-                        if (eType.IsBitfield)
-                        {
-                            type = typeof(CBitField<>).MakeGenericType(eType.Type);
-                        }
-                        else
-                        {
-                            type = typeof(CEnum<>).MakeGenericType(eType.Type);
-                        }
+                        type = eType.IsBitfield
+                            ? typeof(CBitField<>).MakeGenericType(eType.Type)
+                            : typeof(CEnum<>).MakeGenericType(eType.Type);
                     }
                     else
                     {
@@ -233,7 +195,7 @@ namespace WolvenKit.RED4.Types
 
                     if (isFixedArray)
                     {
-                        for (int j = 0; j < flagValues.Count; j++)
+                        for (var j = 0; j < flagValues.Count; j++)
                         {
                             type = typeof(CArrayFixedSize<>).MakeGenericType(type);
                         }
@@ -253,7 +215,7 @@ namespace WolvenKit.RED4.Types
 
                 if (isFixedArray)
                 {
-                    for (int j = 0; j < flagValues.Count; j++)
+                    for (var j = 0; j < flagValues.Count; j++)
                     {
                         type = typeof(CArrayFixedSize<>).MakeGenericType(type);
                     }
@@ -263,19 +225,17 @@ namespace WolvenKit.RED4.Types
             flagValues.Reverse();
             var flags = new Flags(flagValues.ToArray());
 
-            _csTypeCache2.TryAdd(redTypeName, (type, flags.Clone()));
+            s_csTypeCache2.TryAdd(redTypeName, (type, flags.Clone()));
 
             return (type, flags);
         }
-
-        private static readonly ConcurrentDictionary<int, string> _csTypeCache = new();
 
         public static string GetRedTypeFromCSType(Type type, Flags flags = null)
         {
             flags ??= Flags.Empty;
 
             var hash = HashCode.Combine(type, flags);
-            if (_csTypeCache.TryGetValue(hash, out var result))
+            if (s_csTypeCache.TryGetValue(hash, out var result))
             {
                 return result;
             }
@@ -301,7 +261,6 @@ namespace WolvenKit.RED4.Types
                     }
 
 
-
                     if (genericType == typeof(CArrayFixedSize<>))
                     {
                         result += $"[{(flags.MoveNext() ? flags.Current : 0)}]";
@@ -320,52 +279,42 @@ namespace WolvenKit.RED4.Types
                 }
             }
 
-            _csTypeCache.TryAdd(hash, result);
+            s_csTypeCache.TryAdd(hash, result);
 
             return result;
         }
 
-        private static void PreBuildReadTypeCache()
+        public static bool AddRedType(Type type)
         {
-            var baseType = typeof(IRedType);
-
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            if (typeof(IRedType).IsAssignableFrom(type))
             {
-                if (!baseType.IsAssignableFrom(type))
-                {
-                    continue;
-                }
-
                 var redAttr = type.GetCustomAttribute<REDAttribute>();
                 if (redAttr != null)
                 {
-                    _redTypeCache.Add(redAttr.Name, type);
+                    s_redTypeCache.Add(redAttr.Name, type);
+                    s_redTypeCacheReverse.Add(type, redAttr.Name);
                 }
                 else
                 {
-                    _redTypeCache.Add(type.Name, type);
+                    s_redTypeCache.Add(type.Name, type);
+                    s_redTypeCacheReverse.Add(type, type.Name);
                 }
 
                 BuildTypeCache(type);
+                return true;
             }
 
-            _redTypeCacheReverse = _redTypeCache.ToDictionary(x => x.Value, x => x.Key);
+            return false;
 
-            var types = typeof(Enums).GetNestedTypes();
-            foreach (var type in types)
+            void BuildTypeCache(Type innerType)
             {
-                _redEnumCache.Add(type.Name, new ExtendedEnumInfo(type));
-            }
-
-            void BuildTypeCache(Type type)
-            {
-                if (s_typeInfoCache.ContainsKey(type))
+                if (s_typeInfoCache.ContainsKey(innerType))
                 {
                     return;
                 }
 
-                var typeInfo = new ExtendedTypeInfo(type);
-                s_typeInfoCache.TryAdd(type, typeInfo);
+                var typeInfo = new ExtendedTypeInfo(innerType);
+                s_typeInfoCache.TryAdd(innerType, typeInfo);
                 foreach (var propertyInfo in typeInfo.PropertyInfos)
                 {
                     BuildTypeCache(propertyInfo.Type);
@@ -373,376 +322,196 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        static RedReflection()
+        public static bool AddEnumType(Type type)
         {
-            PreBuildReadTypeCache();
+            if (type.IsEnum)
+            {
+                s_redEnumCache.Add(type.Name, new ExtendedEnumInfo(type));
+                return true;
+            }
+
+            return false;
         }
 
-        public class ExtendedEnumInfo
+        #region TypeInfo
+
+        public static Type GetFullType(List<RedTypeInfo> redTypeInfos)
         {
-            public Type Type { get; set; }
-            public bool IsBitfield { get; set; }
+            Type result = null;
 
-            public Dictionary<string, string> RedNames { get; set; } = new();
-
-            public ExtendedEnumInfo(Type type)
+            for (var i = redTypeInfos.Count - 1; i >= 0; i--)
             {
-                Type = type;
-                IsBitfield = type.GetCustomAttribute<FlagsAttribute>() != null;
-
-                var valueNames = Enum.GetNames(Type);
-                foreach (var valueName in valueNames)
+                if (result == null)
                 {
-                    var member = Type.GetMember(valueName);
-
-                    var redAttr = member[0].GetCustomAttribute<REDAttribute>();
-                    if (redAttr != null)
+                    if (redTypeInfos[i].BaseRedType is BaseRedType.Class)
                     {
-                        RedNames.Add(redAttr.Name, valueName);
+                        result = redTypeInfos[i].RedObjectType;
                     }
-                }
-            }
-
-            public string GetCSNameFromRedName(string valueName)
-            {
-                if (RedNames.ContainsKey(valueName))
-                {
-                    return RedNames[valueName];
-                }
-
-                return valueName;
-            }
-
-            public string GetRedNameFromCSName(string valueName)
-            {
-                if (RedNames.ContainsValue(valueName))
-                {
-                    return RedNames.FirstOrDefault(x => x.Value == valueName).Key;
-                }
-
-                return valueName;
-            }
-        }
-
-        public class ExtendedTypeInfo
-        {
-            private readonly Dictionary<string, int> _nameIndex = new();
-            private readonly Dictionary<string, int> _redNameIndex = new();
-
-            public Type BaseType { get; }
-            public bool SerializeDefault { get; }
-            public int ChildLevel { get; }
-
-            public bool IsDynamicType { get; }
-
-            public bool IsValueType { get; }
-            public ImmutableList<ExtendedPropertyInfo> PropertyInfos { get; } = ImmutableList<ExtendedPropertyInfo>.Empty;
-            public List<ExtendedPropertyInfo> DynamicPropertyInfos { get; } = new();
-
-            public ExtendedTypeInfo()
-            {
-                IsDynamicType = true;
-            }
-
-            public ExtendedTypeInfo(Type type)
-            {
-                IsDynamicType = false;
-
-                BaseType = type.BaseType;
-
-                var attrs = type.GetCustomAttributes(false);
-                foreach (var attribute in attrs)
-                {
-                    if (attribute is REDClassAttribute clsAttr)
+                    else if (redTypeInfos[i].BaseRedType is BaseRedType.Enum or BaseRedType.BitField)
                     {
-                        SerializeDefault = clsAttr.SerializeDefault;
-                        ChildLevel = clsAttr.ChildLevel;
-                    }
-
-                    if (attribute is REDTypeAttribute typeAttr)
-                    {
-                        IsValueType = typeAttr.IsValueType;
-                    }
-                }
-
-                var properties = new List<ExtendedPropertyInfo>();
-                var cusProps = new List<ExtendedPropertyInfo>();
-                foreach (var propertyInfo in type.GetProperties())
-                {
-                    var extendedInfo = new ExtendedPropertyInfo(type, propertyInfo);
-
-                    if (typeof(IRedAppendix).IsAssignableFrom(type) && propertyInfo.Name == "Appendix")
-                    {
-                        extendedInfo.IsIgnored = true;
-                    }
-
-                    if (extendedInfo.Ordinal != -1)
-                    {
-                        properties.Add(extendedInfo);
+                        result = redTypeInfos[i].MappedType.MakeGenericType(redTypeInfos[i].RedObjectType);
                     }
                     else
                     {
-                        cusProps.Add(extendedInfo);
+                        result = redTypeInfos[i].MappedType;
                     }
                 }
-
-                properties = properties.OrderBy(p => p.Ordinal).ToList();
-                var clone = new List<ExtendedPropertyInfo>(properties);
-                foreach (var extendedInfo in cusProps)
+                else
                 {
-                    if (extendedInfo.Before != -1)
-                    {
-                        var index = properties.IndexOf(clone[extendedInfo.Before]);
-                        properties.Insert(index, extendedInfo);
-                        continue;
-                    }
-
-                    if (extendedInfo.After != -1)
-                    {
-                        var index = properties.IndexOf(clone[extendedInfo.After]);
-                        properties.Insert(index + 1, extendedInfo);
-                        continue;
-                    }
-
-                    properties.Add(extendedInfo);
-                }
-
-                PropertyInfos = PropertyInfos.AddRange(properties);
-                for (var i = 0; i < PropertyInfos.Count; i++)
-                {
-                    _nameIndex.Add(PropertyInfos[i].Name, i);
-
-                    if (!string.IsNullOrEmpty(PropertyInfos[i].RedName))
-                    {
-                        _redNameIndex.Add(PropertyInfos[i].RedName, i);
-                    }
+                    result = redTypeInfos[i].MappedType.MakeGenericType(result);
                 }
             }
 
-            public ExtendedPropertyInfo GetNativePropertyInfoByName(string name)
+            return result;
+        }
+
+        public static List<RedTypeInfo> GetRedTypeInfos(Type type, Flags flags = null) =>
+            GetRedTypeInfos(GetRedTypeFromCSType(type, flags));
+
+        public static List<RedTypeInfo> GetRedTypeInfos(string redTypeName)
+        {
+            var result = new List<RedTypeInfo>();
+
+            var isFixed = false;
+            var isStatic = false;
+
+            var str = "";
+            foreach (var c in redTypeName)
             {
-                if (string.IsNullOrEmpty(name))
+                if (c == ':')
                 {
-                    throw new ArgumentNullException(nameof(name));
+                    Temp();
+                    continue;
                 }
 
-                if (_redNameIndex.TryGetValue(name, out var i1))
+                if (isStatic && c == ',')
                 {
-                    return PropertyInfos[i1];
+                    isStatic = false;
+
+                    result.Add(new RedTypeInfo(BaseRedType.StaticArray, int.Parse(str)));
+
+                    str = "";
+                    continue;
                 }
 
-                if (_nameIndex.TryGetValue(name, out var i2))
+                if (c == '[')
                 {
-                    return PropertyInfos[i2];
+                    isFixed = true;
+                    continue;
                 }
-                throw new ArgumentNullException();
-                //return null;
+
+                if (isFixed && c == ']')
+                {
+                    isFixed = false;
+
+                    result.Add(new RedTypeInfo(BaseRedType.NativeArray, int.Parse(str)));
+
+                    str = "";
+                    continue;
+                }
+
+                str += c;
             }
 
-            public ExtendedPropertyInfo GetPropertyInfoByName(string name)
+            Temp();
+
+            return result;
+
+            void Temp()
             {
-                if (string.IsNullOrEmpty(name))
+                switch (str)
                 {
-                    throw new ArgumentNullException(nameof(name));
-                }
+                    case "array":
+                        result.Add(new RedTypeInfo(BaseRedType.Array));
+                        break;
 
-                var propInfo = GetPropertyInfoByRedName(name);
-                if (propInfo != null)
-                {
-                    return propInfo;
-                }
+                    case "static":
+                        isStatic = true;
+                        break;
 
-                propInfo = GetPropertyInfoByCsName(name);
-                if (propInfo != null)
-                {
-                    return propInfo;
-                }
+                    case "handle":
+                        result.Add(new RedTypeInfo(BaseRedType.Handle));
+                        break;
 
-                return null;
-            }
+                    case "whandle":
+                        result.Add(new RedTypeInfo(BaseRedType.WeakHandle));
+                        break;
 
-            public IEnumerable<ExtendedPropertyInfo> GetWritableProperties()
-            {
-                foreach (var propertyInfo in PropertyInfos)
-                {
-                    if (!propertyInfo.IsIgnored)
-                    {
-                        yield return propertyInfo;
-                    }
-                }
+                    case "rRef":
+                        result.Add(new RedTypeInfo(BaseRedType.ResourceReference));
+                        break;
 
-                foreach (var propertyInfo in DynamicPropertyInfos)
-                {
-                    if (!propertyInfo.IsIgnored)
-                    {
-                        yield return propertyInfo;
-                    }
-                }
-            }
+                    case "raRef":
+                        result.Add(new RedTypeInfo(BaseRedType.ResourceAsyncReference));
+                        break;
 
-            public ExtendedPropertyInfo GetPropertyInfoByCsName(string name)
-            {
-                if (string.IsNullOrEmpty(name))
-                {
-                    throw new ArgumentNullException(nameof(name));
-                }
+                    case "curveData":
+                        result.Add(new RedTypeInfo(BaseRedType.LegacySingleChannelCurve));
+                        break;
 
-                if (!IsDynamicType)
-                {
-                    if (_nameIndex.TryGetValue(name, out var i))
-                    {
-                        return PropertyInfos[i];
-                    }
-                }
+                    case "CName":
+                    case "String":
+                    case "LocalizationString":
+                    case "TweakDBID":
+                    case "DataBuffer":
+                    case "serializationDeferredDataBuffer":
+                    case "SharedDataBuffer":
+                    case "Variant":
+                    case "CDateTime":
+                    case "CGUID":
+                    case "CRUID":
+                    case "CRUIDRef":
+                    case "EditorObjectID":
+                    case "gamedataLocKeyWrapper":
+                    case "MessageResourcePath":
+                    case "NodeRef":
+                    case "RuntimeEntityRef":
+                        result.Add(new SimpleRedTypeInfo(Enum.Parse<SimpleRedType>(str)));
+                        break;
 
-                foreach (var propertyInfo in DynamicPropertyInfos)
-                {
-                    if (propertyInfo.Name == name)
-                    {
-                        return propertyInfo;
-                    }
-                }
+                    case "Bool":
+                    case "Int8":
+                    case "Uint8":
+                    case "Int16":
+                    case "Uint16":
+                    case "Int32":
+                    case "Uint32":
+                    case "Int64":
+                    case "Uint64":
+                    case "Float":
+                    case "Double":
+                        result.Add(new FundamentalRedTypeInfo(Enum.Parse<FundamentalRedType>(str)));
+                        break;
 
-                return null;
-            }
+                    case "multiChannelCurve":
+                        result.Add(new SpecialRedTypeInfo(SpecialRedType.MultiChannelCurve, str));
+                        break;
 
-            public ExtendedPropertyInfo GetPropertyInfoByRedName(string name)
-            {
-                if (string.IsNullOrEmpty(name))
-                {
-                    throw new ArgumentNullException(nameof(name));
-                }
-
-                if (!IsDynamicType)
-                {
-                    if (_redNameIndex.TryGetValue(name, out var i))
-                    {
-                        return PropertyInfos[i];
-                    }
-                }
-
-                foreach (var propertyInfo in DynamicPropertyInfos)
-                {
-                    if (propertyInfo.RedName == name)
-                    {
-                        return propertyInfo;
-                    }
-                }
-
-                return null;
-            }
-
-            public ExtendedPropertyInfo AddDynamicProperty(string varName, string typeName)
-            {
-                foreach (var oldPropertyInfo in DynamicPropertyInfos)
-                {
-                    if (oldPropertyInfo.RedName == varName)
-                    {
-                        if (oldPropertyInfo.RedType == typeName)
+                    default:
+                        if (s_redTypeCache.TryGetValue(str, out var type1) &&
+                            type1.IsAssignableTo(typeof(RedBaseClass)))
                         {
-                            return oldPropertyInfo;
+                            result.Add(new RedTypeInfo(BaseRedType.Class, type1));
+                            break;
                         }
 
-                        throw new ArgumentException($"A dynamic property with the name '{varName}' already exists!");
-                    }
+                        if (s_redEnumCache.TryGetValue(str, out var type2))
+                        {
+                            result.Add(type2.IsBitfield
+                                ? new RedTypeInfo(BaseRedType.BitField, type2.Type)
+                                : new RedTypeInfo(BaseRedType.Enum, type2.Type));
+                            break;
+                        }
+
+                        // could be enum/bitfield/class, just use class for now
+                        result.Add(new SpecialRedTypeInfo(SpecialRedType.Mixed, str));
+                        break;
                 }
 
-                var propertyInfo = new ExtendedPropertyInfo(varName, typeName);
-
-                DynamicPropertyInfos.Add(propertyInfo);
-
-                return propertyInfo;
+                str = "";
             }
         }
 
-        public class ExtendedPropertyInfo
-        {
-            private Flags _flags;
-            internal bool _isDefaultSet;
-
-            public int Ordinal { get; private set; } = -1;
-            public int Before { get; private set; } = -1;
-            public int After { get; private set; } = -1;
-
-            public string Name { get; }
-            public string RedName { get; private set; }
-            public string RedType { get; private set; }
-            public Flags Flags => _flags != null ? _flags.Clone() : Flags.Empty;
-            public bool IsIgnored { get; internal set; }
-
-            public bool IsDynamic { get; }
-
-            public Type Type { get; }
-            public Type GenericType { get; }
-
-            public bool SerializeDefault { get; private set; }
-            public object DefaultValue { get; internal set; }
-
-            public ExtendedPropertyInfo(string name, string type)
-            {
-                IsDynamic = true;
-
-                RedName = name;
-                RedType = type;
-            }
-
-            public ExtendedPropertyInfo(Type parent, PropertyInfo propertyInfo)
-            {
-                IsDynamic = false;
-
-                Name = propertyInfo.Name;
-                Type = propertyInfo.PropertyType;
-                if (Type.IsGenericType)
-                {
-                    GenericType = Type.GetGenericTypeDefinition();
-                }
-
-                var attrs = propertyInfo.GetCustomAttributes();
-                foreach (var attribute in attrs)
-                {
-                    ProcessAttribute(attribute);
-                }
-
-                var propName = $"{parent.Name}.{Name}";
-                if (Patches.AttributePatches.ContainsKey(propName))
-                {
-                    foreach (var attribute in Patches.AttributePatches[propName])
-                    {
-                        ProcessAttribute(attribute);
-                    }
-                }
-            }
-
-            private void ProcessAttribute(Attribute attribute)
-            {
-                if (attribute is OrdinalAttribute ordinalAttribute)
-                {
-                    Ordinal = ordinalAttribute.Ordinal;
-                }
-
-                if (attribute is OrdinalOverrideAttribute ordinalOverrideAttribute)
-                {
-                    Before = ordinalOverrideAttribute.Before;
-                    After = ordinalOverrideAttribute.After;
-                }
-
-                if (attribute is REDAttribute redAttribute)
-                {
-                    RedName = redAttribute.Name;
-                    _flags = new Flags(redAttribute.Flags);
-                }
-
-                if (attribute is REDBufferAttribute redBufferAttribute)
-                {
-                    IsIgnored = redBufferAttribute.IsIgnored;
-                }
-
-                if (attribute is REDPropertyAttribute redPropertyAttribute)
-                {
-                    SerializeDefault = redPropertyAttribute.SerializeDefault;
-                    IsIgnored = redPropertyAttribute.IsIgnored;
-                }
-            }
-        }
+        #endregion
     }
 }

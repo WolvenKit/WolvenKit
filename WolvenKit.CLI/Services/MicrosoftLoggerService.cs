@@ -1,8 +1,10 @@
 using System;
 using DynamicData;
+using Microsoft.Build.Framework;
 using Microsoft.Extensions.Logging;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.CLI.Services
 {
@@ -10,21 +12,62 @@ namespace WolvenKit.CLI.Services
     {
         private readonly ILogger<MicrosoftLoggerService> _logger;
 
-        public MicrosoftLoggerService(ILogger<MicrosoftLoggerService> logger)
+        public LoggerVerbosity LoggerVerbosity { get; private set; } = LoggerVerbosity.Normal;
+
+        public MicrosoftLoggerService(ILogger<MicrosoftLoggerService> logger) => _logger = logger;
+
+        public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
+
+
+        public void Debug(string msg) => LogString(msg, Logtype.Debug);
+
+        public void Success(string msg) => LogString(msg, Logtype.Success);
+
+        public void Info(string msg) => LogString(msg, Logtype.Important);
+
+        public void Warning(string msg) => LogString(msg, Logtype.Warning);
+
+        public void Error(string msg) => LogString(msg, Logtype.Error);
+
+        public void Error(Exception exception)
         {
-            _logger = logger;
+            switch (LoggerVerbosity)
+            {
+                case LoggerVerbosity.Quiet:
+                    // log nothing
+                    break;
+                case LoggerVerbosity.Minimal:
+                    // TODO more minimal?
+                    Error(exception.Message);
+                    break;
+                case LoggerVerbosity.Normal:
+                    Error(exception.Message);
+                    break;
+                case LoggerVerbosity.Detailed:
+                case LoggerVerbosity.Diagnostic:
+                    Error($"Message: {exception.Message}\nSource: {exception.Source}\nStackTrace: {exception.StackTrace}");
+                    break;
+                default:
+                    break;
+            }
         }
 
-        public void LogString(string message, Logtype type)
+
+        private void LogString(string message, Logtype type)
         {
+            if (LoggerVerbosity == LoggerVerbosity.Quiet)
+            {
+                return;
+            }
+
             switch (type)
             {
-                case Logtype.Wcc:
+                case Logtype.Debug:
+                    _logger.LogDebug(message);
+                    break;
                 case Logtype.Normal:
                     _logger.LogDebug(message);
                     break;
-
-
                 case Logtype.Success:
                     _logger.LogInformation(message);
                     break;
@@ -42,28 +85,7 @@ namespace WolvenKit.CLI.Services
             }
         }
 
-        // Normal
-        public void Log(string msg, Logtype type = Logtype.Normal) => LogString(msg, type);
-
-
-        public void Success(string msg) => LogString(msg, Logtype.Success);
-        public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
-
-        public void Error(Exception exception)
-        {
-            var msg =
-                $"========================\r\n" +
-                $"{exception.ToString()}" +
-                $"\r\n========================";
-            Error(msg);
-        }
-
-        public void Info(string s) => LogString(s, Logtype.Important);
-        public void Important(string s) => LogString(s, Logtype.Important);
-
-        public void Warning(string s) => _logger.LogError(s);
-
-        public void Error(string msg) => LogString(msg, Logtype.Error);
+        public void SetLoggerVerbosity(LoggerVerbosity verbosity) => LoggerVerbosity = verbosity;
 
     }
 }

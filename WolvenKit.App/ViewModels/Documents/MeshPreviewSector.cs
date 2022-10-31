@@ -1,22 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reactive.Disposables;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
-using Splat;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
-using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Types;
+using Splat;
 using WolvenKit.Common.Services;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
+using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -271,19 +266,19 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             HelixToolkit.SharpDX.Core.MeshGeometry3D geometry = null;
 
-                            if (shape.ShapeType == Enums.physicsShapeType.Box)
+                            if (shape is CollisionShapeSimple simpleShape && simpleShape.ShapeType == Enums.physicsShapeType.Box)
                             {
                                 var mb = new MeshBuilder();
                                 mb.CreateNormals = true;
-                                mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), shape.Size.X * 2, shape.Size.Z * 2, shape.Size.Y * 2);
+                                mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), simpleShape.Size.X * 2, simpleShape.Size.Z * 2, simpleShape.Size.Y * 2);
 
                                 mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
 
                                 geometry = mb.ToMeshGeometry3D();
                             }
-                            else if (shape.ShapeType == Enums.physicsShapeType.ConvexMesh || shape.ShapeType == Enums.physicsShapeType.TriangleMesh)
+                            else if (shape is CollisionShapeMesh meshShape)
                             {
-                                var geo = gcs.GetEntry(wcn.SectorHash, shape.Hash);
+                                var geo = gcs.GetEntry(wcn.SectorHash, meshShape.Hash);
 
                                 if (geo == null)
                                 {
@@ -418,9 +413,15 @@ namespace WolvenKit.ViewModels.Documents
                                 continue;
                             }
 
+                            ulong hash = 0;
+                            if (shape is CollisionShapeMesh meshShape2)
+                            {
+                                hash = meshShape2.Hash;
+                            }
+
                             var shapeGroup = new SubmeshComponent()
                             {
-                                Name = "shape_" + shape.Hash,
+                                Name = "shape_" + hash,
                                 IsRendering = true,
                                 Geometry = geometry,
                                 Material = colliderMaterial,
@@ -556,7 +557,7 @@ namespace WolvenKit.ViewModels.Documents
                             }
                         }
                     }
-                    catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+                    catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
                 }
                 else if (handle.Chunk is worldPopulationSpawnerNode wpsn)
                 {

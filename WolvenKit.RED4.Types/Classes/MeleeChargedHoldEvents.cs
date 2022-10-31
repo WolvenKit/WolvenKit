@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MeleeChargedHoldEvents : MeleeEventsTransition
+	public partial class MeleeChargedHoldEvents : MeleeRumblingEvents
 	{
 		[Ordinal(1)] 
 		[RED("clearWeaponCharge")] 

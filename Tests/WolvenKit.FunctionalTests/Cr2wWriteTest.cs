@@ -4,7 +4,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -95,6 +94,9 @@ namespace WolvenKit.FunctionalTests
         public void Write_charcustpreset() => Test_Extension(".charcustpreset");
 
         [TestMethod]
+        public void Write_chromaset() => Test_Extension(".chromaset");
+
+        [TestMethod]
         public void Write_cminimap() => Test_Extension(".cminimap");
 
         [TestMethod]
@@ -111,6 +113,9 @@ namespace WolvenKit.FunctionalTests
 
         [TestMethod]
         public void Write_cookedapp() => Test_Extension(".cookedapp");
+
+        [TestMethod]
+        public void Write_cookedprefab() => Test_Extension(".cookedprefab");
 
         [TestMethod]
         public void Write_credits() => Test_Extension(".credits");
@@ -517,8 +522,6 @@ namespace WolvenKit.FunctionalTests
                     continue;
                 }
 
-                using var mmf = ar.GetMemoryMappedFile();
-
 #if IS_PARALLEL
                 Parallel.ForEach(fileList, tmpFile =>
 #else
@@ -529,7 +532,7 @@ namespace WolvenKit.FunctionalTests
                     try
                     {
                         using var originalStream = new MemoryStream();
-                        ar.CopyFileToStream(originalStream, file.NameHash64, false, mmf);
+                        ar.CopyFileToStream(originalStream, file.NameHash64, false);
                         originalStream.Seek(0, SeekOrigin.Begin);
 
                         using var originalReader = new CR2WReader(originalStream, Encoding.UTF8, true);

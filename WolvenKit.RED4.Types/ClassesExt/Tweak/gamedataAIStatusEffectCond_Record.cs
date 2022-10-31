@@ -11,14 +11,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
-		[RED("invert")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Invert
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("statusEffect")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID StatusEffect

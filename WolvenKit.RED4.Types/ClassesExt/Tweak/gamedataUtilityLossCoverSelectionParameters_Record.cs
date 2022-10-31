@@ -27,14 +27,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 		
-		[RED("scoreOnlyForCombatTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool ScoreOnlyForCombatTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("utilityLossMultiplier")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat UtilityLossMultiplier
@@ -65,14 +57,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("vaidateOnlyForCombatTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool VaidateOnlyForCombatTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

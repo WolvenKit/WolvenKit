@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Extensions;
@@ -19,12 +20,10 @@ public class ArchiveReader
             ArchiveAbsolutePath = path
         };
 
-        using var mmf = ar.GetMemoryMappedFile();
-
         // read header
         uint customDataLength;
 
-        using (var vs = mmf.CreateViewStream(0, Header.EXTENDED_SIZE, MemoryMappedFileAccess.Read))
+        using (var vs = ar.GetViewStream(0, Header.EXTENDED_SIZE))
         using (var br = new BinaryReader(vs))
         {
             ar.Header = ReadHeader(br);
@@ -36,7 +35,7 @@ public class ArchiveReader
         {
             if (customDataLength != 0)
             {
-                using var vs = mmf.CreateViewStream(Header.EXTENDED_SIZE, customDataLength, MemoryMappedFileAccess.Read);
+                using var vs = ar.GetViewStream(Header.EXTENDED_SIZE, customDataLength);
                 using var br = new BinaryReader(vs);
                 if (br.BaseStream.Length >= LxrsFooter.MIN_LENGTH)
                 {
@@ -54,8 +53,7 @@ public class ArchiveReader
         }
 
         // read files
-        using (var vs = mmf.CreateViewStream((long)ar.Header.IndexPosition, ar.Header.IndexSize,
-        MemoryMappedFileAccess.Read))
+        using (var vs = ar.GetViewStream(ar.Header.IndexPosition, ar.Header.IndexSize))
         using (var br = new BinaryReader(vs))
         {
             ar.Index = ReadIndex(br, hashService);
@@ -68,61 +66,76 @@ public class ArchiveReader
 
             if (file.Extension == ".bin")
             {
-                var segment = ar.Index.FileSegments[(int)file.SegmentsStart];
-
-                using var vs = mmf.CreateViewStream((long)segment.Offset, segment.ZSize, MemoryMappedFileAccess.Read);
-                BinaryReader br;
-
-                if (segment.ZSize != segment.Size)
+                var knownGuessedExtension = hashService.GetGuessedExtension(file.Key);
+                if (knownGuessedExtension != null)
                 {
-                    var ms = new MemoryStream();
-                    vs.DecompressAndCopySegment(ms, segment.ZSize, segment.Size);
-                    ms.Position = 0;
-                    br = new BinaryReader(ms);
+                    file.GuessedExtension = knownGuessedExtension;
                 }
                 else
                 {
-                    br = new BinaryReader(vs);
+                    GuessFileType(ar, file);
                 }
-
-                var id = br.BaseStream.ReadStruct<uint>();
-                switch (id)
-                {
-                    case CR2WFile.MAGIC:
-                    {
-                        br.BaseStream.Position = 0xA1;
-                        var rootClsName = br.ReadNullTerminatedString();
-                        var fileTypes = FileTypeHelper.GetFileExtensionsFromRootName(rootClsName);
-
-                        if (fileTypes.Length > 0)
-                        {
-                            file.GuessedExtension = "." + fileTypes[0];
-                        }
-
-                        break;
-                    }
-                    case 0x44484B42:
-                    {
-                        file.GuessedExtension = ".bnk";
-                        break;
-                    }
-                    case 0x6A32424B:
-                    {
-                        file.GuessedExtension = ".bk2";
-                        break;
-                    }
-                    case 0x46464952:
-                    {
-                        file.GuessedExtension = ".wem";
-                        break;
-                    }
-                }
-
-                br.Dispose();
             }
         }
 
+        ar.ReleaseFileHandle();
+
         return EFileReadErrorCodes.NoError;
+    }
+
+    private void GuessFileType(Archive ar, FileEntry file)
+    {
+        var segment = ar.Index.FileSegments[(int)file.SegmentsStart];
+
+        using var vs = ar.GetViewStream(segment.Offset, segment.ZSize);
+        BinaryReader br;
+
+        if (segment.ZSize != segment.Size)
+        {
+            var ms = new MemoryStream();
+            vs.DecompressAndCopySegment(ms, segment.ZSize, segment.Size);
+            ms.Position = 0;
+            br = new BinaryReader(ms);
+        }
+        else
+        {
+            br = new BinaryReader(vs);
+        }
+
+        var id = br.BaseStream.ReadStruct<uint>();
+        switch (id)
+        {
+            case CR2WFile.MAGIC:
+            {
+                br.BaseStream.Position = 0xA1;
+                var rootClsName = br.ReadNullTerminatedString();
+                var fileTypes = FileTypeHelper.GetFileExtensionsFromRootName(rootClsName);
+
+                if (fileTypes.Length > 0)
+                {
+                    file.GuessedExtension = "." + fileTypes[0];
+                }
+
+                break;
+            }
+            case 0x44484B42:
+            {
+                file.GuessedExtension = ".bnk";
+                break;
+            }
+            case 0x6A32424B:
+            {
+                file.GuessedExtension = ".bk2";
+                break;
+            }
+            case 0x46464952:
+            {
+                file.GuessedExtension = ".wem";
+                break;
+            }
+        }
+
+        br.Dispose();
     }
 
     private LxrsFooter ReadLxrsFooter(BinaryReader br)
@@ -170,7 +183,7 @@ public class ArchiveReader
         {
             index.Dependencies.Add(ReadDependency(br));
         }
-        
+
         foreach (var (_, value) in index.FileEntries)
         {
             var startIndex = (int)value.SegmentsStart;
@@ -201,12 +214,7 @@ public class ArchiveReader
             DebugSize = br.ReadUInt32(),
             Filesize = br.ReadUInt64()
         };
-        if (header.Magic != Header.MAGIC)
-        {
-            throw new InvalidParsingException("not an ArchiveHeader");
-        }
-
-        return header;
+        return header.Magic != Header.MAGIC ? throw new InvalidParsingException("not an ArchiveHeader") : header;
     }
 
     private Dependency ReadDependency(BinaryReader br) => new(br.ReadUInt64());
