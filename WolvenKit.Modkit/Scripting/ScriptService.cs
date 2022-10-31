@@ -1,9 +1,9 @@
 ﻿using Microsoft.ClearScript.V8;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection;
+using Microsoft.ClearScript;
+using Microsoft.ClearScript.JavaScript;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.Scripting;
@@ -19,13 +19,20 @@ public class ScriptService
 
     public void Execute(string code) => Execute(code, new Dictionary<string, object> {{"wkit", new WKitScripting(_loggerService)}});
 
-    public void Execute(string code, Dictionary<string, object> hostObjects)
+    public void Execute(string code, Dictionary<string, object> hostObjects, string searchPath = null)
     {
         var sw = new Stopwatch();
         sw.Start();
 
+        DocumentLoader.Default.DiscardCachedDocuments();
         using (var engine = new V8ScriptEngine())
         {
+            if (!string.IsNullOrEmpty(searchPath))
+            {
+                engine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
+                engine.DocumentSettings.SearchPath = searchPath;
+            }
+
             foreach (var kvp in hostObjects)
             {
                 engine.AddHostObject(kvp.Key, kvp.Value);
@@ -33,7 +40,7 @@ public class ScriptService
 
             try
             {
-                engine.Execute(code);
+                engine.Execute(new DocumentInfo {Category = ModuleCategory.Standard}, code);
             }
             catch (Exception ex)
             {

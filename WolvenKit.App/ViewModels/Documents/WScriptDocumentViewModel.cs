@@ -11,6 +11,7 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.ViewModels.Documents;
@@ -45,7 +46,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     {
         var code = Document.Text;
 
-        return Task.Run(() => _scriptService.Execute(code, _hostObjects));
+        return Task.Run(() => _scriptService.Execute(code, _hostObjects, ISettingsManager.GetWScriptDir()));
     }
 
     private void GenerateCompletionData()
