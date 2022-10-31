@@ -1,8 +1,8 @@
 name: wkit-draft-release
 on:
   push:
-    tags:
-    - '*'
+    tags-ignore:
+    - '*-nightly*'
 
 jobs:
   desktop-win:
