@@ -147,6 +147,9 @@
                     <DataTemplate DataType="{x:Type dialogVMs:ProjectSettingsDialogViewModel}">
                         <dialogs:ProjectSettingsDialog ViewModel="{Binding}" />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:ScriptManagerViewModel}">
+                        <dialogs:ScriptManagerView ViewModel="{Binding}" />
+                    </DataTemplate>
 
                     <Storyboard x:Key="OverlayFadeIn">
                         <DoubleAnimation

@@ -595,6 +595,18 @@
                             Kind="VolumeUp" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemShowScriptManager"
+                    Margin="2,1"
+                    Header="Script Manager">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconUnicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="{StaticResource WolvenKitCyan}"
+                            Kind="JavaScript" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
             <!--  Game  -->

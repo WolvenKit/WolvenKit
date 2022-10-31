@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Threading;
 using DynamicData;
 using ReactiveUI;
 using Serilog.Events;
@@ -104,7 +105,8 @@ namespace WolvenKit.Views.Tools
             };
             paragraph.Inlines.Add(run);
             LogRichTextBox.Document.Blocks.Add(paragraph);
-            LogRichTextBox.ScrollToEnd();
+
+            Dispatcher.InvokeAsync(() => LogRichTextBox.ScrollToEnd(), DispatcherPriority.Background);
         }
 
         private Logtype ToLogtype(LogEventLevel level)

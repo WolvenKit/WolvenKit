@@ -13,6 +13,7 @@ using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
@@ -85,6 +86,8 @@ namespace WolvenKit
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
                     services.AddSingleton<IPluginService, PluginService>();
+
+                    services.AddSingleton<ScriptService>();
 
 
                     // register views

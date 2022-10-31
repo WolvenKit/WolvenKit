@@ -146,6 +146,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                         viewModel => viewModel.OpenGameFolderCommand,
                         view => view.MenuItemOpenGameFolder)
                     .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.ShowScriptManagerCommand,
+                    view => view.MenuItemShowScriptManager)
+                .DisposeWith(disposables);
 
             // Game
             this.BindCommand(ViewModel,
