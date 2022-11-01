@@ -29,7 +29,7 @@ jobs:
     - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
     
     # tag this commit
-    - name: GitHub Tag
+    - name: tag_version
       uses: mathieudutour/github-tag-action@v6.1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -37,3 +37,8 @@ jobs:
         custom_tag: ${{ env.VERSION }}
         tag_prefix: ""
         dry_run: true
+
+    # echo
+    - name: output
+      run: |
+        echo "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
