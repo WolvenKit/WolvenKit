@@ -201,6 +201,9 @@ namespace WolvenKit.ViewModels.Tools
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(
                     _ => ImportSettingsCommand.NotifyCanExecuteChanged());
+
+            this.WhenAnyValue(x => x._settingsManager.ShowAdvancedOptions)
+                .Subscribe(_ => ShowAdvancedOptions = _settingsManager.ShowAdvancedOptions);
         }
 
         private static bool CheckForMultiImport(Models.FileModel file)
@@ -246,6 +249,8 @@ namespace WolvenKit.ViewModels.Tools
         /// Lock Selection of items in grid.
         /// </summary>
         [Reactive] public bool SelectionLocked { get; set; } = false;
+
+        [Reactive] public bool ShowAdvancedOptions { get; set; }
 
         /// <summary>
         /// Returns the name of current selected object in Import/Export Grid.
@@ -841,7 +846,7 @@ namespace WolvenKit.ViewModels.Tools
             SaveSettings();
         }
 
-        [RelayCommand(CanExecute = "HasActiveProject")]
+        [RelayCommand(CanExecute = nameof(HasActiveProject))]
         private void ImportSettings()
         {
             var gammaRegex = new Regex(".*_[de][0-9]*$");
@@ -919,6 +924,9 @@ namespace WolvenKit.ViewModels.Tools
 
             SaveSettings();
         }
+
+        [RelayCommand]
+        private void ToggleAdvancedOptions() => _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
 
         #endregion Commands
 

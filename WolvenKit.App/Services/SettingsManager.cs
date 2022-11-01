@@ -21,8 +21,6 @@ namespace WolvenKit.Functionality.Services
     /// </summary>
     public class SettingsManager : ReactiveObject, ISettingsManager
     {
-        private readonly ILoggerService _loggerService;
-
         private bool _isLoaded;
 
         private readonly string _assemblyVersion;
@@ -32,7 +30,6 @@ namespace WolvenKit.Functionality.Services
         /// </summary>
         public SettingsManager()
         {
-            _loggerService = Locator.Current.GetService<ILoggerService>();
             _assemblyVersion = CommonFunctions.GetAssemblyVersion(Constants.AssemblyName).ToString();
 
             _ = this.WhenAnyPropertyChanged(

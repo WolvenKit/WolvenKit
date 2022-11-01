@@ -9,7 +9,7 @@
     xmlns:layout="clr-namespace:WolvenKit.Layout"
     xmlns:local="clr-namespace:WolvenKit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
@@ -61,7 +61,7 @@
                         IsChecked="{Binding IsExportsSelected}" />
                 </StackPanel>
             </Grid>
-            
+
             <!--  Data Grid Exports  -->
             <syncfusion:SfDataGrid
                 x:Name="ExportGrid"
@@ -149,6 +149,12 @@
                         Style="{DynamicResource ButtonCustom}">
                         <TextBlock Margin="1" Text="Load Settings" />
                     </Button>
+                    <mah:ToggleSwitch
+                        IsOn="{Binding ShowAdvancedOptions}"
+                        OffContent="Show Advanced Options"
+                        OnContent="Hide Advanced Options"
+                        ToolTip="Toggle Advanced Import/Export Options"
+                        Command="{Binding ToggleAdvancedOptionsCommand}" />
                 </StackPanel>
 
                 <syncfusion:SfDataGrid

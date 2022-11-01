@@ -279,7 +279,7 @@ namespace WolvenKit.Views.Tools
                     return;
             }
 
-            if (ViewModel?.SelectedObject.Properties is XbmImportArgs)
+            if (ViewModel?.SelectedObject?.Properties is XbmImportArgs { })
             {
                 if (e.DisplayName == "Use existing file")
                 {
