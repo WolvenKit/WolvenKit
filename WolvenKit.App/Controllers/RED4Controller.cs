@@ -13,6 +13,7 @@ using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
@@ -404,14 +405,16 @@ namespace WolvenKit.Functionality.Controllers
             {
                 // legacy
                 Directory.Delete(cp77Proj.GetPackedArchiveDirectory(!options.IsRedmod), true);
+                Directory.Delete(Path.Combine(cp77Proj.PackedRootDirectory, "archive"), true);
 
                 // tweakXL
                 Directory.Delete(cp77Proj.PackedTweakDirectory, true);
 
                 // redmod
-                Directory.Delete(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod), true);
-                Directory.Delete(cp77Proj.PackedSoundsDirectory, true);
                 File.Delete(Path.Combine(cp77Proj.PackedRedModDirectory, "info.json"));
+                Directory.Delete(cp77Proj.PackedSoundsDirectory, true);
+                Directory.Delete(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod), true);
+                Directory.Delete(Path.Combine(cp77Proj.PackedRootDirectory, "mods"), true);
             }
             catch (Exception e)
             {
@@ -437,28 +440,25 @@ namespace WolvenKit.Functionality.Controllers
         }
         private static bool PackTweakXlFiles(Cp77Project cp77Proj)
         {
-            var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.yaml", SearchOption.AllDirectories);
+            var tweakFiles = Directory.GetFiles(cp77Proj.ResourcesDirectory, "*.yaml", SearchOption.AllDirectories);
             foreach (var f in tweakFiles)
             {
-                var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.TweakDirectory, f));
-                var outDirectory = Path.Combine(cp77Proj.PackedTweakDirectory, folder);
-                if (!Directory.Exists(outDirectory))
+                if (!Directory.Exists(cp77Proj.PackedTweakDirectory))
                 {
-                    Directory.CreateDirectory(outDirectory);
+                    Directory.CreateDirectory(cp77Proj.PackedTweakDirectory);
                 }
                 var filename = Path.GetFileName(f);
-                var outPath = Path.Combine(outDirectory, filename);
+                var outPath = Path.Combine(cp77Proj.PackedTweakDirectory, filename);
                 File.Copy(f, outPath, true);
             }
             return true;
         }
         private static bool PackArchiveXlFiles(Cp77Project cp77Proj, LaunchProfile options)
         {
-            var archiveXlFiles = Directory.GetFiles(cp77Proj.ArchiveXLDirectory, "*.archive.xl", SearchOption.AllDirectories);
+            var archiveXlFiles = Directory.GetFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories);
             foreach (var f in archiveXlFiles)
             {
-                var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.ArchiveXLDirectory, f));
-                var outDirectory = Path.Combine(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod), folder);
+                var outDirectory = cp77Proj.GetPackedArchiveDirectory(options.IsRedmod);
                 if (!Directory.Exists(outDirectory))
                 {
                     Directory.CreateDirectory(outDirectory);

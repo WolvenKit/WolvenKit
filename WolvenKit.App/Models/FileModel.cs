@@ -37,9 +37,9 @@ namespace WolvenKit.Models
                 _extension = ECustomImageKeys.OpenDirImageKey.ToString();
                 if (project is Cp77Project cpp)
                 {
-                    if (FullName.StartsWith(cpp.ArchiveXLDirectory))
+                    if (FullName.StartsWith(cpp.ResourcesDirectory))
                     {
-                        _extension = Functionality.Constants.ArchiveXLDirectoryTop;
+                        _extension = Functionality.Constants.ResourceDirectoryTop;
                     }
                     else if (FullName.StartsWith(cpp.ModDirectory))
                     {
@@ -48,14 +48,6 @@ namespace WolvenKit.Models
                     else if (FullName.ToLower().StartsWith(cpp.RawDirectory.ToLower()))
                     {
                         _extension = Functionality.Constants.RawDirectoryTop;
-                    }
-                    else if (FullName.StartsWith(cpp.ScriptDirectory))
-                    {
-                        _extension = Functionality.Constants.ScriptDirectoryTop;
-                    }
-                    else if (FullName.StartsWith(cpp.TweakDirectory))
-                    {
-                        _extension = Functionality.Constants.TweakDirectoryTop;
                     }
                 }
             }
@@ -66,21 +58,6 @@ namespace WolvenKit.Models
                 parentfullname = fi.Directory.FullName;
                 Name = fi.Name;
                 _extension = fi.Extension;
-                if (project is Cp77Project cpp)
-                {
-                    if (FullName.StartsWith(cpp.TweakDirectory) && _extension == "bin")
-                    {
-                        _extension = "tweak";
-                    }
-                }
-                /*if (_extension == "")
-                {
-                    var guessedExtensions = FileTypeHelper.GetFileExtensions(FullName);
-                    if (guessedExtensions.Length == 1)
-                    {
-                        _extension = guessedExtensions[0];
-                    }
-                }*/
             }
             else
             {

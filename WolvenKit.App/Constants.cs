@@ -16,8 +16,6 @@ namespace WolvenKit.Functionality
 
         public const string ModDirectoryTop = "ModDirectoryTop";
         public const string RawDirectoryTop = "RawDirectoryTop";
-        public const string ScriptDirectoryTop = "ScriptDirectoryTop";
-        public const string TweakDirectoryTop = "TweakDirectoryTop";
-        public const string ArchiveXLDirectoryTop = "ArchiveXLDirectoryTop";
+        public const string ResourceDirectoryTop = "ResourceDirectoryTop";
     }
 }

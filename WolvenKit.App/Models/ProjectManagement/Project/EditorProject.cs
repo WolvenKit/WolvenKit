@@ -11,10 +11,7 @@ namespace WolvenKit.ProjectManagement.Project
     {
         #region Constructors
 
-        public EditorProject(string location)
-        {
-            Location = location;
-        }
+        public EditorProject(string location) => Location = location;
 
         #endregion Constructors
 
@@ -40,6 +37,7 @@ namespace WolvenKit.ProjectManagement.Project
 
         public abstract string PackedRootDirectory { get; }
         public abstract string PackedRedModDirectory { get; }
+        public abstract string ResourcesDirectory { get; }
 
         public bool IsDirty { get; set; }
 
@@ -47,12 +45,12 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                string oldDir = Path.Combine(ProjectDirectory, "files");
+                var oldDir = Path.Combine(ProjectDirectory, "files");
                 if (Directory.Exists(oldDir))
                 {
                     return oldDir;
                 }
-                string dir = Path.Combine(ProjectDirectory, "source");
+                var dir = Path.Combine(ProjectDirectory, "source");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -66,12 +64,12 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                string oldDir = Path.Combine(FileDirectory, "Mod");
+                var oldDir = Path.Combine(FileDirectory, "Mod");
                 if (Directory.Exists(oldDir))
                 {
                     return oldDir;
                 }
-                string dir = Path.Combine(FileDirectory, "archive");
+                var dir = Path.Combine(FileDirectory, "archive");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -85,7 +83,7 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                string dir = Path.Combine(ProjectDirectory, "_backups");
+                var dir = Path.Combine(ProjectDirectory, "_backups");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -99,12 +97,12 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                string oldDir = Path.Combine(FileDirectory, "Raw");
+                var oldDir = Path.Combine(FileDirectory, "Raw");
                 if (DirExistsMatchCase(oldDir))
                 {
                     return oldDir;
                 }
-                string dir = Path.Combine(FileDirectory, "raw");
+                var dir = Path.Combine(FileDirectory, "raw");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -123,8 +121,8 @@ namespace WolvenKit.ProjectManagement.Project
             }
 
             // Figure out if the case (of the final part) is the same
-            string thisDir = Path.GetFileName(path);
-            string actualDir = Path.GetFileName(Directory.GetDirectories(Path.GetDirectoryName(path), thisDir)[0]);
+            var thisDir = Path.GetFileName(path);
+            var actualDir = Path.GetFileName(Directory.GetDirectories(Path.GetDirectoryName(path), thisDir)[0]);
             return thisDir == actualDir;
         }
 
@@ -175,7 +173,7 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                string oldDir = Path.Combine(Path.GetDirectoryName(Location), Name);
+                var oldDir = Path.Combine(Path.GetDirectoryName(Location), Name);
                 return Directory.Exists(oldDir) ? oldDir : Path.GetDirectoryName(Location);
             }
         }

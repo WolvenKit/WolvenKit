@@ -159,6 +159,11 @@ namespace WolvenKit.Functionality.Services
                     }
                 }
 
+                // fix legacy folders
+                MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "tweaks")), result);
+                MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "scripts")), result);
+                MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "archiveXL")), result);
+
                 return result;
             }
             catch (Exception e)
@@ -166,6 +171,36 @@ namespace WolvenKit.Functionality.Services
                 _loggerService.Error($"Failed to load project.");
                 _loggerService.Error(e);
                 return null;
+            }
+        }
+
+        private void MoveLegacyFolder(DirectoryInfo dir, Cp77Project result)
+        {
+            if (dir.Exists)
+            {
+                var files = dir.GetFiles("*", SearchOption.AllDirectories);
+                foreach (var f in files)
+                {
+                    try
+                    {
+                        var relPath = Path.GetRelativePath(dir.FullName, f.FullName);
+                        f.MoveTo(Path.Combine(result.ResourcesDirectory, relPath));
+                    }
+                    catch (Exception)
+                    {
+                        _loggerService.Error($"Could not move {f.FullName}");
+                    }
+                }
+
+                try
+                {
+                    dir.Delete();
+                }
+                catch (Exception)
+                {
+                    _loggerService.Error($"Could not delete {dir.FullName}");
+                }
+
             }
         }
 

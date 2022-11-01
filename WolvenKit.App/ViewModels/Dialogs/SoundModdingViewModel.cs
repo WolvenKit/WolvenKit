@@ -83,7 +83,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
         private void LoadInfo()
         {
             var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
-            path = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
+            path = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "info.json");
             if (File.Exists(path))
             {
                 try
@@ -139,7 +139,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private void Save()
         {
-            var modInfoJsonPath = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
+            var modInfoJsonPath = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "info.json");
             if (!File.Exists(modInfoJsonPath))
             {
                 var jsonString = JsonSerializer.Serialize(_projectManager.ActiveProject.GetInfo(), _options);

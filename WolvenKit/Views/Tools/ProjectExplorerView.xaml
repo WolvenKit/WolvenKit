@@ -482,8 +482,6 @@
             </syncfusion:TabItemExt>
             <syncfusion:TabItemExt Header="archive" Style="{StaticResource WolvenKitPESourceTabs}" />
             <syncfusion:TabItemExt Header="raw" Style="{StaticResource WolvenKitPESourceTabs}" />
-            <syncfusion:TabItemExt Header="scripts" Style="{StaticResource WolvenKitPESourceTabs}" />
-            <syncfusion:TabItemExt Header="tweaks" Style="{StaticResource WolvenKitPESourceTabs}" />
             <syncfusion:TabItemExt>
                 <syncfusion:TabItemExt.Style>
                     <Style BasedOn="{StaticResource SyncfusionTabItemExtStyle}" TargetType="{x:Type syncfusion:TabItemExt}">
@@ -500,7 +498,7 @@
                                             FontSize="11"
                                             FontWeight="Normal"
                                             Foreground="Black"
-                                            Text="PACKED" />
+                                            Text="RESOURCES" />
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">

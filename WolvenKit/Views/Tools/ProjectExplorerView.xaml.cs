@@ -129,7 +129,7 @@ namespace WolvenKit.Views.Tools
                     view => view.RefreshButton);
 
                 // register to KeyUp because KeyDown doesn't forward "F2"
-                this.KeyUp += OnKeyUp;
+                KeyUp += OnKeyUp;
 
 
             });
@@ -146,7 +146,7 @@ namespace WolvenKit.Views.Tools
 
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.F2 && ViewModel.RenameFileCommand.CanExecute(null))
+            if (e.Key == Key.F2 && ViewModel.RenameFileCommand.CanExecute(null))
             {
                 ViewModel.RenameFileCommand.Execute(null);
 
@@ -242,17 +242,8 @@ namespace WolvenKit.Views.Tools
                 }
                 else if (tabControl.SelectedIndex == 3)
                 {
-                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).ScriptDirectory);
+                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).ResourcesDirectory);
                 }
-                else if (tabControl.SelectedIndex == 4)
-                {
-                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).TweakDirectory);
-                }
-                else if (tabControl.SelectedIndex == 5)
-                {
-                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).PackedRootDirectory);
-                }
-
             }
             return includeFile;
         }

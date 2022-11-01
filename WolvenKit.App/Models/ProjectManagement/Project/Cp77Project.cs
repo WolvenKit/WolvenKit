@@ -35,11 +35,58 @@ namespace WolvenKit.ProjectManagement.Project
             }
         }
 
-        public string ScriptDirectory
+        //public string ScriptDirectory
+        //{
+        //    get
+        //    {
+        //        var dir = Path.Combine(FileDirectory, "scripts");
+        //        if (!Directory.Exists(dir))
+        //        {
+        //            Directory.CreateDirectory(dir);
+        //        }
+
+        //        return dir;
+        //    }
+        //}
+
+        //public string TweakDirectory
+        //{
+        //    get
+        //    {
+        //        var oldDir = Path.Combine(FileDirectory, "tweakdbs");
+        //        if (Directory.Exists(oldDir))
+        //        {
+        //            return oldDir;
+        //        }
+        //        var dir = Path.Combine(FileDirectory, "tweaks");
+        //        if (!Directory.Exists(dir))
+        //        {
+        //            Directory.CreateDirectory(dir);
+        //        }
+
+        //        return dir;
+        //    }
+        //}
+
+        //public string ArchiveXLDirectory
+        //{
+        //    get
+        //    {
+        //        var dir = Path.Combine(FileDirectory, "archiveXL");
+        //        if (!Directory.Exists(dir))
+        //        {
+        //            Directory.CreateDirectory(dir);
+        //        }
+
+        //        return dir;
+        //    }
+        //}
+
+        public override string ResourcesDirectory
         {
             get
             {
-                var dir = Path.Combine(FileDirectory, "scripts");
+                var dir = Path.Combine(FileDirectory, "resources");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -49,38 +96,7 @@ namespace WolvenKit.ProjectManagement.Project
             }
         }
 
-        public string TweakDirectory
-        {
-            get
-            {
-                var oldDir = Path.Combine(FileDirectory, "tweakdbs");
-                if (Directory.Exists(oldDir))
-                {
-                    return oldDir;
-                }
-                var dir = Path.Combine(FileDirectory, "tweaks");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
-
-        public string ArchiveXLDirectory
-        {
-            get
-            {
-                var dir = Path.Combine(FileDirectory, "archiveXL");
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
-
-                return dir;
-            }
-        }
+        // packed folders
 
         public override string PackedRootDirectory
         {
@@ -150,38 +166,15 @@ namespace WolvenKit.ProjectManagement.Project
             }
         }
 
-        #region methods
 
-        //public string GetDlcName() => $"dlc{Name}";
+        // Methods
 
         public void CreateDefaultDirectories()
         {
             // create top-level directories
             _ = ModDirectory;
             _ = RawDirectory;
-            _ = TweakDirectory;
-            _ = ScriptDirectory;
-            _ = ArchiveXLDirectory;
-        }
-
-        private void LoadProjectHashes()
-        {
-            if (Locator.Current.GetService<IHashService>() is HashService hashService)
-            {
-                hashService.ClearProjectHashes();
-
-                var hashPath = Path.Combine(FileDirectory, "project_hashes.txt");
-                if (!File.Exists(hashPath))
-                {
-                    return;
-                }
-
-                var paths = File.ReadAllLines(hashPath);
-                foreach (var path in paths)
-                {
-                    hashService.AddProjectPath(path);
-                }
-            }
+            _ = ResourcesDirectory;
         }
 
         public object Clone()
@@ -198,7 +191,5 @@ namespace WolvenKit.ProjectManagement.Project
         }
 
         public override string ToString() => Location;
-
-        #endregion methods
     }
 }

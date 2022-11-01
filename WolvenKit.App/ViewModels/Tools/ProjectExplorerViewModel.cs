@@ -196,13 +196,7 @@ namespace WolvenKit.ViewModels.Tools
                         Commonfunctions.ShowFolderInExplorer(project.RawDirectory);
                         break;
                     case 3:
-                        Commonfunctions.ShowFolderInExplorer(project.ScriptDirectory);
-                        break;
-                    case 4:
-                        Commonfunctions.ShowFolderInExplorer(project.TweakDirectory);
-                        break;
-                    case 5:
-                        Commonfunctions.ShowFolderInExplorer(project.PackedRootDirectory);
+                        Commonfunctions.ShowFolderInExplorer(project.ResourcesDirectory);
                         break;
                     default:
                         break;
