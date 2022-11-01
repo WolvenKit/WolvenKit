@@ -142,7 +142,7 @@ namespace WolvenKit.ViewModels.Tools
         #region properties
 
         public AppViewModel MainViewModel => Locator.Current.GetService<AppViewModel>();
-        [Reactive] private EditorProject ActiveProject { get; set; }
+        [Reactive] private Cp77Project ActiveProject { get; set; }
 
         public ReactiveCommand<Unit, Unit> ExpandAll { get; private set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; private set; }
@@ -182,25 +182,22 @@ namespace WolvenKit.ViewModels.Tools
         private bool CanOpenRootFolder() => ActiveProject != null;
         private void ExecuteOpenRootFolder()
         {
-            if (ActiveProject is Cp77Project project)
+            switch (SelectedTabIndex)
             {
-                switch (SelectedTabIndex)
-                {
-                    case 0:
-                        Commonfunctions.ShowFolderInExplorer(project.FileDirectory);
-                        break;
-                    case 1:
-                        Commonfunctions.ShowFolderInExplorer(project.ModDirectory);
-                        break;
-                    case 2:
-                        Commonfunctions.ShowFolderInExplorer(project.RawDirectory);
-                        break;
-                    case 3:
-                        Commonfunctions.ShowFolderInExplorer(project.ResourcesDirectory);
-                        break;
-                    default:
-                        break;
-                }
+                case 0:
+                    Commonfunctions.ShowFolderInExplorer(ActiveProject.FileDirectory);
+                    break;
+                case 1:
+                    Commonfunctions.ShowFolderInExplorer(ActiveProject.ModDirectory);
+                    break;
+                case 2:
+                    Commonfunctions.ShowFolderInExplorer(ActiveProject.RawDirectory);
+                    break;
+                case 3:
+                    Commonfunctions.ShowFolderInExplorer(ActiveProject.ResourcesDirectory);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -566,82 +563,6 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         #endregion
-
-        #region Tw3 Commands
-
-        ///// <summary>
-        ///// Adds all dependencies (imports) of selected node from the game.
-        ///// </summary>
-        //public ICommand AddAllImportsCommand { get; private set; }
-
-        //public ICommand CookCommand { get; private set; }
-
-        ///// <summary>
-        ///// Exports selected file to Json.
-        ///// </summary>
-        //public ICommand ExportJsonCommand { get; private set; }
-
-        ///// <summary>
-        ///// Exports selected node with wcc.
-        ///// </summary>
-        //public ICommand ExportMeshCommand { get; private set; }
-
-        ///// <summary>
-        /////  Opens the fast render Window for selected file
-        ///// </summary>
-        //public ICommand FastRenderCommand { get; private set; }
-
-
-        //private async void AddAllImports() => await _tw3Controller.AddAllImportsAsync(SelectedItem.FullName, true);
-
-        //private bool CanAddAllImports() => ActiveProject is Tw3Project && SelectedItem != null && !SelectedItem.IsDirectory;
-
-        //// legacy
-        //private bool CanCook() => ActiveProject is Tw3Project && SelectedItem != null;
-
-        //private bool CanExportJson() => ActiveProject is Tw3Project && SelectedItem != null
-        //    && !SelectedItem.IsDirectory;
-
-        //private bool CanExportMesh() => ActiveProject is EditorProject && SelectedItem != null
-        //    && !SelectedItem.IsDirectory && SelectedItem.GetExtension() == ERedExtension.w2mesh.ToString();
-
-        //private bool CanFastRender() => ActiveProject is Tw3Project && SelectedItem != null
-        //    && !SelectedItem.IsDirectory && SelectedItem.GetExtension() == ERedExtension.w2mesh.ToString();
-
-
-        //private void Cook() => RequestFileCook(this, new RequestFileOpenArgs { File = SelectedItem.FullName });
-
-        //private void ExecuteExportJson()
-        //{
-        //    // TODO: Handle command logic here
-        //}
-
-        //private void ExecuteFastRender()
-        //{
-        //    // TODO: Handle command logic here
-        //}
-
-
-        //public ICommand PESearchStartedCommand { get; private set; }
-
-        //private bool CanPESearchStartedCommand(object arg) => true;
-
-        //private void ExecutePESearchStartedCommand(object arg)
-        //{
-        //    if (arg is FunctionEventArgs<string> e)
-        //    {
-        //        PerformSearch(e.Info);
-        //    }
-        //}
-
-        //private void PerformSearch(string query)
-        //{
-        //    // ??
-        //}
-
-        //private async void ExportMesh() => await Task.Run(() => _tw3Controller.ExportFileToMod(SelectedItem.FullName));
-
-        #endregion Tw3 Commands
 
         #endregion commands
 

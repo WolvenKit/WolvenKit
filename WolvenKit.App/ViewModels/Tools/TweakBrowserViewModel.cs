@@ -41,9 +41,6 @@ namespace WolvenKit.ViewModels.Tools
         private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
         private readonly TweakDBService _tweakDB;
-
-        private EditorProject ActiveMod => _projectManager.ActiveProject;
-
         public string Extension { get; set; } = "tweak";
 
 

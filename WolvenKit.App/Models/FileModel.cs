@@ -23,7 +23,7 @@ namespace WolvenKit.Models
 
         public const string s_rawdir = "wkitrawdir";
 
-        public FileModel(string path, EditorProject project)
+        public FileModel(string path, Cp77Project project)
         {
             FullName = path;
             Project = project;
@@ -35,20 +35,17 @@ namespace WolvenKit.Models
                 parentfullname = di.Parent.FullName;
                 Name = di.Name;
                 _extension = ECustomImageKeys.OpenDirImageKey.ToString();
-                if (project is Cp77Project cpp)
+                if (FullName.StartsWith(project.ResourcesDirectory))
                 {
-                    if (FullName.StartsWith(cpp.ResourcesDirectory))
-                    {
-                        _extension = Functionality.Constants.ResourceDirectoryTop;
-                    }
-                    else if (FullName.StartsWith(cpp.ModDirectory))
-                    {
-                        _extension = Functionality.Constants.ModDirectoryTop;
-                    }
-                    else if (FullName.ToLower().StartsWith(cpp.RawDirectory.ToLower()))
-                    {
-                        _extension = Functionality.Constants.RawDirectoryTop;
-                    }
+                    _extension = Functionality.Constants.ResourceDirectoryTop;
+                }
+                else if (FullName.StartsWith(project.ModDirectory))
+                {
+                    _extension = Functionality.Constants.ModDirectoryTop;
+                }
+                else if (FullName.ToLower().StartsWith(project.RawDirectory.ToLower()))
+                {
+                    _extension = Functionality.Constants.RawDirectoryTop;
                 }
             }
             else if (File.Exists(path))
@@ -82,7 +79,7 @@ namespace WolvenKit.Models
         [Display(Name = "Hash")] public string HashStr => Hash.ToString();
 
 
-        [Browsable(false)] public EditorProject Project { get; }
+        [Browsable(false)] public Cp77Project Project { get; }
 
         [Browsable(false)] public ulong Hash { get; }
 
@@ -129,9 +126,9 @@ namespace WolvenKit.Models
 
         public override int GetHashCode() => (int)Hash;
 
-        public ulong GetRedHash(EditorProject project) => FNV1A64HashAlgorithm.HashString(GetRelativeName(FullName, project));
+        public ulong GetRedHash(Cp77Project project) => FNV1A64HashAlgorithm.HashString(GetRelativeName(FullName, project));
 
-        public static string GetRelativeName(string FullName, EditorProject project)
+        public static string GetRelativeName(string FullName, Cp77Project project)
         {
             if (project == null)
             {
@@ -177,7 +174,7 @@ namespace WolvenKit.Models
             //throw new System.NullReferenceException("fuzzy exception");
         }
 
-        public static ulong GenerateKey(string fullname, EditorProject project)
+        public static ulong GenerateKey(string fullname, Cp77Project project)
         {
             if (project == null)
             {

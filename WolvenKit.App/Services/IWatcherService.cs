@@ -12,7 +12,7 @@ namespace WolvenKit.Functionality.Services
         public IObservableCache<FileModel, ulong> Files { get; }
 
         public FileModel LastSelect { get; set; }
-        public Task RefreshAsync(EditorProject proj);
+        public Task RefreshAsync(Cp77Project proj);
 
         public FileModel GetFileModelFromHash(ulong hash);
     }

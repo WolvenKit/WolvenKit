@@ -1107,7 +1107,7 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public IDocumentViewModel ActiveDocument { get; set; }
 
-        [Reactive] public EditorProject ActiveProject { get; set; }
+        [Reactive] public Cp77Project ActiveProject { get; set; }
 
         private List<IDocumentViewModel> OpenDocuments => DockedViews.OfType<IDocumentViewModel>().ToList();
 

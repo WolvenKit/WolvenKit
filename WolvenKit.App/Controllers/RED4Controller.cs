@@ -223,12 +223,6 @@ namespace WolvenKit.Functionality.Controllers
 
         public bool PackProjectHot()
         {
-            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
-            {
-                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
-                return false;
-            }
-
             var hotdirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
 
             // create hot directory
@@ -239,17 +233,17 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             // pack mod
-            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            var modfiles = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories);
             if (modfiles.Any())
             {
                 _modTools.Pack(
-                    new DirectoryInfo(cp77Proj.ModDirectory),
+                    new DirectoryInfo(_projectManager.ActiveProject.ModDirectory),
                     new DirectoryInfo(hotdirectory),
-                    cp77Proj.Name);
+                    _projectManager.ActiveProject.Name);
                 _loggerService.Info("Hot archive installation complete!");
             }
-            _loggerService.Success($"{cp77Proj.Name} packed into {hotdirectory}");
-            _notificationService.Success($"{cp77Proj.Name} packed into {hotdirectory}");
+            _loggerService.Success($"{_projectManager.ActiveProject.Name} packed into {hotdirectory}");
+            _notificationService.Success($"{_projectManager.ActiveProject.Name} packed into {hotdirectory}");
 
             return true;
         }
@@ -401,28 +395,55 @@ namespace WolvenKit.Functionality.Controllers
 
         private bool Cleanup(Cp77Project cp77Proj, LaunchProfile options)
         {
+            var result = false;
+            // legacy
+            result = SafeDirectoryDelete(cp77Proj.GetPackedArchiveDirectory(!options.IsRedmod), true);
+            result = SafeDirectoryDelete(Path.Combine(cp77Proj.PackedRootDirectory, "archive"), true);
+
+            // tweakXL
+            result = SafeDirectoryDelete(cp77Proj.PackedTweakDirectory, true);
+
+            // redmod
+            result = SafeFileDelete(Path.Combine(cp77Proj.PackedRedModDirectory, "info.json"));
+            result = SafeDirectoryDelete(cp77Proj.PackedSoundsDirectory, true);
+            result = SafeDirectoryDelete(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod), true);
+            result = SafeDirectoryDelete(Path.Combine(cp77Proj.PackedRootDirectory, "mods"), true);
+
+            return result;
+        }
+
+        private bool SafeDirectoryDelete(string path, bool recursive = true)
+        {
             try
             {
-                // legacy
-                Directory.Delete(cp77Proj.GetPackedArchiveDirectory(!options.IsRedmod), true);
-                Directory.Delete(Path.Combine(cp77Proj.PackedRootDirectory, "archive"), true);
-
-                // tweakXL
-                Directory.Delete(cp77Proj.PackedTweakDirectory, true);
-
-                // redmod
-                File.Delete(Path.Combine(cp77Proj.PackedRedModDirectory, "info.json"));
-                Directory.Delete(cp77Proj.PackedSoundsDirectory, true);
-                Directory.Delete(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod), true);
-                Directory.Delete(Path.Combine(cp77Proj.PackedRootDirectory, "mods"), true);
+                if (Directory.Exists(path))
+                {
+                    Directory.Delete(path, recursive);
+                }
+                return true;
             }
             catch (Exception e)
             {
                 _loggerService.Error(e);
                 return false;
             }
+        }
 
-            return true;
+        private bool SafeFileDelete(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+                return false;
+            }
         }
 
         private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options)
@@ -506,7 +527,7 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             // read info
-            var modProj = _projectManager.ActiveProject as Cp77Project;
+            var modProj = _projectManager.ActiveProject;
             List<string> files = new();
             try
             {
@@ -698,63 +719,43 @@ namespace WolvenKit.Functionality.Controllers
 
         public void AddToMod(IGameFile file)
         {
-            var project = _projectManager.ActiveProject;
-            switch (project.GameType)
+            switch (_projectManager.ActiveProject.GameType)
             {
-                case GameType.Witcher3:
-                {
-                    //if (project is Tw3Project witcherProject)
-                    //{
-                    //    var diskPathInfo = new FileInfo(Path.Combine(witcherProject.ModCookedDirectory, file.Name));
-                    //    if (diskPathInfo.Directory == null)
-                    //    {
-                    //        break;
-                    //    }
-
-                    //    Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                    //    using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                    //    file.Extract(fs);
-                    //}
-                    break;
-                }
                 case GameType.Cyberpunk2077:
                 {
-                    if (project is Cp77Project cyberpunkProject)
+                    var fileName = file.Name;
+                    if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
                     {
-                        var fileName = file.Name;
-                        if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
-                        {
-                            fileName += file.GuessedExtension;
-                        }
+                        fileName += file.GuessedExtension;
+                    }
 
-                        FileInfo diskPathInfo = new(Path.Combine(cyberpunkProject.ModDirectory, fileName));
-                        if (diskPathInfo.Directory == null)
-                        {
-                            break;
-                        }
+                    FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, fileName));
+                    if (diskPathInfo.Directory == null)
+                    {
+                        break;
+                    }
 
-                        if (File.Exists(diskPathInfo.FullName))
+                    if (File.Exists(diskPathInfo.FullName))
+                    {
+                        using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                        file.Extract(fs);
+                        _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                        try
                         {
                             using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
                             file.Extract(fs);
-                            _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
+                            _loggerService.Info($"Added game file to project: {file.Name}");
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                            try
-                            {
-                                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                                file.Extract(fs);
-                                _loggerService.Info($"Added game file to project: {file.Name}");
-                            }
-                            catch (Exception ex)
-                            {
-                                File.Delete(diskPathInfo.FullName);
-                                _loggerService.Error(ex);
-                            }
-
+                            File.Delete(diskPathInfo.FullName);
+                            _loggerService.Error(ex);
                         }
+
                     }
 
                     break;

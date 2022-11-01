@@ -48,7 +48,7 @@ namespace WolvenKit.Functionality.Services
 
         [Reactive] public bool IsProjectLoaded { get; set; }
 
-        [Reactive] public EditorProject ActiveProject { get; set; }
+        [Reactive] public Cp77Project ActiveProject { get; set; }
 
         #endregion
 
@@ -98,7 +98,7 @@ namespace WolvenKit.Functionality.Services
             return true;
         }
 
-        private async Task<EditorProject> ReadFromLocationAsync(string location)
+        private async Task<Cp77Project> ReadFromLocationAsync(string location)
         {
             try
             {
@@ -110,8 +110,7 @@ namespace WolvenKit.Functionality.Services
 
                 var project = fi.Extension switch
                 {
-                    //".w3modproj" => await Load<Tw3Project>(location),
-                    ".cpmodproj" => await Load<Cp77Project>(location),
+                    ".cpmodproj" => await Load(location),
                     _ => null
                 };
 
@@ -125,18 +124,13 @@ namespace WolvenKit.Functionality.Services
             return null;
         }
 
-        private async Task<EditorProject> Load<T>(string path) where T : EditorProject
+        private async Task<Cp77Project> Load(string path)
         {
             try
             {
                 await using FileStream lf = new(path, FileMode.Open, FileAccess.Read);
                 XmlSerializer ser = new(typeof(CP77Mod));
                 if (ser.Deserialize(lf) is not CP77Mod obj)
-                {
-                    return null;
-                }
-
-                if (typeof(T) != typeof(Cp77Project))
                 {
                     return null;
                 }
@@ -246,7 +240,7 @@ namespace WolvenKit.Functionality.Services
 
             }
 
-            public CP77Mod(EditorProject project)
+            public CP77Mod(Cp77Project project)
             {
                 Author = project.Author;
                 Email = project.Email;

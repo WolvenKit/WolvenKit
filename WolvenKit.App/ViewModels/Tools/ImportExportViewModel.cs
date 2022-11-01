@@ -100,7 +100,8 @@ namespace WolvenKit.ViewModels.Tools
             {
                 new JsonFileEntryConverter(),
                 new JsonArchiveConverter()
-            }, WriteIndented = true
+            },
+            WriteIndented = true
         };
 
         #endregion fields
@@ -199,22 +200,13 @@ namespace WolvenKit.ViewModels.Tools
                 });
 
             ImportableItems.ObserveCollectionChanges()
-                .Subscribe(item =>
-                {
-                    SetSetting("import", item);
-                });
+                .Subscribe(item => SetSetting("import", item));
 
             ExportableItems.ObserveCollectionChanges()
-                .Subscribe(item =>
-                {
-                    SetSetting("export", item);
-                });
+                .Subscribe(item => SetSetting("export", item));
 
             ConvertableItems.ObserveCollectionChanges()
-                .Subscribe(item =>
-                {
-                    SetSetting("convert", item);
-                });
+                .Subscribe(item => SetSetting("convert", item));
 
             this.WhenAnyValue(x => x.SelectedExport, x => x.IsExportsSelected, y => y.SelectedImport, y => y.IsImportsSelected, z => z.SelectedConvert, z => z.IsConvertsSelected)
                 .Subscribe(b =>
@@ -230,10 +222,7 @@ namespace WolvenKit.ViewModels.Tools
                 .WhenAnyValue(x => x._projectManager.IsProjectLoaded)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(
-                    _ =>
-                    {
-                        ImportSettingsCommand.NotifyCanExecuteChanged();
-                    });
+                    _ => ImportSettingsCommand.NotifyCanExecuteChanged());
         }
 
         private static bool CheckForMultiImport(Models.FileModel file)
@@ -731,11 +720,7 @@ namespace WolvenKit.ViewModels.Tools
                 if (item.Properties is GltfImportArgs gltfImportArgs)
                 {
                     gltfImportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-
-                    if (_projectManager.ActiveProject is Cp77Project cp77Proj)
-                    {
-                        gltfImportArgs.Archives.Insert(0, new FileSystemArchive(cp77Proj.ModDirectory));
-                    }
+                    gltfImportArgs.Archives.Insert(0, new FileSystemArchive(_projectManager.ActiveProject.ModDirectory));
                 }
 
                 if (item.Properties is ReImportArgs reImportArgs)
@@ -780,10 +765,7 @@ namespace WolvenKit.ViewModels.Tools
                         meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
                     }
 
-                    if (_projectManager.ActiveProject is Cp77Project cp77Proj)
-                    {
-                        meshExportArgs.Archives.Insert(0, new FileSystemArchive(cp77Proj.ModDirectory));
-                    }
+                    meshExportArgs.Archives.Insert(0, new FileSystemArchive(_projectManager.ActiveProject.ModDirectory));
 
                     meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
                 }
