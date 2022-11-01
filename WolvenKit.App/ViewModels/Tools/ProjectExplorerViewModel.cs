@@ -98,8 +98,8 @@ namespace WolvenKit.ViewModels.Tools
             Bk2ImportCommand = new DelegateCommand(ExecuteBk2Import, CanBk2Import).ObservesProperty(() => SelectedItem);
             Bk2ExportCommand = new DelegateCommand(ExecuteBk2Export, CanBk2Export).ObservesProperty(() => SelectedItem);
 
-            ConvertToJsonCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.json), CanConvertTo).ObservesProperty(() => SelectedItem);
-            ConvertFromJsonCommand = new DelegateCommand(ExecuteConvertFromJson, CanConvertFromJson).ObservesProperty(() => SelectedItem);
+            ConvertToJsonCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(), CanConvertTo).ObservesProperty(() => SelectedItem);
+            ConvertFromJsonCommand = new DelegateCommand(async () => await ExecuteConvertFromAsync(), CanConvertFromJson).ObservesProperty(() => SelectedItem);
 
 
             OpenInAssetBrowserCommand = new DelegateCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
@@ -432,24 +432,18 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         public ICommand ConvertToJsonCommand { get; private set; }
-
-        private bool CanConvertTo() => SelectedItem != null
-                && !IsInRawFolder(SelectedItem)
-                //&& Enum.GetNames<ERedExtension>().Contains(SelectedItem.Extension.ToLower())
-                ;
-
-        private async Task ExecuteConvertToAsync(ETextConvertFormat fmt)
+        private bool CanConvertTo() => SelectedItem != null && !IsInRawFolder(SelectedItem);
+        private async Task ExecuteConvertToAsync()
         {
             if (SelectedItem.IsDirectory)
             {
                 var progress = 0;
                 _progressService.Report(0);
 
-                var files = Directory.GetFiles(SelectedItem.FullName, "*", SearchOption.AllDirectories)
-                    .ToList();
+                var files = Directory.GetFiles(SelectedItem.FullName, "*", SearchOption.AllDirectories).ToList();
                 foreach (var file in files)
                 {
-                    await ConvertTo(file, fmt);
+                    await ConvertToTask(file);
 
                     progress++;
                     _progressService.Report(progress / (float)files.Count);
@@ -458,19 +452,19 @@ namespace WolvenKit.ViewModels.Tools
             else
             {
                 var inpath = SelectedItem.FullName;
-                await ConvertTo(inpath, fmt);
+                await ConvertToTask(inpath);
             }
         }
-
-        private async Task ConvertTo(string file, ETextConvertFormat fmt)
+        private Task ConvertToTask(string file)
         {
             if (!File.Exists(file))
             {
-                return;
+                return Task.CompletedTask;
             }
+
             if (!Enum.GetNames<ERedExtension>().Contains(Path.GetExtension(file).TrimStart('.').ToLower()))
             {
-                return;
+                return Task.CompletedTask;
             }
 
             var rawOutPath = Path.Combine(ActiveProject.RawDirectory, FileModel.GetRelativeName(file, ActiveProject));
@@ -479,26 +473,59 @@ namespace WolvenKit.ViewModels.Tools
             {
                 Directory.CreateDirectory(outDirectoryPath);
 
-                await Task.Run(() => _modTools.ConvertToAndWrite(fmt, file, new DirectoryInfo(outDirectoryPath)));
+                return Task.Run(() => _modTools.ConvertToAndWrite(ETextConvertFormat.json, file, new DirectoryInfo(outDirectoryPath)));
             }
+
+            return Task.CompletedTask;
         }
 
 
         public ICommand ConvertFromJsonCommand { get; private set; }
-        private bool CanConvertFromJson() => SelectedItem != null
-            && IsInRawFolder(SelectedItem)
-            && SelectedItem.Extension.ToLower().Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal);
-        private void ExecuteConvertFromJson()
+        private bool CanConvertFromJson() => SelectedItem != null && IsInRawFolder(SelectedItem);
+        private async Task ExecuteConvertFromAsync()
         {
-            var inpath = SelectedItem.FullName;
+            if (SelectedItem.IsDirectory)
+            {
+                var progress = 0;
+                _progressService.Report(0);
+
+                var files = Directory.GetFiles(SelectedItem.FullName, "*", SearchOption.AllDirectories).ToList();
+                foreach (var file in files)
+                {
+                    await ConvertFromTask(file);
+
+                    progress++;
+                    _progressService.Report(progress / (float)files.Count);
+                }
+            }
+            else
+            {
+                var inpath = SelectedItem.FullName;
+                await ConvertFromTask(inpath);
+            }
+        }
+        private Task ConvertFromTask(string file)
+        {
+            if (!File.Exists(file))
+            {
+                return Task.CompletedTask;
+            }
+
+            if (Path.GetExtension(file).TrimStart('.').ToLower() != ETextConvertFormat.json.ToString())
+            {
+                return Task.CompletedTask;
+            }
+
             var modPath = Path.Combine(ActiveProject.ModDirectory, FileModel.GetRelativeName(SelectedItem.FullName, ActiveProject));
             var outDirectoryPath = Path.GetDirectoryName(modPath);
             if (outDirectoryPath != null)
             {
                 Directory.CreateDirectory(outDirectoryPath);
 
-                _modTools.ConvertFromAndWrite(new FileInfo(inpath), new DirectoryInfo(outDirectoryPath));
+                return Task.Run(() => _modTools.ConvertFromAndWrite(new FileInfo(file), new DirectoryInfo(outDirectoryPath)));
             }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
