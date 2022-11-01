@@ -1153,9 +1153,10 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         if (list.Files[i].RootChunk == Data)
                         {
-                            if (mesh.MaterialEntries.Count > i)
+                            var entry = mesh.MaterialEntries.FirstOrDefault(x => x.IsLocalInstance && x.Index == i);
+                            if (entry != null)
                             {
-                                Descriptor = mesh.MaterialEntries[i].Name;
+                                Descriptor = entry.Name;
                             }
                             break;
                         }
