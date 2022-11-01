@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml;
@@ -110,19 +111,7 @@ namespace WolvenKit.Views.Shell
         {
             if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
-                if (vm.IsDirty)
-                {
-                    if (await Interactions.ShowMessageBoxAsync("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
-                    {
-                        e.Cancel = true;
-                        return;
-                    }
-                }
-
-                vm.Close.Execute().Subscribe();
-
-                (ItemsSource as IList).Remove(vm);
-                viewModel.UpdateTitle();
+                e.Cancel = !await TryCloseDocument(vm);
             }
         }
 
@@ -539,6 +528,46 @@ namespace WolvenKit.Views.Shell
             }
 
             viewModel?.UpdateTitle();
+        }
+
+        private async void PART_DockingManager_OnCloseAllTabs(object sender, CloseTabEventArgs e)
+        {
+            foreach (var item in e.ClosingTabItems)
+            {
+                if (item is TabItemExt { Content: ContentPresenter {Content: ContentControl { Content: DocumentViewModel vm } } })
+                {
+                    e.Cancel = !await TryCloseDocument(vm);
+                }
+            }
+        }
+
+        private async void PART_DockingManager_OnCloseOtherTabs(object sender, CloseTabEventArgs e)
+        {
+            foreach (var item in e.ClosingTabItems)
+            {
+                if (item is TabItemExt { Content: ContentPresenter {Content: ContentControl { Content: DocumentViewModel vm } } })
+                {
+                    e.Cancel = !await TryCloseDocument(vm);
+                }
+            }
+        }
+
+        private async Task<bool> TryCloseDocument(DocumentViewModel vm)
+        {
+            if (vm.IsDirty)
+            {
+                if (await Interactions.ShowMessageBoxAsync("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
+                {
+                    return false;
+                }
+            }
+
+            vm.Close.Execute().Subscribe();
+
+            (ItemsSource as IList).Remove(vm);
+            viewModel.UpdateTitle();
+
+            return true;
         }
     }
 }
