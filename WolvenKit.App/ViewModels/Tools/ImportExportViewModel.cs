@@ -86,8 +86,6 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         private ImportExportItemViewModel _lastselected;
 
-        private readonly ReadOnlyObservableCollection<ConvertableItemViewModel> _convertableItems;
-
         private readonly ReadOnlyObservableCollection<ImportableItemViewModel> _importableItems;
 
         private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
@@ -173,22 +171,6 @@ namespace WolvenKit.ViewModels.Tools
                 .Bind(out _exportableItems)
                 .Subscribe();
 
-            _watcherService.Files
-                .Connect()
-                .Filter(_ => _.IsConvertable)
-                .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.RawDirectory))
-                .Transform(_ => new ConvertableItemViewModel(_))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _convertableItems)
-                .Subscribe();
-
-            ////=> IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
-            //this.WhenAnyValue(x => x.IsImportsSelected, y => y.IsExportsSelected, z => z.IsConvertsSelected)
-            //    .Subscribe(b =>
-            //{
-            //    SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
-            //});
-
             this.WhenAnyValue(x => x._projectManager.ActiveProject)
                 .Subscribe(project =>
                 {
@@ -205,17 +187,13 @@ namespace WolvenKit.ViewModels.Tools
             ExportableItems.ObserveCollectionChanges()
                 .Subscribe(item => SetSetting("export", item));
 
-            ConvertableItems.ObserveCollectionChanges()
-                .Subscribe(item => SetSetting("convert", item));
-
-            this.WhenAnyValue(x => x.SelectedExport, x => x.IsExportsSelected, y => y.SelectedImport, y => y.IsImportsSelected, z => z.SelectedConvert, z => z.IsConvertsSelected)
+            this.WhenAnyValue(x => x.SelectedExport, x => x.IsExportsSelected, y => y.SelectedImport, y => y.IsImportsSelected)
                 .Subscribe(b =>
                 {
                     var x = b.Item1;
                     var y = b.Item2;
-                    var z = b.Item3;
 
-                    SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
+                    SelectedObject = IsImportsSelected ? SelectedImport : SelectedExport;
                 });
 
             this
@@ -239,8 +217,6 @@ namespace WolvenKit.ViewModels.Tools
         [Reactive] public ObservableCollection<CollectionItemViewModel> CollectionAvailableItems { get; set; } = new();
         [Reactive] public ObservableCollection<CollectionItemViewModel> CollectionSelectedItems { get; set; } = new();
 
-        public ReadOnlyObservableCollection<ConvertableItemViewModel> ConvertableItems => _convertableItems;
-
         /// <summary>
         /// Public Importable Items
         /// </summary>
@@ -250,8 +226,6 @@ namespace WolvenKit.ViewModels.Tools
         /// Public Exportable items.
         /// </summary>
         public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
-
-        [Reactive] public ConvertableItemViewModel SelectedConvert { get; set; }
 
         /// <summary>
         /// Selected Export Item
@@ -266,7 +240,7 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
         /// </summary>
-        [Reactive] public ImportExportItemViewModel SelectedObject { get; set; } //=> IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
+        [Reactive] public ImportExportItemViewModel SelectedObject { get; set; }
 
         /// <summary>
         /// Lock Selection of items in grid.
@@ -304,7 +278,6 @@ namespace WolvenKit.ViewModels.Tools
         [Reactive] public bool IsImportsSelected { get; set; }
 
         [Reactive] public bool IsExportsSelected { get; set; } = true;
-        [Reactive] public bool IsConvertsSelected { get; set; }
 
         #endregion properties
 
@@ -599,26 +572,6 @@ namespace WolvenKit.ViewModels.Tools
                     item.Properties = (ExportArgs)json.Deserialize(exportArgs.GetType(), s_jsonSerializerSettings);
                 }
             }
-            if (IsConvertsSelected)
-            {
-                if (current is not ConvertArgs convertArgs)
-                {
-                    return;
-                }
-
-                var json = SerializeArgs(convertArgs);
-
-                var results = param switch
-                {
-                    s_selectedInGrid => ConvertableItems.Where(_ => _.IsChecked),
-                    _ => ConvertableItems
-                };
-
-                foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
-                {
-                    item.Properties = (ConvertArgs)json.Deserialize(convertArgs.GetType(), s_jsonSerializerSettings);
-                }
-            }
 
             SaveSettings();
             _notificationService.Success($"Template has been copied to the selected items.");
@@ -669,15 +622,7 @@ namespace WolvenKit.ViewModels.Tools
                     success = await ExportSingleAsync(item);
                 }
             }
-            if (IsConvertsSelected)
-            {
-                var toBeConverted = ConvertableItems.ToList();
-                foreach (var itemViewModel in toBeConverted)
-                {
-                    success = await ConvertSingle(itemViewModel);
-                }
 
-            }
             IsProcessing = false;
 
             if (success)
@@ -851,15 +796,6 @@ namespace WolvenKit.ViewModels.Tools
                         success = await ExportSingleAsync(item);
                     }
                 }
-                if (IsConvertsSelected)
-                {
-
-                    var toBeConverted = ConvertableItems.Where(_ => _.IsChecked).ToList();
-                    foreach (var itemViewModel in toBeConverted)
-                    {
-                        success = await Task.Run(() => ConvertSingle(itemViewModel));
-                    }
-                }
 
                 if (success)
                 {
@@ -877,82 +813,6 @@ namespace WolvenKit.ViewModels.Tools
                 IsProcessing = false;
                 _progressService.IsIndeterminate = false;
             }
-        }
-
-        private async Task<bool> ConvertSingle(ConvertableItemViewModel item)
-        {
-            IsProcessing = true;
-
-
-
-
-            if (item == null)
-            {
-                return false;
-            }
-            var fi = new FileInfo(item.FullName);
-            if (!fi.Exists)
-            {
-                return false;
-            }
-
-            switch (item.Properties)
-            {
-                case CommonConvertArgs:
-                    break;
-                default:
-                    return false;
-            }
-
-            try
-            {
-                var qx = item.GetBaseFile();
-                var proj = _projectManager.ActiveProject;
-                var relativename = FileModel.GetRelativeName(qx.FullName, proj);
-                var newname = Path.ChangeExtension(relativename, ".mesh");
-                var hash = FNV1A64HashAlgorithm.HashString(newname);
-                var cp77Controller = _gameController.GetController() as RED4Controller;
-
-                string outfile;
-                IGameFile file;
-                if (_archiveManager.Lookup(hash).HasValue)
-                {
-                    file = _archiveManager.Lookup(hash).Value;
-                    if (file is not null)
-                    {
-                        var meshStream = new MemoryStream();
-                        file.Extract(meshStream);
-                        meshStream.Seek(0, SeekOrigin.Begin);
-
-                        outfile = Path.Combine(ISettingsManager.GetTemp_OBJPath(), qx.Name);
-                        outfile = Path.ChangeExtension(outfile, ".glb");
-
-                        if (!_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outfile)))
-                        {
-                            outfile = "";
-                        }
-
-                        meshStream.Dispose();
-                        meshStream.Close();
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    outfile = qx.FullName;
-                }
-            }
-            catch
-            {
-
-            }
-
-            await Task.CompletedTask;
-
-            return true;
         }
 
         /// <summary>
@@ -1105,13 +965,11 @@ namespace WolvenKit.ViewModels.Tools
         {
             var importSettings = ImportableItems.ToDictionary(importableItem => importableItem.GetBaseFile().RelativePath, SerializeArgs);
             var exportSettings = ExportableItems.ToDictionary(exportableItem => exportableItem.GetBaseFile().RelativePath, SerializeArgs);
-            var convertSettings = ConvertableItems.ToDictionary(convertableItem => convertableItem.GetBaseFile().RelativePath, SerializeArgs);
 
             var settings = new Dictionary<string, Dictionary<string, JsonObject>>
             {
                 { "import", importSettings },
                 { "export", exportSettings },
-                { "convert", convertSettings },
             };
 
             var json = JsonSerializer.Serialize(settings, s_jsonSerializerSettings);
