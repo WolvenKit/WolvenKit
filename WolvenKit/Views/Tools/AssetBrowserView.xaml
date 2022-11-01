@@ -1,4 +1,4 @@
-<reactiveUi:ReactiveUserControl xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" 
+<reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Tools.AssetBrowserView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -8,6 +8,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:layout="clr-namespace:WolvenKit.Layout"
     xmlns:local="clr-namespace:WolvenKit"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
@@ -82,14 +83,18 @@
                         <iconPacks:PackIconCodicons Kind="FoldUp" />
                     </Button>
 
-                    <TextBlock Grid.Column="1" Margin="8,0" VerticalAlignment="Center" Text="Mod Browser" />
+                    <TextBlock
+                        Grid.Column="1"
+                        Margin="8,0"
+                        VerticalAlignment="Center"
+                        Text="Mod Browser" />
 
                     <mah:ToggleSwitch
                         Grid.Column="2"
+                        Command="{Binding ToggleModBrowserCommand}"
                         OffContent=""
                         OnContent=""
-                        ToolTip="Toggle to browse installed mod archives"
-                        Command="{Binding ToggleModBrowserCommand}" />
+                        ToolTip="Toggle to browse installed mod archives" />
 
                     <hc:SearchBar
                         x:Name="FileSearchBar"

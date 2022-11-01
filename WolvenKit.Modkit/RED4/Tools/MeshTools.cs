@@ -8,8 +8,8 @@ using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
-using WolvenKit.Common.Services;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive.CR2W;
@@ -29,47 +29,6 @@ namespace WolvenKit.Modkit.RED4.Tools
         public MeshTools(Red4ParserService red4ParserService)
         {
             _red4ParserService = red4ParserService;
-        }
-
-        public bool ExportMeshPreviewer(Stream meshStream, FileInfo outFile)
-        {
-            var cr2w = _red4ParserService.ReadRed4File(meshStream);
-            return ExportMeshPreviewer(cr2w, outFile);
-        }
-
-        public static bool ExportMeshPreviewer(CR2WFile cr2w, FileInfo outFile)
-        {
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
-            {
-                return false;
-            }
-
-            //var cachedFiles = Directory.GetFiles(outFile.DirectoryName);
-            //if (cachedFiles.Length > 5)
-            //{
-            //    foreach (var f in cachedFiles)
-            //    {
-            //        try
-            //        {
-            //            File.Delete(f);
-            //        }
-            //        catch
-            //        {
-            //        }
-            //    }
-            //}
-
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
-
-            var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
-
-            var expMeshes = ContainRawMesh(ms, meshesinfo, true);
-
-            var model = RawMeshesToMinimalGLTF(expMeshes);
-
-            model.SaveGLB(outFile.FullName, new WriteSettings(ValidationMode.TryFix));
-
-            return true;
         }
 
         public bool ExportMesh(Stream meshStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
@@ -320,7 +279,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             foreach (var meshStream in meshStreamS)
             {
                 var cr2w = _red4ParserService.ReadRed4File(meshStream);
-                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null ||  cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
                 {
                     continue;
                 }
@@ -684,9 +643,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                     meshContainer.indices[i] = gbr.ReadUInt16();
                 }
 
-                
-                meshContainer.name = mergeMeshes ? 
-                    info.appearances.Keys.FirstOrDefault("default") : 
+
+                meshContainer.name = mergeMeshes ?
+                    info.appearances.Keys.FirstOrDefault("default") :
                     "submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
 
                 meshContainer.materialNames = new string[info.appearances.Count];
@@ -864,17 +823,17 @@ namespace WolvenKit.Modkit.RED4.Tools
             {
                 Mesh mes = null;
                 Node node = null;
-                if(mergeMeshes)
+                if (mergeMeshes)
                 {
-                    if(!nodes.ContainsKey(mesh.lod))
+                    if (!nodes.ContainsKey(mesh.lod))
                     {
                         nodes[mesh.lod] = parent.CreateNode();
                         nodes[mesh.lod].Mesh = model.CreateMesh($"{mesh.name}_LOD{mesh.lod}");
                     }
                     node = nodes[mesh.lod];
                     mes = nodes[mesh.lod].Mesh;
-                } 
-                else 
+                }
+                else
                 {
                     node = parent.CreateNode(mesh.name);
                     mes = model.CreateMesh(mesh.name);
@@ -1033,8 +992,9 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
 
             Dictionary<string, Material> materials = null;
-            
-            if(mergeMeshes){
+
+            if (mergeMeshes)
+            {
                 materials = new Dictionary<string, Material>();
 
                 foreach (var mesh in meshes)
@@ -1309,7 +1269,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                     {
                         meshes[i].weightCount = 4;
                     }
-                    if (blob.Chunks[i].SkinIndicesExt is {Buffer.MemSize: > 0 } && blob.Chunks[i].SkinWeightsExt is { Buffer.MemSize: > 0 })
+                    if (blob.Chunks[i].SkinIndicesExt is { Buffer.MemSize: > 0 } && blob.Chunks[i].SkinWeightsExt is { Buffer.MemSize: > 0 })
                     {
                         meshes[i].weightCount += 4;
                     }

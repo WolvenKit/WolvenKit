@@ -1,7 +1,7 @@
 using System;
-using System.Linq;
-using System.IO;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -72,16 +72,6 @@ namespace WolvenKit.Views.Tools
                        x => x.SelectedImport,
                        x => x.ImportGrid.SelectedItem)
                    .DisposeWith(disposables);
-
-                this.Bind(ViewModel,
-                        x => x.ConvertableItems,
-                        x => x.ConvertGrid.ItemsSource)
-                    .DisposeWith(disposables);
-
-                this.Bind(ViewModel,
-                       x => x.SelectedConvert,
-                       x => x.ConvertGrid.SelectedItem)
-                   .DisposeWith(disposables);
             });
 
             this.WhenAnyValue(x => x.ViewModel.SelectedObject)
@@ -100,10 +90,7 @@ namespace WolvenKit.Views.Tools
                 });
 
             this.WhenAnyValue(x => x._settingsManager.ShowAdvancedOptions)
-                .Subscribe(_ =>
-                {
-                    OverlayPropertyGrid.RefreshPropertygrid();
-                });
+                .Subscribe(_ => OverlayPropertyGrid.RefreshPropertygrid());
         }
 
         /// <summary>
@@ -136,7 +123,7 @@ namespace WolvenKit.Views.Tools
                         {
                             var mod = projectManager.ActiveProject;
                             var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
-                            var depotPaths = animsets.Select(x => x.Substring(mod.ModDirectory.Length + 1));
+                            var depotPaths = animsets.Select(x => x[(mod.ModDirectory.Length + 1)..]);
 
                             AddSettingsRe.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
@@ -192,21 +179,6 @@ namespace WolvenKit.Views.Tools
                     { throw new ArgumentOutOfRangeException(); }
                 }
             }
-
-            if (ViewModel.IsConvertsSelected)
-            {
-                if (ConvertGrid.SelectedItem is ImportExportItemViewModel selectedconvert)
-                {
-                    if (Enum.TryParse(selectedconvert.Extension.TrimStart('.'), out EConvertableFileFormat _))
-                    {
-                        XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
-                        XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedconvert.Extension);
-                        XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedconvert.Name);
-                    }
-                    else
-                    { throw new ArgumentOutOfRangeException(); }
-                }
-            }
         }
 
         private void OnPropertyValueChanged(object sender, PropertyChangedEventArgs e) => _dispatcher.Invoke(() => OverlayPropertyGrid.RefreshPropertygrid());
@@ -237,11 +209,6 @@ namespace WolvenKit.Views.Tools
                 {
                     ExportGrid.RefreshColumns();
                 }
-
-                if (ViewModel.IsConvertsSelected)
-                {
-                    ConvertGrid.RefreshColumns();
-                }
             }
             XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         }
@@ -253,7 +220,7 @@ namespace WolvenKit.Views.Tools
         /// <param name="e"></param>
         private void CancelSelectingClick(object sender, RoutedEventArgs e) => XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
-        
+
 
         /// <summary>
         /// Override PG Collection Editor
@@ -312,7 +279,7 @@ namespace WolvenKit.Views.Tools
                     return;
             }
 
-            if (ViewModel?.SelectedObject.Properties is XbmImportArgs)
+            if (ViewModel?.SelectedObject?.Properties is XbmImportArgs { })
             {
                 if (e.DisplayName == "Use existing file")
                 {

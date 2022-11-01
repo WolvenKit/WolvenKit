@@ -150,14 +150,7 @@ namespace WolvenKit.ViewModels.Shell
                                     }
                                     else
                                     {
-                                        if (parentData is IRedRef)
-                                        {
-                                            Parent.Data = RedTypeManager.CreateRedType(parentData.RedType, Data);
-                                        }
-                                        else
-                                        {
-                                            throw new Exception();
-                                        }
+                                        Parent.Data = parentData is IRedRef ? RedTypeManager.CreateRedType(parentData.RedType, Data) : throw new Exception();
                                     }
                                     Tab.File.SetIsDirty(true);
                                     Parent.NotifyChain("Data");
@@ -207,16 +200,20 @@ namespace WolvenKit.ViewModels.Shell
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab, bool isReadOnly) : this(export, null, null, false, isReadOnly)
         {
-            _tab = tab;
-            RelativePath = _tab.File.RelativePath;
-            IsExpanded = true;
-            //Data = export;
-            //if (!PropertiesLoaded)
-            //{
-            //CalculateProperties();
-            //}
-            //TVProperties.AddRange(Properties);
-            //this.RaisePropertyChanged("Data");
+            if (tab is not null)
+            {
+                _tab = tab;
+                RelativePath = _tab.File.RelativePath;
+                IsExpanded = true;
+                //Data = export;
+                //if (!PropertiesLoaded)
+                //{
+                //CalculateProperties();
+                //}
+                //TVProperties.AddRange(Properties);
+                //this.RaisePropertyChanged("Data");
+            }
+
             this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) => Tab.File.SetIsDirty(true));
         }
 
@@ -1257,15 +1254,11 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "SymbolString";
                 }
-                if (PropertyType.IsAssignableTo(typeof(IRedArray)))
-                {
-                    return "SymbolArray";
-                }
-                if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
-                {
-                    return "SymbolEnum";
-                }
-                return PropertyType.IsAssignableTo(typeof(IRedRef))
+                return PropertyType.IsAssignableTo(typeof(IRedArray))
+                    ? "SymbolArray"
+                    : PropertyType.IsAssignableTo(typeof(IRedEnum))
+                    ? "SymbolEnum"
+                    : PropertyType.IsAssignableTo(typeof(IRedRef))
                     ? "FileSymlinkFile"
                     : PropertyType.IsAssignableTo(typeof(IRedBitField))
                     ? "SymbolEnum"
@@ -1417,7 +1410,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     innerType = innerType.GetGenericTypeDefinition();
                 }
-                
+
                 var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
                     .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
@@ -1534,7 +1527,7 @@ namespace WolvenKit.ViewModels.Shell
                 throw new Exception();
             }
 
-            entVisualControllerComponent vc = null; 
+            entVisualControllerComponent vc = null;
             var list = new CArray<entVisualControllerDependency>();
 
             foreach (var component in arr)
@@ -2131,14 +2124,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             try
             {
-                if (Data is IRedCloneable irc)
-                {
-                    RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
-                }
-                else
-                {
-                    RDTDataViewModel.CopiedChunk = Data;
-                }
+                RDTDataViewModel.CopiedChunk = Data is IRedCloneable irc ? (IRedType)irc.DeepCopy() : Data;
             }
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }

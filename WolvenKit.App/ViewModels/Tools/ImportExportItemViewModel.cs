@@ -22,7 +22,7 @@ namespace WolvenKit.ViewModels.Tools
     {
         public ImportExportItemViewModel()
         {
-            
+
         }
 
 
@@ -92,10 +92,7 @@ namespace WolvenKit.ViewModels.Tools
             BaseFile = model;
             Properties = DecideImportOptions(model);
 
-            Properties.WhenAnyPropertyChanged().Subscribe(v =>
-            {
-                this.RaisePropertyChanged(nameof(Properties));
-            });
+            Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
         }
 
         private ImportArgs DecideImportOptions(FileModel model)
@@ -122,22 +119,6 @@ namespace WolvenKit.ViewModels.Tools
         }
     }
 
-    public class ConvertableItemViewModel : ImportExportItemViewModel
-    {
-        public ConvertableItemViewModel(FileModel model)
-        {
-            BaseFile = model;
-            Properties = DecideConverOptions(model);
-
-            Properties.WhenAnyPropertyChanged().Subscribe(v =>
-            {
-                this.RaisePropertyChanged(nameof(Properties));
-            });
-        }
-
-        private ConvertArgs DecideConverOptions(FileModel model) => new CommonConvertArgs();
-    }
-
     public class ExportableItemViewModel : ImportExportItemViewModel
     {
         public ExportableItemViewModel(FileModel model)
@@ -145,10 +126,7 @@ namespace WolvenKit.ViewModels.Tools
             BaseFile = model;
             Properties = DecideExportOptions(model);
 
-            Properties.WhenAnyPropertyChanged().Subscribe(v =>
-            {
-                this.RaisePropertyChanged(nameof(Properties));
-            });
+            Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
         }
 
         private ExportArgs DecideExportOptions(FileModel model)
