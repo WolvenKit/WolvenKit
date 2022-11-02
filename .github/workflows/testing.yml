@@ -42,3 +42,8 @@ jobs:
     - name: output
       run: |
         echo "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
+
+    # echo 2
+    - name: output 2
+      run: |
+        echo "${{ steps.tag_version.outputs.changelog }}"
