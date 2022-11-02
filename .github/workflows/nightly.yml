@@ -83,7 +83,8 @@ jobs:
     - run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
     
     # tag this commit
-    - name: tag_version
+    - name: Create Tag
+      id: tag_version
       uses: mathieudutour/github-tag-action@v6.1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
