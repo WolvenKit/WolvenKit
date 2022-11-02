@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.IO;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
@@ -36,6 +37,18 @@ public class WKitScripting
             return file.Value;
         }
         return null;
+    }
+
+    // Note to myself: Don't use IEnumerable<T>
+    public virtual IEnumerable GetArchiveFiles()
+    {
+        foreach (var archive in _archiveManager.Archives.Items)
+        {
+            foreach (var (key, file) in archive.Files)
+            {
+                yield return file as FileEntry;
+            }
+        }
     }
 
     public virtual IGameFile GetFileFromBase(ulong hash)
@@ -73,4 +86,6 @@ public class WKitScripting
     {
         return RedJsonSerializer.Deserialize<RedFileDto>(json)?.Data;
     }
+
+    public virtual string ChangeExtension(string path, string extension) => Path.ChangeExtension(path, extension);
 }

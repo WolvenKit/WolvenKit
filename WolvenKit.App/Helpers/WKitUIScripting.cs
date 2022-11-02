@@ -4,7 +4,6 @@ using Splat;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.Scripting;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 
@@ -16,35 +15,30 @@ public class WKitUIScripting : WKitScripting
 
     public WKitUIScripting(ILoggerService loggerService) : base(loggerService) => _projectManager = Locator.Current.GetService<IProjectManager>();
 
-    public virtual void SaveToProject(string path, CR2WFile cr2w)
-    {
-        FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, path));
-        if (diskPathInfo.Directory == null)
+    public virtual void SaveToProject(string path, CR2WFile cr2w) =>
+        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
         {
-            return;
-        }
-
-        if (!File.Exists(diskPathInfo.FullName))
-        {
-            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-        }
-
-        try
-        {
-            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+            using FileStream fs = new(s, FileMode.Create);
             using var writer = new CR2WWriter(fs);
             writer.WriteFile(cr2w);
-        }
-        catch (Exception ex)
-        {
-            File.Delete(diskPathInfo.FullName);
-            _loggerService.Error(ex);
-        }
-    }
+        });
 
-    public virtual void SaveToProject(string path, IGameFile gameFile)
+    public virtual void SaveToProject(string path, IGameFile gameFile) =>
+        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
+        {
+            using FileStream fs = new(s, FileMode.Create);
+            gameFile.Extract(fs);
+        });
+
+    public virtual void SaveToRaw(string path, string content) =>
+        SaveAs(Path.Combine(_projectManager.ActiveProject.RawDirectory, path), s =>
+        {
+            File.WriteAllText(s, content);
+        });
+
+    private void SaveAs(string path, Action<string> action)
     {
-        FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, path));
+        FileInfo diskPathInfo = new(path);
         if (diskPathInfo.Directory == null)
         {
             return;
@@ -57,8 +51,7 @@ public class WKitUIScripting : WKitScripting
 
         try
         {
-            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-            gameFile.Extract(fs);
+            action(diskPathInfo.FullName);
         }
         catch (Exception ex)
         {
