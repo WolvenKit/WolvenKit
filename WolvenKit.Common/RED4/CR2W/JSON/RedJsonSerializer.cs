@@ -1,8 +1,11 @@
 #nullable enable
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using System.Text.Unicode;
 using Semver;
 using WolvenKit.Common.Conversion;
@@ -96,10 +99,21 @@ public static class RedJsonSerializer
 
     public static JsonSerializerOptions Options { get; }
 
-    public static string Serialize(object value)
+    public static string Serialize(object value, bool skipHeader = false)
     {
         s_bufferResolver.Begin();
         s_classResolver.Begin();
+
+        if (skipHeader)
+        {
+            foreach (var c in Options.Converters)
+            {
+                if (c is RedFileDtoConverter red)
+                {
+                    red.SetSkipHeader(skipHeader);
+                }
+            }
+        }
 
         var result = JsonSerializer.Serialize(value, Options);
 

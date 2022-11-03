@@ -38,12 +38,12 @@ internal class ConvertCommand : CommandBase
 
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
+            AddOption(new Option<bool>("--print", "Print to stdout"));
 
-            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, string, IHost>(Action));
+            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, string, bool, IHost>(Action));
         }
 
-        private Task<int> Action(FileSystemInfo[] path, string outpath, string pattern,
-            string regex, IHost host)
+        private Task<int> Action(FileSystemInfo[] path, string outpath, string pattern, string regex, bool print, IHost host)
         {
             var serviceProvider = host.Services;
             var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -55,7 +55,7 @@ internal class ConvertCommand : CommandBase
             }
 
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            return consoleFunctions.Cr2wTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), true, false, pattern, regex, ETextConvertFormat.json);
+            return consoleFunctions.Cr2wTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), true, false, pattern, regex, ETextConvertFormat.json, print);
         }
     }
 
@@ -76,12 +76,12 @@ internal class ConvertCommand : CommandBase
 
             AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
+            AddOption(new Option<bool>("--print", "Print to stdout"));
 
-            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, string, IHost>(Action));
+            SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, string, bool, IHost>(Action));
         }
 
-        private Task<int> Action(FileSystemInfo[] path, string outpath, string pattern,
-            string regex, IHost host)
+        private Task<int> Action(FileSystemInfo[] path, string outpath, string pattern, string regex, bool print, IHost host)
         {
             var serviceProvider = host.Services;
             var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -93,7 +93,7 @@ internal class ConvertCommand : CommandBase
             }
 
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            return consoleFunctions.Cr2wTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), false, true, pattern, regex, ETextConvertFormat.json);
+            return consoleFunctions.Cr2wTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), false, true, pattern, regex, ETextConvertFormat.json, print);
         }
     }
 }

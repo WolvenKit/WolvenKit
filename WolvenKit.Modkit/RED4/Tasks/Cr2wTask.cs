@@ -13,7 +13,7 @@ namespace CP77Tools.Tasks;
 
 public partial class ConsoleFunctions
 {
-    public async Task<int> Cr2wTask(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
+    public async Task<int> Cr2wTask(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format, bool print = false)
     {
         if (path is null || path.Length < 1)
         {
@@ -30,14 +30,14 @@ public partial class ConsoleFunctions
         var result = 0;
         foreach (var s in path)
         {
-            result += await Cr2wTaskInner(s, outpath, deserialize, serialize, pattern, regex, format);
+            result += await Cr2wTaskInner(s, outpath, deserialize, serialize, pattern, regex, format, print);
         }
 
         return result;
     }
 
     private async Task<int> Cr2wTaskInner(FileSystemInfo path, DirectoryInfo outputDirectory, bool deserialize, bool serialize,
-        string pattern = "", string regex = "", ETextConvertFormat format = ETextConvertFormat.json)
+        string pattern = "", string regex = "", ETextConvertFormat format = ETextConvertFormat.json, bool print = false)
     {
         #region checks
 
@@ -102,7 +102,10 @@ public partial class ConsoleFunctions
         }
 
         var finalMatchesList = finalmatches.ToList();
-        _loggerService.Info($"Found {finalMatchesList.Count} files to process.");
+        if (!print)
+        {
+            _loggerService.Info($"Found {finalMatchesList.Count} files to process.");
+        }
 
         var progress = 0;
 
@@ -120,9 +123,18 @@ public partial class ConsoleFunctions
             if (serialize)
             {
                 var infile = fileInfo.FullName;
-                if (await Task.Run(() => _modTools.ConvertToAndWrite(format, infile, outputDirInfo)))
+
+                if (print)
                 {
-                    _loggerService.Success($"Saved {infile} to {format}.");
+                    var text = await Task.Run(() => _modTools.ConvertToText(format, infile, true));
+                    Console.WriteLine(text);
+                }
+                else
+                {
+                    if (await Task.Run(() => _modTools.ConvertToAndWrite(format, infile, outputDirInfo)))
+                    {
+                        _loggerService.Success($"Saved {infile} to {format}.");
+                    }
                 }
             }
 
@@ -145,7 +157,10 @@ public partial class ConsoleFunctions
         }
 
         watch.Stop();
-        _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds}ms.");
+        if (!print)
+        {
+            _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds}ms.");
+        }
 
         return 0;
     }
