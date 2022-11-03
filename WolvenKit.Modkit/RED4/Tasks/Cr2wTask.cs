@@ -142,7 +142,6 @@ public partial class ConsoleFunctions
             }
 
             Interlocked.Increment(ref progress);
-            //});
         }
 
         watch.Stop();
