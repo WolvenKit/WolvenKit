@@ -174,7 +174,7 @@
 
                         <Grid Grid.Row="1">
                             <syncfusion:SfLinearProgressBar
-                                x:Name="StatusBarProgressBar"
+                                x:Name="PluginProgressBar"
                                 Height="10"
                                 IsIndeterminate="{Binding IsIndeterminate}"
                                 Progress="{Binding Progress}"

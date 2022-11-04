@@ -51,12 +51,12 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Get version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1
+      uses: naminodarie/get-net-sdk-project-versions-action@v1.1.2
       id: get-version
       with:
         proj-path: ./WolvenKit/WolvenKit.csproj
     - name: Get console version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1
+      uses: naminodarie/get-net-sdk-project-versions-action@v1.1.2
       id: get-version-cli
       with:
         proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
@@ -81,13 +81,23 @@ jobs:
     # create zip
     - run: Compress-Archive -Path ./publish/app/* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
     - run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
-
+    
+    # tag this commit
+    - name: Create Tag
+      id: tag_version
+      uses: rfuzzo/github-tag-action@7b0316b3fb8aa236fdc20bee0614ea6ef99f4bf1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        default_bump: false
+        custom_tag: ${{ env.VERSION }}
+        tag_prefix: ""
+    
     # RELEASE
     - name: Release
       run: |
           gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} ${{ env.FILES }}
       env:
-        MESSAGE: "This is a beta release so you may encounter bugs. Please report them. The latest commit this release is based on is: [#${{env.SHA}}](https://github.com/${{env.MREPO}}/commit/${{env.SHA}})"
+        MESSAGE: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
         FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}}
         REPO: WolvenKit/WolvenKit-nightly-releases
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}

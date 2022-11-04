@@ -27,7 +27,7 @@ namespace WolvenKit.ViewModels.Tools
 
         [Browsable(false)] public List<RedFileSystemModel> Directories => _model.Directories.Values.ToList();
 
-        [Browsable(false)] public List<IGameFile> Files => _model.Files;
+        [Browsable(false)] public List<IGameFile> Files => _model.Files.ToList();
 
         public override uint Size => 0;
 

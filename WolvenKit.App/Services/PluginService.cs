@@ -17,6 +17,7 @@ using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Interaction;
+using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.Functionality.Services
@@ -414,7 +415,7 @@ namespace WolvenKit.Functionality.Services
 
                 var progress = 0;
                 _progressService.IsIndeterminate = false;
-                _progressService.Report(10);
+                _progressService.Report(0.1);
                 foreach (var entry in archive.Entries)
                 {
                     // Gets the full path to ensure that relative segments are removed.
@@ -458,6 +459,7 @@ namespace WolvenKit.Functionality.Services
                 files.Clear();
             }
 
+            _progressService.Completed();
             return files;
         }
 

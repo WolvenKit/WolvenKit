@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Archive.IO
                 FileHeader = BaseStream.ReadStruct<CR2WFileHeader>()
             };
 
-            if (result.FileHeader.version > 195 || result.FileHeader.version < 163)
+            if (result.FileHeader.version is > 195 or < 163)
             {
                 info = null;
                 return EFileReadErrorCodes.UnsupportedVersion;
@@ -208,15 +208,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         #region Read Sections
 
-        private CName ReadName(CR2WNameInfo info, Dictionary<uint, CName> stringDict)
-        {
-            if (!stringDict.ContainsKey(info.offset))
-            {
-                throw new TodoException();
-            }
-
-            return stringDict[info.offset];
-        }
+        private CName ReadName(CR2WNameInfo info, Dictionary<uint, CName> stringDict) => !stringDict.ContainsKey(info.offset) ? throw new TodoException() : stringDict[info.offset];
 
         private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, CName> stringDict)
         {
@@ -236,7 +228,7 @@ namespace WolvenKit.RED4.Archive.IO
             return ret;
         }
 
-        private CR2WProperty ReadProperty(CR2WPropertyInfo info) => new CR2WProperty();
+        private CR2WProperty ReadProperty(CR2WPropertyInfo info) => new();
 
         private void ReadChunk(int chunkIndex)
         {
@@ -376,7 +368,7 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 var pos = (uint)BaseStream.Position - stringInfoTable.offset;
                 var str = _reader.ReadNullTerminatedString();
-                if (str == "")
+                if (string.IsNullOrEmpty(str))
                 {
                     str = "None";
                 }

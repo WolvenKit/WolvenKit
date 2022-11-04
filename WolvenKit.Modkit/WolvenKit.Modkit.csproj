@@ -34,6 +34,8 @@
 
   <ItemGroup>
       <PackageReference Include="BigGustave" Version="1.0.6" />
+      <PackageReference Include="Microsoft.ClearScript.V8" Version="7.3.4" />
+      <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" Version="7.3.4" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
       <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
       <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0023" />
@@ -58,6 +60,10 @@
     
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <Folder Include="Scripting\" />
   </ItemGroup>
 
 </Project>

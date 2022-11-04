@@ -13,11 +13,15 @@ namespace WolvenKit.RED4.CR2W.JSON;
 public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverter
 {
     private readonly ReferenceResolver<RedBaseClass> _referenceResolver;
+    private bool _skipHeader;
 
-    public RedFileDtoConverter(ReferenceResolver<RedBaseClass> referenceResolver)
+    public RedFileDtoConverter(ReferenceResolver<RedBaseClass> referenceResolver, bool skipHeader = false)
     {
         _referenceResolver = referenceResolver;
+        _skipHeader = skipHeader;
     }
+
+    public void SetSkipHeader(bool skipHeader) => _skipHeader = skipHeader;
 
     public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
@@ -88,12 +92,7 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
         }
 
         reader.Read();
-        if (reader.TokenType != JsonTokenType.EndObject)
-        {
-            throw new JsonException();
-        }
-
-        return result;
+        return reader.TokenType != JsonTokenType.EndObject ? throw new JsonException() : result;
     }
 
     private CR2WFile ReadRegular(ref Utf8JsonReader reader, JsonSerializerOptions options)
@@ -149,14 +148,9 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
                 case "RootChunk":
                 {
                     var converter = options.GetConverter(typeof(RedBaseClass));
-                    if (converter is ICustomRedConverter conv)
-                    {
-                        result.RootChunk = (RedBaseClass?)conv.ReadRedType(ref reader, typeof(RedBaseClass), options);
-                    }
-                    else
-                    {
-                        throw new JsonException();
-                    }
+                    result.RootChunk = converter is ICustomRedConverter conv
+                        ? (RedBaseClass?)conv.ReadRedType(ref reader, typeof(RedBaseClass), options)
+                        : throw new JsonException();
 
                     break;
                 }
@@ -284,16 +278,9 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
 
                     for (var i = 0; i < chunkList.Count; i++)
                     {
-                        string? type;
-
-                        if (RedJsonSerializer.IsOlderThen("0.0.2"))
-                        {
-                            type = chunkList[i].GetProperty("Type").GetString();
-                        }
-                        else
-                        {
-                            type = chunkList[i].GetProperty("$type").GetString();
-                        }
+                        var type = RedJsonSerializer.IsOlderThen("0.0.2")
+                            ? chunkList[i].GetProperty("Type").GetString()
+                            : chunkList[i].GetProperty("$type").GetString();
 
                         if (type == null)
                         {
@@ -337,8 +324,11 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
 
         writer.WriteStartObject();
 
-        writer.WritePropertyName("Header");
-        JsonSerializer.Serialize(writer, value.Header, options);
+        if (!_skipHeader)
+        {
+            writer.WritePropertyName("Header");
+            JsonSerializer.Serialize(writer, value.Header, options);
+        }
 
         writer.WritePropertyName("Data");
         JsonSerializer.Serialize(writer, value.Data, options);

@@ -47,8 +47,6 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Tools;
-using static Microsoft.WindowsAPICodePack.PortableDevices.PropertySystem.Properties;
-using static WolvenKit.Common.Wcc.Wcc_lite;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
@@ -116,6 +114,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowSoundModdingToolCommand = new DelegateCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool).ObservesProperty(() => IsDialogShown);
             ShowModsViewCommand = new DelegateCommand(ExecuteShowModsView, CanShowModsView).ObservesProperty(() => IsDialogShown);
             ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin).ObservesProperty(() => IsDialogShown);
+            ShowScriptManagerCommand = new DelegateCommand(ExecuteShowScriptManager, CanShowScriptManager).ObservesProperty(() => IsDialogShown);
 
             OpenFileCommand = ReactiveCommand.CreateFromTask<FileModel>(async (m) => await OpenFileAsync(m));
             OpenRedFileCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
@@ -669,6 +668,14 @@ namespace WolvenKit.ViewModels.Shell
             await Task.CompletedTask;
         }
 
+        public ICommand ShowScriptManagerCommand { get; private set; }
+        private bool CanShowScriptManager() => !IsDialogShown;
+        private void ExecuteShowScriptManager()
+        {
+            CloseModalCommand.Execute(null);
+            SetActiveDialog(new ScriptManagerViewModel());
+        }
+
         public ICommand ShowPluginCommand { get; private set; }
         private bool CanShowPlugin() => !IsDialogShown;
         private void ExecuteShowPlugin()
@@ -714,6 +721,7 @@ namespace WolvenKit.ViewModels.Shell
             Stream stream = null;
             switch (file.SelectedFile.Type)
             {
+                case EWolvenKitFile.ArchiveXl:
                 case EWolvenKitFile.TweakXl:
                     if (!string.IsNullOrEmpty(file.SelectedFile.Template))
                     {
@@ -1097,7 +1105,7 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public IDocumentViewModel ActiveDocument { get; set; }
 
-        [Reactive] public EditorProject ActiveProject { get; set; }
+        [Reactive] public Cp77Project ActiveProject { get; set; }
 
         private List<IDocumentViewModel> OpenDocuments => DockedViews.OfType<IDocumentViewModel>().ToList();
 
@@ -1156,6 +1164,9 @@ namespace WolvenKit.ViewModels.Shell
                     break;
                 case EWolvenKitFile.TweakXl:
                     fileViewModel = new TweakXLDocumentViewModel(fullPath);
+                    break;
+                case EWolvenKitFile.WScript:
+                    fileViewModel = new WScriptDocumentViewModel(fullPath);
                     break;
                 default:
                     break;
@@ -1281,6 +1292,8 @@ namespace WolvenKit.ViewModels.Shell
                 case ".yml":
                 case ".log":
                 case ".ini":
+                case ".xl":
+                case ".reds":
                     //case ".yaml":
                     ShellExecute();
                     break;
@@ -1335,6 +1348,13 @@ namespace WolvenKit.ViewModels.Shell
                 if (isTweakFile)
                 {
                     type = EWolvenKitFile.TweakXl;
+                    isRedEngineFile = true;
+                }
+
+                var isWScriptFile = Enum.GetNames<EWScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+                if (isWScriptFile)
+                {
+                    type = EWolvenKitFile.WScript;
                     isRedEngineFile = true;
                 }
 
@@ -1396,7 +1416,12 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public void SetStatusReady() => Status = EAppStatus.Loaded;
+        public void SetStatusReady()
+        {
+            Status = EAppStatus.Loaded;
+            _progressService.Completed();
+        }
+
         public void SetLaunchProfiles(ObservableCollection<LaunchProfileViewModel> launchProfiles)
         {
             _settingsManager.LaunchProfiles.Clear();

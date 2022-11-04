@@ -64,6 +64,11 @@
                             <documents:ScriptDocumentView />
                         </Grid>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type docvm:WScriptDocumentViewModel}">
+                        <Grid>
+                            <documents:WScriptDocumentView />
+                        </Grid>
+                    </DataTemplate>
 
                 </ResourceDictionary>
 

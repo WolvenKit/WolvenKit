@@ -3,10 +3,12 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Threading;
 using DynamicData;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
+using WolvenKit.Common;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
@@ -76,11 +78,20 @@ namespace WolvenKit.Views.Tools
 
         private void AddLog(LogEvent item)
         {
-            var level = item.Level;
-            if (item.Properties.TryGetValue("IsSuccess", out var val) && val is ScalarValue { Value: true })
+            var level = ToLogtype(item.Level);
+
+#if !DEBUG
+            // don't log Debug on release build
+            if (level == Logtype.Debug)
+            {
+                return;
+            }
+#endif
+
+            if (item.Properties.TryGetValue(Core.Constants.IsSuccess, out var val) && val is ScalarValue { Value: true })
             {
                 // ... 
-                level = LogEventLevel.Debug;
+                level = Logtype.Success;
             }
 
             var paragraph = new Paragraph()
@@ -94,16 +105,32 @@ namespace WolvenKit.Views.Tools
             };
             paragraph.Inlines.Add(run);
             LogRichTextBox.Document.Blocks.Add(paragraph);
-            LogRichTextBox.ScrollToEnd();
+
+            Dispatcher.InvokeAsync(() => LogRichTextBox.ScrollToEnd(), DispatcherPriority.Background);
         }
 
-        private Brush GetBrushForLevel(LogEventLevel level) => level switch
+        private Logtype ToLogtype(LogEventLevel level)
         {
-            //Logtype.Normal or Logtype.Wcc => Brushes.White,
-            LogEventLevel.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
-            LogEventLevel.Information => (Brush)Application.Current.FindResource("WolvenKitYellow"),
-            LogEventLevel.Debug => (Brush)Application.Current.FindResource("WolvenKitCyan"),
-            LogEventLevel.Warning => (Brush)Application.Current.FindResource("WolvenKitPurple"),
+            return level switch
+            {
+                LogEventLevel.Verbose => Logtype.Debug,
+                LogEventLevel.Debug => Logtype.Debug,
+                LogEventLevel.Information => Logtype.Important,
+                LogEventLevel.Warning => Logtype.Warning,
+                LogEventLevel.Error => Logtype.Error,
+                LogEventLevel.Fatal => Logtype.Error,
+                _ => Logtype.Normal,
+            };
+        }
+
+        private Brush GetBrushForLevel(Logtype level) => level switch
+        {
+            Logtype.Normal or Logtype.Debug => Brushes.White,
+            Logtype.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
+            Logtype.Warning => (Brush)Application.Current.FindResource("WolvenKitPurple"),
+            Logtype.Important => (Brush)Application.Current.FindResource("WolvenKitYellow"),
+            Logtype.Success => (Brush)Application.Current.FindResource("WolvenKitCyan"),
+
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
         };
 

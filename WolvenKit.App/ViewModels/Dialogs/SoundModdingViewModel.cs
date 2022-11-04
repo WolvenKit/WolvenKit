@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
@@ -22,7 +23,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class SoundModdingViewModel : DialogViewModel
     {
-        private readonly ISettingsManager _settings;
+        private readonly INotificationService _notificationService;
         private readonly ILoggerService _logger;
         private readonly IProjectManager _projectManager;
 
@@ -39,7 +40,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         public SoundModdingViewModel()
         {
-            _settings = Locator.Current.GetService<ISettingsManager>();
+            _notificationService = Locator.Current.GetService<INotificationService>();
             _logger = Locator.Current.GetService<ILoggerService>();
             _projectManager = Locator.Current.GetService<IProjectManager>();
 
@@ -83,7 +84,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
         private void LoadInfo()
         {
             var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
-            path = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
+            path = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "info.json");
             if (File.Exists(path))
             {
                 try
@@ -107,7 +108,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private void PopulateFiles()
         {
-            var modProj = _projectManager.ActiveProject as Cp77Project;
+            var modProj = _projectManager.ActiveProject;
             var modfiles = Directory.GetFiles(modProj.SoundDirectory, "*.wav", SearchOption.AllDirectories);
             foreach (var modfile in modfiles)
             {
@@ -139,7 +140,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private void Save()
         {
-            var modInfoJsonPath = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
+            var modInfoJsonPath = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "info.json");
             if (!File.Exists(modInfoJsonPath))
             {
                 var jsonString = JsonSerializer.Serialize(_projectManager.ActiveProject.GetInfo(), _options);
@@ -192,7 +193,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
                 var jsonString = JsonSerializer.Serialize(info, _options);
                 File.WriteAllText(modInfoJsonPath, jsonString);
-                _logger.Success($"Saved sound configuration to {modInfoJsonPath}");
+                _notificationService.Success($"Saved sound configuration to {modInfoJsonPath}");
             }
         }
 

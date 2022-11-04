@@ -228,6 +228,7 @@
             Grid.RowSpan="2"
             Background="Transparent"
             Visibility="{Binding IsProcessing, Converter={StaticResource boolToVisibilityConverter}}">
+            
             <syncfusion:SfBusyIndicator AnimationType="Gear" />
             <TextBlock
                 x:Name="ImportExportOverlayText"
@@ -235,6 +236,12 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Text="Mods are being deployed ..." />
+            <syncfusion:SfLinearProgressBar
+                x:Name="DeploymentProgressBar"
+                Height="20"
+                Margin="50,150,50,0"
+                Progress="{Binding Progress}" />
+
         </Grid>
 
 

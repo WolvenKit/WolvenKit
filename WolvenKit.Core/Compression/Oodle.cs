@@ -104,11 +104,11 @@ public static class Oodle
     public static bool IsCompressed(byte[] buf) => buf.Length >= 4 && buf[0] == 0x4B && buf[1] == 0x41 && buf[2] == 0x52 && buf[3] == 0x4B;
     public static bool IsCompressed(Stream stream) => stream.PeekFourCC() == 0x4B52414B;
 
-    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf) => CompressBuffer(rawBuf, out compBuf, CompressionSettings.Get().CompressionLevel);
+    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf, bool forceCompression) => CompressBuffer(rawBuf, out compBuf, CompressionSettings.Get().CompressionLevel, forceCompression);
 
-    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf, CompressionLevel compressionLevel)
+    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf, CompressionLevel compressionLevel, bool forceCompression)
     {
-        if (rawBuf.Length > 256)
+        if (forceCompression || rawBuf.Length > 256)
         {
             //var compressedBufferSizeNeeded = GetCompressedBufferSizeNeeded(rawBuf.Length);
             //var compressedBuffer = new byte[compressedBufferSizeNeeded];
@@ -116,13 +116,26 @@ public static class Oodle
 
             var compressedSize = Oodle.Compress(rawBuf, ref compressedBuffer, false, compressionLevel);
 
-            var outArray = new byte[compressedSize + 8];
+            byte[] outArray;
+            if (forceCompression && rawBuf.Length <= 256)
+            {
+                outArray = new byte[compressedSize + 10];
 
-            Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
-            Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
-            Array.Copy(compressedBuffer.ToArray(), 0, outArray, 8, compressedSize);
+                Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
+                Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
+                Array.Copy(new byte[] {0xCC, 0x06}, 0, outArray, 8, 2);
+                Array.Copy(compressedBuffer.ToArray(), 0, outArray, 10, compressedSize);
+            }
+            else
+            {
+                outArray = new byte[compressedSize + 8];
 
-            if (rawBuf.Length > outArray.Length)
+                Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
+                Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
+                Array.Copy(compressedBuffer.ToArray(), 0, outArray, 8, compressedSize);
+            }
+
+            if (forceCompression || rawBuf.Length > outArray.Length)
             {
                 compBuf = outArray;
                 return Status.Compressed;

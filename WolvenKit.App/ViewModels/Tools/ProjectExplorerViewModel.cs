@@ -98,8 +98,8 @@ namespace WolvenKit.ViewModels.Tools
             Bk2ImportCommand = new DelegateCommand(ExecuteBk2Import, CanBk2Import).ObservesProperty(() => SelectedItem);
             Bk2ExportCommand = new DelegateCommand(ExecuteBk2Export, CanBk2Export).ObservesProperty(() => SelectedItem);
 
-            ConvertToJsonCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.json), CanConvertTo).ObservesProperty(() => SelectedItem);
-            ConvertFromJsonCommand = new DelegateCommand(ExecuteConvertFromJson, CanConvertFromJson).ObservesProperty(() => SelectedItem);
+            ConvertToJsonCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(), CanConvertTo).ObservesProperty(() => SelectedItem);
+            ConvertFromJsonCommand = new DelegateCommand(async () => await ExecuteConvertFromAsync(), CanConvertFromJson).ObservesProperty(() => SelectedItem);
 
 
             OpenInAssetBrowserCommand = new DelegateCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
@@ -142,7 +142,7 @@ namespace WolvenKit.ViewModels.Tools
         #region properties
 
         public AppViewModel MainViewModel => Locator.Current.GetService<AppViewModel>();
-        [Reactive] private EditorProject ActiveProject { get; set; }
+        [Reactive] private Cp77Project ActiveProject { get; set; }
 
         public ReactiveCommand<Unit, Unit> ExpandAll { get; private set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; private set; }
@@ -182,31 +182,22 @@ namespace WolvenKit.ViewModels.Tools
         private bool CanOpenRootFolder() => ActiveProject != null;
         private void ExecuteOpenRootFolder()
         {
-            if (ActiveProject is Cp77Project project)
+            switch (SelectedTabIndex)
             {
-                switch (SelectedTabIndex)
-                {
-                    case 0:
-                        Commonfunctions.ShowFolderInExplorer(project.FileDirectory);
-                        break;
-                    case 1:
-                        Commonfunctions.ShowFolderInExplorer(project.ModDirectory);
-                        break;
-                    case 2:
-                        Commonfunctions.ShowFolderInExplorer(project.RawDirectory);
-                        break;
-                    case 3:
-                        Commonfunctions.ShowFolderInExplorer(project.ScriptDirectory);
-                        break;
-                    case 4:
-                        Commonfunctions.ShowFolderInExplorer(project.TweakDirectory);
-                        break;
-                    case 5:
-                        Commonfunctions.ShowFolderInExplorer(project.PackedRootDirectory);
-                        break;
-                    default:
-                        break;
-                }
+                case 0:
+                    Commonfunctions.ShowFolderInExplorer(ActiveProject.FileDirectory);
+                    break;
+                case 1:
+                    Commonfunctions.ShowFolderInExplorer(ActiveProject.ModDirectory);
+                    break;
+                case 2:
+                    Commonfunctions.ShowFolderInExplorer(ActiveProject.RawDirectory);
+                    break;
+                case 3:
+                    Commonfunctions.ShowFolderInExplorer(ActiveProject.ResourcesDirectory);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -441,45 +432,41 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         public ICommand ConvertToJsonCommand { get; private set; }
-
-        private bool CanConvertTo() => SelectedItem != null
-                && !IsInRawFolder(SelectedItem)
-                //&& Enum.GetNames<ERedExtension>().Contains(SelectedItem.Extension.ToLower())
-                ;
-
-        private async Task ExecuteConvertToAsync(ETextConvertFormat fmt)
+        private bool CanConvertTo() => SelectedItem != null && !IsInRawFolder(SelectedItem);
+        private async Task ExecuteConvertToAsync()
         {
             if (SelectedItem.IsDirectory)
             {
                 var progress = 0;
                 _progressService.Report(0);
 
-                var files = Directory.GetFiles(SelectedItem.FullName, "*", SearchOption.AllDirectories)
-                    .ToList();
+                var files = Directory.GetFiles(SelectedItem.FullName, "*", SearchOption.AllDirectories).ToList();
                 foreach (var file in files)
                 {
-                    await ConvertTo(file, fmt);
+                    await ConvertToTask(file);
 
                     progress++;
                     _progressService.Report(progress / (float)files.Count);
                 }
+
+                _progressService.Completed();
             }
             else
             {
                 var inpath = SelectedItem.FullName;
-                await ConvertTo(inpath, fmt);
+                await ConvertToTask(inpath);
             }
         }
-
-        private async Task ConvertTo(string file, ETextConvertFormat fmt)
+        private Task ConvertToTask(string file)
         {
             if (!File.Exists(file))
             {
-                return;
+                return Task.CompletedTask;
             }
+
             if (!Enum.GetNames<ERedExtension>().Contains(Path.GetExtension(file).TrimStart('.').ToLower()))
             {
-                return;
+                return Task.CompletedTask;
             }
 
             var rawOutPath = Path.Combine(ActiveProject.RawDirectory, FileModel.GetRelativeName(file, ActiveProject));
@@ -488,26 +475,61 @@ namespace WolvenKit.ViewModels.Tools
             {
                 Directory.CreateDirectory(outDirectoryPath);
 
-                await Task.Run(() => _modTools.ConvertToAndWrite(fmt, file, new DirectoryInfo(outDirectoryPath)));
+                return Task.Run(() => _modTools.ConvertToAndWrite(ETextConvertFormat.json, file, new DirectoryInfo(outDirectoryPath)));
             }
+
+            return Task.CompletedTask;
         }
 
 
         public ICommand ConvertFromJsonCommand { get; private set; }
-        private bool CanConvertFromJson() => SelectedItem != null
-            && IsInRawFolder(SelectedItem)
-            && SelectedItem.Extension.ToLower().Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal);
-        private void ExecuteConvertFromJson()
+        private bool CanConvertFromJson() => SelectedItem != null && IsInRawFolder(SelectedItem);
+        private async Task ExecuteConvertFromAsync()
         {
-            var inpath = SelectedItem.FullName;
-            var modPath = Path.Combine(ActiveProject.ModDirectory, FileModel.GetRelativeName(SelectedItem.FullName, ActiveProject));
+            if (SelectedItem.IsDirectory)
+            {
+                var progress = 0;
+                _progressService.Report(0);
+
+                var files = Directory.GetFiles(SelectedItem.FullName, "*.json", SearchOption.AllDirectories).ToList();
+                foreach (var file in files)
+                {
+                    await ConvertFromTask(file);
+
+                    progress++;
+                    _progressService.Report(progress / (float)files.Count);
+                }
+
+                _progressService.Completed();
+            }
+            else
+            {
+                var inpath = SelectedItem.FullName;
+                await ConvertFromTask(inpath);
+            }
+        }
+        private Task ConvertFromTask(string file)
+        {
+            if (!File.Exists(file))
+            {
+                return Task.CompletedTask;
+            }
+
+            if (Path.GetExtension(file).TrimStart('.').ToLower() != ETextConvertFormat.json.ToString())
+            {
+                return Task.CompletedTask;
+            }
+
+            var modPath = Path.Combine(ActiveProject.ModDirectory, FileModel.GetRelativeName(file, ActiveProject));
             var outDirectoryPath = Path.GetDirectoryName(modPath);
             if (outDirectoryPath != null)
             {
                 Directory.CreateDirectory(outDirectoryPath);
 
-                _modTools.ConvertFromAndWrite(new FileInfo(inpath), new DirectoryInfo(outDirectoryPath));
+                return Task.Run(() => _modTools.ConvertFromAndWrite(new FileInfo(file), new DirectoryInfo(outDirectoryPath)));
             }
+
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -572,82 +594,6 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         #endregion
-
-        #region Tw3 Commands
-
-        ///// <summary>
-        ///// Adds all dependencies (imports) of selected node from the game.
-        ///// </summary>
-        //public ICommand AddAllImportsCommand { get; private set; }
-
-        //public ICommand CookCommand { get; private set; }
-
-        ///// <summary>
-        ///// Exports selected file to Json.
-        ///// </summary>
-        //public ICommand ExportJsonCommand { get; private set; }
-
-        ///// <summary>
-        ///// Exports selected node with wcc.
-        ///// </summary>
-        //public ICommand ExportMeshCommand { get; private set; }
-
-        ///// <summary>
-        /////  Opens the fast render Window for selected file
-        ///// </summary>
-        //public ICommand FastRenderCommand { get; private set; }
-
-
-        //private async void AddAllImports() => await _tw3Controller.AddAllImportsAsync(SelectedItem.FullName, true);
-
-        //private bool CanAddAllImports() => ActiveProject is Tw3Project && SelectedItem != null && !SelectedItem.IsDirectory;
-
-        //// legacy
-        //private bool CanCook() => ActiveProject is Tw3Project && SelectedItem != null;
-
-        //private bool CanExportJson() => ActiveProject is Tw3Project && SelectedItem != null
-        //    && !SelectedItem.IsDirectory;
-
-        //private bool CanExportMesh() => ActiveProject is EditorProject && SelectedItem != null
-        //    && !SelectedItem.IsDirectory && SelectedItem.GetExtension() == ERedExtension.w2mesh.ToString();
-
-        //private bool CanFastRender() => ActiveProject is Tw3Project && SelectedItem != null
-        //    && !SelectedItem.IsDirectory && SelectedItem.GetExtension() == ERedExtension.w2mesh.ToString();
-
-
-        //private void Cook() => RequestFileCook(this, new RequestFileOpenArgs { File = SelectedItem.FullName });
-
-        //private void ExecuteExportJson()
-        //{
-        //    // TODO: Handle command logic here
-        //}
-
-        //private void ExecuteFastRender()
-        //{
-        //    // TODO: Handle command logic here
-        //}
-
-
-        //public ICommand PESearchStartedCommand { get; private set; }
-
-        //private bool CanPESearchStartedCommand(object arg) => true;
-
-        //private void ExecutePESearchStartedCommand(object arg)
-        //{
-        //    if (arg is FunctionEventArgs<string> e)
-        //    {
-        //        PerformSearch(e.Info);
-        //    }
-        //}
-
-        //private void PerformSearch(string query)
-        //{
-        //    // ??
-        //}
-
-        //private async void ExportMesh() => await Task.Run(() => _tw3Controller.ExportFileToMod(SelectedItem.FullName));
-
-        #endregion Tw3 Commands
 
         #endregion commands
 

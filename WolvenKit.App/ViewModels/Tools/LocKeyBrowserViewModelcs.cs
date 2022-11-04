@@ -40,8 +40,6 @@ namespace WolvenKit.ViewModels.Tools
         private readonly LocKeyService _locKey;
         private readonly IArchiveManager _archive;
 
-        private EditorProject ActiveMod => _projectManager.ActiveProject;
-
         public string Extension { get; set; } = "json";
 
         #endregion fields
@@ -104,9 +102,8 @@ namespace WolvenKit.ViewModels.Tools
             set
             {
                 _searchText = value;
-                if (_searchText != "")
-                {
-                    LocKeys.Filter = (obj) =>
+                LocKeys.Filter = _searchText != ""
+                    ? ((obj) =>
                     {
                         if (obj is localizationPersistenceOnScreenEntry entry)
                         {
@@ -116,12 +113,8 @@ namespace WolvenKit.ViewModels.Tools
                             }
                         }
                         return false;
-                    };
-                }
-                else
-                {
-                    LocKeys.Filter = null;
-                }
+                    })
+                    : null;
                 this.RaisePropertyChanged(nameof(SearchText));
             }
         }
@@ -137,7 +130,11 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedLocKey != null)
                 {
                     SelectedChunk.Clear();
-                    SelectedChunk.Add(new ChunkViewModel(_selectedLocKey, null));
+                    SelectedChunk.Add(new ChunkViewModel(_selectedLocKey)
+                    {
+                        IsReadOnly = true,
+                        IsExpanded = true
+                    });
                 }
                 else
                 {

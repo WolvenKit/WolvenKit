@@ -5,7 +5,6 @@ namespace WolvenKit.Views.Documents
 {
     public partial class RedDocumentView : ReactiveUserControl<RedDocumentViewModel>
     {
-        #region Constructors
 
         public RedDocumentView()
         {
@@ -21,6 +20,5 @@ namespace WolvenKit.Views.Documents
             });
         }
 
-        #endregion Constructors
     }
 }

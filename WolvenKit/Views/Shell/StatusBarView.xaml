@@ -30,7 +30,7 @@
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
 
-        <Fluent:StatusBar Grid.Row="1" Background="#1f1f1f">
+        <Fluent:StatusBar Grid.Row="1" Background="{Binding BarColor}">
 
             <Fluent:StatusBarItem Title="Status" HorizontalAlignment="Left">
                 <TextBlock Margin="6,0,0,4" Text="{Binding Status}" />

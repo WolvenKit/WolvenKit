@@ -51,6 +51,7 @@ namespace WolvenKit.Common.Interfaces
         public bool ConvertToAndWrite(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo);
 
         public bool ConvertFromAndWrite(FileInfo fileInfo, DirectoryInfo outputDirInfo);
+        public string ConvertToText(ETextConvertFormat format, string infile, bool skipHeader);
     }
 
 }

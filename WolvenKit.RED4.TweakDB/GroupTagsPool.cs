@@ -44,19 +44,10 @@ public class GroupTagsPool : IEnumerable<(TweakDBID id, byte val)>
         return _groupTags.ContainsKey(hash);
     }
 
-    public List<TweakDBID> GetRecords(bool sortByName = false)
-    {
-        var list = _groupTags.Keys
+    public List<TweakDBID> GetRecords() =>
+        _groupTags.Keys
             .Select(x => (TweakDBID)x)
             .ToList();
-
-        if (sortByName)
-        {
-            list.Sort((a, b) => string.Compare(a.GetResolvedText(), b.GetResolvedText(), StringComparison.InvariantCulture));
-        }
-
-        return list;
-    }
 
     public byte? GetGroupTag(ulong hash)
     {

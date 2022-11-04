@@ -84,6 +84,8 @@ namespace WolvenKit.Modkit.RED4
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             });
 
+            _progressService.Completed();
+
             //logging
             var msg = $"{ar.ArchiveAbsolutePath}: Unbundled {extractedList.Count}/{finalMatchesList.Count} entries.";
             if (extractedList.Count == finalMatchesList.Count)
@@ -143,6 +145,8 @@ namespace WolvenKit.Modkit.RED4
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             });
+
+            _progressService.Completed();
             var count = bag.Count;
             _loggerService.Info($"--------{count}---------");
         }

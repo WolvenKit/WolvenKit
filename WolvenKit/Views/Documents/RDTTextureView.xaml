@@ -81,6 +81,7 @@
             <Border.ContextMenu>
                 <ContextMenu>
                     <MenuItem Click="ResetZoomPan" Header="Reset Zoom/Pan" />
+                    <MenuItem Click="ReplaceTexture" Header="Replace Texture" />
                 </ContextMenu>
             </Border.ContextMenu>
             <Border

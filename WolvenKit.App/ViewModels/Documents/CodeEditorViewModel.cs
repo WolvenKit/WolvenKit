@@ -46,12 +46,6 @@ namespace WolvenKit.ViewModels.Tools
 
         #endregion Constructors
 
-        #region Properties
-
-        private EditorProject ActiveMod => _projectManager.ActiveProject;
-
-        #endregion Properties
-
         #region Methods
 
         private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;

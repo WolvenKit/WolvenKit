@@ -17,9 +17,8 @@ namespace WolvenKit.ViewModels.Documents
     public class RDTTextureViewModel : RedDocumentTabViewModel
     {
         protected readonly RedBaseClass _data;
-        protected readonly RedImage _image;
 
-        
+        protected readonly RedImage _image;
 
         public delegate void RenderDelegate();
         public RenderDelegate Render;

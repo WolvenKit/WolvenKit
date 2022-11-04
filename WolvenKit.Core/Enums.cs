@@ -21,7 +21,9 @@ namespace WolvenKit.Common
     public enum EWolvenKitFile
     {
         Cr2w,
-        TweakXl
+        TweakXl,
+        ArchiveXl,
+        WScript
     }
 
     public enum ERedScriptExtension
@@ -34,6 +36,11 @@ namespace WolvenKit.Common
     public enum ETweakExtension
     {
         yaml
+    }
+
+    public enum EWScriptExtension
+    {
+        wscript
     }
 
     public enum EUpdateChannel
@@ -90,7 +97,8 @@ namespace WolvenKit.Common
         Error,
         Important,
         Success,
-        Warning
+        Warning,
+        Debug
     }
 
     public enum EArchiveType
@@ -166,17 +174,17 @@ namespace WolvenKit.Common
 
     public enum EConvertableFileFormat
     {
-        gltf,
-        glb,
-        x,
-        stp,
-        obj,
-        stl,
-        ply,
-        assbin,
-        assxml,
-        x3d,
-        fbx,
+        //gltf,
+        //glb,
+        //x,
+        //stp,
+        //obj,
+        //stl,
+        //ply,
+        //assbin,
+        //assxml,
+        //x3d,
+        //fbx,
 
     }
 

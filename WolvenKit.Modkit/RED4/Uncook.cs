@@ -331,6 +331,8 @@ namespace WolvenKit.Modkit.RED4
             }
             );
 
+            _progressService.Completed();
+
             foreach (var failed in failedList)
             {
                 _loggerService.Warning($"Failed to uncook {failed}.");
@@ -561,7 +563,6 @@ namespace WolvenKit.Modkit.RED4
         private static bool HandleOpus(OpusExportArgs opusExportArgs)
         {
             OpusTools opusTools = new(
-                opusExportArgs.SoundbanksArchive,
                 opusExportArgs.ModFolderPath,
                 opusExportArgs.RawFolderPath,
                 opusExportArgs.UseMod);
@@ -610,22 +611,22 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (inkTextureAtlas.Texture.DepotPath != 0)
+            if (inkTextureAtlas.Texture.DepotPath != CName.Empty)
             {
                 ExtractParts(inkTextureAtlas.Texture.DepotPath, inkTextureAtlas.Parts, Path.Combine(outFile.FullName, "main"));
             }
 
-            if (inkTextureAtlas.Slots[0] != null && inkTextureAtlas.Slots[0].Texture.DepotPath != 0)
+            if (inkTextureAtlas.Slots[0] != null && inkTextureAtlas.Slots[0].Texture.DepotPath != CName.Empty)
             {
                 ExtractParts(inkTextureAtlas.Slots[0].Texture.DepotPath, inkTextureAtlas.Slots[0].Parts, Path.Combine(outFile.FullName, "2160p"));
             }
 
-            if (inkTextureAtlas.Slots[1] != null && inkTextureAtlas.Slots[1].Texture.DepotPath != 0)
+            if (inkTextureAtlas.Slots[1] != null && inkTextureAtlas.Slots[1].Texture.DepotPath != CName.Empty)
             {
                 ExtractParts(inkTextureAtlas.Slots[1].Texture.DepotPath, inkTextureAtlas.Slots[1].Parts, Path.Combine(outFile.FullName, "1080p"));
             }
 
-            if (inkTextureAtlas.Slots[2] != null && inkTextureAtlas.Slots[2].Texture.DepotPath != 0)
+            if (inkTextureAtlas.Slots[2] != null && inkTextureAtlas.Slots[2].Texture.DepotPath != CName.Empty)
             {
                 ExtractParts(inkTextureAtlas.Slots[2].Texture.DepotPath, inkTextureAtlas.Slots[2].Parts, Path.Combine(outFile.FullName, "720p"));
             }

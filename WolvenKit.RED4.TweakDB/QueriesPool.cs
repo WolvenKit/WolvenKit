@@ -44,19 +44,10 @@ public class QueriesPool : IEnumerable<(TweakDBID id, List<TweakDBID> val)>
         return _queries.ContainsKey(hash);
     }
 
-    public List<TweakDBID> GetRecords(bool sortByName = false)
-    {
-        var list = _queries.Keys
+    public List<TweakDBID> GetRecords() =>
+        _queries.Keys
             .Select(x => (TweakDBID)x)
             .ToList();
-
-        if (sortByName)
-        {
-            list.Sort((a, b) => string.Compare(a.GetResolvedText(), b.GetResolvedText(), StringComparison.InvariantCulture));
-        }
-
-        return list;
-    }
 
     public List<TweakDBID> GetQuery(ulong hash)
     {

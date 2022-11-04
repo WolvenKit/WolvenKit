@@ -30,6 +30,7 @@
     <Color x:Key="WolvenKitYellowColor">#FFEA0A</Color>
     <Color x:Key="WolvenKitYellowShadowColor">#ABA108</Color>
     <Color x:Key="WolvenKitPurpleColor">#5760B3</Color>
+    <Color x:Key="WolvenKitDarkPinkColor">#AA336A</Color>
     <Color x:Key="WolvenKitTanColor">#D0A467</Color>
 
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
@@ -39,6 +40,7 @@
     <SolidColorBrush x:Key="WolvenKitYellow" Color="{StaticResource WolvenKitYellowColor}" />
     <SolidColorBrush x:Key="WolvenKitYellowShadow" Color="{StaticResource WolvenKitYellowShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitPurple" Color="{StaticResource WolvenKitPurpleColor}" />
+    <SolidColorBrush x:Key="WolvenKitDarkPink" Color="{StaticResource WolvenKitDarkPinkColor}" />
     <SolidColorBrush x:Key="WolvenKitTan" Color="{StaticResource WolvenKitTanColor}" />
 
     <SolidColorBrush x:Key="WolvenKitRed50" Color="#7FDF2935" />
@@ -1192,22 +1194,16 @@
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ScriptDirectoryTop">
+
+            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ResourceDirectoryTop">
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ScriptDirectoryTopOpen">
+            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ResourceDirectoryTopOpen">
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="TweakDirectoryTop">
-                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitPurple}" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="TweakDirectoryTopOpen">
-                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitPurple}" />
-            </DataTrigger>
+
             <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ClosedDirImageKey">
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />

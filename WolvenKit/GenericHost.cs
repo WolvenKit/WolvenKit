@@ -1,11 +1,15 @@
+using System.IO;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReactiveUI;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using WolvenKit.App;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Controllers;
@@ -13,6 +17,7 @@ using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
@@ -36,6 +41,13 @@ namespace WolvenKit
     {
         public static IHostBuilder CreateHostBuilder() => Host
                 .CreateDefaultBuilder()
+                .ConfigureAppConfiguration((hostingContext, configuration) =>
+                {
+                    var assemblyFolder = Path.GetDirectoryName(System.AppContext.BaseDirectory);
+
+                    configuration.SetBasePath(assemblyFolder);
+                    configuration.AddJsonFile("appsettings.json");
+                })
                 .ConfigureServices(services =>
                 {
                     services.UseMicrosoftDependencyResolver();
@@ -85,6 +97,8 @@ namespace WolvenKit
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
                     services.AddSingleton<IPluginService, PluginService>();
+
+                    services.AddSingleton<ScriptService>();
 
 
                     // register views
@@ -201,6 +215,9 @@ namespace WolvenKit
                     //services.AddSingleton<IViewFor<RecentlyUsedItemsViewModel>, RecentlyUsedItemsView>();
 
                     #endregion
+
+                    // bind options
+                    services.AddOptions<Globals>().Bind(hostContext.Configuration.GetSection("Globals"));
 
                 })
                 .UseEnvironment(Environments.Development);

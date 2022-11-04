@@ -122,8 +122,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
             var project = Locator.Current.GetService<IProjectManager>().ActiveProject as Cp77Project;
             return type switch
             {
-                EWolvenKitFile.TweakXl => project.TweakDirectory,
+                EWolvenKitFile.TweakXl => project.ResourcesDirectory,
                 EWolvenKitFile.Cr2w => project.ModDirectory,
+                EWolvenKitFile.ArchiveXl => project.ResourcesDirectory,
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
         }

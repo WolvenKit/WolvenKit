@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -34,7 +35,7 @@ using IRedString = WolvenKit.RED4.Types.IRedString;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public partial class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
+    public partial class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, WolvenKit.Functionality.Interfaces.INode<ReferenceSocket>
     {
         private static readonly List<string> s_hiddenProperties = new();
 
@@ -62,6 +63,8 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public string Descriptor { get; private set; }
         [Reactive] public bool IsDefault { get; private set; }
         [Reactive] public bool IsReadOnly { get; set; }
+
+        private const BindingFlags s_defaultLookup = BindingFlags.Instance | BindingFlags.Public;
 
         #region Constructors
 
@@ -147,14 +150,7 @@ namespace WolvenKit.ViewModels.Shell
                                     }
                                     else
                                     {
-                                        if (parentData is IRedRef)
-                                        {
-                                            Parent.Data = RedTypeManager.CreateRedType(parentData.RedType, Data);
-                                        }
-                                        else
-                                        {
-                                            throw new Exception();
-                                        }
+                                        Parent.Data = parentData is IRedRef ? RedTypeManager.CreateRedType(parentData.RedType, Data) : throw new Exception();
                                     }
                                     Tab.File.SetIsDirty(true);
                                     Parent.NotifyChain("Data");
@@ -204,16 +200,28 @@ namespace WolvenKit.ViewModels.Shell
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab, bool isReadOnly) : this(export, null, null, false, isReadOnly)
         {
-            _tab = tab;
-            IsExpanded = true;
-            //Data = export;
-            //if (!PropertiesLoaded)
-            //{
-            //CalculateProperties();
-            //}
-            //TVProperties.AddRange(Properties);
-            //this.RaisePropertyChanged("Data");
+            if (tab is not null)
+            {
+                _tab = tab;
+                RelativePath = _tab.File.RelativePath;
+                IsExpanded = true;
+                //Data = export;
+                //if (!PropertiesLoaded)
+                //{
+                //CalculateProperties();
+                //}
+                //TVProperties.AddRange(Properties);
+                //this.RaisePropertyChanged("Data");
+            }
+
             this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) => Tab.File.SetIsDirty(true));
+        }
+
+        public ChunkViewModel(IRedType export, ReferenceSocket socket) : this(export)
+        {
+            Socket = socket;
+            socket.Node = this;
+            RelativePath = socket.File;
         }
 
         #endregion Constructors
@@ -258,6 +266,8 @@ namespace WolvenKit.ViewModels.Shell
         public RDTDataViewModel Tab => _tab ?? Parent?.Tab;
 
         [Reactive] public IRedType Data { get; set; }
+
+        [Reactive] public CName RelativePath { get; set; }
 
         private IRedType _resolvedDataCache;
 
@@ -420,7 +430,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (sddb.Data is not null)
                 {
-                    var pis = sddb.Data.GetType().GetProperties();
+                    var pis = sddb.Data.GetType().GetProperties(s_defaultLookup);
                     foreach (var pi in pis)
                     {
                         var value = pi.GetValue(sddb.Data);
@@ -479,7 +489,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (db.Data is not null)
                 {
-                    var pis = db.Data.GetType().GetProperties();
+                    var pis = db.Data.GetType().GetProperties(s_defaultLookup);
                     foreach (var pi in pis)
                     {
                         var value = pi.GetValue(db.Data);
@@ -518,7 +528,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    var pis = Data.GetType().GetProperties();
+                    var pis = Data.GetType().GetProperties(s_defaultLookup);
                     foreach (var pi in pis)
                     {
                         var value = Data is not null ? pi.GetValue(Data) : null;
@@ -527,7 +537,8 @@ namespace WolvenKit.ViewModels.Shell
                             Properties.Add(new ChunkViewModel(irt, this, pi.Name, false, isreadonly));
                         }
                     }
-                    if (Data is worldNodeData sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+
+                    if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
                     {
                         try
                         {
@@ -824,7 +835,7 @@ namespace WolvenKit.ViewModels.Shell
                         }
                         else if (sddb.Data is not null)
                         {
-                            count += sddb.Data.GetType().GetProperties().Count();
+                            count += sddb.Data.GetType().GetProperties(s_defaultLookup).Count();
                         }
                     }
                     else if (ResolvedData is SharedDataBuffer sdb)
@@ -878,7 +889,7 @@ namespace WolvenKit.ViewModels.Shell
                         }
                         else
                         {
-                            var pis = Data.GetType().GetProperties();
+                            var pis = Data.GetType().GetProperties(s_defaultLookup);
                             count += pis.Count();
                         }
                         if (Data is worldNodeData)
@@ -1065,8 +1076,7 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
-
-            if (Data is worldNodeData sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+            if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
             {
                 Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].Chunk.DebugName}";
                 return;
@@ -1140,9 +1150,10 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         if (list.Files[i].RootChunk == Data)
                         {
-                            if (mesh.MaterialEntries.Count > i)
+                            var entry = mesh.MaterialEntries.FirstOrDefault(x => x.IsLocalInstance && x.Index == i);
+                            if (entry != null)
                             {
-                                Descriptor = mesh.MaterialEntries[i].Name;
+                                Descriptor = entry.Name;
                             }
                             break;
                         }
@@ -1243,15 +1254,11 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "SymbolString";
                 }
-                if (PropertyType.IsAssignableTo(typeof(IRedArray)))
-                {
-                    return "SymbolArray";
-                }
-                if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
-                {
-                    return "SymbolEnum";
-                }
-                return PropertyType.IsAssignableTo(typeof(IRedRef))
+                return PropertyType.IsAssignableTo(typeof(IRedArray))
+                    ? "SymbolArray"
+                    : PropertyType.IsAssignableTo(typeof(IRedEnum))
+                    ? "SymbolEnum"
+                    : PropertyType.IsAssignableTo(typeof(IRedRef))
                     ? "FileSymlinkFile"
                     : PropertyType.IsAssignableTo(typeof(IRedBitField))
                     ? "SymbolEnum"
@@ -1403,7 +1410,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     innerType = innerType.GetGenericTypeDefinition();
                 }
-                
+
                 var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
                     .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
@@ -1520,7 +1527,7 @@ namespace WolvenKit.ViewModels.Shell
                 throw new Exception();
             }
 
-            entVisualControllerComponent vc = null; 
+            entVisualControllerComponent vc = null;
             var list = new CArray<entVisualControllerDependency>();
 
             foreach (var component in arr)
@@ -2117,14 +2124,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             try
             {
-                if (Data is IRedCloneable irc)
-                {
-                    RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
-                }
-                else
-                {
-                    RDTDataViewModel.CopiedChunk = Data;
-                }
+                RDTDataViewModel.CopiedChunk = Data is IRedCloneable irc ? (IRedType)irc.DeepCopy() : Data;
             }
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
@@ -2229,7 +2229,6 @@ namespace WolvenKit.ViewModels.Shell
             }
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
-
 
         public ICommand CopySelectionCommand { get; private set; }
         private bool CanCopySelection() => IsInArray;
@@ -2551,7 +2550,10 @@ namespace WolvenKit.ViewModels.Shell
                     if (prop.Data is not null && prop.Data.GetHashCode() == selectChild.GetHashCode())
                     {
                         prop.IsExpanded = true;
-                        Tab.SelectedChunk = prop;
+                        if (Tab is RDTDataViewModel dvm)
+                        {
+                            dvm.SelectedChunk = prop;
+                        }
                         break;
                     }
                 }
@@ -2559,5 +2561,26 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
+        // node stuff
+
+        [Reactive] public ReferenceSocket Socket { get; set; }
+
+        public IList<ReferenceSocket> Inputs
+        {
+            get => new List<ReferenceSocket>(new ReferenceSocket[] { Socket });
+            set
+            {
+                ;
+            }
+        }
+
+        [Reactive] public IList<ReferenceSocket> Outputs { get; set; } = new ObservableCollection<ReferenceSocket>();
+
+        [Reactive] public System.Windows.Point Location { get; set; }
+
+        public ICommand OpenSelfCommand { get; private set; }
+        private bool CanOpenSelf() => RelativePath != CName.Empty && _tab == null;
+        private void ExecuteOpenSelf() => Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
     }
 }

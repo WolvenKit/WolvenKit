@@ -85,9 +85,9 @@ namespace WolvenKit.Functionality.Services
         /// <summary>
         /// initial refresh
         /// </summary>
-        public async Task RefreshAsync(EditorProject proj) => await Task.Run(() => DetectProjectFiles(proj));
+        public async Task RefreshAsync(Cp77Project proj) => await Task.Run(() => DetectProjectFiles(proj));
 
-        private void DetectProjectFiles(EditorProject proj)
+        private void DetectProjectFiles(Cp77Project proj)
         {
             var allFiles = Directory
                     .GetFileSystemEntries(proj.ProjectDirectory, "*", SearchOption.AllDirectories)
@@ -181,7 +181,7 @@ namespace WolvenKit.Functionality.Services
                 return;
             }
 
-            bool newIsTempFile = Path.GetExtension(e.Name).ToUpper().Equals(".TMP", StringComparison.Ordinal) ||
+            var newIsTempFile = Path.GetExtension(e.Name).ToUpper().Equals(".TMP", StringComparison.Ordinal) ||
                                  Path.GetExtension(e.Name).ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal);
 
             switch (e.ChangeType)
@@ -191,7 +191,7 @@ namespace WolvenKit.Functionality.Services
                     var key = FileModel.GenerateKey(e.OldFullPath, _projectManager.ActiveProject);
                     _files.RemoveKey(key);
 
-                    if(!newIsTempFile)
+                    if (!newIsTempFile)
                     {
                         _files.AddOrUpdate(new FileModel(e.FullPath, _projectManager.ActiveProject));
                     }
