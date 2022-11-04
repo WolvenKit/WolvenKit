@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using WolvenKit.Core.Interfaces;
-using System.Threading;
 
 namespace WolvenKit.Modkit.Scripting;
 
@@ -53,8 +52,6 @@ public class ScriptService : INotifyPropertyChanged
             _mainEngine.DocumentSettings.SearchPath = searchPath;
         }
 
-        _mainEngine.AddHostType(typeof(Thread));
-        _mainEngine.AddHostType(typeof(Task));
         _mainEngine.AddHostType(typeof(JavaScriptExtensions));
 
         _mainEngine.AddHostObject("logger", _loggerService);
