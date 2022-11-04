@@ -42,6 +42,11 @@
                 Command="{Binding RunCommand}"
                 CommandParameter="{Binding Document.Text}"
                 Header="Run" />
+            <MenuItem
+                Height="25"
+                Padding="6,0,6,3"
+                Command="{Binding StopCommand}"
+                Header="Stop" />
         </Menu>
 
         <avalonedit:TextEditor

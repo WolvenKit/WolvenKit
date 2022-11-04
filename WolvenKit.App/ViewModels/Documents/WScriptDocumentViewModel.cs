@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Utils;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App.Helpers;
@@ -33,6 +35,13 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
         _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService) } };
         GenerateCompletionData();
+
+        this.WhenAnyValue(x => x._scriptService.IsRunning)
+            .Subscribe(_ =>
+            {
+                RunCommand.NotifyCanExecuteChanged();
+                StopCommand.NotifyCanExecuteChanged();
+            });
     }
 
     [Reactive] public TextDocument Document { get; set; }
@@ -41,13 +50,21 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     [Reactive] public string IsReadOnlyReason { get; set; }
     public Dictionary<string, List<(string name, string desc)>> CompletionData { get; } = new();
 
-    [RelayCommand]
-    private Task Run()
+    [RelayCommand(CanExecute = nameof(CanRun))]
+    private async void Run()
     {
         var code = Document.Text;
 
-        return Task.Run(() => _scriptService.Execute(code, _hostObjects, ISettingsManager.GetWScriptDir()));
+        await _scriptService.ExecuteAsync(code, _hostObjects, ISettingsManager.GetWScriptDir());
     }
+    private bool CanRun() => !_scriptService.IsRunning;
+
+    [RelayCommand(CanExecute = nameof(CanStop))]
+    private void Stop()
+    {
+        _scriptService.Stop();
+    }
+    private bool CanStop() => _scriptService.IsRunning;
 
     private void GenerateCompletionData()
     {
