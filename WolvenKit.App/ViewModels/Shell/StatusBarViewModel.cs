@@ -74,7 +74,7 @@ namespace WolvenKit.ViewModels.Shell
                 switch (s)
                 {
                     case EStatus.Running:
-                        BarColor = Brushes.Orange;
+                        BarColor = Brushes.DarkOrange;
                         break;
                     case EStatus.Ready:
                         BarColor = (SolidColorBrush)new BrushConverter().ConvertFromString("#951C2D");

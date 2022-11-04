@@ -11,6 +11,7 @@ using System.Reactive.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
@@ -70,16 +71,11 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IProgressService<double> _progressService;
         private readonly IWatcherService _watcherService;
         private readonly IGameControllerFactory _gameController;
-        private readonly MeshTools _meshTools;
         private readonly ISettingsManager _settingsManager;
         private readonly IArchiveManager _archiveManager;
         private readonly IPluginService _pluginService;
         private readonly Red4ParserService _parserService;
 
-        /// <summary>
-        /// Private NameOf Selected Item in Grid.
-        /// </summary>
-        private string _currentSelectionInGridName;
 
         /// <summary>
         /// Private Last Selected Item, Used for Selection Lock.
@@ -122,7 +118,6 @@ namespace WolvenKit.ViewModels.Tools
             IGameControllerFactory gameController,
             ISettingsManager settingsManager,
             IModTools modTools,
-            MeshTools meshTools,
             IArchiveManager archiveManager,
             IPluginService pluginService,
             Red4ParserService parserService) : base(ToolTitle)
@@ -135,7 +130,6 @@ namespace WolvenKit.ViewModels.Tools
             _gameController = gameController;
             _notificationService = notificationService;
             _settingsManager = settingsManager;
-            _meshTools = meshTools;
             _archiveManager = archiveManager;
             _pluginService = pluginService;
             _parserService = parserService;
@@ -251,6 +245,11 @@ namespace WolvenKit.ViewModels.Tools
         [Reactive] public bool SelectionLocked { get; set; } = false;
 
         [Reactive] public bool ShowAdvancedOptions { get; set; }
+
+        /// <summary>
+        /// Private NameOf Selected Item in Grid.
+        /// </summary>
+        private string _currentSelectionInGridName;
 
         /// <summary>
         /// Returns the name of current selected object in Import/Export Grid.
@@ -582,7 +581,7 @@ namespace WolvenKit.ViewModels.Tools
             _notificationService.Success($"Template has been copied to the selected items.");
         }
 
-        public bool IsProcessing { get; set; } = false;
+        [Reactive] public bool IsProcessing { get; set; } = false;
 
         /// <summary>
         /// Process all in Import / Export Grid Command.
@@ -594,46 +593,60 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         private async Task ExecuteProcessAll()
         {
-            var success = false;
             IsProcessing = true;
+            _watcherService.IsSuspended = true;
+            var progress = 0;
+            _progressService.Report(0);
+
+            var total = 0;
+            var sucessful = 0;
 
             if (IsImportsSelected)
             {
-                var wavs = new List<string>();
-                // split up wavs
-                var toBeImported = ImportableItems.ToList();
+                var toBeImported = ImportableItems.Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
                 foreach (var item in toBeImported)
                 {
-                    if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
+                    if (await Task.Run(() => ImportSingleTask(item)))
                     {
-                        wavs.Add(item.FullName);
+                        sucessful++;
                     }
-                    else
-                    {
-                        success = await ImportSingle(item);
-                    }
+
+                    Interlocked.Increment(ref progress);
+                    _progressService.Report(progress / (float)toBeImported.Count);
                 }
 
-                if (wavs.Count > 0)
-                {
-                    success = await ImportWavs(wavs);
-                }
+                await ImportWavs(ImportableItems
+                    .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
+                    .Select(x => x.FullName)
+                    .ToList()
+                    );
             }
+
             if (IsExportsSelected)
             {
                 var toBeExported = ExportableItems.ToList();
+                total = toBeExported.Count;
                 foreach (var item in toBeExported)
                 {
-                    success = await ExportSingleAsync(item);
+                    if (await Task.Run(() => ExportSingle(item)))
+                    {
+                        sucessful++;
+                    }
+
+                    Interlocked.Increment(ref progress);
+                    _progressService.Report(progress / (float)total);
                 }
             }
 
             IsProcessing = false;
+            _progressService.IsIndeterminate = true;
 
-            if (success)
-            {
-                _notificationService.Success($"Files have been processed and are available in the Project Explorer");
-            }
+            _watcherService.IsSuspended = false;
+            await _watcherService.RefreshAsync(_projectManager.ActiveProject);
+
+            _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+            _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+            _progressService.Completed();
         }
 
         private Task<bool> ImportWavs(List<string> wavs)
@@ -656,7 +669,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Import Single item
         /// </summary>
         /// <param name="item"></param>
-        private Task<bool> ImportSingle(ImportableItemViewModel item)
+        private Task<bool> ImportSingleTask(ImportableItemViewModel item)
         {
             if (_gameController.GetController() is not RED4Controller cp77Controller)
             {
@@ -694,8 +707,6 @@ namespace WolvenKit.ViewModels.Tools
 
             return Task.FromResult(false);
         }
-
-        private Task<bool> ExportSingleAsync(ExportableItemViewModel item) => Task.Run(() => ExportSingle(item));
 
         /// <summary>
         /// Export Single Item
@@ -765,59 +776,60 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         private async Task ExecuteProcessSelected()
         {
-            var success = false;
-
             IsProcessing = true;
-            _progressService.IsIndeterminate = true;
-            try
+            _watcherService.IsSuspended = true;
+            var progress = 0;
+            _progressService.Report(0);
+
+            var total = 0;
+            var sucessful = 0;
+
+            if (IsImportsSelected)
             {
-                if (IsImportsSelected)
+                var toBeImported = ImportableItems.Where(_ => _.IsChecked).Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
+                total = toBeImported.Count;
+                foreach (var item in toBeImported)
                 {
-                    var wavs = new List<string>();
-                    // split up wavs
-                    var toBeConverted = ImportableItems.Where(_ => _.IsChecked).ToList();
-                    foreach (var item in toBeConverted)
+                    if (await Task.Run(() => ImportSingleTask(item)))
                     {
-                        if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
-                        {
-                            wavs.Add(item.FullName);
-                        }
-                        else
-                        {
-                            success = await ImportSingle(item);
-                        }
+                        sucessful++;
                     }
 
-                    if (wavs.Count > 0)
-                    {
-                        success = await ImportWavs(wavs);
-                    }
-                }
-                if (IsExportsSelected)
-                {
-                    var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
-                    foreach (var item in toBeConverted)
-                    {
-                        success = await ExportSingleAsync(item);
-                    }
+                    Interlocked.Increment(ref progress);
+                    _progressService.Report(progress / (float)total);
                 }
 
-                if (success)
+                await ImportWavs(ImportableItems.Where(_ => _.IsChecked)
+                    .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
+                    .Select(x => x.FullName)
+                    .ToList()
+                    );
+            }
+
+            if (IsExportsSelected)
+            {
+                var toBeExported = ExportableItems.Where(_ => _.IsChecked).ToList();
+                total = toBeExported.Count;
+                foreach (var item in toBeExported)
                 {
-                    _notificationService.Success($"Files have been processed and are available in the Project Explorer");
-                    _loggerService.Success("Files have been processed and are available in the Project Explorer");
+                    if (await Task.Run(() => ExportSingle(item)))
+                    {
+                        sucessful++;
+                    }
+
+                    Interlocked.Increment(ref progress);
+                    _progressService.Report(progress / (float)toBeExported.Count);
                 }
             }
-            catch (Exception e)
-            {
-                _notificationService.Error(e.Message);
-                _loggerService.Error(e.Message);
-            }
-            finally
-            {
-                IsProcessing = false;
-                _progressService.IsIndeterminate = false;
-            }
+
+            IsProcessing = false;
+
+            _watcherService.IsSuspended = false;
+            await _watcherService.RefreshAsync(_projectManager.ActiveProject).ContinueWith((result) => _progressService.IsIndeterminate = false);
+
+            _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+            _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+            _progressService.Completed();
         }
 
         /// <summary>
