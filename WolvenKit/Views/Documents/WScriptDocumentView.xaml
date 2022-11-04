@@ -61,13 +61,13 @@
             x:Name="ScriptTextEditor"
             Grid.Row="1"
             Margin="0"
-            Background="White"
+            Background="{StaticResource ContentBackground}"
             Document="{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             FontFamily="Consolas"
             FontSize="10pt"
-            Foreground="Black"
+            Foreground="{StaticResource ContentForeground}"
             ShowLineNumbers="True"
-            SyntaxHighlighting="JavaScript" />
+            SyntaxHighlighting="JavaScript DarkMode" />
 
     </Grid>
 </reactiveUi:ReactiveUserControl>
