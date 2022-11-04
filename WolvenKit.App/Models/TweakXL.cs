@@ -228,9 +228,194 @@ namespace WolvenKit.Models
             return result;
         }
 
+        private void WriteCName(IEmitter emitter, string property, CName cName)
+        {
+            if (!cName.Equals(CName.Empty))
+            {
+                emitter.Emit(new Scalar(property));
+                emitter.Emit(new Scalar(cName.GetResolvedText()));
+            }
+        }
+
+        private void WriteTweakDBID(IEmitter emitter, string property, TweakDBID tweakDBID)
+        {
+            if (tweakDBID.Length > 0)
+            {
+                emitter.Emit(new Scalar(property));
+                emitter.Emit(new Scalar(tweakDBID.GetResolvedText()));
+            }
+        }
+        private void WriteREDRaRef(IEmitter emitter, string property, IRedResourceAsyncReference raRef)
+        {
+            emitter.Emit(new Scalar(property));
+            if (raRef.IsSet)
+                emitter.Emit(new Scalar(raRef.DepotPath));
+            else
+                emitter.Emit(new Scalar(string.Empty));
+        }
+
+        private void WriteLocKey(IEmitter emitter, string property, gamedataLocKeyWrapper locKeyWrapper)
+        {
+            if (locKeyWrapper.Key != 0)
+            {
+                var loc = Locator.Current.GetService<LocKeyService>().GetEntry(locKeyWrapper.Key);
+                emitter.Emit(new Scalar(property));
+                emitter.Emit(new Scalar($"LocKey#{loc.PrimaryKey}"));
+            }
+        }
+
+        private void WriteVector2(IEmitter emitter, string property, Vector2 vector2)
+        {
+            emitter.Emit(new Scalar(property));
+            emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
+            emitter.Emit(new Scalar("x"));
+            emitter.Emit(new Scalar(vector2.X.ToString()));
+            emitter.Emit(new Scalar("y"));
+            emitter.Emit(new Scalar(vector2.Y.ToString()));
+            emitter.Emit(new MappingEnd());
+        }
+
+        private void WriteVector3(IEmitter emitter, string property, Vector3 vector3)
+        {
+            emitter.Emit(new Scalar(property));
+            emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
+            emitter.Emit(new Scalar("x"));
+            emitter.Emit(new Scalar($"{vector3.X}"));
+            emitter.Emit(new Scalar("y"));
+            emitter.Emit(new Scalar($"{vector3.Y}"));
+            emitter.Emit(new Scalar("z"));
+            emitter.Emit(new Scalar($"{vector3.Z}"));
+            emitter.Emit(new MappingEnd());
+        }
+
+        private void WriteREDArray(IEmitter emitter, string property, IRedArray redArray)
+        {
+            emitter.Emit(new Scalar(property));
+            if (redArray.Count > 0)
+            {
+                emitter.Emit(new SequenceStart(null, null, false, SequenceStyle.Block));
+                foreach (var redType in redArray)
+                {
+                    switch (redType)
+                    {
+                        case CName cName:
+                            if (!cName.Equals(CName.Empty))
+                                emitter.Emit(new Scalar(cName.GetResolvedText()));
+                            break;
+                        case TweakDBID tweakDBID:
+                            if (tweakDBID.Length > 0)
+                                emitter.Emit(new Scalar(tweakDBID.GetResolvedText()));
+                            break;
+                        case IRedResourceReference raRef:
+                            if (raRef.IsSet)
+                                emitter.Emit(new Scalar(raRef.DepotPath));
+                            else
+                                emitter.Emit(new Scalar(string.Empty));
+                            break;
+                        case Vector2 vector2:
+                            emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
+                            emitter.Emit(new Scalar("x"));
+                            emitter.Emit(new Scalar(vector2.X.ToString()));
+                            emitter.Emit(new Scalar("y"));
+                            emitter.Emit(new Scalar(vector2.Y.ToString()));
+                            emitter.Emit(new MappingEnd());
+                            break;
+                        case Vector3 vector3:
+                            emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
+                            emitter.Emit(new Scalar("x"));
+                            emitter.Emit(new Scalar($"{vector3.X}"));
+                            emitter.Emit(new Scalar("y"));
+                            emitter.Emit(new Scalar($"{vector3.Y}"));
+                            emitter.Emit(new Scalar("z"));
+                            emitter.Emit(new Scalar($"{vector3.Z}"));
+                            emitter.Emit(new MappingEnd());
+                            break;
+                        case gamedataLocKeyWrapper locKeyWrapper:
+                            var loc = Locator.Current.GetService<LocKeyService>().GetEntry(locKeyWrapper.Key);
+                            emitter.Emit(new Scalar($"LocKey#{loc.PrimaryKey}"));
+                            break;
+                        default:
+                            emitter.Emit(new Scalar(redType.ToString()));
+                            break;
+                    }
+                }
+                emitter.Emit(new SequenceEnd());
+            }
+            else
+            {
+                // emit an empty array
+                emitter.Emit(new SequenceStart(null, null, false, SequenceStyle.Flow));
+                emitter.Emit(new SequenceEnd());
+            }
+        }
+
+        // TODO: Write a ChainedEventEmitter for the style switching
+        // TODO: Maybe consider using WithTagMapping for "!append", "!append-once", etc.
         public void WriteYaml(IEmitter emitter, object value, Type type)
         {
+            emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
 
+            foreach (var txlEntry in (TweakXLFile)value)
+            {
+                emitter.Emit(new Scalar(null, txlEntry.ID));
+                emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
+
+                // for now we're only assuming one "tweak" per file during serialization. is this correct?
+                if (txlEntry is TweakXL txl)
+                {
+                    // iterate over the properties
+                    foreach (var property in txl.GetPropertyNames())
+                    {
+                        // skip ID since it's already written as the map start
+                        if (property == "ID")
+                            continue;
+
+                        if (property == "Type")
+                        {
+                            emitter.Emit(new Scalar("$type"));
+                            emitter.Emit(new Scalar(txl.GetPropertyValue(property).ToString()));
+                            continue;
+                        }
+
+                        // TODO: Explicit or implicit formatting?
+                        var propertyValue = txl.GetPropertyValue(property);
+                        switch (propertyValue)
+                        {
+                            case CName cName:
+                                WriteCName(emitter, property, cName);
+                                break;
+                            case TweakDBID tweakDBID:
+                                WriteTweakDBID(emitter, property, tweakDBID);
+                                break;
+                            case IRedResourceAsyncReference raRef:
+                                WriteREDRaRef(emitter, property, raRef);
+                                break;
+                            case Vector2 vector2:
+                                WriteVector2(emitter, property, vector2);
+                                break;
+                            case Vector3 vector3:
+                                WriteVector3(emitter, property, vector3);
+                                break;
+                            case gamedataLocKeyWrapper locKeyWrapper:
+                                WriteLocKey(emitter, property, locKeyWrapper);
+                                break;
+                            // CArray of the types
+                            case IRedArray redArray:
+                                WriteREDArray(emitter, property, redArray);
+                                break;
+                            // TODO: EulerAngles & Quaterion
+                            // CString, CFloat, CBool, CInt32
+                            default:
+                                emitter.Emit(new Scalar(property));
+                                emitter.Emit(new Scalar(propertyValue.ToString()));
+                                break;
+                        }
+
+                    }
+                }
+                emitter.Emit(new MappingEnd());
+            }
+            emitter.Emit(new MappingEnd());
         }
 
         // eventually ITweakXLItem
@@ -335,7 +520,14 @@ namespace WolvenKit.Models
 
                         if (propertyName == "$type")
                         {
-                            tweak.Type = "gamedata" + propertyValue + "_Record";
+                            // handle the various forms of "$type"
+                            var recordTypeStr = propertyValue.ToString();
+                            if (!recordTypeStr.EndsWith("_Record"))
+                                recordTypeStr += "_Record";
+                            if (!recordTypeStr.StartsWith("gamedata"))
+                                recordTypeStr = "gamedata" + recordTypeStr;
+
+                            tweak.Type = recordTypeStr;
                         }
                         else if (propertyName == "$base")
                         {

@@ -34,7 +34,8 @@ namespace WolvenKit.Common
 
     public enum ETweakExtension
     {
-        yaml
+        yaml,
+        yml
     }
 
     public enum EUpdateChannel

@@ -95,6 +95,7 @@ namespace WolvenKit.ViewModels.Documents
 
             try
             {
+                // if we're in a text view, use a normal StreamWriter, else use the CR2W one
                 if (file.Value is RDTTextViewModel textViewModel)
                 {
                     using var tw = new StreamWriter(fs);

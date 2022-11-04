@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Splat;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
@@ -16,12 +18,30 @@ namespace WolvenKit.ViewModels.Documents
     public class TweakXLDocumentViewModel : RedDocumentViewModel
     {
         private TweakDBService _tdbs;
+        private readonly ISettingsManager _settingsManager = Locator.Current.GetService<ISettingsManager>();
+        
 
-        public TweakXLDocumentViewModel(string path) : base(path) => _tdbs = Locator.Current.GetService<TweakDBService>();
+        public TweakXLDocumentViewModel(string path) : base(path)
+        {
+            _tdbs = Locator.Current.GetService<TweakDBService>();
+        }
 
-        public override bool OpenFile(string path)
+        private Task LoadTweakDB()
+        {
+            if (_tdbs.IsLoaded)
+            {
+                return Task.CompletedTask;
+            }
+
+            return _tdbs.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+        }
+
+        public override async Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;
+
+            // make sure TweakDB is loaded before we open the TweakXL file
+            await Task.WhenAll(LoadTweakDB());
 
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {

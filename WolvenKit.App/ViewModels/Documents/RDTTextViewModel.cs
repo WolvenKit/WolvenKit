@@ -26,19 +26,21 @@ namespace WolvenKit.ViewModels.Documents
         {
             Header = "Source YAML";
             File = file;
+            FilePath = file.FilePath;
 
             SetupText(stream);
 
             this.WhenAnyPropertyChanged(nameof(IsDirty))
                 .Do(x =>
                 {
-                    File.SetIsDirty(IsDirty);
+                    x.File.SetIsDirty(IsDirty);
                 })
                 .Subscribe();
         }
 
         private void SetupText(Stream stream)
         {
+            // register the custom highlighting for YAML files
             using (var xshdStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.YAML.xhsd"))
             {
                 var xmlreader = XmlReader.Create(xshdStream);
@@ -58,8 +60,8 @@ namespace WolvenKit.ViewModels.Documents
             using var sr = new StreamReader(stream);
             Document = new TextDocument(sr.ReadToEnd());
 
-            var ext = Path.GetExtension(FilePath);
-            var def = HighlightingManager.Instance.GetDefinitionByExtension("yaml");
+            var ext = Path.GetExtension(FilePath).Substring(1);
+            var def = HighlightingManager.Instance.GetDefinitionByExtension(ext);
             if (def != null)
             {
                 HighlightingDefinition = def;
