@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
@@ -168,7 +169,7 @@
             </Style>
         </Grid.Resources>
 
-        <Menu Background="Transparent">
+        <others:ScriptableMenu Background="Transparent" ScriptingName="MenuBarMain">
             <!--  Home  -->
             <MenuItem
                 x:Name="HomeButton"
@@ -762,7 +763,7 @@
 
             </MenuItem>
 
-        </Menu>
+        </others:ScriptableMenu>
 
     </Grid>
 

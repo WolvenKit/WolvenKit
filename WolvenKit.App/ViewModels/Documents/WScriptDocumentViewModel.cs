@@ -31,7 +31,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         Extension = "wsc";
 
         _loggerService = Locator.Current.GetService<ILoggerService>();
-        _scriptService = Locator.Current.GetService<ScriptService>();
+        _scriptService = Locator.Current.GetService<ExtendedScriptService>();
 
         _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService) } };
         GenerateCompletionData();
