@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +10,11 @@ namespace WolvenKit.Views.Others;
 
 public class ScriptableMenuItem : MenuItem, IScriptableControl
 {
+    private ExtendedScriptService _scriptService;
+
+    private readonly List<UIElement> _scriptedElements = new();
+    private bool _disposed;
+
     public static readonly DependencyProperty ScriptingNameProperty = DependencyProperty.Register(
         nameof(ScriptingName), typeof(string), typeof(ScriptableMenuItem), new PropertyMetadata(default));
 
@@ -25,21 +31,65 @@ public class ScriptableMenuItem : MenuItem, IScriptableControl
             throw new Exception("ScriptingName must be explicitly set!");
         }
 
-        var scriptService = Locator.Current.GetService<ExtendedScriptService>();
-        if (scriptService == null)
+        _scriptService = Locator.Current.GetService<ExtendedScriptService>();
+        if (_scriptService == null)
         {
             throw new Exception("ExtendedScriptService could not be found!");
         }
 
-        var scriptEntries = scriptService.GetScripts(ScriptingName);
+        _scriptService.RegisterControl(this);
+
+        base.OnInitialized(e);
+    }
+
+    public void AddScriptedElements(List<ScriptEntry> scriptEntries)
+    {
         foreach (var scriptEntry in scriptEntries)
         {
             var menuItem = new MenuItem { Header = scriptEntry.Name };
             menuItem.Click += (_, _) => scriptEntry.Execute();
 
             Items.Add(menuItem);
+            _scriptedElements.Add(menuItem);
         }
-
-        base.OnInitialized(e);
     }
+
+    public void RemoveScriptedElements()
+    {
+        foreach (var element in _scriptedElements)
+        {
+            Items.Remove(element);
+        }
+        _scriptedElements.Clear();
+    }
+
+    #region IDisposable
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                // Dispose managed resources.
+            }
+
+            _scriptService?.UnRegisterControl(this);
+
+            _disposed = true;
+        }
+    }
+
+    ~ScriptableMenuItem()
+    {
+        Dispose(disposing: false);
+    }
+
+    #endregion IDisposable
 }

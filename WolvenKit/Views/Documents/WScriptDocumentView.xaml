@@ -41,12 +41,20 @@
                 Padding="6,0,6,3"
                 Command="{Binding RunCommand}"
                 CommandParameter="{Binding Document.Text}"
-                Header="Run" />
+                Header="Run"
+                Visibility="{Binding IsNormalScript, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <MenuItem
                 Height="25"
                 Padding="6,0,6,3"
                 Command="{Binding StopCommand}"
-                Header="Stop" />
+                Header="Stop"
+                Visibility="{Binding IsNormalScript, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <MenuItem
+                Height="25"
+                Padding="6,0,6,3"
+                Command="{Binding ReloadUICommand}"
+                Header="Reload UI"
+                Visibility="{Binding IsUIScript, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Menu>
 
         <avalonedit:TextEditor

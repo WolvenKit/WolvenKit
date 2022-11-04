@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.V8;
 using WolvenKit.Core.Interfaces;
@@ -14,6 +13,8 @@ namespace WolvenKit.Functionality.Services;
 public class ExtendedScriptService : ScriptService
 {
     private readonly Dictionary<string, List<ScriptEntry>> _uiScripts = new();
+    private readonly Dictionary<string, IScriptableControl> _uiControls = new();
+
     private V8ScriptEngine _uiEngine;
 
     public ExtendedScriptService(ILoggerService loggerService = null) : base(loggerService)
@@ -21,7 +22,34 @@ public class ExtendedScriptService : ScriptService
         RefreshUIScripts();
     }
 
-    public List<ScriptEntry> GetScripts(string name)
+    public void RegisterControl(IScriptableControl scriptableControl)
+    {
+        if (_uiControls.ContainsKey(scriptableControl.ScriptingName))
+        {
+            if (_uiControls[scriptableControl.ScriptingName].Equals(scriptableControl))
+            {
+                return;
+            }
+
+            throw new ArgumentException($"An control with the ScriptingName of {scriptableControl.ScriptingName} is already registered");
+        }
+
+        _uiControls.Add(scriptableControl.ScriptingName, scriptableControl);
+
+        if (_uiScripts.TryGetValue(scriptableControl.ScriptingName, out var lst))
+        {
+            scriptableControl.AddScriptedElements(lst);
+        }
+    }
+
+    public void UnRegisterControl(IScriptableControl scriptableControl)
+    {
+        scriptableControl.RemoveScriptedElements();
+
+        _uiControls.Remove(scriptableControl.ScriptingName);
+    }
+
+    public List<ScriptEntry> GetScripts(UIElement caller, string name)
     {
         if (_uiScripts.TryGetValue(name, out var lst))
         {
@@ -31,8 +59,13 @@ public class ExtendedScriptService : ScriptService
         return new List<ScriptEntry>();
     }
 
-    private void RefreshUIScripts()
+    private void UnloadScripts()
     {
+        foreach (var (name, scriptableControl) in _uiControls)
+        {
+            scriptableControl.RemoveScriptedElements();
+        }
+
         if (_uiEngine != null)
         {
             _uiScripts.Clear();
@@ -40,8 +73,13 @@ public class ExtendedScriptService : ScriptService
             _uiEngine.Dispose();
             _uiEngine = null;
         }
+    }
 
-        _uiEngine = GetScriptEngine();
+    public void RefreshUIScripts()
+    {
+        UnloadScripts();
+
+        _uiEngine = GetUIScriptEngine();
 
         foreach (var file in Directory.GetFiles(ISettingsManager.GetWScriptDir(), "*.wscript"))
         {
@@ -78,9 +116,17 @@ public class ExtendedScriptService : ScriptService
                 }
             }
         }
+
+        foreach (var (name, scriptableControl) in _uiControls)
+        {
+            if (_uiScripts.TryGetValue(scriptableControl.ScriptingName, out var lst))
+            {
+                scriptableControl.AddScriptedElements(lst);
+            }
+        }
     }
 
-    protected override V8ScriptEngine GetScriptEngine(Dictionary<string, object> hostObjects = null, string searchPath = null)
+    protected virtual V8ScriptEngine GetUIScriptEngine(Dictionary<string, object> hostObjects = null, string searchPath = null)
     {
         var engine = base.GetScriptEngine(hostObjects, searchPath);
 
