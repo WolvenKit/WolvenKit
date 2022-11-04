@@ -1294,6 +1294,8 @@ namespace WolvenKit.ViewModels.Shell
                 case ".yml":
                 case ".log":
                 case ".ini":
+                case ".xl":
+                case ".reds":
                     //case ".yaml":
                     ShellExecute();
                     break;

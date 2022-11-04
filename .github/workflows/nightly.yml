@@ -85,7 +85,7 @@ jobs:
     # tag this commit
     - name: Create Tag
       id: tag_version
-      uses: mathieudutour/github-tag-action@v6.1
+      uses: rfuzzo/github-tag-action@7b0316b3fb8aa236fdc20bee0614ea6ef99f4bf1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         default_bump: false

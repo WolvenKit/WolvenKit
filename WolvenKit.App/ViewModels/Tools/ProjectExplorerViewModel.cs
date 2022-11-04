@@ -489,7 +489,7 @@ namespace WolvenKit.ViewModels.Tools
                 var progress = 0;
                 _progressService.Report(0);
 
-                var files = Directory.GetFiles(SelectedItem.FullName, "*", SearchOption.AllDirectories).ToList();
+                var files = Directory.GetFiles(SelectedItem.FullName, "*.json", SearchOption.AllDirectories).ToList();
                 foreach (var file in files)
                 {
                     await ConvertFromTask(file);
@@ -516,7 +516,7 @@ namespace WolvenKit.ViewModels.Tools
                 return Task.CompletedTask;
             }
 
-            var modPath = Path.Combine(ActiveProject.ModDirectory, FileModel.GetRelativeName(SelectedItem.FullName, ActiveProject));
+            var modPath = Path.Combine(ActiveProject.ModDirectory, FileModel.GetRelativeName(file, ActiveProject));
             var outDirectoryPath = Path.GetDirectoryName(modPath);
             if (outDirectoryPath != null)
             {

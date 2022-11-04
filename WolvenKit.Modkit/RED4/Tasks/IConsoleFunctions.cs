@@ -10,7 +10,7 @@ namespace CP77Tools.Tasks
         public int UnbundleTask(FileSystemInfo[] path, DirectoryInfo outpath, string hash, string pattern, string regex,
             bool DEBUG_decompress = false);
         public Task<int> Cr2wTask(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
-            string regex, ETextConvertFormat format);
+            string regex, ETextConvertFormat format, bool print);
         public int ExportTask(FileSystemInfo[] path, DirectoryInfo outDir, EUncookExtension? uncookext, bool? flip,
             ECookedFileFormat[] forcebuffers);
         public Task<int> ImportTask(FileSystemInfo[] path, DirectoryInfo outDir, bool keep);
