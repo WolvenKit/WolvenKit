@@ -448,6 +448,8 @@ namespace WolvenKit.ViewModels.Tools
                     progress++;
                     _progressService.Report(progress / (float)files.Count);
                 }
+
+                _progressService.Completed();
             }
             else
             {
@@ -497,6 +499,8 @@ namespace WolvenKit.ViewModels.Tools
                     progress++;
                     _progressService.Report(progress / (float)files.Count);
                 }
+
+                _progressService.Completed();
             }
             else
             {

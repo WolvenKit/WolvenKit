@@ -47,8 +47,6 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Tools;
-using static Microsoft.WindowsAPICodePack.PortableDevices.PropertySystem.Properties;
-using static WolvenKit.Common.Wcc.Wcc_lite;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
@@ -1418,7 +1416,12 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public void SetStatusReady() => Status = EAppStatus.Loaded;
+        public void SetStatusReady()
+        {
+            Status = EAppStatus.Loaded;
+            _progressService.Completed();
+        }
+
         public void SetLaunchProfiles(ObservableCollection<LaunchProfileViewModel> launchProfiles)
         {
             _settingsManager.LaunchProfiles.Clear();

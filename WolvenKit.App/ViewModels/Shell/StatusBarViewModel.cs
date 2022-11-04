@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Linq;
+using System.Windows.Media;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
@@ -67,6 +68,21 @@ namespace WolvenKit.ViewModels.Shell
                 .ToProperty(this, x => x.IsIndeterminate, out _isIndeterminate);
 
             _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => IsIndeterminate = b);
+            _ = _progressService.WhenAnyValue(x => x.Status).Subscribe(s =>
+            {
+                Status = s.ToString();
+                switch (s)
+                {
+                    case EStatus.Running:
+                        BarColor = Brushes.Orange;
+                        break;
+                    case EStatus.Ready:
+                        BarColor = (SolidColorBrush)new BrushConverter().ConvertFromString("#951C2D");
+                        break;
+                    default:
+                        break;
+                }
+            });
         }
 
         #endregion Constructors
@@ -74,8 +90,6 @@ namespace WolvenKit.ViewModels.Shell
         #region Properties
 
         public double Progress => _progress.Value;
-
-        //public bool IsIndeterminate => _isIndeterminate.Value; // TODO ???
 
         [Reactive] public bool IsIndeterminate { get; set; }
 
@@ -90,6 +104,9 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public string Status { get; set; } = "Ready";
 
         public object VersionNumber => _settingsManager.GetVersionNumber();
+
+
+        [Reactive] public Brush BarColor { get; set; } = Brushes.Black;
 
         #endregion Properties
 

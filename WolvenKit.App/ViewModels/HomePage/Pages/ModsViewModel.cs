@@ -132,6 +132,7 @@ namespace WolvenKit.ViewModels.HomePage
                 var result = await ProcessUtil.RunRedmodAsync(redmodPath, args, progress: _progressService);
 
                 _progressService.Report(1.0);
+                _progressService.Completed();
                 IsProcessing = false;
 
                 if (!result)

@@ -55,10 +55,7 @@ namespace System
         /// could be invoked concurrently with itself.
         /// </param>
         /// <exception cref="System.ArgumentNullException">The <paramref name="handler"/> is null (Nothing in Visual Basic).</exception>
-        public ProgressService(Action<T> handler) : this()
-        {
-            _handler = handler ?? throw new ArgumentNullException(nameof(handler));
-        }
+        public ProgressService(Action<T> handler) : this() => _handler = handler ?? throw new ArgumentNullException(nameof(handler));
 
         /// <summary>Raised for each reported progress value.</summary>
         /// <remarks>
@@ -81,6 +78,11 @@ namespace System
             var changedEvent = ProgressChanged;
             if (handler != null || changedEvent != null)
             {
+                if (value is double dbl)
+                {
+                    Status = dbl < 1.0 ? EStatus.Running : EStatus.Ready;
+                }
+
                 // Post the processing to the sync context.
                 // (If T is a value type, it will get boxed here.)
                 _synchronizationContext.Post(_invokeHandlers, value);
@@ -104,6 +106,17 @@ namespace System
             changedEvent?.Invoke(this, value);
         }
 
+        public void Completed()
+        {
+            if (typeof(T) == typeof(double) && 1.0 is T tt)
+            {
+                OnReport(tt);
+            }
+
+            IsIndeterminate = false;
+            Status = EStatus.Ready;
+        }
+
         private bool _isIndeterminate;
         public bool IsIndeterminate
         {
@@ -114,6 +127,22 @@ namespace System
                 if (value != _isIndeterminate)
                 {
                     _isIndeterminate = value;
+                    Status = _isIndeterminate ? EStatus.Running : EStatus.Ready;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private EStatus _status;
+        public EStatus Status
+        {
+            get => _status;
+
+            set
+            {
+                if (value != _status)
+                {
+                    _status = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -128,7 +157,7 @@ namespace System
     internal static class ProgressStatics
     {
         /// <summary>A default synchronization context that targets the ThreadPool.</summary>
-        internal static readonly SynchronizationContext DefaultContext = new SynchronizationContext();
+        internal static readonly SynchronizationContext DefaultContext = new();
     }
 
 }

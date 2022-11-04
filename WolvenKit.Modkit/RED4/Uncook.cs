@@ -331,6 +331,8 @@ namespace WolvenKit.Modkit.RED4
             }
             );
 
+            _progressService.Completed();
+
             foreach (var failed in failedList)
             {
                 _loggerService.Warning($"Failed to uncook {failed}.");

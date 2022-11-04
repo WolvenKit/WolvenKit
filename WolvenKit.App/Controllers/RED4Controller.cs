@@ -76,12 +76,16 @@ namespace WolvenKit.Functionality.Controllers
             if (!_initialized)
             {
                 _initialized = true;
+                _progressService.IsIndeterminate = true;
 
                 // load archives
                 await LoadArchiveManager();
 
                 // requires oodle
                 InitializeBk();
+
+                _progressService.IsIndeterminate = false;
+                _progressService.Completed();
             }
         }
 

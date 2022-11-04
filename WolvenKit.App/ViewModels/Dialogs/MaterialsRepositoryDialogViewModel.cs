@@ -226,6 +226,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
 
+                _progress.Completed();
                 _loggerService.Success($"{key}: Unbundled {fileCount} files.");
             }
 
@@ -300,6 +301,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 GC.WaitForPendingFinalizers();
                 GC.Collect();
 
+                _progress.Completed();
                 _loggerService.Success($"{key}: Uncooked {fileCount} files.");
             }
 
@@ -329,7 +331,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                         progress++;
                         _progress.Report(i / (float)total);
                     }
-                    _progress.Report(1.0);
+                    _progress.Completed();
                 });
             }
 

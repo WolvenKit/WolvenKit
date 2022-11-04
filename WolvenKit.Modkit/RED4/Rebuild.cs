@@ -295,6 +295,7 @@ namespace WolvenKit.Modkit.RED4
                 _progressService.Report(progress / (float)buffersDict.Count);
             }
 
+            _progressService.Completed();
             _loggerService.Info($"Rebuilt {buffersDict.Count - failsCount}/{buffersDict.Count} file(s)");
             return true;
 
