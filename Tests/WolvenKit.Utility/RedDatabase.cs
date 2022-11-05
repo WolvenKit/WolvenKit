@@ -57,7 +57,7 @@ namespace WolvenKit.Utility
                     }
                 });
 
-                importDict.Add(Path.GetFileName(archiveInfoDir) + ".archive", fileImports);
+                importDict.Add(Path.GetFileName(archiveInfoDir), fileImports);
             }
 
             using var db = new RedDBContext();

@@ -72,6 +72,36 @@ namespace WolvenKit.RED4.Archive.IO
 
                     cls.SetProperty(prop.RedName, value);
                 }
+
+                if (CollectData)
+                {
+                    if (prop.Name.Contains("Fact") && !prop.Name.Contains("Factor"))
+                    {
+                        if (value is CString str1)
+                        {
+                            DataCollection.RawStringList.Remove(str1);
+                            DataCollection.RawFactStrings.Add(str1);
+                        }
+
+                        if (value is CName str2 && str2.IsResolvable)
+                        {
+                            DataCollection.RawStringList.Remove(str2.GetResolvedText());
+                            DataCollection.RawFactStrings.Add(str2.GetResolvedText());
+                        }
+
+                        if (value is CArray<CName> arr1)
+                        {
+                            foreach (var cName in arr1)
+                            {
+                                if (cName.IsResolvable)
+                                {
+                                    DataCollection.RawStringList.Remove(cName.GetResolvedText());
+                                    DataCollection.RawFactStrings.Add(cName.GetResolvedText());
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -79,8 +109,14 @@ namespace WolvenKit.RED4.Archive.IO
         {
             if (header.version == 2 || header.version == 3)
             {
-                var length = _reader.ReadInt16();
-                return Encoding.UTF8.GetString(_reader.ReadBytes(length));
+                var result = Encoding.UTF8.GetString(_reader.ReadBytes(_reader.ReadInt16()));
+
+                if (CollectData)
+                {
+                    DataCollection.RawTweakStrings.Add(result);
+                }
+
+                return result;
             }
 
             if (header.version == 04)
@@ -219,21 +255,33 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override NodeRef ReadNodeRef()
         {
-            var length = _reader.ReadInt16();
-            return Encoding.UTF8.GetString(_reader.ReadBytes(length));
+            var result = Encoding.UTF8.GetString(_reader.ReadBytes(_reader.ReadInt16()));
+
+            if (CollectData)
+            {
+                DataCollection.RawStringList.Remove(result);
+                DataCollection.RawNodeRefs.Add(result);
+            }
+
+            return result;
         }
 
-        public override LocalizationString ReadLocalizationString() =>
-            new()
-            {
-                Unk1 = _reader.ReadUInt64(),
-                Value = ReadSimpleString()
-            };
+        public override LocalizationString ReadLocalizationString()
+        {
+            return new() { Unk1 = _reader.ReadUInt64(), Value = ReadSimpleString() };
+        }
 
         public string ReadSimpleString()
         {
-            var length = _reader.ReadUInt16();
-            return Encoding.UTF8.GetString(_reader.ReadBytes(length));
+            var result = Encoding.UTF8.GetString(_reader.ReadBytes(_reader.ReadUInt16()));
+
+            if (CollectData)
+            {
+                DataCollection.RawStringList.Remove(result);
+                DataCollection.RawUsedStrings.Add(result);
+            }
+
+            return result;
         }
 
         public override CString ReadCString() => ReadSimpleString();

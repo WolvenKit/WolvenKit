@@ -322,6 +322,9 @@ namespace WolvenKit.Utility
                     continue;
                 }
 
+                var dirPath = Path.Combine(resultDir, archive.Name);
+                Directory.CreateDirectory(dirPath);
+
                 Parallel.ForEach(archive.Files, pair =>
                 {
                     if (pair.Value is not FileEntry fileEntry)
@@ -329,7 +332,7 @@ namespace WolvenKit.Utility
                         return;
                     }
 
-                    var resultPath = Path.Combine(resultDir, fileEntry.NameHash64 + ".txt");
+                    var resultPath = Path.Combine(dirPath, fileEntry.NameHash64 + ".json");
                     if (existingFiles.TryRemove(resultPath, out _))
                     {
                         return;

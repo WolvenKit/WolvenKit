@@ -4,6 +4,7 @@ using System.Text;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO
 {
@@ -152,7 +153,24 @@ namespace WolvenKit.RED4.Archive.IO
             };
             if (Settings.ImportsAsHash)
             {
+                if (r.size != 8)
+                {
+                    throw new TodoException("ReadAsHash size != 8");
+                }
+
                 import.DepotPath = _reader.ReadUInt64();
+
+                if (CollectData && import.DepotPath.IsResolvable)
+                {
+                    if (import.DepotPath.IsResolvable)
+                    {
+                        DataCollection.RawImportList.Add(import.DepotPath);
+                    }
+                    else
+                    {
+                        DataCollection.RawImportHashList.Add(import.DepotPath);
+                    }
+                }
             }
             else
             {

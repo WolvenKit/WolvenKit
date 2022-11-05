@@ -327,7 +327,18 @@ namespace WolvenKit.RED4.Archive.IO
                     }
                 }
 
+                if (reader is CR2WListReader lReader)
+                {
+                    lReader.CollectData = CollectData;
+                }
+
                 reader.ReadBuffer(buffer);
+
+                if (reader is CR2WListReader { CollectData: true } lReader2)
+                {
+                    DataCollection.Buffers ??= new List<DataCollection>();
+                    DataCollection.Buffers.Add(lReader2.DataCollection);
+                }
 
                 if (reader is Red4Reader { CollectData: true } red4Reader2)
                 {
