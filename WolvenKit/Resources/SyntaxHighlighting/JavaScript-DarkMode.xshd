@@ -4,8 +4,8 @@
 <SyntaxDefinition name="JavaScript DarkMode" extensions=".wscript" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
 	<Color name="Digits" foreground="#FF00C0FF" exampleText="3.14" />
 	<Color name="Comment" foreground="#FF55FF00" exampleText="// comment" />
-	<Color name="String" foreground="#FFFFEF00" exampleText="var text = &quot;Hello, World!&quot;;" />
-	<Color name="Character" foreground="#FFFFFF00" exampleText="var char = 'a';" />
+	<Color name="String" foreground="#FFFFCF00" exampleText="var text = &quot;Hello, World!&quot;;" />
+	<Color name="Character" foreground="#FFFFCF00" exampleText="var char = 'a';" />
 	<Color name="Regex" foreground="#FF00A0FF" exampleText="/abc/m" />
 	<Color name="JavaScriptKeyWords" foreground="#FF00A0FF" exampleText="return myVariable;" />
 	<Color name="JavaScriptIntrinsics" foreground="#FF0080FF" exampleText="Math.random()" />
@@ -51,6 +51,9 @@
 			<Word>goto</Word>
 			<Word>implements</Word>
 			<Word>import</Word>
+			<Word>as</Word>
+			<Word>of</Word>
+			<Word>from</Word>
 			<Word>instanceof</Word>
 			<Word>int</Word>
 			<Word>interface</Word>
