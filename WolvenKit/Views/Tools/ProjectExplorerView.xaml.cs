@@ -9,7 +9,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using DynamicData;
 using HandyControl.Data;
 using ReactiveUI;
 using Splat;
@@ -21,9 +20,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.ProjectManagement.Project;
-using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Tools;
-using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Tools
@@ -140,7 +137,7 @@ namespace WolvenKit.Views.Tools
 
         }
 
-        private HashSet<string> _nodeState;
+        private Dictionary<string, bool> _nodeState;
         private string _selectedNodeState;
 
         private void OnBeforeDataSourceUpdate(object sender, EventArgs e)
@@ -151,7 +148,7 @@ namespace WolvenKit.Views.Tools
             }
 
             _selectedNodeState = ((FileModel)TreeGrid.SelectedItem)?.FullName;
-            _nodeState = new HashSet<string>();
+            _nodeState = new Dictionary<string, bool>();
             foreach (var node in TreeGrid.View.Nodes)
             {
                 if (((FileModel)node.Item).IsDirectory)
@@ -167,10 +164,7 @@ namespace WolvenKit.Views.Tools
                     return;
                 }
 
-                if (node.IsExpanded)
-                {
-                    _nodeState.Add(((FileModel)node.Item).FullName);
-                }
+                _nodeState.TryAdd(((FileModel)node.Item).FullName, node.IsExpanded);
 
                 foreach (var childNode in node.ChildNodes)
                 {
@@ -213,7 +207,8 @@ namespace WolvenKit.Views.Tools
                     return;
                 }
 
-                if (_nodeState.Contains(((FileModel)node.Item).FullName))
+                var fullName = ((FileModel)node.Item).FullName;
+                if (!_nodeState.ContainsKey(fullName) || _nodeState[fullName])
                 {
                     TreeGrid.ExpandNode(node);
                 }
