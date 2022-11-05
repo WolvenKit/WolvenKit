@@ -25,8 +25,11 @@
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 	  <PackageReference Include="CommunityToolkit.WinUI" Version="7.1.2" />
 	  <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
+	  <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
 	  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.2.220902.1-preview1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.194" />
+    <PackageReference Include="Octokit" Version="4.0.1" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
@@ -50,6 +53,7 @@
 
   <ItemGroup>
     <Folder Include="Assets\ControlImages\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
   <ItemGroup>

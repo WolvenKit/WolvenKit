@@ -28,7 +28,7 @@
             SizeChanged="OnItemGridViewSizeChanged"
             
             ItemContainerStyle="{StaticResource IndentedGridViewItemStyle}"
-            ItemTemplate="{StaticResource ControlItemTemplate2}"
+            ItemTemplate="{StaticResource RemoteControlItemTemplate}"
             
             />
 

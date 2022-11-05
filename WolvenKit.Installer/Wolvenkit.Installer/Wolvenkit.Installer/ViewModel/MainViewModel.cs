@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml.Controls;
 using Wolvenkit.Installer.Services;
 
 namespace Wolvenkit.Installer.ViewModel;
@@ -55,7 +48,7 @@ public partial class MainViewModel
     private async void Init()
     {
         IsIndeterminate = true;
-        NotificationService.DisplayBanner("Test", "test msg", Microsoft.UI.Xaml.Controls.InfoBarSeverity.Warning);
+        NotificationService.DisplayBanner("Initializing", "Checking for updates. Please wait.", Microsoft.UI.Xaml.Controls.InfoBarSeverity.Warning);
 
         await InitAsync();
 
@@ -69,7 +62,7 @@ public partial class MainViewModel
     /// Get remote versions
     /// </summary>
     /// <returns></returns>
-    private async Task InitAsync() => await _libraryService.InitAsync();//for (var i = 0; i < 10; i++)//{//    // thread safety//    //Text += "-G";//    //Progress += 10;//    await Task.Delay(500).ConfigureAwait(false);//}
+    private async Task InitAsync() => await _libraryService.InitAsync();
 
     [RelayCommand]
     private async Task Refresh()

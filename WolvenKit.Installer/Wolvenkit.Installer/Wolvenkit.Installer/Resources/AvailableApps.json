@@ -1,16 +1,18 @@
 [
   {
-    "Url": "https://github.com/WolvenKit/WolvenKit.git",
+    "Url": "https://github.com/WolvenKit/WolvenKit",
     "Name": "WolvenKit",
     "AssetPattern": "WolvenKit-.*.zip",
     "Description": "Cyberpunk 2077 mod editor and creator",
-    "Category": "Application"
+    "Category": "Application",
+    "ImagePath": "ms-appx:///Assets/ControlImages/Acrylic.png"
   },
   {
-    "Url": "https://github.com/WolvenKit/WolvenKit-nightly-releases.git",
+    "Url": "https://github.com/WolvenKit/WolvenKit-nightly-releases",
     "Name": "WolvenKit Nightly",
     "AssetPattern": "WolvenKit-.*.zip",
     "Description": "Wolvenkit Beta",
-    "Category": "Application"
+    "Category": "Application",
+    "ImagePath": "ms-appx:///Assets/ControlImages/Acrylic.png"
   }
 ]

@@ -1,42 +1,52 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Wolvenkit.Installer.Models;
+using Wolvenkit.Installer.Services;
 
 namespace Wolvenkit.Installer.ViewModel;
 
 [ObservableObject]
 public partial class RemotePackageViewModel
 {
+    private readonly ILibraryService _libraryService;
     private readonly RemotePackageModel _model;
 
-    public RemotePackageViewModel(RemotePackageModel model, string version, EPackageStatus status, string imagePath)
+    public RemotePackageViewModel(
+        RemotePackageModel model,
+        //string version,
+        string remoteVersion
+        //bool isInstalled
+        )
     {
+        _libraryService = App.Current.Services.GetService<ILibraryService>();
         _model = model;
 
-        Name = model.Name;
-        Description = model.Description;
+        //Version = version;
+        RemoteVersion = remoteVersion;
+        //IsInstalled = isInstalled;
 
-        Version = version;
-        Status = status;
-        ImagePath = imagePath;
     }
 
-    public string Name { get; }
+    public string Name => _model.Name;
 
-    public string Description { get; }
+    public string Description => _model.Description;
 
-
-
+    public string ImagePath => _model.ImagePath;
 
     // Local
-    public string ImagePath { get; set; }
+    //public string Version { get; }
+    public string RemoteVersion { get; }
+    //public bool IsInstalled { get; }
 
-    public string Version { get; }
-    public EPackageStatus Status { get; }
+    [RelayCommand]
+    private async Task Install()
+    {
+        await _libraryService.InstallAsync(_model);
+
+
+
+    }
 }
 
-public enum EPackageStatus
-{
-    NotInstalled,
-    UpdateAvailable,
-    Installed,
-}

@@ -94,7 +94,7 @@
         </UserControl>
     </DataTemplate>
 
-    <DataTemplate x:Key="ControlItemTemplate2" x:DataType="viewmodel:RemotePackageViewModel">
+    <DataTemplate x:Key="RemoteControlItemTemplate" x:DataType="viewmodel:RemotePackageViewModel">
         <UserControl>
             <Grid
                 x:Name="controlRoot"
@@ -124,7 +124,6 @@
 
                 <RelativePanel
                     Grid.Column="1"
-                    Grid.ColumnSpan="2"
                     Margin="16,6,0,0">
 
                     <TextBlock
@@ -139,43 +138,29 @@
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                         RelativePanel.Below="titleText"
                         Style="{StaticResource CaptionTextBlockStyle}"
-                        Text="{x:Bind Version}"
+                        Text="{x:Bind RemoteVersion}"
                         TextTrimming="CharacterEllipsis" />
 
                 </RelativePanel>
 
-                <!--<Grid
+                <RelativePanel
                     Grid.Column="2"
-                    Margin="0"
-                    VerticalAlignment="Top"
-                    CornerRadius="{StaticResource ControlCornerRadius}"
-                    Visibility="{x:Bind BadgeString, Converter={StaticResource nullToVisibilityConverter}}">
+                    Margin="16,6,0,0">
 
-                    <Ellipse
-                        Width="12"
-                        Height="12"
-                        Fill="{ThemeResource SystemAccentColorDark1}" />
-                </Grid>-->
+                    <Button
+                        x:Name="installButton"
+                        Content="Install"
+                        Command="{x:Bind InstallCommand}"
+                        />
 
-                <!--<VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="LayoutVisualStates">
-                        <VisualState x:Name="WideLayout">
-                            <VisualState.StateTriggers>
-                                <AdaptiveTrigger MinWindowWidth="{StaticResource Breakpoint640Plus}" />
-                            </VisualState.StateTriggers>
-                            <VisualState.Setters />
-                        </VisualState>
-                        <VisualState x:Name="NarrowLayout">
-                            <VisualState.StateTriggers>
-                                <AdaptiveTrigger MinWindowWidth="0" />
-                            </VisualState.StateTriggers>
-                            <VisualState.Setters>
-                                <Setter Target="controlRoot.Width" Value="Auto" />
-                                <Setter Target="controlRoot.Height" Value="120" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>-->
+                    <!--<Button
+                        Margin="0,2,8,0"
+                        RelativePanel.Below="installButton"
+                        Content="More"
+                       />-->
+
+                </RelativePanel>
+
             </Grid>
         </UserControl>
     </DataTemplate>

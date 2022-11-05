@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
@@ -16,11 +15,11 @@ using WolvenKit.Core;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
-using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services
 {
     public class PluginService : ReactiveObject, IPluginService
     {
@@ -77,7 +76,7 @@ namespace WolvenKit.Functionality.Services
                 {
                     pluginManifestDict = JsonSerializer.Deserialize<Dictionary<EPlugin, PluginModel>>(pluginManifest, new JsonSerializerOptions() { WriteIndented = true });
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     _loggerService.Error(ex);
                 }
@@ -251,7 +250,6 @@ namespace WolvenKit.Functionality.Services
             var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last().TrimStart('v');
 
             var fileName = id.GetFile().Replace(@".*\", version);
-            // TODO check if asset is already downloaded
             var testZipPath = Path.Combine(Path.GetTempPath(), fileName);
             var zipPath = testZipPath;
 
@@ -306,7 +304,7 @@ namespace WolvenKit.Functionality.Services
                         return;
                     }
 
-                    await using var fs = new FileStream(zipPath, System.IO.FileMode.Create);
+                    await using var fs = new FileStream(zipPath, FileMode.Create);
                     // TODO report progress here
                     await response.Content.CopyToAsync(fs);
                 }

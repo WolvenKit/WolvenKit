@@ -2,25 +2,11 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Shapes;
-using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Wolvenkit.Installer.Helper;
 using Wolvenkit.Installer.Pages;
 using Wolvenkit.Installer.Services;
@@ -86,7 +72,7 @@ public partial class App : Application
 
         if (targetPageType == typeof(InstalledPage))
         {
-            ((Microsoft.UI.Xaml.Controls.NavigationViewItem)((MainWindow)App.StartupWindow).NavigationView.MenuItems[0]).IsSelected = true;
+            ((NavigationViewItem)((MainWindow)App.StartupWindow).NavigationView.MenuItems[0]).IsSelected = true;
         }
 
         // Ensure the current window is active
@@ -116,10 +102,11 @@ public partial class App : Application
     {
         ServiceCollection services = new();
 
+        services.AddLogging();
+
         services.AddSingleton<ILibraryService, LibraryService>();
         services.AddTransient<IDialogService, DialogService>();
         services.AddTransient<INotificationService, NotificationService>();
-
 
         // Viewmodels
         services.AddTransient<MainViewModel>();

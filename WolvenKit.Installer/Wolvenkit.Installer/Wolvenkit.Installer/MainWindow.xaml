@@ -70,8 +70,6 @@
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
                     </Grid.RowDefinitions>
 
                     <ParallaxView
@@ -115,19 +113,12 @@
                         Message="{x:Bind ViewModel.NotificationService.BannerNotification.Message, Mode=OneWay}"
                         Severity="{x:Bind ViewModel.NotificationService.BannerNotification.Severity, Mode=OneWay}" />
 
-                    <ProgressBar
+                    <!--<ProgressBar
                         Grid.Row="2"
                         Width="500"
                         Height="50"
                         IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}"
-                        Value="{x:Bind ViewModel.Progress, Mode=OneWay}" />
-
-                    <Button
-                        Grid.Row="3"
-                        Width="500"
-                        Height="50"
-                        Command="{x:Bind ViewModel.RefreshCommand}"
-                        Content="BUTTON" />
+                        Value="{x:Bind ViewModel.Progress, Mode=OneWay}" />-->
 
                 </Grid>
 

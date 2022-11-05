@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Wolvenkit.Installer.Models;
+﻿namespace Wolvenkit.Installer.Models;
 public class RemotePackageModel
 {
     public string Url { get; set; }
@@ -12,4 +6,6 @@ public class RemotePackageModel
     public string AssetPattern { get; set; }
     public string Description { get; set; }
     public string Category { get; set; }
+    public string ImagePath { get; set; }
+
 }
