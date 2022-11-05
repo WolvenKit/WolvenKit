@@ -550,12 +550,18 @@ namespace WolvenKit.Models
             }
             else if (parser.TryConsume<Scalar>(out var s))
             {
-                if (s.Tag == "!append")
+                var tag = s.Tag.ToString();
+                if (tag.StartsWith("!append"))
                 {
                     var tweak = new TweakXLAppend
                     {
                         ID = ReadScalar(s).ToString()
                     };
+                    if (tag.EndsWith("-once"))
+                        tweak.AppendType = TweakXLAppendType.Once;
+                    else if (tag.EndsWith("-from"))
+                        tweak.AppendType = TweakXLAppendType.From;
+
                     return tweak;
                 }
                 else
