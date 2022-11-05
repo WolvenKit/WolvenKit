@@ -13,6 +13,8 @@ namespace WolvenKit.RED4.Archive.IO
 
         public void WritePackage(appearanceAppearanceDefinition appearanceDefinition, RedPackage buffer)
         {
+            Settings.ImportsAsHash = true;
+
             buffer.Chunks = new List<RedBaseClass>();
             foreach (var component in appearanceDefinition.Components)
             {
