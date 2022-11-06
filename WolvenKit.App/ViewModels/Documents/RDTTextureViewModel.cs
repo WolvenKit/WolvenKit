@@ -76,7 +76,10 @@ namespace WolvenKit.ViewModels.Documents
             {
                 xbm.Width = (uint)Image.Width;
                 xbm.Height = (uint)Image.Height;
-                File.GetMainFile().Value.Chunks[0].Properties.Where(x => x.Name is "Width" or "Height").ToList().ForEach(x => x.RaisePropertyChanged("Data"));
+                if (File.GetMainFile().Value is RDTDataViewModel file)
+                {
+                    file.Chunks[0].Properties.Where(x => x.Name is "Width" or "Height").ToList().ForEach(x => x.RaisePropertyChanged("Data"));
+                }
             }
         }
 

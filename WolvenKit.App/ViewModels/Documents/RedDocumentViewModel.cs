@@ -39,6 +39,7 @@ namespace WolvenKit.ViewModels.Documents
 
     public class RedDocumentViewModel : DocumentViewModel
     {
+        protected readonly HashSet<string> _embedHashSet;
         protected readonly ILoggerService _loggerService;
         protected readonly Red4ParserService _parser;
         protected readonly IHashService _hashService;
@@ -50,6 +51,12 @@ namespace WolvenKit.ViewModels.Documents
 
         public RedDocumentViewModel(string path) : base(path)
         {
+            _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "yaml",
+                "yml",
+                "xl"
+            };
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _parser = Locator.Current.GetService<Red4ParserService>();
             _hashService = Locator.Current.GetService<IHashService>();
@@ -63,7 +70,7 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
-            NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile);
+            NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile, CanExecuteNewEmbeddedFile);
 
             this.WhenAnyValue(x => x.SelectedTabItemViewModel)
                 .Subscribe(x => x?.OnSelected());
@@ -92,33 +99,41 @@ namespace WolvenKit.ViewModels.Documents
 
             using var fs = new FileStream(tmpPath, FileMode.Create, FileAccess.ReadWrite);
             var file = GetMainFile();
-            if (file.HasValue && Cr2wFile != null)
+
+            try
             {
-                try
+                // if we're in a text view, use a normal StreamWriter, else use the CR2W one
+                if (file.Value is RDTTextViewModel textViewModel)
+                {
+                    using var tw = new StreamWriter(fs);
+                    var text = textViewModel.Document.Text;
+                    tw.Write(text);
+                }
+                else if (file.HasValue && Cr2wFile != null)
                 {
                     using var writer = new CR2WWriter(fs);
                     writer.WriteFile(Cr2wFile);
                 }
-                catch (Exception e)
-                {
-                    _loggerService.Error($"Error while saving {FilePath}");
-                    _loggerService.Error(e);
-
-                    fs.Dispose();
-                    File.Delete(tmpPath);
-
-                    return Task.CompletedTask;
-                }
-
-                if (File.Exists(FilePath))
-                {
-                    File.Delete(FilePath);
-                }
-                File.Move(tmpPath, FilePath);
-
-                SetIsDirty(false);
-                _loggerService.Success($"Saved file {FilePath}");
             }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Error while saving {FilePath}");
+                _loggerService.Error(e);
+
+                fs.Dispose();
+                File.Delete(tmpPath);
+
+                return Task.CompletedTask;
+            }
+
+            if (File.Exists(FilePath))
+            {
+                File.Delete(FilePath);
+            }
+            File.Move(tmpPath, FilePath);
+
+            SetIsDirty(false);
+            _loggerService.Success($"Saved file {FilePath}");
 
             return Task.CompletedTask;
         }
@@ -189,10 +204,19 @@ namespace WolvenKit.ViewModels.Documents
             return Task.FromResult(false);
         }
 
-        public Optional<RDTDataViewModel> GetMainFile() => Optional<RDTDataViewModel>.ToOptional(TabItemViewModels
+        public Optional<RedDocumentTabViewModel> GetMainFile()
+        {
+            if (SelectedTabItemViewModel is RDTTextViewModel textVM)
+            {
+                return Optional<RedDocumentTabViewModel>.ToOptional(textVM);
+            }
+
+            var r = TabItemViewModels
             .OfType<RDTDataViewModel>()
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
-            .FirstOrDefault());
+            .FirstOrDefault();
+            return Optional<RedDocumentTabViewModel>.ToOptional(r);
+        }
 
         protected void AddTabForRedType(RedBaseClass cls)
         {
@@ -333,6 +357,7 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public ICommand NewEmbeddedFileCommand { get; private set; }
+        private bool CanExecuteNewEmbeddedFile() => !_embedHashSet.Contains(Extension);
         private void ExecuteNewEmbeddedFile()
         {
             var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()

@@ -1,3 +1,4 @@
+using Prism.Commands;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,14 +11,21 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Threading;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Types;
+using WolvenKit.Models;
+using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Shell;
+using YamlDotNet.Serialization;
+using System.Windows.Forms;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -40,6 +48,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly ISettingsManager _settingsManager;
         private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
+        private readonly ILoggerService _loggerService;
         private readonly TweakDBService _tweakDB;
         public string Extension { get; set; } = "tweak";
 
@@ -62,12 +71,14 @@ namespace WolvenKit.ViewModels.Tools
             ISettingsManager settingsManager,
             INotificationService notificationService,
             IProjectManager projectManager,
+            ILoggerService loggerService,
             TweakDBService tweakDbService
         ) : base(ToolTitle)
         {
             _settingsManager = settingsManager;
             _notificationService = notificationService;
             _projectManager = projectManager;
+            _loggerService = loggerService;
             _tweakDB = tweakDbService;
 
             _tweakDB.Loaded += Load;
@@ -347,6 +358,58 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             return false;
+        }
+
+        private DelegateCommand convertToYAML;
+        public ICommand ConvertToYAML => convertToYAML ??= new DelegateCommand(ExecuteConvertToYAML, CanExecuteConvertToYAML);
+        public bool CanExecuteConvertToYAML() => true; //Locator.Current.GetService<IProjectManager>().IsProjectLoaded;
+
+        private void ExecuteConvertToYAML()
+        {
+            var txl = new TweakXL();
+            txl.ID = SelectedRecordEntry.DisplayName;
+
+            var baseRecord = _tweakDB.GetRecord(_selectedRecordEntry.Item);
+            txl.Type = "gamedata" + _selectedRecordEntry.RecordTypeName + "_Record";
+            baseRecord.GetPropertyNames().ForEach(property =>
+            {
+                txl.Properties.Add(property, baseRecord.GetProperty(property));
+            });
+
+            var txlFile = new TweakXLFile();
+            txlFile.Add(txl);
+
+            Stream myStream;
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "YAML files (*.yaml; *.yml)|*.yaml;*.yml|All files (*.*)|*.*",
+                FilterIndex = 1,
+                FileName = $"{SelectedRecordEntry.DisplayName}.yaml"
+            };
+
+            if (_projectManager.IsProjectLoaded)
+                saveFileDialog.InitialDirectory = Path.Combine(_projectManager.ActiveProject.FileDirectory, "tweaks");
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog.OpenFile()) is not null)
+                {
+                    var serializer = new SerializerBuilder()
+                        .WithTypeConverter(new TweakXLYamlTypeConverter())
+                        .WithIndentedSequences()
+                        .Build();
+
+                    var yaml = serializer.Serialize(txlFile);
+                    myStream.Write(yaml.ToCharArray().Select(c => (byte)c).ToArray());
+                    myStream.Close();
+
+                    _loggerService.Success($"{SelectedRecordEntry.DisplayName} TweakXL written to: {saveFileDialog.FileName}");
+                }
+                else
+                {
+                    _loggerService.Error($"Could not open file: {saveFileDialog.FileName}");
+                }
+            }
         }
 
         #endregion

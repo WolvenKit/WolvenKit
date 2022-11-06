@@ -30,6 +30,10 @@
                 <docV:RDTTextureView ViewModel="{Binding}" />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type docVM:RDTTextViewModel}">
+                <docV:RDTTextView ViewModel="{Binding}" />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type docVM:RDTMeshViewModel}">
                 <docV:RDTMeshView ViewModel="{Binding}" />
             </DataTemplate>

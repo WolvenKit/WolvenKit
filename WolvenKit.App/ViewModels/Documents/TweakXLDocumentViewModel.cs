@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Splat;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
@@ -16,49 +18,63 @@ namespace WolvenKit.ViewModels.Documents
     public class TweakXLDocumentViewModel : RedDocumentViewModel
     {
         private TweakDBService _tdbs;
+        private readonly ISettingsManager _settingsManager = Locator.Current.GetService<ISettingsManager>();
+        
 
-        public TweakXLDocumentViewModel(string path) : base(path) => _tdbs = Locator.Current.GetService<TweakDBService>();
+        public TweakXLDocumentViewModel(string path) : base(path)
+        {
+            _tdbs = Locator.Current.GetService<TweakDBService>();
+        }
 
-        public override bool OpenFile(string path)
+        private Task LoadTweakDB()
+        {
+            if (_tdbs.IsLoaded)
+            {
+                return Task.CompletedTask;
+            }
+
+            return _tdbs.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+        }
+
+        public override async Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;
 
-            try
-            {
-                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    using var reader = new StreamReader(stream);
+            // make sure TweakDB is loaded before we open the TweakXL file
+            await Task.WhenAll(LoadTweakDB());
 
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                FilePath = path;
+
+                try
+                {
+                    // read tweakXL file
+                    using var reader = new StreamReader(stream);
                     var deserializer = new DeserializerBuilder()
                         .WithTypeConverter(new TweakXLYamlTypeConverter())
                         .Build();
-
                     var file = deserializer.Deserialize<TweakXLFile>(reader);
-                    if (file == null)
-                    {
-                        return false;
-                    }
-
-                    FilePath = path;
-                    _isInitialized = true;
-
                     TabItemViewModels.Add(new RDTDataViewModel(file, this));
 
-                    SelectedIndex = 0;
+                    // read text file
+                    stream.Seek(0, SeekOrigin.Begin);
+                    TabItemViewModels.Add(new RDTTextViewModel(stream, this));
 
-                    SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    _loggerService.Error(ex);
+                    return false;
                 }
 
-                return true;
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                // Not processing this catch in any other way than rejecting to initialize this
-                _isInitialized = false;
+                _isInitialized = true;
+
+                SelectedIndex = 0;
+                SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
             }
 
-            return false;
+            return true;
         }
     }
 }
