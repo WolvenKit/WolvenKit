@@ -16,6 +16,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Interfaces;
+using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -81,6 +82,8 @@ namespace WolvenKit.ViewModels.Documents
 
     public class RDTDataViewModel : RedDocumentTabViewModel, IActivatableViewModel
     {
+        private readonly ISettingsManager _settingsManager;
+
         public ViewModelActivator Activator { get; } = new();
 
         protected readonly IRedType _data;
@@ -89,6 +92,8 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTDataViewModel(IRedType data, RedDocumentViewModel file)
         {
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+
             File = file;
             _data = data;
             Header = _data.GetType().Name;
@@ -212,6 +217,8 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public ObservableCollection<RedReference> References { get; set; } = new();
 
         [Reactive] public IRedRef SelectedImport { get; set; }
+
+        public bool ShowReferenceGraph => _settingsManager.ShowReferenceGraph;
 
         public delegate void LayoutNodesDelegate();
 

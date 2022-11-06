@@ -26,6 +26,7 @@ namespace WolvenKit.Functionality.Services
         public bool ShowCNameAsHex { get; set; }
         public bool ShowNodeRefAsHex { get; set; }
         public bool ShowTweakDBIDAsHex { get; set; }
+        public bool ShowReferenceGraph { get; set; }
         public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; }
     }
 }

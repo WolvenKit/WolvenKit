@@ -2,6 +2,7 @@
     x:Class="WolvenKit.Views.Documents.RDTDataView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:app="clr-namespace:WolvenKit.App;assembly=WolvenKit.App"
     xmlns:archive="clr-namespace:WolvenKit.RED4.Archive.CR2W;assembly=WolvenKit.RED4.Archive"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -17,8 +18,7 @@
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
     xmlns:treeViewEngine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
-    xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types" 
-    xmlns:app="clr-namespace:WolvenKit.App;assembly=WolvenKit.App"
+    xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types"
     Margin="0"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTDataViewModel}}"
     d:DesignHeight="450"
@@ -59,8 +59,30 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="*" />
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="5" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ShowReferenceGraph}" Value="False">
+                                <Setter Property="Height" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="{x:Type RowDefinition}">
+                        <Setter Property="Height" Value="*" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ShowReferenceGraph}" Value="False">
+                                <Setter Property="Height" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
         </Grid.RowDefinitions>
 
         <tools:RedTreeView
@@ -79,7 +101,7 @@
             ViewModel="{Binding}"
         -->
 
-        <!-- ENABLE_NODE_EDITOR -->
+        <!--  ENABLE_NODE_EDITOR  -->
         <!--  Grid Splitter  -->
 
         <GridSplitter
@@ -87,7 +109,8 @@
             Grid.ColumnSpan="3"
             Height="5"
             HorizontalAlignment="Stretch"
-            Background="{StaticResource BorderAlt}" />
+            Background="{StaticResource BorderAlt}"
+            Visibility="{Binding ShowReferenceGraph, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <!--
             Offset="{Binding Location}"
@@ -102,7 +125,7 @@
                     Target="{Binding Input.Anchor}"
                     Source="{Binding Output.Anchor}"
         -->
-        
+
         <editors:AutomaticNodifyEditor
             x:Name="Editor"
             Grid.Row="2"
@@ -111,15 +134,15 @@
             Connections="{Binding References}"
             DisplayConnectionsOnTop="True"
             EnableRealtimeSelection="True"
-            
-            ItemsSource="{Binding Nodes}">
-            
+            ItemsSource="{Binding Nodes}"
+            Visibility="{Binding ShowReferenceGraph, Converter={StaticResource BooleanToVisibilityConverter}}">
+
             <editors:AutomaticNodifyEditor.ContextMenu>
                 <ContextMenu>
                     <MenuItem Click="AutolayoutNodes_MenuItem" Header="Rearrange Nodes" />
                 </ContextMenu>
             </editors:AutomaticNodifyEditor.ContextMenu>
-            
+
             <editors:AutomaticNodifyEditor.ConnectionTemplate>
                 <DataTemplate>
                     <nodify:Connection
@@ -145,13 +168,13 @@
                                     <DataTrigger Binding="{Binding Output.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                         <Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" />
                                     </DataTrigger>
-                                </Style.Triggers--> 
+                                </Style.Triggers-->
                             </Style>
                         </nodify:Connection.Style>
                     </nodify:Connection>
                 </DataTemplate>
             </editors:AutomaticNodifyEditor.ConnectionTemplate>
-            
+
             <editors:AutomaticNodifyEditor.Resources>
                 <Style BasedOn="{StaticResource {x:Type nodify:Connector}}" TargetType="{x:Type nodify:Connector}">
                     <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
@@ -311,7 +334,7 @@
                     </nodify:Node>
                 </DataTemplate>
             </editors:AutomaticNodifyEditor.Resources>
-            
+
             <editors:AutomaticNodifyEditor.ItemContainerStyle>
                 <Style BasedOn="{StaticResource {x:Type nodify:ItemContainer}}" TargetType="{x:Type nodify:ItemContainer}">
                     <Setter Property="Location" Value="{Binding Location}" />
@@ -326,7 +349,7 @@
                     <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitCyan}" />
                 </Style>
             </editors:AutomaticNodifyEditor.ItemContainerStyle>
-            
+
         </editors:AutomaticNodifyEditor>
 
     </Grid>
