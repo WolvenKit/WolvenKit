@@ -53,6 +53,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.Save", "Wolv
 EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "WolvenKit.Package", "WolvenKit.Package\WolvenKit.Package.wapproj", "{849A9683-78D3-4A05-8C76-A804DC79704A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolvenkit.Installer", "WolvenKit.Installer\Wolvenkit.Installer\Wolvenkit.Installer\Wolvenkit.Installer.csproj", "{AAC7FA50-41FE-4DAA-9D77-BD35DF219ACD}"
+EndProject
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "Wolvenkit.Installer (Package)", "WolvenKit.Installer\Wolvenkit.Installer\Wolvenkit.Installer (Package)\Wolvenkit.Installer (Package).wapproj", "{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -145,6 +149,21 @@ Global
 		{849A9683-78D3-4A05-8C76-A804DC79704A}.Release|x64.ActiveCfg = Release|x64
 		{849A9683-78D3-4A05-8C76-A804DC79704A}.Release|x64.Build.0 = Release|x64
 		{849A9683-78D3-4A05-8C76-A804DC79704A}.Release|x64.Deploy.0 = Release|x64
+		{AAC7FA50-41FE-4DAA-9D77-BD35DF219ACD}.Debug|x64.ActiveCfg = Debug|x64
+		{AAC7FA50-41FE-4DAA-9D77-BD35DF219ACD}.Debug|x64.Build.0 = Debug|x64
+		{AAC7FA50-41FE-4DAA-9D77-BD35DF219ACD}.Profile|x64.ActiveCfg = Debug|x64
+		{AAC7FA50-41FE-4DAA-9D77-BD35DF219ACD}.Profile|x64.Build.0 = Debug|x64
+		{AAC7FA50-41FE-4DAA-9D77-BD35DF219ACD}.Release|x64.ActiveCfg = Release|x64
+		{AAC7FA50-41FE-4DAA-9D77-BD35DF219ACD}.Release|x64.Build.0 = Release|x64
+		{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}.Debug|x64.ActiveCfg = Debug|x64
+		{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}.Debug|x64.Build.0 = Debug|x64
+		{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}.Debug|x64.Deploy.0 = Debug|x64
+		{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}.Profile|x64.ActiveCfg = Debug|x64
+		{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}.Profile|x64.Build.0 = Debug|x64
+		{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}.Profile|x64.Deploy.0 = Debug|x64
+		{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}.Release|x64.ActiveCfg = Release|x64
+		{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}.Release|x64.Build.0 = Release|x64
+		{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}.Release|x64.Deploy.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,6 +185,8 @@ Global
 		{29905632-3CB2-4CD8-B296-522F681D6D4D} = {B904A345-E6CF-4D6A-9F10-C04F02340B63}
 		{9B8CF5A4-29BA-45E6-9BC2-DEDEB3A9EFB4} = {A84C71C3-E7BD-4E88-847B-B743E549429A}
 		{849A9683-78D3-4A05-8C76-A804DC79704A} = {BE958494-0BB3-4401-93DB-65458FED482B}
+		{AAC7FA50-41FE-4DAA-9D77-BD35DF219ACD} = {E4ECEE21-F0F1-440F-A356-76BBD57E710E}
+		{BE6C095C-DAAE-42A7-A8D9-23022A7CA784} = {E4ECEE21-F0F1-440F-A356-76BBD57E710E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DAAF993-E8B7-47A4-AB0E-C159CB499F45}

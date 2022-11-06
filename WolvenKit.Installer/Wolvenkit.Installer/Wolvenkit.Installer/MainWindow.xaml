@@ -1,0 +1,132 @@
+<!--  Copyright (c) Microsoft Corporation. All rights reserved.  -->
+<!--  Licensed under the MIT License. See LICENSE in the project root for license information.  -->
+
+<Window
+    x:Class="Wolvenkit.Installer.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Wolvenkit.Installer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <!--  Title Bar  -->
+        <Border
+            x:Name="AppTitleBar"
+            Grid.Column="1"
+            Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
+            VerticalAlignment="Top"
+            Background="#202020"
+            Canvas.ZIndex="1"
+            IsHitTestVisible="True"
+            Opacity="1">
+            <TextBlock
+                x:Name="AppTitle"
+                Margin="45,0,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{x:Bind Title}" />
+        </Border>
+
+        <!--    -->
+        <NavigationView
+            x:Name="NavigationViewControl"
+            Grid.Column="1"
+            AlwaysShowHeader="True"
+            Canvas.ZIndex="1"
+            IsEnabled="{x:Bind ViewModel.Loaded, Mode=OneWay}"
+            PaneDisplayMode="Left"
+            SelectionChanged="NavigationViewControl_SelectionChanged">
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem
+                    Content="Installed"
+                    Icon="Library"
+                    Tag="InstalledPage" />
+
+                <NavigationViewItem
+                    Content="Available"
+                    Icon="Download"
+                    Tag="AvailablePage" />
+            </NavigationView.MenuItems>
+
+            <!--  Navigation Area  -->
+            <Frame x:Name="rootFrame" />
+
+            <!--  Header Area  -->
+            <NavigationView.Header>
+
+                <Grid x:Name="HeaderGrid" Margin="0,4,40,0">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <ParallaxView
+                        x:Name="headerImageView"
+                        Height="256"
+                        VerticalAlignment="Top">
+                        <Grid CornerRadius="{StaticResource ControlCornerRadius}">
+                            <Image
+                                x:Name="headerImage"
+                                HorizontalAlignment="Center"
+                                Source="Assets/MainPage_Banner.png"
+                                Stretch="Fill" />
+                        </Grid>
+                    </ParallaxView>
+
+                    <TextBlock AutomationProperties.AutomationId="__ClickableAreaTextBlock" />
+
+                    <StackPanel Margin="50,80,0,20" Orientation="Vertical">
+                        <TextBlock
+                            x:Name="smallHeaderText"
+                            Foreground="Black"
+                            Style="{StaticResource TitleTextBlockStyle}"
+                            Text="{StaticResource AppTitleName}"
+                            Visibility="Visible" />
+                        <TextBlock
+                            x:Name="smallHeaderSubtitleText"
+                            Foreground="Black"
+                            Style="{StaticResource SubtitleTextBlockStyle}"
+                            Text="{StaticResource WinUIVersion}"
+                            Visibility="Visible" />
+                    </StackPanel>
+
+                    <InfoBar
+                        Title="{x:Bind ViewModel.Notifications.BannerNotification.Title, Mode=OneWay}"
+                        Grid.Row="1"
+                        Margin="-56,0,-40,0"
+                        VerticalAlignment="Bottom"
+                        IsClosable="False"
+                        IsIconVisible="True"
+                        IsOpen="{x:Bind ViewModel.Notifications.BannerNotification.IsOpen, Mode=OneWay}"
+                        Message="{x:Bind ViewModel.Notifications.BannerNotification.Message, Mode=OneWay}"
+                        Severity="{x:Bind ViewModel.Notifications.BannerNotification.Severity, Mode=OneWay}" />
+
+                    <ProgressBar
+                        Grid.Row="2"
+                        Width="500"
+                        Height="50"
+                        IsIndeterminate="{x:Bind ViewModel.Notifications.Progress.IsIndeterminate, Mode=OneWay}"
+                        Value="{x:Bind ViewModel.Progress, Mode=OneWay}" />
+
+                </Grid>
+
+            </NavigationView.Header>
+
+        </NavigationView>
+
+    </Grid>
+
+</Window>
