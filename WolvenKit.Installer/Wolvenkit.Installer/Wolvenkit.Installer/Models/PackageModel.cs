@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Wolvenkit.Installer.Models;
+﻿namespace Wolvenkit.Installer.Models;
 public class PackageModel
 {
-    public PackageModel(string idStr, string version)
+    public PackageModel(string name, string version, string[] files, string path)
     {
         Version = version;
-        IdStr = idStr;
+        Name = name;
+        Files = files;
+        Path = path;
     }
 
-    public string IdStr { get; set; }
+    public string Name { get; set; }
     public string Path { get; set; }
     public string Version { get; set; }
     public string[] Files { get; set; }

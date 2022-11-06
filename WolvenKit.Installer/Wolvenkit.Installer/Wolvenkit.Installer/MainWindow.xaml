@@ -70,6 +70,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
 
                     <ParallaxView
@@ -103,22 +104,22 @@
                     </StackPanel>
 
                     <InfoBar
-                        Title="{x:Bind ViewModel.NotificationService.BannerNotification.Title, Mode=OneWay}"
+                        Title="{x:Bind ViewModel.Notifications.BannerNotification.Title, Mode=OneWay}"
                         Grid.Row="1"
                         Margin="-56,0,-40,0"
                         VerticalAlignment="Bottom"
                         IsClosable="False"
                         IsIconVisible="True"
-                        IsOpen="{x:Bind ViewModel.NotificationService.BannerNotification.IsOpen, Mode=OneWay}"
-                        Message="{x:Bind ViewModel.NotificationService.BannerNotification.Message, Mode=OneWay}"
-                        Severity="{x:Bind ViewModel.NotificationService.BannerNotification.Severity, Mode=OneWay}" />
+                        IsOpen="{x:Bind ViewModel.Notifications.BannerNotification.IsOpen, Mode=OneWay}"
+                        Message="{x:Bind ViewModel.Notifications.BannerNotification.Message, Mode=OneWay}"
+                        Severity="{x:Bind ViewModel.Notifications.BannerNotification.Severity, Mode=OneWay}" />
 
-                    <!--<ProgressBar
+                    <ProgressBar
                         Grid.Row="2"
                         Width="500"
                         Height="50"
-                        IsIndeterminate="{x:Bind ViewModel.IsIndeterminate, Mode=OneWay}"
-                        Value="{x:Bind ViewModel.Progress, Mode=OneWay}" />-->
+                        IsIndeterminate="{x:Bind ViewModel.Notifications.Progress.IsIndeterminate, Mode=OneWay}"
+                        Value="{x:Bind ViewModel.Progress, Mode=OneWay}" />
 
                 </Grid>
 

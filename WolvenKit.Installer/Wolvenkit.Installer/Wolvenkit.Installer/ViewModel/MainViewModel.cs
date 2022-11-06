@@ -18,26 +18,19 @@ public partial class MainViewModel
     {
         _dialogService = dialogService;
         _libraryService = libraryService;
-        NotificationService = notificationService;
+        Notifications = notificationService;
 
-        Text = "DEBUG";
         Progress = 0;
 
         Init();
+
     }
 
     [ObservableProperty]
-    private INotificationService notificationService;
-
-
-    [ObservableProperty]
-    private string? text;
+    private INotificationService notifications;
 
     [ObservableProperty]
     private int progress;
-
-    [ObservableProperty]
-    private bool isIndeterminate;
 
     [ObservableProperty]
     private bool loaded;
@@ -47,13 +40,13 @@ public partial class MainViewModel
     /// </summary>
     private async void Init()
     {
-        IsIndeterminate = true;
-        NotificationService.DisplayBanner("Initializing", "Checking for updates. Please wait.", Microsoft.UI.Xaml.Controls.InfoBarSeverity.Warning);
+        Notifications.StartIndeterminate();
+        Notifications.DisplayBanner("Initializing", "Checking for updates. Please wait.", Microsoft.UI.Xaml.Controls.InfoBarSeverity.Warning);
 
         await InitAsync();
 
-        NotificationService.CloseBanner();
-        IsIndeterminate = false;
+        Notifications.CloseBanner();
+        Notifications.StopIndeterminate();
 
         Loaded = true;
     }
@@ -67,12 +60,12 @@ public partial class MainViewModel
     [RelayCommand]
     private async Task Refresh()
     {
-        IsIndeterminate = true;
-        NotificationService.DisplayBanner("Test", "test msg", Microsoft.UI.Xaml.Controls.InfoBarSeverity.Warning);
+        Notifications.StartIndeterminate();
+        Notifications.DisplayBanner("Test", "test msg", Microsoft.UI.Xaml.Controls.InfoBarSeverity.Warning);
 
         await InitAsync();
 
-        NotificationService.CloseBanner();
-        IsIndeterminate = false;
+        Notifications.CloseBanner();
+        Notifications.StopIndeterminate();
     }
 }

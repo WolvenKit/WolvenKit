@@ -31,7 +31,7 @@
                         x:Name="gridImage"
                         Width="48"
                         VerticalAlignment="Center"
-                        AutomationProperties.Name="{x:Bind Title}"
+                        AutomationProperties.Name="{x:Bind Name}"
                         Source="{x:Bind ImagePath}"
                         Stretch="Uniform" />
                 </Grid>
@@ -44,7 +44,7 @@
                     <TextBlock
                         x:Name="titleText"
                         Style="{StaticResource BodyStrongTextBlockStyle}"
-                        Text="{x:Bind Title}"
+                        Text="{x:Bind Name}"
                         TextLineBounds="TrimToCapHeight"
                         TextWrapping="NoWrap" />
                     
@@ -58,38 +58,18 @@
                     
                 </RelativePanel>
 
-                <!--<Grid
+                <RelativePanel
                     Grid.Column="2"
-                    Margin="0"
-                    VerticalAlignment="Top"
-                    CornerRadius="{StaticResource ControlCornerRadius}"
-                    Visibility="{x:Bind BadgeString, Converter={StaticResource nullToVisibilityConverter}}">
+                    Margin="16,6,0,0">
 
-                    <Ellipse
-                        Width="12"
-                        Height="12"
-                        Fill="{ThemeResource SystemAccentColorDark1}" />
-                </Grid>-->
+                    <Button Content="Open" 
+                            x:Name="OpenButton" Command="{x:Bind OpenCommand}" />
+                    <Button Content="Uninstall" x:Name="UninstallButton" 
+                            RelativePanel.Below="OpenButton" Margin="0,3,0,0"
+                            Command="{x:Bind UninstallCommand}" />
 
-                <!--<VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="LayoutVisualStates">
-                        <VisualState x:Name="WideLayout">
-                            <VisualState.StateTriggers>
-                                <AdaptiveTrigger MinWindowWidth="{StaticResource Breakpoint640Plus}" />
-                            </VisualState.StateTriggers>
-                            <VisualState.Setters />
-                        </VisualState>
-                        <VisualState x:Name="NarrowLayout">
-                            <VisualState.StateTriggers>
-                                <AdaptiveTrigger MinWindowWidth="0" />
-                            </VisualState.StateTriggers>
-                            <VisualState.Setters>
-                                <Setter Target="controlRoot.Width" Value="Auto" />
-                                <Setter Target="controlRoot.Height" Value="120" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>-->
+                </RelativePanel>
+
             </Grid>
         </UserControl>
     </DataTemplate>
@@ -150,8 +130,19 @@
                     <Button
                         x:Name="installButton"
                         Content="Install"
-                        Command="{x:Bind InstallCommand}"
-                        />
+                        
+                        >
+                        <Button.Flyout>
+                            <Flyout>
+                                <StackPanel>
+                                    <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Text="Install Location" Margin="0,0,0,12" />
+                                    <TextBox Text="{x:Bind InstallPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,12" />
+                                    <Button Content="Install" Command="{x:Bind InstallCommand}" />
+                                </StackPanel>
+                            </Flyout>
+                        </Button.Flyout>
+
+                    </Button>
 
                     <!--<Button
                         Margin="0,2,8,0"

@@ -104,9 +104,12 @@ public partial class App : Application
 
         services.AddLogging();
 
-        services.AddSingleton<ILibraryService, LibraryService>();
+        services.AddSingleton<INotificationService, NotificationService>();
         services.AddTransient<IDialogService, DialogService>();
-        services.AddTransient<INotificationService, NotificationService>();
+
+        services.AddSingleton<ILibraryService, LibraryService>();
+
+
 
         // Viewmodels
         services.AddTransient<MainViewModel>();

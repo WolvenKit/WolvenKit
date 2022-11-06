@@ -2,23 +2,9 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.ApplicationSettings;
-using Wolvenkit.Installer.Helper;
 using Wolvenkit.Installer.Pages;
 using Wolvenkit.Installer.ViewModel;
 
@@ -46,7 +32,7 @@ public sealed partial class MainWindow : Window
 
     public MainViewModel ViewModel => App.Current.Services.GetService<MainViewModel>();
 
-    public Microsoft.UI.Xaml.Controls.NavigationView NavigationView => NavigationViewControl;
+    public NavigationView NavigationView => NavigationViewControl;
 
     private void NavigationViewControl_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {

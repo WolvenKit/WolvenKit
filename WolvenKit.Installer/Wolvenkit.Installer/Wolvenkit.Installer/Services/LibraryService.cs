@@ -23,19 +23,22 @@ public interface ILibraryService
     ObservableCollection<RemotePackageViewModel> RemotePackages { get; set; }
 
     Task<string> CheckForUpdateAsync(RemotePackageModel model, bool prerelease);
-    Task InstallAsync(RemotePackageModel id);
+    Task InstallAsync(RemotePackageModel id, string installPath);
     Task InitAsync();
     Task SaveAsync();
+    Task RemoveAsync(PackageModel model);
 }
 
 public class LibraryService : ILibraryService
 {
     private readonly HttpClient _httpClient = new();
-    private readonly Microsoft.Extensions.Logging.ILogger<LibraryService> _logger;
+    private readonly ILogger<LibraryService> _logger;
+    private readonly INotificationService _notificationService;
 
-    public LibraryService(Microsoft.Extensions.Logging.ILogger<LibraryService> logger)
+    public LibraryService(Microsoft.Extensions.Logging.ILogger<LibraryService> logger, INotificationService notificationService)
     {
-        _logger = logger;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _notificationService = notificationService;
     }
 
     public const string FileName = "library.json";
@@ -57,9 +60,6 @@ public class LibraryService : ILibraryService
 
     public async Task InitAsync()
     {
-        // load installed packages
-        await LoadAsync();
-
         // get remote info from static db
         using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"Wolvenkit.Installer.Resources.AvailableApps.json");
         var available = await JsonSerializer.DeserializeAsync<List<RemotePackageModel>>(stream,
@@ -80,11 +80,14 @@ public class LibraryService : ILibraryService
             }
             RemotePackages.Add(new(item, latest));
         }
+
+        // load installed packages
+        await LoadAsync();
     }
 
     private bool TryGetInstalled(string id, out PackageViewModel installed)
     {
-        installed = InstalledPackages.FirstOrDefault(x => x.Title == id);
+        installed = InstalledPackages.FirstOrDefault(x => x.Name == id);
         return installed != null;
     }
 
@@ -113,10 +116,9 @@ public class LibraryService : ILibraryService
                     foreach (var item in installed)
                     {
                         InstalledPackages.Add(new PackageViewModel(
-                            item.IdStr,
-                            "ms-appx:///Assets/ControlImages/Acrylic.png",
-                            item.Version,
-                            EPackageStatus.Installed
+                            item,
+                            EPackageStatus.Installed,
+                            "ms-appx:///Assets/ControlImages/Acrylic.png"
                             )
                         {
                         });
@@ -137,10 +139,6 @@ public class LibraryService : ILibraryService
         {
             InstalledPackages = new();
         }
-
-        // dbg
-        InstalledPackages.Add(new("TEST", "ms-appx:///Assets/ControlImages/Acrylic.png", "1.0", EPackageStatus.Installed));
-        InstalledPackages.Add(new("TEST2", "ms-appx:///Assets/ControlImages/Acrylic.png", "2.0", EPackageStatus.Installed));
     }
 
     public async Task<string> CheckForUpdateAsync(RemotePackageModel model, bool prerelease = false)
@@ -167,8 +165,28 @@ public class LibraryService : ILibraryService
         return response?.RequestMessage.RequestUri.LocalPath.Split('/').Last();
     }
 
-    public async Task InstallAsync(RemotePackageModel package)
+    public async Task RemoveAsync(PackageModel model)
     {
+        var installed = InstalledPackages.FirstOrDefault(x => x.GetModel() == model);
+        if (installed is not null)
+        {
+            InstalledPackages.Remove(installed);
+            await SaveAsync();
+        }
+        else
+        {
+            _logger.LogError("Could not find {model}", model.Name);
+        }
+    }
+
+    public async Task InstallAsync(RemotePackageModel package, string installPath)
+    {
+        if (string.IsNullOrEmpty(installPath))
+        {
+            _logger.LogError("Install location does not exist: {installpath}", installPath);
+            return;
+        }
+
         //_progressService.IsIndeterminate = true;
 
         // get remote version
@@ -193,7 +211,7 @@ public class LibraryService : ILibraryService
             IEnumerable<Octokit.ReleaseAsset> asset = new List<Octokit.ReleaseAsset>();
             try
             {
-                var owner = package.Url.Split('/').First();
+                var owner = package.Url.Split('/')[^2];
                 var repo = package.Url.Split('/').Last();
 
                 var releases = await ghClient.Repository.Release.GetAll(owner, repo);
@@ -246,22 +264,11 @@ public class LibraryService : ILibraryService
 
         //_progressService.IsIndeterminate = false;
 
-        //TODO
-
-        //var pluginViewModel = Plugins.FirstOrDefault(x => x.Id == id);
-        var installedFiles = new List<string>();
         // extract zip file
-        // installedFiles = await Task.Run(() => ExtractZip(zipPath, pluginViewModel.InstallPath));
+        var installedFiles = await Task.Run(() => ExtractZip(zipPath, installPath));
+        var installedPackage = new PackageModel(package.Name, version, installedFiles.ToArray(), installPath);
 
-
-        //// update list
-        //if (installedFiles.Count > 0)
-        //{
-        //    pluginViewModel.Status = EPluginStatus.Latest;
-        //    pluginViewModel.Version = version;
-
-        //    pluginViewModel.SetModel(new PluginModel(id, version, installedFiles));
-        //}
+        InstalledPackages.Add(new(installedPackage, EPackageStatus.Installed, package.ImagePath));
 
         // save
         await SaveAsync();
@@ -335,6 +342,17 @@ public class LibraryService : ILibraryService
         return files;
     }
 
-    public Task SaveAsync() => throw new NotImplementedException();
+    public async Task SaveAsync()
+    {
+        var models = InstalledPackages.Select(x => x.GetModel()).ToArray();
+        var json = JsonSerializer.Serialize(models, new JsonSerializerOptions()
+        {
+            WriteIndented = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        });
+
+        var file = Path.Combine(GetAppData(), FileName);
+        await File.WriteAllTextAsync(file, json);
+    }
 }
 
