@@ -50,14 +50,29 @@ public partial class PackageViewModel
     {
         if (Directory.Exists(_model.Path))
         {
-            var exe = Path.Combine(_model.Path, _model.Executable);
-            if (File.Exists(exe))
+            Process.Start("explorer.exe", "\"" + _model.Path + "\"");
+        }
+    }
+
+    [RelayCommand()]
+    private void Launch()
+    {
+        if (Directory.Exists(_model.Path))
+        {
+            if (_libraryService.TryGetRemote(_model, out var remote))
             {
-                Process.Start("explorer.exe", "\"" + _model.Executable + "\"");
+                var exe = Path.Combine(_model.Path, remote.GetModel().Executable);
+                if (File.Exists(exe))
+                {
+                    try
+                    {
+                        Process.Start(exe);
+                    }
+                    catch (System.Exception)
+                    {
+                    }
+                }
             }
-
-            //Process.Start("explorer.exe", "\"" + _model.Path + "\"");
-
         }
     }
 

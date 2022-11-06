@@ -91,15 +91,15 @@
                     Margin="16,0,0,0">
 
                     <Button
-                        x:Name="OpenButton"
-                        Command="{x:Bind OpenCommand}"
+                        x:Name="LaunchButton"
+                        Command="{x:Bind LaunchCommand}"
                         Content="Launch" />
                     <Button
                         x:Name="UninstallButton"
                         Margin="0,3,0,0"
                         Command="{x:Bind UninstallCommand}"
                         Content="Uninstall"
-                        RelativePanel.Below="OpenButton" />
+                        RelativePanel.Below="LaunchButton" />
 
                 </RelativePanel>
 

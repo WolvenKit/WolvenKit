@@ -28,6 +28,7 @@ public interface ILibraryService
     Task InitAsync();
     Task SaveAsync();
     Task<bool> RemoveAsync(PackageModel model);
+    bool TryGetRemote(PackageModel model, out RemotePackageViewModel remote);
 }
 
 public class LibraryService : ILibraryService
@@ -36,19 +37,21 @@ public class LibraryService : ILibraryService
     private readonly ILogger<LibraryService> _logger;
     private readonly INotificationService _notificationService;
 
+    public const string FileName = "library.json";
+
     public LibraryService(Microsoft.Extensions.Logging.ILogger<LibraryService> logger, INotificationService notificationService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _notificationService = notificationService;
     }
 
-    public const string FileName = "library.json";
-
     public ObservableCollection<PackageViewModel> InstalledPackages { get; set; } = new();
 
     public ObservableCollection<RemotePackageViewModel> RemotePackages { get; set; } = new();
 
-    public static string GetAppData()
+    #region Lifetime
+
+    private static string GetAppData()
     {
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit.Installer");
         if (!Directory.Exists(dir))
@@ -86,16 +89,21 @@ public class LibraryService : ILibraryService
         await LoadAsync();
     }
 
-    private bool TryGetInstalled(string id, out PackageViewModel installed)
+    /// <summary>
+    /// Serialize
+    /// </summary>
+    /// <returns></returns>
+    public async Task SaveAsync()
     {
-        installed = InstalledPackages.FirstOrDefault(x => x.Name == id);
-        return installed != null;
-    }
+        var models = InstalledPackages.Select(x => x.GetModel()).ToArray();
+        var json = JsonSerializer.Serialize(models, new JsonSerializerOptions()
+        {
+            WriteIndented = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        });
 
-    private bool TryGetRemote(string id, out RemotePackageViewModel remote)
-    {
-        remote = RemotePackages.FirstOrDefault(x => x.Name == id);
-        return remote != null;
+        var file = Path.Combine(GetAppData(), FileName);
+        await File.WriteAllTextAsync(file, json);
     }
 
     /// <summary>
@@ -171,6 +179,27 @@ public class LibraryService : ILibraryService
             InstalledPackages = new();
         }
     }
+
+    #endregion
+
+    #region Dictionary
+
+    private bool TryGetInstalled(string id, out PackageViewModel installed)
+    {
+        installed = InstalledPackages.FirstOrDefault(x => x.Name == id);
+        return installed != null;
+    }
+
+    public bool TryGetRemote(PackageModel model, out RemotePackageViewModel remote) => TryGetRemote(model.Name, out remote);
+
+    public bool TryGetRemote(string id, out RemotePackageViewModel remote)
+    {
+        remote = RemotePackages.FirstOrDefault(x => x.Name == id);
+        return remote != null;
+    }
+
+    #endregion
+
 
     public async Task<string> GetLatestVersionAsync(RemotePackageModel model, bool prerelease = false)
     {
@@ -305,7 +334,7 @@ public class LibraryService : ILibraryService
 
         // extract zip file
         var installedFiles = await Task.Run(() => ExtractZip(zipPath, installPath));
-        var installedPackage = new PackageModel(package.Name, version, installedFiles.ToArray(), installPath, package.Executable);
+        var installedPackage = new PackageModel(package.Name, version, installedFiles.Select(x => Path.GetRelativePath(installPath, x)).ToArray(), installPath);
 
         InstalledPackages.Add(new(installedPackage, EPackageStatus.Installed, package.ImagePath));
 
@@ -383,17 +412,6 @@ public class LibraryService : ILibraryService
         return files;
     }
 
-    public async Task SaveAsync()
-    {
-        var models = InstalledPackages.Select(x => x.GetModel()).ToArray();
-        var json = JsonSerializer.Serialize(models, new JsonSerializerOptions()
-        {
-            WriteIndented = true,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        });
 
-        var file = Path.Combine(GetAppData(), FileName);
-        await File.WriteAllTextAsync(file, json);
-    }
 }
 

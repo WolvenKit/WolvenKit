@@ -21,16 +21,13 @@
             IsItemClickEnabled="True"
             IsSwipeEnabled="False"
             ItemClick="OnItemGridViewItemClick"
+            ItemContainerStyle="{StaticResource IndentedGridViewItemStyle}"
+            ItemTemplate="{StaticResource RemoteControlItemTemplate}"
             ItemsSource="{x:Bind ViewModel.LibraryService.RemotePackages, Mode=OneWay}"
             KeyDown="OnItemGridViewKeyDown"
             Loaded="OnItemGridViewLoaded"
             SelectionMode="None"
-            SizeChanged="OnItemGridViewSizeChanged"
-            
-            ItemContainerStyle="{StaticResource IndentedGridViewItemStyle}"
-            ItemTemplate="{StaticResource RemoteControlItemTemplate}"
-            
-            />
+            SizeChanged="OnItemGridViewSizeChanged" />
 
 
     </Grid>

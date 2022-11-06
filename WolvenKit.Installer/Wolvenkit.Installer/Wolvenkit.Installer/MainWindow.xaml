@@ -39,11 +39,11 @@
 
         <!--    -->
         <NavigationView
-            IsEnabled="{x:Bind ViewModel.Loaded, Mode=OneWay}"
             x:Name="NavigationViewControl"
             Grid.Column="1"
             AlwaysShowHeader="True"
             Canvas.ZIndex="1"
+            IsEnabled="{x:Bind ViewModel.Loaded, Mode=OneWay}"
             PaneDisplayMode="Left"
             SelectionChanged="NavigationViewControl_SelectionChanged">
 

@@ -17,6 +17,9 @@ namespace Wolvenkit.Installer;
 /// </summary>
 public sealed partial class MainWindow : Window
 {
+    private const int width = 1400;
+    private const int height = 900;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -25,7 +28,11 @@ public sealed partial class MainWindow : Window
 
         SetTitleBar(AppTitleBar);
 
-
+        // set app dimensions
+        var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+        var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
+        var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+        appWindow.MoveAndResize(new Windows.Graphics.RectInt32((1920 / 2) - (width / 2), (1080 / 2) - (height / 2), width, height));
     }
 
 
