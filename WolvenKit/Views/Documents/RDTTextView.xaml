@@ -42,7 +42,7 @@
             FontSize="10pt"
             Foreground="{StaticResource ContentForeground}"
             ShowLineNumbers="True"
-            SyntaxHighlighting="{Binding HighlightingDefinition}" />
+            SyntaxHighlighting="{Binding HighlightingDefinition, Mode=OneWay}"/>
 
 
     </Grid>

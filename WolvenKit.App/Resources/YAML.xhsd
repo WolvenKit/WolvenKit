@@ -1,50 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- syntaxdefinition for YAML by DZK -->
 <!-- the regex for this is... interesting -->
-<SyntaxDefinition name="Yaml" extensions=".yaml;.yml;.xl" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
-	<Color name="Key" foreground="#7EE787" exampleText="" />
-	<Color name="Value" foreground="#a5d6ff" exampleText="" />
-	<Color name="Bool" foreground="#79c0ff" exampleText="true | false" />
-	<Color name="Number" foreground="Cyan" exampleText="3.14" />
+<SyntaxDefinition name="YAML" extensions=".yaml;.yml;.xl" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Key" foreground="#7EE787" exampleText="key:" />
+	<Color name="Value" foreground="#A5D6FF" exampleText="" />
+	<Color name="Tag" foreground="#FF7B72" exampleText="!tag" />
+	<Color name="Bool" foreground="#79C0FF" exampleText="true | false" />
+	<Color name="Number" foreground="#79C0FF" exampleText="3.14" />
+	<Color name="Comment" foreground="#8B949E" exampleText="#Comment" />
 	<Color name="IllegalChars" background="Red" exampleText="" />
 	
-	<RuleSet name="IllegalChars">
-		<Rule color="IllegalChars">
-			\\t+
-		</Rule>
-		<Rule color="IllegalChars">
-			:'.+$
-		</Rule>
-		<Rule color="IllegalChars">
-			:".+$
-		</Rule>
-		<!--<Rule color="IllegalChars">
-			(?<=[A-Za-z:]+) +$
-		</Rule>-->
-	</RuleSet>
-
-	<RuleSet name="Object">
-		<Rule color="Key">
-			^\s*@?[\$\w\-.]+
-		</Rule>
-		<Rule color="Value">
-			: +.+$
-		</Rule>
-	</RuleSet>
+	<!--<RuleSet name="IllegalChars">
+		<Rule color="IllegalChars">\\t+</Rule>
+		<Rule color="IllegalChars">:'.+$</Rule>
+		<Rule color="IllegalChars">:".+$</Rule>
+		<Rule color="IllegalChars">(?&lt;=[A-Za-z:]+)\s+$</Rule>
+	</RuleSet>-->
 
 	<RuleSet name="Expression">
 		<Keywords color="Bool" >
 			<Word>true</Word>
 			<Word>false</Word>
+			<Word>True</Word>
+			<Word>False</Word>
 		</Keywords>
-		<Rule color="Number">
-			\b0[xX][0-9a-fA-F]+|(\b\d+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?
-		</Rule>
+		<Rule color="Number">\b0[xX][0-9a-fA-F]+|(?:\b\d+(?:\.[0-9]+)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?</Rule>
+	</RuleSet>
+
+	<RuleSet name="Object">
+		<Rule color="Key">^\s*@?[\$\w\-\.]+\b</Rule>
+		<Rule color="Value">(?&lt;=:)\s.+$</Rule>
+		<Rule color="Tag">(?&lt;=-)\s![a-zA-Z\-]+\b</Rule>
+		<Rule color="Value">(?&lt;=-)\s.+$</Rule>
+	</RuleSet>
+
+	<RuleSet name="Comments">
+		<Span color="Comment">
+			<Begin>\#</Begin>
+		</Span>
 	</RuleSet>
 
 	<RuleSet>
-		<Import ruleSet="IllegalChars" />
+		<!--<Import ruleSet="IllegalChars" />-->
 		<Import ruleSet="Expression" />
 		<Import ruleSet="Object" />
+		<Import ruleSet="Comments" />
 	</RuleSet>
 </SyntaxDefinition>

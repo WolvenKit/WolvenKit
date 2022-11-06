@@ -1,4 +1,3 @@
-using DynamicData.Binding;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -6,6 +5,8 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Xml;
+using DynamicData.Binding;
+using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
@@ -38,34 +39,48 @@ namespace WolvenKit.ViewModels.Documents
                 .Subscribe();
         }
 
+        private void RegisterHighlighting()
+        {
+            try
+            {
+                // register the custom highlighting for YAML files
+                using (var xshdStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.YAML.xhsd"))
+                {
+                    var xmlreader = XmlReader.Create(xshdStream);
+
+                    var hlManager = HighlightingManager.Instance;
+                    var hlXshdDef = HighlightingLoader.LoadXshd(xmlreader);
+                    var hlDef = HighlightingLoader.Load(hlXshdDef, hlManager);
+
+                    hlManager.RegisterHighlighting(hlXshdDef.Name, hlXshdDef.Extensions.ToArray(), hlDef);
+                    HighlightingDefinition = hlDef;
+                }
+            }
+            catch
+            {
+                
+            }
+        }
+
         private void SetupText(Stream stream)
         {
-            // register the custom highlighting for YAML files
-            using (var xshdStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.YAML.xhsd"))
-            {
-                var xmlreader = XmlReader.Create(xshdStream);
-
-                var hlManager = HighlightingManager.Instance;
-                var hlXshdDef = HighlightingLoader.LoadXshd(xmlreader);
-                var hlDef = HighlightingLoader.Load(hlXshdDef, hlManager);
-
-                hlManager.RegisterHighlighting("yaml", new string[]
-                {
-                "yaml",
-                "yml",
-                "xl"
-                }, hlDef);
-            };
-
             using var sr = new StreamReader(stream);
             Document = new TextDocument(sr.ReadToEnd());
-
-            var ext = Path.GetExtension(FilePath).Substring(1);
-            var def = HighlightingManager.Instance.GetDefinitionByExtension(ext);
-            if (def != null)
+            TextEditorOptions = new TextEditorOptions
             {
+                IndentationSize = 2,
+                ConvertTabsToSpaces = true,
+                EnableHyperlinks = false,
+                EnableEmailHyperlinks = false
+            };
+
+            var def = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(FilePath));
+
+            if (def != null)
                 HighlightingDefinition = def;
-            }
+            else
+                RegisterHighlighting();
+            
         }
 
         public override void OnSelected()
@@ -91,7 +106,8 @@ namespace WolvenKit.ViewModels.Documents
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
         [Reactive] public TextDocument Document { get; set; }
-        [Reactive] public IHighlightingDefinition HighlightingDefinition { get; set; }
+        [Reactive] public IHighlightingDefinition HighlightingDefinition { get; protected set; }
+        public TextEditorOptions TextEditorOptions { get; protected set; }
 
         public string GetText() => Document.Text;
         [Reactive] public bool IsDirty { get; protected set; }

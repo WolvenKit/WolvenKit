@@ -32,16 +32,13 @@ namespace WolvenKit.Views.Documents
                        viewModel => viewModel.IsDirty,
                        view => view.textEditor.IsModified)
                    .DisposeWith(disposables);
+                this.OneWayBind(ViewModel,
+                    viewModel => viewModel.TextEditorOptions,
+                    view => view.textEditor.Options);
                 //this.OneWayBind(ViewModel,
                 //        viewModel => viewModel.IsReadOnly,
                 //        view => view.textEditor.IsReadOnly)
                 //    .DisposeWith(disposables);
-                //this.OneWayBind(ViewModel,
-                //        viewModel => viewModel.HighlightingDefinition,
-                //        view => view.textEditor.SyntaxHighlighting)
-                //    .DisposeWith(disposables);
-
-
             });
         }
     }
