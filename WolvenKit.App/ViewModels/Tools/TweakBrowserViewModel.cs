@@ -162,7 +162,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 _selectedRecordEntry = value;
                 this.RaisePropertyChanged(nameof(SelectedRecordEntry));
-                if (_selectedRecordEntry != null)
+                if (_selectedRecordEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedRecord.Clear();
                     SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, true));
@@ -182,7 +182,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 _selectedFlatEntry = value;
                 this.RaisePropertyChanged(nameof(SelectedFlatEntry));
-                if (_selectedFlatEntry != null)
+                if (_selectedFlatEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(_selectedFlatEntry.Item), null, true);
                 }
@@ -201,7 +201,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 _selectedQueryEntry = value;
                 this.RaisePropertyChanged(nameof(SelectedQueryEntry));
-                if (_selectedQueryEntry != null)
+                if (_selectedQueryEntry != null && _tweakDB.IsLoaded)
                 {
                     var arr = new CArray<TweakDBID>();
                     foreach (var query in _tweakDB.GetQuery(_selectedQueryEntry.Item))
@@ -226,7 +226,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 _selectedGroupTagEntry = value;
                 this.RaisePropertyChanged(nameof(SelectedGroupTagEntry));
-                if (_selectedGroupTagEntry != null)
+                if (_selectedGroupTagEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedGroupTag = new ChunkViewModel((CUInt8)_tweakDB.GetGroupTag(_selectedGroupTagEntry.Item), null, true);
                 }
