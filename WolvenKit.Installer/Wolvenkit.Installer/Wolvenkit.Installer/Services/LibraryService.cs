@@ -22,11 +22,12 @@ public interface ILibraryService
 
     ObservableCollection<RemotePackageViewModel> RemotePackages { get; set; }
 
-    Task<string> CheckForUpdateAsync(RemotePackageModel model, bool prerelease);
-    Task InstallAsync(RemotePackageModel id, string installPath);
+    Task<string> GetLatestVersionAsync(RemotePackageModel model, bool prerelease);
+    Task<bool> InstallAsync(RemotePackageModel id, string installPath);
+    Task<bool> InstallAsync(PackageModel id);
     Task InitAsync();
     Task SaveAsync();
-    Task RemoveAsync(PackageModel model);
+    Task<bool> RemoveAsync(PackageModel model);
 }
 
 public class LibraryService : ILibraryService
@@ -72,7 +73,7 @@ public class LibraryService : ILibraryService
         // create available viewmodels
         foreach (var item in available)
         {
-            var latest = await CheckForUpdateAsync(item);
+            var latest = await GetLatestVersionAsync(item);
             if (string.IsNullOrEmpty(latest))
             {
                 // todo logging
@@ -89,6 +90,12 @@ public class LibraryService : ILibraryService
     {
         installed = InstalledPackages.FirstOrDefault(x => x.Name == id);
         return installed != null;
+    }
+
+    private bool TryGetRemote(string id, out RemotePackageViewModel remote)
+    {
+        remote = RemotePackages.FirstOrDefault(x => x.Name == id);
+        return remote != null;
     }
 
     /// <summary>
@@ -115,13 +122,37 @@ public class LibraryService : ILibraryService
                     // todo refactor
                     foreach (var item in installed)
                     {
-                        InstalledPackages.Add(new PackageViewModel(
+                        // check for updates
+                        if (TryGetRemote(item.Name, out var remote))
+                        {
+                            var installedVersion = item.Version;
+                            var remoteVersion = remote.RemoteVersion;
+
+                            // refactor SemVer
+                            var updateAvailable = false;
+                            if (installedVersion != remoteVersion)
+                            {
+                                updateAvailable = true;
+                            }
+
+                            InstalledPackages.Add(new PackageViewModel(
+                            item,
+                            updateAvailable ? EPackageStatus.UpdateAvailable : EPackageStatus.Installed,
+                            "ms-appx:///Assets/ControlImages/Acrylic.png"
+                            )
+                            {
+                            });
+                        }
+                        else
+                        {
+                            InstalledPackages.Add(new PackageViewModel(
                             item,
                             EPackageStatus.Installed,
                             "ms-appx:///Assets/ControlImages/Acrylic.png"
                             )
-                        {
-                        });
+                            {
+                            });
+                        }
                     }
                 }
                 else
@@ -141,7 +172,7 @@ public class LibraryService : ILibraryService
         }
     }
 
-    public async Task<string> CheckForUpdateAsync(RemotePackageModel model, bool prerelease = false)
+    public async Task<string> GetLatestVersionAsync(RemotePackageModel model, bool prerelease = false)
     {
         if (prerelease)
         {
@@ -165,36 +196,43 @@ public class LibraryService : ILibraryService
         return response?.RequestMessage.RequestUri.LocalPath.Split('/').Last();
     }
 
-    public async Task RemoveAsync(PackageModel model)
+    public async Task<bool> RemoveAsync(PackageModel model)
     {
         var installed = InstalledPackages.FirstOrDefault(x => x.GetModel() == model);
         if (installed is not null)
         {
             InstalledPackages.Remove(installed);
             await SaveAsync();
+            return true;
         }
         else
         {
             _logger.LogError("Could not find {model}", model.Name);
+            return false;
         }
     }
 
-    public async Task InstallAsync(RemotePackageModel package, string installPath)
+    public async Task<bool> InstallAsync(PackageModel package)
+    {
+        return TryGetRemote(package.Name, out var remote) && await InstallAsync(remote.GetModel(), remote.InstallPath);
+    }
+
+    public async Task<bool> InstallAsync(RemotePackageModel package, string installPath)
     {
         if (string.IsNullOrEmpty(installPath))
         {
             _logger.LogError("Install location does not exist: {installpath}", installPath);
-            return;
+            return false;
         }
 
         //_progressService.IsIndeterminate = true;
 
         // get remote version
-        var version = await CheckForUpdateAsync(package);
+        var version = await GetLatestVersionAsync(package);
         if (string.IsNullOrEmpty(version))
         {
-            // todo logging
-            return;
+            _logger.LogError("No remote version found");
+            return false;
         }
 
         // check installed?
@@ -227,16 +265,17 @@ public class LibraryService : ILibraryService
                 var howManyRequestsCanIMakePerHour = rateLimit?.Limit;
                 var howManyRequestsDoIHaveLeft = rateLimit?.Remaining;
                 var whenDoesTheLimitReset = rateLimit?.Reset; // UTC time
-                _logger.LogInformation($"[Update] {howManyRequestsDoIHaveLeft}/{howManyRequestsCanIMakePerHour} - reset: {whenDoesTheLimitReset ?? whenDoesTheLimitReset.Value.ToLocalTime()}");
 
+                _logger.LogInformation($"[Update] {howManyRequestsDoIHaveLeft}/{howManyRequestsCanIMakePerHour} - reset: {whenDoesTheLimitReset ?? whenDoesTheLimitReset.Value.ToLocalTime()}");
                 _logger.LogError("API rate limit exceeded");
 
-                return;
+                return false;
             }
 
             if (!asset.Any())
             {
-                return;
+                _logger.LogError("No assets found to download");
+                return false;
             }
 
             // download 
@@ -253,7 +292,7 @@ public class LibraryService : ILibraryService
                 catch (HttpRequestException ex)
                 {
                     _logger.LogError(ex, "Failed to respond to url: {contentUrl}", contentUrl);
-                    return;
+                    return false;
                 }
 
                 await using var fs = new FileStream(zipPath, System.IO.FileMode.Create);
@@ -266,12 +305,14 @@ public class LibraryService : ILibraryService
 
         // extract zip file
         var installedFiles = await Task.Run(() => ExtractZip(zipPath, installPath));
-        var installedPackage = new PackageModel(package.Name, version, installedFiles.ToArray(), installPath);
+        var installedPackage = new PackageModel(package.Name, version, installedFiles.ToArray(), installPath, package.Executable);
 
         InstalledPackages.Add(new(installedPackage, EPackageStatus.Installed, package.ImagePath));
 
         // save
         await SaveAsync();
+
+        return true;
     }
 
     private List<string> ExtractZip(string zipPath, string extractPath)

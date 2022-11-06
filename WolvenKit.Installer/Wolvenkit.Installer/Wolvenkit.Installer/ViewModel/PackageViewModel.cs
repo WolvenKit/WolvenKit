@@ -22,16 +22,25 @@ public partial class PackageViewModel
         _notificationService = App.Current.Services.GetService<INotificationService>();
 
         _model = model;
-        Installed = installed;
+        Status = installed;
         ImagePath = imagePath;
+
+        if (Status == EPackageStatus.UpdateAvailable)
+        {
+            IsUpdateAvailable = true;
+        }
     }
+
+    // Todo refactor with custom converter
+    [ObservableProperty]
+    private bool isUpdateAvailable;
 
     public string Name => _model.Name;
     public string Version => _model.Version;
 
     // LOCAL
     public string ImagePath { get; }
-    public EPackageStatus Installed { get; set; }
+    public EPackageStatus Status { get; set; }
 
     internal PackageModel GetModel() => _model;
 
@@ -41,7 +50,14 @@ public partial class PackageViewModel
     {
         if (Directory.Exists(_model.Path))
         {
-            Process.Start("explorer.exe", "\"" + _model.Path + "\"");
+            var exe = Path.Combine(_model.Path, _model.Executable);
+            if (File.Exists(exe))
+            {
+                Process.Start("explorer.exe", "\"" + _model.Executable + "\"");
+            }
+
+            //Process.Start("explorer.exe", "\"" + _model.Path + "\"");
+
         }
     }
 
@@ -61,16 +77,46 @@ public partial class PackageViewModel
             }
             catch (System.Exception)
             {
-
-                throw;
+                // todo logging
             }
-
         }
 
         _notificationService.CloseBanner();
         _notificationService.StopIndeterminate();
     }
 
+    [RelayCommand()]
+    private async Task Update()
+    {
+        _notificationService.StartIndeterminate();
+        _notificationService.DisplayBanner("Updating", $"Updating {Name}. Please wait", Microsoft.UI.Xaml.Controls.InfoBarSeverity.Informational);
+
+        var isuninstalled = false;
+
+        // remove
+        if (Directory.Exists(_model.Path))
+        {
+            try
+            {
+                Directory.Delete(_model.Path, true);
+                isuninstalled = await _libraryService.RemoveAsync(_model);
+            }
+            catch (System.Exception)
+            {
+                // todo logging
+            }
+        }
+
+        // install
+        if (isuninstalled)
+        {
+            await _libraryService.InstallAsync(_model);
+            IsUpdateAvailable = false;
+        }
+
+        _notificationService.CloseBanner();
+        _notificationService.StopIndeterminate();
+    }
 }
 
 public enum EPackageStatus

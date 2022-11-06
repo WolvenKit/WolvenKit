@@ -60,5 +60,7 @@ public partial class RemotePackageViewModel
     {
         return !Directory.Exists(InstallPath);
     }
+
+    public RemotePackageModel GetModel() => _model;
 }
 
