@@ -20,9 +20,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.ProjectManagement.Project;
-using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Tools;
-using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Tools
@@ -50,6 +48,9 @@ namespace WolvenKit.Views.Tools
 
             ViewModel = Locator.Current.GetService<ProjectExplorerViewModel>();
             DataContext = ViewModel;
+
+            ViewModel.BeforeDataSourceUpdate += OnBeforeDataSourceUpdate;
+            ViewModel.AfterDataSourceUpdate += OnAfterDataSourceUpdate;
 
             this.WhenActivated(disposables =>
             {
@@ -134,6 +135,89 @@ namespace WolvenKit.Views.Tools
 
             });
 
+        }
+
+        private Dictionary<string, bool> _nodeState;
+        private string _selectedNodeState;
+
+        private void OnBeforeDataSourceUpdate(object sender, EventArgs e)
+        {
+            if (TreeGrid?.View == null || TreeGrid.View.Nodes.Count == 0)
+            {
+                return;
+            }
+
+            _selectedNodeState = ((FileModel)TreeGrid.SelectedItem)?.FullName;
+            _nodeState = new Dictionary<string, bool>();
+            foreach (var node in TreeGrid.View.Nodes)
+            {
+                if (((FileModel)node.Item).IsDirectory)
+                {
+                    GetStates(node);
+                }
+            }
+            
+            void GetStates(TreeNode node)
+            {
+                if (!node.HasChildNodes)
+                {
+                    return;
+                }
+
+                _nodeState.TryAdd(((FileModel)node.Item).FullName, node.IsExpanded);
+
+                foreach (var childNode in node.ChildNodes)
+                {
+                    if (((FileModel)childNode.Item).IsDirectory)
+                    {
+                        GetStates(childNode);
+                    }
+                }
+            }
+        }
+
+        private void OnAfterDataSourceUpdate(object sender, EventArgs e)
+        {
+            if (TreeGrid?.View == null || TreeGrid.View.Nodes.Count == 0 || _nodeState == null)
+            {
+                return;
+            }
+
+            TreeGrid.CollapseAllNodes();
+            foreach (var node in TreeGrid.View.Nodes)
+            {
+                if (((FileModel)node.Item).IsDirectory)
+                {
+                    SetStates(node);
+                }
+            }
+
+            _nodeState = null;
+            _selectedNodeState = null;
+            
+            void SetStates(TreeNode node)
+            {
+                if (((FileModel)node.Item).FullName == _selectedNodeState)
+                {
+                    TreeGrid.SetCurrentValue(SfGridBase.SelectedItemProperty, node.Item);
+                }
+
+                if (!node.HasChildNodes)
+                {
+                    return;
+                }
+
+                var fullName = ((FileModel)node.Item).FullName;
+                if (!_nodeState.ContainsKey(fullName) || _nodeState[fullName])
+                {
+                    TreeGrid.ExpandNode(node);
+                }
+
+                foreach (var childNode in node.ChildNodes)
+                {
+                    SetStates(childNode);
+                }
+            }
         }
 
         private void OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs treeGridCellDoubleTappedEventArgs)

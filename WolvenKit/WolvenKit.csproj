@@ -1774,6 +1774,7 @@
     <None Remove="Resources\SkyboxTextures\skyrender0003.bmp" />
     <None Remove="Resources\SkyboxTextures\skyrender0004.bmp" />
     <None Remove="Resources\SkyboxTextures\skyrender0005.bmp" />
+    <None Remove="Resources\SyntaxHighlighting\JavaScript-DarkMode.xshd" />
     <None Remove="sample.mp4" />
     <None Remove="SplashScreen1.png" />
     <None Remove="TaskBarIcon.ico" />
@@ -1783,6 +1784,7 @@
     <EmbeddedResource Include="Resources\launchprofiles.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SyntaxHighlighting\JavaScript-DarkMode.xshd" />
   </ItemGroup>
 
   <ItemGroup>

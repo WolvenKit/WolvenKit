@@ -21,6 +21,8 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
         {
+            Settings.ImportsAsHash = true;
+
             var code = base.ReadBuffer(buffer);
             if (code == EFileReadErrorCodes.NoError)
             {

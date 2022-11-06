@@ -28,6 +28,7 @@ namespace WolvenKit.Functionality.Services
             ShowCNameAsHex = settings.ShowCNameAsHex;
             ShowNodeRefAsHex = settings.ShowNodeRefAsHex;
             ShowTweakDBIDAsHex = settings.ShowTweakDBIDAsHex;
+            ShowReferenceGraph = settings.ShowReferenceGraph;
             LaunchProfiles = settings.LaunchProfiles;
 
             if (settings.SettingsVersion != 2)
@@ -54,6 +55,7 @@ namespace WolvenKit.Functionality.Services
         public bool ShowCNameAsHex { get; set; }
         public bool ShowNodeRefAsHex { get; set; }
         public bool ShowTweakDBIDAsHex { get; set; }
+        public bool ShowReferenceGraph { get; set; }
         public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; }
 
         public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
@@ -81,6 +83,7 @@ namespace WolvenKit.Functionality.Services
             settingsManager.ShowCNameAsHex = ShowCNameAsHex;
             settingsManager.ShowNodeRefAsHex = ShowNodeRefAsHex;
             settingsManager.ShowTweakDBIDAsHex = ShowTweakDBIDAsHex;
+            settingsManager.ShowReferenceGraph = ShowReferenceGraph;
             settingsManager.LaunchProfiles = LaunchProfiles;
 
             return settingsManager;

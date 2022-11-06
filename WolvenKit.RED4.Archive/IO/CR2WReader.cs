@@ -139,6 +139,36 @@ namespace WolvenKit.RED4.Archive.IO
                 cls.SetProperty(prop.RedName, value);
             }
 
+            if (CollectData)
+            {
+                if (prop.Name.Contains("Fact") && !prop.Name.Contains("Factor"))
+                {
+                    if (value is CString str1)
+                    {
+                        DataCollection.RawStringList.Remove(str1);
+                        DataCollection.RawFactStrings.Add(str1);
+                    }
+
+                    if (value is CName str2 && str2.IsResolvable)
+                    {
+                        DataCollection.RawStringList.Remove(str2.GetResolvedText());
+                        DataCollection.RawFactStrings.Add(str2.GetResolvedText());
+                    }
+
+                    if (value is CArray<CName> arr1)
+                    {
+                        foreach (var cName in arr1)
+                        {
+                            if (cName.IsResolvable)
+                            {
+                                DataCollection.RawStringList.Remove(cName.GetResolvedText());
+                                DataCollection.RawFactStrings.Add(cName.GetResolvedText());
+                            }
+                        }
+                    }
+                }
+            }
+
             PostProcess();
 
             return true;

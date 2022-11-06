@@ -599,7 +599,17 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Methods
 
-        private void OnNext(IChangeSet<FileModel, ulong> obj) => BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
+        public event EventHandler BeforeDataSourceUpdate;
+        public event EventHandler AfterDataSourceUpdate;
+
+        private void OnNext(IChangeSet<FileModel, ulong> obj)
+        {
+            BeforeDataSourceUpdate?.Invoke(this, EventArgs.Empty);
+
+            BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
+
+            AfterDataSourceUpdate?.Invoke(this, EventArgs.Empty);
+        }
 
         /// <summary>
         /// Initialize Avalondock specific defaults that are specific to this tool window.

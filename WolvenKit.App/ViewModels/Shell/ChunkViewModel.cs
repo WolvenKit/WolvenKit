@@ -106,7 +106,6 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (Parent is not null)
                     {
-
                         if (Parent.Data is IRedArray arr)
                         {
                             var index = int.Parse(Name);
@@ -159,6 +158,15 @@ namespace WolvenKit.ViewModels.Shell
                         }
 
                         Parent.CalculateDescriptor();
+
+                        if (Parent.Data is CMeshMaterialEntry meshMaterialEntry && meshMaterialEntry.IsLocalInstance)
+                        {
+                            var materials = GetRootModel().GetModelFromPath("localMaterialBuffer.materials");
+                            if (materials != null && materials.Properties.Count > meshMaterialEntry.Index)
+                            {
+                                materials.Properties[meshMaterialEntry.Index].CalculateDescriptor();
+                            }
+                        }
                     }
                 });
 
@@ -2582,5 +2590,34 @@ namespace WolvenKit.ViewModels.Shell
         public ICommand OpenSelfCommand { get; private set; }
         private bool CanOpenSelf() => RelativePath != CName.Empty && _tab == null;
         private void ExecuteOpenSelf() => Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
+
+        private ChunkViewModel GetRootModel()
+        {
+            var result = this;
+            while (result.Parent != null)
+            {
+                result = result.Parent;
+            }
+            return result;
+        }
+
+        private ChunkViewModel GetModelFromPath(string path)
+        {
+            var parts = path.Split('.');
+
+            var result = this;
+            foreach (var part in parts)
+            {
+                var newResult = result.Properties.FirstOrDefault(x => x.Name == part);
+                if (newResult == null)
+                {
+                    return null;
+                }
+
+                result = newResult;
+            }
+
+            return result;
+        }
     }
 }

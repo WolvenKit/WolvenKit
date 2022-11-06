@@ -47,7 +47,8 @@ namespace WolvenKit.Functionality.Services
                 nameof(ShowAdvancedOptions),
                 nameof(ShowCNameAsHex),
                 nameof(ShowNodeRefAsHex),
-                nameof(ShowTweakDBIDAsHex)
+                nameof(ShowTweakDBIDAsHex),
+                nameof(ShowReferenceGraph)
                 )
               .Subscribe(_ =>
               {
@@ -210,6 +211,11 @@ namespace WolvenKit.Functionality.Services
         [Display(Name = "Show TweakDBID hashes as hex")]
         [Reactive]
         public bool ShowTweakDBIDAsHex { get; set; }
+
+        [Category("Display")]
+        [Display(Name = "Show reference graph")]
+        [Reactive]
+        public bool ShowReferenceGraph { get; set; }
 
         [Reactive]
         [Browsable(false)]

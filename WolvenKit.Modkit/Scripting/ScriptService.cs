@@ -7,21 +7,21 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
+using Splat;
 using WolvenKit.Core.Interfaces;
-using System.Threading;
 
 namespace WolvenKit.Modkit.Scripting;
 
 public class ScriptService : INotifyPropertyChanged
 {
-    private readonly ILoggerService _loggerService;
+    protected readonly ILoggerService _loggerService;
 
     private V8ScriptEngine _mainEngine;
     private bool _isRunning;
 
-    public ScriptService(ILoggerService loggerService)
+    public ScriptService(ILoggerService loggerService = null)
     {
-        _loggerService = loggerService;
+        _loggerService = loggerService ?? Locator.Current.GetService<ILoggerService>();
     }
 
     public bool IsRunning
@@ -30,7 +30,7 @@ public class ScriptService : INotifyPropertyChanged
         set => SetField(ref _isRunning, value);
     }
 
-    public async Task ExecuteAsync(string code, Dictionary<string, object> hostObjects, string searchPath = null)
+    public async Task ExecuteAsync(string code, Dictionary<string, object> hostObjects = null, string searchPath = null)
     {
         if (_mainEngine != null)
         {
@@ -45,23 +45,7 @@ public class ScriptService : INotifyPropertyChanged
 
         DocumentLoader.Default.DiscardCachedDocuments();
 
-        _mainEngine = new V8ScriptEngine();
-
-        if (!string.IsNullOrEmpty(searchPath))
-        {
-            _mainEngine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
-            _mainEngine.DocumentSettings.SearchPath = searchPath;
-        }
-
-        _mainEngine.AddHostType(typeof(Thread));
-        _mainEngine.AddHostType(typeof(Task));
-        _mainEngine.AddHostType(typeof(JavaScriptExtensions));
-
-        _mainEngine.AddHostObject("logger", _loggerService);
-        foreach (var kvp in hostObjects)
-        {
-            _mainEngine.AddHostObject(kvp.Key, kvp.Value);
-        }
+        _mainEngine = GetScriptEngine(hostObjects, searchPath);
 
         try
         {
@@ -94,6 +78,28 @@ public class ScriptService : INotifyPropertyChanged
         }
 
         IsRunning = false;
+    }
+
+    protected virtual V8ScriptEngine GetScriptEngine(Dictionary<string, object> hostObjects = null, string searchPath = null)
+    {
+        var engine = new V8ScriptEngine();
+
+        engine.AddHostObject("logger", _loggerService);
+        if (hostObjects != null)
+        {
+            foreach (var kvp in hostObjects)
+            {
+                engine.AddHostObject(kvp.Key, kvp.Value);
+            }
+        }
+
+        if (!string.IsNullOrEmpty(searchPath))
+        {
+            engine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
+            engine.DocumentSettings.SearchPath = searchPath;
+        }
+
+        return engine;
     }
 
     #region INotifyPropertyChanged

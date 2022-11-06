@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.RED4.Archive.Buffer;
@@ -8,6 +9,9 @@ namespace WolvenKit.RED4.Archive.IO
     public class CR2WListReader : IBufferReader, IErrorHandler
     {
         private MemoryStream _ms;
+
+        public bool CollectData { get; set; } = false;
+        public DataCollection DataCollection { get; } = new();
 
         public CR2WListReader(MemoryStream ms)
         {
@@ -23,6 +27,8 @@ namespace WolvenKit.RED4.Archive.IO
                 var reader = new CR2WReader(_ms);
                 reader.ParsingError += HandleParsingError;
 
+                reader.CollectData = CollectData;
+
                 result = reader.ReadFile(out var cr2wFile, false);
                 if (cr2wFile != null)
                 {
@@ -30,6 +36,12 @@ namespace WolvenKit.RED4.Archive.IO
                     _ms = new MemoryStream(data);
 
                     list.Files.Add(cr2wFile);
+
+                    if (reader.CollectData)
+                    {
+                        DataCollection.Buffers ??= new List<DataCollection>();
+                        DataCollection.Buffers.Add(reader.DataCollection);
+                    }
                 }
             }
 

@@ -14,14 +14,13 @@ using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.ViewModels.Documents;
 
 public partial class WScriptDocumentViewModel : DocumentViewModel
 {
     private readonly ILoggerService _loggerService;
-    private readonly ScriptService _scriptService;
+    private readonly ExtendedScriptService _scriptService;
 
     private readonly Dictionary<string, object> _hostObjects;
 
@@ -31,7 +30,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         Extension = "wsc";
 
         _loggerService = Locator.Current.GetService<ILoggerService>();
-        _scriptService = Locator.Current.GetService<ScriptService>();
+        _scriptService = Locator.Current.GetService<ExtendedScriptService>();
 
         _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService) } };
         GenerateCompletionData();
@@ -50,6 +49,9 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     [Reactive] public string IsReadOnlyReason { get; set; }
     public Dictionary<string, List<(string name, string desc)>> CompletionData { get; } = new();
 
+    [Reactive] public bool IsUIScript { get; set; }
+    [Reactive] public bool IsNormalScript { get; set; }
+
     [RelayCommand(CanExecute = nameof(CanRun))]
     private async void Run()
     {
@@ -65,6 +67,12 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         _scriptService.Stop();
     }
     private bool CanStop() => _scriptService.IsRunning;
+
+    [RelayCommand]
+    private void ReloadUI()
+    {
+        _scriptService.RefreshUIScripts();
+    }
 
     private void GenerateCompletionData()
     {
@@ -155,10 +163,26 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         }
 
         FilePath = paramFilePath;
+        GetScriptType(Path.GetFileNameWithoutExtension(paramFilePath));
 
         if (string.IsNullOrEmpty(Document.Text))
         {
             return;
+        }
+    }
+
+    private void GetScriptType(string fileName)
+    {
+        IsUIScript = false;
+        IsNormalScript = false;
+
+        if (fileName.StartsWith("ui_"))
+        {
+            IsUIScript = true;
+        }
+        else
+        {
+            IsNormalScript = true;
         }
     }
 }

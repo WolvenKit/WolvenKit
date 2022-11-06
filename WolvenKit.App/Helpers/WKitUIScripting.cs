@@ -15,6 +15,19 @@ public class WKitUIScripting : WKitScripting
 
     public WKitUIScripting(ILoggerService loggerService) : base(loggerService) => _projectManager = Locator.Current.GetService<IProjectManager>();
 
+    public void SuspendFileWatcher(bool suspend)
+    {
+        var watcherService = Locator.Current.GetService<IWatcherService>();
+        if (watcherService != null && watcherService.IsSuspended != suspend)
+        {
+            watcherService.IsSuspended = suspend;
+            if (!suspend)
+            {
+                watcherService.RefreshAsync(_projectManager.ActiveProject);
+            }
+        }
+    }
+
     public virtual void SaveToProject(string path, CR2WFile cr2w) =>
         SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
         {

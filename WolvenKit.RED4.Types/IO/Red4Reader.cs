@@ -82,6 +82,7 @@ namespace WolvenKit.RED4.IO
 
             if (CollectData)
             {
+                DataCollection.RawStringList.Remove(ret);
                 DataCollection.RawUsedStrings.Add(ret);
             }
 
@@ -282,7 +283,18 @@ namespace WolvenKit.RED4.IO
 
         public virtual MessageResourcePath ReadMessageResourcePath() => (MessageResourcePath)ThrowNotImplemented();
 
-        public virtual NodeRef ReadNodeRef() => InternalReadLengthPrefixedString();
+        public virtual NodeRef ReadNodeRef()
+        {
+            var ret = _reader.ReadLengthPrefixedString();
+
+            if (CollectData)
+            {
+                DataCollection.RawStringList.Remove(ret);
+                DataCollection.RawNodeRefs.Add(ret);
+            }
+
+            return ret;
+        }
 
         public virtual IRedType ReadRuntimeEntityRef() => throw new NotImplementedException();
 

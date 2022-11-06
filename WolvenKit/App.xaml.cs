@@ -77,6 +77,7 @@ namespace WolvenKit
             loggerService.Info("Initializing red database");
             Initializations.InitializeThemeHelper();
 
+            Initializations.InitializeSyntaxHighlighting();
 
             // main app viewmodel
             loggerService.Info("Initializing Shell");

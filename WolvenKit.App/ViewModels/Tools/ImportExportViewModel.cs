@@ -757,6 +757,12 @@ namespace WolvenKit.ViewModels.Tools
                         animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                     }
                 }
+
+                if (proj != null)
+                {
+
+                }
+
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
                 return _modTools.Export(fi, settings,
                     new DirectoryInfo(proj.ModDirectory),
