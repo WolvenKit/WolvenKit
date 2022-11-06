@@ -3,9 +3,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Xml;
+using ICSharpCode.AvalonEdit.Highlighting;
 using Microsoft.Web.WebView2.Core;
 using ReactiveUI;
 using Splat;
@@ -114,6 +117,22 @@ namespace WolvenKit
             };
             SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
             SfSkinManager.ApplyStylesOnApplication = true;
+        }
+
+        public static void InitializeSyntaxHighlighting()
+        {
+            // Load our custom highlighting definition
+            IHighlightingDefinition customHighlighting;
+            using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream("WolvenKit.Resources.SyntaxHighlighting.JavaScript-DarkMode.xshd")) {
+                if (s == null)
+                    throw new InvalidOperationException("Could not find embedded resource");
+                using (XmlReader reader = new XmlTextReader(s)) {
+                    customHighlighting = ICSharpCode.AvalonEdit.Highlighting.Xshd.
+                        HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                }
+            }
+            // and register it in the HighlightingManager
+            HighlightingManager.Instance.RegisterHighlighting("JavaScript DarkMode", new string[] { ".wscript" }, customHighlighting);
         }
 
         public static void InitializeLicenses() => Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDM1MDYwQDMxMzkyZTMxMmUzMGNBRjJJdnZoVnJjaklqMTVNL0FNR0JJR3dqR0Fac21YalpQOVEyTkd6bms9");

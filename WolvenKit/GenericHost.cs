@@ -9,7 +9,6 @@ using WolvenKit.App;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Controllers;
@@ -17,7 +16,6 @@ using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
@@ -98,7 +96,7 @@ namespace WolvenKit
 
                     services.AddSingleton<IPluginService, PluginService>();
 
-                    services.AddSingleton<ScriptService>();
+                    services.AddSingleton(new ExtendedScriptService());
 
 
                     // register views
