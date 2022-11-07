@@ -9,130 +9,133 @@ jobs:
     runs-on: windows-2022
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.x
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
 
-    - name: Publish with Dotnet
-      run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
+      - name: Publish with Dotnet
+        run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: WolvenKit Desktop
-        path: .\publish
+      - uses: actions/upload-artifact@v2
+        with:
+          name: WolvenKit Desktop
+          path: .\publish
 
   console-win:
     runs-on: windows-2022
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.x
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
 
-    - name: Publish with Dotnet
-      run: dotnet publish .\WolvenKit.CLI\WolvenKit.CLI.csproj -o .\publish_cli -r win-x64 -c Release --no-self-contained
+      - name: Publish with Dotnet
+        run: dotnet publish .\WolvenKit.CLI\WolvenKit.CLI.csproj -o .\publish_cli -r win-x64 -c Release --no-self-contained
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: WolvenKit CLI
-        path: ./publish_cli
+      - uses: actions/upload-artifact@v2
+        with:
+          name: WolvenKit CLI
+          path: ./publish_cli
 
   console-linux:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.x
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
 
-    - name: Publish with Dotnet
-      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
+      - name: Publish with Dotnet
+        run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: WolvenKit CLI Linux
-        path: ./publish_cli_linux
+      - uses: actions/upload-artifact@v2
+        with:
+          name: WolvenKit CLI Linux
+          path: ./publish_cli_linux
 
   release:
     runs-on: ubuntu-latest
     needs: [console-linux, console-win, desktop-win]
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-     
-    # environmental variables
-    - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $GITHUB_ENV
-    - run: echo "PROJC=./WolvenKit.CLI/WolvenKit.CLI.csproj" >> $GITHUB_ENV
-    - run: echo "OUT=./publish/app/" >> $GITHUB_ENV
-    - run: echo "OUTC=./publish/console/" >> $GITHUB_ENV
-    - run: echo "FINALOUT=./publish" >> $GITHUB_ENV
-    - run: echo "NAME=WolvenKit" >> $GITHUB_ENV
-    - run: echo "REF=${{github.ref}}" >> $GITHUB_ENV
-    - run: echo "SHA=${{github.sha}}" >> $GITHUB_ENV
-    - run: echo "MREPO=${{github.repository}}" >> $GITHUB_ENV
-    - run: echo "VERSION=${{github.ref_name}}" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v3
+       
+      # environmental variables
+      - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $GITHUB_ENV
+      - run: echo "PROJC=./WolvenKit.CLI/WolvenKit.CLI.csproj" >> $GITHUB_ENV
+      - run: echo "OUT=./publish/app/" >> $GITHUB_ENV
+      - run: echo "OUTC=./publish/console/" >> $GITHUB_ENV
+      - run: echo "FINALOUT=./publish" >> $GITHUB_ENV
+      - run: echo "NAME=WolvenKit" >> $GITHUB_ENV
+      - run: echo "REF=${{github.ref}}" >> $GITHUB_ENV
+      - run: echo "SHA=${{github.sha}}" >> $GITHUB_ENV
+      - run: echo "MREPO=${{github.repository}}" >> $GITHUB_ENV
+      - run: echo "VERSION=${{github.ref_name}}" >> $GITHUB_ENV
 
-    - name: Get console version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1
-      id: get-version-cli
-      with:
-        proj-path: ${{env.PROJC}}
+      - name: Get console version
+        uses: naminodarie/get-net-sdk-project-versions-action@v1
+        id: get-version-cli
+        with:
+          proj-path: ${{env.PROJC}}
 
-    - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}" >> $GITHUB_ENV
-    
-    - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $GITHUB_ENV
-    - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $GITHUB_ENV
-    - run: echo "CONSOLELINUX=${{env.NAME}}.ConsoleLinux-${{env.VERSIONC}}.zip" >> $GITHUB_ENV
+      - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}" >> $GITHUB_ENV
+      
+      - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $GITHUB_ENV
+      - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $GITHUB_ENV
+      - run: echo "CONSOLELINUX=${{env.NAME}}.ConsoleLinux-${{env.VERSIONC}}.zip" >> $GITHUB_ENV
 
-    - name: Download artifacts
-      uses: actions/download-artifact@v2
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
 
-    # create zip
-    - run: sudo apt-get install zip -y
-    - run: mkdir -p ${{ env.FINALOUT }}
-    - run: ls -R
-    - run: zip -r ${{ env.FINALOUT }}/${{ env.PORTABLE }} "WolvenKit Desktop"
-    - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLE }} "WolvenKit CLI"
-    - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLELINUX }} "WolvenKit CLI Linux"
+      # create zip
+      - run: sudo apt-get install zip -y
+      - run: mkdir -p ${{ env.FINALOUT }}
+      # - run: ls -R
+      # - run: zip -r ${{ env.FINALOUT }}/${{ env.PORTABLE }} "WolvenKit Desktop"
+      - run: cd "WolvenKit Desktop"; zip -r ../${{ env.FINALOUT }}/${{ env.PORTABLE }} *
+      # - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLE }} "WolvenKit CLI"
+      - run: cd "WolvenKit CLI"; zip -r ../${{ env.FINALOUT }}/${{ env.PORTABLE }} *
+      # - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLELINUX }} "WolvenKit CLI Linux"
+      - run: cd "WolvenKit CLI Linux"; zip -r ../${{ env.FINALOUT }}/${{ env.PORTABLE }} *
 
 
-    # RELEASE
-    - name: Release
-      uses: ncipollo/release-action@v1
-      with:
-        draft: true
-        generateReleaseNotes: true
-        artifacts: "${{ env.FINALOUT }}/*.zip"
-        bodyFile: "RELEASE.md"
-        token: ${{ secrets.GITHUB_TOKEN }}
+      # RELEASE
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          draft: true
+          generateReleaseNotes: true
+          artifacts: "${{ env.FINALOUT }}/*.zip"
+          bodyFile: "RELEASE.md"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   publish-nugets:
     runs-on: windows-latest
 
     steps:
-    - name: checkout
-      uses: actions/checkout@v3
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.x
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
 
-    # Pack and upload nugets for Types, Modkit and CLI
-    - run: dotnet pack .\WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj
-    - run: dotnet nuget push .\WolvenKit.RED4.Types\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+      # Pack and upload nugets for Types, Modkit and CLI
+      - run: dotnet pack .\WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj
+      - run: dotnet nuget push .\WolvenKit.RED4.Types\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
 
-    - run: dotnet pack .\WolvenKit.Modkit\WolvenKit.Modkit.csproj
-    - run: dotnet nuget push .\WolvenKit.Modkit\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+      - run: dotnet pack .\WolvenKit.Modkit\WolvenKit.Modkit.csproj
+      - run: dotnet nuget push .\WolvenKit.Modkit\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
 
-    - run: dotnet pack .\WolvenKit.CLI\WolvenKit.CLI.csproj
-    - run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+      - run: dotnet pack .\WolvenKit.CLI\WolvenKit.CLI.csproj
+      - run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

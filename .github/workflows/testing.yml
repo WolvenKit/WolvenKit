@@ -28,6 +28,7 @@ jobs:
         
     - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
     
+
     # tag this commit
     - name: Create Tag
       id: tag_version
@@ -43,3 +44,27 @@ jobs:
     - name: output
       run: |
         echo "This is a beta release so you may encounter bugs. Please report them. \n ${{ steps.tag_version.outputs.changelog }}"
+
+    - run: git fetch --tags
+
+    - name: Get CLI commits
+      id: get_cli_commits
+      run: |
+        $commits = (git --no-pager diff --name-only 8.7.1-nightly.2022-11-06) | Out-String
+        $i = 0
+        $commits -Split "`r`n" | ForEach-Object {  if ( $_.StartsWith("WolvenKit.CLI/") -or $_.StartsWith("WolvenKit.Common/") -or $_.StartsWith("WolvenKit.Core/") -or $_.StartsWith("WolvenKit.Modkit/") -or $_.StartsWith("WolvenKit.RED4.") ) { $i = $i + 1  } }
+        if ($i -eq 0) { $b = "NO" } else { $b = "YES" }
+        $b
+        echo "has_cli_commits=$b" >> $env:GITHUB_ENV
+
+    - run: |
+        echo "${{ env.has_cli_commits }}" 
+
+    - name: conditional
+      if: ${{ env.has_cli_commits == 'YES' }} 
+      run: |
+        echo "continue with cli" 
+    - name: conditional
+      if: ${{ env.has_cli_commits == 'NO' }} 
+      run: |
+        echo "continue without cli" 
