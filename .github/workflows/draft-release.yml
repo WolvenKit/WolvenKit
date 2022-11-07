@@ -104,9 +104,9 @@ jobs:
       # - run: zip -r ${{ env.FINALOUT }}/${{ env.PORTABLE }} "WolvenKit Desktop"
       - run: cd "WolvenKit Desktop"; zip -r ../${{ env.FINALOUT }}/${{ env.PORTABLE }} *
       # - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLE }} "WolvenKit CLI"
-      - run: cd "WolvenKit CLI"; zip -r ../${{ env.FINALOUT }}/${{ env.PORTABLE }} *
+      - run: cd "WolvenKit CLI"; zip -r ../${{ env.FINALOUT }}/${{ env.CONSOLE }} *
       # - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLELINUX }} "WolvenKit CLI Linux"
-      - run: cd "WolvenKit CLI Linux"; zip -r ../${{ env.FINALOUT }}/${{ env.PORTABLE }} *
+      - run: cd "WolvenKit CLI Linux"; zip -r ../${{ env.FINALOUT }}/${{ env.CONSOLELINUX }} *
 
 
       # RELEASE
