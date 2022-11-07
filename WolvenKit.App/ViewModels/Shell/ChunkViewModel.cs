@@ -166,6 +166,12 @@ namespace WolvenKit.ViewModels.Shell
                             {
                                 materials.Properties[meshMaterialEntry.Index].CalculateDescriptor();
                             }
+
+                            var preload = GetRootModel().GetModelFromPath("preloadLocalMaterialInstances");
+                            if (preload != null && preload.Properties.Count > meshMaterialEntry.Index)
+                            {
+                                preload.Properties[meshMaterialEntry.Index].CalculateDescriptor();
+                            }
                         }
                     }
                 });
