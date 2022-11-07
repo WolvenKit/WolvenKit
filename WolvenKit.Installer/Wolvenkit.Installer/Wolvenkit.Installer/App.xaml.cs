@@ -2,11 +2,10 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
+using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Windows.ApplicationModel.Activation;
 using Wolvenkit.Installer.Helper;
 using Wolvenkit.Installer.Pages;
 using Wolvenkit.Installer.Services;
@@ -16,6 +15,9 @@ using Wolvenkit.Installer.ViewModel;
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace Wolvenkit.Installer;
+
+public record class LaunchSettings(DirectoryInfo TargetLocation, string TargetId, string TargetVersion);
+
 /// <summary>
 /// Provides application-specific behavior to supplement the default Application class.
 /// </summary>
@@ -39,41 +41,43 @@ public partial class App : Application
     /// <param name="args">Details about the launch request and process.</param>
     protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
-        //m_window = new MainWindow();
-        //m_window.Activate();
         StartupWindow = WindowHelper.CreateWindow();
+
+        TargetAppSettings = ParseCommandline();
 
         EnsureWindow();
     }
 
-    private void EnsureWindow(IActivatedEventArgs args = null)
+    private LaunchSettings ParseCommandline()
     {
-        // No matter what our destination is, we're going to need control data loaded - let's knock that out now.
-        // We'll never need to do this again.
-        //var library = App.Current.Services.GetService<ILibraryService>();
-        //await library.LoadAsync();
-
-        ThemeHelper.Initialize();
-
-        var targetPageType = typeof(InstalledPage);
-        var targetPageArguments = string.Empty;
-
-        if (args != null)
+        LaunchSettings launchSettings = null;
+        // hack
+        var cmdargs = Environment.GetCommandLineArgs();
+        if (cmdargs.Length == 7
+            && cmdargs[1] == "-t"
+            && cmdargs[3] == "-i"
+            && cmdargs[5] == "-v")
         {
-            if (args.Kind == ActivationKind.Launch)
+            var di = new DirectoryInfo(cmdargs[2]);
+            if (di is not null && di.Exists)
             {
-                targetPageArguments = ((Windows.ApplicationModel.Activation.LaunchActivatedEventArgs)args).Arguments;
+                launchSettings = new(di, cmdargs[4], cmdargs[6]);
             }
         }
 
+        return launchSettings;
+    }
+
+    private void EnsureWindow()
+    {
+        ThemeHelper.Initialize();
+
+
+        var targetPageType = typeof(InstalledPage);
+        var targetPageArguments = string.Empty;
         MainRoot = StartupWindow.Content as FrameworkElement;
         var rootPage = StartupWindow as MainWindow;
         rootPage.Navigate(targetPageType, targetPageArguments);
-
-        if (targetPageType == typeof(InstalledPage))
-        {
-            ((NavigationViewItem)((MainWindow)App.StartupWindow).NavigationView.MenuItems[0]).IsSelected = true;
-        }
 
         // Ensure the current window is active
         StartupWindow.Activate();
@@ -85,6 +89,8 @@ public partial class App : Application
     // been closed.
     public static Window StartupWindow { get; private set; }
 
+
+    public static LaunchSettings TargetAppSettings { get; private set; }
 
     public static FrameworkElement MainRoot { get; private set; }
 

@@ -12,6 +12,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Semver;
 using Wolvenkit.Installer.Models;
 using Wolvenkit.Installer.ViewModel;
 
@@ -67,6 +68,7 @@ public class LibraryService : ILibraryService
     /// Load and initialize
     /// </summary>
     /// <returns></returns>
+    [Obsolete]
     public async Task InitAsync()
     {
         // get remote info from static db
@@ -115,6 +117,7 @@ public class LibraryService : ILibraryService
     /// Load installed packages
     /// </summary>
     /// <returns></returns>
+    [Obsolete]
     private async Task LoadAsync()
     {
         var file = Path.Combine(GetAppData(), FileName);
@@ -124,53 +127,89 @@ public class LibraryService : ILibraryService
             try
             {
                 var json = await File.ReadAllTextAsync(file);
-                var installed = JsonSerializer.Deserialize<List<PackageModel>>(json, new JsonSerializerOptions()
+                var installedApps = JsonSerializer.Deserialize<List<PackageModel>>(json, new JsonSerializerOptions()
                 {
                     WriteIndented = true,
                     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
                 });
 
-                if (installed is not null)
+                if (installedApps is not null)
                 {
-                    // todo refactor
-                    foreach (var item in installed)
+                    // check for updates
+                    foreach (var item in installedApps)
                     {
+                        // check if exists
+                        if (!Directory.Exists(item.Path))
+                        {
+                            continue;
+                        }
+
                         // check for updates
                         if (TryGetRemote(item.Name, out var remote))
                         {
-                            var installedVersion = item.Version;
-                            var remoteVersion = remote.RemoteVersion;
-
-                            // refactor SemVer
-                            var updateAvailable = false;
-                            if (installedVersion != remoteVersion)
-                            {
-                                updateAvailable = true;
-                            }
+                            var installedVersion = SemVersion.Parse(item.Version, SemVersionStyles.OptionalMinorPatch);
+                            var remoteVersion = SemVersion.Parse(remote.Version, SemVersionStyles.OptionalMinorPatch);
+                            var updateAvailable = remoteVersion.CompareSortOrderTo(installedVersion) > 0;
 
                             InstalledPackages.Add(new PackageViewModel(
                             item,
                             updateAvailable ? EPackageStatus.UpdateAvailable : EPackageStatus.Installed,
                             "ms-appx:///Assets/ControlImages/Acrylic.png"
-                            )
-                            {
-                            });
-                        }
-                        else
-                        {
-                            InstalledPackages.Add(new PackageViewModel(
-                            item,
-                            EPackageStatus.Installed,
-                            "ms-appx:///Assets/ControlImages/Acrylic.png"
-                            )
-                            {
-                            });
+                            ));
                         }
                     }
                 }
                 else
                 {
                     InstalledPackages = new();
+                }
+
+                // check if new app needs registering
+                if (App.TargetAppSettings != null)
+                {
+                    var found = false;
+                    foreach (var item in InstalledPackages)
+                    {
+                        if (item.Name == App.TargetAppSettings.TargetId)
+                        {
+                            var targetPath = App.TargetAppSettings.TargetLocation.FullName.ToUpper();
+                            var installedPath = item.Location.ToUpper();
+                            if (string.Equals(targetPath, installedPath, StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (found)
+                    {
+                        // do nothing, already installed
+                    }
+                    else
+                    {
+
+                        // register
+                        var installedPackage = new PackageModel(
+                            App.TargetAppSettings.TargetId,
+                            App.TargetAppSettings.TargetVersion,
+                            null,
+                            App.TargetAppSettings.TargetLocation.FullName);
+
+                        // check for updates
+                        if (TryGetRemote(installedPackage.Name, out var remote))
+                        {
+                            var installedVersion = SemVersion.Parse(installedPackage.Version, SemVersionStyles.OptionalMinorPatch);
+                            var remoteVersion = SemVersion.Parse(remote.Version, SemVersionStyles.OptionalMinorPatch);
+                            var updateAvailable = remoteVersion.CompareSortOrderTo(installedVersion) > 0;
+
+                            InstalledPackages.Add(new PackageViewModel(
+                            installedPackage,
+                            updateAvailable ? EPackageStatus.UpdateAvailable : EPackageStatus.Installed,
+                            "ms-appx:///Assets/ControlImages/Acrylic.png"
+                            ));
+                        }
+                    }
                 }
             }
             catch (Exception)
@@ -183,6 +222,8 @@ public class LibraryService : ILibraryService
         {
             InstalledPackages = new();
         }
+
+        await SaveAsync();
     }
 
     #endregion
@@ -205,6 +246,7 @@ public class LibraryService : ILibraryService
 
     #endregion
 
+    #region Install
 
     public async Task<string> GetLatestVersionAsync(RemotePackageModel model, bool prerelease = false)
     {
@@ -459,6 +501,7 @@ public class LibraryService : ILibraryService
         return files;
     }
 
+    #endregion
 
 }
 

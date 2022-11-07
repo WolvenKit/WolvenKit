@@ -16,8 +16,8 @@ public partial class PackageViewModel
     private readonly ILibraryService _libraryService;
     private readonly INotificationService _notificationService;
 
-    private const int s_height = 85;
-    private const int s_expandedHeight = 140;
+    //private const int s_height = 85;
+    //private const int s_expandedHeight = 140;
 
     public PackageViewModel(PackageModel model, EPackageStatus installed, string imagePath)
     {
@@ -28,12 +28,12 @@ public partial class PackageViewModel
         Status = installed;
         ImagePath = imagePath;
 
-        Height = s_height;
+        //Height = s_expandedHeight;
 
         if (Status == EPackageStatus.UpdateAvailable)
         {
             IsUpdateAvailable = true;
-            Height = s_expandedHeight;
+            //Height = s_expandedHeight;
         }
     }
 
@@ -46,8 +46,8 @@ public partial class PackageViewModel
     [ObservableProperty]
     private bool isUpdateAvailable;
 
-    [ObservableProperty]
-    private int height;
+    //[ObservableProperty]
+    //private int height;
 
     public string ImagePath { get; }
     public EPackageStatus Status { get; set; }
@@ -154,7 +154,7 @@ public partial class PackageViewModel
         {
             await _libraryService.InstallAsync(_model);
             IsUpdateAvailable = false;
-            Height = s_expandedHeight;
+            //.Height = s_expandedHeight;
         }
 
         _notificationService.CloseBanner();

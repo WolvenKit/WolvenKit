@@ -19,14 +19,14 @@ public partial class RemotePackageViewModel
 
     public RemotePackageViewModel(
         RemotePackageModel model,
-        string remoteVersion
+        string version
         )
     {
         _libraryService = App.Current.Services.GetService<ILibraryService>();
         _notificationService = App.Current.Services.GetService<INotificationService>();
         _model = model;
 
-        RemoteVersion = remoteVersion;
+        Version = version;
 
         // default
         var appName = Name.Split('/').Last();
@@ -42,7 +42,7 @@ public partial class RemotePackageViewModel
     public string NavigateUri => $"{_model.Url}/releases/latest";
 
     // Local
-    public string RemoteVersion { get; }
+    public string Version { get; }
 
 
     [ObservableProperty]
@@ -84,8 +84,10 @@ public partial class RemotePackageViewModel
         }
     }
 
-    private bool CanInstall() => !Directory.GetFiles(InstallPath).Any();
-
+    private bool CanInstall()
+    {
+        return !Directory.Exists(InstallPath) || (Directory.Exists(InstallPath) && !Directory.GetFiles(InstallPath).Any());
+    }
 
     public RemotePackageModel GetModel() => _model;
 }

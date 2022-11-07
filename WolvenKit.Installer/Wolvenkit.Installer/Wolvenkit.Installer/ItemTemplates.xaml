@@ -14,7 +14,7 @@
             <Grid
                 x:Name="controlRoot"
                 Width="420"
-                Height="{x:Bind Height}"
+                Height="140"
                 Padding="8"
                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
@@ -181,7 +181,7 @@
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                         RelativePanel.Below="titleText"
                         Style="{StaticResource CaptionTextBlockStyle}"
-                        Text="{x:Bind RemoteVersion}"
+                        Text="{x:Bind Version}"
                         TextTrimming="CharacterEllipsis" />
 
                     <HyperlinkButton
