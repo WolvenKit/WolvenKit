@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -59,10 +60,32 @@ public partial class RemotePackageViewModel
         _notificationService.StopIndeterminate();
     }
 
-    private bool CanInstall()
+    [RelayCommand()]
+    private async Task PickFolder()
     {
-        return !Directory.Exists(InstallPath);
+        // Create a folder picker.
+        var folderPicker = new Windows.Storage.Pickers.FolderPicker();
+
+        // Initialize the folder picker with the window handle (HWND).
+        var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(App.StartupWindow);
+        WinRT.Interop.InitializeWithWindow.Initialize(folderPicker, hWnd);
+
+        // Use the folder picker as usual.
+        folderPicker.FileTypeFilter.Add("*");
+        var storageFolder = await folderPicker.PickSingleFolderAsync();
+
+        if (storageFolder is not null)
+        {
+            var folder = storageFolder.Path;
+            if (Directory.Exists(folder))
+            {
+                InstallPath = folder;
+            }
+        }
     }
+
+    private bool CanInstall() => !Directory.GetFiles(InstallPath).Any();
+
 
     public RemotePackageModel GetModel() => _model;
 }

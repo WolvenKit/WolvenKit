@@ -37,20 +37,25 @@ public partial class PackageViewModel
         }
     }
 
+    public string Name => _model.Name;
+    public string Version => _model.Version;
+    public string Location => _model.Path;
+
+    // LOCAL
     // Todo refactor with custom converter
     [ObservableProperty]
     private bool isUpdateAvailable;
 
-    public string Name => _model.Name;
-    public string Version => _model.Version;
+    [ObservableProperty]
+    private int height;
 
-    // LOCAL
     public string ImagePath { get; }
     public EPackageStatus Status { get; set; }
 
-    // View
-    [ObservableProperty]
-    private int height;
+
+
+    //public string DisplayName => $"{Name} | {Version}";
+
 
     internal PackageModel GetModel() => _model;
 

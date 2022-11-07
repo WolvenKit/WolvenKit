@@ -8,11 +8,12 @@
     xmlns:local="using:Wolvenkit.Installer"
     xmlns:viewmodel="using:Wolvenkit.Installer.ViewModel">
 
+    <!--  Installed Template  -->
     <DataTemplate x:Key="ControlItemTemplate" x:DataType="viewmodel:PackageViewModel">
         <UserControl>
             <Grid
                 x:Name="controlRoot"
-                Width="460"
+                Width="420"
                 Height="{x:Bind Height}"
                 Padding="8"
                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -48,6 +49,7 @@
 
                 </InfoBar>
 
+                <!--  Icon  -->
                 <Grid
                     Grid.Row="1"
                     Grid.Column="0"
@@ -62,6 +64,7 @@
                         Stretch="Uniform" />
                 </Grid>
 
+                <!--  Text  -->
                 <RelativePanel
                     Grid.Row="1"
                     Grid.Column="1"
@@ -76,6 +79,7 @@
                         TextWrapping="NoWrap" />
 
                     <TextBlock
+                        x:Name="versionText"
                         Margin="0,2,8,0"
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                         RelativePanel.Below="titleText"
@@ -83,8 +87,19 @@
                         Text="{x:Bind Version}"
                         TextTrimming="CharacterEllipsis" />
 
+                    <TextBlock
+                        x:Name="locationText"
+                        Margin="0,2,8,0"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        RelativePanel.Below="versionText"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="{x:Bind Location}"
+                        TextDecorations="Underline"
+                        TextTrimming="CharacterEllipsis" />
+
                 </RelativePanel>
 
+                <!--  Buttons  -->
                 <RelativePanel
                     Grid.Row="1"
                     Grid.Column="2"
@@ -122,6 +137,7 @@
         </UserControl>
     </DataTemplate>
 
+    <!--  Available Template  -->
     <DataTemplate x:Key="RemoteControlItemTemplate" x:DataType="viewmodel:RemotePackageViewModel">
         <UserControl>
             <Grid
@@ -183,12 +199,22 @@
                         <Button.Flyout>
                             <Flyout>
                                 <StackPanel>
-                                    <TextBlock
-                                        Margin="0,0,0,12"
-                                        Style="{ThemeResource BaseTextBlockStyle}"
-                                        Text="Install Location" />
-                                    <TextBox Margin="0,0,0,12" Text="{x:Bind InstallPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    <Button Command="{x:Bind InstallCommand}" Content="Install" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--<TextBlock
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center"
+                                            Style="{ThemeResource BaseTextBlockStyle}"
+                                            Text="Location: " />-->
+                                        <TextBox Text="{x:Bind InstallPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Button Margin="5,0,0,0" Command="{x:Bind PickFolderCommand}">
+                                            <SymbolIcon Symbol="Folder" />
+                                        </Button>
+                                    </StackPanel>
+                                    <Button
+                                        Margin="0,15,0,0"
+                                        HorizontalAlignment="Left"
+                                        Command="{x:Bind InstallCommand}"
+                                        Content="Install" />
                                 </StackPanel>
                             </Flyout>
                         </Button.Flyout>
