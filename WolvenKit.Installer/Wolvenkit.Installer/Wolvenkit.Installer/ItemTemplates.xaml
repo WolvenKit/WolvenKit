@@ -1,4 +1,4 @@
-<!--  Copyright (c) Microsoft Corporation. All rights reserved.  -->
+﻿<!--  Copyright (c) Microsoft Corporation. All rights reserved.  -->
 <!--  Licensed under the MIT License. See LICENSE in the project root for license information.  -->
 
 <ResourceDictionary
@@ -13,7 +13,7 @@
             <Grid
                 x:Name="controlRoot"
                 Width="460"
-                Height="140"
+                Height="{x:Bind Height}"
                 Padding="8"
                 Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
@@ -94,12 +94,27 @@
                         x:Name="LaunchButton"
                         Command="{x:Bind LaunchCommand}"
                         Content="Launch" />
+
+
                     <Button
-                        x:Name="UninstallButton"
+                        x:Name="MoreButton"
                         Margin="0,3,0,0"
-                        Command="{x:Bind UninstallCommand}"
-                        Content="Uninstall"
-                        RelativePanel.Below="LaunchButton" />
+                        Content="More ..."
+                        RelativePanel.Below="LaunchButton">
+                        <Button.Flyout>
+                            <Flyout>
+                                <StackPanel>
+                                    <Button Command="{x:Bind OpenCommand}" Content="Open Folder" />
+                                    <Button
+                                        Command="{x:Bind DebugCommand}"
+                                        Content="Debug"
+                                        Visibility="Collapsed" />
+                                    <AppBarSeparator />
+                                    <Button Command="{x:Bind UninstallCommand}" Content="Uninstall" />
+                                </StackPanel>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
 
                 </RelativePanel>
 
@@ -145,12 +160,20 @@
                         TextWrapping="NoWrap" />
 
                     <TextBlock
+                        x:Name="versionText"
                         Margin="0,2,8,0"
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                         RelativePanel.Below="titleText"
                         Style="{StaticResource CaptionTextBlockStyle}"
                         Text="{x:Bind RemoteVersion}"
                         TextTrimming="CharacterEllipsis" />
+
+                    <HyperlinkButton
+                        Margin="0,2,8,0"
+                        Content="Release notes"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        NavigateUri="{x:Bind NavigateUri}"
+                        RelativePanel.Below="versionText" />
 
                 </RelativePanel>
 

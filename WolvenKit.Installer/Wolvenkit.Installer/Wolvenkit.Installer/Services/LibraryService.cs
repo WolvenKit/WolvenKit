@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -39,7 +40,7 @@ public class LibraryService : ILibraryService
 
     public const string FileName = "library.json";
 
-    public LibraryService(Microsoft.Extensions.Logging.ILogger<LibraryService> logger, INotificationService notificationService)
+    public LibraryService(ILogger<LibraryService> logger, INotificationService notificationService)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _notificationService = notificationService;
@@ -53,7 +54,7 @@ public class LibraryService : ILibraryService
 
     private static string GetAppData()
     {
-        var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit.Installer");
+        var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "REDModding", "WolvenKit.Installer");
         if (!Directory.Exists(dir))
         {
             Directory.CreateDirectory(dir);
@@ -62,6 +63,10 @@ public class LibraryService : ILibraryService
         return dir;
     }
 
+    /// <summary>
+    /// Load and initialize
+    /// </summary>
+    /// <returns></returns>
     public async Task InitAsync()
     {
         // get remote info from static db
@@ -241,10 +246,7 @@ public class LibraryService : ILibraryService
         }
     }
 
-    public async Task<bool> InstallAsync(PackageModel package)
-    {
-        return TryGetRemote(package.Name, out var remote) && await InstallAsync(remote.GetModel(), remote.InstallPath);
-    }
+    public async Task<bool> InstallAsync(PackageModel package) => TryGetRemote(package.Name, out var remote) && await InstallAsync(remote.GetModel(), remote.InstallPath);
 
     public async Task<bool> InstallAsync(RemotePackageModel package, string installPath)
     {
@@ -254,7 +256,7 @@ public class LibraryService : ILibraryService
             return false;
         }
 
-        //_progressService.IsIndeterminate = true;
+        _notificationService.StartIndeterminate();
 
         // get remote version
         var version = await GetLatestVersionAsync(package);
@@ -264,9 +266,8 @@ public class LibraryService : ILibraryService
             return false;
         }
 
-        // check installed?
-
-        var fileName = package.AssetPattern.Replace(@".*\", version);
+        // check if versioned file is installed
+        var fileName = package.AssetPattern.Replace(@".*", version);
         var testZipPath = Path.Combine(Path.GetTempPath(), fileName);
         var zipPath = testZipPath;
 
@@ -311,7 +312,14 @@ public class LibraryService : ILibraryService
             var contentUrl = asset.First().BrowserDownloadUrl;
             zipPath = Path.Combine(Path.GetTempPath(), contentUrl.Split('/').Last());
 
-            if (!File.Exists(zipPath))
+            var remoteHash = "";
+            string localHash = null;
+            if (File.Exists(zipPath))
+            {
+                localHash = CalculateFileHash(zipPath);
+            }
+
+            if (localHash != remoteHash)
             {
                 var response = await _httpClient.GetAsync(new Uri(contentUrl));
                 try
@@ -330,11 +338,15 @@ public class LibraryService : ILibraryService
             }
         }
 
-        //_progressService.IsIndeterminate = false;
 
         // extract zip file
         var installedFiles = await Task.Run(() => ExtractZip(zipPath, installPath));
-        var installedPackage = new PackageModel(package.Name, version, installedFiles.Select(x => Path.GetRelativePath(installPath, x)).ToArray(), installPath);
+
+        var installedPackage = new PackageModel(
+            package.Name,
+            version,
+            installedFiles.Select(x => Path.GetRelativePath(installPath, x)).ToArray(),
+            installPath);
 
         InstalledPackages.Add(new(installedPackage, EPackageStatus.Installed, package.ImagePath));
 
@@ -342,6 +354,35 @@ public class LibraryService : ILibraryService
         await SaveAsync();
 
         return true;
+    }
+
+    /// <summary>
+    /// Calculates the SHA256 hash of a physical file
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
+    private string CalculateFileHash(string filePath)
+    {
+        using (var mySHA256 = SHA256.Create())
+        {
+            var fInfo = new FileInfo(filePath);
+            using var fileStream = fInfo.Open(FileMode.Open);
+            try
+            {
+                fileStream.Position = 0;
+                return string.Concat(mySHA256.ComputeHash(fileStream).Select(b => b.ToString("X2")));
+            }
+            catch (IOException e)
+            {
+                _logger.LogWarning("I/O Exception: {msg}", e.Message);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                _logger.LogWarning("Access Exception: {msg}", e.Message);
+            }
+        }
+
+        return null;
     }
 
     private List<string> ExtractZip(string zipPath, string extractPath)
@@ -364,8 +405,13 @@ public class LibraryService : ILibraryService
             using var archive = ZipFile.OpenRead(zipPath);
 
             var progress = 0;
-            //_progressService.IsIndeterminate = false;
-            //_progressService.Report(0.1);
+            _ = App.StartupWindow.DispatcherQueue.TryEnqueue(() =>
+            {
+                _notificationService.StopIndeterminate();
+                _notificationService.Report(0.1);
+            });
+
+            var total = archive.Entries.Count;
             foreach (var entry in archive.Entries)
             {
                 // Gets the full path to ensure that relative segments are removed.
@@ -398,7 +444,8 @@ public class LibraryService : ILibraryService
                 }
 
                 progress++;
-                //_progressService.Report(progress / (float)archive.Entries.Count);
+                _ = App.StartupWindow.DispatcherQueue.TryEnqueue(() => _notificationService.Report(progress / (float)total));
+
             }
         }
         catch (Exception e)
@@ -408,7 +455,7 @@ public class LibraryService : ILibraryService
             files.Clear();
         }
 
-        //_progressService.Completed();
+        _ = App.StartupWindow.DispatcherQueue.TryEnqueue(() => _notificationService.Completed());
         return files;
     }
 

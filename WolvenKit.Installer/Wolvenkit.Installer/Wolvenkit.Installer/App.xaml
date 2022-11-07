@@ -49,9 +49,12 @@
 
             <x:String x:Key="ControlsName">All controls</x:String>
             <x:String x:Key="AppTitleName">WolvenKit Installer</x:String>
-            <x:String x:Key="WinUIVersion">Version 0.1</x:String>
+            <x:String x:Key="WinUIVersion">Version 1.0</x:String>
 
-            <Style x:Key="IndentedGridViewItemStyle" TargetType="GridViewItem" BasedOn="{StaticResource DefaultGridViewItemStyle}">
+            <Style
+                x:Key="IndentedGridViewItemStyle"
+                BasedOn="{StaticResource DefaultGridViewItemStyle}"
+                TargetType="GridViewItem">
                 <Setter Property="Margin" Value="12,0,0,12" />
             </Style>
 

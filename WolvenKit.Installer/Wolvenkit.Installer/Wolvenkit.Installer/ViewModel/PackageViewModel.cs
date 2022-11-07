@@ -16,6 +16,9 @@ public partial class PackageViewModel
     private readonly ILibraryService _libraryService;
     private readonly INotificationService _notificationService;
 
+    private const int s_height = 85;
+    private const int s_expandedHeight = 140;
+
     public PackageViewModel(PackageModel model, EPackageStatus installed, string imagePath)
     {
         _libraryService = App.Current.Services.GetService<ILibraryService>();
@@ -25,9 +28,12 @@ public partial class PackageViewModel
         Status = installed;
         ImagePath = imagePath;
 
+        Height = s_height;
+
         if (Status == EPackageStatus.UpdateAvailable)
         {
             IsUpdateAvailable = true;
+            Height = s_expandedHeight;
         }
     }
 
@@ -42,6 +48,10 @@ public partial class PackageViewModel
     public string ImagePath { get; }
     public EPackageStatus Status { get; set; }
 
+    // View
+    [ObservableProperty]
+    private int height;
+
     internal PackageModel GetModel() => _model;
 
 
@@ -52,6 +62,18 @@ public partial class PackageViewModel
         {
             Process.Start("explorer.exe", "\"" + _model.Path + "\"");
         }
+    }
+
+    [RelayCommand()]
+    private async Task Debug()
+    {
+        _notificationService.StartIndeterminate();
+        _notificationService.DisplayBanner("Uninstalling", $"Uninstalling {Name}. Please wait", Microsoft.UI.Xaml.Controls.InfoBarSeverity.Informational);
+
+        await Task.Delay(4000);
+
+        _notificationService.CloseBanner();
+        _notificationService.StopIndeterminate();
     }
 
     [RelayCommand()]
@@ -127,6 +149,7 @@ public partial class PackageViewModel
         {
             await _libraryService.InstallAsync(_model);
             IsUpdateAvailable = false;
+            Height = s_expandedHeight;
         }
 
         _notificationService.CloseBanner();

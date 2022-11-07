@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Wolvenkit.Installer.Services;
@@ -20,17 +21,12 @@ public partial class MainViewModel
         _libraryService = libraryService;
         Notifications = notificationService;
 
-        Progress = 0;
-
         Init();
 
     }
 
     [ObservableProperty]
     private INotificationService notifications;
-
-    [ObservableProperty]
-    private int progress;
 
     [ObservableProperty]
     private bool loaded;
@@ -66,6 +62,13 @@ public partial class MainViewModel
         await InitAsync();
 
         Notifications.CloseBanner();
-        Notifications.StopIndeterminate();
+        Notifications.Completed();
     }
+
+    [RelayCommand]
+    private void About()
+    {
+        Process.Start("explorer.exe", @"https://github.com/WolvenKit/WolvenKit");
+    }
+
 }

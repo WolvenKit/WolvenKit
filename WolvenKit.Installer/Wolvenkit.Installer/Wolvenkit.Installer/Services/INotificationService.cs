@@ -9,8 +9,19 @@ public interface INotificationService
 
     void CloseBanner();
     void DisplayBanner(string title, string message, InfoBarSeverity severity);
+
+
     void StartIndeterminate();
     void StopIndeterminate();
+    /// <summary>
+    /// Report Progress
+    /// </summary>
+    /// <param name="v"></param>
+    void Report(double v);
+    /// <summary>
+    /// Report full progress and halt indeterminate
+    /// </summary>
+    void Completed();
 }
 
 [ObservableObject]
@@ -43,6 +54,12 @@ public partial class NotificationService : INotificationService
 
     public void StartIndeterminate() => Progress.IsIndeterminate = true;
     public void StopIndeterminate() => Progress.IsIndeterminate = false;
+    public void Report(double v) => Progress.Value = (int)(v * 100);
+    public void Completed()
+    {
+        Progress.Value = 100;
+        Progress.IsIndeterminate = false;
+    }
 }
 
 [ObservableObject]
@@ -64,6 +81,8 @@ public partial class BannerNotification
 [ObservableObject]
 public partial class Progress
 {
+    [ObservableProperty]
+    private int value;
 
     [ObservableProperty]
     private bool isIndeterminate;

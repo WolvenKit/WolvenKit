@@ -14,37 +14,124 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
 
         <!--  Title Bar  -->
         <Border
             x:Name="AppTitleBar"
-            Grid.Column="1"
             Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
+            Margin="60,0,0,0"
             VerticalAlignment="Top"
-            Background="#202020"
+            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
             Canvas.ZIndex="1"
-            IsHitTestVisible="True"
-            Opacity="1">
+            IsHitTestVisible="True">
             <TextBlock
                 x:Name="AppTitle"
-                Margin="45,0,0,0"
+                Margin="25,0,0,0"
                 VerticalAlignment="Center"
                 Style="{StaticResource CaptionTextBlockStyle}"
                 Text="{x:Bind Title}" />
         </Border>
 
-        <!--    -->
+        <!--  Menu  -->
+        <MenuBar
+            Width="60"
+            Margin="0"
+            HorizontalAlignment="Left"
+            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+            <MenuBarItem Title="Help">
+                <MenuFlyoutItem Command="{x:Bind ViewModel.AboutCommand}" Text="About" />
+
+            </MenuBarItem>
+        </MenuBar>
+
+        <!--  Header  -->
+        <Grid
+            x:Name="MainHeaderGrid"
+            Grid.Row="1"
+            Padding="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <ParallaxView
+                x:Name="headerImageView"
+                Height="256"
+                VerticalAlignment="Top">
+                <Grid CornerRadius="{StaticResource ControlCornerRadius}">
+                    <Image
+                        x:Name="headerImage"
+                        HorizontalAlignment="Center"
+                        Source="Assets/MainPage_Banner.png"
+                        Stretch="Fill" />
+                </Grid>
+            </ParallaxView>
+
+            <TextBlock AutomationProperties.AutomationId="__ClickableAreaTextBlock" />
+
+            <StackPanel Margin="50,80,0,20" Orientation="Vertical">
+                <TextBlock
+                    x:Name="smallHeaderText"
+                    Foreground="Black"
+                    Style="{StaticResource TitleTextBlockStyle}"
+                    Text="{StaticResource AppTitleName}" />
+                <TextBlock
+                    x:Name="smallHeaderSubtitleText"
+                    Foreground="Black"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Text="{StaticResource WinUIVersion}" />
+            </StackPanel>
+        </Grid>
+
+        <Grid
+            x:Name="NavigationViewHeaderGrid"
+            Grid.Row="2"
+            Margin="20,0,20,0"
+            Visibility="Visible">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--    -->
+            <InfoBar
+                Title="{x:Bind ViewModel.Notifications.BannerNotification.Title, Mode=OneWay}"
+                Grid.Row="0"
+                VerticalAlignment="Bottom"
+                IsClosable="False"
+                IsIconVisible="True"
+                IsOpen="{x:Bind ViewModel.Notifications.BannerNotification.IsOpen, Mode=OneWay}"
+                Message="{x:Bind ViewModel.Notifications.BannerNotification.Message, Mode=OneWay}"
+                Severity="{x:Bind ViewModel.Notifications.BannerNotification.Severity, Mode=OneWay}" />
+
+            <ProgressBar
+                Grid.Row="1"
+                Width="Auto"
+                Height="50"
+                IsIndeterminate="{x:Bind ViewModel.Notifications.Progress.IsIndeterminate, Mode=OneWay}"
+                Visibility="Visible"
+                Value="{x:Bind ViewModel.Notifications.Progress.Value, Mode=OneWay}" />
+        </Grid>
+
+        <!--  Navigation View  -->
         <NavigationView
             x:Name="NavigationViewControl"
-            Grid.Column="1"
+            Grid.Row="3"
             AlwaysShowHeader="True"
             Canvas.ZIndex="1"
             IsEnabled="{x:Bind ViewModel.Loaded, Mode=OneWay}"
-            PaneDisplayMode="Left"
+            PaneDisplayMode="Top"
             SelectionChanged="NavigationViewControl_SelectionChanged">
 
             <NavigationView.MenuItems>
@@ -61,69 +148,6 @@
 
             <!--  Navigation Area  -->
             <Frame x:Name="rootFrame" />
-
-            <!--  Header Area  -->
-            <NavigationView.Header>
-
-                <Grid x:Name="HeaderGrid" Margin="0,4,40,0">
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-
-                    <ParallaxView
-                        x:Name="headerImageView"
-                        Height="256"
-                        VerticalAlignment="Top">
-                        <Grid CornerRadius="{StaticResource ControlCornerRadius}">
-                            <Image
-                                x:Name="headerImage"
-                                HorizontalAlignment="Center"
-                                Source="Assets/MainPage_Banner.png"
-                                Stretch="Fill" />
-                        </Grid>
-                    </ParallaxView>
-
-                    <TextBlock AutomationProperties.AutomationId="__ClickableAreaTextBlock" />
-
-                    <StackPanel Margin="50,80,0,20" Orientation="Vertical">
-                        <TextBlock
-                            x:Name="smallHeaderText"
-                            Foreground="Black"
-                            Style="{StaticResource TitleTextBlockStyle}"
-                            Text="{StaticResource AppTitleName}"
-                            Visibility="Visible" />
-                        <TextBlock
-                            x:Name="smallHeaderSubtitleText"
-                            Foreground="Black"
-                            Style="{StaticResource SubtitleTextBlockStyle}"
-                            Text="{StaticResource WinUIVersion}"
-                            Visibility="Visible" />
-                    </StackPanel>
-
-                    <InfoBar
-                        Title="{x:Bind ViewModel.Notifications.BannerNotification.Title, Mode=OneWay}"
-                        Grid.Row="1"
-                        Margin="-56,0,-40,0"
-                        VerticalAlignment="Bottom"
-                        IsClosable="False"
-                        IsIconVisible="True"
-                        IsOpen="{x:Bind ViewModel.Notifications.BannerNotification.IsOpen, Mode=OneWay}"
-                        Message="{x:Bind ViewModel.Notifications.BannerNotification.Message, Mode=OneWay}"
-                        Severity="{x:Bind ViewModel.Notifications.BannerNotification.Severity, Mode=OneWay}" />
-
-                    <ProgressBar
-                        Grid.Row="2"
-                        Width="500"
-                        Height="50"
-                        IsIndeterminate="{x:Bind ViewModel.Notifications.Progress.IsIndeterminate, Mode=OneWay}"
-                        Value="{x:Bind ViewModel.Progress, Mode=OneWay}" />
-
-                </Grid>
-
-            </NavigationView.Header>
 
         </NavigationView>
 

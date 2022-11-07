@@ -38,8 +38,11 @@ public partial class RemotePackageViewModel
 
     public string ImagePath => _model.ImagePath;
 
+    public string NavigateUri => $"{_model.Url}/releases/latest";
+
     // Local
     public string RemoteVersion { get; }
+
 
     [ObservableProperty]
     private string installPath;
