@@ -1255,80 +1255,92 @@ namespace WolvenKit.ViewModels.Shell
         {
             var ext = Path.GetExtension(fullpath).ToLower();
 
-            // double click
-            switch (ext)
+            // everything in ignoredExtensions is delegated to the System viewer
+            string delimiter = "|";
+            //string[] ignoredExtensions = _settingsManager.TreeViewIgnoredExtensions.ToLower().Split(delimiter);
+            //bool isAnIgnoredExtension = Array.Exists(ignoredExtensions, extension => extension.Equals(ext));
+            bool isAnIgnoredExtension = _settingsManager.TreeViewIgnoredExtensions.Split(delimiter).Any(entry => entry.ToLower().Trim().Equals(ext));
+            if (isAnIgnoredExtension)
             {
-                // custom raw file extensions
-                case $".{nameof(ERawFileFormat.masklist)}":
-
-                // images
-                case ".png":
-                case ".jpg":
-                case ".tga":
-                case ".bmp":
-                case ".jpeg":
-                case ".dds":
-
-                //text
-                case ".xml":
-                case ".txt":
-                case ".ws":
-
-                // other
-                case ".mp3":
-                case ".wav":
-                case ".glb":
-                case ".gltf":
-                case ".fbx":
-                case ".xcf":
-                case ".psd":
-                case ".apb":
-                case ".apx":
-                case ".ctw":
-                case ".blend":
-                case ".zip":
-                case ".rar":
-                case ".bat":
-                case ".yml":
-                case ".log":
-                case ".ini":
-                case ".xl":
-                case ".reds":
-                    //case ".yaml":
-                    ShellExecute();
-                    break;
-
-                // double file formats
-                case ".csv":
-                case ".json":
-                    return IsInRawFolder(fullpath) ? Task.Run(() => ShellExecute()) : Task.Run(() => OpenRedengineFile());
-
-                // VIDEO
-                case ".bk2":
-                    break;
-
-                // AUDIO
-
-                case ".wem":
-                    return Task.Run(() => OpenAudioFile());
-
-                case ".subs":
-                    return Task.Run(() => PolymorphExecute(fullpath, ".txt"));
-
-                case ".usm":
+                ShellExecute();
+            }
+            // double click
+            else
+            {
+                switch (ext)
                 {
-                    // TODO: port winforms
-                    //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")
-                    //    return;
-                    //var usmplayer = new frmUsmPlayer(fullpath);
-                    //usmplayer.Show(dockPanel, DockState.Document);
-                    break;
+                    // custom raw file extensions
+                    case $".{nameof(ERawFileFormat.masklist)}":
+
+                    // images
+                    case ".png":
+                    case ".jpg":
+                    case ".tga":
+                    case ".bmp":
+                    case ".jpeg":
+                    case ".dds":
+
+                    //text
+                    case ".xml":
+                    case ".txt":
+                    case ".ws":
+
+                    // other
+                    case ".mp3":
+                    case ".wav":
+                    case ".glb":
+                    case ".gltf":
+                    case ".fbx":
+                    case ".xcf":
+                    case ".psd":
+                    case ".apb":
+                    case ".apx":
+                    case ".ctw":
+                    case ".blend":
+                    case ".zip":
+                    case ".rar":
+                    case ".bat":
+                    case ".yml":
+                    case ".log":
+                    case ".ini":
+                    case ".xl":
+                    case ".reds":
+                        //case ".yaml":
+                        ShellExecute();
+                        break;
+
+                    // double file formats
+                    case ".csv":
+                    case ".json":
+                        return IsInRawFolder(fullpath) ? Task.Run(() => ShellExecute()) : Task.Run(() => OpenRedengineFile());
+
+                    // VIDEO
+                    case ".bk2":
+                        break;
+
+                    // AUDIO
+
+                    case ".wem":
+                        return Task.Run(() => OpenAudioFile());
+
+                    case ".subs":
+                        return Task.Run(() => PolymorphExecute(fullpath, ".txt"));
+
+                    case ".usm":
+                    {
+                        // TODO: port winforms
+                        //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")
+                        //    return;
+                        //var usmplayer = new frmUsmPlayer(fullpath);
+                        //usmplayer.Show(dockPanel, DockState.Document);
+                        break;
+                    }
+                    //case ".BNK":
+                    // TODO SPLIT WEMS TO PLAYLIST FROM BNK
+                    case "":
+                    default:
+                        return Task.Run(() => OpenRedengineFile());
                 }
-                //case ".BNK":
-                // TODO SPLIT WEMS TO PLAYLIST FROM BNK
-                case "":
-                default:
-                    return Task.Run(() => OpenRedengineFile());
             }
 
             return Task.Run(() => true);
