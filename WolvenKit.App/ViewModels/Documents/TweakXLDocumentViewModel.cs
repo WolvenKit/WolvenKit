@@ -1,16 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Splat;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
-using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
 using YamlDotNet.Serialization;
 
 namespace WolvenKit.ViewModels.Documents

@@ -371,10 +371,8 @@ namespace WolvenKit.ViewModels.Tools
 
             var baseRecord = _tweakDB.GetRecord(_selectedRecordEntry.Item);
             txl.Type = "gamedata" + _selectedRecordEntry.RecordTypeName + "_Record";
-            baseRecord.GetPropertyNames().ForEach(property =>
-            {
-                txl.Properties.Add(property, baseRecord.GetProperty(property));
-            });
+
+            txl.ID = _selectedRecordEntry.Item;
 
             var txlFile = new TweakXLFile();
             txlFile.Add(txl);
@@ -388,7 +386,7 @@ namespace WolvenKit.ViewModels.Tools
             };
 
             if (_projectManager.IsProjectLoaded)
-                saveFileDialog.InitialDirectory = Path.Combine(_projectManager.ActiveProject.FileDirectory, "tweaks");
+                saveFileDialog.InitialDirectory = _projectManager.ActiveProject.ResourcesDirectory;
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {

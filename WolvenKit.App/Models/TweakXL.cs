@@ -7,6 +7,7 @@ using WolvenKit.RED4.Types;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WolvenKit.Models
 {
@@ -23,6 +24,11 @@ namespace WolvenKit.Models
         public object GetPropertyValue(string name);
     }
 
+    public interface ITweakXLItem : IRedType
+    {
+        public TweakDBID ID { get; set; }
+    }
+
     public class TweakXLFile : List<ITweakXLItem>, IRedType, IBrowsableType
     {
         public string GetBrowsableName() => null;
@@ -30,11 +36,6 @@ namespace WolvenKit.Models
         public string GetBrowsableValue() => "TweakXLFile";
 
         public string GetBrowsableType() => null;
-    }
-
-    public interface ITweakXLItem : IRedType
-    {
-        public TweakDBID ID { get; set; }
     }
 
     public class TweakXL : ITweakXLItem, IBrowsableType, IBrowsableDictionary
@@ -419,11 +420,16 @@ namespace WolvenKit.Models
         }
 
         // eventually ITweakXLItem
-        public IRedType ReadScalar(Scalar s, Type type = null)
+        public IRedType ReadScalar(Scalar s, TweakDBService tdbs, Type type = null)
         {
             // TODO get parent type & property name, look-up type if ambiguous?
             // TODO parse type strings
             // TODO Maybe this can be done with some is magic.
+            //
+            //Value = tdbs.GetFlat(tdb);
+            //Value ??= tdbs.GetRecord(tdb);
+            //
+
             if (type == typeof(TweakDBID))
             {
                 return (TweakDBID)s.Value;
@@ -433,6 +439,7 @@ namespace WolvenKit.Models
 
         public ITweakXLItem ReadTweakXL(IParser parser, string id = null, Type type = null)
         {
+            var _tdbs = Locator.Current.GetService<TweakDBService>();
             if (parser.TryConsume<SequenceStart>(out var _))
             {
                 var tweak = new TweakXLSequence();
@@ -467,8 +474,8 @@ namespace WolvenKit.Models
                         //{
                         //    propertyID = id + "." + propertyID;
                         //}
-                        // eventually ITweakXLItem
 
+                        // eventually ITweakXLItem
                         IRedType propertyValue = null;
 
                         // regular property
@@ -477,9 +484,9 @@ namespace WolvenKit.Models
                             Type childType = null;
                             if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
-                                childType = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName);
+                                childType = _tdbs.GetType(tweak.Base + "." + propertyName);
                             }
-                            propertyValue = ReadScalar(s, childType);
+                            propertyValue = ReadScalar(s, _tdbs, childType);
                         }
                         // embedded record
                         else if (parser.Current is MappingStart)
@@ -492,7 +499,7 @@ namespace WolvenKit.Models
                             Type childType = null;
                             if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
-                                childType = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName);
+                                childType = _tdbs.GetType(tweak.Base + "." + propertyName);
                             }
                             propertyValue = ReadTweakXL(parser, id: childID, type: childType);
                         }
@@ -506,7 +513,7 @@ namespace WolvenKit.Models
                             }
                             if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
-                                ((TweakXLSequence)propertyValue).Type = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName).Name;
+                                ((TweakXLSequence)propertyValue).Type = _tdbs.GetType(tweak.Base + "." + propertyName).Name;
                             }
                             //if (type != null)
                             //{
@@ -555,7 +562,7 @@ namespace WolvenKit.Models
                 {
                     var tweak = new TweakXLAppend
                     {
-                        ID = ReadScalar(s).ToString()
+                        ID = ReadScalar(s, _tdbs).ToString()
                     };
                     if (tag.EndsWith("-once"))
                         tweak.AppendType = TweakXLAppendType.Once;
@@ -578,7 +585,7 @@ namespace WolvenKit.Models
                     {
                         tweak.ID = id;
                     }
-                    tweak.Value = ReadScalar(s);
+                    tweak.Value = ReadScalar(s, _tdbs);
                     return tweak;
                 }
             }
