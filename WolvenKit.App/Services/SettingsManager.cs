@@ -44,6 +44,7 @@ namespace WolvenKit.Functionality.Services
                 nameof(ReddbHash),
                 nameof(TreeViewGroups),
                 nameof(TreeViewGroupSize),
+                nameof(TreeViewIgnoredExtensions),
                 nameof(ShowAdvancedOptions),
                 nameof(ShowCNameAsHex),
                 nameof(ShowNodeRefAsHex),
@@ -191,6 +192,11 @@ namespace WolvenKit.Functionality.Services
         [Display(Name = "Group Size")]
         [Reactive]
         public uint TreeViewGroupSize { get; set; } = 100;
+
+        [Category("File Editor")]
+        [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)")]
+        [Reactive]
+        public string TreeViewIgnoredExtensions { get; set; } = "";
 
         [Category("Import / Export")]
         [Display(Name = "Show advanced Options")]

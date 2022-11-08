@@ -22,6 +22,7 @@ namespace WolvenKit.Functionality.Services
         public string MaterialRepositoryPath { get; set; }
         public bool TreeViewGroups { get; set; }
         public uint TreeViewGroupSize { get; set; }
+        public string TreeViewIgnoredExtensions { get; set; }
         public bool ShowAdvancedOptions { get; set; }
         public bool ShowCNameAsHex { get; set; }
         public bool ShowNodeRefAsHex { get; set; }
