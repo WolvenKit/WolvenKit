@@ -80,7 +80,7 @@
                 <MenuItem
                     x:Name="ConvertFromJsonMenuItem"
                     Command="{Binding ConvertFromJsonCommand}"
-                    Header="Import from JSON"
+                    Header="Convert from JSON"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>

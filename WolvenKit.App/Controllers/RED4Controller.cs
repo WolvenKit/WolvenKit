@@ -721,6 +721,15 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
+        public void AddToMod(ulong hash)
+        {
+            var file = _archiveManager.Lookup(hash);
+            if (file.HasValue)
+            {
+                AddToMod(file.Value);
+            }
+        }
+
         public void AddToMod(IGameFile file)
         {
             switch (_projectManager.ActiveProject.GameType)
