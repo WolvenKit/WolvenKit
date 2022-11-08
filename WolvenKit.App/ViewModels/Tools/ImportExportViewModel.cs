@@ -600,15 +600,23 @@ namespace WolvenKit.ViewModels.Tools
 
             var total = 0;
             var sucessful = 0;
+            
+            //prepare a list of failed items
+            var failedItems = new List<string>();
 
             if (IsImportsSelected)
             {
                 var toBeImported = ImportableItems.Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
+                total = toBeImported.Count;
                 foreach (var item in toBeImported)
                 {
                     if (await Task.Run(() => ImportSingleTask(item)))
                     {
                         sucessful++;
+                    }
+                    else // not successful
+                    {
+                        failedItems.Add(item.FullName);
                     }
 
                     Interlocked.Increment(ref progress);
@@ -632,6 +640,10 @@ namespace WolvenKit.ViewModels.Tools
                     {
                         sucessful++;
                     }
+                    else // not successful
+                    {
+                        failedItems.Add(item.FullName);
+                    }
 
                     Interlocked.Increment(ref progress);
                     _progressService.Report(progress / (float)total);
@@ -646,6 +658,15 @@ namespace WolvenKit.ViewModels.Tools
 
             _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
             _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+
+            //We format the list of failed export/import items here
+            if (failedItems.Count > 0)
+            {
+                var failedItemsErrorString = $"The following items failed:\n{String.Join("\n", failedItems)}";
+                _notificationService.Error(failedItemsErrorString); //notify once only 
+                _loggerService.Error(failedItemsErrorString);
+            }
+
             _progressService.Completed();
         }
 
@@ -790,6 +811,9 @@ namespace WolvenKit.ViewModels.Tools
             var total = 0;
             var sucessful = 0;
 
+            //prepare a list of failed items
+            var failedItems = new List<string>();
+
             if (IsImportsSelected)
             {
                 var toBeImported = ImportableItems.Where(_ => _.IsChecked).Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
@@ -799,6 +823,10 @@ namespace WolvenKit.ViewModels.Tools
                     if (await Task.Run(() => ImportSingleTask(item)))
                     {
                         sucessful++;
+                    }
+                    else // not successful
+                    {
+                        failedItems.Add(item.FullName);
                     }
 
                     Interlocked.Increment(ref progress);
@@ -822,6 +850,10 @@ namespace WolvenKit.ViewModels.Tools
                     {
                         sucessful++;
                     }
+                    else
+                    {
+                        failedItems.Add(item.FullName);
+                    }
 
                     Interlocked.Increment(ref progress);
                     _progressService.Report(progress / (float)toBeExported.Count);
@@ -835,6 +867,15 @@ namespace WolvenKit.ViewModels.Tools
 
             _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
             _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+
+            //We format the list of failed export/import items here
+            if (failedItems.Count > 0)
+            {
+                var failedItemsErrorString = $"The following items failed:\n{String.Join("\n", failedItems)}";
+                _notificationService.Error(failedItemsErrorString); //notify once only 
+                _loggerService.Error(failedItemsErrorString);
+            }
+
             _progressService.Completed();
         }
 
