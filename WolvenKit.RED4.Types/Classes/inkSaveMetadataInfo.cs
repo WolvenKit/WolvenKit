@@ -132,6 +132,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(16)] 
+		[RED("platform")] 
+		public CString Platform
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
 		public inkSaveMetadataInfo()
 		{
 			PlayTime = 0.000000;

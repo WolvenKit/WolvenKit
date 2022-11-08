@@ -300,6 +300,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(38)] 
+		[RED("hoveredIn")] 
+		public CBool HoveredIn
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public RipperdocScreenAnimationController()
 		{
 			DefaultAnimationTab = new();
