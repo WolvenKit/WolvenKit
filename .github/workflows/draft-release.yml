@@ -1,8 +1,20 @@
 name: wkit-draft-release
 on:
+  workflow_dispatch:
   push:
     tags-ignore:
     - '*-nightly*'
+
+env:
+  TAG: ${{github.ref}}
+  VERSION: ${{github.ref_name}}
+  PROJ: ./WolvenKit/WolvenKit.csproj
+  PROJC: ./WolvenKit.CLI/WolvenKit.CLI.csproj
+  FINALOUT: ./publish
+  NAME: WolvenKit
+  ARTIFACT_APP_WIN: WolvenKit Desktop
+  ARTIFACT_CLI_WIN: WolvenKit CLI
+  ARTIFACT_CLI_LIN: WolvenKit CLI Linux
 
 jobs:
   desktop-win:
@@ -17,11 +29,11 @@ jobs:
           dotnet-version: 6.x
 
       - name: Publish with Dotnet
-        run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
+        run: dotnet publish ${{env.PROJ}} -o .\publish -c Release
 
       - uses: actions/upload-artifact@v2
         with:
-          name: WolvenKit Desktop
+          name: ${{env.ARTIFACT_APP_WIN}}
           path: .\publish
 
   console-win:
@@ -36,11 +48,11 @@ jobs:
           dotnet-version: 6.x
 
       - name: Publish with Dotnet
-        run: dotnet publish .\WolvenKit.CLI\WolvenKit.CLI.csproj -o .\publish_cli -r win-x64 -c Release --no-self-contained
+        run: dotnet publish ${{env.PROJC}} -o .\publish_cli -r win-x64 -c Release --no-self-contained
 
       - uses: actions/upload-artifact@v2
         with:
-          name: WolvenKit CLI
+          name: ${{env.ARTIFACT_CLI_WIN}}
           path: ./publish_cli
 
   console-linux:
@@ -55,11 +67,11 @@ jobs:
           dotnet-version: 6.x
 
       - name: Publish with Dotnet
-        run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
+        run: dotnet publish ${{env.PROJC}} -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
 
       - uses: actions/upload-artifact@v2
         with:
-          name: WolvenKit CLI Linux
+          name: ${{env.ARTIFACT_CLI_LIN}}
           path: ./publish_cli_linux
 
   release:
@@ -70,57 +82,63 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
        
-      # environmental variables
-      - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $GITHUB_ENV
-      - run: echo "PROJC=./WolvenKit.CLI/WolvenKit.CLI.csproj" >> $GITHUB_ENV
-      - run: echo "OUT=./publish/app/" >> $GITHUB_ENV
-      - run: echo "OUTC=./publish/console/" >> $GITHUB_ENV
-      - run: echo "FINALOUT=./publish" >> $GITHUB_ENV
-      - run: echo "NAME=WolvenKit" >> $GITHUB_ENV
-      - run: echo "REF=${{github.ref}}" >> $GITHUB_ENV
-      - run: echo "SHA=${{github.sha}}" >> $GITHUB_ENV
-      - run: echo "MREPO=${{github.repository}}" >> $GITHUB_ENV
-      - run: echo "VERSION=${{github.ref_name}}" >> $GITHUB_ENV
+      ##########################################
+      # SETUP
 
+      # the CLI is versioned by its assemblyversion
       - name: Get console version
         uses: naminodarie/get-net-sdk-project-versions-action@v1
-        id: get-version-cli
+        id: get_version_cli
         with:
           proj-path: ${{env.PROJC}}
 
-      - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}" >> $GITHUB_ENV
-      
-      - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $GITHUB_ENV
-      - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $GITHUB_ENV
-      - run: echo "CONSOLELINUX=${{env.NAME}}.ConsoleLinux-${{env.VERSIONC}}.zip" >> $GITHUB_ENV
+      # get the version for the portable from the tag
+      # only run on dispatch, otherwise the version is taken from the tag
+      - name: Get app version
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        uses: naminodarie/get-net-sdk-project-versions-action@v1
+        id: get_version
+        with:
+          proj-path: ${{env.PROJC}}
+      - name: change version
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        run: echo "VERSION=${{steps.get_version.outputs.assembly-version}}" >> $GITHUB_ENV
 
+      ##########################################
+      # Download artifacts
       - name: Download artifacts
         uses: actions/download-artifact@v2
 
-      # create zip
+      ##########################################
+      # create zip files
       - run: sudo apt-get install zip -y
       - run: mkdir -p ${{ env.FINALOUT }}
-      # - run: ls -R
-      # - run: zip -r ${{ env.FINALOUT }}/${{ env.PORTABLE }} "WolvenKit Desktop"
-      - run: cd "WolvenKit Desktop"; zip -r ../${{ env.FINALOUT }}/${{ env.PORTABLE }} *
-      # - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLE }} "WolvenKit CLI"
-      - run: cd "WolvenKit CLI"; zip -r ../${{ env.FINALOUT }}/${{ env.CONSOLE }} *
-      # - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLELINUX }} "WolvenKit CLI Linux"
-      - run: cd "WolvenKit CLI Linux"; zip -r ../${{ env.FINALOUT }}/${{ env.CONSOLELINUX }} *
+      - run: cd "${{env.ARTIFACT_APP_WIN}}"; zip -r ../${{ env.FINALOUT }}/${{env.NAME}}-${{env.VERSION}}.zip *
+      - run: cd "${{env.ARTIFACT_CLI_WIN}}"; zip -r ../${{ env.FINALOUT }}/${{env.NAME}}.Console-${{steps.get_version_cli.outputs.assembly-version}}.zip *
+      - run: cd "${{env.ARTIFACT_CLI_LIN}}"; zip -r ../${{ env.FINALOUT }}/${{env.NAME}}.ConsoleLinux-${{steps.get_version_cli.outputs.assembly-version}}.zip *
 
-
+      ##########################################
       # RELEASE
+      # if dispatch: create a draft release with some test tag
+      - name: change tag
+        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        run: echo "TAG=${{env.VERSION}}" >> $env:GITHUB_ENV
+
       - name: Release
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ env.TAG }}
           draft: true
           generateReleaseNotes: true
-          artifacts: "${{ env.FINALOUT }}/*.zip"
-          bodyFile: "RELEASE.md"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          body_path: "RELEASE.md"
+          files: "${{ env.FINALOUT }}/*.zip"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
   publish-nugets:
     runs-on: windows-latest
+    if: ${{ startsWith(github.ref, 'refs/tags/') && !contains(github.ref_name, '-') }} # only run on tags that are non-prerelease tags
 
     steps:
       - name: checkout

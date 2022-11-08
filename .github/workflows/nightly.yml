@@ -97,7 +97,7 @@ jobs:
       - run: git fetch --tags
       - name: Get CLI commits
         run: |
-          $commits = (git --no-pager diff --name-only 8.7.1-nightly.2022-11-06) | Out-String
+          $commits = (git --no-pager diff --name-only ${{ steps.tag_version.outputs.previous_tag }}) | Out-String
           $i = 0
           $commits -Split "`r`n" | ForEach-Object {  if ( $_.StartsWith("WolvenKit.CLI/") -or $_.StartsWith("WolvenKit.Common/") -or $_.StartsWith("WolvenKit.Core/") -or $_.StartsWith("WolvenKit.Modkit/") -or $_.StartsWith("WolvenKit.RED4.") ) { $i = $i + 1  } }
           if ($i -eq 0) { $b = 'false' } else { $b = 'true' }
