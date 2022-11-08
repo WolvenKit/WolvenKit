@@ -99,7 +99,7 @@ jobs:
         uses: naminodarie/get-net-sdk-project-versions-action@v1
         id: get_version
         with:
-          proj-path: ${{env.PROJC}}
+          proj-path: ${{env.PROJ}}
       - name: change version
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         run: echo "VERSION=${{steps.get_version.outputs.assembly-version}}" >> $GITHUB_ENV
@@ -127,9 +127,10 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
+          name: ${{ env.TAG }}
           tag_name: ${{ env.TAG }}
           draft: true
-          generateReleaseNotes: true
+          generate_release_notes: true
           body_path: "RELEASE.md"
           files: "${{ env.OUT_DIR }}/*.zip"
         env:
