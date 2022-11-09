@@ -60,9 +60,9 @@
             Style="{StaticResource WolvenKitTabControl}"
             TabPanelBackground="#313131"
             Tag="{Binding}">
-            
+
             <syncfusion:TabControlExt.NewButtonTemplate>
-                
+
                 <ControlTemplate>
                     <Button
                         Margin="0"
@@ -81,9 +81,9 @@
                         </Button.Content>
                     </Button>
                 </ControlTemplate>
-                
+
             </syncfusion:TabControlExt.NewButtonTemplate>
-            
+
             <syncfusion:TabControlExt.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="-5" Tag="{Binding}">
@@ -91,7 +91,7 @@
                             Padding="5"
                             Text="{Binding Header}"
                             ToolTip="{Binding FilePath}" />
-                        
+
                         <Grid.ContextMenu>
                             <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
                                 <TextBlock
@@ -129,12 +129,12 @@
                                 </MenuItem>
                             </ContextMenu>
                         </Grid.ContextMenu>
-                        
+
                     </Grid>
                 </DataTemplate>
             </syncfusion:TabControlExt.ItemTemplate>
-            
-            <syncfusion:TabControlExt.ContextMenu>
+
+            <!-- <syncfusion:TabControlExt.ContextMenu>
                 <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
                     <MenuItem Command="{Binding PlacementTarget.Tag.NewEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Header="New Embedded File">
                         <MenuItem.Icon>
@@ -148,8 +148,8 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
-            </syncfusion:TabControlExt.ContextMenu>
-            
+            </syncfusion:TabControlExt.ContextMenu>-->
+
         </syncfusion:TabControlExt>
 
 
