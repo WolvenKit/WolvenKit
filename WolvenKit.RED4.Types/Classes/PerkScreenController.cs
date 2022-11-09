@@ -69,6 +69,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("attributeIcon")] 
+		public inkImageWidgetReference AttributeIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("levelControllerRef")] 
 		public inkWidgetReference LevelControllerRef
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("rewardsControllerRef")] 
 		public inkWidgetReference RewardsControllerRef
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("TooltipsManagerRef")] 
 		public inkWidgetReference TooltipsManagerRef
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("proficiencyRootRef")] 
 		public inkWidgetReference ProficiencyRootRef
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("proficiencyDescriptionText")] 
 		public inkTextWidgetReference ProficiencyDescriptionText
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("dataManager")] 
 		public CHandle<PlayerDevelopmentDataManager> DataManager
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PlayerDevelopmentDataManager>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("displayData")] 
 		public CHandle<AttributeDisplayData> DisplayData
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AttributeDisplayData>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("proficiencyRoot")] 
 		public CWeakHandle<TabRadioGroup> ProficiencyRoot
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<TabRadioGroup>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("widgetMap")] 
 		public CArray<CWeakHandle<PerkDisplayContainerController>> WidgetMap
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<PerkDisplayContainerController>>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("traitController")] 
 		public CWeakHandle<PerkDisplayContainerController> TraitController
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PerkDisplayContainerController>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("currentIndex")] 
 		public CInt32 CurrentIndex
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("connectionLines", 45)] 
 		public CArrayFixedSize<CInt32> ConnectionLines
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArrayFixedSize<CInt32>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("levelController")] 
 		public CWeakHandle<StatsProgressController> LevelController
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<StatsProgressController>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("rewardsController")] 
 		public CWeakHandle<StatsStreetCredReward> RewardsController
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<StatsStreetCredReward>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("tooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -198,6 +206,7 @@ namespace WolvenKit.RED4.Types
 			MaxedMaskContainer = new();
 			AttributeNameText = new();
 			AttributeLevelText = new();
+			AttributeIcon = new();
 			LevelControllerRef = new();
 			RewardsControllerRef = new();
 			TooltipsManagerRef = new();
