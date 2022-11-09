@@ -189,27 +189,27 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(23)] 
-		[RED("CASSharpeningEnabled")] 
-		public CBool CASSharpeningEnabled
+		[RED("FSR2Enabled")] 
+		public CBool FSR2Enabled
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(24)] 
-		[RED("FSREnabled")] 
-		public CBool FSREnabled
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(25)] 
-		[RED("FSRQuality")] 
-		public CInt32 FSRQuality
+		[RED("FSR2Quality")] 
+		public CInt32 FSR2Quality
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("FSR2Sharpness")] 
+		public CFloat FSR2Sharpness
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(26)] 
@@ -220,8 +220,60 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(27)] 
+		[RED("DRSTargetFPS")] 
+		public CUInt32 DRSTargetFPS
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("DRSMinimalResolutionPercentage")] 
+		public CUInt32 DRSMinimalResolutionPercentage
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("DRSMaximalResolutionPercentage")] 
+		public CUInt32 DRSMaximalResolutionPercentage
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("CASSharpeningEnabled")] 
+		public CBool CASSharpeningEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("FSREnabled")] 
+		public CBool FSREnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("FSRQuality")] 
+		public CInt32 FSRQuality
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public worldBenchmarkSummary()
 		{
+			DRSTargetFPS = 30;
+			DRSMinimalResolutionPercentage = 100;
+			DRSMaximalResolutionPercentage = 100;
+
 			PostConstruct();
 		}
 

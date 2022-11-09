@@ -1,9 +1,9 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class SetHoverOutEvent : redEvent
+	public partial class FSR2CustomData : ICameraStorageCustomData
 	{
-		public SetHoverOutEvent()
+		public FSR2CustomData()
 		{
 			PostConstruct();
 		}
