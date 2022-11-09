@@ -154,9 +154,10 @@ jobs:
         with:
           tag_name: ${{ env.VERSION }}
           generate_release_notes: true
-          body: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
           files: "${{ env.FINALOUT }}/*.zip"
-          repository: ${{ env.REPO }}
+          repository: WolvenKit/WolvenKit-nightly-releases
           token: ${{ secrets.RELEASE_TOKEN }}
+          body: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
         #env:
+        #  GITHUB_REPOSITORY: ${{ env.REPO }}
         #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
