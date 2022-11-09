@@ -609,7 +609,7 @@ namespace WolvenKit.ViewModels.Tools
 
             if (IsImportsSelected)
             {
-                var toBeImported = ImportableItems.Where(_ => _.IsChecked || all).Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
+                var toBeImported = ImportableItems.Where(_ => all || _.IsChecked).Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
                 total = toBeImported.Count;
                 foreach (var item in toBeImported)
                 {
@@ -626,7 +626,7 @@ namespace WolvenKit.ViewModels.Tools
                     _progressService.Report(progress / (float)total);
                 }
 
-                await ImportWavs(ImportableItems.Where(_ => _.IsChecked || all)
+                await ImportWavs(ImportableItems.Where(_ => all || _.IsChecked)
                     .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
                     .Select(x => x.FullName)
                     .ToList()
@@ -635,7 +635,7 @@ namespace WolvenKit.ViewModels.Tools
 
             if (IsExportsSelected)
             {
-                var toBeExported = ExportableItems.Where(_ => _.IsChecked || all).ToList();
+                var toBeExported = ExportableItems.Where(_ => all || _.IsChecked).ToList();
                 total = toBeExported.Count;
                 foreach (var item in toBeExported)
                 {
@@ -649,7 +649,7 @@ namespace WolvenKit.ViewModels.Tools
                     }
 
                     Interlocked.Increment(ref progress);
-                    _progressService.Report(progress / (float)toBeExported.Count);
+                    _progressService.Report(progress / (float)total);
                 }
             }
 
