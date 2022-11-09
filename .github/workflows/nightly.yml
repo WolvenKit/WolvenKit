@@ -87,8 +87,8 @@ jobs:
           tag_prefix: ""
 
       # get files
-      - name: app files
-        run: echo "FILES=${{env.FINALOUT}}/${{env.PORTABLE}}"  >> $env:GITHUB_ENV
+      #- name: app files
+      #  run: echo "FILES=${{env.FINALOUT}}/${{env.PORTABLE}}"  >> $env:GITHUB_ENV
 
       ##########################################
       # CONSOLE
@@ -126,9 +126,9 @@ jobs:
         run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
 
       # get cli files
-      - name: cli files
-        if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        run: echo "FILES=${{env.FILES}} ${{env.FINALOUT}}/${{env.CONSOLE}}" >> $env:GITHUB_ENV
+      #- name: cli files
+      #  if: ${{ env.HAS_CLI_COMMITS == 'true' }}
+      #  run: echo "FILES=${{env.FILES}} ${{env.FINALOUT}}/${{env.CONSOLE}}" >> $env:GITHUB_ENV
 
       # Pack and upload prerelease nugets
       - name: pack cli
@@ -140,10 +140,23 @@ jobs:
       
       ##########################################
       # RELEASE
-      - name: Release
-        run: |
-            gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} ${{ env.FILES }}
-        env:
-          MESSAGE: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
-          REPO: WolvenKit/WolvenKit-nightly-releases
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+      #- name: Release
+      #  run: |
+      #      gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} ${{ env.FILES }}
+      #  env:
+      #    MESSAGE: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
+      #    REPO: WolvenKit/WolvenKit-nightly-releases
+      #    GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: Release dispatch
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          generate_release_notes: true
+          body: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
+          files: "${{ env.FINALOUT }}/*.zip"
+          repository: ${{ env.REPO }}
+          token: ${{ secrets.RELEASE_TOKEN }}
+        #env:
+        #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
