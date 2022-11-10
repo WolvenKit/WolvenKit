@@ -8,7 +8,7 @@
 	<Color name="Bool" foreground="#79C0FF" exampleText="true | false" />
 	<Color name="Number" foreground="#79C0FF" exampleText="3.14" />
 	<Color name="Comment" foreground="#8B949E" exampleText="#Comment" />
-	<Color name="IllegalChars" background="Red" exampleText="" />
+	<!--<Color name="IllegalChars" background="Red" exampleText="" />-->
 	
 	<!--<RuleSet name="IllegalChars">
 		<Rule color="IllegalChars">\\t+</Rule>
@@ -17,26 +17,39 @@
 		<Rule color="IllegalChars">(?&lt;=[A-Za-z:]+)\s+$</Rule>
 	</RuleSet>-->
 
+	<!--<RuleSet name="Array">
+		<Import ruleSet="Expression"/>
+		<Span color="Bool">
+			<Begin>,</Begin>
+		</Span>
+	</RuleSet>-->
+
 	<RuleSet name="Expression">
 		<Keywords color="Bool" >
 			<Word>true</Word>
-			<Word>false</Word>
 			<Word>True</Word>
+			<Word>TRUE</Word>
+			<Word>false</Word>
 			<Word>False</Word>
+			<Word>FALSE</Word>
 		</Keywords>
 		<Rule color="Number">\b0[xX][0-9a-fA-F]+|(?:\b\d+(?:\.[0-9]+)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?</Rule>
+
+		<Rule color="Key">@?[\$\w\-\.]+(?=:)</Rule>
+		<Rule color="Tag">(?&lt;=-\s)![a-zA-Z\-]+</Rule>
+		<Rule color="Value">(?!\-)[a-zA-Z0-9._*&amp;\\\#]+$</Rule>
+		<!--<Span color="Bool" ruleSet="Array" multiline="true">
+			<Begin>\[</Begin>
+			<End>\]</End>
+		</Span>-->
 	</RuleSet>
 
 	<RuleSet name="Object">
-		<Rule color="Key">^\s*@?[\$\w\-\.]+\b</Rule>
-		<Rule color="Value">(?&lt;=:)\s.+$</Rule>
-		<Rule color="Tag">(?&lt;=-)\s![a-zA-Z\-]+\b</Rule>
-		<Rule color="Value">(?&lt;=-)\s.+$</Rule>
 	</RuleSet>
 
 	<RuleSet name="Comments">
 		<Span color="Comment">
-			<Begin>\#</Begin>
+			<Begin>(?&lt;!LocKey)\#</Begin>
 		</Span>
 	</RuleSet>
 

@@ -50,7 +50,8 @@ namespace WolvenKit.ViewModels.Documents
                         .WithTypeConverter(new TweakXLYamlTypeConverter())
                         .Build();
                     var file = deserializer.Deserialize<TweakXLFile>(reader);
-                    TabItemViewModels.Add(new RDTDataViewModel(file, this));
+                    // TODO: enable when working on ChunkViewModel
+                    //TabItemViewModels.Add(new RDTDataViewModel(file, this));
 
                     // read text file
                     stream.Seek(0, SeekOrigin.Begin);

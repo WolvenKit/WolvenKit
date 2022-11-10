@@ -88,14 +88,14 @@ namespace WolvenKit.ViewModels.Documents
             // serialize from Data tab
             if (File is TweakXLDocumentViewModel tweakFile)
             {
+                // TODO: enable when working on ChunkViewModel
                 // get data tab
-                var tab = tweakFile.TabItemViewModels.OfType<RDTDataViewModel>().FirstOrDefault();
-                var obj = tab.GetData();
-
-                using var writer = new StringWriter();
-                var serializer = new SerializerBuilder()
-                    .WithTypeConverter(new TweakXLYamlTypeConverter())
-                    .Build();
+                //var tab = tweakFile.TabItemViewModels.OfType<RDTDataViewModel>().FirstOrDefault();
+                //var obj = tab.GetData();
+                //using var writer = new StringWriter();
+                //var serializer = new SerializerBuilder()
+                //    .WithTypeConverter(new TweakXLYamlTypeConverter())
+                //    .Build();
                 //var file = serializer.Serialize(obj);
 
                 // refresh
