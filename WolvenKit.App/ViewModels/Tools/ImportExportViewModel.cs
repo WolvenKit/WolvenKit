@@ -588,10 +588,13 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ReactiveCommand<Unit, Unit> ProcessAllCommand { get; private set; }
 
+
+
         /// <summary>
-        /// Execute Process all in Import / Export Grid Command.
+        /// Helper Task to Execute Bulk Processing in Import / Export Grid Command
+        /// 
         /// </summary>
-        private async Task ExecuteProcessAll()
+        private async Task ExecuteProcessBulk(bool all = false)
         {
             IsProcessing = true;
             _watcherService.IsSuspended = true;
@@ -601,21 +604,29 @@ namespace WolvenKit.ViewModels.Tools
             var total = 0;
             var sucessful = 0;
 
+            //prepare a list of failed items
+            var failedItems = new List<string>();
+
             if (IsImportsSelected)
             {
-                var toBeImported = ImportableItems.Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
+                var toBeImported = ImportableItems.Where(_ => all || _.IsChecked).Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
+                total = toBeImported.Count;
                 foreach (var item in toBeImported)
                 {
                     if (await Task.Run(() => ImportSingleTask(item)))
                     {
                         sucessful++;
                     }
+                    else // not successful
+                    {
+                        failedItems.Add(item.FullName);
+                    }
 
                     Interlocked.Increment(ref progress);
-                    _progressService.Report(progress / (float)toBeImported.Count);
+                    _progressService.Report(progress / (float)total);
                 }
 
-                await ImportWavs(ImportableItems
+                await ImportWavs(ImportableItems.Where(_ => all || _.IsChecked)
                     .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
                     .Select(x => x.FullName)
                     .ToList()
@@ -624,13 +635,17 @@ namespace WolvenKit.ViewModels.Tools
 
             if (IsExportsSelected)
             {
-                var toBeExported = ExportableItems.ToList();
+                var toBeExported = ExportableItems.Where(_ => all || _.IsChecked).ToList();
                 total = toBeExported.Count;
                 foreach (var item in toBeExported)
                 {
                     if (await Task.Run(() => ExportSingle(item)))
                     {
                         sucessful++;
+                    }
+                    else
+                    {
+                        failedItems.Add(item.FullName);
                     }
 
                     Interlocked.Increment(ref progress);
@@ -639,14 +654,40 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             IsProcessing = false;
-            _progressService.IsIndeterminate = true;
 
             _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(_projectManager.ActiveProject);
+            await _watcherService.RefreshAsync(_projectManager.ActiveProject).ContinueWith((result) => _progressService.IsIndeterminate = false);
 
             _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
             _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+
+            //We format the list of failed export/import items here
+            if (failedItems.Count > 0)
+            {
+                var failedItemsErrorString = $"The following items failed:\n{String.Join("\n", failedItems)}";
+                _notificationService.Error(failedItemsErrorString); //notify once only 
+                _loggerService.Error(failedItemsErrorString);
+            }
+
             _progressService.Completed();
+        }
+
+        /// <summary>
+        /// Execute Process all in Import / Export Grid Command.
+        /// Uses ExecuteProcessBulk
+        /// </summary>
+        private async Task ExecuteProcessAll()
+        {
+            await ExecuteProcessBulk(true); //the all parameter is set to true
+        }
+
+        /// <summary>
+        /// Execute Process Selected in Import / Export Grid Command.
+        /// Uses ExecuteProcessBulk
+        /// </summary>
+        private async Task ExecuteProcessSelected()
+        {
+            await ExecuteProcessBulk(); //the all parameter's default is false
         }
 
         private Task<bool> ImportWavs(List<string> wavs)
@@ -777,66 +818,6 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand ProcessSelectedCommand { get; private set; }
 
-        /// <summary>
-        /// Execute Process selected in Import / Export Grid Command
-        /// </summary>
-        private async Task ExecuteProcessSelected()
-        {
-            IsProcessing = true;
-            _watcherService.IsSuspended = true;
-            var progress = 0;
-            _progressService.Report(0);
-
-            var total = 0;
-            var sucessful = 0;
-
-            if (IsImportsSelected)
-            {
-                var toBeImported = ImportableItems.Where(_ => _.IsChecked).Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
-                total = toBeImported.Count;
-                foreach (var item in toBeImported)
-                {
-                    if (await Task.Run(() => ImportSingleTask(item)))
-                    {
-                        sucessful++;
-                    }
-
-                    Interlocked.Increment(ref progress);
-                    _progressService.Report(progress / (float)total);
-                }
-
-                await ImportWavs(ImportableItems.Where(_ => _.IsChecked)
-                    .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
-                    .Select(x => x.FullName)
-                    .ToList()
-                    );
-            }
-
-            if (IsExportsSelected)
-            {
-                var toBeExported = ExportableItems.Where(_ => _.IsChecked).ToList();
-                total = toBeExported.Count;
-                foreach (var item in toBeExported)
-                {
-                    if (await Task.Run(() => ExportSingle(item)))
-                    {
-                        sucessful++;
-                    }
-
-                    Interlocked.Increment(ref progress);
-                    _progressService.Report(progress / (float)toBeExported.Count);
-                }
-            }
-
-            IsProcessing = false;
-
-            _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(_projectManager.ActiveProject).ContinueWith((result) => _progressService.IsIndeterminate = false);
-
-            _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
-            _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
-            _progressService.Completed();
-        }
 
         /// <summary>
         /// Setup Tool defaults for tool window.

@@ -53,10 +53,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.Save", "Wolv
 EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "WolvenKit.Package", "WolvenKit.Package\WolvenKit.Package.wapproj", "{849A9683-78D3-4A05-8C76-A804DC79704A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wolvenkit.Installer", "WolvenKit.Installer\Wolvenkit.Installer\Wolvenkit.Installer\Wolvenkit.Installer.csproj", "{AAC7FA50-41FE-4DAA-9D77-BD35DF219ACD}"
-EndProject
-Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "Wolvenkit.Installer (Package)", "WolvenKit.Installer\Wolvenkit.Installer\Wolvenkit.Installer (Package)\Wolvenkit.Installer (Package).wapproj", "{BE6C095C-DAAE-42A7-A8D9-23022A7CA784}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

@@ -114,7 +114,7 @@ namespace WolvenKit.ViewModels.HomePage
                 IsProcessing = true;
 
                 var rttiSchemaPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
-                var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"  -rttiSchemaPath=\"{rttiSchemaPath}\"";
+                var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
 
                 if (LoadOrderChanged)
                 {
@@ -129,7 +129,8 @@ namespace WolvenKit.ViewModels.HomePage
 
                 _progressService.Report(0.1);
 
-                var result = await ProcessUtil.RunRedmodAsync(redmodPath, args, progress: _progressService);
+                var workingDir = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin");
+                var result = await ProcessUtil.RunRedmodAsync(redmodPath, args, workingDir, progress: _progressService);
 
                 _progressService.Report(1.0);
                 _progressService.Completed();

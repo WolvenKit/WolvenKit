@@ -16,6 +16,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -219,8 +220,37 @@ namespace WolvenKit.ViewModels.Tools
         /// Reimports the game file to replace the current one
         /// </summary>
         public ICommand ReimportFileCommand { get; private set; }
-        private bool CanReimportFile() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
-        private Task ExecuteReimportFile() => _gameController.GetController().AddFileToModModal(SelectedItem.Hash);
+        private bool CanReimportFile() => ActiveProject != null && SelectedItem != null && !IsInRawFolder(SelectedItem);
+        private async Task ExecuteReimportFile()
+        {
+            if (SelectedItem.IsDirectory)
+            {
+                _watcherService.IsSuspended = true;
+
+                var progress = 0;
+                _progressService.Report(0);
+
+                var files = Directory.GetFiles(SelectedItem.FullName, "*", SearchOption.AllDirectories).ToList();
+                foreach (var file in files)
+                {
+                    var relPath = FileModel.GetRelativeName(file, ActiveProject);
+                    var hash = FNV1A64HashAlgorithm.HashString(relPath);
+                    await Task.Run(() => _gameController.GetController().AddToMod(hash));
+
+                    progress++;
+                    _progressService.Report(progress / (float)files.Count);
+                }
+
+                _watcherService.IsSuspended = false;
+                await _watcherService.RefreshAsync(ActiveProject);
+
+                _progressService.Completed();
+            }
+            else
+            {
+                await _gameController.GetController().AddFileToModModal(SelectedItem.Hash);
+            }
+        }
 
         /// <summary>
         /// Cuts selected node to the clipboard.
@@ -235,11 +265,7 @@ namespace WolvenKit.ViewModels.Tools
         /// Delets selected node.
         /// </summary>
         public ICommand DeleteFileCommand { get; private set; }
-        private bool CanDeleteFile()
-        {
-            var b = ActiveProject != null && SelectedItem != null;
-            return b && b;
-        }
+        private bool CanDeleteFile() => ActiveProject != null && SelectedItem != null;
         public async void ExecuteDeleteFile()
         {
             var selected = SelectedItems.OfType<FileModel>().ToList();
@@ -437,6 +463,8 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (SelectedItem.IsDirectory)
             {
+                _watcherService.IsSuspended = true;
+
                 var progress = 0;
                 _progressService.Report(0);
 
@@ -448,6 +476,9 @@ namespace WolvenKit.ViewModels.Tools
                     progress++;
                     _progressService.Report(progress / (float)files.Count);
                 }
+
+                _watcherService.IsSuspended = false;
+                await _watcherService.RefreshAsync(ActiveProject);
 
                 _progressService.Completed();
             }
@@ -488,6 +519,8 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (SelectedItem.IsDirectory)
             {
+                _watcherService.IsSuspended = true;
+
                 var progress = 0;
                 _progressService.Report(0);
 
@@ -499,6 +532,9 @@ namespace WolvenKit.ViewModels.Tools
                     progress++;
                     _progressService.Report(progress / (float)files.Count);
                 }
+
+                _watcherService.IsSuspended = false;
+                await _watcherService.RefreshAsync(ActiveProject);
 
                 _progressService.Completed();
             }

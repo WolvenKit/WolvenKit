@@ -58,7 +58,7 @@ public class CyberpunkSaveReader : IDisposable, IErrorHandler
             return result;
         }
 
-        if (((CyberpunkSaveHeaderStruct)info).gameVersion != (ulong)Enums.gameGameVersion.CP77_Patch_1_6)
+        if (((CyberpunkSaveHeaderStruct)info).gameVersion < (ulong)Enums.gameGameVersion.CP77_Patch_1_6)
         {
             file = null;
             return EFileReadErrorCodes.UnsupportedVersion;

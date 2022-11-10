@@ -33,7 +33,7 @@ namespace WolvenKit.Functionality.Services
         redscript,
         [Id("MlsetupBuilder", "neurolinked/mlsetupbuilder", @"MlsetupBuilder-.*\.zip", "Cyberpunk 2077 modding tool to build json version of .mlsetup files.")]
         mlsetupbuilder,
-        [Id("Wolvenkit Resources", "WolvenKit/Wolvenkit-Resources", @"resources.zip", "Resource depot for Wolvenkit.")]
+        [Id("Wolvenkit Resources", "WolvenKit/Wolvenkit-Resources", @"resources-.*\.zip", "Resource depot for Wolvenkit.")]
         wolvenkit_resources,
         [Id("RedMod", "", @"redmod.zip", "RedMod tools.")]
         redmod,

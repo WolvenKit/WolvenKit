@@ -85,6 +85,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("inventoryWrapper")] 
+		public inkWidgetReference InventoryWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("gridWrapper")] 
 		public inkWidgetReference GridWrapper
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("scrollArea")] 
 		public inkWidgetReference ScrollArea
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("outroAnimation")] 
 		public CHandle<inkanimProxy> OutroAnimation
 		{
@@ -120,6 +128,7 @@ namespace WolvenKit.RED4.Types
 			M_eyesTexture = new();
 			M_systemReplacementTexture = new();
 			M_handsTexture = new();
+			InventoryWrapper = new();
 			GridWrapper = new();
 			ScrollArea = new();
 

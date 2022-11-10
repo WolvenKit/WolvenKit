@@ -272,8 +272,8 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Button
                         Grid.Column="0"
@@ -289,8 +289,8 @@
                         Command="{Binding ClearSearchCommand}"
                         Content="Clear Search" />
                     <Button
-                        Grid.Column="0"
                         Grid.Row="1"
+                        Grid.Column="0"
                         Height="24"
                         Margin="4"
                         HorizontalAlignment="Stretch"
@@ -299,8 +299,8 @@
                         IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
                         ToolTip="May take a while - watch log for completion" />
                     <Button
-                        Grid.Column="1"
                         Grid.Row="1"
+                        Grid.Column="1"
                         Height="24"
                         Margin="4"
                         HorizontalAlignment="Stretch"
@@ -362,13 +362,22 @@
                 NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
                 RowHeaderWidth="300"
                 SelectedItem="{Binding SelectedItem}"
-                ShowCheckBox="True">
+                ShowCheckBox="True"
+                TreeGridContextMenuOpening="SfTreeGrid_OnTreeGridContextMenuOpening">
+                <syncfusion:SfTreeGrid.RecordContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="CheckAllChildrenMenuItem_OnClick" Header="Check All Children" />
+                        <MenuItem Click="CheckAllChildrenRecursiveMenuItem_OnClick" Header="Check All Children (Recursive)" />
+                        <MenuItem Click="UncheckAllChildrenMenuItem_OnClick" Header="Uncheck All Children" />
+                        <MenuItem Click="UncheckAllChildrenRecursiveMenuItem_OnClick" Header="Uncheck All Children (Recursive)" />
+                    </ContextMenu>
+                </syncfusion:SfTreeGrid.RecordContextMenu>
                 <syncfusion:SfTreeGrid.Columns>
                     <syncfusion:TreeGridTextColumn
+                        ColumnSizer="Auto"
                         HeaderText="Name"
                         MappingName="Name"
-                        MinimumWidth="100"
-                        ColumnSizer="Auto"/>
+                        MinimumWidth="100" />
                     <!--syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
                         <syncfusion:TreeGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -384,20 +393,20 @@
                         </syncfusion:TreeGridTemplateColumn.CellTemplate>
                     </syncfusion:TreeGridTemplateColumn-->
                     <syncfusion:TreeGridTextColumn
+                        ColumnSizer="Auto"
                         HeaderText="Appearance"
                         MappingName="AppearanceName"
-                        MinimumWidth="100"
-                        ColumnSizer="Auto"/>
+                        MinimumWidth="100" />
                     <syncfusion:TreeGridTextColumn
+                        ColumnSizer="Auto"
                         HeaderText="Material"
                         MappingName="MaterialName"
-                        MinimumWidth="100"
-                        ColumnSizer="Auto"/>
+                        MinimumWidth="100" />
                     <syncfusion:TreeGridTextColumn
+                        ColumnSizer="Auto"
                         HeaderText="DepotPath"
                         MappingName="DepotPath"
-                        MinimumWidth="100"
-                        ColumnSizer="Auto"/>
+                        MinimumWidth="100" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">

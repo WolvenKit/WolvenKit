@@ -24,6 +24,7 @@ namespace WolvenKit.Functionality.Services
             MaterialRepositoryPath = settings.MaterialRepositoryPath;
             TreeViewGroups = settings.TreeViewGroups;
             TreeViewGroupSize = settings.TreeViewGroupSize;
+            TreeViewIgnoredExtensions = settings.TreeViewIgnoredExtensions;
             ShowAdvancedOptions = settings.ShowAdvancedOptions;
             ShowCNameAsHex = settings.ShowCNameAsHex;
             ShowNodeRefAsHex = settings.ShowNodeRefAsHex;
@@ -51,6 +52,7 @@ namespace WolvenKit.Functionality.Services
         public string MaterialRepositoryPath { get; set; }
         public bool TreeViewGroups { get; set; }
         public uint TreeViewGroupSize { get; set; }
+        public string TreeViewIgnoredExtensions { get; set; } = "";
         public bool ShowAdvancedOptions { get; set; }
         public bool ShowCNameAsHex { get; set; }
         public bool ShowNodeRefAsHex { get; set; }
@@ -79,6 +81,7 @@ namespace WolvenKit.Functionality.Services
             settingsManager.MaterialRepositoryPath = MaterialRepositoryPath;
             settingsManager.TreeViewGroups = TreeViewGroups;
             settingsManager.TreeViewGroupSize = TreeViewGroupSize;
+            settingsManager.TreeViewIgnoredExtensions = TreeViewIgnoredExtensions;
             settingsManager.ShowAdvancedOptions = ShowAdvancedOptions;
             settingsManager.ShowCNameAsHex = ShowCNameAsHex;
             settingsManager.ShowNodeRefAsHex = ShowNodeRefAsHex;
