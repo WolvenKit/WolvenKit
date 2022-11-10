@@ -322,11 +322,11 @@ namespace WolvenKit.Functionality.Controllers
             _loggerService.Success($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
 
             // pack 'script' files
-            if (!PackScriptFiles(cp77Proj))
+            if (!PackResources(cp77Proj))
             {
                 _progressService.IsIndeterminate = false;
-                _loggerService.Error("Packing script files failed, aborting.");
-                _notificationService.Error("Packing script files failed, aborting.");
+                _loggerService.Error("Packing other resource files failed, aborting.");
+                _notificationService.Error("Packing other resource files failed, aborting.");
                 return false;
             }
 
@@ -477,10 +477,10 @@ namespace WolvenKit.Functionality.Controllers
         }
 
 
-        private static bool PackScriptFiles(Cp77Project cp77Proj)
+        private static bool PackResources(Cp77Project cp77Proj)
         {
             //preliminary approach -- everything under resources, except for *.yaml, *.xl, is a 'script' element
-            //this will cover all potential scripts
+            //this will cover all potential add-ons/mods/redscript
             //All such files goes into the root of the cp77Proj.PackedRootDirectory
             Directory.GetFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(name => !name.ToLower().EndsWith(".xl") && !name.ToLower().EndsWith(".yaml")) 
