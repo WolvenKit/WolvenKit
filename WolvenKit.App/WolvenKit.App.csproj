@@ -35,15 +35,10 @@
 
   <ItemGroup>
     <None Remove="Resources\WolvenKitFileDefinitions.xml" />
-    <None Remove="Resources\YAML.xhsd" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\WolvenKitFileDefinitions.xml" />
-    <EmbeddedResource Include="Resources\YAML.xhsd">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

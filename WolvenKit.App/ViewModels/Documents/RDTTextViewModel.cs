@@ -11,9 +11,7 @@ using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Models;
 using WolvenKit.RED4.Types;
-using YamlDotNet.Serialization;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -39,29 +37,6 @@ namespace WolvenKit.ViewModels.Documents
                 .Subscribe();
         }
 
-        private void RegisterHighlighting()
-        {
-            try
-            {
-                // register the custom highlighting for YAML files
-                using (var xshdStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.YAML.xhsd"))
-                {
-                    var xmlreader = XmlReader.Create(xshdStream);
-
-                    var hlManager = HighlightingManager.Instance;
-                    var hlXshdDef = HighlightingLoader.LoadXshd(xmlreader);
-                    var hlDef = HighlightingLoader.Load(hlXshdDef, hlManager);
-
-                    hlManager.RegisterHighlighting(hlXshdDef.Name, hlXshdDef.Extensions.ToArray(), hlDef);
-                    HighlightingDefinition = hlDef;
-                }
-            }
-            catch
-            {
-                
-            }
-        }
-
         private void SetupText(Stream stream)
         {
             using var sr = new StreamReader(stream);
@@ -74,13 +49,7 @@ namespace WolvenKit.ViewModels.Documents
                 EnableEmailHyperlinks = false
             };
 
-            var def = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(FilePath));
-
-            if (def != null)
-                HighlightingDefinition = def;
-            else
-                RegisterHighlighting();
-            
+            HighlightingDefinition = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(FilePath));      
         }
 
         public override void OnSelected()
