@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using MoreLinq;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Models;
@@ -320,6 +321,17 @@ namespace WolvenKit.Functionality.Controllers
             }
             _loggerService.Success($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
 
+            // pack 'script' files
+            if (!PackResources(cp77Proj))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing other resource files failed, aborting.");
+                _notificationService.Error("Packing other resource files failed, aborting.");
+                return false;
+            }
+
+            _loggerService.Success($"{cp77Proj.Name} script files packed into {cp77Proj.PackedRootDirectory}");
+
 
             // pack redmod files
             if (options.IsRedmod)
@@ -463,6 +475,33 @@ namespace WolvenKit.Functionality.Controllers
 
             return true;
         }
+
+
+        private static bool PackResources(Cp77Project cp77Proj)
+        {
+            //preliminary approach -- everything under resources, except for *.yaml, *.xl, is a 'script' element
+            //this will cover all potential add-ons/mods/redscript
+            //All such files goes into the root of the cp77Proj.PackedRootDirectory
+            Directory.GetFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
+                .Where(name => !name.ToLower().EndsWith(".xl") && !name.ToLower().EndsWith(".yaml")) 
+                .ForEach( f => 
+                {
+                    var fileName = Path.GetFileName(f);
+                    var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(f));
+                    var fileOutputDir = Path.Combine(cp77Proj.PackedRootDirectory, fileRelativeDir);
+                    var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+                    if (!Directory.Exists(fileOutputDir))
+                    {
+                        Directory.CreateDirectory(fileOutputDir);
+                    }
+                    
+                    // copy files, with overwriting
+                    File.Copy(f, fileOutputPath, true);
+                }
+            );
+            return true;
+        }
+
         private static bool PackTweakXlFiles(Cp77Project cp77Proj)
         {
             var tweakFiles = Directory.GetFiles(cp77Proj.ResourcesDirectory, "*.yaml", SearchOption.AllDirectories);
