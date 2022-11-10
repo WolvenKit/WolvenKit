@@ -374,19 +374,18 @@ namespace WolvenKit.ViewModels.Tools
 
             txl.ID = _selectedRecordEntry.Item;
 
-            var txlFile = new TweakXLFile();
-            txlFile.Add(txl);
+            baseRecord.GetPropertyNames().ForEach(name => txl.Properties.Add(name, baseRecord.GetProperty(name)));
+
+            var txlFile = new TweakXLFile { txl };
 
             Stream myStream;
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = "YAML files (*.yaml; *.yml)|*.yaml;*.yml|All files (*.*)|*.*",
                 FilterIndex = 1,
-                FileName = $"{SelectedRecordEntry.DisplayName}.yaml"
+                FileName = $"{SelectedRecordEntry.DisplayName}.yaml",
+                InitialDirectory = _projectManager.ActiveProject?.ResourcesDirectory
             };
-
-            if (_projectManager.IsProjectLoaded)
-                saveFileDialog.InitialDirectory = _projectManager.ActiveProject.ResourcesDirectory;
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {

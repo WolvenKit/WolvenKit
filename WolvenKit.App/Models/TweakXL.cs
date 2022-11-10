@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Splat;
+using Syncfusion.Windows.Shared;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WolvenKit.Models
 {
@@ -229,45 +229,56 @@ namespace WolvenKit.Models
             return result;
         }
 
-        private void WriteCName(IEmitter emitter, string property, CName cName)
+        private void WriteCName(IEmitter emitter, CName cName, string property = "")
         {
             if (!cName.Equals(CName.Empty))
             {
-                emitter.Emit(new Scalar(property));
+                if (!property.IsNullOrWhiteSpace())
+                    emitter.Emit(new Scalar(property));
+
                 emitter.Emit(new Scalar(cName.GetResolvedText()));
             }
         }
 
-        private void WriteTweakDBID(IEmitter emitter, string property, TweakDBID tweakDBID)
+        private void WriteTweakDBID(IEmitter emitter, TweakDBID tweakDBID, string property = "")
         {
             if (tweakDBID.Length > 0)
             {
-                emitter.Emit(new Scalar(property));
+                if (!property.IsNullOrWhiteSpace())
+                    emitter.Emit(new Scalar(property));
+
                 emitter.Emit(new Scalar(tweakDBID.GetResolvedText()));
             }
         }
-        private void WriteREDRaRef(IEmitter emitter, string property, IRedResourceAsyncReference raRef)
+        private void WriteREDRaRef(IEmitter emitter, IRedResourceAsyncReference raRef, string property = "")
         {
-            emitter.Emit(new Scalar(property));
+            if (!property.IsNullOrWhiteSpace())
+                emitter.Emit(new Scalar(property));
+
             if (raRef.IsSet)
                 emitter.Emit(new Scalar(raRef.DepotPath));
             else
                 emitter.Emit(new Scalar(string.Empty));
         }
 
-        private void WriteLocKey(IEmitter emitter, string property, gamedataLocKeyWrapper locKeyWrapper)
+        private void WriteLocKey(IEmitter emitter, gamedataLocKeyWrapper locKeyWrapper, string property = "")
         {
             if (locKeyWrapper.Key != 0)
             {
                 var loc = Locator.Current.GetService<LocKeyService>().GetEntry(locKeyWrapper.Key);
-                emitter.Emit(new Scalar(property));
+
+                if (!property.IsNullOrWhiteSpace())
+                    emitter.Emit(new Scalar(property));
+
                 emitter.Emit(new Scalar($"LocKey#{loc.PrimaryKey}"));
             }
         }
 
-        private void WriteVector2(IEmitter emitter, string property, Vector2 vector2)
+        private void WriteVector2(IEmitter emitter, Vector2 vector2, string property = "")
         {
-            emitter.Emit(new Scalar(property));
+            if (!property.IsNullOrWhiteSpace())
+                emitter.Emit(new Scalar(property));
+
             emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
             emitter.Emit(new Scalar("x"));
             emitter.Emit(new Scalar(vector2.X.ToString()));
@@ -276,9 +287,11 @@ namespace WolvenKit.Models
             emitter.Emit(new MappingEnd());
         }
 
-        private void WriteVector3(IEmitter emitter, string property, Vector3 vector3)
+        private void WriteVector3(IEmitter emitter, Vector3 vector3, string property = "")
         {
-            emitter.Emit(new Scalar(property));
+            if (!property.IsNullOrWhiteSpace())
+                emitter.Emit(new Scalar(property));
+
             emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
             emitter.Emit(new Scalar("x"));
             emitter.Emit(new Scalar($"{vector3.X}"));
@@ -289,7 +302,7 @@ namespace WolvenKit.Models
             emitter.Emit(new MappingEnd());
         }
 
-        private void WriteREDArray(IEmitter emitter, string property, IRedArray redArray)
+        private void WriteREDArray(IEmitter emitter, IRedArray redArray, string property)
         {
             emitter.Emit(new Scalar(property));
             if (redArray.Count > 0)
@@ -300,40 +313,22 @@ namespace WolvenKit.Models
                     switch (redType)
                     {
                         case CName cName:
-                            if (!cName.Equals(CName.Empty))
-                                emitter.Emit(new Scalar(cName.GetResolvedText()));
+                            WriteCName(emitter, cName);
                             break;
                         case TweakDBID tweakDBID:
-                            if (tweakDBID.Length > 0)
-                                emitter.Emit(new Scalar(tweakDBID.GetResolvedText()));
+                            WriteTweakDBID(emitter, tweakDBID);
                             break;
-                        case IRedResourceReference raRef:
-                            if (raRef.IsSet)
-                                emitter.Emit(new Scalar(raRef.DepotPath));
-                            else
-                                emitter.Emit(new Scalar(string.Empty));
+                        case IRedResourceAsyncReference raRef:
+                            WriteREDRaRef(emitter, raRef);
                             break;
                         case Vector2 vector2:
-                            emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
-                            emitter.Emit(new Scalar("x"));
-                            emitter.Emit(new Scalar(vector2.X.ToString()));
-                            emitter.Emit(new Scalar("y"));
-                            emitter.Emit(new Scalar(vector2.Y.ToString()));
-                            emitter.Emit(new MappingEnd());
+                            WriteVector2(emitter, vector2);
                             break;
                         case Vector3 vector3:
-                            emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
-                            emitter.Emit(new Scalar("x"));
-                            emitter.Emit(new Scalar($"{vector3.X}"));
-                            emitter.Emit(new Scalar("y"));
-                            emitter.Emit(new Scalar($"{vector3.Y}"));
-                            emitter.Emit(new Scalar("z"));
-                            emitter.Emit(new Scalar($"{vector3.Z}"));
-                            emitter.Emit(new MappingEnd());
+                            WriteVector3(emitter, vector3);
                             break;
                         case gamedataLocKeyWrapper locKeyWrapper:
-                            var loc = Locator.Current.GetService<LocKeyService>().GetEntry(locKeyWrapper.Key);
-                            emitter.Emit(new Scalar($"LocKey#{loc.PrimaryKey}"));
+                            WriteLocKey(emitter, locKeyWrapper);
                             break;
                         default:
                             emitter.Emit(new Scalar(redType.ToString()));
@@ -362,6 +357,7 @@ namespace WolvenKit.Models
                 emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
 
                 // for now we're only assuming one "tweak" per file during serialization. is this correct?
+                // TODO: ViewModel probably needs to build ITweakXLItem for appends, etc.
                 if (txlEntry is TweakXL txl)
                 {
                     // iterate over the properties
@@ -383,26 +379,26 @@ namespace WolvenKit.Models
                         switch (propertyValue)
                         {
                             case CName cName:
-                                WriteCName(emitter, property, cName);
+                                WriteCName(emitter, cName, property);
                                 break;
                             case TweakDBID tweakDBID:
-                                WriteTweakDBID(emitter, property, tweakDBID);
+                                WriteTweakDBID(emitter, tweakDBID, property);
                                 break;
                             case IRedResourceAsyncReference raRef:
-                                WriteREDRaRef(emitter, property, raRef);
+                                WriteREDRaRef(emitter, raRef, property);
                                 break;
                             case Vector2 vector2:
-                                WriteVector2(emitter, property, vector2);
+                                WriteVector2(emitter, vector2, property);
                                 break;
                             case Vector3 vector3:
-                                WriteVector3(emitter, property, vector3);
+                                WriteVector3(emitter, vector3, property);
                                 break;
                             case gamedataLocKeyWrapper locKeyWrapper:
-                                WriteLocKey(emitter, property, locKeyWrapper);
+                                WriteLocKey(emitter, locKeyWrapper, property);
                                 break;
                             // CArray of the types
                             case IRedArray redArray:
-                                WriteREDArray(emitter, property, redArray);
+                                WriteREDArray(emitter, redArray, property);
                                 break;
                             // TODO: EulerAngles & Quaterion
                             // CString, CFloat, CBool, CInt32
