@@ -1158,7 +1158,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             if (Data is CMaterialInstance && Parent is not null && Tab.File.Cr2wFile.RootChunk is CMesh mesh)
             {
-                if (mesh.LocalMaterialBuffer.RawData.Data is CR2WList list)
+                if (mesh.LocalMaterialBuffer.RawData?.Data is CR2WList list)
                 {
                     for (var i = 0; i < list.Files.Count; i++)
                     {
