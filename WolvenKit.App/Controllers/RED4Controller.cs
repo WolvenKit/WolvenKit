@@ -675,11 +675,12 @@ namespace WolvenKit.Functionality.Controllers
             if (File.Exists(redmodPath))
             {
                 var rttiSchemaPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
-                var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\" -rttiSchemaPath=\"{rttiSchemaPath}\"";
+                var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\"";
 
                 _loggerService.Info($"WorkDir: {redmodPath}");
                 _loggerService.Info($"Running commandlet: {args}");
-                return ProcessUtil.RunProcessAsync(redmodPath, args);
+                var workingDir = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin");
+                return ProcessUtil.RunProcessAsync(redmodPath, args, workingDir);
             }
 
             return Task.FromResult(true);
