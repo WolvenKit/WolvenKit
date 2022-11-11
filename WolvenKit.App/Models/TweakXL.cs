@@ -353,16 +353,20 @@ namespace WolvenKit.Models
 
             foreach (var txlEntry in (TweakXLFile)value)
             {
-                emitter.Emit(new Scalar(null, txlEntry.ID));
-                emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
-
                 // for now we're only assuming one "tweak" per file during serialization. is this correct?
                 // TODO: ViewModel probably needs to build ITweakXLItem for appends, etc.
                 if (txlEntry is TweakXL txl)
                 {
+                    if (txl.Properties.Count > 0)
+                    {
+                        emitter.Emit(new Scalar(null, txlEntry.ID));
+                        emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
+                    }
+
                     // iterate over the properties
                     foreach (var property in txl.GetPropertyNames())
                     {
+                        var propertyToWrite = property;
                         // skip ID since it's already written as the map start
                         if (property == "ID")
                             continue;
@@ -374,43 +378,50 @@ namespace WolvenKit.Models
                             continue;
                         }
 
-                        // TODO: Explicit or implicit formatting?
+                        if (property == "Value")
+                        {
+                            propertyToWrite = txl.ID.ResolvedText;
+                        }
+
                         var propertyValue = txl.GetPropertyValue(property);
                         switch (propertyValue)
                         {
                             case CName cName:
-                                WriteCName(emitter, cName, property);
+                                WriteCName(emitter, cName, propertyToWrite);
                                 break;
                             case TweakDBID tweakDBID:
-                                WriteTweakDBID(emitter, tweakDBID, property);
+                                WriteTweakDBID(emitter, tweakDBID, propertyToWrite);
                                 break;
                             case IRedResourceAsyncReference raRef:
-                                WriteREDRaRef(emitter, raRef, property);
+                                WriteREDRaRef(emitter, raRef, propertyToWrite);
                                 break;
                             case Vector2 vector2:
-                                WriteVector2(emitter, vector2, property);
+                                WriteVector2(emitter, vector2, propertyToWrite);
                                 break;
                             case Vector3 vector3:
-                                WriteVector3(emitter, vector3, property);
+                                WriteVector3(emitter, vector3, propertyToWrite);
                                 break;
                             case gamedataLocKeyWrapper locKeyWrapper:
-                                WriteLocKey(emitter, locKeyWrapper, property);
+                                WriteLocKey(emitter, locKeyWrapper, propertyToWrite);
                                 break;
                             // CArray of the types
                             case IRedArray redArray:
-                                WriteREDArray(emitter, redArray, property);
+                                WriteREDArray(emitter, redArray, propertyToWrite);
                                 break;
                             // TODO: EulerAngles & Quaterion
                             // CString, CFloat, CBool, CInt32
                             default:
-                                emitter.Emit(new Scalar(property));
+                                emitter.Emit(new Scalar(propertyToWrite));
                                 emitter.Emit(new Scalar(propertyValue.ToString()));
                                 break;
                         }
 
                     }
+                    if (txl.Properties.Count > 0)
+                    {
+                        emitter.Emit(new MappingEnd());
+                    }
                 }
-                emitter.Emit(new MappingEnd());
             }
             emitter.Emit(new MappingEnd());
         }
