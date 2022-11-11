@@ -1,4 +1,3 @@
-using Prism.Commands;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -11,21 +10,19 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ProjectManagement.Project;
-using WolvenKit.RED4.Types;
 using WolvenKit.Models;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
 using YamlDotNet.Serialization;
-using System.Windows.Forms;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -366,8 +363,10 @@ namespace WolvenKit.ViewModels.Tools
 
         private void ExecuteConvertToYAML()
         {
-            var txl = new TweakXL();
-            txl.ID = SelectedRecordEntry.DisplayName;
+            var txl = new TweakXL
+            {
+                ID = SelectedRecordEntry.DisplayName
+            };
 
             var baseRecord = _tweakDB.GetRecord(_selectedRecordEntry.Item);
             txl.Type = "gamedata" + _selectedRecordEntry.RecordTypeName + "_Record";

@@ -1307,9 +1307,9 @@ namespace WolvenKit.ViewModels.Shell
         public bool ShouldShowTweakXLMenu()
         {
             var ret = Data is gamedataTweakDBRecord;
-            ret |= (Data is TweakDBID);
-            ret |= (Parent?.Data is gamedataTweakDBRecord);
-            ret |= (Parent?.Data is TweakDBID);
+            ret |= Data is TweakDBID;
+            ret |= Parent?.Data is gamedataTweakDBRecord;
+            ret |= Parent?.Data is TweakDBID;
             return ret;
         }
 
@@ -1361,7 +1361,9 @@ namespace WolvenKit.ViewModels.Shell
 
             // if a record was found, parse its data
             if (tdbEntry is gamedataTweakDBRecord)
+            {
                 ((gamedataTweakDBRecord)tdbEntry).GetPropertyNames().ForEach(name => txl.Properties.Add(name, ((gamedataTweakDBRecord)tdbEntry).GetProperty(name)));
+            }
 
             var saveFileDialog = new SaveFileDialog
             {
@@ -1375,18 +1377,16 @@ namespace WolvenKit.ViewModels.Shell
             {
                 try
                 {
-                    using (var stream = saveFileDialog.OpenFile())
-                    {
-                        var serializer = new SerializerBuilder()
-                            .WithTypeConverter(new TweakXLYamlTypeConverter())
-                            .WithIndentedSequences()
-                            .Build();
+                    using var stream = saveFileDialog.OpenFile();
+                    var serializer = new SerializerBuilder()
+                        .WithTypeConverter(new TweakXLYamlTypeConverter())
+                        .WithIndentedSequences()
+                        .Build();
 
-                        var yaml = serializer.Serialize(new TweakXLFile { txl });
-                        stream.Write(yaml.ToCharArray().Select(c => (byte)c).ToArray());
+                    var yaml = serializer.Serialize(new TweakXLFile { txl });
+                    stream.Write(yaml.ToCharArray().Select(c => (byte)c).ToArray());
 
-                        Locator.Current.GetService<ILoggerService>().Success($"TweakXL YAML written for {recordName}.");
-                    }
+                    Locator.Current.GetService<ILoggerService>().Success($"TweakXL YAML written for {recordName}.");
                 }
                 catch (Exception ex)
                 {

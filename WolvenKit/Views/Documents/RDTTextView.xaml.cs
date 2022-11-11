@@ -1,13 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Reactive.Disposables;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using ReactiveUI;
-using Splat;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents

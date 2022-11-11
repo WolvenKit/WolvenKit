@@ -3,13 +3,10 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reflection;
-using System.Xml;
 using DynamicData.Binding;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
 
@@ -49,7 +46,7 @@ namespace WolvenKit.ViewModels.Documents
                 EnableEmailHyperlinks = false
             };
 
-            HighlightingDefinition = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(FilePath));      
+            HighlightingDefinition = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(FilePath));
         }
 
         public override void OnSelected()

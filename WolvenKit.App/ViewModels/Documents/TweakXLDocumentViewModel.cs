@@ -14,7 +14,7 @@ namespace WolvenKit.ViewModels.Documents
     {
         private TweakDBService _tdbs;
         private readonly ISettingsManager _settingsManager = Locator.Current.GetService<ISettingsManager>();
-        
+
 
         public TweakXLDocumentViewModel(string path) : base(path)
         {

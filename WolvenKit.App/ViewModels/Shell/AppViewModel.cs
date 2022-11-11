@@ -1257,10 +1257,10 @@ namespace WolvenKit.ViewModels.Shell
             var ext = Path.GetExtension(fullpath).ToLower();
 
             // everything in ignoredExtensions is delegated to the System viewer
-            string delimiter = "|";
+            var delimiter = "|";
             //string[] ignoredExtensions = _settingsManager.TreeViewIgnoredExtensions.ToLower().Split(delimiter);
             //bool isAnIgnoredExtension = Array.Exists(ignoredExtensions, extension => extension.Equals(ext));
-            bool isAnIgnoredExtension = _settingsManager.TreeViewIgnoredExtensions.Split(delimiter).Any(entry => entry.ToLower().Trim().Equals(ext));
+            var isAnIgnoredExtension = _settingsManager.TreeViewIgnoredExtensions.Split(delimiter).Any(entry => entry.ToLower().Trim().Equals(ext));
             if (isAnIgnoredExtension)
             {
                 ShellExecute();
@@ -1286,29 +1286,29 @@ namespace WolvenKit.ViewModels.Shell
                     case ".txt":
                     case ".ws":
 
-                // other
-                case ".mp3":
-                case ".wav":
-                case ".glb":
-                case ".gltf":
-                case ".fbx":
-                case ".xcf":
-                case ".psd":
-                case ".apb":
-                case ".apx":
-                case ".ctw":
-                case ".blend":
-                case ".zip":
-                case ".rar":
-                case ".bat":
-                //case ".yml":
-                case ".log":
-                case ".ini":
-                case ".xl":
-                case ".reds":
-                    //case ".yaml":
-                    ShellExecute();
-                    break;
+                    // other
+                    case ".mp3":
+                    case ".wav":
+                    case ".glb":
+                    case ".gltf":
+                    case ".fbx":
+                    case ".xcf":
+                    case ".psd":
+                    case ".apb":
+                    case ".apx":
+                    case ".ctw":
+                    case ".blend":
+                    case ".zip":
+                    case ".rar":
+                    case ".bat":
+                    //case ".yml":
+                    case ".log":
+                    case ".ini":
+                    case ".xl":
+                    case ".reds":
+                        //case ".yaml":
+                        ShellExecute();
+                        break;
 
                     // double file formats
                     case ".csv":
@@ -1373,7 +1373,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 if (isRedEngineFile)
                 {
-                    DispatcherHelper.RunOnMainThread(async() =>
+                    DispatcherHelper.RunOnMainThread(async () =>
                     {
                         var document = await Open(fullpath, type);
                         if (document is not null)

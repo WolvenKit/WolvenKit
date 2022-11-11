@@ -234,7 +234,9 @@ namespace WolvenKit.Models
             if (!cName.Equals(CName.Empty))
             {
                 if (!property.IsNullOrWhiteSpace())
+                {
                     emitter.Emit(new Scalar(property));
+                }
 
                 emitter.Emit(new Scalar(cName.GetResolvedText()));
             }
@@ -245,7 +247,9 @@ namespace WolvenKit.Models
             if (tweakDBID.Length > 0)
             {
                 if (!property.IsNullOrWhiteSpace())
+                {
                     emitter.Emit(new Scalar(property));
+                }
 
                 emitter.Emit(new Scalar(tweakDBID.GetResolvedText()));
             }
@@ -253,12 +257,18 @@ namespace WolvenKit.Models
         private void WriteREDRaRef(IEmitter emitter, IRedResourceAsyncReference raRef, string property = "")
         {
             if (!property.IsNullOrWhiteSpace())
+            {
                 emitter.Emit(new Scalar(property));
+            }
 
             if (raRef.IsSet)
+            {
                 emitter.Emit(new Scalar(raRef.DepotPath));
+            }
             else
+            {
                 emitter.Emit(new Scalar(string.Empty));
+            }
         }
 
         private void WriteLocKey(IEmitter emitter, gamedataLocKeyWrapper locKeyWrapper, string property = "")
@@ -268,7 +278,9 @@ namespace WolvenKit.Models
                 var loc = Locator.Current.GetService<LocKeyService>().GetEntry(locKeyWrapper.Key);
 
                 if (!property.IsNullOrWhiteSpace())
+                {
                     emitter.Emit(new Scalar(property));
+                }
 
                 emitter.Emit(new Scalar($"LocKey#{loc.PrimaryKey}"));
             }
@@ -277,7 +289,9 @@ namespace WolvenKit.Models
         private void WriteVector2(IEmitter emitter, Vector2 vector2, string property = "")
         {
             if (!property.IsNullOrWhiteSpace())
+            {
                 emitter.Emit(new Scalar(property));
+            }
 
             emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
             emitter.Emit(new Scalar("x"));
@@ -290,7 +304,9 @@ namespace WolvenKit.Models
         private void WriteVector3(IEmitter emitter, Vector3 vector3, string property = "")
         {
             if (!property.IsNullOrWhiteSpace())
+            {
                 emitter.Emit(new Scalar(property));
+            }
 
             emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
             emitter.Emit(new Scalar("x"));
@@ -369,7 +385,9 @@ namespace WolvenKit.Models
                         var propertyToWrite = property;
                         // skip ID since it's already written as the map start
                         if (property == "ID")
+                        {
                             continue;
+                        }
 
                         if (property == "Type")
                         {
@@ -537,9 +555,14 @@ namespace WolvenKit.Models
                             // handle the various forms of "$type"
                             var recordTypeStr = propertyValue.ToString();
                             if (!recordTypeStr.EndsWith("_Record"))
+                            {
                                 recordTypeStr += "_Record";
+                            }
+
                             if (!recordTypeStr.StartsWith("gamedata"))
+                            {
                                 recordTypeStr = "gamedata" + recordTypeStr;
+                            }
 
                             tweak.Type = recordTypeStr;
                         }
@@ -572,9 +595,13 @@ namespace WolvenKit.Models
                         ID = ReadScalar(s, _tdbs).ToString()
                     };
                     if (tag.EndsWith("-once"))
+                    {
                         tweak.AppendType = TweakXLAppendType.Once;
+                    }
                     else if (tag.EndsWith("-from"))
+                    {
                         tweak.AppendType = TweakXLAppendType.From;
+                    }
 
                     return tweak;
                 }

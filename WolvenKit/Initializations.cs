@@ -129,19 +129,18 @@ namespace WolvenKit
             {
                 // Load our custom highlighting definition
                 IHighlightingDefinition customHighlighting;
-                using (var s = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.Resources.SyntaxHighlighting.{customHighlightName}.xshd"))
+                using var s = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.Resources.SyntaxHighlighting.{customHighlightName}.xshd");
+                if (s == null)
                 {
-                    if (s == null)
-                        throw new InvalidOperationException("Could not find embedded resource");
-                    using (XmlReader reader = new XmlTextReader(s))
-                    {
-                        var hlXshdDef = HighlightingLoader.LoadXshd(reader);
-                        customHighlighting = HighlightingLoader.Load(hlXshdDef, HighlightingManager.Instance);
-
-                        // and register it in the HighlightingManager
-                        HighlightingManager.Instance.RegisterHighlighting(hlXshdDef.Name, hlXshdDef.Extensions.ToArray(), customHighlighting);
-                    }
+                    throw new InvalidOperationException("Could not find embedded resource");
                 }
+
+                using XmlReader reader = new XmlTextReader(s);
+                var hlXshdDef = HighlightingLoader.LoadXshd(reader);
+                customHighlighting = HighlightingLoader.Load(hlXshdDef, HighlightingManager.Instance);
+
+                // and register it in the HighlightingManager
+                HighlightingManager.Instance.RegisterHighlighting(hlXshdDef.Name, hlXshdDef.Extensions.ToArray(), customHighlighting);
             }
         }
 
