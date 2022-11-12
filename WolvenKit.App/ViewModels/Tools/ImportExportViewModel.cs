@@ -973,13 +973,13 @@ namespace WolvenKit.ViewModels.Tools
             var importSettings = ImportableItems.ToDictionary(importableItem => importableItem.GetBaseFile().RelativePath, SerializeArgs);
             var exportSettings = ExportableItems.ToDictionary(exportableItem => exportableItem.GetBaseFile().RelativePath, SerializeArgs);
 
-            var settings = new Dictionary<string, Dictionary<string, JsonObject>>
+            _loadedSettings = new Dictionary<string, Dictionary<string, JsonObject>>
             {
                 { "import", importSettings },
                 { "export", exportSettings },
             };
 
-            var json = JsonSerializer.Serialize(settings, s_jsonSerializerSettings);
+            var json = JsonSerializer.Serialize(_loadedSettings, s_jsonSerializerSettings);
             File.WriteAllText(Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json"), json);
         }
 
