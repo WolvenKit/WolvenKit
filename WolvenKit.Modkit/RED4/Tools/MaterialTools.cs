@@ -956,9 +956,14 @@ namespace WolvenKit.Modkit.RED4
 
             var baseMaterials = new List<CMaterialInstance>();
 
-            string path = cMaterialInstance.BaseMaterial.DepotPath;
+            var path = cMaterialInstance.BaseMaterial.DepotPath;
             while (!Path.GetExtension(path).Contains("mt"))
             {
+                if (path == CName.Empty)
+                {
+                    return (null, resultDict);
+                }
+
                 var file = LoadFile(path, archives);
                 if (file.RootChunk is not CMaterialInstance mi)
                 {
@@ -1030,6 +1035,10 @@ namespace WolvenKit.Modkit.RED4
         private RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string name, List<ICyberGameArchive> archives, ref Dictionary<string, CMaterialTemplate> mts)
         {
             var (materialTemplatePath, valueDict) = GetMaterialChain(cMaterialInstance, archives, ref mts);
+            if (materialTemplatePath == null)
+            {
+                _loggerService.Warning($"Missing path in \"{name}\"");
+            }
 
             var rawMaterial = new RawMaterial
             {
