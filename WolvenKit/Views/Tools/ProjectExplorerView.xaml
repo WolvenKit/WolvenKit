@@ -108,7 +108,10 @@
 
                 <Separator />
 
-                <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete" InputGestureText="Del">
+                <MenuItem
+                    Command="{Binding DeleteFileCommand}"
+                    Header="Delete"
+                    InputGestureText="Del">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Width="13"
@@ -118,7 +121,10 @@
                             Kind="Trash" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding RenameFileCommand}" Header="Rename" InputGestureText="F2">
+                <MenuItem
+                    Command="{Binding RenameFileCommand}"
+                    Header="Rename"
+                    InputGestureText="F2">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Width="13"
@@ -180,7 +186,16 @@
 
                 <Separator />
 
-                <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
+                <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="FolderOpen" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
             </ContextMenu>
 
