@@ -154,7 +154,7 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedRecordEntry != null)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, true));
+                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, true) {IsExpanded = true});
                 }
                 else
                 {
