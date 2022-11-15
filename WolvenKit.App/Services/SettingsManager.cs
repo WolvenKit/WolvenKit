@@ -8,11 +8,9 @@ using System.Windows.Media;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Core;
-using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -42,6 +40,7 @@ namespace WolvenKit.Functionality.Services
                 nameof(CP77LaunchOptions),
                 nameof(ShowFilePreview),
                 nameof(ReddbHash),
+                nameof(InstallerHash),
                 nameof(TreeViewGroups),
                 nameof(TreeViewGroupSize),
                 nameof(TreeViewIgnoredExtensions),
@@ -176,7 +175,12 @@ namespace WolvenKit.Functionality.Services
         public bool ShowFilePreview { get; set; } = true;
 
         [Browsable(false)]
+        [Reactive]
         public string ReddbHash { get; set; }
+
+        [Browsable(false)]
+        [Reactive]
+        public string InstallerHash { get; set; }
 
         [Category("Cyberpunk")]
         [Display(Name = "Depot Path")]

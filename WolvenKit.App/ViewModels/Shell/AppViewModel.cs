@@ -102,7 +102,14 @@ namespace WolvenKit.ViewModels.Shell
 
             #region commands
 
-            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask<bool>(async x => await CheckForUpdate(x));
+            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask<bool>(async x =>
+            {
+                DispatcherHelper.RunOnMainThread(async () =>
+                {
+                    await CheckForUpdate(x);
+                });
+                await Task.FromResult(Task.CompletedTask);
+            });
 
             ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog).ObservesProperty(() => ActiveProject);
             ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer).ObservesProperty(() => ActiveProject);
@@ -293,6 +300,10 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<bool, Unit> CheckForUpdatesCommand { get; }
         private async Task CheckForUpdate(bool checkForCheckForUpdates)
         {
+
+
+
+
             if (checkForCheckForUpdates)
             {
                 if (_settingsManager.SkipUpdateCheck)
@@ -482,9 +493,7 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
             CloseModalCommand.Execute(null);
-            await Task.Run(() => NewProjectTask(project)).ContinueWith((result) =>
-            {
-            });
+            await Task.Run(() => NewProjectTask(project));
         }
 
         private async Task NewProjectTask(ProjectWizardViewModel project)
@@ -1256,10 +1265,10 @@ namespace WolvenKit.ViewModels.Shell
             var ext = Path.GetExtension(fullpath).ToLower();
 
             // everything in ignoredExtensions is delegated to the System viewer
-            string delimiter = "|";
+            var delimiter = "|";
             //string[] ignoredExtensions = _settingsManager.TreeViewIgnoredExtensions.ToLower().Split(delimiter);
             //bool isAnIgnoredExtension = Array.Exists(ignoredExtensions, extension => extension.Equals(ext));
-            bool isAnIgnoredExtension = _settingsManager.TreeViewIgnoredExtensions.Split(delimiter).Any(entry => entry.ToLower().Trim().Equals(ext));
+            var isAnIgnoredExtension = _settingsManager.TreeViewIgnoredExtensions.Split(delimiter).Any(entry => entry.ToLower().Trim().Equals(ext));
             if (isAnIgnoredExtension)
             {
                 ShellExecute();

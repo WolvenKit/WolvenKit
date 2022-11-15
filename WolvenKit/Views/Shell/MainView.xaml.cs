@@ -2,25 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
-using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Helpers;
 using WolvenKit.Interaction;
-using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
-using WolvenKit.ViewModels.Wizards;
-using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
-using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Views.Shell
 {
@@ -110,10 +100,7 @@ namespace WolvenKit.Views.Shell
                 Buttons = GetAdonisButtons(buttons)
             };
 
-            var result = WMessageBoxResult.None;
-            DispatcherHelper.RunOnMainThread(() => result = (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox));
-
-            return result;
+            return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
 
             // local methods
             AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage image) => (AdonisUI.Controls.MessageBoxImage)image;

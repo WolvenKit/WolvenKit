@@ -23,7 +23,6 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
@@ -33,11 +32,8 @@ using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
-using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -88,7 +84,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private Dictionary<string, Dictionary<string, JsonObject>> _loadedSettings;
 
-        private static JsonSerializerOptions s_jsonSerializerSettings = new()
+        private static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
         {
             Converters =
             {
@@ -656,7 +652,8 @@ namespace WolvenKit.ViewModels.Tools
             IsProcessing = false;
 
             _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(_projectManager.ActiveProject).ContinueWith((result) => _progressService.IsIndeterminate = false);
+            await _watcherService.RefreshAsync(_projectManager.ActiveProject);
+            _progressService.IsIndeterminate = false;
 
             _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
             _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");

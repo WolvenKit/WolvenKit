@@ -21,6 +21,7 @@ namespace WolvenKit.Functionality.Services
             CP77LaunchOptions = settings.CP77LaunchOptions;
             ShowFilePreview = settings.ShowFilePreview;
             ReddbHash = settings.ReddbHash;
+            InstallerHash = settings.InstallerHash;
             MaterialRepositoryPath = settings.MaterialRepositoryPath;
             TreeViewGroups = settings.TreeViewGroups;
             TreeViewGroupSize = settings.TreeViewGroupSize;
@@ -49,6 +50,7 @@ namespace WolvenKit.Functionality.Services
         public string CP77LaunchOptions { get; set; }
         public bool ShowFilePreview { get; set; }
         public string ReddbHash { get; set; }
+        public string InstallerHash { get; set; }
         public string MaterialRepositoryPath { get; set; }
         public bool TreeViewGroups { get; set; }
         public uint TreeViewGroupSize { get; set; }
@@ -78,6 +80,7 @@ namespace WolvenKit.Functionality.Services
             settingsManager.CP77LaunchOptions = CP77LaunchOptions;
             settingsManager.ShowFilePreview = ShowFilePreview;
             settingsManager.ReddbHash = ReddbHash;
+            settingsManager.InstallerHash = InstallerHash;
             settingsManager.MaterialRepositoryPath = MaterialRepositoryPath;
             settingsManager.TreeViewGroups = TreeViewGroups;
             settingsManager.TreeViewGroupSize = TreeViewGroupSize;

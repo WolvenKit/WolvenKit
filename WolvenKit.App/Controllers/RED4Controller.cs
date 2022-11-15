@@ -14,7 +14,6 @@ using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
@@ -483,8 +482,8 @@ namespace WolvenKit.Functionality.Controllers
             //this will cover all potential add-ons/mods/redscript
             //All such files goes into the root of the cp77Proj.PackedRootDirectory
             Directory.GetFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
-                .Where(name => !name.ToLower().EndsWith(".xl") && !name.ToLower().EndsWith(".yaml")) 
-                .ForEach( f => 
+                .Where(name => !name.ToLower().EndsWith(".xl") && !name.ToLower().EndsWith(".yaml"))
+                .ForEach(f =>
                 {
                     var fileName = Path.GetFileName(f);
                     var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(f));
@@ -494,7 +493,7 @@ namespace WolvenKit.Functionality.Controllers
                     {
                         Directory.CreateDirectory(fileOutputDir);
                     }
-                    
+
                     // copy files, with overwriting
                     File.Copy(f, fileOutputPath, true);
                 }

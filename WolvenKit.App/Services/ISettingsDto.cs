@@ -19,6 +19,7 @@ namespace WolvenKit.Functionality.Services
         public string CP77LaunchOptions { get; set; }
         public bool ShowFilePreview { get; set; }
         public string ReddbHash { get; set; }
+        public string InstallerHash { get; set; }
         public string MaterialRepositoryPath { get; set; }
         public bool TreeViewGroups { get; set; }
         public uint TreeViewGroupSize { get; set; }
