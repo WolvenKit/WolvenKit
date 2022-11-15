@@ -1,7 +1,6 @@
 name: wkit-check-builds
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   desktop-win:

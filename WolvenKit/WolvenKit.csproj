@@ -195,6 +195,10 @@
     <Content Include="Resources\Media\t5.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Wolvenkit.Installer.Package_0.1.3.0_x64.msixbundle">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+
     <Resource Include="Resources\Media\Images\Application\Sammy_Alpha_Mask.png" />
     <Resource Include="Resources\Media\Images\Application\Sammy_Grayscale.png" />
     <Resource Include="Resources\Media\Images\Application\Sammy_Home.png" />
@@ -1595,9 +1599,6 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
-    <None Remove="Assimp32.dll" />
-    <None Remove="Assimp64.dll" />
-    <None Remove="AssimpNet.dll" />
     <None Remove="distraction_generic.bk2" />
     <None Remove="DockStatesDefault.xml" />
     <None Remove="Obsolete.dll" />
@@ -1775,6 +1776,7 @@
     <None Remove="Resources\SkyboxTextures\skyrender0004.bmp" />
     <None Remove="Resources\SkyboxTextures\skyrender0005.bmp" />
     <None Remove="Resources\SyntaxHighlighting\JavaScript-DarkMode.xshd" />
+    <None Remove="Resources\Wolvenkit.Installer.Package_0.1.3.0_x64.msixbundle" />
     <None Remove="sample.mp4" />
     <None Remove="SplashScreen1.png" />
     <None Remove="TaskBarIcon.ico" />
