@@ -144,7 +144,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.VERSION }}
-          generate_release_notes: true
+          generate_release_notes: false
           files: |
             ${{ env.FINALOUT }}/*.zip
             ${{ env.FINALOUT }}/*.msixbundle
