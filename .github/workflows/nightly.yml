@@ -86,10 +86,6 @@ jobs:
           custom_tag: ${{ env.VERSION }}
           tag_prefix: ""
 
-      # get files
-      #- name: app files
-      #  run: echo "FILES=${{env.FINALOUT}}/${{env.PORTABLE}}"  >> $env:GITHUB_ENV
-
       ##########################################
       # CONSOLE
 
@@ -125,11 +121,6 @@ jobs:
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
         run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
 
-      # get cli files
-      #- name: cli files
-      #  if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-      #  run: echo "FILES=${{env.FILES}} ${{env.FINALOUT}}/${{env.CONSOLE}}" >> $env:GITHUB_ENV
-
       # Pack and upload prerelease nugets
       - name: pack cli
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
@@ -139,25 +130,24 @@ jobs:
         run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
       
       ##########################################
-      # RELEASE
+      # INSTALLER
 
-      #- name: Release
-      #  run: |
-      #      gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} ${{ env.FILES }}
-      #  env:
-      #    MESSAGE: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
-      #    REPO: WolvenKit/WolvenKit-nightly-releases
-      #    GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      - name: download installer
+        run: gh release download --pattern '*.msixbundle' --dir ${{env.FINALOUT}} --repo WolvenKit/WolvenKit.Installer
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      ##########################################
+      # RELEASE
 
       - name: Release dispatch
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.VERSION }}
           generate_release_notes: true
-          files: "${{ env.FINALOUT }}/*.zip"
+          files: |
+            ${{ env.FINALOUT }}/*.zip
+            ${{ env.FINALOUT }}/*.msixbundle
           repository: WolvenKit/WolvenKit-nightly-releases
           token: ${{ secrets.RELEASE_TOKEN }}
           body: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
-        #env:
-        #  GITHUB_REPOSITORY: ${{ env.REPO }}
-        #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -11,6 +11,7 @@ namespace WolvenKit.Functionality
         public const string AppProductName = ProductName;
         public const string AppName = ProductName + ".exe";
 
+        public const string InstallerMsixName = "Wolvenkit.Installer.Package_0.1.3.0_x64.msixbundle";
         public const string UpdateUrl = "https://github.com/WolvenKit/Wolvenkit/releases/latest/download/";
         public const string UpdateUrlNightly = "https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest/download/";
 

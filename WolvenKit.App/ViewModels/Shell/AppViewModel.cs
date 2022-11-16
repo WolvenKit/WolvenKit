@@ -297,12 +297,64 @@ namespace WolvenKit.ViewModels.Shell
 
         #region commands
 
+        private static (string, string) GetInstallerPackage()
+        {
+            using var p = new Process();
+            p.StartInfo.FileName = "powershell.exe";
+            p.StartInfo.Arguments = $"Get-AppxPackage -Name \"*WolvenKit.Installer*\" | ft Version, InstallLocation -AutoSize -HideTableHeaders";
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.Start();
+
+            var output = p.StandardOutput.ReadToEnd();
+
+            p.WaitForExit();
+
+            var version = "";
+            var path = "";
+
+            if (!string.IsNullOrEmpty(output))
+            {
+                output = output.Replace("\r\n", string.Empty).Trim();
+                var pieces = output.Split(new[] { ' ' }, 2);
+                version = pieces[0];
+                path = pieces[1];
+            }
+            return (version, path);
+        }
+
+
         public ReactiveCommand<bool, Unit> CheckForUpdatesCommand { get; }
         private async Task CheckForUpdate(bool checkForCheckForUpdates)
         {
+            var (localInstallerVersion, location) = GetInstallerPackage();
 
+            var fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", WolvenKit.Functionality.Constants.InstallerMsixName);
+            var remoteInstallerVersion = Path.GetFileNameWithoutExtension(fileName).Split('_')[1];
 
+            if (string.IsNullOrEmpty(location) || !remoteInstallerVersion.Equals(localInstallerVersion))
+            {
+                if (await Interactions.ShowMessageBoxAsync($"WolvenKit will install a helper tool to check for updates.", "WolvenKit.Installer", WMessageBoxButtons.OkCancel) == WMessageBoxResult.OK)
+                {
+                    try
+                    {
+                        using var p = new Process();
+                        p.StartInfo.FileName = "powershell.exe";
+                        p.StartInfo.Arguments = $"Add-AppxPackage -Path {fileName}";
+                        p.StartInfo.UseShellExecute = true;
+                        p.Start();
+                        p.WaitForExit();
 
+                        _loggerService.Success("Successfully installed Wolvenkit.Installer.Package.");
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService.Success("Error installing Wolvenkit.Installer.Package.");
+                        _loggerService.Error(ex);
+                    }
+                }
+            }
 
             if (checkForCheckForUpdates)
             {
@@ -349,10 +401,29 @@ namespace WolvenKit.ViewModels.Shell
             if (remoteVersion.CompareSortOrderTo(thisVersion) > 0)
             {
                 var url = $"https://github.com/{owner}/{name}/releases/latest";
-                var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
+                var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nUpdate now?", name, WMessageBoxButtons.OkCancel);
                 if (res == WMessageBoxResult.OK)
                 {
-                    Process.Start("explorer", url);
+                    // run installer app
+                    (_, location) = GetInstallerPackage();
+                    if (!string.IsNullOrEmpty(location))
+                    {
+                        var executable = Path.Combine(location, "Wolvenkit.Installer", "Wolvenkit.Installer.exe");
+                        if (File.Exists(executable))
+                        {
+                            var id = name;
+                            if (thisVersion.ToString().Contains("nightly"))
+                            {
+                                id = "WolvenKit Nightly";
+                            }
+                            var thisLocation = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
+
+                            var process = new Process();
+                            process.StartInfo.FileName = executable;
+                            process.StartInfo.Arguments = $"-t \"{thisLocation}\" -i \"{id}\" -v {thisVersion}";
+                            process.Start();
+                        }
+                    }
                 }
             }
             else
