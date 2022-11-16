@@ -108,6 +108,12 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v2
 
+      # Download installer
+      - name: download installer
+        run: gh release download --pattern '*.msixbundle' --dir ${{env.OUT_DIR}} --repo WolvenKit/WolvenKit.Installer
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       ##########################################
       # create zip files
       - run: sudo apt-get install zip -y
@@ -125,7 +131,9 @@ jobs:
           draft: true
           generate_release_notes: true
           body_path: "RELEASE.md"
-          files: "${{ env.OUT_DIR }}/*.zip"
+          files: |
+            "${{ env.OUT_DIR }}/*.zip"
+            "${{ env.OUT_DIR }}/*.msixbundle"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -138,7 +146,9 @@ jobs:
           draft: true
           generate_release_notes: true
           body_path: "RELEASE.md"
-          files: "${{ env.OUT_DIR }}/*.zip"
+          files: |
+            "${{ env.OUT_DIR }}/*.zip"
+            "${{ env.OUT_DIR }}/*.msixbundle"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
