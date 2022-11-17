@@ -331,6 +331,7 @@ namespace WolvenKit.ViewModels.Shell
             var (localInstallerVersion, location) = GetInstallerPackage();
 
             var fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", WolvenKit.Functionality.Constants.InstallerMsixName);
+            _loggerService.Info($"Checking installer: {fileName}");
             var remoteInstallerVersion = Path.GetFileNameWithoutExtension(fileName).Split('_')[1];
 
             if (string.IsNullOrEmpty(location) || !remoteInstallerVersion.Equals(localInstallerVersion))
@@ -341,7 +342,7 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         using var p = new Process();
                         p.StartInfo.FileName = "powershell.exe";
-                        p.StartInfo.Arguments = $"Add-AppxPackage -Path {fileName}";
+                        p.StartInfo.Arguments = $"Add-AppxPackage -Path \"{fileName}\"";
                         p.StartInfo.UseShellExecute = true;
                         p.Start();
                         p.WaitForExit();
