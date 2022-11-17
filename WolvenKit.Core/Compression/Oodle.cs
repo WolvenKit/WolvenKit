@@ -97,8 +97,7 @@ public static class Oodle
             return true;
         }
 
-        return RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
-|| (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? true : throw new NotImplementedException());
+        return RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? true : throw new NotImplementedException());
     }
 
     public static bool IsCompressed(byte[] buf) => buf.Length >= 4 && buf[0] == 0x4B && buf[1] == 0x41 && buf[2] == 0x52 && buf[3] == 0x4B;
@@ -123,7 +122,7 @@ public static class Oodle
 
                 Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
                 Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
-                Array.Copy(new byte[] {0xCC, 0x06}, 0, outArray, 8, 2);
+                Array.Copy(new byte[] { 0xCC, 0x06 }, 0, outArray, 8, 2);
                 Array.Copy(compressedBuffer.ToArray(), 0, outArray, 10, compressedSize);
             }
             else
@@ -239,15 +238,21 @@ public static class Oodle
 
     public static long Decompress(byte[] inputBuffer, byte[] outputBuffer)
     {
-        var result = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? CompressionSettings.Get().UseOodle
+        int result;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            result = CompressionSettings.Get().UseOodle
                 ? OodleLib.OodleLZ_Decompress(inputBuffer, outputBuffer)
-                : KrakenNative.Decompress(inputBuffer, outputBuffer)
-            : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                : KrakenNative.Decompress(inputBuffer, outputBuffer);
+        }
+        else
+        {
+            result = RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
                 ? KrakenNative.Decompress(inputBuffer, outputBuffer)
                 : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
                             ? KrakenNative.Decompress(inputBuffer, outputBuffer)
                             : throw new NotImplementedException();
+        }
 
         return result;
     }
@@ -375,13 +380,23 @@ public static class Oodle
 
     private static bool TryCopyOodleLib()
     {
-        var destFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "oo2ext_7_win64.dll");
+        var localData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var destFileName = Path.Combine(localData, "oo2ext_7_win64.dll");
         if (File.Exists(destFileName))
         {
             return true;
         }
 
-        var cp77BinDir = TryGetGameInstallDir();
+        var cp77BinDir = "";
+        try
+        {
+            cp77BinDir = TryGetGameInstallDir();
+        }
+        catch (Exception)
+        {
+            // just swallow this
+        }
+
         if (string.IsNullOrEmpty(cp77BinDir))
         {
             return false;
