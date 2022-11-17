@@ -132,8 +132,8 @@ jobs:
           generate_release_notes: true
           body_path: "RELEASE.md"
           files: |
-            "${{ env.OUT_DIR }}/*.zip"
-            "${{ env.OUT_DIR }}/*.msixbundle"
+            ${{ env.OUT_DIR }}/*.zip
+            ${{ env.OUT_DIR }}/*.msixbundle
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -147,8 +147,8 @@ jobs:
           generate_release_notes: true
           body_path: "RELEASE.md"
           files: |
-            "${{ env.OUT_DIR }}/*.zip"
-            "${{ env.OUT_DIR }}/*.msixbundle"
+            ${{ env.OUT_DIR }}/*.zip
+            ${{ env.OUT_DIR }}/*.msixbundle
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
