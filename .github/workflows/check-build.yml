@@ -12,7 +12,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.x
+        dotnet-version: 7.x
 
     - name: Publish with Dotnet
       run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
@@ -31,7 +31,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.x
+        dotnet-version: 7.x
 
     - name: Publish with Dotnet
       run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli -r win-x64 -c Release --no-self-contained
@@ -51,7 +51,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.x
+        dotnet-version: 7.x
 
     - name: Publish with Dotnet
       run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained

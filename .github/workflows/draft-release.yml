@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.x
+          dotnet-version: 7.x
 
       - name: Publish with Dotnet
         run: dotnet publish ${{env.PROJ}} -o .\publish -c Release
@@ -41,7 +41,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.x
+          dotnet-version: 7.x
 
       - name: Publish with Dotnet
         run: dotnet publish ${{env.PROJC}} -o .\publish_cli -r win-x64 -c Release --no-self-contained
@@ -60,7 +60,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.x
+          dotnet-version: 7.x
 
       - name: Publish with Dotnet
         run: dotnet publish ${{env.PROJC}} -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
@@ -163,7 +163,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.x
+          dotnet-version: 7.x
 
       # Pack and upload nugets for Types, Modkit and CLI
       - run: dotnet pack .\WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj
