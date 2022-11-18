@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
       <Platforms>x64</Platforms>
       <OutputType>Exe</OutputType>
-      <TargetFramework>net6.0</TargetFramework>
-      <VersionPrefix>1.7.3</VersionPrefix>
+      <TargetFramework>net7.0</TargetFramework>
+      <VersionPrefix>1.8.0</VersionPrefix>
       <VersionSuffix>$(VersionSuffix)</VersionSuffix>
 
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

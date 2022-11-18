@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64</Platforms>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <AssemblyName>WolvenKit</AssemblyName>
     <RootNamespace>WolvenKit</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -17,9 +17,9 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <VersionPrefix>8.8.0</VersionPrefix>
+    <VersionPrefix>8.8.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-    <InformationalVersion>8.8.0</InformationalVersion>
+    <InformationalVersion>8.8.1</InformationalVersion>
     <Description>WPF</Description>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Product>WolvenKit</Product>
