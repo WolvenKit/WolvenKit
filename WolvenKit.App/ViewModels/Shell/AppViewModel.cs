@@ -20,6 +20,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Semver;
 using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
@@ -104,10 +105,7 @@ namespace WolvenKit.ViewModels.Shell
 
             CheckForUpdatesCommand = ReactiveCommand.CreateFromTask<bool>(async x =>
             {
-                DispatcherHelper.RunOnMainThread(async () =>
-                {
-                    await CheckForUpdate(x);
-                });
+                DispatcherHelper.RunOnMainThread(async () => await CheckForUpdate(x));
                 await Task.FromResult(Task.CompletedTask);
             });
 
@@ -239,6 +237,10 @@ namespace WolvenKit.ViewModels.Shell
                 _settingsManager.UpdateChannel = EUpdateChannel.Nightly;
             }
 
+            // check package
+            var helpers = new DesktopBridgeHelper();
+            IsPackage = DesktopBridgeHelper.IsRunningAsPackage();
+
             Observable.Start(() => CheckForUpdatesCommand.Execute(true).Subscribe())
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe();
@@ -328,8 +330,13 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<bool, Unit> CheckForUpdatesCommand { get; }
         private async Task CheckForUpdate(bool checkForCheckForUpdates)
         {
-            var (localInstallerVersion, location) = GetInstallerPackage();
+            if (IsPackage)
+            {
+                // don't check for updates for packaged apps
+                return;
+            }
 
+            var (localInstallerVersion, location) = GetInstallerPackage();
             var fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", WolvenKit.Functionality.Constants.InstallerMsixName);
             var remoteInstallerVersion = Path.GetFileNameWithoutExtension(fileName).Split('_')[1];
 
@@ -1143,6 +1150,10 @@ namespace WolvenKit.ViewModels.Shell
         //}
 
         #endregion ToolViewModels
+
+        public bool IsPackage { get; private set; }
+
+        public bool IsUpdateAvailable { get; set; }
 
         [Reactive] public EAppStatus Status { get; set; }
 

@@ -8,7 +8,7 @@
 
   <Identity
     Name="26499Wolvenkit.WolvenKit"
-    Publisher="CN=E=moritz.v.baron@gmail.com, &quot;Open Source Developer, Moritz Baron&quot;, O=Open Source Developer, L=Gmunden, S=Oberösterreich, C=AT"
+    Publisher="E=moritz.v.baron@gmail.com, CN=&quot;Open Source Developer, Moritz Baron&quot;, O=Open Source Developer, L=Gmunden, S=Oberösterreich, C=AT"
     Version="8.8.0.0" />
 
   <Properties>

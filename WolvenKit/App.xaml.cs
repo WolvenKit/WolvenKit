@@ -42,18 +42,12 @@ namespace WolvenKit
 
             SetupExceptionHandling();
 
-            // check package
-            var helpers = new DesktopBridgeHelper();
-            IsPackage = DesktopBridgeHelper.IsRunningAsPackage();
-
             // load oodle
             if (!Oodle.Load())
             {
                 throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
             }
         }
-
-        public bool IsPackage { get; private set; }
 
         // Application OnStartup Override.
         protected override async void OnStartup(StartupEventArgs e)

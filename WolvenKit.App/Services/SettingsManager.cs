@@ -233,10 +233,6 @@ namespace WolvenKit.Functionality.Services
 
         #endregion properties
 
-        [Reactive]
-        [Browsable(false)]
-        public bool IsUpdateAvailable { get; set; }
-
         #region methods
 
         public string GetVersionNumber() => _assemblyVersion;
