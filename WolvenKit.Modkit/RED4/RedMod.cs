@@ -8,10 +8,10 @@ namespace WolvenKit.Modkit.RED4
     {
         public static string GetReImportArgs(string depot, string input, string animset, string output = "", string animationRename = "")
         {
-            var args = $"animation-import -depot=\"{depot}\" -inputPath=\"{input}\" -animset={animset}";
+            var args = $"animation-import -depot=\"{depot}\" -input=\"{input}\" -animset={animset}";
             if (!string.IsNullOrEmpty(output))
             {
-                args += $" -outputPath={output}";
+                args += $" -output={output}";
             }
             if (!string.IsNullOrEmpty(animationRename))
             {

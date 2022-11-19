@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +11,7 @@ using ReactiveUI;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using WolvenKit.App.Helpers;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
@@ -126,7 +126,7 @@ namespace WolvenKit
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
 #if DEBUG
-       
+
                 .WriteTo.Async(a => a.Console(), bufferSize: 1000)
 #endif
                 .WriteTo.MySink(_host.Services.GetService<MySink>())

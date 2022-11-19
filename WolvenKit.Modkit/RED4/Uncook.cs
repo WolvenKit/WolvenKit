@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -20,7 +19,6 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -745,10 +743,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var arg = infile.ToEscapedPath() + " -o " + outfile.ToEscapedPath();
-            var si = new ProcessStartInfo(
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "test.exe"),
-                    arg
-                )
+            var si = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "test.exe"), arg)
             {
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden,

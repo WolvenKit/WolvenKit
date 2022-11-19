@@ -19,10 +19,6 @@ namespace WolvenKit.Functionality.Services
 
         #endregion lifecyclestuff
 
-        #region settingspropertystuff
-
-        public bool IsUpdateAvailable { get; set; }
-
         string GetRED4OodleDll();
 
         string GetRED4GameRootDir();
@@ -142,7 +138,5 @@ namespace WolvenKit.Functionality.Services
         void SetThemeAccent(Color color);
 
         string GetVersionNumber();
-
-        #endregion settingspropertystuff
     }
 }

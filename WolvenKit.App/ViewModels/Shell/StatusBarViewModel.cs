@@ -5,6 +5,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.ViewModels.Shell
@@ -23,8 +24,6 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IProgressService<double> _progressService;
 
         private readonly ObservableAsPropertyHelper<double> _progress;
-
-        private readonly ObservableAsPropertyHelper<bool> _isIndeterminate;
 
         private readonly ObservableAsPropertyHelper<string> _currentProject;
 
@@ -63,25 +62,31 @@ namespace WolvenKit.ViewModels.Shell
                 .Select(_ => _.EventArgs * 100)
                 .ToProperty(this, x => x.Progress, out _progress);
 
-            _ = _progressService
-                .WhenAnyValue(x => x.IsIndeterminate)
-                .ToProperty(this, x => x.IsIndeterminate, out _isIndeterminate);
-
-            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => IsIndeterminate = b);
+            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b =>
+            {
+                DispatcherHelper.RunOnMainThread(() =>
+                {
+                    IsIndeterminate = b;
+                });
+            });
             _ = _progressService.WhenAnyValue(x => x.Status).Subscribe(s =>
             {
-                Status = s.ToString();
-                switch (s)
+                DispatcherHelper.RunOnMainThread(() =>
                 {
-                    case EStatus.Running:
-                        BarColor = Brushes.DarkOrange;
-                        break;
-                    case EStatus.Ready:
-                        BarColor = (SolidColorBrush)new BrushConverter().ConvertFromString("#951C2D");
-                        break;
-                    default:
-                        break;
-                }
+                    Status = s.ToString();
+                    switch (s)
+                    {
+                        case EStatus.Running:
+                            BarColor = Brushes.DarkOrange;
+                            break;
+                        case EStatus.Ready:
+                            BarColor = (SolidColorBrush)new BrushConverter().ConvertFromString("#951C2D");
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
             });
         }
 

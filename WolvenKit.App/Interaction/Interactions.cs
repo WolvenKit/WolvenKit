@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
-using WolvenKit.Common.Model;
+using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.Interaction
 {
@@ -14,8 +14,15 @@ namespace WolvenKit.Interaction
             string text,
             string caption,
             WMessageBoxButtons messageBoxButtons = WMessageBoxButtons.OkCancel,
-            WMessageBoxImage image = WMessageBoxImage.Question) =>
-            await ShowConfirmation.Handle((text, caption, image, messageBoxButtons));
+            WMessageBoxImage image = WMessageBoxImage.Question)
+        {
+            var result = WMessageBoxResult.None;
+            DispatcherHelper.RunOnMainThread(async () =>
+            {
+                result = await ShowConfirmation.Handle((text, caption, image, messageBoxButtons));
+            });
+            return await Task.FromResult(result);
+        }
 
 
 
