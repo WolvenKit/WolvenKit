@@ -249,14 +249,37 @@
                     </MenuItem>
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                        Header="Append to List"
+                        Header="Append to Array"
                         IsCheckable="False"
                         IsEnabled="False"
                         Style="{StaticResource SyncfusionMenuItemStyle}">
                     </MenuItem>
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                        Header="Append to List (Once)"
+                        Header="Prepend to Array"
+                        IsCheckable="False"
+                        IsEnabled="False"
+                        Style="{StaticResource SyncfusionMenuItemStyle}">
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem
+                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Header="Append to Array (Once)"
+                        IsCheckable="False"
+                        IsEnabled="False"
+                        Style="{StaticResource SyncfusionMenuItemStyle}">
+                    </MenuItem>
+                    <MenuItem
+                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Header="Prepend to Array (Once)"
+                        IsCheckable="False"
+                        IsEnabled="False"
+                        Style="{StaticResource SyncfusionMenuItemStyle}">
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem
+                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Header="Remove from Array"
                         IsCheckable="False"
                         IsEnabled="False"
                         Style="{StaticResource SyncfusionMenuItemStyle}">
