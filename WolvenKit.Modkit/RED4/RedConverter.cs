@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using SharpDX.DXGI;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.RED4.Archive.CR2W;
@@ -58,7 +60,16 @@ namespace WolvenKit.Modkit.RED4
             try
             {
                 var text = ConvertToText(format, infile);
-                var outpath = Path.Combine(outputDirInfo.FullName, $"{Path.GetFileName(infile)}.{format}");
+                var destination = Path.GetDirectoryName(infile);
+                // If DepotPath structure exists then add it to output directory
+                // Would be nice to make this a runtime option like --structure "[none|depotpath]" or something
+                if (destination.IndexOf(@"\\source\\archive\\") > 0)
+                {
+                    destination = Regex.Split(destination, @"\\source\\archive\\")[1];
+                    destination = Path.Combine(outputDirInfo.FullName, destination);
+                    Directory.CreateDirectory(destination);
+                }
+                var outpath = Path.Combine(destination, $"{Path.GetFileName(infile)}.{format}");
 
                 File.WriteAllText(outpath, text);
 
