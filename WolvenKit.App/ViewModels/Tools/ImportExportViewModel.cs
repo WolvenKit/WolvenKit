@@ -37,6 +37,7 @@ using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -661,7 +662,7 @@ namespace WolvenKit.ViewModels.Tools
             //We format the list of failed export/import items here
             if (failedItems.Count > 0)
             {
-                var failedItemsErrorString = $"The following items failed:\n{String.Join("\n", failedItems)}";
+                var failedItemsErrorString = $"The following items failed:\n{string.Join("\n", failedItems)}";
                 _notificationService.Error(failedItemsErrorString); //notify once only 
                 _loggerService.Error(failedItemsErrorString);
             }
@@ -673,19 +674,13 @@ namespace WolvenKit.ViewModels.Tools
         /// Execute Process all in Import / Export Grid Command.
         /// Uses ExecuteProcessBulk
         /// </summary>
-        private async Task ExecuteProcessAll()
-        {
-            await ExecuteProcessBulk(true); //the all parameter is set to true
-        }
+        private async Task ExecuteProcessAll() => await ExecuteProcessBulk(true); //the all parameter is set to true
 
         /// <summary>
         /// Execute Process Selected in Import / Export Grid Command.
         /// Uses ExecuteProcessBulk
         /// </summary>
-        private async Task ExecuteProcessSelected()
-        {
-            await ExecuteProcessBulk(); //the all parameter's default is false
-        }
+        private async Task ExecuteProcessSelected() => await ExecuteProcessBulk(); //the all parameter's default is false
 
         private Task<bool> ImportWavs(List<string> wavs)
         {
@@ -867,8 +862,8 @@ namespace WolvenKit.ViewModels.Tools
 
                         if (_parserService.TryReadRed4File(fs, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
                         {
-                            xbmImportArgs.RawFormat = Enum.Parse<SupportedRawFormats>(bitmap.Setup.RawFormat.ToString());
-                            xbmImportArgs.Compression = Enum.Parse<SupportedCompressionFormats>(bitmap.Setup.Compression.ToString());
+                            xbmImportArgs.RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString());
+                            xbmImportArgs.Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString());
                             xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
                             xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
                             xbmImportArgs.TextureGroup = bitmap.Setup.Group;
@@ -893,8 +888,8 @@ namespace WolvenKit.ViewModels.Tools
 
                         if (_parserService.TryReadRed4File(ms, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
                         {
-                            xbmImportArgs.RawFormat = Enum.Parse<SupportedRawFormats>(bitmap.Setup.RawFormat.ToString());
-                            xbmImportArgs.Compression = Enum.Parse<SupportedCompressionFormats>(bitmap.Setup.Compression.ToString());
+                            xbmImportArgs.RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString());
+                            xbmImportArgs.Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString());
                             xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
                             xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
                             xbmImportArgs.TextureGroup = bitmap.Setup.Group;

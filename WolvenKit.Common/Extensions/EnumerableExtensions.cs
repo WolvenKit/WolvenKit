@@ -48,7 +48,7 @@ namespace WolvenKit.Common.Extensions
                 Enums.ETextureRawFormat.TRF_HDRHalf => DXGI_FORMAT.R16G16B16A16_FLOAT,
                 Enums.ETextureRawFormat.TRF_HDRFloatGrayscale => DXGI_FORMAT.R32_FLOAT,
                 Enums.ETextureRawFormat.TRF_R8G8 => DXGI_FORMAT.R8G8_UNORM,
-                Enums.ETextureRawFormat.TRF_AlphaGrayscale => DXGI_FORMAT.A8_UNORM,
+                Enums.ETextureRawFormat.TRF_Grayscale_Font => DXGI_FORMAT.A8_UNORM,
                 _ => throw new ArgumentOutOfRangeException(nameof(textureRawFormat), textureRawFormat, null)
             };
 

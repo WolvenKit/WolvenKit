@@ -450,13 +450,14 @@ namespace WolvenKit.Utility
 
                 var sortedProps = props.OrderBy(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value);
 
-                var lines = new List<string>();
-
-                lines.Add("");
-                lines.Add("namespace WolvenKit.RED4.Types");
-                lines.Add("{");
-                lines.Add($"\tpublic partial class {className}");
-                lines.Add("\t{");
+                var lines = new List<string>
+                {
+                    "",
+                    "namespace WolvenKit.RED4.Types",
+                    "{",
+                    $"\tpublic partial class {className}",
+                    "\t{"
+                };
 
                 var firstProp = true;
                 foreach (var (propName, typeName) in sortedProps)
@@ -466,7 +467,7 @@ namespace WolvenKit.Utility
                         lines.Add("\t\t");
                     }
 
-                    var nName = char.ToUpper(propName[0]) + propName.Substring(1);
+                    var nName = char.ToUpper(propName[0]) + propName[1..];
 
                     lines.Add($"\t\t[RED(\"{propName}\")]");
                     lines.Add("\t\t[REDProperty(IsIgnored = true)]");
@@ -485,7 +486,7 @@ namespace WolvenKit.Utility
                 File.WriteAllLines(Path.Combine(resultDir, $"{className}.cs"), lines);
             }
 
-            string GetTypeName(Type type)
+            static string GetTypeName(Type type)
             {
                 if (type.IsGenericType)
                 {
@@ -511,6 +512,75 @@ namespace WolvenKit.Utility
 
                 throw new NotSupportedException();
             }
+        }
+
+        public record class TextureInfo(string group, string compression, string rawFormat);
+
+        [TestMethod]
+        public void DumpTextureInfo()
+        {
+            var parser = _host.Services.GetRequiredService<Red4ParserService>();
+
+            var results = new Dictionary<string, ConcurrentDictionary<ulong, TextureInfo>>();
+            //foreach (var e in s_groupedFiles)
+            {
+                results.Add(".xbm", new ConcurrentDictionary<ulong, TextureInfo>());
+            }
+
+            // Run Test
+            foreach (var item in s_groupedFiles.Where(_ => _.Key == ".xbm"))
+            {
+                var ext = item.Key;
+                var files = item.Value;
+
+                Parallel.ForEach(files, file =>
+                {
+                    var hash = file.Key;
+                    var archive = file.Archive as Archive;
+
+                    try
+                    {
+                        using var ms = new MemoryStream();
+                        ModTools.ExtractSingleToStream(archive, hash, ms);
+                        if (parser.TryReadRed4File(ms, out var resource))
+                        {
+                            if (resource.RootChunk is CBitmapTexture texture)
+                            {
+                                var group = texture.Setup.Group.ToString();
+                                var compression = texture.Setup.Compression.ToString();
+                                var rawFormat = texture.Setup.RawFormat.ToString();
+
+
+                                var info = new TextureInfo(group, compression, rawFormat);
+                                results[".xbm"].TryAdd(hash, info);
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+
+                });
+
+            }
+
+            var _hashService = _host.Services.GetRequiredService<IHashService>();
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+            Directory.CreateDirectory(resultDir);
+
+            using var sw = new StringWriter();
+            sw.WriteLine($"filename; group; rawFormat; compression");
+            foreach (var (key, info) in results[".xbm"])
+            {
+                var filename = _hashService.Get(key);
+                sw.WriteLine($"{filename}; {info.group}; {info.rawFormat}; {info.compression}");
+            }
+            File.WriteAllText(Path.Combine(resultDir, "texinfo.csv"), sw.ToString());
         }
     }
 }

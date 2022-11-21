@@ -13,6 +13,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Views.Documents
 {
@@ -231,7 +232,7 @@ namespace WolvenKit.Views.Documents
             {
                 Filter = "PNG files (*.png)|*.png|TGA files (*.tga)|*.tga|DDS files (*.dds)|*.dds|BMP files (*.bmp)|*.bmp|JPG files (*.jpg)|*.jpg|TIFF files (*.tiff)|*.tiff|All files (*.*)|*.*",
             };
-            
+
             if (dlg.ShowDialog().GetValueOrDefault())
             {
                 var ext = Path.GetExtension(dlg.FileName).ToUpperInvariant();
@@ -281,18 +282,18 @@ namespace WolvenKit.Views.Documents
                 }
 
                 var xbmImportArgs = new XbmImportArgs
-                    {
-                        RawFormat = Enum.Parse<SupportedRawFormats>(bitmap.Setup.RawFormat.ToString()),
-                        Compression = Enum.Parse<SupportedCompressionFormats>(bitmap.Setup.Compression.ToString()),
-                        HasMipchain = bitmap.Setup.HasMipchain,
-                        IsGamma = bitmap.Setup.IsGamma,
-                        TextureGroup = bitmap.Setup.Group,
-                        IsStreamable = bitmap.Setup.IsStreamable,
-                        PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC,
-                        PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole,
-                        AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade,
-                        AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold
-                    };
+                {
+                    RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString()),
+                    Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString()),
+                    HasMipchain = bitmap.Setup.HasMipchain,
+                    IsGamma = bitmap.Setup.IsGamma,
+                    TextureGroup = bitmap.Setup.Group,
+                    IsStreamable = bitmap.Setup.IsStreamable,
+                    PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC,
+                    PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole,
+                    AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade,
+                    AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold
+                };
 
                 var newBitmap = image.SaveToXBM(xbmImportArgs);
 

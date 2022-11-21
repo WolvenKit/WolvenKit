@@ -19,6 +19,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -192,11 +193,16 @@ namespace WolvenKit.Modkit.RED4
                 {
                     // find the first matching redfile
                     var redfile = FindRedFile(rawRelative, outDir, cookedTextureFormat.ToString());
-                    return !string.IsNullOrEmpty(redfile)
-                        ? cookedTextureFormat == ECookedTextureFormat.xbm
+                    if (!string.IsNullOrEmpty(redfile))
+                    {
+                        return cookedTextureFormat == ECookedTextureFormat.xbm
                             ? ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>())
-                            : RebuildTexture(redfile)
-                        : ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>());
+                            : RebuildTexture(redfile);
+                    }
+                    else
+                    {
+                        return ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>());
+                    }
                 }
             }
 
@@ -311,9 +317,11 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
+        // app: texture group is set from filename in args
+        // cli: TODO
         private bool ImportXbm(RedRelativePath rawRelative, DirectoryInfo outDir, XbmImportArgs args)
         {
-            var infile = rawRelative.FullName;
+            var infilePath = rawRelative.FullName;
 
             if (ImportExportArgs.IsCLI && args.Keep)
             {
@@ -338,27 +346,30 @@ namespace WolvenKit.Modkit.RED4
                 {
                     AllowTextureDowngrade = xbm.Setup.AllowTextureDowngrade,
                     AlphaToCoverageThreshold = xbm.Setup.AlphaToCoverageThreshold,
-                    Compression = Enum.Parse<SupportedCompressionFormats>(xbm.Setup.Compression.ToString()),
+                    Compression = Enum.Parse<ETextureCompression>(xbm.Setup.Compression.ToString()),
                     HasMipchain = xbm.Setup.HasMipchain,
                     IsGamma = xbm.Setup.IsGamma,
                     IsStreamable = xbm.Setup.IsStreamable,
                     PlatformMipBiasConsole = xbm.Setup.PlatformMipBiasConsole,
                     PlatformMipBiasPC = xbm.Setup.PlatformMipBiasPC,
-                    RawFormat = Enum.Parse<SupportedRawFormats>(xbm.Setup.RawFormat.ToString()),
+                    RawFormat = Enum.Parse<ETextureRawFormat>(xbm.Setup.RawFormat.ToString()),
                     TextureGroup = xbm.Setup.Group
                 };
             }
 
+            // load and, if needed, decompress file
             var image = Enum.Parse<EUncookExtension>(rawRelative.Extension) switch
             {
-                EUncookExtension.dds => RedImage.LoadFromDDSFile(infile),
-                EUncookExtension.tga => RedImage.LoadFromTGAFile(infile),
-                EUncookExtension.bmp => RedImage.LoadFromBMPFile(infile),
-                EUncookExtension.jpg => RedImage.LoadFromJPGFile(infile),
-                EUncookExtension.png => RedImage.LoadFromPNGFile(infile),
-                EUncookExtension.tiff => RedImage.LoadFromTIFFFile(infile),
+                EUncookExtension.dds => RedImage.LoadFromDDSFile(infilePath),
+                EUncookExtension.tga => RedImage.LoadFromTGAFile(infilePath),
+                EUncookExtension.bmp => RedImage.LoadFromBMPFile(infilePath),
+                EUncookExtension.jpg => RedImage.LoadFromJPGFile(infilePath),
+                EUncookExtension.png => RedImage.LoadFromPNGFile(infilePath),
+                EUncookExtension.tiff => RedImage.LoadFromTIFFFile(infilePath),
                 _ => throw new ArgumentOutOfRangeException(),
             };
+
+            // create resource
             var bitmap = image.SaveToXBM(args);
 
             var outpath = new RedRelativePath(rawRelative)

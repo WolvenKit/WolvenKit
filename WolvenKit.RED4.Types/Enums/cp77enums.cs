@@ -3599,7 +3599,7 @@ namespace WolvenKit.RED4.Types
 			TRF_Grayscale_Font, // = 7,
 			TRF_R8G8, // = 8,
 			TRF_R32UI, // = 9,
-			TRF_AlphaGrayscale, // = 0
+			TRF_Max, // = 0
 		}
 
 		public enum ETimeOfYearSeason

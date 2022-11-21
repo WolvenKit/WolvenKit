@@ -12,6 +12,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.ProjectManagement.Project;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -20,12 +21,6 @@ namespace WolvenKit.ViewModels.Tools
     /// </summary>
     public abstract class ImportExportItemViewModel : ReactiveObject, ISelectableViewModel
     {
-        public ImportExportItemViewModel()
-        {
-
-        }
-
-
         /// <summary>
         /// BaseFile "FileModel"
         /// </summary>
@@ -99,24 +94,79 @@ namespace WolvenKit.ViewModels.Tools
         {
             _ = Enum.TryParse(model.GetExtension(), out ERawFileFormat rawFileFormat);
 
+            // get texturegroup from filename
+            var texGroup = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
+            if (IsRawTexture(rawFileFormat))
+            {
+                texGroup = GetTextureGroupFromFileName(Path.GetFileName(FullName));
+            }
+
             return rawFileFormat switch
             {
-                ERawFileFormat.tga => new XbmImportArgs(),
-                ERawFileFormat.dds => new XbmImportArgs(),
-                ERawFileFormat.fbx => new CommonImportArgs(),
+                ERawFileFormat.tga => new XbmImportArgs() { TextureGroup = texGroup },
+                ERawFileFormat.bmp => new XbmImportArgs() { TextureGroup = texGroup },
+                ERawFileFormat.jpg => new XbmImportArgs() { TextureGroup = texGroup },
+                ERawFileFormat.png => new XbmImportArgs() { TextureGroup = texGroup },
+                ERawFileFormat.tiff => new XbmImportArgs() { TextureGroup = texGroup },
+                ERawFileFormat.dds => new XbmImportArgs() { TextureGroup = texGroup },
+
                 ERawFileFormat.glb => new GltfImportArgs(),
                 ERawFileFormat.gltf => new GltfImportArgs(),
+
                 ERawFileFormat.ttf => new FntImportArgs(),
                 ERawFileFormat.wav => new OpusImportArgs(),
-                ERawFileFormat.bmp => new XbmImportArgs(),
-                ERawFileFormat.jpg => new XbmImportArgs(),
-                ERawFileFormat.png => new XbmImportArgs(),
-                ERawFileFormat.tiff => new XbmImportArgs(),
                 ERawFileFormat.masklist => new MlmaskImportArgs(),
                 ERawFileFormat.re => new ReImportArgs(),
+
+                ERawFileFormat.fbx => new CommonImportArgs(),
                 _ => new CommonImportArgs()
             };
         }
+
+        private static Enums.GpuWrapApieTextureGroup GetTextureGroupFromFileName(string fileName)
+        {
+            Enums.GpuWrapApieTextureGroup ret;
+            if (fileName.EndsWith("_n"))
+            {
+                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Normal;
+            }
+            else if (fileName.EndsWith("_rm"))
+            {
+                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
+            }
+            else if (fileName.EndsWith("_r"))
+            {
+                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Grayscale;
+            }
+            else if (fileName.EndsWith("_m"))
+            {
+                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Grayscale;
+            }
+            else if (fileName.EndsWith("_b"))
+            {
+                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
+            }
+            else if (fileName.EndsWith("nm"))
+            {
+                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Normal;
+            }
+            else if (fileName.EndsWith("_data"))
+            {
+                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Data;
+            }
+            else if (fileName.EndsWith("_lut"))
+            {
+                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_LUT;
+            }
+            else
+            {
+                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
+            }
+
+            return ret;
+        }
+
+        private static bool IsRawTexture(ERawFileFormat fmt) => fmt is ERawFileFormat.tga or ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.dds or ERawFileFormat.tiff;
     }
 
     public class ExportableItemViewModel : ImportExportItemViewModel

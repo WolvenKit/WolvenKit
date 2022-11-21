@@ -4,11 +4,15 @@ using System.Runtime.InteropServices;
 using DirectXTexNet;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
+using SharpDX.DXGI;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Wcc;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using static WolvenKit.RED4.Types.Enums;
 using DXGI_FORMAT = DirectXTexNet.DXGI_FORMAT;
 using TEX_DIMENSION = DirectXTexNet.TEX_DIMENSION;
 
@@ -49,7 +53,7 @@ public class RedImage : IDisposable
 
     private bool _disposed = false;
 
-    private RedImage(){}
+    private RedImage() { }
 
     private ScratchImage InternalScratchImage
     {
@@ -66,7 +70,7 @@ public class RedImage : IDisposable
     }
 
     public TexMetadataWrapper Metadata => new(_metadata);
-    
+
     static RedImage()
     {
         s_device = new SharpDX.Direct3D11.Device(DriverType.Hardware, DeviceCreationFlags.BgraSupport);
@@ -115,21 +119,6 @@ public class RedImage : IDisposable
 
     #region LoadFromFileFormat
 
-    public static RedImage LoadFromDDSFile(string szFile, Common.DDS.DXGI_FORMAT format = Common.DDS.DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
-    {
-        var scratchImage = TexHelper.Instance.LoadFromDDSFile(szFile, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
-
-        if (TexHelper.Instance.IsCompressed(metadata.Format))
-        {
-            scratchImage = scratchImage.Decompress(format.ToDirectXTexFormat());
-        }
-
-        return new()
-        {
-            InternalScratchImage = scratchImage
-        };
-    }
-
     public static RedImage LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer, DXGI_FORMAT.UNKNOWN);
 
     public static RedImage LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
@@ -151,14 +140,28 @@ public class RedImage : IDisposable
         };
     }
 
-    public static RedImage LoadFromTGAFile(string szFile) =>
-        new() { InternalScratchImage = TexHelper.Instance.LoadFromTGAFile(szFile) };
+    // load from files
 
-    public static RedImage LoadFromBMPFile(string szFile) =>
-        new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
+    public static RedImage LoadFromDDSFile(string szFile, Common.DDS.DXGI_FORMAT format = Common.DDS.DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
+    {
+        var scratchImage = TexHelper.Instance.LoadFromDDSFile(szFile, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
 
-    public static RedImage LoadFromJPGFile(string szFile) =>
-        new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
+        if (TexHelper.Instance.IsCompressed(metadata.Format))
+        {
+            scratchImage = scratchImage.Decompress(format.ToDirectXTexFormat());
+        }
+
+        return new()
+        {
+            InternalScratchImage = scratchImage
+        };
+    }
+
+    public static RedImage LoadFromTGAFile(string szFile) => new() { InternalScratchImage = TexHelper.Instance.LoadFromTGAFile(szFile) };
+
+    public static RedImage LoadFromBMPFile(string szFile) => new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
+
+    public static RedImage LoadFromJPGFile(string szFile) => new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
 
     public static RedImage LoadFromPNGFile(string szFile)
     {
@@ -329,7 +332,7 @@ public class RedImage : IDisposable
             var result = TexHelper.Instance.Initialize2D(_metadata.Format, _metadata.Width * 4, _metadata.Height * 3, 1, 1, CP_FLAGS.NONE);
             var dest = result.GetImage(0, 0, 0);
 
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 var img = InternalScratchImage.GetImage(0, i, 0);
 
@@ -355,7 +358,7 @@ public class RedImage : IDisposable
 
         TexHelper.Instance.CopyRectangle(InternalScratchImage.GetImage(0), x, y, width, height, croppedImage.GetImage(0), TEX_FILTER_FLAGS.DEFAULT, 0, 0);
 
-        return new RedImage {InternalScratchImage = croppedImage};
+        return new RedImage { InternalScratchImage = croppedImage };
     }
 
     public void FlipV() => InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
@@ -412,30 +415,45 @@ public class RedImage : IDisposable
 
     public CBitmapTexture SaveToXBM(XbmImportArgs args)
     {
-        var settings = new RedImageTransformSettings();
-        settings.RawFormat = CommonFunctions.GetDXGIFormat3(SupportedCompressionFormats.TCM_None, args.RawFormat, args.IsGamma, null);
+        // get settings from texgroup
+        var settings = CreateBaseTextureGroup(args.TextureGroup);
 
-        if (args.Compression != SupportedCompressionFormats.TCM_None)
-        {
-            settings.CompressionFormat = CommonFunctions.GetDXGIFormat3(args.Compression, SupportedRawFormats.TRF_Invalid, args.IsGamma, null);
-        }
-        
-        settings.IsGamma = args.IsGamma;
-        settings.GenerateMipMaps = args.HasMipchain;
 
-        if (args.Compression == SupportedCompressionFormats.TCM_DXTAlpha)
+        // to refactor
+        //var settings = new RedImageTransformSettings
+        //{
+        //    RawFormat = CommonFunctions.GetDXGIFormat3(SupportedCompressionFormats.TCM_None, args.RawFormat, args.IsGamma, null)
+        //};
+        //if (args.Compression != SupportedCompressionFormats.TCM_None)
+        //{
+        //    settings.CompressionFormat = CommonFunctions.GetDXGIFormat3(args.Compression, SupportedRawFormats.TRF_Invalid, args.IsGamma, null);
+        //}
+        //settings.IsGamma = args.IsGamma;
+        //settings.GenerateMipMaps = args.HasMipchain;
+        if (args.Compression == ETextureCompression.TCM_DXTAlpha) //todo
         {
             settings.PremultiplyAlpha = true;
         }
 
+        // get the format again, cos CDPR
+        var (rawFormat, compression, pixelSize) = MapGpuToEngineTextureFormat(_metadata.Format);
+        settings.EngineRawFormat = rawFormat;
+        settings.EngineCompression = compression; // todo if this is already set use the previous one
+
+        // todo check this
+        settings.RawFormat = _metadata.Format;
+        settings.CompressionFormat = CommonFunctions.GetDXGIFormat(compression, rawFormat, settings.IsGamma);
+
+        // get resource
         var (setup, blob) = GetSetupAndBlob(settings);
 
+        // todo set in GetSetupAndBlob
         setup.Group = args.TextureGroup;
-        setup.RawFormat = Enum.Parse<Enums.ETextureRawFormat>(args.RawFormat.ToString());
-        setup.Compression = Enum.Parse<Enums.ETextureCompression>(args.Compression.ToString());
+        //setup.RawFormat = Enum.Parse<Enums.ETextureRawFormat>(args.RawFormat.ToString());
+        //setup.Compression = Enum.Parse<Enums.ETextureCompression>(args.Compression.ToString());
         setup.IsStreamable = args.IsStreamable;
-        setup.HasMipchain = args.HasMipchain;
-        setup.IsGamma = args.IsGamma;
+        //setup.HasMipchain = args.HasMipchain;
+        //setup.IsGamma = args.IsGamma;
         setup.PlatformMipBiasPC = args.PlatformMipBiasPC;
         setup.PlatformMipBiasConsole = args.PlatformMipBiasConsole;
         setup.AllowTextureDowngrade = args.AllowTextureDowngrade;
@@ -452,9 +470,142 @@ public class RedImage : IDisposable
         };
     }
 
+    private static RedImageTransformSettings CreateBaseTextureGroup(GpuWrapApieTextureGroup textureGroup)
+    {
+        var outSetup = new RedImageTransformSettings
+        {
+            Group = textureGroup,
+            IsGamma = textureGroup is GpuWrapApieTextureGroup.TEXG_Generic_Color or GpuWrapApieTextureGroup.TEXG_Multilayer_Color or GpuWrapApieTextureGroup.TEXG_Generic_UI
+        };
+
+        switch (textureGroup)
+        {
+            case GpuWrapApieTextureGroup.TEXG_Generic_Color:
+            case GpuWrapApieTextureGroup.TEXG_Multilayer_Color:
+            case GpuWrapApieTextureGroup.TEXG_Multilayer_Microblend:
+                outSetup.EngineRawFormat = ETextureRawFormat.TRF_TrueColor;
+                outSetup.EngineCompression = ETextureCompression.TCM_QualityColor;
+                outSetup.GenerateMipMaps = true;
+                outSetup.IsStreamable = true;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_Normal:
+            case GpuWrapApieTextureGroup.TEXG_Multilayer_Normal:
+                outSetup.EngineRawFormat = ETextureRawFormat.TRF_TrueColor;
+                outSetup.EngineCompression = ETextureCompression.TCM_Normalmap;
+                outSetup.GenerateMipMaps = true;
+                outSetup.IsStreamable = true;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_Data:
+                outSetup.EngineRawFormat = ETextureRawFormat.TRF_TrueColor;
+                outSetup.EngineCompression = ETextureCompression.TCM_None;
+                outSetup.GenerateMipMaps = false;
+                outSetup.IsStreamable = true;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_UI:
+                outSetup.EngineRawFormat = ETextureRawFormat.TRF_TrueColor;
+                outSetup.EngineCompression = ETextureCompression.TCM_DXTAlpha;
+                outSetup.GenerateMipMaps = false;
+                outSetup.IsStreamable = false;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_Grayscale:
+            case GpuWrapApieTextureGroup.TEXG_Multilayer_Grayscale:
+                outSetup.EngineRawFormat = ETextureRawFormat.TRF_Grayscale;
+                outSetup.EngineCompression = ETextureCompression.TCM_QualityR;
+                outSetup.GenerateMipMaps = true;
+                outSetup.IsStreamable = true;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_Font:
+                outSetup.EngineRawFormat = ETextureRawFormat.TRF_Grayscale_Font;
+                outSetup.EngineCompression = ETextureCompression.TCM_None;
+                outSetup.GenerateMipMaps = false;
+                outSetup.IsStreamable = false;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_LUT:
+                outSetup.EngineRawFormat = ETextureRawFormat.TRF_DeepColor;
+                outSetup.EngineCompression = ETextureCompression.TCM_None;
+                outSetup.GenerateMipMaps = false;
+                outSetup.IsStreamable = false;
+                break;
+
+            default:
+                throw new ArgumentException("Unknown texture group");
+        }
+
+        return outSetup;
+    }
+
+    private static (ETextureRawFormat, ETextureCompression, int) MapGpuToEngineTextureFormat(DXGI_FORMAT texFormat)
+    {
+        ETextureRawFormat outRawFormat;
+        ETextureCompression outCompression;
+        int outPixelSize;
+
+        switch (texFormat)
+        {
+            case DXGI_FORMAT.R32G32B32A32_FLOAT:
+                outRawFormat = ETextureRawFormat.TRF_HDRFloat;
+                outCompression = ETextureCompression.TCM_HalfHDR_Unsigned;
+                outPixelSize = 16;
+                break;
+
+            case DXGI_FORMAT.R16G16B16A16_FLOAT:
+                outRawFormat = ETextureRawFormat.TRF_HDRHalf;
+                outCompression = ETextureCompression.TCM_HalfHDR_Unsigned;
+                outPixelSize = 8;
+                break;
+
+            case DXGI_FORMAT.R16G16B16A16_UNORM:
+                outRawFormat = ETextureRawFormat.TRF_DeepColor;
+                outCompression = ETextureCompression.TCM_QualityColor;
+                outPixelSize = 8;
+                break;
+
+            case DXGI_FORMAT.R32_FLOAT:
+                outRawFormat = ETextureRawFormat.TRF_HDRFloatGrayscale;
+                outCompression = ETextureCompression.TCM_QualityR;
+                outPixelSize = 4;
+                break;
+
+            case DXGI_FORMAT.A8_UNORM:
+                //case DXGI_FORMAT.L8_UNORM:    //TODO
+                // Load as gray scale image
+                outRawFormat = ETextureRawFormat.TRF_Grayscale;
+                outCompression = ETextureCompression.TCM_QualityR;
+                outPixelSize = 1;
+                break;
+
+            case DXGI_FORMAT.R8G8B8A8_UNORM:
+                outRawFormat = ETextureRawFormat.TRF_TrueColor;
+                outCompression = ETextureCompression.TCM_QualityColor;
+                outPixelSize = 4;
+                break;
+
+            case DXGI_FORMAT.R8G8_UNORM: //do I need this?
+                outRawFormat = ETextureRawFormat.TRF_R8G8;
+                outCompression = ETextureCompression.TCM_None;
+                outPixelSize = 2;
+                break;
+
+            default:
+                // Load as True Color image
+                outRawFormat = ETextureRawFormat.TRF_TrueColor;
+                outCompression = ETextureCompression.TCM_QualityColor;
+                outPixelSize = 4;
+                break;
+        }
+
+        return (outRawFormat, outCompression, outPixelSize);
+    }
+
     public CTextureArray SaveToTexArray()
     {
-        var (setup, blob) = GetSetupAndBlob(new RedImageTransformSettings {GenerateMipMaps = false});
+        var (setup, blob) = GetSetupAndBlob(new RedImageTransformSettings { GenerateMipMaps = false });
 
         return new CTextureArray
         {
@@ -480,10 +631,16 @@ public class RedImage : IDisposable
     {
         public DXGI_FORMAT RawFormat = DXGI_FORMAT.UNKNOWN;
         public DXGI_FORMAT CompressionFormat = DXGI_FORMAT.UNKNOWN;
+
         public bool IsGamma = false;
         public bool GenerateMipMaps = false;
-        public bool PremultiplyAlpha = false;
-        public bool VFlip = true;
+        public bool PremultiplyAlpha = false;   // todo
+        public bool VFlip = true;               // todo
+
+        public ETextureCompression EngineCompression { get; internal set; }
+        public ETextureRawFormat EngineRawFormat { get; internal set; }
+        public bool IsStreamable { get; internal set; }
+        public GpuWrapApieTextureGroup Group { get; internal set; }
     }
 
     private (STextureGroupSetup, rendRenderTextureBlobPC) GetSetupAndBlob(RedImageTransformSettings settings)
@@ -495,6 +652,7 @@ public class RedImage : IDisposable
         var img = InternalScratchImage;
         var metadata = _metadata;
 
+        // this will never trigger
         if (settings.RawFormat != DXGI_FORMAT.UNKNOWN && settings.RawFormat != metadata.Format)
         {
             if (TexHelper.Instance.IsCompressed(settings.RawFormat))
@@ -509,6 +667,7 @@ public class RedImage : IDisposable
         }
         else
         {
+            // gamma adjustments
             if (settings.IsGamma && !TexHelper.Instance.IsSRGB(metadata.Format))
             {
                 var srgbFormat = TexHelper.Instance.MakeSRGB(metadata.Format);
@@ -566,6 +725,7 @@ public class RedImage : IDisposable
             metadata = img.GetMetadata();
         }
 
+        // compress
         var uncompressedFormat = metadata.Format;
         if (settings.CompressionFormat != DXGI_FORMAT.UNKNOWN)
         {
@@ -601,8 +761,9 @@ public class RedImage : IDisposable
 
         setup.HasMipchain = metadata.MipLevels > 1;
 
-        var rawFormat = CommonFunctions.GetRedTextureFromDXGI(uncompressedFormat);
-        setup.RawFormat = rawFormat;
+        //var rawFormat = CommonFunctions.GetRedTextureFromDXGI(uncompressedFormat);
+        //setup.RawFormat = rawFormat;
+        setup.RawFormat = settings.EngineRawFormat;
         setup.IsGamma = TexHelper.Instance.IsSRGB(metadata.Format);
 
         if (TexHelper.Instance.IsCompressed(metadata.Format))
@@ -649,7 +810,7 @@ public class RedImage : IDisposable
             for (var j = 0; j < metadata.MipLevels; j++)
             {
                 var tmpImg = img.GetImage(j, i, 0);
-                
+
                 if (i == 0)
                 {
                     // TODO: Some mipMaps have a different SlicePitch in the original xbm
@@ -677,6 +838,7 @@ public class RedImage : IDisposable
 
         #endregion rendRenderTextureBlobPC
 
+        // save
         using var ms = img.SaveToDDSMemory(DDS_FLAGS.FORCE_DX10_EXT);
 
         var buffer = new byte[ms.Length];
@@ -700,7 +862,6 @@ public class RedImage : IDisposable
         {
             img.Dispose();
         }
-
         return (setup, blob);
     }
 
@@ -787,7 +948,7 @@ public class RedImage : IDisposable
         return Create(new STextureGroupSetup(), blob);
     }
 
-    
+
 
     public static RedImage FromWICBuffer(byte[] buffer)
     {
@@ -858,7 +1019,7 @@ public class RedImage : IDisposable
         {
             result._compressionFormat = metadata.Format;
 
-            var textureFormat = CommonFunctions.GetDXGIFormat2(Enums.ETextureCompression.TCM_None, info.RawFormat, info.IsGamma, null);
+            var textureFormat = CommonFunctions.GetDXGIFormat(Enums.ETextureCompression.TCM_None, info.RawFormat, info.IsGamma);
             result.InternalScratchImage = result.InternalScratchImage.Decompress(textureFormat);
         }
 
@@ -897,7 +1058,7 @@ public class RedImage : IDisposable
             {
                 InternalScratchImage.Dispose();
             }
-            
+
             _disposed = true;
         }
     }

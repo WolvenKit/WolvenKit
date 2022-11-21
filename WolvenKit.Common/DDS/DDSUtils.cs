@@ -169,29 +169,29 @@ namespace WolvenKit.Common.DDS
             wdp
         }
 
-        public static void Convert(byte[] inBuffer, ConvertableFileTypes inType, out byte[] outBuffer, ConvertableFileTypes outType)
-        {
-            Convert(inBuffer, inType, out outBuffer, outType, DirectXTexNet.DXGI_FORMAT.UNKNOWN);
-        }
+        //public static void Convert(byte[] inBuffer, ConvertableFileTypes inType, out byte[] outBuffer, ConvertableFileTypes outType)
+        //{
+        //    Convert(inBuffer, inType, out outBuffer, outType, DirectXTexNet.DXGI_FORMAT.UNKNOWN);
+        //}
 
-        public static void Convert(byte[] inBuffer, ConvertableFileTypes inType, out byte[] outBuffer, ConvertableFileTypes outType, Enums.ETextureRawFormat decompressedFormat, bool isGamma)
-        {
-            var targetFormat = decompressedFormat switch
-            {
-                Enums.ETextureRawFormat.TRF_Invalid => DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM,
-                Enums.ETextureRawFormat.TRF_TrueColor => isGamma ? DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM,
-                Enums.ETextureRawFormat.TRF_DeepColor => DirectXTexNet.DXGI_FORMAT.R16G16B16A16_UNORM, // seems wrong
-                Enums.ETextureRawFormat.TRF_Grayscale => DirectXTexNet.DXGI_FORMAT.R8_UINT,
-                Enums.ETextureRawFormat.TRF_HDRFloat => DirectXTexNet.DXGI_FORMAT.R32G32B32A32_FLOAT,
-                Enums.ETextureRawFormat.TRF_HDRHalf => DirectXTexNet.DXGI_FORMAT.R16G16B16A16_FLOAT,
-                Enums.ETextureRawFormat.TRF_HDRFloatGrayscale => DirectXTexNet.DXGI_FORMAT.R16_FLOAT,
-                Enums.ETextureRawFormat.TRF_R8G8 => DirectXTexNet.DXGI_FORMAT.R8G8_UNORM,
-                Enums.ETextureRawFormat.TRF_AlphaGrayscale => DirectXTexNet.DXGI_FORMAT.A8_UNORM,
-                _ => throw new NotSupportedException()
-            };
+        //public static void Convert(byte[] inBuffer, ConvertableFileTypes inType, out byte[] outBuffer, ConvertableFileTypes outType, Enums.ETextureRawFormat decompressedFormat, bool isGamma)
+        //{
+        //    var targetFormat = decompressedFormat switch
+        //    {
+        //        Enums.ETextureRawFormat.TRF_Invalid => DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM,
+        //        Enums.ETextureRawFormat.TRF_TrueColor => isGamma ? DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM,
+        //        Enums.ETextureRawFormat.TRF_DeepColor => DirectXTexNet.DXGI_FORMAT.R16G16B16A16_UNORM, // seems wrong
+        //        Enums.ETextureRawFormat.TRF_Grayscale => DirectXTexNet.DXGI_FORMAT.R8_UINT,
+        //        Enums.ETextureRawFormat.TRF_HDRFloat => DirectXTexNet.DXGI_FORMAT.R32G32B32A32_FLOAT,
+        //        Enums.ETextureRawFormat.TRF_HDRHalf => DirectXTexNet.DXGI_FORMAT.R16G16B16A16_FLOAT,
+        //        Enums.ETextureRawFormat.TRF_HDRFloatGrayscale => DirectXTexNet.DXGI_FORMAT.R16_FLOAT,
+        //        Enums.ETextureRawFormat.TRF_R8G8 => DirectXTexNet.DXGI_FORMAT.R8G8_UNORM,
+        //        Enums.ETextureRawFormat.TRF_AlphaGrayscale => DirectXTexNet.DXGI_FORMAT.A8_UNORM,
+        //        _ => throw new NotSupportedException()
+        //    };
 
-            Convert(inBuffer, inType, out outBuffer, outType, targetFormat);
-        }
+        //    Convert(inBuffer, inType, out outBuffer, outType, targetFormat);
+        //}
 
         private static unsafe void Convert(byte[] inBuffer, ConvertableFileTypes inType, out byte[] outBuffer, ConvertableFileTypes outType, DirectXTexNet.DXGI_FORMAT decompressedFormat)
         {
@@ -357,7 +357,7 @@ namespace WolvenKit.Common.DDS
                     Enums.ETextureRawFormat.TRF_HDRHalf => DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT,
                     Enums.ETextureRawFormat.TRF_HDRFloatGrayscale => DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT,
                     Enums.ETextureRawFormat.TRF_R8G8 => DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM,
-                    Enums.ETextureRawFormat.TRF_AlphaGrayscale => DXGI_FORMAT.DXGI_FORMAT_A8_UNORM,
+                    Enums.ETextureRawFormat.TRF_Grayscale_Font => DXGI_FORMAT.DXGI_FORMAT_A8_UNORM,
                     _ => throw new ArgumentOutOfRangeException()
                 },
                 Enums.ETextureCompression.TCM_DXTNoAlpha => info.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
@@ -382,7 +382,7 @@ namespace WolvenKit.Common.DDS
 
             switch (info.TextureType)
             {
-                
+
                 case Enums.GpuWrapApieTextureType.TEXTYPE_2D:
                     dx10Header.resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D;
                     break;
