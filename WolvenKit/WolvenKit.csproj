@@ -1777,6 +1777,7 @@
     <None Remove="Resources\SkyboxTextures\skyrender0005.bmp" />
     <None Remove="Resources\SyntaxHighlighting\JavaScript-DarkMode.xshd" />
     <None Remove="Resources\Wolvenkit.Installer.Package_0.1.5.0_x64.msixbundle" />
+    <None Remove="Resources\SyntaxHighlighting\YAML.xshd" />
     <None Remove="sample.mp4" />
     <None Remove="SplashScreen1.png" />
     <None Remove="TaskBarIcon.ico" />
@@ -1787,6 +1788,10 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyntaxHighlighting\JavaScript-DarkMode.xshd" />
+    <EmbeddedResource Include="Resources\SyntaxHighlighting\YAML.xshd">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

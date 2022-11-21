@@ -1236,8 +1236,10 @@ namespace WolvenKit.ViewModels.Shell
         /// Open a file and return its content in a viewmodel.
         /// </summary>
         /// <returns></returns>
-        private IDocumentViewModel Open(string fullPath, EWolvenKitFile type)
+        private async Task<IDocumentViewModel> Open(string fullPath, EWolvenKitFile type)
         {
+            var result = false;
+
             // Check if we have already loaded this file and return it if so
             var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == fullPath);
             if (fileViewModel is not null)
@@ -1250,20 +1252,19 @@ namespace WolvenKit.ViewModels.Shell
             {
                 case EWolvenKitFile.Cr2w:
                     fileViewModel = new RedDocumentViewModel(fullPath);
+                    result = fileViewModel.OpenFile(fullPath);
                     break;
                 case EWolvenKitFile.TweakXl:
                     fileViewModel = new TweakXLDocumentViewModel(fullPath);
+                    result = await fileViewModel.OpenFileAsync(fullPath);
                     break;
                 case EWolvenKitFile.WScript:
                     fileViewModel = new WScriptDocumentViewModel(fullPath);
+                    result = fileViewModel.OpenFile(fullPath);
                     break;
                 default:
                     break;
             }
-
-            //var result = await fileViewModel.OpenFileAsync(fullPath);
-            var result = fileViewModel.OpenFile(fullPath);
-
 
             if (result)
             {
@@ -1389,7 +1390,7 @@ namespace WolvenKit.ViewModels.Shell
                     case ".zip":
                     case ".rar":
                     case ".bat":
-                    case ".yml":
+                    //case ".yml":
                     case ".log":
                     case ".ini":
                     case ".xl":
@@ -1461,9 +1462,9 @@ namespace WolvenKit.ViewModels.Shell
 
                 if (isRedEngineFile)
                 {
-                    DispatcherHelper.RunOnMainThread(() =>
+                    DispatcherHelper.RunOnMainThread(async () =>
                     {
-                        var document = Open(fullpath, type);
+                        var document = await Open(fullpath, type);
                         if (document is not null)
                         {
                             if (!DockedViews.Contains(document))

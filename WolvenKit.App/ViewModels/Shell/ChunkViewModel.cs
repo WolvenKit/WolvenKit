@@ -21,6 +21,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
@@ -29,6 +30,7 @@ using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
+using YamlDotNet.Serialization;
 using static WolvenKit.RED4.Types.RedReflection;
 using static WolvenKit.ViewModels.Dialogs.DialogViewModel;
 using IRedString = WolvenKit.RED4.Types.IRedString;
@@ -177,7 +179,8 @@ namespace WolvenKit.ViewModels.Shell
                 });
 
             //DoSubscribe();
-            // TODO INPC 
+            // TODO INPC
+            CreateTXLOverride = new DelegateCommand(ExecuteCreateTXLOverride);
             OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef).ObservesProperty(() => Data);
             AddRefCommand = new DelegateCommand(async () => await ExecuteAddRef(), CanAddRef).ObservesProperty(() => Data);
             ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk).ObservesProperty(() => PropertyCount);
@@ -1299,6 +1302,98 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         #endregion Properties
+
+        public ICommand CreateTXLOverride { get; protected set; }
+        public bool ShouldShowTweakXLMenu()
+        {
+            var ret = Data is gamedataTweakDBRecord;
+            ret |= Data is TweakDBID;
+            ret |= Parent?.Data is gamedataTweakDBRecord;
+            ret |= Parent?.Data is TweakDBID;
+            return ret;
+        }
+
+        private void ExecuteCreateTXLOverride()
+        {
+            var recordName = Name;
+            IRedType tdbEntry = null;
+            var tdbs = Locator.Current.GetService<TweakDBService>();
+
+            var txl = new TweakXL();
+
+            switch (Parent?.Data)
+            {
+                case gamedataTweakDBRecord tweakDBRecord:
+                    recordName = $"{Parent.Name}.{Name}";
+                    break;
+                case TweakDBID tweakDBID:
+                    recordName = $"{tweakDBID.ResolvedText}.{Name}";
+                    break;
+                case IRedArray:
+                    break;
+                case null:
+                    break;
+                default:
+                    throw new NotImplementedException("Unknown parent type found for TweakXL override.");
+            }
+
+            switch (Data)
+            {
+                case gamedataTweakDBRecord tweakDBRecord:
+                    tdbEntry = tweakDBRecord;
+                    txl.ID = recordName;
+                    txl.Type = tweakDBRecord.GetType().Name;
+                    break;
+                case TweakDBID tweakDBID:
+                    tdbEntry = tdbs.GetFlat(tweakDBID);
+                    tdbEntry ??= tdbs.GetRecord(tweakDBID);
+                    txl.ID = tweakDBID;
+                    txl.Type = tdbs.GetType(tweakDBID).Name;
+                    break;
+                case IRedType redType:
+                    tdbEntry = Data;
+                    txl.ID = recordName;
+                    txl.Value = redType;
+                    break;
+                default:
+                    throw new NotImplementedException("Unknown record type found for TweakXL override.");
+            }
+
+            // if a record was found, parse its data
+            if (tdbEntry is gamedataTweakDBRecord)
+            {
+                ((gamedataTweakDBRecord)tdbEntry).GetPropertyNames().ForEach(name => txl.Properties.Add(name, ((gamedataTweakDBRecord)tdbEntry).GetProperty(name)));
+            }
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "YAML files (*.yaml; *.yml)|*.yaml;*.yml|All files (*.*)|*.*",
+                FilterIndex = 1,
+                FileName = $"{txl.ID.ResolvedText}.yaml",
+                InitialDirectory = Locator.Current.GetService<IProjectManager>().ActiveProject?.ResourcesDirectory
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using var stream = saveFileDialog.OpenFile();
+                    var serializer = new SerializerBuilder()
+                        .WithTypeConverter(new TweakXLYamlTypeConverter())
+                        .WithIndentedSequences()
+                        .Build();
+
+                    var yaml = serializer.Serialize(new TweakXLFile { txl });
+                    stream.Write(yaml.ToCharArray().Select(c => (byte)c).ToArray());
+
+                    Locator.Current.GetService<ILoggerService>().Success($"TweakXL YAML written for {recordName}.");
+                }
+                catch (Exception ex)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(ex);
+                }
+            }
+        }
 
         public bool CanBeDroppedOn(ChunkViewModel target) => PropertyType == target.PropertyType;
 

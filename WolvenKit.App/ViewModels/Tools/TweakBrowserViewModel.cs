@@ -10,14 +10,19 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Threading;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ProjectManagement.Project;
+using WolvenKit.Models;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
+using YamlDotNet.Serialization;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -40,6 +45,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly ISettingsManager _settingsManager;
         private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
+        private readonly ILoggerService _loggerService;
         private readonly TweakDBService _tweakDB;
         public string Extension { get; set; } = "tweak";
 
@@ -62,12 +68,14 @@ namespace WolvenKit.ViewModels.Tools
             ISettingsManager settingsManager,
             INotificationService notificationService,
             IProjectManager projectManager,
+            ILoggerService loggerService,
             TweakDBService tweakDbService
         ) : base(ToolTitle)
         {
             _settingsManager = settingsManager;
             _notificationService = notificationService;
             _projectManager = projectManager;
+            _loggerService = loggerService;
             _tweakDB = tweakDbService;
 
             _tweakDB.Loaded += Load;
@@ -151,10 +159,10 @@ namespace WolvenKit.ViewModels.Tools
             {
                 _selectedRecordEntry = value;
                 this.RaisePropertyChanged(nameof(SelectedRecordEntry));
-                if (_selectedRecordEntry != null)
+                if (_selectedRecordEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, true) {IsExpanded = true});
+                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, _selectedRecordEntry.DisplayName, false, true) { IsExpanded = true });
                 }
                 else
                 {
@@ -171,7 +179,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 _selectedFlatEntry = value;
                 this.RaisePropertyChanged(nameof(SelectedFlatEntry));
-                if (_selectedFlatEntry != null)
+                if (_selectedFlatEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(_selectedFlatEntry.Item), null, true);
                 }
@@ -190,7 +198,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 _selectedQueryEntry = value;
                 this.RaisePropertyChanged(nameof(SelectedQueryEntry));
-                if (_selectedQueryEntry != null)
+                if (_selectedQueryEntry != null && _tweakDB.IsLoaded)
                 {
                     var arr = new CArray<TweakDBID>();
                     foreach (var query in _tweakDB.GetQuery(_selectedQueryEntry.Item))
@@ -215,7 +223,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 _selectedGroupTagEntry = value;
                 this.RaisePropertyChanged(nameof(SelectedGroupTagEntry));
-                if (_selectedGroupTagEntry != null)
+                if (_selectedGroupTagEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedGroupTag = new ChunkViewModel((CUInt8)_tweakDB.GetGroupTag(_selectedGroupTagEntry.Item), null, true);
                 }
@@ -347,6 +355,57 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             return false;
+        }
+
+        private DelegateCommand convertToYAML;
+        public ICommand ConvertToYAML => convertToYAML ??= new DelegateCommand(ExecuteConvertToYAML, CanExecuteConvertToYAML);
+        public bool CanExecuteConvertToYAML() => true; //Locator.Current.GetService<IProjectManager>().IsProjectLoaded;
+
+        private void ExecuteConvertToYAML()
+        {
+            var txl = new TweakXL
+            {
+                ID = SelectedRecordEntry.DisplayName
+            };
+
+            var baseRecord = _tweakDB.GetRecord(_selectedRecordEntry.Item);
+            txl.Type = "gamedata" + _selectedRecordEntry.RecordTypeName + "_Record";
+
+            txl.ID = _selectedRecordEntry.Item;
+
+            baseRecord.GetPropertyNames().ForEach(name => txl.Properties.Add(name, baseRecord.GetProperty(name)));
+
+            var txlFile = new TweakXLFile { txl };
+
+            Stream myStream;
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "YAML files (*.yaml; *.yml)|*.yaml;*.yml|All files (*.*)|*.*",
+                FilterIndex = 1,
+                FileName = $"{SelectedRecordEntry.DisplayName}.yaml",
+                InitialDirectory = _projectManager.ActiveProject?.ResourcesDirectory
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog.OpenFile()) is not null)
+                {
+                    var serializer = new SerializerBuilder()
+                        .WithTypeConverter(new TweakXLYamlTypeConverter())
+                        .WithIndentedSequences()
+                        .Build();
+
+                    var yaml = serializer.Serialize(txlFile);
+                    myStream.Write(yaml.ToCharArray().Select(c => (byte)c).ToArray());
+                    myStream.Close();
+
+                    _loggerService.Success($"{SelectedRecordEntry.DisplayName} TweakXL written to: {saveFileDialog.FileName}");
+                }
+                else
+                {
+                    _loggerService.Error($"Could not open file: {saveFileDialog.FileName}");
+                }
+            }
         }
 
         #endregion

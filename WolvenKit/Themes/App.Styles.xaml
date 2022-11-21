@@ -500,6 +500,12 @@
             <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="yaml">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
             </DataTrigger>
+            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="yml">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="xl">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
+            </DataTrigger>
             <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="reds">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reds.svg}" />
             </DataTrigger>

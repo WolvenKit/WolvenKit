@@ -29,7 +29,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Border
-            Margin="-3,-2,0,0"
+            Margin="0,-2,0,0"
             Background="{StaticResource ContentBackgroundAlt2}"
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="1,1,0,1">
@@ -88,7 +88,9 @@
             </Grid>
         </Border>
         <TabControl Grid.Row="1">
-            <TabItem Header="{Binding RecordsHeader}">
+            <TabItem
+                d:Header="Records (12345)"
+                Header="{Binding RecordsHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300" />
@@ -100,12 +102,32 @@
                         Margin="-3,0,0,-3"
                         BorderThickness="1,0,0,1"
                         ItemsSource="{Binding Records}"
+                        d:ItemsSource="{d:SampleData}"
+                        d:SelectedIndex="1"
                         SelectedItem="{Binding SelectedRecordEntry, Mode=TwoWay}">
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="{Binding ConvertToYAML}" Header="Add TweakXL Override" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Margin="2,0" Text="{Binding DisplayName}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+                        <!--<ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Trigger.Setters>
+                                            <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                                            <Setter Property="BorderThickness" Value="10" />
+                                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                                        </Trigger.Setters>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>-->
                     </ListBox>
                     <syncfusion:SfGridSplitter
                         Grid.Column="1"
@@ -114,7 +136,9 @@
                     <local:RedTreeView Grid.Column="2" ItemsSource="{Binding SelectedRecord}" />
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding FlatsHeader}">
+            <TabItem
+                d:Header="Flats (12345)"
+                Header="{Binding FlatsHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300" />
@@ -140,7 +164,9 @@
                     <editors:RedTypeView Grid.Column="2" DataContext="{Binding SelectedFlat}" />
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding QueriesHeader}">
+            <TabItem
+                d:Header="Queries (12345)"
+                Header="{Binding QueriesHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300" />
@@ -166,7 +192,9 @@
                     <editors:RedTypeView Grid.Column="2" DataContext="{Binding SelectedQuery}" />
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding GroupTagsHeader}">
+            <TabItem
+                d:Header="Groups (12345)"
+                Header="{Binding GroupTagsHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300" />
@@ -200,7 +228,8 @@
             Background="{StaticResource ContentBackgroundAlt3}"
             BorderBrush="Black"
             BorderThickness="0"
-            Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            d:Visibility="Hidden">
             <Grid>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock

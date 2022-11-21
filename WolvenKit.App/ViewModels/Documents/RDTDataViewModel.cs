@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -12,16 +13,16 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView.Engine;
 using Syncfusion.Windows.Shared;
-using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Interfaces;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
 using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
+using YamlDotNet.Serialization;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -86,7 +87,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public ViewModelActivator Activator { get; } = new();
 
-        protected readonly IRedType _data;
+        protected IRedType _data;
 
         public bool IsEmbeddedFile { get; set; }
 
@@ -96,22 +97,34 @@ namespace WolvenKit.ViewModels.Documents
 
             File = file;
             _data = data;
-            Header = _data.GetType().Name;
+
+            // set header
+            if (data is null && file is TweakXLDocumentViewModel)
+            {
+                var ext = Path.GetExtension(file.FilePath).ToLower();
+                Header = ext switch
+                {
+                    ".yaml" => "TweakXL",
+                    ".yml" => "TweakXL",
+                    ".xl" => "TweakXL",
+                    _ => throw new NotImplementedException(),
+                };
+            }
+            else
+            {
+                Header = _data.GetType().Name;
+            }
 
             this.WhenActivated((CompositeDisposable disposables) =>
             {
                 OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
                 OpenImportCommand = new DelegateCommand<ICR2WImport>(async (i) => await ExecuteOpenImport(i));
 
-                if (SelectedChunk == null)
+                if (SelectedChunk == null && Chunks.Count > 0)
                 {
                     SelectedChunk = Chunks[0];
                     SelectedChunks.Add(Chunks[0]);
                 }
-
-                //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
-
-                //this.HandleActivation()
             });
 
 
@@ -170,19 +183,13 @@ namespace WolvenKit.ViewModels.Documents
             //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
         }
 
-        public RedBaseClass GetData() => (RedBaseClass)_data;
-
+        public IRedType GetData() => _data;
         public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file) => Header = header;
 
         #region properties
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
-        //[Reactive] public ObservableCollection<ChunkPropertyViewModel> ChunkProperties { get; set; } = new();
-
-        //public IReadOnlyList<IRedRef> Imports => _file is CR2WFile cr2w ? cr2w.Imports : new ReadOnlyCollection<IRedRef>(new List<IRedRef>());
-
-        //public List<ICR2WBuffer> Buffers => _file.Buffers;
 
         private List<ChunkViewModel> _chunks;
 
@@ -192,11 +199,10 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (_chunks == null || _chunks.Count == 0)
                 {
-                    _chunks = new List<ChunkViewModel>
+                    _chunks = _data is null ? new() : new List<ChunkViewModel>
                     {
                         GenerateChunks()
                     };
-                    //SelectedChunk = _chunks[0];
                 }
                 return _chunks;
             }
@@ -466,7 +472,34 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         //public Red4File GetFile() => _file;
+        public override void OnSelected()
+        {
+            // if tweak file, deserialize from text
+            // read tweakXL file
+            if (File is TweakXLDocumentViewModel tweakFile)
+            {
+                try
+                {
+                    // get text tab
+                    var tab = tweakFile.TabItemViewModels.OfType<RDTTextViewModel>().FirstOrDefault();
+                    var text = tab.GetText();
 
+                    using var reader = new StringReader(text);
+                    var deserializer = new DeserializerBuilder()
+                        .WithTypeConverter(new TweakXLYamlTypeConverter())
+                        .Build();
+                    var file = deserializer.Deserialize<TweakXLFile>(reader);
+                    _data = file;
+                    // refresh
+                    _chunks = null;
+                    _ = Chunks;
+                }
+                catch (Exception ex)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(ex);
+                }
+            }
+        }
         #endregion
     }
 
