@@ -3,10 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using SharpGLTF.Validation;
-using Splat;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Common.Model.Arguments
@@ -54,43 +51,36 @@ namespace WolvenKit.Common.Model.Arguments
     public class XbmImportArgs : ImportArgs
     {
         [Category("General Import Settings")]
+        [Description("Select the texture group of the imported item")]
+        public GpuWrapApieTextureGroup TextureGroup { get; set; } = GpuWrapApieTextureGroup.TEXG_Generic_Color;
+
+        [Category("General Import Settings")]
         [Description("If true, the file will be handled as a SRGB file")]
-        public bool IsGamma { get; set; } = false;
+        public bool? IsGamma { get; set; } = false;
+
+        [Category("General Import Settings")]
+        [Description("Vertical Flip")]
+        public bool? VFlip { get; set; } = false;
+
 
         [Category("Image Import Settings")]
-        public ETextureRawFormat RawFormat { get; set; } = ETextureRawFormat.TRF_TrueColor;
+        public ETextureRawFormat? RawFormat { get; set; } = ETextureRawFormat.TRF_TrueColor;
 
         [Category("Image Import Settings")]
-        public ETextureCompression Compression { get; set; }
+        public ETextureCompression? Compression { get; set; }
 
         [Category("Image Import Settings")]
         [Description("If true, mipMaps will be generated")]
-        public bool HasMipchain { get; set; } = true;
+        public bool? GenerateMipMaps { get; set; } = true;
 
-
-        [Category("XBM Import Settings")]
-        [Description("Select the texture group of the imported item")]
-        public Enums.GpuWrapApieTextureGroup TextureGroup { get; set; } = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
-
-        [Category("XBM Import Settings")]
-        public bool IsStreamable { get; set; } = true;
-
-        [Category("XBM Import Settings")]
-        public byte PlatformMipBiasPC { get; set; }
-
-        [Category("XBM Import Settings")]
-        public byte PlatformMipBiasConsole { get; set; }
-
-        [Category("XBM Import Settings")]
-        public bool AllowTextureDowngrade { get; set; } = true;
-
-        [Category("XBM Import Settings")]
-        public byte AlphaToCoverageThreshold { get; set; }
+        [Category("Image Import Settings")]
+        [Description("PremultiplyAlpha")]
+        public bool? PremultiplyAlpha { get; set; } = true;
 
         public XbmImportArgs()
         {
             Keep = false;
-            HasMipchain = true;
+            GenerateMipMaps = true;
         }
 
         /// <summary>

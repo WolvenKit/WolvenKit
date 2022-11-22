@@ -173,8 +173,8 @@ namespace WolvenKit.Views.Documents
             var zoom = e.Delta > 0 ? 1.2 : (1 / 1.2);
 
             var CursorPosCanvas = e.GetPosition(ImagePreviewCanvas);
-            pan.X += -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoom - 1.0);
-            pan.Y += -(CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height / 2.0 - pan.Y) * (zoom - 1.0);
+            pan.X += -(CursorPosCanvas.X - (ImagePreviewCanvas.RenderSize.Width / 2.0) - pan.X) * (zoom - 1.0);
+            pan.Y += -(CursorPosCanvas.Y - (ImagePreviewCanvas.RenderSize.Height / 2.0) - pan.Y) * (zoom - 1.0);
             end.X = pan.X;
             end.Y = pan.Y;
 
@@ -285,14 +285,14 @@ namespace WolvenKit.Views.Documents
                 {
                     RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString()),
                     Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString()),
-                    HasMipchain = bitmap.Setup.HasMipchain,
+                    GenerateMipMaps = bitmap.Setup.HasMipchain,
                     IsGamma = bitmap.Setup.IsGamma,
                     TextureGroup = bitmap.Setup.Group,
-                    IsStreamable = bitmap.Setup.IsStreamable,
-                    PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC,
-                    PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole,
-                    AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade,
-                    AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold
+                    //IsStreamable = bitmap.Setup.IsStreamable,
+                    //PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC,
+                    //PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole,
+                    //AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade,
+                    //AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold
                 };
 
                 var newBitmap = image.SaveToXBM(xbmImportArgs);

@@ -873,14 +873,9 @@ namespace WolvenKit.ViewModels.Tools
                         {
                             xbmImportArgs.RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString());
                             xbmImportArgs.Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString());
-                            xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
                             xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
                             xbmImportArgs.TextureGroup = bitmap.Setup.Group;
-                            xbmImportArgs.IsStreamable = bitmap.Setup.IsStreamable;
-                            xbmImportArgs.PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC;
-                            xbmImportArgs.PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole;
-                            xbmImportArgs.AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade;
-                            xbmImportArgs.AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold;
+                            xbmImportArgs.GenerateMipMaps = bitmap.Setup.HasMipchain;
 
                             _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Loaded from project file");
 
@@ -899,14 +894,9 @@ namespace WolvenKit.ViewModels.Tools
                         {
                             xbmImportArgs.RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString());
                             xbmImportArgs.Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString());
-                            xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
+                            xbmImportArgs.GenerateMipMaps = bitmap.Setup.HasMipchain;
                             xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
                             xbmImportArgs.TextureGroup = bitmap.Setup.Group;
-                            xbmImportArgs.IsStreamable = bitmap.Setup.IsStreamable;
-                            xbmImportArgs.PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC;
-                            xbmImportArgs.PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole;
-                            xbmImportArgs.AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade;
-                            xbmImportArgs.AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold;
 
                             _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Loaded from archive file");
 

@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Splat;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Helpers;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.MLMask;
-using WolvenKit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -344,14 +340,14 @@ namespace WolvenKit.Modkit.RED4
 
                 args = new XbmImportArgs
                 {
-                    AllowTextureDowngrade = xbm.Setup.AllowTextureDowngrade,
-                    AlphaToCoverageThreshold = xbm.Setup.AlphaToCoverageThreshold,
+                    //AllowTextureDowngrade = xbm.Setup.AllowTextureDowngrade,
+                    //AlphaToCoverageThreshold = xbm.Setup.AlphaToCoverageThreshold,
                     Compression = Enum.Parse<ETextureCompression>(xbm.Setup.Compression.ToString()),
-                    HasMipchain = xbm.Setup.HasMipchain,
+                    GenerateMipMaps = xbm.Setup.HasMipchain,
                     IsGamma = xbm.Setup.IsGamma,
-                    IsStreamable = xbm.Setup.IsStreamable,
-                    PlatformMipBiasConsole = xbm.Setup.PlatformMipBiasConsole,
-                    PlatformMipBiasPC = xbm.Setup.PlatformMipBiasPC,
+                    //IsStreamable = xbm.Setup.IsStreamable,
+                    //PlatformMipBiasConsole = xbm.Setup.PlatformMipBiasConsole,
+                    //PlatformMipBiasPC = xbm.Setup.PlatformMipBiasPC,
                     RawFormat = Enum.Parse<ETextureRawFormat>(xbm.Setup.RawFormat.ToString()),
                     TextureGroup = xbm.Setup.Group
                 };
