@@ -304,7 +304,7 @@ namespace WolvenKit.ViewModels.HomePage
                 mod.LoadOrder = i + foundMods.Count;
             }
 
-            _logger.Info($"Found {Mods.Count} mods.");
+            _logger.Info($"Found {Mods.Count} REDmods.");
         }
 
         public void SetLoadOrderChanged(bool v) => LoadOrderChanged = v;
