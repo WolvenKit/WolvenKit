@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reactive;
 using System.Runtime.InteropServices;
 using DirectXTexNet;
 using SharpDX.Direct3D;
@@ -417,19 +418,6 @@ public class RedImage : IDisposable
     {
         // get settings from texgroup
         var settings = CreateBaseTextureGroup(args.TextureGroup);
-
-
-        // to refactor
-        //var settings = new RedImageTransformSettings
-        //{
-        //    RawFormat = CommonFunctions.GetDXGIFormat3(SupportedCompressionFormats.TCM_None, args.RawFormat, args.IsGamma, null)
-        //};
-        //if (args.Compression != SupportedCompressionFormats.TCM_None)
-        //{
-        //    settings.CompressionFormat = CommonFunctions.GetDXGIFormat3(args.Compression, SupportedRawFormats.TRF_Invalid, args.IsGamma, null);
-        //}
-        //settings.IsGamma = args.IsGamma;
-        //settings.GenerateMipMaps = args.HasMipchain;
         if (args.Compression == ETextureCompression.TCM_DXTAlpha) //todo
         {
             settings.PremultiplyAlpha = true;
@@ -444,20 +432,11 @@ public class RedImage : IDisposable
         settings.RawFormat = _metadata.Format;
         settings.CompressionFormat = CommonFunctions.GetDXGIFormat(compression, rawFormat, settings.IsGamma);
 
+        //settings.PremultiplyAlpha = args.PremultiplyAlpha;
+        //settings.VFlip = args.VFlip;
+
         // get resource
         var (setup, blob) = GetSetupAndBlob(settings);
-
-        // todo set in GetSetupAndBlob
-        setup.Group = args.TextureGroup;
-        //setup.RawFormat = Enum.Parse<Enums.ETextureRawFormat>(args.RawFormat.ToString());
-        //setup.Compression = Enum.Parse<Enums.ETextureCompression>(args.Compression.ToString());
-        setup.IsStreamable = args.IsStreamable;
-        //setup.HasMipchain = args.HasMipchain;
-        //setup.IsGamma = args.IsGamma;
-        setup.PlatformMipBiasPC = args.PlatformMipBiasPC;
-        setup.PlatformMipBiasConsole = args.PlatformMipBiasConsole;
-        setup.AllowTextureDowngrade = args.AllowTextureDowngrade;
-        setup.AlphaToCoverageThreshold = args.AlphaToCoverageThreshold;
 
         return new CBitmapTexture
         {
@@ -632,15 +611,17 @@ public class RedImage : IDisposable
         public DXGI_FORMAT RawFormat = DXGI_FORMAT.UNKNOWN;
         public DXGI_FORMAT CompressionFormat = DXGI_FORMAT.UNKNOWN;
 
-        public bool IsGamma = false;
-        public bool GenerateMipMaps = false;
-        public bool PremultiplyAlpha = false;   // todo
-        public bool VFlip = true;               // todo
+        public bool IsGamma { get; internal set; }
+        public bool GenerateMipMaps { get; internal set; }
+        public bool PremultiplyAlpha { get; internal set; }
+        public bool VFlip { get; internal set; } = true;
 
         public ETextureCompression EngineCompression { get; internal set; }
         public ETextureRawFormat EngineRawFormat { get; internal set; }
         public bool IsStreamable { get; internal set; }
         public GpuWrapApieTextureGroup Group { get; internal set; }
+        public bool AllowTextureDowngrade { get; internal set; } // unused
+        public byte AlphaToCoverageThreshold { get; internal set; } = 0; // unused
     }
 
     private (STextureGroupSetup, rendRenderTextureBlobPC) GetSetupAndBlob(RedImageTransformSettings settings)
@@ -726,7 +707,6 @@ public class RedImage : IDisposable
         }
 
         // compress
-        var uncompressedFormat = metadata.Format;
         if (settings.CompressionFormat != DXGI_FORMAT.UNKNOWN)
         {
             if (!TexHelper.Instance.IsCompressed(settings.CompressionFormat))
@@ -760,16 +740,25 @@ public class RedImage : IDisposable
         #region STextureGroupSetup
 
         setup.HasMipchain = metadata.MipLevels > 1;
-
-        //var rawFormat = CommonFunctions.GetRedTextureFromDXGI(uncompressedFormat);
-        //setup.RawFormat = rawFormat;
+        setup.Compression = settings.EngineCompression;
+        //if (TexHelper.Instance.IsCompressed(metadata.Format))
+        //{
+        //    setup.Compression = CommonFunctions.GetRedCompressionFromDXGI(metadata.Format, settings.PremultiplyAlpha);
+        //}
         setup.RawFormat = settings.EngineRawFormat;
         setup.IsGamma = TexHelper.Instance.IsSRGB(metadata.Format);
 
-        if (TexHelper.Instance.IsCompressed(metadata.Format))
-        {
-            setup.Compression = CommonFunctions.GetRedCompressionFromDXGI(metadata.Format, settings.PremultiplyAlpha);
-        }
+        var mipBiasMaxUnclamped = metadata.MipLevels - 3;
+        var mipBiasMax = Math.Max(0, mipBiasMaxUnclamped);
+        setup.PlatformMipBiasPC = (byte)mipBiasMax;
+        setup.PlatformMipBiasConsole = (byte)mipBiasMax;
+
+        setup.AllowTextureDowngrade = settings.AllowTextureDowngrade;
+        setup.AlphaToCoverageThreshold = settings.AlphaToCoverageThreshold;
+
+        setup.Group = settings.Group;
+        setup.IsStreamable = settings.IsStreamable;
+
 
         #endregion STextureGroupSetup
 

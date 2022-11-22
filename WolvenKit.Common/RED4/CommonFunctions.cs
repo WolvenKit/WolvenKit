@@ -37,8 +37,6 @@ namespace WolvenKit.RED4.CR2W
             return ext.ToArray();
         }
 
-        #region Methods
-
         public static DirectXTexNet.DXGI_FORMAT GetDXGIFormat(ETextureCompression compression, ETextureRawFormat rawFormat, bool isGamma/*, ILoggerService logger*/)
         {
             return compression switch
@@ -74,61 +72,5 @@ namespace WolvenKit.RED4.CR2W
                 _ => throw new ArgumentOutOfRangeException(),//logger.Warning($"Unknown texture compression format: {compression}");
             };
         }
-
-        public static ETextureCompression GetRedCompressionFromDXGI(DirectXTexNet.DXGI_FORMAT format, bool isPMA)
-        {
-            switch (format)
-            {
-                // could also be TCM_Normals_DEPRECATED
-                case DirectXTexNet.DXGI_FORMAT.BC1_UNORM:
-                case DirectXTexNet.DXGI_FORMAT.BC1_UNORM_SRGB:
-                    return ETextureCompression.TCM_DXTNoAlpha;
-
-                // could also be TCM_NormalsHigh_DEPRECATED
-                case DirectXTexNet.DXGI_FORMAT.BC3_UNORM:
-                case DirectXTexNet.DXGI_FORMAT.BC3_UNORM_SRGB:
-                {
-                    if (isPMA)
-                    {
-                        return ETextureCompression.TCM_DXTAlpha;
-                    }
-                    else
-                    {
-                        return ETextureCompression.TCM_DXTAlphaLinear;
-                    }
-                }
-
-                case DirectXTexNet.DXGI_FORMAT.BC4_UNORM:
-                    return ETextureCompression.TCM_QualityR;
-
-                // could also be TCM_QualityRG
-                case DirectXTexNet.DXGI_FORMAT.BC5_UNORM:
-                    return ETextureCompression.TCM_Normalmap;
-
-                case DirectXTexNet.DXGI_FORMAT.BC7_UNORM:
-                case DirectXTexNet.DXGI_FORMAT.BC7_UNORM_SRGB:
-                    return ETextureCompression.TCM_QualityColor;
-
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        public static (ETextureCompression, ETextureRawFormat)
-            GetRedFormatsFromTextureGroup(GpuWrapApieTextureGroup textureGroup)
-        {
-            return textureGroup switch
-            {
-                GpuWrapApieTextureGroup.TEXG_Generic_Grayscale => (ETextureCompression.TCM_QualityR, ETextureRawFormat.TRF_Invalid),
-                //TODO: support TCM_Normals_DEPRECATED?
-                GpuWrapApieTextureGroup.TEXG_Generic_Normal => (ETextureCompression.TCM_Normalmap, ETextureRawFormat.TRF_Invalid),
-                _ => throw new ArgumentOutOfRangeException(nameof(textureGroup), textureGroup, null),
-            };
-        }
-
-
-
-
-        #endregion Methods
     }
 }
