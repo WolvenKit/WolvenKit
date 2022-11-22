@@ -702,11 +702,11 @@ namespace WolvenKit.ViewModels.Tools
         /// Import Single item
         /// </summary>
         /// <param name="item"></param>
-        private Task<bool> ImportSingleTask(ImportableItemViewModel item)
+        private async Task<bool> ImportSingleTask(ImportableItemViewModel item)
         {
-            if (_gameController.GetController() is not RED4Controller cp77Controller)
+            if (_gameController.GetController() is not RED4Controller)
             {
-                return Task.FromResult(false);
+                return false;
             }
 
             var proj = _projectManager.ActiveProject;
@@ -724,7 +724,7 @@ namespace WolvenKit.ViewModels.Tools
                     if (!_pluginService.IsInstalled(EPlugin.redmod))
                     {
                         _loggerService.Error("Redmod plugin needs to be installed to import animations");
-                        return Task.FromResult(false);
+                        return false;
                     }
 
                     reImportArgs.Depot = proj.ModDirectory;
@@ -735,10 +735,19 @@ namespace WolvenKit.ViewModels.Tools
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
                 var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
 
-                return _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
+                try
+                {
+                    return await _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error($"Could not import {item.Name}");
+                    _loggerService.Error(e);
+                }
+
             }
 
-            return Task.FromResult(false);
+            return false;
         }
 
         /// <summary>
