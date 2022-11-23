@@ -9,6 +9,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using static WolvenKit.RED4.Types.Enums;
 using DXGI_FORMAT = DirectXTexNet.DXGI_FORMAT;
 using TEX_DIMENSION = DirectXTexNet.TEX_DIMENSION;
 
@@ -49,7 +50,7 @@ public class RedImage : IDisposable
 
     private bool _disposed = false;
 
-    private RedImage(){}
+    private RedImage() { }
 
     private ScratchImage InternalScratchImage
     {
@@ -66,7 +67,7 @@ public class RedImage : IDisposable
     }
 
     public TexMetadataWrapper Metadata => new(_metadata);
-    
+
     static RedImage()
     {
         s_device = new SharpDX.Direct3D11.Device(DriverType.Hardware, DeviceCreationFlags.BgraSupport);
@@ -115,26 +116,11 @@ public class RedImage : IDisposable
 
     #region LoadFromFileFormat
 
-    public static RedImage LoadFromDDSFile(string szFile, Common.DDS.DXGI_FORMAT format = Common.DDS.DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
-    {
-        var scratchImage = TexHelper.Instance.LoadFromDDSFile(szFile, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
-
-        if (TexHelper.Instance.IsCompressed(metadata.Format))
-        {
-            scratchImage = scratchImage.Decompress(format.ToDirectXTexFormat());
-        }
-
-        return new()
-        {
-            InternalScratchImage = scratchImage
-        };
-    }
-
     public static RedImage LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer, DXGI_FORMAT.UNKNOWN);
 
-    public static RedImage LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
+    public static RedImage LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format) => LoadFromDDSMemory(buffer, (DXGI_FORMAT)format);
 
-    public static RedImage LoadFromDDSMemory(byte[] buffer, Common.DDS.DXGI_FORMAT format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
+    public static RedImage LoadFromDDSMemory(byte[] buffer, Common.DDS.DXGI_FORMAT format) => LoadFromDDSMemory(buffer, (DXGI_FORMAT)format);
 
     internal static RedImage LoadFromDDSMemory(byte[] buffer, DXGI_FORMAT format)
     {
@@ -151,14 +137,28 @@ public class RedImage : IDisposable
         };
     }
 
-    public static RedImage LoadFromTGAFile(string szFile) =>
-        new() { InternalScratchImage = TexHelper.Instance.LoadFromTGAFile(szFile) };
+    // load from files
 
-    public static RedImage LoadFromBMPFile(string szFile) =>
-        new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
+    public static RedImage LoadFromDDSFile(string szFile, Common.DDS.DXGI_FORMAT format = Common.DDS.DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
+    {
+        var scratchImage = TexHelper.Instance.LoadFromDDSFile(szFile, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
 
-    public static RedImage LoadFromJPGFile(string szFile) =>
-        new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
+        if (TexHelper.Instance.IsCompressed(metadata.Format))
+        {
+            scratchImage = scratchImage.Decompress((DXGI_FORMAT)format);
+        }
+
+        return new()
+        {
+            InternalScratchImage = scratchImage
+        };
+    }
+
+    public static RedImage LoadFromTGAFile(string szFile) => new() { InternalScratchImage = TexHelper.Instance.LoadFromTGAFile(szFile) };
+
+    public static RedImage LoadFromBMPFile(string szFile) => new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
+
+    public static RedImage LoadFromJPGFile(string szFile) => new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
 
     public static RedImage LoadFromPNGFile(string szFile)
     {
@@ -329,7 +329,7 @@ public class RedImage : IDisposable
             var result = TexHelper.Instance.Initialize2D(_metadata.Format, _metadata.Width * 4, _metadata.Height * 3, 1, 1, CP_FLAGS.NONE);
             var dest = result.GetImage(0, 0, 0);
 
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 var img = InternalScratchImage.GetImage(0, i, 0);
 
@@ -355,7 +355,7 @@ public class RedImage : IDisposable
 
         TexHelper.Instance.CopyRectangle(InternalScratchImage.GetImage(0), x, y, width, height, croppedImage.GetImage(0), TEX_FILTER_FLAGS.DEFAULT, 0, 0);
 
-        return new RedImage {InternalScratchImage = croppedImage};
+        return new RedImage { InternalScratchImage = croppedImage };
     }
 
     public void FlipV() => InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
@@ -412,34 +412,24 @@ public class RedImage : IDisposable
 
     public CBitmapTexture SaveToXBM(XbmImportArgs args)
     {
-        var settings = new RedImageTransformSettings();
-        settings.RawFormat = CommonFunctions.GetDXGIFormat3(SupportedCompressionFormats.TCM_None, args.RawFormat, args.IsGamma, null);
+        //if (args.Compression == ETextureCompression.TCM_DXTAlpha) //todo
+        //{
+        //    settings.PremultiplyAlpha = true;
+        //}
 
-        if (args.Compression != SupportedCompressionFormats.TCM_None)
+        var settings = new RedImageTransformSettings
         {
-            settings.CompressionFormat = CommonFunctions.GetDXGIFormat3(args.Compression, SupportedRawFormats.TRF_Invalid, args.IsGamma, null);
-        }
-        
-        settings.IsGamma = args.IsGamma;
-        settings.GenerateMipMaps = args.HasMipchain;
+            VFlip = args.VFlip,
+            IsGamma = args.IsGamma,
+            RawFormat = args.RawFormat,
+            Compression = args.Compression,
+            GenerateMipMaps = args.GenerateMipMaps,
+            PremultiplyAlpha = args.PremultiplyAlpha,
+            IsStreamable = args.IsStreamable
+        };
 
-        if (args.Compression == SupportedCompressionFormats.TCM_DXTAlpha)
-        {
-            settings.PremultiplyAlpha = true;
-        }
-
+        // get resource
         var (setup, blob) = GetSetupAndBlob(settings);
-
-        setup.Group = args.TextureGroup;
-        setup.RawFormat = Enum.Parse<Enums.ETextureRawFormat>(args.RawFormat.ToString());
-        setup.Compression = Enum.Parse<Enums.ETextureCompression>(args.Compression.ToString());
-        setup.IsStreamable = args.IsStreamable;
-        setup.HasMipchain = args.HasMipchain;
-        setup.IsGamma = args.IsGamma;
-        setup.PlatformMipBiasPC = args.PlatformMipBiasPC;
-        setup.PlatformMipBiasConsole = args.PlatformMipBiasConsole;
-        setup.AllowTextureDowngrade = args.AllowTextureDowngrade;
-        setup.AlphaToCoverageThreshold = args.AlphaToCoverageThreshold;
 
         return new CBitmapTexture
         {
@@ -454,7 +444,7 @@ public class RedImage : IDisposable
 
     public CTextureArray SaveToTexArray()
     {
-        var (setup, blob) = GetSetupAndBlob(new RedImageTransformSettings {GenerateMipMaps = false});
+        var (setup, blob) = GetSetupAndBlob(new RedImageTransformSettings { GenerateMipMaps = false });
 
         return new CTextureArray
         {
@@ -478,12 +468,17 @@ public class RedImage : IDisposable
 
     public class RedImageTransformSettings
     {
-        public DXGI_FORMAT RawFormat = DXGI_FORMAT.UNKNOWN;
-        public DXGI_FORMAT CompressionFormat = DXGI_FORMAT.UNKNOWN;
-        public bool IsGamma = false;
-        public bool GenerateMipMaps = false;
-        public bool PremultiplyAlpha = false;
-        public bool VFlip = true;
+        public GpuWrapApieTextureGroup TextureGroup { get; set; }
+        public bool IsGamma { get; set; }
+        public bool VFlip { get; set; }
+        public ETextureRawFormat RawFormat { get; set; }
+        public ETextureCompression Compression { get; set; }
+        public bool GenerateMipMaps { get; set; }
+        public bool PremultiplyAlpha { get; set; }
+        public bool IsStreamable { get; set; }
+
+        public bool AllowTextureDowngrade { get; } = false; // unused
+        public byte AlphaToCoverageThreshold { get; } = 0; // unused
     }
 
     private (STextureGroupSetup, rendRenderTextureBlobPC) GetSetupAndBlob(RedImageTransformSettings settings)
@@ -495,45 +490,32 @@ public class RedImage : IDisposable
         var img = InternalScratchImage;
         var metadata = _metadata;
 
-        if (settings.RawFormat != DXGI_FORMAT.UNKNOWN && settings.RawFormat != metadata.Format)
+        // gamma adjustments
+        if (settings.IsGamma && !TexHelper.Instance.IsSRGB(metadata.Format))
         {
-            if (TexHelper.Instance.IsCompressed(settings.RawFormat))
+            var srgbFormat = TexHelper.Instance.MakeSRGB(metadata.Format);
+            if (metadata.Format != srgbFormat)
             {
-                throw new ArgumentOutOfRangeException(nameof(settings.RawFormat));
-            }
+                tmpImage = true;
 
-            tmpImage = true;
-
-            img = img.Convert(settings.RawFormat, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
-            metadata = img.GetMetadata();
-        }
-        else
-        {
-            if (settings.IsGamma && !TexHelper.Instance.IsSRGB(metadata.Format))
-            {
-                var srgbFormat = TexHelper.Instance.MakeSRGB(metadata.Format);
-                if (metadata.Format != srgbFormat)
-                {
-                    tmpImage = true;
-
-                    img = img.Convert(srgbFormat, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
-                    metadata = img.GetMetadata();
-                }
-            }
-
-            if (!settings.IsGamma && TexHelper.Instance.IsSRGB(metadata.Format))
-            {
-                var linearFormat = TexHelper.Instance.MakeLinear(metadata.Format);
-                if (metadata.Format != linearFormat)
-                {
-                    tmpImage = true;
-
-                    img = img.Convert(linearFormat, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
-                    metadata = img.GetMetadata();
-                }
+                img = img.Convert(srgbFormat, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
+                metadata = img.GetMetadata();
             }
         }
 
+        if (!settings.IsGamma && TexHelper.Instance.IsSRGB(metadata.Format))
+        {
+            var linearFormat = TexHelper.Instance.MakeLinear(metadata.Format);
+            if (metadata.Format != linearFormat)
+            {
+                tmpImage = true;
+
+                img = img.Convert(linearFormat, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
+                metadata = img.GetMetadata();
+            }
+        }
+
+        // flip
         if (settings.VFlip)
         {
             tmpImage = true;
@@ -566,49 +548,52 @@ public class RedImage : IDisposable
             metadata = img.GetMetadata();
         }
 
-        var uncompressedFormat = metadata.Format;
-        if (settings.CompressionFormat != DXGI_FORMAT.UNKNOWN)
+        // compress
+        var outImageFormat = CommonFunctions.GetDXGIFormat(settings.Compression, settings.RawFormat, settings.IsGamma);
+        //if (!TexHelper.Instance.IsCompressed(outImageFormat))
+        //{
+        //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
+        //}
+        if (TexHelper.Instance.IsSRGB(metadata.Format) != TexHelper.Instance.IsSRGB((DXGI_FORMAT)outImageFormat))
         {
-            if (!TexHelper.Instance.IsCompressed(settings.CompressionFormat))
-            {
-                throw new ArgumentOutOfRangeException(nameof(settings.CompressionFormat));
-            }
-
-            if (TexHelper.Instance.IsSRGB(metadata.Format) != TexHelper.Instance.IsSRGB(settings.CompressionFormat))
-            {
-                throw new ArgumentOutOfRangeException(nameof(settings.CompressionFormat));
-            }
-
-            tmpImage = true;
-
-            if (settings.CompressionFormat is DXGI_FORMAT.BC6H_UF16
-                    or DXGI_FORMAT.BC6H_SF16
-                    or DXGI_FORMAT.BC7_UNORM
-                    or DXGI_FORMAT.BC7_UNORM_SRGB &&
-                s_device != null)
-            {
-                img = img.Compress(s_device.NativePointer, settings.CompressionFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
-            }
-            else
-            {
-                img = img.Compress(settings.CompressionFormat, TEX_COMPRESS_FLAGS.PARALLEL, 0.5F);
-            }
-
-            metadata = img.GetMetadata();
+            throw new ArgumentOutOfRangeException(nameof(outImageFormat));
         }
+
+        tmpImage = true;
+
+        if ((DXGI_FORMAT)outImageFormat is DXGI_FORMAT.BC6H_UF16 or DXGI_FORMAT.BC6H_SF16 or DXGI_FORMAT.BC7_UNORM or DXGI_FORMAT.BC7_UNORM_SRGB && s_device != null)
+        {
+            img = img.Compress(s_device.NativePointer, (DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+        }
+        else
+        {
+            img = img.Compress((DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.PARALLEL, 0.5F);
+        }
+
+        metadata = img.GetMetadata();
 
         #region STextureGroupSetup
 
         setup.HasMipchain = metadata.MipLevels > 1;
-
-        var rawFormat = CommonFunctions.GetRedTextureFromDXGI(uncompressedFormat);
-        setup.RawFormat = rawFormat;
+        setup.Compression = settings.Compression;
+        //if (TexHelper.Instance.IsCompressed(metadata.Format))
+        //{
+        //    setup.Compression = CommonFunctions.GetRedCompressionFromDXGI(metadata.Format, settings.PremultiplyAlpha);
+        //}
+        setup.RawFormat = settings.RawFormat;
         setup.IsGamma = TexHelper.Instance.IsSRGB(metadata.Format);
 
-        if (TexHelper.Instance.IsCompressed(metadata.Format))
-        {
-            setup.Compression = CommonFunctions.GetRedCompressionFromDXGI(metadata.Format, settings.PremultiplyAlpha);
-        }
+        var mipBiasMaxUnclamped = metadata.MipLevels - 3;
+        var mipBiasMax = Math.Max(0, mipBiasMaxUnclamped);
+        setup.PlatformMipBiasPC = (byte)mipBiasMax;
+        setup.PlatformMipBiasConsole = (byte)mipBiasMax;
+
+        setup.AllowTextureDowngrade = settings.AllowTextureDowngrade;
+        setup.AlphaToCoverageThreshold = settings.AlphaToCoverageThreshold;
+
+        setup.Group = settings.TextureGroup;
+        setup.IsStreamable = settings.IsStreamable;
+
 
         #endregion STextureGroupSetup
 
@@ -649,7 +634,7 @@ public class RedImage : IDisposable
             for (var j = 0; j < metadata.MipLevels; j++)
             {
                 var tmpImg = img.GetImage(j, i, 0);
-                
+
                 if (i == 0)
                 {
                     // TODO: Some mipMaps have a different SlicePitch in the original xbm
@@ -677,6 +662,7 @@ public class RedImage : IDisposable
 
         #endregion rendRenderTextureBlobPC
 
+        // save
         using var ms = img.SaveToDDSMemory(DDS_FLAGS.FORCE_DX10_EXT);
 
         var buffer = new byte[ms.Length];
@@ -700,7 +686,6 @@ public class RedImage : IDisposable
         {
             img.Dispose();
         }
-
         return (setup, blob);
     }
 
@@ -787,7 +772,7 @@ public class RedImage : IDisposable
         return Create(new STextureGroupSetup(), blob);
     }
 
-    
+
 
     public static RedImage FromWICBuffer(byte[] buffer)
     {
@@ -858,8 +843,8 @@ public class RedImage : IDisposable
         {
             result._compressionFormat = metadata.Format;
 
-            var textureFormat = CommonFunctions.GetDXGIFormat2(Enums.ETextureCompression.TCM_None, info.RawFormat, info.IsGamma, null);
-            result.InternalScratchImage = result.InternalScratchImage.Decompress(textureFormat);
+            var textureFormat = CommonFunctions.GetDXGIFormat(Enums.ETextureCompression.TCM_None, info.RawFormat, info.IsGamma);
+            result.InternalScratchImage = result.InternalScratchImage.Decompress((DXGI_FORMAT)textureFormat);
         }
 
         if (result.Metadata.MipLevels > 1)
@@ -897,7 +882,7 @@ public class RedImage : IDisposable
             {
                 InternalScratchImage.Dispose();
             }
-            
+
             _disposed = true;
         }
     }

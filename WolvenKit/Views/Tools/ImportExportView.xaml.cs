@@ -27,7 +27,7 @@ namespace WolvenKit.Views.Tools
         private PropertyItem _propertyItem;
         private readonly IProjectManager projectManager;
         private readonly Red4ParserService parser;
-        private ISettingsManager _settingsManager;
+        private readonly ISettingsManager _settingsManager;
 
         /// <summary>
         /// Constructor I/E Tool.
@@ -289,7 +289,7 @@ namespace WolvenKit.Views.Tools
 
                 if (!_settingsManager.ShowAdvancedOptions)
                 {
-                    if (e.Category is "Image Import Settings" or "XBM Import Settings")
+                    if (e.Category is "Image Import Settings")
                     {
                         e.Cancel = true;
                         return;

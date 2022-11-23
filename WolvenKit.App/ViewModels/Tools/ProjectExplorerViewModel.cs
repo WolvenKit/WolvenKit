@@ -248,7 +248,7 @@ namespace WolvenKit.ViewModels.Tools
             }
             else
             {
-                await _gameController.GetController().AddFileToModModal(SelectedItem.Hash);
+                _gameController.GetController().AddToMod(SelectedItem.Hash);
             }
         }
 

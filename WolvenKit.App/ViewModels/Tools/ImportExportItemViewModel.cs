@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using DynamicData.Binding;
+using HelixToolkit.SharpDX.Core.Model;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -12,6 +13,8 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.ProjectManagement.Project;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -20,12 +23,6 @@ namespace WolvenKit.ViewModels.Tools
     /// </summary>
     public abstract class ImportExportItemViewModel : ReactiveObject, ISelectableViewModel
     {
-        public ImportExportItemViewModel()
-        {
-
-        }
-
-
         /// <summary>
         /// BaseFile "FileModel"
         /// </summary>
@@ -99,24 +96,57 @@ namespace WolvenKit.ViewModels.Tools
         {
             _ = Enum.TryParse(model.GetExtension(), out ERawFileFormat rawFileFormat);
 
+            // get texturegroup from filename
+            var xbmArgs = new XbmImportArgs();
+            if (IsRawTexture(rawFileFormat))
+            {
+                // load and, if needed, decompress file
+                var image = rawFileFormat switch
+                {
+                    ERawFileFormat.dds => RedImage.LoadFromDDSFile(model.FullName),
+                    ERawFileFormat.tga => RedImage.LoadFromTGAFile(model.FullName),
+                    ERawFileFormat.bmp => RedImage.LoadFromBMPFile(model.FullName),
+                    ERawFileFormat.jpg => RedImage.LoadFromJPGFile(model.FullName),
+                    ERawFileFormat.png => RedImage.LoadFromPNGFile(model.FullName),
+                    ERawFileFormat.tiff => RedImage.LoadFromTIFFFile(model.FullName),
+                    _ => throw new ArgumentOutOfRangeException(),
+                };
+
+                var texGroup = CommonFunctions.GetTextureGroupFromFileName(Path.GetFileName(FullName));
+
+                // get settings from texgroup
+                xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
+                // get the format again, cos CDPR
+                var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
+                xbmArgs.RawFormat = rawFormat;
+                xbmArgs.Compression = compression;   // todo if this is already set use the previous one
+            }
+
             return rawFileFormat switch
             {
-                ERawFileFormat.tga => new XbmImportArgs(),
-                ERawFileFormat.dds => new XbmImportArgs(),
-                ERawFileFormat.fbx => new CommonImportArgs(),
+                ERawFileFormat.tga => xbmArgs,
+                ERawFileFormat.bmp => xbmArgs,
+                ERawFileFormat.jpg => xbmArgs,
+                ERawFileFormat.png => xbmArgs,
+                ERawFileFormat.tiff => xbmArgs,
+                ERawFileFormat.dds => xbmArgs,
+
                 ERawFileFormat.glb => new GltfImportArgs(),
                 ERawFileFormat.gltf => new GltfImportArgs(),
+
                 ERawFileFormat.ttf => new FntImportArgs(),
                 ERawFileFormat.wav => new OpusImportArgs(),
-                ERawFileFormat.bmp => new XbmImportArgs(),
-                ERawFileFormat.jpg => new XbmImportArgs(),
-                ERawFileFormat.png => new XbmImportArgs(),
-                ERawFileFormat.tiff => new XbmImportArgs(),
                 ERawFileFormat.masklist => new MlmaskImportArgs(),
                 ERawFileFormat.re => new ReImportArgs(),
+
+                ERawFileFormat.fbx => new CommonImportArgs(),
                 _ => new CommonImportArgs()
             };
         }
+
+
+
+        private static bool IsRawTexture(ERawFileFormat fmt) => fmt is ERawFileFormat.tga or ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.dds or ERawFileFormat.tiff;
     }
 
     public class ExportableItemViewModel : ImportExportItemViewModel

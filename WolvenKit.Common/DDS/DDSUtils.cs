@@ -14,10 +14,6 @@ namespace WolvenKit.Common.DDS
 
         #endregion Fields
 
-        // "DDS "
-
-        // constants
-
         #region DDS_HEADER
 
         // dwCaps2
@@ -169,107 +165,6 @@ namespace WolvenKit.Common.DDS
             wdp
         }
 
-        public static void Convert(byte[] inBuffer, ConvertableFileTypes inType, out byte[] outBuffer, ConvertableFileTypes outType)
-        {
-            Convert(inBuffer, inType, out outBuffer, outType, DirectXTexNet.DXGI_FORMAT.UNKNOWN);
-        }
-
-        public static void Convert(byte[] inBuffer, ConvertableFileTypes inType, out byte[] outBuffer, ConvertableFileTypes outType, Enums.ETextureRawFormat decompressedFormat, bool isGamma)
-        {
-            var targetFormat = decompressedFormat switch
-            {
-                Enums.ETextureRawFormat.TRF_Invalid => DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM,
-                Enums.ETextureRawFormat.TRF_TrueColor => isGamma ? DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM,
-                Enums.ETextureRawFormat.TRF_DeepColor => DirectXTexNet.DXGI_FORMAT.R16G16B16A16_UNORM, // seems wrong
-                Enums.ETextureRawFormat.TRF_Grayscale => DirectXTexNet.DXGI_FORMAT.R8_UINT,
-                Enums.ETextureRawFormat.TRF_HDRFloat => DirectXTexNet.DXGI_FORMAT.R32G32B32A32_FLOAT,
-                Enums.ETextureRawFormat.TRF_HDRHalf => DirectXTexNet.DXGI_FORMAT.R16G16B16A16_FLOAT,
-                Enums.ETextureRawFormat.TRF_HDRFloatGrayscale => DirectXTexNet.DXGI_FORMAT.R16_FLOAT,
-                Enums.ETextureRawFormat.TRF_R8G8 => DirectXTexNet.DXGI_FORMAT.R8G8_UNORM,
-                Enums.ETextureRawFormat.TRF_AlphaGrayscale => DirectXTexNet.DXGI_FORMAT.A8_UNORM,
-                _ => throw new NotSupportedException()
-            };
-
-            Convert(inBuffer, inType, out outBuffer, outType, targetFormat);
-        }
-
-        private static unsafe void Convert(byte[] inBuffer, ConvertableFileTypes inType, out byte[] outBuffer, ConvertableFileTypes outType, DirectXTexNet.DXGI_FORMAT decompressedFormat)
-        {
-            fixed (byte* pIn = inBuffer)
-            {
-                ScratchImage image;
-                TexMetadata metadata = null;
-
-                switch (inType)
-                {
-                    case ConvertableFileTypes.dds:
-                        image = TexHelper.Instance.LoadFromDDSMemory((IntPtr)pIn, inBuffer.Length, DDS_FLAGS.NONE, out metadata);
-                        if (TexHelper.Instance.IsCompressed(metadata.Format))
-                        {
-                            image = image.Decompress(decompressedFormat);
-                            metadata = image.GetMetadata();
-                        }
-                        break;
-                    case ConvertableFileTypes.tga:
-                        image = TexHelper.Instance.LoadFromTGAMemory((IntPtr)pIn, inBuffer.Length);
-                        break;
-                    case ConvertableFileTypes.bmp:
-                    case ConvertableFileTypes.png:
-                    case ConvertableFileTypes.tif:
-                    case ConvertableFileTypes.wdp:
-                        image = TexHelper.Instance.LoadFromWICMemory((IntPtr)pIn, inBuffer.Length, WIC_FLAGS.NONE);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(inType), inType, null);
-                }
-
-                UnmanagedMemoryStream outStream;
-                switch (outType)
-                {
-                    case ConvertableFileTypes.dds:
-                        outStream = image.SaveToDDSMemory(DDS_FLAGS.NONE);
-                        break;
-                    case ConvertableFileTypes.tga:
-                        if (metadata != null)
-                        {
-                            if (TexHelper.Instance.IsSRGB(metadata.Format))
-                            {
-                                if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB)
-                                {
-                                    image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
-                                }
-                            }
-                            else
-                            {
-                                if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM)
-                                {
-                                    image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
-                                }
-                            }
-                        }
-                        outStream = image.SaveToTGAMemory(0);
-                        break;
-                    case ConvertableFileTypes.bmp:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.BMP));
-                        break;
-                    case ConvertableFileTypes.png:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.FORCE_SRGB, TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
-                        break;
-                    case ConvertableFileTypes.tif:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.TIFF));
-                        break;
-                    case ConvertableFileTypes.wdp:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.WMP));
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(outType), outType, null);
-                }
-
-                outBuffer = new byte[outStream.Length];
-                outStream.Read(outBuffer, 0, outBuffer.Length);
-            }
-        }
-
         #endregion
 
         #region Writing
@@ -357,7 +252,7 @@ namespace WolvenKit.Common.DDS
                     Enums.ETextureRawFormat.TRF_HDRHalf => DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT,
                     Enums.ETextureRawFormat.TRF_HDRFloatGrayscale => DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT,
                     Enums.ETextureRawFormat.TRF_R8G8 => DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM,
-                    Enums.ETextureRawFormat.TRF_AlphaGrayscale => DXGI_FORMAT.DXGI_FORMAT_A8_UNORM,
+                    Enums.ETextureRawFormat.TRF_Grayscale_Font => DXGI_FORMAT.DXGI_FORMAT_A8_UNORM,
                     _ => throw new ArgumentOutOfRangeException()
                 },
                 Enums.ETextureCompression.TCM_DXTNoAlpha => info.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
@@ -382,7 +277,7 @@ namespace WolvenKit.Common.DDS
 
             switch (info.TextureType)
             {
-                
+
                 case Enums.GpuWrapApieTextureType.TEXTYPE_2D:
                     dx10Header.resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D;
                     break;
