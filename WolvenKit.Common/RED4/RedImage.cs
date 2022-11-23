@@ -118,9 +118,9 @@ public class RedImage : IDisposable
 
     public static RedImage LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer, DXGI_FORMAT.UNKNOWN);
 
-    public static RedImage LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
+    public static RedImage LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format) => LoadFromDDSMemory(buffer, (DXGI_FORMAT)format);
 
-    public static RedImage LoadFromDDSMemory(byte[] buffer, Common.DDS.DXGI_FORMAT format) => LoadFromDDSMemory(buffer, format.ToDirectXTexFormat());
+    public static RedImage LoadFromDDSMemory(byte[] buffer, Common.DDS.DXGI_FORMAT format) => LoadFromDDSMemory(buffer, (DXGI_FORMAT)format);
 
     internal static RedImage LoadFromDDSMemory(byte[] buffer, DXGI_FORMAT format)
     {
@@ -145,7 +145,7 @@ public class RedImage : IDisposable
 
         if (TexHelper.Instance.IsCompressed(metadata.Format))
         {
-            scratchImage = scratchImage.Decompress(format.ToDirectXTexFormat());
+            scratchImage = scratchImage.Decompress((DXGI_FORMAT)format);
         }
 
         return new()
@@ -412,49 +412,21 @@ public class RedImage : IDisposable
 
     public CBitmapTexture SaveToXBM(XbmImportArgs args)
     {
-        // get settings from texgroup
-        var settings = CommonFunctions.TextureSetupFromTextureGroup(args.TextureGroup);
-        // get the format again, cos CDPR
-        var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(_metadata.Format);
-        settings.RawFormat = rawFormat;
-        settings.Compression = compression;   // todo if this is already set use the previous one
-
         //if (args.Compression == ETextureCompression.TCM_DXTAlpha) //todo
         //{
         //    settings.PremultiplyAlpha = true;
         //}
 
-        if (args.VFlip is not null)
+        var settings = new RedImageTransformSettings
         {
-            settings.VFlip = (bool)args.VFlip;
-        }
-
-
-        // overwrite from args if they are set
-        if (args.IsGamma is not null)
-        {
-            settings.IsGamma = (bool)args.IsGamma;
-        }
-
-        if (args.RawFormat is not null)
-        {
-            settings.RawFormat = (ETextureRawFormat)args.RawFormat;
-        }
-
-        if (args.Compression is not null)
-        {
-            settings.Compression = (ETextureCompression)args.Compression;
-        }
-
-        if (args.GenerateMipMaps is not null)
-        {
-            settings.GenerateMipMaps = (bool)args.GenerateMipMaps;
-        }
-
-        if (args.PremultiplyAlpha is not null)
-        {
-            settings.PremultiplyAlpha = (bool)args.PremultiplyAlpha;
-        }
+            VFlip = args.VFlip,
+            IsGamma = args.IsGamma,
+            RawFormat = args.RawFormat,
+            Compression = args.Compression,
+            GenerateMipMaps = args.GenerateMipMaps,
+            PremultiplyAlpha = args.PremultiplyAlpha,
+            IsStreamable = args.IsStreamable
+        };
 
         // get resource
         var (setup, blob) = GetSetupAndBlob(settings);
@@ -496,15 +468,15 @@ public class RedImage : IDisposable
 
     public class RedImageTransformSettings
     {
-        public GpuWrapApieTextureGroup TextureGroup { get; internal set; }
-        public bool IsGamma { get; internal set; }
-        public bool VFlip { get; internal set; }
-        public ETextureRawFormat RawFormat { get; internal set; }
-        public ETextureCompression Compression { get; internal set; }
-        public bool GenerateMipMaps { get; internal set; }
-        public bool PremultiplyAlpha { get; internal set; }
+        public GpuWrapApieTextureGroup TextureGroup { get; set; }
+        public bool IsGamma { get; set; }
+        public bool VFlip { get; set; }
+        public ETextureRawFormat RawFormat { get; set; }
+        public ETextureCompression Compression { get; set; }
+        public bool GenerateMipMaps { get; set; }
+        public bool PremultiplyAlpha { get; set; }
+        public bool IsStreamable { get; set; }
 
-        public bool IsStreamable { get; internal set; }
         public bool AllowTextureDowngrade { get; } = false; // unused
         public byte AlphaToCoverageThreshold { get; } = 0; // unused
     }
@@ -582,20 +554,20 @@ public class RedImage : IDisposable
         //{
         //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
         //}
-        if (TexHelper.Instance.IsSRGB(metadata.Format) != TexHelper.Instance.IsSRGB(outImageFormat))
+        if (TexHelper.Instance.IsSRGB(metadata.Format) != TexHelper.Instance.IsSRGB((DXGI_FORMAT)outImageFormat))
         {
             throw new ArgumentOutOfRangeException(nameof(outImageFormat));
         }
 
         tmpImage = true;
 
-        if (outImageFormat is DXGI_FORMAT.BC6H_UF16 or DXGI_FORMAT.BC6H_SF16 or DXGI_FORMAT.BC7_UNORM or DXGI_FORMAT.BC7_UNORM_SRGB && s_device != null)
+        if ((DXGI_FORMAT)outImageFormat is DXGI_FORMAT.BC6H_UF16 or DXGI_FORMAT.BC6H_SF16 or DXGI_FORMAT.BC7_UNORM or DXGI_FORMAT.BC7_UNORM_SRGB && s_device != null)
         {
-            img = img.Compress(s_device.NativePointer, outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+            img = img.Compress(s_device.NativePointer, (DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
         }
         else
         {
-            img = img.Compress(outImageFormat, TEX_COMPRESS_FLAGS.PARALLEL, 0.5F);
+            img = img.Compress((DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.PARALLEL, 0.5F);
         }
 
         metadata = img.GetMetadata();
@@ -872,7 +844,7 @@ public class RedImage : IDisposable
             result._compressionFormat = metadata.Format;
 
             var textureFormat = CommonFunctions.GetDXGIFormat(Enums.ETextureCompression.TCM_None, info.RawFormat, info.IsGamma);
-            result.InternalScratchImage = result.InternalScratchImage.Decompress(textureFormat);
+            result.InternalScratchImage = result.InternalScratchImage.Decompress((DXGI_FORMAT)textureFormat);
         }
 
         if (result.Metadata.MipLevels > 1)

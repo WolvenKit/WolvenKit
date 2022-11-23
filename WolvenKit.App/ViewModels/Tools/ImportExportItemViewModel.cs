@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using DynamicData.Binding;
+using HelixToolkit.SharpDX.Core.Model;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -12,6 +13,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.ProjectManagement.Project;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Tools
@@ -95,20 +97,39 @@ namespace WolvenKit.ViewModels.Tools
             _ = Enum.TryParse(model.GetExtension(), out ERawFileFormat rawFileFormat);
 
             // get texturegroup from filename
-            var texGroup = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
+            var xbmArgs = new XbmImportArgs();
             if (IsRawTexture(rawFileFormat))
             {
-                texGroup = GetTextureGroupFromFileName(Path.GetFileName(FullName));
+                // load and, if needed, decompress file
+                var image = rawFileFormat switch
+                {
+                    ERawFileFormat.dds => RedImage.LoadFromDDSFile(model.FullName),
+                    ERawFileFormat.tga => RedImage.LoadFromTGAFile(model.FullName),
+                    ERawFileFormat.bmp => RedImage.LoadFromBMPFile(model.FullName),
+                    ERawFileFormat.jpg => RedImage.LoadFromJPGFile(model.FullName),
+                    ERawFileFormat.png => RedImage.LoadFromPNGFile(model.FullName),
+                    ERawFileFormat.tiff => RedImage.LoadFromTIFFFile(model.FullName),
+                    _ => throw new ArgumentOutOfRangeException(),
+                };
+
+                var texGroup = CommonFunctions.GetTextureGroupFromFileName(Path.GetFileName(FullName));
+
+                // get settings from texgroup
+                xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
+                // get the format again, cos CDPR
+                var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
+                xbmArgs.RawFormat = rawFormat;
+                xbmArgs.Compression = compression;   // todo if this is already set use the previous one
             }
 
             return rawFileFormat switch
             {
-                ERawFileFormat.tga => new XbmImportArgs() { TextureGroup = texGroup },
-                ERawFileFormat.bmp => new XbmImportArgs() { TextureGroup = texGroup },
-                ERawFileFormat.jpg => new XbmImportArgs() { TextureGroup = texGroup },
-                ERawFileFormat.png => new XbmImportArgs() { TextureGroup = texGroup },
-                ERawFileFormat.tiff => new XbmImportArgs() { TextureGroup = texGroup },
-                ERawFileFormat.dds => new XbmImportArgs() { TextureGroup = texGroup },
+                ERawFileFormat.tga => xbmArgs,
+                ERawFileFormat.bmp => xbmArgs,
+                ERawFileFormat.jpg => xbmArgs,
+                ERawFileFormat.png => xbmArgs,
+                ERawFileFormat.tiff => xbmArgs,
+                ERawFileFormat.dds => xbmArgs,
 
                 ERawFileFormat.glb => new GltfImportArgs(),
                 ERawFileFormat.gltf => new GltfImportArgs(),
@@ -123,48 +144,7 @@ namespace WolvenKit.ViewModels.Tools
             };
         }
 
-        private static Enums.GpuWrapApieTextureGroup GetTextureGroupFromFileName(string fileName)
-        {
-            Enums.GpuWrapApieTextureGroup ret;
-            if (fileName.EndsWith("_n"))
-            {
-                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Normal;
-            }
-            else if (fileName.EndsWith("_rm"))
-            {
-                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
-            }
-            else if (fileName.EndsWith("_r"))
-            {
-                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Grayscale;
-            }
-            else if (fileName.EndsWith("_m"))
-            {
-                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Grayscale;
-            }
-            else if (fileName.EndsWith("_b"))
-            {
-                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
-            }
-            else if (fileName.EndsWith("nm"))
-            {
-                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Normal;
-            }
-            else if (fileName.EndsWith("_data"))
-            {
-                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Data;
-            }
-            else if (fileName.EndsWith("_lut"))
-            {
-                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_LUT;
-            }
-            else
-            {
-                ret = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
-            }
 
-            return ret;
-        }
 
         private static bool IsRawTexture(ERawFileFormat fmt) => fmt is ERawFileFormat.tga or ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.dds or ERawFileFormat.tiff;
     }

@@ -390,6 +390,7 @@ namespace WolvenKit.ViewModels.Tools
                 EUncookExtension.tiff => RedImage.LoadFromTIFFFile(fileName),
                 _ => throw new ArgumentOutOfRangeException(nameof(ext), ext, null),
             };
+
             if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
             {
                 return;
@@ -401,7 +402,6 @@ namespace WolvenKit.ViewModels.Tools
             bitmapImage.EndInit();
 
             LoadedBitmapFrame = bitmapImage;
-
             IsImagePreviewVisible = true;
             SelectedIndex = 3;
         }

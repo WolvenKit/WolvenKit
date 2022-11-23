@@ -56,26 +56,32 @@ namespace WolvenKit.Common.Model.Arguments
 
         [Category("General Import Settings")]
         [Description("If true, the file will be handled as a SRGB file")]
-        public bool? IsGamma { get; set; } = false;
+        public bool IsGamma { get; set; } = false;
 
         [Category("General Import Settings")]
         [Description("Vertical Flip")]
-        public bool? VFlip { get; set; } = false;
+        public bool VFlip { get; set; } = true;
 
 
-        [Category("Image Import Settings")]
-        public ETextureRawFormat? RawFormat { get; set; } = ETextureRawFormat.TRF_TrueColor;
 
         [Category("Image Import Settings")]
-        public ETextureCompression? Compression { get; set; }
+        public ETextureRawFormat RawFormat { get; set; } = ETextureRawFormat.TRF_TrueColor;
+
+        [Category("Image Import Settings")]
+        public ETextureCompression Compression { get; set; }
 
         [Category("Image Import Settings")]
         [Description("If true, mipMaps will be generated")]
-        public bool? GenerateMipMaps { get; set; } = true;
+        public bool GenerateMipMaps { get; set; } = true;
+
+        [Category("Image Import Settings")]
+        public bool IsStreamable { get; set; } = true;
+
+
 
         [Category("Image Import Settings")]
         [Description("PremultiplyAlpha")]
-        public bool? PremultiplyAlpha { get; set; } = true;
+        public bool PremultiplyAlpha { get; set; } = true;
 
         public XbmImportArgs()
         {
