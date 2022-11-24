@@ -519,7 +519,7 @@ namespace WolvenKit.Functionality.Controllers
         }
         private static bool PackArchiveXlFiles(Cp77Project cp77Proj, LaunchProfile options)
         {
-            var archiveXlFiles = Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.archive.xl", SearchOption.AllDirectories);
+            var archiveXlFiles = Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories);
             foreach (var f in archiveXlFiles)
             {
                 var outDirectory = cp77Proj.GetPackedArchiveDirectory(options.IsRedmod);
