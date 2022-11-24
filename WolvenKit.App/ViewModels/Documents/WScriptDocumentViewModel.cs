@@ -27,7 +27,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     public WScriptDocumentViewModel(string path) : base(path)
     {
         Document = new TextDocument();
-        Extension = "wsc";
+        Extension = "wscript";
 
         _loggerService = Locator.Current.GetService<ILoggerService>();
         _scriptService = Locator.Current.GetService<ExtendedScriptService>();
