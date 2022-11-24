@@ -7,6 +7,7 @@
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:local="clr-namespace:WolvenKit.Views.Documents"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nodify="https://miroiu.github.io/nodify"
     xmlns:reactiveUi="http://reactiveui.net"
@@ -45,6 +46,51 @@
             PendingConnection="{Binding PendingConnection}"
             SelectedItems="{Binding SelectedNodes}"
             ViewportLocation="{Binding Location}">
+            <editors:AutomaticNodifyEditor.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{x:Static nodify:EditorCommands.ZoomIn}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="MagnifyPlusOutline" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{x:Static nodify:EditorCommands.ZoomOut}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="MagnifyMinusOutline" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Command="SelectAll">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="SelectAll" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{x:Static nodify:EditorCommands.FitToScreen}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="FitToScreen" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </editors:AutomaticNodifyEditor.ContextMenu>
             <editors:AutomaticNodifyEditor.ConnectionTemplate>
                 <DataTemplate>
                     <nodify:Connection
@@ -226,6 +272,86 @@
                         </Setter.Value>
                     </Setter>
                     <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitYellow}" />
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Header="_Alignment">
+                                    <MenuItem Header="_Top"
+                                              Command="{x:Static nodify:EditorCommands.Align}"
+                                              CommandParameter="Top">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconMaterial
+                                                Width="13"
+                                                Height="13"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Stretch"
+                                                Kind="AlignVerticalTop" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="_Left"
+                                              Command="{x:Static nodify:EditorCommands.Align}"
+                                              CommandParameter="Left">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconMaterial
+                                                Width="13"
+                                                Height="13"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Stretch"
+                                                Kind="AlignHorizontalLeft" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="_Bottom"
+                                              Command="{x:Static nodify:EditorCommands.Align}"
+                                              CommandParameter="Bottom">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconMaterial
+                                                Width="13"
+                                                Height="13"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Stretch"
+                                                Kind="AlignVerticalBottom" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="_Right"
+                                              Command="{x:Static nodify:EditorCommands.Align}"
+                                              CommandParameter="Right">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconMaterial
+                                                Width="13"
+                                                Height="13"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Stretch"
+                                                Kind="AlignHorizontalRight" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="_Middle"
+                                              Command="{x:Static nodify:EditorCommands.Align}"
+                                              CommandParameter="Middle">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconMaterial
+                                                Width="13"
+                                                Height="13"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Stretch"
+                                                Kind="AlignVerticalCenter" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="_Center"
+                                              Command="{x:Static nodify:EditorCommands.Align}"
+                                              CommandParameter="Center">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconMaterial
+                                                Width="13"
+                                                Height="13"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Stretch"
+                                                Kind="AlignHorizontalCenter" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuItem>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </editors:AutomaticNodifyEditor.ItemContainerStyle>
         </editors:AutomaticNodifyEditor>
