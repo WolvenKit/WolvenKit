@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using ReactiveUI;
-using WinCopies.Collections.DotNetFix;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.Types;
 

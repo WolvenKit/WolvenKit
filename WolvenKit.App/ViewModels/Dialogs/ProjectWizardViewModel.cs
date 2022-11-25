@@ -2,9 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using Prism.Commands;
+using System.Windows.Forms;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.ViewModels.Dialogs;
@@ -89,21 +87,19 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private void ExecuteOpenProjectPath()
         {
-            var dlg = new CommonOpenFileDialog
+            var dlg = new FolderBrowserDialog
             {
-                AllowNonFileSystemItems = false,
-                Multiselect = false,
-                IsFolderPicker = true,
-                Title = "Select the folder to create the project in"
+                AutoUpgradeEnabled = true,
+                UseDescriptionForTitle = true,
+                Description = "Select the folder to create the project in"
             };
-            //dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
 
-            if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+            if (dlg.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
 
-            var result = dlg.FileName;
+            var result = dlg.SelectedPath;
             if (string.IsNullOrEmpty(result))
             {
                 return;

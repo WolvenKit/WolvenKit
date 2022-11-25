@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -13,6 +13,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Dialogs;
+using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
 namespace WolvenKit.App.ViewModels.Dialogs
 {
@@ -111,17 +112,14 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private void ExecuteOpenCP77GamePath()
         {
-            var dlg = new CommonOpenFileDialog
+            var dlg = new OpenFileDialog
             {
-                AllowNonFileSystemItems = false,
                 Multiselect = false,
-                IsFolderPicker = false,
-                Title = "Select Cyberpunk 2077 executable."
+                Title = "Select Cyberpunk 2077 executable.",
+                Filter = "Cyberpunk2077.exe|*.exe"
             };
 
-            dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk2077.exe", "*.exe"));
-
-            if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+            if (dlg.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
@@ -137,20 +135,19 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private void ExecuteOpenDepotPath()
         {
-            var dlg = new CommonOpenFileDialog
+            var dlg = new FolderBrowserDialog
             {
-                AllowNonFileSystemItems = false,
-                Multiselect = false,
-                IsFolderPicker = true,
-                Title = "Select Material Depot folder"
+                AutoUpgradeEnabled = true,
+                UseDescriptionForTitle = true,
+                Description = "Select Material Depot folder"
             };
 
-            if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+            if (dlg.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
 
-            var result = dlg.FileName;
+            var result = dlg.SelectedPath;
             if (string.IsNullOrEmpty(result))
             {
                 return;

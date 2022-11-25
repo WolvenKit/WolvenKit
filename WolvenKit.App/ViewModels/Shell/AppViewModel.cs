@@ -12,9 +12,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
-using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -48,6 +47,7 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Tools;
+using MessageBox = System.Windows.MessageBox;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
@@ -510,16 +510,14 @@ namespace WolvenKit.ViewModels.Shell
                     // open an existing project
                     else
                     {
-                        CommonOpenFileDialog dlg = new()
+                        var dlg = new OpenFileDialog
                         {
-                            AllowNonFileSystemItems = false,
                             Multiselect = false,
-                            IsFolderPicker = false,
-                            Title = "Locate the WolvenKit project"
+                            Title = "Locate the WolvenKit project",
+                            Filter = "Cyberpunk 2077 Project (*.cpmodproj)|*.cpmodproj"
                         };
-                        dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
 
-                        if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+                        if (dlg.ShowDialog() != DialogResult.OK)
                         {
                             return Unit.Default;
                         }
@@ -858,7 +856,7 @@ namespace WolvenKit.ViewModels.Shell
             if (model == null)
             {
                 OpenFileDialog dlg = new();
-                if (dlg.ShowDialog().GetValueOrDefault())
+                if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     //model = new FileViewModel(new FileModel(new FileInfo(dlg.FileName)));
                     //TODO
@@ -1338,7 +1336,7 @@ namespace WolvenKit.ViewModels.Shell
                     dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
                 }
                 _watcherService.IsSuspended = true;
-                if (dlg.ShowDialog().GetValueOrDefault())
+                if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     fileToSave.FilePath = dlg.FileName;
                     ActiveDocument.SaveCommand.SafeExecute();
