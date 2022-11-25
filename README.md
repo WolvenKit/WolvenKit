@@ -38,12 +38,12 @@ It's completely open source, licensed under the <a href="https://github.com/Wolv
   
 ## Installation
 
-### Prerequisite: .NET 6.0 Runtime
+### Prerequisite: .NET Runtime
 
-We recommend always using the latest .NET 6.0 runtime, unless otherwise specified. 
+We recommend always using the latest .NET 7.0 runtime, unless otherwise specified. 
 
-1. Go to [Microsoft's .NET 6.0 download page](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
-2. Find the ".NET Desktop Runtime 6.0.x" section and download the installer for your architecture (x64/x86/Arm64)
+1. Go to [Microsoft's .NET download page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
+2. Find the ".NET Desktop Runtime 7.0.x" section and download the installer for your architecture (x64)
 3. Run the downloaded installer
 
 ### WolvenKit

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <VersionPrefix>1.61.0</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Platforms>x64</Platforms>
@@ -10,6 +10,10 @@
     <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<NoWarn>CS8981</NoWarn>
+	</PropertyGroup>
+	
     <PropertyGroup>
         <PackageId>WolvenKit.RED4.Types</PackageId>
         <Product>WolvenKit.RED4.Types</Product>
