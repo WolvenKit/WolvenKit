@@ -2,14 +2,13 @@
     x:Class="WolvenKit.Views.Tools.ImportExportView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:I="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:layout="clr-namespace:WolvenKit.Layout"
     xmlns:local="clr-namespace:WolvenKit"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
@@ -150,11 +149,11 @@
                         <TextBlock Margin="1" Text="Load Settings" />
                     </Button>
                     <mah:ToggleSwitch
+                        Command="{Binding ToggleAdvancedOptionsCommand}"
                         IsOn="{Binding ShowAdvancedOptions}"
                         OffContent="Show Advanced Options"
                         OnContent="Hide Advanced Options"
-                        ToolTip="Toggle Advanced Import/Export Options"
-                        Command="{Binding ToggleAdvancedOptionsCommand}" />
+                        ToolTip="Toggle Advanced Import/Export Options" />
                 </StackPanel>
 
                 <syncfusion:SfDataGrid
