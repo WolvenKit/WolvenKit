@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:object="clr-namespace:Microsoft.WindowsAPICodePack.PortableDevices.CommandSystem.Object;assembly=WinCopies.WindowsAPICodePack.COMNative"
     xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types"
     d:DesignHeight="100"
     d:DesignWidth="400"
