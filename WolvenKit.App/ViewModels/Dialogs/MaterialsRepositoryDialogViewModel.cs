@@ -14,7 +14,6 @@ using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WinCopies.Util;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
