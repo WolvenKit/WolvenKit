@@ -58,7 +58,7 @@ namespace WolvenKit.Modkit.RED4
 
             var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig, mergeMeshes);
 
-            ParseMaterials(cr2w, meshStream, outfile, archives, matRepo, eUncookExtension);
+            ParseMaterials(cr2w, meshStream, outfile, archives, matRepo, meshesinfo, eUncookExtension);
 
             if (isGLBinary)
             {
@@ -277,7 +277,7 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, List<ICyberGameArchive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, List<ICyberGameArchive> archives, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             var primaryDependencies = new List<string>();
 
@@ -331,13 +331,14 @@ namespace WolvenKit.Modkit.RED4
                     matTemplates.Add(rawMat);
                 }
             }
-
+            
             var matData = new MatData
             {
                 MaterialRepo = matRepo,
                 Materials = RawMaterials,
                 TexturesList = TexturesList,
-                MaterialTemplates = matTemplates
+                MaterialTemplates = matTemplates,
+                Appearances = info.appearances
             };
 
             var str = RedJsonSerializer.Serialize(matData);
