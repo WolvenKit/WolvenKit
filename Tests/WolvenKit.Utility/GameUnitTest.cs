@@ -85,7 +85,7 @@ namespace WolvenKit.Utility
             s_config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
-            s_writeToFile = bool.Parse(s_config.GetSection(s_writeToFileSetting).Value);
+            s_writeToFile = bool.Parse(s_config.GetSection(s_writeToFileSetting).Value!);
 
             // overrides hardcoded appsettings.json
             var cp77Dir = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
