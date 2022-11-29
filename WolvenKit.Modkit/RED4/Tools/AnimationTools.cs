@@ -14,11 +14,13 @@ using System.Text;
 using SharpGLTF.Validation;
 using WolvenKit.RED4.Archive;
 using System.Data.SqlTypes;
+using System.Security.Policy;
 
 namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
+        private static SortedSet<string> set = new SortedSet<string>();
         public bool ExportAnim(Stream animStream, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
         {
             var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
@@ -343,14 +345,39 @@ namespace WolvenKit.Modkit.RED4
         }
         private static Dictionary<string, (string, string) > GetActorToRigMapping()
         {
-            // Actor Signature Mapped To (Base Deformation Rig, Facial Rig)
+            // Actor Signature Mapped To (Base Anims Rig, Facial Rig)
             Dictionary<string, (string, string)> actorToRigMap = new Dictionary<string, (string, string)>();
             actorToRigMap.Add("femalePlayerFpp", ("base\\characters\\entities\\player\\player_woman_skeleton.rig", ""));
             actorToRigMap.Add("female_average", ("base\\characters\\base_entities\\woman_base\\woman_base.rig", ""));
+
+            actorToRigMap.Add("male_average", ("base\\characters\\base_entities\\man_base\\man_base.rig", ""));
+            actorToRigMap.Add("male_big", ("base\\characters\\base_entities\\man_big\\man_big.rig", ""));
+            actorToRigMap.Add("male_child", ("base\\characters\\base_entities\\man_child\\man_child.rig", ""));
+            actorToRigMap.Add("male_fat", ("base\\characters\\base_entities\\man_fat\\man_fat.rig", ""));
+            actorToRigMap.Add("male_massive", ("base\\characters\\base_entities\\man_massive\\man_massive.rig", ""));
+
             return actorToRigMap;
         }
         public bool ExportSceneridAnims(Stream ridStream, FileInfo outfile, List<ICyberGameArchive> archives, bool isGLBinary = false)
         {
+            foreach (var ar in archives)
+            {
+                foreach (var file in ar.Files)
+                {
+                    if (Path.GetExtension(file.Value.Name) == ".scenerid")
+                    {
+                        var ms = new MemoryStream();
+                        file.Value.Extract(ms);
+                        var temp = _wolvenkitFileService.ReadRed4File(ms);
+                        var temp1 = temp.RootChunk as scnRidResource;
+
+                        foreach (var actor in temp1.Actors)
+                        {
+                            set.Add(actor.Tag.Signature.GetString());
+                        }
+                    }
+                }
+            }
             var ridFile = _wolvenkitFileService.ReadRed4File(ridStream);
             if (ridFile == null || ridFile.RootChunk is not scnRidResource scnRid)
             {
