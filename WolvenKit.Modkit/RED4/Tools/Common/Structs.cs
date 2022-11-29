@@ -168,6 +168,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public List<RawMaterial> Materials { get; set; }
         public List<string> TexturesList { get; set; }
         public List<RawMaterial> MaterialTemplates { get; set; }
+        public Dictionary<string, string[]> Appearances { get; set; }
     }
     public class RawMaterial
     {
