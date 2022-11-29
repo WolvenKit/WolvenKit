@@ -13,6 +13,7 @@ using WolvenKit.RED4.Archive.IO;
 using System.Text;
 using SharpGLTF.Validation;
 using WolvenKit.RED4.Archive;
+using System.Data.SqlTypes;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -337,6 +338,116 @@ namespace WolvenKit.Modkit.RED4
                 {
                     CompressedBuffer.AddAnimation(ref model, animAnimDes, incRootMotion);
                 }
+            }
+            return true;
+        }
+        private static Dictionary<string, (string, string) > GetActorToRigMapping()
+        {
+            // Actor Signature Mapped To (Base Deformation Rig, Facial Rig)
+            Dictionary<string, (string, string)> actorToRigMap = new Dictionary<string, (string, string)>();
+            actorToRigMap.Add("femalePlayerFpp", ("base\\characters\\entities\\player\\player_woman_skeleton.rig", ""));
+            actorToRigMap.Add("female_average", ("base\\characters\\base_entities\\woman_base\\woman_base.rig", ""));
+            return actorToRigMap;
+        }
+        public bool ExportSceneridAnims(Stream ridStream, FileInfo outfile, List<ICyberGameArchive> archives, bool isGLBinary = false)
+        {
+            var ridFile = _wolvenkitFileService.ReadRed4File(ridStream);
+            if (ridFile == null || ridFile.RootChunk is not scnRidResource scnRid)
+            {
+                return false;
+            }
+
+            Dictionary<string, (string, string)> actorToRigMap = GetActorToRigMapping();
+
+            var model = ModelRoot.CreateModel();
+
+            foreach (var actor in scnRid.Actors)
+            {
+                
+                RawArmature baseRig = null;
+                RawArmature faceRig = null;
+
+                if(actorToRigMap.ContainsKey(actor.Tag.Signature.GetString()))
+                {
+                    if (!string.IsNullOrEmpty(actorToRigMap[actor.Tag.Signature.GetString()].Item1))
+                    {
+                        UInt64 hash = FNV1A64HashAlgorithm.HashString(actorToRigMap[actor.Tag.Signature.GetString()].Item1);
+                        foreach (var ar in archives)
+                        {
+                            if (ar.Files.TryGetValue(hash, out var gameFile))
+                            {
+                                var ms = new MemoryStream();
+                                gameFile.Extract(ms);
+                                var rigFile = _wolvenkitFileService.ReadRed4File(ms);
+                                baseRig = RIG.ProcessRig(rigFile);
+                                break;
+                            }
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(actorToRigMap[actor.Tag.Signature.GetString()].Item2))
+                    {
+                        UInt64 hash = FNV1A64HashAlgorithm.HashString(actorToRigMap[actor.Tag.Signature.GetString()].Item2);
+                        foreach (var ar in archives)
+                        {
+                            if (ar.Files.TryGetValue(hash, out var gameFile))
+                            {
+                                var ms = new MemoryStream();
+                                gameFile.Extract(ms);
+                                var rigFile = _wolvenkitFileService.ReadRed4File(ms);
+                                faceRig = RIG.ProcessRig(rigFile);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(baseRig != null && baseRig.BoneCount > 0)
+                {
+                    var skin = model.CreateSkin(actor.Tag.Signature.GetString());
+                    skin.BindJoints(RIG.ExportNodes(ref model, baseRig, actor.Tag.Signature.GetString()).Values.ToArray());
+
+                    foreach (var anim in actor.Animations)
+                    {
+                        if (anim.BonesCount != baseRig.BoneCount)
+                            continue;
+
+                        var animAnimDes = anim.Animation.Chunk;
+                        if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd animBuffSimd)
+                        {
+                            MemoryStream defferedBuffer;
+                            if (animBuffSimd.InplaceCompressedBuffer != null)
+                            {
+                                defferedBuffer = new MemoryStream(animBuffSimd.InplaceCompressedBuffer.Buffer.GetBytes());
+                            }
+                            //else if (animBuffSimd.DataAddress != null && animBuffSimd.DataAddress.UnkIndex != UInt32.MaxValue)
+                            //{
+                            //    var dataAddr = animBuffSimd.DataAddress;
+                            //    var bytes = new byte[dataAddr.ZeInBytes];
+                            //    animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Seek(dataAddr.FsetInBytes, SeekOrigin.Begin);
+                            //    animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Read(bytes, 0, (int)((uint)dataAddr.ZeInBytes));
+                            //    defferedBuffer = new MemoryStream(bytes);
+                            //}
+                            else
+                            {
+                                defferedBuffer = new MemoryStream(animBuffSimd.DefferedBuffer.Buffer.GetBytes());
+                            }
+                            defferedBuffer.Seek(0, SeekOrigin.Begin);
+                            SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name, defferedBuffer, animAnimDes, false, actor.Tag.Signature.GetString());
+
+                        }
+                        else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
+                        {
+                            CompressedBuffer.AddAnimation(ref model, animAnimDes, false, actor.Tag.Signature.GetString());
+                        }
+                    }
+                }
+            }
+            if (isGLBinary)
+            {
+                model.SaveGLB(outfile.FullName);
+            }
+            else
+            {
+                model.SaveGLTF(outfile.FullName);
             }
             return true;
         }

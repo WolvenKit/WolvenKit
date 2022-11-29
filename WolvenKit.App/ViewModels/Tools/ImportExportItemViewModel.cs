@@ -183,6 +183,7 @@ namespace WolvenKit.ViewModels.Tools
                 //ECookedFileFormat.app => new EntityExportArgs(),
                 ECookedFileFormat.anims => new AnimationExportArgs(),
                 ECookedFileFormat.inkatlas => new InkAtlasExportArgs(),
+                ECookedFileFormat.scenerid => new SceneRidExportArgs(),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

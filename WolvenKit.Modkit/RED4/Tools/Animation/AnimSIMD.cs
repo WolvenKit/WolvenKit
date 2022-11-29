@@ -12,7 +12,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
     internal class SIMD
     {
-        public static void AddAnimationSIMD(ref ModelRoot model, animAnimationBufferSimd blob, string animName, Stream defferedBuffer, animAnimation animAnimDes, bool incRootMotion = true)
+        public static void AddAnimationSIMD(ref ModelRoot model, animAnimationBufferSimd blob, string animName, Stream defferedBuffer, animAnimation animAnimDes, bool incRootMotion = true, string rigName = "Armature")
         {
             var rootPositions = new Dictionary<ushort, Dictionary<float, Vec3>>();
             var rootRotations = new Dictionary<ushort, Dictionary<float, Quat>>();
@@ -191,7 +191,7 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
 
             var a = model.CreateAnimation(animName);
-            var skin = model.LogicalSkins.FirstOrDefault(_ => _.Name is "Armature");
+            var skin = model.LogicalSkins.FirstOrDefault(_ => _.Name == rigName);
 
             for (var e = 0; e < blob.NumJoints - blob.NumExtraJoints; e++)
             {

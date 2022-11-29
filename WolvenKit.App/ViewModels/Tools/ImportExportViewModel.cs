@@ -799,7 +799,13 @@ namespace WolvenKit.ViewModels.Tools
                         animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                     }
                 }
-
+                if (item.Properties is SceneRidExportArgs sceneridExportArgs)
+                {
+                    if (_gameController.GetController() is RED4Controller cp77Controller)
+                    {
+                        sceneridExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+                    }
+                }
                 if (proj != null)
                 {
 

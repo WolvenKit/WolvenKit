@@ -307,7 +307,22 @@ namespace WolvenKit.Common.Model.Arguments
         /// <returns>String</returns>
         public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary}";
     }
+    public class SceneRidExportArgs : ExportArgs
+    {
+        /// <summary>
+        /// List of Archives for Animations Export.
+        /// </summary>
+        [Browsable(false)]
+        public List<ICyberGameArchive> Archives { get; set; } = new();
 
+        /// <summary>
+        /// Binary Export Bool, Decides between GLB and GLTF
+        /// </summary>
+        [Category("Export Settings")]
+        [Display(Name = "Is Binary")]
+        [Description("If selected the anims will be exported as GLB, if unchecked as GLTF")]
+        public bool IsBinary { get; set; } = true;
+    }
     /// <summary>
     /// Wem Export Types
     /// </summary>

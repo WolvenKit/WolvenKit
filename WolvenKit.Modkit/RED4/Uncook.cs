@@ -452,6 +452,18 @@ namespace WolvenKit.Modkit.RED4
 
                         return false;
                     }
+                case ECookedFileFormat.scenerid:
+                    try
+                    {
+                        return ExportSceneridAnims(cr2wStream, outfile, settings.Get<SceneRidExportArgs>().Archives, settings.Get<SceneRidExportArgs>().IsBinary);
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error($"{relPath} - {e.Message}");
+                        _loggerService.Error(e);
+
+                        return false;
+                    }
                 case ECookedFileFormat.xbm:
                 {
                     if (settings.Get<XbmExportArgs>() is not { } xbmargs)

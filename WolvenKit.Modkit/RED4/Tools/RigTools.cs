@@ -157,10 +157,10 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
             return CombinedRig;
         }
-        public static Dictionary<int, Node> ExportNodes(ref ModelRoot model, RawArmature srcBones)
+        public static Dictionary<int, Node> ExportNodes(ref ModelRoot model, RawArmature srcBones, string rigName = "Armature")
         {
             var bonesMapping = new Dictionary<int, Node>();
-            var armature = model.UseScene(0).CreateNode("Armature");
+            var armature = model.UseScene(0).CreateNode(rigName);
             for (var i = 0; i < srcBones.BoneCount; i++)
             {
                 if (srcBones.Parent[i] > -1)

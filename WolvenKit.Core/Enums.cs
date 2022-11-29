@@ -136,7 +136,8 @@ namespace WolvenKit.Common
         opusinfo,
         anims,
         ent,
-        inkatlas
+        inkatlas,
+        scenerid
     }
 
     /// <summary>

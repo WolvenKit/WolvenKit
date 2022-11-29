@@ -27,7 +27,7 @@ namespace WolvenKit.Modkit.RED4.Animation
             return new Vec3(x, z, y);
         }
 
-        public static void AddAnimation(ref ModelRoot model, animAnimation animAnimDes,bool incRootMotion = true)
+        public static void AddAnimation(ref ModelRoot model, animAnimation animAnimDes,bool incRootMotion = true, string rigName = "Armature")
         {
             var blob = animAnimDes.AnimBuffer.GetValue() as animAnimationBufferCompressed;
             blob.ReadBuffer();
@@ -130,7 +130,7 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
 
             var anim = model.CreateAnimation(animAnimDes.Name);
-            var skin = model.LogicalSkins.FirstOrDefault(_ => _.Name is "Armature");
+            var skin = model.LogicalSkins.FirstOrDefault(_ => _.Name == rigName);
 
             if (animAnimDes.AnimationType == Enums.animAnimationType.Additive)
             {
