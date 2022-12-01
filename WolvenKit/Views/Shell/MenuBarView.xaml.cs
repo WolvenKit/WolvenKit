@@ -123,6 +123,12 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                        view => view.ToolbarPackInstallRedmodLaunchButton)
                    .DisposeWith(disposables);
 
+            // Clean All
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.CleanAllCommand,
+                    view => view.MenuItemClean)
+                .DisposeWith(disposables);
+
             // Hot Reload
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.HotInstallModCommand,

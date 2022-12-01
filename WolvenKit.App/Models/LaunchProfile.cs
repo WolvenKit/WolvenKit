@@ -21,6 +21,10 @@ public class LaunchProfile
     // install tweak files
     // install script files
 
+    [Category("Install")]
+    [Display(Name = "Clean packed directory completely first")]
+    public bool CleanAll { get; set; }
+
     [Category("REDmod")]
     [Display(Name = "Pack as REDmod")]
     public bool IsRedmod { get; set; }
@@ -43,6 +47,7 @@ public class LaunchProfile
         return new LaunchProfile()
         {
             CreateBackup = CreateBackup,
+            CleanAll = CleanAll,
             Install = Install,
             IsRedmod = IsRedmod,
             DeployWithRedmod = DeployWithRedmod,

@@ -158,6 +158,8 @@ namespace WolvenKit.ViewModels.Shell
                 LaunchGame = true
             }));
 
+            CleanAllCommand = ReactiveCommand.CreateFromTask(CleanAllAsync);
+
             HotInstallModCommand = ReactiveCommand.CreateFromTask(HotInstallModAsync);
 
             LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
@@ -965,6 +967,8 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool HasActiveProject() => ActiveProject is not null;
 
+        // Clean all
+        public ReactiveCommand<Unit, Unit> CleanAllCommand { get; private set; }
 
         // Pack mod
         public ReactiveCommand<Unit, Unit> PackModCommand { get; private set; }
@@ -973,6 +977,8 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> PackInstallRedModCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> PackInstallRunCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> PackInstallRedModRunCommand { get; private set; }
+
+        private Task CleanAllAsync() => Task.Run(() => _gameControllerFactory.GetController().CleanAll());
 
         private async Task LaunchAsync(LaunchProfile profile)
         {
