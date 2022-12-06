@@ -7,9 +7,9 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using DynamicData;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -153,14 +153,16 @@ namespace WolvenKit.ViewModels.Shared
             }
             else
             {
-                var dlg = new OpenFileDialog
+                var dlg = new CommonOpenFileDialog
                 {
+                    AllowNonFileSystemItems = false,
                     Multiselect = false,
-                    Title = "Locate the WolvenKit project",
-                    Filter = "Cyberpunk 2077 Project (*.cpmodproj)|*.cpmodproj"
+                    IsFolderPicker = false,
+                    Title = "Locate the WolvenKit project"
                 };
+                dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
 
-                if (dlg.ShowDialog() != DialogResult.OK)
+                if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
                 {
                     return "";
                 }

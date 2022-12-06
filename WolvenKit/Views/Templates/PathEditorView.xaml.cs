@@ -1,6 +1,5 @@
-using System.Linq;
 using System.Windows;
-using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace WolvenKit.Controls
 {
@@ -67,7 +66,6 @@ namespace WolvenKit.Controls
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            string[] results;
             var title = "Select files or folders";
             switch (_isFolderPicker)
             {
@@ -87,57 +85,34 @@ namespace WolvenKit.Controls
                     break;
             }
 
-            if (_isFolderPicker)
+            var dlg = new CommonOpenFileDialog
             {
-                var dlg = new FolderBrowserDialog
-                {
-                    AutoUpgradeEnabled = true,
-                    UseDescriptionForTitle = true,
-                    Description = title
-                };
+                AllowNonFileSystemItems = true,
+                Multiselect = _multiselect,
+                IsFolderPicker = _isFolderPicker,
 
-                if (dlg.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
+                Title = title
+            };
 
-                var result = dlg.SelectedPath;
-                if (result == null)
-                {
-                    return;
-                }
-                results = new string[]{ result };
-            }
-            else
+            if (_filters is not null)
             {
-                var filter = "";
-
-                if (_filters is not null)
+                foreach (var item in _filters)
                 {
-                    foreach (var item in _filters)
-                    {
-                        filter += $"|{item.Name}|{item.Patterns}";
-                    }
-                    filter = filter.Substring(1);
-                }
-                var dlg = new OpenFileDialog
-                {
-                    Multiselect = _multiselect,
-                    Filter= filter,
-                    Title = title
-                };
-
-                if (dlg.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
-
-                results = dlg.FileNames;
-                if (results == null)
-                {
-                    return;
+                    dlg.Filters.Add(new CommonFileDialogFilter(item.Name, item.Patterns));
                 }
             }
+
+            if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+            {
+                return;
+            }
+
+            var results = dlg.FileNames;
+            if (results == null)
+            {
+                return;
+            }
+
 
             SetCurrentValue(TextProperty, "");
             foreach (var s in results)
