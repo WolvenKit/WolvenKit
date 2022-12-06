@@ -56,7 +56,7 @@ namespace WolvenKit.FunctionalTests
             }
 
             ArgumentNullException.ThrowIfNull(s_config);
-            var isKeep = bool.Parse(s_config.GetSection(s_KEEP).Value);
+            var isKeep = bool.Parse(s_config.GetSection(s_KEEP).Value!);
             var isettings = new GlobalImportArgs().Register(
                 new XbmImportArgs() { Keep = isKeep },
                 new GltfImportArgs() { Keep = isKeep },
@@ -70,7 +70,7 @@ namespace WolvenKit.FunctionalTests
 
             // random tests
             var random = new Random();
-            var limit = Math.Min(int.Parse(s_config.GetSection(s_LIMIT).Value), infiles.Count);
+            var limit = Math.Min(int.Parse(s_config.GetSection(s_LIMIT).Value!), infiles.Count);
             var filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
 
             for (var i = 0; i < filesToTest.Count; i++)

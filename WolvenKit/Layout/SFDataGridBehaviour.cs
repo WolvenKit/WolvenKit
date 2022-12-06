@@ -1,4 +1,4 @@
-using System.Windows.Interactivity;
+using Microsoft.Xaml.Behaviors;
 using Syncfusion.UI.Xaml.Grid;
 
 namespace WolvenKit.Layout

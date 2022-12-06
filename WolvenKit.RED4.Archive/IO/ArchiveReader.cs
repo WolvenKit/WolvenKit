@@ -5,6 +5,7 @@ using System.IO.MemoryMappedFiles;
 using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types.Exceptions;
@@ -92,10 +93,19 @@ public class ArchiveReader
 
         if (segment.ZSize != segment.Size)
         {
-            var ms = new MemoryStream();
-            vs.DecompressAndCopySegment(ms, segment.ZSize, segment.Size);
-            ms.Position = 0;
-            br = new BinaryReader(ms);
+            try
+            {
+                var ms = new MemoryStream();
+                vs.DecompressAndCopySegment(ms, segment.ZSize, segment.Size);
+                ms.Position = 0;
+                br = new BinaryReader(ms);
+            }
+            catch (DecompressionException e)
+            {
+                // todo logging
+                Console.WriteLine(e.ToString());
+                return;
+            }
         }
         else
         {

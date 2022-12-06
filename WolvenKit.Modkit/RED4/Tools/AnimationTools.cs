@@ -317,7 +317,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         defferedBuffer = new MemoryStream(animBuffSimd.InplaceCompressedBuffer.Buffer.GetBytes());
                     }
-                    else if (animBuffSimd.DataAddress != null)
+                    else if ((animBuffSimd.DataAddress != null) && animBuffSimd.DataAddress.UnkIndex != uint.MaxValue)
                     {
                         var dataAddr = animBuffSimd.DataAddress;
                         var bytes = new byte[dataAddr.ZeInBytes];

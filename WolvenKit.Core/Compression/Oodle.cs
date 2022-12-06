@@ -264,7 +264,6 @@ public static class Oodle
     /// <param name="outStream"></param>
     /// <param name="zSize"></param>
     /// <param name="size"></param>
-    /// <exception cref="Exception"></exception>
     /// <exception cref="DecompressionException"></exception>
     public static void DecompressAndCopySegment(this Stream stream, Stream outStream, uint zSize, uint size)
     {
@@ -280,7 +279,9 @@ public static class Oodle
                 var headerSize = stream.ReadStruct<uint>();
                 if (headerSize != size)
                 {
-                    throw new DecompressionException($"Buffer size doesn't match size in info table. {headerSize} vs {size}");
+                    // don't throw but use the KARK header size
+                    //throw new DecompressionException($"Buffer size doesn't match size in info table. {headerSize} vs {size}");
+                    size = headerSize;
                 }
 
                 //const int SPAN_LEN = 5333;//32768;
@@ -301,8 +302,7 @@ public static class Oodle
                 //var unpackedSize = Oodle.Decompress(inputBufferSpan, outputBufferSpan);
                 if (unpackedSize != size)
                 {
-                    throw new DecompressionException(
-                        $"Unpacked size {unpackedSize} doesn't match real size {size}.");
+                    throw new DecompressionException($"Unpacked size {unpackedSize} doesn't match real size {size}.");
                 }
 
                 //outStream.Write(outputBufferSpan);
@@ -339,7 +339,9 @@ public static class Oodle
                 var headerSize = stream.ReadStruct<uint>();
                 if (headerSize != size)
                 {
-                    throw new Exception($"Buffer size doesn't match size in info table. {headerSize} vs {size}");
+                    // don't throw but use the KARK header size
+                    // throw new DecompressionException($"Buffer size doesn't match size in info table. {headerSize} vs {size}");
+                    size = headerSize;
                 }
 
                 var inputBuffer = new byte[(int)zSize - 8];
@@ -351,8 +353,7 @@ public static class Oodle
 
                 if (unpackedSize != size)
                 {
-                    throw new DecompressionException(
-                        $"Unpacked size {unpackedSize} doesn't match real size {size}.");
+                    throw new DecompressionException($"Unpacked size {unpackedSize} doesn't match real size {size}.");
                 }
 
                 outStream.Write(outputBuffer);

@@ -14,19 +14,25 @@ namespace WolvenKit.RED4.Archive.IO
 
         public virtual EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
         {
+            // don't attempt to read empty streams
+            if (BaseReader.BaseStream.Length == 0)
+            {
+                return EFileReadErrorCodes.NoCr2w;
+            }
+
             var chunks = new List<RedBaseClass>();
 
             var result = new RedPackage();
             _outputFile = result;
 
             header.version = BaseReader.ReadUInt16();
-            if (header.version < 2 || header.version > 4)
+            if (header.version is < 2 or > 4)
             {
                 return EFileReadErrorCodes.UnsupportedVersion;
             }
 
             header.numSections = _reader.ReadUInt16();
-            if (header.numSections < 6 || header.numSections > 7)
+            if (header.numSections is < 6 or > 7)
             {
                 return EFileReadErrorCodes.UnsupportedVersion;
             }
@@ -69,7 +75,7 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            if (Settings.RedPackageType == RedPackageType.SaveResource || Settings.RedPackageType == RedPackageType.ScriptableSystem)
+            if (Settings.RedPackageType is RedPackageType.SaveResource or RedPackageType.ScriptableSystem)
             {
                 var numCruids = _reader.ReadUInt32();
                 for (var i = 0; i < numCruids; i++)
@@ -131,7 +137,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (Settings.RedPackageType is RedPackageType.Default or RedPackageType.SaveResource)
             {
-                for (int i = 0; i < result.Chunks.Count; i++)
+                for (var i = 0; i < result.Chunks.Count; i++)
                 {
                     result.ChunkDictionary.Add(result.Chunks[i], result.RootCruids[i]);
                 }
