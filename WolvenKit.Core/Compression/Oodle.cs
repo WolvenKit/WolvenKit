@@ -264,7 +264,6 @@ public static class Oodle
     /// <param name="outStream"></param>
     /// <param name="zSize"></param>
     /// <param name="size"></param>
-    /// <exception cref="Exception"></exception>
     /// <exception cref="DecompressionException"></exception>
     public static void DecompressAndCopySegment(this Stream stream, Stream outStream, uint zSize, uint size)
     {

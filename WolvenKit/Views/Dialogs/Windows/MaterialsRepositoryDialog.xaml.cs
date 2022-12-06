@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -62,22 +62,13 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void MaterialsButton_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var dialog = new FolderBrowserDialog
+            var dialog = new CommonOpenFileDialog { IsFolderPicker = true };
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                AutoUpgradeEnabled = true
-            };
-
-            if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
-            {
-                return;
-            }
-
-            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                ViewModel.MaterialsDepotPath = dialog.SelectedPath;
+                ViewModel.MaterialsDepotPath = dialog.FileName;
 
                 var settingsManager = Locator.Current.GetService<ISettingsManager>();
-                settingsManager.MaterialRepositoryPath = dialog.SelectedPath;
+                settingsManager.MaterialRepositoryPath = dialog.FileName;
                 settingsManager.Save();
             }
         }

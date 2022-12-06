@@ -252,6 +252,45 @@ namespace WolvenKit.Functionality.Controllers
             return true;
         }
 
+        /// <summary>
+        /// cleans the packed directory
+        /// </summary>
+        /// <returns></returns>
+        public bool CleanAll()
+        {
+            _progressService.IsIndeterminate = true;
+            // checks
+            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            {
+                var errorMessage = "Cannot perform clean all on project (no project/not cyberpunk project)!";
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error(errorMessage);
+                _notificationService.Error(errorMessage);
+                return false;
+            }
+
+            // perform cleanup
+            if (!Cleanup(cp77Proj, new LaunchProfile()
+                {
+                    CleanAll = true
+                }))
+            {
+                var errorMessage = "An error occured during clean all. Some files may not be removed.";
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error(errorMessage);
+                _notificationService.Error(errorMessage);
+                return false;
+            }
+
+            _progressService.IsIndeterminate = false;
+
+            var successMessage = $"{cp77Proj.Name} packed directory all cleaned.";
+            _loggerService.Success(successMessage);
+            _notificationService.Success(successMessage);
+
+            return true;
+        }
+
 
         /// <summary>
         /// Pack mod with options
@@ -411,6 +450,29 @@ namespace WolvenKit.Functionality.Controllers
         private bool Cleanup(Cp77Project cp77Proj, LaunchProfile options)
         {
             var result = false;
+
+            //clean all nukes everything in the packed/ directory, not just directories covered by the commands after this block
+            //When this option is chosen, no need to continue further.
+            if (options.CleanAll)
+            {
+                result = true; //base condition -- if packed/ is already empty, then the command is 'successful'.
+
+                //top level directories
+                Directory.GetDirectories(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly)
+                .ForEach(dir =>
+                {
+                    result = SafeDirectoryDelete(dir, true) && result;
+                });
+
+                //top level files
+                Directory.GetFiles(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly)
+                .ForEach(file =>
+                {
+                    result = SafeFileDelete(file) && result;
+                });
+                return result;
+            }
+
             // legacy
             result = SafeDirectoryDelete(cp77Proj.GetPackedArchiveDirectory(!options.IsRedmod), true);
             result = SafeDirectoryDelete(Path.Combine(cp77Proj.PackedRootDirectory, "archive"), true);

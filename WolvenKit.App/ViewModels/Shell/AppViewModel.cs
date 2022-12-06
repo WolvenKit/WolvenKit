@@ -12,8 +12,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
+using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -47,7 +48,6 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Tools;
-using MessageBox = System.Windows.MessageBox;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
@@ -157,6 +157,8 @@ namespace WolvenKit.ViewModels.Shell
                 DeployWithRedmod = true,
                 LaunchGame = true
             }));
+
+            CleanAllCommand = ReactiveCommand.CreateFromTask(CleanAllAsync);
 
             HotInstallModCommand = ReactiveCommand.CreateFromTask(HotInstallModAsync);
 
@@ -510,14 +512,16 @@ namespace WolvenKit.ViewModels.Shell
                     // open an existing project
                     else
                     {
-                        var dlg = new OpenFileDialog
+                        CommonOpenFileDialog dlg = new()
                         {
+                            AllowNonFileSystemItems = false,
                             Multiselect = false,
-                            Title = "Locate the WolvenKit project",
-                            Filter = "Cyberpunk 2077 Project (*.cpmodproj)|*.cpmodproj"
+                            IsFolderPicker = false,
+                            Title = "Locate the WolvenKit project"
                         };
+                        dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
 
-                        if (dlg.ShowDialog() != DialogResult.OK)
+                        if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
                         {
                             return Unit.Default;
                         }
@@ -872,7 +876,7 @@ namespace WolvenKit.ViewModels.Shell
             if (model == null)
             {
                 OpenFileDialog dlg = new();
-                if (dlg.ShowDialog() == DialogResult.OK)
+                if (dlg.ShowDialog().GetValueOrDefault())
                 {
                     //model = new FileViewModel(new FileModel(new FileInfo(dlg.FileName)));
                     //TODO
@@ -981,6 +985,8 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool HasActiveProject() => ActiveProject is not null;
 
+        // Clean all
+        public ReactiveCommand<Unit, Unit> CleanAllCommand { get; private set; }
 
         // Pack mod
         public ReactiveCommand<Unit, Unit> PackModCommand { get; private set; }
@@ -989,6 +995,8 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> PackInstallRedModCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> PackInstallRunCommand { get; private set; }
         public ReactiveCommand<Unit, Unit> PackInstallRedModRunCommand { get; private set; }
+
+        private Task CleanAllAsync() => Task.Run(() => _gameControllerFactory.GetController().CleanAll());
 
         private async Task LaunchAsync(LaunchProfile profile)
         {
@@ -1352,7 +1360,7 @@ namespace WolvenKit.ViewModels.Shell
                     dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
                 }
                 _watcherService.IsSuspended = true;
-                if (dlg.ShowDialog() == DialogResult.OK)
+                if (dlg.ShowDialog().GetValueOrDefault())
                 {
                     fileToSave.FilePath = dlg.FileName;
                     ActiveDocument.SaveCommand.SafeExecute();
