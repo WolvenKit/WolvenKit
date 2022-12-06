@@ -23,7 +23,9 @@ namespace WolvenKit.Common
         Cr2w,
         TweakXl,
         ArchiveXl,
-        WScript
+        WScript,
+        RedScript,
+        CETLua
     }
 
     public enum ERedScriptExtension
