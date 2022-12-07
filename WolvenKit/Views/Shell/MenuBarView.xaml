@@ -516,11 +516,11 @@
                     Margin="2,1"
                     Header="Log"
                     IsCheckable="True" />
-                <MenuItem
+                <!--<MenuItem
                     x:Name="ImportExportCheckbox"
                     Margin="2,1"
                     Header="Import / Export"
-                    IsCheckable="True" />
+                    IsCheckable="True" />-->
                 <MenuItem
                     x:Name="TweakBrowserCheckbox"
                     Margin="2,1"
@@ -604,8 +604,23 @@
                         <iconPacks:PackIconUnicons
                             Margin="6,0"
                             Padding="0,1,0,1"
-                            Foreground="{StaticResource WolvenKitCyan}"
+                            Foreground="{StaticResource WolvenKitPurple}"
                             Kind="JavaScript" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                
+                <Separator/>
+
+                <MenuItem
+                    x:Name="MenuItemShowTextureImporter"
+                    Margin="2,1"
+                    Header="Texture Importer">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconUnicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="Import" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

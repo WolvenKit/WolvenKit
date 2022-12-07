@@ -62,6 +62,7 @@
             </Grid>
 
             <!--  Data Grid Exports  -->
+            <!--  CellDoubleTapped="SfDataGrid_CellDoubleTapped"  -->
             <syncfusion:SfDataGrid
                 x:Name="ExportGrid"
                 Grid.Row="1"
@@ -71,7 +72,7 @@
                 AllowSorting="True"
                 AutoGenerateColumns="False"
                 BorderThickness="0,1,0,1"
-                CellDoubleTapped="SfDataGrid_CellDoubleTapped"
+                
                 ColumnSizer="Auto"
                 SelectionMode="Extended"
                 Visibility="{Binding IsExportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
@@ -105,377 +106,23 @@
 
                 </syncfusion:SfDataGrid.Columns>
 
-                <syncfusion:SfDataGrid.RecordContextMenu>
+                <!--<syncfusion:SfDataGrid.RecordContextMenu>
                     <ContextMenu>
                         <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
                     </ContextMenu>
-                </syncfusion:SfDataGrid.RecordContextMenu>
+                </syncfusion:SfDataGrid.RecordContextMenu>-->
 
             </syncfusion:SfDataGrid>
 
-            <!--  Data Grid Imports  -->
-            <Grid
-                Grid.Row="1"
-                Background="{DynamicResource ContentBackgroundAlt2}"
-                Visibility="{Binding IsImportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+           
 
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Button
-                        Margin="4"
-                        Padding="4"
-                        VerticalAlignment="Center"
-                        Background="{DynamicResource ContentBackground}"
-                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                        BorderThickness="1"
-                        Command="{Binding ResetSettingsCommand}"
-                        FontSize="12"
-                        Style="{DynamicResource ButtonCustom}">
-                        <TextBlock Margin="1" Text="Reset Settings" />
-                    </Button>
-                    <Button
-                        Margin="4"
-                        Padding="4"
-                        VerticalAlignment="Center"
-                        Background="{DynamicResource ContentBackground}"
-                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                        BorderThickness="1"
-                        Command="{Binding ImportSettingsCommand}"
-                        FontSize="12"
-                        Style="{DynamicResource ButtonCustom}">
-                        <TextBlock Margin="1" Text="Load Settings" />
-                    </Button>
-                    <mah:ToggleSwitch
-                        Command="{Binding ToggleAdvancedOptionsCommand}"
-                        IsOn="{Binding ShowAdvancedOptions}"
-                        OffContent="Show Advanced Options"
-                        OnContent="Hide Advanced Options"
-                        ToolTip="Toggle Advanced Import/Export Options" />
-                </StackPanel>
-
-                <syncfusion:SfDataGrid
-                    x:Name="ImportGrid"
-                    Grid.Row="1"
-                    AllowEditing="True"
-                    AllowFiltering="True"
-                    AllowResizingColumns="True"
-                    AllowSorting="True"
-                    AutoGenerateColumns="False"
-                    BorderThickness="0,1,0,1"
-                    CellDoubleTapped="SfDataGrid_CellDoubleTapped"
-                    ColumnSizer="Auto"
-                    SelectionMode="Extended">
-
-                    <syncfusion:SfDataGrid.Columns>
-                        <syncfusion:GridCheckBoxColumn
-                            Width="50"
-                            AllowEditing="True"
-                            HeaderText="#"
-                            MappingName="IsChecked">
-                            <syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                                <DataTemplate>
-                                    <CheckBox
-                                        Command="layout:SFDataGridCommands.CheckAndUnCheck"
-                                        CommandParameter="{Binding ElementName=ImportGrid}"
-                                        IsChecked="{Binding Path=IsHeaderChecked}" />
-                                </DataTemplate>
-                            </syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                        </syncfusion:GridCheckBoxColumn>
-                        <syncfusion:GridTextColumn
-                            AllowEditing="False"
-                            ColumnSizer="Star"
-                            HeaderText="Name"
-                            HorizontalHeaderContentAlignment="Left"
-                            MappingName="Name" />
-                        <syncfusion:GridTextColumn
-                            AllowEditing="False"
-                            ColumnSizer="AutoLastColumnFill"
-                            HeaderText="Import Task"
-                            HorizontalHeaderContentAlignment="Left"
-                            MappingName="Properties" />
-                    </syncfusion:SfDataGrid.Columns>
-
-                    <syncfusion:SfDataGrid.RecordContextMenu>
-                        <ContextMenu>
-                            <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
-                        </ContextMenu>
-                    </syncfusion:SfDataGrid.RecordContextMenu>
-
-                </syncfusion:SfDataGrid>
-            </Grid>
-
-            <!--  Bottom Button Panel Main  -->
-            <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" MinWidth="220" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <StackPanel
-                    Grid.Column="0"
-                    Margin="6,4,6,4"
-                    Orientation="Horizontal">
-
-                    <Button
-                        Margin="0,0,4,0"
-                        Padding="4"
-                        VerticalAlignment="Center"
-                        Background="{DynamicResource ContentBackground}"
-                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                        BorderThickness="1"
-                        Command="{Binding ProcessSelectedCommand}"
-                        FontSize="12"
-                        Style="{DynamicResource ButtonCustom}">
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconCodicons
-                                Width="13"
-                                Height="13"
-                                Margin="2"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="DebugStart" />
-
-                            <TextBlock Margin="1" Text="Process Selected" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button
-                        Margin="4,0,0,0"
-                        Padding="4"
-                        VerticalAlignment="Center"
-                        Background="{DynamicResource ContentBackground}"
-                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                        BorderThickness="1"
-                        Command="{Binding ProcessAllCommand}"
-                        FontSize="12"
-                        Style="{DynamicResource ButtonCustom}">
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconCodicons
-                                Width="13"
-                                Height="13"
-                                Margin="2"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="RunAll" />
-
-                            <TextBlock Margin="1" Text="Process All" />
-                        </StackPanel>
-                    </Button>
-
-                </StackPanel>
-
-                <StackPanel
-                    Grid.Column="1"
-                    Margin="6,4,6,4"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
-
-                    <ToggleButton
-                        Margin="0,0,4,0"
-                        Padding="4"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Background="{DynamicResource ContentBackgroundAlt}"
-                        IsChecked="{Binding SelectionLocked}"
-                        Style="{DynamicResource WPFToggleButtonStyle}"
-                        ToolTip="Lock selected file">
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:BootstrapIcons Kind="Lock" />
-                        </StackPanel>
-                    </ToggleButton>
-
-                    <TextBlock
-                        x:Name="CurrentSelectedItemButtonbar"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        FontSize="11"
-                        Text="{Binding CurrentSelectedInGridName}" />
-
-                </StackPanel>
-
-                <StackPanel
-                    Grid.Column="2"
-                    Margin="6,4,6,4"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
-
-                    <StackPanel
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Orientation="Horizontal">
-
-                        <Button
-                            Margin="0,0,6,0"
-                            Padding="4"
-                            VerticalAlignment="Center"
-                            Background="{DynamicResource ContentBackground}"
-                            BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                            BorderThickness="1"
-                            Command="{Binding CopyArgumentsTemplateToCommand}"
-                            CommandParameter="{Binding Path=SelectedItem.Content, ElementName=ToThese}"
-                            FontSize="12"
-                            Style="{DynamicResource ButtonCustom}"
-                            ToolTip="Copy I/O settings from selected file">
-                            <StackPanel Orientation="Horizontal">
-                                <iconPacks:PackIconForkAwesome
-                                    Width="13"
-                                    Height="13"
-                                    Margin="2"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Kind="FilesOutline" />
-                                <TextBlock Margin="1" Text="Copy Settings" />
-                            </StackPanel>
-                        </Button>
-                        <syncfusion:ComboBoxAdv
-                            x:Name="ToThese"
-                            Margin="0,0,0,0"
-                            Padding="6,6,0,6"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            SelectedIndex="0"
-                            Text="apply"
-                            ToolTip="Destination for copied settings">
-
-                            <syncfusion:ComboBoxItemAdv Content="Selected in Grid" />
-                            <syncfusion:ComboBoxItemAdv Content="All in Grid" />
-                        </syncfusion:ComboBoxAdv>
-
-                    </StackPanel>
-                </StackPanel>
-            </Grid>
+            
 
         </Grid>
 
-        <!--  Special Import / Export Options  -->
-        <Grid
-            x:Name="XAML_AdvancedOptionsOverlay"
-            Grid.RowSpan="4"
-            Grid.ColumnSpan="4"
-            Background="{DynamicResource ContentBackgroundAlt2}"
-            Visibility="Collapsed">
+        
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="80" />
-                <RowDefinition Height="5*" />
-            </Grid.RowDefinitions>
-
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <hc:Divider
-                    Grid.Row="0"
-                    Margin="15,0,15,0"
-                    VerticalAlignment="Center" />
-
-                <Border
-                    Grid.Row="0"
-                    Margin="8,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackgroundAlt}"
-                    BorderBrush="{DynamicResource BorderBrush}"
-                    BorderThickness="1">
-                    <TextBlock
-                        x:Name="XAML_AdvancedOptionsExtension"
-                        Padding="5,0,5,0"
-                        FontSize="24"
-                        Text="EXTENSION" />
-                </Border>
-
-                <StackPanel
-                    Grid.Row="1"
-                    Margin="8,2"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal">
-                    <StackPanel Margin="8" Orientation="Horizontal">
-                        <TextBlock
-                            x:Name="XAML_AdvancedOptionsFileName"
-                            FontSize="14"
-                            Text="FileName" />
-                    </StackPanel>
-                </StackPanel>
-
-                <StackPanel Grid.Row="1" Margin="8,2">
-                    <CheckBox
-                        x:Name="ApplyToAllCheckbox"
-                        Margin="8"
-                        Padding="4,0,4,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Content="Apply to all files of the same extension"
-                        FontSize="10"
-                        Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid}" />
-                </StackPanel>
-
-                <Button
-                    Width="80"
-                    Height="39"
-                    Margin="8,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackgroundAlt}"
-                    Click="ButtonBase_OnClick"
-                    Content="Confirm"
-                    FontSize="12"
-                    Style="{DynamicResource MahApps.Styles.Button.ToolBar}" />
-            </Grid>
-
-            <Grid
-                x:Name="ContentLinkForSpecialExportOrImportOptions"
-                Grid.Row="1"
-                Margin="2"
-                Background="{DynamicResource ContentBackgroundAlt}">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <!--  Additional options  -->
-                <StackPanel
-                    x:Name="AddSettingsRe"
-                    Grid.Row="0"
-                    Orientation="Vertical"
-                    Visibility="Collapsed">
-                    <hc:ComboBox
-                        x:Name="AnimsetComboBox"
-                        hc:TitleElement.Title="Animset"
-                        SelectionChanged="AnimsetComboBox_SelectionChanged" />
-
-                    <hc:ComboBox
-                        x:Name="AnimNameComboBox"
-                        hc:TitleElement.Title="Animation to rename"
-                        SelectionChanged="AnimNameComboBox_SelectionChanged" />
-                </StackPanel>
-
-                <!--  PropertyGrid  -->
-                <syncfusion:PropertyGrid
-                    x:Name="OverlayPropertyGrid"
-                    Grid.Row="1"
-                    AutoGeneratingPropertyGridItem="OverlayPropertyGrid_AutoGeneratingPropertyGridItem"
-                    ButtonPanelVisibility="Hidden"
-                    CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
-                    CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"
-                    DescriptionPanelVisibility="Visible"
-                    EnableGrouping="True"
-                    PropertyExpandMode="NestedMode"
-                    ReadOnlyBackground="{DynamicResource ContentBackgroundAlt}"
-                    SearchBoxVisibility="Hidden"
-                    SortDirection="{x:Null}" />
-            </Grid>
-        </Grid>
-
-        <!--  Exporting/Importing Overlay  -->
+        <!--  Processing Overlay  -->
         <Grid
             Grid.RowSpan="4"
             Grid.ColumnSpan="4"
@@ -652,7 +299,7 @@
 
                                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
 
-                                    <!--  Renove Button  -->
+                                    <!--  Remove Button  -->
                                     <Button
                                         Height="30"
                                         Margin="0,0,5,0"
@@ -683,12 +330,13 @@
                                         </StackPanel>
                                     </Button>
                                     <!--  Confirm Button  -->
+                                    <!--  Click="ConfirmCollectionEditorSelection_OnClick"  -->
                                     <Button
                                         Height="30"
                                         Margin="5,0,5,0"
                                         Padding="5"
                                         Background="{DynamicResource ContentBackgroundAlt}"
-                                        Click="ConfirmCollectionEditorSelection_OnClick"
+                                        
                                         FontSize="12"
                                         Style="{DynamicResource MahApps.Styles.Button.ToolBar}">
                                         <StackPanel Orientation="Horizontal">

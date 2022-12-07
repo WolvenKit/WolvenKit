@@ -17,7 +17,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
-        //private string _lastName;
 
         public LaunchProfilesViewModel(ISettingsManager settingsManager, ILoggerService loggerService)
         {

@@ -114,7 +114,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowPropertiesCommand = new DelegateCommand(ExecuteShowProperties, CanShowProperties).ObservesProperty(() => ActiveProject);
             ShowAssetsCommand = new DelegateCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
 
-            ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool).ObservesProperty(() => ActiveProject);
+            //ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool).ObservesProperty(() => ActiveProject);
 
             ShowSoundModdingToolCommand = new DelegateCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool).ObservesProperty(() => IsDialogShown);
             ShowModsViewCommand = new DelegateCommand(ExecuteShowModsView, CanShowModsView).ObservesProperty(() => IsDialogShown);
@@ -162,6 +162,8 @@ namespace WolvenKit.ViewModels.Shell
 
             LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
 
+            ShowTextureImporterCommand = ReactiveCommand.Create(ShowTextureImporter);
+
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => IsDialogShown);
 
             // File
@@ -207,7 +209,7 @@ namespace WolvenKit.ViewModels.Shell
                 ProjectExplorer,
                 PropertiesViewModel,
                 AssetBrowserVM,
-                ImportExportToolVM,
+                //ImportExportToolVM,
                 TweakBrowserVM,
                 LocKeyBrowserVM
             };
@@ -988,6 +990,9 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> LaunchOptionsCommand { get; }
         private async void LaunchOptions() => await Interactions.ShowLaunchProfilesView.Handle(Unit.Default);
 
+        public ReactiveCommand<Unit, Unit> ShowTextureImporterCommand { get; }
+        private async void ShowTextureImporter() => await Interactions.ShowTextureImporter.Handle(Unit.Default);
+
         public string CyberpunkBlenderAddonLink = "https://github.com/WolvenKit/Cyberpunk-Blender-add-on";
         public string WolvenKitSetupLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
         public string WolvenKitCreatingAModLink = "https://wiki.redmodding.org/wolvenkit/getting-started/creating-a-mod";
@@ -1010,9 +1015,9 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
         private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
 
-        public ICommand ShowImportExportToolCommand { get; private set; }
-        private bool CanShowImportExportTool() => ActiveProject is not null;
-        private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
+        //public ICommand ShowImportExportToolCommand { get; private set; }
+        //private bool CanShowImportExportTool() => ActiveProject is not null;
+        //private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
         public ICommand ShowLogCommand { get; private set; }
         private bool CanShowLog() => ActiveProject is not null;
@@ -1083,15 +1088,15 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private ImportExportViewModel _importExportToolViewModel;
-        public ImportExportViewModel ImportExportToolVM
-        {
-            get
-            {
-                _importExportToolViewModel ??= Locator.Current.GetService<ImportExportViewModel>();
-                return _importExportToolViewModel;
-            }
-        }
+        //private ImportExportViewModel _importExportToolViewModel;
+        //public ImportExportViewModel ImportExportToolVM
+        //{
+        //    get
+        //    {
+        //        _importExportToolViewModel ??= Locator.Current.GetService<ImportExportViewModel>();
+        //        return _importExportToolViewModel;
+        //    }
+        //}
 
         private LogViewModel _logViewModel;
         public LogViewModel Log

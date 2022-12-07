@@ -151,6 +151,12 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.MenuItemShowScriptManager)
                 .DisposeWith(disposables);
 
+            // Importers
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.ShowTextureImporterCommand,
+                    view => view.MenuItemShowTextureImporter)
+                .DisposeWith(disposables);
+
             // Game
             this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.LaunchGameCommand,
@@ -210,10 +216,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.Log.IsVisible,
                     view => view.LogCheckbox.IsChecked)
                 .DisposeWith(disposables);
-            this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.ImportExportToolVM.IsVisible,
-                    view => view.ImportExportCheckbox.IsChecked)
-                .DisposeWith(disposables);
+            //this.Bind(ViewModel,
+            //        viewModel => viewModel.MainViewModel.ImportExportToolVM.IsVisible,
+            //        view => view.ImportExportCheckbox.IsChecked)
+            //    .DisposeWith(disposables);
             this.Bind(ViewModel,
                     viewModel => viewModel.MainViewModel.TweakBrowserVM.IsVisible,
                     view => view.TweakBrowserCheckbox.IsChecked)

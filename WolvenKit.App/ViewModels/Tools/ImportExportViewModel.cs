@@ -77,7 +77,7 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Private Last Selected Item, Used for Selection Lock.
         /// </summary>
-        private ImportExportItemViewModel _lastselected;
+        //private ImportExportItemViewModel _lastselected;
 
         private readonly ReadOnlyObservableCollection<ImportableItemViewModel> _importableItems;
 
@@ -134,11 +134,10 @@ namespace WolvenKit.ViewModels.Tools
             SetupToolDefaults();
             SideInDockedMode = DockSide.Tabbed;
 
-            ProcessAllCommand = ReactiveCommand.CreateFromTask(ExecuteProcessAll);
-            ProcessSelectedCommand = ReactiveCommand.CreateFromTask(ExecuteProcessSelected);
+
             CopyArgumentsTemplateToCommand = new DelegateCommand<string>(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
-            SetCollectionCommand = new DelegateCommand<string>(ExecuteSetCollection, CanSetCollection);
-            ConfirmCollectionCommand = new DelegateCommand<string>(ExecuteConfirmCollection, CanConfirmCollection);
+            //SetCollectionCommand = new DelegateCommand<string>(ExecuteSetCollection, CanSetCollection);
+            //ConfirmCollectionCommand = new DelegateCommand<string>(ExecuteConfirmCollection, CanConfirmCollection);
 
             AddItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteAddItems, CanAddItems);
             RemoveItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteRemoveItems, CanRemoveItems);
@@ -178,14 +177,14 @@ namespace WolvenKit.ViewModels.Tools
             ExportableItems.ObserveCollectionChanges()
                 .Subscribe(item => SetSetting("export", item));
 
-            this.WhenAnyValue(x => x.SelectedExport, x => x.IsExportsSelected, y => y.SelectedImport, y => y.IsImportsSelected)
-                .Subscribe(b =>
-                {
-                    var x = b.Item1;
-                    var y = b.Item2;
+            //this.WhenAnyValue(x => x.SelectedExport, x => x.IsExportsSelected, y => y.SelectedImport, y => y.IsImportsSelected)
+            //    .Subscribe(b =>
+            //    {
+            //        var x = b.Item1;
+            //        var y = b.Item2;
 
-                    SelectedObject = IsImportsSelected ? SelectedImport : SelectedExport;
-                });
+            //        SelectedObject = IsImportsSelected ? SelectedImport : SelectedExport;
+            //    });
 
             this
                 .WhenAnyValue(x => x._projectManager.IsProjectLoaded)
@@ -231,10 +230,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         [Reactive] public ImportableItemViewModel SelectedImport { get; set; }
 
-        /// <summary>
-        /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
-        /// </summary>
-        [Reactive] public ImportExportItemViewModel SelectedObject { get; set; }
+
 
         /// <summary>
         /// Lock Selection of items in grid.
@@ -246,32 +242,32 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Private NameOf Selected Item in Grid.
         /// </summary>
-        private string _currentSelectionInGridName;
+        //private string _currentSelectionInGridName;
 
         /// <summary>
         /// Returns the name of current selected object in Import/Export Grid.
         /// </summary>
-        public string CurrentSelectedInGridName
-        {
-            get
-            {
-                if (SelectedObject is not null)
-                {
-                    if (!SelectionLocked)
-                    {
-                        _lastselected = SelectedObject;
-                        return SelectedObject.Name;
-                    }
-                    else
-                    {
-                        return _lastselected == null ? "" : _lastselected.Name;
-                    }
-                }
-                else
-                { return ""; }
-            }
-            set => _currentSelectionInGridName = value;
-        }
+        //public string CurrentSelectedInGridName
+        //{
+        //    get
+        //    {
+        //        if (SelectedObject is not null)
+        //        {
+        //            if (!SelectionLocked)
+        //            {
+        //                _lastselected = SelectedObject;
+        //                return SelectedObject.Name;
+        //            }
+        //            else
+        //            {
+        //                return _lastselected == null ? "" : _lastselected.Name;
+        //            }
+        //        }
+        //        else
+        //        { return ""; }
+        //    }
+        //    set => _currentSelectionInGridName = value;
+        //}
 
         /// <summary>
         /// Is Import Selected, if false Export is default.
@@ -313,96 +309,96 @@ namespace WolvenKit.ViewModels.Tools
             CollectionSelectedItems.RemoveMany(x);
         }
 
-        public ICommand ConfirmCollectionCommand { get; private set; }
+        //public ICommand ConfirmCollectionCommand { get; private set; }
 
-        private bool CanConfirmCollection(string v) => true;
+        //private bool CanConfirmCollection(string v) => true;
 
-        private void ExecuteConfirmCollection(string v)
-        {
-            switch (SelectedObject)
-            {
-                case { Properties: MeshExportArgs meshExportArgs }:
-                    switch (v)
-                    {
-                        case nameof(MeshExportArgs.MultiMeshMeshes):
-                            meshExportArgs.MultiMeshMeshes =
-                                CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
-                            _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
-                            meshExportArgs.meshExportType = MeshExportType.Multimesh;
-                            break;
+        //private void ExecuteConfirmCollection(string v)
+        //{
+        //    switch (SelectedObject)
+        //    {
+        //        case { Properties: MeshExportArgs meshExportArgs }:
+        //            switch (v)
+        //            {
+        //                case nameof(MeshExportArgs.MultiMeshMeshes):
+        //                    meshExportArgs.MultiMeshMeshes =
+        //                        CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
+        //                    _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
+        //                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
+        //                    break;
 
-                        case nameof(MeshExportArgs.MultiMeshRigs):
-                            meshExportArgs.MultiMeshRigs =
-                                CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
-                            _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
-                            meshExportArgs.meshExportType = MeshExportType.Multimesh;
-                            break;
+        //                case nameof(MeshExportArgs.MultiMeshRigs):
+        //                    meshExportArgs.MultiMeshRigs =
+        //                        CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().ToList();
+        //                    _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
+        //                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
+        //                    break;
 
-                        case nameof(MeshExportArgs.Rig):
-                            meshExportArgs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
-                            _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
-                            meshExportArgs.meshExportType = MeshExportType.WithRig;
-                            break;
-                    }
-                    break;
+        //                case nameof(MeshExportArgs.Rig):
+        //                    meshExportArgs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
+        //                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+        //                    meshExportArgs.meshExportType = MeshExportType.WithRig;
+        //                    break;
+        //            }
+        //            break;
 
-                case { Properties: GltfImportArgs gltfImportArgs }:
-                    switch (v)
-                    {
-                        case nameof(GltfImportArgs.Rig):
-                            gltfImportArgs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
-                            _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
-                            gltfImportArgs.importFormat = GltfImportAsFormat.MeshWithRig;
-                            break;
+        //        case { Properties: GltfImportArgs gltfImportArgs }:
+        //            switch (v)
+        //            {
+        //                case nameof(GltfImportArgs.Rig):
+        //                    gltfImportArgs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
+        //                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+        //                    gltfImportArgs.importFormat = GltfImportAsFormat.MeshWithRig;
+        //                    break;
 
-                        case nameof(GltfImportArgs.BaseMesh):
-                            gltfImportArgs.BaseMesh = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
-                            _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
-                            gltfImportArgs.importFormat = GltfImportAsFormat.Mesh;
-                            break;
-                    }
-                    break;
+        //                case nameof(GltfImportArgs.BaseMesh):
+        //                    gltfImportArgs.BaseMesh = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
+        //                    _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
+        //                    gltfImportArgs.importFormat = GltfImportAsFormat.Mesh;
+        //                    break;
+        //            }
+        //            break;
 
 
-                case { Properties: OpusExportArgs opusExportArgs }:
-                    switch (v)
-                    {
-                        case nameof(OpusExportArgs.SelectedForExport):
-                            opusExportArgs.SelectedForExport =
-                                new List<uint>(CollectionSelectedItems.Select(_ => _.Model).Cast<uint>());
-                            _notificationService.Success($"Selected opus items were added.");
-                            break;
-                    }
-                    break;
+        //        case { Properties: OpusExportArgs opusExportArgs }:
+        //            switch (v)
+        //            {
+        //                case nameof(OpusExportArgs.SelectedForExport):
+        //                    opusExportArgs.SelectedForExport =
+        //                        new List<uint>(CollectionSelectedItems.Select(_ => _.Model).Cast<uint>());
+        //                    _notificationService.Success($"Selected opus items were added.");
+        //                    break;
+        //            }
+        //            break;
 
-                default:
-                    Trace.WriteLine("failed to confirm");
-                    break;
-            }
-        }
+        //        default:
+        //            Trace.WriteLine("failed to confirm");
+        //            break;
+        //    }
+        //}
 
-        public ICommand SetCollectionCommand { get; private set; }
+        //public ICommand SetCollectionCommand { get; private set; }
 
-        private bool CanSetCollection(string selectedType) => true;
+        //private bool CanSetCollection(string selectedType) => true;
 
-        private void ExecuteSetCollection(string argType)
-        {
-            switch (SelectedObject)
-            {
-                case { Properties: GltfImportArgs gltfImportArgs }:
-                    InitCollectionEditorForMesh(argType, gltfImportArgs);
-                    break;
+        //private void ExecuteSetCollection(string argType)
+        //{
+        //    switch (SelectedObject)
+        //    {
+        //        case { Properties: GltfImportArgs gltfImportArgs }:
+        //            InitCollectionEditorForMesh(argType, gltfImportArgs);
+        //            break;
 
-                case { Properties: MeshExportArgs meshExportArgs }:
-                    InitCollectionEditorForMesh(argType, meshExportArgs);
-                    break;
+        //        case { Properties: MeshExportArgs meshExportArgs }:
+        //            InitCollectionEditorForMesh(argType, meshExportArgs);
+        //            break;
 
-                case { Properties: OpusExportArgs opusExportArgs }:
-                    InitCollectionEditorForOpus(argType, opusExportArgs);
-                    Trace.WriteLine(opusExportArgs.ModFolderPath + opusExportArgs.RawFolderPath);
-                    break;
-            }
-        }
+        //        case { Properties: OpusExportArgs opusExportArgs }:
+        //            InitCollectionEditorForOpus(argType, opusExportArgs);
+        //            Trace.WriteLine(opusExportArgs.ModFolderPath + opusExportArgs.RawFolderPath);
+        //            break;
+        //    }
+        //}
 
         private void InitCollectionEditorForMesh(string argType, ImportExportArgs args)
         {
@@ -525,6 +521,8 @@ namespace WolvenKit.ViewModels.Tools
             CollectionAvailableItems.AddRange(opusTools.Info.OpusHashes.Select(_ => new CollectionItemViewModel(_)));
         }
 
+        [Reactive] public ImportExportItemViewModel SelectedObject { get; set; }
+
         public ICommand CopyArgumentsTemplateToCommand { get; private set; }
 
         private bool CanCopyArgumentsTemplateTo(string param) => true;
@@ -578,177 +576,14 @@ namespace WolvenKit.ViewModels.Tools
             _notificationService.Success($"Template has been copied to the selected items.");
         }
 
-        [Reactive] public bool IsProcessing { get; set; } = false;
-
-        /// <summary>
-        /// Process all in Import / Export Grid Command.
-        /// </summary>
-        public ReactiveCommand<Unit, Unit> ProcessAllCommand { get; private set; }
 
 
 
-        /// <summary>
-        /// Helper Task to Execute Bulk Processing in Import / Export Grid Command
-        /// 
-        /// </summary>
-        private async Task ExecuteProcessBulk(bool all = false)
-        {
-            IsProcessing = true;
-            _watcherService.IsSuspended = true;
-            var progress = 0;
-            _progressService.Report(0);
 
-            var total = 0;
-            var sucessful = 0;
 
-            //prepare a list of failed items
-            var failedItems = new List<string>();
 
-            if (IsImportsSelected)
-            {
-                var toBeImported = ImportableItems.Where(_ => all || _.IsChecked).Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
-                total = toBeImported.Count;
-                foreach (var item in toBeImported)
-                {
-                    if (await Task.Run(() => ImportSingleTask(item)))
-                    {
-                        sucessful++;
-                    }
-                    else // not successful
-                    {
-                        failedItems.Add(item.FullName);
-                    }
 
-                    Interlocked.Increment(ref progress);
-                    _progressService.Report(progress / (float)total);
-                }
 
-                await ImportWavs(ImportableItems.Where(_ => all || _.IsChecked)
-                    .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
-                    .Select(x => x.FullName)
-                    .ToList()
-                    );
-            }
-
-            if (IsExportsSelected)
-            {
-                var toBeExported = ExportableItems.Where(_ => all || _.IsChecked).ToList();
-                total = toBeExported.Count;
-                foreach (var item in toBeExported)
-                {
-                    if (await Task.Run(() => ExportSingle(item)))
-                    {
-                        sucessful++;
-                    }
-                    else
-                    {
-                        failedItems.Add(item.FullName);
-                    }
-
-                    Interlocked.Increment(ref progress);
-                    _progressService.Report(progress / (float)total);
-                }
-            }
-
-            IsProcessing = false;
-
-            _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(_projectManager.ActiveProject);
-            _progressService.IsIndeterminate = false;
-
-            _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
-            _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
-
-            //We format the list of failed export/import items here
-            if (failedItems.Count > 0)
-            {
-                var failedItemsErrorString = $"The following items failed:\n{string.Join("\n", failedItems)}";
-                _notificationService.Error(failedItemsErrorString); //notify once only 
-                _loggerService.Error(failedItemsErrorString);
-            }
-
-            _progressService.Completed();
-        }
-
-        /// <summary>
-        /// Execute Process all in Import / Export Grid Command.
-        /// Uses ExecuteProcessBulk
-        /// </summary>
-        private async Task ExecuteProcessAll() => await ExecuteProcessBulk(true); //the all parameter is set to true
-
-        /// <summary>
-        /// Execute Process Selected in Import / Export Grid Command.
-        /// Uses ExecuteProcessBulk
-        /// </summary>
-        private async Task ExecuteProcessSelected() => await ExecuteProcessBulk(); //the all parameter's default is false
-
-        private Task<bool> ImportWavs(List<string> wavs)
-        {
-            var proj = _projectManager.ActiveProject;
-            if (_gameController.GetController() is RED4Controller cp77Controller)
-            {
-                OpusTools opusTools = new(
-                    proj.ModDirectory,
-                    proj.RawDirectory,
-                    true);
-
-                return Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
-            }
-
-            return Task.FromResult(false);
-        }
-
-        /// <summary>
-        /// Import Single item
-        /// </summary>
-        /// <param name="item"></param>
-        private async Task<bool> ImportSingleTask(ImportableItemViewModel item)
-        {
-            if (_gameController.GetController() is not RED4Controller)
-            {
-                return false;
-            }
-
-            var proj = _projectManager.ActiveProject;
-            var fi = new FileInfo(item.FullName);
-            if (fi.Exists)
-            {
-                if (item.Properties is GltfImportArgs gltfImportArgs)
-                {
-                    gltfImportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                    gltfImportArgs.Archives.Insert(0, new FileSystemArchive(_projectManager.ActiveProject.ModDirectory));
-                }
-
-                if (item.Properties is ReImportArgs reImportArgs)
-                {
-                    if (!_pluginService.IsInstalled(EPlugin.redmod))
-                    {
-                        _loggerService.Error("Redmod plugin needs to be installed to import animations");
-                        return false;
-                    }
-
-                    reImportArgs.Depot = proj.ModDirectory;
-                    reImportArgs.RedMod = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
-                }
-
-                var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
-                var rawDir = new DirectoryInfo(proj.RawDirectory);
-                var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
-
-                try
-                {
-                    return await _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
-                }
-                catch (Exception e)
-                {
-                    _loggerService.Error($"Could not import {item.Name}");
-                    _loggerService.Error(e);
-                }
-
-            }
-
-            return false;
-        }
 
         /// <summary>
         /// Export Single Item
@@ -814,10 +649,7 @@ namespace WolvenKit.ViewModels.Tools
             return false;
         }
 
-        /// <summary>
-        /// Process selected in Import / Export Grid Command
-        /// </summary>
-        public ICommand ProcessSelectedCommand { get; private set; }
+
 
 
         /// <summary>
@@ -825,8 +657,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
 
-        public bool HasActiveProject => _projectManager != null
-            && _projectManager.IsProjectLoaded;
+        public bool HasActiveProject => _projectManager != null && _projectManager.IsProjectLoaded;
 
         #region Commands
 

@@ -51,10 +51,7 @@ public class WKitUIScripting : WKitScripting
         });
 
     public virtual void SaveToRaw(string path, string content) =>
-        SaveAs(Path.Combine(_projectManager.ActiveProject.RawDirectory, path), s =>
-        {
-            File.WriteAllText(s, content);
-        });
+        SaveAs(Path.Combine(_projectManager.ActiveProject.RawDirectory, path), s => File.WriteAllText(s, content));
 
     private void SaveAs(string path, Action<string> action)
     {
@@ -80,6 +77,8 @@ public class WKitUIScripting : WKitScripting
         }
     }
 
+    /*
+     * Todo Refactor
     public void ExportFiles(dynamic relPaths)
     {
         if (relPaths is null)
@@ -157,4 +156,5 @@ public class WKitUIScripting : WKitScripting
             _loggerService.Error(e);
         }
     }
+    */
 }
