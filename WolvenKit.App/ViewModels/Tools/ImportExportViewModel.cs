@@ -20,9 +20,12 @@ using DynamicData.Binding;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SharpDX.DirectWrite;
+using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
@@ -32,8 +35,10 @@ using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -72,17 +77,6 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IArchiveManager _archiveManager;
         private readonly IPluginService _pluginService;
         private readonly Red4ParserService _parserService;
-
-
-        /// <summary>
-        /// Private Last Selected Item, Used for Selection Lock.
-        /// </summary>
-        //private ImportExportItemViewModel _lastselected;
-
-        private readonly ReadOnlyObservableCollection<ImportableItemViewModel> _importableItems;
-
-        private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
-
         private Dictionary<string, Dictionary<string, JsonObject>> _loadedSettings;
 
         private static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
@@ -135,31 +129,30 @@ namespace WolvenKit.ViewModels.Tools
             SideInDockedMode = DockSide.Tabbed;
 
 
-            CopyArgumentsTemplateToCommand = new DelegateCommand<string>(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
             //SetCollectionCommand = new DelegateCommand<string>(ExecuteSetCollection, CanSetCollection);
             //ConfirmCollectionCommand = new DelegateCommand<string>(ExecuteConfirmCollection, CanConfirmCollection);
 
             AddItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteAddItems, CanAddItems);
             RemoveItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteRemoveItems, CanRemoveItems);
 
-            _watcherService.Files
-                .Connect()
-                .Filter(_ => _.IsImportable)
-                .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.RawDirectory))
-                .Filter(x => CheckForMultiImport(x))
-                .Transform(_ => new ImportableItemViewModel(_))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _importableItems)
-                .Subscribe();
+            //_watcherService.Files
+            //    .Connect()
+            //    .Filter(_ => _.IsImportable)
+            //    .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.RawDirectory))
+            //    .Filter(x => CheckForMultiImport(x))
+            //    .Transform(_ => new ImportableItemViewModel(_))
+            //    .ObserveOn(RxApp.MainThreadScheduler)
+            //    .Bind(out _importableItems)
+            //    .Subscribe();
 
-            _watcherService.Files
-                .Connect()
-                .Filter(_ => _.IsExportable)
-                .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.ModDirectory))
-                .Transform(_ => new ExportableItemViewModel(_))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _exportableItems)
-                .Subscribe();
+            //_watcherService.Files
+            //    .Connect()
+            //    .Filter(_ => _.IsExportable)
+            //    .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.ModDirectory))
+            //    .Transform(_ => new ExportableItemViewModel(_))
+            //    .ObserveOn(RxApp.MainThreadScheduler)
+            //    .Bind(out _exportableItems)
+            //    .Subscribe();
 
             this.WhenAnyValue(x => x._projectManager.ActiveProject)
                 .Subscribe(project =>
@@ -171,11 +164,9 @@ namespace WolvenKit.ViewModels.Tools
                     }
                 });
 
-            ImportableItems.ObserveCollectionChanges()
-                .Subscribe(item => SetSetting("import", item));
+            //ImportableItems.ObserveCollectionChanges().Subscribe(item => SetSetting("import", item));
 
-            ExportableItems.ObserveCollectionChanges()
-                .Subscribe(item => SetSetting("export", item));
+            //ExportableItems.ObserveCollectionChanges().Subscribe(item => SetSetting("export", item));
 
             //this.WhenAnyValue(x => x.SelectedExport, x => x.IsExportsSelected, y => y.SelectedImport, y => y.IsImportsSelected)
             //    .Subscribe(b =>
@@ -186,11 +177,7 @@ namespace WolvenKit.ViewModels.Tools
             //        SelectedObject = IsImportsSelected ? SelectedImport : SelectedExport;
             //    });
 
-            this
-                .WhenAnyValue(x => x._projectManager.IsProjectLoaded)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(
-                    _ => ImportSettingsCommand.NotifyCanExecuteChanged());
+
 
             this.WhenAnyValue(x => x._settingsManager.ShowAdvancedOptions)
                 .Subscribe(_ => ShowAdvancedOptions = _settingsManager.ShowAdvancedOptions);
@@ -209,26 +196,6 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public ObservableCollection<CollectionItemViewModel> CollectionAvailableItems { get; set; } = new();
         [Reactive] public ObservableCollection<CollectionItemViewModel> CollectionSelectedItems { get; set; } = new();
-
-        /// <summary>
-        /// Public Importable Items
-        /// </summary>
-        public ReadOnlyObservableCollection<ImportableItemViewModel> ImportableItems => _importableItems;
-
-        /// <summary>
-        /// Public Exportable items.
-        /// </summary>
-        public ReadOnlyObservableCollection<ExportableItemViewModel> ExportableItems => _exportableItems;
-
-        /// <summary>
-        /// Selected Export Item
-        /// </summary>
-        [Reactive] public ExportableItemViewModel SelectedExport { get; set; }
-
-        /// <summary>
-        /// Selected Import Item
-        /// </summary>
-        [Reactive] public ImportableItemViewModel SelectedImport { get; set; }
 
 
 
@@ -523,132 +490,6 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public ImportExportItemViewModel SelectedObject { get; set; }
 
-        public ICommand CopyArgumentsTemplateToCommand { get; private set; }
-
-        private bool CanCopyArgumentsTemplateTo(string param) => true;
-
-        private void ExecuteCopyArgumentsTemplateTo(string param)
-        {
-            var current = SelectedObject.Properties;
-
-            if (IsImportsSelected)
-            {
-                if (current is not ImportArgs importArgs)
-                {
-                    return;
-                }
-
-                var json = SerializeArgs(importArgs);
-
-                var results = param switch
-                {
-                    s_selectedInGrid => ImportableItems.Where(_ => _.IsChecked),
-                    _ => ImportableItems
-                };
-
-                foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
-                {
-                    item.Properties = (ImportArgs)json.Deserialize(importArgs.GetType(), s_jsonSerializerSettings);
-                }
-            }
-            if (IsExportsSelected)
-            {
-                if (current is not ExportArgs exportArgs)
-                {
-                    return;
-                }
-
-                var json = SerializeArgs(exportArgs);
-
-                var results = param switch
-                {
-                    s_selectedInGrid => ExportableItems.Where(_ => _.IsChecked),
-                    _ => ExportableItems
-                };
-
-                foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
-                {
-                    item.Properties = (ExportArgs)json.Deserialize(exportArgs.GetType(), s_jsonSerializerSettings);
-                }
-            }
-
-            SaveSettings();
-            _notificationService.Success($"Template has been copied to the selected items.");
-        }
-
-
-
-
-
-
-
-
-
-
-        /// <summary>
-        /// Export Single Item
-        /// </summary>
-        /// <param name="item"></param>
-        private bool ExportSingle(ExportableItemViewModel item)
-        {
-            var proj = _projectManager.ActiveProject;
-            var fi = new FileInfo(item.FullName);
-            if (fi.Exists)
-            {
-                if (item.Properties is MeshExportArgs meshExportArgs)
-                {
-                    meshExportArgs.Archives.Clear();
-                    if (_gameController.GetController() is RED4Controller cp77Controller)
-                    {
-                        meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
-                    }
-
-                    meshExportArgs.Archives.Insert(0, new FileSystemArchive(_projectManager.ActiveProject.ModDirectory));
-
-                    meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
-                }
-                if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
-                {
-                    if (_gameController.GetController() is RED4Controller cp77Controller)
-                    {
-                        morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                    }
-                    morphTargetExportArgs.ModFolderPath = _projectManager.ActiveProject.ModDirectory;
-                }
-                if (item.Properties is OpusExportArgs opusExportArgs)
-                {
-                    opusExportArgs.RawFolderPath = proj.RawDirectory;
-                    opusExportArgs.ModFolderPath = proj.ModDirectory;
-                }
-                if (item.Properties is EntityExportArgs entExportArgs)
-                {
-                    if (_gameController.GetController() is RED4Controller cp77Controller)
-                    {
-                        entExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                    }
-                }
-                if (item.Properties is AnimationExportArgs animationExportArgs)
-                {
-                    if (_gameController.GetController() is RED4Controller cp77Controller)
-                    {
-                        animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                    }
-                }
-
-                if (proj != null)
-                {
-
-                }
-
-                var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
-                return _modTools.Export(fi, settings,
-                    new DirectoryInfo(proj.ModDirectory),
-                    new DirectoryInfo(proj.RawDirectory));
-            }
-
-            return false;
-        }
-
 
 
 
@@ -657,94 +498,15 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
 
-        public bool HasActiveProject => _projectManager != null && _projectManager.IsProjectLoaded;
+
 
         #region Commands
 
-        [RelayCommand]
-        private void ResetSettings()
-        {
-            foreach (var importableItem in ImportableItems)
-            {
-                if (!importableItem.IsChecked)
-                {
-                    continue;
-                }
 
-                importableItem.Properties = (ImportExportArgs)System.Activator.CreateInstance(importableItem.Properties.GetType());
-            }
 
-            SaveSettings();
-        }
 
-        [RelayCommand(CanExecute = nameof(HasActiveProject))]
-        private void ImportSettings()
-        {
-            var gammaRegex = new Regex(".*_[de][0-9]*$");
 
-            foreach (var importableItem in ImportableItems)
-            {
-                if (!importableItem.IsChecked)
-                {
-                    continue;
-                }
 
-                if (importableItem.Properties is not XbmImportArgs xbmImportArgs)
-                {
-                    continue;
-                }
-
-                if (_parserService != null)
-                {
-                    if (importableItem.GetModFile("xbm") is { } modFile)
-                    {
-                        using var fs = File.OpenRead(modFile);
-
-                        if (_parserService.TryReadRed4File(fs, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
-                        {
-                            xbmImportArgs.RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString());
-                            xbmImportArgs.Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString());
-                            xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
-                            xbmImportArgs.TextureGroup = bitmap.Setup.Group;
-                            xbmImportArgs.GenerateMipMaps = bitmap.Setup.HasMipchain;
-
-                            _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Loaded from project file");
-
-                            continue;
-                        }
-
-                        _loggerService?.Warning($"Load settings for \"{importableItem.Name}\": Project file couldn't be read");
-                    }
-
-                    if (importableItem.GetArchiveFile("xbm") is { } archiveFile)
-                    {
-                        using var ms = new MemoryStream();
-                        archiveFile.Extract(ms);
-
-                        if (_parserService.TryReadRed4File(ms, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
-                        {
-                            xbmImportArgs.RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString());
-                            xbmImportArgs.Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString());
-                            xbmImportArgs.GenerateMipMaps = bitmap.Setup.HasMipchain;
-                            xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
-                            xbmImportArgs.TextureGroup = bitmap.Setup.Group;
-
-                            _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Loaded from archive file");
-
-                            continue;
-                        }
-
-                        _loggerService?.Warning($"Load settings for \"{importableItem.Name}\": Archive file couldn't be read");
-                    }
-                }
-
-                xbmImportArgs.IsGamma = gammaRegex.IsMatch(Path.GetFileNameWithoutExtension(importableItem.Name));
-
-                _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Parsed filename");
-            }
-
-            SaveSettings();
-        }
 
         [RelayCommand]
         private void ToggleAdvancedOptions() => _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
@@ -763,58 +525,33 @@ namespace WolvenKit.ViewModels.Tools
             _loadedSettings = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, JsonObject>>>(json, s_jsonSerializerSettings);
         }
 
-        private void SetSetting(string type, IEventPattern<object, NotifyCollectionChangedEventArgs> item)
-        {
-            if (_loadedSettings == null)
-            {
-                return;
-            }
+        //private void SetSetting(string type, IEventPattern<object, NotifyCollectionChangedEventArgs> item)
+        //{
+        //    if (_loadedSettings == null)
+        //    {
+        //        return;
+        //    }
 
-            if (item.EventArgs.Action == NotifyCollectionChangedAction.Reset && item.Sender is IList list)
-            {
-                foreach (var entry in list)
-                {
-                    if (entry is ImportExportItemViewModel vm && _loadedSettings[type].TryGetValue(vm.GetBaseFile().RelativePath, out var args))
-                    {
-                        vm.Properties = (ImportExportArgs)args.Deserialize(vm.Properties.GetType(), s_jsonSerializerSettings);
-                    }
-                }
-            }
+        //    if (item.EventArgs.Action == NotifyCollectionChangedAction.Reset && item.Sender is IList list)
+        //    {
+        //        foreach (var entry in list)
+        //        {
+        //            if (entry is ImportExportItemViewModel vm && _loadedSettings[type].TryGetValue(vm.GetBaseFile().RelativePath, out var args))
+        //            {
+        //                vm.Properties = (ImportExportArgs)args.Deserialize(vm.Properties.GetType(), s_jsonSerializerSettings);
+        //            }
+        //        }
+        //    }
 
-            if (item.EventArgs.Action == NotifyCollectionChangedAction.Add && item.EventArgs.NewItems[0] is ImportExportItemViewModel vm2)
-            {
-                if (_loadedSettings[type].TryGetValue(vm2.GetBaseFile().RelativePath, out var args))
-                {
-                    vm2.Properties = (ImportExportArgs)args.Deserialize(vm2.Properties.GetType(), s_jsonSerializerSettings);
-                }
-            }
-        }
+        //    if (item.EventArgs.Action == NotifyCollectionChangedAction.Add && item.EventArgs.NewItems[0] is ImportExportItemViewModel vm2)
+        //    {
+        //        if (_loadedSettings[type].TryGetValue(vm2.GetBaseFile().RelativePath, out var args))
+        //        {
+        //            vm2.Properties = (ImportExportArgs)args.Deserialize(vm2.Properties.GetType(), s_jsonSerializerSettings);
+        //        }
+        //    }
+        //}
 
-        public void SaveSettings()
-        {
-            var importSettings = ImportableItems.ToDictionary(importableItem => importableItem.GetBaseFile().RelativePath, SerializeArgs);
-            var exportSettings = ExportableItems.ToDictionary(exportableItem => exportableItem.GetBaseFile().RelativePath, SerializeArgs);
 
-            _loadedSettings = new Dictionary<string, Dictionary<string, JsonObject>>
-            {
-                { "import", importSettings },
-                { "export", exportSettings },
-            };
-
-            var json = JsonSerializer.Serialize(_loadedSettings, s_jsonSerializerSettings);
-            File.WriteAllText(Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json"), json);
-        }
-
-        private JsonObject SerializeArgs(ImportExportItemViewModel vm) => SerializeArgs(vm.Properties);
-        private JsonObject SerializeArgs(ImportExportArgs args)
-        {
-            var node = (JsonObject)JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings);
-
-            node.Remove("Changing");
-            node.Remove("Changed");
-            node.Remove("ThrownExceptions");
-
-            return node;
-        }
     }
 }

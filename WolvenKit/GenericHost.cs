@@ -29,6 +29,7 @@ using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Exporters;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Importers;
@@ -145,8 +146,15 @@ namespace WolvenKit
                     services.AddTransient<ProjectWizardViewModel>();
                     services.AddTransient<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
 
+
+
+                    // Importers
+
                     services.AddTransient<TextureImportViewModel>();
                     services.AddTransient<IViewFor<TextureImportViewModel>, TextureImportView>();
+
+                    services.AddTransient<TextureExportViewModel>();
+                    services.AddTransient<IViewFor<TextureExportViewModel>, TextureExportView>();
 
                     #endregion
 

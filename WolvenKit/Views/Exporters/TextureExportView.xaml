@@ -1,20 +1,19 @@
-<Window
-    x:Class="WolvenKit.Views.Importers.TextureImportView"
+﻿<Window
+    x:Class="WolvenKit.Views.Exporters.TextureExportView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dialogs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
-    xmlns:dialogs1="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:layout="clr-namespace:WolvenKit.Layout"
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:local="clr-namespace:WolvenKit.Views.Importers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    Title="Texture Importer"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:layout="clr-namespace:WolvenKit.Layout"
+    Title="Texture Exporter"
     Width="800"
     Height="600"
-    WindowStartupLocation="CenterOwner">
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
 
     <Grid
         Grid.Row="1"
@@ -202,54 +201,56 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
+            <!--  Data Grid Exports  -->
             <!--  CellDoubleTapped="SfDataGrid_CellDoubleTapped"  -->
             <syncfusion:SfDataGrid
-                x:Name="ImportGrid"
-                Grid.Column="0"
+                x:Name="ExportGrid"
+                Grid.Row="1"
                 AllowEditing="True"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
                 AllowSorting="True"
                 AutoGenerateColumns="False"
                 BorderThickness="0,1,0,1"
+                
                 ColumnSizer="Auto"
-                SelectionMode="Extended">
+                SelectionMode="Extended"
+                Visibility="{Binding IsExportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <syncfusion:SfDataGrid.Columns>
+
                     <syncfusion:GridCheckBoxColumn
                         Width="50"
-                        AllowEditing="True"
                         HeaderText="#"
                         MappingName="IsChecked">
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
-                                <CheckBox
-                                    Command="layout:SFDataGridCommands.CheckAndUnCheck"
-                                    CommandParameter="{Binding ElementName=ImportGrid}"
-                                    IsChecked="{Binding Path=IsHeaderChecked}" />
+                                <CheckBox Command="layout:SFDataGridCommands.CheckAndUnCheck" CommandParameter="{Binding ElementName=ExportGrid}" />
                             </DataTemplate>
                         </syncfusion:GridCheckBoxColumn.HeaderTemplate>
                     </syncfusion:GridCheckBoxColumn>
+
                     <syncfusion:GridTextColumn
                         AllowEditing="False"
                         ColumnSizer="Star"
                         HeaderText="Name"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Name" />
+
                     <syncfusion:GridTextColumn
                         AllowEditing="False"
                         ColumnSizer="AutoLastColumnFill"
-                        HeaderText="Import Task"
+                        HeaderText="Export Task"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Properties" />
+
                 </syncfusion:SfDataGrid.Columns>
 
-                <!--  Click="ShowSettings_OnClick"  -->
-                <syncfusion:SfDataGrid.RecordContextMenu>
+                <!--<syncfusion:SfDataGrid.RecordContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Show settings" />
+                        <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
                     </ContextMenu>
-                </syncfusion:SfDataGrid.RecordContextMenu>
+                </syncfusion:SfDataGrid.RecordContextMenu>-->
 
             </syncfusion:SfDataGrid>
 

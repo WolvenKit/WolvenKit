@@ -116,9 +116,7 @@ namespace WolvenKit.Models
         }
 
         [Browsable(false)]
-        public bool IsExportable => !IsDirectory
-                                    && !string.IsNullOrEmpty(GetExtension())
-                                    && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
+        public bool IsExportable => !IsDirectory && !string.IsNullOrEmpty(GetExtension()) && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
 
         #endregion
 

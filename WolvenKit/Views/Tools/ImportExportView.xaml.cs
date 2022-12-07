@@ -45,22 +45,6 @@ namespace WolvenKit.Views.Tools
             parser = Locator.Current.GetService<Red4ParserService>();
 
 
-            this.WhenActivated(disposables =>
-            {
-
-
-                this.Bind(ViewModel,
-                        x => x.ExportableItems,
-                        x => x.ExportGrid.ItemsSource)
-                    .DisposeWith(disposables);
-
-                this.Bind(ViewModel,
-                       x => x.SelectedExport,
-                       x => x.ExportGrid.SelectedItem)
-                   .DisposeWith(disposables);
-
-
-            });
         }
 
         //private void OnPropertyValueChanged(object sender, PropertyChangedEventArgs e) => _dispatcher.Invoke(() => OverlayPropertyGrid.RefreshPropertygrid());

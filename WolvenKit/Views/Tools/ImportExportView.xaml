@@ -61,58 +61,7 @@
                 </StackPanel>
             </Grid>
 
-            <!--  Data Grid Exports  -->
-            <!--  CellDoubleTapped="SfDataGrid_CellDoubleTapped"  -->
-            <syncfusion:SfDataGrid
-                x:Name="ExportGrid"
-                Grid.Row="1"
-                AllowEditing="True"
-                AllowFiltering="True"
-                AllowResizingColumns="True"
-                AllowSorting="True"
-                AutoGenerateColumns="False"
-                BorderThickness="0,1,0,1"
-                
-                ColumnSizer="Auto"
-                SelectionMode="Extended"
-                Visibility="{Binding IsExportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
-
-                <syncfusion:SfDataGrid.Columns>
-
-                    <syncfusion:GridCheckBoxColumn
-                        Width="50"
-                        HeaderText="#"
-                        MappingName="IsChecked">
-                        <syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <CheckBox Command="layout:SFDataGridCommands.CheckAndUnCheck" CommandParameter="{Binding ElementName=ExportGrid}" />
-                            </DataTemplate>
-                        </syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                    </syncfusion:GridCheckBoxColumn>
-
-                    <syncfusion:GridTextColumn
-                        AllowEditing="False"
-                        ColumnSizer="Star"
-                        HeaderText="Name"
-                        HorizontalHeaderContentAlignment="Left"
-                        MappingName="Name" />
-
-                    <syncfusion:GridTextColumn
-                        AllowEditing="False"
-                        ColumnSizer="AutoLastColumnFill"
-                        HeaderText="Export Task"
-                        HorizontalHeaderContentAlignment="Left"
-                        MappingName="Properties" />
-
-                </syncfusion:SfDataGrid.Columns>
-
-                <!--<syncfusion:SfDataGrid.RecordContextMenu>
-                    <ContextMenu>
-                        <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
-                    </ContextMenu>
-                </syncfusion:SfDataGrid.RecordContextMenu>-->
-
-            </syncfusion:SfDataGrid>
+           
 
            
 
@@ -123,7 +72,7 @@
         
 
         <!--  Processing Overlay  -->
-        <Grid
+        <!--<Grid
             Grid.RowSpan="4"
             Grid.ColumnSpan="4"
             Background="Gray"
@@ -134,7 +83,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Text="Files are being processed..." />
-        </Grid>
+        </Grid>-->
 
         <!--  Help Overlay  -->
         <Grid
