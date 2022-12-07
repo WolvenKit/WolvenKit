@@ -837,6 +837,22 @@ namespace WolvenKit.ViewModels.Shell
                         stream = File.Create(file.FullPath);
                     }
                     break;
+                case EWolvenKitFile.RedScript:
+                case EWolvenKitFile.CETLua:
+                    //prep the subdirs
+                    var scriptDirName = Path.GetDirectoryName(file.FullPath);
+                    Directory.CreateDirectory(scriptDirName);
+                    if (!string.IsNullOrEmpty(file.SelectedFile.Template))
+                    {
+                        await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}");
+                        stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
+                        resource.CopyTo(stream);
+                    }
+                    else
+                    {
+                        stream = File.Create(file.FullPath);
+                    }
+                    break;
                 case EWolvenKitFile.Cr2w:
                     var redType = file.SelectedFile.Name;
                     if (redType != "")
