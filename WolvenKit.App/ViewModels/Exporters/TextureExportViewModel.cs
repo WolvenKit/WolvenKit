@@ -27,10 +27,11 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Importers;
-public partial class TextureExportViewModel : AbstractConverterViewModel
+public partial class TextureExportViewModel : ToolViewModel
 {
     private readonly ILoggerService _loggerService;
     private readonly INotificationService _notificationService;
@@ -53,7 +54,7 @@ public partial class TextureExportViewModel : AbstractConverterViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
-        IProgressService<double> progressService)
+        IProgressService<double> progressService) : base("TextureExportViewModel")
     {
         _gameController = gameController;
         _settingsManager = settingsManager;
@@ -75,7 +76,7 @@ public partial class TextureExportViewModel : AbstractConverterViewModel
 
     private void LoadFiles()
     {
-        var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*")
+        var files = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories)
             .Where(CanExport)
             .Select(x => new ExportableItemViewModel(x));
 
@@ -94,8 +95,8 @@ public partial class TextureExportViewModel : AbstractConverterViewModel
         return true;
     }
 
-    public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
-    public override ReactiveCommand<Unit, Unit> OkCommand { get; }
+    //public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
+    //public override ReactiveCommand<Unit, Unit> OkCommand { get; }
 
     /// <summary>
     /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"

@@ -25,19 +25,14 @@ namespace WolvenKit.Functionality.Layout
 
         #region Methods
 
-        public override System.Windows.Style SelectStyle(object item, System.Windows.DependencyObject container)
+        public override Style SelectStyle(object item, DependencyObject container)
         {
-            switch (item)
+            return item switch
             {
-                case ToolViewModel _:
-                    return ToolStyle;
-
-                case DocumentViewModel _:
-                    return FileStyle;
-
-                default:
-                    return base.SelectStyle(item, container);
-            }
+                ToolViewModel _ => ToolStyle,
+                DocumentViewModel _ => FileStyle,
+                _ => base.SelectStyle(item, container),
+            };
         }
 
         #endregion Methods

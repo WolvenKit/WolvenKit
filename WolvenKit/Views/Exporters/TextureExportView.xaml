@@ -3,12 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:layout="clr-namespace:WolvenKit.Layout"
     xmlns:local="clr-namespace:WolvenKit.Views.Importers"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:layout="clr-namespace:WolvenKit.Layout"
     Title="Texture Exporter"
     Width="800"
     Height="600"
@@ -34,34 +34,6 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Horizontal">
-
-                <!--  ResetSettingsCommand  -->
-                <Button
-                    Margin="4"
-                    Padding="4"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackground}"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                    BorderThickness="1"
-                    Command="{Binding ResetSettingsCommand}"
-                    FontSize="12"
-                    Style="{DynamicResource ButtonCustom}">
-                    <TextBlock Margin="1" Text="Reset Settings" />
-                </Button>
-
-                <!--  ImportSettingsCommand  -->
-                <Button
-                    Margin="4"
-                    Padding="4"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackground}"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                    BorderThickness="1"
-                    Command="{Binding ImportSettingsCommand}"
-                    FontSize="12"
-                    Style="{DynamicResource ButtonCustom}">
-                    <TextBlock Margin="1" Text="Load Settings" />
-                </Button>
 
                 <!--  CopyArgumentsTemplateToCommand  -->
                 <Button
@@ -103,13 +75,7 @@
                     <syncfusion:ComboBoxItemAdv Content="All in Grid" />
                 </syncfusion:ComboBoxAdv>
 
-                <!--  ShowAdvancedOptions  -->
-                <mah:ToggleSwitch
-                    Command="{Binding ToggleAdvancedOptionsCommand}"
-                    IsOn="{Binding ShowAdvancedOptions}"
-                    OffContent="Show Advanced Options"
-                    OnContent="Hide Advanced Options"
-                    ToolTip="Toggle Advanced Import/Export Options" />
+
 
             </StackPanel>
 
@@ -198,6 +164,7 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
+                <ColumnDefinition Width="3" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
@@ -212,7 +179,6 @@
                 AllowSorting="True"
                 AutoGenerateColumns="False"
                 BorderThickness="0,1,0,1"
-                
                 ColumnSizer="Auto"
                 SelectionMode="Extended"
                 Visibility="{Binding IsExportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
@@ -254,11 +220,13 @@
 
             </syncfusion:SfDataGrid>
 
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+
             <!--  Special Import / Export Options  -->
             <!--  CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"  -->
             <Grid
                 x:Name="XAML_AdvancedOptionsOverlay"
-                Grid.Column="1"
+                Grid.Column="2"
                 Background="{DynamicResource ContentBackgroundAlt2}">
 
                 <syncfusion:PropertyGrid
@@ -267,7 +235,6 @@
                     AutoGeneratingPropertyGridItem="OverlayPropertyGrid_AutoGeneratingPropertyGridItem"
                     ButtonPanelVisibility="Hidden"
                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
-                    
                     DescriptionPanelVisibility="Visible"
                     EnableGrouping="True"
                     PropertyExpandMode="NestedMode"

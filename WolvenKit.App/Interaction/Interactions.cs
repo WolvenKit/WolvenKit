@@ -35,6 +35,7 @@ namespace WolvenKit.Interaction
         public static readonly Interaction<Unit, bool> ShowMaterialRepositoryView = new();
 
         public static readonly Interaction<Unit, bool> ShowTextureImporter = new();
+        public static readonly Interaction<Unit, bool> ShowTextureExporter = new();
 
     }
 

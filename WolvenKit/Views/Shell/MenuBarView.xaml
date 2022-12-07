@@ -623,6 +623,18 @@
                             Kind="Import" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemShowTextureExporter"
+                    Margin="2,1"
+                    Header="Texture Exporter">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconUnicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="Export" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
             <!--  Game  -->

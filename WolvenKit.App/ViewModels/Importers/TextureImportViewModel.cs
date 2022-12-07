@@ -95,7 +95,7 @@ public partial class TextureImportViewModel : AbstractConverterViewModel
 
     private void LoadFiles()
     {
-        var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*")
+        var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
             .Where(CanImport)
             .Select(x => new ImportableItemViewModel(x));
 
@@ -165,51 +165,28 @@ public partial class TextureImportViewModel : AbstractConverterViewModel
         //prepare a list of failed items
         var failedItems = new List<string>();
 
-        //if (IsImportsSelected)
+        var toBeImported = ImportableItems.Where(_ => all || _.IsChecked).Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
+        total = toBeImported.Count;
+        foreach (var item in toBeImported)
         {
-            var toBeImported = ImportableItems.Where(_ => all || _.IsChecked).Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
-            total = toBeImported.Count;
-            foreach (var item in toBeImported)
+            if (await Task.Run(() => ImportSingleTask(item)))
             {
-                if (await Task.Run(() => ImportSingleTask(item)))
-                {
-                    sucessful++;
-                }
-                else // not successful
-                {
-                    failedItems.Add(item.FullName);
-                }
-
-                Interlocked.Increment(ref progress);
-                _progressService.Report(progress / (float)total);
+                sucessful++;
+            }
+            else // not successful
+            {
+                failedItems.Add(item.FullName);
             }
 
-            await ImportWavs(ImportableItems.Where(_ => all || _.IsChecked)
-                .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
-                .Select(x => x.FullName)
-                .ToList()
-                );
+            Interlocked.Increment(ref progress);
+            _progressService.Report(progress / (float)total);
         }
 
-        //if (IsExportsSelected)
-        //{
-        //    var toBeExported = ExportableItems.Where(_ => all || _.IsChecked).ToList();
-        //    total = toBeExported.Count;
-        //    foreach (var item in toBeExported)
-        //    {
-        //        if (await Task.Run(() => ExportSingle(item)))
-        //        {
-        //            sucessful++;
-        //        }
-        //        else
-        //        {
-        //            failedItems.Add(item.FullName);
-        //        }
-
-        //        Interlocked.Increment(ref progress);
-        //        _progressService.Report(progress / (float)total);
-        //    }
-        //}
+        await ImportWavs(ImportableItems.Where(_ => all || _.IsChecked)
+            .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
+            .Select(x => x.FullName)
+            .ToList()
+            );
 
         IsProcessing = false;
 

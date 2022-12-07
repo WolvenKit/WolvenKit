@@ -156,6 +156,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.ShowTextureImporterCommand,
                     view => view.MenuItemShowTextureImporter)
                 .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.ShowTextureExporterCommand,
+                    view => view.MenuItemShowTextureExporter)
+                .DisposeWith(disposables);
 
             // Game
             this.BindCommand(ViewModel,

@@ -20,7 +20,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private ExportArgs DecideExportOptions(string model)
         {
-            _ = Enum.TryParse(Path.GetExtension(model), out ECookedFileFormat fileFormat);
+            _ = Enum.TryParse(Path.GetExtension(model).TrimStart('.'), out ECookedFileFormat fileFormat);
 
             return fileFormat switch
             {

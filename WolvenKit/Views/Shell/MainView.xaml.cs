@@ -11,6 +11,7 @@ using Splat;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Exporters;
 using WolvenKit.Views.Importers;
 
 namespace WolvenKit.Views.Shell
@@ -75,6 +76,18 @@ namespace WolvenKit.Views.Shell
                         interaction.SetOutput(true);
                     }, RxApp.MainThreadScheduler);
                 });
+                //Interactions.ShowTextureExporter.RegisterHandler(interaction =>
+                //{
+                //    TextureExportView dialog = new();
+
+                //    return Observable.Start(() =>
+                //    {
+                //        if (dialog.ShowDialog(this) == true)
+                //        { }
+
+                //        interaction.SetOutput(true);
+                //    }, RxApp.MainThreadScheduler);
+                //});
 
                 this.Bind(ViewModel,
                     vm => vm.ActiveDocument,

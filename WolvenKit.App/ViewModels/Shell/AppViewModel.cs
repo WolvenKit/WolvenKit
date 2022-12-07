@@ -22,6 +22,7 @@ using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
@@ -163,6 +164,7 @@ namespace WolvenKit.ViewModels.Shell
             LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
 
             ShowTextureImporterCommand = ReactiveCommand.Create(ShowTextureImporter);
+            ShowTextureExporterCommand = ReactiveCommand.Create(ShowTextureExporter);
 
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => IsDialogShown);
 
@@ -991,7 +993,19 @@ namespace WolvenKit.ViewModels.Shell
         private async void LaunchOptions() => await Interactions.ShowLaunchProfilesView.Handle(Unit.Default);
 
         public ReactiveCommand<Unit, Unit> ShowTextureImporterCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowTextureExporterCommand { get; }
         private async void ShowTextureImporter() => await Interactions.ShowTextureImporter.Handle(Unit.Default);
+        private async void ShowTextureExporter()
+        {
+            var vm = Locator.Current.GetService<TextureExportViewModel>();
+            vm.State = DockState.Float;
+
+            DockedViews.Add(vm);
+
+
+            await Task.Delay(1);
+            //await Interactions.ShowTextureExporter.Handle(Unit.Default);
+        }
 
         public string CyberpunkBlenderAddonLink = "https://github.com/WolvenKit/Cyberpunk-Blender-add-on";
         public string WolvenKitSetupLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
