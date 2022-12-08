@@ -336,7 +336,7 @@
                 Margin="1,0"
                 Padding="12,0"
                 Header="Build">
-
+                
                 <!--  Pack  -->
                 <MenuItem
                     x:Name="MenuItemPack"
@@ -448,6 +448,25 @@
                             Foreground="{StaticResource WolvenKitYellow}"
                             Kind="RunAll"
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator />
+
+                <!--  Clean All  -->
+                <MenuItem
+                    x:Name="MenuItemClean"
+                    Margin="2,1"
+                    Header="Clean All"
+                    ToolTip="Clean project's packed directory completely">
+                    <MenuItem.Icon>
+                        <Grid Margin="6,0">
+                            <iconPacks:PackIconForkAwesome
+                                Padding="0,0,2,2"
+                                Foreground="{StaticResource WolvenKitRed}"
+                                Kind="Trash"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                        </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
 

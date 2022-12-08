@@ -82,7 +82,24 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
 
             this.WhenAnyValue(x => x.SelectedFile)
-                .Subscribe(x => FileName = x is not null ? $"{x.Name.Split(' ').First()}1.{x.Extension.ToLower()}" : null);
+                .WhereNotNull()
+                .Subscribe(x =>
+                {
+                    var project = Locator.Current.GetService<IProjectManager>().ActiveProject as Cp77Project;
+                    var sep = Path.DirectorySeparatorChar;
+                    switch (SelectedFile.Type)
+                    {
+                        case EWolvenKitFile.RedScript:
+                            FileName = $"r6{sep}scripts{sep}{project.Name}{sep}untitled.{x.Extension.ToLower()}";
+                            break;
+                        case EWolvenKitFile.CETLua:
+                            FileName = $"bin{sep}x64{sep}plugins{sep}cyber_engine_tweaks{sep}mods{sep}{project.Name}{sep}init.{x.Extension.ToLower()}";
+                            break;
+                        default: //retain default behavior for all other files
+                            FileName = x is not null ? $"{x.Name.Split(' ').First()}1.{x.Extension.ToLower()}" : null;
+                            break;
+                    }
+                });
             this.WhenAnyValue(x => x.FileName)
                 .Subscribe(x =>
                 {
@@ -125,6 +142,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 EWolvenKitFile.TweakXl => project.ResourcesDirectory,
                 EWolvenKitFile.Cr2w => project.ModDirectory,
                 EWolvenKitFile.ArchiveXl => project.ResourcesDirectory,
+                EWolvenKitFile.RedScript => project.ResourcesDirectory ,
+                EWolvenKitFile.CETLua => project.ResourcesDirectory,
                 _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
         }
