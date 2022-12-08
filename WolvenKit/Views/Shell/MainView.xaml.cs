@@ -64,30 +64,7 @@ namespace WolvenKit.Views.Shell
                         interaction.SetOutput(true);
                     }, RxApp.MainThreadScheduler);
                 });
-                Interactions.ShowTextureImporter.RegisterHandler(interaction =>
-                {
-                    TextureImportView dialog = new();
 
-                    return Observable.Start(() =>
-                    {
-                        if (dialog.ShowDialog(this) == true)
-                        { }
-
-                        interaction.SetOutput(true);
-                    }, RxApp.MainThreadScheduler);
-                });
-                //Interactions.ShowTextureExporter.RegisterHandler(interaction =>
-                //{
-                //    TextureExportView dialog = new();
-
-                //    return Observable.Start(() =>
-                //    {
-                //        if (dialog.ShowDialog(this) == true)
-                //        { }
-
-                //        interaction.SetOutput(true);
-                //    }, RxApp.MainThreadScheduler);
-                //});
 
                 this.Bind(ViewModel,
                     vm => vm.ActiveDocument,

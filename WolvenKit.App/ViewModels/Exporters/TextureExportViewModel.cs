@@ -4,34 +4,27 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData;
-using Newtonsoft.Json;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 
-namespace WolvenKit.App.ViewModels.Importers;
-public partial class TextureExportViewModel : ToolViewModel
+namespace WolvenKit.App.ViewModels.Exporters;
+public class TextureExportViewModel : FloatingPaneViewModel
 {
     private readonly ILoggerService _loggerService;
     private readonly INotificationService _notificationService;
@@ -54,7 +47,7 @@ public partial class TextureExportViewModel : ToolViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
-        IProgressService<double> progressService) : base("TextureExportViewModel")
+        IProgressService<double> progressService)
     {
         _gameController = gameController;
         _settingsManager = settingsManager;
@@ -72,31 +65,12 @@ public partial class TextureExportViewModel : ToolViewModel
         CopyArgumentsTemplateToCommand = new DelegateCommand<string>(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
 
         LoadFiles();
+
+        Header = Name;
     }
 
-    private void LoadFiles()
-    {
-        var files = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories)
-            .Where(CanExport)
-            .Select(x => new ExportableItemViewModel(x));
+    public override string Name => "Texture Exporter";
 
-        ExportableItems = new(files);
-    }
-
-    private static bool CanExport(string x)
-    {
-        var ext = Path.GetExtension(x).TrimStart('.');
-
-        if (!Enum.TryParse<ECookedFileFormat>(ext, out var _))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    //public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
-    //public override ReactiveCommand<Unit, Unit> OkCommand { get; }
 
     /// <summary>
     /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
@@ -110,18 +84,60 @@ public partial class TextureExportViewModel : ToolViewModel
 
     [Reactive] public bool IsProcessing { get; set; } = false;
 
-
-
+    #region Commands
 
     /// <summary>
     /// Process all in Import / Export Grid Command.
     /// </summary>
     public ReactiveCommand<Unit, Unit> ProcessAllCommand { get; private set; }
     /// <summary>
+    /// Execute Process all in Import / Export Grid Command.
+    /// Uses ExecuteProcessBulk
+    /// </summary>
+    private async Task ExecuteProcessAll() => await ExecuteProcessBulk(true); //the all parameter is set to true
+
+    /// <summary>
     /// Process selected in Import / Export Grid Command
     /// </summary>
     public ICommand ProcessSelectedCommand { get; private set; }
+    /// <summary>
+    /// Execute Process Selected in Import / Export Grid Command.
+    /// Uses ExecuteProcessBulk
+    /// </summary>
+    private async Task ExecuteProcessSelected() => await ExecuteProcessBulk(); //the all parameter's default is false
 
+    public ICommand CopyArgumentsTemplateToCommand { get; private set; }
+    private bool CanCopyArgumentsTemplateTo(string param) => true;
+    private void ExecuteCopyArgumentsTemplateTo(string param)
+    {
+        //var current = SelectedObject.Properties;
+
+
+        //if (current is not ExportArgs exportArgs)
+        //{
+        //    return;
+        //}
+
+        //var json = SerializeArgs(exportArgs);
+
+        //var results = param switch
+        //{
+        //    s_selectedInGrid => ExportableItems.Where(_ => _.IsChecked),
+        //    _ => ExportableItems
+        //};
+
+        //foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
+        //{
+        //    item.Properties = (ExportArgs)json.Deserialize(exportArgs.GetType(), s_jsonSerializerSettings);
+        //}
+
+
+        //SaveSettings();
+        //_notificationService.Success($"Template has been copied to the selected items.");
+    }
+
+
+    #endregion
 
     /// <summary>
     /// Helper Task to Execute Bulk Processing in Import / Export Grid Command
@@ -176,19 +192,6 @@ public partial class TextureExportViewModel : ToolViewModel
 
         _progressService.Completed();
     }
-
-    /// <summary>
-    /// Execute Process all in Import / Export Grid Command.
-    /// Uses ExecuteProcessBulk
-    /// </summary>
-    private async Task ExecuteProcessAll() => await ExecuteProcessBulk(true); //the all parameter is set to true
-
-    /// <summary>
-    /// Execute Process Selected in Import / Export Grid Command.
-    /// Uses ExecuteProcessBulk
-    /// </summary>
-    private async Task ExecuteProcessSelected() => await ExecuteProcessBulk(); //the all parameter's default is false
-
 
     /// <summary>
     /// Export Single Item
@@ -254,39 +257,24 @@ public partial class TextureExportViewModel : ToolViewModel
         return false;
     }
 
-
-
-
-    public ICommand CopyArgumentsTemplateToCommand { get; private set; }
-
-    private bool CanCopyArgumentsTemplateTo(string param) => true;
-
-    private void ExecuteCopyArgumentsTemplateTo(string param)
+    private void LoadFiles()
     {
-        //var current = SelectedObject.Properties;
+        var files = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories)
+            .Where(CanExport)
+            .Select(x => new ExportableItemViewModel(x));
 
-
-        //if (current is not ExportArgs exportArgs)
-        //{
-        //    return;
-        //}
-
-        //var json = SerializeArgs(exportArgs);
-
-        //var results = param switch
-        //{
-        //    s_selectedInGrid => ExportableItems.Where(_ => _.IsChecked),
-        //    _ => ExportableItems
-        //};
-
-        //foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
-        //{
-        //    item.Properties = (ExportArgs)json.Deserialize(exportArgs.GetType(), s_jsonSerializerSettings);
-        //}
-
-
-        //SaveSettings();
-        //_notificationService.Success($"Template has been copied to the selected items.");
+        ExportableItems = new(files);
     }
 
+    private static bool CanExport(string x)
+    {
+        var ext = Path.GetExtension(x).TrimStart('.');
+
+        if (!Enum.TryParse<ECookedFileFormat>(ext, out var _))
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

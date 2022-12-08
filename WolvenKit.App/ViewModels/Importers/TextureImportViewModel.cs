@@ -41,7 +41,7 @@ using WolvenKit.ViewModels.Tools;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.App.ViewModels.Importers;
-public partial class TextureImportViewModel : AbstractConverterViewModel
+public partial class TextureImportViewModel : FloatingPaneViewModel
 {
     private readonly ILoggerService _loggerService;
     private readonly INotificationService _notificationService;
@@ -86,45 +86,14 @@ public partial class TextureImportViewModel : AbstractConverterViewModel
 
         LoadFiles();
 
-        this
-                .WhenAnyValue(x => x._projectManager.IsProjectLoaded)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(
-                    _ => ImportSettingsCommand.NotifyCanExecuteChanged());
+        Header = Name;
+
+        this.WhenAnyValue(x => x._projectManager.IsProjectLoaded)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(_ => ImportSettingsCommand.NotifyCanExecuteChanged());
     }
 
-    private void LoadFiles()
-    {
-        var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
-            .Where(CanImport)
-            .Select(x => new ImportableItemViewModel(x));
-
-        ImportableItems = new(files);
-    }
-
-    private static bool CanImport(string x)
-    {
-        var ext = Path.GetExtension(x).TrimStart('.');
-
-        if (!Enum.TryParse<ERawFileFormat>(ext, out var _))
-        {
-            return false;
-        }
-
-        var dbg_disabled = new List<string>()
-                {
-                    "bmp",
-                    "jpg",
-                    //"png",
-                    //"tga",
-                    "tiff",
-                };
-
-        return !dbg_disabled.Contains(ext);
-    }
-
-    public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
-    public override ReactiveCommand<Unit, Unit> OkCommand { get; }
+    public override string Name => "Texture Importer";
 
     /// <summary>
     /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
@@ -480,5 +449,35 @@ public partial class TextureImportViewModel : AbstractConverterViewModel
 
         var json = JsonSerializer.Serialize(_loadedSettings, s_jsonSerializerSettings);
         File.WriteAllText(Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json"), json);
+    }
+
+    private void LoadFiles()
+    {
+        var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
+            .Where(CanImport)
+            .Select(x => new ImportableItemViewModel(x));
+
+        ImportableItems = new(files);
+    }
+
+    private static bool CanImport(string x)
+    {
+        var ext = Path.GetExtension(x).TrimStart('.');
+
+        if (!Enum.TryParse<ERawFileFormat>(ext, out var _))
+        {
+            return false;
+        }
+
+        var dbg_disabled = new List<string>()
+                {
+                    "bmp",
+                    "jpg",
+                    //"png",
+                    //"tga",
+                    "tiff",
+                };
+
+        return !dbg_disabled.Contains(ext);
     }
 }

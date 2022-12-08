@@ -8,6 +8,7 @@ using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.App;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;

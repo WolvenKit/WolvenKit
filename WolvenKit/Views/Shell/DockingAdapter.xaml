@@ -77,15 +77,9 @@
             PersistState="True"
             ShowFloatWindowInTaskbar="True"
             UseDocumentContainer="True"
-            UseNativeFloatWindow="True">
-            <!--syncfusion:DockingManager.Resources>
-                <Style TargetType="{x:Type ContentPresenter}">
-                    <Setter Property="Margin" Value="-1" />
-                </Style>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="Margin" Value="-1" />
-                </Style>
-            </syncfusion:DockingManager.Resources-->
+            UseNativeFloatWindow="True"
+            WindowClosing="PART_DockingManager_WindowClosing">
+
             <syncfusion:DockingManager.ContainerStyle>
                 <Style BasedOn="{StaticResource SyncfusionDocumentContainerStyle}" TargetType="{x:Type syncfusion:DocumentContainer}">
                     <Setter Property="Background">

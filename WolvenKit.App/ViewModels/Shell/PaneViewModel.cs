@@ -7,11 +7,6 @@ namespace WolvenKit.ViewModels.Shell;
 
 public abstract class PaneViewModel : ReactiveObject, IDockElement
 {
-    public PaneViewModel()
-    {
-
-    }
-
     [Reactive] public virtual string Header { get; set; }
 
     [Reactive] public DockState State { get; set; }

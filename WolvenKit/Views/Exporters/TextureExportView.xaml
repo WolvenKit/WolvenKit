@@ -1,4 +1,4 @@
-﻿<Window
+﻿<reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Exporters.TextureExportView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -8,13 +8,16 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Importers"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    Title="Texture Exporter"
-    Width="800"
-    Height="600"
-    WindowStartupLocation="CenterOwner"
+    xmlns:vm="clr-namespace:WolvenKit.App.ViewModels.Exporters;assembly=WolvenKit.App"
+    x:TypeArguments="vm:TextureExportViewModel"
+    d:DataContext="{d:DesignInstance Type=vm:TextureExportViewModel}"
     mc:Ignorable="d">
-
+    <!--
+        Title="Texture Exporter"
+        WindowStartupLocation="CenterOwner"
+    -->
     <Grid
         Grid.Row="1"
         Background="{DynamicResource ContentBackgroundAlt2}"
@@ -248,4 +251,4 @@
 
     </Grid>
 
-</Window>
+</reactiveUi:ReactiveUserControl>

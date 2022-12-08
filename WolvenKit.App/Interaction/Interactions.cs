@@ -33,10 +33,6 @@ namespace WolvenKit.Interaction
         public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();
         public static readonly Interaction<Unit, bool> ShowLaunchProfilesView = new();
         public static readonly Interaction<Unit, bool> ShowMaterialRepositoryView = new();
-
-        public static readonly Interaction<Unit, bool> ShowTextureImporter = new();
-        public static readonly Interaction<Unit, bool> ShowTextureExporter = new();
-
     }
 
     public enum WMessageBoxImage

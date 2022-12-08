@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common.Model.Arguments;
 
@@ -22,19 +23,19 @@ namespace WolvenKit.Views.Exporters;
 /// <summary>
 /// Interaction logic for TextureExportView.xaml
 /// </summary>
-public partial class TextureExportView : IViewFor<TextureExportViewModel>
+public partial class TextureExportView : ReactiveUserControl<TextureExportViewModel>
 {
     public TextureExportView()
     {
         InitializeComponent();
 
-        ViewModel = Locator.Current.GetService<TextureExportViewModel>();
-        DataContext = ViewModel;
-
-
-
         this.WhenActivated(disposables =>
         {
+            if (DataContext is TextureExportViewModel viewModel)
+            {
+                SetCurrentValue(ViewModelProperty, viewModel);
+            }
+
             this.OneWayBind(ViewModel,
                     x => x.SelectedObject.Properties,
                     x => x.OverlayPropertyGrid.SelectedObject)
@@ -51,15 +52,6 @@ public partial class TextureExportView : IViewFor<TextureExportViewModel>
                .DisposeWith(disposables);
 
         });
-    }
-
-    public TextureExportViewModel ViewModel { get; set; }
-    object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (TextureExportViewModel)value; }
-
-    public bool? ShowDialog(System.Windows.Window owner)
-    {
-        Owner = owner;
-        return ShowDialog();
     }
 
     private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)

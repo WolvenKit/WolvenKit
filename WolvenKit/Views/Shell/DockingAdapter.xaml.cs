@@ -14,13 +14,13 @@ using System.Xml;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
+using WolvenKit.App.ViewModels;
 using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Documents;
-using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 using DockState = WolvenKit.Models.Docking.DockState;
@@ -113,6 +113,16 @@ namespace WolvenKit.Views.Shell
             {
                 e.Cancel = !await TryCloseDocument(vm);
             }
+        }
+
+        /// <summary>
+        /// For windows in Float, Dock and AutoHidden state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PART_DockingManager_WindowClosing(object sender, WindowClosingEventArgs e)
+        {
+
         }
 
         private readonly bool _debuggingLayouts = false;
@@ -321,7 +331,10 @@ namespace WolvenKit.Views.Shell
         }
 
 
-
+        /// <summary>
+        /// This happens on the very first tool window assignments
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             if (e.Property.Name == "ItemsSource")
@@ -330,26 +343,34 @@ namespace WolvenKit.Views.Shell
                 {
                     var oldcollection = e.OldValue as INotifyCollectionChanged;
                     oldcollection.CollectionChanged -= CollectionChanged;
+
+                    //unsubscribe?
                 }
 
                 if (e.NewValue != null)
                 {
                     ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(DocumentContainer.AddTabDocumentAtLastProperty, true);
+
                     var newcollection = e.NewValue as INotifyCollectionChanged;
+
                     var count = 0;
                     foreach (var item in (IList)e.NewValue)
                     {
                         if (item is IDockElement dockElement)
                         {
-                            dockElement
-                                .ObservableForProperty(x => x.State)
+                            // use normal events here?
+                            dockElement.ObservableForProperty(x => x.State)
                                 .ObserveOn(RxApp.MainThreadScheduler)
                                 .Subscribe(OnStateUpdated);
 
-                            var control = new ContentControl() { Content = item };
+                            // add control
+                            var control = new ContentControl()
+                            {
+                                Content = item
+                            };
                             DockingManager.SetHeader(control, dockElement.Header);
                             DockingManager.SetSideInDockedMode(control, (Syncfusion.Windows.Tools.Controls.DockSide)(int)dockElement.SideInDockedMode);
-                            DockingManager.SetState(control, (Syncfusion.Windows.Tools.Controls.DockState)(int)dockElement.State);
+                            DockingManager.SetState(control, dockElement.State.ToSfDockState());
                             if (dockElement.State != DockState.Document)
                             {
                                 if (count != 0)
@@ -358,13 +379,83 @@ namespace WolvenKit.Views.Shell
                                 }
                                 control.Name = "item" + count++.ToString();
                             }
+
                             PART_DockingManager.Children.Add(control);
                         }
                     }
+
                     newcollection.CollectionChanged += CollectionChanged;
                 }
             }
             base.OnPropertyChanged(e);
+        }
+
+        /// <summary>
+        /// For all programmatically added windows
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // remove windows
+            if (e.OldItems != null)
+            {
+                foreach (var item in e.OldItems)
+                {
+                    // add control
+                    var control = (from ContentControl element in PART_DockingManager.Children
+                                   where element.Content == item
+                                   select element).FirstOrDefault();
+                    PART_DockingManager.Children.Remove(control);
+
+                    // set active document to null
+                    if (control.Content is IDocumentViewModel document)
+                    {
+                        if (ActiveDocument == document)
+                        {
+                            SetCurrentValue(ActiveDocumentProperty, null);
+                        }
+                    }
+
+                    // unsubscribe ?
+                }
+            }
+
+            // add windows
+            if (e.NewItems != null)
+            {
+                foreach (var item in e.NewItems)
+                {
+                    if (item is IDockElement element)
+                    {
+                        // use normal events here?
+                        element.ObservableForProperty(x => x.Header)
+                            .ObserveOn(RxApp.MainThreadScheduler)
+                            .Subscribe(OnHeaderChanged);
+                        element.ObservableForProperty(x => x.State)
+                            .ObserveOn(RxApp.MainThreadScheduler)
+                            .Subscribe(OnStateUpdated);
+
+                        // add control
+                        var control = new ContentControl()
+                        {
+                            Content = element
+                        };
+
+                        // floating windows need size and positioning
+                        if (item is FloatingPaneViewModel vm)
+                        {
+                            DockingManager.SetDesiredHeightInFloatingMode(control, vm.Height);
+                            DockingManager.SetDesiredWidthInFloatingMode(control, vm.Width);
+                            DockingManager.SetFloatingWindowRect(control, new Rect(400, 400, vm.Width, vm.Height));
+                        }
+
+                        DockingManager.SetHeader(control, element.Header);
+                        DockingManager.SetState(control, element.State.ToSfDockState());
+                        PART_DockingManager.Children.Add(control);
+                    }
+                }
+            }
         }
 
         private void OnHeaderChanged(IObservedChange<IDockElement, string> headerChange)
@@ -387,60 +478,22 @@ namespace WolvenKit.Views.Shell
         private void OnStateUpdated(IObservedChange<IDockElement, DockState> dockStateChange)
         {
             var item = dockStateChange.Sender;
-            var newstate = dockStateChange.Value;
-
             var control = (from ContentControl element in PART_DockingManager.Children
                            where element.Content == item
                            select element).FirstOrDefault();
-            var dockstate = DockingManager.GetState(control).ToDockState();
 
+            var newstate = dockStateChange.Value;
+            // actually remove and not hide FloatingPaneViewModels
+            if (control is ContentControl { Content: FloatingPaneViewModel vm } && newstate == DockState.Hidden)
+            {
+                viewModel.DockedViews.Remove(vm);
+                return;
+            }
+
+            var dockstate = DockingManager.GetState(control).ToDockState();
             if (dockstate != newstate)
             {
                 DockingManager.SetState(control, newstate.ToSfDockState());
-            }
-        }
-
-        private void CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    var control = (from ContentControl element in PART_DockingManager.Children
-                                   where element.Content == item
-                                   select element).FirstOrDefault();
-                    PART_DockingManager.Children.Remove(control);
-                    if (control.Content is IDocumentViewModel document)
-                    {
-
-                        if (ActiveDocument == document)
-                        {
-                            SetCurrentValue(ActiveDocumentProperty, null);
-                        }
-                    }
-                }
-            }
-
-            if (e.NewItems != null)
-            {
-                foreach (var item in e.NewItems)
-                {
-                    if (item is IDockElement element)
-                    {
-                        element
-                               .ObservableForProperty(x => x.Header)
-                               .ObserveOn(RxApp.MainThreadScheduler)
-                               .Subscribe(OnHeaderChanged);
-
-                        var control = new ContentControl() { Content = element };
-                        DockingManager.SetHeader(control, element.Header);
-                        if (element.State == DockState.Document)
-                        {
-                            DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Document);
-                        }
-                        PART_DockingManager.Children.Add(control);
-                    }
-                }
             }
         }
 
@@ -534,7 +587,7 @@ namespace WolvenKit.Views.Shell
         {
             foreach (var item in e.ClosingTabItems)
             {
-                if (item is TabItemExt { Content: ContentPresenter {Content: ContentControl { Content: DocumentViewModel vm } } })
+                if (item is TabItemExt { Content: ContentPresenter { Content: ContentControl { Content: DocumentViewModel vm } } })
                 {
                     e.Cancel = !await TryCloseDocument(vm);
                 }
@@ -545,7 +598,7 @@ namespace WolvenKit.Views.Shell
         {
             foreach (var item in e.ClosingTabItems)
             {
-                if (item is TabItemExt { Content: ContentPresenter {Content: ContentControl { Content: DocumentViewModel vm } } })
+                if (item is TabItemExt { Content: ContentPresenter { Content: ContentControl { Content: DocumentViewModel vm } } })
                 {
                     e.Cancel = !await TryCloseDocument(vm);
                 }
@@ -569,5 +622,7 @@ namespace WolvenKit.Views.Shell
 
             return true;
         }
+
+
     }
 }

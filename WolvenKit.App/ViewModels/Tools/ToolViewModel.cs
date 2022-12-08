@@ -8,9 +8,6 @@ namespace WolvenKit.ViewModels.Tools
 {
     public abstract class ToolViewModel : PaneViewModel
     {
-
-        #region constructors
-
         /// <summary>
         /// Class constructor.
         /// </summary>
@@ -22,10 +19,7 @@ namespace WolvenKit.ViewModels.Tools
             Name = name;
             Header = name;
 
-            this.WhenAnyValue(x => x.State).Subscribe(b =>
-            {
-                this.RaisePropertyChanged("IsVisible");
-            });
+            this.WhenAnyValue(x => x.State).Subscribe(b => this.RaisePropertyChanged(nameof(IsVisible)));
         }
 
         /// <summary>
@@ -35,16 +29,12 @@ namespace WolvenKit.ViewModels.Tools
         {
         }
 
-        #endregion constructors
-
-        #region properties
 
         /// <summary>
         /// Gets the name of this tool window.
         /// </summary>
         public string Name { get; }
 
-        #region IsVisible
 
         /// <summary>
         /// Gets/sets whether this tool window is visible or not.
@@ -55,12 +45,10 @@ namespace WolvenKit.ViewModels.Tools
             set
             {
                 State = value ? DockState.Dock : DockState.Hidden;
-                this.RaisePropertyChanged("IsVisible");
+                this.RaisePropertyChanged(nameof(IsVisible));
             }
         }
 
-        #endregion IsVisible
 
-        #endregion properties
     }
 }

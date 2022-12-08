@@ -24,19 +24,19 @@ using YamlDotNet.Core;
 
 namespace WolvenKit.Views.Importers;
 
-public partial class TextureImportView : IViewFor<TextureImportViewModel>
+public partial class TextureImportView : ReactiveUserControl<TextureImportViewModel>
 {
     public TextureImportView()
     {
         InitializeComponent();
 
-        ViewModel = Locator.Current.GetService<TextureImportViewModel>();
-        DataContext = ViewModel;
-
-
-
         this.WhenActivated(disposables =>
         {
+            if (DataContext is TextureImportViewModel viewModel)
+            {
+                SetCurrentValue(ViewModelProperty, viewModel);
+            }
+
             this.OneWayBind(ViewModel,
                     x => x.SelectedObject.Properties,
                     x => x.OverlayPropertyGrid.SelectedObject)
@@ -54,15 +54,6 @@ public partial class TextureImportView : IViewFor<TextureImportViewModel>
 
         });
 
-    }
-
-    public TextureImportViewModel ViewModel { get; set; }
-    object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (TextureImportViewModel)value; }
-
-    public bool? ShowDialog(System.Windows.Window owner)
-    {
-        Owner = owner;
-        return ShowDialog();
     }
 
     private void ShowSettings()

@@ -22,6 +22,7 @@ using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
@@ -994,17 +995,18 @@ namespace WolvenKit.ViewModels.Shell
 
         public ReactiveCommand<Unit, Unit> ShowTextureImporterCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowTextureExporterCommand { get; }
-        private async void ShowTextureImporter() => await Interactions.ShowTextureImporter.Handle(Unit.Default);
-        private async void ShowTextureExporter()
+        private void ShowTextureImporter()
+        {
+            var vm = Locator.Current.GetService<TextureImportViewModel>();
+            vm.State = DockState.Float;
+            DockedViews.Add(vm);
+        }
+
+        private void ShowTextureExporter()
         {
             var vm = Locator.Current.GetService<TextureExportViewModel>();
             vm.State = DockState.Float;
-
             DockedViews.Add(vm);
-
-
-            await Task.Delay(1);
-            //await Interactions.ShowTextureExporter.Handle(Unit.Default);
         }
 
         public string CyberpunkBlenderAddonLink = "https://github.com/WolvenKit/Cyberpunk-Blender-add-on";
