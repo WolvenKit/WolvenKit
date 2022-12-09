@@ -36,7 +36,7 @@ internal class UncookCommand : CommandBase
         AddOption(new Option<bool>(new[] { "--unbundle", "-u" }, "Also unbundle files."));
         AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh"));
         AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize to JSON"));
-        AddOption(new Option<MeshExportType?>(new[] { "--mesh-export-type" }, "Mesh export type (Default, WithMaterials, WithRig, Multimesh)."));
+        AddOption(new Option<MeshExportType?>(new[] { "--mesh-export-type" }, "Mesh export type (MeshOnly, WithMaterials (Default), WithRig, Multimesh)."));
         AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
         AddOption(new Option<bool>(new[] { "--mesh-export-lod-filter" }, "Filter out lod models."));
         AddOption(new Option<bool>(new[] { "--mesh-export-experimental-merged-export" }, "[EXPERIMENTAL] Merged mesh export. (Only supports Default or WithMaterials, re-import not supported)"));

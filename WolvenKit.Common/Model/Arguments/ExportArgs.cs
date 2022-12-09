@@ -168,16 +168,16 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "Mesh Export Type")]
-        [Description("Select between mesh export options. By default no rig or materials are included.")]
-        public MeshExportType meshExportType { get; set; } = MeshExportType.Default;
+        [Description("Select between mesh export options. By default materials but no rig are included.")]
+        public MeshExportType meshExportType { get; set; } = MeshExportType.WithMaterials;
 
         /// <summary>
         /// If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.
         /// </summary>
         [Category("Default Export Settings")]
         [Display(Name = "LOD Filter")]
-        [Description("If selected LOD meshes will not be included. Not recommended for most cases due to complications with clipping decals.")]
-        public bool LodFilter { get; set; } = false;
+        [Description("If selected LOD meshes will not be included. May cause complications with clipping decals.")]
+        public bool LodFilter { get; set; } = true;
 
         /// <summary>
         /// Binary Export Bool, Decides between GLB and GLTF
@@ -322,9 +322,9 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public enum MeshExportType
     {
-        Default,
-        WithRig,
         WithMaterials,
+        WithRig,
+        MeshOnly,
         Multimesh
     }
 

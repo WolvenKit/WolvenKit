@@ -679,7 +679,7 @@ namespace WolvenKit.Modkit.RED4
         {
             switch (meshargs.meshExportType)
             {
-                case MeshExportType.Default:
+                case MeshExportType.MeshOnly:
                     return _meshTools.ExportMesh(cr2wStream, cr2wFileName, meshargs);
 
                 case MeshExportType.WithMaterials:
