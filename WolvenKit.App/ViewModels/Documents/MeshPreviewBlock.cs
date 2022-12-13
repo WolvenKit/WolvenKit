@@ -324,7 +324,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 if (e.HitTestResult.ModelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
                 {
-                    Locator.Current.GetService<ILoggerService>().Info("Mesh Name: " + mesh.Name);
+                    Locator.Current.GetService<ILoggerService>().Info((mesh.WorldNodeIndex != null ? "worldNodeData[" + mesh.WorldNodeIndex + "] : " : "Mesh Name :") + mesh.Name);
                 }
             }
         }
