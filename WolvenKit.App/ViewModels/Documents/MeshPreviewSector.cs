@@ -71,6 +71,7 @@ namespace WolvenKit.ViewModels.Documents
                     var group = new MeshComponent()
                     {
                         Name = name,
+                        WorldNodeIndex = $"{handleIndex}",
                         AppearanceName = irmn.MeshAppearance,
                         DepotPath = irmn.Mesh.DepotPath
                     };
@@ -241,6 +242,7 @@ namespace WolvenKit.ViewModels.Documents
 
                     var mesh = new MeshComponent()
                     {
+                        WorldNodeIndex = $"{handleIndex}",
                         Name = "collisionNode_" + wcn.SectorHash
                     };
 
@@ -259,6 +261,7 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         var actorGroup = new MeshComponent()
                         {
+                            WorldNodeIndex = $"{handleIndex}",
                             Name = "actor_" + cb.Actors.IndexOf(actor)
                         };
 

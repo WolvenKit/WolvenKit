@@ -383,6 +383,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             public string AppearanceName { get; set; }
             public string MaterialName { get; set; }
+            public string WorldNodeIndex { get; set; }
             public CName DepotPath { get; set; }
         }
 
