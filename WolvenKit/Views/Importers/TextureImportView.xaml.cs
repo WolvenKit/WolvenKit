@@ -206,6 +206,33 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
         }
     }
 
+    private void ImportGrid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
+    {
+        foreach (var item in e.AddedItems)
+        {
+            if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
+            {
+                vm.IsChecked = true;
+
+                //RightFileView.ScrollInView(new RowColumnIndex(info.RowIndex, 0));
+            }
+        }
+
+        foreach (var item in e.RemovedItems)
+        {
+            if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
+            {
+                vm.IsChecked = false;
+            }
+        }
+
+
+        ViewModel.ProcessSelectedCommand.NotifyCanExecuteChanged();
+        ViewModel.CopyArgumentsTemplateToCommand.NotifyCanExecuteChanged();
+        ViewModel.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
+        ViewModel.ImportSettingsCommand.NotifyCanExecuteChanged();
+    }
+
 
     //private PropertyItem _propertyItem;
     ///// <summary>

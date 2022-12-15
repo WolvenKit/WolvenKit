@@ -193,7 +193,7 @@
     <Content Include="Resources\Media\t5.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Wolvenkit.Installer.Package_0.1.5.0_x64.msixbundle">
+    <Content Include="Resources\Wolvenkit.Installer.Package_0.2.0.0_x64.msixbundle">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
 
@@ -1774,8 +1774,8 @@
     <None Remove="Resources\SkyboxTextures\skyrender0004.bmp" />
     <None Remove="Resources\SkyboxTextures\skyrender0005.bmp" />
     <None Remove="Resources\SyntaxHighlighting\JavaScript-DarkMode.xshd" />
-    <None Remove="Resources\Wolvenkit.Installer.Package_0.1.5.0_x64.msixbundle" />
     <None Remove="Resources\SyntaxHighlighting\YAML.xshd" />
+    <None Remove="Resources\Wolvenkit.Installer.Package_0.2.0.0_x64.msixbundle" />
     <None Remove="sample.mp4" />
     <None Remove="SplashScreen1.png" />
     <None Remove="TaskBarIcon.ico" />

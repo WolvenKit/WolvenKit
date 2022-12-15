@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using ReactiveUI.Fody.Helpers;
@@ -24,6 +25,7 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Exporters;
+
 public partial class TextureExportViewModel : FloatingPaneViewModel
 {
     private readonly ILoggerService _loggerService;
@@ -37,7 +39,7 @@ public partial class TextureExportViewModel : FloatingPaneViewModel
     private readonly IPluginService _pluginService;
     private readonly IModTools _modTools;
 
-    private JsonObject currentSettings;
+    private (JsonObject, Type) currentSettings;
     private static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
     {
         Converters =
@@ -81,6 +83,7 @@ public partial class TextureExportViewModel : FloatingPaneViewModel
     [Reactive] public ExportableItemViewModel SelectedObject { get; set; }
 
     public ObservableCollection<ExportableItemViewModel> ExportableItems { get; set; }
+    public ObservableCollection<object> SelectedItems { get; set; }
 
     [Reactive] public bool IsProcessing { get; set; } = false;
 
@@ -95,25 +98,37 @@ public partial class TextureExportViewModel : FloatingPaneViewModel
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
     private void CopyArgumentsTemplateTo(string param)
     {
-        if (SelectedObject.Properties is not ExportArgs exportArgs)
+        if (SelectedObject.Properties is not ImportExportArgs args)
         {
             return;
         }
 
-        currentSettings = SerializeArgs(exportArgs);
+        currentSettings = (SerializeArgs(args), args.GetType());
     }
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
     private void PasteArgumentsTemplateTo()
     {
         var results = ExportableItems.Where(x => x.IsChecked);
+        var count = 0;
 
         foreach (var item in results)
         {
-            item.Properties = (ExportArgs)currentSettings.Deserialize(typeof(ExportArgs), s_jsonSerializerSettings);
+            var (settings, type) = currentSettings;
+
+            if (item.Properties.GetType() != type)
+            {
+                continue;
+            }
+
+            item.Properties = (ImportExportArgs)settings.Deserialize(type, s_jsonSerializerSettings);
+            count++;
         }
 
-        _notificationService.Success($"Template has been copied to the selected items.");
+        if (count > 0)
+        {
+            _notificationService.Success($"Template has been copied to the selected items.");
+        }
     }
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
@@ -133,9 +148,13 @@ public partial class TextureExportViewModel : FloatingPaneViewModel
     [RelayCommand]
     private void Refresh() => LoadFiles();
 
+    [RelayCommand]
+    private void ToggleAdvancedOptions() => _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
+
+
     #endregion
 
-    private bool IsAnyFileSelected() => ExportableItems.Where(x => x.IsChecked).Any();
+    public bool IsAnyFileSelected => ExportableItems.Where(x => x.IsChecked).Any();
 
     private bool IsAnyFile() => ExportableItems.Any();
 

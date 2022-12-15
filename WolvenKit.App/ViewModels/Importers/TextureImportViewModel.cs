@@ -29,6 +29,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Importers;
+
 public partial class TextureImportViewModel : FloatingPaneViewModel
 {
     private readonly ILoggerService _loggerService;
@@ -43,7 +44,7 @@ public partial class TextureImportViewModel : FloatingPaneViewModel
     private readonly IPluginService _pluginService;
     private readonly IModTools _modTools;
 
-    private JsonObject currentSettings;
+    private (JsonObject, Type) currentSettings;
     private static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
     {
         Converters =
@@ -103,25 +104,37 @@ public partial class TextureImportViewModel : FloatingPaneViewModel
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
     private void CopyArgumentsTemplateTo()
     {
-        if (SelectedObject.Properties is not ImportArgs importArgs)
+        if (SelectedObject.Properties is not ImportExportArgs args)
         {
             return;
         }
 
-        currentSettings = SerializeArgs(importArgs);
+        currentSettings = (SerializeArgs(args), args.GetType());
     }
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
     private void PasteArgumentsTemplateTo()
     {
         var results = ImportableItems.Where(x => x.IsChecked);
+        var count = 0;
 
         foreach (var item in results)
         {
-            item.Properties = (ImportArgs)currentSettings.Deserialize(typeof(ImportArgs), s_jsonSerializerSettings);
+            var (settings, type) = currentSettings;
+
+            if (item.Properties.GetType() != type)
+            {
+                continue;
+            }
+
+            item.Properties = (ImportExportArgs)settings.Deserialize(type, s_jsonSerializerSettings);
+            count++;
         }
 
-        _notificationService.Success($"Template has been copied to the selected items.");
+        if (count > 0)
+        {
+            _notificationService.Success($"Template has been copied to the selected items.");
+        }
     }
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
@@ -193,6 +206,10 @@ public partial class TextureImportViewModel : FloatingPaneViewModel
 
     [RelayCommand]
     private void Refresh() => LoadFiles();
+
+    [RelayCommand]
+    private void ToggleAdvancedOptions() => _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
+
 
     #endregion
 

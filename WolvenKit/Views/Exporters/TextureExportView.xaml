@@ -25,7 +25,7 @@
         <!--  Top Toolbar  -->
         <Grid
             Grid.Row="0"
-            Margin="4"
+            Margin="8"
             Background="{DynamicResource ContentBackgroundAlt2}">
 
             <StackPanel Orientation="Horizontal">
@@ -40,7 +40,7 @@
                     Command="{Binding ProcessSelectedCommand}"
                     FontSize="14"
                     Style="{DynamicResource ButtonCustom}"
-                    ToolTip="Import selected files to the engine format">
+                    ToolTip="Export selected files to the engine format">
 
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
@@ -55,7 +55,7 @@
                         <TextBlock
                             Margin="1"
                             FontSize="14"
-                            Text="Import Selected" />
+                            Text="Export Selected" />
                     </StackPanel>
 
                 </Button>
@@ -70,7 +70,7 @@
                     Command="{Binding ProcessAllCommand}"
                     FontSize="14"
                     Style="{DynamicResource ButtonCustom}"
-                    ToolTip="Import all files to the engine format">
+                    ToolTip="Export all files to the engine format">
 
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
@@ -85,7 +85,7 @@
                         <TextBlock
                             Margin="1"
                             FontSize="14"
-                            Text="Import All" />
+                            Text="Export All" />
                     </StackPanel>
 
                 </Button>
@@ -150,7 +150,7 @@
                     Command="{Binding CopyArgumentsTemplateToCommand}"
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
-                    ToolTip="Copy import settings from selected file">
+                    ToolTip="Copy export settings from selected file">
 
                     <StackPanel Orientation="Horizontal">
 
@@ -180,7 +180,7 @@
                     Command="{Binding PasteArgumentsTemplateToCommand}"
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
-                    ToolTip="Paste import settings to all selected files">
+                    ToolTip="Paste export settings to all selected files">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconForkAwesome
                             Width="13"
@@ -200,7 +200,7 @@
         </Grid>
 
         <!--  Main Grid  -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Margin="8">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -213,7 +213,7 @@
             <syncfusion:SfDataGrid
                 x:Name="ExportGrid"
                 Grid.Row="1"
-                AllowEditing="True"
+                AllowEditing="False"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
                 AllowSorting="True"
@@ -221,14 +221,16 @@
                 BorderThickness="0,1,0,1"
                 ColumnSizer="Auto"
                 SelectionMode="Extended"
-                Visibility="{Binding IsExportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
+                SelectionChanged="ExportGrid_SelectionChanged"
+               >
 
                 <syncfusion:SfDataGrid.Columns>
 
                     <syncfusion:GridCheckBoxColumn
                         Width="50"
                         HeaderText="#"
-                        MappingName="IsChecked">
+                        MappingName="IsChecked"
+                        >
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
                                 <CheckBox Command="layout:SFDataGridCommands.CheckAndUnCheck" CommandParameter="{Binding ElementName=ExportGrid}" />

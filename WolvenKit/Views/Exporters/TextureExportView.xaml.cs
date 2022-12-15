@@ -14,10 +14,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ReactiveUI;
 using Splat;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Exporters;
 /// <summary>
@@ -50,6 +52,10 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
                    x => x.SelectedObject,
                    x => x.ExportGrid.SelectedItem)
                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                   x => x.SelectedItems,
+                   x => x.ExportGrid.SelectedItems)
+               .DisposeWith(disposables);
 
         });
     }
@@ -66,5 +72,30 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
         }
     }
 
+    private void ExportGrid_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+    {
+        foreach (var item in e.AddedItems)
+        {
+            if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
+            {
+                vm.IsChecked = true;
 
+                //RightFileView.ScrollInView(new RowColumnIndex(info.RowIndex, 0));
+            }
+        }
+
+        foreach (var item in e.RemovedItems)
+        {
+            if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
+            {
+                vm.IsChecked = false;
+            }
+        }
+
+
+        ViewModel.ProcessSelectedCommand.NotifyCanExecuteChanged();
+        ViewModel.CopyArgumentsTemplateToCommand.NotifyCanExecuteChanged();
+        ViewModel.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
+        ViewModel.ImportSettingsCommand.NotifyCanExecuteChanged();
+    }
 }
