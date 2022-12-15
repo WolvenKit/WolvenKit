@@ -4,16 +4,15 @@ using DynamicData.Binding;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Models;
 
 namespace WolvenKit.ViewModels.Tools
 {
     public class ExportableItemViewModel : ImportExportItemViewModel
     {
-        public ExportableItemViewModel(string model)
+        public ExportableItemViewModel(string fileName)
         {
-            BaseFile = model;
-            Properties = DecideExportOptions(model);
+            BaseFile = fileName;
+            Properties = DecideExportOptions(fileName);
 
             Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
         }

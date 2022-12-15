@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using Prism.Commands;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
@@ -19,12 +18,13 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Exporters;
-public class TextureExportViewModel : FloatingPaneViewModel
+public partial class TextureExportViewModel : FloatingPaneViewModel
 {
     private readonly ILoggerService _loggerService;
     private readonly INotificationService _notificationService;
@@ -36,6 +36,17 @@ public class TextureExportViewModel : FloatingPaneViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly IPluginService _pluginService;
     private readonly IModTools _modTools;
+
+    private JsonObject currentSettings;
+    private static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
+    {
+        Converters =
+            {
+                new JsonFileEntryConverter(),
+                new JsonArchiveConverter()
+            },
+        WriteIndented = true
+    };
 
     public TextureExportViewModel(
         IGameControllerFactory gameController,
@@ -60,10 +71,6 @@ public class TextureExportViewModel : FloatingPaneViewModel
         _modTools = modTools;
         _progressService = progressService;
 
-        ProcessAllCommand = ReactiveCommand.CreateFromTask(ExecuteProcessAll);
-        ProcessSelectedCommand = ReactiveCommand.CreateFromTask(ExecuteProcessSelected);
-        CopyArgumentsTemplateToCommand = new DelegateCommand<string>(ExecuteCopyArgumentsTemplateTo, CanCopyArgumentsTemplateTo);
-
         LoadFiles();
 
         Header = Name;
@@ -71,73 +78,77 @@ public class TextureExportViewModel : FloatingPaneViewModel
 
     public override string Name => "Texture Exporter";
 
-
-    /// <summary>
-    /// Selected object , returns a Importable/Exportable ItemVM based on "IsImportsSelected"
-    /// </summary>
     [Reactive] public ExportableItemViewModel SelectedObject { get; set; }
 
-    /// <summary>
-    /// Public Exportable items.
-    /// </summary>
     public ObservableCollection<ExportableItemViewModel> ExportableItems { get; set; }
 
     [Reactive] public bool IsProcessing { get; set; } = false;
 
     #region Commands
 
-    /// <summary>
-    /// Process all in Import / Export Grid Command.
-    /// </summary>
-    public ReactiveCommand<Unit, Unit> ProcessAllCommand { get; private set; }
-    /// <summary>
-    /// Execute Process all in Import / Export Grid Command.
-    /// Uses ExecuteProcessBulk
-    /// </summary>
-    private async Task ExecuteProcessAll() => await ExecuteProcessBulk(true); //the all parameter is set to true
+    [RelayCommand(CanExecute = nameof(IsAnyFile))]
+    private async Task ProcessAll() => await ExecuteProcessBulk(true);
 
-    /// <summary>
-    /// Process selected in Import / Export Grid Command
-    /// </summary>
-    public ICommand ProcessSelectedCommand { get; private set; }
-    /// <summary>
-    /// Execute Process Selected in Import / Export Grid Command.
-    /// Uses ExecuteProcessBulk
-    /// </summary>
-    private async Task ExecuteProcessSelected() => await ExecuteProcessBulk(); //the all parameter's default is false
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    private async Task ProcessSelected() => await ExecuteProcessBulk();
 
-    public ICommand CopyArgumentsTemplateToCommand { get; private set; }
-    private bool CanCopyArgumentsTemplateTo(string param) => true;
-    private void ExecuteCopyArgumentsTemplateTo(string param)
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    private void CopyArgumentsTemplateTo(string param)
     {
-        //var current = SelectedObject.Properties;
+        if (SelectedObject.Properties is not ExportArgs exportArgs)
+        {
+            return;
+        }
 
-
-        //if (current is not ExportArgs exportArgs)
-        //{
-        //    return;
-        //}
-
-        //var json = SerializeArgs(exportArgs);
-
-        //var results = param switch
-        //{
-        //    s_selectedInGrid => ExportableItems.Where(_ => _.IsChecked),
-        //    _ => ExportableItems
-        //};
-
-        //foreach (var item in results.Where(item => item.Properties.GetType() == current.GetType()))
-        //{
-        //    item.Properties = (ExportArgs)json.Deserialize(exportArgs.GetType(), s_jsonSerializerSettings);
-        //}
-
-
-        //SaveSettings();
-        //_notificationService.Success($"Template has been copied to the selected items.");
+        currentSettings = SerializeArgs(exportArgs);
     }
 
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    private void PasteArgumentsTemplateTo()
+    {
+        var results = ExportableItems.Where(x => x.IsChecked);
+
+        foreach (var item in results)
+        {
+            item.Properties = (ExportArgs)currentSettings.Deserialize(typeof(ExportArgs), s_jsonSerializerSettings);
+        }
+
+        _notificationService.Success($"Template has been copied to the selected items.");
+    }
+
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    private void ImportSettings()
+    {
+        foreach (var item in ExportableItems.Where(x => x.IsChecked))
+        {
+            if (item.Properties is not ExportArgs args)
+            {
+                continue;
+            }
+
+            item.Properties = (ImportExportArgs)System.Activator.CreateInstance(item.Properties.GetType());
+        }
+    }
+
+    [RelayCommand]
+    private void Refresh() => LoadFiles();
 
     #endregion
+
+    private bool IsAnyFileSelected() => ExportableItems.Where(x => x.IsChecked).Any();
+
+    private bool IsAnyFile() => ExportableItems.Any();
+
+    private JsonObject SerializeArgs(ImportExportArgs args)
+    {
+        var node = (JsonObject)JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings);
+
+        node.Remove("Changing");
+        node.Remove("Changed");
+        node.Remove("ThrownExceptions");
+
+        return node;
+    }
 
     /// <summary>
     /// Helper Task to Execute Bulk Processing in Import / Export Grid Command
@@ -259,6 +270,11 @@ public class TextureExportViewModel : FloatingPaneViewModel
 
     private void LoadFiles()
     {
+        if (_projectManager.ActiveProject is null)
+        {
+            return;
+        }
+
         var files = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories)
             .Where(CanExport)
             .Select(x => new ExportableItemViewModel(x));

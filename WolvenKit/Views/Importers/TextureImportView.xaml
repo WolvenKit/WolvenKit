@@ -14,10 +14,7 @@
     xmlns:vm="clr-namespace:WolvenKit.App.ViewModels.Importers;assembly=WolvenKit.App"
     x:TypeArguments="vm:TextureImportViewModel">
 
-    <Grid
-        Grid.Row="1"
-        Background="{DynamicResource ContentBackgroundAlt2}"
-        Visibility="{Binding IsImportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
+    <Grid Background="{DynamicResource ContentBackgroundAlt2}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -25,32 +22,108 @@
         </Grid.RowDefinitions>
 
         <!--  Top Toolbar  -->
-        <Grid Grid.Row="0" Background="{DynamicResource ContentBackgroundAlt2}">
+        <Grid
+            Grid.Row="0"
+            Margin="4"
+            Background="{DynamicResource ContentBackgroundAlt2}">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
 
-            <StackPanel Grid.Row="0" Orientation="Horizontal">
-
-                <!--  ResetSettingsCommand  -->
+                <!--  ProcessSelectedCommand  -->
                 <Button
-                    Margin="4"
                     Padding="4"
                     VerticalAlignment="Center"
                     Background="{DynamicResource ContentBackground}"
                     BorderBrush="{DynamicResource ContentBackgroundAlt}"
                     BorderThickness="1"
-                    Command="{Binding ResetSettingsCommand}"
-                    FontSize="12"
-                    Style="{DynamicResource ButtonCustom}">
-                    <TextBlock Margin="1" Text="Reset Settings" />
+                    Command="{Binding ProcessSelectedCommand}"
+                    FontSize="14"
+                    Style="{DynamicResource ButtonCustom}"
+                    ToolTip="Import selected files to the engine format">
+
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Margin="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="Green"
+                            Kind="DebugStart" />
+
+                        <TextBlock
+                            Margin="1"
+                            FontSize="14"
+                            Text="Import Selected" />
+                    </StackPanel>
+
                 </Button>
+
+                <!--  ProcessAllCommand  -->
+                <Button
+                    Padding="4"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource ContentBackground}"
+                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                    BorderThickness="1"
+                    Command="{Binding ProcessAllCommand}"
+                    FontSize="14"
+                    Style="{DynamicResource ButtonCustom}"
+                    ToolTip="Import all files to the engine format">
+
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Margin="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="Green"
+                            Kind="RunAll" />
+
+                        <TextBlock
+                            Margin="1"
+                            FontSize="14"
+                            Text="Import All" />
+                    </StackPanel>
+
+                </Button>
+
+                <Separator />
+
+                <!--  Refresh Files  -->
+                <Button
+                    Padding="4"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource ContentBackground}"
+                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                    BorderThickness="1"
+                    Command="{Binding RefreshCommand}"
+                    Style="{DynamicResource ButtonCustom}"
+                    ToolTip="Reload all files">
+
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Margin="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="CornflowerBlue"
+                            Kind="Refresh" />
+
+                        <TextBlock
+                            Margin="1"
+                            FontSize="14"
+                            Text="Refresh" />
+                    </StackPanel>
+
+                </Button>
+
+                <Separator />
 
                 <!--  ImportSettingsCommand  -->
                 <Button
-                    Margin="4"
                     Padding="4"
                     VerticalAlignment="Center"
                     Background="{DynamicResource ContentBackground}"
@@ -58,23 +131,55 @@
                     BorderThickness="1"
                     Command="{Binding ImportSettingsCommand}"
                     FontSize="12"
-                    Style="{DynamicResource ButtonCustom}">
-                    <TextBlock Margin="1" Text="Load Settings" />
+                    Style="{DynamicResource ButtonCustom}"
+                    ToolTip="Reset import settings on selected files">
+                    <TextBlock
+                        Margin="1"
+                        FontSize="14"
+                        Text="Reset Settings" />
                 </Button>
 
                 <!--  CopyArgumentsTemplateToCommand  -->
                 <Button
-                    Margin="0,0,6,0"
                     Padding="4"
                     VerticalAlignment="Center"
                     Background="{DynamicResource ContentBackground}"
                     BorderBrush="{DynamicResource ContentBackgroundAlt}"
                     BorderThickness="1"
                     Command="{Binding CopyArgumentsTemplateToCommand}"
-                    CommandParameter="{Binding Path=SelectedItem.Content, ElementName=ToThese}"
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
-                    ToolTip="Copy I/O settings from selected file">
+                    ToolTip="Copy import settings from selected file">
+
+                    <StackPanel Orientation="Horizontal">
+
+                        <iconPacks:PackIconForkAwesome
+                            Width="13"
+                            Height="13"
+                            Margin="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="FilesOutline" />
+
+                        <TextBlock
+                            Margin="1"
+                            FontSize="14"
+                            Text="Copy Settings" />
+
+                    </StackPanel>
+                </Button>
+
+                <!--  PasteArgumentsTemplateToCommand  -->
+                <Button
+                    Padding="4"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource ContentBackground}"
+                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                    BorderThickness="1"
+                    Command="{Binding PasteArgumentsTemplateToCommand}"
+                    FontSize="12"
+                    Style="{DynamicResource ButtonCustom}"
+                    ToolTip="Paste import settings to all selected files">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconForkAwesome
                             Width="13"
@@ -83,116 +188,18 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Kind="FilesOutline" />
-                        <TextBlock Margin="1" Text="Copy Settings" />
+                        <TextBlock
+                            Margin="1"
+                            FontSize="14"
+                            Text="Paste Settings" />
                     </StackPanel>
                 </Button>
-
-                <!--  Destination for copied settings  -->
-                <syncfusion:ComboBoxAdv
-                    x:Name="ToThese"
-                    Margin="0,0,0,0"
-                    Padding="6,6,0,6"
-                    VerticalAlignment="Center"
-                    FontSize="12"
-                    SelectedIndex="0"
-                    Text="apply"
-                    ToolTip="Destination for copied settings">
-
-                    <syncfusion:ComboBoxItemAdv Content="Selected in Grid" />
-                    <syncfusion:ComboBoxItemAdv Content="All in Grid" />
-                </syncfusion:ComboBoxAdv>
-
-                <!--  ShowAdvancedOptions  -->
-                <mah:ToggleSwitch
-                    Command="{Binding ToggleAdvancedOptionsCommand}"
-                    IsOn="{Binding ShowAdvancedOptions}"
-                    OffContent="Show Advanced Options"
-                    OnContent="Hide Advanced Options"
-                    ToolTip="Toggle Advanced Import/Export Options" />
-
-            </StackPanel>
-
-            <!--  Status  -->
-            <StackPanel Grid.Row="1" Orientation="Horizontal">
-
-                <!--  ProcessSelectedCommand  -->
-                <Button
-                    Margin="0,0,4,0"
-                    Padding="4"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackground}"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                    BorderThickness="1"
-                    Command="{Binding ProcessSelectedCommand}"
-                    FontSize="12"
-                    Style="{DynamicResource ButtonCustom}">
-
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Margin="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="DebugStart" />
-
-                        <TextBlock Margin="1" Text="Process Selected" />
-                    </StackPanel>
-
-                </Button>
-
-                <!--  ProcessAllCommand  -->
-                <Button
-                    Margin="4,0,0,0"
-                    Padding="4"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackground}"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                    BorderThickness="1"
-                    Command="{Binding ProcessAllCommand}"
-                    FontSize="12"
-                    Style="{DynamicResource ButtonCustom}">
-
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Margin="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="RunAll" />
-
-                        <TextBlock Margin="1" Text="Process All" />
-                    </StackPanel>
-
-                </Button>
-
-                <!--  Lock selected file  -->
-                <ToggleButton
-                    Margin="0,0,4,0"
-                    Padding="4"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackgroundAlt}"
-                    IsChecked="{Binding SelectionLocked}"
-                    Style="{DynamicResource WPFToggleButtonStyle}"
-                    ToolTip="Lock selected file">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:BootstrapIcons Kind="Lock" />
-                    </StackPanel>
-                </ToggleButton>
-
-                <TextBlock
-                    x:Name="CurrentSelectedItemButtonbar"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    FontSize="11"
-                    Text="{Binding CurrentSelectedInGridName}" />
 
             </StackPanel>
 
         </Grid>
 
+        <!--  Main Grid  -->
         <Grid Grid.Row="1">
 
             <Grid.ColumnDefinitions>
@@ -201,7 +208,7 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <!--  CellDoubleTapped="SfDataGrid_CellDoubleTapped"  -->
+            <!--  Files Grid  -->
             <syncfusion:SfDataGrid
                 x:Name="ImportGrid"
                 Grid.Column="0"
@@ -243,15 +250,9 @@
                         MappingName="Properties" />
                 </syncfusion:SfDataGrid.Columns>
 
-                <!--  Click="ShowSettings_OnClick"  -->
-                <syncfusion:SfDataGrid.RecordContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Show settings" />
-                    </ContextMenu>
-                </syncfusion:SfDataGrid.RecordContextMenu>
-
             </syncfusion:SfDataGrid>
 
+            <!--  GridSplitter  -->
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
             <!--  Special Import / Export Options  -->
@@ -260,6 +261,19 @@
                 x:Name="XAML_AdvancedOptionsOverlay"
                 Grid.Column="2"
                 Background="{DynamicResource ContentBackgroundAlt2}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <!--  ShowAdvancedOptions  -->
+                <mah:ToggleSwitch
+                    Command="{Binding ToggleAdvancedOptionsCommand}"
+                    IsOn="{Binding ShowAdvancedOptions}"
+                    OffContent="Show Advanced Options"
+                    OnContent="Hide Advanced Options"
+                    ToolTip="Toggle Advanced Import/Export Options" />
 
                 <syncfusion:PropertyGrid
                     x:Name="OverlayPropertyGrid"

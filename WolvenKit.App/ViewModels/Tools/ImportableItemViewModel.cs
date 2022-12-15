@@ -4,49 +4,29 @@ using DynamicData.Binding;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Models;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Tools
 {
     public class ImportableItemViewModel : ImportExportItemViewModel
     {
-        public ImportableItemViewModel(string model)
+        public ImportableItemViewModel(string fileName)
         {
-            BaseFile = model;
-            Properties = DecideImportOptions(model);
+            BaseFile = fileName;
+            Properties = DecideImportOptions();
 
             Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
         }
 
-        private ImportArgs DecideImportOptions(string model)
+        private ImportArgs DecideImportOptions()
         {
-            _ = Enum.TryParse(Path.GetExtension(model), out ERawFileFormat rawFileFormat);
+            _ = Enum.TryParse(Path.GetExtension(BaseFile), out ERawFileFormat rawFileFormat);
 
             // get texturegroup from filename
             var xbmArgs = new XbmImportArgs();
             if (IsRawTexture(rawFileFormat))
             {
-                // load and, if needed, decompress file
-                var image = rawFileFormat switch
-                {
-                    ERawFileFormat.dds => RedImage.LoadFromDDSFile(model),
-                    ERawFileFormat.tga => RedImage.LoadFromTGAFile(model),
-                    ERawFileFormat.bmp => RedImage.LoadFromBMPFile(model),
-                    ERawFileFormat.jpg => RedImage.LoadFromJPGFile(model),
-                    ERawFileFormat.png => RedImage.LoadFromPNGFile(model),
-                    ERawFileFormat.tiff => RedImage.LoadFromTIFFFile(model),
-                    _ => throw new ArgumentOutOfRangeException(),
-                };
-
-                var texGroup = CommonFunctions.GetTextureGroupFromFileName(Path.GetFileName(FullName));
-
-                // get settings from texgroup
-                xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
-                // get the format again, cos CDPR
-                var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
-                xbmArgs.RawFormat = rawFormat;
-                xbmArgs.Compression = compression;   // todo if this is already set use the previous one
+                xbmArgs = LoadXbmDefaultSettings();
             }
 
             return rawFileFormat switch
@@ -71,7 +51,33 @@ namespace WolvenKit.ViewModels.Tools
             };
         }
 
+        public XbmImportArgs LoadXbmDefaultSettings()
+        {
+            XbmImportArgs xbmArgs;
+            _ = Enum.TryParse(Path.GetExtension(BaseFile), out ERawFileFormat rawFileFormat);
 
+            // load and, if needed, decompress file
+            var image = rawFileFormat switch
+            {
+                ERawFileFormat.dds => RedImage.LoadFromDDSFile(BaseFile),
+                ERawFileFormat.tga => RedImage.LoadFromTGAFile(BaseFile),
+                ERawFileFormat.bmp => RedImage.LoadFromBMPFile(BaseFile),
+                ERawFileFormat.jpg => RedImage.LoadFromJPGFile(BaseFile),
+                ERawFileFormat.png => RedImage.LoadFromPNGFile(BaseFile),
+                ERawFileFormat.tiff => RedImage.LoadFromTIFFFile(BaseFile),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+
+            var texGroup = CommonFunctions.GetTextureGroupFromFileName(Path.GetFileName(BaseFile));
+
+            // get settings from texgroup
+            xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
+            // get the format again, cos CDPR
+            var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
+            xbmArgs.RawFormat = rawFormat;
+            xbmArgs.Compression = compression;   // todo if this is already set use the previous one
+            return xbmArgs;
+        }
 
         private static bool IsRawTexture(ERawFileFormat fmt) => fmt is ERawFileFormat.tga or ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.dds or ERawFileFormat.tiff;
     }
