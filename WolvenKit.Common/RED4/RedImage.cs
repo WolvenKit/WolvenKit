@@ -417,16 +417,7 @@ public class RedImage : IDisposable
         //    settings.PremultiplyAlpha = true;
         //}
 
-        var settings = new RedImageTransformSettings
-        {
-            VFlip = args.VFlip,
-            IsGamma = args.IsGamma,
-            RawFormat = args.RawFormat,
-            Compression = args.Compression,
-            GenerateMipMaps = args.GenerateMipMaps,
-            PremultiplyAlpha = args.PremultiplyAlpha,
-            IsStreamable = args.IsStreamable
-        };
+        var settings = new RedImageTransformSettings(args.TextureGroup, args.IsGamma, args.VFlip, args.RawFormat, args.Compression, args.GenerateMipMaps, args.PremultiplyAlpha, args.IsStreamable);
 
         // get resource
         var (setup, blob) = GetSetupAndBlob(settings);
@@ -444,7 +435,7 @@ public class RedImage : IDisposable
 
     public CTextureArray SaveToTexArray()
     {
-        var (setup, blob) = GetSetupAndBlob(new RedImageTransformSettings { GenerateMipMaps = false });
+        var (setup, blob) = GetSetupAndBlob(new RedImageTransformSettings(default, default, default, default, default, false, default, default));
 
         return new CTextureArray
         {
@@ -456,7 +447,7 @@ public class RedImage : IDisposable
 
     public CCubeTexture SaveToCubeMap()
     {
-        var (setup, blob) = GetSetupAndBlob(new RedImageTransformSettings { GenerateMipMaps = false });
+        var (setup, blob) = GetSetupAndBlob(new RedImageTransformSettings(default, default, default, default, default, false, default, default));
 
         return new CCubeTexture()
         {
@@ -466,17 +457,8 @@ public class RedImage : IDisposable
         };
     }
 
-    public class RedImageTransformSettings
+    public record RedImageTransformSettings(GpuWrapApieTextureGroup TextureGroup, bool IsGamma, bool VFlip, ETextureRawFormat RawFormat, ETextureCompression Compression, bool GenerateMipMaps, bool PremultiplyAlpha, bool IsStreamable)
     {
-        public GpuWrapApieTextureGroup TextureGroup { get; set; }
-        public bool IsGamma { get; set; }
-        public bool VFlip { get; set; }
-        public ETextureRawFormat RawFormat { get; set; }
-        public ETextureCompression Compression { get; set; }
-        public bool GenerateMipMaps { get; set; }
-        public bool PremultiplyAlpha { get; set; }
-        public bool IsStreamable { get; set; }
-
         public bool AllowTextureDowngrade { get; } = false; // unused
         public byte AlphaToCoverageThreshold { get; } = 0; // unused
     }
@@ -554,10 +536,10 @@ public class RedImage : IDisposable
         //{
         //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
         //}
-        if (TexHelper.Instance.IsSRGB(metadata.Format) != TexHelper.Instance.IsSRGB((DXGI_FORMAT)outImageFormat))
-        {
-            throw new ArgumentOutOfRangeException(nameof(outImageFormat));
-        }
+        //if (TexHelper.Instance.IsSRGB(metadata.Format) != TexHelper.Instance.IsSRGB((DXGI_FORMAT)outImageFormat))
+        //{
+        //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
+        //}
 
         tmpImage = true;
 

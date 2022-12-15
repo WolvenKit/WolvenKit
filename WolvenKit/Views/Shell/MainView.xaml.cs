@@ -11,6 +11,8 @@ using Splat;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Exporters;
+using WolvenKit.Views.Importers;
 
 namespace WolvenKit.Views.Shell
 {
@@ -36,34 +38,33 @@ namespace WolvenKit.Views.Shell
             this.WhenActivated(disposables =>
             {
                 Interactions.ShowConfirmation.RegisterHandler(interaction => interaction.SetOutput(ShowConfirmation(interaction.Input)));
-                Interactions.ShowLaunchProfilesView.RegisterHandler(
-                    interaction =>
+                Interactions.ShowLaunchProfilesView.RegisterHandler(interaction =>
+                {
+                    LaunchProfilesView dialog = new();
+
+                    return Observable.Start(() =>
                     {
-                        LaunchProfilesView dialog = new();
-
-                        return Observable.Start(() =>
+                        if (dialog.ShowDialog(this) == true)
                         {
-                            if (dialog.ShowDialog(this) == true)
-                            {
-                                ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
-                            }
+                            ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
+                        }
 
-                            interaction.SetOutput(true);
-                        }, RxApp.MainThreadScheduler);
-                    });
-                Interactions.ShowMaterialRepositoryView.RegisterHandler(
-                    interaction =>
+                        interaction.SetOutput(true);
+                    }, RxApp.MainThreadScheduler);
+                });
+                Interactions.ShowMaterialRepositoryView.RegisterHandler(interaction =>
+                {
+                    MaterialsRepositoryView dialog = new();
+
+                    return Observable.Start(() =>
                     {
-                        MaterialsRepositoryView dialog = new();
+                        if (dialog.ShowDialog(this) == true)
+                        { }
 
-                        return Observable.Start(() =>
-                        {
-                            if (dialog.ShowDialog(this) == true)
-                            { }
+                        interaction.SetOutput(true);
+                    }, RxApp.MainThreadScheduler);
+                });
 
-                            interaction.SetOutput(true);
-                        }, RxApp.MainThreadScheduler);
-                    });
 
                 this.Bind(ViewModel,
                     vm => vm.ActiveDocument,

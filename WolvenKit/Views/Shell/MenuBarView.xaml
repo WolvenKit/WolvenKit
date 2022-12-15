@@ -536,11 +536,6 @@
                     Header="Log"
                     IsCheckable="True" />
                 <MenuItem
-                    x:Name="ImportExportCheckbox"
-                    Margin="2,1"
-                    Header="Import / Export"
-                    IsCheckable="True" />
-                <MenuItem
                     x:Name="TweakBrowserCheckbox"
                     Margin="2,1"
                     Header="Tweak Browser"
@@ -623,8 +618,35 @@
                         <iconPacks:PackIconUnicons
                             Margin="6,0"
                             Padding="0,1,0,1"
-                            Foreground="{StaticResource WolvenKitCyan}"
+                            Foreground="{StaticResource WolvenKitPurple}"
                             Kind="JavaScript" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                
+                <Separator/>
+
+                <MenuItem
+                    x:Name="MenuItemShowTextureImporter"
+                    Margin="2,1"
+                    Header="Import Tool">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconUnicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="Import" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemShowTextureExporter"
+                    Margin="2,1"
+                    Header="Export Tool">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconUnicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="Export" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

@@ -8,6 +8,8 @@ using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.App;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Exporters;
+using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -28,8 +30,10 @@ using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Exporters;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
+using WolvenKit.Views.Importers;
 using WolvenKit.Views.Shell;
 using WolvenKit.Views.Tools;
 using WolvenKit.Views.Wizards;
@@ -143,6 +147,16 @@ namespace WolvenKit
                     services.AddTransient<ProjectWizardViewModel>();
                     services.AddTransient<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
 
+
+
+                    // Importers
+
+                    services.AddTransient<TextureImportViewModel>();
+                    services.AddTransient<IViewFor<TextureImportViewModel>, TextureImportView>();
+
+                    services.AddTransient<TextureExportViewModel>();
+                    services.AddTransient<IViewFor<TextureExportViewModel>, TextureExportView>();
+
                     #endregion
 
                     #region documents
@@ -175,8 +189,8 @@ namespace WolvenKit
                     //services.AddTransient<VisualEditorViewModel>();
                     //services.AddTransient<IViewFor<VisualEditorViewModel>, VisualEditorView>();
 
-                    services.AddSingleton<ImportExportViewModel>();
-                    services.AddTransient<IViewFor<ImportExportViewModel>, ImportExportView>();
+                    //services.AddSingleton<ImportExportViewModel>();
+                    //services.AddTransient<IViewFor<ImportExportViewModel>, ImportExportView>();
 
                     #endregion
 

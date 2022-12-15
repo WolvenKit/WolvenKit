@@ -17,10 +17,7 @@ namespace WolvenKit.Interaction
             WMessageBoxImage image = WMessageBoxImage.Question)
         {
             var result = WMessageBoxResult.None;
-            DispatcherHelper.RunOnMainThread(async () =>
-            {
-                result = await ShowConfirmation.Handle((text, caption, image, messageBoxButtons));
-            });
+            DispatcherHelper.RunOnMainThread(async () => result = await ShowConfirmation.Handle((text, caption, image, messageBoxButtons)));
             return await Task.FromResult(result);
         }
 
@@ -36,7 +33,6 @@ namespace WolvenKit.Interaction
         public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();
         public static readonly Interaction<Unit, bool> ShowLaunchProfilesView = new();
         public static readonly Interaction<Unit, bool> ShowMaterialRepositoryView = new();
-
     }
 
     public enum WMessageBoxImage

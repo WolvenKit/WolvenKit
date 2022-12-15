@@ -23,6 +23,8 @@ using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Exporters;
+using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
@@ -114,7 +116,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowPropertiesCommand = new DelegateCommand(ExecuteShowProperties, CanShowProperties).ObservesProperty(() => ActiveProject);
             ShowAssetsCommand = new DelegateCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
 
-            ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool).ObservesProperty(() => ActiveProject);
+            //ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool).ObservesProperty(() => ActiveProject);
 
             ShowSoundModdingToolCommand = new DelegateCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool).ObservesProperty(() => IsDialogShown);
             ShowModsViewCommand = new DelegateCommand(ExecuteShowModsView, CanShowModsView).ObservesProperty(() => IsDialogShown);
@@ -164,6 +166,9 @@ namespace WolvenKit.ViewModels.Shell
 
             LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
 
+            ShowTextureImporterCommand = ReactiveCommand.Create(ShowTextureImporter);
+            ShowTextureExporterCommand = ReactiveCommand.Create(ShowTextureExporter);
+
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => IsDialogShown);
 
             // File
@@ -209,7 +214,7 @@ namespace WolvenKit.ViewModels.Shell
                 ProjectExplorer,
                 PropertiesViewModel,
                 AssetBrowserVM,
-                ImportExportToolVM,
+                //ImportExportToolVM,
                 TweakBrowserVM,
                 LocKeyBrowserVM
             };
@@ -1012,6 +1017,22 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> LaunchOptionsCommand { get; }
         private async void LaunchOptions() => await Interactions.ShowLaunchProfilesView.Handle(Unit.Default);
 
+        public ReactiveCommand<Unit, Unit> ShowTextureImporterCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowTextureExporterCommand { get; }
+        private void ShowTextureImporter()
+        {
+            var vm = Locator.Current.GetService<TextureImportViewModel>();
+            vm.State = DockState.Float;
+            DockedViews.Add(vm);
+        }
+
+        private void ShowTextureExporter()
+        {
+            var vm = Locator.Current.GetService<TextureExportViewModel>();
+            vm.State = DockState.Float;
+            DockedViews.Add(vm);
+        }
+
         public string CyberpunkBlenderAddonLink = "https://github.com/WolvenKit/Cyberpunk-Blender-add-on";
         public string WolvenKitSetupLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
         public string WolvenKitCreatingAModLink = "https://wiki.redmodding.org/wolvenkit/getting-started/creating-a-mod";
@@ -1034,9 +1055,9 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
         private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
 
-        public ICommand ShowImportExportToolCommand { get; private set; }
-        private bool CanShowImportExportTool() => ActiveProject is not null;
-        private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
+        //public ICommand ShowImportExportToolCommand { get; private set; }
+        //private bool CanShowImportExportTool() => ActiveProject is not null;
+        //private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
         public ICommand ShowLogCommand { get; private set; }
         private bool CanShowLog() => ActiveProject is not null;
@@ -1107,15 +1128,15 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private ImportExportViewModel _importExportToolViewModel;
-        public ImportExportViewModel ImportExportToolVM
-        {
-            get
-            {
-                _importExportToolViewModel ??= Locator.Current.GetService<ImportExportViewModel>();
-                return _importExportToolViewModel;
-            }
-        }
+        //private ImportExportViewModel _importExportToolViewModel;
+        //public ImportExportViewModel ImportExportToolVM
+        //{
+        //    get
+        //    {
+        //        _importExportToolViewModel ??= Locator.Current.GetService<ImportExportViewModel>();
+        //        return _importExportToolViewModel;
+        //    }
+        //}
 
         private LogViewModel _logViewModel;
         public LogViewModel Log
