@@ -65,11 +65,11 @@ jobs:
         with:
           proj-path: ./WolvenKit/WolvenKit.csproj
 
-      - run: echo "VERSION=${{steps.get_version.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
-      - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
+      - run: echo "VERSION_APP=${{steps.get_version.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
+      - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION_APP}}.zip" >> $env:GITHUB_ENV
 
       # Publish app
-      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION}}"
+      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION_APP}}"
       - run: Compress-Archive -Path ./publish/app/* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
 
       # tag main commit
@@ -79,7 +79,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           default_bump: false
-          custom_tag: ${{ env.VERSION }}
+          custom_tag: ${{ env.VERSION_APP }}
           tag_prefix: ""
 
       ##########################################
@@ -104,10 +104,10 @@ jobs:
 
       - name: env cli version
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        run: echo "VERSIONC=${{steps.get_version_cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
+        run: echo "VERSION_CLI=${{steps.get_version_cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
       - name: env cli name
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV
+        run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSION_CLI}}.zip" >> $env:GITHUB_ENV
 
       # Publish console
       - name: publish console
@@ -139,7 +139,7 @@ jobs:
       - name: Release dispatch
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ env.VERSION }}
+          tag_name: ${{ env.VERSION_APP }}
           generate_release_notes: false
           files: |
             ${{ env.FINALOUT }}/*.zip
