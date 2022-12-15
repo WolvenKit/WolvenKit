@@ -43,7 +43,7 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
                 .DisposeWith(disposables);
 
             this.Bind(ViewModel,
-                    x => x.ImportableItems,
+                    x => x.Items,
                     x => x.ImportGrid.ItemsSource)
                 .DisposeWith(disposables);
 

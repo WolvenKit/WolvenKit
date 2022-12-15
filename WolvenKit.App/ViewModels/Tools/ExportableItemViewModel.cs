@@ -12,14 +12,14 @@ namespace WolvenKit.ViewModels.Tools
         public ExportableItemViewModel(string fileName)
         {
             BaseFile = fileName;
-            Properties = DecideExportOptions(fileName);
+            Properties = DecideExportOptions();
 
             Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
         }
 
-        private ExportArgs DecideExportOptions(string model)
+        private ExportArgs DecideExportOptions()
         {
-            _ = Enum.TryParse(Path.GetExtension(model).TrimStart('.'), out ECookedFileFormat fileFormat);
+            _ = Enum.TryParse(Extension, out ECookedFileFormat fileFormat);
 
             return fileFormat switch
             {

@@ -212,7 +212,7 @@
             <syncfusion:SfDataGrid
                 x:Name="ImportGrid"
                 Grid.Column="0"
-                AllowEditing="True"
+                AllowEditing="False"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
                 AllowSorting="True"
@@ -225,7 +225,6 @@
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridCheckBoxColumn
                         Width="50"
-                        AllowEditing="True"
                         HeaderText="#"
                         MappingName="IsChecked">
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
@@ -238,13 +237,11 @@
                         </syncfusion:GridCheckBoxColumn.HeaderTemplate>
                     </syncfusion:GridCheckBoxColumn>
                     <syncfusion:GridTextColumn
-                        AllowEditing="False"
                         ColumnSizer="Star"
                         HeaderText="Name"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Name" />
                     <syncfusion:GridTextColumn
-                        AllowEditing="False"
                         ColumnSizer="AutoLastColumnFill"
                         HeaderText="Import Task"
                         HorizontalHeaderContentAlignment="Left"

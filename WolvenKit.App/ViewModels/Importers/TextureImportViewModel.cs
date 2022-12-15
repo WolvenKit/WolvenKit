@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
@@ -30,33 +31,14 @@ using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Importers;
 
-public partial class TextureImportViewModel : FloatingPaneViewModel
+public abstract partial class ImportViewModel : ImportExportViewModel
 {
-    private readonly ILoggerService _loggerService;
-    private readonly INotificationService _notificationService;
-    private readonly ISettingsManager _settingsManager;
-    private readonly IWatcherService _watcherService;
-    private readonly IProgressService<double> _progressService;
-    private readonly IProjectManager _projectManager;
-    private readonly Red4ParserService _parserService;
-    private readonly IGameControllerFactory _gameController;
-    private readonly IArchiveManager _archiveManager;
-    private readonly IPluginService _pluginService;
-    private readonly IModTools _modTools;
 
-    private (JsonObject, Type) currentSettings;
-    private static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
-    {
-        Converters =
-            {
-                new JsonFileEntryConverter(),
-                new JsonArchiveConverter()
-            },
-        WriteIndented = true
-    };
+}
 
+public partial class TextureImportViewModel : ImportViewModel
+{
     public TextureImportViewModel(
-        Red4ParserService parserService,
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
         IWatcherService watcherService,
@@ -68,7 +50,6 @@ public partial class TextureImportViewModel : FloatingPaneViewModel
         IModTools modTools,
         IProgressService<double> progressService)
     {
-        _parserService = parserService;
         _gameController = gameController;
         _settingsManager = settingsManager;
         _watcherService = watcherService;
@@ -85,139 +66,29 @@ public partial class TextureImportViewModel : FloatingPaneViewModel
         Header = Name;
     }
 
-    public override string Name => "Texture Importer";
+    public override string Name => "Import Tool";
 
-    [Reactive] public ImportableItemViewModel SelectedObject { get; set; }
-
-    [Reactive] public ObservableCollection<ImportableItemViewModel> ImportableItems { get; set; } = new();
-
-    [Reactive] public bool IsProcessing { get; set; } = false;
 
     #region Commands
-
-    [RelayCommand(CanExecute = nameof(IsAnyFile))]
-    private async Task ProcessAll() => await ExecuteProcessBulk(true);
-
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
-    private async Task ProcessSelected() => await ExecuteProcessBulk();
-
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
-    private void CopyArgumentsTemplateTo()
-    {
-        if (SelectedObject.Properties is not ImportExportArgs args)
-        {
-            return;
-        }
-
-        currentSettings = (SerializeArgs(args), args.GetType());
-    }
-
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
-    private void PasteArgumentsTemplateTo()
-    {
-        var results = ImportableItems.Where(x => x.IsChecked);
-        var count = 0;
-
-        foreach (var item in results)
-        {
-            var (settings, type) = currentSettings;
-
-            if (item.Properties.GetType() != type)
-            {
-                continue;
-            }
-
-            item.Properties = (ImportExportArgs)settings.Deserialize(type, s_jsonSerializerSettings);
-            count++;
-        }
-
-        if (count > 0)
-        {
-            _notificationService.Success($"Template has been copied to the selected items.");
-        }
-    }
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
     private void ImportSettings()
     {
-        //var gammaRegex = new Regex(".*_[de][0-9]*$");
-
-        foreach (var importableItem in ImportableItems.Where(x => x.IsChecked))
+        foreach (var item in Items.Where(x => x.IsChecked))
         {
-            if (importableItem.Properties is not XbmImportArgs xbmImportArgs)
+            if (item.Properties is not XbmImportArgs xbmImportArgs)
             {
                 continue;
             }
 
-            xbmImportArgs = importableItem.LoadXbmDefaultSettings();
-
-
-            //if (_parserService != null)
-            //{
-            //    if (GetModFile(importableItem, "xbm") is { } modFile)
-            //    {
-            //        using var fs = File.OpenRead(modFile);
-
-            //        if (_parserService.TryReadRed4File(fs, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
-            //        {
-            //            xbmImportArgs.RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString());
-            //            xbmImportArgs.Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString());
-            //            xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
-            //            xbmImportArgs.TextureGroup = bitmap.Setup.Group;
-            //            xbmImportArgs.GenerateMipMaps = bitmap.Setup.HasMipchain;
-
-            //            _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Loaded from project file");
-
-            //            continue;
-            //        }
-
-            //        _loggerService?.Warning($"Load settings for \"{importableItem.Name}\": Project file couldn't be read");
-            //    }
-
-            //    if (GetArchiveFile(importableItem, "xbm") is { } archiveFile)
-            //    {
-            //        using var ms = new MemoryStream();
-            //        archiveFile.Extract(ms);
-
-            //        if (_parserService.TryReadRed4File(ms, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
-            //        {
-            //            xbmImportArgs.RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString());
-            //            xbmImportArgs.Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString());
-            //            xbmImportArgs.GenerateMipMaps = bitmap.Setup.HasMipchain;
-            //            xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
-            //            xbmImportArgs.TextureGroup = bitmap.Setup.Group;
-
-            //            _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Loaded from archive file");
-
-            //            continue;
-            //        }
-
-            //        _loggerService?.Warning($"Load settings for \"{importableItem.Name}\": Archive file couldn't be read");
-            //    }
-            //}
-
-            //xbmImportArgs.IsGamma = gammaRegex.IsMatch(Path.GetFileNameWithoutExtension(importableItem.Name));
-
-            _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Parsed filename");
+            xbmImportArgs = (item as ImportableItemViewModel).LoadXbmDefaultSettings();
+            _loggerService?.Info($"Load settings for \"{item.Name}\": Parsed filename");
         }
-
-        //SaveSettings();
     }
-
-    [RelayCommand]
-    private void Refresh() => LoadFiles();
-
-    [RelayCommand]
-    private void ToggleAdvancedOptions() => _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
-
 
     #endregion
 
-    private bool IsAnyFileSelected() => ImportableItems.Where(x => x.IsChecked).Any();
-
-    private bool IsAnyFile() => ImportableItems.Any();
-
-    private async Task ExecuteProcessBulk(bool all = false)
+    protected override async Task ExecuteProcessBulk(bool all = false)
     {
         IsProcessing = true;
         _watcherService.IsSuspended = true;
@@ -230,7 +101,11 @@ public partial class TextureImportViewModel : FloatingPaneViewModel
         //prepare a list of failed items
         var failedItems = new List<string>();
 
-        var toBeImported = ImportableItems.Where(_ => all || _.IsChecked).Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString())).ToList();
+        var toBeImported = Items
+            .Where(_ => all || _.IsChecked)
+            .Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString()))
+            .Cast<ImportableItemViewModel>()
+            .ToList();
         total = toBeImported.Count;
         foreach (var item in toBeImported)
         {
@@ -247,7 +122,7 @@ public partial class TextureImportViewModel : FloatingPaneViewModel
             _progressService.Report(progress / (float)total);
         }
 
-        await ImportWavs(ImportableItems.Where(_ => all || _.IsChecked)
+        await ImportWavs(Items.Where(_ => all || _.IsChecked)
             .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
             .Select(x => x.FullName)
             .ToList()
@@ -289,10 +164,6 @@ public partial class TextureImportViewModel : FloatingPaneViewModel
         return Task.FromResult(false);
     }
 
-    /// <summary>
-    /// Import Single item
-    /// </summary>
-    /// <param name="item"></param>
     private async Task<bool> ImportSingleTask(ImportableItemViewModel item)
     {
         if (_gameController.GetController() is not RED4Controller)
@@ -341,69 +212,7 @@ public partial class TextureImportViewModel : FloatingPaneViewModel
         return false;
     }
 
-    //public string GetModFile(ImportableItemViewModel importableItem, string extension)
-    //{
-    //    if (_projectManager is { ActiveProject: Cp77Project project })
-    //    {
-    //        var tmp = Path.ChangeExtension(FileModel.GetRelativeName(importableItem.FullName, _projectManager.ActiveProject), extension);
-
-    //        foreach (var modFile in _projectManager.ActiveProject.ModFiles)
-    //        {
-    //            if (modFile == tmp)
-    //            {
-    //                return Path.Combine(project.ModDirectory, modFile);
-    //            }
-    //        }
-    //    }
-
-    //    return null;
-    //}
-
-    //public IGameFile GetArchiveFile(ImportableItemViewModel importableItem, string extension)
-    //{
-    //    if (_archiveManager != null)
-    //    {
-    //        var hash = FNV1A64HashAlgorithm.HashString(Path.ChangeExtension(FileModel.GetRelativeName(importableItem.FullName, _projectManager.ActiveProject), extension));
-
-    //        var archiveFile = _archiveManager.Lookup(hash);
-    //        if (archiveFile.HasValue)
-    //        {
-    //            return archiveFile.Value;
-    //        }
-    //    }
-
-    //    return null;
-    //}
-
-    //private JsonObject SerializeArgs(ImportExportItemViewModel vm) => SerializeArgs(vm.Properties);
-    private JsonObject SerializeArgs(ImportExportArgs args)
-    {
-        var node = (JsonObject)JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings);
-
-        node.Remove("Changing");
-        node.Remove("Changed");
-        node.Remove("ThrownExceptions");
-
-        return node;
-    }
-
-    //private Dictionary<string, Dictionary<string, JsonObject>> _loadedSettings;
-    //public void SaveSettings()
-    //{
-    //    var importSettings = ImportableItems.ToDictionary(importableItem => FileModel.GetRelativeName(importableItem.FullName, _projectManager.ActiveProject), SerializeArgs);
-    //    //var exportSettings = ExportableItems.ToDictionary(exportableItem => FileModel.GetRelativeName(exportableItem.FullName, _projectManager.ActiveProject), SerializeArgs);
-
-    //    _loadedSettings = new Dictionary<string, Dictionary<string, JsonObject>>
-    //        {
-    //            { "import", importSettings },
-    //            //{ "export", exportSettings },
-    //        };
-
-    //    var json = JsonSerializer.Serialize(_loadedSettings, s_jsonSerializerSettings);
-    //    File.WriteAllText(Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json"), json);
-    //}
-
-    private void LoadFiles()
+    protected override void LoadFiles()
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -414,27 +223,9 @@ public partial class TextureImportViewModel : FloatingPaneViewModel
             .Where(CanImport)
             .Select(x => new ImportableItemViewModel(x));
 
-        ImportableItems = new(files);
+        Items.Clear();
+        Items = new(files);
     }
 
-    private static bool CanImport(string x)
-    {
-        var ext = Path.GetExtension(x).TrimStart('.');
-
-        if (!Enum.TryParse<ERawFileFormat>(ext, out var _))
-        {
-            return false;
-        }
-
-        var dbg_disabled = new List<string>()
-                {
-                    "bmp",
-                    "jpg",
-                    //"png",
-                    //"tga",
-                    "tiff",
-                };
-
-        return !dbg_disabled.Contains(ext);
-    }
+    private static bool CanImport(string x) => Enum.TryParse<ERawFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
 }

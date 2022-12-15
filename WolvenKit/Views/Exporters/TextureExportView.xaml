@@ -239,14 +239,12 @@
                     </syncfusion:GridCheckBoxColumn>
 
                     <syncfusion:GridTextColumn
-                        AllowEditing="False"
                         ColumnSizer="Star"
                         HeaderText="Name"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Name" />
 
                     <syncfusion:GridTextColumn
-                        AllowEditing="False"
                         ColumnSizer="AutoLastColumnFill"
                         HeaderText="Export Task"
                         HorizontalHeaderContentAlignment="Left"

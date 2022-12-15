@@ -44,7 +44,7 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
                 .DisposeWith(disposables);
 
             this.Bind(ViewModel,
-                        x => x.ExportableItems,
+                        x => x.Items,
                         x => x.ExportGrid.ItemsSource)
                     .DisposeWith(disposables);
 
@@ -52,11 +52,6 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
                    x => x.SelectedObject,
                    x => x.ExportGrid.SelectedItem)
                .DisposeWith(disposables);
-            this.Bind(ViewModel,
-                   x => x.SelectedItems,
-                   x => x.ExportGrid.SelectedItems)
-               .DisposeWith(disposables);
-
         });
     }
 

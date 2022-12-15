@@ -39,28 +39,5 @@ namespace WolvenKit.ViewModels.Tools
         public string Name => Path.GetFileName(BaseFile);
 
         [Reactive] public bool IsChecked { get; set; }
-
-        public EExportState ExportState => CanImport(BaseFile) ? EExportState.Importable : EExportState.Exportable;
-
-        private static bool CanImport(string x)
-        {
-            var ext = Path.GetExtension(x).TrimStart('.');
-
-            if (!Enum.TryParse<ERawFileFormat>(ext, out var _))
-            {
-                return false;
-            }
-
-            var dbg_disabled = new List<string>()
-                {
-                    "bmp",
-                    "jpg",
-                    //"png",
-                    //"tga",
-                    "tiff",
-                };
-
-            return !dbg_disabled.Contains(ext);
-        }
     }
 }

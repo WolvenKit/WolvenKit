@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
@@ -26,30 +27,13 @@ using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
-public partial class TextureExportViewModel : FloatingPaneViewModel
+public abstract partial class ExportViewModel : ImportExportViewModel
 {
-    private readonly ILoggerService _loggerService;
-    private readonly INotificationService _notificationService;
-    private readonly ISettingsManager _settingsManager;
-    private readonly IWatcherService _watcherService;
-    private readonly IProgressService<double> _progressService;
-    private readonly IProjectManager _projectManager;
-    private readonly IGameControllerFactory _gameController;
-    private readonly IArchiveManager _archiveManager;
-    private readonly IPluginService _pluginService;
-    private readonly IModTools _modTools;
 
-    private (JsonObject, Type) currentSettings;
-    private static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
-    {
-        Converters =
-            {
-                new JsonFileEntryConverter(),
-                new JsonArchiveConverter()
-            },
-        WriteIndented = true
-    };
+}
 
+public partial class TextureExportViewModel : ExportViewModel
+{
     public TextureExportViewModel(
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
@@ -78,63 +62,14 @@ public partial class TextureExportViewModel : FloatingPaneViewModel
         Header = Name;
     }
 
-    public override string Name => "Texture Exporter";
-
-    [Reactive] public ExportableItemViewModel SelectedObject { get; set; }
-
-    public ObservableCollection<ExportableItemViewModel> ExportableItems { get; set; }
-    public ObservableCollection<object> SelectedItems { get; set; }
-
-    [Reactive] public bool IsProcessing { get; set; } = false;
+    public override string Name => "Export Tool";
 
     #region Commands
-
-    [RelayCommand(CanExecute = nameof(IsAnyFile))]
-    private async Task ProcessAll() => await ExecuteProcessBulk(true);
-
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
-    private async Task ProcessSelected() => await ExecuteProcessBulk();
-
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
-    private void CopyArgumentsTemplateTo(string param)
-    {
-        if (SelectedObject.Properties is not ImportExportArgs args)
-        {
-            return;
-        }
-
-        currentSettings = (SerializeArgs(args), args.GetType());
-    }
-
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
-    private void PasteArgumentsTemplateTo()
-    {
-        var results = ExportableItems.Where(x => x.IsChecked);
-        var count = 0;
-
-        foreach (var item in results)
-        {
-            var (settings, type) = currentSettings;
-
-            if (item.Properties.GetType() != type)
-            {
-                continue;
-            }
-
-            item.Properties = (ImportExportArgs)settings.Deserialize(type, s_jsonSerializerSettings);
-            count++;
-        }
-
-        if (count > 0)
-        {
-            _notificationService.Success($"Template has been copied to the selected items.");
-        }
-    }
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
     private void ImportSettings()
     {
-        foreach (var item in ExportableItems.Where(x => x.IsChecked))
+        foreach (var item in Items.Where(x => x.IsChecked))
         {
             if (item.Properties is not ExportArgs args)
             {
@@ -145,35 +80,9 @@ public partial class TextureExportViewModel : FloatingPaneViewModel
         }
     }
 
-    [RelayCommand]
-    private void Refresh() => LoadFiles();
-
-    [RelayCommand]
-    private void ToggleAdvancedOptions() => _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
-
-
     #endregion
 
-    public bool IsAnyFileSelected => ExportableItems.Where(x => x.IsChecked).Any();
-
-    private bool IsAnyFile() => ExportableItems.Any();
-
-    private JsonObject SerializeArgs(ImportExportArgs args)
-    {
-        var node = (JsonObject)JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings);
-
-        node.Remove("Changing");
-        node.Remove("Changed");
-        node.Remove("ThrownExceptions");
-
-        return node;
-    }
-
-    /// <summary>
-    /// Helper Task to Execute Bulk Processing in Import / Export Grid Command
-    /// 
-    /// </summary>
-    private async Task ExecuteProcessBulk(bool all = false)
+    protected override async Task ExecuteProcessBulk(bool all = false)
     {
         IsProcessing = true;
         _watcherService.IsSuspended = true;
@@ -186,7 +95,10 @@ public partial class TextureExportViewModel : FloatingPaneViewModel
         //prepare a list of failed items
         var failedItems = new List<string>();
 
-        var toBeExported = ExportableItems.Where(_ => all || _.IsChecked).ToList();
+        var toBeExported = Items
+            .Where(_ => all || _.IsChecked)
+            .Cast<ExportableItemViewModel>()
+            .ToList();
         total = toBeExported.Count;
         foreach (var item in toBeExported)
         {
@@ -223,10 +135,6 @@ public partial class TextureExportViewModel : FloatingPaneViewModel
         _progressService.Completed();
     }
 
-    /// <summary>
-    /// Export Single Item
-    /// </summary>
-    /// <param name="item"></param>
     private bool ExportSingle(ExportableItemViewModel item)
     {
         var proj = _projectManager.ActiveProject;
@@ -287,7 +195,7 @@ public partial class TextureExportViewModel : FloatingPaneViewModel
         return false;
     }
 
-    private void LoadFiles()
+    protected override void LoadFiles()
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -298,18 +206,9 @@ public partial class TextureExportViewModel : FloatingPaneViewModel
             .Where(CanExport)
             .Select(x => new ExportableItemViewModel(x));
 
-        ExportableItems = new(files);
+        Items.Clear();
+        Items = new(files);
     }
 
-    private static bool CanExport(string x)
-    {
-        var ext = Path.GetExtension(x).TrimStart('.');
-
-        if (!Enum.TryParse<ECookedFileFormat>(ext, out var _))
-        {
-            return false;
-        }
-
-        return true;
-    }
+    private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
 }
