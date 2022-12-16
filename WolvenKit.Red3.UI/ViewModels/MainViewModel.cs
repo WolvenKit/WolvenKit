@@ -46,6 +46,18 @@ public partial class MainViewModel
     #region commands
 
     [RelayCommand]
+    private async Task NewFile()
+    {
+        Notifications.StartIndeterminate();
+        Notifications.DisplayBanner("Test", "test msg", Microsoft.UI.Xaml.Controls.InfoBarSeverity.Warning);
+
+        await Task.Delay(5000);
+
+        Notifications.CloseBanner();
+        Notifications.Completed();
+    }
+
+    [RelayCommand]
     private async Task OpenFolder()
     {
         // Create a folder picker.

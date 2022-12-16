@@ -19,6 +19,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
 
@@ -89,7 +90,10 @@
             <AppBarSeparator />
 
             <!--  New File  -->
-            <AppBarButton Icon="OpenFile" Label="New File" />
+            <AppBarButton
+                Command="{x:Bind ViewModel.NewFileCommand}"
+                Icon="OpenFile"
+                Label="New File" />
 
             <AppBarSeparator />
 
@@ -126,29 +130,15 @@
             Margin="20,0,20,0"
             Visibility="Visible">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
             <!--    -->
             <InfoBar
                 Title="{x:Bind ViewModel.Notifications.BannerNotification.Title, Mode=OneWay}"
-                Grid.Row="0"
                 VerticalAlignment="Bottom"
                 IsClosable="False"
                 IsIconVisible="True"
                 IsOpen="{x:Bind ViewModel.Notifications.BannerNotification.IsOpen, Mode=OneWay}"
                 Message="{x:Bind ViewModel.Notifications.BannerNotification.Message, Mode=OneWay}"
                 Severity="{x:Bind ViewModel.Notifications.BannerNotification.Severity, Mode=OneWay}" />
-
-            <ProgressBar
-                Grid.Row="1"
-                Width="Auto"
-                Height="50"
-                IsIndeterminate="{x:Bind ViewModel.Notifications.Progress.IsIndeterminate, Mode=OneWay}"
-                Visibility="Visible"
-                Value="{x:Bind ViewModel.Notifications.Progress.Value, Mode=OneWay}" />
         </Grid>
 
         <!--  Main Workspace  -->
@@ -240,6 +230,32 @@
 
             </TabView>
 
+        </Grid>
+
+        <!--  Status Bar  -->
+        <Grid Grid.Row="4" Background="DarkSlateGray">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Padding="10" Text="Status 1" />
+
+            <ProgressBar
+                Grid.Column="1"
+                Width="Auto"
+                Height="30"
+                IsIndeterminate="{x:Bind ViewModel.Notifications.Progress.IsIndeterminate, Mode=OneWay}"
+                Visibility="Visible"
+                Value="{x:Bind ViewModel.Notifications.Progress.Value, Mode=OneWay}" />
+
+            <TextBlock
+                Grid.Column="2"
+                Padding="10"
+                FlowDirection="RightToLeft"
+                Text="Status 2" />
         </Grid>
 
     </Grid>
