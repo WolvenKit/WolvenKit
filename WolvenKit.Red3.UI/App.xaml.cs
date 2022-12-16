@@ -9,7 +9,7 @@ using Microsoft.UI.Xaml;
 using WolvenKit.Red3.UI.Helpers;
 using WolvenKit.Red3.UI.Pages;
 using WolvenKit.Red3.UI.Services;
-using WolvenKit.Red3.UI.ViewModel;
+using WolvenKit.Red3.UI.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -49,7 +49,7 @@ public partial class App : Application
 
         MainRoot = StartupWindow.Content as FrameworkElement;
 
-        (StartupWindow as MainWindow).Navigate(typeof(SettingsPage), "");
+        (StartupWindow as MainWindow).Navigate(typeof(ProjectExplorerPage), "");
 
         // Ensure the current window is active
         StartupWindow.Activate();
@@ -88,9 +88,13 @@ public partial class App : Application
         services.AddSingleton<INotificationService, NotificationService>();
         services.AddTransient<IDialogService, DialogService>();
 
+        services.AddSingleton<IWorkspaceService, WorkspaceService>();
+
 
         // Viewmodels
-        services.AddTransient<MainViewModel>();
+        services.AddSingleton<MainViewModel>();
+
+        services.AddSingleton<ProjectExplorerViewModel>();
 
 
         return services.BuildServiceProvider();

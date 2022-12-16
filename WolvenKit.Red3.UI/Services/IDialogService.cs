@@ -17,6 +17,7 @@ public class DialogService : IDialogService
             Title = title,
             Content = message,
             CloseButtonText = cancel,
+
             XamlRoot = App.MainRoot.XamlRoot,
         };
 

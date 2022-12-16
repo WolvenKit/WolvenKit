@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using WolvenKit.Red3.UI.Pages;
-using WolvenKit.Red3.UI.ViewModel;
+using WolvenKit.Red3.UI.ViewModels;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -89,8 +89,12 @@ public sealed partial class MainWindow : Window
         public object Parameter;
     }
 
-    private void NavigationViewControl_Tapped(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
+    private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
     {
+        if (args.Item is DocumentViewModel vm)
+        {
+            ViewModel.CloseDocument(vm);
+        }
 
     }
 }

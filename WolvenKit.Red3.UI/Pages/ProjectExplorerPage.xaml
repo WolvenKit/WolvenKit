@@ -5,8 +5,50 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:WolvenKit.Red3.UI.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:WolvenKit.Red3.UI.ViewModels"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
 
-    <Grid Background="Olive" />
+    <Page.Resources>
+
+        <!--  FolderTemplate  -->
+        <DataTemplate x:Key="FolderTemplate" x:DataType="viewmodels:ExplorerItem">
+            <TreeViewItem
+                AutomationProperties.Name="{x:Bind Name}"
+                IsExpanded="True"
+                ItemsSource="{x:Bind Children}">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Foreground="DarkGoldenrod" Symbol="Folder" />
+                    <TextBlock Margin="0,0,10,0" />
+                    <TextBlock Text="{x:Bind Name}" />
+                </StackPanel>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <!--  FileTemplate  -->
+        <DataTemplate x:Key="FileTemplate" x:DataType="viewmodels:ExplorerItem">
+            <TreeViewItem
+                AutomationProperties.Name="{x:Bind Name}"
+                DoubleTapped="TreeViewItem_DoubleTapped"
+                IsDoubleTapEnabled="True">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Document" />
+                    <TextBlock Margin="0,0,10,0" />
+                    <TextBlock Text="{x:Bind Name}" />
+                </StackPanel>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <viewmodels:ExplorerItemTemplateSelector
+            x:Key="ExplorerItemTemplateSelector"
+            FileTemplate="{StaticResource FileTemplate}"
+            FolderTemplate="{StaticResource FolderTemplate}" />
+    </Page.Resources>
+
+
+    <Grid>
+
+        <TreeView ItemTemplateSelector="{StaticResource ExplorerItemTemplateSelector}" ItemsSource="{x:Bind ViewModel.DataSource, Mode=OneWay}" />
+
+    </Grid>
 </Page>

@@ -9,6 +9,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:WolvenKit.Red3.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:WolvenKit.Red3.UI.ViewModels"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -79,7 +80,11 @@
             DefaultLabelPosition="Right">
 
             <!--  New Project  -->
-            <AppBarButton Icon="OpenLocal" Label="Open Project" />
+            <AppBarButton Command="{x:Bind ViewModel.OpenFolderCommand}" Label="Open Project">
+                <AppBarButton.Icon>
+                    <SymbolIcon Foreground="Yellow" Symbol="OpenLocal" />
+                </AppBarButton.Icon>
+            </AppBarButton>
 
             <AppBarSeparator />
 
@@ -89,10 +94,17 @@
             <AppBarSeparator />
 
             <!--  File  -->
-            <AppBarButton Icon="Save" Label="Save" />
+            <AppBarButton Label="Save">
+                <AppBarButton.Icon>
+                    <SymbolIcon Foreground="CornflowerBlue" Symbol="Save" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarButton Label="Save All">
                 <AppBarButton.Icon>
-                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA35;" />
+                    <FontIcon
+                        FontFamily="Segoe Fluent Icons"
+                        Foreground="CornflowerBlue"
+                        Glyph="&#xEA35;" />
                 </AppBarButton.Icon>
             </AppBarButton>
 
@@ -101,7 +113,7 @@
             <!--  Build  -->
             <AppBarButton Label="Build">
                 <AppBarButton.Icon>
-                    <SymbolIcon Symbol="Play" />
+                    <SymbolIcon Foreground="Green" Symbol="Play" />
                 </AppBarButton.Icon>
             </AppBarButton>
 
@@ -142,9 +154,9 @@
         <!--  Main Workspace  -->
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="50" />
+                <ColumnDefinition Width="1*" MinWidth="50" />
                 <ColumnDefinition Width="5" />
-                <ColumnDefinition />
+                <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
 
             <!--  Navigation View  -->
@@ -155,8 +167,7 @@
                 IsEnabled="{x:Bind ViewModel.Loaded, Mode=OneWay}"
                 IsPaneToggleButtonVisible="False"
                 PaneDisplayMode="LeftCompact"
-                SelectionChanged="NavigationViewControl_SelectionChanged"
-                Tapped="NavigationViewControl_Tapped">
+                SelectionChanged="NavigationViewControl_SelectionChanged">
 
                 <NavigationView.MenuItems>
 
@@ -195,10 +206,39 @@
             <controls:GridSplitter Grid.Column="1" ResizeBehavior="PreviousAndNext" />
 
             <!--  Document View  -->
-            <!--  AddTabButtonClick="TabView_AddButtonClick"  -->
-            <!--  TabCloseRequested="TabView_TabCloseRequested"  -->
-            <!--  Loaded="TabView_Loaded"  -->
-            <TabView Grid.Column="2" />
+            <TabView
+                Grid.Column="2"
+                IsAddTabButtonVisible="False"
+                TabCloseRequested="TabView_TabCloseRequested"
+                TabItemsSource="{x:Bind ViewModel.Documents, Mode=OneWay}">
+
+                <TabView.TabItemTemplate>
+                    <DataTemplate x:DataType="viewmodels:DocumentViewModel">
+                        <TabViewItem Header="{x:Bind DataHeader}">
+
+                            <TabViewItem.Content>
+                                <Grid>
+                                    <ScrollViewer>
+                                        <TextBox
+                                            AcceptsReturn="True"
+                                            AutomationProperties.Name="multi-line TextBox"
+                                            IsSpellCheckEnabled="True"
+                                            SelectionHighlightColor="Green"
+                                            Text="{x:Bind Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            TextWrapping="Wrap" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </TabViewItem.Content>
+
+                            <TabViewItem.IconSource>
+                                <SymbolIconSource Symbol="Document" />
+                            </TabViewItem.IconSource>
+
+                        </TabViewItem>
+                    </DataTemplate>
+                </TabView.TabItemTemplate>
+
+            </TabView>
 
         </Grid>
 
