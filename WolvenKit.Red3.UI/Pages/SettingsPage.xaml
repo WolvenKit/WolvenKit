@@ -1,0 +1,43 @@
+﻿<Page
+    x:Class="WolvenKit.Red3.UI.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:WolvenKit.Red3.UI.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+
+    <Grid>
+        <ScrollViewer
+            x:Name="contentSV"
+            Grid.Row="1"
+            Padding="56,0,0,0"
+            IsTabStop="False"
+            UseSystemFocusVisuals="False"
+            VerticalScrollBarVisibility="Auto"
+            VerticalScrollMode="Auto">
+            <StackPanel HorizontalAlignment="Left">
+                <TextBlock
+                    Margin="0,12,0,0"
+                    Style="{StaticResource SubtitleTextBlockStyle}"
+                    Text="Theme Mode" />
+                <StackPanel x:Name="ThemePanel" Margin="0,10,0,0">
+                    <RadioButton
+                        Checked="OnThemeRadioButtonChecked"
+                        Content="Light"
+                        KeyDown="OnThemeRadioButtonKeyDown"
+                        Tag="Light" />
+                    <RadioButton
+                        Checked="OnThemeRadioButtonChecked"
+                        Content="Dark"
+                        Tag="Dark" />
+                    <RadioButton
+                        Checked="OnThemeRadioButtonChecked"
+                        Content="Use system setting"
+                        Tag="Default" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
