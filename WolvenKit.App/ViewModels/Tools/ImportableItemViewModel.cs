@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using DynamicData.Binding;
 using ReactiveUI;
@@ -16,6 +17,21 @@ namespace WolvenKit.ViewModels.Tools
             Properties = DecideImportOptions();
 
             Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
+
+            Properties.WhenAnyPropertyChanged(nameof(XbmImportArgs.TextureGroup)).Subscribe(p =>
+            {
+                if (p is XbmImportArgs importArgs)
+                {
+                    // when manually changing texturegroup, recalculate values
+                    // IsGamma, RawFormat, Compression, GenerateMipMaps, IsStreamable
+                    var args = CommonFunctions.TextureSetupFromTextureGroup(importArgs.TextureGroup);
+                    importArgs.IsGamma = args.IsGamma;
+                    importArgs.RawFormat = args.RawFormat;
+                    importArgs.Compression = args.Compression;
+                    importArgs.GenerateMipMaps = args.GenerateMipMaps;
+                    importArgs.IsStreamable = args.IsStreamable;
+                }
+            });
         }
 
         private ImportArgs DecideImportOptions()
@@ -71,10 +87,12 @@ namespace WolvenKit.ViewModels.Tools
                 _ => throw new ArgumentOutOfRangeException(),
             };
 
+            // set default texturegroup from filename
             var texGroup = CommonFunctions.GetTextureGroupFromFileName(Path.GetFileNameWithoutExtension(FullName));
 
             // get settings from texgroup
             xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
+
             // get the format again, cos CDPR
             var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
             xbmArgs.RawFormat = rawFormat;

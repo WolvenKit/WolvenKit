@@ -266,12 +266,12 @@
                 </Grid.RowDefinitions>
 
                 <!--  ShowAdvancedOptions  -->
-                <mah:ToggleSwitch
+                <!--<mah:ToggleSwitch
                     Command="{Binding ToggleAdvancedOptionsCommand}"
                     IsOn="{Binding ShowAdvancedOptions}"
                     OffContent="Show Advanced Options"
                     OnContent="Hide Advanced Options"
-                    ToolTip="Toggle Advanced Import/Export Options" />
+                    ToolTip="Toggle Advanced Import/Export Options" />-->
 
                 <syncfusion:PropertyGrid
                     x:Name="OverlayPropertyGrid"
