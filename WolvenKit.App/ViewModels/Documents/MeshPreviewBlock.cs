@@ -72,6 +72,7 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
             Header = "Sector Previews";
 
+            PanelVisibility.ShowSearchPanel = true;
             SearchForPointCommand = new DelegateCommand(ExecuteSearchForPoint);
             ClearSearchCommand = new DelegateCommand(ExecuteClearSearch);
 
@@ -90,6 +91,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             SearchActive = true;
             RenderBlock((worldStreamingBlock)_data);
+            CenterCameraToCoord(SearchPoint);
         }
 
         public void RenderBlockSolo()

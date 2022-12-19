@@ -179,7 +179,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -219,52 +219,77 @@
                         ItemsSource="{Binding SelectedAppearance.LODLUT.Keys, Mode=OneWay}"
                         SelectedItem="{Binding SelectedAppearance.SelectedLOD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
-                <TextBlock
-                    Margin="5,6,0,3"
-                    VerticalAlignment="Center"
-                    Text="Search Coordinate:" />
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Vertical" Visibility="{Binding PanelVisibility.ShowSearchPanel, Converter={StaticResource VisibilityConverter}}" >
                     <TextBlock
-                        Margin="5,0,0,0"
+                        Margin="5,6,0,3"
                         VerticalAlignment="Center"
-                        Text="X: " />
-                    <editors:RedFloatEditor
-                        Grid.Column="1"
-                        Height="24"
-                        RedNumber="{Binding SearchPoint.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Margin="5,0,0,0"
-                        VerticalAlignment="Center"
-                        Text="Y: " />
-                    <editors:RedFloatEditor
-                        Grid.Column="1"
-                        Height="24"
-                        RedNumber="{Binding SearchPoint.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Margin="5,0,0,0"
-                        VerticalAlignment="Center"
-                        Text="Z: " />
-                    <editors:RedFloatEditor
-                        Grid.Column="1"
-                        Height="24"
-                        RedNumber="{Binding SearchPoint.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
+                        Text="Search Coordinate:" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="X: " />
+                        <editors:RedFloatEditor
+                            Grid.Column="1"
+                            Height="24"
+                            RedNumber="{Binding SearchPoint.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="Y: " />
+                        <editors:RedFloatEditor
+                            Grid.Column="1"
+                            Height="24"
+                            RedNumber="{Binding SearchPoint.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="Z: " />
+                        <editors:RedFloatEditor
+                            Grid.Column="1"
+                            Height="24"
+                            RedNumber="{Binding SearchPoint.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Button
+                            Grid.Column="0"
+                            Margin="4"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding SearchForPointCommand}"
+                            Content="Search for Coordinate" />
+                        <Button
+                            Grid.Column="1"
+                            Height="24"
+                            Margin="4"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding ClearSearchCommand}"
+                            Content="Clear Search" />
+                    </Grid>
+                </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -274,19 +299,6 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Button
-                        Grid.Column="0"
-                        Margin="4"
-                        HorizontalAlignment="Stretch"
-                        Command="{Binding SearchForPointCommand}"
-                        Content="Search for Coordinate" />
-                    <Button
-                        Grid.Column="1"
-                        Height="24"
-                        Margin="4"
-                        HorizontalAlignment="Stretch"
-                        Command="{Binding ClearSearchCommand}"
-                        Content="Clear Search" />
                     <Button
                         Grid.Row="1"
                         Grid.Column="0"
@@ -305,7 +317,7 @@
                         HorizontalAlignment="Stretch"
                         Command="{Binding ExportEntity}"
                         Content="Export Appearance with Rig (experimental)"
-                        Visibility="{Binding ShowExportEntity, Converter={StaticResource VisibilityConverter}}" />
+                        Visibility="{Binding PanelVisibility.ShowExportEntity, Converter={StaticResource VisibilityConverter}}" />
                 </Grid>
 
                 <!--  Button Click="ReloadModels" Content="Zoom to Extents" /  -->

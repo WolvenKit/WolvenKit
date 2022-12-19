@@ -21,7 +21,6 @@ namespace WolvenKit.ViewModels.Documents
         {
             Header = "Sector Preview";
             _data = data;
-
             var app = new Appearance()
             {
                 Name = Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"),

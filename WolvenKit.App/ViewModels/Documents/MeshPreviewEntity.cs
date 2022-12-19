@@ -19,14 +19,13 @@ namespace WolvenKit.ViewModels.Documents
     {
         public ICommand ExportEntity { get; set; }
 
-        public bool ShowExportEntity { get; set; }
 
         public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file)
         {
             Header = "Entity Preview";
             _data = ent;
 
-            ShowExportEntity = true;
+            PanelVisibility.ShowExportEntity = true;
             ExportEntity = new DelegateCommand(() =>
             {
                 var dlg = new SaveFileDialog

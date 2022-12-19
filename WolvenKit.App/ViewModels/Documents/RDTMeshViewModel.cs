@@ -172,6 +172,14 @@ namespace WolvenKit.ViewModels.Documents
         public float Metalness { get; set; } = 0.0f;
         public float Roughness { get; set; } = 0.75f;
     }
+    public class PanelVisibility
+    {
+        public bool ShowExportEntity { get; set; }
+
+        public bool ShowSearchPanel { get; set; }
+
+    }
+
 
     public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableViewModel
     {
@@ -194,6 +202,12 @@ namespace WolvenKit.ViewModels.Documents
         public TextureModel EnvironmentMap { get; set; }
 
         public bool IsRendered;
+
+        private const int s_distanceCameraUnits = 145;
+        private const double s_cameraUpDirectionFactor = 0.7;
+        private const int s_cameraAnimationTime = 400;
+
+        public PanelVisibility PanelVisibility { get; set; } = new();
 
         public RDTMeshViewModel(RedDocumentViewModel file)
         {
@@ -855,6 +869,15 @@ namespace WolvenKit.ViewModels.Documents
         //                                                                  matrix.Y.X, matrix.Y.Y, matrix.Y.Z, matrix.Y.W,
         //                                                                  matrix.Z.X, matrix.Z.Y, matrix.Z.Z, matrix.Z.W,
         //                                                                  matrix.W.X, matrix.W.Y, matrix.W.Z, matrix.W.W);
+
+        public void CenterCameraToCoord(Vector3 coord)
+        {
+            Camera.AnimateTo(
+                    new System.Windows.Media.Media3D.Point3D(coord.X, coord.Z + (s_distanceCameraUnits), -coord.Y + (s_distanceCameraUnits)),
+                    new Vector3D(0, -s_distanceCameraUnits, -s_distanceCameraUnits),
+                    new Vector3D(0, s_cameraUpDirectionFactor, -s_cameraUpDirectionFactor),
+                    s_cameraAnimationTime);
+        }
     }
 
     public class SeparateMatrix
