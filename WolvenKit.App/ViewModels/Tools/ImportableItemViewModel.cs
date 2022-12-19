@@ -54,7 +54,10 @@ namespace WolvenKit.ViewModels.Tools
         public XbmImportArgs LoadXbmDefaultSettings()
         {
             XbmImportArgs xbmArgs;
-            _ = Enum.TryParse(Extension, out ERawFileFormat rawFileFormat);
+            if (!Enum.TryParse(Extension, out ERawFileFormat rawFileFormat))
+            {
+                throw new ArgumentException();
+            }
 
             // load and, if needed, decompress file
             var image = rawFileFormat switch
@@ -68,7 +71,7 @@ namespace WolvenKit.ViewModels.Tools
                 _ => throw new ArgumentOutOfRangeException(),
             };
 
-            var texGroup = CommonFunctions.GetTextureGroupFromFileName(Name);
+            var texGroup = CommonFunctions.GetTextureGroupFromFileName(Path.GetFileNameWithoutExtension(FullName));
 
             // get settings from texgroup
             xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
