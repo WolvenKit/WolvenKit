@@ -219,6 +219,12 @@
                         ItemsSource="{Binding SelectedAppearance.LODLUT.Keys, Mode=OneWay}"
                         SelectedItem="{Binding SelectedAppearance.SelectedLOD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock
+                        Margin="5,6,0,3"
+                        VerticalAlignment="Center"
+                        Text="{Binding CurrentSelection.Name}" />
+                </StackPanel>
                 <StackPanel Orientation="Vertical" Visibility="{Binding PanelVisibility.ShowSearchPanel, Converter={StaticResource VisibilityConverter}}" >
                     <TextBlock
                         Margin="5,6,0,3"

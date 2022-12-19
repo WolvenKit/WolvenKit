@@ -7,6 +7,7 @@ using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using Splat;
+using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
@@ -17,6 +18,11 @@ namespace WolvenKit.ViewModels.Documents
 {
     public partial class RDTMeshViewModel
     {
+        public MeshComponent CurrentSelection { get; set; } = new()
+        {
+            Name = "Not_Selected"
+        };
+
         public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file)
         {
             Header = "Sector Preview";
@@ -37,6 +43,10 @@ namespace WolvenKit.ViewModels.Documents
 
         public void RenderSectorSolo()
         {
+            RetoreSelectedMeshMaterial();
+            CurrentSelection = new MeshComponent(){
+                Name = "Not_Selected"
+            };
             if (IsRendered)
             {
                 return;
@@ -650,6 +660,52 @@ namespace WolvenKit.ViewModels.Documents
         {
             return new SharpDX.Vector3(v.X, v.Y, v.Z);
         }
+
+
+        public void UpdateSelection(MeshComponent mesh)
+        {
+            RetoreSelectedMeshMaterial();
+
+            CurrentSelection = mesh;
+
+            UpdateMeshSelectionColor(mesh);
+        }
+
+        private void RetoreSelectedMeshMaterial() => UpdateChildrenSubmesh(CurrentSelection, (SubmeshComponent submesh) => submesh.Material = submesh.OriginalMaterial);
+        private void UpdateMeshSelectionColor(MeshComponent mesh)
+        {
+            UpdateChildrenSubmesh(mesh, (SubmeshComponent submesh) =>
+            {
+                submesh.OriginalMaterial = submesh.Material;
+                submesh.Material = PhongMaterials.Blue;
+            });
+        }
+
+        private void UpdateChildrenSubmesh(MeshComponent mesh, Action<SubmeshComponent> submeshUpdater)
+        {
+            if (mesh != null)
+            {
+                foreach (var child in mesh.Children)
+                {
+                    if (child is MeshComponent childMesh)
+                    {
+                        UpdateChildrenSubmesh(childMesh, submeshUpdater);
+                    }
+                    else if (child is SubmeshComponent childSubMesh)
+                    {
+                        if (submeshUpdater != null)
+                        {
+                            submeshUpdater(childSubMesh);
+                        }
+                    }
+                    else
+                    {
+                        Locator.Current.GetService<ILoggerService>().Warning("Child is a " + child.GetType());
+                    }
+                }
+            }
+        }
+
     }
 
     public class SectorGroup : GroupModel3D

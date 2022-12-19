@@ -132,6 +132,7 @@ namespace WolvenKit.Views.Documents
                 //   .DisposeWith(disposables);
 
             });
+            
 
 
             //PropertyGrid.CustomEditorCollection = CustomEditorCollection;
