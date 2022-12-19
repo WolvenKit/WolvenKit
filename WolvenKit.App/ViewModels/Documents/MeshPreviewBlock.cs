@@ -90,6 +90,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             SearchActive = true;
             RenderBlock((worldStreamingBlock)_data);
+            CenterCameraToCoord(SearchPoint);
         }
 
         public void RenderBlockSolo()
