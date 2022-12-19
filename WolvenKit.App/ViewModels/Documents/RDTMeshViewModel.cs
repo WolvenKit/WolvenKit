@@ -9,7 +9,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
-using HelixToolkit.SharpDX.Core.Model.Scene2D;
 using HelixToolkit.Wpf.SharpDX;
 using Prism.Commands;
 using ReactiveUI;
@@ -173,6 +172,14 @@ namespace WolvenKit.ViewModels.Documents
         public float Metalness { get; set; } = 0.0f;
         public float Roughness { get; set; } = 0.75f;
     }
+    public class PanelVisibility
+    {
+        public bool ShowExportEntity { get; set; }
+
+        public bool ShowSearchPanel { get; set; }
+
+    }
+
 
     public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableViewModel
     {
@@ -199,6 +206,8 @@ namespace WolvenKit.ViewModels.Documents
         private const int s_distanceCameraUnits = 145;
         private const double s_cameraUpDirectionFactor = 0.7;
         private const int s_cameraAnimationTime = 400;
+
+        public PanelVisibility PanelVisibility { get; set; } = new();
 
         public RDTMeshViewModel(RedDocumentViewModel file)
         {
