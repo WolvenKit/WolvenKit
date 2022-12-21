@@ -46,11 +46,6 @@
                 <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="MiddleClick" />
                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="Shift+MiddleClick" />
             </hx:Viewport3DX.InputBindings>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDown3D">
-                    <i:CallMethodAction MethodName="OnMouseDown3DHandler" TargetObject="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
             <hx:DirectionalLight3D Direction="0, -1, 0" Color="White" />
             <hx:DirectionalLight3D Direction="0, 0, 1" Color="White" />
             <hx:DirectionalLight3D Direction="0, 0, -1" Color="White" />

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -180,6 +181,14 @@ namespace WolvenKit.ViewModels.Documents
 
     }
 
+    public static class MeshViewHeaders
+    {
+        public const string MeshPreview = "Mesh Preview";
+        public const string AllSectorPreview = "All Sector Preview";
+        public const string SectorPreview = "Sector Preview";
+        public const string EntityPreview = "Entity Preview";
+    }
+
 
     public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableViewModel
     {
@@ -215,7 +224,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (Header == null)
                 {
-                    Header = "Mesh Preview";
+                    Header = MeshViewHeaders.MeshPreview;
                 }
 
                 File = file;
@@ -877,6 +886,27 @@ namespace WolvenKit.ViewModels.Documents
                     new Vector3D(0, -s_distanceCameraUnits, -s_distanceCameraUnits),
                     new Vector3D(0, s_cameraUpDirectionFactor, -s_cameraUpDirectionFactor),
                     s_cameraAnimationTime);
+        }
+
+        public void MouseDown3D(object sender, RoutedEventArgs e)
+        {
+            if (e is MouseDown3DEventArgs args && args.HitTestResult != null)
+            {
+                var mouseButtonEventArgs = ((MouseButtonEventArgs)args.OriginalInputEventArgs);
+                MouseDown3DSector(sender, args, mouseButtonEventArgs);
+                MouseDown3DBlock(sender, args, mouseButtonEventArgs);
+
+                CommonMouseDownEvents(args.HitTestResult.ModelHit, mouseButtonEventArgs);
+            }
+        }
+
+        private void CommonMouseDownEvents(object modelHit, MouseButtonEventArgs mouseButtonEventArgs) 
+        {
+            if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed && modelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
+            {
+                Locator.Current.GetService<ILoggerService>().Info((mesh.WorldNodeIndex != null ? "worldNodeData[" + mesh.WorldNodeIndex + "] : " : "Mesh Name :") + mesh.Name);
+            }
+        
         }
     }
 

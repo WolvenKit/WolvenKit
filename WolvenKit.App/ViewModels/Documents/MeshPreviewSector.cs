@@ -25,7 +25,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file)
         {
-            Header = "Sector Preview";
+            Header = MeshViewHeaders.SectorPreview;
             _data = data;
             var app = new Appearance()
             {
@@ -706,6 +706,20 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
+        private void MouseDown3DSector(object sender, MouseDown3DEventArgs args, MouseButtonEventArgs mouseButtonEventArgs)
+        {
+            if (Header == MeshViewHeaders.SectorPreview && args.HitTestResult.ModelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
+            {
+                if (mouseButtonEventArgs.RightButton == MouseButtonState.Pressed)
+                {
+                    Locator.Current.GetService<ILoggerService>().Info("RighClick: " + mesh.Name);
+                }
+                else if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed)
+                {
+                    UpdateSelection(mesh);
+                }
+            }
+        }
     }
 
     public class SectorGroup : GroupModel3D
