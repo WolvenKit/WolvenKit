@@ -2,26 +2,46 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reactive.Disposables;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public partial class RDTMeshViewModel
     {
-        public MeshComponent CurrentSelection { get; set; } = new()
+        public class MeshComponentSelector: ReactiveObject 
         {
-            Name = "Not_Selected"
-        };
+            private const string s_noSelection = "No_Selection";
+
+            [Reactive] public string Name { get; private set; } = s_noSelection;
+
+            private MeshComponent _meshComponent;
+            public MeshComponent SelectedMesh
+            {
+                get => _meshComponent;
+                set
+                {
+                    _meshComponent = value;
+                    Name = (value == null) ? s_noSelection : value.Name;
+                }
+            }
+
+            public void Unselect() => SelectedMesh = null;
+        }
+
+        [Reactive] public MeshComponentSelector CurrentSelection { get; set; } = new();
 
         public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file)
         {
@@ -44,9 +64,7 @@ namespace WolvenKit.ViewModels.Documents
         public void RenderSectorSolo()
         {
             RetoreSelectedMeshMaterial();
-            CurrentSelection = new MeshComponent(){
-                Name = "Not_Selected"
-            };
+            CurrentSelection = new();
             if (IsRendered)
             {
                 return;
@@ -646,7 +664,7 @@ namespace WolvenKit.ViewModels.Documents
 
             var element = new SectorGroup()
             {
-
+                Name=""
             };
             foreach (var group in groups)
             {
@@ -666,12 +684,12 @@ namespace WolvenKit.ViewModels.Documents
         {
             RetoreSelectedMeshMaterial();
 
-            CurrentSelection = mesh;
+            CurrentSelection.SelectedMesh = mesh;
 
             UpdateMeshSelectionColor(mesh);
         }
 
-        private void RetoreSelectedMeshMaterial() => UpdateChildrenSubmesh(CurrentSelection, (SubmeshComponent submesh) => submesh.Material = submesh.OriginalMaterial);
+        private void RetoreSelectedMeshMaterial() => UpdateChildrenSubmesh(CurrentSelection.SelectedMesh, (SubmeshComponent submesh) => submesh.Material = submesh.OriginalMaterial);
         private void UpdateMeshSelectionColor(MeshComponent mesh)
         {
             UpdateChildrenSubmesh(mesh, (SubmeshComponent submesh) =>
