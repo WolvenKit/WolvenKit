@@ -664,7 +664,8 @@ namespace WolvenKit.Modkit.RED4.Tools
             return expMeshes;
         }
 
-        private static string FindNextInSequence(IReadOnlyList<string> sequence, string current){
+        private static string FindNextInSequence(IReadOnlyList<string> sequence, string current)
+        {
             for (var i = 0; i < sequence.Count - 1; i++)
             {
                 if (sequence[i] != current || sequence[i + 1] == current)

@@ -437,7 +437,7 @@ namespace WolvenKit.ViewModels.Documents
         public ICommand LoadMaterialsCommand { get; set; }
         public void LoadMaterials()
         {
-            if (null == SelectedAppearance)
+            if (SelectedAppearance == null)
             {
                 Locator.Current.GetService<ILoggerService>().Warning($"No material selected!");
                 return;
