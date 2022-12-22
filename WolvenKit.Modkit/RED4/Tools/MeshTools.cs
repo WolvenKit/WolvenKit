@@ -652,6 +652,8 @@ namespace WolvenKit.Modkit.RED4.Tools
                 var apps = info.appearances.Keys.ToList();
                 for (var e = 0; e < apps.Count; e++)
                 {
+                    // Null-proof materials
+                    info.appearances[apps[e]] = InitializeDefaultMaterial(info.meshCount, info.appearances[apps[e]]);
                     meshContainer.materialNames[e] = info.appearances[apps[e]][index];
                 }
 
@@ -661,6 +663,43 @@ namespace WolvenKit.Modkit.RED4.Tools
             RemoveDoubleFaces(ref expMeshes);
             return expMeshes;
         }
+
+        private static string FindNextInSequence(IReadOnlyList<string> sequence, string current){
+            for (var i = 0; i < sequence.Count - 1; i++)
+            {
+                if (sequence[i] != current || sequence[i + 1] == current)
+                {
+                    continue;
+                }
+                return sequence[i + 1];
+            }
+            return null;
+        }
+
+        private static string[] InitializeDefaultMaterial(int numTotalSubmeshes, string[] meshAppearances)
+        {
+            List<string> ret = meshAppearances.ToList();;
+            // If the array is empty: initialize it with "default" material
+            if (ret.Count == 0)
+            {
+                ret.Add("default");
+            }
+
+            // append all missing appearance names
+            for (var e = ret.Count; e < numTotalSubmeshes; e++)
+            {
+                // get last item from array, which is never falsy because of the above statement 
+                var lastUsedString = ret[^1];
+
+                var nextUsedString = FindNextInSequence(ret, lastUsedString) ?? lastUsedString;
+                
+                ret.Add(nextUsedString);
+            }
+
+            return ret.ToArray();
+
+        }
+        
         public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature newRig, RawArmature oldRig)
         {
             // updating mesh bone indices
