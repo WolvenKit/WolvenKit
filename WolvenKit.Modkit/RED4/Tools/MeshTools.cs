@@ -650,8 +650,11 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 meshContainer.materialNames = new string[info.appearances.Count];
                 var apps = info.appearances.Keys.ToList();
+                
                 for (var e = 0; e < apps.Count; e++)
                 {
+                    // Null-proof materials
+                    info.appearances[apps[e]] = InitializeDefaultMaterial(info.meshCount, info.appearances[apps[e]]);
                     meshContainer.materialNames[e] = info.appearances[apps[e]][index];
                 }
 
@@ -661,6 +664,37 @@ namespace WolvenKit.Modkit.RED4.Tools
             RemoveDoubleFaces(ref expMeshes);
             return expMeshes;
         }
+
+        private static string[] InitializeDefaultMaterial(int numTotalSubmeshes, string[] meshAppearances)
+        {
+            List<string> ret = meshAppearances.ToList();
+
+            // make sure it has at least one item
+            if (ret.Count == 0)
+            {
+                ret.Add("default");
+            }
+            
+            // check if there's a sequence
+            var startIndex = ret.IndexOf(ret[^1]) + 1;
+            
+            if (startIndex >= ret.Count())
+            {
+                startIndex = 0;
+            }
+
+            // append all missing appearance names
+            for (var e = ret.Count; e < numTotalSubmeshes; e++)
+            {
+                // get next-item-in-sequence, which might just be the same item as before
+                var lastUsedString = ret[startIndex++];
+                ret.Add(lastUsedString);
+            }
+            
+            return ret.ToArray();
+
+        }
+        
         public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature newRig, RawArmature oldRig)
         {
             // updating mesh bone indices

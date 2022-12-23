@@ -437,6 +437,11 @@ namespace WolvenKit.ViewModels.Documents
         public ICommand LoadMaterialsCommand { get; set; }
         public void LoadMaterials()
         {
+            if (SelectedAppearance == null)
+            {
+                Locator.Current.GetService<ILoggerService>().Warning($"No material selected!");
+                return;
+            }
             IsLoadingMaterials = true;
             Parallel.ForEachAsync(from entry in SelectedAppearance.RawMaterials orderby entry.Key ascending select entry, (material, cancellationToken) => LoadMaterial(material.Value)).ContinueWith((result) =>
             {
