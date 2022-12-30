@@ -72,6 +72,22 @@ public partial class TextureImportViewModel : ImportViewModel
     #region Commands
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    private void DefaultSettings()
+    {
+        foreach (var item in Items.Where(x => x.IsChecked))
+        {
+            if (item.Properties is not XbmImportArgs xbmImportArgs)
+            {
+                continue;
+            }
+
+            // set default settings from filename
+            xbmImportArgs = (item as ImportableItemViewModel).LoadXbmDefaultSettings();
+            _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed filename");
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
     private void ImportSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -81,10 +97,13 @@ public partial class TextureImportViewModel : ImportViewModel
                 continue;
             }
 
-            xbmImportArgs = (item as ImportableItemViewModel).LoadXbmDefaultSettings();
-            _loggerService?.Info($"Load settings for \"{item.Name}\": Parsed filename");
+            // import settings from vanilla
+            xbmImportArgs = (item as ImportableItemViewModel).LoadXbmSettingsFromGame();
+            _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed filename");
         }
     }
+
+
 
     #endregion
 

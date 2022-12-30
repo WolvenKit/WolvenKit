@@ -1,11 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Policy;
+using System.Windows.Media.Imaging;
 using DynamicData.Binding;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -42,7 +51,10 @@ namespace WolvenKit.ViewModels.Tools
             var xbmArgs = new XbmImportArgs();
             if (IsRawTexture(rawFileFormat))
             {
-                xbmArgs = LoadXbmDefaultSettings();
+                // first get settings from game
+                xbmArgs = LoadXbmSettingsFromGame();
+                // if not, get defaults from filename
+                xbmArgs ??= LoadXbmDefaultSettings();
             }
 
             return rawFileFormat switch
@@ -75,6 +87,13 @@ namespace WolvenKit.ViewModels.Tools
                 throw new ArgumentException();
             }
 
+            // set default texturegroup from filename
+            var texGroup = CommonFunctions.GetTextureGroupFromFileName(Path.GetFileNameWithoutExtension(FullName));
+
+            // get settings from texgroup
+            xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
+
+            // get the format again, cos CDPR
             // load and, if needed, decompress file
             var image = rawFileFormat switch
             {
@@ -86,18 +105,54 @@ namespace WolvenKit.ViewModels.Tools
                 ERawFileFormat.tiff => RedImage.LoadFromTIFFFile(BaseFile),
                 _ => throw new ArgumentOutOfRangeException(),
             };
-
-            // set default texturegroup from filename
-            var texGroup = CommonFunctions.GetTextureGroupFromFileName(Path.GetFileNameWithoutExtension(FullName));
-
-            // get settings from texgroup
-            xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
-
-            // get the format again, cos CDPR
             var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
             xbmArgs.RawFormat = rawFormat;
             xbmArgs.Compression = compression;   // todo if this is already set use the previous one
             return xbmArgs;
+        }
+
+        public XbmImportArgs LoadXbmSettingsFromGame()
+        {
+            if (!Enum.TryParse(Extension, out ERawFileFormat _))
+            {
+                throw new ArgumentException();
+            }
+
+            // first get the texturegroup from the vanilla file
+            var archiveManager = Locator.Current.GetService<IArchiveManager>();
+            var activeProject = Locator.Current.GetService<IProjectManager>().ActiveProject;
+            var relPath = FileModel.GetRelativeName(BaseFile, activeProject);
+            var hash = FNV1A64HashAlgorithm.HashString(relPath);
+            var file = archiveManager.Lookup(hash);
+            if (file.HasValue)
+            {
+                // file exists in vanilla
+                using MemoryStream stream = new();
+                file.Value.Extract(stream);
+                var parser = Locator.Current.GetService<Red4ParserService>();
+                if (parser != null && parser.TryReadRed4File(stream, out var cr2w))
+                {
+                    if (cr2w.RootChunk is CBitmapTexture bitmapTexture)
+                    {
+                        if (bitmapTexture.Setup is not { } setup || bitmapTexture.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
+                        {
+                            return null;
+                        }
+
+                        return new XbmImportArgs()
+                        {
+                            TextureGroup = setup.Group,
+                            IsGamma = setup.IsGamma,
+                            RawFormat = setup.RawFormat,
+                            Compression = setup.Compression,
+                            GenerateMipMaps = blob.Header.TextureInfo.MipCount > 1,
+                            IsStreamable = setup.IsStreamable,
+                        };
+                    }
+                }
+            }
+
+            return null;
         }
 
         private static bool IsRawTexture(ERawFileFormat fmt) => fmt is ERawFileFormat.tga or ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.dds or ERawFileFormat.tiff;

@@ -132,11 +132,28 @@
                     Command="{Binding ImportSettingsCommand}"
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
-                    ToolTip="Reset import settings on selected files">
+                    ToolTip="Load import settings from vanilla">
                     <TextBlock
                         Margin="1"
                         FontSize="14"
-                        Text="Reset Settings" />
+                        Text="Load Settings" />
+                </Button>
+
+                <!--  DefaultSettingsCommand  -->
+                <Button
+                    Padding="4"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource ContentBackground}"
+                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                    BorderThickness="1"
+                    Command="{Binding DefaultSettingsCommand}"
+                    FontSize="12"
+                    Style="{DynamicResource ButtonCustom}"
+                    ToolTip="Set import settings from filename">
+                    <TextBlock
+                        Margin="1"
+                        FontSize="14"
+                        Text="Default Settings" />
                 </Button>
 
                 <!--  CopyArgumentsTemplateToCommand  -->
