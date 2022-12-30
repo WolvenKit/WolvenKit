@@ -9,9 +9,9 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using DynamicData.Binding;
+using Microsoft.Win32;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -1373,7 +1373,7 @@ namespace WolvenKit.ViewModels.Shell
                 InitialDirectory = Locator.Current.GetService<IProjectManager>().ActiveProject?.ResourcesDirectory
             };
 
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.ShowDialog() == true)
             {
                 try
                 {
@@ -1584,7 +1584,7 @@ namespace WolvenKit.ViewModels.Shell
                 FileName = "buffer.bin",
                 Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*"
             };
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog() == true)
             {
                 File.WriteAllBytes(dlg.FileName, buffer.Buffer.GetBytes());
             }
@@ -1599,7 +1599,7 @@ namespace WolvenKit.ViewModels.Shell
                 FileName = "buffer.bin",
                 Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*"
             };
-            if (dlg.ShowDialog() != DialogResult.OK)
+            if (dlg.ShowDialog() != true)
             {
                 return;
             }
@@ -1889,7 +1889,7 @@ namespace WolvenKit.ViewModels.Shell
                 RestoreDirectory = true
             };
 
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            if (openFileDialog.ShowDialog() == true)
             {
                 try
                 {
@@ -1987,7 +1987,7 @@ namespace WolvenKit.ViewModels.Shell
                     RestoreDirectory = true
                 };
 
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                if (saveFileDialog.ShowDialog() == true)
                 {
                     if ((myStream = saveFileDialog.OpenFile()) is not null)
                     {
@@ -2132,7 +2132,7 @@ namespace WolvenKit.ViewModels.Shell
                 RestoreDirectory = true
             };
 
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.ShowDialog() == true)
             {
                 if ((myStream = saveFileDialog.OpenFile()) is not null)
                 {

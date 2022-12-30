@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Prism.Commands;
@@ -40,7 +39,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public const string ToolTitle = "Tweak Browser";
 
-        private Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
+        private readonly Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
 
         private readonly ISettingsManager _settingsManager;
         private readonly INotificationService _notificationService;
@@ -378,7 +377,7 @@ namespace WolvenKit.ViewModels.Tools
             var txlFile = new TweakXLFile { txl };
 
             Stream myStream;
-            var saveFileDialog = new SaveFileDialog
+            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
             {
                 Filter = "YAML files (*.yaml; *.yml)|*.yaml;*.yml|All files (*.*)|*.*",
                 FilterIndex = 1,
@@ -386,7 +385,7 @@ namespace WolvenKit.ViewModels.Tools
                 InitialDirectory = _projectManager.ActiveProject?.ResourcesDirectory
             };
 
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.ShowDialog() == true)
             {
                 if ((myStream = saveFileDialog.OpenFile()) is not null)
                 {
@@ -413,7 +412,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public class TweakEntry
         {
-            private static Regex s_inlineRegex = new("_inline[0-9]+");
+            private static readonly Regex s_inlineRegex = new("_inline[0-9]+");
 
             public TweakDBID Item { get; }
 
@@ -445,7 +444,7 @@ namespace WolvenKit.ViewModels.Tools
                     }
 
                     var type = tweakDbService.GetType(Item);
-                    RecordTypeName = type.Name.Substring(8, type.Name.Length - 15);
+                    RecordTypeName = type.Name[8..^7];
                 }
             }
         }

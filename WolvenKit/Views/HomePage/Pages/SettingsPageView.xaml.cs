@@ -1,5 +1,4 @@
 using System.Reactive.Disposables;
-using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
@@ -40,12 +39,6 @@ namespace WolvenKit.Views.HomePage.Pages
         }
 
         public ItemCollection AccordionItems { get; set; }
-
-        private void ExitRestart_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.Application.Restart();
-            System.Windows.Application.Current.Shutdown();
-        }
 
         private void SettingsPropertygrid_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
         {

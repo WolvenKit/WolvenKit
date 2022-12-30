@@ -5,7 +5,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
@@ -292,7 +291,7 @@ namespace WolvenKit.ViewModels.Documents
         public void ExportWidget(inkWidget widget)
         {
             Stream myStream;
-            var saveFileDialog = new SaveFileDialog
+            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
             {
                 Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*",
                 FilterIndex = 2,
@@ -300,7 +299,7 @@ namespace WolvenKit.ViewModels.Documents
                 RestoreDirectory = true
             };
 
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.ShowDialog() == true)
             {
                 if ((myStream = saveFileDialog.OpenFile()) != null)
                 {

@@ -81,7 +81,6 @@ namespace WolvenKit
                         };
                         var p = Process.Start(psi);
 
-                        //System.Windows.Forms.Application.Restart();
                         System.Windows.Application.Current.Shutdown();
                     }
                 }
