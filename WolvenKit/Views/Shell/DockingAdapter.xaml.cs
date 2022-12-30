@@ -16,6 +16,7 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.App.ViewModels;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
@@ -35,99 +36,47 @@ namespace WolvenKit.Views.Shell
     /// </summary>
     public partial class DockingAdapter : UserControl
     {
-        private AppViewModel viewModel;
-        public static DockingAdapter G_Dock;
-        private bool UsingProjectLayout = false;
-        private bool _hadLoadedProject = false;
-
+        private AppViewModel _viewModel;
         private Window _mainWindow;
         private bool _stateChanged;
+
+        private bool _usingProjectLayout = false;
+        private bool _hadLoadedProject = false;
+        private readonly bool _debuggingLayouts = false;
+        private readonly bool _useAppdataStorage = true;
 
         public DockingAdapter()
         {
             InitializeComponent();
             G_Dock = this;
 
-            viewModel = DataContext as AppViewModel;
+            _viewModel = DataContext as AppViewModel;
         }
 
-        private void DockingAdapterOnLoaded(object sender, RoutedEventArgs e)
+        public static DockingAdapter G_Dock;
+
+        public IDocumentViewModel ActiveDocument
         {
-            _mainWindow = Window.GetWindow(this);
-            if (_mainWindow != null)
-            {
-                _mainWindow.Deactivated += OnMainWindowDeactivated;
-                _mainWindow.Closing += OnMainWindowClosing;
-            }
+            get => (IDocumentViewModel)GetValue(ActiveDocumentProperty);
+            set => SetValue(ActiveDocumentProperty, value);
         }
 
-        private void OnMainWindowDeactivated(object sender, EventArgs e)
+        // Using a DependencyProperty as the backing store for ActiveDocument.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ActiveDocumentProperty =
+            DependencyProperty.Register(nameof(ActiveDocument), typeof(IDocumentViewModel), typeof(DockingAdapter), new PropertyMetadata(null, new PropertyChangedCallback(OnActiveDocumentChanged)));
+
+        public object ItemsSource
         {
-            if (_stateChanged)
-            {
-                foreach (Window win in Application.Current.Windows)
-                {
-                    if (win is NativeFloatWindow && win.Owner != null)
-                    {
-                        win.Owner = null;
-                    }
-                }
-            }
-            _stateChanged = false;
+            get => GetValue(ItemsSourceProperty);
+            set => SetValue(ItemsSourceProperty, value);
         }
 
-        private void OnMainWindowClosing(object sender, CancelEventArgs e)
-        {
-            foreach (Window win in Application.Current.Windows)
-            {
-                if (win is NativeFloatWindow)
-                {
-                    win.Close();
-                }
-            }
-        }
+        // Using a DependencyProperty as the backing store for ItemsSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(DockingAdapter), new PropertyMetadata(null));
 
-        private void PART_DockingManagerOnDockStateChanging(FrameworkElement sender, DockStateChangingEventArgs e)
-        {
-            if (e.SourceElement is ContentControl { Content: PaneViewModel vm })
-            {
-                vm.State = e.TargetState.ToDockState();
-            }
-        }
 
-        private void PART_DockingManagerOnDockStateChanged(FrameworkElement sender, DockStateEventArgs e)
-        {
-            if (e.NewState == Syncfusion.Windows.Tools.Controls.DockState.Float)
-            {
-                _stateChanged = true;
-            }
-        }
-
-        /// <summary>
-        /// fires when a document (but no tool window) gets closed through clicking the close button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
-        {
-            if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
-            {
-                e.Cancel = !await TryCloseDocument(vm);
-            }
-        }
-
-        /// <summary>
-        /// For windows in Float, Dock and AutoHidden state
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void PART_DockingManager_WindowClosing(object sender, WindowClosingEventArgs e)
-        {
-
-        }
-
-        private readonly bool _debuggingLayouts = false;
-        private readonly bool _useAppdataStorage = true;
+        #region methods
 
         public void SaveLayout()
         {
@@ -143,7 +92,7 @@ namespace WolvenKit.Views.Shell
                 // save open windows
                 using var fs = new FileStream(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt"), FileMode.Create);
                 using var sw = new StreamWriter(fs);
-                foreach (var pane in viewModel.DockedViews)
+                foreach (var pane in _viewModel.DockedViews)
                 {
                     sw.WriteLine(pane.GetType().Name);
                 }
@@ -156,20 +105,16 @@ namespace WolvenKit.Views.Shell
 
         public void SaveLayoutToProject()
         {
-            if (viewModel is null || viewModel.ActiveProject is null)
+            if (_viewModel is null || _viewModel.ActiveProject is null)
             {
-                var layoutPath1 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "layout.xml");
-                var writer1 = XmlWriter.Create(layoutPath1);
-                PART_DockingManager.SaveDockState(writer1);
-                writer1.Close();
-
                 return;
             }
 
-            var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
+            var layoutPath = Path.Combine(_viewModel.ActiveProject.ProjectDirectory, "layout.xml");
             var writer = XmlWriter.Create(layoutPath);
             PART_DockingManager.SaveDockState(writer);
             writer.Close();
+            Locator.Current.GetService<ILoggerService>().Info($"Saved current layout to {layoutPath}");
         }
 
         private void LoadLayout()
@@ -190,6 +135,8 @@ namespace WolvenKit.Views.Shell
                     var Debugging_A = PART_DockingManager.LoadDockState(reader);
 
                     reader.Close();
+
+                    Locator.Current.GetService<ILoggerService>().Info($"Loaded layout from {xmlPath}");
                 }
                 else
                 {
@@ -212,11 +159,85 @@ namespace WolvenKit.Views.Shell
                 var Debugging_A = PART_DockingManager.LoadDockState(reader);
                 Trace.WriteLine(Debugging_A);
                 reader.Close();
+                Locator.Current.GetService<ILoggerService>().Info($"Loaded default layout");
             }
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.Message);
             }
+        }
+
+        public DataTemplate FindDataTemplate(Type type, FrameworkElement element)
+        {
+            if (element.TryFindResource(type) is DataTemplate dataTemplate)
+            {
+                return dataTemplate;
+            }
+
+            if (type.BaseType != null && type.BaseType != typeof(object))
+            {
+                dataTemplate = FindDataTemplate(type.BaseType, element);
+                if (dataTemplate != null)
+                {
+                    return dataTemplate;
+                }
+            }
+
+            foreach (var interfaceType in type.GetInterfaces())
+            {
+                dataTemplate = FindDataTemplate(interfaceType, element);
+                if (dataTemplate != null)
+                {
+                    return dataTemplate;
+                }
+            }
+
+            return null;
+        }
+
+        private async Task<bool> TryCloseDocument(DocumentViewModel vm)
+        {
+            if (vm.IsDirty)
+            {
+                if (await Interactions.ShowMessageBoxAsync("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
+                {
+                    return false;
+                }
+            }
+
+            vm.Close.Execute().Subscribe();
+
+            (ItemsSource as IList).Remove(vm);
+            _viewModel.UpdateTitle();
+
+            return true;
+        }
+
+        #endregion
+
+        #region events
+
+        /// <summary>
+        /// fires when a document (but no tool window) gets closed through clicking the close button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
+        {
+            if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
+            {
+                e.Cancel = !await TryCloseDocument(vm);
+            }
+        }
+
+        /// <summary>
+        /// For windows in Float, Dock and AutoHidden state
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PART_DockingManager_WindowClosing(object sender, WindowClosingEventArgs e)
+        {
+
         }
 
         private void PART_DockingManager_Loaded(object sender, RoutedEventArgs e)
@@ -252,38 +273,151 @@ namespace WolvenKit.Views.Shell
                 }
             }
 
-            viewModel ??= DataContext as AppViewModel;
+            _viewModel ??= DataContext as AppViewModel;
 
             SizeChanged += Window_SizeChanged;
         }
 
+        private void PART_DockingManagerOnDockStateChanging(FrameworkElement sender, DockStateChangingEventArgs e)
+        {
+            if (e.SourceElement is ContentControl { Content: PaneViewModel vm })
+            {
+                vm.State = e.TargetState.ToDockState();
+            }
+        }
+
+        private void PART_DockingManagerOnDockStateChanged(FrameworkElement sender, DockStateEventArgs e)
+        {
+            if (e.NewState == Syncfusion.Windows.Tools.Controls.DockState.Float)
+            {
+                _stateChanged = true;
+            }
+        }
+
+        private void PART_DockingManager_ActiveWindowChanged_1(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            // set active property
+            if (e.OldValue is ContentControl oldValue)
+            {
+                if (oldValue.Content is IDockElement dockElement)
+                {
+                    dockElement.IsActive = false;
+                }
+            }
+
+            if (e.NewValue is ContentControl content)
+            {
+                if (content.Content is IDockElement dockElement)
+                {
+                    dockElement.IsActive = true;
+                }
+
+                var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
+                if (content.Content is ProjectExplorerViewModel pevm)
+                {
+                    //propertiesViewModel.SetToNullAndResetVisibility();
+                    propertiesViewModel.PE_FileInfoVisible = true;
+                    propertiesViewModel.AB_FileInfoVisible = false;
+                    //propertiesViewModel.PE_SelectedItem = pevm.SelectedItem;
+                    propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
+                }
+                else if (content.Content is AssetBrowserViewModel abvm)
+                {
+                    //propertiesViewModel.SetToNullAndResetVisibility();
+                    propertiesViewModel.AB_FileInfoVisible = true;
+                    propertiesViewModel.PE_FileInfoVisible = false;
+                    //propertiesViewModel.AB_SelectedItem = abvm.RightSelectedItem;
+                    propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
+                }
+
+                if (content.Content != null)
+                {
+                    DiscordHelper.SetDiscordRPCStatus(content.Content as string);
+                }
+
+                //if (((IDockElement)content.Content).State == DockState.Document)
+                try
+                {
+                    if (content.Content is IDocumentViewModel document)
+                    {
+                        SetCurrentValue(ActiveDocumentProperty, document);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+
+            }
+
+            _viewModel?.UpdateTitle();
+        }
+
+        private async void PART_DockingManager_OnCloseAllTabs(object sender, CloseTabEventArgs e)
+        {
+            foreach (var item in e.ClosingTabItems)
+            {
+                if (item is TabItemExt { Content: ContentPresenter { Content: ContentControl { Content: DocumentViewModel vm } } })
+                {
+                    e.Cancel = !await TryCloseDocument(vm);
+                }
+            }
+        }
+
+        private async void PART_DockingManager_OnCloseOtherTabs(object sender, CloseTabEventArgs e)
+        {
+            foreach (var item in e.ClosingTabItems)
+            {
+                if (item is TabItemExt { Content: ContentPresenter { Content: ContentControl { Content: DocumentViewModel vm } } })
+                {
+                    e.Cancel = !await TryCloseDocument(vm);
+                }
+            }
+        }
+
+
+        private void DockingAdapterOnLoaded(object sender, RoutedEventArgs e)
+        {
+            _mainWindow = Window.GetWindow(this);
+            if (_mainWindow != null)
+            {
+                _mainWindow.Deactivated += OnMainWindowDeactivated;
+                _mainWindow.Closing += OnMainWindowClosing;
+            }
+        }
+
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (!UsingProjectLayout)
+            if (!_usingProjectLayout)
             {
                 SaveLayout();
             }
         }
 
-        public IDocumentViewModel ActiveDocument
+        private void OnMainWindowDeactivated(object sender, EventArgs e)
         {
-            get => (IDocumentViewModel)GetValue(ActiveDocumentProperty);
-            set => SetValue(ActiveDocumentProperty, value);
+            if (_stateChanged)
+            {
+                foreach (Window win in Application.Current.Windows)
+                {
+                    if (win is NativeFloatWindow && win.Owner != null)
+                    {
+                        win.Owner = null;
+                    }
+                }
+            }
+            _stateChanged = false;
         }
 
-        // Using a DependencyProperty as the backing store for ActiveDocument.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ActiveDocumentProperty =
-            DependencyProperty.Register(nameof(ActiveDocument), typeof(IDocumentViewModel), typeof(DockingAdapter), new PropertyMetadata(null, new PropertyChangedCallback(OnActiveDocumentChanged)));
-
-        public object ItemsSource
+        private void OnMainWindowClosing(object sender, CancelEventArgs e)
         {
-            get => GetValue(ItemsSourceProperty);
-            set => SetValue(ItemsSourceProperty, value);
+            foreach (Window win in Application.Current.Windows)
+            {
+                if (win is NativeFloatWindow)
+                {
+                    win.Close();
+                }
+            }
         }
-
-        // Using a DependencyProperty as the backing store for ItemsSource.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(DockingAdapter), new PropertyMetadata(null));
 
         private static void OnActiveDocumentChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
@@ -306,14 +440,15 @@ namespace WolvenKit.Views.Shell
 
                 adapter.PART_DockingManager.SetCurrentValue(DockingManager.ActiveWindowProperty, control);
 
-                adapter.viewModel?.UpdateTitle();
+                adapter._viewModel?.UpdateTitle();
 
                 break;
             }
         }
+
         public void OnActiveProjectChanged()
         {
-            if (viewModel is null || viewModel.ActiveProject is null)
+            if (_viewModel is null || _viewModel.ActiveProject is null)
             {
                 return;
             }
@@ -326,14 +461,14 @@ namespace WolvenKit.Views.Shell
                     _hadLoadedProject = true;
                     //oc.Clear();
                 }
-                var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
+                var layoutPath = Path.Combine(_viewModel.ActiveProject.ProjectDirectory, "layout.xml");
                 if (File.Exists(layoutPath))
                 {
                     var reader = XmlReader.Create(layoutPath);
                     var Debugging_A = PART_DockingManager.LoadDockState(reader);
                     Trace.WriteLine(Debugging_A);
                     reader.Close();
-                    UsingProjectLayout = true;
+                    _usingProjectLayout = true;
                     //PART_DockingManager.SetCurrentValue(DockingManager.PersistStateProperty, false);
                 }
             }
@@ -343,7 +478,6 @@ namespace WolvenKit.Views.Shell
                 throw;
             }
         }
-
 
         /// <summary>
         /// This happens on the very first tool window assignments
@@ -500,7 +634,7 @@ namespace WolvenKit.Views.Shell
             // actually remove and not hide FloatingPaneViewModels
             if (control is ContentControl { Content: FloatingPaneViewModel vm } && newstate == DockState.Hidden)
             {
-                viewModel.DockedViews.Remove(vm);
+                _viewModel.DockedViews.Remove(vm);
                 return;
             }
 
@@ -511,132 +645,6 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        public DataTemplate FindDataTemplate(Type type, FrameworkElement element)
-        {
-            if (element.TryFindResource(type) is DataTemplate dataTemplate)
-            {
-                return dataTemplate;
-            }
-
-            if (type.BaseType != null && type.BaseType != typeof(object))
-            {
-                dataTemplate = FindDataTemplate(type.BaseType, element);
-                if (dataTemplate != null)
-                {
-                    return dataTemplate;
-                }
-            }
-
-            foreach (var interfaceType in type.GetInterfaces())
-            {
-                dataTemplate = FindDataTemplate(interfaceType, element);
-                if (dataTemplate != null)
-                {
-                    return dataTemplate;
-                }
-            }
-
-            return null;
-        }
-
-        private void PART_DockingManager_ActiveWindowChanged_1(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            // set active property
-            if (e.OldValue is ContentControl oldValue)
-            {
-                if (oldValue.Content is IDockElement dockElement)
-                {
-                    dockElement.IsActive = false;
-                }
-            }
-
-            if (e.NewValue is ContentControl content)
-            {
-                if (content.Content is IDockElement dockElement)
-                {
-                    dockElement.IsActive = true;
-                }
-
-                var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
-                if (content.Content is ProjectExplorerViewModel pevm)
-                {
-                    //propertiesViewModel.SetToNullAndResetVisibility();
-                    propertiesViewModel.PE_FileInfoVisible = true;
-                    propertiesViewModel.AB_FileInfoVisible = false;
-                    //propertiesViewModel.PE_SelectedItem = pevm.SelectedItem;
-                    propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
-                }
-                else if (content.Content is AssetBrowserViewModel abvm)
-                {
-                    //propertiesViewModel.SetToNullAndResetVisibility();
-                    propertiesViewModel.AB_FileInfoVisible = true;
-                    propertiesViewModel.PE_FileInfoVisible = false;
-                    //propertiesViewModel.AB_SelectedItem = abvm.RightSelectedItem;
-                    propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
-                }
-
-                if (content.Content != null)
-                {
-                    DiscordHelper.SetDiscordRPCStatus(content.Content as string);
-                }
-
-                //if (((IDockElement)content.Content).State == DockState.Document)
-                try
-                {
-                    if (content.Content is IDocumentViewModel document)
-                    {
-                        SetCurrentValue(ActiveDocumentProperty, document);
-                    }
-                }
-                catch (Exception)
-                {
-                }
-
-            }
-
-            viewModel?.UpdateTitle();
-        }
-
-        private async void PART_DockingManager_OnCloseAllTabs(object sender, CloseTabEventArgs e)
-        {
-            foreach (var item in e.ClosingTabItems)
-            {
-                if (item is TabItemExt { Content: ContentPresenter { Content: ContentControl { Content: DocumentViewModel vm } } })
-                {
-                    e.Cancel = !await TryCloseDocument(vm);
-                }
-            }
-        }
-
-        private async void PART_DockingManager_OnCloseOtherTabs(object sender, CloseTabEventArgs e)
-        {
-            foreach (var item in e.ClosingTabItems)
-            {
-                if (item is TabItemExt { Content: ContentPresenter { Content: ContentControl { Content: DocumentViewModel vm } } })
-                {
-                    e.Cancel = !await TryCloseDocument(vm);
-                }
-            }
-        }
-
-        private async Task<bool> TryCloseDocument(DocumentViewModel vm)
-        {
-            if (vm.IsDirty)
-            {
-                if (await Interactions.ShowMessageBoxAsync("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
-                {
-                    return false;
-                }
-            }
-
-            vm.Close.Execute().Subscribe();
-
-            (ItemsSource as IList).Remove(vm);
-            viewModel.UpdateTitle();
-
-            return true;
-        }
-
-
+        #endregion
     }
 }
