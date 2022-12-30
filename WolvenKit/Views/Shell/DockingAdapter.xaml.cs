@@ -10,6 +10,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents.DocumentStructures;
 using System.Xml;
 using ReactiveUI;
 using Splat;
@@ -138,6 +139,14 @@ namespace WolvenKit.Views.Shell
                 PART_DockingManager.SaveDockState(writer);
 
                 writer.Close();
+
+                // save open windows
+                using var fs = new FileStream(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt"), FileMode.Create);
+                using var sw = new StreamWriter(fs);
+                foreach (var pane in viewModel.DockedViews)
+                {
+                    sw.WriteLine(pane.GetType().Name);
+                }
             }
             else
             {
@@ -149,6 +158,11 @@ namespace WolvenKit.Views.Shell
         {
             if (viewModel is null || viewModel.ActiveProject is null)
             {
+                var layoutPath1 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "layout.xml");
+                var writer1 = XmlWriter.Create(layoutPath1);
+                PART_DockingManager.SaveDockState(writer1);
+                writer1.Close();
+
                 return;
             }
 
@@ -310,7 +324,7 @@ namespace WolvenKit.Views.Shell
                 if (!_hadLoadedProject && ItemsSource is ObservableCollection<IDockElement> oc)
                 {
                     _hadLoadedProject = true;
-                    oc.Clear();
+                    //oc.Clear();
                 }
                 var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
                 if (File.Exists(layoutPath))
@@ -353,7 +367,6 @@ namespace WolvenKit.Views.Shell
 
                     var newcollection = e.NewValue as INotifyCollectionChanged;
 
-                    var count = 0;
                     foreach (var item in (IList)e.NewValue)
                     {
                         if (item is IDockElement dockElement)
@@ -373,11 +386,7 @@ namespace WolvenKit.Views.Shell
                             DockingManager.SetState(control, dockElement.State.ToSfDockState());
                             if (dockElement.State != DockState.Document)
                             {
-                                if (count != 0)
-                                {
-                                    //DockingManager.SetTargetNameInDockedMode(control, "item" + (count - 1).ToString());
-                                }
-                                control.Name = "item" + count++.ToString();
+                                control.Name = dockElement.GetType().Name;
                             }
 
                             PART_DockingManager.Children.Add(control);
@@ -452,6 +461,11 @@ namespace WolvenKit.Views.Shell
 
                         DockingManager.SetHeader(control, element.Header);
                         DockingManager.SetState(control, element.State.ToSfDockState());
+                        if (element.State != DockState.Document)
+                        {
+                            control.Name = element.GetType().Name;
+                        }
+
                         PART_DockingManager.Children.Add(control);
                     }
                 }

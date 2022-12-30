@@ -27,4 +27,16 @@ namespace WolvenKit.Functionality.WKitGlobal
         Busy,
         Ready
     }
+
+    public enum EDockedViews
+    {
+        LogViewModel,
+        ProjectExplorerViewModel,
+        PropertiesViewModel,
+        AssetBrowserViewModel,
+        TweakBrowserViewModel,
+        LocKeyBrowserViewModel,
+        TextureImportViewModel,
+        TextureExportViewModel
+    }
 }

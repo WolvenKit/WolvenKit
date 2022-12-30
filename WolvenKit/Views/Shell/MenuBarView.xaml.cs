@@ -211,11 +211,11 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
             // visibility
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.ProjectExplorer.IsVisible,
+                    viewModel => viewModel.MainViewModel.ProjectExplorerViewModel.IsVisible,
                     view => view.ProjectExplorerCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.AssetBrowserVM.IsVisible,
+                    viewModel => viewModel.MainViewModel.AssetBrowserViewModel.IsVisible,
                     view => view.AssetBrowserCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
@@ -223,7 +223,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.PropertiesCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.Log.IsVisible,
+                    viewModel => viewModel.MainViewModel.LogViewModel.IsVisible,
                     view => view.LogCheckbox.IsChecked)
                 .DisposeWith(disposables);
             //this.Bind(ViewModel,
@@ -231,11 +231,11 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
             //        view => view.ImportExportCheckbox.IsChecked)
             //    .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.TweakBrowserVM.IsVisible,
+                    viewModel => viewModel.MainViewModel.TweakBrowserViewModel.IsVisible,
                     view => view.TweakBrowserCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.LocKeyBrowserVM.IsVisible,
+                    viewModel => viewModel.MainViewModel.LocKeyBrowserViewModel.IsVisible,
                     view => view.LocKeyBrowserCheckbox.IsChecked)
                 .DisposeWith(disposables);
         });

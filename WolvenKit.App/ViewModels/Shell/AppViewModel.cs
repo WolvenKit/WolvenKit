@@ -209,15 +209,7 @@ namespace WolvenKit.ViewModels.Shell
 
             OnStartup();
 
-            DockedViews = new ObservableCollection<IDockElement> {
-                Log,
-                ProjectExplorer,
-                PropertiesViewModel,
-                AssetBrowserVM,
-                //ImportExportToolVM,
-                TweakBrowserVM,
-                LocKeyBrowserVM
-            };
+            AddDockedPanes();
 
             // TweakDB when we're good and ready
             _settingsManager
@@ -230,6 +222,72 @@ namespace WolvenKit.ViewModels.Shell
                 .WhenAnyValue(x => x.Status)
                 .Where(x => x == EAppStatus.Loaded)
                 .Subscribe(x => HandleActivation());
+        }
+
+        private void AddDockedPanes()
+        {
+            // only add existing docked views
+            if (File.Exists(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt")))
+            {
+                DockedViews = new ObservableCollection<IDockElement>();
+                var savedPanes = File.ReadLines(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt"));
+                foreach (var paneString in savedPanes)
+                {
+                    if (Enum.TryParse<EDockedViews>(paneString, out var pane))
+                    {
+                        switch (pane)
+                        {
+                            case EDockedViews.LogViewModel:
+                                DockedViews.Add(LogViewModel);
+                                break;
+                            case EDockedViews.ProjectExplorerViewModel:
+                                DockedViews.Add(ProjectExplorerViewModel);
+                                break;
+                            case EDockedViews.PropertiesViewModel:
+                                DockedViews.Add(PropertiesViewModel);
+                                break;
+                            case EDockedViews.AssetBrowserViewModel:
+                                DockedViews.Add(AssetBrowserViewModel);
+                                break;
+                            case EDockedViews.TweakBrowserViewModel:
+                                DockedViews.Add(TweakBrowserViewModel);
+                                break;
+                            case EDockedViews.LocKeyBrowserViewModel:
+                                DockedViews.Add(LocKeyBrowserViewModel);
+                                break;
+                            case EDockedViews.TextureImportViewModel:
+                            {
+                                var vm = Locator.Current.GetService<TextureImportViewModel>();
+                                vm.State = DockState.Dock;
+                                vm.SideInDockedMode = DockSide.Right;
+                                DockedViews.Add(vm);
+                                break;
+                            }
+                            case EDockedViews.TextureExportViewModel:
+                            {
+                                var vm = Locator.Current.GetService<TextureExportViewModel>();
+                                vm.State = DockState.Dock;
+                                vm.SideInDockedMode = DockSide.Right;
+                                DockedViews.Add(vm);
+                                break;
+                            }
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                DockedViews = new ObservableCollection<IDockElement> {
+                    LogViewModel,
+                    ProjectExplorerViewModel,
+                    PropertiesViewModel,
+                    AssetBrowserViewModel,
+                    TweakBrowserViewModel,
+                    LocKeyBrowserViewModel
+                };
+            }
         }
 
         #endregion constructors
@@ -1053,7 +1111,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand ShowAssetsCommand { get; private set; }
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
-        private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
+        private void ExecuteAssetBrowser() => AssetBrowserViewModel.IsVisible = !AssetBrowserViewModel.IsVisible;
 
         //public ICommand ShowImportExportToolCommand { get; private set; }
         //private bool CanShowImportExportTool() => ActiveProject is not null;
@@ -1061,11 +1119,11 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand ShowLogCommand { get; private set; }
         private bool CanShowLog() => ActiveProject is not null;
-        private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
+        private void ExecuteShowLog() => LogViewModel.IsVisible = !LogViewModel.IsVisible;
 
         public ICommand ShowProjectExplorerCommand { get; private set; }
         private bool CanShowProjectExplorer() => ActiveProject is not null;
-        private void ExecuteShowProjectExplorer() => ProjectExplorer.IsVisible = !ProjectExplorer.IsVisible;
+        private void ExecuteShowProjectExplorer() => ProjectExplorerViewModel.IsVisible = !ProjectExplorerViewModel.IsVisible;
 
         public ICommand ShowPropertiesCommand { get; private set; }
         private bool CanShowProperties() => ActiveProject is not null;
@@ -1119,7 +1177,7 @@ namespace WolvenKit.ViewModels.Shell
         #region ToolViewModels
 
         private AssetBrowserViewModel _assetBrowserViewModel;
-        public AssetBrowserViewModel AssetBrowserVM
+        public AssetBrowserViewModel AssetBrowserViewModel
         {
             get
             {
@@ -1139,7 +1197,7 @@ namespace WolvenKit.ViewModels.Shell
         //}
 
         private LogViewModel _logViewModel;
-        public LogViewModel Log
+        public LogViewModel LogViewModel
         {
             get
             {
@@ -1149,7 +1207,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         private ProjectExplorerViewModel _projectExplorerViewModel;
-        public ProjectExplorerViewModel ProjectExplorer
+        public ProjectExplorerViewModel ProjectExplorerViewModel
         {
             get
             {
@@ -1169,7 +1227,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         private TweakBrowserViewModel _tweakBrowserViewModel;
-        public TweakBrowserViewModel TweakBrowserVM
+        public TweakBrowserViewModel TweakBrowserViewModel
         {
             get
             {
@@ -1179,7 +1237,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         private LocKeyBrowserViewModel _locKeyBrowserViewModel;
-        public LocKeyBrowserViewModel LocKeyBrowserVM
+        public LocKeyBrowserViewModel LocKeyBrowserViewModel
         {
             get
             {

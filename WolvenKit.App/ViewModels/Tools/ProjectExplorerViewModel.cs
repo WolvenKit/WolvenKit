@@ -575,7 +575,7 @@ namespace WolvenKit.ViewModels.Tools
         private bool CanOpenInAssetBrowser() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
         private void ExecuteOpenInAssetBrowser()
         {
-            Locator.Current.GetService<AppViewModel>().AssetBrowserVM.IsVisible = true;
+            Locator.Current.GetService<AppViewModel>().AssetBrowserViewModel.IsVisible = true;
             Locator.Current.GetService<AssetBrowserViewModel>().ShowFile(SelectedItem);
         }
 
