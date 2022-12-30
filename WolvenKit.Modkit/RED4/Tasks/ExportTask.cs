@@ -80,6 +80,7 @@ public partial class ConsoleFunctions
         {
             exportArgs.Get<XbmExportArgs>().UncookExtension = uext.Value;
             exportArgs.Get<MlmaskExportArgs>().UncookExtension = uext.Value;
+            exportArgs.Get<MeshExportArgs>().MaterialUncookExtension = uext.Value;
         }
 
         var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;
