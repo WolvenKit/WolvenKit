@@ -82,7 +82,7 @@ public partial class TextureImportViewModel : ImportViewModel
             }
 
             // set default settings from filename
-            xbmImportArgs = (item as ImportableItemViewModel).LoadXbmDefaultSettings();
+            item.Properties = (item as ImportableItemViewModel).LoadXbmDefaultSettings();
             _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed filename");
         }
     }
@@ -98,8 +98,8 @@ public partial class TextureImportViewModel : ImportViewModel
             }
 
             // import settings from vanilla
-            xbmImportArgs = (item as ImportableItemViewModel).LoadXbmSettingsFromGame();
-            _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed filename");
+            item.Properties = (item as ImportableItemViewModel).LoadXbmSettingsFromGame();
+            _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed game file");
         }
     }
 

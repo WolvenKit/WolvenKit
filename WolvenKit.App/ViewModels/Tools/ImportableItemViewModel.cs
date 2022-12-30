@@ -121,7 +121,7 @@ namespace WolvenKit.ViewModels.Tools
             // first get the texturegroup from the vanilla file
             var archiveManager = Locator.Current.GetService<IArchiveManager>();
             var activeProject = Locator.Current.GetService<IProjectManager>().ActiveProject;
-            var relPath = FileModel.GetRelativeName(BaseFile, activeProject);
+            var relPath = Path.ChangeExtension(FileModel.GetRelativeName(BaseFile, activeProject), "xbm");
             var hash = FNV1A64HashAlgorithm.HashString(relPath);
             var file = archiveManager.Lookup(hash);
             if (file.HasValue)

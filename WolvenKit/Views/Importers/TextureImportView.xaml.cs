@@ -231,6 +231,7 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
         ViewModel.CopyArgumentsTemplateToCommand.NotifyCanExecuteChanged();
         ViewModel.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
         ViewModel.ImportSettingsCommand.NotifyCanExecuteChanged();
+        ViewModel.DefaultSettingsCommand.NotifyCanExecuteChanged();
     }
 
 
