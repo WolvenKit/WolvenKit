@@ -73,6 +73,7 @@
 			<Word>transient</Word>
 			<Word>try</Word>
 			<Word>volatile</Word>
+			<Word>yield</Word>
 		</Keywords>
 		<Keywords color="JavaScriptIntrinsics">
 			<Word>Array</Word>
@@ -80,10 +81,12 @@
 			<Word>Date</Word>
 			<Word>Function</Word>
 			<Word>Global</Word>
+			<Word>JSON</Word>
 			<Word>Math</Word>
 			<Word>Number</Word>
 			<Word>Object</Word>
 			<Word>RegExp</Word>
+			<Word>Set</Word>
 			<Word>String</Word>
 		</Keywords>
 		<Keywords color="JavaScriptLiterals">
