@@ -1,11 +1,32 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Common.Model.Arguments
 {
+    /// <summary>
+    /// Tags a property as accessible in a WolvenKit Script
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class WkitScriptAccess : Attribute
+    {
+        private readonly string _scriptName;
+        public string ScriptName
+        {
+            get => _scriptName;
+        }
+
+        // by default the script name is the name of the property or class
+        public WkitScriptAccess([CallerMemberName] string scriptName = null)
+        {
+            _scriptName = scriptName;
+        }
+    }
+
     /// <summary>
     /// Export Arguments
     /// </summary>
@@ -25,6 +46,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Export Settings")]
         [Display(Name = "Use Modified OpusInfo")]
         [Description("If selected modified OpusInfo and paks within the Mod Project are used. If unchecked the original OpusInfo and paks will be exported.")]
+        [WkitScriptAccess()]
         public bool UseMod { get; set; }
 
         [Category("Export Settings")]
@@ -54,6 +76,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
         [Description("If selected the mesh will be exported as GLB, if unchecked as GLTF")]
+        [WkitScriptAccess("Binary")]
         public bool IsBinary { get; set; } = true;
 
         /// <summary>
@@ -95,9 +118,11 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "MLmask Export Type")]
+        [WkitScriptAccess("ImageFormat")]
         public EUncookExtension UncookExtension { get; set; } = EUncookExtension.png;
 
         [Browsable(false)]
+        [WkitScriptAccess()]
         public bool AsList { get; set; } = true;
 
         /// <summary>
@@ -122,6 +147,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "XBM Export Type")]
+        [WkitScriptAccess("ImageType")]
         public EUncookExtension UncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
@@ -129,6 +155,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Flip Image")]
+        [WkitScriptAccess()]
         public bool Flip { get; set; }
 
         /// <summary>
@@ -169,6 +196,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Export Type")]
         [Display(Name = "Mesh Export Type")]
         [Description("Select between mesh export options. By default materials but no rig are included.")]
+        [WkitScriptAccess("ExportType")]
         public MeshExportType meshExportType { get; set; } = MeshExportType.WithMaterials;
 
         /// <summary>
@@ -177,6 +205,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Default Export Settings")]
         [Display(Name = "LOD Filter")]
         [Description("If selected LOD meshes will not be included. May cause complications with clipping decals.")]
+        [WkitScriptAccess()]
         public bool LodFilter { get; set; } = true;
 
         /// <summary>
@@ -185,6 +214,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Default Export Settings")]
         [Display(Name = "Is Binary")]
         [Description("If selected mesh exports will be in binary form as GLB rather than glTF format. (Recommended)")]
+        [WkitScriptAccess("Binary")]
         public bool isGLBinary { get; set; } = true;
 
         /// <summary>
@@ -217,6 +247,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("WithMaterials Settings")]
         [Display(Name = "Select Texture Format")]
         [Description("Select the preferred texture format to be exported within the Depot.")]
+        [WkitScriptAccess("ImageType")]
         public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
@@ -261,6 +292,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Export Type")]
         [Display(Name = "Wem Export Type")]
         [Description("Select audio output format")]
+        [WkitScriptAccess("ExportType")]
         public WemExportTypes wemExportType { get; set; } = WemExportTypes.Mp3;
 
         [Browsable(false)]
@@ -281,6 +313,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
         [Description("If selected the anims will be exported as GLB, if unchecked as GLTF")]
+        [WkitScriptAccess("Binary")]
         public bool IsBinary { get; set; } = true;
 
         /// <summary>
@@ -289,6 +322,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Export Settings")]
         [Display(Name = "Include Root Motion")]
         [Description("If selected the anims will have the root translations")]
+        [WkitScriptAccess()]
         public bool incRootMotion { get; set; } = false;
 
         /// <summary>

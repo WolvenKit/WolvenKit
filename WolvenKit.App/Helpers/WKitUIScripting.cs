@@ -3,10 +3,12 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using Microsoft.ClearScript;
 using MoreLinq;
 using Splat;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.Common;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.Scripting;
@@ -78,14 +80,48 @@ public class WKitUIScripting : WKitScripting
         }
     }
 
-    public void ExportFiles(dynamic exportList)
+    private T ParseExportSettings<T>(ScriptObject scriptSettingsObject) where T : ExportArgs, new()
+    {
+        // find all of the matching scriptable properties the script provided
+        var exportArgs = new T();
+        exportArgs.GetType().GetProperties()
+            .Where(_ =>
+            {
+                var includeProp = Attribute.IsDefined(_, typeof(WkitScriptAccess));
+                if (includeProp)
+                {
+                    var scriptAccess = (WkitScriptAccess)Attribute.GetCustomAttribute(_, typeof(WkitScriptAccess));
+                    includeProp &= scriptSettingsObject.PropertyNames.Contains(scriptAccess.ScriptName);
+                }
+
+                return includeProp;
+            })
+            .ForEach(prop =>
+            {
+                // now set their value
+                var scriptAccess = (WkitScriptAccess)Attribute.GetCustomAttribute(prop, typeof(WkitScriptAccess));
+                if (prop.PropertyType.IsEnum)
+                {
+                    Enum.TryParse(prop.PropertyType, scriptSettingsObject[scriptAccess.ScriptName].ToString(), out var val);
+                    prop.SetValue(exportArgs, val);
+                }
+                else
+                {
+                    prop.SetValue(exportArgs, scriptSettingsObject[scriptAccess.ScriptName]);
+                }
+            });
+
+        return exportArgs;
+    }
+
+    public void ExportFiles(dynamic exportList, dynamic exportSettings = null)
     {
         // dynamic type checking
         // TODO: mix in hashes (V8 doesn't have a ulong equivalent though)
         switch (exportList)
         {
             case IList list:
-                foreach(var item in list)
+                foreach (var item in list)
                 {
                     if (item is not string)
                     {
@@ -109,6 +145,74 @@ public class WKitUIScripting : WKitScripting
         var expVM = Locator.Current.GetService<TextureExportViewModel>();
         expVM.Items.ForEach(_ => _.IsChecked = false);
 
+        // handle any settings if we have them
+        // TODO: clean this up a bit to auto handle all export types instead of manually checking
+        switch (exportSettings)
+        {
+            case ScriptObject settings:
+                if (settings["Mesh"] is ScriptObject meshSettings)
+                {
+                    var exportArgs = ParseExportSettings<MeshExportArgs>(meshSettings);
+
+                    // set the export settings for meshes in the vm
+                    expVM.Items.Where(_ => _.Properties.GetType() == typeof(MeshExportArgs))
+                        .ForEach(_ => _.Properties = exportArgs);
+                }
+                if (settings["Xbm"] is ScriptObject xbmSettings)
+                {
+                    var exportArgs = ParseExportSettings<XbmExportArgs>(xbmSettings);
+
+                    // set the export settings for images in the vm
+                    expVM.Items.Where(_ => _.Properties.GetType() == typeof(XbmExportArgs))
+                        .ForEach(_ => _.Properties = exportArgs);
+                }
+                if (settings["Opus"] is ScriptObject opusSettings)
+                {
+                    var exportArgs = ParseExportSettings<OpusExportArgs>(opusSettings);
+
+                    // set the export settings for opus files in the vm
+                    expVM.Items.Where(_ => _.Properties.GetType() == typeof(OpusExportArgs))
+                        .ForEach(_ => _.Properties = exportArgs);
+                }
+                if (settings["Wem"] is ScriptObject wemSettings)
+                {
+                    var exportArgs = ParseExportSettings<WemExportArgs>(wemSettings);
+
+                    // set the export settings for wems in the vm
+                    expVM.Items.Where(_ => _.Properties.GetType() == typeof(WemExportArgs))
+                        .ForEach(_ => _.Properties = exportArgs);
+                }
+                if (settings["MorphTarget"] is ScriptObject morphTargetSettings)
+                {
+                    var exportArgs = ParseExportSettings<MorphTargetExportArgs>(morphTargetSettings);
+
+                    // set the export settings for morphtargets in the vm
+                    expVM.Items.Where(_ => _.Properties.GetType() == typeof(MorphTargetExportArgs))
+                        .ForEach(_ => _.Properties = exportArgs);
+                }
+                if (settings["MlMask"] is ScriptObject mlMaskSettings)
+                {
+                    var exportArgs = ParseExportSettings<MlmaskExportArgs>(mlMaskSettings);
+
+                    // set the export settings for mlmasks in the vm
+                    expVM.Items.Where(_ => _.Properties.GetType() == typeof(MlmaskExportArgs))
+                        .ForEach(_ => _.Properties = exportArgs);
+                }
+                if (settings["Animation"] is ScriptObject animationSettings)
+                {
+                    var exportArgs = ParseExportSettings<AnimationExportArgs>(animationSettings);
+
+                    // set the export settings for animations in the vm
+                    expVM.Items.Where(_ => _.Properties.GetType() == typeof(AnimationExportArgs))
+                        .ForEach(_ => _.Properties = exportArgs);
+                }
+                break;
+            default:
+                _loggerService.Warning("Unknown type found for ExportFiles settings. The settings used in the Export Tool will be used.");
+                break;
+        }
+
+        // loop over each item to export and export the item
         foreach (var exportItem in exportList)
         {
             if (exportItem is string exportPath)
@@ -153,6 +257,7 @@ public class WKitUIScripting : WKitScripting
             }
         }
 
+        // export all the checked items if we have any
         if (expVM.Items.Any(_ => _.IsChecked))
         {
             expVM.ProcessSelectedCommand.Execute(Unit.Default);
