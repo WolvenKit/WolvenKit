@@ -26,6 +26,8 @@ namespace WolvenKit.ViewModels.Documents
             private const string s_noSelection = "No_Selection";
 
             [Reactive] public string Name { get; private set; } = s_noSelection;
+            [Reactive] public string WorldNodeIndex { get; private set; } = string.Empty;
+            [Reactive] public bool IsValid { get; private set; }
 
             private MeshComponent _meshComponent;
             public MeshComponent SelectedMesh
@@ -34,7 +36,9 @@ namespace WolvenKit.ViewModels.Documents
                 set
                 {
                     _meshComponent = value;
-                    Name = (value == null) ? s_noSelection : value.Name;
+                    Name = (value == null) ? s_noSelection : value.Name.StartsWith("_") ? value.Name[1..] : value.Name;
+                    WorldNodeIndex = (value == null) ? string.Empty : "[" + value.WorldNodeIndex + "]";
+                    IsValid = value != null;
                 }
             }
 
@@ -46,6 +50,7 @@ namespace WolvenKit.ViewModels.Documents
         public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file)
         {
             Header = MeshViewHeaders.SectorPreview;
+            PanelVisibility.ShowSelectionPanel = true;
             _data = data;
             var app = new Appearance()
             {
@@ -679,7 +684,6 @@ namespace WolvenKit.ViewModels.Documents
             return new SharpDX.Vector3(v.X, v.Y, v.Z);
         }
 
-
         public void UpdateSelection(MeshComponent mesh)
         {
             RetoreSelectedMeshMaterial();
@@ -726,6 +730,7 @@ namespace WolvenKit.ViewModels.Documents
 
         private void MouseDown3DSector(object sender, MouseDown3DEventArgs args, MouseButtonEventArgs mouseButtonEventArgs)
         {
+            
             if (Header == MeshViewHeaders.SectorPreview && args.HitTestResult.ModelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
             {
                 if (mouseButtonEventArgs.RightButton == MouseButtonState.Pressed)

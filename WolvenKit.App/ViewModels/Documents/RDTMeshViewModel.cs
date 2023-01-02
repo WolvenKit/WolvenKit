@@ -176,8 +176,8 @@ namespace WolvenKit.ViewModels.Documents
     public class PanelVisibility
     {
         public bool ShowExportEntity { get; set; }
-
         public bool ShowSearchPanel { get; set; }
+        public bool ShowSelectionPanel { get; set; }
 
     }
 
@@ -225,7 +225,7 @@ namespace WolvenKit.ViewModels.Documents
                 if (Header == null)
                 {
                     Header = MeshViewHeaders.MeshPreview;
-                }
+                } 
 
                 File = file;
 

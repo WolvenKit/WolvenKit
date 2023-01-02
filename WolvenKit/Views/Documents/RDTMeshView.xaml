@@ -181,8 +181,8 @@
                         <ColumnDefinition SharedSizeGroup="ColumnHeader" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Border BorderThickness="1,1,1,0" BorderBrush="{StaticResource BorderAlt}" />
-                    <Border BorderThickness="0,1,1,0" BorderBrush="{StaticResource BorderAlt}" Grid.Column="1" />
+                    <Border BorderThickness="1,0,1,1" BorderBrush="{StaticResource BorderAlt}" />
+                    <Border BorderThickness="0,0,1,1" BorderBrush="{StaticResource BorderAlt}" Grid.Column="1" />
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="0"
@@ -202,8 +202,8 @@
                         <ColumnDefinition SharedSizeGroup="ColumnHeader" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Border BorderThickness="1,1,1,0" BorderBrush="{StaticResource BorderAlt}" />
-                    <Border BorderThickness="0,1,1,0" BorderBrush="{StaticResource BorderAlt}" Grid.Column="1" />
+                    <Border BorderThickness="1,0,1,1" BorderBrush="{StaticResource BorderAlt}" />
+                    <Border BorderThickness="0,0,1,1" BorderBrush="{StaticResource BorderAlt}" Grid.Column="1" />
                     <TextBlock
                         Grid.Column="0"
                         Margin="5,0"
@@ -217,13 +217,14 @@
                         SelectedItem="{Binding SelectedAppearance.SelectedLOD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     
                 </Grid>
-                <Grid Grid.Column="2">
+                <Grid Grid.Column="2"
+                      Visibility="{Binding PanelVisibility.ShowSelectionPanel, Converter={StaticResource VisibilityConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition SharedSizeGroup="ColumnHeader" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Border BorderThickness="1" BorderBrush="{StaticResource BorderAlt}"  />
-                    <Border BorderThickness="0,1,1,1" BorderBrush="{StaticResource BorderAlt}" Grid.Column="1" />
+                    <Border BorderThickness="1,0,1,1" BorderBrush="{StaticResource BorderAlt}" />
+                    <Border BorderThickness="0,0,1,1" BorderBrush="{StaticResource BorderAlt}" Grid.Column="1" />
                     <TextBlock
                         Grid.Column="0"
                         Margin="5,7"
@@ -232,6 +233,7 @@
                     <StackPanel Orientation="Horizontal" 
                         Grid.Column="1"
                         Height="15"
+                        Visibility="{Binding CurrentSelection.IsValid, Converter={StaticResource VisibilityConverter}}"
                         VerticalAlignment="Center"
                         Margin="0,7,0,3">
                         <iconPacks:PackIconCodicons
@@ -241,7 +243,14 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Kind="SymbolClass" />
- 
+
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            Foreground="{StaticResource WolvenKitTan}"
+                            Text="worldNodeData" />
+                        <TextBlock
+                            Margin="3,0,0,0"
+                            Text="{Binding CurrentSelection.WorldNodeIndex, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock
                             Margin="3,0,0,0"
                             Text="{Binding CurrentSelection.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
