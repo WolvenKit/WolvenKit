@@ -2,24 +2,55 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reactive.Disposables;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public partial class RDTMeshViewModel
     {
+        public class MeshComponentSelector: ReactiveObject 
+        {
+            private const string s_noSelection = "No_Selection";
+
+            [Reactive] public string Name { get; private set; } = s_noSelection;
+            [Reactive] public string WorldNodeIndex { get; private set; } = string.Empty;
+            [Reactive] public bool IsValid { get; private set; }
+
+            private MeshComponent _meshComponent;
+            public MeshComponent SelectedMesh
+            {
+                get => _meshComponent;
+                set
+                {
+                    _meshComponent = value;
+                    Name = (value == null) ? s_noSelection : value.Name.StartsWith("_") ? value.Name[1..] : value.Name;
+                    WorldNodeIndex = (value == null) ? string.Empty : "[" + value.WorldNodeIndex + "]";
+                    IsValid = value != null;
+                }
+            }
+
+            public void Unselect() => SelectedMesh = null;
+        }
+
+        [Reactive] public MeshComponentSelector CurrentSelection { get; set; } = new();
+
         public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file)
         {
-            Header = "Sector Preview";
+            Header = MeshViewHeaders.SectorPreview;
+            PanelVisibility.ShowSelectionPanel = true;
             _data = data;
             var app = new Appearance()
             {
@@ -37,6 +68,8 @@ namespace WolvenKit.ViewModels.Documents
 
         public void RenderSectorSolo()
         {
+            RetoreSelectedMeshMaterial();
+            CurrentSelection = new();
             if (IsRendered)
             {
                 return;
@@ -636,7 +669,7 @@ namespace WolvenKit.ViewModels.Documents
 
             var element = new SectorGroup()
             {
-
+                Name=""
             };
             foreach (var group in groups)
             {
@@ -649,6 +682,66 @@ namespace WolvenKit.ViewModels.Documents
         public static SharpDX.Vector3 ToVector3(Vector3 v)
         {
             return new SharpDX.Vector3(v.X, v.Y, v.Z);
+        }
+
+        public void UpdateSelection(MeshComponent mesh)
+        {
+            RetoreSelectedMeshMaterial();
+
+            CurrentSelection.SelectedMesh = mesh;
+
+            UpdateMeshSelectionColor(mesh);
+        }
+
+        private void RetoreSelectedMeshMaterial() => UpdateChildrenSubmesh(CurrentSelection.SelectedMesh, (SubmeshComponent submesh) => submesh.Material = submesh.OriginalMaterial);
+        private void UpdateMeshSelectionColor(MeshComponent mesh)
+        {
+            UpdateChildrenSubmesh(mesh, (SubmeshComponent submesh) =>
+            {
+                submesh.OriginalMaterial = submesh.Material;
+                submesh.Material = PhongMaterials.Blue;
+            });
+        }
+
+        private void UpdateChildrenSubmesh(MeshComponent mesh, Action<SubmeshComponent> submeshUpdater)
+        {
+            if (mesh != null)
+            {
+                foreach (var child in mesh.Children)
+                {
+                    if (child is MeshComponent childMesh)
+                    {
+                        UpdateChildrenSubmesh(childMesh, submeshUpdater);
+                    }
+                    else if (child is SubmeshComponent childSubMesh)
+                    {
+                        if (submeshUpdater != null)
+                        {
+                            submeshUpdater(childSubMesh);
+                        }
+                    }
+                    else
+                    {
+                        Locator.Current.GetService<ILoggerService>().Warning("Child is a " + child.GetType());
+                    }
+                }
+            }
+        }
+
+        private void MouseDown3DSector(object sender, MouseDown3DEventArgs args, MouseButtonEventArgs mouseButtonEventArgs)
+        {
+            
+            if (Header == MeshViewHeaders.SectorPreview && args.HitTestResult.ModelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
+            {
+                if (mouseButtonEventArgs.RightButton == MouseButtonState.Pressed)
+                {
+                    Locator.Current.GetService<ILoggerService>().Info("RighClick: " + mesh.Name);
+                }
+                else if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed)
+                {
+                    UpdateSelection(mesh);
+                }
+            }
         }
     }
 

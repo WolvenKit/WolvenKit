@@ -22,7 +22,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file)
         {
-            Header = "Entity Preview";
+            Header = MeshViewHeaders.EntityPreview;
             _data = ent;
 
             PanelVisibility.ShowExportEntity = true;

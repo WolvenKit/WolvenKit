@@ -32,6 +32,8 @@ namespace WolvenKit.ViewModels.Documents
         public uint LOD { get; set; }
         public string AppearanceName { get; set; }
         public CName DepotPath { get; set; }
+        public HelixToolkit.Wpf.SharpDX.Material OriginalMaterial { get; set; }
+
     }
 
     public class SmartElement3DCollection : ObservableElement3DCollection

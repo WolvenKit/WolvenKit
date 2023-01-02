@@ -31,15 +31,18 @@ namespace WolvenKit.Views.Documents
                 if (DataContext is RDTMeshViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
+                    hxViewport.MouseDown3D += vm.MouseDown3D;
                 }
 
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.SelectedAppearance.ModelGroup,
                         view => view.hxContentVisual.ItemsSource)
                     .DisposeWith(disposables);
+            
             });
         }
 
+        private void HxViewport_MouseDown3D(object sender, RoutedEventArgs e) => throw new System.NotImplementedException();
         private void ReloadModels(object sender, RoutedEventArgs e) => hxViewport.ZoomExtents();//if (ViewModel != null)//    LoadModels(ViewModel.SelectedAppearance);
         private void ComboBoxAdv_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

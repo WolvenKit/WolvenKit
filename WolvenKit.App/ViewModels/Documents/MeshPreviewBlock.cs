@@ -70,7 +70,7 @@ namespace WolvenKit.ViewModels.Documents
         public RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file) : this(file)
         {
             _data = data;
-            Header = "Sector Previews";
+            Header = MeshViewHeaders.AllSectorPreview;
 
             PanelVisibility.ShowSearchPanel = true;
             SearchForPointCommand = new DelegateCommand(ExecuteSearchForPoint);
@@ -299,34 +299,33 @@ namespace WolvenKit.ViewModels.Documents
 
         }
 
-        public void OnMouseDown3DHandler(object sender, MouseDown3DEventArgs e)
+        private void MouseDown3DBlock(object sender, MouseDown3DEventArgs args, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            if (e.HitTestResult is not null && ((MouseButtonEventArgs)e.OriginalInputEventArgs).LeftButton == MouseButtonState.Pressed)
+            if (Header == MeshViewHeaders.AllSectorPreview)
             {
-                if (e.HitTestResult.ModelHit is WKBillboardTextModel3D text)
+                if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed)
                 {
-                    var sector = Sectors.Where(x => x.Text == text).FirstOrDefault();
-                    if (sector is not null)
+                    if (args.HitTestResult.ModelHit is WKBillboardTextModel3D text)
                     {
-                        try
+                        var sector = Sectors.Where(x => x.Text == text).FirstOrDefault();
+                        if (sector is not null)
                         {
-                            LoadSector(sector);
+                            try
+                            {
+                                LoadSector(sector);
+                            }
+                            catch (Exception ex)
+                            {
+                                Locator.Current.GetService<ILoggerService>().Error(ex);
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                            Locator.Current.GetService<ILoggerService>().Error(ex);
-                        }
+                        args.Handled = true;
                     }
-                    e.Handled = true;
-                }
-                if (e.HitTestResult.ModelHit is MeshComponent group)
-                {
-                    SelectedItem = group;
-                    e.Handled = true;
-                }
-                if (e.HitTestResult.ModelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
-                {
-                    Locator.Current.GetService<ILoggerService>().Info((mesh.WorldNodeIndex != null ? "worldNodeData[" + mesh.WorldNodeIndex + "] : " : "Mesh Name :") + mesh.Name);
+                    if (args.HitTestResult.ModelHit is MeshComponent group)
+                    {
+                        SelectedItem = group;
+                        args.Handled = true;
+                    }
                 }
             }
         }
