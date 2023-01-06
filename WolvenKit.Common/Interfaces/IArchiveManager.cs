@@ -36,6 +36,7 @@ namespace WolvenKit.Common
         public void LoadArchive(string path, bool ispatch = false);
         public void LoadModArchive(string filename);
         public void LoadModsArchives(FileInfo executable);
+        public void ReleaseFileModArchive(string path);
 
         public Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
         public IEnumerable<FileEntry> GetFiles();

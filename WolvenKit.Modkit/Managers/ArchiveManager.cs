@@ -265,6 +265,17 @@ namespace WolvenKit.RED4.CR2W.Archive
             ModArchives.AddOrUpdate(archive);
         }
 
+        public override void ReleaseFileModArchive(string path)
+        {
+            var dictValue = ModArchives.Lookup(path);
+            if (!dictValue.HasValue)
+            {
+                return;
+            }
+
+            (dictValue.Value as RED4.Archive.Archive)?.ReleaseFileHandle();
+        }
+
         /// <summary>
         /// Loads bundles from specified mods and dlc folder
         /// </summary>
