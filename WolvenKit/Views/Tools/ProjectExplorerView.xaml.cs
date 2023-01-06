@@ -128,13 +128,21 @@ namespace WolvenKit.Views.Tools
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.RefreshCommand,
                     view => view.RefreshButton);
-
-                // register to KeyUp because KeyDown doesn't forward "F2"
-                KeyUp += OnKeyUp;
-
-
             });
 
+            AddKeyUpEvent();
+        }
+
+        private void AddKeyUpEvent()
+        {
+            if (ViewModel.IsKeyUpEventAssigned)
+            {
+                return;
+            }
+
+            // register to KeyUp because KeyDown doesn't forward "F2"
+            KeyUp += OnKeyUp;
+            ViewModel.IsKeyUpEventAssigned = true;
         }
 
         private Dictionary<string, bool> _nodeState;

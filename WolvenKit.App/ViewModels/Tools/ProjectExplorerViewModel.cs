@@ -363,6 +363,8 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
+        public bool IsKeyUpEventAssigned { get; set; }
+
         /// <summary>
         /// Renames selected node.
         /// </summary>
