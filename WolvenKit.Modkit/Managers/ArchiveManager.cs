@@ -158,7 +158,6 @@ namespace WolvenKit.RED4.CR2W.Archive
             IsManagerLoaded = true;
         }
 
-
         /// <summary>
         /// Load every non-mod bundle it can find in ..\..\content and ..\..\DLC, also calls RebuildRootNode()
         /// </summary>
@@ -218,7 +217,6 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             IsManagerLoaded = true;
         }
-
 
         /// <summary>
         /// Load a single bundle
@@ -292,8 +290,6 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 return;
             }
-
-            _logger.Info("Open Archive");
 
             ModArchives.Clear();
 

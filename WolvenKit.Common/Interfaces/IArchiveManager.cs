@@ -40,7 +40,7 @@ namespace WolvenKit.Common
 
         public Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
         public IEnumerable<FileEntry> GetFiles();
-        public void LoadFromFolder(DirectoryInfo archivedir);
+        void LoadFromFolder(DirectoryInfo archivedir);
 
         RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
         public Optional<IGameFile> Lookup(ulong hash);
