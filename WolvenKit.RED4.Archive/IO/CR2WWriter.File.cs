@@ -18,6 +18,13 @@ namespace WolvenKit.RED4.Archive.IO
     {
         private CR2WFile _file;
 
+        private static readonly Dictionary<Type, Type> s_preProcessors = new();
+
+        static CR2WWriter()
+        {
+            s_preProcessors.Add(typeof(entEntityTemplate), typeof(entEntityTemplatePreProcessor));
+        }
+
         public void WriteFile(CR2WFile file)
         {
             _file = file;
@@ -298,21 +305,15 @@ namespace WolvenKit.RED4.Archive.IO
 
                     packageWriter.WritePackage(aad, p4);
                 }
-                else if (buffer.Parent is entEntityTemplate eet)
-                {
-                    using var packageWriter = new entEntityTemplateWriter(ms) { IsRoot = false };
-
-                    if (_file.RootChunk.GetType() == typeof(appearanceAppearanceResource))
-                    {
-                        packageWriter.Settings.ImportsAsHash = true;
-                    }
-
-                    packageWriter.WritePackage(eet, p4);
-                }
                 else
                 {
                     using var packageWriter = new RedPackageWriter(ms) { IsRoot = false };
 
+                    if (_file.RootChunk.GetType() == typeof(appearanceAppearanceResource) && buffer.Parent is entEntityTemplate)
+                    {
+                        packageWriter.Settings.ImportsAsHash = true;
+                    } 
+                    
                     if (_file.RootChunk.GetType() == typeof(gamePersistentStateDataResource))
                     {
                         packageWriter.Settings.RedPackageType = RedPackageType.SaveResource;
@@ -574,6 +575,15 @@ namespace WolvenKit.RED4.Archive.IO
                     chunkClassNames.Add(GetClassName(chunk));
 
                     _chunkInfos[chunk].Id = chunkCounter;
+
+                    if (s_preProcessors.TryGetValue(chunk.GetType(), out var processor))
+                    {
+                        if (System.Activator.CreateInstance(processor) is IPreProcessor instance)
+                        {
+                            instance.Process(chunk);
+                        }
+                    }
+
                     file.StartChunk(chunk);
                     chunkInfoList.Add(WriteChunk(file, chunk));
                     _chunks.Add(chunk);
