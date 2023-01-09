@@ -109,6 +109,11 @@ public partial class TextureImportViewModel : ImportViewModel
 
     protected override async Task ExecuteProcessBulk(bool all = false)
     {
+        if (!Items.Any())
+        {
+            return;
+        }
+
         IsProcessing = true;
         _watcherService.IsSuspended = true;
         var progress = 0;
@@ -249,6 +254,8 @@ public partial class TextureImportViewModel : ImportViewModel
 
         Items.Clear();
         Items = new(files);
+
+        ProcessAllCommand.NotifyCanExecuteChanged();
     }
 
     private static bool CanImport(string x) => Enum.TryParse<ERawFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);

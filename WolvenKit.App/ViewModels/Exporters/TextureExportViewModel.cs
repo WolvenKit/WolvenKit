@@ -208,6 +208,8 @@ public partial class TextureExportViewModel : ExportViewModel
 
         Items.Clear();
         Items = new(files);
+
+        ProcessAllCommand.NotifyCanExecuteChanged();
     }
 
     private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
