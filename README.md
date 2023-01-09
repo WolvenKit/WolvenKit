@@ -11,7 +11,7 @@
 
 <p align="center">
 
-> Our current development focus is REDengine 4 with Cyberpunk 2077. For WolvenKit for <em>The Witcher 3: Wild Hunt</em> please see: https://github.com/WolvenKit/WolvenKit-7
+> ⚠️ This repository focuses on REDengine 4 for Cyberpunk 2077. For WolvenKit for <em>The Witcher 3: Wild Hunt</em> please see: https://github.com/WolvenKit/WolvenKit-7
 
 WolvenKit is an open-source modding tool for <em>Cyberpunk 2077</em>. Our vision is to develop a standalone software which is capable of reading and writing all REDengine file formats. Additionally the WolvenKit application is designed to simplify and accelerate modding workflows. 
 This repository was created to demonstrate how <a href="https://en.wikipedia.org/wiki/CD_Projekt">CDPR</a>'s proprietary <a href="https://en.wikipedia.org/wiki/CD_Projekt#REDengine"><strong>REDengine</strong></a> reads and writes file formats. 
@@ -52,12 +52,17 @@ Download either the latest stable version or the current nightly (beta) version 
 
 | Package | Latest Release | Checks  |
 | ------- | ------------ | ----------------- |
-| [WolvenKit Nightly](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit-nightly-releases)](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/WolvenKit/WolvenKit/WolvenKit-Nightly) |
-| [WolvenKit](https://github.com/WolvenKit/WolvenKit/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub branch checks state](https://img.shields.io/github/workflow/status/WolvenKit/WolvenKit/check-only) | 
+| [WolvenKit Nightly](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit-nightly-releases)](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/WolvenKit/WolvenKit/nightly.yml) |
+| [WolvenKit](https://github.com/WolvenKit/WolvenKit/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/WolvenKit/WolvenKit/check-only.yml) | 
+
 
 ### Portable
 1. Download and extract `Wolvenkit.zip`
-2. Run WolvenKit.exe
+2. Double click WolvenKit.exe
+
+### Installer
+1. Download the `Wolvenkit.Installer.Package_x.x.x.x_x64.msixbundle` installer
+2. Double click it
 
 ## Usage
 
