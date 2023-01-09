@@ -1,7 +1,6 @@
 <p align="center">
   <a href="https://wiki.redmodding.org/wolvenkit"><img src="https://user-images.githubusercontent.com/65016231/191120204-c8e08bb2-d68b-4919-91ec-f8c1aaef1e6a.png"/></a><br /><br />
   <a href="https://github.com/WolvenKit/Wolvenkit/releases"><img src="https://img.shields.io/github/downloads/WolvenKit/WolvenKit/total"></a>
-  <a href="https://github.com/WolvenKit/Wolvenkit/actions?query=workflow%3AWolvenKit-Nightly"><img src="https://github.com/WolvenKit/WolvenKit/workflows/WolvenKit-Nightly/badge.svg"></a>
   <a href="https://github.com/WolvenKit/WolvenKit/issues"><img src="https://img.shields.io/github/issues/WolvenKit/WolvenKit.svg"></a>
   <a href="https://github.com/WolvenKit/WolvenKit/network"><img src="https://img.shields.io/github/forks/WolvenKit/WolvenKit.svg"></a>
   <a href="https://github.com/WolvenKit/WolvenKit/stargazers"><img src="https://img.shields.io/github/stars/WolvenKit/WolvenKit.svg"></a>    
@@ -40,13 +39,23 @@ It's completely open source, licensed under the <a href="https://github.com/Wolv
 
 ### Prerequisite: .NET Runtime
 
-We recommend always using the latest .NET 7.0 runtime, unless otherwise specified. 
+Wolvenkit requires the latest .NET 7.0 runtime:
 
 1. Go to [Microsoft's .NET download page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
 2. Find the ".NET Desktop Runtime 7.0.x" section and download the installer for your architecture (x64)
 3. Run the downloaded installer
 
 ### WolvenKit
+
+You can either use the WolvenKit Installer app or download a portable instance to a location of your choice.
+
+### Installer
+
+1. Download the `Wolvenkit.Installer.Package_x.x.x.x_x64.msixbundle` installer
+2. Double click it to install the installer app
+3. Run the WolvenKit Installer from your Home menu
+
+### Portable
 
 Download either the latest stable version or the current nightly (beta) version from here:
 
@@ -55,20 +64,17 @@ Download either the latest stable version or the current nightly (beta) version 
 | [WolvenKit Nightly](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit-nightly-releases)](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/WolvenKit/WolvenKit/nightly.yml) |
 | [WolvenKit](https://github.com/WolvenKit/WolvenKit/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/WolvenKit/WolvenKit/check-only.yml) | 
 
-
-### Portable
-1. Download and extract `Wolvenkit.zip`
-2. Double click WolvenKit.exe
-
-### Installer
-1. Download the `Wolvenkit.Installer.Package_x.x.x.x_x64.msixbundle` installer
-2. Double click it
+1. Download `Wolvenkit.zip` and extract it to a location of your choice
+2. Double click WolvenKit.exe to run the app
 
 ## Usage
 
 📑 Check out the wiki: https://wiki.redmodding.org/wolvenkit
 
 ## Build instructions
+
+If you want to build the app from source yourself:
+
 1. Download and install [Visual Studio 2022 Community Edition](https://www.visualstudio.com/) or a higher version.
 2. Clone this repository.
 3. Open the solution (`All.sln`)
