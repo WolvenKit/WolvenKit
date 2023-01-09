@@ -169,6 +169,11 @@ public partial class TextureImportViewModel : ImportViewModel
 
     private Task<bool> ImportWavs(List<string> wavs)
     {
+        if (wavs.Count == 0)
+        {
+            return Task.FromResult(true);
+        }
+
         var proj = _projectManager.ActiveProject;
         if (_gameController.GetController() is RED4Controller cp77Controller)
         {
