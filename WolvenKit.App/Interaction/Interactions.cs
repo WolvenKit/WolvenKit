@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.Interaction
@@ -33,6 +34,7 @@ namespace WolvenKit.Interaction
         public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();
         public static readonly Interaction<Unit, bool> ShowLaunchProfilesView = new();
         public static readonly Interaction<Unit, bool> ShowMaterialRepositoryView = new();
+        public static readonly Interaction<IEnumerable<IDisplayable>, IEnumerable<IDisplayable>> ShowCollectionView = new();
     }
 
     public enum WMessageBoxImage

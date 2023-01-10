@@ -29,7 +29,7 @@ using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.App.ViewModels.Dialogs
 {
-    public class MaterialsRepositoryViewModel : DialogViewModel
+    public class MaterialsRepositoryViewModel : DialogWindowViewModel
     {
         public record class UncookExtensionViewModel(string Name, EUncookExtension Extension);
 
@@ -54,10 +54,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
             _gameControllerFactory = gameControllerFactory;
             _progress = progress;
             _modTools = modTools;
-
-            CloseCommand = ReactiveCommand.Create(() => { });
-            OkCommand = ReactiveCommand.Create(() => { });
-            CancelCommand = ReactiveCommand.Create(() => { });
 
             OpenMaterialRepositoryCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath));
             UnbundleGameCommand = ReactiveCommand.CreateFromTask(UnbundleGame);
@@ -99,11 +95,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
         public ReactiveCommand<Unit, Unit> OpenMaterialRepositoryCommand { get; }
         public ReactiveCommand<Unit, Unit> GenerateMaterialRepoCommand { get; }
         public ReactiveCommand<Unit, Unit> UnbundleGameCommand { get; }
-
-
-        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
-        public override ReactiveCommand<Unit, Unit> OkCommand { get; }
 
         #endregion Commands
 

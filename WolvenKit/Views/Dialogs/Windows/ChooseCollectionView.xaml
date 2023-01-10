@@ -1,0 +1,102 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.ChooseCollectionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    Title="Select Items"
+    Width="800"
+    Height="600"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    Background="{StaticResource ContentBackgroundAlt3}"
+    mc:Ignorable="d">
+
+    <syncfusion:WizardControl
+        x:Name="WizardControl"
+        CancelButtonCancelsWindow="True"
+        CancelEnabled="True"
+        FinishButtonClosesWindow="True">
+
+        <syncfusion:WizardPage
+            BackVisibility="Collapsed"
+            HelpVisibility="Collapsed"
+            NextVisibility="Collapsed"
+            PageType="Exterior">
+
+            <Grid >
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <!--  AVAILABLE FILES  -->
+                <syncfusion:SfDataGrid
+                    x:Name="AvailableDataGrid"
+                    Margin="5"
+                    AllowFiltering="True"
+                    AllowSorting="True"
+                    AutoGenerateColumns="False"
+                    ColumnSizer="AutoLastColumnFill"
+                    FilterRowPosition="FixedTop"
+                    IsReadOnly="True"
+                    SelectionMode="Extended">
+
+                    <syncfusion:SfDataGrid.Columns>
+                        <syncfusion:GridTextColumn HeaderText="Available" MappingName="Name" />
+                    </syncfusion:SfDataGrid.Columns>
+
+                </syncfusion:SfDataGrid>
+
+                <!--  BUTTONS  -->
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="5"
+                    VerticalAlignment="Center">
+                    <Button
+                        x:Name="AddButton"
+                        Margin="0,5,0,5"
+                        Content=" &gt; " />
+                    <Button
+                        x:Name="RemoveButton"
+                        Margin="0,5,0,5"
+                        Content=" &lt; " />
+                </StackPanel>
+
+                <!--  SELECTED FILES  -->
+                <syncfusion:SfDataGrid
+                    x:Name="SelectedDataGrid"
+                    Grid.Column="2"
+                    Margin="5"
+                    AllowFiltering="True"
+                    AllowSorting="True"
+                    AutoGenerateColumns="False"
+                    ColumnSizer="AutoLastColumnFill"
+                    FilterRowPosition="FixedTop"
+                    IsReadOnly="True"
+                    SelectionMode="Extended">
+
+                    <syncfusion:SfDataGrid.Columns>
+                        <syncfusion:GridTextColumn HeaderText="Available" MappingName="Name" />
+                    </syncfusion:SfDataGrid.Columns>
+
+                </syncfusion:SfDataGrid>
+
+            </Grid>
+
+
+        </syncfusion:WizardPage>
+
+    </syncfusion:WizardControl>
+
+
+
+</Window>

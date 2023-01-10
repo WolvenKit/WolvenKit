@@ -8,6 +8,7 @@ using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Dialogs.Windows;
@@ -62,6 +63,22 @@ namespace WolvenKit.Views.Shell
                         { }
 
                         interaction.SetOutput(true);
+                    }, RxApp.MainThreadScheduler);
+                });
+                Interactions.ShowCollectionView.RegisterHandler(interaction =>
+                {
+                    ChooseCollectionView dialog = new();
+                    dialog.ViewModel.SetAvailableItems(interaction.Input);
+
+                    return Observable.Start(() =>
+                    {
+                        IEnumerable<IDisplayable> result = null;
+                        if (dialog.ShowDialog(this) == true)
+                        {
+                            result = dialog.ViewModel.SelectedItems;
+                        }
+
+                        interaction.SetOutput(result);
                     }, RxApp.MainThreadScheduler);
                 });
 

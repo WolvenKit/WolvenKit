@@ -43,30 +43,6 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
         WriteIndented = true
     };
 
-    //public ImportExportViewModel(
-    //    IGameControllerFactory gameController,
-    //    ISettingsManager settingsManager,
-    //    IWatcherService watcherService,
-    //    ILoggerService loggerService,
-    //    IProjectManager projectManager,
-    //    INotificationService notificationService,
-    //    IArchiveManager archiveManager,
-    //    IPluginService pluginService,
-    //    IModTools modTools,
-    //    IProgressService<double> progressService)
-    //{
-    //    _gameController = gameController;
-    //    _settingsManager = settingsManager;
-    //    _watcherService = watcherService;
-    //    _loggerService = loggerService;
-    //    _projectManager = projectManager;
-    //    _notificationService = notificationService;
-    //    _archiveManager = archiveManager;
-    //    _pluginService = pluginService;
-    //    _modTools = modTools;
-    //    _progressService = progressService;
-    //}
-
     [Reactive] public ImportExportItemViewModel SelectedObject { get; set; }
 
     [Reactive] public ObservableCollection<ImportExportItemViewModel> Items { get; set; } = new();

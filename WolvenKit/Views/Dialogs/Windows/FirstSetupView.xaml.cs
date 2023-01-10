@@ -21,11 +21,6 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             this.WhenActivated(disposables =>
             {
-                Observable
-                    .FromEventPattern(WizardControl, nameof(Syncfusion.Windows.Tools.Controls.WizardControl.Finish))
-                    .Subscribe(_ => ViewModel.OkCommand.Execute().Subscribe())
-                    .DisposeWith(disposables);
-
                 this.Bind(ViewModel,
                     vm => vm.CP77ExePath,
                     v => v.cp77ExeTxtb.Text)

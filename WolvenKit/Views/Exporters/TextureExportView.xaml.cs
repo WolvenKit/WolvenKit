@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,14 +21,21 @@ using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Controls;
+using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
+using static WolvenKit.Converters.PropertyGridEditors;
 
 namespace WolvenKit.Views.Exporters;
+
 /// <summary>
 /// Interaction logic for TextureExportView.xaml
 /// </summary>
 public partial class TextureExportView : ReactiveUserControl<TextureExportViewModel>
 {
+    private PropertyItem _propertyItem;
+
     public TextureExportView()
     {
         InitializeComponent();
@@ -53,6 +62,17 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
                    x => x.ExportGrid.SelectedItem)
                .DisposeWith(disposables);
         });
+
+        //// Custom Collection Editors
+        //var customEditorCollection = new CustomEditorCollection();
+        //var editor1 = new CustomEditor
+        //{
+        //    Editor = new CustomCollectionEditor()
+        //};
+        //editor1.Properties.Add(nameof(MeshExportArgs.Rig));
+        ////editor1.
+        //customEditorCollection.Add(editor1);
+        //OverlayPropertyGrid.CustomEditorCollection = customEditorCollection;
     }
 
     private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
@@ -65,17 +85,26 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
                 e.Cancel = true;
                 return;
         }
+
+        // Generate special editors for the properties for which default is not ok
+        if (e.OriginalSource is PropertyItem { } propertyItem)
+        {
+            switch (propertyItem.DisplayName)
+            {
+                case nameof(ISettingsManager.MaterialRepositoryPath):
+                    propertyItem.Editor = new SingleFolderPathEditor();
+                    break;
+            }
+        }
     }
 
-    private void ExportGrid_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+    private void ExportGrid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
     {
         foreach (var item in e.AddedItems)
         {
             if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
             {
                 vm.IsChecked = true;
-
-                //RightFileView.ScrollInView(new RowColumnIndex(info.RowIndex, 0));
             }
         }
 
@@ -92,5 +121,16 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
         ViewModel.CopyArgumentsTemplateToCommand.NotifyCanExecuteChanged();
         ViewModel.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
         ViewModel.ImportSettingsCommand.NotifyCanExecuteChanged();
+    }
+
+    private async void PropertyGrid_CollectionEditorOpening(object sender, CollectionEditorOpeningEventArgs e)
+    {
+        e.Cancel = true;
+
+        if (sender is PropertyGrid pg)
+        {
+            _propertyItem = pg.SelectedPropertyItem;
+            await ViewModel.ExecuteSetCollection(_propertyItem.Name);
+        }
     }
 }

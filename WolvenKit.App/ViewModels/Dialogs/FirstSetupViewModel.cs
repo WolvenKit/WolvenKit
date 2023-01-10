@@ -19,7 +19,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
     /// <summary>
     /// During the first time setup it tries to automatically determine the missing paths and settings.
     /// </summary>
-    public class FirstSetupViewModel : DialogViewModel
+    public class FirstSetupViewModel : DialogWindowViewModel
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
@@ -33,10 +33,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
             _loggerService = loggerService;
 
             Title = "Settings";
-
-            CloseCommand = ReactiveCommand.Create(() => { });
-            OkCommand = ReactiveCommand.Create(ExecuteFinish, CanExecute);
-            CancelCommand = ReactiveCommand.Create(() => { });
 
             OpenCP77GamePathCommand = new DelegateCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
             OpenDepotPathCommand = new DelegateCommand(ExecuteOpenDepotPath, CanOpenDepotPath);
@@ -88,11 +84,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
         #endregion Properties
 
         #region Commands
-
-        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
-        public override ReactiveCommand<Unit, Unit> OkCommand { get; }
-
 
         private void ExecuteFinish()
         {

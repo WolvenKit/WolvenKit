@@ -213,8 +213,6 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
             if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
             {
                 vm.IsChecked = true;
-
-                //RightFileView.ScrollInView(new RowColumnIndex(info.RowIndex, 0));
             }
         }
 
@@ -234,22 +232,4 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
         ViewModel.DefaultSettingsCommand.NotifyCanExecuteChanged();
     }
 
-
-    //private PropertyItem _propertyItem;
-    ///// <summary>
-    ///// Override PG Collection Editor
-    ///// </summary>
-    ///// <param name="sender"></param>
-    ///// <param name="e"></param>
-    //private void PropertyGrid_CollectionEditorOpening(object sender, Syncfusion.Windows.PropertyGrid.CollectionEditorOpeningEventArgs e)
-    //{
-    //    if (ViewModel is TextureImportViewModel vm && sender is PropertyGrid pg)
-    //    {
-    //        _propertyItem = pg.SelectedPropertyItem;
-    //        vm.SetCollectionCommand.SafeExecute(_propertyItem.Name);
-    //    }
-
-    //    e.Cancel = true;
-    //    XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-    //}
 }

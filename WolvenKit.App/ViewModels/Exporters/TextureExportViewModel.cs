@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
@@ -11,7 +14,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -22,7 +27,11 @@ using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Interaction;
+using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
+using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Exporters;
@@ -213,4 +222,131 @@ public partial class TextureExportViewModel : ExportViewModel
     }
 
     private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
+
+    public async Task ExecuteSetCollection(string argType)
+    {
+        switch (SelectedObject)
+        {
+            case { Properties: MeshExportArgs meshExportArgs }:
+                await InitCollectionEditor(argType, meshExportArgs);
+                break;
+
+            case { Properties: OpusExportArgs opusExportArgs }:
+                await InitCollectionEditor(argType, opusExportArgs);
+                break;
+        }
+    }
+
+    private async Task InitCollectionEditor(string argType, ExportArgs args)
+    {
+        if (_gameController.GetController() is not RED4Controller cp77Controller)
+        {
+            return;
+        }
+
+        // get initial items
+        var fetchExtension = ERedExtension.mesh;
+
+        switch (args)
+        {
+            case MeshExportArgs meshExportArgs:
+            {
+                List<FileEntry> selectedEntries = new();
+                switch (argType)
+                {
+                    case nameof(MeshExportArgs.MultiMeshMeshes):
+                        selectedEntries = meshExportArgs.MultiMeshMeshes;
+                        fetchExtension = ERedExtension.mesh;
+                        break;
+
+                    case nameof(MeshExportArgs.MultiMeshRigs):
+                        selectedEntries = meshExportArgs.MultiMeshRigs;
+                        fetchExtension = ERedExtension.rig;
+                        break;
+
+                    case nameof(MeshExportArgs.Rig):
+                        selectedEntries = meshExportArgs.Rig;
+                        fetchExtension = ERedExtension.rig;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                // TODO init collectionEditor with this
+                if (selectedEntries is not null)
+                {
+                    var selectedItems = selectedEntries.Select(_ => new CollectionItemViewModel<FileEntry>(_));
+                }
+
+                var availableItems = _archiveManager
+                    .GetGroupedFiles()[$".{fetchExtension}"]
+                    .Select(_ => new CollectionItemViewModel<FileEntry>(_)).GroupBy(x => x.Name)
+                    .Select(x => x.First());
+
+                // open dialogue
+                var result = await Interactions.ShowCollectionView.Handle(availableItems);
+
+                switch (argType)
+                {
+                    case nameof(MeshExportArgs.MultiMeshMeshes):
+                        meshExportArgs.MultiMeshMeshes = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+                        _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
+                        meshExportArgs.meshExportType = MeshExportType.Multimesh;
+                        break;
+
+                    case nameof(MeshExportArgs.MultiMeshRigs):
+                        meshExportArgs.MultiMeshRigs = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+                        _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
+                        meshExportArgs.meshExportType = MeshExportType.Multimesh;
+                        break;
+
+                    case nameof(MeshExportArgs.Rig):
+                        meshExportArgs.Rig = new List<FileEntry>() { result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault() };
+                        _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                        meshExportArgs.meshExportType = MeshExportType.WithRig;
+                        break;
+
+                    default:
+                        break;
+                }
+
+                break;
+            }
+
+            case OpusExportArgs opusExportArgs:
+            {
+                List<uint> selectedEntries = new();
+                switch (argType)
+                {
+                    case nameof(OpusExportArgs.SelectedForExport):
+                        selectedEntries = opusExportArgs.SelectedForExport;
+                        break;
+                }
+                // TODO init collectionEditor with this
+                if (selectedEntries is not null)
+                {
+                    var selectedItems = selectedEntries.Select(x => new CollectionItemViewModel<uint>(x));
+                }
+                OpusTools opusTools = new(_projectManager.ActiveProject.ModDirectory, _projectManager.ActiveProject.RawDirectory, opusExportArgs.UseMod);
+                var availableItems = opusTools.Info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
+
+                // open dialogue
+                var result = await Interactions.ShowCollectionView.Handle(availableItems);
+
+                switch (argType)
+                {
+                    case nameof(OpusExportArgs.SelectedForExport):
+                        opusExportArgs.SelectedForExport =
+                            new List<uint>(result.Cast<CollectionItemViewModel<uint>>().Select(_ => _.Model));
+                        _notificationService.Success($"Selected opus items were added.");
+                        break;
+                }
+
+                break;
+            }
+
+        }
+    }
+
 }
