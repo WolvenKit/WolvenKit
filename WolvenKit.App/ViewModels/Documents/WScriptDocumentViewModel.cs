@@ -123,6 +123,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
         ContentId = path;
         FilePath = path;
+        Header = Path.GetFileName(path);
         _isInitialized = true;
 
         return true;
@@ -133,8 +134,10 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
         using var bw = new StreamWriter(fs);
         bw.Write(Document.Text);
+        bw.Close();
 
         SetIsDirty(false);
+        this.OpenFile(FilePath);
 
         return Task.CompletedTask;
     }

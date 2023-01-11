@@ -1417,6 +1417,10 @@ namespace WolvenKit.ViewModels.Shell
                         red.FilePath == null ||
                         !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath)))
                     ,
+                    WScriptDocumentViewModel wScript =>
+                        saveAsDialogRequested ||
+                        wScript.FilePath == null ||
+                        !Directory.Exists(ISettingsManager.GetWScriptDir()),
                     _ => false,
                 };
 
