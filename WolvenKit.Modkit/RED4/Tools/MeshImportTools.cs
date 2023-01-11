@@ -301,7 +301,7 @@ namespace WolvenKit.Modkit.RED4
 
             var originalRig = args.Rig != null ? args.Rig.FirstOrDefault() : null;
 
-            if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")))
+            if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")) && (args.importMaterialOnly || args.importMaterials))
             {
                 if (args.Archives != null)
                 {

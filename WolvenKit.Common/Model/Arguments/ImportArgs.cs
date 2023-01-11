@@ -101,6 +101,17 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class GltfImportArgs : ImportArgs
     {
+        /// <summary>
+        /// Should a Material.Json be imported?
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Import with Material.Json")]
+        [Description("If selected materials will be updated from a Material.json file.")]
+        public bool importMaterials { get; set; } = false;
+
+        /// <summary>
+        /// Should only materials be imported and no mesh data be changed?
+        /// </summary>
         [Category("Import Settings")]
         [Display(Name = "Import Material.Json Only")]
         [Description("If selected only materials will be updated from a Material.json file. Mesh geometry will remain unchanged.")]
@@ -120,7 +131,6 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "Target File Format")]
         public GltfImportAsFormat importFormat { get; set; } = GltfImportAsFormat.Mesh;
-
 
 
         /// <summary>
