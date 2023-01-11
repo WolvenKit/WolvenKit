@@ -273,7 +273,6 @@
             <!--  Special Import / Export Options  -->
             <!--  CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"  -->
             <Grid
-                x:Name="XAML_AdvancedOptionsOverlay"
                 Grid.Column="2"
                 Background="{DynamicResource ContentBackgroundAlt2}">
 
@@ -282,14 +281,24 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <!--  ShowAdvancedOptions  -->
-                <!--<mah:ToggleSwitch
-                    Command="{Binding ToggleAdvancedOptionsCommand}"
-                    IsOn="{Binding ShowAdvancedOptions}"
-                    OffContent="Show Advanced Options"
-                    OnContent="Hide Advanced Options"
-                    ToolTip="Toggle Advanced Import/Export Options" />-->
+                <!--  Additional options  -->
+                <StackPanel
+                    x:Name="AddSettingsRe"
+                    Grid.Row="0"
+                    Orientation="Vertical"
+                    Visibility="Collapsed">
+                    <hc:ComboBox
+                        x:Name="AnimsetComboBox"
+                        hc:TitleElement.Title="Animset"
+                        SelectionChanged="AnimsetComboBox_SelectionChanged" />
 
+                    <hc:ComboBox
+                        x:Name="AnimNameComboBox"
+                        hc:TitleElement.Title="Animation to rename"
+                        SelectionChanged="AnimNameComboBox_SelectionChanged" />
+                </StackPanel>
+
+                <!--  PropertyGrid  -->
                 <syncfusion:PropertyGrid
                     x:Name="OverlayPropertyGrid"
                     Grid.Row="1"

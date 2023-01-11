@@ -1472,7 +1472,7 @@ namespace WolvenKit.ViewModels.Shell
                     CalculateDescriptor();
                     PropertiesLoaded = false;
                     CalculateProperties();
-                    this.RaisePropertyChanged("Data");
+                    this.RaisePropertyChanged(nameof(Data));
                     Tab.File.SetIsDirty(true);
                 }
             }

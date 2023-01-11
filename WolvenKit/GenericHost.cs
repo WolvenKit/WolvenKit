@@ -147,6 +147,8 @@ namespace WolvenKit
                     services.AddTransient<ProjectWizardViewModel>();
                     services.AddTransient<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
 
+                    services.AddTransient<ChooseCollectionViewModel>();
+                    services.AddTransient<IViewFor<ChooseCollectionViewModel>, ChooseCollectionView>();
 
 
                     // Importers

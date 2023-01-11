@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -24,7 +25,9 @@ using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Opus;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Tools;
@@ -103,8 +106,6 @@ public partial class TextureImportViewModel : ImportViewModel
         }
     }
 
-
-
     #endregion
 
     protected override async Task ExecuteProcessBulk(bool all = false)
@@ -117,7 +118,7 @@ public partial class TextureImportViewModel : ImportViewModel
         IsProcessing = true;
         _watcherService.IsSuspended = true;
         var progress = 0;
-        _progressService.Report(0);
+        _progressService.Report(0.1);
 
         var total = 0;
         var sucessful = 0;
@@ -259,4 +260,79 @@ public partial class TextureImportViewModel : ImportViewModel
     }
 
     private static bool CanImport(string x) => Enum.TryParse<ERawFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
+
+    public async Task InitCollectionEditor(CallbackArguments args)
+    {
+        if (args.Arg is not ImportArgs importArgs)
+        {
+            return;
+        }
+
+        switch (importArgs)
+        {
+            case GltfImportArgs gltfimport:
+            {
+                await InitGltfCollectionEditor(args, gltfimport);
+                break;
+            }
+
+        }
+    }
+
+    private async Task InitGltfCollectionEditor(CallbackArguments args, GltfImportArgs gltfImportArgs)
+    {
+        var fetchExtension = ERedExtension.mesh;
+        List<FileEntry> selectedEntries = new();
+        switch (args.PropertyName)
+        {
+            case nameof(GltfImportArgs.Rig):
+                selectedEntries = gltfImportArgs.Rig;
+                fetchExtension = ERedExtension.rig;
+                break;
+
+            case nameof(GltfImportArgs.BaseMesh):
+                selectedEntries = gltfImportArgs.BaseMesh;
+                fetchExtension = ERedExtension.mesh;
+                break;
+
+            default:
+                break;
+        }
+
+        IEnumerable<CollectionItemViewModel<FileEntry>> selectedItems = null;
+        if (selectedEntries is not null)
+        {
+            selectedItems = selectedEntries.Select(_ => new CollectionItemViewModel<FileEntry>(_));
+        }
+
+        var availableItems = _archiveManager
+            .GetGroupedFiles()[$".{fetchExtension}"]
+            .Select(_ => new CollectionItemViewModel<FileEntry>(_)).GroupBy(x => x.Name)
+            .Select(x => x.First());
+
+        // open dialogue
+        var result = await Interactions.ShowCollectionView.Handle((availableItems, selectedItems));
+        if (result is not null)
+        {
+            switch (args.PropertyName)
+            {
+                case nameof(GltfImportArgs.Rig):
+                    gltfImportArgs.Rig = new List<FileEntry>() { result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault() };
+                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                    gltfImportArgs.ImportFormat = GltfImportAsFormat.MeshWithRig;
+                    break;
+
+                case nameof(GltfImportArgs.BaseMesh):
+                    gltfImportArgs.BaseMesh = new List<FileEntry>() { result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault() };
+                    _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
+                    gltfImportArgs.ImportFormat = GltfImportAsFormat.Mesh;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    public Cp77Project GetActiveProject() => _projectManager.ActiveProject;
 }
