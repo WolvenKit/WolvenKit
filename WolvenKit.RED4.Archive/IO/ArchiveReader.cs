@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
-using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
@@ -74,7 +72,14 @@ public class ArchiveReader
                 }
                 else
                 {
-                    GuessFileType(ar, file);
+                    try
+                    {
+                        GuessFileType(ar, file);
+                    }
+                    catch (Exception)
+                    {
+                        // ignore
+                    }
                 }
             }
         }
