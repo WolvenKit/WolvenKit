@@ -7,6 +7,7 @@ using System.Windows.Documents;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.RED4.Archive;
 using WolvenKit.Views.Exporters;
 
 namespace WolvenKit.Controls
@@ -25,10 +26,7 @@ namespace WolvenKit.Controls
             _callback = callback;
             _args = args;
 
-            if (List is not null)
-            {
-                Text = List.Count.ToString();
-            }
+            SetText();
         }
 
         public IList List
@@ -52,9 +50,24 @@ namespace WolvenKit.Controls
         {
             await _callback(_args);
 
+            SetText();
+        }
+
+        private void SetText()
+        {
             if (List is not null)
             {
-                SetCurrentValue(TextProperty, List.Count.ToString());
+                var text = $"[{List.Count}]";
+                if (List.Count == 1)
+                {
+                    text += $"{List[0]}";
+                }
+                else if (List.Count > 1)
+                {
+                    text += $"{List[0]}, ...";
+                }
+
+                SetCurrentValue(TextProperty, text);
             }
         }
     }

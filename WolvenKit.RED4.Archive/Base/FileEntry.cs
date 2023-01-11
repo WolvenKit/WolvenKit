@@ -11,11 +11,7 @@ namespace WolvenKit.RED4.Archive
     [ProtoContract]
     public class FileEntry : ICyberGameFile
     {
-        #region Fields
-
         private IHashService _hashService;
-
-        #endregion Fields
 
         #region Constructors
 
@@ -24,10 +20,7 @@ namespace WolvenKit.RED4.Archive
 
         }
 
-        public FileEntry(IHashService hashService)
-        {
-            _hashService = hashService;
-        }
+        public FileEntry(IHashService hashService) => _hashService = hashService;
 
         public FileEntry(
             IHashService hashService,
@@ -146,5 +139,7 @@ namespace WolvenKit.RED4.Archive
 
 
         #endregion Methods
+
+        public override string ToString() => ShortName;
     }
 }

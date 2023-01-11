@@ -29,7 +29,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 {
     public interface IDisplayable
     {
-
+        string Name { get; }
     }
 
     public partial class ChooseCollectionViewModel : DialogWindowViewModel

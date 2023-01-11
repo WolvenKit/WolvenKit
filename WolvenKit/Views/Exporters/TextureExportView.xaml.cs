@@ -37,17 +37,6 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
             if (DataContext is TextureExportViewModel viewModel)
             {
                 SetCurrentValue(ViewModelProperty, viewModel);
-
-                //// Custom Collection Editors
-                //var customEditorCollection = new CustomEditorCollection();
-                //var editor1 = new CustomEditor
-                //{
-                //    Editor = new CustomCollectionEditor(ViewModel.OpenCollectionView)
-                //};
-                //editor1.Properties.Add(nameof(MeshExportArgs.Rig));
-                ////editor1.
-                //customEditorCollection.Add(editor1);
-                //OverlayPropertyGrid.SetCurrentValue(PropertyGrid.CustomEditorCollectionProperty, customEditorCollection);
             }
 
             this.OneWayBind(ViewModel,

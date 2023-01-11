@@ -12,14 +12,17 @@ using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Services;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Tools;
+using WolvenKit.Views.Exporters;
 using YamlDotNet.Core;
 
 namespace WolvenKit.Views.Importers;
@@ -56,125 +59,91 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
 
     }
 
+    // TODO refactor this and move to ViewModel
     private void ShowSettings()
     {
-        if (ViewModel == null)
+        if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport && Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat rawExtension) && rawExtension == ERawFileFormat.re)
         {
-            return;
+            var mod = ViewModel.GetActiveProject();
+            var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
+            var depotPaths = animsets.Select(x => x[(mod.ModDirectory.Length + 1)..]);
+
+            // UI actions
+            AddSettingsRe.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            AnimsetComboBox.SetCurrentValue(ItemsControl.ItemsSourceProperty, depotPaths);
+
+            // set defaults if no change in selection
+            if (selectedImport.Properties is ReImportArgs args)
+            {
+                if (AnimsetComboBox.SelectedItem is not string selectedItem)
+                {
+                    return;
+                }
+                if (string.IsNullOrEmpty(selectedItem))
+                {
+                    return;
+                }
+
+                args.Animset = selectedItem;
+
+                if (AnimNameComboBox.SelectedItem is not string selectedName)
+                {
+                    return;
+                }
+                if (string.IsNullOrEmpty(selectedName))
+                {
+                    return;
+                }
+
+                args.AnimationToRename = selectedName;
+            }
+
         }
-
-        //if (ViewModel.IsImportsSelected)
-        //{
-        //    if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport)
-        //    {
-        //        if (Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat rawExtension))
-        //        {
-        //            XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
-        //            XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Extension);
-        //            XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Name);
-
-        //            if (rawExtension == ERawFileFormat.re)
-        //            {
-        //                var mod = projectManager.ActiveProject;
-        //                var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
-        //                var depotPaths = animsets.Select(x => x[(mod.ModDirectory.Length + 1)..]);
-
-        //                AddSettingsRe.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-
-        //                AnimsetComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, depotPaths);
-
-        //                // set defaults if no change in selection
-        //                if (selectedImport.Properties is ReImportArgs args)
-        //                {
-        //                    if (AnimsetComboBox.SelectedItem is not string selectedItem)
-        //                    {
-        //                        return;
-        //                    }
-        //                    if (string.IsNullOrEmpty(selectedItem))
-        //                    {
-        //                        return;
-        //                    }
-
-        //                    args.Animset = selectedItem;
-        //                    //args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
-
-        //                    if (AnimNameComboBox.SelectedItem is not string selectedName)
-        //                    {
-        //                        return;
-        //                    }
-        //                    if (string.IsNullOrEmpty(selectedName))
-        //                    {
-        //                        return;
-        //                    }
-
-        //                    args.AnimationToRename = selectedName;
-        //                }
-
-        //            }
-        //        }
-        //        else
-        //        {
-        //            throw new ArgumentOutOfRangeException();
-        //        }
-        //    }
-        //}
-
-
     }
 
-    //private void AnimsetComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-    //{
-    //    if (ViewModel is not ImportExportViewModel vm)
-    //    {
-    //        return;
-    //    }
-    //    if (vm.IsImportsSelected
-    //        && ImportGrid.SelectedItem is ImportableItemViewModel selectedImport
-    //        && selectedImport.Properties is ReImportArgs args)
-    //    {
-    //        if (AnimsetComboBox.SelectedItem is not string selectedItem)
-    //        {
-    //            return;
-    //        }
+    // TODO refactor this and move to ViewModel
+    private void AnimsetComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        if (ImportGrid.SelectedItem is ImportableItemViewModel selectedImport && selectedImport.Properties is ReImportArgs args)
+        {
+            if (AnimsetComboBox.SelectedItem is not string selectedItem)
+            {
+                return;
+            }
 
-    //        args.Animset = selectedItem;
-    //        //args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
+            args.Animset = selectedItem;
 
-    //        // parse animset and populate the animnameBox
-    //        var path = Path.Combine(projectManager.ActiveProject.ModDirectory, selectedItem);
-    //        if (File.Exists(path))
-    //        {
-    //            using var fs = new FileStream(path, FileMode.Open);
-    //            if (parser.TryReadRed4File(fs, out var originalFile))
-    //            {
-    //                if (originalFile.RootChunk is animAnimSet animset)
-    //                {
-    //                    var animnames = animset.Animations.Select(x => x.Chunk.Animation.Chunk.Name.ToString());
-    //                    AnimNameComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animnames);
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
+            // parse animset and populate the animnameBox
+            var path = Path.Combine(ViewModel.GetActiveProject().ModDirectory, selectedItem);
+            if (File.Exists(path))
+            {
+                using var fs = new FileStream(path, FileMode.Open);
+                var parser = Locator.Current.GetService<Red4ParserService>();
+                if (parser.TryReadRed4File(fs, out var originalFile))
+                {
+                    if (originalFile.RootChunk is animAnimSet animset)
+                    {
+                        var animnames = animset.Animations.Select(x => x.Chunk.Animation.Chunk.Name.ToString());
+                        AnimNameComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animnames);
+                    }
+                }
+            }
+        }
+    }
 
-    //private void AnimNameComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-    //{
-    //    if (ViewModel is not ImportExportViewModel vm)
-    //    {
-    //        return;
-    //    }
-    //    if (vm.IsImportsSelected
-    //        && ImportGrid.SelectedItem is ImportableItemViewModel selectedImport
-    //        && selectedImport.Properties is ReImportArgs args)
-    //    {
-    //        if (AnimNameComboBox.SelectedItem is not string selectedItem)
-    //        {
-    //            return;
-    //        }
+    // TODO refactor this and move to ViewModel
+    private void AnimNameComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        if (ImportGrid.SelectedItem is ImportableItemViewModel selectedImport && selectedImport.Properties is ReImportArgs args)
+        {
+            if (AnimNameComboBox.SelectedItem is not string selectedItem)
+            {
+                return;
+            }
 
-    //        args.AnimationToRename = selectedItem;
-    //    }
-    //}
+            args.AnimationToRename = selectedItem;
+        }
+    }
 
     private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
     {
@@ -194,15 +163,21 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
                 e.Cancel = true;
                 return;
             }
+        }
 
-            //if (!_settingsManager.ShowAdvancedOptions)
-            //{
-            //    if (e.Category is "Image Import Settings")
-            //    {
-            //        e.Cancel = true;
-            //        return;
-            //    }
-            //}
+        // Generate special editors for certain properties
+        // we need the callback function
+        // we need the propertyname
+        // we need the type of the arguments
+        if (e.OriginalSource is PropertyItem { } propertyItem && sender is PropertyGrid pg && pg.SelectedObject is ImportArgs args)
+        {
+            switch (propertyItem.DisplayName)
+            {
+                case nameof(GltfImportArgs.Rig):
+                case nameof(GltfImportArgs.BaseMesh):
+                    propertyItem.Editor = new CustomCollectionEditor(ViewModel.InitCollectionEditor, new CallbackArguments(args, propertyItem.DisplayName));
+                    break;
+            }
         }
     }
 
@@ -230,6 +205,9 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
         ViewModel.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
         ViewModel.ImportSettingsCommand.NotifyCanExecuteChanged();
         ViewModel.DefaultSettingsCommand.NotifyCanExecuteChanged();
+
+        // toglle additional options
+        ShowSettings();
     }
 
 }
