@@ -319,13 +319,13 @@ public partial class TextureImportViewModel : ImportViewModel
                 case nameof(GltfImportArgs.Rig):
                     gltfImportArgs.Rig = new List<FileEntry>() { result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault() };
                     _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
-                    gltfImportArgs.importFormat = GltfImportAsFormat.MeshWithRig;
+                    gltfImportArgs.ImportFormat = GltfImportAsFormat.MeshWithRig;
                     break;
 
                 case nameof(GltfImportArgs.BaseMesh):
                     gltfImportArgs.BaseMesh = new List<FileEntry>() { result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault() };
                     _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
-                    gltfImportArgs.importFormat = GltfImportAsFormat.Mesh;
+                    gltfImportArgs.ImportFormat = GltfImportAsFormat.Mesh;
                     break;
 
                 default:
