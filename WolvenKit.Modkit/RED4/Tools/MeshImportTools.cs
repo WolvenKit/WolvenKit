@@ -32,7 +32,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.validationMode));
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
 
             //VerifyGLTF(model);
 
@@ -301,13 +301,13 @@ namespace WolvenKit.Modkit.RED4
 
             var originalRig = args.Rig != null ? args.Rig.FirstOrDefault() : null;
 
-            if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")) && (args.importMaterialOnly || args.importMaterials))
+            if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")) && (args.ImportMaterialOnly || args.ImportMaterials))
             {
                 if (args.Archives != null)
                 {
                     WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")), args.Archives);
                 }
-                if (args.importMaterialOnly)
+                if (args.ImportMaterialOnly)
                 {
                     var matOnlyStream = new MemoryStream();
 
@@ -331,7 +331,7 @@ namespace WolvenKit.Modkit.RED4
 
             }
 
-            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.validationMode));
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
 
             if (model.LogicalSkins.Count > 0 && originalRig != null)
             {
