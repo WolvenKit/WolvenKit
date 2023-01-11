@@ -526,7 +526,7 @@ namespace WolvenKit.ViewModels.Tools
                 var progress = 0;
                 _progressService.Report(0);
 
-                var files = Directory.GetFiles(SelectedItem.FullName, "*.json", SearchOption.AllDirectories).ToList();
+                var files = Directory.GetFiles(SelectedItem.FullName, "*.json", SearchOption.AllDirectories).Where(name => !name.EndsWith(".Material.json")).ToList();
                 foreach (var file in files)
                 {
                     await ConvertFromTask(file);
@@ -546,6 +546,7 @@ namespace WolvenKit.ViewModels.Tools
                 await ConvertFromTask(inpath);
             }
         }
+
         private Task ConvertFromTask(string file)
         {
             if (!File.Exists(file))
