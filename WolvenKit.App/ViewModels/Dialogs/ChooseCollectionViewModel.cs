@@ -48,7 +48,13 @@ namespace WolvenKit.App.ViewModels.Dialogs
         [Reactive] public ObservableCollection<object> SelectedSelectedItems { get; set; }
 
         public void SetAvailableItems(IEnumerable<IDisplayable> input) => AvailableItems = new(input);
-
+        public void SetSelectedItems(IEnumerable<IDisplayable> input)
+        {
+            if (input is not null)
+            {
+                SelectedItems = new(input);
+            }
+        }
 
         [RelayCommand]
         private void AddItem()

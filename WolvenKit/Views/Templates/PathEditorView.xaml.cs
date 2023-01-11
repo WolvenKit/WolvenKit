@@ -15,7 +15,7 @@ namespace WolvenKit.Controls
     public record PathEditorFilter(string Name, string Patterns);
 
     /// <summary>
-    /// Interaction logic for AddPathDialogView.xaml
+    /// Interaction logic for PathEditorView.xaml
     /// </summary>
     public partial class PathEditorView
     {

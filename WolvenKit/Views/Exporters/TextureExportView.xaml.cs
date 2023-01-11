@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -21,7 +16,6 @@ using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Controls;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
@@ -34,8 +28,6 @@ namespace WolvenKit.Views.Exporters;
 /// </summary>
 public partial class TextureExportView : ReactiveUserControl<TextureExportViewModel>
 {
-    private PropertyItem _propertyItem;
-
     public TextureExportView()
     {
         InitializeComponent();
@@ -45,6 +37,17 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
             if (DataContext is TextureExportViewModel viewModel)
             {
                 SetCurrentValue(ViewModelProperty, viewModel);
+
+                //// Custom Collection Editors
+                //var customEditorCollection = new CustomEditorCollection();
+                //var editor1 = new CustomEditor
+                //{
+                //    Editor = new CustomCollectionEditor(ViewModel.OpenCollectionView)
+                //};
+                //editor1.Properties.Add(nameof(MeshExportArgs.Rig));
+                ////editor1.
+                //customEditorCollection.Add(editor1);
+                //OverlayPropertyGrid.SetCurrentValue(PropertyGrid.CustomEditorCollectionProperty, customEditorCollection);
             }
 
             this.OneWayBind(ViewModel,
@@ -63,16 +66,7 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
                .DisposeWith(disposables);
         });
 
-        //// Custom Collection Editors
-        //var customEditorCollection = new CustomEditorCollection();
-        //var editor1 = new CustomEditor
-        //{
-        //    Editor = new CustomCollectionEditor()
-        //};
-        //editor1.Properties.Add(nameof(MeshExportArgs.Rig));
-        ////editor1.
-        //customEditorCollection.Add(editor1);
-        //OverlayPropertyGrid.CustomEditorCollection = customEditorCollection;
+
     }
 
     private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
@@ -86,13 +80,19 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
                 return;
         }
 
-        // Generate special editors for the properties for which default is not ok
-        if (e.OriginalSource is PropertyItem { } propertyItem)
+        // Generate special editors for certain properties
+        // we need the callback function
+        // we need the propertyname
+        // we need the type of the arguments
+        if (e.OriginalSource is PropertyItem { } propertyItem && sender is PropertyGrid pg && pg.SelectedObject is ExportArgs args)
         {
             switch (propertyItem.DisplayName)
             {
-                case nameof(ISettingsManager.MaterialRepositoryPath):
-                    propertyItem.Editor = new SingleFolderPathEditor();
+                case nameof(MeshExportArgs.Rig):
+                case nameof(MeshExportArgs.MultiMeshMeshes):
+                case nameof(MeshExportArgs.MultiMeshRigs):
+                case nameof(OpusExportArgs.SelectedForExport):
+                    propertyItem.Editor = new CustomCollectionEditor(ViewModel.InitCollectionEditor, new CallbackArguments(args, propertyItem.DisplayName));
                     break;
             }
         }
@@ -123,14 +123,5 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
         ViewModel.ImportSettingsCommand.NotifyCanExecuteChanged();
     }
 
-    private async void PropertyGrid_CollectionEditorOpening(object sender, CollectionEditorOpeningEventArgs e)
-    {
-        e.Cancel = true;
-
-        if (sender is PropertyGrid pg)
-        {
-            _propertyItem = pg.SelectedPropertyItem;
-            await ViewModel.ExecuteSetCollection(_propertyItem.Name);
-        }
-    }
 }
+

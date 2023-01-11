@@ -258,12 +258,13 @@
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
             <!--  Properties  -->
-            <syncfusion:PropertyGrid  Grid.Column="2" 
+            <!--  CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"  -->
+            <syncfusion:PropertyGrid
                 x:Name="OverlayPropertyGrid"
+                Grid.Column="2"
                 AutoGeneratingPropertyGridItem="OverlayPropertyGrid_AutoGeneratingPropertyGridItem"
                 ButtonPanelVisibility="Hidden"
                 CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
-                CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"
                 DescriptionPanelVisibility="Visible"
                 EnableGrouping="True"
                 PropertyExpandMode="NestedMode"

@@ -68,7 +68,8 @@ namespace WolvenKit.Views.Shell
                 Interactions.ShowCollectionView.RegisterHandler(interaction =>
                 {
                     ChooseCollectionView dialog = new();
-                    dialog.ViewModel.SetAvailableItems(interaction.Input);
+                    dialog.ViewModel.SetAvailableItems(interaction.Input.Item1);
+                    dialog.ViewModel.SetSelectedItems(interaction.Input.Item2);
 
                     return Observable.Start(() =>
                     {
