@@ -261,7 +261,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             return true;
         }
-        public bool ExportMultiMeshWithRig(List<Stream> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportMultiMeshWithRig(Dictionary<Stream, String> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var Rigs = new List<RawArmature>();
             foreach (var rigStream in rigStreamS)
@@ -276,7 +276,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             var expMeshes = new List<RawMeshContainer>();
 
-            foreach (var meshStream in meshStreamS)
+            foreach (var meshStream in meshStreamS.Keys)
             {
                 var cr2w = _red4ParserService.ReadRed4File(meshStream);
                 if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
@@ -293,7 +293,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 var meshRig = GetOrphanRig(cMesh);
 
-                UpdateMeshJoints(ref Meshes, expRig, meshRig);
+                UpdateMeshJoints(ref Meshes, expRig, meshRig, meshStreamS[meshStream]);
 
                 expMeshes.AddRange(Meshes);
 
@@ -694,8 +694,8 @@ namespace WolvenKit.Modkit.RED4.Tools
             return ret.ToArray();
 
         }
-        
-        public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature newRig, RawArmature oldRig)
+
+        public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature newRig, RawArmature oldRig, String fileName = "")
         {
             // updating mesh bone indices
             if (newRig != null && newRig.BoneCount > 0 && oldRig != null && oldRig.BoneCount > 0)
@@ -724,7 +724,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                             }
                             if (!found)
                             {
-                                throw new Exception($"Bone: {oldRig.Names[meshes[i].boneindices[e, eye]]} not present in export Rig(s)/Import Mesh");
+                                throw new Exception($"Bone: {oldRig.Names[meshes[i].boneindices[e, eye]]} not present in export Rig(s)/Import Mesh {(!fileName.Equals("") ? string.Format("({0})", fileName) : "")}");
                             }
                         }
                     }
