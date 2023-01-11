@@ -101,10 +101,21 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class GltfImportArgs : ImportArgs
     {
+        /// <summary>
+        /// Should a Material.Json be imported?
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Import with Material.Json")]
+        [Description("If selected materials will be updated from a Material.json file.")]
+        public bool ImportMaterials { get; set; } = false;
+
+        /// <summary>
+        /// Should only materials be imported and no mesh data be changed?
+        /// </summary>
         [Category("Import Settings")]
         [Display(Name = "Import Material.Json Only")]
         [Description("If selected only materials will be updated from a Material.json file. Mesh geometry will remain unchanged.")]
-        public bool importMaterialOnly { get; set; } = false;
+        public bool ImportMaterialOnly { get; set; } = false;
 
         /// <summary>
         /// Validation type for the selected GLB/GLTF.
@@ -112,15 +123,14 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "GLTF Validation Checks")]
         [Description("Optional validation check for glb/glTF files")]
-        public ValidationMode validationMode { get; set; } = ValidationMode.Skip;
+        public ValidationMode ValidationMode { get; set; } = ValidationMode.Skip;
 
         /// <summary>
         /// RedEngine4 Cooked File type for the selected GLB/GLTF.
         /// </summary>
         [Category("Import Settings")]
         [Display(Name = "Target File Format")]
-        public GltfImportAsFormat importFormat { get; set; } = GltfImportAsFormat.Mesh;
-
+        public GltfImportAsFormat ImportFormat { get; set; } = GltfImportAsFormat.Mesh;
 
 
         /// <summary>
@@ -173,7 +183,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"Mesh/Morphtarget | Import Format :  {importFormat}";
+        public override string ToString() => $"Mesh/Morphtarget | Import Format :  {ImportFormat}";
     }
 
     public enum GltfImportAsFormat

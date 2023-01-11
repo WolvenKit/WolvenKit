@@ -708,16 +708,6 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    var meshstreams = meshes.Select(
-                            delegate (FileEntry entry)
-                            {
-                                var ar = entry.Archive as Archive;
-                                var ms = new MemoryStream();
-                                ar?.CopyFileToStream(ms, entry.NameHash64, false);
-                                return (Stream)ms;
-                            })
-                        .ToList();
-
                     var rigstreams = rigs.Select(
                             delegate (FileEntry entry)
                             {
@@ -727,6 +717,17 @@ namespace WolvenKit.Modkit.RED4
                                 return (Stream)ms;
                             })
                         .ToList();
+
+
+                    var meshstreams = meshes.Select(
+                              delegate (FileEntry entry)
+                              {
+                                  var ar = entry.Archive as Archive;
+                                  var ms = new MemoryStream();
+                                  ar?.CopyFileToStream(ms, entry.NameHash64, false);
+                                  return new KeyValuePair<Stream, String>((Stream)ms, entry.FileName);
+                              }).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
 
                     return _meshTools.ExportMultiMeshWithRig(meshstreams, rigstreams, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
                 }
