@@ -386,8 +386,8 @@ namespace WolvenKit.Modkit.RED4
         private bool ImportGltf(RedRelativePath rawRelative, DirectoryInfo outDir, GltfImportArgs args)
         {
             string redfile;
-            var ext = args.importFormat ==
-                GltfImportAsFormat.MeshWithRig ? $".mesh" : $".{args.importFormat.ToString().ToLower()}";
+            var ext = args.ImportFormat ==
+                GltfImportAsFormat.MeshWithRig ? $".mesh" : $".{args.ImportFormat.ToString().ToLower()}";
 
 
             if (args.SelectBase)
@@ -441,7 +441,7 @@ namespace WolvenKit.Modkit.RED4
             try
             {
                 var result = false;
-                switch (args.importFormat)
+                switch (args.ImportFormat)
                 {
                     case GltfImportAsFormat.Mesh:
                         result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
