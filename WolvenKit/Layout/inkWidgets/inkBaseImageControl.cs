@@ -148,6 +148,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 case Enums.inkBrushTileType.Horizontal:
                     size.Width = OriginalImageSize.Width;
                     break;
+                case Enums.inkBrushTileType.NoTile:
+                    break;
                 default:
                     break;
             }
@@ -352,6 +354,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         case Enums.inkBrushTileType.Horizontal:
                             width = OriginalImageSize.Width;
                             break;
+                        case Enums.inkBrushTileType.NoTile:
+                            break;
                         default:
                             break;
                     }
@@ -380,6 +384,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             return tile switch
             {
                 Enums.inkBrushTileType.NoTile => TileMode.None,
+                Enums.inkBrushTileType.Horizontal => TileMode.Tile,
+                Enums.inkBrushTileType.Vertical => TileMode.Tile,
+                Enums.inkBrushTileType.Both => TileMode.Tile,
+                null => TileMode.Tile,
                 _ => TileMode.Tile,
             };
         }
@@ -390,6 +398,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             {
                 Enums.inkEHorizontalAlign.Left => AlignmentX.Left,
                 Enums.inkEHorizontalAlign.Right => AlignmentX.Right,
+                Enums.inkEHorizontalAlign.Fill => AlignmentX.Center,
+                Enums.inkEHorizontalAlign.Center => AlignmentX.Center,
+                null => AlignmentX.Center,
                 _ => AlignmentX.Center,
             };
         }
@@ -400,6 +411,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             {
                 Enums.inkEVerticalAlign.Top => AlignmentY.Top,
                 Enums.inkEVerticalAlign.Bottom => AlignmentY.Bottom,
+                Enums.inkEVerticalAlign.Fill => AlignmentY.Center,
+                Enums.inkEVerticalAlign.Center => AlignmentY.Center,
+                null => AlignmentY.Center,
                 _ => AlignmentY.Center,
             };
         }

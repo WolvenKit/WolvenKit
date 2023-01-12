@@ -157,6 +157,7 @@ namespace WolvenKit.App.Services
                     case EPlugin.redscript:
                     case EPlugin.red4ext:
                     case EPlugin.tweakXL:
+                    case EPlugin.redhottools:
                         _pluginIds.Add(item, Path.Combine(_settings.GetRED4GameRootDir()));
                         break;
                     case EPlugin.mlsetupbuilder:
@@ -322,6 +323,7 @@ namespace WolvenKit.App.Services
                 case EPlugin.cyberenginetweaks:
                 case EPlugin.redscript:
                 case EPlugin.mlsetupbuilder:
+                case EPlugin.redhottools:
                     installedFiles = await Task.Run(() => ExtractZip(zipPath, pluginViewModel.InstallPath));
                     break;
                 case EPlugin.wolvenkit_resources:

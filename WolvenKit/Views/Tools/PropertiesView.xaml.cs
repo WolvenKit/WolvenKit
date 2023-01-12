@@ -174,6 +174,8 @@ namespace WolvenKit.Views.Tools
                 case nameof(ReactiveObject.ThrownExceptions):
                     e.Cancel = true;
                     break;
+                default:
+                    break;
             }
             e.ReadOnly = true;
         }

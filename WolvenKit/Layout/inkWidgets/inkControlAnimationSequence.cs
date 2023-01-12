@@ -454,6 +454,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             Enums.inkanimInterpolationMode.EasyOut => EasingMode.EaseOut,
             Enums.inkanimInterpolationMode.EasyInOut or Enums.inkanimInterpolationMode.EasyOutIn => EasingMode.EaseInOut,
+            Enums.inkanimInterpolationMode.EasyIn => EasingMode.EaseIn,
+            null => EasingMode.EaseIn,
             _ => EasingMode.EaseIn,
         };
     }

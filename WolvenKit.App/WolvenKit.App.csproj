@@ -7,7 +7,8 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>

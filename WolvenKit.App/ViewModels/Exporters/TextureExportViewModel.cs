@@ -245,6 +245,9 @@ public partial class TextureExportViewModel : ExportViewModel
                 await InitOpusCollectionEditor(args, opusExportArgs);
                 break;
             }
+
+            default:
+                break;
         }
     }
 
@@ -255,6 +258,8 @@ public partial class TextureExportViewModel : ExportViewModel
         {
             case nameof(OpusExportArgs.SelectedForExport):
                 selectedEntries = opusExportArgs.SelectedForExport;
+                break;
+            default:
                 break;
         }
         // TODO init collectionEditor with this
@@ -276,6 +281,8 @@ public partial class TextureExportViewModel : ExportViewModel
                     opusExportArgs.SelectedForExport =
                         new List<uint>(result.Cast<CollectionItemViewModel<uint>>().Select(_ => _.Model));
                     _notificationService.Success($"Selected opus items were added.");
+                    break;
+                default:
                     break;
             }
 

@@ -64,6 +64,8 @@ namespace WolvenKit.Views.Dialogs.Windows
                 case nameof(ReactiveObject.ThrownExceptions):
                     e.Cancel = true;
                     break;
+                default:
+                    break;
             }
         }
 

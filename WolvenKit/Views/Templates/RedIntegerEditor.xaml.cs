@@ -118,6 +118,8 @@ namespace WolvenKit.Views.Editors
                 case CInt64:
                     SetCurrentValue(RedIntegerProperty, (CInt64)value);
                     break;
+                default:
+                    break;
             }
 
         }

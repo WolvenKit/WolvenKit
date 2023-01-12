@@ -154,6 +154,8 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
             case nameof(ReactiveObject.ThrownExceptions):
                 e.Cancel = true;
                 return;
+            default:
+                break;
         }
 
         if (ViewModel.SelectedObject?.Properties is XbmImportArgs { })
@@ -176,6 +178,8 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
                 case nameof(GltfImportArgs.Rig):
                 case nameof(GltfImportArgs.BaseMesh):
                     propertyItem.Editor = new CustomCollectionEditor(ViewModel.InitCollectionEditor, new CallbackArguments(args, propertyItem.DisplayName));
+                    break;
+                default:
                     break;
             }
         }

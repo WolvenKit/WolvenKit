@@ -75,6 +75,7 @@ namespace WolvenKit.ViewModels.Tools
                 ERawFileFormat.re => new ReImportArgs(),
 
                 ERawFileFormat.fbx => new CommonImportArgs(),
+                ERawFileFormat.csv => new CommonImportArgs(),
                 _ => new CommonImportArgs()
             };
         }
@@ -103,6 +104,14 @@ namespace WolvenKit.ViewModels.Tools
                 ERawFileFormat.jpg => RedImage.LoadFromJPGFile(BaseFile),
                 ERawFileFormat.png => RedImage.LoadFromPNGFile(BaseFile),
                 ERawFileFormat.tiff => RedImage.LoadFromTIFFFile(BaseFile),
+                ERawFileFormat.fbx => throw new NotImplementedException(),
+                ERawFileFormat.gltf => throw new NotImplementedException(),
+                ERawFileFormat.glb => throw new NotImplementedException(),
+                ERawFileFormat.ttf => throw new NotImplementedException(),
+                ERawFileFormat.wav => throw new NotImplementedException(),
+                ERawFileFormat.masklist => throw new NotImplementedException(),
+                ERawFileFormat.csv => throw new NotImplementedException(),
+                ERawFileFormat.re => throw new NotImplementedException(),
                 _ => throw new ArgumentOutOfRangeException(),
             };
             var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
