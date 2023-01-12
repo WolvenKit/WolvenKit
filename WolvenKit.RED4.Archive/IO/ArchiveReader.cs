@@ -209,7 +209,7 @@ public class ArchiveReader
 
             for (var j = startIndex + 1; j < nextIndex; j++)
             {
-                value.Size += index.FileSegments[j].Size;
+                value.Size += index.FileSegments[j].ZSize;
                 value.ZSize += index.FileSegments[j].ZSize;
             }
         }
