@@ -132,16 +132,22 @@ namespace WolvenKit.Views.Shell
 
                     var reader = XmlReader.Create(xmlPath);
 
-                    var Debugging_A = PART_DockingManager.LoadDockState(reader);
+                    var isSuccessful = PART_DockingManager.LoadDockState(reader);
 
                     reader.Close();
 
-                    Locator.Current.GetService<ILoggerService>().Info($"Loaded layout from {xmlPath}");
+                    if (!isSuccessful)
+                    {
+                        LoadLayoutDefault();
+                        return;
+                    }
+
+                    Locator.Current.GetService<ILoggerService>().Info($"Loaded layout from {xmlPath}: {isSuccessful}");
                 }
                 else
                 {
-                    var Debugging_A = PART_DockingManager.LoadDockState();
-                    Trace.WriteLine(Debugging_A);
+                    var isSuccessful = PART_DockingManager.LoadDockState();
+                    Trace.WriteLine(isSuccessful);
                 }
             }
             catch (Exception ex)
@@ -156,8 +162,8 @@ namespace WolvenKit.Views.Shell
             try
             {
                 var reader = XmlReader.Create("DockStatesDefault.xml");
-                var Debugging_A = PART_DockingManager.LoadDockState(reader);
-                Trace.WriteLine(Debugging_A);
+                var isSuccessful = PART_DockingManager.LoadDockState(reader);
+                Trace.WriteLine(isSuccessful);
                 reader.Close();
                 Locator.Current.GetService<ILoggerService>().Info($"Loaded default layout");
             }

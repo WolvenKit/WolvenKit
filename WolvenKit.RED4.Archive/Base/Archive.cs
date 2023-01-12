@@ -14,15 +14,11 @@ namespace WolvenKit.RED4.Archive
     [ProtoContract]
     public class Archive : ICyberGameArchive, IDisposable
     {
-        #region Fields
-
         private MemoryMappedFile _mmf;
         private bool _bulkExtract;
         private int _handleCount;
 
         private bool _disposed;
-
-        #endregion
 
         #region constructors
 
@@ -60,7 +56,7 @@ namespace WolvenKit.RED4.Archive
 
         public MemoryMappedViewStream GetViewStream(ulong offset, uint size)
         {
-            _mmf ??= MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
+            _mmf = MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
             return _mmf.CreateViewStream((long)offset, size, MemoryMappedFileAccess.Read);
         }
 
