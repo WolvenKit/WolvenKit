@@ -154,39 +154,15 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 var progress = 0;
                 _progress.Report(0);
 
-                if (UseNewParallelism)
+                foreach (var archiveGroup in filesList.GroupBy(x => x.Archive.ArchiveAbsolutePath))
                 {
-                    async Task UnbundleAsync(FileEntry entry)
+                    var ar = (Archive)_archiveManager.Archives.Lookup(archiveGroup.Key).Value;
+
+                    ar.SetBulkExtract(true);
+
+                    if (UseNewParallelism)
                     {
-                        var endPath = Path.Combine(materialRepoDir.FullName, entry.Name);
-                        var dirpath = Path.GetDirectoryName(endPath);
-                        var dirInfo = Directory.CreateDirectory(dirpath);
-
-                        try
-                        {
-                            if (dirInfo.Exists) // CreateDirectory sometimes is false even on success.
-                            {
-                                using var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write);
-                                await entry.ExtractAsync(fs);
-                            }
-                            Interlocked.Increment(ref progress);
-                            _progress.Report(progress / (float)fileCount);
-                        }
-                        catch (Exception ex)
-                        {
-                            _loggerService.Error($"Error unbundling [File: {endPath}] [Entry: {entry.Name}]");
-                            _loggerService.Error(ex);
-                        }
-                    }
-
-                    await filesList.ParallelForEachAsync(UnbundleAsync, _maxDoP);
-                }
-                else
-                {
-                    Parallel.ForEach(
-                        filesList,
-                        _parallelOptions,
-                        entry =>
+                        async Task UnbundleAsync(FileEntry entry)
                         {
                             var endPath = Path.Combine(materialRepoDir.FullName, entry.Name);
                             var dirpath = Path.GetDirectoryName(endPath);
@@ -197,18 +173,51 @@ namespace WolvenKit.App.ViewModels.Dialogs
                                 if (dirInfo.Exists) // CreateDirectory sometimes is false even on success.
                                 {
                                     using var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write);
-                                    entry.Extract(fs);
+                                    await entry.ExtractAsync(fs);
                                 }
                                 Interlocked.Increment(ref progress);
-                                _progress.Report(progress / (float)filesList.Count);
+                                _progress.Report(progress / (float)fileCount);
                             }
                             catch (Exception ex)
                             {
-                                _loggerService.Error($"Error unbundling [File: {endPath}] [Key: {entry.Key}]");
+                                _loggerService.Error($"Error unbundling [File: {endPath}] [Entry: {entry.Name}]");
                                 _loggerService.Error(ex);
                             }
                         }
-                    );
+
+                        await archiveGroup.ParallelForEachAsync(UnbundleAsync, _maxDoP);
+                    }
+                    else
+                    {
+                        Parallel.ForEach(
+                            archiveGroup,
+                            _parallelOptions,
+                            entry =>
+                            {
+                                var endPath = Path.Combine(materialRepoDir.FullName, entry.Name);
+                                var dirpath = Path.GetDirectoryName(endPath);
+                                var dirInfo = Directory.CreateDirectory(dirpath);
+
+                                try
+                                {
+                                    if (dirInfo.Exists) // CreateDirectory sometimes is false even on success.
+                                    {
+                                        using var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write);
+                                        entry.Extract(fs);
+                                    }
+                                    Interlocked.Increment(ref progress);
+                                    _progress.Report(progress / (float)filesList.Count);
+                                }
+                                catch (Exception ex)
+                                {
+                                    _loggerService.Error($"Error unbundling [File: {endPath}] [Key: {entry.Key}]");
+                                    _loggerService.Error(ex);
+                                }
+                            }
+                        );
+                    }
+
+                    ar.SetBulkExtract(false);
                 }
 
                 // Temporary measure. As memory optimizations get made with streams
@@ -241,38 +250,20 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 var progress = 0;
                 _progress.Report(0);
 
-                if (UseNewParallelism)
+                foreach (var archiveGroup in filesList.GroupBy(x => x.Archive.ArchiveAbsolutePath))
                 {
-                    async Task UncookAsync(FileEntry entry)
+                    var ar = (Archive)_archiveManager.Archives.Lookup(archiveGroup.Key).Value;
+
+                    ar.SetBulkExtract(true);
+
+                    if (UseNewParallelism)
                     {
-                        try
-                        {
-                            exportArgs.Get<MlmaskExportArgs>().AsList = false;
-                            await _modTools.UncookSingleAsync(entry.Archive as Archive, entry.Key, materialRepoDir, exportArgs);
-
-                            Interlocked.Increment(ref progress);
-                            _progress.Report(progress / (float)fileCount);
-                        }
-                        catch (Exception ex)
-                        {
-                            _loggerService.Error($"Error uncooking [File: {entry.Name}] [Key: {entry.Key}]");
-                            _loggerService.Error(ex);
-                        }
-                    }
-
-                    await filesList.ParallelForEachAsync(UncookAsync, _maxDoP);
-                }
-                else
-                {
-                    Parallel.ForEach(
-                        filesList,
-                        _parallelOptions,
-                        entry =>
+                        async Task UncookAsync(FileEntry entry)
                         {
                             try
                             {
                                 exportArgs.Get<MlmaskExportArgs>().AsList = false;
-                                _modTools.UncookSingle(entry.Archive as Archive, entry.Key, materialRepoDir, exportArgs);
+                                await _modTools.UncookSingleAsync(entry.Archive as Archive, entry.Key, materialRepoDir, exportArgs);
 
                                 Interlocked.Increment(ref progress);
                                 _progress.Report(progress / (float)fileCount);
@@ -283,7 +274,34 @@ namespace WolvenKit.App.ViewModels.Dialogs
                                 _loggerService.Error(ex);
                             }
                         }
-                    );
+
+                        await archiveGroup.ParallelForEachAsync(UncookAsync, _maxDoP);
+                    }
+                    else
+                    {
+                        Parallel.ForEach(
+                            archiveGroup,
+                            _parallelOptions,
+                            entry =>
+                            {
+                                try
+                                {
+                                    exportArgs.Get<MlmaskExportArgs>().AsList = false;
+                                    _modTools.UncookSingle(entry.Archive as Archive, entry.Key, materialRepoDir, exportArgs);
+
+                                    Interlocked.Increment(ref progress);
+                                    _progress.Report(progress / (float)fileCount);
+                                }
+                                catch (Exception ex)
+                                {
+                                    _loggerService.Error($"Error uncooking [File: {entry.Name}] [Key: {entry.Key}]");
+                                    _loggerService.Error(ex);
+                                }
+                            }
+                        );
+                    }
+
+                    ar.SetBulkExtract(false);
                 }
 
                 // Temporary measure. As memory optimizations get made with streams
