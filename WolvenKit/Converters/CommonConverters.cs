@@ -33,6 +33,7 @@ namespace WolvenKit.Converters
                     Logtype.Important => new SolidColorBrush(Colors.Orange),
                     Logtype.Success => new SolidColorBrush(Colors.GreenYellow),
                     Logtype.Warning => new SolidColorBrush(Colors.Purple),
+                    Logtype.Debug => DependencyProperty.UnsetValue,
                     _ => throw new ArgumentOutOfRangeException()
                 }
                 : DependencyProperty.UnsetValue;

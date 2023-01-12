@@ -23,6 +23,16 @@ public class JsonFileEntryConverter : JsonConverter<FileEntry>
         {
             JsonTokenType.String => FNV1A64HashAlgorithm.HashString(reader.GetString()),
             JsonTokenType.Number => reader.GetUInt64(),
+            JsonTokenType.None => throw new NotImplementedException(),
+            JsonTokenType.StartObject => throw new NotImplementedException(),
+            JsonTokenType.EndObject => throw new NotImplementedException(),
+            JsonTokenType.StartArray => throw new NotImplementedException(),
+            JsonTokenType.EndArray => throw new NotImplementedException(),
+            JsonTokenType.PropertyName => throw new NotImplementedException(),
+            JsonTokenType.Comment => throw new NotImplementedException(),
+            JsonTokenType.True => throw new NotImplementedException(),
+            JsonTokenType.False => throw new NotImplementedException(),
+            JsonTokenType.Null => throw new NotImplementedException(),
             _ => throw new NotImplementedException()
         };
 
@@ -35,8 +45,5 @@ public class JsonFileEntryConverter : JsonConverter<FileEntry>
         throw new FileNotFoundException();
     }
 
-    public override void Write(Utf8JsonWriter writer, FileEntry value, JsonSerializerOptions options)
-    {
-        JsonSerializer.Serialize(writer, value.NameOrHash);
-    }
+    public override void Write(Utf8JsonWriter writer, FileEntry value, JsonSerializerOptions options) => JsonSerializer.Serialize(writer, value.NameOrHash);
 }

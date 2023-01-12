@@ -401,7 +401,7 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
-            var location = "";
+            string location;
             if (!DesktopBridgeHelper.IsWindows7OrLower() && DesktopBridgeHelper.PowershellExists())
             {
                 (var localInstallerVersion, location) = GetInstallerPackage();
@@ -929,6 +929,10 @@ namespace WolvenKit.ViewModels.Shell
                         writer.WriteFile(cr2w);
                     }
                     break;
+                case EWolvenKitFile.WScript:
+                    throw new NotImplementedException();
+                default:
+                    break;
             }
             stream.Dispose();
         }
@@ -1379,6 +1383,9 @@ namespace WolvenKit.ViewModels.Shell
                     fileViewModel = new WScriptDocumentViewModel(fullPath);
                     result = fileViewModel.OpenFile(fullPath);
                     break;
+                case EWolvenKitFile.ArchiveXl:
+                case EWolvenKitFile.RedScript:
+                case EWolvenKitFile.CETLua:
                 default:
                     break;
             }
@@ -1386,15 +1393,6 @@ namespace WolvenKit.ViewModels.Shell
             if (result)
             {
                 _loggerService.Success($"Opening File: {fullPath}");
-
-                // TODO: this is not threadsafe
-                //handler.Report(fileViewModel);
-
-                //Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
-                //{
-                //    addfiledel(fileViewModel);
-                //}), DispatcherPriority.ContextIdle);
-
                 return fileViewModel;
             }
 

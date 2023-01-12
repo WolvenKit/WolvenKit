@@ -67,6 +67,8 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
             case nameof(ReactiveObject.ThrownExceptions):
                 e.Cancel = true;
                 return;
+            default:
+                break;
         }
 
         // Generate special editors for certain properties
@@ -82,6 +84,8 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
                 case nameof(MeshExportArgs.MultiMeshRigs):
                 case nameof(OpusExportArgs.SelectedForExport):
                     propertyItem.Editor = new CustomCollectionEditor(ViewModel.InitCollectionEditor, new CallbackArguments(args, propertyItem.DisplayName));
+                    break;
+                default:
                     break;
             }
         }

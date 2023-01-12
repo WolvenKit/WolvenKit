@@ -193,6 +193,8 @@ namespace WolvenKit.Functionality.Controllers
                         }
 
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
@@ -227,6 +229,12 @@ namespace WolvenKit.Functionality.Controllers
 
         public bool PackProjectHot()
         {
+            // check if plugin is installed
+            if (!_pluginService.IsInstalled(EPlugin.redhottools))
+            {
+                _notificationService.Error("The Red Hot Tools plugin is not installed and is needed for this functionality.\nYou can install the plugin from the WolvenKit settings,");
+            }
+
             var hotdirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
 
             // create hot directory
@@ -271,9 +279,9 @@ namespace WolvenKit.Functionality.Controllers
 
             // perform cleanup
             if (!Cleanup(cp77Proj, new LaunchProfile()
-                {
-                    CleanAll = true
-                }))
+            {
+                CleanAll = true
+            }))
             {
                 var errorMessage = "An error occured during clean all. Some files may not be removed.";
                 _progressService.IsIndeterminate = false;
@@ -459,17 +467,11 @@ namespace WolvenKit.Functionality.Controllers
 
                 //top level directories
                 Directory.GetDirectories(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly)
-                .ForEach(dir =>
-                {
-                    result = SafeDirectoryDelete(dir, true) && result;
-                });
+                .ForEach(dir => result = SafeDirectoryDelete(dir, true) && result);
 
                 //top level files
                 Directory.GetFiles(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly)
-                .ForEach(file =>
-                {
-                    result = SafeFileDelete(file) && result;
-                });
+                .ForEach(file => result = SafeFileDelete(file) && result);
                 return result;
             }
 
@@ -810,11 +812,23 @@ namespace WolvenKit.Functionality.Controllers
 
                 switch (response)
                 {
+                    case WMessageBoxResult.OK:
                     case WMessageBoxResult.Yes:
                     {
                         await Task.Run(() => AddToMod(file));
                         break;
                     }
+
+                    case WMessageBoxResult.None:
+                        break;
+                    case WMessageBoxResult.Cancel:
+                        break;
+                    case WMessageBoxResult.No:
+                        break;
+                    case WMessageBoxResult.Custom:
+                        break;
+                    default:
+                        break;
                 }
             }
             else

@@ -275,7 +275,8 @@ public partial class TextureImportViewModel : ImportViewModel
                 await InitGltfCollectionEditor(args, gltfimport);
                 break;
             }
-
+            default:
+                break;
         }
     }
 
@@ -289,12 +290,10 @@ public partial class TextureImportViewModel : ImportViewModel
                 selectedEntries = gltfImportArgs.Rig;
                 fetchExtension = ERedExtension.rig;
                 break;
-
             case nameof(GltfImportArgs.BaseMesh):
                 selectedEntries = gltfImportArgs.BaseMesh;
                 fetchExtension = ERedExtension.mesh;
                 break;
-
             default:
                 break;
         }

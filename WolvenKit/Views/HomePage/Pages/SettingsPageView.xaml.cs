@@ -49,6 +49,8 @@ namespace WolvenKit.Views.HomePage.Pages
                 case nameof(ReactiveObject.ThrownExceptions):
                     e.Cancel = true;
                     break;
+                default:
+                    break;
             }
             // Generate special editors for the properties for which default is not ok
             if (e.OriginalSource is PropertyItem { } propertyItem)
@@ -63,6 +65,8 @@ namespace WolvenKit.Views.HomePage.Pages
                         break;
                     case nameof(ISettingsDto.ThemeAccentString):
                         propertyItem.Editor = new BrushEditor();
+                        break;
+                    default:
                         break;
                 }
             }

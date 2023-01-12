@@ -254,7 +254,6 @@ namespace WolvenKit.ViewModels.Tools
                 _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
 
                 var response = await Interactions.ShowMessageBoxAsync("Wolvenkit-Resources plugin is not installed and is needed for this functionality. Would you like to install it now?", "Wolvenkit-Resources not found");
-
                 switch (response)
                 {
                     case WMessageBoxResult.OK:
@@ -265,9 +264,15 @@ namespace WolvenKit.ViewModels.Tools
 
                         homepage.NavigateTo(EHomePage.Plugins);
                         appViewModel.SetActiveOverlay(homepage);
+                        break;
                     }
 
-                    break;
+                    case WMessageBoxResult.None:
+                    case WMessageBoxResult.Cancel:
+                    case WMessageBoxResult.No:
+                    case WMessageBoxResult.Custom:
+                    default:
+                        break;
                 }
 
                 return;
@@ -327,9 +332,15 @@ namespace WolvenKit.ViewModels.Tools
 
                         homepage.NavigateTo(EHomePage.Plugins);
                         appViewModel.SetActiveOverlay(homepage);
+                        break;
                     }
 
-                    break;
+                    case WMessageBoxResult.None:
+                    case WMessageBoxResult.Cancel:
+                    case WMessageBoxResult.No:
+                    case WMessageBoxResult.Custom:
+                    default:
+                        break;
                 }
 
                 return;
@@ -418,6 +429,8 @@ namespace WolvenKit.ViewModels.Tools
                     case RedDirectoryViewModel dirVm:
                         GetFilesRecursive(dirVm.GetModel(), filesToAdd);
                         break;
+                    default:
+                        break;
                 }
             }
 
@@ -462,8 +475,11 @@ namespace WolvenKit.ViewModels.Tools
                         }
                         break;
                     }
-
                     // Rest cancels
+                    case WMessageBoxResult.None:
+                    case WMessageBoxResult.OK:
+                    case WMessageBoxResult.Cancel:
+                    case WMessageBoxResult.Custom:
                     default:
                         return;
                 }
@@ -524,6 +540,8 @@ namespace WolvenKit.ViewModels.Tools
                     break;
                 case RedDirectoryViewModel dirVm:
                     MoveToFolder(dirVm);
+                    break;
+                default:
                     break;
             }
         }

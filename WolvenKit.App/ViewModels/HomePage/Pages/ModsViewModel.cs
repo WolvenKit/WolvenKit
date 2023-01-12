@@ -92,6 +92,12 @@ namespace WolvenKit.ViewModels.HomePage
                     case WMessageBoxResult.Yes:
                         _homePageViewModel.NavigateTo(EHomePage.Plugins);
                         break;
+                    case WMessageBoxResult.None:
+                    case WMessageBoxResult.Cancel:
+                    case WMessageBoxResult.No:
+                    case WMessageBoxResult.Custom:
+                    default:
+                        break;
                 }
 
                 return false;
@@ -198,6 +204,12 @@ namespace WolvenKit.ViewModels.HomePage
                     case WMessageBoxResult.OK:
                     case WMessageBoxResult.Yes:
                         _homePageViewModel.NavigateTo(EHomePage.Plugins);
+                        break;
+                    case WMessageBoxResult.None:
+                    case WMessageBoxResult.Cancel:
+                    case WMessageBoxResult.No:
+                    case WMessageBoxResult.Custom:
+                    default:
                         break;
                 }
             }

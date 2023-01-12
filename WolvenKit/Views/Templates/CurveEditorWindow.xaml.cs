@@ -246,6 +246,8 @@ namespace WolvenKit.Views.Editors
                     //this.RenderPoints();
                     vm.Reload();
                     break;
+                default:
+                    break;
             }
         }
 
@@ -511,6 +513,10 @@ namespace WolvenKit.Views.Editors
                 case HorizontalAlignment.Right:
                     x -= label.DesiredSize.Width;
                     break;
+                case HorizontalAlignment.Left:
+                case HorizontalAlignment.Stretch:
+                default:
+                    break;
             }
             Canvas.SetLeft(label, x);
 
@@ -522,6 +528,10 @@ namespace WolvenKit.Views.Editors
                     break;
                 case VerticalAlignment.Bottom:
                     y -= label.DesiredSize.Height;
+                    break;
+                case VerticalAlignment.Top:
+                case VerticalAlignment.Stretch:
+                default:
                     break;
             }
             Canvas.SetTop(label, y);

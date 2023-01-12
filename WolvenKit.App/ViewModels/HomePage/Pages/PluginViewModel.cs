@@ -62,6 +62,8 @@ namespace WolvenKit.ViewModels.Dialogs
                         IsNotInstalled = false;
                         Label = "Repair";
                         break;
+                    case EPluginStatus.Installed:
+                        break;
                     default:
                         break;
                 }
@@ -136,6 +138,8 @@ namespace WolvenKit.ViewModels.Dialogs
                     await _pluginService.RemovePluginAsync(Id);
                     // reinstall
                     await _pluginService.InstallPluginAsync(Id);
+                    break;
+                case EPluginStatus.Installed:
                     break;
                 default:
                     break;

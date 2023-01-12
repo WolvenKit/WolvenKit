@@ -164,6 +164,8 @@ namespace WolvenKit.Functionality.Services
                     break;
                 case WatcherChangeTypes.Changed:
                     break;
+                case WatcherChangeTypes.Renamed:
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -198,6 +200,16 @@ namespace WolvenKit.Functionality.Services
                     break;
                 }
 
+                case WatcherChangeTypes.Created:
+                    break;
+                case WatcherChangeTypes.Deleted:
+                    break;
+                case WatcherChangeTypes.Changed:
+                    break;
+                case WatcherChangeTypes.All:
+                    break;
+                default:
+                    break;
             }
 
         }

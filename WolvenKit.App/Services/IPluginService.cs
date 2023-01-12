@@ -32,7 +32,7 @@ namespace WolvenKit.Functionality.Services
         redscript,
         [Id("MlsetupBuilder", "neurolinked/mlsetupbuilder", @"MlsetupBuilder-.*\.zip", "Cyberpunk 2077 modding tool to build json version of .mlsetup files.")]
         mlsetupbuilder,
-        [Id("Wolvenkit Resources", "WolvenKit/Wolvenkit-Resources", @"resources-.*\.zip", "Resource depot for Wolvenkit.")]
+        [Id("Wolvenkit Resources", "WolvenKit/Wolvenkit-Resources", @"resources-.*\.zip", "Resource database used for certain Wolvenkit functions in the Asset Browser.")]
         wolvenkit_resources,
         [Id("RedMod", "", @"redmod.zip", "RedMod tools.")]
         redmod,
@@ -40,6 +40,8 @@ namespace WolvenKit.Functionality.Services
         red4ext,
         [Id("TweakXL", "psiberx/cp2077-tweak-xl", @"TweakXL-.*\.zip", "Cyberpunk 2077 mod that allows you to modify TweakDB.")]
         tweakXL,
+        [Id("RedHotTools", "psiberx/cp2077-red-hot-tools", @"RedHotTools-.*\.zip", "Hot reload archives, scripts and tweaks.")]
+        redhottools,
     }
 
     [AttributeUsage(AttributeTargets.Field)]

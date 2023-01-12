@@ -139,6 +139,12 @@ namespace WolvenKit.ViewModels.Shared
                 case WMessageBoxResult.Yes:
                     delete = true;
                     break;
+                case WMessageBoxResult.None:
+                case WMessageBoxResult.Cancel:
+                case WMessageBoxResult.No:
+                case WMessageBoxResult.Custom:
+                default:
+                    break;
             }
             if (!delete)
             {
