@@ -17,6 +17,8 @@ namespace WolvenKit.RED4.Archive
         #region Fields
 
         private MemoryMappedFile _mmf;
+        private bool _bulkExtract;
+        private int _handleCount;
 
         private bool _disposed;
 
@@ -65,6 +67,22 @@ namespace WolvenKit.RED4.Archive
         public void ReleaseFileHandle()
         {
             if (_mmf != null)
+            {
+                _mmf.Dispose();
+                _mmf = null;
+            }
+        }
+
+        public void SetBulkExtract(bool enable)
+        {
+            _bulkExtract = enable;
+
+            if (enable && _mmf == null)
+            {
+                _mmf = MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
+            }
+
+            if (!enable && _mmf != null)
             {
                 _mmf.Dispose();
                 _mmf = null;
@@ -173,6 +191,11 @@ namespace WolvenKit.RED4.Archive
         {
             var zSize = offsetEntry.ZSize;
 
+            if (!_bulkExtract)
+            {
+                _handleCount++;
+            }
+
             using var vs = GetViewStream(offsetEntry.Offset, zSize);
             if (!decompress)
             {
@@ -184,6 +207,15 @@ namespace WolvenKit.RED4.Archive
                 vs.DecompressAndCopySegment(outStream, zSize, size);
             }
             vs.Dispose();
+
+            if (!_bulkExtract)
+            {
+                _handleCount--;
+                if (_handleCount == 0)
+                {
+                    ReleaseFileHandle();
+                }
+            }
         }
 
         /// <summary>
@@ -196,6 +228,11 @@ namespace WolvenKit.RED4.Archive
         {
             var zSize = offsetEntry.ZSize;
 
+            if (!_bulkExtract)
+            {
+                _handleCount++;
+            }
+
             await using var vs = GetViewStream(offsetEntry.Offset, zSize);
             if (!decompress)
             {
@@ -205,6 +242,16 @@ namespace WolvenKit.RED4.Archive
             {
                 var size = offsetEntry.Size;
                 await vs.DecompressAndCopySegmentAsync(outStream, zSize, size);
+            }
+            await vs.DisposeAsync();
+
+            if (!_bulkExtract)
+            {
+                _handleCount--;
+                if (_handleCount == 0)
+                {
+                    ReleaseFileHandle();
+                }
             }
         }
 

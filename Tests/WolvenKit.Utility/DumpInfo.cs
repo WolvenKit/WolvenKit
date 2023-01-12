@@ -325,6 +325,8 @@ namespace WolvenKit.Utility
                 var dirPath = Path.Combine(resultDir, archive.Name);
                 Directory.CreateDirectory(dirPath);
 
+                archive.SetBulkExtract(true);
+
                 Parallel.ForEach(archive.Files, pair =>
                 {
                     if (pair.Value is not FileEntry fileEntry)
@@ -365,6 +367,8 @@ namespace WolvenKit.Utility
                         // ignore
                     }
                 });
+
+                archive.SetBulkExtract(false);
             }
         }
 

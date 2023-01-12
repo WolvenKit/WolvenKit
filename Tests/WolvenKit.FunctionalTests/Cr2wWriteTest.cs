@@ -522,6 +522,8 @@ namespace WolvenKit.FunctionalTests
                     continue;
                 }
 
+                ar.SetBulkExtract(true);
+
 #if IS_PARALLEL
                 Parallel.ForEach(fileList, tmpFile =>
 #else
@@ -655,8 +657,10 @@ namespace WolvenKit.FunctionalTests
 #if IS_PARALLEL
                 });
 #else
-            }
+                }
 #endif
+
+                ar.SetBulkExtract(false);
             }
             return results;
         }

@@ -707,7 +707,6 @@ namespace WolvenKit.Functionality.Controllers
                             {
                                 if (File.Exists(f.Value))
                                 {
-                                    _archiveManager.ReleaseFileModArchive(f.Value);
                                     File.Delete(f.Value);
                                     Debug.WriteLine("File delete: " + f.Value);
                                 }
