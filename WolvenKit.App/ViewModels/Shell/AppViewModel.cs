@@ -124,7 +124,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin).ObservesProperty(() => IsDialogShown);
             ShowScriptManagerCommand = new DelegateCommand(ExecuteShowScriptManager, CanShowScriptManager).ObservesProperty(() => IsDialogShown);
 
-            OpenFileCommand = ReactiveCommand.CreateFromTask<FileModel>(async (m) => await OpenFileAsync(m));
+            OpenFileCommand = ReactiveCommand.CreateFromTask<FileModel>(OpenFileAsync);
             OpenRedFileCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
             // Build
@@ -195,9 +195,9 @@ namespace WolvenKit.ViewModels.Shell
             CloseDialogCommand = new DelegateCommand(ExecuteCloseDialog, CanCloseDialog).ObservesProperty(() => IsDialogShown);
 
 
-            OpenFileCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            OpenRedFileCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            OpenProjectCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            OpenFileCommand.ThrownExceptions.Subscribe(LogExtended);
+            OpenRedFileCommand.ThrownExceptions.Subscribe(LogExtended);
+            OpenProjectCommand.ThrownExceptions.Subscribe(LogExtended);
 
             #endregion commands
 
@@ -407,6 +407,14 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
+            if (checkForCheckForUpdates)
+            {
+                if (_settingsManager.SkipUpdateCheck)
+                {
+                    return;
+                }
+            }
+
             string location;
             if (!DesktopBridgeHelper.IsWindows7OrLower() && DesktopBridgeHelper.PowershellExists())
             {
@@ -433,14 +441,6 @@ namespace WolvenKit.ViewModels.Shell
                         }
                     }
                 }
-
-            if (checkForCheckForUpdates)
-            {
-                if (_settingsManager.SkipUpdateCheck)
-                {
-                    return;
-                }
-            }
 
             var owner = "WolvenKit";
             var name = "WolvenKit";
@@ -1525,7 +1525,7 @@ namespace WolvenKit.ViewModels.Shell
                     // double file formats
                     case ".csv":
                     case ".json":
-                        return IsInRawFolder(fullpath) ? Task.Run(() => ShellExecute()) : Task.Run(() => OpenRedengineFile());
+                        return IsInRawFolder(fullpath) ? Task.Run(ShellExecute) : Task.Run(OpenRedengineFile);
 
                     // VIDEO
                     case ".bk2":
@@ -1534,7 +1534,7 @@ namespace WolvenKit.ViewModels.Shell
                     // AUDIO
 
                     case ".wem":
-                        return Task.Run(() => OpenAudioFile());
+                        return Task.Run(OpenAudioFile);
 
                     case ".subs":
                         return Task.Run(() => PolymorphExecute(fullpath, ".txt"));
@@ -1552,7 +1552,7 @@ namespace WolvenKit.ViewModels.Shell
                     // TODO SPLIT WEMS TO PLAYLIST FROM BNK
                     case "":
                     default:
-                        return Task.Run(() => OpenRedengineFile());
+                        return Task.Run(OpenRedengineFile);
                 }
             }
 
