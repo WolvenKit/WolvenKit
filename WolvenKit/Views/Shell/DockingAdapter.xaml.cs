@@ -349,9 +349,9 @@ namespace WolvenKit.Views.Shell
                 {
                 }
 
-                if (content.Content != null)
+                if (ActiveDocument != null)
                 {
-                    DiscordHelper.SetDiscordRPCStatus(content.Content as String, ActiveDocument == null ? "Browsing..." : String.Format("Working on {0}", ActiveDocument.Header));
+                    DiscordHelper.UpdateDiscordRPCState(String.Format("Working on {0}", ActiveDocument.Header));
                 }
 
             }
@@ -460,7 +460,7 @@ namespace WolvenKit.Views.Shell
                 return;
             }
 
-            DiscordHelper.SetDiscordRPCStatus(_viewModel.ActiveProject.Name as String, ActiveDocument == null ? "Browsing..." : String.Format("Working on {0}", ActiveDocument.Header));
+            DiscordHelper.UpdateDiscordRPCDetails(String.Format("Project: {0}", _viewModel.ActiveProject.Name));
 
             try
             {

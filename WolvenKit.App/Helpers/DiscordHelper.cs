@@ -1,4 +1,6 @@
 using System;
+using System.Runtime.CompilerServices;
+using DiscordRPC;
 using Splat;
 using WolvenKit.Core.Interfaces;
 
@@ -19,7 +21,55 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                 Client.OnReady += (sender, e) => Console.WriteLine("Received Ready from user {0}", e.User.Username);
                 Client.OnPresenceUpdate += (sender, e) => Console.WriteLine("Received Update! {0}", e.Presence);
                 Client.Initialize();
+
+
+                SetDiscordRPCStatus("No project selected yet", "");
+                
                 DiscordRPCInitizialized = true;
+            }
+        }
+
+        public static void UpdateDiscordRPCDetails(string details)
+        {
+            if (DiscordRPCEnabled == true)
+            {
+                try
+                {
+                    if (Client != null)
+                    {
+                        DiscordRPC.RichPresence rpc = Client.CurrentPresence.Clone();
+                        rpc.Details = details;
+                        rpc.Timestamps = new DiscordRPC.Timestamps() { Start = DateTime.UtcNow };
+                        Client.SetPresence(rpc);
+                        Client.Invoke();
+                    }
+                } 
+                catch(Exception ex)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(ex);
+                }
+            }
+        }
+
+        public static void UpdateDiscordRPCState(string state)
+        {
+            if (DiscordRPCEnabled == true)
+            {
+                try
+                {
+                    if (Client != null)
+                    {
+                        DiscordRPC.RichPresence rpc = Client.CurrentPresence.Clone();
+                        rpc.State = state;
+                        rpc.Timestamps = new DiscordRPC.Timestamps() { Start = DateTime.UtcNow };
+                        Client.SetPresence(rpc);
+                        Client.Invoke();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(ex);
+                }
             }
         }
 
