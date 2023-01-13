@@ -431,7 +431,7 @@ namespace WolvenKit.Modkit.RED4
             var expMeshes = Meshes.Select(_ => RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
 
             var meshBuffer = new MemoryStream();
-            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
+            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer, args);
 
             meshesInfo.quantScale = QuantScale;
             meshesInfo.quantTrans = QuantTrans;
@@ -755,7 +755,7 @@ namespace WolvenKit.Modkit.RED4
             return Re4Mesh;
         }
 
-        private static MeshesInfo BufferWriter(List<Re4MeshContainer> expMeshes, ref MemoryStream ms)
+        private static MeshesInfo BufferWriter(List<Re4MeshContainer> expMeshes, ref MemoryStream ms, GltfImportArgs args)
         {
             var meshesInfo = new MeshesInfo(expMeshes.Count);
 
@@ -903,7 +903,7 @@ namespace WolvenKit.Modkit.RED4
                     if (idx < expMeshes[i].name.Length - 1)
                     {
                         var LOD = Convert.ToUInt32(expMeshes[i].name.Substring(idx + 4, 1));
-                        LOD =  LOD == 0 ? 8 : LOD;
+                        LOD = args.ReplaceLod && LOD == 0 ? 8 : LOD;
                         meshesInfo.LODLvl[i] = LOD;
                     }
                 }
