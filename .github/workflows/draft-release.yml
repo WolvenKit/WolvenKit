@@ -77,7 +77,7 @@ jobs:
         run: dotnet publish ${{env.PROJ}} -o .\publish -c Release
 
       - name: create setup
-        run: ISCC /O"${{env.OUT_DIR}}" /dMyAppBaseDir="..\download\${{env.ARTIFACT_APP_WIN}}"\" .\Installers\installer.iss
+        run: ISCC /O"${{env.OUT_DIR}}" /dMyAppBaseDir="..\publish\" .\Installers\installer.iss
 
       ##########################################
       # CONSOLE
