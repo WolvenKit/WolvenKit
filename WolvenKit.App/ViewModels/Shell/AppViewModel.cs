@@ -436,88 +436,90 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
 
-            var owner = "WolvenKit";
-            var name = "WolvenKit";
+                var owner = "WolvenKit";
+                var name = "WolvenKit";
 
-            switch (_settingsManager.UpdateChannel)
-            {
-                case EUpdateChannel.Nightly:
-                    name = "WolvenKit-nightly-releases";
-                    break;
-                case EUpdateChannel.Stable:
-                default:
-                    break;
-            }
-
-            // get remote version without GitHub API calls
-            SemVersion remoteVersion;
-            var githuburl = $@"https://github.com/{owner}/{name}/releases/latest";
-            try
-            {
-                HttpClient _client = new();
-                var response = await _client.GetAsync(new Uri(githuburl));
-                response.EnsureSuccessStatusCode();
-
-                var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
-                remoteVersion = SemVersion.Parse(version, SemVersionStyles.OptionalMinorPatch);
-            }
-            catch (HttpRequestException ex)
-            {
-                _loggerService.Error($"Failed to respond to url: {githuburl}");
-                _loggerService.Error(ex);
-                return;
-            }
-
-            var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Functionality.Constants.AssemblyName);
-
-            if (remoteVersion.CompareSortOrderTo(thisVersion) > 0)
-            {
-                if (DesktopBridgeHelper.IsWindows7OrLower() || !DesktopBridgeHelper.PowershellExists())
+                switch (_settingsManager.UpdateChannel)
                 {
-                    // old style update info
-                    var url = $"https://github.com/{owner}/{name}/releases/latest";
-                    var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
-                    if (res == WMessageBoxResult.OK)
-                    {
-                        Process.Start("explorer", url);
-                    }
+                    case EUpdateChannel.Nightly:
+                        name = "WolvenKit-nightly-releases";
+                        break;
+                    case EUpdateChannel.Stable:
+                    default:
+                        break;
                 }
-                else
-                {
-                    var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nUpdate now?", name, WMessageBoxButtons.OkCancel);
-                    if (res == WMessageBoxResult.OK)
-                    {
-                        // run installer app
-                        (_, location) = GetInstallerPackage();
-                        if (!string.IsNullOrEmpty(location))
-                        {
-                            var executable = Path.Combine(location, "Wolvenkit.Installer", "Wolvenkit.Installer.exe");
-                            if (File.Exists(executable))
-                            {
-                                var id = name;
-                                if (thisVersion.ToString().Contains("nightly"))
-                                {
-                                    id = "WolvenKit Nightly";
-                                }
-                                var thisLocation = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
 
-                                var process = new Process();
-                                process.StartInfo.FileName = executable;
-                                process.StartInfo.Arguments = $"-t \"{thisLocation}\" -i \"{id}\" -v {thisVersion}";
-                                process.Start();
+                // get remote version without GitHub API calls
+                SemVersion remoteVersion;
+                var githuburl = $@"https://github.com/{owner}/{name}/releases/latest";
+                try
+                {
+                    HttpClient _client = new();
+                    var response = await _client.GetAsync(new Uri(githuburl));
+                    response.EnsureSuccessStatusCode();
+
+                    var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
+                    remoteVersion = SemVersion.Parse(version, SemVersionStyles.OptionalMinorPatch);
+                }
+                catch (HttpRequestException ex)
+                {
+                    _loggerService.Error($"Failed to respond to url: {githuburl}");
+                    _loggerService.Error(ex);
+                    return;
+                }
+
+                var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Functionality.Constants.AssemblyName);
+
+                if (remoteVersion.CompareSortOrderTo(thisVersion) > 0)
+                {
+                    if (DesktopBridgeHelper.IsWindows7OrLower() || !DesktopBridgeHelper.PowershellExists())
+                    {
+                        // old style update info
+                        var url = $"https://github.com/{owner}/{name}/releases/latest";
+                        var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
+                        if (res == WMessageBoxResult.OK)
+                        {
+                            Process.Start("explorer", url);
+                        }
+                    }
+                    else
+                    {
+                        var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nUpdate now?", name, WMessageBoxButtons.OkCancel);
+                        if (res == WMessageBoxResult.OK)
+                        {
+                            // run installer app
+                            (_, location) = GetInstallerPackage();
+                            if (!string.IsNullOrEmpty(location))
+                            {
+                                var executable = Path.Combine(location, "Wolvenkit.Installer", "Wolvenkit.Installer.exe");
+                                if (File.Exists(executable))
+                                {
+                                    var id = name;
+                                    if (thisVersion.ToString().Contains("nightly"))
+                                    {
+                                        id = "WolvenKit Nightly";
+                                    }
+                                    var thisLocation = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
+
+                                    var process = new Process();
+                                    process.StartInfo.FileName = executable;
+                                    process.StartInfo.Arguments = $"-t \"{thisLocation}\" -i \"{id}\" -v {thisVersion}";
+                                    process.Start();
+                                }
                             }
                         }
                     }
                 }
-            }
-            else
-            {
-                if (!checkForCheckForUpdates)
+                else
                 {
-                    var res = await Interactions.ShowMessageBoxAsync($"No update available. You are on the latest version.", name, WMessageBoxButtons.Ok);
+                    if (!checkForCheckForUpdates)
+                    {
+                        var res = await Interactions.ShowMessageBoxAsync($"No update available. You are on the latest version.", name, WMessageBoxButtons.Ok);
+                    }
                 }
             }
         }
+        
 
         public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
         private void DeleteProject(string parameter)
