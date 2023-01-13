@@ -158,6 +158,14 @@ namespace WolvenKit.Common.Model.Arguments
         public bool SelectBase { get; set; } = false;
 
         /// <summary>
+        /// Assigns found LOD0 submeshes to LOD8 to allow import of certain meshes that handle LOD0 as LOD8.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Contains LOD8 named LOD0")]
+        [Description("If checked the included LOD0 submesh will be handled as LOD8")]
+        public bool ReplaceLod { get; set; } = false;
+
+        /// <summary>
         /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
         /// </summary>
         [Category("WithRig Settings")]

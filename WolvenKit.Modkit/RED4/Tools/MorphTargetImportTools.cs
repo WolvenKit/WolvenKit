@@ -48,7 +48,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
-            VerifyGLTF(model);
+            VerifyGLTF(model, args);
 
             var Meshes = new List<RawMeshContainer>();
             foreach (var node in model.LogicalNodes)
@@ -92,7 +92,7 @@ namespace WolvenKit.Modkit.RED4
             var expMeshes = Meshes.Select(_=> RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
 
             var meshBuffer = new MemoryStream();
-            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
+            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer, args);
 
             meshesInfo.quantScale = QuantScale;
             meshesInfo.quantTrans = QuantTrans;
