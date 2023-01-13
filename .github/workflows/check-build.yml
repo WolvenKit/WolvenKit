@@ -4,7 +4,7 @@ on:
 
 jobs:
   desktop-win:
-    runs-on: windows-2022
+    runs-on: windows-latest
 
     steps:
     - name: Checkout
@@ -31,7 +31,7 @@ jobs:
         path: .\publish
 
   console-win:
-    runs-on: windows-2022
+    runs-on: windows-latest
 
     steps:
     - name: Checkout

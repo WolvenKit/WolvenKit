@@ -104,7 +104,7 @@ jobs:
      
       - run: Compress-Archive -Path .\publish\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}-${{env.VERSION_APP}}.zip
       - run: Compress-Archive -Path .\publish_cli\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.Console-${{steps.get_version_cli.outputs.assembly-version}}.zip
-      - run: Compress-Archive -Path .\download\${{env.ARTIFACT_CLI_LIN}}"\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.ConsoleLinux-${{steps.get_version_cli.outputs.assembly-version}}.zip
+      - run: Compress-Archive -Path ".\download\${{env.ARTIFACT_CLI_LIN}}\*" -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.ConsoleLinux-${{steps.get_version_cli.outputs.assembly-version}}.zip
 
       ##########################################
       # RELEASE
