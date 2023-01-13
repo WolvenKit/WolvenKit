@@ -9,6 +9,7 @@ env:
   PROJ: ./WolvenKit/WolvenKit.csproj
   PROJC: ./WolvenKit.CLI/WolvenKit.CLI.csproj
   ARTIFACT_APP_WIN: WolvenKit Desktop
+  ARTIFACT_APP_INSTALLER: WolvenKit Installer
   ARTIFACT_CLI_WIN: WolvenKit CLI
   ARTIFACT_CLI_LIN: WolvenKit CLI Linux
 
@@ -26,6 +27,14 @@ jobs:
 
       - name: Publish with Dotnet
         run: dotnet publish ${{env.PROJ}} -o .\publish -c Release
+
+      - name: create installer
+        run: ISCC /O".\outinstaller" /dMyAppBaseDir="..\publish\" .\Installers\installer.iss
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{env.ARTIFACT_APP_INSTALLER}}
+          path: .\outinstaller
 
       - uses: actions/upload-artifact@v2
         with:
@@ -118,9 +127,12 @@ jobs:
       # create zip files
       - run: sudo apt-get install zip -y
       - run: mkdir -p ${{ env.OUT_DIR }}
-      - run: cd "${{env.ARTIFACT_APP_WIN}}"; zip -r ../${{ env.OUT_DIR }}/${{env.NAME}}-${{env.VERSION}}.zip *
+      - run: cd "${{env.ARTIFACT_APP_WIN}}";       zip -r ../${{ env.OUT_DIR }}/${{env.NAME}}-${{env.VERSION}}.zip *
+      - run: cd "${{env.ARTIFACT_APP_INSTALLER}}"; zip -r ../${{ env.OUT_DIR }}/${{env.NAME}}.Installer.zip *
+
       - run: cd "${{env.ARTIFACT_CLI_WIN}}"; zip -r ../${{ env.OUT_DIR }}/${{env.NAME}}.Console-${{steps.get_version_cli.outputs.assembly-version}}.zip *
       - run: cd "${{env.ARTIFACT_CLI_LIN}}"; zip -r ../${{ env.OUT_DIR }}/${{env.NAME}}.ConsoleLinux-${{steps.get_version_cli.outputs.assembly-version}}.zip *
+
 
       ##########################################
       # RELEASE
@@ -134,6 +146,7 @@ jobs:
           files: |
             ${{ env.OUT_DIR }}/*.zip
             ${{ env.OUT_DIR }}/*.msixbundle
+            ${{ env.OUT_DIR }}/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -149,6 +162,7 @@ jobs:
           files: |
             ${{ env.OUT_DIR }}/*.zip
             ${{ env.OUT_DIR }}/*.msixbundle
+            ${{ env.OUT_DIR }}/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

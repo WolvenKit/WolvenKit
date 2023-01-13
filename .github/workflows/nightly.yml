@@ -128,10 +128,13 @@ jobs:
       ##########################################
       # INSTALLER
 
-      - name: download installer
+      - name: download installer app
         run: gh release download --pattern '*.msixbundle' --dir ${{env.FINALOUT}} --repo WolvenKit/WolvenKit.Installer
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: create installer
+        run: ISCC /O"${{env.FINALOUT}}" .\Installers\installer.iss
 
       ##########################################
       # RELEASE
@@ -144,6 +147,7 @@ jobs:
           files: |
             ${{ env.FINALOUT }}/*.zip
             ${{ env.FINALOUT }}/*.msixbundle
+            ${{ env.FINALOUT }}/*.exe
           repository: WolvenKit/WolvenKit-nightly-releases
           token: ${{ secrets.RELEASE_TOKEN }}
           body: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"

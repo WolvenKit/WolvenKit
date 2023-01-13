@@ -9,7 +9,7 @@
 
 [Setup]
 #ifndef MyAppBaseDir
-# define MyAppBaseDir "..\publish\full\"
+# define MyAppBaseDir "..\publish\app\"
 #endif
 #define MyAppPath MyAppBaseDir + MyAppExeName
 #define MyAppVersion GetStringFileInfo(MyAppPath, "ProductVersion")
@@ -20,15 +20,20 @@ AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppVerName={#MyAppName} {#MyAppVersion}
 OutputDir=MyOutput
-OutputBaseFilename={#MyAppName}-installer-{#MyAppVersion}
+OutputBaseFilename={#MyAppName}-installer
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
+
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
+
+
+
+
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -61,12 +66,12 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall
 
-[Code]
-procedure CurStepChanged(CurStep: TSetupStep);
-begin
-  if CurStep = ssPostInstall then
-  begin
-    Log('Post install');
-    SaveStringToFile(ExpandConstant('{app}\.managed'), '{"IsPortable": false}', False);
-  end;
-end;
+;[Code]
+;procedure CurStepChanged(CurStep: TSetupStep);
+;begin
+;  if CurStep = ssPostInstall then
+;  begin
+;    Log('Post install');
+;    SaveStringToFile(ExpandConstant('{app}\.managed'), '{"IsPortable": false}', False);
+;  end;
+;end;
