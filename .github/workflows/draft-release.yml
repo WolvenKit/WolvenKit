@@ -36,7 +36,7 @@ jobs:
     needs: [console-linux]
     env:
       VERSION_APP: ${{github.ref_name}} # this is the tag on tag push or the branch name on dispatch
-      OUT_DIR: ./publish
+      OUT_DIR: ./release
       NAME: WolvenKit
     steps:
       - name: Checkout
@@ -72,36 +72,38 @@ jobs:
       ##########################################
       # APP
 
-      # Publish app
+      # Publish app to .\publish
       - name: publish app
         run: dotnet publish ${{env.PROJ}} -o .\publish -c Release
-
-      - name: create setup
-        run: ISCC /O"${{env.OUT_DIR}}" /dMyAppBaseDir="..\publish\" .\Installers\installer.iss
 
       ##########################################
       # CONSOLE
 
-      # Publish console
+      # Publish console to .\publish_cli
       - name: publish console
         run: dotnet publish ${{env.PROJC}} -o .\publish_cli -r win-x64 -c Release --no-self-contained
 
       ##########################################
-      # Download artifacts
+      # Download artifacts to .\download
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
           path: download
 
-      # Download installer
+      ##########################################
+      # create release files
+
+      # Download installer to OUT_DIR
       - name: download installer
         run: gh release download --pattern '*.msixbundle' --dir ${{env.OUT_DIR}} --repo WolvenKit/WolvenKit.Installer
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      ##########################################
-      # create zip files
+      # Create Installer in OUT_DIR
+      - name: create setup
+        run: ISCC /O"${{env.OUT_DIR}}" /dMyAppBaseDir="..\publish\" .\Installers\installer.iss
      
+      # compress portables to OUT_DIR
       - run: Compress-Archive -Path .\publish\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}-${{env.VERSION_APP}}.zip
       - run: Compress-Archive -Path .\publish_cli\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.Console-${{steps.get_version_cli.outputs.assembly-version}}.zip
       - run: Compress-Archive -Path ".\download\${{env.ARTIFACT_CLI_LIN}}\*" -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.ConsoleLinux-${{steps.get_version_cli.outputs.assembly-version}}.zip
