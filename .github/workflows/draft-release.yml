@@ -33,7 +33,7 @@ jobs:
 
   release:
     runs-on: windows-latest
-    needs: [console-linux, console-win, desktop-win]
+    needs: [console-linux]
     env:
       VERSION: ${{github.ref_name}}
       OUT_DIR: ./publish
