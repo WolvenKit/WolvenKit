@@ -392,12 +392,6 @@ namespace WolvenKit.ViewModels.Shell
             return (version, path);
         }
 
-        void ErrorOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
-        {
-            //* Do your stuff with the output (write to console/log/StringBuilder)
-            Console.WriteLine(outLine.Data);
-        }
-
         public ReactiveCommand<bool, Unit> CheckForUpdatesCommand { get; }
         private async Task CheckForUpdate(bool checkForCheckForUpdates)
         {
