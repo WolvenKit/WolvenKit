@@ -129,6 +129,11 @@ namespace WolvenKit.Functionality.Services
                 Directory.CreateDirectory(dir);
             }
 
+            if (!File.Exists(dir + "/Logger.wscript"))
+            {
+                File.Copy(@"Resources\Scripts\Logger.wscript", dir + "/Logger.wscript");
+            }
+
             return dir;
         }
 
