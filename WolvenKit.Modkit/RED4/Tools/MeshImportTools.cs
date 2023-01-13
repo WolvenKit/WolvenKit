@@ -356,7 +356,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            VerifyGLTF(model);
+            VerifyGLTF(model, args);
 
             var Meshes = new List<RawMeshContainer>();
             foreach (var node in model.LogicalNodes)
@@ -426,7 +426,7 @@ namespace WolvenKit.Modkit.RED4
 
             MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
 
-            UpdateSkinningParamCloth(ref Meshes, ref cr2w);
+            UpdateSkinningParamCloth(ref Meshes, ref cr2w, args);
 
             var expMeshes = Meshes.Select(_ => RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
 
@@ -902,7 +902,9 @@ namespace WolvenKit.Modkit.RED4
                     var idx = expMeshes[i].name.IndexOf("LOD_");
                     if (idx < expMeshes[i].name.Length - 1)
                     {
-                        meshesInfo.LODLvl[i] = Convert.ToUInt32(expMeshes[i].name.Substring(idx + 4, 1));
+                        var LOD = Convert.ToUInt32(expMeshes[i].name.Substring(idx + 4, 1));
+                        LOD =  LOD == 0 ? 8 : LOD;
+                        meshesInfo.LODLvl[i] = LOD;
                     }
                 }
                 else
@@ -1251,7 +1253,7 @@ namespace WolvenKit.Modkit.RED4
             return ms;
         }
 
-        private static void VerifyGLTF(ModelRoot model)
+        private static void VerifyGLTF(ModelRoot model, GltfImportArgs args)
         {
             if (model.LogicalMeshes.Count < 1)
             {
@@ -1294,6 +1296,8 @@ namespace WolvenKit.Modkit.RED4
                         if (idx < name.Length - 1)
                         {
                             LOD = Convert.ToUInt32(name.Substring(idx + 4, 1));
+                            LOD = args.ReplaceLod && LOD == 0 ? 8 : LOD;
+                            
                             LODs.Add(LOD);
                         }
                     }
@@ -1316,7 +1320,7 @@ namespace WolvenKit.Modkit.RED4
                 throw new Exception("None of the Geometry/submeshes are of 1 Level of Detail or (LOD 1) in provided GLTF");
             }
         }
-        private static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, ref CR2WFile cr2w)
+        private static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, ref CR2WFile cr2w, GltfImportArgs args)
         {
             var cmesh = (CMesh)cr2w.RootChunk;
 
@@ -1328,7 +1332,10 @@ namespace WolvenKit.Modkit.RED4
                     var idx = meshes[i].name.IndexOf("LOD_");
                     if (idx < meshes[i].name.Length - 1)
                     {
-                        LODLvl[i] = Convert.ToUInt32(meshes[i].name.Substring(idx + 4, 1));
+                        var LOD = Convert.ToUInt32(meshes[i].name.Substring(idx + 4, 1));
+                        LOD = args.ReplaceLod && LOD == 0 ? 8 : LOD;
+
+                        LODLvl[i] = LOD;
                     }
                 }
                 else

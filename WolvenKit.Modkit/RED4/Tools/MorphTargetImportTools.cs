@@ -48,7 +48,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
-            VerifyGLTF(model);
+            VerifyGLTF(model, args);
 
             var Meshes = new List<RawMeshContainer>();
             foreach (var node in model.LogicalNodes)

@@ -158,6 +158,14 @@ namespace WolvenKit.Common.Model.Arguments
         public bool SelectBase { get; set; } = false;
 
         /// <summary>
+        /// Uses a selected mesh from archives as base mesh for import instead of mod project archive directory mesh
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Contains LOD8 named LOD0")]
+        [Description("If checked the included LOD0 will be assigned to LOD8")]
+        public bool ReplaceLod { get; set; } = false;
+
+        /// <summary>
         /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
         /// </summary>
         [Category("WithRig Settings")]
