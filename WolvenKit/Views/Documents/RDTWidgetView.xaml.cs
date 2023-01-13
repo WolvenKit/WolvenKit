@@ -81,6 +81,7 @@ namespace WolvenKit.Views.Documents
 
                 foreach (var item in ViewModel.library.LibraryItems)
                 {
+
                     if (item.PackageData == null || item.PackageData.Data is not RedPackage pkg)
                     {
                         if (item.Package.Data is not RedPackage pkg2)
@@ -89,6 +90,11 @@ namespace WolvenKit.Views.Documents
                         }
 
                         pkg = pkg2;
+                    }
+
+                    if (pkg.Chunks.Count == 0)
+                    { 
+                        continue; 
                     }
 
                     if (pkg.Chunks[0] is not inkWidgetLibraryItemInstance inst)
