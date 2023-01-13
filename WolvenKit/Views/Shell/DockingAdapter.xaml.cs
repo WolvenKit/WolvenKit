@@ -469,12 +469,7 @@ namespace WolvenKit.Views.Shell
                     propertiesViewModel.AB_FileInfoVisible = true;
                     propertiesViewModel.PE_FileInfoVisible = false;
                     propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
-                }
-
-                if (content.Content is string s)
-                {
-                    DiscordHelper.SetDiscordRPCStatus(s, _logger);
-                }
+                } 
 
                 //if (((IDockElement)content.Content).State == DockState.Document)
                 try
@@ -489,6 +484,10 @@ namespace WolvenKit.Views.Shell
                     // Don't activate it
                 }
 
+                var details = content.Content is string s ? s : "";
+                var state = ActiveDocument == null ? "Browsing..." : $"Working on {ActiveDocument.Header}";
+
+                DiscordHelper.SetDiscordRPCStatus(details, state, _logger);
             }
 
             _viewModel?.UpdateTitle();
@@ -598,7 +597,16 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        public void OnActiveProjectChanged() => LoadLayoutFromProject();
+        public void OnActiveProjectChanged()
+        {
+            if (_viewModel?.ActiveProject is { } activeProject)
+            {
+                DiscordHelper.SetDiscordRPCStatus(activeProject.Name,
+                    ActiveDocument == null ? "Browsing..." : $"Working on {ActiveDocument.Header}", _logger);
+            }
+
+            LoadLayoutFromProject();
+        }
 
         /// <summary>
         /// This happens on the very first tool window assignments

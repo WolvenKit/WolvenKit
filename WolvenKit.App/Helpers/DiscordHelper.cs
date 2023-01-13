@@ -22,7 +22,7 @@ public static class DiscordHelper
         }
     }
 
-    public static void SetDiscordRPCStatus(string details, ILoggerService logger)
+    public static void SetDiscordRPCStatus(string details, string state, ILoggerService logger)
     {
         if (DiscordRPCEnabled == true)
         {
@@ -33,6 +33,7 @@ public static class DiscordHelper
                     Client.SetPresence(new DiscordRPC.RichPresence()
                     {
                         Details = details,
+                        State = state,
                         Timestamps = new DiscordRPC.Timestamps() { Start = DateTime.UtcNow },
                         Assets = new DiscordRPC.Assets() { LargeImageKey = "bigwk", LargeImageText = "WolvenKit", }
                     });
