@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using Prism.Commands;
 using ReactiveUI;
+using Splat;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Layout.inkWidgets;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -24,6 +26,7 @@ namespace WolvenKit.Views.Documents
     /// </summary>
     public partial class RDTWidgetView : ReactiveUserControl<RDTWidgetViewModel>
     {
+
         public List<inkControl> Widgets = new();
 
         public List<inkControlAnimation> Animations = new();
@@ -93,7 +96,8 @@ namespace WolvenKit.Views.Documents
                     }
 
                     if (pkg.Chunks.Count == 0)
-                    { 
+                    {
+                        Locator.Current.GetService<ILoggerService>().Warning(String.Format("LibraryItem {0} did not contain any packageData and was skipped.", item.Name));
                         continue; 
                     }
 
