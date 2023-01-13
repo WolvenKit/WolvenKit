@@ -7,7 +7,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
     public static class DiscordHelper
     {
         public static DiscordRPC.DiscordRpcClient Client;
-        public static string DiscordAppID = "897813293480169532";
+        public static string DiscordAppID = "1063530665448067132";
         public static bool DiscordRPCEnabled = true;
         public static bool DiscordRPCInitizialized = false;
 
@@ -23,7 +23,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             }
         }
 
-        public static void SetDiscordRPCStatus(string details)
+        public static void SetDiscordRPCStatus(string details, string state)
         {
             if (DiscordRPCEnabled == true)
             {
@@ -34,8 +34,9 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                         Client.SetPresence(new DiscordRPC.RichPresence()
                         {
                             Details = details,
+                            State = state,
                             Timestamps = new DiscordRPC.Timestamps() { Start = DateTime.UtcNow },
-                            Assets = new DiscordRPC.Assets() { LargeImageKey = "bigwk", LargeImageText = "WolvenKit", }
+                            Assets = new DiscordRPC.Assets() { LargeImageKey = "wolvenlarge", LargeImageText = "WolvenKit", }
                         });
                         Client.Invoke();
                     }

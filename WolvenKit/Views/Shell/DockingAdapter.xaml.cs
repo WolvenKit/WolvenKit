@@ -281,6 +281,7 @@ namespace WolvenKit.Views.Shell
 
             _viewModel ??= DataContext as AppViewModel;
 
+
             SizeChanged += Window_SizeChanged;
         }
 
@@ -336,11 +337,6 @@ namespace WolvenKit.Views.Shell
                     propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
                 }
 
-                if (content.Content != null)
-                {
-                    DiscordHelper.SetDiscordRPCStatus(content.Content as string);
-                }
-
                 //if (((IDockElement)content.Content).State == DockState.Document)
                 try
                 {
@@ -351,6 +347,11 @@ namespace WolvenKit.Views.Shell
                 }
                 catch (Exception)
                 {
+                }
+
+                if (content.Content != null)
+                {
+                    DiscordHelper.SetDiscordRPCStatus(content.Content as String, ActiveDocument == null ? "Browsing..." : String.Format("Working on {0}", ActiveDocument.Header));
                 }
 
             }
@@ -458,6 +459,8 @@ namespace WolvenKit.Views.Shell
             {
                 return;
             }
+
+            DiscordHelper.SetDiscordRPCStatus(_viewModel.ActiveProject.Name as String, ActiveDocument == null ? "Browsing..." : String.Format("Working on {0}", ActiveDocument.Header));
 
             try
             {
