@@ -10,6 +10,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -391,6 +392,11 @@ namespace WolvenKit.ViewModels.Shell
             return (version, path);
         }
 
+        void ErrorOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            //* Do your stuff with the output (write to console/log/StringBuilder)
+            Console.WriteLine(outLine.Data);
+        }
 
         public ReactiveCommand<bool, Unit> CheckForUpdatesCommand { get; }
         private async Task CheckForUpdate(bool checkForCheckForUpdates)
@@ -415,9 +421,8 @@ namespace WolvenKit.ViewModels.Shell
                         try
                         {
                             using var p = new Process();
-                            p.StartInfo.FileName = "powershell.exe";
-                            p.StartInfo.Arguments = $"Add-AppxPackage -Path '{fileName}'";
-                            p.StartInfo.UseShellExecute = true;
+                            p.StartInfo.FileName = "cmd";
+                            p.StartInfo.Arguments = String.Format("/C {0}", fileName);
                             p.Start();
                             p.WaitForExit();
                         }
@@ -428,7 +433,6 @@ namespace WolvenKit.ViewModels.Shell
                         }
                     }
                 }
-            }
 
             if (checkForCheckForUpdates)
             {
