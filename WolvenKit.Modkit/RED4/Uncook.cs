@@ -634,8 +634,15 @@ namespace WolvenKit.Modkit.RED4
             void ExtractParts(CName texturePath, CArray<inkTextureAtlasMapper> parts, string outDir)
             {
                 var xbmFile = _archiveManager.Lookup(texturePath);
-                if (xbmFile.HasValue)
+                
+                if(xbmFile == null)
                 {
+                    _loggerService.Error(String.Format("File: {0} was not found in any archive.", texturePath));
+                    return;
+                }
+
+                if (xbmFile.HasValue)
+                { 
                     Directory.CreateDirectory(outDir);
 
                     using var ms = new MemoryStream();
