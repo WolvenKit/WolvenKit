@@ -94,7 +94,6 @@ jobs:
           path: download
 
       # Download installer
-      - run: mkdir ${{ env.OUT_DIR }}
       - name: download installer
         run: gh release download --pattern '*.msixbundle' --dir ${{env.OUT_DIR}} --repo WolvenKit/WolvenKit.Installer
         env:
