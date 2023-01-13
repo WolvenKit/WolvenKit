@@ -8,57 +8,9 @@ on:
 env:
   PROJ: ./WolvenKit/WolvenKit.csproj
   PROJC: ./WolvenKit.CLI/WolvenKit.CLI.csproj
-  ARTIFACT_APP_WIN: WolvenKit Desktop
-  ARTIFACT_APP_INSTALLER: WolvenKit Installer
-  ARTIFACT_CLI_WIN: WolvenKit CLI
-  ARTIFACT_CLI_LIN: WolvenKit CLI Linux
+  ARTIFACT_CLI_LIN: wolvenkit-cli-linux
 
 jobs:
-  desktop-win:
-    runs-on: windows-2022
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 7.x
-
-      - name: Publish with Dotnet
-        run: dotnet publish ${{env.PROJ}} -o .\publish -c Release
-
-      - name: create installer
-        run: ISCC /O".\outinstaller" /dMyAppBaseDir="..\publish\" .\Installers\installer.iss
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: ${{env.ARTIFACT_APP_INSTALLER}}
-          path: .\outinstaller
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: ${{env.ARTIFACT_APP_WIN}}
-          path: .\publish
-
-  console-win:
-    runs-on: windows-2022
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 7.x
-
-      - name: Publish with Dotnet
-        run: dotnet publish ${{env.PROJC}} -o .\publish_cli -r win-x64 -c Release --no-self-contained
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: ${{env.ARTIFACT_CLI_WIN}}
-          path: ./publish_cli
 
   console-linux:
     runs-on: ubuntu-latest
@@ -74,13 +26,13 @@ jobs:
       - name: Publish with Dotnet
         run: dotnet publish ${{env.PROJC}} -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: ${{env.ARTIFACT_CLI_LIN}}
           path: ./publish_cli_linux
 
   release:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: [console-linux, console-win, desktop-win]
     env:
       VERSION: ${{github.ref_name}}
@@ -89,9 +41,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.x
        
       ##########################################
-      # SETUP
+      # VERSIONS
 
       # the CLI is versioned by its assemblyversion
       - name: Get console version
@@ -112,12 +68,33 @@ jobs:
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         run: echo "VERSION=${{steps.get_version.outputs.assembly-version}}" >> $GITHUB_ENV
 
+
+      ##########################################
+      # APP
+
+      # Publish app
+      - name: publish app
+        run: dotnet publish ${{env.PROJ}} -o .\publish -c Release
+
+      - name: create setup
+        run: ISCC /O"${{env.OUT_DIR}}" /dMyAppBaseDir="..\download\${{env.ARTIFACT_APP_WIN}}"\" .\Installers\installer.is
+
+      ##########################################
+      # CONSOLE
+
+      # Publish console
+      - name: publish console
+        run: dotnet publish ${{env.PROJC}} -o .\publish_cli -r win-x64 -c Release --no-self-contained
+
       ##########################################
       # Download artifacts
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
+        with:
+          path: download
 
       # Download installer
+      - run: mkdir ${{ env.OUT_DIR }}
       - name: download installer
         run: gh release download --pattern '*.msixbundle' --dir ${{env.OUT_DIR}} --repo WolvenKit/WolvenKit.Installer
         env:
@@ -125,14 +102,10 @@ jobs:
 
       ##########################################
       # create zip files
-      - run: sudo apt-get install zip -y
-      - run: mkdir -p ${{ env.OUT_DIR }}
-      - run: cd "${{env.ARTIFACT_APP_WIN}}";       zip -r ../${{ env.OUT_DIR }}/${{env.NAME}}-${{env.VERSION}}.zip *
-      - run: cd "${{env.ARTIFACT_APP_INSTALLER}}"; zip -r ../${{ env.OUT_DIR }}/${{env.NAME}}.Installer.zip *
-
-      - run: cd "${{env.ARTIFACT_CLI_WIN}}"; zip -r ../${{ env.OUT_DIR }}/${{env.NAME}}.Console-${{steps.get_version_cli.outputs.assembly-version}}.zip *
-      - run: cd "${{env.ARTIFACT_CLI_LIN}}"; zip -r ../${{ env.OUT_DIR }}/${{env.NAME}}.ConsoleLinux-${{steps.get_version_cli.outputs.assembly-version}}.zip *
-
+     
+      - run: Compress-Archive -Path .\publish\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}-${{env.VERSION}}.zip
+      - run: Compress-Archive -Path .\publish_cli\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.Console-${{steps.get_version_cli.outputs.assembly-version}}.zip
+      - run: Compress-Archive -Path .\download\${{env.ARTIFACT_CLI_LIN}}"\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.ConsoleLinux-${{steps.get_version_cli.outputs.assembly-version}}.zip
 
       ##########################################
       # RELEASE
