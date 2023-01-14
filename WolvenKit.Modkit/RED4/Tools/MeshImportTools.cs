@@ -361,10 +361,8 @@ namespace WolvenKit.Modkit.RED4
             var Meshes = new List<RawMeshContainer>();
             foreach (var node in model.LogicalNodes)
             {
-                _loggerService.Info(node.Name);
                 if (node.Mesh != null)
                 {
-                    _loggerService.Info("belongs to " + node.Mesh.Name);
                     Meshes.Add(GltfMeshToRawContainer(node));
                 }
                 else if (args.FillEmpty)
