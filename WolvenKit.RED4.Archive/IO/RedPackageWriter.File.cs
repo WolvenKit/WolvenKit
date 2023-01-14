@@ -272,11 +272,6 @@ namespace WolvenKit.RED4.Archive.IO
             StringCacheList.Clear();
             foreach (var stringInfo in _chunkStringList)
             {
-                if (stringInfo.Value.List.Contains(CName.Empty))
-                {
-                    stringInfo.Value.List.Remove(CName.Empty);
-                }
-
                 StringCacheList.AddRange(stringInfo.Value.List);
             }
 
@@ -363,7 +358,6 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             file.GenerateStringDictionary();
-            file.StringCacheList.Remove(CName.Empty);
 
             for (var i = 0; i < chunkDesc.Count; i++)
             {
