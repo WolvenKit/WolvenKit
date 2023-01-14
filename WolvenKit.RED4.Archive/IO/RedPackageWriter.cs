@@ -24,6 +24,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         public RedPackageWriter(Stream output, Encoding encoding, bool leaveOpen) : base(output, encoding, leaveOpen)
         {
+            StringCacheList = new CacheList<CName>();
             ImportCacheList = new PackageImportCacheList();
         }
 
