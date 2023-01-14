@@ -361,8 +361,10 @@ namespace WolvenKit.Modkit.RED4
             var Meshes = new List<RawMeshContainer>();
             foreach (var node in model.LogicalNodes)
             {
+                _loggerService.Info(node.Name);
                 if (node.Mesh != null)
                 {
+                    _loggerService.Info("belongs to " + node.Mesh.Name);
                     Meshes.Add(GltfMeshToRawContainer(node));
                 }
                 else if (args.FillEmpty)
@@ -519,7 +521,7 @@ namespace WolvenKit.Modkit.RED4
 
             var meshContainer = new RawMeshContainer
             {
-                name = mesh.Name,
+                name = node.Name,
 
                 // Copying PNT w/ RHS to LHS Y+ to Z+
                 positions = mesh.Primitives[0].GetVertices("POSITION").AsVector3Array().ToList().AsParallel().Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray(),
