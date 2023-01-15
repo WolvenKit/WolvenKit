@@ -93,12 +93,6 @@ jobs:
       ##########################################
       # create release files
 
-      # Download installer to OUT_DIR
-      - name: download installer
-        run: gh release download --pattern '*.msixbundle' --dir ${{env.OUT_DIR}} --repo WolvenKit/WolvenKit.Installer
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       # Create Installer in OUT_DIR
       - name: create setup
         run: ISCC /O"${{env.OUT_DIR}}" /dMyAppBaseDir="..\publish\" .\Installers\installer.iss
@@ -119,7 +113,6 @@ jobs:
           body_path: "RELEASE.md"
           files: |
             ${{ env.OUT_DIR }}/*.zip
-            ${{ env.OUT_DIR }}/*.msixbundle
             ${{ env.OUT_DIR }}/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -135,7 +128,6 @@ jobs:
           body_path: "RELEASE.md"
           files: |
             ${{ env.OUT_DIR }}/*.zip
-            ${{ env.OUT_DIR }}/*.msixbundle
             ${{ env.OUT_DIR }}/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
