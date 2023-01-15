@@ -15,6 +15,12 @@ namespace WolvenKit.RED4.Archive.IO
 
             var rp = new RedPackage { Chunks = new List<RedBaseClass>() };
 
+            uint flags = 0;
+            if (entEntityTemplate.CompiledData != null)
+            {
+                flags = entEntityTemplate.CompiledData.Buffer.Flags;
+            }
+
             if (entEntityTemplate.Entity is { Chunk: { } })
             {
                 rp.Chunks.Add(entEntityTemplate.Entity);
@@ -30,7 +36,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (rp.Chunks.Count > 0)
             {
-                entEntityTemplate.CompiledData = new DataBuffer { Data = rp, Buffer = { Parent = entEntityTemplate } };
+                entEntityTemplate.CompiledData = new DataBuffer { Data = rp, Buffer = { Parent = entEntityTemplate, Flags = flags } };
             }
         }
     }
