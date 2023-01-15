@@ -37,25 +37,23 @@ It's completely open source, licensed under the <a href="https://github.com/Wolv
   
 ## Installation
 
-### Prerequisite: .NET Runtime
-
 Wolvenkit requires the latest .NET 7.0 runtime:
 
 1. Go to [Microsoft's .NET download page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
 2. Find the ".NET Desktop Runtime 7.0.x" section and download the installer for your architecture (x64)
 3. Run the downloaded installer
 
-### WolvenKit
+----------
 
-You can either use the WolvenKit Installer app or download a portable instance to a location of your choice.
+There are multiple ways to install Wolvenkit:
 
-### Installer
+### The WolvenKit.Installer app
 
-1. Download the `Wolvenkit.Installer.Package_x.x.x.x_x64.msixbundle` installer
-2. Double click it to install the installer app
-3. Run the WolvenKit Installer from your Home menu
+The WolvenKit.Installer app is a simple program for managing (installing, updating, removing) different WolvenKit versions similar to the Visual Studio Installer app. 
 
-### Portable
+It is [hosted on github](https://github.com/WolvenKit/WolvenKit.Installer) and you can install it from there. Click here: [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit.Installer)](https://github.com/WolvenKit/WolvenKit.Installer/releases/latest)
+
+### Portable or Installer
 
 Download either the latest stable version or the current nightly (beta) version from here:
 
@@ -64,8 +62,9 @@ Download either the latest stable version or the current nightly (beta) version 
 | [WolvenKit Nightly](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit-nightly-releases)](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/WolvenKit/WolvenKit/nightly.yml) |
 | [WolvenKit](https://github.com/WolvenKit/WolvenKit/releases/latest) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/WolvenKit/WolvenKit/check-only.yml) | 
 
-1. Download `Wolvenkit.zip` and extract it to a location of your choice
-2. Double click WolvenKit.exe to run the app
+To install the app quickly download `WolvenKitSetup-x.x.x.exe` and double click to run the installer.
+
+You can also simply download `WolvenKit-x.x.x.x.zip` and extract it to a location of your choice
 
 ## Usage
 
