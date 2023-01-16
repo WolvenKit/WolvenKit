@@ -59,10 +59,10 @@ Source: "{#MyAppBaseDir}*"; DestDir: "{app}"; Flags: ignoreversion recursesubdir
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
-Root: HKCR; Subkey: ".cpmodproj"; ValueType: string; ValueName: ""; ValueData: "WolvenKit.cpmodproj"; Flags: uninsdeletevalue createvalueifdoesntexist   
-Root: HKCR; Subkey: "WolvenKit.cpmodproj"; ValueType: string; ValueName: ""; ValueData: "Cyberpunk 2077 Mod Project"; Flags: uninsdeletekey createvalueifdoesntexist
-Root: HKCR; Subkey: "WolvenKit.cpmodproj\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"
-Root: HKCR; Subkey: "WolvenKit.cpmodproj\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
+Root: HKCR; Subkey: ".cpmodproj"; ValueType: string; ValueName: ""; ValueData: "WolvenKit.cpmodproj"; Flags: uninsdeletevalue createvalueifdoesntexist noerror   
+Root: HKCR; Subkey: "WolvenKit.cpmodproj"; ValueType: string; ValueName: ""; ValueData: "Cyberpunk 2077 Mod Project"; Flags: uninsdeletekey createvalueifdoesntexist noerror
+Root: HKCR; Subkey: "WolvenKit.cpmodproj\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"; Flags: createvalueifdoesntexist noerror   
+Root: HKCR; Subkey: "WolvenKit.cpmodproj\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: createvalueifdoesntexist noerror
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
