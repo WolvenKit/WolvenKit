@@ -15,6 +15,7 @@
 #define MyAppVersion GetStringFileInfo(MyAppPath, "ProductVersion")
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
+; This is the nightly GUID
 AppId={{7ADB3751-78A3-4983-BB58-5795FC8A24FE}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
@@ -64,7 +65,7 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 ;[Code]
 ;procedure CurStepChanged(CurStep: TSetupStep);
