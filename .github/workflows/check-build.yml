@@ -18,7 +18,7 @@ jobs:
       run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
 
     - name: create installer
-      run: ISCC /O".\outinstaller" /dMyAppBaseDir="..\publish\" .\Installers\installer.iss
+      run: ISCC /O".\outinstaller" .\Installers\installer.iss
 
     - uses: actions/upload-artifact@v3
       with:

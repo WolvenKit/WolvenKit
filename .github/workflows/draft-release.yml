@@ -95,7 +95,7 @@ jobs:
 
       # Create Installer in OUT_DIR
       - name: create setup
-        run: ISCC /O"${{env.OUT_DIR}}" /dMyAppBaseDir="..\publish\" .\Installers\installer.iss
+        run: ISCC /O"${{env.OUT_DIR}}" .\Installers\installer.iss
      
       # compress portables to OUT_DIR
       - run: Compress-Archive -Path .\publish\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}-${{env.VERSION_APP}}.zip

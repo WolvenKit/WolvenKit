@@ -129,7 +129,7 @@ jobs:
       # INSTALLER
 
       - name: create installer
-        run: ISCC /O"${{env.FINALOUT}}" .\Installers\installer.iss
+        run: ISCC /O"${{env.FINALOUT}}" /dMyAppBaseDir="..\publish\app\" /MyAppName="WolvenKit Nightly" /MyAppId="WolvenKit-Nightly" .\Installers\installer.iss
 
       ##########################################
       # RELEASE
