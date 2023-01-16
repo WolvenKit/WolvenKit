@@ -20,12 +20,10 @@ namespace WolvenKit.RED4.Archive.IO
         {
             _file = file;
 
-            // might need to work through chunks to figure out if there are 7 sections
-            // setup a separate stream for that?
             _header = new RedPackageHeader
             {
                 version = _file.Version,
-                numSections = _file.Sections,
+                numSections = 6,
                 numComponents = (uint)_file.Chunks.Count
             };
 
@@ -33,11 +31,39 @@ namespace WolvenKit.RED4.Archive.IO
 
             WriteHeader();
 
+            var cruids = new List<CRUID>();
             var chunkList = file.Chunks;
+
+            if (Settings.RedPackageType is RedPackageType.ScriptableSystem)
+            {
+                var chunkDict = new Dictionary<ulong, RedBaseClass>();
+
+                foreach (var chunk in _file.Chunks)
+                {
+                    chunkDict.Add(FNV1A64HashAlgorithm.HashString(GetClassName(chunk)), chunk);
+                }
+
+                chunkDict = chunkDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+
+                chunkList = chunkDict.Values.ToList();
+                foreach (var cruid in chunkDict.Keys)
+                {
+                    cruids.Add(cruid);
+                }
+            }
+
+            var (strings, imports, chunkDesc, chunkData) = GenerateChunkData(chunkList);
+
+            if (imports.Count > 0)
+            {
+                _header.numSections = 7;
+
+                BaseStream.Position += 8;
+            }
+
             if (Settings.RedPackageType == RedPackageType.Default)
             {
                 short cruidsIndex = -1;
-                var cruids = new List<CRUID>();
                 for (var i = 0; i < chunkList.Count; i++)
                 {
                     if (file.ChunkDictionary.TryGetValue(chunkList[i], out var cruid))
@@ -85,7 +111,6 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (Settings.RedPackageType is RedPackageType.SaveResource or RedPackageType.ScriptableSystem)
             {
-                IList<CRUID> cruids = new List<CRUID>();
                 if (Settings.RedPackageType is RedPackageType.SaveResource)
                 {
                     foreach (var chunk in file.Chunks)
@@ -102,33 +127,12 @@ namespace WolvenKit.RED4.Archive.IO
                     }
                 }
 
-                if (Settings.RedPackageType is RedPackageType.ScriptableSystem)
-                {
-                    var chunkDict = new Dictionary<ulong, RedBaseClass>();
-
-                    foreach (var chunk in _file.Chunks)
-                    {
-                        chunkDict.Add(FNV1A64HashAlgorithm.HashString(GetClassName(chunk)), chunk);
-                    }
-
-                    chunkDict = chunkDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
-
-                    chunkList = chunkDict.Values.ToList();
-                    foreach (var cruid in chunkDict.Keys)
-                    {
-                        cruids.Add(cruid);
-                    }
-                }
-
-
                 BaseWriter.Write(cruids.Count);
                 foreach (var cruid in cruids)
                 {
                     BaseWriter.Write(cruid);
                 }
             }
-
-            var (strings, imports, chunkDesc, chunkData) = GenerateChunkData(chunkList);
 
             var headerEnd = BaseStream.Position;
 
