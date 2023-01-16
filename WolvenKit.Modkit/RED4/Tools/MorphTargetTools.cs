@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
+using Splat;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
@@ -143,12 +145,13 @@ namespace WolvenKit.Modkit.RED4
 
             var Names = new string[NumTargets];
             var RegionNames = new string[NumTargets];
+            var OutputNames = new string[NumTargets];
             string BaseMesh = morphBlob.BaseMesh.DepotPath;
             string BaseTexture = morphBlob.BaseTexture.DepotPath;
 
             for (var i = 0; i < NumTargets; i++)
             {
-                Names[i] = morphBlob.Targets[i].Name;
+                Names[i] = String.Format("{0}_{1}", morphBlob.Targets[i].Name, morphBlob.Targets[i].RegionName);
                 RegionNames[i] = morphBlob.Targets[i].RegionName;
             }
 
