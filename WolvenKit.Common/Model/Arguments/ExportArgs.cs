@@ -197,7 +197,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Mesh Export Type")]
         [Description("Select between mesh export options. By default materials but no rig are included.")]
         [WkitScriptAccess("ExportType")]
-        public MeshExportType meshExportType { get; set; } = MeshExportType.WithRig;
+        public MeshExportType meshExportType { get; set; } = MeshExportType.MeshOnly;
 
         /// <summary>
         /// If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.
@@ -366,8 +366,8 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public enum MeshExportType
     {
-        WithRig,
         MeshOnly,
+        WithRig,
         Multimesh
     }
 
