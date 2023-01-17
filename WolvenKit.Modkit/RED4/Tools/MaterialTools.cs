@@ -75,7 +75,7 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-        private void GetMateriaEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<ICyberGameArchive> archives)
+        private void GetMaterialEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<ICyberGameArchive> archives)
         {
             var cmesh = cr2w.RootChunk as CMesh;
 
@@ -285,7 +285,7 @@ namespace WolvenKit.Modkit.RED4
             var materialEntryNames = new List<string>();
             var materialEntries = new List<CMaterialInstance>();
 
-            GetMateriaEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
+            GetMaterialEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
 
             var mlSetupNames = new List<string>();
 
@@ -584,7 +584,7 @@ namespace WolvenKit.Modkit.RED4
             var materialEntryNames = new List<string>();
             var materialEntries = new List<CMaterialInstance>();
 
-            GetMateriaEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
+            GetMaterialEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
 
             var mlSetupNames = new List<string>();
 
