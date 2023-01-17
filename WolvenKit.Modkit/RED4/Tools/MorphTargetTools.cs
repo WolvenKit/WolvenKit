@@ -148,7 +148,7 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < NumTargets; i++)
             {
-                Names[i] = morphBlob.Targets[i].Name;
+                Names[i] = String.Format("{0}_{1}", morphBlob.Targets[i].Name, morphBlob.Targets[i].RegionName);
                 RegionNames[i] = morphBlob.Targets[i].RegionName;
             }
 
