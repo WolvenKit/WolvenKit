@@ -31,12 +31,6 @@ namespace WolvenKit.Modkit.RED4.Tools
             _red4ParserService = red4ParserService;
         }
 
-        public bool ExportMesh(Stream meshStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
-        {
-            var cr2w = _red4ParserService.ReadRed4File(meshStream);
-            return ExportMesh(cr2w, outfile, meshExportArgs, vmode);
-        }
-
         public static bool ExportMesh(CR2WFile cr2w, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             var model = GetModel(cr2w, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport);
@@ -214,111 +208,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             return true;
         }
-        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
-        {
-            var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
-            {
-                return false;
-            }
-
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
-
-            var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
-
-            var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter);
-            UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
-
-            var meshRig = GetOrphanRig(cMesh);
-
-            var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
-
-            UpdateMeshJoints(ref expMeshes, Rig, meshRig);
-
-            var model = RawMeshesToGLTF(expMeshes, Rig);
-
-
-            if (WolvenTesting.IsTesting)
-            {
-                model.WriteGLB(new WriteSettings(vmode));
-                return true;
-            }
-
-            if (isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
-            }
-
-            meshStream.Dispose();
-            meshStream.Close();
-            rigStream.Dispose();
-            rigStream.Close();
-
-            return true;
-        }
-        public bool ExportMultiMeshWithRig(Dictionary<Stream, String> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
-        {
-            var Rigs = new List<RawArmature>();
-            foreach (var rigStream in rigStreamS)
-            {
-                var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
-                Rigs.Add(Rig);
-
-                rigStream.Dispose();
-                rigStream.Close();
-            }
-            var expRig = RIG.CombineRigs(Rigs);
-
-            var expMeshes = new List<RawMeshContainer>();
-
-            foreach (var meshStream in meshStreamS.Keys)
-            {
-                var cr2w = _red4ParserService.ReadRed4File(meshStream);
-                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
-                {
-                    continue;
-                }
-
-                using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
-
-                var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
-
-                var Meshes = ContainRawMesh(ms, meshesinfo, lodFilter);
-                UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
-
-                var meshRig = GetOrphanRig(cMesh);
-
-                UpdateMeshJoints(ref Meshes, expRig, meshRig, meshStreamS[meshStream]);
-
-                expMeshes.AddRange(Meshes);
-
-                meshStream.Dispose();
-                meshStream.Close();
-            }
-            var model = RawMeshesToGLTF(expMeshes, expRig);
-
-            if (WolvenTesting.IsTesting)
-            {
-                model.WriteGLB(new WriteSettings(vmode));
-                return true;
-            }
-
-            if (isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
-            }
-
-            return true;
-        }
         public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendmeshblob, CMesh cMesh = null)
         {
             var meshesInfo = new MeshesInfo(rendmeshblob.Header.RenderChunkInfos.Count);
@@ -742,7 +632,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
         }
 
-        public static void AddSubmeshesToModel(List<RawMeshContainer> meshes, Skin skin, ref ModelRoot model, IVisualNodeContainer parent, Dictionary<string, Material> materials = null, bool mergeMeshes = false)
+        public static void AddSubmeshesToModel(List<RawMeshContainer> meshes, Skin skin, ref ModelRoot model, IVisualNodeContainer parent, Dictionary<string, Material> materials = null, bool mergeMeshes = false, bool withMaterials = false)
         {
             var mat = model.CreateMaterial("Default");
             mat.WithPBRMetallicRoughness().WithDefault();
@@ -853,6 +743,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             var BuffViewoffset = 0;
 
             var nodes = new Dictionary<uint, Node>();
+            int meshCounter = 0;
             foreach (var mesh in meshes)
             {
                 Mesh mes = null;
@@ -869,8 +760,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
                 else
                 {
-                    node = parent.CreateNode(mesh.name);
-                    mes = model.CreateMesh(mesh.name);
+                    string name = withMaterials ? $"{meshCounter}_{mesh.name}" : mesh.name;
+                    node = parent.CreateNode(name);
+                    mes = model.CreateMesh(name);
                 }
                 var prim = mes.CreatePrimitive();
                 if (materials != null && materials.ContainsKey(mesh.materialNames[0]))
@@ -1009,11 +901,11 @@ namespace WolvenKit.Modkit.RED4.Tools
                     prim.SetMorphTargetAccessors(0, dict);
                     BuffViewoffset += mesh.garmentMorph.Length * 12;
                 }
-
+                meshCounter++;
             }
         }
 
-        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature rig, bool mergeMeshes = false)
+        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature rig, bool mergeMeshes = false, bool withMaterials = false)
         {
             var model = ModelRoot.CreateModel();
             model.Extras = SharpGLTF.IO.JsonContent.Serialize(new { ExperimentalMergedMeshes = mergeMeshes });
@@ -1045,7 +937,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
             }
 
-            AddSubmeshesToModel(meshes, skin, ref model, model.UseScene(0), materials, mergeMeshes);
+            AddSubmeshesToModel(meshes, skin, ref model, model.UseScene(0), materials, mergeMeshes, withMaterials);
 
             model.UseScene(0).Name = "Scene";
             model.DefaultScene = model.UseScene(0);
