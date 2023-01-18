@@ -57,7 +57,7 @@
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
-    <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED4\WolvenKit.RED4.csproj" />
   </ItemGroup>
 
   <ItemGroup>

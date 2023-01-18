@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
       <TargetFramework>net7.0</TargetFramework>
@@ -98,8 +98,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WolvenKit.RED4.Archive\WolvenKit.RED4.Archive.csproj" />
-    <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED4\WolvenKit.RED4.csproj" />
   </ItemGroup>
 
   <ItemGroup>
