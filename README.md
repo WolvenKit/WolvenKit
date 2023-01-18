@@ -4,7 +4,7 @@
 
 ![GitHub Release Date](https://img.shields.io/github/release-date/WolvenKit/WolvenKit)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/WolvenKit/WolvenKit/check-only.yml)
-![GitHub milestone](https://img.shields.io/github/milestones/progress/WolvenKit/WolvenKit/11)
+![GitHub milestone](https://img.shields.io/github/milestones/progress/WolvenKit/WolvenKit/12)
 ![GitHub all releases](https://img.shields.io/github/downloads/WolvenKit/WolvenKit/total)
 ![GitHub issues](https://img.shields.io/github/issues/WolvenKit/WolvenKit)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/WolvenKit/WolvenKit)

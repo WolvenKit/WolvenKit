@@ -603,6 +603,7 @@ public class RedImage : IDisposable
             case TEX_DIMENSION.TEXTURE3D:
                 blob.Header.TextureInfo.Type = Enums.GpuWrapApieTextureType.TEXTYPE_2D;
                 break;
+            case TEX_DIMENSION.TEXTURE1D:
             default:
                 throw new ArgumentOutOfRangeException();
         }
