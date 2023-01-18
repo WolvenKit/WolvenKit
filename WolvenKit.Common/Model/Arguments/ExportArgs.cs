@@ -197,7 +197,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Mesh Export Type")]
         [Description("Select between mesh export options. By default materials but no rig are included.")]
         [WkitScriptAccess("ExportType")]
-        public MeshExportType meshExportType { get; set; } = MeshExportType.WithMaterials;
+        public MeshExportType meshExportType { get; set; } = MeshExportType.MeshOnly;
 
         /// <summary>
         /// If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.
@@ -218,13 +218,23 @@ namespace WolvenKit.Common.Model.Arguments
         public bool isGLBinary { get; set; } = true;
 
         /// <summary>
+        /// Binary Export Bool, Decides if we should export materials
+        /// </summary>
+        [Category("Default Export Settings")]
+        [Display(Name = "Export Materials")]
+        [Description("If selected mesh exports will include materials.")]
+        [WkitScriptAccess("WithMaterials")]
+        public bool withMaterials { get; set; } = true;
+
+
+        /// <summary>
         /// MultiMesh Mesh List.
         /// </summary>
         [Category("MultiMesh Settings")]
         [Display(Name = "Select Additional Meshes")]
         [Description("Select additional meshes to be included within a single export.")]
         public List<FileEntry> MultiMeshMeshes { get; set; } = new();      // meshes?
-
+    
         /// <summary>
         /// MultiMesh Rig List.
         /// </summary>
@@ -356,9 +366,8 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public enum MeshExportType
     {
-        WithMaterials,
-        WithRig,
         MeshOnly,
+        WithRig,
         Multimesh
     }
 
