@@ -1,15 +1,12 @@
-using System;
+namespace WolvenKit.RED4.Types;
 
-namespace WolvenKit.RED4.Types
+public interface IRedCloneable
 {
-    public interface IRedCloneable
-    {
-        public object ShallowCopy();
-        public object DeepCopy();
-    }
+    public object ShallowCopy();
+    public object DeepCopy();
+}
 
-    public interface IRedClass : IRedType
-    {
+public interface IRedClass : IRedType
+{
 
-    }
 }

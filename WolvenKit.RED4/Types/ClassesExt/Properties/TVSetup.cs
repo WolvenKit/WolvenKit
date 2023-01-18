@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class TVSetup
 {
-    public partial class TVSetup
+    [OrdinalOverride(Before = 1)]
+    [RED("useWhiteNoiseFX")]
+    public CBool UseWhiteNoiseFX
     {
-        [OrdinalOverride(Before = 1)]
-        [RED("useWhiteNoiseFX")]
-        public CBool UseWhiteNoiseFX
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+        get => GetPropertyValue<CBool>();
+        set => SetPropertyValue<CBool>(value);
     }
 }

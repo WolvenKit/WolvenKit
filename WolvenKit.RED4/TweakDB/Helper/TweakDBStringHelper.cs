@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.CRC;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.TweakDB.Helper;
 

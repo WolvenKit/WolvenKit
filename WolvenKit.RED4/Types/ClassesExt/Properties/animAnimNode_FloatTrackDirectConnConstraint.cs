@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class animAnimNode_FloatTrackDirectConnConstraint
 {
-    public partial class animAnimNode_FloatTrackDirectConnConstraint
+    [Ordinal(1001)]
+    [RED("debug")]
+    public CBool Debug
     {
-        [Ordinal(1001)]
-        [RED("debug")]
-        public CBool Debug
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+        get => GetPropertyValue<CBool>();
+        set => SetPropertyValue<CBool>(value);
     }
 }

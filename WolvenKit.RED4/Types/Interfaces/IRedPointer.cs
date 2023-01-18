@@ -1,8 +1,7 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public interface IRedBufferPointer
 {
-    public interface IRedBufferPointer
-    {
-        public RedBuffer GetValue();
-        public void SetValue(RedBuffer instance);
-    }
+    public RedBuffer GetValue();
+    public void SetValue(RedBuffer instance);
 }

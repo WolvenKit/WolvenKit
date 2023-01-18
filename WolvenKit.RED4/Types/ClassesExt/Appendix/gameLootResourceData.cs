@@ -1,65 +1,64 @@
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class gameLootResourceData : IRedAppendix
 {
-    public partial class gameLootResourceData : IRedAppendix
+    [RED("nodeRefsHash")]
+    [REDProperty(IsIgnored = true)]
+    public CArray<CUInt64> NodeRefsHash
     {
-        [RED("nodeRefsHash")]
-        [REDProperty(IsIgnored = true)]
-        public CArray<CUInt64> NodeRefsHash
+        get => GetPropertyValue<CArray<CUInt64>>();
+        set => SetPropertyValue<CArray<CUInt64>>(value);
+    }
+
+    [RED("tweakDbIds")]
+    [REDProperty(IsIgnored = true)]
+    public CArray<CArray<TweakDBID>> TweakDbIds
+    {
+        get => GetPropertyValue<CArray<CArray<TweakDBID>>>();
+        set => SetPropertyValue<CArray<CArray<TweakDBID>>>(value);
+    }
+
+    public void Read(Red4Reader reader, uint size)
+    {
+        NodeRefsHash = new CArray<CUInt64>();
+        TweakDbIds = new CArray<CArray<TweakDBID>>();
+
+        var cnt = reader.BaseReader.ReadVLQInt32();
+        for (int i = 0; i < cnt; i++)
         {
-            get => GetPropertyValue<CArray<CUInt64>>();
-            set => SetPropertyValue<CArray<CUInt64>>(value);
+            NodeRefsHash.Add(reader.ReadCUInt64());
         }
 
-        [RED("tweakDbIds")]
-        [REDProperty(IsIgnored = true)]
-        public CArray<CArray<TweakDBID>> TweakDbIds
+        for (int i = 0; i < cnt; i++)
         {
-            get => GetPropertyValue<CArray<CArray<TweakDBID>>>();
-            set => SetPropertyValue<CArray<CArray<TweakDBID>>>(value);
+            var tmp = new CArray<TweakDBID>();
+
+            var cnt2 = reader.BaseReader.ReadByte();
+            for (int j = 0; j <= cnt2; j++)
+            {
+                tmp.Add(reader.ReadTweakDBID());
+            }
+            TweakDbIds.Add(tmp);
+        }
+    }
+
+    public void Write(Red4Writer writer)
+    {
+        writer.WriteVLQ(NodeRefsHash.Count);
+        foreach (var entry in NodeRefsHash)
+        {
+            writer.Write(entry);
         }
 
-        public void Read(Red4Reader reader, uint size)
+        foreach (var ids in TweakDbIds)
         {
-            NodeRefsHash = new CArray<CUInt64>();
-            TweakDbIds = new CArray<CArray<TweakDBID>>();
-
-            var cnt = reader.BaseReader.ReadVLQInt32();
-            for (int i = 0; i < cnt; i++)
+            writer.BaseWriter.Write((byte)(ids.Count - 1));
+            foreach (var tweakDbid in ids)
             {
-                NodeRefsHash.Add(reader.ReadCUInt64());
-            }
-
-            for (int i = 0; i < cnt; i++)
-            {
-                var tmp = new CArray<TweakDBID>();
-
-                var cnt2 = reader.BaseReader.ReadByte();
-                for (int j = 0; j <= cnt2; j++)
-                {
-                    tmp.Add(reader.ReadTweakDBID());
-                }
-                TweakDbIds.Add(tmp);
-            }
-        }
-
-        public void Write(Red4Writer writer)
-        {
-            writer.WriteVLQ(NodeRefsHash.Count);
-            foreach (var entry in NodeRefsHash)
-            {
-                writer.Write(entry);
-            }
-
-            foreach (var ids in TweakDbIds)
-            {
-                writer.BaseWriter.Write((byte)(ids.Count - 1));
-                foreach (var tweakDbid in ids)
-                {
-                    writer.Write(tweakDbid);
-                }
+                writer.Write(tweakDbid);
             }
         }
     }

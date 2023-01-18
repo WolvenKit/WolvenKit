@@ -1,35 +1,28 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+namespace WolvenKit.RED4.Types;
 
-namespace WolvenKit.RED4.Types
+public class CArrayFixedSize<T> : CArrayBase<T>, IRedArrayFixedSize<T> where T : IRedType
 {
-    public class CArrayFixedSize<T> : CArrayBase<T>, IRedArrayFixedSize<T> where T : IRedType
+    public CArrayFixedSize(int size) : base(size)
     {
-        public CArrayFixedSize(int size) : base(size)
-        {
-            IsReadOnly = true;
-        }
+        IsReadOnly = true;
+    }
 
-        public override object DeepCopy()
-        {
-            var other = new CArrayFixedSize<T>(_internalList.Count);
+    public override object DeepCopy()
+    {
+        var other = new CArrayFixedSize<T>(_internalList.Count);
 
-            for (int i = 0; i < _internalList.Count; i++)
+        for (int i = 0; i < _internalList.Count; i++)
+        {
+            if (_internalList[i] is IRedCloneable cl)
             {
-                if (_internalList[i] is IRedCloneable cl)
-                {
-                    other[i] = (T)cl.DeepCopy();
-                }
-                else
-                {
-                    other[i] = _internalList[i];
-                }
+                other[i] = (T)cl.DeepCopy();
             }
-
-            return other;
+            else
+            {
+                other[i] = _internalList[i];
+            }
         }
+
+        return other;
     }
 }

@@ -1,26 +1,25 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class AccessPoint
 {
-    public partial class AccessPoint
+    [RED("baseStateOperations")]
+    public CHandle<BaseStateOperations> BaseStateOperations
     {
-        [RED("baseStateOperations")]
-        public CHandle<BaseStateOperations> BaseStateOperations
-        {
-            get => GetPropertyValue<CHandle<BaseStateOperations>>();
-            set => SetPropertyValue<CHandle<BaseStateOperations>>(value);
-        }
+        get => GetPropertyValue<CHandle<BaseStateOperations>>();
+        set => SetPropertyValue<CHandle<BaseStateOperations>>(value);
+    }
 
-        [RED("baseActionOperations")]
-        public CHandle<BaseActionOperations> BaseActionOperations
-        {
-            get => GetPropertyValue<CHandle<BaseActionOperations>>();
-            set => SetPropertyValue<CHandle<BaseActionOperations>>(value);
-        }
+    [RED("baseActionOperations")]
+    public CHandle<BaseActionOperations> BaseActionOperations
+    {
+        get => GetPropertyValue<CHandle<BaseActionOperations>>();
+        set => SetPropertyValue<CHandle<BaseActionOperations>>(value);
+    }
 
-        [RED("interactionAreaOperations")]
-        public CHandle<InteractionAreaOperations> InteractionAreaOperations
-        {
-            get => GetPropertyValue<CHandle<InteractionAreaOperations>>();
-            set => SetPropertyValue<CHandle<InteractionAreaOperations>>(value);
-        }
+    [RED("interactionAreaOperations")]
+    public CHandle<InteractionAreaOperations> InteractionAreaOperations
+    {
+        get => GetPropertyValue<CHandle<InteractionAreaOperations>>();
+        set => SetPropertyValue<CHandle<InteractionAreaOperations>>(value);
     }
 }

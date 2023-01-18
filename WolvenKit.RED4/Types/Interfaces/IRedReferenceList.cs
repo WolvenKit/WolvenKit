@@ -1,9 +1,6 @@
-using System.Collections.Generic;
+namespace WolvenKit.RED4.Types;
 
-namespace WolvenKit.RED4.Types
+public interface IRedReferenceList : IList<RedBaseClass>
 {
-    public interface IRedReferenceList : IList<RedBaseClass>
-    {
         
-    }
 }

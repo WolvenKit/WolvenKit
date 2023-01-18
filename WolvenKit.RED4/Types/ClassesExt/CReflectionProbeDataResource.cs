@@ -1,10 +1,9 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class CReflectionProbeDataResource
 {
-    public partial class CReflectionProbeDataResource
+    partial void PostConstruct()
     {
-        partial void PostConstruct()
-        {
-            FaceDepth = null;
-        }
+        FaceDepth = null;
     }
 }

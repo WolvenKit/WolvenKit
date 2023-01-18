@@ -1,15 +1,12 @@
-using System;
+namespace WolvenKit.RED4.Types.Exceptions;
 
-namespace WolvenKit.RED4.Types.Exceptions
+public class InvalidParsingException : Exception
 {
-    public class InvalidParsingException : Exception
+    #region Constructors
+
+    public InvalidParsingException(string message) : base(message)
     {
-        #region Constructors
-
-        public InvalidParsingException(string message) : base(message)
-        {
-        }
-
-        #endregion Constructors
     }
+
+    #endregion Constructors
 }

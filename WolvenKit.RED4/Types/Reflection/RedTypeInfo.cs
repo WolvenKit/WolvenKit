@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WolvenKit.RED4.Types;
+﻿namespace WolvenKit.RED4.Types;
 
 public enum BaseRedType
 {

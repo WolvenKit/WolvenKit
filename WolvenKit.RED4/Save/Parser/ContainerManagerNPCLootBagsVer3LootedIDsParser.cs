@@ -1,47 +1,44 @@
-using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Save.IO;
 
-namespace WolvenKit.RED4.Save
+namespace WolvenKit.RED4.Save;
+
+public class ContainerManagerNPCLootBagsVer3LootedIDs : INodeData
 {
-    public class ContainerManagerNPCLootBagsVer3LootedIDs : INodeData
+    public List<ulong> EntityIds { get; set; }
+
+
+    public ContainerManagerNPCLootBagsVer3LootedIDs()
     {
-        public List<ulong> EntityIds { get; set; }
+        EntityIds = new List<ulong>();
+    }
+}
 
 
-        public ContainerManagerNPCLootBagsVer3LootedIDs()
+public class ContainerManagerNPCLootBagsVer3LootedIDsParser : INodeParser
+{
+    public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER_NPC_LOOT_BAGS_VER3_LOOTED_IDS;
+
+    public void Read(BinaryReader reader, NodeEntry node)
+    {
+        var data = new ContainerManagerNPCLootBagsVer3LootedIDs();
+        var entryCount = reader.ReadVLQInt32();
+        for (int i = 0; i < entryCount; i++)
         {
-            EntityIds = new List<ulong>();
+            data.EntityIds.Add(reader.ReadUInt64());
         }
+
+        node.Value = data;
     }
 
-
-    public class ContainerManagerNPCLootBagsVer3LootedIDsParser : INodeParser
+    public void Write(NodeWriter writer, NodeEntry node)
     {
-        public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER_NPC_LOOT_BAGS_VER3_LOOTED_IDS;
+        var data = (ContainerManagerNPCLootBagsVer3LootedIDs)node.Value;
 
-        public void Read(BinaryReader reader, NodeEntry node)
+        writer.WriteVLQInt32(data.EntityIds.Count);
+        foreach (var entityId in data.EntityIds)
         {
-            var data = new ContainerManagerNPCLootBagsVer3LootedIDs();
-            var entryCount = reader.ReadVLQInt32();
-            for (int i = 0; i < entryCount; i++)
-            {
-                data.EntityIds.Add(reader.ReadUInt64());
-            }
-
-            node.Value = data;
-        }
-
-        public void Write(NodeWriter writer, NodeEntry node)
-        {
-            var data = (ContainerManagerNPCLootBagsVer3LootedIDs)node.Value;
-
-            writer.WriteVLQInt32(data.EntityIds.Count);
-            foreach (var entityId in data.EntityIds)
-            {
-                writer.Write(entityId);
-            }
+            writer.Write(entityId);
         }
     }
-
 }

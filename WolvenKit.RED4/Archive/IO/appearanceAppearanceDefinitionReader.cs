@@ -1,45 +1,38 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.RED4.Archive.IO
+namespace WolvenKit.RED4.Archive.IO;
+
+public class appearanceAppearanceDefinitionReader : RedPackageReader
 {
-    public class appearanceAppearanceDefinitionReader : RedPackageReader
+    public appearanceAppearanceDefinitionReader(Stream input) : base(input)
     {
-        public appearanceAppearanceDefinitionReader(Stream input) : base(input)
-        {
-        }
+    }
 
-        public appearanceAppearanceDefinitionReader(BinaryReader reader) : base(reader)
-        {
-        }
+    public appearanceAppearanceDefinitionReader(BinaryReader reader) : base(reader)
+    {
+    }
 
-        public override EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
-        {
-            Settings.ImportsAsHash = true;
+    public override EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
+    {
+        Settings.ImportsAsHash = true;
 
-            var code = base.ReadBuffer(buffer);
-            if (code == EFileReadErrorCodes.NoError)
+        var code = base.ReadBuffer(buffer);
+        if (code == EFileReadErrorCodes.NoError)
+        {
+            if (buffer.Parent is appearanceAppearanceDefinition appearanceDefinition && buffer.Data is RedPackage rp)
             {
-                if (buffer.Parent is appearanceAppearanceDefinition appearanceDefinition && buffer.Data is RedPackage rp)
+                appearanceDefinition.Components = new();
+                foreach (var component in rp.Chunks)
                 {
-                    appearanceDefinition.Components = new();
-                    foreach (var component in rp.Chunks)
+                    if (component is entIComponent eic)
                     {
-                        if (component is entIComponent eic)
-                        {
-                            appearanceDefinition.Components.Add(eic);
-                        }
+                        appearanceDefinition.Components.Add(eic);
                     }
                 }
             }
-
-            return code;
         }
+
+        return code;
     }
 }

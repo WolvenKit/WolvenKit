@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using WolvenKit.Core.CRC;
 using WolvenKit.RED4.Types;
 

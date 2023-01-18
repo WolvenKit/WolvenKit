@@ -1,5 +1,3 @@
-using System;
-
 namespace WolvenKit.RED4.Types;
 
 public sealed class CKeyValuePair : IRedType, IEquatable<CKeyValuePair>, IRedCloneable

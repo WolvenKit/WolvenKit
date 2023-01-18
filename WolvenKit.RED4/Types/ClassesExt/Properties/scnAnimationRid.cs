@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class scnAnimationRid
 {
-    public partial class scnAnimationRid
+    [Ordinal(999)]
+    [RED("backendData")]
+    public CHandle<IBackendData> BackendData
     {
-        [Ordinal(999)]
-        [RED("backendData")]
-        public CHandle<IBackendData> BackendData
-        {
-            get => GetPropertyValue<CHandle<IBackendData>>();
-            set => SetPropertyValue<CHandle<IBackendData>>(value);
-        }
+        get => GetPropertyValue<CHandle<IBackendData>>();
+        set => SetPropertyValue<CHandle<IBackendData>>(value);
     }
 }

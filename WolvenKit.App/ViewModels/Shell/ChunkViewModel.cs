@@ -1681,7 +1681,7 @@ namespace WolvenKit.ViewModels.Shell
             if (Data == null)
             {
                 Data = RedTypeManager.CreateRedType(ResolvedPropertyType);
-                (Data as IRedBufferPointer).SetValue(new RED4.RedBuffer()
+                (Data as IRedBufferPointer).SetValue(new RedBuffer()
                 {
                     Data = new RedPackage()
                     {

@@ -1,6 +1,5 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public class EditorObjectID : IRedPrimitive
 {
-    public class EditorObjectID : IRedPrimitive
-    {
-    }
 }

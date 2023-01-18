@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class animAnimNode_IntInput
 {
-    public partial class animAnimNode_IntInput
+    [Ordinal(999)]
+    [RED("debugInput")]
+    public CBool DebugInput
     {
-        [Ordinal(999)]
-        [RED("debugInput")]
-        public CBool DebugInput
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+        get => GetPropertyValue<CBool>();
+        set => SetPropertyValue<CBool>(value);
     }
 }

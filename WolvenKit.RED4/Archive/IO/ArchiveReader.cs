@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;

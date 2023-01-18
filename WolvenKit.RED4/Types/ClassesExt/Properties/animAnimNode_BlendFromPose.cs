@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class animAnimNode_BlendFromPose
 {
-    public partial class animAnimNode_BlendFromPose
+    [Ordinal(998)]
+    [RED("debug")]
+    public CBool Debug
     {
-        [Ordinal(998)]
-        [RED("debug")]
-        public CBool Debug
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+        get => GetPropertyValue<CBool>();
+        set => SetPropertyValue<CBool>(value);
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.TweakDB.Helper;

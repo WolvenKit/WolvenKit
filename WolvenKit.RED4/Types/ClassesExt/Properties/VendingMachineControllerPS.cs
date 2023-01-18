@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class VendingMachineControllerPS
 {
-    public partial class VendingMachineControllerPS
+    [OrdinalOverride(Before = 22)]
+    [RED("vendingMachineSkillchecks")]
+    public CHandle<EngDemoContainer> VendingMachineSkillchecks
     {
-        [OrdinalOverride(Before = 22)]
-        [RED("vendingMachineSkillchecks")]
-        public CHandle<EngDemoContainer> VendingMachineSkillchecks
-        {
-            get => GetPropertyValue<CHandle<EngDemoContainer>>();
-            set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
-        }
+        get => GetPropertyValue<CHandle<EngDemoContainer>>();
+        set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
     }
 }

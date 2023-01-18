@@ -1,9 +1,3 @@
-using Splat;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.Core.CRC;
-using WolvenKit.Core.Extensions;
-using WolvenKit.RED4.Types;
-
 namespace WolvenKit.RED4.Save;
 
 public static class Extensions

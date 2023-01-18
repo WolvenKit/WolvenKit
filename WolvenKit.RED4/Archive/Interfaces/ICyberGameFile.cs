@@ -1,4 +1,3 @@
-using System.IO;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.RED4.Archive;

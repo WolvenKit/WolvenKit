@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace WolvenKit.RED4.Types;
 

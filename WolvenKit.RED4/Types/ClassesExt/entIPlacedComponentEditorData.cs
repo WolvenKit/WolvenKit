@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public class entIPlacedComponentEditorData : RedBaseClass
 {
-    public class entIPlacedComponentEditorData : RedBaseClass
+    [Ordinal(0)]
+    [RED("initialTransform")]
+    public Transform InitialTransform
     {
-        [Ordinal(0)]
-        [RED("initialTransform")]
-        public Transform InitialTransform
-        {
-            get => GetPropertyValue<Transform>();
-            set => SetPropertyValue<Transform>(value);
-        }
+        get => GetPropertyValue<Transform>();
+        set => SetPropertyValue<Transform>(value);
     }
 }

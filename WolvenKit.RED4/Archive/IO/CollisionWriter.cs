@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;

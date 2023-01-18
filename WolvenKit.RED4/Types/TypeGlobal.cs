@@ -1,5 +1,3 @@
-using System;
-using Serilog.Core;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.RED4.Types;

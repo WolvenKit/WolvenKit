@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class gameJournalCodexDescription
 {
-    public partial class gameJournalCodexDescription
+    [Ordinal(999)]
+    [RED("activatedAtStart")]
+    public CBool ActivatedAtStart
     {
-        [Ordinal(999)]
-        [RED("activatedAtStart")]
-        public CBool ActivatedAtStart
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+        get => GetPropertyValue<CBool>();
+        set => SetPropertyValue<CBool>(value);
     }
 }

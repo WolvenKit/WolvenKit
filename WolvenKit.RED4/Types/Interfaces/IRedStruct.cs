@@ -1,7 +1,6 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public interface IRedStruct : IRedType
 {
-    public interface IRedStruct : IRedType
-    {
         
-    }
 }

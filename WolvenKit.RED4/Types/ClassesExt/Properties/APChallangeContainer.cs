@@ -1,12 +1,11 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public class APChallangeContainer : RedBaseClass
 {
-    public class APChallangeContainer : RedBaseClass
+    [RED("contentScale")]
+    public TweakDBID ContentScale
     {
-        [RED("contentScale")]
-        public TweakDBID ContentScale
-        {
-            get => GetPropertyValue<TweakDBID>();
-            set => SetPropertyValue<TweakDBID>(value);
-        }
+        get => GetPropertyValue<TweakDBID>();
+        set => SetPropertyValue<TweakDBID>(value);
     }
 }

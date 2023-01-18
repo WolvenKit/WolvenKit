@@ -1,5 +1,3 @@
-using WolvenKit.RED4.Types;
-
 namespace WolvenKit.RED4.Save;
 
 public class NodeEntry

@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class STextureGroupSetup
 {
-    public partial class STextureGroupSetup
+    [Ordinal(6)]
+    [RED("alphaToCoverageThreshold")]
+    public CUInt8 AlphaToCoverageThreshold
     {
-        [Ordinal(6)]
-        [RED("alphaToCoverageThreshold")]
-        public CUInt8 AlphaToCoverageThreshold
-        {
-            get => GetPropertyValue<CUInt8>();
-            set => SetPropertyValue<CUInt8>(value);
-        }
+        get => GetPropertyValue<CUInt8>();
+        set => SetPropertyValue<CUInt8>(value);
     }
 }

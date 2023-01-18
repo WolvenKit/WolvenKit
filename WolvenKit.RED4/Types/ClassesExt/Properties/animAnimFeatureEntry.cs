@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class animAnimFeatureEntry
 {
-    public partial class animAnimFeatureEntry
+    [Ordinal(999)]
+    [RED("debugEnabled")]
+    public CBool DebugEnabled
     {
-        [Ordinal(999)]
-        [RED("debugEnabled")]
-        public CBool DebugEnabled
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+        get => GetPropertyValue<CBool>();
+        set => SetPropertyValue<CBool>(value);
     }
 }

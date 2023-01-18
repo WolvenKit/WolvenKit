@@ -1,12 +1,11 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class SecurityTurret
 {
-    public partial class SecurityTurret
+    [RED("TargetDataBlock")]
+    public SimpleTargetComponentDataBlock TargetDataBlock
     {
-        [RED("TargetDataBlock")]
-        public SimpleTargetComponentDataBlock TargetDataBlock
-        {
-            get => GetPropertyValue<SimpleTargetComponentDataBlock>();
-            set => SetPropertyValue<SimpleTargetComponentDataBlock>(value);
-        }
+        get => GetPropertyValue<SimpleTargetComponentDataBlock>();
+        set => SetPropertyValue<SimpleTargetComponentDataBlock>(value);
     }
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace WolvenKit.RED4.Archive;
 
 public class FileType

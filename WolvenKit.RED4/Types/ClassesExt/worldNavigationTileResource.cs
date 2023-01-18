@@ -1,8 +1,7 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+[REDClass(ChildLevel = 1)]
+public partial class worldNavigationTileResource
 {
-    [REDClass(ChildLevel = 1)]
-    public partial class worldNavigationTileResource
-    {
         
-    }
 }

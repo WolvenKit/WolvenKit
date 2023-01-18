@@ -1,227 +1,224 @@
-using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using WolvenKit.RED4.Types.Exceptions;
 
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBaseClass>
 {
-    public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBaseClass>
+    public RedBaseClass()
     {
-        public RedBaseClass()
-        {
-            InternalInitClass();
-        }
+        InternalInitClass();
+    }
 
-        internal void InternalInitClass()
+    internal void InternalInitClass()
+    {
+        var info = RedReflection.GetTypeInfo(GetType());
+        foreach (var propertyInfo in info.PropertyInfos)
         {
-            var info = RedReflection.GetTypeInfo(GetType());
-            foreach (var propertyInfo in info.PropertyInfos)
+            if (string.IsNullOrEmpty(propertyInfo.RedName))
             {
-                if (string.IsNullOrEmpty(propertyInfo.RedName))
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                var propTypeInfo = RedReflection.GetTypeInfo(propertyInfo.Type);
-                if (propertyInfo.Type.IsValueType)
+            var propTypeInfo = RedReflection.GetTypeInfo(propertyInfo.Type);
+            if (propertyInfo.Type.IsValueType)
+            {
+                if (propertyInfo.Flags.Equals(Flags.Empty))
                 {
-                    if (propertyInfo.Flags.Equals(Flags.Empty))
-                    {
-                        InternalSetPropertyValue(propertyInfo.RedName, (IRedType)System.Activator.CreateInstance(propertyInfo.Type));
-                    }
-                    else
-                    {
-                        var flags = propertyInfo.Flags;
-                        InternalSetPropertyValue(propertyInfo.RedName, (IRedType)System.Activator.CreateInstance(propertyInfo.Type, flags.MoveNext() ? flags.Current : 0));
-                    }
+                    InternalSetPropertyValue(propertyInfo.RedName, (IRedType)System.Activator.CreateInstance(propertyInfo.Type));
+                }
+                else
+                {
+                    var flags = propertyInfo.Flags;
+                    InternalSetPropertyValue(propertyInfo.RedName, (IRedType)System.Activator.CreateInstance(propertyInfo.Type, flags.MoveNext() ? flags.Current : 0));
                 }
             }
         }
+    }
 
-        internal void InternalSetPropertyValue(string propertyName, IRedType value, bool onlyNative = true)
+    internal void InternalSetPropertyValue(string propertyName, IRedType value, bool onlyNative = true)
+    {
+        var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), propertyName);
+        if (propertyInfo != null)
         {
-            var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), propertyName);
-            if (propertyInfo != null)
+            propertyName = propertyInfo.RedName;
+
+            if (propertyInfo.GenericType != null)
             {
-                propertyName = propertyInfo.RedName;
-
-                if (propertyInfo.GenericType != null)
+                if (propertyInfo.GenericType == typeof(CArrayFixedSize<>) && !Equals(RedReflection.GetDefaultValue(propertyInfo.Type), value))
                 {
-                    if (propertyInfo.GenericType == typeof(CArrayFixedSize<>) && !Equals(RedReflection.GetDefaultValue(propertyInfo.Type), value))
+                    var flags = propertyInfo.Flags;
+                    var size = flags.MoveNext() ? flags.Current : 0;
+
+                    if (((IRedArray)value).Count > size)
                     {
-                        var flags = propertyInfo.Flags;
-                        var size = flags.MoveNext() ? flags.Current : 0;
-
-                        if (((IRedArray)value).Count > size)
-                        {
-                            throw new ArgumentException();
-                        }
-                    }
-
-                    if (propertyInfo.GenericType == typeof(CStatic<>) && !Equals(RedReflection.GetDefaultValue(propertyInfo.Type), value))
-                    {
-                        var flags = propertyInfo.Flags;
-                        var maxSize = flags.MoveNext() ? flags.Current : 0;
-
-                        ((IRedArray)value).MaxSize = maxSize;
+                        throw new ArgumentException();
                     }
                 }
+
+                if (propertyInfo.GenericType == typeof(CStatic<>) && !Equals(RedReflection.GetDefaultValue(propertyInfo.Type), value))
+                {
+                    var flags = propertyInfo.Flags;
+                    var maxSize = flags.MoveNext() ? flags.Current : 0;
+
+                    ((IRedArray)value).MaxSize = maxSize;
+                }
             }
-            else
+        }
+        else
+        {
+            if (onlyNative)
             {
-                if (onlyNative)
-                {
-                    throw new ArgumentException($"Native prop '{propertyName}' could not be found!");
-                }
-
-                if (!_dynamicProperties.Contains(propertyName))
-                {
-                    _dynamicProperties.Add(propertyName);
-                }
+                throw new ArgumentException($"Native prop '{propertyName}' could not be found!");
             }
 
-            _properties[propertyName] = value;
+            if (!_dynamicProperties.Contains(propertyName))
+            {
+                _dynamicProperties.Add(propertyName);
+            }
         }
 
-        #region Properties
+        _properties[propertyName] = value;
+    }
 
-        private readonly IDictionary<string, IRedType> _properties = new Dictionary<string, IRedType>();
-        private readonly IList<string> _dynamicProperties = new List<string>();
+    #region Properties
+
+    private readonly IDictionary<string, IRedType> _properties = new Dictionary<string, IRedType>();
+    private readonly IList<string> _dynamicProperties = new List<string>();
 
 
-        /// <summary>
-        /// Used only for native properties
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="callerName"></param>
-        /// <returns></returns>
-        protected T GetPropertyValue<T>([CallerMemberName] string callerName = "") where T : IRedType
+    /// <summary>
+    /// Used only for native properties
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="callerName"></param>
+    /// <returns></returns>
+    protected T GetPropertyValue<T>([CallerMemberName] string callerName = "") where T : IRedType
+    {
+        var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), callerName);
+        if (propertyInfo != null && _properties.ContainsKey(propertyInfo.RedName))
         {
-            var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), callerName);
-            if (propertyInfo != null && _properties.ContainsKey(propertyInfo.RedName))
-            {
-                return (T)_properties[propertyInfo.RedName];
-            }
-            return (T)RedReflection.GetDefaultValue(typeof(T));
+            return (T)_properties[propertyInfo.RedName];
+        }
+        return (T)RedReflection.GetDefaultValue(typeof(T));
+    }
+
+    /// <summary>
+    /// Used only for native properties
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="value"></param>
+    /// <param name="callerName"></param>
+    protected void SetPropertyValue<T>(T value, [CallerMemberName] string callerName = "") where T : IRedType
+        => InternalSetPropertyValue(callerName, value);
+
+    public bool HasProperty(string propertyName) => _properties.ContainsKey(propertyName) || RedReflection.GetNativePropertyInfo(GetType(), propertyName) != null;
+
+    public void SetProperty(string propertyName, IRedType value) => InternalSetPropertyValue(propertyName, value, false);
+
+    public IRedType GetProperty(string propertyName)
+    {
+        if (_dynamicProperties.Contains(propertyName))
+        {
+            return _properties[propertyName];
         }
 
-        /// <summary>
-        /// Used only for native properties
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <param name="callerName"></param>
-        protected void SetPropertyValue<T>(T value, [CallerMemberName] string callerName = "") where T : IRedType
-            => InternalSetPropertyValue(callerName, value);
-
-        public bool HasProperty(string propertyName) => _properties.ContainsKey(propertyName) || RedReflection.GetNativePropertyInfo(GetType(), propertyName) != null;
-
-        public void SetProperty(string propertyName, IRedType value) => InternalSetPropertyValue(propertyName, value, false);
-
-        public IRedType GetProperty(string propertyName)
+        var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), propertyName);
+        if (propertyInfo != null)
         {
-            if (_dynamicProperties.Contains(propertyName))
+            if ( propertyInfo.RedName is null)
             {
-                return _properties[propertyName];
+                throw new PropertyNotFoundException(" RedName is null ");
             }
 
-            var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), propertyName);
-            if (propertyInfo != null)
+            if ( _properties.ContainsKey(propertyInfo.RedName))
             {
-                if ( propertyInfo.RedName is null)
-                {
-                    throw new PropertyNotFoundException(" RedName is null ");
-                }
-
-                if ( _properties.ContainsKey(propertyInfo.RedName))
-                {
-                    return _properties[propertyInfo.RedName];
-                }
-
-                return (IRedType)RedReflection.GetDefaultValue(propertyInfo.Type);
+                return _properties[propertyInfo.RedName];
             }
 
-            throw new PropertyNotFoundException();
+            return (IRedType)RedReflection.GetDefaultValue(propertyInfo.Type);
         }
 
-        public bool ResetProperty(string name)
+        throw new PropertyNotFoundException();
+    }
+
+    public bool ResetProperty(string name)
+    {
+        var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), name);
+        if (propertyInfo != null)
         {
-            var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), name);
-            if (propertyInfo != null)
-            {
-                SetProperty(propertyInfo.RedName, (IRedType)RedReflection.GetDefaultValue(propertyInfo.Type));
-                return true;
-            }
-
-            if (_dynamicProperties.Contains(name))
-            {
-                _dynamicProperties.Remove(name);
-                _properties.Remove(name);
-
-                return true;
-            }
-
-            return false;
+            SetProperty(propertyInfo.RedName, (IRedType)RedReflection.GetDefaultValue(propertyInfo.Type));
+            return true;
         }
 
-        public List<string> GetPropertyNames() => new(_properties.Keys);
-        public List<string> GetDynamicPropertyNames() => new(_dynamicProperties);
-
-        #endregion Properties
-
-        public override bool Equals(object obj)
+        if (_dynamicProperties.Contains(name))
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return Equals((RedBaseClass)obj);
-        }
-
-        public bool Equals(RedBaseClass other)
-        {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            if (_properties.Count != other._properties.Count)
-            {
-                return false;
-            }
-
-            foreach (var property in _properties)
-            {
-                if (!other._properties.ContainsKey(property.Key))
-                {
-                    return false;
-                }
-
-                if (!Equals(property.Value, other._properties[property.Key]))
-                {
-                    return false;
-                }
-            }
+            _dynamicProperties.Remove(name);
+            _properties.Remove(name);
 
             return true;
         }
 
-        public override int GetHashCode() => base.GetHashCode();
+        return false;
     }
+
+    public List<string> GetPropertyNames() => new(_properties.Keys);
+    public List<string> GetDynamicPropertyNames() => new(_dynamicProperties);
+
+    #endregion Properties
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (obj.GetType() != this.GetType())
+        {
+            return false;
+        }
+
+        return Equals((RedBaseClass)obj);
+    }
+
+    public bool Equals(RedBaseClass other)
+    {
+        if (ReferenceEquals(null, other))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        if (_properties.Count != other._properties.Count)
+        {
+            return false;
+        }
+
+        foreach (var property in _properties)
+        {
+            if (!other._properties.ContainsKey(property.Key))
+            {
+                return false;
+            }
+
+            if (!Equals(property.Value, other._properties[property.Key]))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public override int GetHashCode() => base.GetHashCode();
 }

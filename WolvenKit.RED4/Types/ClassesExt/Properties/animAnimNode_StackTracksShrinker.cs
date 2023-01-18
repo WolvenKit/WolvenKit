@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class animAnimNode_StackTracksShrinker
 {
-    public partial class animAnimNode_StackTracksShrinker
+    [Ordinal(999)]
+    [RED("extenderNodeId")]
+    public CUInt32 ExtenderNodeId
     {
-        [Ordinal(999)]
-        [RED("extenderNodeId")]
-        public CUInt32 ExtenderNodeId
-        {
-            get => GetPropertyValue<CUInt32>();
-            set => SetPropertyValue<CUInt32>(value);
-        }
+        get => GetPropertyValue<CUInt32>();
+        set => SetPropertyValue<CUInt32>(value);
     }
 }

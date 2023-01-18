@@ -1,8 +1,7 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+[REDClass(SerializeDefault = true)]
+public partial class NavGenNavigationSetting
 {
-    [REDClass(SerializeDefault = true)]
-    public partial class NavGenNavigationSetting
-    {
         
-    }
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace WolvenKit.RED4.Types.Exceptions;
 
 public class PropertyNotFoundException : Exception

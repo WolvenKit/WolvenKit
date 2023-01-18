@@ -1,5 +1,3 @@
-using WolvenKit.Core.Compression;
-
 namespace WolvenKit.RED4.Save;
 
 public class CyberpunkSaveFile

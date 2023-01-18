@@ -1,13 +1,12 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class animAnimNode_MathExpressionFloat
 {
-    public partial class animAnimNode_MathExpressionFloat
+    [Ordinal(999)]
+    [RED("expressionString")]
+    public CString ExpressionString
     {
-        [Ordinal(999)]
-        [RED("expressionString")]
-        public CString ExpressionString
-        {
-            get => GetPropertyValue<CString>();
-            set => SetPropertyValue<CString>(value);
-        }
+        get => GetPropertyValue<CString>();
+        set => SetPropertyValue<CString>(value);
     }
 }

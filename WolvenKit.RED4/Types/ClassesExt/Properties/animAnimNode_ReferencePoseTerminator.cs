@@ -1,10 +1,9 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public partial class animAnimNode_ReferencePoseTerminator
 {
-    public partial class animAnimNode_ReferencePoseTerminator
+    partial void PostConstruct()
     {
-        partial void PostConstruct()
-        {
-            VisWhenActive = true;
-        }
+        VisWhenActive = true;
     }
 }

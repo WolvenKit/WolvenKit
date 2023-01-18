@@ -1,7 +1,6 @@
-namespace WolvenKit.RED4.Types
+namespace WolvenKit.RED4.Types;
+
+public interface IRedNotifyObjectChanged
 {
-    public interface IRedNotifyObjectChanged
-    {
-        public event ObjectChangedEventHandler ObjectChanged;
-    }
+    public event ObjectChangedEventHandler ObjectChanged;
 }

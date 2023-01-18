@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
-using System.Threading;
-using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;

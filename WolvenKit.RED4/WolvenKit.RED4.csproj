@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <Platforms>x64</Platforms>
   </PropertyGroup>
 
@@ -13,14 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="C:\Users\seber\source\repos\WolvenKit\WolvenKit\WolvenKit.RED4\Types\Classes\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="C:\Users\seber\source\repos\WolvenKit\WolvenKit\WolvenKit.RED4\Types\Classes\.editorconfig" />
   </ItemGroup>
 
 </Project>
