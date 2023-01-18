@@ -567,8 +567,8 @@ public class RedImage : IDisposable
 
         var mipBiasMaxUnclamped = metadata.MipLevels - 3;
         var mipBiasMax = Math.Max(0, mipBiasMaxUnclamped);
-        setup.PlatformMipBiasPC = (byte)mipBiasMax;
-        setup.PlatformMipBiasConsole = (byte)mipBiasMax;
+        setup.PlatformMipBiasPC = Math.Clamp(setup.PlatformMipBiasPC, (byte)0, (byte)mipBiasMax);
+        setup.PlatformMipBiasConsole = Math.Clamp(setup.PlatformMipBiasConsole, (byte)0, (byte)mipBiasMax);
 
         setup.AllowTextureDowngrade = settings.AllowTextureDowngrade;
         setup.AlphaToCoverageThreshold = settings.AlphaToCoverageThreshold;
