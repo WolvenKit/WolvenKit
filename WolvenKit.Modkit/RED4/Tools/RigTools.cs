@@ -79,12 +79,22 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
             for (var i = 0; i < rigs.Count; i++)
             {
+                var rig = rigs[i];
+
+                ArgumentNullException.ThrowIfNull(rig.AposeLSTrans);
+                ArgumentNullException.ThrowIfNull(rig.AposeLSScale);
+                ArgumentNullException.ThrowIfNull(rig.AposeLSRot);
+                ArgumentNullException.ThrowIfNull(rig.LocalPosn);
+                ArgumentNullException.ThrowIfNull(rig.LocalScale);
+                ArgumentNullException.ThrowIfNull(rig.LocalRot);
+                ArgumentNullException.ThrowIfNull(rig.Names);
+
                 for (var e = 0; e < rigs[i].BoneCount; e++)
                 {
                     var found = false;
                     for (var eye = 0; eye < BoneCount; eye++)
                     {
-                        if (Names[eye] == rigs[i].Names[e])
+                        if (Names[eye] == rig.Names[e])
                         {
                             found = true;
                             break;
@@ -92,18 +102,18 @@ namespace WolvenKit.Modkit.RED4.RigFile
                     }
                     if (!found)
                     {
-                        Names.Add(rigs[i].Names[e]);
+                        Names.Add(rig.Names[e]);
                         if (rigs[i].AposeLSExits)
                         {
-                            LocalPosn.Add(rigs[i].AposeLSTrans[e]);
-                            LocalScale.Add(rigs[i].AposeLSScale[e]);
-                            LocalRot.Add(rigs[i].AposeLSRot[e]);
+                            LocalPosn.Add(rig.AposeLSTrans[e]);
+                            LocalScale.Add(rig.AposeLSScale[e]);
+                            LocalRot.Add(rig.AposeLSRot[e]);
                         }
                         else
                         {
-                            LocalPosn.Add(rigs[i].LocalPosn[e]);
-                            LocalScale.Add(rigs[i].LocalScale[e]);
-                            LocalRot.Add(rigs[i].LocalRot[e]);
+                            LocalPosn.Add(rig.LocalPosn[e]);
+                            LocalScale.Add(rig.LocalScale[e]);
+                            LocalRot.Add(rig.LocalRot[e]);
                         }
                         BoneCount++;
                     }
@@ -118,12 +128,17 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
                 for (var e = 0; e < rigs.Count; e++)
                 {
-                    for (var eye = 0; eye < rigs[e].BoneCount; eye++)
+                    var rig = rigs[e];
+
+                    ArgumentNullException.ThrowIfNull(rig.Names);
+                    ArgumentNullException.ThrowIfNull(rig.Parent);
+
+                    for (var eye = 0; eye < rig.BoneCount; eye++)
                     {
-                        if (Names[i] == rigs[e].Names[eye])
+                        if (Names[i] == rig.Names[eye])
                         {
                             found = true;
-                            parentName = rigs[e].Names[rigs[e].Parent[eye]];
+                            parentName = rig.Names[rig.Parent[eye]];
                             break;
                         }
                     }
@@ -158,6 +173,15 @@ namespace WolvenKit.Modkit.RED4.RigFile
         }
         public static Dictionary<int, Node> ExportNodes(ref ModelRoot model, RawArmature srcBones)
         {
+            ArgumentNullException.ThrowIfNull(srcBones.Parent);
+            ArgumentNullException.ThrowIfNull(srcBones.Names);
+            ArgumentNullException.ThrowIfNull(srcBones.AposeLSScale);
+            ArgumentNullException.ThrowIfNull(srcBones.AposeLSRot);
+            ArgumentNullException.ThrowIfNull(srcBones.AposeLSTrans);
+            ArgumentNullException.ThrowIfNull(srcBones.LocalScale);
+            ArgumentNullException.ThrowIfNull(srcBones.LocalRot);
+            ArgumentNullException.ThrowIfNull(srcBones.LocalPosn);
+
             var bonesMapping = new Dictionary<int, Node>();
             var armature = model.UseScene(0).CreateNode("Armature");
             for (var i = 0; i < srcBones.BoneCount; i++)

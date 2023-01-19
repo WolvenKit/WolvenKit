@@ -15,8 +15,8 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using static WolvenKit.Modkit.RED4.MLMask.MLMASK;
 using static WolvenKit.RED4.Types.Enums;
-using static WolvenKit.RED4.Types.ImportHandler;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -142,7 +142,7 @@ namespace WolvenKit.Modkit.RED4
 
         private bool ImportMlmask(RedRelativePath rawRelative, DirectoryInfo outDir)
         {
-            var mlmask = new MLMASK();
+            var mlmask = new MLMASK(new MlMaskContainer());
             var ext = rawRelative.Extension;
             if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
             {

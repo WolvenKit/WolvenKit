@@ -6,6 +6,7 @@ using System.Text;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -135,7 +136,7 @@ namespace WolvenKit.Modkit.RED4
 
                 foreach (var chan in srcAnim.Channels)
                 {
-                    var idx = Array.IndexOf(Rig.Names, chan.TargetNode.Name);
+                    var idx = Array.IndexOf(Rig.Names.NotNull(), chan.TargetNode.Name);
                     if (idx < 0)
                     {
                         throw new Exception($"Invalid Joint Transform, Joint: {chan.TargetNode.Name} not present in the src/original Rig");
