@@ -53,7 +53,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T Get<T>() where T : ExportArgs
+        public T? Get<T>() where T : ExportArgs
         {
             var arg = _argsList[typeof(T)];
             return arg as T;

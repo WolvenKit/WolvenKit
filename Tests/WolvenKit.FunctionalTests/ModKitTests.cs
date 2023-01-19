@@ -40,7 +40,7 @@ namespace WolvenKit.FunctionalTests
         [DataRow(ECookedFileFormat.xbm)]
         public async Task Test_ImportExport(ECookedFileFormat extension)
         {
-            var ext = $".{extension.ToString()}";
+            var ext = $".{extension}";
             var infiles = s_groupedFiles[ext].ToList();
 
             var modtools = _host.Services.GetRequiredService<IModTools>();
@@ -91,7 +91,12 @@ namespace WolvenKit.FunctionalTests
 
 
                 // uncook
-                var resUncook = modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, esettings,
+                if (fileEntry.Archive is not Archive a)
+                {
+                    Assert.Fail($"Not a RED4 archive");
+                    return;
+                }
+                var resUncook = modtools.UncookSingle(a, fileEntry.Key, resultDir, esettings,
                     resultDir);
 
                 if (!resUncook)
@@ -105,6 +110,10 @@ namespace WolvenKit.FunctionalTests
                 var allfiles = resultDir.GetFiles("*", SearchOption.AllDirectories);
                 var rawfile = allfiles.FirstOrDefault(_ => _.Extension != ext);
                 if (rawfile == null)
+                {
+                    Assert.Fail($"No raw file found in {resultDir}");
+                }
+                if (rawfile.Directory == null)
                 {
                     Assert.Fail($"No raw file found in {resultDir}");
                 }
@@ -328,7 +337,7 @@ namespace WolvenKit.FunctionalTests
             ArgumentNullException.ThrowIfNull(s_config);
             Environment.SetEnvironmentVariable("WOLVENKIT_ENVIRONMENT", "Testing", EnvironmentVariableTarget.Process);
 
-            var ext = $".{extension.ToString()}";
+            var ext = $".{extension}";
             var infiles = s_groupedFiles[ext].ToList();
 
             var modtools = _host.Services.GetRequiredService<IModTools>();
@@ -371,7 +380,12 @@ namespace WolvenKit.FunctionalTests
                 }
 
                 // uncook
-                var resUncook = modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir,
+                if (fileEntry.Archive is not Archive a)
+                {
+                    Assert.Fail($"Not a RED4 archive");
+                    return;
+                }
+                var resUncook = modtools.UncookSingle(a, fileEntry.Key, resultDir,
                     exportArgs, resultDir);
 
                 if (!resUncook)

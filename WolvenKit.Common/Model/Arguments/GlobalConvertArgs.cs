@@ -28,7 +28,7 @@ namespace WolvenKit.Common.Model.Arguments
             return this;
         }
 
-        public T Get<T>() where T : ConvertArgs
+        public T? Get<T>() where T : ConvertArgs
         {
             var arg = _argsList[typeof(T)];
             return arg as T;

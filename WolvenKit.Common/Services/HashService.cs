@@ -87,7 +87,7 @@ namespace WolvenKit.Common.Services
             return false;
         }
 
-        public string GetGuessedExtension(ulong key)
+        public string? GetGuessedExtension(ulong key)
         {
             if (_missing.TryGetValue(key, out var ext))
             {
@@ -96,38 +96,38 @@ namespace WolvenKit.Common.Services
             return null;
         }
 
-        public string Get(ulong key)
+        public string? Get(ulong key)
         {
-            if (_hashes.ContainsKey(key))
+            if (_hashes.TryGetValue(key, out var value))
             {
-                return _hashes[key].ToString();
+                return value.ToString();
             }
 
-            if (_userHashes.ContainsKey(key))
+            if (_userHashes.TryGetValue(key, out var value2))
             {
-                return _userHashes[key].ToString();
+                return value2.ToString();
             }
 
-            if (_projectHashes.ContainsKey(key))
+            if (_projectHashes.TryGetValue(key, out var value3))
             {
-                return _projectHashes[key].ToString();
+                return value3.ToString();
             }
 
             // load additional
             LoadAdditional();
-            if (_additionalhashes.ContainsKey(key))
+            if (_additionalhashes.TryGetValue(key, out var value4))
             {
-                return _additionalhashes[key].ToString();
+                return value4.ToString();
             }
 
             return null;
         }
 
-        public string GetNodeRef(ulong key)
+        public string? GetNodeRef(ulong key)
         {
-            if (_noderefs.ContainsKey(key))
+            if (_noderefs.TryGetValue(key, out var value))
             {
-                return _noderefs[key].ToString();
+                return value.ToString();
             }
 
             return Get(key);
@@ -201,7 +201,7 @@ namespace WolvenKit.Common.Services
             LoadAdditional();
 
             // user hashes
-            LoadUserHashesFrom(Path.GetDirectoryName(AppContext.BaseDirectory));
+            LoadUserHashesFrom(Path.GetDirectoryName(AppContext.BaseDirectory).NotNull());
             LoadUserHashesFrom(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit"));
 
             LoadMissingHashes();
@@ -219,7 +219,7 @@ namespace WolvenKit.Common.Services
 
         private void LoadEmbeddedHashes(string resourceName, Dictionary<ulong, SAsciiString> hashDictionary)
         {
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName).NotNull();
 
             // read KARK header
             var oodleCompression = stream.ReadStruct<uint>();
@@ -246,19 +246,15 @@ namespace WolvenKit.Common.Services
 
         private void LoadMissingHashes()
         {
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s_missing);
-            if (stream == null)
-            {
-                throw new FileNotFoundException(s_missing);
-            }
-            _missing = JsonSerializer.Deserialize<Dictionary<ulong, string>>(stream);
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s_missing).NotNull();
+            _missing = JsonSerializer.Deserialize<Dictionary<ulong, string>>(stream).NotNull();
         }
 
         private void ReadHashes(Stream memoryStream, IDictionary<ulong, SAsciiString> hashDict)
         {
             using var sr = new StreamReader(memoryStream);
             string line;
-            while ((line = sr.ReadLine()) != null)
+            while ((line = sr.ReadLine().NotNull()) is not null)
             {
                 var hash = FNV1A64HashAlgorithm.HashString(line);
                 if (_hashes.ContainsKey(hash))

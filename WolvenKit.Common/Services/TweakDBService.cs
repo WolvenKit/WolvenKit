@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using WolvenKit.Common.Model;
-using WolvenKit.RED4.Types;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Helper;
-using System.Threading.Tasks;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Services
 {
@@ -21,7 +21,7 @@ namespace WolvenKit.Common.Services
         private bool _isLoading;
 
         public bool IsLoaded;
-        public event EventHandler Loaded;
+        public event EventHandler? Loaded;
 
         public TweakDBService()
         {
@@ -76,10 +76,7 @@ namespace WolvenKit.Common.Services
             });
         }
 
-        public bool Exists(TweakDBID key)
-        {
-            return s_tweakDb.Flats.Exists(key) || s_tweakDb.Records.Exists(key);
-        }
+        public bool Exists(TweakDBID key) => s_tweakDb.Flats.Exists(key) || s_tweakDb.Records.Exists(key);
 
         public string GetString(ulong key) => s_stringHelper.GetString(key);
 
@@ -87,7 +84,7 @@ namespace WolvenKit.Common.Services
         public List<TweakDBID> GetQuery(TweakDBID tdb) => s_tweakDb.Queries.GetQuery((ulong)tdb);
         public byte? GetGroupTag(TweakDBID tdb) => s_tweakDb.GroupTags.GetGroupTag((ulong)tdb);
 
-        public Type GetType(TweakDBID tdb)
+        public Type? GetType(TweakDBID tdb)
         {
             var hash = (ulong)tdb;
 

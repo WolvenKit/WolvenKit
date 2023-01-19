@@ -26,7 +26,7 @@ namespace WolvenKit.Common.Model
 
         public bool Exists => File.Exists(FullName);
 
-        public string Extension => Path.GetExtension(RelativePath)?.TrimStart('.');
+        public string? Extension => Path.GetExtension(RelativePath)?.TrimStart('.');
 
         public RedRelativePath ChangeBaseDir(DirectoryInfo newbase)
         {

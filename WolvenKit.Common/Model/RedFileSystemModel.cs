@@ -9,10 +9,10 @@ namespace WolvenKit.Common.Model
 {
     public class RedFileSystemModel : ReactiveObject
     {
-        public RedFileSystemModel(string fullname)
-        {
-            FullName = fullname;
-        }
+        private bool _isExpanded;
+        private string? _name;
+
+        public RedFileSystemModel(string fullname) => FullName = fullname;
 
         public string Name => _name ??= new DirectoryInfo(FullName).Name;
 
@@ -28,8 +28,7 @@ namespace WolvenKit.Common.Model
             ? nameof(ECustomImageKeys.OpenDirImageKey)
             : nameof(ECustomImageKeys.ClosedDirImageKey);
 
-        private bool _isExpanded;
-        private string _name;
+
 
         public bool IsExpanded
         {

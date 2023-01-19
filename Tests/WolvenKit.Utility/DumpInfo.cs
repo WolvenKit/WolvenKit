@@ -263,7 +263,11 @@ namespace WolvenKit.Utility
                     {
                         continue;
                     }
-                    usedStrings.Add(str);
+                    if (!string.IsNullOrEmpty(str))
+                    {
+                        usedStrings.Add(str);
+                    }
+
                 }
                 usedStrings = usedStrings.OrderBy(x => x).Distinct().ToList();
                 File.WriteAllLines(usedhashtxt, usedStrings);

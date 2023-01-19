@@ -25,7 +25,7 @@ namespace WolvenKit.Core
             }
         }
 
-        public static SemVersion GetAssemblyVersion(Assembly assembly)
+        public static SemVersion GetAssemblyVersion(Assembly? assembly)
         {
             if (assembly == null)
             {
