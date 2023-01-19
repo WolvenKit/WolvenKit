@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Splat;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Models;
 
 namespace WolvenKit.ProjectManagement.Project
@@ -13,21 +11,24 @@ namespace WolvenKit.ProjectManagement.Project
     public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
     {
 
-        public Cp77Project(string location) => Location = location;
-
-        private Cp77Project() => Location = "";
-
-        public string Location { get; set; }
-
-        public string Author { get; set; }
-
-        public string Email { get; set; }
+        public Cp77Project(string location, string name)
+        {
+            Location = location;
+            Name = name;
+        }
 
         public string Name { get; set; }
 
-        public string Description { get; set; }
+        public string Location { get; set; }
 
-        public string Version { get; set; }
+
+        public string? Author { get; set; }
+
+        public string? Email { get; set; }
+
+        public string? Description { get; set; }
+
+        public string? Version { get; set; }
 
 
         public bool IsDirty { get; set; }
@@ -83,8 +84,8 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var oldDir = Path.Combine(Path.GetDirectoryName(Location), Name);
-                return Directory.Exists(oldDir) ? oldDir : Path.GetDirectoryName(Location);
+                var oldDir = Path.Combine(Path.GetDirectoryName(Location).NotNull(), Name).NotNull();
+                return Directory.Exists(oldDir) ? oldDir : Path.GetDirectoryName(Location).NotNull();
             }
         }
 
@@ -277,7 +278,7 @@ namespace WolvenKit.ProjectManagement.Project
 
             // Figure out if the case (of the final part) is the same
             var thisDir = Path.GetFileName(path);
-            var actualDir = Path.GetFileName(Directory.GetDirectories(Path.GetDirectoryName(path), thisDir)[0]);
+            var actualDir = Path.GetFileName(Directory.GetDirectories(Path.GetDirectoryName(path).NotNull(), thisDir)[0]);
             return thisDir == actualDir;
         }
 
@@ -293,13 +294,11 @@ namespace WolvenKit.ProjectManagement.Project
 
         public object Clone()
         {
-            Cp77Project clone = new()
+            Cp77Project clone = new(Location, Name)
             {
-                Name = Name,
                 Author = Author,
                 Email = Email,
-                Version = Version,
-                Location = Location
+                Version = Version
             };
             return clone;
         }

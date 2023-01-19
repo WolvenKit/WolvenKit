@@ -18,12 +18,12 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
-using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
@@ -70,9 +70,9 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Constructors
 
-        public ChunkViewModel(ChunkViewModel parent = null) => Parent = parent;
+        public ChunkViewModel(ChunkViewModel? parent = null) => Parent = parent;
 
-        public ChunkViewModel(IRedType export, ChunkViewModel parent = null, string name = null, bool lazy = false, bool isReadOnly = false)
+        public ChunkViewModel(IRedType export, ChunkViewModel? parent = null, string? name = null, bool lazy = false, bool isReadOnly = false)
         {
             IsReadOnly = isReadOnly;
 
@@ -211,11 +211,9 @@ namespace WolvenKit.ViewModels.Shell
             RegenerateAppearanceVisualControllerCommand = new DelegateCommand(ExecuteRegenerateAppearanceVisualController, CanRegenerateAppearanceVisualController);
         }
 
-
-
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export, tab, false) { }
 
-        public ChunkViewModel(IRedType export, RDTDataViewModel tab, bool isReadOnly) : this(export, null, null, false, isReadOnly)
+        public ChunkViewModel(IRedType export, RDTDataViewModel? tab, bool isReadOnly) : this(export, null, null, false, isReadOnly)
         {
             if (tab is not null)
             {
@@ -249,7 +247,7 @@ namespace WolvenKit.ViewModels.Shell
             Parent?.NotifyChain(property);
         }
 
-        private ObservableCollection<ISelectableTreeViewItemModel> SplitProperties(ObservableCollection<ChunkViewModel> locations, int nSize = 100)
+        private ObservableCollection<ISelectableTreeViewItemModel>? SplitProperties(ObservableCollection<ChunkViewModel> locations, int nSize = 100)
         {
             if (locations == null)
             {
@@ -278,15 +276,15 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        private readonly RDTDataViewModel _tab;
+        private readonly RDTDataViewModel? _tab;
 
-        public RDTDataViewModel Tab => _tab ?? Parent?.Tab;
+        public RDTDataViewModel? Tab => _tab ?? Parent?.Tab;
 
         [Reactive] public IRedType Data { get; set; }
 
         [Reactive] public CName RelativePath { get; set; }
 
-        private IRedType _resolvedDataCache;
+        private IRedType? _resolvedDataCache;
 
         public IRedType ResolvedData
         {
@@ -305,8 +303,8 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (Data is TweakDBID tdb && PropertiesLoaded)
                     {
-                        data = Locator.Current.GetService<TweakDBService>().GetFlat(tdb);
-                        data ??= Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
+                        data = Locator.Current.GetService<TweakDBService>().NotNull().GetFlat(tdb);
+                        data ??= Locator.Current.GetService<TweakDBService>().NotNull().GetRecord(tdb);
                     }
                     else if (Data is DataBuffer db && db.Buffer.Data is IRedType irt)
                     {
@@ -320,7 +318,7 @@ namespace WolvenKit.ViewModels.Shell
             set => _resolvedDataCache = null;
         }
 
-        public ChunkViewModel Parent { get; set; }
+        public ChunkViewModel? Parent { get; set; }
 
         public void CalculateProperties()
         {
@@ -576,7 +574,7 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public bool IsHandled { get; set; }
 
-        public string propertyName { get; }
+        public string? propertyName { get; }
 
         private string _name;
 
@@ -675,11 +673,11 @@ namespace WolvenKit.ViewModels.Shell
 
         private Flags _flags;
 
-        public Type PropertyType
+        public Type? PropertyType
         {
             get
             {
-                var type = Data?.GetType() ?? null;
+                var type = Data.GetType() ?? null;
                 if (Parent is not null)
                 {
                     var parent = Parent.Data;
@@ -704,21 +702,21 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public Type ResolvedPropertyType
+        public Type? ResolvedPropertyType
         {
             get
             {
                 if (Data is IRedBaseHandle handle)
                 {
-                    return handle?.GetValue()?.GetType() ?? handle.InnerType;
+                    return handle.GetValue().GetType() ?? handle.InnerType;
                 }
                 if (Data is CVariant v)
                 {
-                    return v?.Value.GetType() ?? null;
+                    return v.Value.GetType() ?? null;
                 }
                 if (Data is TweakDBID tdb)
                 {
-                    var type = Locator.Current.GetService<TweakDBService>().GetType(tdb);
+                    var type = Locator.Current.GetService<TweakDBService>().NotNull().GetType(tdb);
                     if (type is not null)
                     {
                         return type;
@@ -726,7 +724,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 if (Data is ITweakXLItem iti)
                 {
-                    var type = Locator.Current.GetService<TweakDBService>().GetType(iti.ID);
+                    var type = Locator.Current.GetService<TweakDBService>().NotNull().GetType(iti.ID);
                     if (type is not null)
                     {
                         return type;
@@ -785,9 +783,9 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool IsArray => PropertyType is not null &&
                     (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
-                    ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
-                    ResolvedPropertyType.IsAssignableTo(typeof(CR2WList)) ||
-                    ResolvedPropertyType.IsAssignableTo(typeof(RedPackage)));
+                    (ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(IList))) ||
+                    (ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(CR2WList))) ||
+                    (ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(RedPackage))));
 
         private int _propertyCountCache = -1;
 
@@ -1370,7 +1368,7 @@ namespace WolvenKit.ViewModels.Shell
                 Filter = "YAML files (*.yaml; *.yml)|*.yaml;*.yml|All files (*.*)|*.*",
                 FilterIndex = 1,
                 FileName = $"{txl.ID.ResolvedText}.yaml",
-                InitialDirectory = Locator.Current.GetService<IProjectManager>().ActiveProject?.ResourcesDirectory
+                InitialDirectory = Locator.Current.GetService<IProjectManager>().NotNull().ActiveProject?.ResourcesDirectory
             };
 
             if (saveFileDialog.ShowDialog() == true)
@@ -1386,11 +1384,11 @@ namespace WolvenKit.ViewModels.Shell
                     var yaml = serializer.Serialize(new TweakXLFile { txl });
                     stream.Write(yaml.ToCharArray().Select(c => (byte)c).ToArray());
 
-                    Locator.Current.GetService<ILoggerService>().Success($"TweakXL YAML written for {recordName}.");
+                    Locator.Current.GetService<ILoggerService>().NotNull().Success($"TweakXL YAML written for {recordName}.");
                 }
                 catch (Exception ex)
                 {
-                    Locator.Current.GetService<ILoggerService>().Error(ex);
+                    Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
                 }
             }
         }
@@ -1405,7 +1403,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 //string depotpath = r.DepotPath;
                 //Tab.File.OpenRefAsTab(depotpath);
-                Locator.Current.GetService<AppViewModel>().OpenFileFromHash(r.DepotPath.GetRedHash());
+                Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromHash(r.DepotPath.GetRedHash());
             }
             //var key = FNV1A64HashAlgorithm.HashString(depotpath);
 
@@ -1428,7 +1426,7 @@ namespace WolvenKit.ViewModels.Shell
                 //Tab.File.OpenRefAsTab(depotpath);
                 //Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
                 var key = r.DepotPath.GetRedHash();
-                var gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
+                var gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>().NotNull();
                 await gameControllerFactory.GetController().AddFileToModModal(key);
             }
         }

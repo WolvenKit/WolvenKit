@@ -10,7 +10,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -31,6 +30,7 @@ using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
@@ -258,7 +258,7 @@ namespace WolvenKit.ViewModels.Shell
                                 break;
                             case EDockedViews.TextureImportViewModel:
                             {
-                                var vm = Locator.Current.GetService<TextureImportViewModel>();
+                                var vm = Locator.Current.GetService<TextureImportViewModel>().NotNull();
                                 vm.State = DockState.Dock;
                                 vm.SideInDockedMode = DockSide.Right;
                                 DockedViews.Add(vm);
@@ -266,7 +266,7 @@ namespace WolvenKit.ViewModels.Shell
                             }
                             case EDockedViews.TextureExportViewModel:
                             {
-                                var vm = Locator.Current.GetService<TextureExportViewModel>();
+                                var vm = Locator.Current.GetService<TextureExportViewModel>().NotNull();
                                 vm.State = DockState.Dock;
                                 vm.SideInDockedMode = DockSide.Right;
                                 DockedViews.Add(vm);
@@ -424,7 +424,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             using var p = new Process();
                             p.StartInfo.FileName = "cmd";
-                            p.StartInfo.Arguments = String.Format("/C {0}", fileName);
+                            p.StartInfo.Arguments = string.Format("/C {0}", fileName);
                             p.Start();
                             p.WaitForExit();
                         }
@@ -519,7 +519,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
         }
-        
+
 
         public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
         private void DeleteProject(string parameter)
@@ -659,9 +659,8 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var newProjectname = project.ProjectName.Trim();
                 var projectLocation = Path.Combine(project.ProjectPath, newProjectname, newProjectname + ".cpmodproj");
-                Cp77Project np = new(projectLocation)
+                Cp77Project np = new(projectLocation, newProjectname)
                 {
-                    Name = newProjectname,
                     Author = project.Author,
                     Email = project.Email,
                     Version = project.Version
@@ -884,7 +883,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private static async Task OpenFromNewFileTask(NewFileViewModel file)
         {
-            Stream stream = null;
+            Stream? stream = null;
             switch (file.SelectedFile.Type)
             {
                 case EWolvenKitFile.ArchiveXl:

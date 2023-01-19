@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
@@ -18,7 +16,6 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Extensions;
-using WolvenKit.Functionality.Other;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
@@ -101,12 +98,12 @@ namespace WolvenKit.ViewModels.Tools
         #region properties
         [Reactive] public int SelectedIndex { get; set; }
 
-        [Reactive] public FileModel PE_SelectedItem { get; set; }
+        [Reactive] public FileModel? PE_SelectedItem { get; set; }
 
         /// <summary>
         /// Selected Item from Asset Browser If Available.
         /// </summary>
-        [Reactive] public IFileSystemViewModel AB_SelectedItem { get; set; }
+        [Reactive] public IFileSystemViewModel? AB_SelectedItem { get; set; }
 
         /// <summary>
         /// Decides if Asset browser Selected File info should be visible.
@@ -127,11 +124,11 @@ namespace WolvenKit.ViewModels.Tools
         [Reactive] public bool IsImagePreviewVisible { get; set; }
         [Reactive] public bool IsVideoPreviewVisible { get; set; }
 
-        [Reactive] public string ExeCommand { get; set; }
+        [Reactive] public string? ExeCommand { get; set; }
 
-        [Reactive] public string LoadedModelPath { get; set; }
+        [Reactive] public string? LoadedModelPath { get; set; }
 
-        [Reactive] public BitmapSource LoadedBitmapFrame { get; set; }
+        [Reactive] public BitmapSource? LoadedBitmapFrame { get; set; }
 
         #endregion properties
 
@@ -139,7 +136,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public ReactiveCommand<AudioObject, AudioObject> PreviewAudioCommand { get; set; }
 
-        public ICommand FileSelectedCommand { get; private set; }
+        public ICommand? FileSelectedCommand { get; private set; }
 
         private bool CanOpenFile(FileModel model) => model != null;
 
@@ -186,7 +183,7 @@ namespace WolvenKit.ViewModels.Tools
                 Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
                 Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
             {
-                CR2WFile cr2w = null;
+                CR2WFile? cr2w = null;
                 using (var stream = new MemoryStream())
                 {
                     var selectedGameFile = selectedItem.GetGameFile();
@@ -247,7 +244,7 @@ namespace WolvenKit.ViewModels.Tools
                 Enum.TryParse<AudioPreviewExtensions>(extension, true, out _) ||
                 Enum.TryParse<EUncookExtension>(extension, true, out _))
             {
-                CR2WFile cr2w = null;
+                CR2WFile? cr2w = null;
                 using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan))
                 {
                     if (!_parser.TryReadRed4File(stream, out cr2w))
@@ -457,7 +454,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public List<SubmeshComponent> MakePreviewMesh(RedBaseClass cls, ulong chunkMask = ulong.MaxValue)
         {
-            rendRenderMeshBlob rendblob = null;
+            rendRenderMeshBlob? rendblob = null;
 
             if (cls is CMesh cMesh && cMesh.RenderResourceBlob != null && cMesh.RenderResourceBlob.Chunk is rendRenderMeshBlob blob)
             {
@@ -487,6 +484,9 @@ namespace WolvenKit.ViewModels.Tools
             };
             foreach (var mesh in expMeshes)
             {
+                ArgumentNullException.ThrowIfNull(mesh.positions);
+                ArgumentNullException.ThrowIfNull(mesh.indices);
+                ArgumentNullException.ThrowIfNull(mesh.normals);
 
                 var positions = new Vector3Collection(mesh.positions.Length);
                 for (var i = 0; i < mesh.positions.Length; i++)

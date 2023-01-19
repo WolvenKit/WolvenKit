@@ -48,13 +48,13 @@ namespace WolvenKit.Functionality.Services
 
         [Reactive] public bool IsProjectLoaded { get; set; }
 
-        [Reactive] public Cp77Project ActiveProject { get; set; }
+        [Reactive] public Cp77Project? ActiveProject { get; set; }
 
         #endregion
 
         #region commands
 
-        public ReactiveCommand<string, Unit> OpenProjectCommand { get; set; }
+        public ReactiveCommand<string, Unit>? OpenProjectCommand { get; set; }
 
         #endregion
 
@@ -70,16 +70,16 @@ namespace WolvenKit.Functionality.Services
             }
 
             IsProjectLoaded = false;
-            await ReadFromLocationAsync(location).ContinueWith(_ =>
+            await ReadFromLocationAsync(location).ContinueWith(x =>
             {
-                if (_.IsCompletedSuccessfully)
+                if (x.IsCompletedSuccessfully)
                 {
-                    if (_.Result == null)
+                    if (x.Result == null)
                     {
                     }
                     else
                     {
-                        ActiveProject = _.Result;
+                        ActiveProject = x.Result;
                         IsProjectLoaded = true;
 
                         if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
@@ -98,7 +98,7 @@ namespace WolvenKit.Functionality.Services
             return true;
         }
 
-        private async Task<Cp77Project> ReadFromLocationAsync(string location)
+        private async Task<Cp77Project?> ReadFromLocationAsync(string location)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace WolvenKit.Functionality.Services
             return null;
         }
 
-        private async Task<Cp77Project> Load(string path)
+        private async Task<Cp77Project?> Load(string path)
         {
             try
             {
@@ -135,11 +135,10 @@ namespace WolvenKit.Functionality.Services
                     return null;
                 }
 
-                Cp77Project result = new(path)
+                Cp77Project result = new(path, obj.Name)
                 {
                     Author = obj.Author,
                     Email = obj.Email,
-                    Name = obj.Name,
                     Version = obj.Version,
                 };
 

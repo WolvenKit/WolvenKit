@@ -16,6 +16,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
@@ -92,7 +93,7 @@ namespace WolvenKit.Functionality.Controllers
         // TODO: Move this somewhere else
         private void LoadCustomHashes()
         {
-            var parser = Locator.Current.GetService<Red4ParserService>();
+            var parser = Locator.Current.GetService<Red4ParserService>().NotNull();
 
             CName physMatLibPath = "base\\physics\\physicsmaterials.physmatlib";
             CName presetPath = "engine\\physics\\collision_presets.json";

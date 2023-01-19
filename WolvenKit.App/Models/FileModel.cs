@@ -4,14 +4,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.ProjectManagement.Project;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Models
 {
@@ -23,7 +20,7 @@ namespace WolvenKit.Models
 
         public const string s_rawdir = "wkitrawdir";
 
-        public FileModel(string path, Cp77Project project)
+        public FileModel(string path, Cp77Project? project)
         {
             FullName = path;
             Project = project;
@@ -79,7 +76,7 @@ namespace WolvenKit.Models
         [Display(Name = "Hash")] public string HashStr => Hash.ToString();
 
 
-        [Browsable(false)] public Cp77Project Project { get; }
+        [Browsable(false)] public Cp77Project? Project { get; }
 
         [Browsable(false)] public ulong Hash { get; }
 
@@ -172,7 +169,7 @@ namespace WolvenKit.Models
             //throw new System.NullReferenceException("fuzzy exception");
         }
 
-        public static ulong GenerateKey(string fullname, Cp77Project project)
+        public static ulong GenerateKey(string fullname, Cp77Project? project)
         {
             if (project == null)
             {
