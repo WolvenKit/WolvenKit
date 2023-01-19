@@ -26,9 +26,9 @@ namespace WolvenKit.Modkit.RED4.Sounds
                 .Subscribe(type => IsEnabled = type != ECustomSoundType.mod_skip.ToString());
         }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [Reactive] public string Type { get; set; } = ECustomSoundType.mod_sfx_2d.ToString();
-        public string File { get; set; }
+        public string? File { get; set; }
         public decimal? Gain { get; set; } = 1.0m;
         public decimal? Pitch { get; set; } = 0.0m;
 

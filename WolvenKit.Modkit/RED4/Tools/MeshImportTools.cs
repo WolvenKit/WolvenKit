@@ -6,17 +6,17 @@ using System.Text;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.GeneralStructs;
-using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
+using Mat4 = System.Numerics.Matrix4x4;
+using Quat = System.Numerics.Quaternion;
 using Vec2 = System.Numerics.Vector2;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
-using Quat = System.Numerics.Quaternion;
-using Mat4 = System.Numerics.Matrix4x4;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -61,7 +61,7 @@ namespace WolvenKit.Modkit.RED4
                 if (model.LogicalNodes.Count > 0)
                 {
                     armature = Enumerable.Range(0, model.LogicalNodes.Count).Select(_ => (LogicalChildOfRoot)model.LogicalNodes[_]).ToList();
-                    jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_])).ToList();
+                    jointlist = Enumerable.Range(0, armature.Count).Select(_ => (Node)armature[_]).ToList();
                     jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).Name).ToList();
                     jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).VisualParent is null
                                                                         ? "firstbone" : ((Node)armature[_]).VisualParent.Name).ToList();
@@ -78,7 +78,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            int[] GetLevels(string root = "Root")
+            int[]? GetLevels(string root = "Root")
             {
                 var rootindex = jointnames.IndexOf("Root");
                 var treelevel = new int[jointnames.Count];
@@ -240,15 +240,15 @@ namespace WolvenKit.Modkit.RED4
 
                     //level = 0;
 
-                    var x90 = Quat.CreateFromAxisAngle(Vec3.UnitX, ((float)Math.PI / 2));
-                    var y90 = Quat.CreateFromAxisAngle(Vec3.UnitY, ((float)Math.PI / 2));
-                    var z90 = Quat.CreateFromAxisAngle(Vec3.UnitZ, ((float)Math.PI / 2));
+                    var x90 = Quat.CreateFromAxisAngle(Vec3.UnitX, (float)Math.PI / 2);
+                    var y90 = Quat.CreateFromAxisAngle(Vec3.UnitY, (float)Math.PI / 2);
+                    var z90 = Quat.CreateFromAxisAngle(Vec3.UnitZ, (float)Math.PI / 2);
 
 
                     //works only for the rig of the kusanagi bike
                     rig.BoneTransforms[i].Translation = level == 1 ? Vec4.Transform(newT, x90) :
-                                                        level == 3 ||
-                                                        level == 4 ? Vec4.Transform(newT, new Quat(0, 1, 0, 0) * x90) :
+                                                        level is 3 or
+                                                        4 ? Vec4.Transform(newT, new Quat(0, 1, 0, 0) * x90) :
                                                         level == 5 ? Vec4.Transform(newT, x90) :
                                                         level == 6 ? Vec4.Transform(newT, z90) :
                                                         level == 8 ? Vec4.Transform(newT, y90 * new Quat(0, 0, 0, 1)) : // Quat(0, 0, 0, 1) is z90 * z90
@@ -290,7 +290,7 @@ namespace WolvenKit.Modkit.RED4
         }
 
 
-        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, GltfImportArgs args, Stream outStream = null)
+        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, GltfImportArgs args)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);
 
@@ -299,7 +299,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var originalRig = args.Rig != null ? args.Rig.FirstOrDefault() : null;
+            var originalRig = args.Rig?.FirstOrDefault();
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")) && (args.ImportMaterialOnly || args.ImportMaterials))
             {
@@ -317,11 +317,11 @@ namespace WolvenKit.Modkit.RED4
 
 
                     matOnlyStream.Seek(0, SeekOrigin.Begin);
-                    if (outStream != null)
-                    {
-                        matOnlyStream.CopyTo(outStream);
-                    }
-                    else
+                    //if (outStream != null)
+                    //{
+                    //    matOnlyStream.CopyTo(outStream);
+                    //}
+                    //else
                     {
                         inmeshStream.SetLength(0);
                         matOnlyStream.CopyTo(inmeshStream);
@@ -339,7 +339,7 @@ namespace WolvenKit.Modkit.RED4
 
                 if (cr2w.RootChunk is CMesh root)
                 {
-                    for (int i = 0; i < root.BoneNames.Count; i++)
+                    for (var i = 0; i < root.BoneNames.Count; i++)
                     {
                         var foundbone = jointarray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
                         if (foundbone is not null)
@@ -372,8 +372,8 @@ namespace WolvenKit.Modkit.RED4
             }
             Meshes = Meshes.OrderBy(o => o.name).ToList();
 
-            var max = new Vec3(Single.MinValue, Single.MinValue, Single.MinValue);
-            var min = new Vec3(Single.MaxValue, Single.MaxValue, Single.MaxValue);
+            var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
+            var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
 
             Meshes.ForEach(p => p.positions.ToList().ForEach(q => { max.X = Math.Max(q.X, max.X); max.Y = Math.Max(q.Y, max.Y); max.Z = Math.Max(q.Z, max.Z); }));
             Meshes.ForEach(p => p.positions.ToList().ForEach(q => { min.X = Math.Min(q.X, min.X); min.Y = Math.Min(q.Y, min.Y); min.Z = Math.Min(q.Z, min.Z); }));
@@ -386,8 +386,8 @@ namespace WolvenKit.Modkit.RED4
 
 
 
-            RawArmature oldRig = null;
-            RawArmature newRig = null;
+            RawArmature? oldRig = null;
+            RawArmature? newRig = null;
             if (originalRig != null)
             {
 
@@ -440,9 +440,9 @@ namespace WolvenKit.Modkit.RED4
 
             if (originalRig != null)
             {
-                var tt = model.LogicalSkins.Count >= 2 ?
-                Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.WorldMatrix).ToArray()
-                : null;
+                var tt = model.LogicalSkins.Count >= 2
+                    ? Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.WorldMatrix).ToArray()
+                    : null;
 
                 var tjointnames = model.LogicalSkins.Count >= 2 ?
                     Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.Name).ToArray()
@@ -455,11 +455,11 @@ namespace WolvenKit.Modkit.RED4
             }
 
             ms.Seek(0, SeekOrigin.Begin);
-            if (outStream != null)
-            {
-                ms.CopyTo(outStream);
-            }
-            else
+            //if (outStream != null)
+            //{
+            //    ms.CopyTo(outStream);
+            //}
+            //else
             {
                 inmeshStream.SetLength(0);
                 ms.CopyTo(inmeshStream);
@@ -495,7 +495,7 @@ namespace WolvenKit.Modkit.RED4
             meshContainer.texCoords0[1] = new Vec2(0, 0);
             meshContainer.texCoords0[2] = new Vec2(1, 0);
 
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 meshContainer.colors0[i] = new Vec4(1, 1, 1, 1);
                 meshContainer.normals[i] = new Vec3(0, 0, 1);
@@ -607,7 +607,7 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < vertCount; i++)
             {
-                if (joints0 != null && i < joints0.Count)
+                if (joints0 != null && weights0 is not null && i < joints0.Count)
                 {
                     meshContainer.boneindices[i, 0] = (ushort)joints0[i].X;
                     meshContainer.boneindices[i, 1] = (ushort)joints0[i].Y;
@@ -619,7 +619,7 @@ namespace WolvenKit.Modkit.RED4
                     meshContainer.weights[i, 2] = weights0[i].Z;
                     meshContainer.weights[i, 3] = weights0[i].W;
                 }
-                if (joints1 != null && i < joints1.Count)
+                if (joints1 != null && weights1 is not null && i < joints1.Count)
                 {
                     meshContainer.boneindices[i, 4] = (ushort)joints1[i].X;
                     meshContainer.boneindices[i, 5] = (ushort)joints1[i].Y;
@@ -685,7 +685,7 @@ namespace WolvenKit.Modkit.RED4
             for (var i = 0; i < mesh.texCoords0.Length; i++)
             {
                 Re4Mesh.uv0s[i, 0] = Converters.converthf(mesh.texCoords0[i].X);
-                Re4Mesh.uv0s[i, 1] = Converters.converthf(mesh.texCoords0[i].Y * -1 + 1);
+                Re4Mesh.uv0s[i, 1] = Converters.converthf((mesh.texCoords0[i].Y * -1) + 1);
             }
 
             Re4Mesh.uv1s = new ushort[vertCount, 2];
@@ -916,10 +916,10 @@ namespace WolvenKit.Modkit.RED4
             return meshesInfo;
         }
 
-        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, Mat4[] inverseBindMatrices = null, string[] boneNames = null)
+        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, Mat4[]? inverseBindMatrices = null, string[]? boneNames = null)
         //private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
         {
-            rendRenderMeshBlob blob = null;
+            rendRenderMeshBlob? blob = null;
             if (cr2w.RootChunk is CMesh obj1 && obj1.RenderResourceBlob.Chunk is rendRenderMeshBlob obj2)
             {
                 blob = obj2;
@@ -929,6 +929,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 blob = obj5;
             }
+
+            ArgumentNullException.ThrowIfNull(blob, nameof(blob));
 
             // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
             if (blob.Header.Topology is not null)
@@ -1234,15 +1236,18 @@ namespace WolvenKit.Modkit.RED4
 
             if (cr2w.RootChunk is CMesh root && inverseBindMatrices != null)
             {
-                for (int i = 0; i < blob.Header.BonePositions.Count; i++)
+                for (var i = 0; i < blob.Header.BonePositions.Count; i++)
                 {
-                    var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i]) && x.Length == root.BoneNames[i].Length);
+                    if (boneNames is not null)
+                    {
+                        var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i]) && x.Length == root.BoneNames[i].Length);
 
-                    blob.Header.BonePositions[i].X = inverseBindMatrices[index].M41;
-                    blob.Header.BonePositions[i].Y = -inverseBindMatrices[index].M43;
-                    blob.Header.BonePositions[i].Z = inverseBindMatrices[index].M42;
-                    blob.Header.BonePositions[i].W = inverseBindMatrices[index].M44;
-                    //blob.Header.BonePositions[i] = root.BoneRigMatrices[i].W;
+                        blob.Header.BonePositions[i].X = inverseBindMatrices[index].M41;
+                        blob.Header.BonePositions[i].Y = -inverseBindMatrices[index].M43;
+                        blob.Header.BonePositions[i].Z = inverseBindMatrices[index].M42;
+                        blob.Header.BonePositions[i].W = inverseBindMatrices[index].M44;
+                        //blob.Header.BonePositions[i] = root.BoneRigMatrices[i].W;
+                    }
                 }
             }
 
@@ -1297,7 +1302,7 @@ namespace WolvenKit.Modkit.RED4
                         {
                             LOD = Convert.ToUInt32(name.Substring(idx + 4, 1));
                             LOD = args.ReplaceLod && LOD == 0 ? 8 : LOD;
-                            
+
                             LODs.Add(LOD);
                         }
                     }

@@ -19,11 +19,11 @@ namespace WolvenKit.Common
         SourceCache<IGameArchive, string> Archives { get; set; }
         SourceCache<IGameArchive, string> ModArchives { get; set; }
         //SourceCache<IGameFile, ulong> Items { get; }
-        RedFileSystemModel RootNode { get; set; }
+        RedFileSystemModel? RootNode { get; set; }
         public List<RedFileSystemModel> ModRoots { get; }
 
         //IEnumerable<string> AutocompleteSource { get; }
-        IEnumerable<string> Extensions { get; set; }
+        IEnumerable<string>? Extensions { get; set; }
         //IEnumerable<IGameFile> FileList { get; }
         EArchiveType TypeName { get; }
 
@@ -37,11 +37,11 @@ namespace WolvenKit.Common
         public void LoadModArchive(string filename);
         public void LoadModsArchives(FileInfo executable);
 
-        public Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
+        public Dictionary<string, IEnumerable<FileEntry?>> GetGroupedFiles();
         public IEnumerable<FileEntry> GetFiles();
         void LoadFromFolder(DirectoryInfo archivedir);
 
-        RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
+        RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false);
         public Optional<IGameFile> Lookup(ulong hash);
 
         public IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();

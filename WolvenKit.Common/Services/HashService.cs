@@ -253,8 +253,8 @@ namespace WolvenKit.Common.Services
         private void ReadHashes(Stream memoryStream, IDictionary<ulong, SAsciiString> hashDict)
         {
             using var sr = new StreamReader(memoryStream);
-            string line;
-            while ((line = sr.ReadLine().NotNull()) is not null)
+            string? line;
+            while ((line = sr.ReadLine()) is not null)
             {
                 var hash = FNV1A64HashAlgorithm.HashString(line);
                 if (_hashes.ContainsKey(hash))

@@ -6,6 +6,7 @@ using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
@@ -24,12 +25,12 @@ public class WKitScripting
     {
         _loggerService = loggerService;
 
-        _archiveManager = Locator.Current.GetService<IArchiveManager>();
-        _redParserService = Locator.Current.GetService<Red4ParserService>();
+        _archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
+        _redParserService = Locator.Current.GetService<Red4ParserService>().NotNull();
     }
 
     [Description("GetFileFromBase")]
-    public virtual IGameFile GetFileFromBase(string path)
+    public virtual IGameFile? GetFileFromBase(string path)
     {
         var file = _archiveManager.Lookup(FNV1A64HashAlgorithm.HashString(path));
         if (file.HasValue)
@@ -51,7 +52,7 @@ public class WKitScripting
         }
     }
 
-    public virtual IGameFile GetFileFromBase(ulong hash)
+    public virtual IGameFile? GetFileFromBase(ulong hash)
     {
         var file = _archiveManager.Lookup(hash);
         if (file.HasValue)
@@ -62,7 +63,7 @@ public class WKitScripting
     }
 
     [Description("GameFileToJson")]
-    public virtual string GameFileToJson(IGameFile gameFile)
+    public virtual string? GameFileToJson(IGameFile gameFile)
     {
         if (gameFile == null)
         {
@@ -82,10 +83,7 @@ public class WKitScripting
         return null;
     }
 
-    public virtual CR2WFile JsonToCR2W(string json)
-    {
-        return RedJsonSerializer.Deserialize<RedFileDto>(json)?.Data;
-    }
+    public virtual CR2WFile? JsonToCR2W(string json) => RedJsonSerializer.Deserialize<RedFileDto>(json)?.Data;
 
     public virtual string ChangeExtension(string path, string extension) => Path.ChangeExtension(path, extension);
 }

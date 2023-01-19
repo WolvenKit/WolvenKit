@@ -16,6 +16,7 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
+using static WolvenKit.RED4.Types.ImportHandler;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -32,7 +33,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outDir">can be a depotpath, or if null the parent directory of the rawfile</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo outDir = null)
+        public async Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null)
         {
             #region checks
 
@@ -232,7 +233,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="args"></param>
         /// <param name="outDir">must match the relative paths in indir!</param>
         /// <returns></returns>
-        public async Task<bool> ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo outDir = null)
+        public async Task<bool> ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo? outDir = null)
         {
             #region checks
 
@@ -303,7 +304,11 @@ namespace WolvenKit.Modkit.RED4
                 .ChangeExtension(ERedExtension.fnt.ToString());
             if (!File.Exists(redpath.FullPath))
             {
-                Directory.CreateDirectory(redpath.ToFileInfo().Directory.FullName);
+                var dir = redpath.ToFileInfo().Directory;
+                if (dir is not null)
+                {
+                    Directory.CreateDirectory(dir.FullName);
+                }
             }
 
             using var fs = new FileStream(redpath.FullPath, FileMode.Create, FileAccess.Write);
@@ -373,7 +378,11 @@ namespace WolvenKit.Modkit.RED4
                 .ChangeExtension(ERedExtension.xbm.ToString());
             if (!File.Exists(outpath.FullPath))
             {
-                Directory.CreateDirectory(outpath.ToFileInfo().Directory.FullName);
+                var dir = outpath.ToFileInfo().Directory;
+                if (dir is not null)
+                {
+                    Directory.CreateDirectory(dir.FullName);
+                }
             }
 
             using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
@@ -398,15 +407,28 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
 
-                if (_archiveManager.Lookup(args.BaseMesh.FirstOrDefault().NameHash64).Value
+                var m = args.BaseMesh.FirstOrDefault();
+                if (m is null)
+                {
+                    _loggerService.Error($"Could not find any base mesh.");
+                    return false;
+                }
+
+                if (_archiveManager.Lookup(m.NameHash64).Value
                     is Core.Interfaces.IGameFile file)
                 {
                     var name = rawRelative.NameWithoutExtension.ToLower() + ".mesh";
                     var rr = new RedRelativePath(rawRelative);
                     rr.ChangeBaseDir(outDir);
                     var path = Path.GetDirectoryName(rr.FullName);
+                    if (path is null)
+                    {
+                        throw new DirectoryNotFoundException();
+                    }
                     if (!Directory.Exists(path))
-                    { Directory.CreateDirectory(path); }
+                    {
+                        Directory.CreateDirectory(path);
+                    }
 
                     using var fs = new FileStream(path + @"\" + name, FileMode.Create);
                     file.Extract(fs);
@@ -416,7 +438,7 @@ namespace WolvenKit.Modkit.RED4
                 }
                 else
                 {
-                    _loggerService.Error($"Could not open base mesh {args.BaseMesh.FirstOrDefault().FileName}");
+                    _loggerService.Error($"Could not open base mesh {m.FileName}");
                     return false;
                 }
 
@@ -458,6 +480,8 @@ namespace WolvenKit.Modkit.RED4
                     case GltfImportAsFormat.Rig:
                         result = ImportRig(rawRelative.ToFileInfo(), redFs, args);
                         break;
+                    default:
+                        break;
                 }
 
                 if (result)
@@ -483,6 +507,7 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
+#pragma warning disable IDE0072 // Add missing cases
         private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
             rawextension switch
             {
@@ -499,8 +524,9 @@ namespace WolvenKit.Modkit.RED4
                 //ERawFileFormat.wav => expr,
                 _ => throw new ArgumentOutOfRangeException(nameof(rawextension), rawextension, null)
             };
+#pragma warning restore IDE0072 // Add missing cases
 
-        private static string FindRedFile(RedRelativePath rawRelPath, DirectoryInfo outDir, string overrideExt = null)
+        private static string FindRedFile(RedRelativePath rawRelPath, DirectoryInfo outDir, string? overrideExt = null)
         {
             var ext = rawRelPath.Extension;
             if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))

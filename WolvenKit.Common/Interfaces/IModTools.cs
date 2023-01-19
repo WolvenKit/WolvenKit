@@ -20,10 +20,10 @@ namespace WolvenKit.Common.Interfaces
         public Task<bool> ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo? outDir = null);
 
 
-        public bool Export(FileInfo cr2wfile, GlobalExportArgs args, DirectoryInfo? basedir = null,
+        public bool Export(FileInfo cr2wfile, GlobalExportArgs args, DirectoryInfo basedir,
             DirectoryInfo? rawoutdir = null, ECookedFileFormat[]? forcebuffers = null);
 
-        bool RebuildBuffer(RedRelativePath rawRelativePath, DirectoryInfo? outDir = null);
+        bool RebuildBuffer(RedRelativePath rawRelativePath, DirectoryInfo outDir);
 
         void ExtractAll(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false);
         Task ExtractAllAsync(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false);
@@ -51,8 +51,8 @@ namespace WolvenKit.Common.Interfaces
             DirectoryInfo outDir,
             GlobalExportArgs args,
             bool unbundle = false,
-            string pattern = "",
-            string regex = "",
+            string? pattern = null,
+            string? regex = null,
             DirectoryInfo? rawOutDir = null,
             ECookedFileFormat[]? forcebuffers = null,
             bool serialize = false);

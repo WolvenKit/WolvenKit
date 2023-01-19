@@ -29,13 +29,13 @@ namespace WolvenKit.Common.Model
         public abstract SourceCache<IGameArchive, string> ModArchives { get; set; }
 
 
-        public RedFileSystemModel RootNode { get; set; }
+        public RedFileSystemModel? RootNode { get; set; }
 
         public List<RedFileSystemModel> ModRoots { get; set; } = new();
 
         //public IEnumerable<string> AutocompleteSource { get; set; } //=> FileList.Select(_ => GetFileName(_.Name)).Distinct();
 
-        public IEnumerable<string> Extensions { get; set; }
+        public IEnumerable<string>? Extensions { get; set; }
 
         public abstract bool IsManagerLoaded { get; set; }
 
@@ -55,7 +55,7 @@ namespace WolvenKit.Common.Model
         {
             if (path.Split('\\').Length > 3 && path.Split('\\').Contains("content"))
             {
-                return path.Split('\\')[path.Split('\\').ToList().IndexOf(path.Split('\\').FirstOrDefault(x => x == "content")) - 1];
+                return path.Split('\\')[path.Split('\\').ToList().IndexOf(path.Split('\\').First(x => x == "content")) - 1];
             }
             return path;
         }
@@ -142,9 +142,9 @@ namespace WolvenKit.Common.Model
 
         public abstract Optional<IGameFile> Lookup(ulong hash);
 
-        public abstract RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
+        public abstract RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false);
 
-        public abstract Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
+        public abstract Dictionary<string, IEnumerable<FileEntry?>> GetGroupedFiles();
 
         public abstract IEnumerable<FileEntry> GetFiles();
 

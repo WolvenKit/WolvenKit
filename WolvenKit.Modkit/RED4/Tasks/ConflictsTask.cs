@@ -23,7 +23,7 @@ public partial class ConsoleFunctions
         List<ResolvedConflictEntry> Losing
     );
 
-    public record class ResolvedConflictEntry(string FileName, string ModName);
+    public record class ResolvedConflictEntry(string? FileName, string ModName);
 
     public int ConflictsTask(DirectoryInfo path, bool structured)
     {
@@ -170,7 +170,7 @@ public partial class ConsoleFunctions
 
                     foreach (var (hash, modIdx) in conflicts.Losing)
                     {
-                        var resolvedHash = _hashService.Get(hash);
+                        var resolvedHash = _hashService.Get(hash) ?? "";
                         var resolvedMod = mods[modIdx].ArchiveRelativePath;
                         losing.Add(new(resolvedHash, resolvedMod));
 
@@ -198,7 +198,7 @@ public partial class ConsoleFunctions
 
                     foreach (var (hash, modIdx) in conflicts.Winning)
                     {
-                        var resolvedHash = _hashService.Get(hash);
+                        var resolvedHash = _hashService.Get(hash) ?? "";
                         var resolvedMod = mods[modIdx].ArchiveRelativePath;
                         winning.Add(new(resolvedHash, resolvedMod));
 

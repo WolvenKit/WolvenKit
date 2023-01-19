@@ -14,7 +14,7 @@ public static class ProcessUtil
     /// <param name="fileName"></param>
     /// <param name="arguments"></param>
     /// <returns>true if exit code is 0</returns>
-    public static async Task<bool> RunProcessAsync(string fileName, string arguments, string workingDir = "")
+    public static async Task<bool> RunProcessAsync(string fileName, string arguments, string? workingDir = null)
     {
         Process p;
         var eventHandled = new TaskCompletionSource<bool>();

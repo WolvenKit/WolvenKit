@@ -25,7 +25,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
             return baseType != null && baseType.GetGenericTypeDefinition() == typeof(CArray<>);
         }
 
-        public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options)
+        public override JsonConverter? CreateConverter(Type type, JsonSerializerOptions options)
         {
             if (type.BaseType == null)
             {
@@ -34,7 +34,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
 
             var keyType = type.BaseType.GetGenericArguments()[0];
 
-            var converter = (JsonConverter)Activator.CreateInstance(
+            var converter = Activator.CreateInstance(
                 typeof(CArrayConverterInner<>).MakeGenericType(
                     new Type[] { keyType }),
                 BindingFlags.Instance | BindingFlags.Public,
@@ -42,7 +42,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                 args: new object[] { options },
                 culture: null);
 
-            return converter;
+            return converter as JsonConverter;
 
         }
 
@@ -64,11 +64,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
             {
                 var value = _valueConverter.Read(ref reader, _baseType, options) ?? JsonSerializer.Deserialize<IList<T>>(ref reader, options);
 
-                var instance = (CArray<T>)Activator.CreateInstance(typeToConvert);
-                if (instance == null)
-                {
-                    throw new JsonException();
-                }
+                var instance = Activator.CreateInstance(typeToConvert) as CArray<T> ?? throw new JsonException();
 
                 instance.AddRange(value);
                 return instance;

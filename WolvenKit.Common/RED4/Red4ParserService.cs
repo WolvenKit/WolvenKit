@@ -12,6 +12,14 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W
 {
+    public class Red4ParserException : Exception
+    {
+        public Red4ParserException() : base() { }
+
+
+
+    }
+
     public class Red4ParserService : IRedParserService
     {
         private readonly IHashService _hashService;
