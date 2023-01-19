@@ -16,7 +16,7 @@ public class DesktopBridgeHelper
 
     public static bool IsRunningAsPackage()
     {
-        if (_isWindows7OrLower)
+        if (IsWindows7OrLower())
         {
             return false;
         }
@@ -33,16 +33,15 @@ public class DesktopBridgeHelper
         }
     }
 
-    public static bool IsWindows7OrLower() => _isWindows7OrLower;
-    private static bool _isWindows7OrLower
+    private static bool IsWindows7OrLower() => GetOSVersion() <= 6.1;
+    public static bool IsWindows10OrHigher() => GetOSVersion() >= 10.0;
+
+    public static double GetOSVersion()
     {
-        get
-        {
-            var versionMajor = Environment.OSVersion.Version.Major;
-            var versionMinor = Environment.OSVersion.Version.Minor;
-            var version = versionMajor + ((double)versionMinor / 10);
-            return version <= 6.1;
-        }
+        var versionMajor = Environment.OSVersion.Version.Major;
+        var versionMinor = Environment.OSVersion.Version.Minor;
+        var version = versionMajor + ((double)versionMinor / 10);
+        return version;
     }
 
     public static bool PowershellExists()
