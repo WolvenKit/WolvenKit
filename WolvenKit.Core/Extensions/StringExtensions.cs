@@ -41,7 +41,8 @@ namespace WolvenKit.Interfaces.Extensions
         public static string GetHashMD5(this string input)
         {
             var encodedPassword = new UTF8Encoding().GetBytes(input);
-            var hash = ((HashAlgorithm)CryptoConfig.CreateFromName("MD5")).ComputeHash(encodedPassword);
+            var hash = (CryptoConfig.CreateFromName("MD5") as HashAlgorithm)?.ComputeHash(encodedPassword);
+            ArgumentNullException.ThrowIfNull(hash);
             var encoded = BitConverter.ToString(hash)
                .Replace("-", string.Empty)
                .ToLower();

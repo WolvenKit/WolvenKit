@@ -5,7 +5,7 @@
     <Version>8.8.1</Version>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-
+	<Nullable>Disable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>

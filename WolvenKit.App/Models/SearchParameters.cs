@@ -1,11 +1,12 @@
 using System.ComponentModel;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Prism.Commands;
 using WolvenKit.Common;
 
 namespace WolvenKit.Models
 {
-    public class SearchParameters : ObservableObject, INotifyPropertyChanged, INotifyPropertyChanging
+    public class SearchParameters : ObservableObject
     {
         #region Constructors
 

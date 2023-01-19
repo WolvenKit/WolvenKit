@@ -54,9 +54,9 @@ namespace WolvenKit.Core.Extensions
                         mask = 63;
                     }
                 }
-                result = result | ((b & mask) << shift);
-                shift = shift + s;
-                i = i + 1;
+                result |= ((b & mask) << shift);
+                shift += s;
+                i++;
             } while (!(b < 64 || (i >= 3 && b < 128)));
 
             return result;
@@ -98,7 +98,7 @@ namespace WolvenKit.Core.Extensions
                     break;
             }
             // single precision floating point (binary32) format IEEE 754-2008
-            var floatNum = dataSign << 31 | floatExp << 23 | floatFrac;
+            var floatNum = (dataSign << 31) | (floatExp << 23) | floatFrac;
             return BitConverter.ToSingle(BitConverter.GetBytes(floatNum), 0);
         }
 
@@ -262,7 +262,7 @@ namespace WolvenKit.Core.Extensions
             return value;
         }
 
-        public static string ReadNullTerminatedString(this BinaryReader br, Encoding encoding = null)
+        public static string ReadNullTerminatedString(this BinaryReader br, Encoding? encoding = null)
         {
             encoding ??= Encoding.UTF8;
 

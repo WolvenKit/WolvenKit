@@ -65,7 +65,7 @@ namespace WolvenKit.Core
 
                         if (t == nameof(AssemblyInformationalVersionAttribute))
                         {
-                            productVersion = (string)a.ConstructorArguments.First().Value;
+                            productVersion = a.ConstructorArguments.First().Value as string;
                             break;
                         }
                     }
@@ -89,13 +89,11 @@ namespace WolvenKit.Core
 
         public static (string, long) HashFileSHA512(string filepath)
         {
-            using (var shaM = SHA512.Create())
-            {
-                using var fileStream = File.OpenRead(filepath);
-                var hash1 = shaM.ComputeHash(fileStream);
-                var hashStr = BitConverter.ToString(hash1).Replace("-", "").ToLowerInvariant();
-                return (hashStr, fileStream.Length);
-            }
+            using var shaM = SHA512.Create();
+            using var fileStream = File.OpenRead(filepath);
+            var hash1 = shaM.ComputeHash(fileStream);
+            var hashStr = BitConverter.ToString(hash1).Replace("-", "").ToLowerInvariant();
+            return (hashStr, fileStream.Length);
         }
 
         // Display a byte array in a readable format.
