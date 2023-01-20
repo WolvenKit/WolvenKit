@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Dialogs;
@@ -21,9 +22,9 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
 
     private const string ScriptExtension = ".wscript";
 
-    public ScriptManagerViewModel(AppViewModel appViewModel = null)
+    public ScriptManagerViewModel(AppViewModel? appViewModel = null)
     {
-        _appViewModel = appViewModel ?? Locator.Current.GetService<AppViewModel>();
+        _appViewModel = appViewModel ?? Locator.Current.GetService<AppViewModel>().NotNull();
 
         OkCommand = ReactiveCommand.Create(() => { _appViewModel.CloseModalCommand.Execute(null); });
         CancelCommand = ReactiveCommand.Create(() => { _appViewModel.CloseModalCommand.Execute(null); });
@@ -31,7 +32,7 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
         this.WhenActivated(disposables =>
         {
             HandleActivation();
-        
+
             Disposable
                 .Create(HandleDeactivation)
                 .DisposeWith(disposables);
@@ -45,8 +46,8 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
     }
 
     public ObservableCollection<string> Scripts { get; } = new();
-    [Reactive] public string SelectedItem { get; set; }
-    [Reactive] public string FileName { get; set; }
+    [Reactive] public string? SelectedItem { get; set; }
+    [Reactive] public string? FileName { get; set; }
 
     public ViewModelActivator Activator { get; } = new();
     public override ReactiveCommand<Unit, Unit> OkCommand { get; }
@@ -87,6 +88,11 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
     [RelayCommand(CanExecute = nameof(CanDeleteScript))]
     private async void DeleteScript()
     {
+        if (SelectedItem is null)
+        {
+            return;
+        }
+
         var response = await Interactions.ShowMessageBoxAsync(
             $"Are you sure you want to delete \"{SelectedItem}\"?",
             "Add file",
@@ -112,6 +118,10 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
 
     public void OpenFile()
     {
+        if (SelectedItem is null)
+        {
+            return;
+        }
         _appViewModel.RequestFileOpen(Path.Combine(ISettingsManager.GetWScriptDir(), SelectedItem));
         _appViewModel.CloseModalCommand.Execute(null);
     }

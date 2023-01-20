@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using DynamicData;
 using Splat;
 using WolvenKit.Common;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
@@ -75,24 +76,24 @@ namespace WolvenKit.ViewModels.Shell
             return new Vec4(cX, cY, cZ, 1);
         }
 
-        private static Vec4 GetPos(Prop line)
-        {
-            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-            return new Vec4()
-            {
-                X = float.Parse(posandrot.x),
-                Y = float.Parse(posandrot.y),
-                Z = float.Parse(posandrot.z),
-                W = float.Parse(posandrot.w)
-            };
-        }
+        //private static Vec4 GetPos(Prop line)
+        //{
+        //    var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+        //    return new Vec4()
+        //    {
+        //        X = float.Parse(posandrot.x),
+        //        Y = float.Parse(posandrot.y),
+        //        Z = float.Parse(posandrot.z),
+        //        W = float.Parse(posandrot.w)
+        //    };
+        //}
 
         private static List<Vec4> GetPos(List<Prop> props)
         {
             var poslist = new List<Vec4>();
             foreach (var line in props)
             {
-                var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+                var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos)).NotNull();
                 var v = new Vec4()
                 {
                     X = float.Parse(posandrot.x),
@@ -134,70 +135,70 @@ namespace WolvenKit.ViewModels.Shell
             return (v, q);
         }
 
-        private (List<Vec4>, List<Quat>) GetPosRot(List<Prop> props)
-        {
-            var poslist = new List<Vec4>();
-            var rotlist = new List<Quat>();
+        //private (List<Vec4>, List<Quat>) GetPosRot(List<Prop> props)
+        //{
+        //    var poslist = new List<Vec4>();
+        //    var rotlist = new List<Quat>();
 
-            foreach (var line in props)
-            {
-                var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-                var v = new Vec4()
-                {
-                    X = float.Parse(posandrot.x),
-                    Y = float.Parse(posandrot.y),
-                    Z = float.Parse(posandrot.z),
-                    W = float.Parse(posandrot.w)
-                };
-                poslist.Add(v);
+        //    foreach (var line in props)
+        //    {
+        //        var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+        //        var v = new Vec4()
+        //        {
+        //            X = float.Parse(posandrot.x),
+        //            Y = float.Parse(posandrot.y),
+        //            Z = float.Parse(posandrot.z),
+        //            W = float.Parse(posandrot.w)
+        //        };
+        //        poslist.Add(v);
 
-                var euler = new Vec3()
-                {
-                    X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-                    Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-                    Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
-                };
-                var q = FixRotation(euler);
+        //        var euler = new Vec3()
+        //        {
+        //            X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+        //            Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+        //            Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+        //        };
+        //        var q = FixRotation(euler);
 
-                rotlist.Add(q);
-            }
-            return (poslist, rotlist);
-        }
+        //        rotlist.Add(q);
+        //    }
+        //    return (poslist, rotlist);
+        //}
 
-        private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props)
-        {
-            var poslist = new List<Vec4>();
-            var rotlist = new List<Quat>();
-            var applist = new List<string>();
+        //private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props)
+        //{
+        //    var poslist = new List<Vec4>();
+        //    var rotlist = new List<Quat>();
+        //    var applist = new List<string>();
 
-            foreach (var line in props)
-            {
-                var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-                var v = new Vec4()
-                {
-                    X = float.Parse(posandrot.x),
-                    Y = float.Parse(posandrot.y),
-                    Z = float.Parse(posandrot.z),
-                    W = float.Parse(posandrot.w)
-                };
-                poslist.Add(v);
+        //    foreach (var line in props)
+        //    {
+        //        var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+        //        var v = new Vec4()
+        //        {
+        //            X = float.Parse(posandrot.x),
+        //            Y = float.Parse(posandrot.y),
+        //            Z = float.Parse(posandrot.z),
+        //            W = float.Parse(posandrot.w)
+        //        };
+        //        poslist.Add(v);
 
-                var euler = new Vec3()
-                {
-                    X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-                    Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-                    Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
-                };
+        //        var euler = new Vec3()
+        //        {
+        //            X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+        //            Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+        //            Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+        //        };
 
-                var q = FixRotation(euler);
+        //        var q = FixRotation(euler);
 
-                // (q.Y, q.Z) = (-q.Z, -q.Y);
-                rotlist.Add(q);
+        //        // (q.Y, q.Z) = (-q.Z, -q.Y);
+        //        rotlist.Add(q);
 
-                applist.Add(line.app);
-            }
-            return (poslist, rotlist, applist);
-        }
+        //        applist.Add(line.app);
+        //    }
+        //    return (poslist, rotlist, applist);
+        //}
 
         private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Child> props)
         {
@@ -253,11 +254,12 @@ namespace WolvenKit.ViewModels.Shell
 
         public async Task Refresh()
         {
-            var currentfile = new FileModel(Tab.File.FilePath, Locator.Current.GetService<AppViewModel>().ActiveProject);
-            Tab.File.TabItemViewModels.RemoveMany(Tab.File.TabItemViewModels.AsEnumerable());
-
-            var ad = Locator.Current.GetService<AppViewModel>().ActiveDocument;
-            await ad.OpenFileAsync(currentfile.FullName);
+            if (Tab is not null)
+            {
+                var currentfile = new FileModel(Tab.File.FilePath, Locator.Current.GetService<AppViewModel>().NotNull().ActiveProject);
+                Tab.File.TabItemViewModels.RemoveMany(Tab.File.TabItemViewModels.AsEnumerable());
+                await Locator.Current.GetService<AppViewModel>().NotNull().ActiveDocument.OpenFileAsync(currentfile.FullName);
+            }
         }
 
 
@@ -303,30 +305,30 @@ namespace WolvenKit.ViewModels.Shell
             return poslist;
         }
 
-        private void AddToData(string tr, Prop line, string ff = "", bool updatecoords = true)
-        {
-            if (Parent.Parent is not null &&
-                Parent.Parent.Data is not null &&
-                Parent.Parent.Data is worldStreamingSector)
-            {
-                //loads the mesh when found and scaled
-                if (GetScale(line) == Vec3.One)
-                {
-                    AddEntity(tr, line, updatecoords);
-                }
-                else if (ff != "")
-                {
-                    AddMesh(tr, line, updatecoords);
-                }
-            }
-        }
+        //private void AddToData(string tr, Prop line, string ff = "", bool updatecoords = true)
+        //{
+        //    if (Parent.Parent is not null &&
+        //        Parent.Parent.Data is not null &&
+        //        Parent.Parent.Data is worldStreamingSector)
+        //    {
+        //        //loads the mesh when found and scaled
+        //        if (GetScale(line) == Vec3.One)
+        //        {
+        //            AddEntity(tr, line, updatecoords);
+        //        }
+        //        else if (ff != "")
+        //        {
+        //            AddMesh(tr, line, updatecoords);
+        //        }
+        //    }
+        //}
 
         private void AddEntity(string tr, Prop line, bool updatecoords = true, bool visible = true)
         {
-            if (line.template_path is not null && Parent.Parent.Data is worldStreamingSector wss)
+            if (line.template_path is not null && Parent?.Parent?.Data is worldStreamingSector wss)
             {
                 //var wss = (worldStreamingSector)Parent.Parent.Data;
-                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr).NotNull();
 
                 var wen = new worldEntityNode();
                 var wenh = new CHandle<worldNode>(wen);
@@ -360,15 +362,22 @@ namespace WolvenKit.ViewModels.Shell
                     eeid.Buffer.Data = pk;
                 }
 
-            ((IRedArray)wss.Nodes).Insert(index, wenh);
-                SetCoords(current, index, line, updatecoords);
+                ((IRedArray)wss.Nodes).Insert(index, wenh);
+                 SetCoords(current, index, line, updatecoords);
             }
         }
 
         private void AddMesh(string tr, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
         {
-            var wss = (worldStreamingSector)Parent.Parent.Data;
+            if (Parent?.Parent?.Data is not worldStreamingSector wss)
+            {
+                return;
+            }
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+            if (current == null)
+            {
+                return;
+            }
 
             //var cmesh = new worldStaticMeshNode();
             var cmesh = new worldGenericProxyMeshNode();
@@ -432,7 +441,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private void AddCurrent(worldNodeData current)
         {
-            if (Parent.Data is DataBuffer db00 &&
+            if (Parent?.Data is DataBuffer db00 &&
                 db00.Buffer.Data is worldNodeDataBuffer db0)
             {
                 if (!db0.Lookup.ContainsKey(current.NodeIndex))
@@ -442,7 +451,7 @@ namespace WolvenKit.ViewModels.Shell
                 db0.Lookup[current.NodeIndex].Add(current);
             }
 
-            if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedType irt)
+            if (Parent?.Data is DataBuffer db && db.Buffer.Data is IRedType irt)
             {
                 if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
                 {
@@ -458,14 +467,13 @@ namespace WolvenKit.ViewModels.Shell
 
         private List<Child> GetLines(JsonAMM2 json)
         {
+            ArgumentNullException.ThrowIfNull(json.name, nameof(json));
+            ArgumentNullException.ThrowIfNull(json.pos, nameof(json));
+            ArgumentNullException.ThrowIfNull(json.rot, nameof(json));
+
             var props = new List<Child>();
 
-            var v = new Child()
-            {
-                pos = json.pos,
-                rot = json.rot,
-                name = json.name
-            };
+            var v = new Child(json.name, json.pos, json.rot);
             props.Add(v);
 
             foreach (var child in json.childs)
@@ -478,11 +486,8 @@ namespace WolvenKit.ViewModels.Shell
 
         private void GetLines(Child c, List<Child> props)
         {
-            var v = new Child()
+            var v = new Child(c.name, c.pos, c.rot)
             {
-                pos = c.pos,
-                rot = c.rot,
-                name = c.name,
                 path = c.path,
                 app = c.app
             };
@@ -496,14 +501,18 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private static Vec4 GetCenter(JsonAMM2 r) => new(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
+        private static Vec4 GetCenter(JsonAMM2 r)
+        {
+            ArgumentNullException.ThrowIfNull(r.pos, nameof(r));
+            return new(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
+        }
 
         private void AddFromAMM(List<Prop> props, string tr, bool updatecoords = true)
         {
             try
             {
-                var am = Locator.Current.GetService<IArchiveManager>();
-                var sm = Locator.Current.GetService<ISettingsManager>();
+                var am = Locator.Current.GetService<IArchiveManager>().NotNull();
+                var sm = Locator.Current.GetService<ISettingsManager>().NotNull();
                 am.LoadModsArchives(new FileInfo(sm.CP77ExecutablePath));
                 var af = am.GetGroupedFiles();
 
@@ -546,7 +555,7 @@ namespace WolvenKit.ViewModels.Shell
                             using var stream = new MemoryStream();
                             foundent.Extract(stream);
                             using var reader = new BinaryReader(stream);
-                            var cr2wFile = Locator.Current.GetService<Red4ParserService>().ReadRed4File(reader);
+                            var cr2wFile = Locator.Current.GetService<Red4ParserService>().NotNull().ReadRed4File(reader);
 
                             //open ent
                             if (cr2wFile is not null &&
@@ -610,7 +619,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+            catch (Exception ex) { ILoggerService.GetUnsafe().Error(ex); }
         }
 
         private void AddFromAMM2(JsonAMM2 json, string tr, bool updatecoords = true)
@@ -655,7 +664,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private void AddFromBlender(List<worldNodeData> json, string tr, bool updatecoords = false)
         {
-            if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedArray ira)
+            if (Parent?.Data is DataBuffer db && db.Buffer.Data is IRedArray ira)
             {
                 for (var i = 0; i < json.Count; i++)
                 {
@@ -704,27 +713,34 @@ namespace WolvenKit.ViewModels.Shell
 
     public class Child
     {
+        public Child(string name, Pos pos, Rot rot)
+        {
+            this.name = name;
+            this.pos = pos;
+            this.rot = rot;
+        }
+
         public bool headerOpen { get; set; }
         public bool autoLoad { get; set; }
         public Rot rot { get; set; }
-        public string path { get; set; }
+        public string? path { get; set; }
         public Pos pos { get; set; }
-        public string type { get; set; }
+        public string? type { get; set; }
         public int loadRange { get; set; }
         public string name { get; set; }
-        public string app { get; set; }
-        public List<Child> childs { get; set; }
+        public string? app { get; set; }
+        public List<Child> childs { get; set; } = new();
     }
 
     public class JsonAMM2
     {
-        public List<Child> childs { get; set; }
-        public Pos pos { get; set; }
+        public List<Child> childs { get; set; } = new();
+        public Pos? pos { get; set; }
         public int loadRange { get; set; }
         public bool headerOpen { get; set; }
-        public string type { get; set; }
-        public Rot rot { get; set; }
-        public string name { get; set; }
+        public string? type { get; set; }
+        public Rot? rot { get; set; }
+        public string? name { get; set; }
         public bool autoLoad { get; set; }
     }
 
@@ -856,22 +872,23 @@ namespace WolvenKit.ViewModels.Shell
         }
     }
 
+    // serializable
     public class JsonAMM
     {
         public bool customIncluded { get; set; }
-        public List<Prop> props { get; set; }
-        public List<object> lights { get; set; }
-        public string name { get; set; }
-        public string file_name { get; set; }
+        public List<Prop>? props { get; set; }
+        public List<object>? lights { get; set; }
+        public string? name { get; set; }
+        public string? file_name { get; set; }
     }
 
-
+    // serializable
     public class JsonObjectSpawner
     {
-        public string path { get; set; }
-        public Pos pos { get; set; }
-        public string app { get; set; }
-        public Rot rot { get; set; }
+        public string? path { get; set; }
+        public Pos? pos { get; set; }
+        public string? app { get; set; }
+        public Rot? rot { get; set; }
     }
 
 }

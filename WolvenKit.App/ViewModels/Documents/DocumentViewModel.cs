@@ -13,58 +13,43 @@ namespace WolvenKit.ViewModels.Documents
 {
     public abstract class DocumentViewModel : PaneViewModel, IDocumentViewModel
     {
-        #region fields
-
         protected bool _isInitialized;
 
-        #endregion fields
 
-        #region ctors
-
-        public DocumentViewModel(string path) : this()
+        public DocumentViewModel(string path)
         {
             Header = Path.GetFileName(path);
             ContentId = path;
-        }
+            FilePath = path;
 
-        private DocumentViewModel()
-        {
             State = DockState.Document;
             SideInDockedMode = DockSide.Tabbed;
 
             Close = ReactiveCommand.Create(() => { });
         }
 
-        #endregion ctors
-
         #region commands
 
-        private ICommand _saveAsCommand = null;
+        private ICommand? _saveAsCommand = null;
         /// <summary>Gets a command to save this document's content into another file in the file system.</summary>
         public ICommand SaveAsCommand
         {
             get
             {
-                if (_saveAsCommand == null)
-                {
-                    _saveAsCommand = new DelegateCommand<object>((p) => OnSaveAs(p), (p) => CanSaveAs(p));
-                }
+                _saveAsCommand ??= new DelegateCommand<object>(OnSaveAs, CanSaveAs);
 
                 return _saveAsCommand;
             }
         }
 
-        private ICommand _saveCommand = null;
+        private ICommand? _saveCommand = null;
 
         /// <summary>Gets a command to save this document's content into the file system.</summary>
         public ICommand SaveCommand
         {
             get
             {
-                if (_saveCommand == null)
-                {
-                    _saveCommand = new DelegateCommand<object>((p) => OnSave(p), (p) => CanSave(p));
-                }
+                _saveCommand ??= new DelegateCommand<object>((p) => OnSave(p), CanSave);
 
                 return _saveCommand;
             }

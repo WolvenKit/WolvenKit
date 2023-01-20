@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reactive.Disposables;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
@@ -15,13 +14,12 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public partial class RDTMeshViewModel
     {
-        public class MeshComponentSelector: ReactiveObject 
+        public class MeshComponentSelector : ReactiveObject
         {
             private const string s_noSelection = "No_Selection";
 
@@ -29,8 +27,8 @@ namespace WolvenKit.ViewModels.Documents
             [Reactive] public string WorldNodeIndex { get; private set; } = string.Empty;
             [Reactive] public bool IsValid { get; private set; }
 
-            private MeshComponent _meshComponent;
-            public MeshComponent SelectedMesh
+            private MeshComponent? _meshComponent;
+            public MeshComponent? SelectedMesh
             {
                 get => _meshComponent;
                 set
@@ -52,10 +50,7 @@ namespace WolvenKit.ViewModels.Documents
             Header = MeshViewHeaders.SectorPreview;
             PanelVisibility.ShowSelectionPanel = true;
             _data = data;
-            var app = new Appearance()
-            {
-                Name = Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"),
-            };
+            var app = new Appearance(Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"));
 
             Appearances.Add(app);
             SelectedAppearance = app;
@@ -108,13 +103,12 @@ namespace WolvenKit.ViewModels.Documents
                         DepotPath = irmn.Mesh.DepotPath
                     };
 
-                    var model = new LoadableModel()
+                    var model = new LoadableModel(name)
                     {
                         MeshFile = File.Cr2wFile,
                         AppearanceIndex = 0,
                         AppearanceName = irmn.MeshAppearance,
                         Materials = appMaterials,
-                        Name = name,
                         IsEnabled = true,
                     };
 
@@ -299,7 +293,7 @@ namespace WolvenKit.ViewModels.Documents
 
                         foreach (var shape in actor.Shapes)
                         {
-                            HelixToolkit.SharpDX.Core.MeshGeometry3D geometry = null;
+                            HelixToolkit.SharpDX.Core.MeshGeometry3D? geometry = null;
 
                             if (shape is CollisionShapeSimple simpleShape && simpleShape.ShapeType == Enums.physicsShapeType.Box)
                             {
@@ -669,7 +663,7 @@ namespace WolvenKit.ViewModels.Documents
 
             var element = new SectorGroup()
             {
-                Name=""
+                Name = ""
             };
             foreach (var group in groups)
             {
@@ -730,7 +724,7 @@ namespace WolvenKit.ViewModels.Documents
 
         private void MouseDown3DSector(object sender, MouseDown3DEventArgs args, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            
+
             if (Header == MeshViewHeaders.SectorPreview && args.HitTestResult.ModelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
             {
                 if (mouseButtonEventArgs.RightButton == MouseButtonState.Pressed)
@@ -747,8 +741,8 @@ namespace WolvenKit.ViewModels.Documents
 
     public class SectorGroup : GroupModel3D
     {
-        public string MaterialName { get; set; }
-        public string AppearanceName { get; set; }
+        public string? MaterialName { get; set; }
+        public string? AppearanceName { get; set; }
     }
 
 }

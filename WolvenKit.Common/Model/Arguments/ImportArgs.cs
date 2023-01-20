@@ -147,7 +147,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "Select base mesh (experimental)")]
         [Description("Select a base mesh to import on.")]
-        public List<FileEntry>? BaseMesh { get; set; }
+        public List<FileEntry> BaseMesh { get; set; } = new();
 
         /// <summary>
         /// Uses a selected mesh from archives as base mesh for import instead of mod project archive directory mesh
@@ -171,7 +171,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("WithRig Settings")]
         [Display(Name = "Select rig (experimental)")]
         [Description("Select a rig to import within the mesh.")]
-        public List<FileEntry>? Rig { get; set; }
+        public List<FileEntry> Rig { get; set; } = new();
 
 
         /// <summary>

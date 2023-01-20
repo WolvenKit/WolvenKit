@@ -15,9 +15,9 @@ public class ExtendedScriptService : ScriptService
     private readonly Dictionary<string, List<ScriptEntry>> _uiScripts = new();
     private readonly Dictionary<string, IScriptableControl> _uiControls = new();
 
-    private V8ScriptEngine _uiEngine;
+    private V8ScriptEngine? _uiEngine;
 
-    public ExtendedScriptService(ILoggerService loggerService = null) : base(loggerService)
+    public ExtendedScriptService(ILoggerService? loggerService = null) : base(loggerService)
     {
         RefreshUIScripts();
     }
@@ -126,7 +126,7 @@ public class ExtendedScriptService : ScriptService
         }
     }
 
-    protected virtual V8ScriptEngine GetUIScriptEngine(Dictionary<string, object> hostObjects = null, string searchPath = null)
+    protected virtual V8ScriptEngine GetUIScriptEngine(Dictionary<string, object>? hostObjects = null, string? searchPath = null)
     {
         var engine = base.GetScriptEngine(hostObjects, searchPath);
 
@@ -144,7 +144,7 @@ public class ScriptEntry
 
     public string Target { get; }
     public string Name { get; }
-    
+
 
     public ScriptEntry(string target, string name, ScriptObject function)
     {

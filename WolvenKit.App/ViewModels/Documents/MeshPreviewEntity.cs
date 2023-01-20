@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using Prism.Commands;
 using ReactiveUI;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
@@ -37,13 +38,13 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     var outFile = new FileInfo(dlg.FileName);
                     // will only use archive files (for now)
-                    if (Locator.Current.GetService<ModTools>().ExportEntity(File.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
+                    if (Locator.Current.GetService<ModTools>().NotNull().ExportEntity(File.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
                     {
-                        Locator.Current.GetService<ILoggerService>().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
+                        Locator.Current.GetService<ILoggerService>().NotNull().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
                     }
                     else
                     {
-                        Locator.Current.GetService<ILoggerService>().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
+                        Locator.Current.GetService<ILoggerService>().NotNull().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
                     }
                 }
             });
@@ -61,7 +62,7 @@ namespace WolvenKit.ViewModels.Documents
             RenderEntity((entEntityTemplate)_data);
         }
 
-        public Element3D RenderEntity(entEntityTemplate ent, Appearance appearance = null, string appearanceName = null)
+        public Element3D? RenderEntity(entEntityTemplate ent, Appearance? appearance = null, string? appearanceName = null)
         {
             if (ent.CompiledData.Data is not RedPackage pkg)
             {
@@ -83,7 +84,7 @@ namespace WolvenKit.ViewModels.Documents
                             }
                         }
 
-                        string bindName = null, slotName = null;
+                        string? bindName = null, slotName = null;
                         if ((slotset.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
                         {
                             bindName = ehtb.BindName;
@@ -91,12 +92,10 @@ namespace WolvenKit.ViewModels.Documents
                         }
                         if (!_slotSets.ContainsKey(slotset.Name))
                         {
-                            _slotSets.Add(slotset.Name, new SlotSet()
+                            _slotSets.Add(slotset.Name, new SlotSet(slotset.Name, bindName)
                             {
-                                Name = slotset.Name,
                                 Matrix = ToSeparateMatrix(slotset.LocalTransform),
                                 Slots = slots,
-                                BindName = bindName,
                                 SlotName = slotName
                             });
                         }
@@ -111,9 +110,8 @@ namespace WolvenKit.ViewModels.Documents
                             var rigBones = new List<RigBone>();
                             for (var i = 0; i < rig.BoneNames.Count; i++)
                             {
-                                var rigBone = new RigBone()
+                                var rigBone = new RigBone(rig.BoneNames[i])
                                 {
-                                    Name = rig.BoneNames[i],
                                     Matrix = ToSeparateMatrix(rig.BoneTransforms[i])
                                 };
 
@@ -132,9 +130,8 @@ namespace WolvenKit.ViewModels.Documents
                                 slotName = ehtb.SlotName;
                             }
 
-                            Rigs[enc.Name] = new Rig()
+                            Rigs[enc.Name] = new Rig(enc.Name)
                             {
-                                Name = enc.Name,
                                 Bones = rigBones,
                                 BindName = bindName,
                                 SlotName = slotName
@@ -181,10 +178,9 @@ namespace WolvenKit.ViewModels.Documents
                             continue;
                         }
 
-                        var a = new Appearance()
+                        var a = new Appearance(app.Name)
                         {
                             AppearanceName = app.AppearanceName,
-                            Name = app.Name,
                             Resource = app.AppearanceResource.DepotPath,
                             Models = LoadMeshs(appPkg.Chunks),
                         };
@@ -256,9 +252,8 @@ namespace WolvenKit.ViewModels.Documents
                 Appearance a;
                 if (appearance == null)
                 {
-                    a = new Appearance()
+                    a = new Appearance("Default")
                     {
-                        Name = "Default",
                         Models = models
                     };
                 }

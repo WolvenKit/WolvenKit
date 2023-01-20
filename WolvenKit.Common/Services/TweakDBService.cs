@@ -84,7 +84,7 @@ namespace WolvenKit.Common.Services
         public List<TweakDBID> GetQuery(TweakDBID tdb) => s_tweakDb.Queries.GetQuery((ulong)tdb);
         public byte? GetGroupTag(TweakDBID tdb) => s_tweakDb.GroupTags.GetGroupTag((ulong)tdb);
 
-        public Type? GetType(TweakDBID tdb)
+        public Type GetType(TweakDBID tdb)
         {
             var hash = (ulong)tdb;
 
@@ -100,7 +100,7 @@ namespace WolvenKit.Common.Services
                 return flatValue.GetType();
             }
 
-            return null;
+            throw new NotImplementedException();
         }
 
         public List<TweakDBID> GetRecords() => s_tweakDb.GetRecords();

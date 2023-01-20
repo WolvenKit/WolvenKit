@@ -8,18 +8,19 @@ using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.Scripting;
 
 public class ScriptService : INotifyPropertyChanged
 {
-    protected readonly ILoggerService? _loggerService;
+    protected readonly ILoggerService _loggerService;
 
     private V8ScriptEngine? _mainEngine;
     private bool _isRunning;
 
-    public ScriptService(ILoggerService? loggerService = null) => _loggerService = loggerService ?? Locator.Current.GetService<ILoggerService>();
+    public ScriptService(ILoggerService? loggerService = null) => _loggerService = loggerService ?? Locator.Current.GetService<ILoggerService>().NotNull();
 
     public bool IsRunning
     {

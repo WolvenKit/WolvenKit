@@ -333,16 +333,16 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// Get files grouped by extension in all archives
         /// </summary>
         /// <returns></returns>
-        public override Dictionary<string, IEnumerable<FileEntry?>> GetGroupedFiles() =>
+        public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() =>
             IsModBrowserActive
             ? ModArchives.Items
               .SelectMany(_ => _.Files.Values)
               .GroupBy(_ => _.Extension)
-              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry))
+              .ToDictionary(_ => _.Key, _ => _.Select(x => x))
             : Archives.Items
               .SelectMany(_ => _.Files.Values)
               .GroupBy(_ => _.Extension)
-              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
+              .ToDictionary(_ => _.Key, _ => _.Select(x => x));
 
         /// <summary>
         /// Get all files in all archives

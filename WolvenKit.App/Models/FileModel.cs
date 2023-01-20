@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.ProjectManagement.Project;
 
 namespace WolvenKit.Models
@@ -20,16 +21,17 @@ namespace WolvenKit.Models
 
         public const string s_rawdir = "wkitrawdir";
 
-        public FileModel(string path, Cp77Project? project)
+        public FileModel(string path, Cp77Project project)
         {
             FullName = path;
             Project = project;
             string parentfullname;
+
             if (Directory.Exists(path))
             {
                 IsDirectory = true;
                 var di = new DirectoryInfo(path);
-                parentfullname = di.Parent.FullName;
+                parentfullname = di.Parent.NotNull().FullName;
                 Name = di.Name;
                 _extension = ECustomImageKeys.OpenDirImageKey.ToString();
                 if (FullName.StartsWith(project.ResourcesDirectory))
@@ -49,7 +51,7 @@ namespace WolvenKit.Models
             {
                 IsDirectory = false;
                 var fi = new FileInfo(path);
-                parentfullname = fi.Directory.FullName;
+                parentfullname = fi.Directory.NotNull().FullName;
                 Name = fi.Name;
                 _extension = fi.Extension;
             }
@@ -76,7 +78,7 @@ namespace WolvenKit.Models
         [Display(Name = "Hash")] public string HashStr => Hash.ToString();
 
 
-        [Browsable(false)] public Cp77Project? Project { get; }
+        [Browsable(false)] public Cp77Project Project { get; }
 
         [Browsable(false)] public ulong Hash { get; }
 

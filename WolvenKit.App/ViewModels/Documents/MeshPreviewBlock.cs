@@ -9,6 +9,7 @@ using HelixToolkit.Wpf.SharpDX;
 using Prism.Commands;
 using ReactiveUI;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
@@ -16,11 +17,18 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class Sector
     {
+        public Sector(string name, Element3D text)
+        {
+            Name = name;
+            Text = text;
+        }
+
         public string Name { get; set; }
+
         public CName DepotPath { get; set; }
         public bool IsLoaded { get; set; }
         public Element3D Text { get; set; }
-        public Element3D Element { get; set; }
+        public Element3D? Element { get; set; }
         public uint NumberOfHandles { get; set; }
 
         private bool _showElements;
@@ -30,15 +38,18 @@ namespace WolvenKit.ViewModels.Documents
             set
             {
                 _showElements = value;
-                Element.IsRendering = _showElements;
+                if (Element is not null)
+                {
+                    Element.IsRendering = _showElements;
+                }
             }
         }
     }
 
     public class WKBillboardTextModel3D : BillboardTextModel3D
     {
-        public string MaterialName { get; set; }
-        public string AppearanceName { get; set; }
+        public string? MaterialName { get; set; }
+        public string? AppearanceName { get; set; }
     }
 
     public partial class RDTMeshViewModel
@@ -49,7 +60,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public bool SearchActive = false;
 
-        public ICommand LoadSectorCommand => new DelegateCommand<Sector>(x => LoadSector(x));
+        public ICommand LoadSectorCommand => new DelegateCommand<Sector>(LoadSector);
         public void LoadSector(Sector sector)
         {
             if (!sector.IsLoaded)
@@ -108,10 +119,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             Appearances = new();
 
-            var app = new Appearance()
-            {
-                Name = "All_Sectors",
-            };
+            var app = new Appearance("All_Sectors");
 
             Appearances.Add(app);
             SelectedAppearance = app;
@@ -280,11 +288,9 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         other.Children.Add(bbText);
                     }
-                    sectors.Add(new Sector()
+                    sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()), bbText)
                     {
-                        Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()),
                         DepotPath = desc.Data.DepotPath,
-                        Text = bbText,
                         NumberOfHandles = desc.NumNodeRanges
                     });
                 }
@@ -316,7 +322,7 @@ namespace WolvenKit.ViewModels.Documents
                             }
                             catch (Exception ex)
                             {
-                                Locator.Current.GetService<ILoggerService>().Error(ex);
+                                Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
                             }
                         }
                         args.Handled = true;

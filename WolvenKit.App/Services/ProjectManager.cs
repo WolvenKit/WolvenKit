@@ -62,7 +62,7 @@ namespace WolvenKit.Functionality.Services
 
         public async Task<bool> SaveAsync() => await Save();
 
-        public async Task<bool> LoadAsync(string location)
+        public async Task<Cp77Project?> LoadAsync(string location)
         {
             if (IsProjectLoaded)
             {
@@ -76,6 +76,7 @@ namespace WolvenKit.Functionality.Services
                 {
                     if (x.Result == null)
                     {
+
                     }
                     else
                     {
@@ -95,7 +96,7 @@ namespace WolvenKit.Functionality.Services
             });
 
 
-            return true;
+            return ActiveProject;
         }
 
         private async Task<Cp77Project?> ReadFromLocationAsync(string location)
@@ -132,6 +133,12 @@ namespace WolvenKit.Functionality.Services
                 XmlSerializer ser = new(typeof(CP77Mod));
                 if (ser.Deserialize(lf) is not CP77Mod obj)
                 {
+                    return null;
+                }
+
+                if (obj.Name is null)
+                {
+                    _loggerService.Error($"Failed to load project: project has no name");
                     return null;
                 }
 
@@ -199,6 +206,11 @@ namespace WolvenKit.Functionality.Services
 
         private async Task<bool> Save()
         {
+            if (ActiveProject is null)
+            {
+                return false;
+            }
+
             try
             {
                 if (!Directory.Exists(ActiveProject.ProjectDirectory))
@@ -234,6 +246,7 @@ namespace WolvenKit.Functionality.Services
 
         public class CP77Mod
         {
+            // Default contructor for serialization
             public CP77Mod()
             {
 
@@ -247,13 +260,13 @@ namespace WolvenKit.Functionality.Services
                 Version = project.Version;
             }
 
-            public string Author { get; set; }
+            public string? Author { get; set; }
 
-            public string Email { get; set; }
+            public string? Email { get; set; }
 
-            public string Name { get; set; }
+            public string? Name { get; set; }
 
-            public string Version { get; set; }
+            public string? Version { get; set; }
             public bool IsRedMod { get; set; }
             public bool ExecuteDeploy { get; set; }
         }

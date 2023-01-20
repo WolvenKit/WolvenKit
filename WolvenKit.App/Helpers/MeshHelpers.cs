@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.Functionality.Helpers;
@@ -28,11 +29,11 @@ namespace WolvenKit.ViewModels.Documents
     public class SubmeshComponent : MeshGeometryModel3D
     {
         public bool EnabledWithMask { get; set; }
-        public string MaterialName { get; set; }
+        public string? MaterialName { get; set; }
         public uint LOD { get; set; }
-        public string AppearanceName { get; set; }
+        public string? AppearanceName { get; set; }
         public CName DepotPath { get; set; }
-        public HelixToolkit.Wpf.SharpDX.Material OriginalMaterial { get; set; }
+        public HelixToolkit.Wpf.SharpDX.Material? OriginalMaterial { get; set; }
 
     }
 
@@ -84,6 +85,12 @@ namespace WolvenKit.ViewModels.Documents
             var index = 0;
             foreach (var mesh in expMeshes)
             {
+                ArgumentNullException.ThrowIfNull(mesh.positions);
+                ArgumentNullException.ThrowIfNull(mesh.indices);
+                ArgumentNullException.ThrowIfNull(mesh.normals);
+                ArgumentNullException.ThrowIfNull(mesh.texCoords0);
+                ArgumentNullException.ThrowIfNull(mesh.tangents);
+                ArgumentNullException.ThrowIfNull(mesh.materialNames);
 
                 var positions = new Vector3Collection(mesh.positions.Length);
                 for (var i = 0; i < mesh.positions.Length; i++)
@@ -374,10 +381,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 else
                 {
-                    appMaterials.Add(new Material()
-                    {
-                        Name = name
-                    });
+                    appMaterials.Add(new Material(name));
                 }
             }
 
@@ -390,7 +394,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             var materials = new Dictionary<string, Material>();
 
-            var localList = (CR2WList)mesh.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
+            var localList = mesh.LocalMaterialBuffer.RawData.Buffer.Data as CR2WList ?? null;
 
             foreach (var me in mesh.MaterialEntries)
             {
@@ -399,10 +403,7 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     if (!materials.ContainsKey(me.Name))
                     {
-                        materials.Add(me.Name, new Material()
-                        {
-                            Name = name
-                        });
+                        materials.Add(me.Name, new Material(name));
                     }
                     continue;
                 }
@@ -410,9 +411,8 @@ namespace WolvenKit.ViewModels.Documents
                     ? (CMaterialInstance)localList.Files[me.Index].RootChunk
                     : (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].GetValue();
 
-                var material = new Material()
+                var material = new Material(name)
                 {
-                    Instance = inst,
                     Name = name
                 };
 
@@ -441,13 +441,13 @@ namespace WolvenKit.ViewModels.Documents
         {
             if (SelectedAppearance == null)
             {
-                Locator.Current.GetService<ILoggerService>().Warning($"No material selected!");
+                Locator.Current.GetService<ILoggerService>().NotNull().NotNull().Warning($"No material selected!");
                 return;
             }
             IsLoadingMaterials = true;
             Parallel.ForEachAsync(from entry in SelectedAppearance.RawMaterials orderby entry.Key ascending select entry, (material, cancellationToken) => LoadMaterial(material.Value)).ContinueWith((result) =>
             {
-                Locator.Current.GetService<ILoggerService>().Info($"All materials loaded!");
+                Locator.Current.GetService<ILoggerService>().NotNull().NotNull().Info($"All materials loaded!");
                 IsLoadingMaterials = false;
             });
 
@@ -473,7 +473,7 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            Locator.Current.GetService<ILoggerService>().Info($"Loading material: {material.Name}");
+            Locator.Current.GetService<ILoggerService>().NotNull().Info($"Loading material: {material.Name}");
 
             var dictionary = material.Values;
 
@@ -782,7 +782,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 catch (Exception e)
                 {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                    Locator.Current.GetService<ILoggerService>().NotNull().Error(e.Message);
                 }
                 finally
                 {
@@ -795,7 +795,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 catch (Exception e)
                 {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                    Locator.Current.GetService<ILoggerService>().NotNull().Error(e.Message);
                 }
                 finally
                 {
@@ -808,7 +808,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 catch (Exception e)
                 {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                    Locator.Current.GetService<ILoggerService>().NotNull().Error(e.Message);
                 }
                 finally
                 {
@@ -921,7 +921,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 catch (Exception e)
                 {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                    Locator.Current.GetService<ILoggerService>().NotNull().Error(e.Message);
                 }
                 finally
                 {
@@ -977,7 +977,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 catch (Exception e)
                 {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                    Locator.Current.GetService<ILoggerService>().NotNull().Error(e.Message);
                 }
                 finally
                 {

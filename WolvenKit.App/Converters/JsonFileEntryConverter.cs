@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -21,7 +22,7 @@ public class JsonFileEntryConverter : JsonConverter<FileEntry>
 
         var fileHash = reader.TokenType switch
         {
-            JsonTokenType.String => FNV1A64HashAlgorithm.HashString(reader.GetString()),
+            JsonTokenType.String => FNV1A64HashAlgorithm.HashString(reader.GetString().NotNull()),
             JsonTokenType.Number => reader.GetUInt64(),
             JsonTokenType.None => throw new NotImplementedException(),
             JsonTokenType.StartObject => throw new NotImplementedException(),

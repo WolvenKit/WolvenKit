@@ -203,7 +203,7 @@ namespace WolvenKit.Functionality.Controllers
         private Task LoadArchiveManager() =>
             Task.Run(() =>
             {
-                if (_archiveManager != null && _archiveManager.IsManagerLoaded)
+                if (_archiveManager.IsManagerLoaded)
                 {
                     return;
                 }
@@ -230,6 +230,11 @@ namespace WolvenKit.Functionality.Controllers
 
         public bool PackProjectHot()
         {
+            if (_projectManager.ActiveProject is null)
+            {
+                return false;
+            }
+
             // check if plugin is installed
             if (!_pluginService.IsInstalled(EPlugin.redhottools))
             {
@@ -551,7 +556,7 @@ namespace WolvenKit.Functionality.Controllers
                 .ForEach(f =>
                 {
                     var fileName = Path.GetFileName(f);
-                    var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(f));
+                    var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(f).NotNull());
                     var fileOutputDir = Path.Combine(cp77Proj.PackedRootDirectory, fileRelativeDir);
                     var fileOutputPath = Path.Combine(fileOutputDir, fileName);
                     if (!Directory.Exists(fileOutputDir))
@@ -625,13 +630,18 @@ namespace WolvenKit.Functionality.Controllers
 
             return true;
         }
-        private void PackSoundFiles()
+        private bool PackSoundFiles()
         {
+            if (_projectManager.ActiveProject is null)
+            {
+                return false;
+            }
+
             // nothing to pack if no info.json file exists
             var path = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
             if (!File.Exists(path))
             {
-                return;
+                return false;
             }
 
             // read info
@@ -646,7 +656,7 @@ namespace WolvenKit.Functionality.Controllers
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                     IgnoreReadOnlyProperties = true,
                 };
-                var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), options);
+                var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), options).NotNull();
                 foreach (var e in info.CustomSounds)
                 {
                     if (!string.IsNullOrEmpty(e.File))
@@ -665,12 +675,20 @@ namespace WolvenKit.Functionality.Controllers
             catch (Exception e)
             {
                 _loggerService.Error(e);
+                return false;
             }
+
+            return true;
         }
 
         private bool BackupMod(Cp77Project cp77Proj)
         {
-            var zipPathRoot = new DirectoryInfo(cp77Proj.PackedRootDirectory).Parent.FullName;
+            var zipPathRoot = new DirectoryInfo(cp77Proj.PackedRootDirectory).Parent?.FullName;
+            if (zipPathRoot is null)
+            {
+                return false;
+            }
+
             var zipPath = Path.Combine(zipPathRoot, $"{cp77Proj.Name}.zip");
             try
             {
@@ -700,6 +718,11 @@ namespace WolvenKit.Functionality.Controllers
                 if (File.Exists(logPath))
                 {
                     var log = XDocument.Load(logPath);
+                    if (log is null || log.Root is null)
+                    {
+                        return false;
+                    }
+
                     var dirs = log.Root.Element("Files")?.Descendants("Directory").ToList();
                     if (dirs != null)
                     {
@@ -718,13 +741,16 @@ namespace WolvenKit.Functionality.Controllers
                         //Delete the empty directories.
                         foreach (var d in dirs)
                         {
-                            if (d.Attribute("Path") != null
-                                && Directory.Exists(d.Attribute("Path").Value)
-                                && !Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any())
+                            var p = d.Attribute("Path");
+                            if (p is not null)
                             {
-                                Directory.Delete(d.Attribute("Path").Value, true);
-                                Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);
+                                if (Directory.Exists(p.Value) && !Directory.GetFiles(p.Value, "*", SearchOption.AllDirectories).Any())
+                                {
+                                    Directory.Delete(p.Value, true);
+                                    Debug.WriteLine("Directory delete: " + p.Value);
+                                }
                             }
+
                         }
                     }
                     //Delete the old install log. We will make a new one so this is not needed anymore.
@@ -748,9 +774,10 @@ namespace WolvenKit.Functionality.Controllers
 
                 fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settingsManager.GetRED4GameRootDir(), true));
 
-                //var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
-                //if (Directory.Exists(packeddlcdir))
-                //    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.CP77GameDlcDir, true));
+                if (installlog.Root is null)
+                {
+                    return false;
+                }
 
                 installlog.Root.Add(fileroot);
                 installlog.Save(logPath);
@@ -801,8 +828,13 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        public async Task AddFileToModModal(IGameFile file)
+        public async Task<bool> AddFileToModModal(IGameFile file)
         {
+            if (_projectManager.ActiveProject is null)
+            {
+                return false;
+            }
+
             FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, file.Name));
             if (diskPathInfo.Exists)
             {
@@ -836,6 +868,8 @@ namespace WolvenKit.Functionality.Controllers
             {
                 await Task.Run(() => AddToMod(file));
             }
+
+            return true;
         }
 
         public void AddToMod(ulong hash)
@@ -847,8 +881,13 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        public void AddToMod(IGameFile file)
+        public bool AddToMod(IGameFile file)
         {
+            if (_projectManager.ActiveProject is null)
+            {
+                return false;
+            }
+
             switch (_projectManager.ActiveProject.GameType)
             {
                 case GameType.Cyberpunk2077:
@@ -893,6 +932,11 @@ namespace WolvenKit.Functionality.Controllers
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            return true;
         }
+
+        void IGameController.AddToMod(IGameFile file) => throw new NotImplementedException();
+        Task IGameController.AddFileToModModal(IGameFile file) => throw new NotImplementedException();
     }
 }

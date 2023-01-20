@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using YamlDotNet.Serialization;
@@ -12,13 +13,14 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class TweakXLDocumentViewModel : RedDocumentViewModel
     {
-        private TweakDBService _tdbs;
-        private readonly ISettingsManager _settingsManager = Locator.Current.GetService<ISettingsManager>();
+        private readonly TweakDBService _tdbs;
+        private readonly ISettingsManager _settingsManager;
 
 
         public TweakXLDocumentViewModel(string path) : base(path)
         {
-            _tdbs = Locator.Current.GetService<TweakDBService>();
+            _tdbs = Locator.Current.GetService<TweakDBService>().NotNull();
+            _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
         }
 
         private Task LoadTweakDB()

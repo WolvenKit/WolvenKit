@@ -16,6 +16,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
@@ -46,9 +47,6 @@ namespace WolvenKit.ViewModels.Documents
         protected readonly IProjectManager _projectManager;
         protected readonly IOptions<Globals> _globals;
 
-
-        public CR2WFile Cr2wFile;
-
         public RedDocumentViewModel(string path) : base(path)
         {
             _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -57,16 +55,18 @@ namespace WolvenKit.ViewModels.Documents
                 "yml",
                 "xl"
             };
-            _loggerService = Locator.Current.GetService<ILoggerService>();
-            _parser = Locator.Current.GetService<Red4ParserService>();
-            _hashService = Locator.Current.GetService<IHashService>();
-            _projectManager = Locator.Current.GetService<IProjectManager>();
-            _globals = Locator.Current.GetService<IOptions<Globals>>();
+            _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
+            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
+            _hashService = Locator.Current.GetService<IHashService>().NotNull();
+            _projectManager = Locator.Current.GetService<IProjectManager>().NotNull();
+            _globals = Locator.Current.GetService<IOptions<Globals>>().NotNull();
 
             if (_projectManager.ActiveProject != null)
             {
                 // assume files that don't exist are relative paths
-                RelativePath = File.Exists(path) ? Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path) : path;
+                RelativePath = File.Exists(path)
+                    ? Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path)
+                    : path;
             }
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
@@ -78,13 +78,15 @@ namespace WolvenKit.ViewModels.Documents
 
         #region properties
 
+        public CR2WFile Cr2wFile { get; set; }
+
         [Reactive] public ObservableCollection<RedDocumentTabViewModel> TabItemViewModels { get; set; } = new();
 
         [Reactive] public int SelectedIndex { get; set; }
 
-        [Reactive] public RedDocumentTabViewModel SelectedTabItemViewModel { get; set; }
+        [Reactive] public RedDocumentTabViewModel? SelectedTabItemViewModel { get; set; }
 
-        [Reactive] public string RelativePath { get; set; }
+        [Reactive] public string? RelativePath { get; set; }
 
         [Reactive] public string Extension { get; set; }
 
@@ -142,15 +144,13 @@ namespace WolvenKit.ViewModels.Documents
         {
             using var reader = new BinaryReader(stream);
 
-            if (!_parser.TryReadRed4File(reader, out Cr2wFile))
+            if (!_parser.TryReadRed4File(reader, out var cr2wFile))
             {
                 _loggerService.Error($"Failed to read cr2w file {path}");
                 return false;
             }
-            //cr2w.FileName = path;
 
-            // already set by base()?
-            //ContentId = path;
+            Cr2wFile = cr2wFile;
             FilePath = path;
             _isInitialized = true;
 
@@ -302,6 +302,11 @@ namespace WolvenKit.ViewModels.Documents
 
         private void PopulateItems()
         {
+            if (Cr2wFile is null)
+            {
+                return;
+            }
+
             var root = new RDTDataViewModel(Cr2wFile.RootChunk, this)
             {
                 FilePath = "(root)"
@@ -336,7 +341,11 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (!Files.ContainsKey(depotPath))
                 {
-                    Files[depotPath] = GetFileFromDepotPath(depotPath);
+                    var file = GetFileFromDepotPath(depotPath);
+                    if (file is not null)
+                    {
+                        Files[depotPath] = file;
+                    }
                 }
 
                 if (Files[depotPath] != null)
@@ -365,7 +374,7 @@ namespace WolvenKit.ViewModels.Documents
                 .Where(p => p.IsAssignableTo(typeof(CResource)) && p.IsClass)
                 .Select(x => x.Name));
 
-            var app = Locator.Current.GetService<AppViewModel>();
+            var app = Locator.Current.GetService<AppViewModel>().NotNull();
             app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
             {
                 DialogHandler = HandleEmbeddedFile
@@ -374,7 +383,12 @@ namespace WolvenKit.ViewModels.Documents
 
         public void HandleEmbeddedFile(DialogViewModel sender)
         {
-            var app = Locator.Current.GetService<AppViewModel>();
+            if (Cr2wFile is null)
+            {
+                return;
+            }
+
+            var app = Locator.Current.GetService<AppViewModel>().NotNull();
             app.CloseDialogCommand.Execute(null);
             if (sender is not null and CreateClassDialogViewModel dvm)
             {
@@ -399,7 +413,7 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public CR2WFile GetFileFromDepotPath(CName depotPath, bool original = false)
+        public CR2WFile? GetFileFromDepotPath(CName depotPath, bool original = false)
         {
             if (depotPath == CName.Empty)
             {
@@ -408,21 +422,21 @@ namespace WolvenKit.ViewModels.Documents
 
             try
             {
-                CR2WFile cr2wFile = null;
+                CR2WFile? cr2wFile = null;
 
                 if (!original)
                 {
-                    var projectManager = Locator.Current.GetService<IProjectManager>();
+                    var projectManager = Locator.Current.GetService<IProjectManager>().NotNull();
                     if (projectManager.ActiveProject != null)
                     {
-                        string path = null;
+                        string? path = null;
                         if (!string.IsNullOrEmpty(depotPath))
                         {
                             path = Path.Combine(projectManager.ActiveProject.ModDirectory, (string)depotPath);
                         }
                         else
                         {
-                            var fm = Locator.Current.GetService<IWatcherService>().GetFileModelFromHash(depotPath.GetRedHash());
+                            var fm = Locator.Current.GetService<IWatcherService>().NotNull().GetFileModelFromHash(depotPath.GetRedHash());
                             if (fm != null)
                             {
                                 path = fm.FullName;
@@ -440,7 +454,7 @@ namespace WolvenKit.ViewModels.Documents
 
                 if (cr2wFile == null)
                 {
-                    var _archiveManager = Locator.Current.GetService<IArchiveManager>();
+                    var _archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
                     var file = _archiveManager.Lookup(depotPath.GetRedHash());
                     if (file.HasValue && file.Value is FileEntry fe)
                     {
@@ -483,24 +497,30 @@ namespace WolvenKit.ViewModels.Documents
             return null;
         }
 
-        public RedDocumentTabViewModel OpenRefAsTab(string path)
+        public RedDocumentTabViewModel? OpenRefAsTab(string path)
         {
             var tab = OpenRefAsTab(FNV1A64HashAlgorithm.HashString(path));
+            if (tab is null)
+            {
+                return null;
+            }
+
             tab.Header = Path.GetFileName(path);
             tab.FilePath = path;
             return tab;
         }
 
-        public RedDocumentTabViewModel OpenRefAsTab(ulong hash)
+        public RedDocumentTabViewModel? OpenRefAsTab(ulong hash)
         {
             var file = GetFileFromDepotPath(hash);
-            if (file != null)
+            if (file == null)
             {
-                var tab = new RDTDataViewModel(hash.ToString(), file.RootChunk, this);
-                TabItemViewModels.Add(tab);
-                return tab;
+                return null;
             }
-            return null;
+
+            var tab = new RDTDataViewModel(hash.ToString(), file.RootChunk, this);
+            TabItemViewModels.Add(tab);
+            return tab;
         }
 
         #endregion

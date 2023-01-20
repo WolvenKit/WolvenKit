@@ -2,29 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
-using System.Reactive.Disposables;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
-using Microsoft.Msagl.Core;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
-using Syncfusion.UI.Xaml.TreeView.Engine;
 using Syncfusion.Windows.Shared;
-using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Interfaces;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
 using Point = System.Windows.Point;
@@ -57,10 +46,7 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
             Header = "Graph Editor";
 
-            PendingConnection = new PendingConnectionViewModel
-            {
-                Graph = this
-            };
+            PendingConnection = new PendingConnectionViewModel(this);
 
             if (data is graphGraphResource ggr)
             {
@@ -71,13 +57,13 @@ namespace WolvenKit.ViewModels.Documents
                 RenderNodes(ssr.SceneGraph.Chunk.Graph);
             }
 
-            SelectedNodes.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
-            {
-                if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems[0] is NodeViewModel fnvm)
-                {
-                    //SelectedChunk = new ChunkViewModel(fnvm.RedNode, (RDTDataViewModel)File.TabItemViewModels[0]);
-                }
-            };
+            //SelectedNodes.CollectionChanged += (object? sender, NotifyCollectionChangedEventArgs e) =>
+            //{
+            //    if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null && e.NewItems[0] is NodeViewModel fnvm)
+            //    {
+            //        //SelectedChunk = new ChunkViewModel(fnvm.RedNode, (RDTDataViewModel)File.TabItemViewModels[0]);
+            //    }
+            //};
 
             CreateConnectionCommand = new DelegateCommand(x => { });
         }
@@ -94,7 +80,7 @@ namespace WolvenKit.ViewModels.Documents
             return graph;
         }
 
-        public GeometryGraph RenderNodes(CArray<CHandle<graphGraphNodeDefinition>> nodes, graphGraphNodeDefinition parent = null)
+        public GeometryGraph RenderNodes(CArray<CHandle<graphGraphNodeDefinition>> nodes, graphGraphNodeDefinition? parent = null)
         {
             var graph = new GeometryGraph();
             var connections = new Dictionary<int, graphGraphConnectionDefinition>();
@@ -120,11 +106,10 @@ namespace WolvenKit.ViewModels.Documents
                 if (node.Chunk is questPhaseNodeDefinition qpnd && qpnd.PhaseGraph != null)
                 {
                     var subgraph = RenderNodes(qpnd.PhaseGraph.Chunk.Nodes, node.Chunk);
-                    nvm = new PhaseNodeViewModel(this, node.Chunk)
+                    nvm = new PhaseNodeViewModel(this, node.Chunk, subgraph)
                     {
                         Width = subgraph.BoundingBox.Size.Width + 40,
                         Height = subgraph.BoundingBox.Size.Height + 40,
-                        GeoGraph = subgraph
                     };
                 }
                 else
@@ -198,8 +183,8 @@ namespace WolvenKit.ViewModels.Documents
             {
                 var nvm = NodeLookup[(int)node.UserData];
                 nvm.Location = new Point(
-                    node.Center.X - graph.BoundingBox.Center.X - nvm.GetSize().Width / 2 + xOffset,
-                    node.Center.Y - graph.BoundingBox.Center.Y - nvm.GetSize().Height / 2 + yOffset);
+                    node.Center.X - graph.BoundingBox.Center.X - (nvm.GetSize().Width / 2) + xOffset,
+                    node.Center.Y - graph.BoundingBox.Center.Y - (nvm.GetSize().Height / 2) + yOffset);
                 if (nvm is PhaseNodeViewModel pnvm)
                 {
                     ArrangeNodes(pnvm.GeoGraph, node.Center.X - graph.BoundingBox.Center.X + xOffset, node.Center.Y - graph.BoundingBox.Center.Y + yOffset);
@@ -215,18 +200,21 @@ namespace WolvenKit.ViewModels.Documents
 
         public ObservableCollection<NodeViewModel> SelectedNodes { get; set; } = new();
 
-        public ChunkViewModel SelectedChunk { get; set; }
+        public ChunkViewModel? SelectedChunk { get; set; }
 
         public ICommand CreateConnectionCommand { get; set; }
     }
 
     public class PendingConnectionViewModel : ReactiveObject
     {
+        public PendingConnectionViewModel(RDTGraphViewModel graph) => Graph = graph;
+
+
         [Reactive] public RDTGraphViewModel Graph { get; set; }
 
-        [Reactive] public SocketViewModel Source { get; set; }
+        [Reactive] public SocketViewModel? Source { get; set; }
 
-        [Reactive] public object PreviewTarget { get; set; }
+        [Reactive] public object? PreviewTarget { get; set; }
 
         [Reactive] public string PreviewText { get; set; } = "Drop on connector";
 
@@ -251,27 +239,60 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public bool IsSelected { get; set; }
 
-        public string Header { get; set; }
+        public string? Header { get; set; }
         public Dictionary<string, string> Details { get; set; } = new();
-        public string Footer { get; set; }
+        public string? Footer { get; set; }
 
         public IList<SocketViewModel> Inputs { get; set; } = new ObservableCollection<SocketViewModel>();
         public IList<SocketViewModel> Outputs { get; set; } = new ObservableCollection<SocketViewModel>();
 
         public graphGraphNodeDefinition RedNode { get; set; }
 
-        public NodeViewModel()
+        public NodeViewModel(RDTGraphViewModel graph, graphGraphNodeDefinition node)
         {
-            ((ObservableCollection<SocketViewModel>)Inputs).CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+            Graph = graph;
+            RedNode = node;
+
+            SetupNode(node);
+
+            foreach (var socket in node.Sockets)
             {
-                if (e.Action == NotifyCollectionChangedAction.Add)
+                var svm = new SocketViewModel(socket.Chunk);
+
+                bool isInput;
+                if (socket.Chunk is questSocketDefinition qsd)
+                {
+                    isInput = qsd.Type == Enums.questSocketType.Input || qsd.Type == Enums.questSocketType.CutDestination;
+                    if (qsd.Type == Enums.questSocketType.CutDestination || qsd.Type == Enums.questSocketType.CutSource)
+                    {
+                        svm.Color = WkitBrushes.Purple;
+                    }
+                }
+                else
+                {
+                    isInput = socket.Chunk.Name.ToString().Contains("In") || socket.Chunk.Name.ToString().Contains("Source");
+                }
+                if (isInput)
+                {
+                    Inputs.Add(svm);
+                }
+                else
+                {
+                    Outputs.Add(svm);
+                }
+                Graph.SocketLookup.Add(socket.Chunk.GetHashCode(), svm);
+            }
+
+            ((ObservableCollection<SocketViewModel>)Inputs).CollectionChanged += (object? sender, NotifyCollectionChangedEventArgs e) =>
+            {
+                if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null)
                 {
                     foreach (SocketViewModel item in e.NewItems)
                     {
                         item.Node = this;
                     }
                 }
-                else if (e.Action == NotifyCollectionChangedAction.Remove)
+                else if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems is not null)
                 {
                     foreach (SocketViewModel item in e.OldItems)
                     {
@@ -279,16 +300,16 @@ namespace WolvenKit.ViewModels.Documents
                     }
                 }
             };
-            ((ObservableCollection<SocketViewModel>)Outputs).CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+            ((ObservableCollection<SocketViewModel>)Outputs).CollectionChanged += (object? sender, NotifyCollectionChangedEventArgs e) =>
             {
-                if (e.Action == NotifyCollectionChangedAction.Add)
+                if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null)
                 {
                     foreach (SocketViewModel item in e.NewItems)
                     {
                         item.Node = this;
                     }
                 }
-                else if (e.Action == NotifyCollectionChangedAction.Remove)
+                else if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems is not null)
                 {
                     foreach (SocketViewModel item in e.OldItems)
                     {
@@ -338,7 +359,7 @@ namespace WolvenKit.ViewModels.Documents
             }
             else if (node is questPauseConditionNodeDefinition or questConditionNodeDefinition)
             {
-                questIBaseCondition condition = null;
+                questIBaseCondition? condition = null;
                 if (node is questPauseConditionNodeDefinition qpcnd)
                 {
                     Header = "Pause ";
@@ -430,41 +451,7 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public NodeViewModel(RDTGraphViewModel graph, graphGraphNodeDefinition node) : this()
-        {
-            Graph = graph;
-            RedNode = node;
 
-            SetupNode(node);
-
-            foreach (var socket in node.Sockets)
-            {
-                var svm = new SocketViewModel(socket.Chunk);
-
-                bool isInput;
-                if (socket.Chunk is questSocketDefinition qsd)
-                {
-                    isInput = qsd.Type == Enums.questSocketType.Input || qsd.Type == Enums.questSocketType.CutDestination;
-                    if (qsd.Type == Enums.questSocketType.CutDestination || qsd.Type == Enums.questSocketType.CutSource)
-                    {
-                        svm.Color = WkitBrushes.Purple;
-                    }
-                }
-                else
-                {
-                    isInput = socket.Chunk.Name.ToString().Contains("In") || socket.Chunk.Name.ToString().Contains("Source");
-                }
-                if (isInput)
-                {
-                    Inputs.Add(svm);
-                }
-                else
-                {
-                    Outputs.Add(svm);
-                }
-                Graph.SocketLookup.Add(socket.Chunk.GetHashCode(), svm);
-            }
-        }
 
         public void Disconnect()
         {
@@ -481,10 +468,9 @@ namespace WolvenKit.ViewModels.Documents
 
         public double Height { get; set; }
 
-        public PhaseNodeViewModel(RDTGraphViewModel graph, graphGraphNodeDefinition node) : base()
+        public PhaseNodeViewModel(RDTGraphViewModel graph, graphGraphNodeDefinition node, GeometryGraph geoGraph) : base(graph, node)
         {
-            Graph = graph;
-            RedNode = node;
+            GeoGraph = geoGraph;
 
             if (node is questNodeDefinition qnd)
             {
@@ -516,7 +502,7 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public Point Anchor { get; set; }
 
-        [Reactive] public NodeViewModel Node { get; set; }
+        [Reactive] public NodeViewModel? Node { get; set; }
 
         [Reactive] public ConnectorShape Shape { get; set; }
 
@@ -528,11 +514,13 @@ namespace WolvenKit.ViewModels.Documents
 
         public ObservableCollection<ConnectionViewModel> Connections { get; } = new();
 
-        public SocketViewModel()
+        public SocketViewModel(string title)
         {
-            Connections.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+            Title = title;
+
+            Connections.CollectionChanged += (object? sender, NotifyCollectionChangedEventArgs e) =>
             {
-                if (e.Action == NotifyCollectionChangedAction.Add)
+                if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null)
                 {
                     foreach (ConnectionViewModel item in e.NewItems)
                     {
@@ -547,15 +535,15 @@ namespace WolvenKit.ViewModels.Documents
                         }
                     }
                 }
-                else if (e.Action == NotifyCollectionChangedAction.Remove)
+                else if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems is not null)
                 {
                     foreach (ConnectionViewModel item in e.OldItems)
                     {
-                        if (item.Source.Connections.Count == 0)
+                        if (item.Source is not null && item.Source.Connections.Count == 0)
                         {
                             item.Source.IsConnected = false;
                         }
-                        if (item.Destination.Connections.Count == 0)
+                        if (item.Destination is not null && item.Destination.Connections.Count == 0)
                         {
                             item.Destination.IsConnected = false;
                         }
@@ -564,7 +552,9 @@ namespace WolvenKit.ViewModels.Documents
             };
         }
 
-        public SocketViewModel(graphGraphSocketDefinition socket) : this() => Title = socket.Name;
+        public SocketViewModel(graphGraphSocketDefinition socket) : this(socket.Name)
+        {
+        }
 
         protected virtual void OnNodeChanged()
         {
@@ -592,9 +582,9 @@ namespace WolvenKit.ViewModels.Documents
     {
         [Reactive] public RDTGraphViewModel Graph { get; set; }
 
-        [Reactive] public SocketViewModel Destination { get; set; }
+        [Reactive] public SocketViewModel? Destination { get; set; }
 
-        [Reactive] public SocketViewModel Source { get; set; }
+        [Reactive] public SocketViewModel? Source { get; set; }
 
         public ConnectionViewModel(RDTGraphViewModel graph, graphGraphConnectionDefinition connection)
         {
@@ -660,7 +650,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
-            var result = new System.Windows.Rect(minX - padding, minY - padding, maxX - minX + padding * 2, maxY - minY + padding * 2);
+            var result = new System.Windows.Rect(minX - padding, minY - padding, maxX - minX + (padding * 2), maxY - minY + (padding * 2));
             result.X = (int)result.X / gridCellSize * gridCellSize;
             result.Y = (int)result.Y / gridCellSize * gridCellSize;
             return result;

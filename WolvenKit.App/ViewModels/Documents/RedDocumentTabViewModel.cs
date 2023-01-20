@@ -12,23 +12,26 @@ namespace WolvenKit.ViewModels.Documents
 {
     public abstract class RedDocumentTabViewModel : ReactiveObject
     {
-        public abstract ERedDocumentItemType DocumentItemType { get; }
-        public string Header { get; set; }
-        public string FilePath { get; set; }
-
-        [Reactive] public bool CanClose { get; set; }
-
-        [Reactive] public RedDocumentViewModel File { get; set; }
-
-        public static IRedType CopiedChunk;
-
-        public static List<IRedType> CopiedChunks = new();
-
-        public RedDocumentTabViewModel()
+        protected RedDocumentTabViewModel(RedDocumentViewModel file, string filePath)
         {
             DeleteEmbeddedFileCommand = new DelegateCommand(ExecuteDeleteEmbeddedFile, CanDeleteEmbeddedFile);
             RenameEmbeddedFileCommand = new DelegateCommand(ExecuteRenameEmbeddedFile, CanRenameEmbeddedFile);
+
+            File = file;
+            FilePath = filePath;
         }
+
+        public abstract ERedDocumentItemType DocumentItemType { get; }
+        public abstract string Header { get; set; }
+        public string FilePath { get; set; }
+
+        [Reactive] public RedDocumentViewModel File { get; set; }
+
+        [Reactive] public bool CanClose { get; set; }
+
+        public static IRedType? CopiedChunk;
+
+        public static List<IRedType> CopiedChunks = new();
 
         public ICommand DeleteEmbeddedFileCommand { get; private set; }
         private bool CanDeleteEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
@@ -64,7 +67,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             if (this is RDTDataViewModel datavm)
             {
-                CR2WEmbedded embeddedFile = null;
+                CR2WEmbedded? embeddedFile = null;
                 for (var i = 0; i < File.Cr2wFile.EmbeddedFiles.Count; i++)
                 {
                     var file = File.Cr2wFile.EmbeddedFiles[i];

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DynamicData;
 using ReactiveUI;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Models;
 using WolvenKit.ProjectManagement.Project;
 
@@ -22,9 +23,9 @@ namespace WolvenKit.Functionality.Services
 
         private readonly IProjectManager _projectManager;
 
-        private FileSystemWatcher _modsWatcher;
+        private FileSystemWatcher? _modsWatcher;
 
-        public FileModel LastSelect { get; set; }
+        public FileModel? LastSelect { get; set; }
 
         #endregion
 
@@ -36,7 +37,7 @@ namespace WolvenKit.Functionality.Services
             {
                 if (loaded)
                 {
-                    WatchLocation(_projectManager.ActiveProject.ProjectDirectory);
+                    WatchLocation(_projectManager.ActiveProject.NotNull().ProjectDirectory);
                     await RefreshAsync(_projectManager.ActiveProject);
                 }
                 else
@@ -85,7 +86,15 @@ namespace WolvenKit.Functionality.Services
         /// <summary>
         /// initial refresh
         /// </summary>
-        public async Task RefreshAsync(Cp77Project proj) => await Task.Run(() => DetectProjectFiles(proj));
+        public async Task RefreshAsync(Cp77Project? proj)
+        {
+            if (proj == null)
+            {
+                return;
+            }
+
+            await Task.Run(() => DetectProjectFiles(proj));
+        }
 
         private void DetectProjectFiles(Cp77Project proj)
         {
@@ -113,7 +122,7 @@ namespace WolvenKit.Functionality.Services
             return x;
         }
 
-        public FileModel GetFileModelFromHash(ulong hash)
+        public FileModel? GetFileModelFromHash(ulong hash)
         {
             var lookup = _files.Items.ToLookup(x => x.Hash);
 
@@ -122,15 +131,21 @@ namespace WolvenKit.Functionality.Services
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
+            if (_projectManager.ActiveProject is null)
+            {
+                return;
+            }
             if (IsSuspended)
             {
                 return;
             }
 
-            if (Path.GetExtension(e.Name).ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal) ||
-                Path.GetExtension(e.Name).ToUpper().Equals(".TMP", StringComparison.Ordinal
-                )
-                )
+            var extension = Path.GetExtension(e.Name);
+            if (string.IsNullOrEmpty(extension))
+            {
+                return;
+            }
+            if (extension.ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal) || extension.ToUpper().Equals(".TMP", StringComparison.Ordinal))
             {
                 return;
             }
@@ -178,13 +193,21 @@ namespace WolvenKit.Functionality.Services
         /// <param name="e"></param>
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
+            if (_projectManager.ActiveProject is null)
+            {
+                return;
+            }
             if (IsSuspended)
             {
                 return;
             }
 
-            var newIsTempFile = Path.GetExtension(e.Name).ToUpper().Equals(".TMP", StringComparison.Ordinal) ||
-                                 Path.GetExtension(e.Name).ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal);
+            var extension = Path.GetExtension(e.Name);
+            if (string.IsNullOrEmpty(extension))
+            {
+                return;
+            }
+            var newIsTempFile = extension.ToUpper().Equals(".TMP", StringComparison.Ordinal) || extension.ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal);
 
             switch (e.ChangeType)
             {

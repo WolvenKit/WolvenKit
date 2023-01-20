@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -102,7 +103,7 @@ namespace WolvenKit.ViewModels.Shell
             _pluginService = pluginService;
             _tweakDBService = tweakDBService;
 
-            _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
+            _homePageViewModel = Locator.Current.GetService<HomePageViewModel>().NotNull();
 
             #region commands
 
@@ -458,6 +459,12 @@ namespace WolvenKit.ViewModels.Shell
                     var response = await _client.GetAsync(new Uri(githuburl));
                     response.EnsureSuccessStatusCode();
 
+                    if (response.RequestMessage?.RequestUri is null)
+                    {
+                        _loggerService.Error($"Failed to respond to url: {githuburl}");
+                        return;
+                    }
+
                     var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
                     remoteVersion = SemVersion.Parse(version, SemVersionStyles.OptionalMinorPatch);
                 }
@@ -607,9 +614,12 @@ namespace WolvenKit.ViewModels.Shell
 
                 CloseModalCommand.Execute(null);
 
-                await _projectManager.LoadAsync(location);
-
-                ActiveProject = _projectManager.ActiveProject;
+                var p = await _projectManager.LoadAsync(location);
+                if (p is null)
+                {
+                    return Unit.Default;
+                }
+                ActiveProject = p;
 
                 // If the assets can't be found, stop here and notify the user in the log
                 if (!File.Exists(_settingsManager.CP77ExecutablePath))
@@ -635,12 +645,15 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
-        private void ExecuteNewProject() =>
+        private void ExecuteNewProject()
+        {
             //IsOverlayShown = false;
             SetActiveDialog(new ProjectWizardViewModel
             {
                 FileHandler = NewProject
             });
+        }
+
         private async Task NewProject(ProjectWizardViewModel project)
         {
 
@@ -717,13 +730,6 @@ namespace WolvenKit.ViewModels.Shell
                 Save(file);
             }
         }
-
-        //public ICommand BackupModCommand { get; private set; }
-        //private bool CanBackupMod() => _projectManager.ActiveProject != null;
-        //private void ExecuteBackupMod()
-        //{
-        //    // TODO: Implement this
-        //}
 
         public ICommand ShowHomePageCommand { get; private set; }
         private bool CanShowHomePage() => !IsDialogShown;
@@ -890,7 +896,7 @@ namespace WolvenKit.ViewModels.Shell
                 case EWolvenKitFile.TweakXl:
                     if (!string.IsNullOrEmpty(file.SelectedFile.Template))
                     {
-                        await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}");
+                        await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}").NotNull();
                         stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
                         resource.CopyTo(stream);
                     }
@@ -902,11 +908,11 @@ namespace WolvenKit.ViewModels.Shell
                 case EWolvenKitFile.RedScript:
                 case EWolvenKitFile.CETLua:
                     //prep the subdirs
-                    var scriptDirName = Path.GetDirectoryName(file.FullPath);
+                    var scriptDirName = Path.GetDirectoryName(file.FullPath).NotNull();
                     Directory.CreateDirectory(scriptDirName);
                     if (!string.IsNullOrEmpty(file.SelectedFile.Template))
                     {
-                        await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}");
+                        await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}").NotNull();
                         stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
                         resource.CopyTo(stream);
                     }
@@ -933,7 +939,8 @@ namespace WolvenKit.ViewModels.Shell
                 default:
                     break;
             }
-            stream.Dispose();
+
+            stream?.Dispose();
         }
 
         public ReactiveCommand<FileModel, Unit> OpenFileCommand { get; }
@@ -1019,7 +1026,7 @@ namespace WolvenKit.ViewModels.Shell
                 _progressService.IsIndeterminate = true;
                 try
                 {
-                    var _archiveManager = Locator.Current.GetService<IArchiveManager>();
+                    var _archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
                     var file = _archiveManager.Lookup(hash);
                     if (file.HasValue && file.Value is FileEntry fe)
                     {
@@ -1082,14 +1089,14 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> ShowTextureExporterCommand { get; }
         private void ShowTextureImporter()
         {
-            var vm = Locator.Current.GetService<TextureImportViewModel>();
+            var vm = Locator.Current.GetService<TextureImportViewModel>().NotNull();
             vm.State = DockState.Float;
             DockedViews.Add(vm);
         }
 
         private void ShowTextureExporter()
         {
-            var vm = Locator.Current.GetService<TextureExportViewModel>();
+            var vm = Locator.Current.GetService<TextureExportViewModel>().NotNull();
             vm.State = DockState.Float;
             DockedViews.Add(vm);
         }
@@ -1179,95 +1186,65 @@ namespace WolvenKit.ViewModels.Shell
 
         #region ToolViewModels
 
-        private AssetBrowserViewModel _assetBrowserViewModel;
+        private AssetBrowserViewModel? _assetBrowserViewModel;
         public AssetBrowserViewModel AssetBrowserViewModel
         {
             get
             {
-                _assetBrowserViewModel ??= Locator.Current.GetService<AssetBrowserViewModel>();
+                _assetBrowserViewModel ??= Locator.Current.GetService<AssetBrowserViewModel>().NotNull();
                 return _assetBrowserViewModel;
             }
         }
 
-        //private ImportExportViewModel _importExportToolViewModel;
-        //public ImportExportViewModel ImportExportToolVM
-        //{
-        //    get
-        //    {
-        //        _importExportToolViewModel ??= Locator.Current.GetService<ImportExportViewModel>();
-        //        return _importExportToolViewModel;
-        //    }
-        //}
-
-        private LogViewModel _logViewModel;
+        private LogViewModel? _logViewModel;
         public LogViewModel LogViewModel
         {
             get
             {
-                _logViewModel ??= Locator.Current.GetService<LogViewModel>();
+                _logViewModel ??= Locator.Current.GetService<LogViewModel>().NotNull();
                 return _logViewModel;
             }
         }
 
-        private ProjectExplorerViewModel _projectExplorerViewModel;
+        private ProjectExplorerViewModel? _projectExplorerViewModel;
         public ProjectExplorerViewModel ProjectExplorerViewModel
         {
             get
             {
-                _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>();
+                _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>().NotNull();
                 return _projectExplorerViewModel;
             }
         }
 
-        private PropertiesViewModel _propertiesViewModel;
+        private PropertiesViewModel? _propertiesViewModel;
         public PropertiesViewModel PropertiesViewModel
         {
             get
             {
-                _propertiesViewModel ??= Locator.Current.GetService<PropertiesViewModel>();
+                _propertiesViewModel ??= Locator.Current.GetService<PropertiesViewModel>().NotNull();
                 return _propertiesViewModel;
             }
         }
 
-        private TweakBrowserViewModel _tweakBrowserViewModel;
+        private TweakBrowserViewModel? _tweakBrowserViewModel;
         public TweakBrowserViewModel TweakBrowserViewModel
         {
             get
             {
-                _tweakBrowserViewModel ??= Locator.Current.GetService<TweakBrowserViewModel>();
+                _tweakBrowserViewModel ??= Locator.Current.GetService<TweakBrowserViewModel>().NotNull();
                 return _tweakBrowserViewModel;
             }
         }
 
-        private LocKeyBrowserViewModel _locKeyBrowserViewModel;
+        private LocKeyBrowserViewModel? _locKeyBrowserViewModel;
         public LocKeyBrowserViewModel LocKeyBrowserViewModel
         {
             get
             {
-                _locKeyBrowserViewModel ??= Locator.Current.GetService<LocKeyBrowserViewModel>();
+                _locKeyBrowserViewModel ??= Locator.Current.GetService<LocKeyBrowserViewModel>().NotNull();
                 return _locKeyBrowserViewModel;
             }
         }
-
-        //private VisualEditorViewModel _visualEditorVm;
-        //public VisualEditorViewModel VisualEditorVM
-        //{
-        //    get
-        //    {
-        //        _visualEditorVm ??= Locator.Current.GetService<VisualEditorViewModel>();
-        //        return _visualEditorVm;
-        //    }
-        //}
-
-        //private CodeEditorViewModel _codeEditorVm;
-        //public CodeEditorViewModel CodeEditorVM
-        //{
-        //    get
-        //    {
-        //        _codeEditorVm ??= Locator.Current.GetService<CodeEditorViewModel>();
-        //        return _codeEditorVm;
-        //    }
-        //}
 
         #endregion ToolViewModels
 
@@ -1325,6 +1302,8 @@ namespace WolvenKit.ViewModels.Shell
         #region methods
 
         private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
+
+        [MemberNotNull(nameof(Title))]
         public void UpdateTitle()
         {
             var title = "";
@@ -1356,7 +1335,7 @@ namespace WolvenKit.ViewModels.Shell
         /// Open a file and return its content in a viewmodel.
         /// </summary>
         /// <returns></returns>
-        private async Task<IDocumentViewModel> Open(string fullPath, EWolvenKitFile type)
+        private async Task<IDocumentViewModel?> Open(string fullPath, EWolvenKitFile type)
         {
             var result = false;
 
@@ -1406,6 +1385,9 @@ namespace WolvenKit.ViewModels.Shell
         /// <param name="saveAsDialogRequested"></param>
         public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
         {
+            if (_projectManager.ActiveProject is null)
+                return;
+
             var needSaveAsDialog =
                 fileToSave switch
                 {
@@ -1426,7 +1408,7 @@ namespace WolvenKit.ViewModels.Shell
                 SaveFileDialog dlg = new();
                 if (fileToSave.FilePath == null && fileToSave is RedDocumentViewModel red)
                 {
-                    var directory = Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath));
+                    var directory = Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath)).NotNull();
                     if (!Directory.Exists(directory))
                     {
                         Directory.CreateDirectory(directory);

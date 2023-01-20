@@ -307,18 +307,16 @@ namespace WolvenKit.ProjectManagement.Project
 
         #region implements IEquatable
 
-        public bool Equals(Cp77Project other) => other is not null && (ReferenceEquals(this, other) || string.Equals(Location, other.Location));
+        public bool Equals(Cp77Project? other) => other is not null && (ReferenceEquals(this, other) || string.Equals(Location, other.Location));
 
-        public override bool Equals(object obj) => obj is not null && (ReferenceEquals(this, obj) || (obj.GetType() == GetType() && Equals((Cp77Project)obj)));
+        public override bool Equals(object? obj) => obj is not null && (ReferenceEquals(this, obj) || (obj.GetType() == GetType() && Equals((Cp77Project)obj)));
 
         public override int GetHashCode() => Location != null ? Location.GetHashCode() : 0;
         public ModInfo GetInfo()
         {
-            ModInfo modInfo = new()
+            ModInfo modInfo = new(Name, Version ?? "1.0")
             {
-                Name = Name,
                 Description = Description,
-                Version = Version
             };
             return modInfo;
         }
