@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class RDTTextureViewModel : RedDocumentTabViewModel
     {
-        protected readonly RedBaseClass _data;
+        protected readonly RedBaseClass? _data;
 
         protected readonly RedImage _image;
 
@@ -24,20 +25,16 @@ namespace WolvenKit.ViewModels.Documents
         public RenderDelegate Render;
         public bool IsRendered;
 
-        public RDTTextureViewModel(RedBaseClass data, RedDocumentViewModel file)
+        public RDTTextureViewModel(RedBaseClass data, RedDocumentViewModel file) : base(file, "Texture Preview")
         {
-            Header = "Texture Preview";
-            File = file;
             _data = data;
             _image = RedImage.FromRedClass(data);
 
             Render = SetupImage;
         }
 
-        public RDTTextureViewModel(Stream stream, RedDocumentViewModel file)
+        public RDTTextureViewModel(Stream stream, RedDocumentViewModel file) : base(file, "Texture Preview")
         {
-            Header = "Texture Preview";
-            File = file;
 
             var buffer = new byte[stream.Length];
             stream.Read(buffer, 0, buffer.Length);
@@ -72,7 +69,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public void UpdateFromImage()
         {
-            if (_data is CBitmapTexture xbm)
+            if (_data is CBitmapTexture xbm && Image is not null)
             {
                 xbm.Width = (uint)Image.Width;
                 xbm.Height = (uint)Image.Height;
@@ -85,9 +82,9 @@ namespace WolvenKit.ViewModels.Documents
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
-        [Reactive] public ImageSource Image { get; set; }
+        [Reactive] public ImageSource? Image { get; set; }
 
-        [Reactive] public object SelectedItem { get; set; }
+        [Reactive] public object? SelectedItem { get; set; }
 
         [Reactive] public bool IsDragging { get; set; }
 

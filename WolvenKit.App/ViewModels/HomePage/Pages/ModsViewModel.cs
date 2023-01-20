@@ -11,6 +11,7 @@ using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
@@ -38,10 +39,10 @@ namespace WolvenKit.ViewModels.HomePage
 
         public ModsViewModel()
         {
-            _settings = Locator.Current.GetService<ISettingsManager>();
-            _logger = Locator.Current.GetService<ILoggerService>();
-            _pluginService = Locator.Current.GetService<IPluginService>();
-            _progressService = Locator.Current.GetService<IProgressService<double>>();
+            _settings = Locator.Current.GetService<ISettingsManager>().NotNull();
+            _logger = Locator.Current.GetService<ILoggerService>().NotNull();
+            _pluginService = Locator.Current.GetService<IPluginService>().NotNull();
+            _progressService = Locator.Current.GetService<IProgressService<double>>().NotNull();
 
             RefreshCommand = ReactiveCommand.Create(() => Refresh());
             DeployCommand = ReactiveCommand.Create(() => Deploy());
@@ -70,8 +71,8 @@ namespace WolvenKit.ViewModels.HomePage
 
         [Reactive] public bool LoadOrderChanged { get; private set; }
         [Reactive] public ObservableCollection<ModInfoViewModel> Mods { get; set; } = new();
-        [Reactive] public ModInfoViewModel SelectedMod { get; set; }
-        [Reactive] public IEnumerable<ModInfoViewModel> SelectedMods { get; set; }
+        [Reactive] public ModInfoViewModel? SelectedMod { get; set; }
+        [Reactive] public IEnumerable<ModInfoViewModel>? SelectedMods { get; set; }
         [Reactive] public bool IsProcessing { get; set; }
 
         #region commands
@@ -259,8 +260,8 @@ namespace WolvenKit.ViewModels.HomePage
             {
                 try
                 {
-                    var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(item.FullName), _options);
-                    var folder = item.Directory.FullName;
+                    var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(item.FullName), _options).NotNull();
+                    var folder = item.Directory.NotNull().FullName;
                     Mods.Add(new ModInfoViewModel(info, folder, _logger));
                 }
                 catch (Exception)
@@ -276,13 +277,24 @@ namespace WolvenKit.ViewModels.HomePage
             // parse existing mods.info and update enabled
             // also update load order
             var modsInfoPath = Path.Combine(_settings.GetRED4GameRootDir(), "r6", "cache", "modded", "mods.json");
-            ModsInfo modsInfo = null;
             var foundMods = new List<ModInfoViewModel>();
             if (File.Exists(modsInfoPath))
             {
                 try
                 {
-                    modsInfo = JsonSerializer.Deserialize<ModsInfo>(File.ReadAllText(modsInfoPath), _options);
+                    var modsInfo = JsonSerializer.Deserialize<ModsInfo>(File.ReadAllText(modsInfoPath), _options).NotNull() ;
+                    for (var i = 0; i < modsInfo.Mods.Count; i++)
+                    {
+                        var mod = modsInfo.Mods[i];
+
+                        var local = Mods.FirstOrDefault(x => x.Folder == mod.folder);
+                        if (local is not null)
+                        {
+                            local.IsEnabled = mod.enabled;
+                            local.LoadOrder = i;
+                            foundMods.Add(local);
+                        }
+                    }
                 }
                 catch (Exception)
                 {
@@ -291,18 +303,7 @@ namespace WolvenKit.ViewModels.HomePage
                 }
 
 
-                for (var i = 0; i < modsInfo.Mods.Count; i++)
-                {
-                    var mod = modsInfo.Mods[i];
-
-                    var local = Mods.FirstOrDefault(x => x.Folder == mod.folder);
-                    if (local is not null)
-                    {
-                        local.IsEnabled = mod.enabled;
-                        local.LoadOrder = i;
-                        foundMods.Add(local);
-                    }
-                }
+                
             }
 
             // loop through all existing mods

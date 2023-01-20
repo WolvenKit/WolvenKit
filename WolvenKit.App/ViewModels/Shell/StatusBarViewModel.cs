@@ -80,7 +80,8 @@ namespace WolvenKit.ViewModels.Shell
                             BarColor = Brushes.DarkOrange;
                             break;
                         case EStatus.Ready:
-                            BarColor = (SolidColorBrush)new BrushConverter().ConvertFromString("#951C2D");
+                            if (new BrushConverter().ConvertFromString("#951C2D") is SolidColorBrush brush)
+                            BarColor = brush;
                             break;
                         default:
                             break;
@@ -98,7 +99,7 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public bool IsIndeterminate { get; set; }
 
-        public string InternetConnected { get; private set; }
+        public string? InternetConnected { get; private set; }
 
         public bool IsLoading { get; set; }
 

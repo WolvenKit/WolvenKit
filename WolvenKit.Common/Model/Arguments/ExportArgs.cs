@@ -232,7 +232,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("WithRig Settings")]
         [Display(Name = "Select Rig")]
         [Description("Select a rig to export within the mesh.")]
-        public List<FileEntry>? Rig { get; set; }
+        public List<FileEntry> Rig { get; set; } = new();
 
         /// <summary>
         /// Uncook Format for material files. (DDS,TGA,PNG Etc)

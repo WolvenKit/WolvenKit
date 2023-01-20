@@ -90,7 +90,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
         [Reactive] public string Version { get; set; }
         [Reactive] public EPluginStatus Status { get; set; }
-        [Reactive] public string Label { get; set; }
+        [Reactive] public string? Label { get; set; }
 
         private readonly ObservableAsPropertyHelper<bool> _isIndeterminate;
         [Reactive] public bool IsIndeterminate { get; set; }

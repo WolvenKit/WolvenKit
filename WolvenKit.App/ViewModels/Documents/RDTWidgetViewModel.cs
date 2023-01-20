@@ -20,18 +20,24 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class RDTWidgetViewModel : RedDocumentTabViewModel
     {
-        protected readonly RedBaseClass _data;
         public inkWidgetLibraryResource library;
+
+       
+
+        public RDTWidgetViewModel(inkWidgetLibraryResource data, RedDocumentViewModel file) : base(file, "Widget Preview")
+        {
+            library = data;
+        }
 
         [Reactive] public Dictionary<object, inkTextWidget> TextWidgets { get; set; } = new();
 
         [Reactive] public List<string> StyleStates { get; set; } = new();
 
-        [Reactive] public string CurrentStyleState { get; set; }
+        [Reactive] public string? CurrentStyleState { get; set; }
 
         [Reactive] public List<string> Themes { get; set; } = new();
 
-        [Reactive] public string CurrentTheme { get; set; }
+        [Reactive] public string? CurrentTheme { get; set; }
 
         [Reactive] public Color WidgetBackground { get; set; }
 
@@ -41,13 +47,13 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public List<inkIEffect> inkEffects { get; set; } = new();
 
-        public RDTWidgetViewModel(RedBaseClass data, RedDocumentViewModel file)
-        {
-            Header = "Widget Preview";
-            File = file;
-            _data = data;
-            library = _data as inkWidgetLibraryResource;
-        }
+        [Reactive] public ImageSource? Image { get; set; }
+
+        [Reactive] public object? SelectedItem { get; set; }
+
+        [Reactive] public bool IsDragging { get; set; }
+
+
 
         public async Task LoadResources()
         {
@@ -281,12 +287,6 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
-
-        [Reactive] public ImageSource Image { get; set; }
-
-        [Reactive] public object SelectedItem { get; set; }
-
-        [Reactive] public bool IsDragging { get; set; }
 
         public void ExportWidget(inkWidget widget)
         {

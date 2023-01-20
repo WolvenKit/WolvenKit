@@ -7,6 +7,7 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.ViewModels.Documents
@@ -24,7 +25,7 @@ namespace WolvenKit.ViewModels.Documents
             var hlManager = HighlightingManager.Instance;
             HighlightingDefinition = hlManager.GetDefinitionByExtension("swift");
 
-            _loggerService = Locator.Current.GetService<ILoggerService>();
+            _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
         }
 
         [Reactive] public TextDocument Document { get; set; }
@@ -35,7 +36,7 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public bool IsReadOnly { get; set; }
 
-        [Reactive] public string IsReadOnlyReason { get; set; }
+        [Reactive] public string? IsReadOnlyReason { get; set; }
 
         public override Task OnSave(object parameter) => throw new NotImplementedException();
 

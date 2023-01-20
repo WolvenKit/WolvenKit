@@ -12,21 +12,13 @@ namespace WolvenKit.ViewModels.Tools
         /// Class constructor.
         /// </summary>
         /// <param name="name"></param>
-        public ToolViewModel(string name)
+        public ToolViewModel(string name) : base(name, name)
         {
             State = DockState.Dock;
 
             Name = name;
-            Header = name;
 
             this.WhenAnyValue(x => x.State).Subscribe(b => this.RaisePropertyChanged(nameof(IsVisible)));
-        }
-
-        /// <summary>
-        /// Hidden default class constructor
-        /// </summary>
-        protected ToolViewModel()
-        {
         }
 
 

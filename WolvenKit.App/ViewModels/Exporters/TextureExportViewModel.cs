@@ -23,6 +23,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
@@ -88,7 +89,8 @@ public partial class TextureExportViewModel : ExportViewModel
                 continue;
             }
 
-            item.Properties = (ImportExportArgs)System.Activator.CreateInstance(item.Properties.GetType());
+            if (Activator.CreateInstance(item.Properties.GetType()) is ImportExportArgs a)
+            item.Properties = a;
         }
     }
 
@@ -120,7 +122,7 @@ public partial class TextureExportViewModel : ExportViewModel
             }
             else
             {
-                failedItems.Add(item.FullName);
+                failedItems.Add(item.BaseFile);
             }
 
             Interlocked.Increment(ref progress);
@@ -150,7 +152,12 @@ public partial class TextureExportViewModel : ExportViewModel
     private bool ExportSingle(ExportableItemViewModel item)
     {
         var proj = _projectManager.ActiveProject;
-        var fi = new FileInfo(item.FullName);
+        if (proj == null)
+        {
+            return false;
+        }
+
+        var fi = new FileInfo(item.BaseFile);
         if (fi.Exists)
         {
             if (item.Properties is MeshExportArgs meshExportArgs)
@@ -161,7 +168,7 @@ public partial class TextureExportViewModel : ExportViewModel
                     meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
                 }
 
-                meshExportArgs.Archives.Insert(0, new FileSystemArchive(_projectManager.ActiveProject.ModDirectory));
+                meshExportArgs.Archives.Insert(0, new FileSystemArchive(proj.ModDirectory));
 
                 meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
             }
@@ -171,7 +178,7 @@ public partial class TextureExportViewModel : ExportViewModel
                 {
                     morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                 }
-                morphTargetExportArgs.ModFolderPath = _projectManager.ActiveProject.ModDirectory;
+                morphTargetExportArgs.ModFolderPath = proj.ModDirectory;
             }
             if (item.Properties is OpusExportArgs opusExportArgs)
             {
@@ -193,15 +200,13 @@ public partial class TextureExportViewModel : ExportViewModel
                 }
             }
 
-            if (proj != null)
+            if (item.Properties is not ExportArgs e)
             {
-
+                throw new NotImplementedException();
             }
 
-            var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
-            return _modTools.Export(fi, settings,
-                new DirectoryInfo(proj.ModDirectory),
-                new DirectoryInfo(proj.RawDirectory));
+            var settings = new GlobalExportArgs().Register(e);
+            return _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory),new DirectoryInfo(proj.RawDirectory));
         }
 
         return false;
@@ -263,12 +268,12 @@ public partial class TextureExportViewModel : ExportViewModel
                 break;
         }
         // TODO init collectionEditor with this
-        IEnumerable<CollectionItemViewModel<uint>> selectedItems = null;
+        List<CollectionItemViewModel<uint>> selectedItems = new();
         if (selectedEntries is not null)
         {
-            selectedItems = selectedEntries.Select(x => new CollectionItemViewModel<uint>(x));
+            selectedItems = selectedEntries.Select(x => new CollectionItemViewModel<uint>(x)).ToList();
         }
-        OpusTools opusTools = new(_projectManager.ActiveProject.ModDirectory, _projectManager.ActiveProject.RawDirectory, opusExportArgs.UseMod);
+        OpusTools opusTools = new(_projectManager.ActiveProject.NotNull().ModDirectory, _projectManager.ActiveProject.RawDirectory, opusExportArgs.UseMod);
         var availableItems = opusTools.Info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
 
         // open dialogue
@@ -314,7 +319,7 @@ public partial class TextureExportViewModel : ExportViewModel
                 break;
         }
 
-        IEnumerable<CollectionItemViewModel<FileEntry>> selectedItems = null;
+        IEnumerable<CollectionItemViewModel<FileEntry>>? selectedItems = null;
         if (selectedEntries is not null)
         {
             selectedItems = selectedEntries.Select(_ => new CollectionItemViewModel<FileEntry>(_));

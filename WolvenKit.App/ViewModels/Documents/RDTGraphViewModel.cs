@@ -40,11 +40,9 @@ namespace WolvenKit.ViewModels.Documents
 
         public PendingConnectionViewModel PendingConnection { get; }
 
-        public RDTGraphViewModel(IRedType data, RedDocumentViewModel file)
+        public RDTGraphViewModel(IRedType data, RedDocumentViewModel file) : base(file , "Graph Editor")
         {
-            File = file;
             _data = data;
-            Header = "Graph Editor";
 
             PendingConnection = new PendingConnectionViewModel(this);
 
@@ -582,9 +580,9 @@ namespace WolvenKit.ViewModels.Documents
     {
         [Reactive] public RDTGraphViewModel Graph { get; set; }
 
-        [Reactive] public SocketViewModel? Destination { get; set; }
+        [Reactive] public SocketViewModel Destination { get; set; }
 
-        [Reactive] public SocketViewModel? Source { get; set; }
+        [Reactive] public SocketViewModel Source { get; set; }
 
         public ConnectionViewModel(RDTGraphViewModel graph, graphGraphConnectionDefinition connection)
         {
@@ -600,6 +598,7 @@ namespace WolvenKit.ViewModels.Documents
             }
             else
             {
+                throw new NotImplementedException();
                 // TODO why is this happening?
             }
         }

@@ -14,6 +14,7 @@ using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.WKitGlobal;
@@ -41,7 +42,7 @@ namespace WolvenKit.ViewModels.Shared
             )
         {
 
-            _mainViewModel = Locator.Current.GetService<AppViewModel>();
+            _mainViewModel = Locator.Current.GetService<AppViewModel>().NotNull();
 
             _recentlyUsedItemsService = recentlyUsedItemsService;
 
@@ -93,10 +94,10 @@ namespace WolvenKit.ViewModels.Shared
         public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
         public ICommand OpenInExplorer { get; private set; }
         public ICommand PinItem { get; private set; }
-        public ICommand SettingsCommand { get; private set; }
-        public ICommand TutorialsCommand { get; private set; }
+       // public ICommand SettingsCommand { get; private set; }
+        //public ICommand TutorialsCommand { get; private set; }
         public ICommand UnpinItem { get; private set; }
-        public ICommand WikiCommand { get; private set; }
+        //public ICommand WikiCommand { get; private set; }
         public readonly ReactiveCommand<string, Unit> OpenLinkCommand = ReactiveCommand.Create<string>(
             link =>
             {
@@ -153,7 +154,11 @@ namespace WolvenKit.ViewModels.Shared
                     .ToList();
                 if (items.Count > 0)
                 {
-                    _recentlyUsedItemsService.RemoveItem(items.FirstOrDefault());
+                    var f = items.FirstOrDefault();
+                    if (f is not null)
+                    {
+                        _recentlyUsedItemsService.RemoveItem(f);
+                    }
                 }
                 return "";
             }

@@ -7,6 +7,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
+using WolvenKit.RED4.Archive.CR2W;
 using YamlDotNet.Serialization;
 
 namespace WolvenKit.ViewModels.Documents
@@ -17,7 +18,7 @@ namespace WolvenKit.ViewModels.Documents
         private readonly ISettingsManager _settingsManager;
 
 
-        public TweakXLDocumentViewModel(string path) : base(path)
+        public TweakXLDocumentViewModel(CR2WFile file, string path) : base(file, path)
         {
             _tdbs = Locator.Current.GetService<TweakDBService>().NotNull();
             _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
@@ -33,46 +34,6 @@ namespace WolvenKit.ViewModels.Documents
             return _tdbs.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
         }
 
-        public override async Task<bool> OpenFileAsync(string path)
-        {
-            _isInitialized = false;
-
-            // make sure TweakDB is loaded before we open the TweakXL file
-            await Task.WhenAll(LoadTweakDB());
-
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            {
-                FilePath = path;
-
-                try
-                {
-                    // read tweakXL file
-                    using var reader = new StreamReader(stream);
-                    var deserializer = new DeserializerBuilder()
-                        .WithTypeConverter(new TweakXLYamlTypeConverter())
-                        .Build();
-                    var file = deserializer.Deserialize<TweakXLFile>(reader);
-                    // TODO: enable when working on ChunkViewModel
-                    //TabItemViewModels.Add(new RDTDataViewModel(file, this));
-
-                    // read text file
-                    stream.Seek(0, SeekOrigin.Begin);
-                    TabItemViewModels.Add(new RDTTextViewModel(stream, this));
-
-                }
-                catch (Exception ex)
-                {
-                    _loggerService.Error(ex);
-                    return false;
-                }
-
-                _isInitialized = true;
-
-                SelectedIndex = 0;
-                SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
-            }
-
-            return true;
-        }
+        
     }
 }

@@ -33,9 +33,18 @@ namespace WolvenKit.ViewModels.Documents
             {
                 return;
             }
+
             SetupImage();
 
-            var xbm = (CBitmapTexture)_data;
+            if (_data is not CBitmapTexture xbm)
+            {
+                return;
+            }
+            if (Image is not BitmapSource source)
+            {
+                return;
+            }
+
             Width = xbm.Width;
             Height = xbm.Height;
 
@@ -43,7 +52,7 @@ namespace WolvenKit.ViewModels.Documents
             using (var outStream = new MemoryStream())
             {
                 BitmapEncoder enc = new TiffBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create((BitmapSource)Image));
+                enc.Frames.Add(BitmapFrame.Create(source));
                 enc.Save(outStream);
                 sourceBitmap = new Bitmap(outStream);
             }
@@ -103,7 +112,7 @@ namespace WolvenKit.ViewModels.Documents
             [Reactive] public double Width { get; set; }
             [Reactive] public double Height { get; set; }
             [Reactive] public string AtlasPath { get; set; }
-            [Reactive] public ImageSource Image { get; set; }
+            [Reactive] public ImageSource? Image { get; set; }
             [Browsable(false)]
             public inkTextureAtlasMapper Itam;
             [Browsable(false)]

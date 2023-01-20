@@ -14,6 +14,7 @@ using Splat;
 using Syncfusion.UI.Xaml.TreeView.Engine;
 using Syncfusion.Windows.Shared;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Interfaces;
@@ -61,7 +62,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public ICommand OpenRefCommand { get; private set; }
         private bool CanOpenRef() => CName != CName.Empty && DataViewModel.File.RelativePath != CName;
-        private void ExecuteOpenRef() => Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(CName);
+        private void ExecuteOpenRef() => Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromDepotPath(CName);
 
         public ICommand LoadRefCommand { get; private set; }
         private bool CanLoadRef() => CName != CName.Empty;
@@ -91,11 +92,10 @@ namespace WolvenKit.ViewModels.Documents
 
         public bool IsEmbeddedFile { get; set; }
 
-        public RDTDataViewModel(IRedType data, RedDocumentViewModel file)
+        public RDTDataViewModel(IRedType data, RedDocumentViewModel file) : base(file, "")
         {
-            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+            _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
 
-            File = file;
             _data = data;
 
             // set header
@@ -115,10 +115,12 @@ namespace WolvenKit.ViewModels.Documents
                 Header = _data.GetType().Name;
             }
 
+            OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
+            OpenImportCommand = new DelegateCommand<ICR2WImport>(async (i) => await ExecuteOpenImport(i));
+
             this.WhenActivated((CompositeDisposable disposables) =>
             {
-                OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
-                OpenImportCommand = new DelegateCommand<ICR2WImport>(async (i) => await ExecuteOpenImport(i));
+                
 
                 if (SelectedChunk == null && Chunks.Count > 0)
                 {
@@ -191,7 +193,7 @@ namespace WolvenKit.ViewModels.Documents
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
 
-        private List<ChunkViewModel> _chunks;
+        private List<ChunkViewModel> _chunks = new();
 
         public List<ChunkViewModel> Chunks
         {
@@ -211,24 +213,24 @@ namespace WolvenKit.ViewModels.Documents
 
         public virtual ChunkViewModel GenerateChunks() => new(_data, this);
 
-        [Reactive] public ChunkViewModel SelectedChunk { get; set; }
+        [Reactive] public ChunkViewModel? SelectedChunk { get; set; }
 
         [Reactive] public ObservableCollection<ChunkViewModel> SelectedChunks { get; set; } = new ObservableCollection<ChunkViewModel>();
 
 
-        [Reactive] public ChunkViewModel RootChunk { get; set; }
+        [Reactive] public ChunkViewModel? RootChunk { get; set; }
 
         [Reactive] public ObservableCollection<object> Nodes { get; set; } = new();
 
         [Reactive] public ObservableCollection<RedReference> References { get; set; } = new();
 
-        [Reactive] public IRedRef SelectedImport { get; set; }
+        [Reactive] public IRedRef? SelectedImport { get; set; }
 
         public bool ShowReferenceGraph => _settingsManager.ShowReferenceGraph;
 
         public delegate void LayoutNodesDelegate();
 
-        public LayoutNodesDelegate LayoutNodes;
+        public LayoutNodesDelegate? LayoutNodes;
 
         private List<CName> _nodePaths = new();
 
@@ -288,7 +290,7 @@ namespace WolvenKit.ViewModels.Documents
             var depotpath = input.DepotPath;
             var key = FNV1A64HashAlgorithm.HashString(depotpath);
 
-            var _gameController = Locator.Current.GetService<IGameControllerFactory>();
+            var _gameController = Locator.Current.GetService<IGameControllerFactory>().NotNull();
             return _gameController.GetController().AddFileToModModal(key);
         }
 
@@ -362,7 +364,7 @@ namespace WolvenKit.ViewModels.Documents
                     if (res != null && !string.IsNullOrEmpty(res.DepotPath))
                     {
                         sourceSocket.IsConnected = true;
-                        ReferenceSocket destSocket = null;
+                        ReferenceSocket? destSocket = null;
                         foreach (var reference in References)
                         {
                             if (reference.Destination.File == res.DepotPath)
@@ -481,7 +483,7 @@ namespace WolvenKit.ViewModels.Documents
                 try
                 {
                     // get text tab
-                    var tab = tweakFile.TabItemViewModels.OfType<RDTTextViewModel>().FirstOrDefault();
+                    var tab = tweakFile.TabItemViewModels.OfType<RDTTextViewModel>().First();
                     var text = tab.GetText();
 
                     using var reader = new StringReader(text);
@@ -491,12 +493,12 @@ namespace WolvenKit.ViewModels.Documents
                     var file = deserializer.Deserialize<TweakXLFile>(reader);
                     _data = file;
                     // refresh
-                    _chunks = null;
+                    _chunks .Clear();
                     _ = Chunks;
                 }
                 catch (Exception ex)
                 {
-                    Locator.Current.GetService<ILoggerService>().Error(ex);
+                    Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
                 }
             }
         }
@@ -530,7 +532,7 @@ namespace WolvenKit.ViewModels.Documents
 
     public class ReferenceSocket : ReactiveObject, INodeSocket<WolvenKit.Functionality.Interfaces.INode>
     {
-        public WolvenKit.Functionality.Interfaces.INode Node { get; set; }
+        public WolvenKit.Functionality.Interfaces.INode? Node { get; set; }
 
         [Reactive] public CName File { get; set; }
 

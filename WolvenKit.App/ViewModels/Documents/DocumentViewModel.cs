@@ -16,10 +16,8 @@ namespace WolvenKit.ViewModels.Documents
         protected bool _isInitialized;
 
 
-        public DocumentViewModel(string path)
+        public DocumentViewModel(string path) : base(Path.GetFileName(path), path)
         {
-            Header = Path.GetFileName(path);
-            ContentId = path;
             FilePath = path;
 
             State = DockState.Document;

@@ -47,6 +47,7 @@ using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
@@ -71,6 +72,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IPluginService _pluginService;
         private readonly TweakDBService _tweakDBService;
         private readonly HomePageViewModel _homePageViewModel;
+        private readonly Red4ParserService _parser;
 
         #endregion fields
 
@@ -89,7 +91,8 @@ namespace WolvenKit.ViewModels.Shell
             IProgressService<double> progressService,
             IWatcherService watcherService,
             IPluginService pluginService,
-            TweakDBService tweakDBService
+            TweakDBService tweakDBService,
+            Red4ParserService parserService
         )
         {
             _projectManager = projectManager;
@@ -102,7 +105,7 @@ namespace WolvenKit.ViewModels.Shell
             _watcherService = watcherService;
             _pluginService = pluginService;
             _tweakDBService = tweakDBService;
-
+            _parser = parserService;
             _homePageViewModel = Locator.Current.GetService<HomePageViewModel>().NotNull();
 
             #region commands
@@ -231,7 +234,6 @@ namespace WolvenKit.ViewModels.Shell
             // only add existing docked views
             if (File.Exists(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt")))
             {
-                DockedViews = new ObservableCollection<IDockElement>();
                 var savedPanes = File.ReadLines(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt"));
                 foreach (var paneString in savedPanes)
                 {
@@ -322,27 +324,30 @@ namespace WolvenKit.ViewModels.Shell
                 return false;
             }
 
-            if (!File.Exists(args[1]))
+            var filePath = args[1];
+
+            if (!File.Exists(filePath))
             {
-                var message = $"Sorry, '{args[1]}' could not be found";
+                var message = $"Sorry, '{filePath}' could not be found";
                 _loggerService.Error(message);
                 MessageBox.Show(message);
                 return false;
             }
 
-            if (Path.GetExtension(args[1]) == ".cpmodproj")
+            if (Path.GetExtension(filePath) == ".cpmodproj")
             {
-                _ = OpenProjectAsync(args[1]);
+                _ = OpenProjectAsync(filePath);
                 return true;
             }
 
-            if (Enum.TryParse<ERedExtension>(Path.GetExtension(args[1])[1..], out var _))
+            // open files
+            if (Enum.TryParse<ERedExtension>(Path.GetExtension(filePath)[1..], out var _))
             {
-                _ = OpenFileAsync(new FileModel(args[1], null));
+                _ = OpenFileAsync(new FileModel(filePath, ActiveProject.NotNull())); // TODO
                 return true;
             }
 
-            var message2 = $"Sorry, {Path.GetExtension(args[1])} files aren't supported by WolvenKit";
+            var message2 = $"Sorry, {Path.GetExtension(filePath)} files aren't supported by WolvenKit";
             _loggerService.Error(message2);
             MessageBox.Show(message2);
             return false;
@@ -716,10 +721,10 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand SaveFileCommand { get; private set; }
         private bool CanSaveFile() => ActiveDocument is not null; // _projectManager.ActiveProject != null &&
-        private void ExecuteSaveFile() => Save(ActiveDocument);
+        private void ExecuteSaveFile() => Save(ActiveDocument.NotNull());
 
         public ICommand SaveAsCommand { get; private set; }
-        private void ExecuteSaveAs() => Save(ActiveDocument, true);
+        private void ExecuteSaveAs() => Save(ActiveDocument.NotNull(), true);
 
         public ICommand SaveAllCommand { get; private set; }
         private bool CanSaveAll() => OpenDocuments?.Count > 0; //  _projectManager.ActiveProject != null &&
@@ -865,7 +870,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand NewFileCommand { get; private set; }
         private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
-        private void ExecuteNewFile(string inputDir) => SetActiveDialog(new NewFileViewModel
+        private void ExecuteNewFile(string? inputDir) => SetActiveDialog(new NewFileViewModel
         {
             FileHandler = OpenFromNewFile
         });
@@ -989,20 +994,19 @@ namespace WolvenKit.ViewModels.Shell
                 _progressService.IsIndeterminate = true;
                 try
                 {
-                    RedDocumentViewModel fileViewModel = new(file.FileName);
-                    await using (MemoryStream stream = new())
+                    await using MemoryStream stream = new();
+                    file.Extract(stream);
+                    if (OpenStream(stream, file.FileName, out var redfile))
                     {
-                        file.Extract(stream);
-                        fileViewModel.OpenStream(stream, null);
-                    }
+                        RedDocumentViewModel fileViewModel = new(redfile, file.FileName);
+                        if (!DockedViews.Contains(fileViewModel))
+                        {
+                            DockedViews.Add(fileViewModel);
+                        }
 
-                    if (!DockedViews.Contains(fileViewModel))
-                    {
-                        DockedViews.Add(fileViewModel);
+                        ActiveDocument = fileViewModel;
+                        UpdateTitle();
                     }
-
-                    ActiveDocument = fileViewModel;
-                    UpdateTitle();
                 }
                 catch (Exception e)
                 {
@@ -1030,19 +1034,21 @@ namespace WolvenKit.ViewModels.Shell
                     var file = _archiveManager.Lookup(hash);
                     if (file.HasValue && file.Value is FileEntry fe)
                     {
-                        RedDocumentViewModel fileViewModel = new(fe.FileName);
-                        using (MemoryStream stream = new())
-                        {
-                            fe.Extract(stream);
-                            fileViewModel.OpenStream(stream, null);
-                        }
-                        if (!DockedViews.Contains(fileViewModel))
-                        {
-                            DockedViews.Add(fileViewModel);
-                        }
+                        using MemoryStream stream = new();
+                        fe.Extract(stream);
 
-                        ActiveDocument = fileViewModel;
-                        UpdateTitle();
+                        if (OpenStream(stream, fe.FileName, out var redfile))
+                        {
+                            RedDocumentViewModel fileViewModel = new(redfile, fe.FileName);
+                            if (!DockedViews.Contains(fileViewModel))
+                            {
+                                DockedViews.Add(fileViewModel);
+                            }
+
+                            ActiveDocument = fileViewModel;
+                            UpdateTitle();
+
+                        }
                     }
                 }
                 catch (Exception e)
@@ -1272,7 +1278,7 @@ namespace WolvenKit.ViewModels.Shell
             ShouldDialogShow = true;
         }
 
-        [Reactive] public ReactiveObject ActiveOverlay { get; set; }
+        [Reactive] public ReactiveObject? ActiveOverlay { get; set; }
 
         public void SetActiveOverlay(ReactiveObject overlay)
         {
@@ -1281,7 +1287,7 @@ namespace WolvenKit.ViewModels.Shell
             Task.Run(OnAfterOverlayRendered);
         }
 
-        [Reactive] public DialogViewModel ActiveDialog { get; set; }
+        [Reactive] public DialogViewModel? ActiveDialog { get; set; }
         public void SetActiveDialog(DialogViewModel modal)
         {
             ActiveDialog = modal;
@@ -1289,13 +1295,13 @@ namespace WolvenKit.ViewModels.Shell
             Task.Run(OnAfterDialogRendered);
         }
 
-        [Reactive] public IDocumentViewModel ActiveDocument { get; set; }
+        [Reactive] public IDocumentViewModel? ActiveDocument { get; set; }
 
-        [Reactive] public Cp77Project ActiveProject { get; set; }
+        [Reactive] public Cp77Project? ActiveProject { get; set; }
 
         private List<IDocumentViewModel> OpenDocuments => DockedViews.OfType<IDocumentViewModel>().ToList();
 
-        [Reactive] public ObservableCollection<IDockElement> DockedViews { get; set; }
+        [Reactive] public ObservableCollection<IDockElement> DockedViews { get; set; } = new();
 
         #endregion properties
 
@@ -1321,15 +1327,79 @@ namespace WolvenKit.ViewModels.Shell
             Title = title;
         }
 
-        //private async Task RequestOpenFile(string fullPath)
-        //{
-        //    if (!File.Exists(fullPath))
-        //    {
-        //        _ = await Task.FromException<FileNotFoundException>(new FileNotFoundException(nameof(RequestOpenFile), fullPath));
-        //    }
-        //    // check if in
-        //    await RequestFileOpen(fullPath);
-        //}
+        private bool OpenStream(Stream stream, string path, [NotNullWhen(true)] out CR2WFile? file)
+        {
+            using var reader = new BinaryReader(stream);
+
+            if (!_parser.TryReadRed4File(reader, out file))
+            {
+                _loggerService.Error($"Failed to read cr2w file {path}");
+                return false;
+            }
+            
+            return true;
+        }
+
+        private bool OpenFile(string path, [NotNullWhen(true)] out CR2WFile? file)
+        {
+            file = null;
+            try
+            {
+                using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                if (OpenStream(stream, path, out file))
+                {
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+
+            return false;
+        }
+
+        public override async Task<bool> OpenTweakFileAsync(string path)
+        {
+            _isInitialized = false;
+
+            // make sure TweakDB is loaded before we open the TweakXL file
+            await Task.WhenAll(LoadTweakDB());
+
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                FilePath = path;
+
+                try
+                {
+                    // read tweakXL file
+                    using var reader = new StreamReader(stream);
+                    var deserializer = new DeserializerBuilder()
+                        .WithTypeConverter(new TweakXLYamlTypeConverter())
+                        .Build();
+                    var file = deserializer.Deserialize<TweakXLFile>(reader);
+                    // TODO: enable when working on ChunkViewModel
+                    //TabItemViewModels.Add(new RDTDataViewModel(file, this));
+
+                    // read text file
+                    stream.Seek(0, SeekOrigin.Begin);
+                    TabItemViewModels.Add(new RDTTextViewModel(stream, this));
+
+                }
+                catch (Exception ex)
+                {
+                    _loggerService.Error(ex);
+                    return false;
+                }
+
+                _isInitialized = true;
+
+                SelectedIndex = 0;
+                SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Open a file and return its content in a viewmodel.
@@ -1350,8 +1420,11 @@ namespace WolvenKit.ViewModels.Shell
             switch (type)
             {
                 case EWolvenKitFile.Cr2w:
-                    fileViewModel = new RedDocumentViewModel(fullPath);
-                    result = fileViewModel.OpenFile(fullPath);
+                    if (OpenFile(fullPath, out var file))
+                    {
+                        fileViewModel = new RedDocumentViewModel(file, fullPath);
+                        result = true;
+                    }
                     break;
                 case EWolvenKitFile.TweakXl:
                     fileViewModel = new TweakXLDocumentViewModel(fullPath);
@@ -1425,14 +1498,14 @@ namespace WolvenKit.ViewModels.Shell
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
                     fileToSave.FilePath = dlg.FileName;
-                    ActiveDocument.SaveCommand.SafeExecute();
+                    ActiveDocument?.SaveCommand.SafeExecute();
                 }
                 _watcherService.IsSuspended = false;
                 _ = _watcherService.RefreshAsync(ActiveProject);
             }
             else
             {
-                ActiveDocument.SaveCommand.SafeExecute();
+                ActiveDocument?.SaveCommand.SafeExecute();
             }
 
         }

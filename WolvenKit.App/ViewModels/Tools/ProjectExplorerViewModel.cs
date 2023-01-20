@@ -162,7 +162,7 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public int SelectedTabIndex { get; set; }
 
-        public FileModel LastSelected => _watcherService.LastSelect;
+        public FileModel? LastSelected => _watcherService.LastSelect;
 
         #endregion properties
 

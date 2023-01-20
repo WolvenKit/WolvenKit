@@ -21,7 +21,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, string stringFormat, BindingMode bindingMode) => Bind(dataSource, sourcePath, destinationObject, dp, stringFormat, bindingMode, null);
 
-        public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, string stringFormat, BindingMode bindingMode, IValueConverter converter)
+        public static void Bind(object dataSource, string sourcePath, FrameworkElement destinationObject, DependencyProperty dp, string? stringFormat, BindingMode bindingMode, IValueConverter? converter)
         {
             var binding = new Binding
             {
@@ -35,23 +35,23 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             destinationObject.SetBinding(dp, binding);
         }
 
-        public static T FindParent<T>(this DependencyObject child) where T : DependencyObject
-        {
-            var parent = VisualTreeHelper.GetParent(child);
-            do
-            {
-                var matchedParent = parent as T;
-                if (matchedParent != null)
-                {
-                    return matchedParent;
-                }
+        //public static T FindParent<T>(this DependencyObject child) where T : DependencyObject
+        //{
+        //    var parent = VisualTreeHelper.GetParent(child);
+        //    do
+        //    {
+        //        var matchedParent = parent as T;
+        //        if (matchedParent != null)
+        //        {
+        //            return matchedParent;
+        //        }
 
-                parent = VisualTreeHelper.GetParent(parent);
-            }
-            while (parent != null);
+        //        parent = VisualTreeHelper.GetParent(parent);
+        //    }
+        //    while (parent != null);
 
-            return null;
-        }
+        //    return null;
+        //}
 
         #endregion Methods
     }

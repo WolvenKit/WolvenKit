@@ -47,27 +47,34 @@ namespace WolvenKit.ViewModels.Documents
         protected readonly IProjectManager _projectManager;
         protected readonly IOptions<Globals> _globals;
 
-        public RedDocumentViewModel(string path) : base(path)
+        public RedDocumentViewModel(CR2WFile file, string path) : base(path)
         {
+            _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
+            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
+            _hashService = Locator.Current.GetService<IHashService>().NotNull();
+            _projectManager = Locator.Current.GetService<IProjectManager>().NotNull();
+            _globals = Locator.Current.GetService<IOptions<Globals>>().NotNull();
             _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
                 "yaml",
                 "yml",
                 "xl"
             };
-            _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
-            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
-            _hashService = Locator.Current.GetService<IHashService>().NotNull();
-            _projectManager = Locator.Current.GetService<IProjectManager>().NotNull();
-            _globals = Locator.Current.GetService<IOptions<Globals>>().NotNull();
 
-            if (_projectManager.ActiveProject != null)
-            {
-                // assume files that don't exist are relative paths
-                RelativePath = File.Exists(path)
-                    ? Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path)
-                    : path;
-            }
+
+
+
+            Cr2wFile = file;
+            _isInitialized = true;
+            PopulateItems();
+
+            
+            
+
+            // assume files that don't exist are relative paths
+            RelativePath = File.Exists(path)
+                ? Path.GetRelativePath(_projectManager.ActiveProject.NotNull().ModDirectory, path)
+                : path;
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
             NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile, CanExecuteNewEmbeddedFile);
@@ -86,7 +93,7 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public RedDocumentTabViewModel? SelectedTabItemViewModel { get; set; }
 
-        [Reactive] public string? RelativePath { get; set; }
+        [Reactive] public string RelativePath { get; set; }
 
         [Reactive] public string Extension { get; set; }
 
@@ -140,46 +147,7 @@ namespace WolvenKit.ViewModels.Documents
             return Task.CompletedTask;
         }
 
-        public bool OpenStream(Stream stream, string path)
-        {
-            using var reader = new BinaryReader(stream);
-
-            if (!_parser.TryReadRed4File(reader, out var cr2wFile))
-            {
-                _loggerService.Error($"Failed to read cr2w file {path}");
-                return false;
-            }
-
-            Cr2wFile = cr2wFile;
-            FilePath = path;
-            _isInitialized = true;
-
-            PopulateItems();
-            return true;
-        }
-
-        public override bool OpenFile(string path)
-        {
-            _isInitialized = false;
-
-            try
-            {
-                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    OpenStream(stream, path);
-                }
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                // Not processing this catch in any other way than rejecting to initialize this
-                _isInitialized = false;
-            }
-
-            return false;
-        }
+       
 
         public override Task<bool> OpenFileAsync(string path)
         {

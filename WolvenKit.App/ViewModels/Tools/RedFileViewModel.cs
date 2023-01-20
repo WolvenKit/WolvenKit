@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.ViewModels.Tools
@@ -49,7 +50,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #endregion Properties
 
-        public string GetParentPath() => Path.GetDirectoryName(_fileEntry.Name);
+        public string GetParentPath() => Path.GetDirectoryName(_fileEntry.Name).NotNull();
 
         private string FormatSize(uint size)
         {
