@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,6 +18,7 @@ using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -54,6 +56,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
             _gameControllerFactory = gameControllerFactory;
             _progress = progress;
             _modTools = modTools;
+
+            ArgumentNullException.ThrowIfNull(_settingsManager.MaterialRepositoryPath);
 
             OpenMaterialRepositoryCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath));
             UnbundleGameCommand = ReactiveCommand.CreateFromTask(UnbundleGame);
@@ -110,7 +114,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private async Task GenerateMaterialRepoAsync()
         {
-            var materialRepoDir = new DirectoryInfo(MaterialsDepotPath);
+            DirectoryInfo materialRepoDir = new DirectoryInfo(MaterialsDepotPath);
             var textureExtension = UncookExtension.Extension;
 
             var unbundle = new List<string>()
@@ -154,7 +158,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 var progress = 0;
                 _progress.Report(0);
 
-                foreach (var archiveGroup in filesList.GroupBy(x => x.Archive.ArchiveAbsolutePath))
+                foreach (var archiveGroup in filesList.GroupBy(x => x.GetArchive<Archive>().ArchiveAbsolutePath))
                 {
                     var ar = (Archive)_archiveManager.Archives.Lookup(archiveGroup.Key).Value;
 
@@ -165,7 +169,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                         async Task UnbundleAsync(FileEntry entry)
                         {
                             var endPath = Path.Combine(materialRepoDir.FullName, entry.Name);
-                            var dirpath = Path.GetDirectoryName(endPath);
+                            var dirpath = Path.GetDirectoryName(endPath).NotNull();
                             var dirInfo = Directory.CreateDirectory(dirpath);
 
                             try
@@ -195,7 +199,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                             entry =>
                             {
                                 var endPath = Path.Combine(materialRepoDir.FullName, entry.Name);
-                                var dirpath = Path.GetDirectoryName(endPath);
+                                var dirpath = Path.GetDirectoryName(endPath).NotNull();
                                 var dirInfo = Directory.CreateDirectory(dirpath);
 
                                 try
@@ -235,6 +239,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                     new XbmExportArgs() { UncookExtension = textureExtension },
                     new MlmaskExportArgs() { UncookExtension = textureExtension }
                 );
+            
 
             foreach (var (key, fileEntries) in groupedFiles)
             {
@@ -250,7 +255,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 var progress = 0;
                 _progress.Report(0);
 
-                foreach (var archiveGroup in filesList.GroupBy(x => x.Archive.ArchiveAbsolutePath))
+                foreach (var archiveGroup in filesList.GroupBy(x => x.GetArchive<Archive>().ArchiveAbsolutePath))
                 {
                     var ar = (Archive)_archiveManager.Archives.Lookup(archiveGroup.Key).Value;
 
@@ -262,8 +267,10 @@ namespace WolvenKit.App.ViewModels.Dialogs
                         {
                             try
                             {
+                                ArgumentNullException.ThrowIfNull(exportArgs); // TODO WHY???
+
                                 exportArgs.Get<MlmaskExportArgs>().AsList = false;
-                                await _modTools.UncookSingleAsync(entry.Archive as Archive, entry.Key, materialRepoDir, exportArgs);
+                                await _modTools.UncookSingleAsync(entry.Archive, entry.Key, materialRepoDir, exportArgs);
 
                                 Interlocked.Increment(ref progress);
                                 _progress.Report(progress / (float)fileCount);
@@ -287,7 +294,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                                 try
                                 {
                                     exportArgs.Get<MlmaskExportArgs>().AsList = false;
-                                    _modTools.UncookSingle(entry.Archive as Archive, entry.Key, materialRepoDir, exportArgs);
+                                    _modTools.UncookSingle(entry.GetArchive<Archive>(), entry.Key, materialRepoDir, exportArgs);
 
                                     Interlocked.Increment(ref progress);
                                     _progress.Report(progress / (float)fileCount);
@@ -320,6 +327,11 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private async Task UnbundleGame()
         {
+            if (_settingsManager.MaterialRepositoryPath is null)
+            {
+                return;
+            }    
+
             var depotPath = new DirectoryInfo(_settingsManager.MaterialRepositoryPath);
             if (depotPath.Exists)
             {
@@ -333,8 +345,11 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
                     for (var i = 0; i < archives.Count; i++)
                     {
-                        var archive = archives[i];
-                        _modTools.ExtractAll(archive as Archive, depotPath);
+                        if (archives[i] is not ICyberGameArchive archive)
+                        {
+                            throw new InvalidGameContextException();
+                        }
+                        _modTools.ExtractAll(archive, depotPath);
 
                         progress++;
                         _progress.Report(i / (float)total);
@@ -348,8 +363,17 @@ namespace WolvenKit.App.ViewModels.Dialogs
             OpenDepotFolder();
         }
 
-        private void OpenDepotFolder() => Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath);
+        private void OpenDepotFolder()
+        {
+            if (_settingsManager.MaterialRepositoryPath is null)
+            {
+                return;
+            }
+            Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath);
+        }
 
         #endregion Methods
     }
+
+    
 }

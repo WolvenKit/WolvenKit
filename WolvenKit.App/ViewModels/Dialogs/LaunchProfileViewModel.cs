@@ -5,10 +5,5 @@ using WolvenKit.App.Models;
 
 namespace WolvenKit.ViewModels.Dialogs
 {
-    public class LaunchProfileViewModel
-    {
-        public string Name { get; set; }
-
-        public LaunchProfile Profile { get; set; }
-    }
+    public record LaunchProfileViewModel(string Name, LaunchProfile Profile);
 }

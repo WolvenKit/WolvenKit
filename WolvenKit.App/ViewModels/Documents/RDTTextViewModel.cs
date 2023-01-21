@@ -17,7 +17,7 @@ namespace WolvenKit.ViewModels.Documents
     {
         //protected readonly IRedType _data;
 
-        public RDTTextViewModel(Stream stream, RedDocumentViewModel file) : base(file, "Source YAML")
+        public RDTTextViewModel(Stream stream, RedDocumentViewModel parent) : base(parent, "Source YAML")
         {
             SetupText(stream);
 
@@ -50,7 +50,7 @@ namespace WolvenKit.ViewModels.Documents
         public override void OnSelected()
         {
             // serialize from Data tab
-            if (File is TweakXLDocumentViewModel tweakFile)
+            //if (File is TweakXLDocumentViewModel tweakFile)
             {
                 // TODO: enable when working on ChunkViewModel
                 // get data tab

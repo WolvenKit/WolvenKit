@@ -23,7 +23,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
             _settingsManager = settingsManager;
             _loggerService = loggerService;
 
-            CloseCommand = ReactiveCommand.Create(() => { });
             OkCommand = ReactiveCommand.Create(() => { });
             CancelCommand = ReactiveCommand.Create(() => { });
 
@@ -31,9 +30,12 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
             // populate profiles
             LaunchProfiles = new();
-            foreach ((var key, var value) in _settingsManager.LaunchProfiles)
+            if (_settingsManager.LaunchProfiles is not null)
             {
-                LaunchProfiles.Add(new LaunchProfileViewModel { Name = key, Profile = value });
+                foreach ((var key, var value) in _settingsManager.LaunchProfiles)
+                {
+                    LaunchProfiles.Add(new LaunchProfileViewModel(key, value));
+                }
             }
 
             NewItemCommand = ReactiveCommand.Create(NewItem);
@@ -49,26 +51,22 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private void NewItem()
         {
-            LaunchProfiles.Add(new LaunchProfileViewModel()
-            {
-                Name = "New LaunchProfile",
-                Profile = new()
-            });
+            LaunchProfiles.Add(new LaunchProfileViewModel("New LaunchProfile", new()));
         }
 
         private void DuplicateItem()
         {
             if (SelectedLaunchProfile != null)
             {
-                LaunchProfiles.Add(new LaunchProfileViewModel()
-                {
-                    Name = $"{SelectedLaunchProfile.Name} Copy",
-                    Profile = SelectedLaunchProfile.Profile.Copy()
-                });
+                LaunchProfiles.Add(new LaunchProfileViewModel($"{SelectedLaunchProfile.Name} Copy", SelectedLaunchProfile.Profile.Copy()));
             }
         }
 
-        private void DeleteItem() => LaunchProfiles.Remove(SelectedLaunchProfile);
+        private void DeleteItem()
+        {
+            if (SelectedLaunchProfile != null)
+            LaunchProfiles.Remove(SelectedLaunchProfile);
+        }
 
         //private void RenameItem()
         //{
@@ -92,12 +90,11 @@ namespace WolvenKit.App.ViewModels.Dialogs
         //}
 
         [Reactive] public ObservableCollection<LaunchProfileViewModel> LaunchProfiles { get; set; } = new();
-        [Reactive] public LaunchProfileViewModel SelectedLaunchProfile { get; set; }
+        [Reactive] public LaunchProfileViewModel? SelectedLaunchProfile { get; set; }
 
 
         public string Title { get; set; }
 
-        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
         public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
         public override ReactiveCommand<Unit, Unit> OkCommand { get; }
 
@@ -105,7 +102,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
         public ReactiveCommand<Unit, Unit> NewItemCommand { get; }
         public ReactiveCommand<Unit, Unit> DuplicateItemCommand { get; }
         public ReactiveCommand<Unit, Unit> DeleteItemCommand { get; }
-        public ReactiveCommand<Unit, Unit> RenameItemCommand { get; }
 
 
     }

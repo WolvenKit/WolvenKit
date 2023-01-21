@@ -659,7 +659,7 @@ namespace WolvenKit.ViewModels.Shell
             });
         }
 
-        private async Task NewProject(ProjectWizardViewModel project)
+        private async Task NewProject(ProjectWizardViewModel? project)
         {
 
             if (project == null)
@@ -675,8 +675,8 @@ namespace WolvenKit.ViewModels.Shell
         {
             try
             {
-                var newProjectname = project.ProjectName.Trim();
-                var projectLocation = Path.Combine(project.ProjectPath, newProjectname, newProjectname + ".cpmodproj");
+                var newProjectname = project.ProjectName.NotNull().Trim();
+                var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectname, newProjectname + ".cpmodproj");
                 Cp77Project np = new(projectLocation, newProjectname)
                 {
                     Author = project.Author,
@@ -764,7 +764,7 @@ namespace WolvenKit.ViewModels.Shell
         public ICommand OpenLogsCommand { get; private set; }
         private void ExecuteOpenLogs() => Commonfunctions.ShowFolderInExplorer(ISettingsManager.GetAppData());
 
-        [Reactive] public int SelectedGameCommandIdx { get; set; }
+        [Reactive] public int? SelectedGameCommandIdx { get; set; }
 
         public record GameLaunchCommand(string Name, EGameLaunchCommand Command);
         public enum EGameLaunchCommand
@@ -829,12 +829,22 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand ShowSoundModdingToolCommand { get; private set; }
         private bool CanShowSoundModdingTool() => !IsDialogShown && ActiveProject != null;
-        private void ExecuteShowSoundModdingTool() => SetActiveDialog(new SoundModdingViewModel
+        private void ExecuteShowSoundModdingTool()
         {
-            FileHandler = OpenSoundModdingView
-        });
+            var vm = Locator.Current.GetService<SoundModdingViewModel>();
+            if (vm != null)
+            {
+                vm.FileHandler = OpenSoundModdingView;
+                SetActiveDialog(vm);
+            }
+            
+            //var vm = new SoundModdingViewModel
+            //{
+            //    FileHandler = OpenSoundModdingView
+            //};
+        }
 
-        public async Task OpenSoundModdingView(SoundModdingViewModel file)
+        public async Task OpenSoundModdingView(SoundModdingViewModel? file)
         {
             CloseModalCommand.Execute(null);
             if (file == null)
@@ -870,12 +880,21 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand NewFileCommand { get; private set; }
         private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
-        private void ExecuteNewFile(string? inputDir) => SetActiveDialog(new NewFileViewModel
+        private void ExecuteNewFile(string? inputDir)
         {
-            FileHandler = OpenFromNewFile
-        });
+            var vm = Locator.Current.GetService<NewFileViewModel>();
+            if (vm != null)
+            {
+                vm.FileHandler = OpenFromNewFile;
+                SetActiveDialog(vm);
+            }
+            //SetActiveDialog(new NewFileViewModel
+            //{
+            //    FileHandler = OpenFromNewFile
+            //});
+        }
 
-        private async Task OpenFromNewFile(NewFileViewModel file)
+        private async Task OpenFromNewFile(NewFileViewModel? file)
         {
             CloseModalCommand.Execute(null);
             if (file == null)
@@ -1258,9 +1277,9 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool IsUpdateAvailable { get; set; }
 
-        [Reactive] public EAppStatus Status { get; set; }
+        [Reactive] public EAppStatus? Status { get; set; }
 
-        [Reactive] public string Title { get; set; }
+        [Reactive] public string? Title { get; set; }
 
         [Reactive] public bool ShouldDialogShow { get; set; }
         [Reactive] public bool ShouldOverlayShow { get; set; }
@@ -1359,46 +1378,17 @@ namespace WolvenKit.ViewModels.Shell
             return false;
         }
 
-        public override async Task<bool> OpenTweakFileAsync(string path)
+        
+
+        private Task LoadTweakDB()
         {
-            _isInitialized = false;
-
-            // make sure TweakDB is loaded before we open the TweakXL file
-            await Task.WhenAll(LoadTweakDB());
-
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            var _tdbs = Locator.Current.GetService<TweakDBService>().NotNull();
+            if (_tdbs.IsLoaded)
             {
-                FilePath = path;
-
-                try
-                {
-                    // read tweakXL file
-                    using var reader = new StreamReader(stream);
-                    var deserializer = new DeserializerBuilder()
-                        .WithTypeConverter(new TweakXLYamlTypeConverter())
-                        .Build();
-                    var file = deserializer.Deserialize<TweakXLFile>(reader);
-                    // TODO: enable when working on ChunkViewModel
-                    //TabItemViewModels.Add(new RDTDataViewModel(file, this));
-
-                    // read text file
-                    stream.Seek(0, SeekOrigin.Begin);
-                    TabItemViewModels.Add(new RDTTextViewModel(stream, this));
-
-                }
-                catch (Exception ex)
-                {
-                    _loggerService.Error(ex);
-                    return false;
-                }
-
-                _isInitialized = true;
-
-                SelectedIndex = 0;
-                SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
+                return Task.CompletedTask;
             }
 
-            return true;
+            return _tdbs.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
         }
 
         /// <summary>
@@ -1423,16 +1413,17 @@ namespace WolvenKit.ViewModels.Shell
                     if (OpenFile(fullPath, out var file))
                     {
                         fileViewModel = new RedDocumentViewModel(file, fullPath);
-                        result = true;
+                        result = fileViewModel.IsInitialized();
                     }
                     break;
                 case EWolvenKitFile.TweakXl:
+                    await LoadTweakDB();
                     fileViewModel = new TweakXLDocumentViewModel(fullPath);
-                    result = await fileViewModel.OpenFileAsync(fullPath);
+                    result = fileViewModel.IsInitialized();
                     break;
                 case EWolvenKitFile.WScript:
                     fileViewModel = new WScriptDocumentViewModel(fullPath);
-                    result = fileViewModel.OpenFile(fullPath);
+                    result = fileViewModel.IsInitialized();
                     break;
                 case EWolvenKitFile.ArchiveXl:
                 case EWolvenKitFile.RedScript:

@@ -40,31 +40,31 @@ namespace WolvenKit.ViewModels.Documents
 
         public override Task OnSave(object parameter) => throw new NotImplementedException();
 
-        public override bool OpenFile(string path)
-        {
-            _isInitialized = false;
+        //public override bool OpenFile(string path)
+        //{
+        //    _isInitialized = false;
 
-            LoadDocument(path);
+        //    LoadDocument(path);
 
-            ContentId = path;
-            FilePath = path;
-            _isInitialized = true;
+        //    ContentId = path;
+        //    FilePath = path;
+        //    _isInitialized = true;
 
-            return true;
-        }
+        //    return true;
+        //}
 
-        public override Task<bool> OpenFileAsync(string path)
-        {
-            _isInitialized = false;
+        //public override Task<bool> OpenFileAsync(string path)
+        //{
+        //    _isInitialized = false;
 
-            LoadDocument(path);
+        //    LoadDocument(path);
 
-            ContentId = path;
-            FilePath = path;
-            _isInitialized = true;
+        //    ContentId = path;
+        //    FilePath = path;
+        //    _isInitialized = true;
 
-            return Task.FromResult(true);
-        }
+        //    return Task.FromResult(true);
+        //}
 
         private void LoadDocument(string paramFilePath)
         {

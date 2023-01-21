@@ -17,6 +17,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
         /// The application log.
         /// Bound to the logview, implements OnPropertyRaised through Fody
         /// </summary>
-        [Reactive] public string Text { get; set; }
+        [Reactive] public string? Text { get; set; }
     }
 }

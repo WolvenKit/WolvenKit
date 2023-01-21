@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using DynamicData;
@@ -12,6 +13,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.CR2W;
@@ -52,13 +54,13 @@ namespace WolvenKit.ViewModels.Shell
                 new Vec3()
                 {
                     X = float.Parse(
-                        ((System.Text.Json.JsonElement)j[5])[0].GetRawText()
+                        ((JsonElement)j[5])[0].GetRawText()
                         ),
                     Y = float.Parse(
-                        ((System.Text.Json.JsonElement)j[5])[1].GetRawText()
+                        ((JsonElement)j[5])[1].GetRawText()
                         ),
                     Z = float.Parse(
-                        ((System.Text.Json.JsonElement)j[5])[2].GetRawText()
+                        ((JsonElement)j[5])[2].GetRawText()
                         )
                 }
                 ).ToList();
@@ -94,6 +96,12 @@ namespace WolvenKit.ViewModels.Shell
             foreach (var line in props)
             {
                 var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos)).NotNull();
+
+                ArgumentNullException.ThrowIfNull(posandrot.x);
+                ArgumentNullException.ThrowIfNull(posandrot.y);
+                ArgumentNullException.ThrowIfNull(posandrot.z);
+                ArgumentNullException.ThrowIfNull(posandrot.w);
+
                 var v = new Vec4()
                 {
                     X = float.Parse(posandrot.x),
@@ -108,7 +116,16 @@ namespace WolvenKit.ViewModels.Shell
 
         private (Vec4, Quat) GetPosRot(Prop line)
         {
-            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos)).NotNull();
+
+            ArgumentNullException.ThrowIfNull(posandrot.x);
+            ArgumentNullException.ThrowIfNull(posandrot.y);
+            ArgumentNullException.ThrowIfNull(posandrot.z);
+            ArgumentNullException.ThrowIfNull(posandrot.w);
+            ArgumentNullException.ThrowIfNull(posandrot.yaw);
+            ArgumentNullException.ThrowIfNull(posandrot.pitch);
+            ArgumentNullException.ThrowIfNull(posandrot.roll);
+
             var v =
                 posandrot == null
                 ? new Vec4()
@@ -254,11 +271,15 @@ namespace WolvenKit.ViewModels.Shell
 
         public async Task Refresh()
         {
-            if (Tab is not null)
+            var document  = Locator.Current.GetService<AppViewModel>().NotNull().ActiveDocument;
+
+            if (Tab is not null && document is not null)
             {
-                var currentfile = new FileModel(Tab.File.FilePath, Locator.Current.GetService<AppViewModel>().NotNull().ActiveProject);
-                Tab.File.TabItemViewModels.RemoveMany(Tab.File.TabItemViewModels.AsEnumerable());
-                await Locator.Current.GetService<AppViewModel>().NotNull().ActiveDocument.OpenFileAsync(currentfile.FullName);
+                Tab.File.TabItemViewModels.Clear();
+                await Task.Delay(1);
+                throw new NotImplementedException();
+
+                //await document.OpenFileAsync(Tab.File.FilePath);
             }
         }
 
@@ -627,10 +648,13 @@ namespace WolvenKit.ViewModels.Shell
             var center = updatecoords ? GetCenter(json) : new Vec4();
             var props = GetLines(json);
 
-            foreach (Prop line in props)
+            foreach (var c in props)
             {
+                var line = Prop.FromChild(c);
                 if (updatecoords)
-                { line.center = center; }
+                { 
+                    line.center = center; 
+                }
                 AddEntity(tr, line, updatecoords);
             }
         }
@@ -638,11 +662,17 @@ namespace WolvenKit.ViewModels.Shell
         private void AddFromUnreal(List<List<object>> json, string tr, bool updatecoords = true)
         {
             var center = updatecoords ? GetCenter(json) : new Vec4();
+            var pm = Locator.Current.GetService<IProjectManager>().NotNull();
+            ArgumentNullException.ThrowIfNull(pm.ActiveProject);
 
-            foreach (Prop line in json)
+            foreach (var o in json)
             {
+                var line = Prop.FromObjectList(o, pm.ActiveProject);
+
                 if (updatecoords)
-                { line.center = center; }
+                { 
+                    line.center = center; 
+                }
                 line.isunreal = true;
                 AddMesh(tr, line, updatecoords);
             }
@@ -650,14 +680,23 @@ namespace WolvenKit.ViewModels.Shell
 
         private void AddFromObjectSpawner(List<JsonObjectSpawner> json, string tr, bool updatecoords = true)
         {
-            var center = updatecoords
-                        ? GetCenter(json.Select(x => new Vec4(x.pos.x, x.pos.y, x.pos.z, x.pos.w)).ToList())
-                        : new Vec4();
-
-            foreach (Prop line in json)
+            var v = json.Select(x =>
             {
+                ArgumentNullException.ThrowIfNull(x.pos);
+
+                return new Vec4(x.pos.x, x.pos.y, x.pos.z, x.pos.w);
+            }).ToList();
+
+
+            var center = updatecoords ? GetCenter(v) : new Vec4();
+
+            foreach (var o in json)
+            {
+                var line = Prop.FromJsonObjectSpawner(o);
                 if (updatecoords)
-                { line.center = center; }
+                { 
+                    line.center = center; 
+                }
                 AddEntity(tr, line, updatecoords);
             }
         }
@@ -676,13 +715,22 @@ namespace WolvenKit.ViewModels.Shell
 
         private Vec3 GetScale(Prop line, float factor = (float)0.01)
         {
-            var scala = line.scale == "nil" ? null
+            var scala = line.scale == "nil" 
+                ? null
                 : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
-            return scala is null ? Vec3.One : new Vec3(
-                float.Parse(scala.x) * factor,
-                float.Parse(scala.y) * factor,
-                float.Parse(scala.z) * factor
-                );
+
+            if (scala is null)
+            {
+                return Vec3.One;
+            }
+            else
+            {
+                ArgumentNullException.ThrowIfNull(scala.x);
+                ArgumentNullException.ThrowIfNull(scala.y);
+                ArgumentNullException.ThrowIfNull(scala.z);
+
+                return new Vec3(float.Parse(scala.x) * factor, float.Parse(scala.y) * factor, float.Parse(scala.z) * factor );
+            }
         }
 
         public static void CreateFromYawPitchRoll(Quaternion r, out float yaw, out float pitch, out float roll)
@@ -747,19 +795,19 @@ namespace WolvenKit.ViewModels.Shell
 
     public class Vec3S
     {
-        public string x { get; set; }
-        public string y { get; set; }
-        public string z { get; set; }
+        public string? x { get; set; }
+        public string? y { get; set; }
+        public string? z { get; set; }
     }
     public class Vec7S
     {
-        public string x { get; set; }
-        public string y { get; set; }
-        public string z { get; set; }
-        public string w { get; set; }
-        public string roll { get; set; }
-        public string pitch { get; set; }
-        public string yaw { get; set; }
+        public string? x { get; set; }
+        public string? y { get; set; }
+        public string? z { get; set; }
+        public string? w { get; set; }
+        public string? roll { get; set; }
+        public string? pitch { get; set; }
+        public string? yaw { get; set; }
     }
     public class Vec7
     {
@@ -774,14 +822,14 @@ namespace WolvenKit.ViewModels.Shell
     public class Prop
     {
         public string scale { get; set; }
-        public string tag { get; set; }
+        public string? tag { get; set; }
         public string template_path { get; set; }
-        public string entity_id { get; set; }
+        public string? entity_id { get; set; }
         public string pos { get; set; }
         public int uid { get; set; }
         public string app { get; set; }
         public string name { get; set; }
-        public string trigger { get; set; }
+        public string? trigger { get; set; }
         public bool isdoor { get; set; }
         public bool isunreal { get; set; }
 
@@ -801,33 +849,44 @@ namespace WolvenKit.ViewModels.Shell
         private static string PosRotToString(Pos pos, Rot rot) =>
             "{" + $"x = {pos.x} , y = {pos.y} , z = {pos.z} , w = {pos.w} , roll = {rot.roll} , pitch = {rot.pitch} , yaw = {rot.yaw} " + "}";
 
-        public static implicit operator Prop(Child C) =>
-          new()
-          {
-              name = C.name,
-              app = C.app,
-              template_path = C.path,
-              scale = "nil",
-              pos = PosRotToString(C.pos, C.rot)
-          };
-
-        public static implicit operator Prop(JsonObjectSpawner C) =>
-          new()
-          {
-              name = Path.GetFileNameWithoutExtension(C.path),
-              app = C.app,
-              template_path = C.path,
-              scale = "nil",
-              pos = PosRotToString(C.pos, C.rot)
-          };
-
-        public static implicit operator Prop(List<object> C)
+        public static Prop FromChild(Child C)
         {
-            var pm = Locator.Current.GetService<IProjectManager>();
+            return new()
+            {
+                name = C.name,
+                app = C.app.NotNull(),
+                template_path = C.path.NotNull(),
+                scale = "nil",
+                pos = PosRotToString(C.pos, C.rot)
+            };
+        }
 
-            var fileslist = pm.ActiveProject.Files.ToList();
 
-            var meshname = ((System.Text.Json.JsonElement)C[1]).GetString().ToLower();
+        public static Prop FromJsonObjectSpawner(JsonObjectSpawner C)
+        {
+            ArgumentNullException.ThrowIfNull(C.pos);
+            ArgumentNullException.ThrowIfNull(C.rot);
+
+            return new()
+            {
+                name = Path.GetFileNameWithoutExtension(C.path).NotNull(),
+                app = C.app.NotNull(),
+                template_path = C.path.NotNull(),
+                scale = "nil",
+                pos = PosRotToString(C.pos, C.rot)
+            };
+        }
+
+        public static Prop FromObjectList(List<object> C, Cp77Project project)
+        {
+            var fileslist = project.Files.ToList();
+
+            if (C[1] is not JsonElement jsonElement)
+            {
+                throw new ArgumentException("invalid argument type", nameof(C));
+            }
+            
+            var meshname = jsonElement.GetString().NotNull().ToLower();
             var foundnames = fileslist
                 .Where(x => x.Contains(meshname) && x.Contains(".mesh"))
                 .Select(x => x).ToList();
@@ -838,9 +897,9 @@ namespace WolvenKit.ViewModels.Shell
                     string.Join("\\", foundnames.First().Split("\\").Skip(1).ToArray());
 
 
-                var scaleX = ((System.Text.Json.JsonElement)C[7])[0].GetDouble().ToString();
-                var scaleY = ((System.Text.Json.JsonElement)C[7])[1].GetDouble().ToString();
-                var scaleZ = ((System.Text.Json.JsonElement)C[7])[2].GetDouble().ToString();
+                var scaleX = ((JsonElement)C[7])[0].GetDouble().ToString();
+                var scaleY = ((JsonElement)C[7])[1].GetDouble().ToString();
+                var scaleZ = ((JsonElement)C[7])[2].GetDouble().ToString();
 
                 return new Prop()
                 {
@@ -851,16 +910,16 @@ namespace WolvenKit.ViewModels.Shell
                     pos = PosRotToString(
                         new Pos()
                         {
-                            x = (float)((System.Text.Json.JsonElement)C[5])[0].GetDouble(),
-                            y = (float)((System.Text.Json.JsonElement)C[5])[1].GetDouble(),
-                            z = (float)((System.Text.Json.JsonElement)C[5])[2].GetDouble(),
+                            x = (float)((JsonElement)C[5])[0].GetDouble(),
+                            y = (float)((JsonElement)C[5])[1].GetDouble(),
+                            z = (float)((JsonElement)C[5])[2].GetDouble(),
                             w = 1
                         }
                         , new Rot()
                         {
-                            roll = (float)((System.Text.Json.JsonElement)C[6])[0].GetDouble(),
-                            pitch = (float)((System.Text.Json.JsonElement)C[6])[2].GetDouble(),
-                            yaw = (float)((System.Text.Json.JsonElement)C[6])[1].GetDouble(),
+                            roll = (float)((JsonElement)C[6])[0].GetDouble(),
+                            pitch = (float)((JsonElement)C[6])[2].GetDouble(),
+                            yaw = (float)((JsonElement)C[6])[1].GetDouble(),
                         }
                     )
                 };

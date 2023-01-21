@@ -41,11 +41,11 @@ namespace WolvenKit.App.ViewModels.Dialogs
         [Reactive] public ObservableCollection<IDisplayable> AvailableItems { get; set; } = new();
         [Reactive] public ObservableCollection<IDisplayable> SelectedItems { get; set; } = new();
 
-        [Reactive] public IDisplayable SelectedAvailableItem { get; set; }
-        [Reactive] public IDisplayable SelectedSelectedItem { get; set; }
+        [Reactive] public IDisplayable? SelectedAvailableItem { get; set; }
+        [Reactive] public IDisplayable? SelectedSelectedItem { get; set; }
 
-        [Reactive] public ObservableCollection<object> SelectedAvailableItems { get; set; }
-        [Reactive] public ObservableCollection<object> SelectedSelectedItems { get; set; }
+        [Reactive] public ObservableCollection<object> SelectedAvailableItems { get; set; } = new();
+        [Reactive] public ObservableCollection<object> SelectedSelectedItems { get; set; } = new();
 
         public void SetAvailableItems(IEnumerable<IDisplayable> input) => AvailableItems = new(input);
         public void SetSelectedItems(IEnumerable<IDisplayable> input)

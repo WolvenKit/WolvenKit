@@ -16,19 +16,5 @@ namespace WolvenKit.Common.Model
         public List<AddFileModel>? Files { get; set; }
     }
 
-    public class AddFileModel
-    {
-        public string? Name { get; set; }
-
-        public string? Description { get; set; }
-
-        public string? Extension { get; set; }
-
-        public EWolvenKitFile Type { get; set; }
-
-        public string? Template { get; set; }
-
-    }
-
-
+    public record AddFileModel(string Name, string Description, string Extension, EWolvenKitFile Type, string Template);
 }

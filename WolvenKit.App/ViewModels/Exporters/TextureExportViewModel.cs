@@ -42,11 +42,25 @@ public record class CallbackArguments(ImportExportArgs Arg, string PropertyName)
 
 public abstract partial class ExportViewModel : ImportExportViewModel
 {
-
+    protected ExportViewModel(string header, string contentId) : base(header, contentId)
+    {
+    }
 }
 
 public partial class TextureExportViewModel : ExportViewModel
 {
+    private ILoggerService _loggerService;
+    private INotificationService _notificationService;
+    private ISettingsManager _settingsManager;
+    private IWatcherService _watcherService;
+    protected IProgressService<double> _progressService;
+    protected IProjectManager _projectManager;
+    protected IGameControllerFactory _gameController;
+    protected IArchiveManager _archiveManager;
+    protected IPluginService _pluginService;
+    protected IModTools _modTools;
+
+
     public TextureExportViewModel(
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
@@ -57,7 +71,7 @@ public partial class TextureExportViewModel : ExportViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
-        IProgressService<double> progressService)
+        IProgressService<double> progressService) : base("Export Tool", "Export Tool")
     {
         _gameController = gameController;
         _settingsManager = settingsManager;
@@ -71,11 +85,7 @@ public partial class TextureExportViewModel : ExportViewModel
         _progressService = progressService;
 
         LoadFiles();
-
-        Header = Name;
     }
-
-    public override string Name => "Export Tool";
 
     #region Commands
 
@@ -327,6 +337,7 @@ public partial class TextureExportViewModel : ExportViewModel
 
         var availableItems = _archiveManager
             .GetGroupedFiles()[$".{fetchExtension}"]
+            .Cast<FileEntry>()
             .Select(_ => new CollectionItemViewModel<FileEntry>(_)).GroupBy(x => x.Name)
             .Select(x => x.First());
 
@@ -349,8 +360,12 @@ public partial class TextureExportViewModel : ExportViewModel
                     break;
 
                 case nameof(MeshExportArgs.Rig):
-                    meshExportArgs.Rig = new List<FileEntry>() { result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault() };
-                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                    var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault();
+                    if (rig is not null)
+{
+                        meshExportArgs.Rig = new List<FileEntry>() { rig };
+                        _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                    }
                     meshExportArgs.meshExportType = MeshExportType.WithRig;
                     break;
 

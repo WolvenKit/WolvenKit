@@ -12,6 +12,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
@@ -28,7 +29,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
         private readonly IProjectManager _projectManager;
 
         private SoundEventMetadata _metadata;
-        private ModInfo _info;
+        private ModInfo? _info;
 
         private readonly JsonSerializerOptions _options = new()
         {
@@ -38,17 +39,17 @@ namespace WolvenKit.App.ViewModels.Dialogs
             IgnoreReadOnlyProperties = true,
         };
 
-        public SoundModdingViewModel()
+        public SoundModdingViewModel(INotificationService notificationService, ILoggerService logger, IProjectManager projectManager)
         {
-            _notificationService = Locator.Current.GetService<INotificationService>();
-            _logger = Locator.Current.GetService<ILoggerService>();
-            _projectManager = Locator.Current.GetService<IProjectManager>();
+            //_notificationService = Locator.Current.GetService<INotificationService>();
+            //_logger = Locator.Current.GetService<ILoggerService>();
+            //_projectManager = Locator.Current.GetService<IProjectManager>();
 
             _metadata = new SoundEventMetadata();
 
             OkCommand = ReactiveCommand.Create(Save);
 #pragma warning disable IDE0053 // Use expression body for lambda expressions
-            CancelCommand = ReactiveCommand.Create(() => { FileHandler(null); });
+            CancelCommand = ReactiveCommand.Create(() => { FileHandler?.Invoke(null); });
 #pragma warning restore IDE0053 // Use expression body for lambda expressions
 
             AddCommand = ReactiveCommand.Create(AddEvents);
@@ -56,6 +57,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
             LoadEvents();
             LoadInfo();
             PopulateFiles();
+            _notificationService = notificationService;
+            _logger = logger;
+            _projectManager = projectManager;
         }
 
         private void LoadEvents()
@@ -65,7 +69,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
             {
                 try
                 {
-                    _metadata = JsonSerializer.Deserialize<SoundEventMetadata>(File.ReadAllText(path), _options);
+                    _metadata = JsonSerializer.Deserialize<SoundEventMetadata>(File.ReadAllText(path), _options).NotNull();
                 }
                 catch (Exception e)
                 {
@@ -83,13 +87,18 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private void LoadInfo()
         {
+            if (_projectManager.ActiveProject is null)
+            {
+                return;
+            }
+
             var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
             path = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "info.json");
             if (File.Exists(path))
             {
                 try
                 {
-                    _info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), _options);
+                    _info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), _options).NotNull();
                     foreach (var e in _info.CustomSounds)
                     {
                         CustomEvents.Add(e);
@@ -109,6 +118,10 @@ namespace WolvenKit.App.ViewModels.Dialogs
         private void PopulateFiles()
         {
             var modProj = _projectManager.ActiveProject;
+            if (modProj is null)
+            {
+                return;
+            }
             var modfiles = Directory.GetFiles(modProj.SoundDirectory, "*.wav", SearchOption.AllDirectories);
             foreach (var modfile in modfiles)
             {
@@ -117,17 +130,17 @@ namespace WolvenKit.App.ViewModels.Dialogs
             }
         }
 
-        public delegate Task ReturnHandler(SoundModdingViewModel file);
-        public ReturnHandler FileHandler;
+        public delegate Task ReturnHandler(SoundModdingViewModel? file);
+        public ReturnHandler? FileHandler;
 
         public List<string> Files { get; set; } = new();
         public List<string> Types { get; set; } = Enum.GetNames<ECustomSoundType>().ToList();
 
         public List<SoundEvent> SelectedEvents { get; set; } = new();
 
-        public IEnumerable<string> Tags { get; set; }
+        public List<string> Tags { get; set; } = new();
 
-        [Reactive] public CustomSoundsModel SelectedObject { get; set; }
+        [Reactive] public CustomSoundsModel? SelectedObject { get; set; }
         [Reactive] public ObservableCollection<CustomSoundsModel> CustomEvents { get; set; } = new();
         [Reactive] public ObservableCollection<SoundEvent> SoundEvents { get; set; } = new();
 
@@ -140,6 +153,11 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private void Save()
         {
+            if (_projectManager.ActiveProject is null)
+            {
+                return;
+            }
+
             var modInfoJsonPath = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "info.json");
             if (!File.Exists(modInfoJsonPath))
             {
@@ -151,9 +169,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 var info = _projectManager.ActiveProject.GetInfo();
                 foreach (var e in CustomEvents)
                 {
-                    if (info.CustomSounds.Any(x => x.Name.Equals(e.Name)))
+                    if (info.CustomSounds.Any(x => x.Name is not null && x.Name.Equals(e.Name)))
                     {
-                        var existing = info.CustomSounds.First(x => x.Name.Equals(e.Name));
+                        var existing = info.CustomSounds.First(x => x.Name is not null && x.Name.Equals(e.Name));
                         info.CustomSounds.Remove(existing);
                     }
 

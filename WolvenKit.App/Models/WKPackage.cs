@@ -23,10 +23,10 @@ namespace WolvenKit.Models
         /// Collects the info and the files from an already created WolveKit package.
         /// </summary>
         /// <param name="Path"></param>
-        public WKPackage(string Path)
-        {
-            //TODO: Finish this once we crate the installer or whatever.
-        }
+        //public WKPackage(string Path)
+        //{
+        //    //TODO: Finish this once we crate the installer or whatever.
+        //}
 
         /// <summary>
         /// Creates a WolveKit package.

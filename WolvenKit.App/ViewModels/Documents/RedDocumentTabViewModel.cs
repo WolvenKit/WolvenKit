@@ -12,13 +12,13 @@ namespace WolvenKit.ViewModels.Documents
 {
     public abstract class RedDocumentTabViewModel : ReactiveObject
     {
-        protected RedDocumentTabViewModel(RedDocumentViewModel file, string header)
+        protected RedDocumentTabViewModel(RedDocumentViewModel parent, string header)
         {
             DeleteEmbeddedFileCommand = new DelegateCommand(ExecuteDeleteEmbeddedFile, CanDeleteEmbeddedFile);
             RenameEmbeddedFileCommand = new DelegateCommand(ExecuteRenameEmbeddedFile, CanRenameEmbeddedFile);
 
-            File = file;
-            FilePath = file.FilePath;
+            File = parent;
+            FilePath = parent.FilePath;
             Header = header;
         }
 

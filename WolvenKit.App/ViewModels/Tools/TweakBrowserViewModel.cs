@@ -225,7 +225,11 @@ namespace WolvenKit.ViewModels.Tools
                 this.RaisePropertyChanged(nameof(SelectedGroupTagEntry));
                 if (_selectedGroupTagEntry != null && _tweakDB.IsLoaded)
                 {
-                    SelectedGroupTag = new ChunkViewModel((CUInt8)_tweakDB.GetGroupTag(_selectedGroupTagEntry.Item), null, true);
+                    var u = _tweakDB.GetGroupTag(_selectedGroupTagEntry.Item);
+                    if (u is not null)
+                    {
+                        SelectedGroupTag = new ChunkViewModel((CUInt8)u, null, true);
+                    }
                 }
                 else
                 {
@@ -363,7 +367,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private void ExecuteConvertToYAML()
         {
-            if (_selectedRecordEntry is null)
+            if (SelectedRecordEntry is null)
             {
                 return;
             }
@@ -373,10 +377,10 @@ namespace WolvenKit.ViewModels.Tools
                 ID = SelectedRecordEntry.DisplayName
             };
 
-            var baseRecord = _tweakDB.GetRecord(_selectedRecordEntry.Item);
-            txl.Type = "gamedata" + _selectedRecordEntry.RecordTypeName + "_Record";
+            var baseRecord = _tweakDB.GetRecord(SelectedRecordEntry.Item);
+            txl.Type = "gamedata" + SelectedRecordEntry.RecordTypeName + "_Record";
 
-            txl.ID = _selectedRecordEntry.Item;
+            txl.ID = SelectedRecordEntry.Item;
 
             baseRecord.GetPropertyNames().ForEach(name => txl.Properties.Add(name, baseRecord.GetProperty(name)));
 

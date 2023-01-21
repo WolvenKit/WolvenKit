@@ -29,9 +29,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Constructors
 
-        public CodeEditorViewModel(
-           IProjectManager projectManager,
-           ILoggerService loggerService) : base(ToolTitle)
+        public CodeEditorViewModel(IProjectManager projectManager, ILoggerService loggerService) : base(ToolTitle)
         {
 
             _projectManager = projectManager;
@@ -74,7 +72,7 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Gets or sets the document source of the edit control
         /// </summary>
-        [Reactive] public string DocumentSource { get; set; }
+        [Reactive] public string? DocumentSource { get; set; }
 
         ///// <summary>
         ///// Gets or sets the langugae of the content to be displayed in the edit control

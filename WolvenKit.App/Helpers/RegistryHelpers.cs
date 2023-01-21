@@ -6,14 +6,14 @@ namespace WolvenKit.App.Helpers;
 
 public static class RegistryHelpers
 {
-    public static string GetFileNamePathFromRegistrySubKey(
+    public static string? GetFileNamePathFromRegistrySubKey(
         string subKeyPath,
         string appName,
         string fileName)
     {
         var subKey = LocalMachine.OpenSubKey(subKeyPath);
-        var programName = (string)subKey?.GetValue("DisplayName");
-        var installLocation = (string)subKey?.GetValue("InstallLocation");
+        var programName = (string?)subKey?.GetValue("DisplayName");
+        var installLocation = (string?)subKey?.GetValue("InstallLocation");
 
         if (programName?.Contains(appName) ?? false)
         {

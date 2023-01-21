@@ -112,13 +112,13 @@ namespace WolvenKit.ViewModels.Documents
             try
             {
                 // if we're in a text view, use a normal StreamWriter, else use the CR2W one
-                if (file.Value is RDTTextViewModel textViewModel)
+                if (file is RDTTextViewModel textViewModel)
                 {
                     using var tw = new StreamWriter(fs);
                     var text = textViewModel.Document.Text;
                     tw.Write(text);
                 }
-                else if (file.HasValue && Cr2wFile != null)
+                else if (file is not null && Cr2wFile != null)
                 {
                     using var writer = new CR2WWriter(fs);
                     writer.WriteFile(Cr2wFile);
@@ -149,41 +149,41 @@ namespace WolvenKit.ViewModels.Documents
 
        
 
-        public override Task<bool> OpenFileAsync(string path)
-        {
-            _isInitialized = false;
+        //public override Task<bool> OpenFileAsync(string path)
+        //{
+        //    _isInitialized = false;
 
-            try
-            {
-                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    OpenStream(stream, path);
-                }
+        //    try
+        //    {
+        //        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        //        {
+        //            OpenStream(stream, path);
+        //        }
 
-                return Task.FromResult(true);
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                // Not processing this catch in any other way than rejecting to initialize this
-                _isInitialized = false;
-            }
+        //        return Task.FromResult(true);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        _loggerService.Error(e);
+        //        // Not processing this catch in any other way than rejecting to initialize this
+        //        _isInitialized = false;
+        //    }
 
-            return Task.FromResult(false);
-        }
+        //    return Task.FromResult(false);
+        //}
 
-        public Optional<RedDocumentTabViewModel> GetMainFile()
+        public RedDocumentTabViewModel? GetMainFile()
         {
             if (SelectedTabItemViewModel is RDTTextViewModel textVM)
             {
-                return Optional<RedDocumentTabViewModel>.ToOptional(textVM);
+                return textVM;
             }
 
             var r = TabItemViewModels
             .OfType<RDTDataViewModel>()
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
             .FirstOrDefault();
-            return Optional<RedDocumentTabViewModel>.ToOptional(r);
+            return r;
         }
 
         protected void AddTabForRedType(RedBaseClass cls)

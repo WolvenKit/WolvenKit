@@ -69,6 +69,8 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
+        public bool IsInitialized() => _isInitialized;
+
         public void SetIsDirty(bool b)
         {
             IsDirty = b;
@@ -90,9 +92,9 @@ namespace WolvenKit.ViewModels.Documents
         /// </summary>
         /// <param name="path"></param>
         /// <returns>True if file read was successful, otherwise false</returns>
-        public abstract Task<bool> OpenFileAsync(string path);
+        //public abstract Task<bool> OpenFileAsync(string path);
 
-        public abstract bool OpenFile(string path);
+       // public abstract bool OpenFile(string path);
 
         private bool CanClose() => true;
 

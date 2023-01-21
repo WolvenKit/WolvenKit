@@ -52,7 +52,7 @@ public class FileEntry : ICyberGameFile
 
     #region Properties
 
-    public IGameArchive Archive { get; set; }
+    public Archive Archive { get; set; }
 
 
     [ProtoMember(1)] public ulong NameHash64 { get; set; }
@@ -138,4 +138,13 @@ public class FileEntry : ICyberGameFile
     #endregion Methods
 
     public override string ToString() => ShortName;
+
+    public T GetArchive<T>() where T : IGameArchive
+    {
+        if (Archive is T ta)
+        {
+            return ta;
+        }
+        throw new ArgumentException();
+    }
 }

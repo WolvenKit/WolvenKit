@@ -10,6 +10,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
@@ -21,17 +22,7 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 {
-    protected ILoggerService _loggerService;
-    protected INotificationService _notificationService;
-    protected ISettingsManager _settingsManager;
-    protected IWatcherService _watcherService;
-    protected IProgressService<double> _progressService;
-    protected IProjectManager _projectManager;
-    protected IGameControllerFactory _gameController;
-    protected IArchiveManager _archiveManager;
-    protected IPluginService _pluginService;
-    protected IModTools _modTools;
-
+    
     protected (JsonObject, Type) currentSettings;
     protected static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
     {
@@ -43,7 +34,11 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
         WriteIndented = true
     };
 
-    [Reactive] public ImportExportItemViewModel SelectedObject { get; set; }
+    protected ImportExportViewModel(string header, string contentId) : base(header, contentId)
+    {
+    }
+
+    [Reactive] public ImportExportItemViewModel? SelectedObject { get; set; }
 
     [Reactive] public ObservableCollection<ImportExportItemViewModel> Items { get; set; } = new();
 
@@ -60,7 +55,7 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
     private void CopyArgumentsTemplateTo()
     {
-        if (SelectedObject.Properties is not ImportExportArgs args)
+        if (SelectedObject?.Properties is not ImportExportArgs args)
         {
             return;
         }
@@ -83,7 +78,7 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
                 continue;
             }
 
-            item.Properties = (ImportExportArgs)settings.Deserialize(type, s_jsonSerializerSettings);
+            item.Properties = settings.Deserialize(type, s_jsonSerializerSettings) as ImportExportArgs;
             count++;
         }
 
@@ -110,13 +105,16 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
     private JsonObject SerializeArgs(ImportExportArgs args)
     {
-        var node = (JsonObject)JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings);
+        if (JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings) is JsonObject node)
+        {
+            node.Remove("Changing");
+            node.Remove("Changed");
+            node.Remove("ThrownExceptions");
 
-        node.Remove("Changing");
-        node.Remove("Changed");
-        node.Remove("ThrownExceptions");
+            return node;
+        }
 
-        return node;
+        throw new ArgumentNullException();
     }
 
     protected abstract Task ExecuteProcessBulk(bool all = false);
