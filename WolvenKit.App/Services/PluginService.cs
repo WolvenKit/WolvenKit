@@ -13,6 +13,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
@@ -74,7 +75,7 @@ namespace WolvenKit.App.Services
                 var pluginManifest = File.ReadAllText(pluginManifestPath);
                 try
                 {
-                    pluginManifestDict = JsonSerializer.Deserialize<Dictionary<EPlugin, PluginModel>>(pluginManifest, new JsonSerializerOptions() { WriteIndented = true });
+                    pluginManifestDict = JsonSerializer.Deserialize<Dictionary<EPlugin, PluginModel>>(pluginManifest, new JsonSerializerOptions() { WriteIndented = true }).NotNull();
                 }
                 catch (Exception ex)
                 {
@@ -110,7 +111,7 @@ namespace WolvenKit.App.Services
                 else
                 {
                     // this should only happen the very first time
-                    Plugins.Add(new PluginViewModel(this, _loggerService, _progressService, new PluginModel(id, null, new()), installPath)
+                    Plugins.Add(new PluginViewModel(this, _loggerService, _progressService, new PluginModel(id, "", new()), installPath)
                     {
                         Status = EPluginStatus.NotInstalled
                     });
@@ -122,7 +123,7 @@ namespace WolvenKit.App.Services
                 {
                     var plugin = Plugins.FirstOrDefault(x => x.Id == id);
                     var redMod = Path.Combine(installPath, "redMod.exe");
-                    if (File.Exists(redMod))
+                    if (plugin is not null && File.Exists(redMod))
                     {
                         // TODO remoteVersion
                         // TODO add redmod version.txt
@@ -212,7 +213,7 @@ namespace WolvenKit.App.Services
                 }
 
                 var response = await CheckForUpdateAsync(plugin.Id);
-                if (response is null)
+                if (response?.RequestMessage?.RequestUri is null)
                 {
                     return;
                 }
@@ -244,7 +245,7 @@ namespace WolvenKit.App.Services
 
             // check remote version (no github API call)
             var response = await CheckForUpdateAsync(id);
-            if (response is null)
+            if (response?.RequestMessage?.RequestUri is null)
             {
                 return;
             }
@@ -274,8 +275,16 @@ namespace WolvenKit.App.Services
                     var rateLimit = apiInfo?.RateLimit;
                     var howManyRequestsCanIMakePerHour = rateLimit?.Limit;
                     var howManyRequestsDoIHaveLeft = rateLimit?.Remaining;
+
                     var whenDoesTheLimitReset = rateLimit?.Reset; // UTC time
-                    _loggerService.Info($"[Update] {howManyRequestsDoIHaveLeft}/{howManyRequestsCanIMakePerHour} - reset: {whenDoesTheLimitReset ?? whenDoesTheLimitReset.Value.ToLocalTime()}");
+
+                    var dateTimeOffset = "";
+                    if (whenDoesTheLimitReset is not null)
+                    {
+                        dateTimeOffset=  whenDoesTheLimitReset.Value.ToLocalTime().ToString();
+                    }
+                     
+                    _loggerService.Info($"[Update] {howManyRequestsDoIHaveLeft}/{howManyRequestsCanIMakePerHour} - reset: {dateTimeOffset}");
 
                     _loggerService.Error("API rate limit exceeded");
 
@@ -314,6 +323,11 @@ namespace WolvenKit.App.Services
             _progressService.IsIndeterminate = false;
 
             var pluginViewModel = Plugins.FirstOrDefault(x => x.Id == id);
+            if (pluginViewModel is null)
+            {
+                _loggerService.Error($"Could not find plugin with id: {id}");
+                return;
+            }
             var installedFiles = new List<string>();
             // extract zip file
             switch (id)
@@ -500,13 +514,13 @@ namespace WolvenKit.App.Services
             vm.Status = EPluginStatus.NotInstalled;
             vm.Version = "";
 
-            vm.SetModel(new(id, null, null));
+            vm.SetModel(new(id, "", new()));
 
             // save
             await SerializeAsync();
         }
 
-        public bool TryGetInstallPath(EPlugin plugin, [NotNullWhen(true)] out string path)
+        public bool TryGetInstallPath(EPlugin plugin, [NotNullWhen(true)] out string? path)
         {
             if (!IsInstalled(plugin))
             {
@@ -515,7 +529,13 @@ namespace WolvenKit.App.Services
             }
             else
             {
-                path = Plugins.FirstOrDefault(x => x.Id == plugin).InstallPath;
+                var p = Plugins.FirstOrDefault(x => x.Id == plugin);
+                if (p is null)
+                {
+                    path = null;
+                    return false;
+                }
+                path = p.InstallPath;
                 return true;
             }
         }
@@ -539,7 +559,7 @@ namespace WolvenKit.App.Services
             await JsonSerializer.SerializeAsync(fs, pluginManifestDict, new JsonSerializerOptions() { WriteIndented = true });
         }
 
-        private async Task<HttpResponseMessage> CheckForUpdateAsync(EPlugin id)
+        private async Task<HttpResponseMessage?> CheckForUpdateAsync(EPlugin id)
         {
             var githuburl = $@"https://github.com/{id.GetUrl()}/releases/latest";
             var response = await _client.GetAsync(new Uri(githuburl));

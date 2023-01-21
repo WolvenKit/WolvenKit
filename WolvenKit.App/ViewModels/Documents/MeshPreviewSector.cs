@@ -10,6 +10,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
@@ -264,7 +265,7 @@ namespace WolvenKit.ViewModels.Documents
                         continue;
                     }
 
-                    var gcs = Locator.Current.GetService<GeometryCacheService>();
+                    var gcs = Locator.Current.GetService<GeometryCacheService>().NotNull();
 
                     var mesh = new MeshComponent()
                     {
@@ -586,7 +587,7 @@ namespace WolvenKit.ViewModels.Documents
                             }
                         }
                     }
-                    catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                    catch (Exception ex) { ILoggerService.GetUnsafe().Error(ex); }
                 }
                 else if (handle.Chunk is worldPopulationSpawnerNode wpsn)
                 {
@@ -697,7 +698,7 @@ namespace WolvenKit.ViewModels.Documents
             });
         }
 
-        private void UpdateChildrenSubmesh(MeshComponent mesh, Action<SubmeshComponent> submeshUpdater)
+        private void UpdateChildrenSubmesh(MeshComponent? mesh, Action<SubmeshComponent>? submeshUpdater)
         {
             if (mesh != null)
             {
@@ -716,7 +717,7 @@ namespace WolvenKit.ViewModels.Documents
                     }
                     else
                     {
-                        Locator.Current.GetService<ILoggerService>().Warning("Child is a " + child.GetType());
+                        ILoggerService.GetUnsafe().Warning("Child is a " + child.GetType());
                     }
                 }
             }
@@ -729,7 +730,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (mouseButtonEventArgs.RightButton == MouseButtonState.Pressed)
                 {
-                    Locator.Current.GetService<ILoggerService>().Info("RighClick: " + mesh.Name);
+                    ILoggerService.GetUnsafe().Info("RighClick: " + mesh.Name);
                 }
                 else if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed)
                 {

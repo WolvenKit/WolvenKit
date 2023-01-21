@@ -92,16 +92,16 @@ namespace WolvenKit.ViewModels.Documents
 
         public bool IsEmbeddedFile { get; set; }
 
-        public RDTDataViewModel(IRedType data, RedDocumentViewModel file) : base(file, "")
+        public RDTDataViewModel(IRedType data, RedDocumentViewModel parent) : base(parent, "")
         {
             _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
 
             _data = data;
 
             // set header
-            if (data is null && file is TweakXLDocumentViewModel)
+            if (data is null && parent is TweakXLDocumentViewModel)
             {
-                var ext = Path.GetExtension(file.FilePath).ToLower();
+                var ext = Path.GetExtension(parent.FilePath).ToLower();
                 Header = ext switch
                 {
                     ".yaml" => "TweakXL",

@@ -53,12 +53,12 @@ public partial class TextureExportViewModel : ExportViewModel
     private INotificationService _notificationService;
     private ISettingsManager _settingsManager;
     private IWatcherService _watcherService;
-    protected IProgressService<double> _progressService;
-    protected IProjectManager _projectManager;
-    protected IGameControllerFactory _gameController;
-    protected IArchiveManager _archiveManager;
-    protected IPluginService _pluginService;
-    protected IModTools _modTools;
+    private IProgressService<double> _progressService;
+    private IProjectManager _projectManager;
+    private IGameControllerFactory _gameController;
+    private IArchiveManager _archiveManager;
+    private IPluginService _pluginService;
+    private IModTools _modTools;
 
 
     public TextureExportViewModel(

@@ -128,6 +128,6 @@ namespace WolvenKit.Functionality.Services
         /// <param name="path"></param>
         /// <returns>false if not installed</returns>
 
-        bool TryGetInstallPath(EPlugin plugin, [NotNullWhen(true)] out string path);
+        bool TryGetInstallPath(EPlugin plugin, [NotNullWhen(true)] out string? path);
     }
 }

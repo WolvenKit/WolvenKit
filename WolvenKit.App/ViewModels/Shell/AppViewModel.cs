@@ -907,12 +907,22 @@ namespace WolvenKit.ViewModels.Shell
             {
                 _watcherService.IsSuspended = false;
                 await _watcherService.RefreshAsync(ActiveProject);
+                if (file.FullPath is not null)
                 await RequestFileOpen(file.FullPath);
             });
         }
 
         private static async Task OpenFromNewFileTask(NewFileViewModel file)
         {
+            if (file.SelectedFile is null)
+            {
+                return;
+            }
+             if (file.FullPath is null)
+            {
+                return;
+            }
+
             Stream? stream = null;
             switch (file.SelectedFile.Type)
             {
@@ -1513,7 +1523,7 @@ namespace WolvenKit.ViewModels.Shell
             var delimiter = "|";
             //string[] ignoredExtensions = _settingsManager.TreeViewIgnoredExtensions.ToLower().Split(delimiter);
             //bool isAnIgnoredExtension = Array.Exists(ignoredExtensions, extension => extension.Equals(ext));
-            var isAnIgnoredExtension = _settingsManager.TreeViewIgnoredExtensions.Split(delimiter).Any(entry => entry.ToLower().Trim().Equals(ext));
+            var isAnIgnoredExtension = (_settingsManager.TreeViewIgnoredExtensions ?? "").Split(delimiter).Any(entry => entry.ToLower().Trim().Equals(ext));
             if (isAnIgnoredExtension)
             {
                 ShellExecute();
@@ -1690,6 +1700,11 @@ namespace WolvenKit.ViewModels.Shell
 
         public void SetLaunchProfiles(ObservableCollection<LaunchProfileViewModel> launchProfiles)
         {
+            if (_settingsManager.LaunchProfiles is null)
+            {
+                _settingsManager.LaunchProfiles = new();
+            }
+
             _settingsManager.LaunchProfiles.Clear();
             var _launchProfiles = new Dictionary<string, LaunchProfile>();
 

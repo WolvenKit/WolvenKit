@@ -29,11 +29,17 @@ namespace WolvenKit.ViewModels.Documents
             PanelVisibility.ShowExportEntity = true;
             ExportEntity = new DelegateCommand(() =>
             {
+                if (SelectedAppearance is null)
+                {
+                    return;
+                }
+
                 var dlg = new SaveFileDialog
                 {
                     FileName = Path.GetFileNameWithoutExtension(file.RelativePath) + ".glb",
                     Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
                 };
+
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
                     var outFile = new FileInfo(dlg.FileName);
@@ -85,14 +91,14 @@ namespace WolvenKit.ViewModels.Documents
                         }
 
                         string? bindName = null, slotName = null;
-                        if ((slotset.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+                        if (slotset.ParentTransform?.GetValue() is entHardTransformBinding ehtb)
                         {
                             bindName = ehtb.BindName;
                             slotName = ehtb.SlotName;
                         }
                         if (!_slotSets.ContainsKey(slotset.Name))
                         {
-                            _slotSets.Add(slotset.Name, new SlotSet(slotset.Name, bindName)
+                            _slotSets.Add(slotset.Name, new SlotSet(slotset.Name, bindName.NotNull())
                             {
                                 Matrix = ToSeparateMatrix(slotset.LocalTransform),
                                 Slots = slots,
@@ -123,7 +129,7 @@ namespace WolvenKit.ViewModels.Documents
                                 rigBones.Add(rigBone);
                             }
 
-                            string bindName = null, slotName = null;
+                            string? bindName = null, slotName = null;
                             if ((enc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
                             {
                                 bindName = ehtb.BindName;
@@ -182,7 +188,7 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             AppearanceName = app.AppearanceName,
                             Resource = app.AppearanceResource.DepotPath,
-                            Models = LoadMeshs(appPkg.Chunks),
+                            Models = LoadMeshs(appPkg.Chunks).NotNull(),
                         };
 
                         if (a.Models is not null)
@@ -201,7 +207,10 @@ namespace WolvenKit.ViewModels.Documents
                                 {
                                     a.RawMaterials[material.Name] = material;
                                 }
-                                model.Meshes = MakeMesh((CMesh)model.MeshFile.RootChunk, model.ChunkMask, model.AppearanceIndex);
+                                if (model.MeshFile?.RootChunk is CMesh mesh)
+                                {
+                                    model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
+                                }
 
                                 foreach (var m in model.Meshes)
                                 {
@@ -278,7 +287,8 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         a.RawMaterials[material.Name] = material;
                     }
-                    model.Meshes = MakeMesh((CMesh)model.MeshFile.RootChunk, model.ChunkMask, model.AppearanceIndex);
+                    if (model.MeshFile?.RootChunk is CMesh mesh)
+                    model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
 
                     foreach (var m in model.Meshes)
                     {

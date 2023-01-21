@@ -6,6 +6,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
@@ -73,18 +74,21 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
         {
             var (settings, type) = currentSettings;
 
-            if (item.Properties.GetType() != type)
+            if (item.Properties is null || item.Properties.GetType() != type)
             {
                 continue;
             }
 
-            item.Properties = settings.Deserialize(type, s_jsonSerializerSettings) as ImportExportArgs;
-            count++;
+            if (settings.Deserialize(type, s_jsonSerializerSettings) is ImportExportArgs ds)
+            {
+                item.Properties = ds;
+                count++;
+            }
         }
 
         if (count > 0)
         {
-            _notificationService.Success($"Template has been copied to the selected items.");
+            Locator.Current.GetService<INotificationService>().NotNull().Success($"Template has been copied to the selected items.");
         }
     }
 
@@ -92,7 +96,11 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
     private void Refresh() => LoadFiles();
 
     [RelayCommand]
-    private void ToggleAdvancedOptions() => _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
+    private void ToggleAdvancedOptions()
+    {
+        var _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
+        _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
+    }
 
 
     #endregion
