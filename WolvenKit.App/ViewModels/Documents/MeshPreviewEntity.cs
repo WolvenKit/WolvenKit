@@ -21,39 +21,12 @@ namespace WolvenKit.ViewModels.Documents
         public ICommand ExportEntity { get; set; }
 
 
-        public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file)
+        public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file, MeshViewHeaders.EntityPreview)
         {
-            Header = MeshViewHeaders.EntityPreview;
             _data = ent;
 
             PanelVisibility.ShowExportEntity = true;
-            ExportEntity = new DelegateCommand(() =>
-            {
-                if (SelectedAppearance is null)
-                {
-                    return;
-                }
-
-                var dlg = new SaveFileDialog
-                {
-                    FileName = Path.GetFileNameWithoutExtension(file.RelativePath) + ".glb",
-                    Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
-                };
-
-                if (dlg.ShowDialog().GetValueOrDefault())
-                {
-                    var outFile = new FileInfo(dlg.FileName);
-                    // will only use archive files (for now)
-                    if (Locator.Current.GetService<ModTools>().NotNull().ExportEntity(File.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
-                    {
-                        Locator.Current.GetService<ILoggerService>().NotNull().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
-                    }
-                    else
-                    {
-                        Locator.Current.GetService<ILoggerService>().NotNull().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
-                    }
-                }
-            });
+            
 
             this.WhenActivated((CompositeDisposable disposables) => RenderEntitySolo());
         }
@@ -65,11 +38,15 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
             IsRendered = true;
-            RenderEntity((entEntityTemplate)_data);
+            RenderEntity(_data as entEntityTemplate);
         }
 
-        public Element3D? RenderEntity(entEntityTemplate ent, Appearance? appearance = null, string? appearanceName = null)
+        public Element3D? RenderEntity(entEntityTemplate? ent, Appearance? appearance = null, string? appearanceName = null)
         {
+            if (ent == null)
+            {
+                return null;
+            }
             if (ent.CompiledData.Data is not RedPackage pkg)
             {
                 return null;

@@ -166,7 +166,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
                     if (UseNewParallelism)
                     {
-                        async Task UnbundleAsync(FileEntry entry)
+                        async Task UnbundleAsync(IGameFile entry)
                         {
                             var endPath = Path.Combine(materialRepoDir.FullName, entry.Name);
                             var dirpath = Path.GetDirectoryName(endPath).NotNull();
@@ -263,7 +263,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
                     if (UseNewParallelism)
                     {
-                        async Task UncookAsync(FileEntry entry)
+                        async Task UncookAsync(IGameFile entry)
                         {
                             try
                             {

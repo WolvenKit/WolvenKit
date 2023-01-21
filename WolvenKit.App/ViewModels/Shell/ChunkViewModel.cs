@@ -63,8 +63,8 @@ namespace WolvenKit.ViewModels.Shell
 
         public ObservableCollectionExtended<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
 
-        [Reactive] public string Value { get; private set; }
-        [Reactive] public string Descriptor { get; private set; }
+        [Reactive] public string? Value { get; private set; }
+        [Reactive] public string? Descriptor { get; private set; }
         [Reactive] public bool IsDefault { get; private set; }
         [Reactive] public bool IsReadOnly { get; set; }
 
@@ -684,7 +684,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public int DetailsLevel => (IsSelected || Parent == null) ? 0 : Parent.DetailsLevel + 1;
 
-        private Flags _flags;
+        private Flags? _flags;
 
         public Type PropertyType
         {
@@ -1466,7 +1466,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public void HandlePointer(DialogViewModel sender)
+        public void HandlePointer(DialogViewModel? sender)
         {
             var app = Locator.Current.GetService<AppViewModel>().NotNull();
             app.CloseDialogCommand.Execute(null);
@@ -1745,7 +1745,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public void HandleCKeyValuePair(DialogViewModel sender)
+        public void HandleCKeyValuePair(DialogViewModel? sender)
         {
             var app = Locator.Current.GetService<AppViewModel>().NotNull();
             app.CloseDialogCommand.Execute(null);
@@ -1757,7 +1757,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
         }
 
-        public void HandleChunk(DialogViewModel sender)
+        public void HandleChunk(DialogViewModel? sender)
         {
             var app = Locator.Current.GetService<AppViewModel>().NotNull();
             app.CloseDialogCommand.Execute(null);
@@ -1771,7 +1771,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public void HandleChunkPointer(DialogViewModel sender)
+        public void HandleChunkPointer(DialogViewModel? sender)
         {
             var app = Locator.Current.GetService<AppViewModel>().NotNull();
             app.CloseDialogCommand.Execute(null);
@@ -1999,7 +1999,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             ArgumentNullException.ThrowIfNull(Tab);
-            var currentfile = new FileModel(Tab.File.FilePath, Locator.Current.GetService<AppViewModel>().NotNull().ActiveProject);
+            var currentfile = new FileModel(Tab.File.FilePath, Locator.Current.GetService<AppViewModel>().NotNull().ActiveProject.NotNull());
 
             Locator.Current.GetService<AppViewModel>().NotNull().SaveFileCommand.SafeExecute(currentfile);
 
@@ -2517,6 +2517,10 @@ namespace WolvenKit.ViewModels.Shell
             {
                 return;
             }
+            if (Tab == null)
+            {
+                return;
+            }
 
             var oldParent = item.Parent;
 
@@ -2575,7 +2579,7 @@ namespace WolvenKit.ViewModels.Shell
                         index--;
                     }
                     InsertChild(index, item.Data);
-                    Tab.File.SetIsDirty(true);
+                    Tab?.File.SetIsDirty(true);
                     RecalculateProperties();
                     if (sourceList.GetHashCode() != destList.GetHashCode())
                     {
@@ -2683,7 +2687,7 @@ namespace WolvenKit.ViewModels.Shell
                 //CalculateProperties();
                 //Tab.File.SetIsDirty(true);
 
-                Tab.File.SetIsDirty(true);
+                Tab?.File.SetIsDirty(true);
                 RecalculateProperties(item);
 
                 return true;
@@ -2726,7 +2730,7 @@ namespace WolvenKit.ViewModels.Shell
 
         // node stuff
 
-        [Reactive] public ReferenceSocket Socket { get; set; }
+        [Reactive] public ReferenceSocket? Socket { get; set; }
 
         public IList<ReferenceSocket> Inputs
         {
@@ -2741,9 +2745,9 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public System.Windows.Point Location { get; set; }
 
-        public ICommand OpenSelfCommand { get; private set; }
-        private bool CanOpenSelf() => RelativePath != CName.Empty && _tab == null;
-        private void ExecuteOpenSelf() => Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromDepotPath(RelativePath);
+        //public ICommand OpenSelfCommand { get; private set; }
+        //private bool CanOpenSelf() => RelativePath != CName.Empty && _tab == null;
+        //private void ExecuteOpenSelf() => Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromDepotPath(RelativePath);
 
         private ChunkViewModel GetRootModel()
         {

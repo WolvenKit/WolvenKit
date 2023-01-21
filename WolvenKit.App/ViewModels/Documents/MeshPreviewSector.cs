@@ -46,9 +46,8 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public MeshComponentSelector CurrentSelection { get; set; } = new();
 
-        public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file)
+        public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file, MeshViewHeaders.SectorPreview)
         {
-            Header = MeshViewHeaders.SectorPreview;
             PanelVisibility.ShowSelectionPanel = true;
             _data = data;
             var app = new Appearance(Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"));
@@ -71,11 +70,13 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
             IsRendered = true;
-            RenderSector((worldStreamingSector)_data, Appearances[0]);
+            if (_data is worldStreamingSector wss)
+            RenderSector(wss, Appearances[0]);
         }
 
         public Element3D RenderSector(worldStreamingSector data, Appearance app)
         {
+
             var ssTransforms = ((worldNodeDataBuffer)data.NodeData.Data).Lookup;
 
             var groups = new List<Element3D>();

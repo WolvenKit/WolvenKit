@@ -92,28 +92,28 @@ namespace WolvenKit.ViewModels.Documents
 
         public bool IsEmbeddedFile { get; set; }
 
-        public RDTDataViewModel(IRedType data, RedDocumentViewModel parent) : base(parent, "")
+        public RDTDataViewModel(IRedType data, RedDocumentViewModel parent) : base(parent, data.GetType().Name)
         {
             _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
 
             _data = data;
 
             // set header
-            if (data is null && parent is TweakXLDocumentViewModel)
-            {
-                var ext = Path.GetExtension(parent.FilePath).ToLower();
-                Header = ext switch
-                {
-                    ".yaml" => "TweakXL",
-                    ".yml" => "TweakXL",
-                    ".xl" => "TweakXL",
-                    _ => throw new NotImplementedException(),
-                };
-            }
-            else
-            {
-                Header = _data.GetType().Name;
-            }
+            //if (data is null && parent is TweakXLDocumentViewModel)
+            //{
+            //    var ext = Path.GetExtension(parent.FilePath).ToLower();
+            //    Header = ext switch
+            //    {
+            //        ".yaml" => "TweakXL",
+            //        ".yml" => "TweakXL",
+            //        ".xl" => "TweakXL",
+            //        _ => throw new NotImplementedException(),
+            //    };
+            //}
+            //else
+            //{
+            //    Header = _data.GetType().Name;
+            //}
 
             OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
             OpenImportCommand = new DelegateCommand<ICR2WImport>(async (i) => await ExecuteOpenImport(i));
@@ -478,29 +478,30 @@ namespace WolvenKit.ViewModels.Documents
         {
             // if tweak file, deserialize from text
             // read tweakXL file
-            if (File is TweakXLDocumentViewModel tweakFile)
-            {
-                try
-                {
-                    // get text tab
-                    var tab = tweakFile.TabItemViewModels.OfType<RDTTextViewModel>().First();
-                    var text = tab.GetText();
+            // TODO fix TweakXLDocumentViewModel
+            //if (File is TweakXLDocumentViewModel tweakFile)
+            //{
+            //    try
+            //    {
+            //        // get text tab
+            //        var tab = tweakFile.TabItemViewModels.OfType<RDTTextViewModel>().First();
+            //        var text = tab.GetText();
 
-                    using var reader = new StringReader(text);
-                    var deserializer = new DeserializerBuilder()
-                        .WithTypeConverter(new TweakXLYamlTypeConverter())
-                        .Build();
-                    var file = deserializer.Deserialize<TweakXLFile>(reader);
-                    _data = file;
-                    // refresh
-                    _chunks .Clear();
-                    _ = Chunks;
-                }
-                catch (Exception ex)
-                {
-                    Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
-                }
-            }
+            //        using var reader = new StringReader(text);
+            //        var deserializer = new DeserializerBuilder()
+            //            .WithTypeConverter(new TweakXLYamlTypeConverter())
+            //            .Build();
+            //        var file = deserializer.Deserialize<TweakXLFile>(reader);
+            //        _data = file;
+            //        // refresh
+            //        _chunks .Clear();
+            //        _ = Chunks;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
+            //    }
+            //}
         }
         #endregion
     }

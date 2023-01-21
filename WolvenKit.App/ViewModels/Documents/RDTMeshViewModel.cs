@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using Microsoft.Win32;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -18,6 +19,7 @@ using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -221,21 +223,21 @@ namespace WolvenKit.ViewModels.Documents
     {
         public ViewModelActivator Activator { get; } = new();
 
-        protected readonly RedBaseClass _data;
+        protected readonly RedBaseClass? _data;
 
         private readonly Dictionary<string, LoadableModel> _modelList = new();
         private readonly Dictionary<string, SlotSet> _slotSets = new();
 
-        public EffectsManager EffectsManager { get; }
+        public EffectsManager? EffectsManager { get; }
 
-        public HelixToolkit.Wpf.SharpDX.Camera Camera { get; }
+        public HelixToolkit.Wpf.SharpDX.Camera? Camera { get; }
 
         public SceneNodeGroupModel3D GroupModel { get; set; } = new SceneNodeGroupModel3D();
 
         //public List<Element3D> ModelGroup { get; set; } = new();
         public SmartElement3DCollection ModelGroup { get; set; } = new();
 
-        public TextureModel EnvironmentMap { get; set; }
+        public TextureModel? EnvironmentMap { get; set; }
 
         public bool IsRendered;
 
@@ -245,13 +247,59 @@ namespace WolvenKit.ViewModels.Documents
 
         public PanelVisibility PanelVisibility { get; set; } = new();
 
-        public RDTMeshViewModel(RedDocumentViewModel file)
+        [Reactive] public ImageSource? Image { get; set; }
+
+        [Reactive] public object? SelectedItem { get; set; }
+
+        [Reactive] public string? LoadedModelPath { get; set; }
+
+        [Reactive] public List<LoadableModel> Models { get; set; } = new();
+
+        [Reactive] public Dictionary<string, Rig> Rigs { get; set; } = new();
+
+        [Reactive] public List<Appearance> Appearances { get; set; } = new();
+
+        [Reactive] public Appearance? SelectedAppearance { get; set; }
+
+        public RDTMeshViewModel(RedDocumentViewModel parent, string header) : base(parent, header)
         {
+            SearchForPointCommand = new DelegateCommand(ExecuteSearchForPoint);
+            ClearSearchCommand = new DelegateCommand(ExecuteClearSearch);
+            ExtractShadersCommand = new DelegateCommand(ExtractShaders);
+            LoadMaterialsCommand = new DelegateCommand(LoadMaterials);
+            ExportEntity = new DelegateCommand(() =>
+            {
+                if (SelectedAppearance is null)
+                {
+                    return;
+                }
+
+                var dlg = new SaveFileDialog
+                {
+                    FileName = Path.GetFileNameWithoutExtension(parent.RelativePath) + ".glb",
+                    Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
+                };
+
+                if (dlg.ShowDialog().GetValueOrDefault())
+                {
+                    var outFile = new FileInfo(dlg.FileName);
+                    // will only use archive files (for now)
+                    if (Locator.Current.GetService<ModTools>().NotNull().ExportEntity(File.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
+                    {
+                        Locator.Current.GetService<ILoggerService>().NotNull().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
+                    }
+                    else
+                    {
+                        Locator.Current.GetService<ILoggerService>().NotNull().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
+                    }
+                }
+            });
+
             try
             {
                 Header ??= MeshViewHeaders.MeshPreview;
 
-                File = file;
+                File = parent;
 
                 foreach (var res in File.Cr2wFile.EmbeddedFiles)
                 {
@@ -273,8 +321,7 @@ namespace WolvenKit.ViewModels.Documents
                     LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f)
                 };
 
-                ExtractShadersCommand = new DelegateCommand(ExtractShaders);
-                LoadMaterialsCommand = new DelegateCommand(LoadMaterials);
+                
             }
             catch (Exception ex)
             {
@@ -283,7 +330,7 @@ namespace WolvenKit.ViewModels.Documents
 
         }
 
-        public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file)
+        public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file, "NO DATA")
         {
             _data = data;
             //Render = RenderMesh;
@@ -298,7 +345,10 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
             IsRendered = true;
-            var data = (CMesh)_data;
+            if (_data is not CMesh data)
+            {
+                return;
+            }
             var materials = new Dictionary<string, Material>();
 
             var localList = data.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
@@ -796,24 +846,13 @@ namespace WolvenKit.ViewModels.Documents
         public static void ExtractShaders()
         {
             var _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
+            if (_settingsManager.CP77ExecutablePath is not null)
             ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
         }
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
-        [Reactive] public ImageSource Image { get; set; }
-
-        [Reactive] public object SelectedItem { get; set; }
-
-        [Reactive] public string LoadedModelPath { get; set; }
-
-        [Reactive] public List<LoadableModel> Models { get; set; } = new();
-
-        [Reactive] public Dictionary<string, Rig> Rigs { get; set; } = new();
-
-        [Reactive] public List<Appearance> Appearances { get; set; } = new();
-
-        [Reactive] public Appearance? SelectedAppearance { get; set; }
+       
 
         public static Matrix3D ToMatrix3D(QsTransform qs)
         {
@@ -889,7 +928,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public void CenterCameraToCoord(Vector3 coord)
         {
-            Camera.AnimateTo(
+            Camera?.AnimateTo(
                     new System.Windows.Media.Media3D.Point3D(coord.X, coord.Z + s_distanceCameraUnits, -coord.Y + s_distanceCameraUnits),
                     new Vector3D(0, -s_distanceCameraUnits, -s_distanceCameraUnits),
                     new Vector3D(0, s_cameraUpDirectionFactor, -s_cameraUpDirectionFactor),

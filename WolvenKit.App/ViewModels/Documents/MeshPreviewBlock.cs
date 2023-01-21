@@ -78,14 +78,12 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file) : this(file)
+        public RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file) : this(file, MeshViewHeaders.AllSectorPreview)
         {
             _data = data;
-            Header = MeshViewHeaders.AllSectorPreview;
 
             PanelVisibility.ShowSearchPanel = true;
-            SearchForPointCommand = new DelegateCommand(ExecuteSearchForPoint);
-            ClearSearchCommand = new DelegateCommand(ExecuteClearSearch);
+            
 
             this.WhenActivated((CompositeDisposable disposables) => RenderBlockSolo());
         }
@@ -94,14 +92,14 @@ namespace WolvenKit.ViewModels.Documents
         public void ExecuteClearSearch()
         {
             SearchActive = false;
-            RenderBlock((worldStreamingBlock)_data);
+            RenderBlock(_data as worldStreamingBlock);
         }
 
         public ICommand SearchForPointCommand { get; set; }
         public void ExecuteSearchForPoint()
         {
             SearchActive = true;
-            RenderBlock((worldStreamingBlock)_data);
+            RenderBlock(_data as worldStreamingBlock);
             CenterCameraToCoord(SearchPoint);
         }
 
@@ -112,11 +110,16 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
             IsRendered = true;
-            RenderBlock((worldStreamingBlock)_data);
+            RenderBlock(_data as worldStreamingBlock);
         }
 
-        public void RenderBlock(worldStreamingBlock data)
+        public void RenderBlock(worldStreamingBlock? data)
         {
+            if (data is null)
+            {
+                return;
+            }
+
             Appearances = new();
 
             var app = new Appearance("All_Sectors");
