@@ -164,11 +164,11 @@ public partial class RedPackageReader : IBufferReader
 
             import.DepotPath = _reader.ReadUInt64();
 
-            if (CollectData && import.DepotPath.IsResolvable)
+            if (CollectData)
             {
                 if (import.DepotPath.IsResolvable)
                 {
-                    DataCollection.RawImportList.Add(import.DepotPath);
+                    DataCollection.RawImportList.Add(import.DepotPath!);
                 }
                 else
                 {
@@ -181,9 +181,9 @@ public partial class RedPackageReader : IBufferReader
             var bytes = _reader.ReadBytes(r.size);
             import.DepotPath = Encoding.UTF8.GetString(bytes.ToArray());
 
-            if (CollectData)
+            if (CollectData && import.DepotPath.IsResolvable)
             {
-                DataCollection.RawImportList.Add(import.DepotPath);
+                DataCollection.RawImportList.Add(import.DepotPath!);
             }
         }
         return import;
@@ -205,12 +205,12 @@ public partial class RedPackageReader : IBufferReader
         // needs header offset
         //Debug.Assert(BaseStream.Position == c.offset);
         var redTypeName = GetStringValue((ushort)c.typeID);
-        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName);
+        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!);
 
         var instance = RedTypeManager.Create(type);
         if (instance is DynamicBaseClass dbc)
         {
-            dbc.ClassName = redTypeName;
+            dbc.ClassName = redTypeName!;
         }
 
         ReadClass(instance, 0);

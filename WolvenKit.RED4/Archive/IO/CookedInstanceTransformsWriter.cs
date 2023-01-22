@@ -14,6 +14,8 @@ public class CookedInstanceTransformsWriter : Red4Writer
     {
         foreach (var tr in citb.Transforms)
         {
+            ArgumentNullException.ThrowIfNull(tr);
+
             _writer.Write(tr.Position.X);
             _writer.Write(tr.Position.Y);
             _writer.Write(tr.Position.Z);

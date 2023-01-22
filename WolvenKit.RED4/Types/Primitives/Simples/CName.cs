@@ -16,7 +16,7 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
 
     public int Length => GetResolvedText()?.Length ?? -1;
 
-    public string GetResolvedText() => CNamePool.ResolveHash(_hash);
+    public string? GetResolvedText() => CNamePool.ResolveHash(_hash);
     public bool IsResolvable => CNamePool.ResolveHash(_hash) != null;
 
     public ulong GetRedHash() => _hash;
@@ -26,7 +26,7 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
     public uint GetOldRedHash() => (uint)(_hash & 0xFFFFFFFF);
 
     public static implicit operator CName(string value) => new(CNamePool.AddOrGetHash(value));
-    public static implicit operator string(CName value) => value.GetResolvedText();
+    public static implicit operator string?(CName value) => value.GetResolvedText();
 
     public static implicit operator CName(ulong value) => new(value);
     public static implicit operator ulong(CName value) => value._hash;
@@ -35,7 +35,7 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
     public static bool operator !=(CName a, CName b) => !(a == b);
 
 
-    public int CompareTo(object value)
+    public int CompareTo(object? value)
     {
         if (value == null)
         {
@@ -65,7 +65,7 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
 
     public override int GetHashCode() => _hash.GetHashCode();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {
@@ -90,6 +90,6 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
         return true;
     }
 
-    public string GetString() => this;
-    public override string ToString() => GetResolvedText();
+    public string? GetString() => this;
+    public override string? ToString() => GetResolvedText();
 }

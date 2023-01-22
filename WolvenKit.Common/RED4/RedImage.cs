@@ -643,7 +643,12 @@ public class RedImage : IDisposable
             }
         }
 
-        blob.Header.TextureInfo.SliceSize = blob.Header.MipMapInfo[^1].Placement.Offset + blob.Header.MipMapInfo[^1].Placement.Size;
+        if (blob.Header.MipMapInfo == null || blob.Header.MipMapInfo.Count == 0)
+        {
+            throw new ArgumentNullException();
+        }
+
+        blob.Header.TextureInfo.SliceSize = blob.Header.MipMapInfo[^1]!.Placement.Offset + blob.Header.MipMapInfo[^1]!.Placement.Size;
 
         #endregion rendRenderTextureBlobPC
 

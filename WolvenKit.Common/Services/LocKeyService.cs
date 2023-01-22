@@ -48,11 +48,10 @@ namespace WolvenKit.Common.Services
                     {
                         foreach (var entry in os.Entries)
                         {
+                            ArgumentNullException.ThrowIfNull(entry);
+
                             primary[entry.PrimaryKey] = entry;
-                            if ((string)entry.SecondaryKey is not null)
-                            {
-                                secondary[entry.SecondaryKey] = entry;
-                            }
+                            secondary[entry.SecondaryKey] = entry;
                         }
                     }
                 }
@@ -112,12 +111,12 @@ namespace WolvenKit.Common.Services
             return null;
         }
 
-        public string GetFemaleVariant(ulong key) => GetEntry(key)?.FemaleVariant ?? null;
+        public string? GetFemaleVariant(ulong key) => GetEntry(key)?.FemaleVariant;
 
-        public string GetFemaleVariant(string key) => GetEntry(key)?.FemaleVariant ?? null;
+        public string? GetFemaleVariant(string key) => GetEntry(key)?.FemaleVariant;
 
-        public string GetMaleVariant(ulong key) => GetEntry(key)?.MaleVariant ?? null;
+        public string? GetMaleVariant(ulong key) => GetEntry(key)?.MaleVariant;
 
-        public string GetMaleVariant(string key) => GetEntry(key)?.MaleVariant ?? null;
+        public string? GetMaleVariant(string key) => GetEntry(key)?.MaleVariant;
     }
 }

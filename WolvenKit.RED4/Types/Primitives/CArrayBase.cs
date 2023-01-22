@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types;
 
 [DebuggerTypeProxy(typeof(ICollectionDebugView<>))]
 [DebuggerDisplay("Count = {Count}")]
-public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyObjectChanged, */IEquatable<CArrayBase<T>>
+public abstract class CArrayBase<T> : IRedArray<T?>, IRedCloneable, /*IRedNotifyObjectChanged, */IEquatable<CArrayBase<T?>>
 {
     private int _maxSize = -1;
 
@@ -29,20 +29,20 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
     // public event ObjectChangedEventHandler ObjectChanged;
 
 
-    protected readonly List<T> _internalList;
+    protected readonly List<T?> _internalList;
 
 
     protected CArrayBase()
     {
-        _internalList = new List<T>();
+        _internalList = new List<T?>();
     }
 
     protected CArrayBase(int size)
     {
-        _internalList = new List<T>(new T[size]);
+        _internalList = new List<T?>(new T[size]);
     }
 
-    protected CArrayBase(List<T> list)
+    protected CArrayBase(List<T?> list)
     {
         _internalList = list;
     }
@@ -123,7 +123,7 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
     public bool IsSynchronized => ((ICollection)_internalList).IsSynchronized;
     public object SyncRoot => ((ICollection)_internalList).IsSynchronized;
 
-    private int AddItem(object value)
+    private int AddItem(object? value)
     {
         if (value != null && value is not T)
         {
@@ -140,7 +140,7 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
             throw new NotSupportedException();
         }
 
-        var castedValue = (T)value;
+        var castedValue = (T?)value;
 
         _internalList.Add(castedValue);
 
@@ -153,9 +153,9 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
         return _internalList.Count - 1;
     }
 
-    private void SetItem(int index, object value)
+    private void SetItem(int index, object? value)
     {
-        _internalList[index] = (T)value;
+        _internalList[index] = (T?)value;
 
         //if (!Equals(_internalList[index], value))
         //{
@@ -181,21 +181,21 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
         //}
     }
 
-    public T this[int index]
+    public T? this[int index]
     {
         get => _internalList[index];
         set => SetItem(index, value);
     }
 
-    object IList.this[int index]
+    object? IList.this[int index]
     {
         get => _internalList[index];
         set => SetItem(index, value);
     }
 
-    public void Add(T item) => AddItem(item);
+    public void Add(T? item) => AddItem(item);
 
-    public int Add(object item) => AddItem(item);
+    public int Add(object? item) => AddItem(item);
 
     public void AddRange(ICollection collection)
     {
@@ -249,15 +249,15 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
         _internalList.Clear();
     }
 
-    public bool Contains(T item) => _internalList.Contains(item);
+    public bool Contains(T? item) => _internalList.Contains(item);
 
-    public void CopyTo(T[] array, int arrayIndex) => ((IList)_internalList).CopyTo(array, arrayIndex);
+    public void CopyTo(T?[] array, int arrayIndex) => ((IList)_internalList).CopyTo(array, arrayIndex);
 
-    public bool Contains(object value) => ((IList)_internalList).Contains(value);
+    public bool Contains(object? value) => ((IList)_internalList).Contains(value);
 
-    public int IndexOf(object value) => ((IList)_internalList).IndexOf(value);
+    public int IndexOf(object? value) => ((IList)_internalList).IndexOf(value);
 
-    public void Insert(int index, object value)
+    public void Insert(int index, object? value)
     {
         //OnObjectChanged(ObjectChangedType.Added, null, value);
 
@@ -280,7 +280,7 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
         }
     }
 
-    public void Remove(object value)
+    public void Remove(object? value)
     {
         if (IsReadOnly)
         {
@@ -293,7 +293,7 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
         ((IList)_internalList).Remove(value);
     }
 
-    public bool Remove(T item)
+    public bool Remove(T? item)
     {
         if (IsReadOnly)
         {
@@ -306,9 +306,9 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
         return _internalList.Remove(item);
     }
 
-    public int IndexOf(T item) => _internalList.IndexOf(item);
+    public int IndexOf(T? item) => _internalList.IndexOf(item);
 
-    public void Insert(int index, T item)
+    public void Insert(int index, T? item)
     {
         if (IsReadOnly)
         {
@@ -344,7 +344,7 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
 
     #region IEquatable
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {
@@ -361,10 +361,10 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
             return false;
         }
 
-        return Equals((CArrayBase<T>)obj);
+        return Equals((CArrayBase<T?>?)obj);
     }
 
-    public bool Equals(CArrayBase<T> other)
+    public bool Equals(CArrayBase<T?>? other)
     {
         if (ReferenceEquals(null, other))
         {

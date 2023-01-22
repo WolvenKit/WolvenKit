@@ -557,13 +557,13 @@ namespace WolvenKit.FunctionalTests
                                     FileEntry = file,
                                     Success = false,
                                     WriteResult = WriteTestResult.WriteResultType.UnsupportedVersion,
-                                    Message = $"Unsupported Version ()"
+                                    Message = $"Unsupported Version ({cr2wFile!.MetaData.Version})"
                                 });
                                 break;
 
                             case EFileReadErrorCodes.NoError:
                             {
-                                cr2wFile.MetaData.FileName = file.NameOrHash;
+                                cr2wFile!.MetaData.FileName = file.NameOrHash;
 
                                 using var writeStream = new MemoryStream();
                                 using var writer = new CR2WWriter(writeStream, Encoding.UTF8, true);

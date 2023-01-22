@@ -75,7 +75,7 @@ public class RedTypeInfo
     public Type RedObjectType { get; set; }
     public string RedObjectName { get; set; }
 
-    public Type MappedType => GetTypeMapping();
+    public Type? MappedType => GetTypeMapping();
     public int ArrayCount { get; set; }
 
     public RedTypeInfo(BaseRedType baseRedType, int arrayCount = -1)
@@ -103,7 +103,7 @@ public class RedTypeInfo
         ArrayCount = -1;
     }
 
-    protected virtual Type GetTypeMapping()
+    protected virtual Type? GetTypeMapping()
     {
         switch (BaseRedType)
         {
@@ -228,15 +228,15 @@ public class FundamentalRedTypeInfo : RedTypeInfo
 public class SpecialRedTypeInfo : RedTypeInfo
 {
     public SpecialRedType SpecialRedType { get; set; }
-    public string RedName { get; set; }
+    public string? RedName { get; set; }
 
-    public SpecialRedTypeInfo(SpecialRedType specialRedType, string redName = null) : base(BaseRedType.Special)
+    public SpecialRedTypeInfo(SpecialRedType specialRedType, string? redName = null) : base(BaseRedType.Special)
     {
         SpecialRedType = specialRedType;
         RedName = redName;
     }
 
-    protected override Type GetTypeMapping()
+    protected override Type? GetTypeMapping()
     {
         switch (SpecialRedType)
         {

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -36,7 +37,7 @@ public partial class CR2WReader
         s_bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
     }
 
-    public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
+    public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo? info)
     {
         var id = BaseStream.ReadStruct<uint>();
         if (id != CR2WFile.MAGIC)
@@ -45,14 +46,13 @@ public partial class CR2WReader
             return EFileReadErrorCodes.NoCr2w;
         }
 
-        var result = new CR2WFileInfo
+        info = new CR2WFileInfo
         {
             FileHeader = BaseStream.ReadStruct<CR2WFileHeader>()
         };
 
-        if (result.FileHeader.version is > 195 or < 163)
+        if (info.FileHeader.version is > 195 or < 163)
         {
-            info = null;
             return EFileReadErrorCodes.UnsupportedVersion;
         }
 
@@ -60,41 +60,47 @@ public partial class CR2WReader
         var tableHeaders = BaseStream.ReadStructs<CR2WTable>(10);
 
         // read strings - block 1 (index 0)
-        result.StringDict = ReadStringDict(tableHeaders[0]);
+        info.StringDict = ReadStringDict(tableHeaders[0]);
         if (CollectData)
         {
-            foreach (var pair in result.StringDict)
+            foreach (var pair in info.StringDict)
             {
-                DataCollection.RawStringList.Add(pair.Value);
+                DataCollection.RawStringList.Add(pair.Value!);
             }
         }
 
         // read the other tables
 
-        result.NameInfo = ReadTable<CR2WNameInfo>(tableHeaders[1]); // block 2
-        result.ImportInfo = ReadTable<CR2WImportInfo>(tableHeaders[2]); // block 3
-        result.PropertyInfo = ReadTable<CR2WPropertyInfo>(tableHeaders[3]); // block 4
-        result.ExportInfo = ReadTable<CR2WExportInfo>(tableHeaders[4]); // block 5
-        result.BufferInfo = ReadTable<CR2WBufferInfo>(tableHeaders[5]);  // block 6
-        result.EmbeddedInfo = ReadTable<CR2WEmbeddedInfo>(tableHeaders[6]); // block 7
+        info.NameInfo = ReadTable<CR2WNameInfo>(tableHeaders[1]); // block 2
+        info.ImportInfo = ReadTable<CR2WImportInfo>(tableHeaders[2]); // block 3
+        info.PropertyInfo = ReadTable<CR2WPropertyInfo>(tableHeaders[3]); // block 4
+        info.ExportInfo = ReadTable<CR2WExportInfo>(tableHeaders[4]); // block 5
+        info.BufferInfo = ReadTable<CR2WBufferInfo>(tableHeaders[5]);  // block 6
+        info.EmbeddedInfo = ReadTable<CR2WEmbeddedInfo>(tableHeaders[6]); // block 7
 
-        info = result;
         return EFileReadErrorCodes.NoError;
     }
 
-    public EFileReadErrorCodes ReadFile(out CR2WFile file, bool parseBuffer = true)
+    public EFileReadErrorCodes ReadFile(out CR2WFile? file, bool parseBuffer = true)
     {
         var result = ReadFileInfo(out var info);
-        if (result != EFileReadErrorCodes.NoError)
+        if (result == EFileReadErrorCodes.NoCr2w)
         {
             file = null;
+            return result;
+        }
+
+        file = new CR2WFile() { Info = info! };
+
+        if (result == EFileReadErrorCodes.UnsupportedVersion)
+        {
             return result;
         }
 
         _outputFile = new CR2WFile();
         _parseBuffer = parseBuffer;
 
-        _cr2wFile.Info = info;
+        _cr2wFile.Info = info!;
         _cr2wFile.MetaData.Version = _cr2wFile.Info.FileHeader.version;
         _cr2wFile.MetaData.BuildVersion = _cr2wFile.Info.FileHeader.buildVersion;
         _cr2wFile.MetaData.ObjectsEnd = _cr2wFile.Info.FileHeader.objectsEnd;
@@ -128,6 +134,13 @@ public partial class CR2WReader
             throw new TodoException("Found unsupported PropertyInfo");
         }
 
+        var chunkPos = BaseStream.Position;
+        for (var i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
+        {
+            InitChunk(i);
+        }
+
+        BaseStream.Position = chunkPos;
         for (var i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
         {
             ReadChunk(i);
@@ -210,15 +223,15 @@ public partial class CR2WReader
     {
         var ret = new CR2WImport
         {
-            ClassName = _namesList[info.className],
+            ClassName = _namesList[info.className]!,
             DepotPath = stringDict[info.offset],
             Flags = (InternalEnums.EImportFlags)info.flags
         };
 
-        if (CollectData)
+        if (CollectData && ret.DepotPath.IsResolvable)
         {
-            DataCollection.RawStringList.Remove(ret.DepotPath);
-            DataCollection.RawImportList.Add(ret.DepotPath);
+            DataCollection.RawStringList.Remove(ret.DepotPath!);
+            DataCollection.RawImportList.Add(ret.DepotPath!);
         }
 
         return ret;
@@ -226,36 +239,26 @@ public partial class CR2WReader
 
     private CR2WProperty ReadProperty(CR2WPropertyInfo info) => new();
 
-    private void ReadChunk(int chunkIndex)
+    private void InitChunk(int chunkIndex)
     {
         var info = _cr2wFile.Info.ExportInfo[chunkIndex];
 
-        Debug.Assert(BaseStream.Position == info.dataOffset);
+        BaseStream.Position = info.dataOffset;
 
         var redTypeName = GetStringValue(info.className);
-        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName);
+        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!);
 
         var instance = RedTypeManager.Create(type);
         if (instance is DynamicBaseClass dbc)
         {
             if (chunkIndex == 0)
             {
-                instance = new DynamicResource { ClassName = redTypeName };
+                instance = new DynamicResource { ClassName = redTypeName! };
             }
             else
             {
-                dbc.ClassName = redTypeName;
+                dbc.ClassName = redTypeName!;
             }
-        }
-
-
-        var startPos = BaseStream.Position;
-        ReadClass(instance, info.dataSize);
-        var bytesRead = BaseStream.Position - startPos;
-
-        if (bytesRead != info.dataSize)
-        {
-            throw new TodoException("Chunk size mismatch");
         }
 
         if (chunkIndex == 0)
@@ -264,6 +267,20 @@ public partial class CR2WReader
         }
 
         _chunks.Add(chunkIndex, instance);
+    }
+
+    private void ReadChunk(int chunkIndex)
+    {
+        var info = _cr2wFile.Info.ExportInfo[chunkIndex];
+
+        Debug.Assert(BaseStream.Position == info.dataOffset);
+
+        ReadClass(_chunks[chunkIndex], info.dataSize);
+
+        if (BaseStream.Position - info.dataOffset != info.dataSize)
+        {
+            throw new TodoException("Chunk size mismatch");
+        }
     }
 
     private RedBuffer ReadBuffer(CR2WBufferInfo info)
@@ -353,7 +370,7 @@ public partial class CR2WReader
 
         var result = new CR2WEmbedded
         {
-            FileName = importsList[(int)info.importIndex - 1].DepotPath,
+            FileName = importsList[(int)info.importIndex - 1].DepotPath!,
             Content = _chunks[(int)info.chunkIndex]
         };
 

@@ -21,7 +21,7 @@ public readonly struct CRUID : IRedPrimitive<ulong>, IEquatable<CRUID>, IRedInte
 
     public override int GetHashCode() => _value.GetHashCode();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

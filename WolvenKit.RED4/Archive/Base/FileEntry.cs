@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Archive;
 [ProtoContract]
 public class FileEntry : ICyberGameFile
 {
-    private IHashService _hashService;
+    private IHashService? _hashService;
 
     #region Constructors
 
@@ -65,13 +65,13 @@ public class FileEntry : ICyberGameFile
     [ProtoMember(8)] public byte[] SHA1Hash { get; set; }
     [ProtoMember(9)] public uint Size { get; set; }
     [ProtoMember(10)] public uint ZSize { get; set; }
-    [ProtoMember(11)] public string GuessedExtension { get; set; }
+    [ProtoMember(11)] public string? GuessedExtension { get; set; }
 
     public ulong Key => NameHash64;
-    public string Name => !string.IsNullOrEmpty(GetNameString()) ? GetNameString() : NameHash64.ToString();
+    public string Name => GetNameString(NameHash64.ToString())!;
     public string BytesAsString => BitConverter.ToString(SHA1Hash);
-    public string FileName => string.IsNullOrEmpty(GetNameString()) ? $"{NameHash64}.bin" : GetNameString();
-    public string NameOrHash => string.IsNullOrEmpty(GetNameString()) ? $"{NameHash64}" : GetNameString();
+    public string FileName => GetNameString($"{NameHash64}.bin")!;
+    public string NameOrHash => GetNameString(NameHash64.ToString())!;
     public string Extension => GetExtension();
 
     public string ShortName => Path.GetFileName(FileName);
@@ -118,19 +118,24 @@ public class FileEntry : ICyberGameFile
         await ar.CopyFileToStreamAsync(output, NameHash64, decompressBuffers);
     }
 
-    private string GetNameString()
+    private string? GetNameString(string? defaultStr = null)
     {
-        var _nameStr = _hashService?.Get(NameHash64);
+        var nameStr = _hashService?.Get(NameHash64);
+        if (nameStr == null)
+        {
+            return defaultStr;
+        }
+
         // x-platform support
         if (System.Runtime.InteropServices.RuntimeInformation
             .IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
         {
-            if (!string.IsNullOrEmpty(_nameStr) && _nameStr.Contains('\\'))
+            if (!string.IsNullOrEmpty(nameStr) && nameStr.Contains('\\'))
             {
-                _nameStr = _nameStr.Replace('\\', Path.DirectorySeparatorChar);
+                nameStr = nameStr.Replace('\\', Path.DirectorySeparatorChar);
             }
         }
-        return _nameStr;
+        return nameStr;
     }
 
 

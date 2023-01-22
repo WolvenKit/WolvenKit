@@ -74,12 +74,12 @@ public class ExtendedTypeInfo
 
             if (!string.IsNullOrEmpty(PropertyInfos[i].RedName))
             {
-                _redNameIndex.Add(PropertyInfos[i].RedName, i);
+                _redNameIndex.Add(PropertyInfos[i].RedName!, i);
             }
         }
     }
 
-    public Type BaseType { get; }
+    public Type? BaseType { get; }
     public bool SerializeDefault { get; }
     public int ChildLevel { get; }
 
@@ -90,7 +90,7 @@ public class ExtendedTypeInfo
 
     public List<ExtendedPropertyInfo> DynamicPropertyInfos { get; } = new();
 
-    public ExtendedPropertyInfo GetNativePropertyInfoByName(string name)
+    public ExtendedPropertyInfo? GetNativePropertyInfoByName(string name)
     {
         if (string.IsNullOrEmpty(name))
         {
@@ -110,7 +110,7 @@ public class ExtendedTypeInfo
         return null;
     }
 
-    public ExtendedPropertyInfo GetPropertyInfoByName(string name)
+    public ExtendedPropertyInfo? GetPropertyInfoByName(string name)
     {
         if (string.IsNullOrEmpty(name))
         {
@@ -151,7 +151,7 @@ public class ExtendedTypeInfo
         }
     }
 
-    public ExtendedPropertyInfo GetPropertyInfoByCsName(string name)
+    public ExtendedPropertyInfo? GetPropertyInfoByCsName(string name)
     {
         if (string.IsNullOrEmpty(name))
         {
@@ -177,7 +177,7 @@ public class ExtendedTypeInfo
         return null;
     }
 
-    public ExtendedPropertyInfo GetPropertyInfoByRedName(string name)
+    public ExtendedPropertyInfo? GetPropertyInfoByRedName(string name)
     {
         if (string.IsNullOrEmpty(name))
         {

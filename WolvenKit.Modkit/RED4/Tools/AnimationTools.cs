@@ -39,6 +39,8 @@ namespace WolvenKit.Modkit.RED4
             var animDataBuffers = new List<MemoryStream>();
             foreach (var chk in anims.AnimationDataChunks)
             {
+                ArgumentNullException.ThrowIfNull(chk);
+
                 var ms = new MemoryStream();
                 ms.Write(chk.Buffer.Buffer.GetBytes());
 
@@ -46,11 +48,10 @@ namespace WolvenKit.Modkit.RED4
             }
 
             CR2WFile? rigFile = null;
-            var hash = FNV1A64HashAlgorithm.HashString(anims.Rig.DepotPath);
             // find first rig in archives
             foreach (var ar in archives)
             {
-                if (ar.Files.TryGetValue(hash, out var gameFile))
+                if (ar.Files.TryGetValue(anims.Rig.DepotPath, out var gameFile))
                 {
                     var ms = new MemoryStream();
                     gameFile.Extract(ms);
@@ -90,11 +91,10 @@ namespace WolvenKit.Modkit.RED4
             }
 
             CR2WFile? rigFile = null;
-            var hash = FNV1A64HashAlgorithm.HashString(anims.Rig.DepotPath);
             // find first rig in archives
             foreach (var ar in archives)
             {
-                if (ar.Files.TryGetValue(hash, out var gameFile))
+                if (ar.Files.TryGetValue(anims.Rig.DepotPath, out var gameFile))
                 {
                     var ms = new MemoryStream();
                     gameFile.Extract(ms);
@@ -121,13 +121,16 @@ namespace WolvenKit.Modkit.RED4
 
             foreach (var srcAnim in model.LogicalAnimations)
             {
-                if (!anims.Animations.Select(_ => _.Chunk.Animation.Chunk.Name.GetResolvedText()).Contains(srcAnim.Name))
+                var tmpAnim = anims.Animations.FirstOrDefault(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText() == srcAnim.Name);
+                if (tmpAnim == null)
                 {
                     continue;
                 }
 
-                var setEntry = anims.Animations.First(_ => _.Chunk.Animation.Chunk.Name.GetResolvedText() == srcAnim.Name).Chunk;
-                var animAnimDes = setEntry.Animation.Chunk;
+                ArgumentNullException.ThrowIfNull(tmpAnim.Chunk);
+                ArgumentNullException.ThrowIfNull(tmpAnim.Chunk.Animation.Chunk);
+
+                var animAnimDes = tmpAnim.Chunk.Animation.Chunk;
 
                 var positions = new Dictionary<ushort, Dictionary<float, System.Numerics.Vector3>>();
                 var rotations = new Dictionary<ushort, Dictionary<float, System.Numerics.Quaternion>>();
@@ -310,6 +313,8 @@ namespace WolvenKit.Modkit.RED4
             var animDataBuffers = new List<MemoryStream>();
             foreach (var chk in anims.AnimationDataChunks)
             {
+                ArgumentNullException.ThrowIfNull(chk);
+
                 var ms = new MemoryStream();
                 ms.Write(chk.Buffer.Buffer.GetBytes());
 
@@ -329,8 +334,13 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < anims.Animations.Count; i++)
             {
-                var setEntry = anims.Animations[i].Chunk;
-                var animAnimDes = setEntry.Animation.Chunk;
+                var anim = anims.Animations[i];
+
+                ArgumentNullException.ThrowIfNull(anim);
+                ArgumentNullException.ThrowIfNull(anim.Chunk);
+                ArgumentNullException.ThrowIfNull(anim.Chunk.Animation.Chunk);
+
+                var animAnimDes = anim.Chunk.Animation.Chunk;
 
                 if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd animBuffSimd)
                 {
@@ -353,7 +363,7 @@ namespace WolvenKit.Modkit.RED4
                         defferedBuffer = new MemoryStream(animBuffSimd.DefferedBuffer.Buffer.GetBytes());
                     }
                     defferedBuffer.Seek(0, SeekOrigin.Begin);
-                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name, defferedBuffer, animAnimDes, incRootMotion);
+                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name!, defferedBuffer, animAnimDes, incRootMotion);
 
                 }
                 else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)

@@ -33,7 +33,7 @@ public class Flags : IEquatable<Flags>
 
     public Flags Clone() => new(_value.ToArray(), _index);
 
-    public bool Equals(Flags other)
+    public bool Equals(Flags? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -48,7 +48,7 @@ public class Flags : IEquatable<Flags>
         return _value.SequenceEqual(other._value) && _index == other._index;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

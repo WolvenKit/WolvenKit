@@ -22,7 +22,7 @@ public readonly struct CBool : IRedPrimitive<bool>, IEquatable<CBool>
 
     public bool Equals(CBool other) => _value == other._value;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

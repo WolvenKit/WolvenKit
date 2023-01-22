@@ -2,5 +2,5 @@
 
 public interface IRedString
 {
-    public string GetString();
+    public string? GetString();
 }

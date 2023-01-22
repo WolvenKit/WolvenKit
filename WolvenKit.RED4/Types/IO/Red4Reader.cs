@@ -60,12 +60,12 @@ public partial class Red4Reader : IErrorHandler, IDisposable
             throw new Exception();
         }
 
-        if (CollectData)
+        if (CollectData && _namesList[index].IsResolvable)
         {
-            DataCollection.RawStringList.Remove(_namesList[index]);
+            DataCollection.RawStringList.Remove(_namesList[index]!);
             if (!isTypeInfo)
             {
-                DataCollection.RawUsedStrings.Add(_namesList[index]);
+                DataCollection.RawUsedStrings.Add(_namesList[index]!);
             }
         }
 
@@ -158,7 +158,10 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedArray)Activator.CreateInstance(type);
+        if (Activator.CreateInstance(type) is not IRedArray result)
+        {
+            throw new Exception();
+        }
 
         var startPos = BaseStream.Position;
 
@@ -253,7 +256,7 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         var result = new CVariant();
 
         var redType = GetStringValue(_reader.ReadUInt16());
-        var redTypeInfos = RedReflection.GetRedTypeInfos(redType);
+        var redTypeInfos = RedReflection.GetRedTypeInfos(redType!);
         CheckRedTypeInfos(ref redTypeInfos);
 
         var size = _reader.ReadUInt32() - 4;
@@ -306,16 +309,16 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         var value = GetStringValue(_reader.ReadUInt16());
 
         var enumInfo = RedReflection.GetEnumTypeInfo(redTypeInfos[0].RedObjectType);
-        var enumString = enumInfo.GetCSNameFromRedName(value);
+        var enumString = enumInfo.GetCSNameFromRedName(value!);
 
-        object enumValue = null;
+        object? enumValue = null;
         if (enumString != null)
         {
             enumValue = Enum.Parse(redTypeInfos[0].RedObjectType, enumString);
         }
         if (enumString == null)
         {
-            var args = new InvalidEnumValueEventArgs(redTypeInfos[0].RedObjectType, value);
+            var args = new InvalidEnumValueEventArgs(redTypeInfos[0].RedObjectType, value!);
             if (!HandleParsingError(args))
             {
                 throw new Exception($"CEnum \"{redTypeInfos[0].RedObjectType.Name}.{value}\" could not be found!");
@@ -326,7 +329,12 @@ public partial class Red4Reader : IErrorHandler, IDisposable
 
         var type = RedReflection.GetFullType(redTypeInfos);
 
-        return (IRedEnum)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { enumValue }, null);
+        if (Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { enumValue }, null) is not IRedEnum result)
+        {
+            throw new Exception();
+        }
+
+        return result;
     }
 
     public virtual IRedStatic ReadCStaticArray(List<RedTypeInfo> redTypeInfos, uint size)
@@ -337,7 +345,10 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedStatic)Activator.CreateInstance(type, redTypeInfos[0].ArrayCount);
+        if (Activator.CreateInstance(type, redTypeInfos[0].ArrayCount) is not IRedStatic result)
+        {
+            throw new Exception();
+        }
 
         var elementCount = _reader.ReadInt32();
         if (elementCount > redTypeInfos[0].ArrayCount)
@@ -361,7 +372,10 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedArrayFixedSize)Activator.CreateInstance(type, redTypeInfos[0].ArrayCount);
+        if (Activator.CreateInstance(type, redTypeInfos[0].ArrayCount) is not IRedArrayFixedSize result)
+        {
+            throw new Exception();
+        }
 
         var elementCount = _reader.ReadInt32();
         if (elementCount > redTypeInfos[0].ArrayCount)
@@ -379,10 +393,13 @@ public partial class Red4Reader : IErrorHandler, IDisposable
 
     public virtual IRedType ReadPointer(List<RedTypeInfo> redTypeInfos, uint size) => throw new NotImplementedException();
 
-    public virtual IRedHandle ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
+    public virtual IRedHandle? ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedHandle)Activator.CreateInstance(type);
+        if (Activator.CreateInstance(type) is not IRedHandle result)
+        {
+            throw new Exception();
+        }
 
         var pointer = _reader.ReadInt32() - 1;
         if (!HandleQueue.ContainsKey(pointer))
@@ -395,36 +412,9 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         return result;
     }
 
-    public virtual IRedHandle ReadCHandle<T>() where T : RedBaseClass
-    {
-        var result = new CHandle<T>();
+    public virtual IRedHandle? ReadCHandle<T>() where T : RedBaseClass => throw new NotImplementedException();
 
-        var pointer = _reader.ReadInt32() - 1;
-        if (!HandleQueue.ContainsKey(pointer))
-        {
-            HandleQueue.Add(pointer, new List<IRedBaseHandle>());
-        }
-
-        HandleQueue[pointer].Add(result);
-
-        return result;
-    }
-
-    public virtual IRedWeakHandle ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
-    {
-        var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedWeakHandle)Activator.CreateInstance(type);
-
-        var pointer = _reader.ReadInt32() - 1;
-        if (!HandleQueue.ContainsKey(pointer))
-        {
-            HandleQueue.Add(pointer, new List<IRedBaseHandle>());
-        }
-
-        HandleQueue[pointer].Add(result);
-
-        return result;
-    }
+    public virtual IRedWeakHandle? ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size) => throw new NotImplementedException();
 
     public virtual IRedResourceReference ReadCResourceReference(List<RedTypeInfo> redTypeInfos, uint size)
     {
@@ -444,7 +434,10 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedResourceReference)Activator.CreateInstance(type, depotPath, flags);
+        if (Activator.CreateInstance(type, depotPath, flags) is not IRedResourceReference result)
+        {
+            throw new Exception();
+        }
 
         return result;
     }
@@ -467,7 +460,10 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedResourceAsyncReference)Activator.CreateInstance(type, depotPath, flags);
+        if (Activator.CreateInstance(type, depotPath, flags) is not IRedResourceAsyncReference result)
+        {
+            throw new Exception();
+        }
 
         return result;
     }
@@ -495,15 +491,24 @@ public partial class Red4Reader : IErrorHandler, IDisposable
                 enumString += ", ";
             }
 
-            enumString += enumInfo.GetCSNameFromRedName(GetStringValue(index));
+            enumString += enumInfo.GetCSNameFromRedName(GetStringValue(index)!);
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
         if (string.IsNullOrEmpty(enumString))
         {
-            return (IRedBitField)Activator.CreateInstance(type);
+            if (Activator.CreateInstance(type) is not IRedBitField result1)
+            {
+                throw new Exception();
+            }
+            return result1;
         }
-        return (IRedBitField)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { Enum.Parse(redTypeInfos[0].RedObjectType, enumString) }, null);
+
+        if (Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { Enum.Parse(redTypeInfos[0].RedObjectType, enumString) }, null) is not IRedBitField result2)
+        {
+            throw new Exception();
+        }
+        return result2;
     }
 
     public virtual IRedLegacySingleChannelCurve ReadCLegacySingleChannelCurve(List<RedTypeInfo> redTypeInfos, uint size)
@@ -514,14 +519,17 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedLegacySingleChannelCurve)Activator.CreateInstance(type);
+        if (Activator.CreateInstance(type) is not IRedLegacySingleChannelCurve result)
+        {
+            throw new Exception();
+        }
 
         var elementCount = _reader.ReadUInt32();
         for (var i = 0; i < elementCount; i++)
         {
             var point = _reader.ReadSingle();
 
-            IRedType element;
+            IRedType? element;
             if (redTypeInfos[1].BaseRedType is BaseRedType.Class)
             {
                 element = ReadFixedClassNew(redTypeInfos[1], 0);
@@ -531,10 +539,13 @@ public partial class Red4Reader : IErrorHandler, IDisposable
                 element = Read(new List<RedTypeInfo> { redTypeInfos[1] });
             }
 
+            ArgumentNullException.ThrowIfNull(element);
             var constructedType = typeof(CurvePoint<>).MakeGenericType(element.GetType());
-            var curvePoint = (IRedCurvePoint)Activator.CreateInstance(constructedType);
-            curvePoint.SetPoint(point);
-            curvePoint.SetValue(element);
+
+            if (Activator.CreateInstance(constructedType, point, element) is not IRedCurvePoint curvePoint)
+            {
+                throw new Exception();
+            }
 
             result.Add(curvePoint);
         }
@@ -554,7 +565,10 @@ public partial class Red4Reader : IErrorHandler, IDisposable
     public virtual IRedMultiChannelCurve ReadMultiChannelCurve(List<RedTypeInfo> redTypeInfos, uint size)
     {
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedMultiChannelCurve)Activator.CreateInstance(type);
+        if (Activator.CreateInstance(type) is not IRedMultiChannelCurve result)
+        {
+            throw new Exception();
+        }
 
         result.NumChannels = _reader.ReadUInt32();
         result.InterpolationType = (Enums.EInterpolationType)_reader.ReadByte();
@@ -579,6 +593,8 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         {
             if (redTypeInfos[i] is SpecialRedTypeInfo { SpecialRedType: SpecialRedType.Mixed } specialRedTypeInfo)
             {
+                ArgumentNullException.ThrowIfNull(specialRedTypeInfo.RedName);
+
                 var args = new UnknownTypeEventArgs(specialRedTypeInfo.RedName);
                 if (!HandleParsingError(args))
                 {
@@ -599,7 +615,7 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         throw new NotSupportedException($"{nameof(Red4Reader)}.{callerMemberName}");
     }
 
-    public event ParsingErrorEventHandler ParsingError;
+    public event ParsingErrorEventHandler? ParsingError;
 
     protected virtual bool HandleParsingError(ParsingErrorEventArgs e) => ParsingError != null && ParsingError.Invoke(e);
 
@@ -617,6 +633,8 @@ public partial class Red4Reader : IErrorHandler, IDisposable
 
         foreach (var propertyInfo in typeInfo.GetWritableProperties())
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
             var redTypeInfos = RedReflection.GetRedTypeInfos(propertyInfo.Type);
 
             var value = Read(redTypeInfos);
@@ -633,6 +651,8 @@ public partial class Red4Reader : IErrorHandler, IDisposable
 
         foreach (var propertyInfo in typeInfo.GetWritableProperties())
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
             var redTypeInfos = RedReflection.GetRedTypeInfos(propertyInfo.Type);
             instance.SetProperty(propertyInfo.RedName, Read(redTypeInfos));
         }
@@ -640,7 +660,7 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         return instance;
     }
 
-    public virtual IRedType Read(List<RedTypeInfo> redTypeInfos, uint size = 0)
+    public virtual IRedType? Read(List<RedTypeInfo> redTypeInfos, uint size = 0)
     {
         var currentType = redTypeInfos[0];
 

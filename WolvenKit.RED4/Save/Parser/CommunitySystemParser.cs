@@ -10,6 +10,7 @@ public class CommunitySystem : INodeData
     public CommunitySystem()
     {
         Unk_HashList = new List<ulong>();
+        TrailingBytes = Array.Empty<byte>();
     }
 }
 

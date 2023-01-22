@@ -303,8 +303,6 @@ public class Compression
 
     private class CompressionHeader
     {
-        private Settings _settings;
-
         public CompressionHeader()
         {
             DataChunkInfos = new List<DataChunkInfo>();
@@ -317,22 +315,17 @@ public class Compression
         {
             get
             {
-                if (_settings == null)
+                if (MaxEntries == 0x100)
                 {
-                    if (MaxEntries == 0x100)
-                    {
-                        return new Settings { TableEntriesCount = 0x100, ChunkSize = 0x00040000 };
-                    }
-
-                    if (MaxEntries == 0x400)
-                    {
-                        return new Settings { TableEntriesCount = 0x400, ChunkSize = 0x00080000 };
-                    }
-
-                    throw new Exception();
+                    return new Settings { TableEntriesCount = 0x100, ChunkSize = 0x00040000 };
                 }
 
-                return _settings;
+                if (MaxEntries == 0x400)
+                {
+                    return new Settings { TableEntriesCount = 0x400, ChunkSize = 0x00080000 };
+                }
+
+                throw new Exception();
             }
         }
     }

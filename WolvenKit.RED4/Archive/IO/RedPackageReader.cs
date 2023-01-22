@@ -34,26 +34,28 @@ public partial class RedPackageReader : Red4Reader
         {
             var varName = GetStringValue(f.nameID);
             var typeName = GetStringValue(f.typeID);
-            var (fieldType, flags) = RedReflection.GetCSTypeFromRedType(typeName);
-            var redTypeInfos = RedReflection.GetRedTypeInfos(typeName);
+            var (fieldType, flags) = RedReflection.GetCSTypeFromRedType(typeName!);
+            var redTypeInfos = RedReflection.GetRedTypeInfos(typeName!);
             CheckRedTypeInfos(ref redTypeInfos);
 
-            var prop = typeInfo.GetPropertyInfoByRedName(varName);
+            var prop = typeInfo.GetPropertyInfoByRedName(varName!);
             if (prop == null)
             {
-                prop = typeInfo.AddDynamicProperty(varName, typeName);
+                prop = typeInfo.AddDynamicProperty(varName!, typeName!);
             }
 
-            IRedType value;
+            IRedType? value;
 
             BaseStream.Position = baseOff + f.offset;
             if (prop.IsDynamic)
             {
                 value = Read(redTypeInfos, 0);
-                cls.SetProperty(varName, value);
+                cls.SetProperty(varName!, value);
             }
             else
             {
+                ArgumentNullException.ThrowIfNull(prop.RedName);
+
                 value = Read(redTypeInfos, 0);
 
                 if (fieldType != prop.Type)
@@ -82,8 +84,8 @@ public partial class RedPackageReader : Red4Reader
 
                     if (value is CName str2 && str2.IsResolvable)
                     {
-                        DataCollection.RawStringList.Remove(str2.GetResolvedText());
-                        DataCollection.RawFactStrings.Add(str2.GetResolvedText());
+                        DataCollection.RawStringList.Remove(str2.GetResolvedText()!);
+                        DataCollection.RawFactStrings.Add(str2.GetResolvedText()!);
                     }
 
                     if (value is CArray<CName> arr1)
@@ -92,8 +94,8 @@ public partial class RedPackageReader : Red4Reader
                         {
                             if (cName.IsResolvable)
                             {
-                                DataCollection.RawStringList.Remove(cName.GetResolvedText());
-                                DataCollection.RawFactStrings.Add(cName.GetResolvedText());
+                                DataCollection.RawStringList.Remove(cName.GetResolvedText()!);
+                                DataCollection.RawFactStrings.Add(cName.GetResolvedText()!);
                             }
                         }
                     }
@@ -148,15 +150,23 @@ public partial class RedPackageReader : Red4Reader
                 enumString += ", ";
             }
 
-            enumString += enumInfo.GetCSNameFromRedName(GetStringValue(index));
+            enumString += enumInfo.GetCSNameFromRedName(GetStringValue(index)!);
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
         if (string.IsNullOrEmpty(enumString))
         {
-            return (IRedBitField)Activator.CreateInstance(type);
+            if (Activator.CreateInstance(type) is not IRedBitField result1)
+            {
+                throw new Exception();
+            }
+            return result1;
         }
-        return (IRedBitField)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { Enum.Parse(redTypeInfos[0].RedObjectType, enumString) }, null);
+        if (Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { Enum.Parse(redTypeInfos[0].RedObjectType, enumString) }, null) is not IRedBitField result2)
+        {
+            throw new Exception();
+        }
+        return result2;
     }
 
     public override IRedHandle ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
@@ -176,7 +186,10 @@ public partial class RedPackageReader : Red4Reader
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedHandle)Activator.CreateInstance(type);
+        if (Activator.CreateInstance(type) is not IRedHandle result)
+        {
+            throw new Exception();
+        }
 
         if (!HandleQueue.ContainsKey(pointer))
         {
@@ -191,7 +204,10 @@ public partial class RedPackageReader : Red4Reader
     public override IRedWeakHandle ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedWeakHandle)Activator.CreateInstance(type);
+        if (Activator.CreateInstance(type) is not IRedWeakHandle result)
+        {
+            throw new Exception();
+        }
 
         var pointer = _reader.ReadInt32();
         if (!HandleQueue.ContainsKey(pointer))
@@ -222,7 +238,10 @@ public partial class RedPackageReader : Red4Reader
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedResourceAsyncReference)Activator.CreateInstance(type, depotPath, flags);
+        if (Activator.CreateInstance(type, depotPath, flags) is not IRedResourceAsyncReference result)
+        {
+            throw new Exception();
+        }
 
         return result;
     }
@@ -245,7 +264,10 @@ public partial class RedPackageReader : Red4Reader
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedResourceReference)Activator.CreateInstance(type, depotPath, flags);
+        if (Activator.CreateInstance(type, depotPath, flags) is not IRedResourceReference result)
+        {
+            throw new Exception();
+        }
 
         return result;
     }

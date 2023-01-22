@@ -9,9 +9,9 @@ public class InvalidRTTIEventArgs : ParsingErrorEventArgs
     public string PropertyName { get; }
     public Type ExpectedType { get; }
     public Type ActualType { get; }
-    public IRedType Value { get; set; }
+    public IRedType? Value { get; set; }
 
-    public InvalidRTTIEventArgs(string propertyName, Type expectedType, Type actualType, IRedType value)
+    public InvalidRTTIEventArgs(string propertyName, Type expectedType, Type actualType, IRedType? value)
     {
         PropertyName = propertyName;
         ExpectedType = expectedType;
@@ -29,7 +29,7 @@ public class InvalidEnumValueEventArgs : ParsingErrorEventArgs
 {
     public Type EnumType { get; }
     public string StringValue { get; }
-    public Enum Value { get; set; }
+    public Enum? Value { get; set; }
 
     public InvalidEnumValueEventArgs(Type enumType, string stringValue)
     {

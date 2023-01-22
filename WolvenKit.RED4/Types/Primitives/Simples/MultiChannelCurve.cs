@@ -9,7 +9,7 @@ public class MultiChannelCurve<T> : IRedMultiChannelCurve<T>, IEquatable<MultiCh
     public uint Alignment { get; set; }
     public byte[] Data { get; set; }
 
-    public bool Equals(MultiChannelCurve<T> other)
+    public bool Equals(MultiChannelCurve<T>? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -24,7 +24,7 @@ public class MultiChannelCurve<T> : IRedMultiChannelCurve<T>, IEquatable<MultiCh
         return NumChannels == other.NumChannels && InterpolationType == other.InterpolationType && LinkType == other.LinkType && Alignment == other.Alignment && Data.SequenceEqual(other.Data);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

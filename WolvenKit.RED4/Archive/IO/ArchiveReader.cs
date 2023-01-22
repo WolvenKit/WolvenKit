@@ -11,10 +11,7 @@ public class ArchiveReader
 {
     public EFileReadErrorCodes ReadArchive(string path, IHashService hashService, out Archive ar)
     {
-        ar = new Archive()
-        {
-            ArchiveAbsolutePath = path
-        };
+        ar = new Archive(path);
 
         // read header
         uint customDataLength;
@@ -145,6 +142,9 @@ public class ArchiveReader
                 file.GuessedExtension = ".wem";
                 break;
             }
+
+            default:
+                break;
         }
 
         br.Dispose();

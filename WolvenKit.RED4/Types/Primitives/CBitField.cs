@@ -8,9 +8,18 @@ public static class CBitField
     public static IRedBitField Parse(Type enumType, string value)
     {
         var method = typeof(CBitField).GetMethod(nameof(Parse), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(string) }, null);
-        var generic = method.MakeGenericMethod(enumType);
+        if (method == null)
+        {
+            throw new MissingMethodException(nameof(CBitField), nameof(Parse));
+        }
 
-        return (IRedBitField)generic.Invoke(null, new object[] { value });
+        var generic = method.MakeGenericMethod(enumType);
+        if (generic.Invoke(null, new object[] { value }) is not IRedBitField result)
+        {
+            throw new Exception();
+        }
+
+        return result;
     }
 
     public static CBitField<T> Parse<T>(string value) where T : struct, Enum
@@ -52,7 +61,7 @@ public readonly struct CBitField<T> : IRedBitField<T>, IEquatable<CBitField<T>> 
     public string ToBitFieldString() => _value.ToString();
 
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

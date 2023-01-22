@@ -1,6 +1,6 @@
 namespace WolvenKit.RED4.Types;
 
-public class CacheList<T> : ICacheList<T>
+public class CacheList<T> : ICacheList<T> where T : notnull
 {
     private readonly HashSet<T> _valueList;
     private readonly Dictionary<T, ushort> _keyValueList;

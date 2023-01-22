@@ -3,6 +3,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO;
 
@@ -36,7 +37,10 @@ public partial class RedPackageWriter
 
             foreach (var chunk in _file.Chunks)
             {
-                chunkDict.Add(FNV1A64HashAlgorithm.HashString(GetClassName(chunk)), chunk);
+                var className = GetClassName(chunk);
+                ArgumentNullException.ThrowIfNull(className);
+
+                chunkDict.Add(FNV1A64HashAlgorithm.HashString(className), chunk);
             }
 
             chunkDict = chunkDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
@@ -197,6 +201,7 @@ public partial class RedPackageWriter
     protected virtual RedPackageChunkHeader WriteChunk(RedPackageWriter file, RedBaseClass chunk)
     {
         var redTypeName = GetClassName(chunk);
+        ArgumentNullException.ThrowIfNull(redTypeName);
         var typeIndex = file.GetStringIndex(redTypeName);
 
         var result = new RedPackageChunkHeader
@@ -219,8 +224,11 @@ public partial class RedPackageWriter
         {
             if (Settings.ImportsAsHash)
             {
-                ImportHandler.AddPathHandler?.Invoke(reff.DepotPath);
-
+                if (reff.DepotPath.IsResolvable)
+                {
+                    ImportHandler.AddPathHandler?.Invoke(reff.DepotPath!);
+                }
+                
                 refDesc.Add(new RedPackageImportHeader
                 {
                     offset = (uint)refData.Count + position,
@@ -238,9 +246,9 @@ public partial class RedPackageWriter
                     sync = reff.Flag > 0
                 });
 
-                if ((string)reff.DepotPath != null)
+                if (reff.DepotPath.IsResolvable)
                 {
-                    refData.AddRange(Encoding.UTF8.GetBytes(reff.DepotPath));
+                    refData.AddRange(Encoding.UTF8.GetBytes(reff.DepotPath!));
                 }
             }
         }
@@ -254,7 +262,9 @@ public partial class RedPackageWriter
         var nameData = new List<byte>();
         foreach (var str in strings)
         {
-            var strBytes = Encoding.UTF8.GetBytes(str);
+            NotResolvableException.ThrowIfNotResolvable(str);
+
+            var strBytes = Encoding.UTF8.GetBytes(str!);
             nameDesc.Add(new RedPackageNameHeader
             {
                 offset = (uint)nameData.Count + position,
@@ -283,7 +293,7 @@ public partial class RedPackageWriter
         }
     }
 
-    private string GetClassName(RedBaseClass cls)
+    private string? GetClassName(RedBaseClass cls)
     {
         if (cls is DynamicBaseClass dbc)
         {
@@ -325,7 +335,12 @@ public partial class RedPackageWriter
                 continue;
             }
 
-            chunkClassNames.Add(GetClassName(chunk));
+            if (GetClassName(chunk) is not string className)
+            {
+                throw new ArgumentNullException();
+            }
+
+            chunkClassNames.Add(className);
 
             _chunkInfos[chunk].Id = chunkCounter;
             file.StartChunk(chunk);

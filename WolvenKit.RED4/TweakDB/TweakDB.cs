@@ -61,11 +61,15 @@ public class TweakDB
         var typeInfo = RedReflection.GetTypeInfo(record);
         foreach (var propertyInfo in typeInfo.PropertyInfos)
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
             var value = record.GetProperty(propertyInfo.RedName);
             if (!typeInfo.SerializeDefault && RedReflection.IsDefault(record.GetType(), propertyInfo, value))
             {
                 continue;
             }
+
+            ArgumentNullException.ThrowIfNull(value);
 
             Add($"{name}.{propertyInfo.RedName}", value);
         }
@@ -73,7 +77,7 @@ public class TweakDB
         Records.Add(name, record.GetType());
     }
 
-    public IRedType GetFlatValue(string path)
+    public IRedType? GetFlatValue(string path)
     {
         foreach (var (id, value) in Flats)
         {
@@ -91,7 +95,7 @@ public class TweakDB
     public List<TweakDBID> GetQueries() => Queries.GetRecords();
     public List<TweakDBID> GetGroupTags() => GroupTags.GetRecords();
 
-    public Type GetRecordType(TweakDBID targetId)
+    public Type? GetRecordType(TweakDBID targetId)
     {
         foreach (var (id, type) in Records)
         {
@@ -104,7 +108,7 @@ public class TweakDB
         return null;
     }
 
-    public gamedataTweakDBRecord GetFullRecord(TweakDBID targetId)
+    public gamedataTweakDBRecord? GetFullRecord(TweakDBID targetId)
     {
         var type = GetRecordType(targetId);
         if (type == null)
@@ -123,6 +127,8 @@ public class TweakDB
         var typeInfo = RedReflection.GetTypeInfo(instance);
         foreach (var propertyInfo in typeInfo.PropertyInfos)
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
             if (targetId.ResolvedText != null)
             {
                 if (values.ContainsKey(propertyInfo.RedName))

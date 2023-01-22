@@ -20,10 +20,9 @@ public class entEntityTemplateReader : RedPackageReader
         {
             if (buffer.Parent is entEntityTemplate entityTemplate && buffer.Data is RedPackage rp)
             {
-                entityTemplate.Entity = new();
                 if (rp.RootChunk is entEntity ee)
                 {
-                    entityTemplate.Entity.SetValue(ee);
+                    entityTemplate.Entity = new(ee);
                 }
                 entityTemplate.Components = new();
                 foreach (var component in rp.Chunks)

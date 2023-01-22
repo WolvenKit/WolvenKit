@@ -56,7 +56,7 @@ public class TweakDBReader : Red4Reader
         }
     }
 
-    public EFileReadErrorCodes ReadFile(out TweakDB file)
+    public EFileReadErrorCodes ReadFile(out TweakDB? file)
     {
         var id = BaseStream.ReadStruct<uint>();
         if (id != TweakDB.Magic)
@@ -104,7 +104,7 @@ public class TweakDBReader : Red4Reader
             var numValues = BaseReader.ReadUInt32();
             for (var j = 0; j < numValues; j++)
             {
-                flatTypeValues[typeHash].Add(Read(redTypeInfos));
+                flatTypeValues[typeHash].Add(Read(redTypeInfos) ?? throw new ArgumentNullException());
             }
 
             var numKeys = BaseReader.ReadUInt32();
@@ -218,7 +218,7 @@ public class TweakDBReader : Red4Reader
             BaseReader.ReadUInt32();
 
             var propertyInfo = RedReflection.GetPropertyByRedName(cls.GetType(), varName);
-            IRedType value;
+            IRedType? value;
 
             if (propertyInfo == null)
             {
@@ -227,6 +227,8 @@ public class TweakDBReader : Red4Reader
             }
             else
             {
+                ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
                 value = Read(redTypeInfos);
 
                 if (valueType != propertyInfo.Type)

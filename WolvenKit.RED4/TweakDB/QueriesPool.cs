@@ -46,7 +46,7 @@ public class QueriesPool : IEnumerable<(TweakDBID id, List<TweakDBID> val)>
             .Select(x => (TweakDBID)x)
             .ToList();
 
-    public List<TweakDBID> GetQuery(ulong hash)
+    public List<TweakDBID>? GetQuery(ulong hash)
     {
         if (_queries.ContainsKey(hash))
         {

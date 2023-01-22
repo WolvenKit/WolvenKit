@@ -107,6 +107,8 @@ namespace WolvenKit.Common.Model
 
             foreach (var archive in ModArchives.Items)
             {
+                ArgumentNullException.ThrowIfNull(archive.ArchiveRelativePath);
+
                 var modroot = new RedFileSystemModel(archive.ArchiveRelativePath);
 
                 // loop through all files

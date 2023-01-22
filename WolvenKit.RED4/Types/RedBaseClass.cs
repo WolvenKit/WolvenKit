@@ -25,22 +25,33 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
             {
                 if (propertyInfo.Flags.Equals(Flags.Empty))
                 {
-                    InternalSetPropertyValue(propertyInfo.RedName, (IRedType)System.Activator.CreateInstance(propertyInfo.Type));
+                    if (System.Activator.CreateInstance(propertyInfo.Type) is not IRedType result)
+                    {
+                        throw new Exception();
+                    }
+
+                    InternalSetPropertyValue(propertyInfo.RedName, result);
                 }
                 else
                 {
                     var flags = propertyInfo.Flags;
-                    InternalSetPropertyValue(propertyInfo.RedName, (IRedType)System.Activator.CreateInstance(propertyInfo.Type, flags.MoveNext() ? flags.Current : 0));
+                    if (System.Activator.CreateInstance(propertyInfo.Type, flags.MoveNext() ? flags.Current : 0) is not IRedType result)
+                    {
+                        throw new Exception();
+                    }
+
+                    InternalSetPropertyValue(propertyInfo.RedName, result);
                 }
             }
         }
     }
 
-    internal void InternalSetPropertyValue(string propertyName, IRedType value, bool onlyNative = true)
+    internal void InternalSetPropertyValue(string propertyName, IRedType? value, bool onlyNative = true)
     {
         var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), propertyName);
         if (propertyInfo != null)
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
             propertyName = propertyInfo.RedName;
 
             if (propertyInfo.GenericType != null)
@@ -50,7 +61,7 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
                     var flags = propertyInfo.Flags;
                     var size = flags.MoveNext() ? flags.Current : 0;
 
-                    if (((IRedArray)value).Count > size)
+                    if (value == null || ((IRedArray)value).Count > size)
                     {
                         throw new ArgumentException();
                     }
@@ -61,7 +72,12 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
                     var flags = propertyInfo.Flags;
                     var maxSize = flags.MoveNext() ? flags.Current : 0;
 
-                    ((IRedArray)value).MaxSize = maxSize;
+                    if (value != null)
+                    {
+                        throw new ArgumentNullException();
+                    }
+
+                    ((IRedArray)value!).MaxSize = maxSize;
                 }
             }
         }
@@ -83,7 +99,7 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
 
     #region Properties
 
-    private readonly IDictionary<string, IRedType> _properties = new Dictionary<string, IRedType>();
+    private readonly IDictionary<string, IRedType?> _properties = new Dictionary<string, IRedType?>();
     private readonly IList<string> _dynamicProperties = new List<string>();
 
 
@@ -93,14 +109,17 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
     /// <typeparam name="T"></typeparam>
     /// <param name="callerName"></param>
     /// <returns></returns>
-    protected T GetPropertyValue<T>([CallerMemberName] string callerName = "") where T : IRedType
+    protected T? GetPropertyValue<T>([CallerMemberName] string callerName = "") where T : IRedType
     {
         var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), callerName);
-        if (propertyInfo != null && _properties.ContainsKey(propertyInfo.RedName))
+
+        ArgumentNullException.ThrowIfNull(propertyInfo?.RedName);
+
+        if (_properties.ContainsKey(propertyInfo.RedName))
         {
-            return (T)_properties[propertyInfo.RedName];
+            return (T?)_properties[propertyInfo.RedName];
         }
-        return (T)RedReflection.GetDefaultValue(typeof(T));
+        return (T?)RedReflection.GetDefaultValue(typeof(T));
     }
 
     /// <summary>
@@ -114,9 +133,9 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
 
     public bool HasProperty(string propertyName) => _properties.ContainsKey(propertyName) || RedReflection.GetNativePropertyInfo(GetType(), propertyName) != null;
 
-    public void SetProperty(string propertyName, IRedType value) => InternalSetPropertyValue(propertyName, value, false);
+    public void SetProperty(string propertyName, IRedType? value) => InternalSetPropertyValue(propertyName, value, false);
 
-    public IRedType GetProperty(string propertyName)
+    public IRedType? GetProperty(string propertyName)
     {
         if (_dynamicProperties.Contains(propertyName))
         {
@@ -136,7 +155,7 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
                 return _properties[propertyInfo.RedName];
             }
 
-            return (IRedType)RedReflection.GetDefaultValue(propertyInfo.Type);
+            return (IRedType?)RedReflection.GetDefaultValue(propertyInfo.Type);
         }
 
         throw new PropertyNotFoundException();
@@ -147,7 +166,8 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
         var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), name);
         if (propertyInfo != null)
         {
-            SetProperty(propertyInfo.RedName, (IRedType)RedReflection.GetDefaultValue(propertyInfo.Type));
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+            SetProperty(propertyInfo.RedName, (IRedType?)RedReflection.GetDefaultValue(propertyInfo.Type));
             return true;
         }
 
@@ -167,7 +187,7 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
 
     #endregion Properties
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {
@@ -187,7 +207,7 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
         return Equals((RedBaseClass)obj);
     }
 
-    public bool Equals(RedBaseClass other)
+    public bool Equals(RedBaseClass? other)
     {
         if (ReferenceEquals(null, other))
         {

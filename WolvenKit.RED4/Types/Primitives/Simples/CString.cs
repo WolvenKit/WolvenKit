@@ -26,7 +26,7 @@ public readonly struct CString : IRedString, IRedPrimitive<CString>, IEquatable<
     public override string ToString() => this;
 
 
-    public int CompareTo(object value)
+    public int CompareTo(object? value)
     {
         if (value == null)
         {
@@ -46,7 +46,7 @@ public readonly struct CString : IRedString, IRedPrimitive<CString>, IEquatable<
 
     public bool Equals(CString other) => string.Equals(Value, other.Value);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

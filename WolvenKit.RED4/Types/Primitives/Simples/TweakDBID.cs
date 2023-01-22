@@ -15,12 +15,13 @@ public readonly struct TweakDBID : IRedPrimitive<ulong>, IEquatable<TweakDBID>
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public int Length => (int)(_hash >> 32);
 
-    public string ResolvedText => GetResolvedText();
-    public string GetResolvedText() => TweakDBIDPool.ResolveHash(_hash);
+    public string? ResolvedText => GetResolvedText();
+    public string? GetResolvedText() => TweakDBIDPool.ResolveHash(_hash);
+    public bool IsResolvable => TweakDBIDPool.ResolveHash(_hash) != null;
 
 
     public static implicit operator TweakDBID(string value) => new(TweakDBIDPool.AddOrGetHash(value));
-    public static implicit operator string(TweakDBID value) => value.GetResolvedText();
+    public static implicit operator string?(TweakDBID value) => value.GetResolvedText();
 
     public static implicit operator TweakDBID(ulong value) => new(value);
     public static implicit operator ulong(TweakDBID value) => value._hash;
@@ -30,7 +31,7 @@ public readonly struct TweakDBID : IRedPrimitive<ulong>, IEquatable<TweakDBID>
 
     public bool Equals(TweakDBID other) => Equals(_hash, other._hash);
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

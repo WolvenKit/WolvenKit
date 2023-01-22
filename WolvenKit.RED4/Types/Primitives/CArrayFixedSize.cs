@@ -1,6 +1,6 @@
 namespace WolvenKit.RED4.Types;
 
-public class CArrayFixedSize<T> : CArrayBase<T>, IRedArrayFixedSize<T> where T : IRedType
+public class CArrayFixedSize<T> : CArrayBase<T?>, IRedArrayFixedSize<T?> where T : IRedType
 {
     public CArrayFixedSize(int size) : base(size)
     {
@@ -11,7 +11,7 @@ public class CArrayFixedSize<T> : CArrayBase<T>, IRedArrayFixedSize<T> where T :
     {
         var other = new CArrayFixedSize<T>(_internalList.Count);
 
-        for (int i = 0; i < _internalList.Count; i++)
+        for (var i = 0; i < _internalList.Count; i++)
         {
             if (_internalList[i] is IRedCloneable cl)
             {

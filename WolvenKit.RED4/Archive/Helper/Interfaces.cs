@@ -14,11 +14,6 @@ public interface ICR2WName
 {
 }
 
-public interface ICR2WBuffer : IRedBuffer
-{
-
-}
-
 public interface ICR2WExport
 {
 

@@ -2,6 +2,7 @@ using System.Text;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 
 namespace WolvenKit.RED4.Archive.IO;
@@ -46,6 +47,8 @@ public partial class RedPackageWriter : Red4Writer
         var nonDefaultProperties = new List<ExtendedPropertyInfo>();
         foreach (var propertyInfo in typeInfo.GetWritableProperties())
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
             var value = cls.GetProperty(propertyInfo.RedName);
             if (!propertyInfo.IsDynamic)
             {
@@ -64,6 +67,8 @@ public partial class RedPackageWriter : Red4Writer
 
         foreach (var propertyInfo in nonDefaultProperties)
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
             var value = cls.GetProperty(propertyInfo.RedName);
 
             string redTypeName;
@@ -206,7 +211,9 @@ public partial class RedPackageWriter : Red4Writer
 
     public override void Write(NodeRef val)
     {
-        var strBytes = Encoding.UTF8.GetBytes(val);
+        NotResolvableException.ThrowIfNotResolvable(val);
+
+        var strBytes = Encoding.UTF8.GetBytes(val!);
 
         _writer.Write((short)strBytes.Length);
         _writer.Write(strBytes);
@@ -233,8 +240,10 @@ public partial class RedPackageWriter : Red4Writer
     {
         if (_header.version == 02 || _header.version == 03)
         {
+            NotResolvableException.ThrowIfNotResolvable(val);
+
             _writer.Write((short)val.Length);
-            _writer.Write(Encoding.UTF8.GetBytes(val));
+            _writer.Write(Encoding.UTF8.GetBytes(val!));
         }
         else if (_header.version == 04)
         {

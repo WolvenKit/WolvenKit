@@ -26,7 +26,7 @@ public readonly struct CUInt64 : IRedPrimitive<ulong>, IEquatable<CUInt64>, IRed
 
     public override int GetHashCode() => _value.GetHashCode();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

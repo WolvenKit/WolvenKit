@@ -21,7 +21,7 @@ public class CR2WEmbedded : ICR2WEmbeddedFile, IEquatable<CR2WEmbedded>
     public string FileName { get; set; }
     public RedBaseClass Content { get; set; }
 
-    public bool Equals(CR2WEmbedded other)
+    public bool Equals(CR2WEmbedded? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -46,7 +46,7 @@ public class CR2WEmbedded : ICR2WEmbeddedFile, IEquatable<CR2WEmbedded>
         return true;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is CR2WEmbedded cObj)
         {

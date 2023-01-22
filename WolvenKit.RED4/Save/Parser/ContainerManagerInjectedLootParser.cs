@@ -11,12 +11,18 @@ public class ContainerManagerInjectedLoot : INodeData
     public ContainerManagerInjectedLoot()
     {
         Entries = new List<Entry>();
+        TrailingBytes = Array.Empty<byte>();
     }
 
     public class Entry
     {
         public ulong EntityId { get; set; }
         public List<SubEntry> Entries { get; set; }
+
+        public Entry()
+        {
+            Entries = new List<SubEntry>();
+        }
     }
 
     public class SubEntry

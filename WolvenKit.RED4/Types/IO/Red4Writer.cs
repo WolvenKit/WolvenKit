@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.IO;
 
@@ -239,8 +240,10 @@ public class Red4Writer : IDisposable
 
     public virtual void Write(CName val)
     {
-        CNameRef.Add(_writer.BaseStream.Position, val);
-        _writer.Write(GetStringIndex(val));
+        NotResolvableException.ThrowIfNotResolvable(val);
+
+        CNameRef.Add(_writer.BaseStream.Position, val!);
+        _writer.Write(GetStringIndex(val!));
     }
 
     public virtual void Write(CRUID val) => _writer.Write(val);
@@ -248,6 +251,8 @@ public class Red4Writer : IDisposable
 
     public virtual void Write(CVariant val)
     {
+        ArgumentNullException.ThrowIfNull(val.Value);
+
         var typeName = RedReflection.GetRedTypeFromCSType(val.Value.GetType(), Flags.Empty);
 
         CNameRef.Add(_writer.BaseStream.Position, typeName);
@@ -321,7 +326,7 @@ public class Red4Writer : IDisposable
     #endregion Simple
 
     // TODO: Check for generic arguments
-    private MethodInfo GetMethod(string name, int genericParameterCount, Type[] types)
+    private MethodInfo? GetMethod(string name, int genericParameterCount, Type[] types)
     {
         var methods = typeof(Red4Writer).GetMethods();
         foreach (var methodInfo in methods)
@@ -400,6 +405,7 @@ public class Red4Writer : IDisposable
         var innerType = instance.GetType().GetGenericArguments()[0];
 
         var method = GetMethod("Write", 1, new[] { genericType });
+        ArgumentNullException.ThrowIfNull(method);
         var generic = method.MakeGenericMethod(innerType);
 
         generic.Invoke(this, new object[] { instance });
@@ -420,6 +426,7 @@ public class Red4Writer : IDisposable
         var innerType = instance.GetType().GetGenericArguments()[0];
 
         var method = GetMethod("Write", 1, new[] { genericType });
+        ArgumentNullException.ThrowIfNull(method);
         var generic = method.MakeGenericMethod(innerType);
 
         generic.Invoke(this, new object[] { instance });
@@ -447,6 +454,7 @@ public class Red4Writer : IDisposable
         var innerType = instance.GetType().GetGenericArguments()[0];
 
         var method = GetMethod("Write", 1, new[] { genericType });
+        ArgumentNullException.ThrowIfNull(method);
         var generic = method.MakeGenericMethod(innerType);
 
         generic.Invoke(this, new object[] { instance });
@@ -499,12 +507,12 @@ public class Red4Writer : IDisposable
     public List<RedBaseClass> ChunkQueue = new();
     public Dictionary<Guid,List<(long, int, Type)>> ChunkReferences = new();
 
-    protected void InternalHandleWriter(RedBaseClass classRef, int pointerOffset)
+    protected void InternalHandleWriter(RedBaseClass? classRef, int pointerOffset)
     {
         InternalHandleWriter(classRef, pointerOffset, typeof(int));
     }
 
-    protected void InternalHandleWriter(RedBaseClass classRef, int pointerOffset, Type indexType)
+    protected void InternalHandleWriter(RedBaseClass? classRef, int pointerOffset, Type indexType)
     {
         if (classRef == null)
         {
@@ -606,6 +614,7 @@ public class Red4Writer : IDisposable
         var innerType = instance.GetType().GetGenericArguments()[0];
 
         var method = GetMethod("Write", 1, new[] { genericType });
+        ArgumentNullException.ThrowIfNull(method);
         var generic = method.MakeGenericMethod(innerType);
 
         generic.Invoke(this, new object[] { instance });
@@ -630,10 +639,7 @@ public class Red4Writer : IDisposable
             return;
         }
 
-        if (!instance.DepotPath.IsResolvable)
-        {
-            throw new Exception("Can't write unresolvable path!");
-        }
+        NotResolvableException.ThrowIfNotResolvable(instance.DepotPath);
 
         var val = new ImportEntry(CName.Empty, instance.DepotPath, (ushort)instance.Flags);
 
@@ -649,10 +655,7 @@ public class Red4Writer : IDisposable
             return;
         }
 
-        if (!instance.DepotPath.IsResolvable)
-        {
-            throw new Exception("Can't write unresolvable path!");
-        }
+        NotResolvableException.ThrowIfNotResolvable(instance.DepotPath);
 
         var val = new ImportEntry(CName.Empty, instance.DepotPath, (ushort)instance.Flags);
 
@@ -669,6 +672,8 @@ public class Red4Writer : IDisposable
         var typeInfo = RedReflection.GetTypeInfo(instance);
         foreach (var propertyInfo in typeInfo.GetWritableProperties())
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
             var value = instance.GetProperty(propertyInfo.RedName);
             Write(value);
         }
@@ -693,8 +698,10 @@ public class Red4Writer : IDisposable
         ThrowNotImplemented();
     }
 
-    public virtual void Write(IRedType instance, [CallerMemberName] string callerMemberName = "")
+    public virtual void Write(IRedType? instance, [CallerMemberName] string callerMemberName = "")
     {
+        ArgumentNullException.ThrowIfNull(instance);
+
         if (callerMemberName == nameof(WriteGeneric))
         {
             throw new Exception();
@@ -932,7 +939,7 @@ public class Red4Writer : IDisposable
 
     protected class ImportComparer : IEqualityComparer<ImportEntry>
     {
-        public bool Equals(ImportEntry x, ImportEntry y) => string.Equals(x.DepotPath, y.DepotPath);
+        public bool Equals(ImportEntry? x, ImportEntry? y) => string.Equals(x?.DepotPath, y?.DepotPath);
 
         public int GetHashCode(ImportEntry obj) => obj.DepotPath.GetHashCode();
     }

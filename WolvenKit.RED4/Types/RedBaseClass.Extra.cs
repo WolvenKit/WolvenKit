@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types;
 
 public partial class RedBaseClass
 {
-    public Dictionary<string, object> ToDictionary(bool clone = true)
+    public Dictionary<string, object?> ToDictionary(bool clone = true)
     {
         if (clone)
         {
@@ -12,7 +12,7 @@ public partial class RedBaseClass
             return copy.ToDictionary(false);
         }
 
-        var dict = new Dictionary<string, object>();
+        var dict = new Dictionary<string, object?>();
         foreach (var property in _properties)
         {
             if (property.Value is RedBaseClass rbc)
@@ -30,11 +30,11 @@ public partial class RedBaseClass
 
     #region XPath
 
-    public (bool, object) GetFromXPath(string xPath) => GetFromXPath(xPath.Split('.'));
+    public (bool, object?) GetFromXPath(string xPath) => GetFromXPath(xPath.Split('.'));
 
-    public (bool, IRedType) GetFromXPath(string[] xPath)
+    public (bool, IRedType?) GetFromXPath(string[] xPath)
     {
-        IRedType result = null;
+        IRedType? result = null;
         var currentProps = _properties;
         foreach (var part in xPath)
         {
@@ -59,7 +59,7 @@ public partial class RedBaseClass
                             return (false, null);
                         }
 
-                        result = (IRedType)lst[index];
+                        result = (IRedType?)lst[index];
                     }
                 }
 
@@ -71,7 +71,7 @@ public partial class RedBaseClass
                 if (result is IRedBaseHandle handle)
                 {
                     var cCls = handle.GetValue();
-                    currentProps = cCls._properties;
+                    currentProps = cCls?._properties;
                 }
 
                 continue;
@@ -123,7 +123,7 @@ public partial class RedBaseClass
             }
         }
 
-        IEnumerable<(string propPath, IRedType value)> ProcessValue(string propPath, IRedType value)
+        IEnumerable<(string propPath, IRedType value)> ProcessValue(string propPath, IRedType? value)
         {
             if (value == null)
             {
@@ -137,7 +137,7 @@ public partial class RedBaseClass
                 for (int i = 0; i < lst.Count; i++)
                 {
                     var arrPath = $"{propPath}:{i}";
-                    foreach (var tuple in ProcessValue(arrPath, (IRedType)lst[i]))
+                    foreach (var tuple in ProcessValue(arrPath, (IRedType?)lst[i]))
                     {
                         yield return tuple;
                     }

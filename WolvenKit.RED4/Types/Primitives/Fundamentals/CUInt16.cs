@@ -26,7 +26,7 @@ public readonly struct CUInt16 : IRedPrimitive<ushort>, IEquatable<CUInt16>, IRe
 
     public override int GetHashCode() => _value.GetHashCode();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

@@ -29,7 +29,7 @@ public class ExtendedEnumInfo
     public List<string> Names { get; set; } = new();
     public Dictionary<string, string> RedNames { get; set; } = new();
 
-    public string GetCSNameFromRedName(string valueName)
+    public string? GetCSNameFromRedName(string valueName)
     {
         if (Names.Contains(valueName))
         {

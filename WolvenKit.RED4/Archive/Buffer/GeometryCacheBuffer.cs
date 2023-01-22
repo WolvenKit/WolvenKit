@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Archive.Buffer;
 
 public class GeometryCacheBuffer : IParseableBuffer
 {
-    public IRedType Data => null;
+    public IRedType? Data => null;
 
     public CArray<GeometryCacheEntry> Entries { get; set; } = new();
 

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Archive.CR2W;
 
 public class CR2WMetaData
 {
-    public string FileName { get; set; }
+    public string? FileName { get; set; }
     public uint Version { get; set; } = 195;
     public uint BuildVersion { get; set; } = 0;
     public EHashVersion HashVersion { get; set; }
@@ -18,7 +18,7 @@ public class CR2WFile : Red4File, IDisposable, IEquatable<CR2WFile>
     public const uint DEADBEEF = 0xDEADBEEF;
 
 
-    public CR2WFileInfo Info { get; internal set; }
+    public CR2WFileInfo Info { get; internal set; } = new();
     public CR2WMetaData MetaData { get; set; } = new();
 
 
@@ -104,7 +104,7 @@ public class CR2WFile : Red4File, IDisposable, IEquatable<CR2WFile>
         return result;
     }
 
-    public (bool, IRedType) GetFromXPath(string xPath)
+    public (bool, IRedType?) GetFromXPath(string xPath)
     {
         var parts = xPath.Split('.');
 
@@ -155,7 +155,7 @@ public class CR2WFile : Red4File, IDisposable, IEquatable<CR2WFile>
 
     #endregion
 
-    public bool Equals(CR2WFile other)
+    public bool Equals(CR2WFile? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -188,7 +188,7 @@ public class CR2WFile : Red4File, IDisposable, IEquatable<CR2WFile>
         return true;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

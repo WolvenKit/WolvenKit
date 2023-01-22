@@ -2,6 +2,7 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Save.IO;
 using WolvenKit.RED4.Types;
+using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.RED4.Save;
 
@@ -23,9 +24,12 @@ public class PackageParser : INodeParser, IErrorHandler
         subReader.Settings.RedPackageType = redPackageType;
         subReader.ParsingError += HandleParsingError;
 
-        subReader.ReadBuffer(dummyBuffer);
+        if (subReader.ReadBuffer(dummyBuffer) != EFileReadErrorCodes.NoError)
+        {
+            throw new Exception();
+        }
 
-        node.Value = new Package { Content = dummyBuffer.Data };
+        node.Value = new Package { Content = dummyBuffer.Data! };
     }
 
     public virtual void Write(NodeWriter writer, NodeEntry node) => Write(writer, node, RedPackageType.InkLibResource);

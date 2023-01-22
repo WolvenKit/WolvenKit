@@ -14,7 +14,7 @@ public static class CNamePool
         AddOrGetHash("None");
     }
 
-    public static string ResolveHash(ulong hash)
+    public static string? ResolveHash(ulong hash)
     {
         if (s_poolReverse.TryGetValue(hash, out var value))
         {
@@ -40,6 +40,6 @@ public static class CNamePool
         return hash;
     }
 
-    public delegate string ExtResolveHash(ulong hash);
-    public static ExtResolveHash ResolveHashHandler;
+    public delegate string? ExtResolveHash(ulong hash);
+    public static ExtResolveHash? ResolveHashHandler;
 }

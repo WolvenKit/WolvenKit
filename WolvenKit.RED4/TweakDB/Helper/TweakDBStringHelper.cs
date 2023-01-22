@@ -139,19 +139,21 @@ public class TweakDBStringHelper
         }
     }
 
-    public string GetString(ulong key)
+    public string? GetString(ulong key)
     {
-        if (_recordHashes.ContainsKey(key))
+        if (_recordHashes.TryGetValue(key, out var name))
         {
-            return _recordHashes[key];
+            return name;
         }
-        if (_flatHashes.ContainsKey(key))
+
+        if (_flatHashes.TryGetValue(key, out name))
         {
-            return _flatHashes[key];
+            return name;
         }
-        if (_queryHashes.ContainsKey(key))
+
+        if (_queryHashes.TryGetValue(key, out name))
         {
-            return _queryHashes[key];
+            return name;
         }
 
         return null;
