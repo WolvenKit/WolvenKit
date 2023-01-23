@@ -448,7 +448,7 @@ namespace WolvenKit.Modkit.RED4
 
             UpdateSkinningParamCloth(ref Meshes, ref cr2w, args);
 
-            UpdateGarmentSupportParameters(Meshes, cr2w);
+            UpdateGarmentSupportParameters(Meshes, cr2w, args.ImportGarmentSupport);
 
             var expMeshes = Meshes.Select(_ => RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
 
@@ -1732,9 +1732,9 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w)
+        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = false)
         {
-            if (cr2w.RootChunk is CMesh cMesh)
+            if (importGarmentSupport && cr2w.RootChunk is CMesh cMesh)
             {
 
                 if (meshes.All(x => x.garmentMorph?.Length > 0 && x.garmentSupportWeight?.Length > 0))

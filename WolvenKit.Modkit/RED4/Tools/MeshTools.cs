@@ -31,7 +31,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public static bool ExportMesh(CR2WFile cr2w, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var model = GetModel(cr2w, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport);
+            var model = GetModel(cr2w, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport, exportGarmentSupport: meshExportArgs.ExportGarmentSupport);
 
             if (model == null)
             {
@@ -56,7 +56,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             return true;
         }
 
-        public static ModelRoot? GetModel(CR2WFile cr2w, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false)
+        public static ModelRoot? GetModel(CR2WFile cr2w, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false, bool exportGarmentSupport = false)
         {
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -81,7 +81,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 UpdateSkinningParamCloth(ref expMeshes, cr2w);
             }
 
-            WriteGarmentParametersToMesh(ref expMeshes, cMesh);
+            WriteGarmentParametersToMesh(ref expMeshes, cMesh, exportGarmentSupport);
 
             var model = RawMeshesToGLTF(expMeshes, rig, mergeMeshes);
 
@@ -1401,10 +1401,10 @@ namespace WolvenKit.Modkit.RED4.Tools
         /// </summary>
         /// <param name="meshes"></param>
         /// <param name="cMesh"></param>
-        public static void WriteGarmentParametersToMesh(ref List<RawMeshContainer> meshes, CMesh cMesh)
+        public static void WriteGarmentParametersToMesh(ref List<RawMeshContainer> meshes, CMesh cMesh, bool exportGarmentSupport = false)
         {
             var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
-            if (garmentBlob != null)
+            if (garmentBlob != null && exportGarmentSupport)
             {
                 var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk;
 
