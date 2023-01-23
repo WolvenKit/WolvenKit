@@ -14,17 +14,10 @@ namespace WolvenKit.Common.Model.Arguments
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class WkitScriptAccess : Attribute
     {
-        private readonly string _scriptName;
-        public string ScriptName
-        {
-            get => _scriptName;
-        }
+        public string ScriptName { get; }
 
         // by default the script name is the name of the property or class
-        public WkitScriptAccess([CallerMemberName] string scriptName = null)
-        {
-            _scriptName = scriptName;
-        }
+        public WkitScriptAccess([CallerMemberName] string scriptName = "") => ScriptName = scriptName;
     }
 
     /// <summary>
@@ -53,10 +46,10 @@ namespace WolvenKit.Common.Model.Arguments
         public List<uint> SelectedForExport { get; set; } = new();
 
         [Browsable(false)]
-        public string ModFolderPath { get; set; }
+        public string? ModFolderPath { get; set; }
 
         [Browsable(false)]
-        public string RawFolderPath { get; set; }
+        public string? RawFolderPath { get; set; }
 
         [Category("Export Settings")]
         [Display(Name = "Dump all information inside OpusInfo to Json.")]
@@ -88,10 +81,10 @@ namespace WolvenKit.Common.Model.Arguments
         /// Archive path for Console Morphtarget Export.
         /// </summary>
         [Browsable(false)]
-        public string ArchiveDepot { get; set; }
+        public string? ArchiveDepot { get; set; }
 
         [Browsable(false)]
-        public string ModFolderPath { get; set; }
+        public string? ModFolderPath { get; set; }
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
@@ -234,7 +227,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Select Additional Meshes")]
         [Description("Select additional meshes to be included within a single export.")]
         public List<FileEntry> MultiMeshMeshes { get; set; } = new();      // meshes?
-    
+
         /// <summary>
         /// MultiMesh Rig List.
         /// </summary>
@@ -249,7 +242,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("WithRig Settings")]
         [Display(Name = "Select Rig")]
         [Description("Select a rig to export within the mesh.")]
-        public List<FileEntry> Rig { get; set; }
+        public List<FileEntry> Rig { get; set; } = new();
 
         /// <summary>
         /// Uncook Format for material files. (DDS,TGA,PNG Etc)
@@ -270,13 +263,13 @@ namespace WolvenKit.Common.Model.Arguments
         /// Optional archive path for WithMaterials Mesh Export.
         /// </summary>
         [Browsable(false)]
-        public string ArchiveDepot { get; set; }
+        public string? ArchiveDepot { get; set; }
 
         /// <summary>
         /// Material Repository path for WithMaterials Mesh Export.
         /// </summary>
         [Browsable(false)]
-        public string MaterialRepo { get; set; }
+        public string? MaterialRepo { get; set; }
 
         /// <summary>
         /// Experimental merged export
@@ -306,7 +299,7 @@ namespace WolvenKit.Common.Model.Arguments
         public WemExportTypes wemExportType { get; set; } = WemExportTypes.Mp3;
 
         [Browsable(false)]
-        public string FileName { get; set; }
+        public string? FileName { get; set; }
 
         /// <summary>
         /// String Override to display info in datagrid.
@@ -344,7 +337,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// Archive path for Console Anims Export.
         /// </summary>
         [Browsable(false)]
-        public string ArchiveDepot { get; set; }
+        public string? ArchiveDepot { get; set; }
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>

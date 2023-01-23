@@ -66,7 +66,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         [Reactive] public bool CheckForUpdates { get; set; }
 
-        [Reactive] public string CP77ExePath { get; set; }
+        [Reactive] public string? CP77ExePath { get; set; }
 
         public string WikiHelpLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
 
@@ -84,14 +84,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
         #endregion Properties
 
         #region Commands
-
-        private void ExecuteFinish()
-        {
-            _settingsManager.CP77ExecutablePath = CP77ExePath;
-            _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
-            _settingsManager.Bounce();
-        }
-
 
         public ICommand OpenDepotPathCommand { get; private set; }
         public ICommand OpenCP77GamePathCommand { get; private set; }

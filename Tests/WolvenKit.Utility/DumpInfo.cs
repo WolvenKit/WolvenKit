@@ -39,7 +39,7 @@ namespace WolvenKit.Utility
             if (eventsInfo != null)
             {
                 var hash = eventsInfo.Key;
-                var archive = eventsInfo.Archive as Archive;
+                var archive = eventsInfo.GetArchive<Archive>();
 
                 using var originalMemoryStream = new MemoryStream();
                 ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
@@ -111,7 +111,7 @@ namespace WolvenKit.Utility
                 Parallel.ForEach(files, file =>
                 {
                     var hash = file.Key;
-                    var archive = file.Archive as Archive;
+                    var archive = file.GetArchive<Archive>();
 
                     try
                     {
@@ -263,7 +263,11 @@ namespace WolvenKit.Utility
                     {
                         continue;
                     }
-                    usedStrings.Add(str);
+                    if (!string.IsNullOrEmpty(str))
+                    {
+                        usedStrings.Add(str);
+                    }
+
                 }
                 usedStrings = usedStrings.OrderBy(x => x).Distinct().ToList();
                 File.WriteAllLines(usedhashtxt, usedStrings);
@@ -540,7 +544,7 @@ namespace WolvenKit.Utility
                 Parallel.ForEach(files, file =>
                 {
                     var hash = file.Key;
-                    var archive = file.Archive as Archive;
+                    var archive = file.GetArchive<Archive>();
 
                     try
                     {

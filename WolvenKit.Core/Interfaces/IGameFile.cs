@@ -10,8 +10,6 @@ public interface IGameFile
 {
     #region Properties
 
-    public IGameArchive Archive { get; set; }
-
     ulong Key { get; }
 
     string Name { get; }
@@ -28,6 +26,7 @@ public interface IGameFile
 
     public string Extension { get; }
     public string GuessedExtension { get; }
+    string FileName { get; }
 
 
     #endregion Properties
@@ -35,4 +34,6 @@ public interface IGameFile
     public void Extract(Stream output);
 
     public Task ExtractAsync(Stream output);
+    T GetArchive<T>() where T : IGameArchive;
+    IGameArchive GetArchive();
 }

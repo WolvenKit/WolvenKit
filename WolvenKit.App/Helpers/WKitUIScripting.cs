@@ -9,6 +9,7 @@ using Splat;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.Scripting;
@@ -23,7 +24,7 @@ public class WKitUIScripting : WKitScripting
     private readonly IProjectManager _projectManager;
 
     public WKitUIScripting(ILoggerService loggerService)
-        : base(loggerService) => _projectManager = Locator.Current.GetService<IProjectManager>();
+        : base(loggerService) => _projectManager = Locator.Current.GetService<IProjectManager>().NotNull();
 
     public void SuspendFileWatcher(bool suspend)
     {
@@ -38,23 +39,41 @@ public class WKitUIScripting : WKitScripting
         }
     }
 
-    public virtual void SaveToProject(string path, CR2WFile cr2w) =>
+    public virtual void SaveToProject(string path, CR2WFile cr2w)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return;
+        }
         SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
         {
             using FileStream fs = new(s, FileMode.Create);
             using var writer = new CR2WWriter(fs);
             writer.WriteFile(cr2w);
         });
+    }
 
-    public virtual void SaveToProject(string path, IGameFile gameFile) =>
+    public virtual void SaveToProject(string path, IGameFile gameFile)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return;
+        }
         SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
         {
             using FileStream fs = new(s, FileMode.Create);
             gameFile.Extract(fs);
         });
+    }
 
-    public virtual void SaveToRaw(string path, string content) =>
+    public virtual void SaveToRaw(string path, string content)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return;
+        }
         SaveAs(Path.Combine(_projectManager.ActiveProject.RawDirectory, path), s => File.WriteAllText(s, content));
+    }
 
     private void SaveAs(string path, Action<string> action)
     {
@@ -85,13 +104,15 @@ public class WKitUIScripting : WKitScripting
         // find all of the matching scriptable properties the script provided
         var exportArgs = new T();
         exportArgs.GetType().GetProperties()
-            .Where(_ =>
+            .Where(x =>
             {
-                var includeProp = Attribute.IsDefined(_, typeof(WkitScriptAccess));
+                var includeProp = Attribute.IsDefined(x, typeof(WkitScriptAccess));
                 if (includeProp)
                 {
-                    var scriptAccess = (WkitScriptAccess)Attribute.GetCustomAttribute(_, typeof(WkitScriptAccess));
-                    includeProp &= scriptSettingsObject.PropertyNames.Contains(scriptAccess.ScriptName);
+                    if (Attribute.GetCustomAttribute(x, typeof(WkitScriptAccess)) is WkitScriptAccess scriptAccess)
+                    {
+                        includeProp &= scriptSettingsObject.PropertyNames.Contains(scriptAccess.ScriptName);
+                    }
                 }
 
                 return includeProp;
@@ -99,22 +120,24 @@ public class WKitUIScripting : WKitScripting
             .ForEach(prop =>
             {
                 // now set their value
-                var scriptAccess = (WkitScriptAccess)Attribute.GetCustomAttribute(prop, typeof(WkitScriptAccess));
-                if (prop.PropertyType.IsEnum)
+                if (Attribute.GetCustomAttribute(prop, typeof(WkitScriptAccess)) is WkitScriptAccess scriptAccess)
                 {
-                    Enum.TryParse(prop.PropertyType, scriptSettingsObject[scriptAccess.ScriptName].ToString(), out var val);
-                    prop.SetValue(exportArgs, val);
-                }
-                else
-                {
-                    prop.SetValue(exportArgs, scriptSettingsObject[scriptAccess.ScriptName]);
+                    if (prop.PropertyType.IsEnum)
+                    {
+                        Enum.TryParse(prop.PropertyType, scriptSettingsObject[scriptAccess.ScriptName].ToString(), out var val);
+                        prop.SetValue(exportArgs, val);
+                    }
+                    else
+                    {
+                        prop.SetValue(exportArgs, scriptSettingsObject[scriptAccess.ScriptName]);
+                    }
                 }
             });
 
         return exportArgs;
     }
 
-    public void ExportFiles(dynamic exportList, dynamic exportSettings = null)
+    public void ExportFiles(dynamic exportList, dynamic? exportSettings = null)
     {
         // dynamic type checking
         // TODO: mix in hashes (V8 doesn't have a ulong equivalent though)
@@ -142,7 +165,7 @@ public class WKitUIScripting : WKitScripting
         }
 
         // get the export view model and clear the items
-        var expVM = Locator.Current.GetService<TextureExportViewModel>();
+        var expVM = Locator.Current.GetService<TextureExportViewModel>().NotNull();
         expVM.Items.ForEach(_ => _.IsChecked = false);
 
         // handle any settings if we have them
@@ -236,7 +259,7 @@ public class WKitUIScripting : WKitScripting
                 {
                     if (_projectManager.IsProjectLoaded)
                     {
-                        exportPath = Path.Combine(_projectManager.ActiveProject.ModDirectory, exportPath);
+                        exportPath = Path.Combine(_projectManager.ActiveProject.NotNull().ModDirectory, exportPath);
                     }
                     else
                     {
@@ -252,7 +275,7 @@ public class WKitUIScripting : WKitScripting
                 }
 
                 // Set the item to be checked
-                expVM.Items.Where(_ => _.FullName.EndsWith(exportPath, StringComparison.InvariantCultureIgnoreCase))
+                expVM.Items.Where(_ => _.BaseFile.EndsWith(exportPath, StringComparison.InvariantCultureIgnoreCase))
                     .ForEach(_ => _.IsChecked = true);
             }
         }

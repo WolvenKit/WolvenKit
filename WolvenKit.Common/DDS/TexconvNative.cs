@@ -11,10 +11,7 @@ public static class TexconvNative
 
         private bool disposed = false;
 
-        public ManagedBlob()
-        {
-            _blob = new Blob();
-        }
+        public ManagedBlob() => _blob = new Blob();
 
         public Blob GetBlob() => _blob;
         public byte[] GetBytes() => _blob.GetBytes();

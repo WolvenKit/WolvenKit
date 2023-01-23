@@ -22,10 +22,10 @@ namespace WolvenKit.Functionality.Other
             return bitmapImage;
         }
 
-        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, WolvenKit.Common.DDS.DXGI_FORMAT format) => 
+        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, WolvenKit.Common.DDS.DXGI_FORMAT format) =>
             Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
 
-        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, Enums.ETextureRawFormat format) => 
+        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, Enums.ETextureRawFormat format) =>
             Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace WolvenKit.Functionality.Other
         /// </summary>
         /// <param name="file">Absolute path of the file</param>
         /// <returns></returns>
-        public static Task<BitmapImage> RenderToBitmapImage(string file) =>
+        public static Task<BitmapImage?> RenderToBitmapImage(string file) =>
             Task.Run(() =>
             {
                 try
@@ -95,12 +95,11 @@ namespace WolvenKit.Functionality.Other
 
     public class XenConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value != null && (value as string) != "")
+            if (value != null && value is string s && !string.IsNullOrEmpty(s))
             {
-                var q = ImageDecoder.RenderToBitmapImage(value as string);
-                return q;
+                return ImageDecoder.RenderToBitmapImage(s);
             }
 
             return null;

@@ -12,6 +12,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App.Helpers;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 
@@ -29,11 +30,13 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         Document = new TextDocument();
         Extension = "wscript";
 
-        _loggerService = Locator.Current.GetService<ILoggerService>();
-        _scriptService = Locator.Current.GetService<ExtendedScriptService>();
+        _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
+        _scriptService = Locator.Current.GetService<ExtendedScriptService>().NotNull();
 
         _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService) } };
         GenerateCompletionData();
+
+        LoadDocument(path);
 
         this.WhenAnyValue(x => x._scriptService.IsRunning)
             .Subscribe(_ =>
@@ -46,33 +49,22 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     [Reactive] public TextDocument Document { get; set; }
     public string Extension { get; }
     [Reactive] public bool IsReadOnly { get; set; }
-    [Reactive] public string IsReadOnlyReason { get; set; }
-    public Dictionary<string, List<(string name, string desc)>> CompletionData { get; } = new();
+    [Reactive] public string? IsReadOnlyReason { get; set; }
+    public Dictionary<string, List<(string name, string? desc)>> CompletionData { get; } = new();
 
     [Reactive] public bool IsUIScript { get; set; }
     [Reactive] public bool IsNormalScript { get; set; }
 
     [RelayCommand(CanExecute = nameof(CanRun))]
-    private async void Run()
-    {
-        var code = Document.Text;
-
-        await _scriptService.ExecuteAsync(code, _hostObjects, ISettingsManager.GetWScriptDir());
-    }
+    private async void Run() => await _scriptService.ExecuteAsync(Document.Text, _hostObjects, ISettingsManager.GetWScriptDir());
     private bool CanRun() => !_scriptService.IsRunning;
 
     [RelayCommand(CanExecute = nameof(CanStop))]
-    private void Stop()
-    {
-        _scriptService.Stop();
-    }
+    private void Stop() => _scriptService.Stop();
     private bool CanStop() => _scriptService.IsRunning;
 
     [RelayCommand]
-    private void ReloadUI()
-    {
-        _scriptService.RefreshUIScripts();
-    }
+    private void ReloadUI() => _scriptService.RefreshUIScripts();
 
     private void GenerateCompletionData()
     {
@@ -80,7 +72,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
         foreach (var (name, instance) in _hostObjects)
         {
-            CompletionData.Add(name, new List<(string name, string desc)>());
+            CompletionData.Add(name, new List<(string name, string? desc)>());
 
             foreach (var methodInfo in instance.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public))
             {
@@ -102,33 +94,6 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         }
     }
 
-    public override Task<bool> OpenFileAsync(string path)
-    {
-        _isInitialized = false;
-
-        LoadDocument(path);
-
-        ContentId = path;
-        FilePath = path;
-        _isInitialized = true;
-
-        return Task.FromResult(true);
-    }
-
-    public override bool OpenFile(string path)
-    {
-        _isInitialized = false;
-
-        LoadDocument(path);
-
-        ContentId = path;
-        FilePath = path;
-        Header = Path.GetFileName(path);
-        _isInitialized = true;
-
-        return true;
-    }
-
     public override Task OnSave(object parameter)
     {
         using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
@@ -137,7 +102,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         bw.Close();
 
         SetIsDirty(false);
-        this.OpenFile(FilePath);
+        LoadDocument(FilePath);
 
         return Task.CompletedTask;
     }
@@ -168,10 +133,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         FilePath = paramFilePath;
         GetScriptType(Path.GetFileNameWithoutExtension(paramFilePath));
 
-        if (string.IsNullOrEmpty(Document.Text))
-        {
-            return;
-        }
+        _isInitialized = true;
     }
 
     private void GetScriptType(string fileName)

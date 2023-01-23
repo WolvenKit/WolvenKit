@@ -1,8 +1,8 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
-using WolvenKit.ViewModels.Documents;
 using Nodify;
+using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Functionality.Converters
 {

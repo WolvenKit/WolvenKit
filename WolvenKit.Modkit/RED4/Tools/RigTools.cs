@@ -5,15 +5,14 @@ using SharpGLTF.Schema2;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using Quat = System.Numerics.Quaternion;
+using Vec3 = System.Numerics.Vector3;
 
 namespace WolvenKit.Modkit.RED4.RigFile
 {
-    using Quat = System.Numerics.Quaternion;
-    using Vec3 = System.Numerics.Vector3;
-
     public class RIG
     {
-        public static RawArmature ProcessRig(CR2WFile cr2w)
+        public static RawArmature? ProcessRig(CR2WFile? cr2w)
         {
             if (cr2w == null || cr2w.RootChunk is not animRig animrig)
             {
@@ -24,7 +23,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
             {
                 BoneCount = animrig.BoneNames.Count,
                 Names = animrig.BoneNames.Select(_ => _.GetResolvedText()).ToArray(),
-                Parent = animrig.BoneParentIndexes.Select(_=>(short)_).ToArray(),
+                Parent = animrig.BoneParentIndexes.Select(_ => (short)_).ToArray(),
                 LocalPosn = animrig.BoneTransforms.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray(),
                 LocalRot = animrig.BoneTransforms.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray(),
                 LocalScale = animrig.BoneTransforms.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray(),
@@ -37,8 +36,8 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 {
                     Rig.AposeMSExits = true;
 
-                    Rig.AposeMSTrans = aRig.APoseMS.Select(p => new Vec3(p.Translation.X,p.Translation.Z, -p.Translation.Y)).ToArray();
-                    Rig.AposeMSRot = aRig.APoseMS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J,p.Rotation.R)).ToArray();
+                    Rig.AposeMSTrans = aRig.APoseMS.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray();
+                    Rig.AposeMSRot = aRig.APoseMS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray();
                     Rig.AposeMSScale = aRig.APoseMS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
                 }
 
@@ -80,12 +79,22 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
             for (var i = 0; i < rigs.Count; i++)
             {
+                var rig = rigs[i];
+
+                ArgumentNullException.ThrowIfNull(rig.AposeLSTrans);
+                ArgumentNullException.ThrowIfNull(rig.AposeLSScale);
+                ArgumentNullException.ThrowIfNull(rig.AposeLSRot);
+                ArgumentNullException.ThrowIfNull(rig.LocalPosn);
+                ArgumentNullException.ThrowIfNull(rig.LocalScale);
+                ArgumentNullException.ThrowIfNull(rig.LocalRot);
+                ArgumentNullException.ThrowIfNull(rig.Names);
+
                 for (var e = 0; e < rigs[i].BoneCount; e++)
                 {
                     var found = false;
                     for (var eye = 0; eye < BoneCount; eye++)
                     {
-                        if (Names[eye] == rigs[i].Names[e])
+                        if (Names[eye] == rig.Names[e])
                         {
                             found = true;
                             break;
@@ -93,18 +102,18 @@ namespace WolvenKit.Modkit.RED4.RigFile
                     }
                     if (!found)
                     {
-                        Names.Add(rigs[i].Names[e]);
+                        Names.Add(rig.Names[e]);
                         if (rigs[i].AposeLSExits)
                         {
-                            LocalPosn.Add(rigs[i].AposeLSTrans[e]);
-                            LocalScale.Add(rigs[i].AposeLSScale[e]);
-                            LocalRot.Add(rigs[i].AposeLSRot[e]);
+                            LocalPosn.Add(rig.AposeLSTrans[e]);
+                            LocalScale.Add(rig.AposeLSScale[e]);
+                            LocalRot.Add(rig.AposeLSRot[e]);
                         }
                         else
                         {
-                            LocalPosn.Add(rigs[i].LocalPosn[e]);
-                            LocalScale.Add(rigs[i].LocalScale[e]);
-                            LocalRot.Add(rigs[i].LocalRot[e]);
+                            LocalPosn.Add(rig.LocalPosn[e]);
+                            LocalScale.Add(rig.LocalScale[e]);
+                            LocalRot.Add(rig.LocalRot[e]);
                         }
                         BoneCount++;
                     }
@@ -119,12 +128,17 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
                 for (var e = 0; e < rigs.Count; e++)
                 {
-                    for (var eye = 0; eye < rigs[e].BoneCount; eye++)
+                    var rig = rigs[e];
+
+                    ArgumentNullException.ThrowIfNull(rig.Names);
+                    ArgumentNullException.ThrowIfNull(rig.Parent);
+
+                    for (var eye = 0; eye < rig.BoneCount; eye++)
                     {
-                        if (Names[i] == rigs[e].Names[eye])
+                        if (Names[i] == rig.Names[eye])
                         {
                             found = true;
-                            parentName = rigs[e].Names[rigs[e].Parent[eye]];
+                            parentName = rig.Names[rig.Parent[eye]];
                             break;
                         }
                     }
@@ -159,6 +173,15 @@ namespace WolvenKit.Modkit.RED4.RigFile
         }
         public static Dictionary<int, Node> ExportNodes(ref ModelRoot model, RawArmature srcBones)
         {
+            ArgumentNullException.ThrowIfNull(srcBones.Parent);
+            ArgumentNullException.ThrowIfNull(srcBones.Names);
+            ArgumentNullException.ThrowIfNull(srcBones.AposeLSScale);
+            ArgumentNullException.ThrowIfNull(srcBones.AposeLSRot);
+            ArgumentNullException.ThrowIfNull(srcBones.AposeLSTrans);
+            ArgumentNullException.ThrowIfNull(srcBones.LocalScale);
+            ArgumentNullException.ThrowIfNull(srcBones.LocalRot);
+            ArgumentNullException.ThrowIfNull(srcBones.LocalPosn);
+
             var bonesMapping = new Dictionary<int, Node>();
             var armature = model.UseScene(0).CreateNode("Armature");
             for (var i = 0; i < srcBones.BoneCount; i++)

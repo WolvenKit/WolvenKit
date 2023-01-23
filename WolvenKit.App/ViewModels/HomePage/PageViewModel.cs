@@ -1,6 +1,7 @@
 using System;
 using ReactiveUI;
 using Splat;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.ViewModels.HomePage
 {
@@ -13,11 +14,9 @@ namespace WolvenKit.ViewModels.HomePage
 
         protected PageViewModel(
             //HomePageViewModel homePageViewModel
-            )
-        {
+            ) =>
             //_homePageViewModel = homePageViewModel;
-            _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
-        }
+            _homePageViewModel = Locator.Current.GetService<HomePageViewModel>().NotNull();
 
 
     }

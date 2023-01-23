@@ -4,6 +4,7 @@ using System.IO;
 using Splat;
 using Syncfusion.Windows.Shared;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
@@ -15,13 +16,13 @@ namespace WolvenKit.Models
     {
         public string GetBrowsableName();
         public string GetBrowsableValue();
-        public string GetBrowsableType();
+        public string? GetBrowsableType();
     }
 
     public interface IBrowsableDictionary
     {
         public IEnumerable<string> GetPropertyNames();
-        public object GetPropertyValue(string name);
+        public object? GetPropertyValue(string name);
     }
 
     public interface ITweakXLItem : IRedType
@@ -31,11 +32,11 @@ namespace WolvenKit.Models
 
     public class TweakXLFile : List<ITweakXLItem>, IRedType, IBrowsableType
     {
-        public string GetBrowsableName() => null;
+        public string GetBrowsableName() => "";
 
         public string GetBrowsableValue() => "TweakXLFile";
 
-        public string GetBrowsableType() => null;
+        public string? GetBrowsableType() => null;
     }
 
     public class TweakXL : ITweakXLItem, IBrowsableType, IBrowsableDictionary
@@ -49,7 +50,7 @@ namespace WolvenKit.Models
         // eventually ITweakXLItem
         public RedDictionary<string, IRedType> Properties { get; set; } = new();
 
-        public IRedType Value { get; set; }
+        public IRedType? Value { get; set; }
 
         public TweakXL()
         {
@@ -87,7 +88,7 @@ namespace WolvenKit.Models
             }
         }
 
-        public virtual object GetPropertyValue(string name)
+        public virtual object? GetPropertyValue(string name)
         {
             if (name == "ID")
             {
@@ -109,7 +110,7 @@ namespace WolvenKit.Models
         }
     }
 
-    public class RedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IRedType
+    public class RedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IRedType where TKey : notnull
     {
 
     }
@@ -122,11 +123,11 @@ namespace WolvenKit.Models
 
         public CArray<ITweakXLItem> Items { get; set; } = new();
 
-        public string GetBrowsableName() => null;
+        public string GetBrowsableName() => "";
 
         public string GetBrowsableValue() => ID.GetResolvedText();
 
-        public string GetBrowsableType() => null;
+        public string? GetBrowsableType() => null;
 
         public IEnumerable<string> GetPropertyNames()
         {
@@ -144,7 +145,7 @@ namespace WolvenKit.Models
             }
         }
 
-        public object GetPropertyValue(string name)
+        public object? GetPropertyValue(string name)
         {
             if (name == "ID")
             {
@@ -182,7 +183,7 @@ namespace WolvenKit.Models
             }
         }
 
-        public override object GetPropertyValue(string name)
+        public override object? GetPropertyValue(string name)
         {
             if (name == "AppendType")
             {
@@ -275,7 +276,7 @@ namespace WolvenKit.Models
         {
             if (locKeyWrapper.Key != 0)
             {
-                var loc = Locator.Current.GetService<LocKeyService>().GetEntry(locKeyWrapper.Key);
+                var loc = Locator.Current.GetService<LocKeyService>().NotNull().GetEntry(locKeyWrapper.Key).NotNull();
 
                 if (!property.IsNullOrWhiteSpace())
                 {
@@ -347,7 +348,7 @@ namespace WolvenKit.Models
                             WriteLocKey(emitter, locKeyWrapper);
                             break;
                         default:
-                            emitter.Emit(new Scalar(redType.ToString()));
+                            emitter.Emit(new Scalar(redType.ToString().NotNull()));
                             break;
                     }
                 }
@@ -363,11 +364,15 @@ namespace WolvenKit.Models
 
         // TODO: Write a ChainedEventEmitter for the style switching
         // TODO: Maybe consider using WithTagMapping for "!append", "!append-once", etc.
-        public void WriteYaml(IEmitter emitter, object value, Type type)
+        public void WriteYaml(IEmitter emitter, object? value, Type type)
         {
             emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
+            if (value is not TweakXLFile tweakValue)
+            {
+                throw new ArgumentException("not a TweakXLFile", nameof(value));
+            }
 
-            foreach (var txlEntry in (TweakXLFile)value)
+            foreach (var txlEntry in tweakValue)
             {
                 // for now we're only assuming one "tweak" per file during serialization. is this correct?
                 // TODO: ViewModel probably needs to build ITweakXLItem for appends, etc.
@@ -392,7 +397,7 @@ namespace WolvenKit.Models
                         if (property == "Type")
                         {
                             emitter.Emit(new Scalar("$type"));
-                            emitter.Emit(new Scalar(txl.GetPropertyValue(property).ToString()));
+                            emitter.Emit(new Scalar(txl.GetPropertyValue(property).NotNull().ToString().NotNull()));
                             continue;
                         }
 
@@ -430,7 +435,7 @@ namespace WolvenKit.Models
                             // CString, CFloat, CBool, CInt32
                             default:
                                 emitter.Emit(new Scalar(propertyToWrite));
-                                emitter.Emit(new Scalar(propertyValue.ToString()));
+                                emitter.Emit(new Scalar(propertyValue.NotNull().ToString().NotNull()));
                                 break;
                         }
 
@@ -445,7 +450,7 @@ namespace WolvenKit.Models
         }
 
         // eventually ITweakXLItem
-        public IRedType ReadScalar(Scalar s, TweakDBService tdbs, Type type = null)
+        public IRedType ReadScalar(Scalar s, TweakDBService tdbs, Type? type = null)
         {
             // TODO get parent type & property name, look-up type if ambiguous?
             // TODO parse type strings
@@ -462,9 +467,9 @@ namespace WolvenKit.Models
             return (CString)s.Value;
         }
 
-        public ITweakXLItem ReadTweakXL(IParser parser, string id = null, Type type = null)
+        public ITweakXLItem? ReadTweakXL(IParser parser, string? id = null, Type? type = null)
         {
-            var _tdbs = Locator.Current.GetService<TweakDBService>();
+            var _tdbs = Locator.Current.GetService<TweakDBService>().NotNull();
             if (parser.TryConsume<SequenceStart>(out var _))
             {
                 var tweak = new TweakXLSequence();
@@ -478,7 +483,11 @@ namespace WolvenKit.Models
                 //}
                 while (!parser.TryConsume<SequenceEnd>(out var _))
                 {
-                    tweak.Items.Add(ReadTweakXL(parser));
+                    var x = ReadTweakXL(parser);
+                    if (x is not null)
+                    {
+                        tweak.Items.Add(x);
+                    }
                 }
                 return tweak;
             }
@@ -501,12 +510,12 @@ namespace WolvenKit.Models
                         //}
 
                         // eventually ITweakXLItem
-                        IRedType propertyValue = null;
+                        IRedType? propertyValue = null;
 
                         // regular property
                         if (parser.TryConsume<Scalar>(out var s))
                         {
-                            Type childType = null;
+                            Type? childType = null;
                             if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
                                 childType = _tdbs.GetType(tweak.Base + "." + propertyName);
@@ -521,7 +530,7 @@ namespace WolvenKit.Models
                             {
                                 childID = childID + "." + propertyName;
                             }
-                            Type childType = null;
+                            Type? childType = null;
                             if (tweak.Base != TweakDBID.Empty && propertyName != null)
                             {
                                 childType = _tdbs.GetType(tweak.Base + "." + propertyName);
@@ -546,33 +555,40 @@ namespace WolvenKit.Models
                             //}
                             while (!parser.TryConsume<SequenceEnd>(out var _))
                             {
-                                ((TweakXLSequence)propertyValue).Items.Add(ReadTweakXL(parser));
+                                var item = ReadTweakXL(parser);
+                                if (item is not null)
+                                {
+                                    ((TweakXLSequence)propertyValue).Items.Add(item);
+                                }
                             }
                         }
 
-                        if (propertyName == "$type")
+                        if (propertyValue is not null)
                         {
-                            // handle the various forms of "$type"
-                            var recordTypeStr = propertyValue.ToString();
-                            if (!recordTypeStr.EndsWith("_Record"))
+                            if (propertyName == "$type")
                             {
-                                recordTypeStr += "_Record";
-                            }
+                                // handle the various forms of "$type"
+                                var recordTypeStr = propertyValue.ToString().NotNull();
+                                if (!recordTypeStr.EndsWith("_Record"))
+                                {
+                                    recordTypeStr += "_Record";
+                                }
 
-                            if (!recordTypeStr.StartsWith("gamedata"))
+                                if (!recordTypeStr.StartsWith("gamedata"))
+                                {
+                                    recordTypeStr = "gamedata" + recordTypeStr;
+                                }
+
+                                tweak.Type = recordTypeStr;
+                            }
+                            else if (propertyName == "$base")
                             {
-                                recordTypeStr = "gamedata" + recordTypeStr;
+                                tweak.Base = propertyValue.ToString().NotNull();
                             }
-
-                            tweak.Type = recordTypeStr;
-                        }
-                        else if (propertyName == "$base")
-                        {
-                            tweak.Base = (TweakDBID)propertyValue.ToString();
-                        }
-                        else if (propertyName is not null and not "")
-                        {
-                            tweak.Properties[propertyName] = propertyValue;
+                            else if (propertyName is not null and not "")
+                            {
+                                tweak.Properties[propertyName] = propertyValue;
+                            }
                         }
                     }
                     else if (parser.Current is not MappingEnd)

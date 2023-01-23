@@ -23,5 +23,5 @@ public class JsonHeader
     public string DataType { get; set; } = DataTypes.Custom;
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public string ArchiveFileName { get; set; }
+    public string? ArchiveFileName { get; set; }
 }

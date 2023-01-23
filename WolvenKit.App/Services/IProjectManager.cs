@@ -9,11 +9,11 @@ namespace WolvenKit.Functionality.Services
         [Reactive]
         bool IsProjectLoaded { get; set; }
 
-        Cp77Project ActiveProject { get; set; }
+        Cp77Project? ActiveProject { get; set; }
 
         Task<bool> SaveAsync();
 
-        Task<bool> LoadAsync(string location);
+        Task<Cp77Project?> LoadAsync(string location);
 
     }
 }

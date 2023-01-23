@@ -20,6 +20,7 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Product>WolvenKit</Product>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+	<Nullable>Disable</Nullable>
   </PropertyGroup>
 	
   <PropertyGroup>

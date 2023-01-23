@@ -201,7 +201,7 @@ namespace WolvenKit.Core.Extensions
             }
         }
 
-        public static void WriteNullTerminatedString(this BinaryWriter bw, string text, Encoding encoding = null)
+        public static void WriteNullTerminatedString(this BinaryWriter bw, string text, Encoding? encoding = null)
         {
             encoding ??= Encoding.UTF8;
 

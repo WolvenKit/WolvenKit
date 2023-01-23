@@ -91,7 +91,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // write texture to file
-            DirectoryInfo subdir = null;
+            DirectoryInfo? subdir = null;
             if (args.AsList)
             {
                 subdir = new DirectoryInfo(Path.ChangeExtension(outfile.FullName, null) + "_layers");
@@ -99,6 +99,12 @@ namespace WolvenKit.Modkit.RED4
                 {
                     Directory.CreateDirectory(subdir.FullName);
                 }
+            }
+
+            if (subdir is null || outfile.Directory is null)
+            {
+                _loggerService.Error("directory was null");
+                return false;
             }
 
             var cnt = 0;
@@ -151,7 +157,7 @@ namespace WolvenKit.Modkit.RED4
                 streams.Add(new MemoryStream(img.SaveToDDSMemory()));
                 img.Dispose();
             }
-            
+
             return true;
         }
 

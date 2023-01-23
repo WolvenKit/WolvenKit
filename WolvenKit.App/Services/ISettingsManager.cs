@@ -19,15 +19,15 @@ namespace WolvenKit.Functionality.Services
 
         #endregion lifecyclestuff
 
-        string GetRED4OodleDll();
+        string? GetRED4OodleDll();
 
         string GetRED4GameRootDir();
 
         string GetRED4GameExecutablePath();
 
-        string GetRED4GameLaunchCommand();
+        string? GetRED4GameLaunchCommand();
 
-        string GetRED4GameLaunchOptions();
+        string? GetRED4GameLaunchOptions();
 
         public string GetRED4GameLegacyModDir();
         public string GetRED4GameModDir();

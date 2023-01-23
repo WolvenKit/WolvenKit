@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Models
 {
@@ -25,25 +26,17 @@ namespace WolvenKit.Models
         /// <returns></returns>
         public static bool RegistryValueExists(RegistryHive hive, string registryRoot, string valueName)
         {
-            RegistryKey root;
-            switch (hive)
+            var root = hive switch
             {
-                case RegistryHive.LocalMachine:
-                    root = Registry.LocalMachine.OpenSubKey(registryRoot, false);
-                    break;
-                case RegistryHive.CurrentUser:
-                    root = Registry.CurrentUser.OpenSubKey(registryRoot, false);
-                    break;
-                case RegistryHive.ClassesRoot:
-                case RegistryHive.Users:
-                case RegistryHive.PerformanceData:
-                case RegistryHive.CurrentConfig:
-                default:
-                    throw new System.InvalidOperationException("parameter registryRoot must be either \"HKLM\" or \"HKCU\"");
-            }
-
-            var r = root.GetValue(valueName) != null;
-            return r;
+                RegistryHive.LocalMachine => Registry.LocalMachine.OpenSubKey(registryRoot, false),
+                RegistryHive.CurrentUser => Registry.CurrentUser.OpenSubKey(registryRoot, false),
+                RegistryHive.ClassesRoot => throw new InvalidOperationException("parameter registryRoot must be either \"HKLM\" or \"HKCU\""),
+                RegistryHive.Users => throw new InvalidOperationException("parameter registryRoot must be either \"HKLM\" or \"HKCU\""),
+                RegistryHive.PerformanceData => throw new InvalidOperationException("parameter registryRoot must be either \"HKLM\" or \"HKCU\""),
+                RegistryHive.CurrentConfig => throw new InvalidOperationException("parameter registryRoot must be either \"HKLM\" or \"HKCU\""),
+                _ => throw new InvalidOperationException("parameter registryRoot must be either \"HKLM\" or \"HKCU\""),
+            };
+            return root?.GetValue(valueName) != null;
         }
 
 
@@ -230,7 +223,7 @@ namespace WolvenKit.Models
         public static void DirectoryMove(string SourcePath, string DestinationPath)
         {
             var oi = new DirectoryInfo(SourcePath);
-            var newdir = Path.Combine(oi.Parent.FullName, oi.Name + "_old");
+            var newdir = Path.Combine(oi.Parent.NotNull().FullName, oi.Name + "_old");
             oi.MoveTo(newdir);
             //Now Create all of the directories
             foreach (var dirPath in Directory.GetDirectories(newdir, "*",

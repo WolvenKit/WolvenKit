@@ -7,6 +7,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 
 namespace CP77Tools.Tasks;
 
@@ -68,7 +69,7 @@ public partial class ConsoleFunctions
         switch (path)
         {
             case FileInfo file:
-                var rawRelative = new RedRelativePath(file.Directory, file.GetRelativePath(file.Directory));
+                var rawRelative = new RedRelativePath(file.Directory.NotNull(), file.GetRelativePath(file.Directory));
                 // check if the file can be directly imported
                 // if not, rebuild the single file
                 if (!Enum.TryParse(rawRelative.Extension, true, out ERawFileFormat extAsEnum))
@@ -80,7 +81,7 @@ public partial class ConsoleFunctions
                     }
 
                     // outdir needs to be the parent dir of the redfile to rebuild !! (user needs to take care of that)
-                    if (_modTools.RebuildBuffer(rawRelative, outDirectory))
+                    if (_modTools.RebuildBuffer(rawRelative, outDirectory.NotNull()))
                     {
                         _loggerService.Success($"Successfully imported {path} to {outDirectory.FullName}");
                         return 0;

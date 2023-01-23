@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -20,15 +22,8 @@ namespace WolvenKit.Common.Services
 
         public LocKeyService()
         {
-            _parser = Locator.Current.GetService<Red4ParserService>();
-            _archive = Locator.Current.GetService<IArchiveManager>();
-            //_archive.WhenAnyValue(x => x.IsManagerLoaded).Subscribe(x =>
-            //{
-            //    if (x)
-            //    {
-            //        LoadCurrentLanguage();
-            //    }
-            //});
+            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
+            _archive = Locator.Current.GetService<IArchiveManager>().NotNull();
         }
 
         public void LoadCurrentLanguage() => (_primaryKeys[Language], _secondaryKeys[Language]) = Load("base\\localization\\en-us\\onscreens\\onscreens_final.json");
@@ -47,7 +42,7 @@ namespace WolvenKit.Common.Services
                 using var reader = new BinaryReader(stream);
                 var cr2wFile = _parser.ReadRed4File(reader);
 
-                if (cr2wFile.RootChunk is JsonResource json)
+                if (cr2wFile?.RootChunk is JsonResource json)
                 {
                     if (json.Root.Chunk is localizationPersistenceOnScreenEntries os)
                     {
@@ -83,22 +78,38 @@ namespace WolvenKit.Common.Services
             return _secondaryKeys[Language].Values.ToList();
         }
 
-        public localizationPersistenceOnScreenEntry GetEntry(ulong key)
+        public localizationPersistenceOnScreenEntry? GetEntry(ulong key)
         {
             if (!_primaryKeys.ContainsKey(Language))
             {
                 LoadCurrentLanguage();
             }
-            return _primaryKeys[Language].GetValueOrDefault(key, null);
+
+            if (_primaryKeys.TryGetValue(Language, out var outerdict))
+            {
+                if (outerdict.TryGetValue(key, out var innerdict))
+                {
+                    return innerdict;
+                }
+            }
+            return null;
         }
 
-        public localizationPersistenceOnScreenEntry GetEntry(string key)
+        public localizationPersistenceOnScreenEntry? GetEntry(string key)
         {
             if (!_secondaryKeys.ContainsKey(Language))
             {
                 LoadCurrentLanguage();
             }
-            return _secondaryKeys[Language].GetValueOrDefault(key, null);
+
+            if (_secondaryKeys.TryGetValue(Language, out var outerdict))
+            {
+                if (outerdict.TryGetValue(key, out var innerdict))
+                {
+                    return innerdict;
+                }
+            }
+            return null;
         }
 
         public string GetFemaleVariant(ulong key) => GetEntry(key)?.FemaleVariant ?? null;

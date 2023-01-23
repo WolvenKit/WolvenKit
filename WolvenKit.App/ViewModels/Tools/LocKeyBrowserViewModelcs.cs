@@ -7,6 +7,7 @@ using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
@@ -63,7 +64,7 @@ namespace WolvenKit.ViewModels.Tools
             _progressService = progressService;
             _gameController = gameController;
             _archive = archive;
-            _locKey = Locator.Current.GetService<LocKeyService>();
+            _locKey = Locator.Current.GetService<LocKeyService>().NotNull();
 
             //State = DockState.Document;
 
@@ -93,7 +94,7 @@ namespace WolvenKit.ViewModels.Tools
             this.RaisePropertyChanged(nameof(LocKeys));
         }
 
-        public ICollectionView LocKeys { get; set; }
+        public ICollectionView? LocKeys { get; set; }
 
         private string _searchText = "";
         public string SearchText
@@ -102,7 +103,9 @@ namespace WolvenKit.ViewModels.Tools
             set
             {
                 _searchText = value;
-                LocKeys.Filter = _searchText != ""
+                if (LocKeys != null)
+                {
+                    LocKeys.Filter = _searchText != ""
                     ? ((obj) =>
                     {
                         if (obj is localizationPersistenceOnScreenEntry entry)
@@ -115,12 +118,14 @@ namespace WolvenKit.ViewModels.Tools
                         return false;
                     })
                     : null;
+                }
+
                 this.RaisePropertyChanged(nameof(SearchText));
             }
         }
 
-        private localizationPersistenceOnScreenEntry _selectedLocKey;
-        public localizationPersistenceOnScreenEntry SelectedLocKey
+        private localizationPersistenceOnScreenEntry? _selectedLocKey;
+        public localizationPersistenceOnScreenEntry? SelectedLocKey
         {
             get => _selectedLocKey;
             set

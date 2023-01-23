@@ -35,8 +35,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 Classes = new ObservableCollection<string>(_typeMap.Keys);
             }
 
-            OkCommand = ReactiveCommand.Create(() => DialogHandler(this), CanOk);
-            CancelCommand = ReactiveCommand.Create(() => DialogHandler(null));
+            OkCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(this), CanOk);
+            CancelCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(null));
         }
 
         public override ReactiveCommand<Unit, Unit> OkCommand { get; }
@@ -45,15 +45,25 @@ namespace WolvenKit.App.ViewModels.Dialogs
         private IObservable<bool> CanOk =>
             this.WhenAnyValue(
                 x => x.SelectedClass,
-                (c) => Classes.Contains(c)
+                (c) => c is not null && Classes.Contains(c)
             );
 
         [Reactive] public ObservableCollection<string> Classes { get; set; }
 
         [Reactive] public ObservableCollection<string> ExistingClasses { get; set; }
 
-        [Reactive] public string SelectedClass { get; set; }
+        [Reactive] public string? SelectedClass { get; set; }
 
-        public Type SelectedType => _typeMap[SelectedClass];
+        public Type? SelectedType
+        {
+            get
+            {
+                if (SelectedClass == null)
+                {
+                    return null;
+                }
+                return _typeMap[SelectedClass];
+            }
+        }
     }
 }

@@ -65,18 +65,18 @@ namespace WolvenKit.MVVM.Model
         /// <param name="cancellationToken">A cancellation token. If invoked, the task will return
         /// immediately as canceled.</param>
         /// <returns>A Task representing waiting for the process to end.</returns>
-        public static Task WaitForExitAsync(this Process process, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var tcs = new TaskCompletionSource<object>();
-            process.EnableRaisingEvents = true;
-            process.Exited += (sender, args) => tcs.TrySetResult(null);
-            if (cancellationToken != default(CancellationToken))
-            {
-                cancellationToken.Register(tcs.SetCanceled);
-            }
+        //public static Task WaitForExitAsync(this Process process, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    var tcs = new TaskCompletionSource<object>();
+        //    process.EnableRaisingEvents = true;
+        //    process.Exited += (sender, args) => tcs.TrySetResult(null);
+        //    if (cancellationToken != default(CancellationToken))
+        //    {
+        //        cancellationToken.Register(tcs.SetCanceled);
+        //    }
 
-            return tcs.Task;
-        }
+        //    return tcs.Task;
+        //}
 
         private static int RunProcess(Process process, params string[] commands)
         {

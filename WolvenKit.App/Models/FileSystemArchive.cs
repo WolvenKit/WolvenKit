@@ -16,7 +16,7 @@ public class FileSystemArchive : ICyberGameArchive
     public string ArchiveAbsolutePath { get; set; }
     public string ArchiveRelativePath { get; set; }
     public Dictionary<ulong, IGameFile> Files { get; set; } = new();
-    public string Name { get; set; }
+    public string Name { get; }
     public EArchiveType TypeName { get; set; }
     public bool CanUncook(ulong hash) => throw new System.NotImplementedException();
 
@@ -44,6 +44,10 @@ public class FileSystemArchive : ICyberGameArchive
 
     public FileSystemArchive(string modDirectory)
     {
+        ArchiveAbsolutePath = ""; // TODO ???
+        ArchiveRelativePath = ""; // TODO ???
+        Name = ""; // TODO ???
+
         if (string.IsNullOrEmpty(modDirectory) || !Directory.Exists(modDirectory))
         {
             throw new ArgumentException(nameof(modDirectory));
@@ -56,7 +60,7 @@ public class FileSystemArchive : ICyberGameArchive
             _filePaths.Add(hash, filePath);
             Files.Add(hash, new FileEntry
             {
-                Archive = this,
+                //Archive = this, // TODO ???
                 NameHash64 = hash
             });
         }

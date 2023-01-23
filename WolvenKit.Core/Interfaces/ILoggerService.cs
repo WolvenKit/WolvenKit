@@ -1,8 +1,10 @@
 using System;
 using DynamicData;
 using Microsoft.Build.Framework;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Core.Interfaces;
 
@@ -28,4 +30,7 @@ public interface ILoggerService
     public LoggerVerbosity LoggerVerbosity { get; }
 
     public void SetLoggerVerbosity(LoggerVerbosity verbosity);
+
+
+    public static ILoggerService GetUnsafe() => Locator.Current.GetService<ILoggerService>().NotNull();
 }

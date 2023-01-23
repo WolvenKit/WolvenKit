@@ -15,6 +15,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Opus;
@@ -44,8 +45,8 @@ namespace WolvenKit.Modkit.RED4
             ulong hash,
             DirectoryInfo outDir,
             GlobalExportArgs args,
-            DirectoryInfo rawOutDir = null,
-            ECookedFileFormat[] forcebuffers = null,
+            DirectoryInfo? rawOutDir = null,
+            ECookedFileFormat[]? forcebuffers = null,
             bool serialize = false)
         {
             if (!archive.Files.TryGetValue(hash, out var gameFile))
@@ -152,8 +153,8 @@ namespace WolvenKit.Modkit.RED4
             ulong hash,
             DirectoryInfo outDir,
             GlobalExportArgs args,
-            DirectoryInfo rawOutDir = null,
-            ECookedFileFormat[] forcebuffers = null,
+            DirectoryInfo? rawOutDir = null,
+            ECookedFileFormat[]? forcebuffers = null,
             bool serialize = false)
         {
             if (!archive.Files.TryGetValue(hash, out var gameFile))
@@ -266,10 +267,10 @@ namespace WolvenKit.Modkit.RED4
             DirectoryInfo outDir,
             GlobalExportArgs args,
             bool unbundle = false,
-            string pattern = "",
-            string regex = "",
-            DirectoryInfo rawOutDir = null,
-            ECookedFileFormat[] forcebuffers = null,
+            string? pattern = null,
+            string? regex = null,
+            DirectoryInfo? rawOutDir = null,
+            ECookedFileFormat[]? forcebuffers = null,
             bool serialize = false)
         {
             var extractedList = new ConcurrentBag<string>();
@@ -277,7 +278,7 @@ namespace WolvenKit.Modkit.RED4
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
-            var totalInArchiveCount = ar.Files?.Count ?? 0;
+            var totalInArchiveCount = ar.Files.Count;
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
@@ -354,7 +355,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="rawOutDir">the output directory. the outfile is conbined from the rawoutdir and the relative path</param>
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
-        private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[] forcebuffers = null)
+        private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[]? forcebuffers = null)
         {
             var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, $"{relPath.Replace('\\', Path.DirectorySeparatorChar)}"));
             if (outfile.Directory == null)
@@ -401,7 +402,7 @@ namespace WolvenKit.Modkit.RED4
             // wems are not cr2w files, need to be handled first
             if (extAsEnum == ECookedFileFormat.wem)
             {
-                if (settings.Get<WemExportArgs>() is { } wemaArgs)
+                if (settings.Get<WemExportArgs>() is { } wemaArgs && wemaArgs.FileName is not null)
                 {
                     var wemoutfile = Path.ChangeExtension(outfile.FullName, wemaArgs.wemExportType.ToString());
                     UncookWem(wemaArgs.FileName, wemoutfile);
@@ -558,6 +559,8 @@ namespace WolvenKit.Modkit.RED4
                 {
                     return UncookInkAtlas(cr2wStream, outfile);
                 }
+
+                case ECookedFileFormat.wem:
                 default:
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
@@ -565,6 +568,9 @@ namespace WolvenKit.Modkit.RED4
 
         private static bool HandleOpus(OpusExportArgs opusExportArgs)
         {
+            ArgumentNullException.ThrowIfNull(opusExportArgs.ModFolderPath, nameof(opusExportArgs.ModFolderPath));
+            ArgumentNullException.ThrowIfNull(opusExportArgs.RawFolderPath, nameof(opusExportArgs.RawFolderPath));
+
             OpusTools opusTools = new(
                 opusExportArgs.ModFolderPath,
                 opusExportArgs.RawFolderPath,
@@ -584,11 +590,13 @@ namespace WolvenKit.Modkit.RED4
 
         private string SerializeMainFile(Stream redstream)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(redstream);
-            var dto = new RedFileDto(cr2w);
-            var json = RedJsonSerializer.Serialize(dto);
-
-            return json;
+            if (_wolvenkitFileService.TryReadRed4File(redstream, out var cr2w))
+            {
+                var dto = new RedFileDto(cr2w);
+                var json = RedJsonSerializer.Serialize(dto);
+                return json;
+            }
+            throw new Red4ParserException();
         }
 
         private bool UncookInkAtlas(Stream redStream, FileInfo outFile)
@@ -639,32 +647,34 @@ namespace WolvenKit.Modkit.RED4
             void ExtractParts(CName texturePath, CArray<inkTextureAtlasMapper> parts, string outDir)
             {
                 var xbmFile = _archiveManager.Lookup(texturePath);
-                
-                if(xbmFile == null)
+
+                if (xbmFile == null)
                 {
-                    _loggerService.Error(String.Format("File: {0} was not found in any archive.", texturePath));
+                    _loggerService.Error(string.Format("File: {0} was not found in any archive.", texturePath));
                     return;
                 }
 
                 if (xbmFile.HasValue)
-                { 
+                {
                     Directory.CreateDirectory(outDir);
 
                     using var ms = new MemoryStream();
                     xbmFile.Value.Extract(ms);
                     ms.Seek(0, SeekOrigin.Begin);
 
-                    var img = RedImage.FromRedFile(_wolvenkitFileService.ReadRed4File(ms));
-
-                    foreach (var part in parts)
+                    if (_wolvenkitFileService.TryReadRed4File(ms, out var file))
                     {
-                        var x = Math.Round(part.ClippingRectInUVCoords.Left * img.Metadata.Width);
-                        var y = Math.Round(part.ClippingRectInUVCoords.Top * img.Metadata.Height);
-                        var width = Math.Round(part.ClippingRectInUVCoords.Right * img.Metadata.Width) - x;
-                        var height = Math.Round(part.ClippingRectInUVCoords.Bottom * img.Metadata.Height) - y;
+                        var img = RedImage.FromRedFile(file);
+                        foreach (var part in parts)
+                        {
+                            var x = Math.Round(part.ClippingRectInUVCoords.Left * img.Metadata.Width);
+                            var y = Math.Round(part.ClippingRectInUVCoords.Top * img.Metadata.Height);
+                            var width = Math.Round(part.ClippingRectInUVCoords.Right * img.Metadata.Width) - x;
+                            var height = Math.Round(part.ClippingRectInUVCoords.Bottom * img.Metadata.Height) - y;
 
-                        var croppedImg = img.Crop((int)x, (int)y, (int)width, (int)height);
-                        croppedImg.SaveToPNG(Path.Combine(outDir, $"{part.PartName}.png"));
+                            var croppedImg = img.Crop((int)x, (int)y, (int)width, (int)height);
+                            croppedImg.SaveToPNG(Path.Combine(outDir, $"{part.PartName}.png"));
+                        }
                     }
                 }
             }
@@ -710,6 +720,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (meshExportArgs.withMaterials)
             {
+                if (meshExportArgs.MaterialRepo is null)
+                {
+                    _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
+                    return false;
+                }
                 ParseMaterials(cr2w, meshStream, outfile, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension);
             }
 
@@ -737,13 +752,14 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-        public bool ExportMultiMeshWithRig(Dictionary<Stream, String> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportMultiMeshWithRig(Dictionary<Stream, string> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             var Rigs = new List<RawArmature>();
             foreach (var rigStream in rigStreamS)
             {
                 var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
-                Rigs.Add(Rig);
+
+                Rigs.Add(Rig.NotNull());
 
                 rigStream.Dispose();
                 rigStream.Close();
@@ -751,7 +767,7 @@ namespace WolvenKit.Modkit.RED4
             var expRig = RIG.CombineRigs(Rigs);
 
             var expMeshes = new List<RawMeshContainer>();
-            List<MatData> matData = new List<MatData>();
+            var matData = new List<MatData>();
             foreach (var meshStream in meshStreamS.Keys)
             {
                 var cr2w = _red4ParserService.ReadRed4File(meshStream);
@@ -773,6 +789,11 @@ namespace WolvenKit.Modkit.RED4
 
                 if (meshExportArgs.withMaterials)
                 {
+                    if (meshExportArgs.MaterialRepo is null)
+                    {
+                        _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
+                        return false;
+                    }
                     matData.Add(SetupMaterial(cr2w, meshStream, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension));
                 }
 
@@ -781,7 +802,7 @@ namespace WolvenKit.Modkit.RED4
                 meshStream.Dispose();
                 meshStream.Close();
             }
-            var model = MeshTools.RawMeshesToGLTF(expMeshes, expRig, withMaterials:meshExportArgs.withMaterials);
+            var model = MeshTools.RawMeshesToGLTF(expMeshes, expRig, withMaterials: meshExportArgs.withMaterials);
 
             SaveMaterials(outfile, matData);
 
@@ -806,11 +827,7 @@ namespace WolvenKit.Modkit.RED4
         public bool ExportMesh(Stream meshStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             var archives = meshExportArgs.Archives;
-            var matRepo = meshExportArgs.MaterialRepo;
             var eUncookExtension = meshExportArgs.MaterialUncookExtension;
-            var isGLBinary = meshExportArgs.isGLBinary;
-            var LodFilter = meshExportArgs.LodFilter;
-            var mergeMeshes = meshExportArgs.ExperimentalMergedExport;
 
             var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
@@ -825,7 +842,12 @@ namespace WolvenKit.Modkit.RED4
 
             if (meshExportArgs.withMaterials)
             {
-                ParseMaterials(cr2w, meshStream, outfile, archives, matRepo, meshesinfo, eUncookExtension);
+                if (meshExportArgs.MaterialRepo is null)
+                {
+                    _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
+                    return false;
+                }
+                ParseMaterials(cr2w, meshStream, outfile, archives, meshExportArgs.MaterialRepo, meshesinfo, eUncookExtension);
             }
 
             return MeshTools.ExportMesh(cr2w, outfile, meshExportArgs, vmode);
@@ -840,13 +862,13 @@ namespace WolvenKit.Modkit.RED4
 
                 case MeshExportType.WithRig:
                 {
-                    var entry = meshargs.Rig.FirstOrDefault();
-                    if (entry == null)
+                    var entry = meshargs.Rig?.FirstOrDefault();
+                    if (entry is null)
                     {
                         return false;
                     }
 
-                    var ar = entry.Archive as Archive;
+                    var ar = entry.Archive;
                     using var ms = new MemoryStream();
                     ar?.CopyFileToStream(ms, entry.NameHash64, false);
 
@@ -864,7 +886,7 @@ namespace WolvenKit.Modkit.RED4
                     var rigstreams = rigs.Select(
                             delegate (FileEntry entry)
                             {
-                                var ar = entry.Archive as Archive;
+                                var ar = entry.Archive;
                                 var ms = new MemoryStream();
                                 ar?.CopyFileToStream(ms, entry.NameHash64, false);
                                 return (Stream)ms;
@@ -875,10 +897,10 @@ namespace WolvenKit.Modkit.RED4
                     var meshstreams = meshes.Select(
                               delegate (FileEntry entry)
                               {
-                                  var ar = entry.Archive as Archive;
+                                  var ar = entry.Archive;
                                   var ms = new MemoryStream();
                                   ar?.CopyFileToStream(ms, entry.NameHash64, false);
-                                  return new KeyValuePair<Stream, String>((Stream)ms, entry.FileName);
+                                  return new KeyValuePair<Stream, string>(ms, entry.FileName);
                               }).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
 

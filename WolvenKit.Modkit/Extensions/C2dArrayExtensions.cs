@@ -62,7 +62,7 @@ namespace WolvenKit.Modkit.Extensions
             }
 
             // read elements
-            string line;
+            string? line;
             var cnt = 0;
             while ((line = sr.ReadLine()) != null)
             {

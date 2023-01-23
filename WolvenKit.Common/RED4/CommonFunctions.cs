@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.CR2W;
 
 public static class CommonFunctions
 {
-    public static string GetResourceClassesFromExtension(ERedExtension extension)
+    public static string? GetResourceClassesFromExtension(ERedExtension extension)
     {
         foreach (var fileType in FileTypeHelper.FileTypes)
         {
@@ -125,6 +125,7 @@ public static class CommonFunctions
         ETextureCompression outCompression;
         int outPixelSize;
 
+#pragma warning disable IDE0010 // Add missing cases
         switch (texFormat)
         {
             case DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT:
@@ -178,6 +179,7 @@ public static class CommonFunctions
                 outPixelSize = 4;
                 break;
         }
+#pragma warning restore IDE0010 // Add missing cases
 
         return (outRawFormat, outCompression, outPixelSize);
     }

@@ -8,8 +8,6 @@ namespace WolvenKit.ViewModels.Documents
 {
     public interface IDocumentViewModel : IDockElement
     {
-        #region Properties
-
         /// <summary>
         /// Gets the current path of the file being managed in this document viewmodel.
         /// </summary>
@@ -29,14 +27,6 @@ namespace WolvenKit.ViewModels.Documents
 
         string ContentId { get; }
 
-        #endregion Properties
-
-        #region Methods
-
-        Task<bool> OpenFileAsync(string path);
-
-        bool OpenFile(string path);
-
-        #endregion Methods
+        bool IsInitialized();
     }
 }

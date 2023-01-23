@@ -9,11 +9,8 @@ public class RedTypeDto
 
     }
 
-    public RedTypeDto(IRedType cls)
-    {
-        Data = cls;
-    }
+    public RedTypeDto(IRedType cls) => Data = cls;
 
     public JsonHeader Header { get; set; } = new();
-    public IRedType Data { get; set; }
+    public IRedType? Data { get; set; }
 }

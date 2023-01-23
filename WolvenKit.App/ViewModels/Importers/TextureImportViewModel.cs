@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
@@ -23,24 +20,34 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Opus;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Importers;
 
 public abstract partial class ImportViewModel : ImportExportViewModel
 {
-
+    protected ImportViewModel(string header, string contentId) : base(header, contentId)
+    {
+    }
 }
 
 public partial class TextureImportViewModel : ImportViewModel
 {
+    private ILoggerService _loggerService;
+    private INotificationService _notificationService;
+    private ISettingsManager _settingsManager;
+    private IWatcherService _watcherService;
+    private IProgressService<double> _progressService;
+    private IProjectManager _projectManager;
+    private IGameControllerFactory _gameController;
+    private IArchiveManager _archiveManager;
+    private IPluginService _pluginService;
+    private IModTools _modTools;
+
     public TextureImportViewModel(
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
@@ -51,7 +58,7 @@ public partial class TextureImportViewModel : ImportViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
-        IProgressService<double> progressService)
+        IProgressService<double> progressService) : base("Import Tool", "Import Tool")
     {
         _gameController = gameController;
         _settingsManager = settingsManager;
@@ -65,12 +72,7 @@ public partial class TextureImportViewModel : ImportViewModel
         _progressService = progressService;
 
         LoadFiles();
-
-        Header = Name;
     }
-
-    public override string Name => "Import Tool";
-
 
     #region Commands
 
@@ -85,7 +87,7 @@ public partial class TextureImportViewModel : ImportViewModel
             }
 
             // set default settings from filename
-            item.Properties = (item as ImportableItemViewModel).LoadXbmDefaultSettings();
+            item.Properties = ImportableItemViewModel.LoadXbmDefaultSettings(item.BaseFile);
             _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed filename");
         }
     }
@@ -101,7 +103,7 @@ public partial class TextureImportViewModel : ImportViewModel
             }
 
             // import settings from vanilla
-            item.Properties = (item as ImportableItemViewModel).LoadXbmSettingsFromGame();
+            item.Properties = ImportableItemViewModel.LoadXbmSettingsFromGame(item.BaseFile);
             _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed game file");
         }
     }
@@ -140,7 +142,7 @@ public partial class TextureImportViewModel : ImportViewModel
             }
             else // not successful
             {
-                failedItems.Add(item.FullName);
+                failedItems.Add(item.BaseFile);
             }
 
             Interlocked.Increment(ref progress);
@@ -149,7 +151,7 @@ public partial class TextureImportViewModel : ImportViewModel
 
         await ImportWavs(Items.Where(_ => all || _.IsChecked)
             .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
-            .Select(x => x.FullName)
+            .Select(x => x.BaseFile)
             .ToList()
             );
 
@@ -181,6 +183,11 @@ public partial class TextureImportViewModel : ImportViewModel
         }
 
         var proj = _projectManager.ActiveProject;
+        if (proj is null)
+        {
+            return Task.FromResult(false);
+        }
+
         if (_gameController.GetController() is RED4Controller cp77Controller)
         {
             OpusTools opusTools = new(
@@ -202,41 +209,54 @@ public partial class TextureImportViewModel : ImportViewModel
         }
 
         var proj = _projectManager.ActiveProject;
-        var fi = new FileInfo(item.FullName);
-        if (fi.Exists)
+        if (proj is null)
         {
-            if (item.Properties is GltfImportArgs gltfImportArgs)
+            return false;
+        }
+
+        var fi = new FileInfo(item.BaseFile);
+        if (!fi.Exists)
+        {
+            return false;
+
+        }
+
+        if (item.Properties is not ImportArgs prop)
+        {
+            throw new ArgumentException("incorrect type, expected ImportArgs", nameof(item));
+        }
+
+        if (item.Properties is GltfImportArgs gltfImportArgs)
+        {
+            gltfImportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+            gltfImportArgs.Archives.Insert(0, new FileSystemArchive(proj.ModDirectory));
+        }
+
+        if (item.Properties is ReImportArgs reImportArgs)
+        {
+            if (!_pluginService.IsInstalled(EPlugin.redmod))
             {
-                gltfImportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                gltfImportArgs.Archives.Insert(0, new FileSystemArchive(_projectManager.ActiveProject.ModDirectory));
+                _loggerService.Error("Redmod plugin needs to be installed to import animations");
+                return false;
             }
 
-            if (item.Properties is ReImportArgs reImportArgs)
-            {
-                if (!_pluginService.IsInstalled(EPlugin.redmod))
-                {
-                    _loggerService.Error("Redmod plugin needs to be installed to import animations");
-                    return false;
-                }
+            reImportArgs.Depot = proj.ModDirectory;
+            reImportArgs.RedMod = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        }
 
-                reImportArgs.Depot = proj.ModDirectory;
-                reImportArgs.RedMod = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
-            }
 
-            var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
-            var rawDir = new DirectoryInfo(proj.RawDirectory);
-            var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
+        var settings = new GlobalImportArgs().Register(prop);
+        var rawDir = new DirectoryInfo(proj.RawDirectory);
+        var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
 
-            try
-            {
-                return await _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error($"Could not import {item.Name}");
-                _loggerService.Error(e);
-            }
-
+        try
+        {
+            return await _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error($"Could not import {item.Name}");
+            _loggerService.Error(e);
         }
 
         return false;
@@ -298,32 +318,53 @@ public partial class TextureImportViewModel : ImportViewModel
                 break;
         }
 
-        IEnumerable<CollectionItemViewModel<FileEntry>> selectedItems = null;
+        List<IDisplayable> selectedItems = new();
         if (selectedEntries is not null)
         {
-            selectedItems = selectedEntries.Select(_ => new CollectionItemViewModel<FileEntry>(_));
+            selectedItems = selectedEntries
+                .Select(_ => new CollectionItemViewModel<FileEntry>(_))
+                .Cast<IDisplayable>()
+                .ToList();
         }
 
         var availableItems = _archiveManager
             .GetGroupedFiles()[$".{fetchExtension}"]
-            .Select(_ => new CollectionItemViewModel<FileEntry>(_)).GroupBy(x => x.Name)
-            .Select(x => x.First());
+            .Select(x => new CollectionItemViewModel<FileEntry>((FileEntry)x))
+            .GroupBy(x => x.Name)
+            .Select(x => x.First())
+            .Cast<IDisplayable>()
+            .ToList();
 
         // open dialogue
-        var result = await Interactions.ShowCollectionView.Handle((availableItems, selectedItems));
+        if ((availableItems, selectedItems) is not (IEnumerable<IDisplayable>, IEnumerable<IDisplayable>) a)
+        {
+            throw new NotImplementedException();
+        }
+
+        var result = await Interactions.ShowCollectionView.Handle(a);
         if (result is not null)
         {
             switch (args.PropertyName)
             {
                 case nameof(GltfImportArgs.Rig):
-                    gltfImportArgs.Rig = new List<FileEntry>() { result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault() };
-                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                    var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
+                    if (rig is not null)
+                    {
+                        gltfImportArgs.Rig = new List<FileEntry>() { rig };
+                        _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                    }
+
                     gltfImportArgs.ImportFormat = GltfImportAsFormat.MeshWithRig;
                     break;
 
                 case nameof(GltfImportArgs.BaseMesh):
-                    gltfImportArgs.BaseMesh = new List<FileEntry>() { result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault() };
-                    _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
+                    var mesh = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
+                    if (mesh is not null)
+                    {
+                        gltfImportArgs.BaseMesh = new List<FileEntry>() { };
+                        _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
+                    }
+
                     gltfImportArgs.ImportFormat = GltfImportAsFormat.Mesh;
                     break;
 
@@ -332,6 +373,4 @@ public partial class TextureImportViewModel : ImportViewModel
             }
         }
     }
-
-    public Cp77Project GetActiveProject() => _projectManager.ActiveProject;
 }

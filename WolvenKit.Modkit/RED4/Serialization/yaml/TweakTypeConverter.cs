@@ -40,20 +40,20 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
             if (IsArray(type))
             {
                 var innertype = type.GetGenericArguments()[0];
-                var array = (IRedArray)Activator.CreateInstance(
+                if (Activator.CreateInstance(
                     typeof(CArray<>).MakeGenericType(innertype),
                     BindingFlags.Instance | BindingFlags.Public,
                     binder: null,
                     args: null,
-                    culture: null);
-                if (array is null)
+                    culture: null) is not IRedArray array)
                 {
                     throw new InvalidDataException();
                 }
 
                 // read values
                 parser.SafeReadScalarValue(s_valueName);
-                if (parser.Current.GetType() != _sequenceStartType)
+                var c = parser.Current ?? throw new InvalidDataException("Invalid YAML content.");
+                if (c.GetType() != _sequenceStartType)
                 {
                     throw new InvalidDataException("Invalid YAML content.");
                 }
@@ -149,6 +149,21 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                             result = new CResourceAsyncReference<CResource>(parser.SafeReadScalarProperty(nameof(CResourceAsyncReference<CResource>.DepotPath)));
                             break;
                         }
+
+                        case ETweakType.CName:
+                        case ETweakType.CString:
+                        case ETweakType.TweakDBID:
+                        case ETweakType.CFloat:
+                        case ETweakType.CBool:
+                        case ETweakType.CUint8:
+                        case ETweakType.CUint16:
+                        case ETweakType.CUint32:
+                        case ETweakType.CUint64:
+                        case ETweakType.CInt8:
+                        case ETweakType.CInt16:
+                        case ETweakType.CInt32:
+                        case ETweakType.CInt64:
+                        case ETweakType.LocKey:
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -162,7 +177,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
             return result;
         }
 
-        public void WriteYaml(IEmitter emitter, object value, Type type)
+        public void WriteYaml(IEmitter emitter, object? value, Type type)
         {
             if (value is not IRedType itype)
             {
@@ -200,7 +215,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
             {
                 if (value is IRedPrimitive fundamental)
                 {
-                    emitter.WriteProperty(s_valueName, fundamental.ToString());
+                    emitter.WriteProperty(s_valueName, fundamental.ToString() ?? throw new ArgumentNullException());
                 }
                 else
                 {
@@ -287,6 +302,11 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                     ETweakType.CInt16 => (CInt16)short.Parse(s),
                     ETweakType.CInt32 => (CInt32)int.Parse(s),
                     ETweakType.CInt64 => (CInt64)long.Parse(s),
+                    ETweakType.CColor => throw new NotImplementedException(),
+                    ETweakType.CEulerAngles => throw new NotImplementedException(),
+                    ETweakType.CQuaternion => throw new NotImplementedException(),
+                    ETweakType.CVector2 => throw new NotImplementedException(),
+                    ETweakType.CVector3 => throw new NotImplementedException(),
                     _ => throw new ArgumentOutOfRangeException()
                 };
             }

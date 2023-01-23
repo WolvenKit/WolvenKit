@@ -9,17 +9,14 @@ namespace WolvenKit.ViewModels.Tools
 {
     public class ExportableItemViewModel : ImportExportItemViewModel
     {
-        public ExportableItemViewModel(string fileName)
-        {
-            BaseFile = fileName;
-            Properties = DecideExportOptions();
+        public ExportableItemViewModel(string fileName) : base(fileName, DecideExportOptions(Path.GetExtension(fileName).TrimStart('.'))) => Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
 
-            Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
-        }
-
-        private ExportArgs DecideExportOptions()
+        private static ExportArgs DecideExportOptions(string extension)
         {
-            _ = Enum.TryParse(Extension, out ECookedFileFormat fileFormat);
+            if (!Enum.TryParse(extension, out ECookedFileFormat fileFormat))
+            {
+                throw new ArgumentException("extension is not ECookedFileFormat", nameof(extension));
+            }
 
             return fileFormat switch
             {

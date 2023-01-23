@@ -5,6 +5,7 @@ using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
 
@@ -59,7 +60,7 @@ namespace WolvenKit.ViewModels.HomePage
         // Restore Shell Window.
         public ICommand RestoreWindow { get; set; }
 
-        public ICommand SwitchItemCmd { get; private set; }
+        //public ICommand SwitchItemCmd { get; private set; }
 
         public WindowState CurrentWindowState { get; set; }
 
@@ -74,7 +75,7 @@ namespace WolvenKit.ViewModels.HomePage
 
         public void ExecuteMinimizeWindow()
         {
-            SystemCommands.MinimizeWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
+            SystemCommands.MinimizeWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>().NotNull());
             CurrentWindowState = WindowState.Minimized;
         }
 
@@ -82,12 +83,12 @@ namespace WolvenKit.ViewModels.HomePage
         {
             if (CurrentWindowState == WindowState.Maximized)
             {
-                SystemCommands.RestoreWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
+                SystemCommands.RestoreWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>().NotNull());
                 CurrentWindowState = WindowState.Normal;
             }
             else
             {
-                SystemCommands.MaximizeWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
+                SystemCommands.MaximizeWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>().NotNull());
                 CurrentWindowState = WindowState.Maximized;
             }
         }
@@ -96,7 +97,7 @@ namespace WolvenKit.ViewModels.HomePage
 
         private void ExecuteHome()
         {
-            var main = Locator.Current.GetService<AppViewModel>();
+            var main = Locator.Current.GetService<AppViewModel>().NotNull();
             main.CloseModalCommand.Execute(null);
         }
 

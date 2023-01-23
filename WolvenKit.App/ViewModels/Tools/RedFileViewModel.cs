@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.ViewModels.Tools
@@ -19,10 +20,10 @@ namespace WolvenKit.ViewModels.Tools
         {
             _fileEntry = fileEntry;
 
-            ArchiveName = _fileEntry.Archive.Name;
-            if (!string.IsNullOrEmpty(_fileEntry.Archive.ArchiveRelativePath))
+            ArchiveName = _fileEntry.GetArchive().Name;
+            if (!string.IsNullOrEmpty(_fileEntry.GetArchive().ArchiveRelativePath))
             {
-                ArchiveName = _fileEntry.Archive.ArchiveRelativePath;
+                ArchiveName = _fileEntry.GetArchive().ArchiveRelativePath;
             }
         }
 
@@ -49,7 +50,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #endregion Properties
 
-        public string GetParentPath() => Path.GetDirectoryName(_fileEntry.Name);
+        public string GetParentPath() => Path.GetDirectoryName(_fileEntry.Name).NotNull();
 
         private string FormatSize(uint size)
         {
@@ -59,7 +60,7 @@ namespace WolvenKit.ViewModels.Tools
             var number = (decimal)size;
             while (Math.Round(number / 1024) >= 1)
             {
-                number = number / 1024;
+                number /= 1024;
                 counter++;
             }
             return $"{number:n1} {suffixes[counter]}";

@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace WolvenKit.Functionality.Interfaces
@@ -42,7 +39,7 @@ namespace WolvenKit.Functionality.Interfaces
 
     public interface INodeSocket<T> : INodeSocket where T : INode
     {
-        public T Node { get; set; }
+        public T? Node { get; set; }
     }
 
     public interface INodeConnection

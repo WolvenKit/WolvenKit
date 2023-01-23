@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,8 +16,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
     {
         #region Fields
 
-        public delegate Task ReturnHandler(ProjectWizardViewModel project);
-        public ReturnHandler FileHandler;
+        public delegate Task ReturnHandler(ProjectWizardViewModel? project);
+        public ReturnHandler? FileHandler;
 
         public const string WitcherGameName = "Witcher 3";
         public const string CyberpunkGameName = "Cyberpunk 2077";
@@ -34,8 +35,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
             CloseCommand = ReactiveCommand.Create(() => { });
 #pragma warning disable IDE0053 // Use expression body for lambda expressions
-            OkCommand = ReactiveCommand.Create(() => { FileHandler(this); }, CanExecute);
-            CancelCommand = ReactiveCommand.Create(() => { FileHandler(null); });
+            OkCommand = ReactiveCommand.Create(() => { FileHandler?.Invoke(this); }, CanExecute);
+            CancelCommand = ReactiveCommand.Create(() => { FileHandler?.Invoke(null); });
 #pragma warning restore IDE0053 // Use expression body for lambda expressions
 
             ProjectType = new ObservableCollection<string> { "Cyberpunk 2077" };
@@ -47,12 +48,14 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         public string Title { get; set; }
 
-        [Reactive] public string ProjectName { get; set; }
-        [Reactive] public string ProjectPath { get; set; }
-        [Reactive] public string Author { get; set; }
-        [Reactive] public string Email { get; set; }
-        [Reactive] public string Version { get; set; }
-        [Reactive] public ObservableCollection<string> ProjectType { get; set; }
+        [NotNull]
+        [Reactive] public string? ProjectName { get; set; }
+        [NotNull]
+        [Reactive] public string? ProjectPath { get; set; }
+        [Reactive] public string? Author { get; set; }
+        [Reactive] public string? Email { get; set; }
+        [Reactive] public string? Version { get; set; }
+        [Reactive] public ObservableCollection<string> ProjectType { get; set; } = new();
 
         private IObservable<bool> CanExecute =>
             this.WhenAnyValue(
@@ -83,7 +86,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         public override ReactiveCommand<Unit, Unit> OkCommand { get; }
 
-        [Reactive] public string WhyNotCreate { get; set; }
+        [Reactive] public string? WhyNotCreate { get; set; }
 
         public ReactiveCommand<Unit, Unit> OpenProjectPathCommand { get; private set; }
 

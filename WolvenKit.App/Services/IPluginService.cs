@@ -10,17 +10,30 @@ namespace WolvenKit.Functionality.Services
     //https://stackoverflow.com/a/4778347
     public static class PluginExtensions
     {
-        public static string GetDisplayName(this EPlugin p) => GetAttr(p).Name;
-        public static string GetDescription(this EPlugin p) => GetAttr(p).Description;
-        public static string GetFile(this EPlugin p) => GetAttr(p).File;
-        public static string GetUrl(this EPlugin p) => GetAttr(p).Url;
+        public static string GetDisplayName(this EPlugin p) => GetAttr(p)?.Name ?? "";
+        public static string GetDescription(this EPlugin p) => GetAttr(p)?.Description ?? "";
+        public static string GetFile(this EPlugin p) => GetAttr(p)?.File ?? "";
+        public static string GetUrl(this EPlugin p) => GetAttr(p)?.Url ?? "";
 
-        private static IdAttribute GetAttr(EPlugin p)
-            => (IdAttribute)Attribute.GetCustomAttribute(ForValue(p), typeof(IdAttribute));
+        private static IdAttribute? GetAttr(EPlugin p)
+        {
+            var m = ForValue(p);
+            if (m == null)
+            {
+                return null;
+            }
+            return Attribute.GetCustomAttribute(m, typeof(IdAttribute)) as IdAttribute;
+        }
 
-        private static MemberInfo ForValue(EPlugin p)
-            => typeof(EPlugin).GetField(Enum.GetName(typeof(EPlugin), p));
-
+        private static MemberInfo? ForValue(EPlugin p)
+        {
+            var n = Enum.GetName(typeof(EPlugin), p);
+            if (n == null)
+            {
+                return null;
+            }
+            return typeof(EPlugin).GetField(n);
+        }
     }
 
     // NOTE do not change the order of this
@@ -115,6 +128,6 @@ namespace WolvenKit.Functionality.Services
         /// <param name="path"></param>
         /// <returns>false if not installed</returns>
 
-        bool TryGetInstallPath(EPlugin plugin, [NotNullWhen(true)] out string path);
+        bool TryGetInstallPath(EPlugin plugin, [NotNullWhen(true)] out string? path);
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Conversion;
@@ -9,12 +10,13 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool GetStreamFromCName(CName cname, out Stream stream)
+        public bool GetStreamFromCName(CName cname, [NotNullWhen(true)] out Stream? stream)
         {
             var file = _archiveManager.Lookup(cname.GetRedHash());
             if (file.HasValue && file.Value is FileEntry fe)
@@ -24,22 +26,31 @@ namespace WolvenKit.Modkit.RED4
 
                 return true;
             }
+
             stream = null;
             return false;
 
         }
 
-        public bool GetFileFromCName(CName cname, out CR2WFile cr2w)
+        public bool GetFileFromCName(CName cname, [NotNullWhen(true)] out CR2WFile? cr2w)
         {
+            if (GetStreamFromCName(cname, out var stream) && _wolvenkitFileService.TryReadRed4File(stream, out cr2w))
+            {
+                return true;
+            }
+
             cr2w = null;
-            return GetStreamFromCName(cname, out var stream) &&
-                _wolvenkitFileService.TryReadRed4File(stream, out cr2w);
+            return false;
         }
 
         public bool ExportEntity(Stream entStream, CName appearance, FileInfo outfile)
         {
-            _wolvenkitFileService.TryReadRed4File(entStream, out var cr2w);
-            return ExportEntity(cr2w, appearance, outfile);
+            if (_wolvenkitFileService.TryReadRed4File(entStream, out var cr2w))
+            {
+                return ExportEntity(cr2w, appearance, outfile);
+            }
+
+            return false;
         }
 
         public bool ExportEntity(CR2WFile entFile, CName appearance, FileInfo outfile)
@@ -54,8 +65,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            CR2WFile animsFile = null;
-            animAnimSet anims = null;
+            CR2WFile? animsFile = null;
             var rigs = new Dictionary<string, List<string>>();
             var slots = new Dictionary<string, Dictionary<string, string>>();
             var slotParents = new Dictionary<string, string>();
@@ -101,9 +111,14 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            if (animsFile != null)
+            if (animsFile is null)
             {
-                anims = animsFile.RootChunk as animAnimSet;
+                throw new InvalidParsingException(nameof(animsFile));
+            }
+
+            if (animsFile.RootChunk is not animAnimSet anims)
+            {
+                throw new InvalidParsingException(nameof(animsFile));
             }
 
             foreach (var app in eet.Appearances)
@@ -149,7 +164,7 @@ namespace WolvenKit.Modkit.RED4
                         {
                             var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
 
-                            Node node = null;
+                            Node? node = null;
 
                             if (slots.ContainsKey(transform.BindName))
                             {
@@ -204,7 +219,7 @@ namespace WolvenKit.Modkit.RED4
                                 continue;
                             }
 
-                            Node node = null;
+                            Node? node = null;
 
                             var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
                             if (nodes.ContainsKey(transform.BindName))
@@ -242,11 +257,11 @@ namespace WolvenKit.Modkit.RED4
             return false;
         }
 
-        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.Vector3 v) => new System.Numerics.Vector3(v.X, v.Z, v.Y);
+        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.Vector3 v) => new(v.X, v.Z, v.Y);
 
-        public static System.Numerics.Quaternion ToQuaternion(WolvenKit.RED4.Types.Quaternion q) => new System.Numerics.Quaternion(q.I, q.K, -q.J, q.R);
+        public static System.Numerics.Quaternion ToQuaternion(WolvenKit.RED4.Types.Quaternion q) => new(q.I, q.K, -q.J, q.R);
 
-        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.WorldPosition p) => new System.Numerics.Vector3(p.X, p.Z, -p.Y);
+        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.WorldPosition p) => new(p.X, p.Z, -p.Y);
 
         public bool DumpEntityPackageAsJson(Stream entStream, FileInfo outfile)
         {
@@ -268,47 +283,51 @@ namespace WolvenKit.Modkit.RED4
 
         private bool DumpEntPackage(CR2WFile cr2w, Stream entStream, string outfile)
         {
-            var blob = cr2w.RootChunk as entEntityTemplate;
-
-            if (blob.CompiledData.Buffer.MemSize > 0)
+            if (cr2w.RootChunk is entEntityTemplate blob)
             {
-                var packageStream = new MemoryStream();
-                packageStream.Write(blob.CompiledData.Buffer.GetBytes());
+                if (blob.CompiledData.Buffer.MemSize > 0)
+                {
+                    var packageStream = new MemoryStream();
+                    packageStream.Write(blob.CompiledData.Buffer.GetBytes());
 
-                var package = new CompiledPackage(_hashService);
-                packageStream.Seek(0, SeekOrigin.Begin);
-                package.Read(new BinaryReader(packageStream));
-                var data = RedJsonSerializer.Serialize(new RedFileDto(cr2w));
-                File.WriteAllText(outfile, data);
-                return true;
+                    var package = new CompiledPackage(_hashService);
+                    packageStream.Seek(0, SeekOrigin.Begin);
+                    package.Read(new BinaryReader(packageStream));
+                    var data = RedJsonSerializer.Serialize(new RedFileDto(cr2w));
+                    File.WriteAllText(outfile, data);
+                    return true;
+                }
             }
+
             return false;
         }
 
         private bool DumpAppPackage(CR2WFile cr2w, Stream appStream, string outfile)
         {
-            var blob = cr2w.RootChunk as appearanceAppearanceResource;
-
-            var datas = new List<RedFileDto>();
-            foreach (var appearance in blob.Appearances)
+            if (cr2w.RootChunk is appearanceAppearanceResource blob)
             {
-                if (appearance.Chunk.CompiledData.Buffer.MemSize > 0)
+                var datas = new List<RedFileDto>();
+                foreach (var appearance in blob.Appearances)
                 {
-                    var packageStream = new MemoryStream();
-                    packageStream.Write(appearance.Chunk.CompiledData.Buffer.GetBytes());
+                    if (appearance.Chunk.CompiledData.Buffer.MemSize > 0)
+                    {
+                        var packageStream = new MemoryStream();
+                        packageStream.Write(appearance.Chunk.CompiledData.Buffer.GetBytes());
 
-                    var package = new CompiledPackage(_hashService);
-                    packageStream.Seek(0, SeekOrigin.Begin);
-                    package.Read(new BinaryReader(packageStream));
-                    datas.Add(new RedFileDto(cr2w));
+                        var package = new CompiledPackage(_hashService);
+                        packageStream.Seek(0, SeekOrigin.Begin);
+                        package.Read(new BinaryReader(packageStream));
+                        datas.Add(new RedFileDto(cr2w));
+                    }
+                }
+                if (datas.Count > 1)
+                {
+                    var data = RedJsonSerializer.Serialize(datas);
+                    File.WriteAllText(outfile, data);
+                    return true;
                 }
             }
-            if (datas.Count > 1)
-            {
-                var data = RedJsonSerializer.Serialize(datas);
-                File.WriteAllText(outfile, data);
-                return true;
-            }
+
             return false;
         }
 

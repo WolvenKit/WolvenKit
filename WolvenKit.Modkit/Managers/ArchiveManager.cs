@@ -10,6 +10,7 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using Path = System.IO.Path;
@@ -207,7 +208,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 _rootCache.Edit(innerCache =>
                 {
                     innerCache.Clear();
-                    innerCache.Add(RootNode);
+                    innerCache.Add(RootNode.NotNull());
                 });
             }
 
@@ -332,16 +333,16 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// Get files grouped by extension in all archives
         /// </summary>
         /// <returns></returns>
-        public override Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles() =>
+        public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() =>
             IsModBrowserActive
             ? ModArchives.Items
               .SelectMany(_ => _.Files.Values)
               .GroupBy(_ => _.Extension)
-              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry))
+              .ToDictionary(_ => _.Key, _ => _.Select(x => x))
             : Archives.Items
               .SelectMany(_ => _.Files.Values)
               .GroupBy(_ => _.Extension)
-              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
+              .ToDictionary(_ => _.Key, _ => _.Select(x => x));
 
         /// <summary>
         /// Get all files in all archives
@@ -385,7 +386,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <param name="fullpath"></param>
         /// <param name="expandAll"></param>
         /// <returns></returns>
-        public override RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false)
+        public override RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false)
         {
             if (IsModBrowserActive)
             {
@@ -401,11 +402,11 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
             else
             {
-                return LookupDirectory(fullpath, RootNode, expandAll);
+                return LookupDirectory(fullpath, RootNode.NotNull(), expandAll);
             }
         }
 
-        private static RedFileSystemModel LookupDirectory(string fullpath, RedFileSystemModel currentDir, bool expandAll = false)
+        private static RedFileSystemModel? LookupDirectory(string fullpath, RedFileSystemModel currentDir, bool expandAll = false)
         {
             var splits = fullpath.Split(Path.DirectorySeparatorChar);
             if (expandAll)

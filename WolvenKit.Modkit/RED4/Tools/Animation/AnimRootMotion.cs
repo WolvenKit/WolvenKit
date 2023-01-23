@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.RED4.Types;
+using Quat = System.Numerics.Quaternion;
+using Vec3 = System.Numerics.Vector3;
 
 namespace WolvenKit.Modkit.RED4.Animation
 {
-    using Quat = System.Numerics.Quaternion;
-    using Vec3 = System.Numerics.Vector3;
-
     internal class ROOT_MOTION
     {
         private const ushort wSignMask = 0x8000;
@@ -33,9 +32,8 @@ namespace WolvenKit.Modkit.RED4.Animation
             BinaryReader br;
             MemoryStream ms;
 
-            if (motionEx is animLinearCompressedMotionExtraction)
+            if (motionEx is animLinearCompressedMotionExtraction lc)
             {
-                var lc = motionEx as animLinearCompressedMotionExtraction;
                 numPositions = lc.PosFrames.Count;
                 numRotations = lc.RotFrames.Count;
                 posTime = lc.PosTime.Cast<float>().ToArray();
@@ -66,9 +64,8 @@ namespace WolvenKit.Modkit.RED4.Animation
                     rotations[0].Add(rotTime[i], new Quat(q.I, q.K, -q.J, q.R));
                 }
             }
-            else if (motionEx is animPlaneUncompressedMotionExtraction)
+            else if (motionEx is animPlaneUncompressedMotionExtraction pc)
             {
-                var pc = motionEx as animPlaneUncompressedMotionExtraction;
                 duration = pc.Duration;
                 numPositions = pc.Frames.Count;
                 numFrames = numPositions;
@@ -87,9 +84,8 @@ namespace WolvenKit.Modkit.RED4.Animation
                     positions[0].Add(ft * i, new Vec3(v.X, v.Z, -v.Y));
                 }
             }
-            else if (motionEx is animSplineCompressedMotionExtraction)
+            else if (motionEx is animSplineCompressedMotionExtraction sc)
             {
-                var sc = motionEx as animSplineCompressedMotionExtraction;
                 duration = sc.Duration;
 
                 #region rotations
@@ -138,10 +134,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                                     }
                                     break;
                                 case 1:
-                                    var dotPr = (x * x + y * y + z * z);
-                                    x = x * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                                    y = y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                                    z = z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    var dotPr = (x * x) + (y * y) + (z * z);
+                                    x *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    y *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    z *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
                                     var w = 1f - dotPr;
                                     if (wSign == 1)
                                     {
@@ -214,10 +210,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                                     }
                                     break;
                                 case 1:
-                                    var dotPr = (x * x + y * y + z * z);
-                                    x = x * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                                    y = y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                                    z = z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    var dotPr = (x * x) + (y * y) + (z * z);
+                                    x *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    y *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    z *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
                                     var w = 1f - dotPr;
                                     if (wSign == 1)
                                     {
@@ -245,9 +241,8 @@ namespace WolvenKit.Modkit.RED4.Animation
                     }
                 }
             }
-            else if (motionEx is animUncompressedAllAnglesMotionExtraction)
+            else if (motionEx is animUncompressedAllAnglesMotionExtraction aa)
             {
-                var aa = motionEx as animUncompressedAllAnglesMotionExtraction;
                 duration = aa.Duration;
                 numFrames = aa.Frames.Count;
                 fps = (numFrames - 1f) / duration;
@@ -271,9 +266,8 @@ namespace WolvenKit.Modkit.RED4.Animation
                     rotations[0].Add(ft * i, new Quat(q.I, q.K, -q.J, q.R));
                 }
             }
-            else if (motionEx is animUncompressedMotionExtraction)
+            else if (motionEx is animUncompressedMotionExtraction uc)
             {
-                var uc = motionEx as animUncompressedMotionExtraction;
                 duration = uc.Duration;
                 numFrames = uc.Frames.Count;
                 numPositions = numFrames;

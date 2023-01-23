@@ -46,8 +46,14 @@ public class DesktopBridgeHelper
 
     public static bool PowershellExists()
     {
-        var regval = Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PowerShell\1", "Install", null).ToString();
-        if (regval.Equals("1"))
+        var regval = Microsoft.Win32.Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PowerShell\1", "Install", null);
+        var s = regval?.ToString();
+        if (s is null)
+        {
+            return false;
+        }
+
+        if (s.Equals("1"))
         {
             return true;
         }

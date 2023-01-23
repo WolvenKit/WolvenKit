@@ -11,6 +11,7 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Core;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -95,10 +96,10 @@ namespace WolvenKit.Functionality.Services
         {
             Save();
             var bouncedSettings = SettingsManager.LoadFromFile();
-            bouncedSettings.ReconfigureSettingsManager(this);
+            bouncedSettings?.ReconfigureSettingsManager(this);
         }
 
-        private static SettingsDto LoadFromFile()
+        private static SettingsDto? LoadFromFile()
         {
             try
             {
@@ -151,23 +152,23 @@ namespace WolvenKit.Functionality.Services
         [Category("General")]
         [Display(Name = "Theme Accent")]
         [Reactive]
-        public string ThemeAccentString { get; set; }
+        public string? ThemeAccentString { get; set; }
 
         [Category("Cyberpunk")]
         [Display(Name = "Game Executable Path (.exe)")]
         [Reactive]
-        public string CP77ExecutablePath { get; set; }
+        public string? CP77ExecutablePath { get; set; }
 
         // This should be conditionally updated by CP77ExecutablePath, but not implemented..
         [Category("Cyberpunk")]
         [Display(Name = "Launch Command (executable or other command (e.g. steam:// uri)")]
         [Reactive]
-        public string CP77LaunchCommand { get; set; }
+        public string? CP77LaunchCommand { get; set; }
 
         [Category("Cyberpunk")]
         [Display(Name = "Launch Options or Command-Line Parameters To Launch Command")]
         [Reactive]
-        public string CP77LaunchOptions { get; set; }
+        public string? CP77LaunchOptions { get; set; }
 
         [Category("Cyberpunk")]
         [Display(Name = "Show File Preview")]
@@ -176,16 +177,16 @@ namespace WolvenKit.Functionality.Services
 
         [Browsable(false)]
         [Reactive]
-        public string ReddbHash { get; set; }
+        public string? ReddbHash { get; set; }
 
         [Browsable(false)]
         [Reactive]
-        public string InstallerHash { get; set; }
+        public string? InstallerHash { get; set; }
 
         [Category("Cyberpunk")]
         [Display(Name = "Depot Path")]
         [Reactive]
-        public string MaterialRepositoryPath { get; set; }
+        public string? MaterialRepositoryPath { get; set; }
 
         [Category("File Editor")]
         [Display(Name = "Group Large Collections")]
@@ -200,7 +201,7 @@ namespace WolvenKit.Functionality.Services
         [Category("File Editor")]
         [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)")]
         [Reactive]
-        public string TreeViewIgnoredExtensions { get; set; } = "";
+        public string? TreeViewIgnoredExtensions { get; set; } = "";
 
         [Category("Import / Export")]
         [Display(Name = "Show advanced Options")]
@@ -229,7 +230,7 @@ namespace WolvenKit.Functionality.Services
 
         [Reactive]
         [Browsable(false)]
-        public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; }
+        public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
 
         #endregion properties
 
@@ -247,6 +248,8 @@ namespace WolvenKit.Functionality.Services
         public void SetThemeAccent(Color color) => ThemeAccentString = color.ToString();
         public string GetRED4GameRootDir()
         {
+            ArgumentNullException.ThrowIfNull(CP77ExecutablePath);
+
             var fi = new FileInfo(CP77ExecutablePath);
 
             return fi.Directory is { Parent.Parent: { } }
@@ -254,11 +257,11 @@ namespace WolvenKit.Functionality.Services
                 : throw new DirectoryNotFoundException();
         }
 
-        public string GetRED4GameExecutablePath() => CP77ExecutablePath;
+        public string GetRED4GameExecutablePath() => CP77ExecutablePath.NotNull();
 
-        public string GetRED4GameLaunchCommand() => CP77LaunchCommand;
+        public string GetRED4GameLaunchCommand() => CP77LaunchCommand.NotNull();
 
-        public string GetRED4GameLaunchOptions() => CP77LaunchOptions;
+        public string GetRED4GameLaunchOptions() => CP77LaunchOptions.NotNull();
 
         public string GetRED4GameLegacyModDir()
         {
@@ -283,7 +286,7 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        public string GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir())
+        public string? GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir())
                 ? null
                 : Path.Combine(GetRED4GameRootDir(), "bin", "x64", WolvenKit.Core.Constants.Oodle);
 

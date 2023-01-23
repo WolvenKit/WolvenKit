@@ -8,7 +8,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
     public class RenameDialogViewModel : DialogWindowViewModel
     {
         public RenameDialogViewModel() => Title = "Rename";
-        [Reactive] public string Text { get; set; }
+        [Reactive] public string? Text { get; set; }
 
         public string Title { get; set; }
     }

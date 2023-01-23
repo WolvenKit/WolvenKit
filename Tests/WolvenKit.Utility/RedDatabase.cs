@@ -63,28 +63,31 @@ namespace WolvenKit.Utility
             using var db = new RedDBContext();
 
             var files = new List<RedFile>();
-            foreach (var dbArchive in db.Archives)
+            if (db.Archives is not null)
             {
-                if (s_bm.Archives.Items.FirstOrDefault(x => x.Name == dbArchive.Name) is not Archive archive)
+                foreach (var dbArchive in db.Archives)
                 {
-                    throw new Exception();
-                }
-
-                var fileImports = importDict[archive.Name];
-                foreach (var (hash, file) in archive.Files)
-                {
-                    var dbFile = new RedFile { ArchiveId = dbArchive.Id, Hash = hash };
-
-                    if (fileImports.ContainsKey(hash))
+                    if (s_bm.Archives.Items.FirstOrDefault(x => x.Name == dbArchive.Name) is not Archive archive)
                     {
-                        dbFile.Uses = new List<RedFileUse>();
-                        foreach (var import in fileImports[hash])
-                        {
-                            dbFile.Uses.Add(new RedFileUse {Hash = import});
-                        }
+                        throw new Exception();
                     }
 
-                    files.Add(dbFile);
+                    var fileImports = importDict[archive.Name];
+                    foreach (var (hash, file) in archive.Files)
+                    {
+                        var dbFile = new RedFile { ArchiveId = dbArchive.Id, Hash = hash };
+
+                        if (fileImports.ContainsKey(hash))
+                        {
+                            dbFile.Uses = new List<RedFileUse>();
+                            foreach (var import in fileImports[hash])
+                            {
+                                dbFile.Uses.Add(new RedFileUse { Hash = import });
+                            }
+                        }
+
+                        files.Add(dbFile);
+                    }
                 }
             }
 
@@ -109,7 +112,7 @@ namespace WolvenKit.Utility
 
             db.SaveChanges();
 
-            HashSet<ulong> GetImports(DataCollection dc)
+            static HashSet<ulong> GetImports(DataCollection dc)
             {
                 var result = new HashSet<ulong>();
 

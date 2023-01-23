@@ -29,8 +29,7 @@ namespace WolvenKit.Views.Editors
 
         private void CurveEditorButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var data = (IRedLegacySingleChannelCurve)cvm.Data;
-            if (data == null)
+            if (cvm.Data is not IRedLegacySingleChannelCurve data)
             {
                 data = (IRedLegacySingleChannelCurve)System.Activator.CreateInstance(cvm.PropertyType);
             }

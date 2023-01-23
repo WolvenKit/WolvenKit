@@ -62,13 +62,7 @@ namespace WolvenKit.ViewModels.Shell
                 .Select(_ => _.EventArgs * 100)
                 .ToProperty(this, x => x.Progress, out _progress);
 
-            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b =>
-            {
-                DispatcherHelper.RunOnMainThread(() =>
-                {
-                    IsIndeterminate = b;
-                });
-            });
+            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => DispatcherHelper.RunOnMainThread(() => IsIndeterminate = b));
             _ = _progressService.WhenAnyValue(x => x.Status).Subscribe(s =>
             {
                 DispatcherHelper.RunOnMainThread(() =>
@@ -80,7 +74,11 @@ namespace WolvenKit.ViewModels.Shell
                             BarColor = Brushes.DarkOrange;
                             break;
                         case EStatus.Ready:
-                            BarColor = (SolidColorBrush)new BrushConverter().ConvertFromString("#951C2D");
+                            if (new BrushConverter().ConvertFromString("#951C2D") is SolidColorBrush brush)
+                            {
+                                BarColor = brush;
+                            }
+
                             break;
                         default:
                             break;
@@ -98,7 +96,7 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public bool IsIndeterminate { get; set; }
 
-        public string InternetConnected { get; private set; }
+        public string? InternetConnected { get; private set; }
 
         public bool IsLoading { get; set; }
 

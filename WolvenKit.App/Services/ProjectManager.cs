@@ -48,13 +48,13 @@ namespace WolvenKit.Functionality.Services
 
         [Reactive] public bool IsProjectLoaded { get; set; }
 
-        [Reactive] public Cp77Project ActiveProject { get; set; }
+        [Reactive] public Cp77Project? ActiveProject { get; set; }
 
         #endregion
 
         #region commands
 
-        public ReactiveCommand<string, Unit> OpenProjectCommand { get; set; }
+        public ReactiveCommand<string, Unit>? OpenProjectCommand { get; set; }
 
         #endregion
 
@@ -62,7 +62,7 @@ namespace WolvenKit.Functionality.Services
 
         public async Task<bool> SaveAsync() => await Save();
 
-        public async Task<bool> LoadAsync(string location)
+        public async Task<Cp77Project?> LoadAsync(string location)
         {
             if (IsProjectLoaded)
             {
@@ -70,16 +70,17 @@ namespace WolvenKit.Functionality.Services
             }
 
             IsProjectLoaded = false;
-            await ReadFromLocationAsync(location).ContinueWith(_ =>
+            await ReadFromLocationAsync(location).ContinueWith(x =>
             {
-                if (_.IsCompletedSuccessfully)
+                if (x.IsCompletedSuccessfully)
                 {
-                    if (_.Result == null)
+                    if (x.Result == null)
                     {
+
                     }
                     else
                     {
-                        ActiveProject = _.Result;
+                        ActiveProject = x.Result;
                         IsProjectLoaded = true;
 
                         if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
@@ -95,10 +96,10 @@ namespace WolvenKit.Functionality.Services
             });
 
 
-            return true;
+            return ActiveProject;
         }
 
-        private async Task<Cp77Project> ReadFromLocationAsync(string location)
+        private async Task<Cp77Project?> ReadFromLocationAsync(string location)
         {
             try
             {
@@ -124,7 +125,7 @@ namespace WolvenKit.Functionality.Services
             return null;
         }
 
-        private async Task<Cp77Project> Load(string path)
+        private async Task<Cp77Project?> Load(string path)
         {
             try
             {
@@ -135,11 +136,16 @@ namespace WolvenKit.Functionality.Services
                     return null;
                 }
 
-                Cp77Project result = new(path)
+                if (obj.Name is null)
+                {
+                    _loggerService.Error($"Failed to load project: project has no name");
+                    return null;
+                }
+
+                Cp77Project result = new(path, obj.Name)
                 {
                     Author = obj.Author,
                     Email = obj.Email,
-                    Name = obj.Name,
                     Version = obj.Version,
                 };
 
@@ -200,6 +206,11 @@ namespace WolvenKit.Functionality.Services
 
         private async Task<bool> Save()
         {
+            if (ActiveProject is null)
+            {
+                return false;
+            }
+
             try
             {
                 if (!Directory.Exists(ActiveProject.ProjectDirectory))
@@ -235,6 +246,7 @@ namespace WolvenKit.Functionality.Services
 
         public class CP77Mod
         {
+            // Default contructor for serialization
             public CP77Mod()
             {
 
@@ -248,13 +260,13 @@ namespace WolvenKit.Functionality.Services
                 Version = project.Version;
             }
 
-            public string Author { get; set; }
+            public string? Author { get; set; }
 
-            public string Email { get; set; }
+            public string? Email { get; set; }
 
-            public string Name { get; set; }
+            public string? Name { get; set; }
 
-            public string Version { get; set; }
+            public string? Version { get; set; }
             public bool IsRedMod { get; set; }
             public bool ExecuteDeploy { get; set; }
         }

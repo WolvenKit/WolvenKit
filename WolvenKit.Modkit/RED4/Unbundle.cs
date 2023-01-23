@@ -32,10 +32,15 @@ namespace WolvenKit.Modkit.RED4
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
+
+
             var totalInArchiveCount = ar.Files?.Count ?? 0;
             if (!string.IsNullOrEmpty(pattern))
             {
-                finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
+                if (ar.Files?.Values is not null)
+                {
+                    finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
+                }
             }
 
             if (!string.IsNullOrEmpty(regex))

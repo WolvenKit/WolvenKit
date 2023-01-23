@@ -46,11 +46,7 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
             throw new JsonException();
         }
 
-        result.Header = JsonSerializer.Deserialize<JsonHeader>(ref reader, options);
-        if (result.Header == null)
-        {
-            throw new JsonException("Invalid JSON format");
-        }
+        result.Header = JsonSerializer.Deserialize<JsonHeader>(ref reader, options) ?? throw new JsonException("Invalid JSON format");
         RedJsonSerializer.SetHeader(result.Header);
 
         if (RedJsonSerializer.IsNewerThen(new JsonHeader().WKitJsonVersion))

@@ -138,10 +138,7 @@ public class HandleConverterFactory : JsonConverterFactory
 {
     private readonly HandleConverter _handleConverter;
 
-    public HandleConverterFactory(ReferenceResolver<RedBaseClass> referenceResolver)
-    {
-        _handleConverter = new(referenceResolver);
-    }
+    public HandleConverterFactory(ReferenceResolver<RedBaseClass> referenceResolver) => _handleConverter = new(referenceResolver);
 
     public override bool CanConvert(Type typeToConvert) => typeof(IRedBaseHandle).IsAssignableFrom(typeToConvert);
 
@@ -165,10 +162,7 @@ public class HandleConverter : JsonConverter<IRedBaseHandle>, ICustomRedConverte
 {
     private readonly ReferenceResolver<RedBaseClass> _referenceResolver;
 
-    public HandleConverter(ReferenceResolver<RedBaseClass> referenceResolver)
-    {
-        _referenceResolver = referenceResolver;
-    }
+    public HandleConverter(ReferenceResolver<RedBaseClass> referenceResolver) => _referenceResolver = referenceResolver;
 
     public override bool HandleNull => true;
 
@@ -434,10 +428,7 @@ public class ClassConverterFactory : JsonConverterFactory
 {
     private readonly RedClassConverter _redBaseClassConverter;
 
-    public ClassConverterFactory(ReferenceResolver<RedBaseClass> classResolver)
-    {
-        _redBaseClassConverter = new(classResolver);
-    }
+    public ClassConverterFactory(ReferenceResolver<RedBaseClass> classResolver) => _redBaseClassConverter = new(classResolver);
 
     public override bool CanConvert(Type typeToConvert) => typeToConvert.IsSubclassOf(typeof(RedBaseClass)) || typeToConvert == typeof(RedBaseClass);
 
@@ -456,10 +447,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
 {
     private readonly ReferenceResolver<RedBaseClass> _referenceResolver;
 
-    public RedClassConverter(ReferenceResolver<RedBaseClass> referenceResolver)
-    {
-        _referenceResolver = referenceResolver;
-    }
+    public RedClassConverter(ReferenceResolver<RedBaseClass> referenceResolver) => _referenceResolver = referenceResolver;
 
 
     public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
@@ -721,10 +709,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
         throw new JsonException();
     }
 
-    public override RedBaseClass? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        return CustomRead(ref reader, typeToConvert, options, null);
-    }
+    public override RedBaseClass? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => CustomRead(ref reader, typeToConvert, options, null);
 
     public override void Write(Utf8JsonWriter writer, RedBaseClass value, JsonSerializerOptions options)
     {
@@ -795,10 +780,7 @@ public class CR2WFileConverter : JsonConverter<CR2WFile>, ICustomRedConverter
 {
     private readonly ReferenceResolver<RedBaseClass> _referenceResolver;
 
-    public CR2WFileConverter(ReferenceResolver<RedBaseClass> classResolver)
-    {
-        _referenceResolver = classResolver;
-    }
+    public CR2WFileConverter(ReferenceResolver<RedBaseClass> classResolver) => _referenceResolver = classResolver;
 
     public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 

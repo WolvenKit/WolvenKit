@@ -12,6 +12,14 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W
 {
+    public class Red4ParserException : Exception
+    {
+        public Red4ParserException() : base() { }
+
+
+
+    }
+
     public class Red4ParserService : IRedParserService
     {
         private readonly IHashService _hashService;
@@ -111,8 +119,11 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>The resulting <see cref="CR2WFile">CR2WFile</see> or null if unsuccessful</returns>
         public CR2WFile? ReadRed4File(Stream stream)
         {
-            TryReadRed4File(stream, out var redFile);
-            return redFile;
+            if (TryReadRed4File(stream, out var redFile))
+            {
+                return redFile;
+            }
+            return null;
         }
 
         /// <summary>

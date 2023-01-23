@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 
@@ -18,14 +19,15 @@ public class SelectRedTypeDialogViewModel : DialogViewModel
 
     public SelectRedTypeDialogViewModel()
     {
-        _types = Assembly.GetAssembly(typeof(RedBaseClass)).GetTypes()
+
+        _types = Assembly.GetAssembly(typeof(RedBaseClass)).NotNull().GetTypes()
             .Where(t => t.IsAssignableTo(typeof(IRedPrimitive)) && !t.IsInterface && !t.IsAbstract)
             .ToDictionary(t => t.Name, t => t);
 
         Types = new ObservableCollection<string>(_types.Select(t => t.Key));
 
-        OkCommand = ReactiveCommand.Create(() => DialogHandler(this), CanCreate);
-        CancelCommand = ReactiveCommand.Create(() => DialogHandler(null));
+        OkCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(this), CanCreate);
+        CancelCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(null));
     }
 
     public override ReactiveCommand<Unit, Unit> OkCommand { get; }
@@ -34,11 +36,11 @@ public class SelectRedTypeDialogViewModel : DialogViewModel
     private IObservable<bool> CanCreate =>
         this.WhenAnyValue(
             x => x.SelectedTypeString,
-            (c) => Types.Contains(c)
+            (c) => c is not null && Types.Contains(c)
         );
 
-    [Reactive] public ObservableCollection<string> Types { get; set; }
-    [Reactive] public string SelectedTypeString { get; set; }
+    [Reactive] public ObservableCollection<string> Types { get; set; } = new();
+    [Reactive] public string? SelectedTypeString { get; set; }
 
-    public Type SelectedType => _types[SelectedTypeString];
+    public Type? SelectedType => SelectedTypeString is null ? null : _types[SelectedTypeString];
 }

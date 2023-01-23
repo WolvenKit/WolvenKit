@@ -14,7 +14,7 @@ public static class ProcessUtil
     /// <param name="fileName"></param>
     /// <param name="arguments"></param>
     /// <returns>true if exit code is 0</returns>
-    public static async Task<bool> RunProcessAsync(string fileName, string arguments, string workingDir = "")
+    public static async Task<bool> RunProcessAsync(string fileName, string arguments, string? workingDir = null)
     {
         Process p;
         var eventHandled = new TaskCompletionSource<bool>();
@@ -85,7 +85,7 @@ public static class ProcessUtil
     /// <param name="fileName"></param>
     /// <param name="arguments"></param>
     /// <returns>true if exit code is 0</returns>
-    public static async Task<bool> RunRedmodAsync(string fileName, string arguments, string workingDir = "", IProgressService<double> progress = null)
+    public static async Task<bool> RunRedmodAsync(string fileName, string arguments, string workingDir = "", IProgressService<double>? progress = null)
     {
         Process p;
         var eventHandled = new TaskCompletionSource<bool>();
@@ -119,7 +119,10 @@ public static class ProcessUtil
                             progress.Report(stageInt / 5);
                         }
                     }
-                    Log.Information(str);
+                    if (!string.IsNullOrEmpty(str))
+                    {
+                        Log.Information(str);
+                    }
                 };
                 p.ErrorDataReceived += (s, e) =>
                 {

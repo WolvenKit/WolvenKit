@@ -1,30 +1,23 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Security.Policy;
-using System.Windows.Media.Imaging;
 using DynamicData.Binding;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Tools
 {
     public class ImportableItemViewModel : ImportExportItemViewModel
     {
-        public ImportableItemViewModel(string fileName)
+        public ImportableItemViewModel(string fileName) : base(fileName, DecideImportOptions(fileName))
         {
-            BaseFile = fileName;
-            Properties = DecideImportOptions();
-
             Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
 
             Properties.WhenAnyPropertyChanged(nameof(XbmImportArgs.TextureGroup)).Subscribe(p =>
@@ -43,18 +36,22 @@ namespace WolvenKit.ViewModels.Tools
             });
         }
 
-        private ImportArgs DecideImportOptions()
+        private static ImportArgs DecideImportOptions(string fileName)
         {
-            _ = Enum.TryParse(Extension, out ERawFileFormat rawFileFormat);
+            var extension = Path.GetExtension(fileName).TrimStart('.');
+            if (!Enum.TryParse(extension, out ERawFileFormat rawFileFormat))
+            {
+                throw new ArgumentException("extension is not ERawFileFormat", nameof(fileName));
+            }
 
             // get texturegroup from filename
             var xbmArgs = new XbmImportArgs();
             if (IsRawTexture(rawFileFormat))
             {
                 // first get settings from game
-                xbmArgs = LoadXbmSettingsFromGame();
+                xbmArgs = LoadXbmSettingsFromGame(fileName);
                 // if not, get defaults from filename
-                xbmArgs ??= LoadXbmDefaultSettings();
+                xbmArgs ??= LoadXbmDefaultSettings(fileName);
             }
 
             return rawFileFormat switch
@@ -76,20 +73,22 @@ namespace WolvenKit.ViewModels.Tools
 
                 ERawFileFormat.fbx => new CommonImportArgs(),
                 ERawFileFormat.csv => new CommonImportArgs(),
-                _ => new CommonImportArgs()
+                _ => throw new ArgumentOutOfRangeException()
             };
         }
 
-        public XbmImportArgs LoadXbmDefaultSettings()
+        public static XbmImportArgs LoadXbmDefaultSettings(string fileName)
         {
             XbmImportArgs xbmArgs;
-            if (!Enum.TryParse(Extension, out ERawFileFormat rawFileFormat))
+
+            var extension = Path.GetExtension(fileName).TrimStart('.');
+            if (!Enum.TryParse(extension, out ERawFileFormat rawFileFormat))
             {
-                throw new ArgumentException();
+                throw new ArgumentException("extension is not ERawFileFormat", nameof(fileName));
             }
 
             // set default texturegroup from filename
-            var texGroup = CommonFunctions.GetTextureGroupFromFileName(Path.GetFileNameWithoutExtension(FullName));
+            var texGroup = CommonFunctions.GetTextureGroupFromFileName(Path.GetFileNameWithoutExtension(fileName));
 
             // get settings from texgroup
             xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
@@ -98,12 +97,12 @@ namespace WolvenKit.ViewModels.Tools
             // load and, if needed, decompress file
             var image = rawFileFormat switch
             {
-                ERawFileFormat.dds => RedImage.LoadFromDDSFile(BaseFile),
-                ERawFileFormat.tga => RedImage.LoadFromTGAFile(BaseFile),
-                ERawFileFormat.bmp => RedImage.LoadFromBMPFile(BaseFile),
-                ERawFileFormat.jpg => RedImage.LoadFromJPGFile(BaseFile),
-                ERawFileFormat.png => RedImage.LoadFromPNGFile(BaseFile),
-                ERawFileFormat.tiff => RedImage.LoadFromTIFFFile(BaseFile),
+                ERawFileFormat.dds => RedImage.LoadFromDDSFile(fileName),
+                ERawFileFormat.tga => RedImage.LoadFromTGAFile(fileName),
+                ERawFileFormat.bmp => RedImage.LoadFromBMPFile(fileName),
+                ERawFileFormat.jpg => RedImage.LoadFromJPGFile(fileName),
+                ERawFileFormat.png => RedImage.LoadFromPNGFile(fileName),
+                ERawFileFormat.tiff => RedImage.LoadFromTIFFFile(fileName),
                 ERawFileFormat.fbx => throw new NotImplementedException(),
                 ERawFileFormat.gltf => throw new NotImplementedException(),
                 ERawFileFormat.glb => throw new NotImplementedException(),
@@ -120,17 +119,24 @@ namespace WolvenKit.ViewModels.Tools
             return xbmArgs;
         }
 
-        public XbmImportArgs LoadXbmSettingsFromGame()
+        public static XbmImportArgs LoadXbmSettingsFromGame(string fileName)
         {
-            if (!Enum.TryParse(Extension, out ERawFileFormat _))
+            var archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
+            var activeProject = Locator.Current.GetService<IProjectManager>().NotNull().ActiveProject;
+            if (activeProject == null)
             {
-                throw new ArgumentException();
+                return new XbmImportArgs();
+            }
+
+            var extension = Path.GetExtension(fileName).TrimStart('.');
+            if (!Enum.TryParse(extension, out ERawFileFormat _))
+            {
+                throw new ArgumentException("extension is not ERawFileFormat", nameof(fileName));
             }
 
             // first get the texturegroup from the vanilla file
-            var archiveManager = Locator.Current.GetService<IArchiveManager>();
-            var activeProject = Locator.Current.GetService<IProjectManager>().ActiveProject;
-            var relPath = Path.ChangeExtension(FileModel.GetRelativeName(BaseFile, activeProject), "xbm");
+
+            var relPath = Path.ChangeExtension(FileModel.GetRelativeName(fileName, activeProject), "xbm");
             var hash = FNV1A64HashAlgorithm.HashString(relPath);
             var file = archiveManager.Lookup(hash);
             if (file.HasValue)
@@ -145,7 +151,7 @@ namespace WolvenKit.ViewModels.Tools
                     {
                         if (bitmapTexture.Setup is not { } setup || bitmapTexture.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
                         {
-                            return null;
+                            return new XbmImportArgs();
                         }
 
                         return new XbmImportArgs()
@@ -161,7 +167,7 @@ namespace WolvenKit.ViewModels.Tools
                 }
             }
 
-            return null;
+            return new XbmImportArgs();
         }
 
         private static bool IsRawTexture(ERawFileFormat fmt) => fmt is ERawFileFormat.tga or ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.dds or ERawFileFormat.tiff;

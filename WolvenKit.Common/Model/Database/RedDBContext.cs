@@ -17,8 +17,8 @@ public class RedDBContext : DbContext
         DbPath = Path.Combine(dir, Constants.RedDb);
     }
 
-    public DbSet<RedArchive> Archives { get; set; }
-    public DbSet<RedFile> Files { get; set; }
+    public DbSet<RedArchive>? Archives { get; set; }
+    public DbSet<RedFile>? Files { get; set; }
 
     public string DbPath { get; }
 

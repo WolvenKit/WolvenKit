@@ -469,7 +469,7 @@ namespace WolvenKit.FunctionalTests
 #endif
             {
                 var hash = file.Key;
-                var archive = file.Archive as Archive;
+                var archive = file.GetArchive<Archive>();
                 ArgumentNullException.ThrowIfNull(archive);
 
                 try

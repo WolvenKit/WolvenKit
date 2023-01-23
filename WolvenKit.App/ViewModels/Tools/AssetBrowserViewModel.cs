@@ -4,9 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Joins;
 using System.Reactive.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,6 +20,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality;
@@ -31,7 +30,6 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
-using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 
@@ -172,9 +170,9 @@ namespace WolvenKit.ViewModels.Tools
                     }
                     else
                     {
-                        DirectoryInfo execDirInfo = new(Path.GetDirectoryName(execPath));
+                        DirectoryInfo execDirInfo = new(Path.GetDirectoryName(execPath).NotNull());
 
-                        _archiveDirNotFound = execDirInfo.Parent.Parent.GetDirectories("archive").Length == 0;
+                        _archiveDirNotFound = execDirInfo.Parent is not null && execDirInfo.Parent.Parent is not null && execDirInfo.Parent.Parent.GetDirectories("archive").Length == 0;
                     }
                     ShouldShowExecutablePathWarning = _archiveDirNotFound;
                     ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded && !_archiveDirNotFound;
@@ -203,9 +201,9 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public ObservableCollection<RedFileSystemModel> LeftItems { get; set; } = new();
 
-        [Reactive] public object LeftSelectedItem { get; set; }
+        [Reactive] public object? LeftSelectedItem { get; set; }
 
-        [Reactive] public IFileSystemViewModel RightSelectedItem { get; set; }
+        [Reactive] public IFileSystemViewModel? RightSelectedItem { get; set; }
 
         [Reactive] public ObservableCollectionEx<IFileSystemViewModel> RightItems { get; set; } = new();
 
@@ -213,13 +211,13 @@ namespace WolvenKit.ViewModels.Tools
 
         //[Reactive] public List<string> Classes { get; set; }
 
-        [Reactive] public string SelectedClass { get; set; }
+        [Reactive] public string? SelectedClass { get; set; }
 
-        [Reactive] public string SelectedExtension { get; set; }
+        [Reactive] public string? SelectedExtension { get; set; }
 
-        [Reactive] public string SearchBarText { get; set; }
+        [Reactive] public string? SearchBarText { get; set; }
 
-        [Reactive] public string OptionsSearchBarText { get; set; }
+        [Reactive] public string? OptionsSearchBarText { get; set; }
 
         #endregion properties
 
@@ -238,8 +236,8 @@ namespace WolvenKit.ViewModels.Tools
         public ICommand OpenWolvenKitSettingsCommand { get; private set; }
         private void OpenWolvenKitSettings()
         {
-            var homepageViewModel = Locator.Current.GetService<HomePage.HomePageViewModel>();
-            var appViewModel = Locator.Current.GetService<AppViewModel>();
+            var homepageViewModel = Locator.Current.GetService<HomePage.HomePageViewModel>().NotNull();
+            var appViewModel = Locator.Current.GetService<AppViewModel>().NotNull();
 
             homepageViewModel.SelectedIndex = 1;
             appViewModel.SetActiveOverlay(homepageViewModel);
@@ -259,8 +257,8 @@ namespace WolvenKit.ViewModels.Tools
                     case WMessageBoxResult.OK:
                     case WMessageBoxResult.Yes:
                     {
-                        var homepage = Locator.Current.GetService<HomePageViewModel>();
-                        var appViewModel = Locator.Current.GetService<AppViewModel>();
+                        var homepage = Locator.Current.GetService<HomePageViewModel>().NotNull();
+                        var appViewModel = Locator.Current.GetService<AppViewModel>().NotNull();
 
                         homepage.NavigateTo(EHomePage.Plugins);
                         appViewModel.SetActiveOverlay(homepage);
@@ -284,12 +282,12 @@ namespace WolvenKit.ViewModels.Tools
             {
                 using RedDBContext db = new();
 
-                if (RightSelectedItem is RedFileViewModel file)
+                if (RightSelectedItem is RedFileViewModel file && db.Files is not null)
                 {
                     var hash = file.GetGameFile().Key;
 
                     var usedBy = await db.Files.Include("Uses")
-                        .Where(x => x.Uses.Any(y => y.Hash == hash))
+                        .Where(x => x.Uses != null && x.Uses.Any(y => y.Hash == hash))
                         .Select(x => x.Hash)
                         .ToListAsync();
 
@@ -327,8 +325,8 @@ namespace WolvenKit.ViewModels.Tools
                     case WMessageBoxResult.OK:
                     case WMessageBoxResult.Yes:
                     {
-                        var homepage = Locator.Current.GetService<HomePageViewModel>();
-                        var appViewModel = Locator.Current.GetService<AppViewModel>();
+                        var homepage = Locator.Current.GetService<HomePageViewModel>().NotNull();
+                        var appViewModel = Locator.Current.GetService<AppViewModel>().NotNull();
 
                         homepage.NavigateTo(EHomePage.Plugins);
                         appViewModel.SetActiveOverlay(homepage);
@@ -352,14 +350,17 @@ namespace WolvenKit.ViewModels.Tools
             {
                 using RedDBContext db = new();
 
-                if (RightSelectedItem is RedFileViewModel file)
+                if (RightSelectedItem is RedFileViewModel file && db.Files is not null)
                 {
                     var hash = file.GetGameFile().Key;
 
+#pragma warning disable CS8604 // Possible null reference argument.
                     var uses = await db.Files.Include("Archive").Include("Uses")
-                        .Where(x => x.Archive.Name == file.ArchiveName && x.Hash == hash)
+                        .Where(x => x.Archive != null && x.Archive.Name == file.ArchiveName && x.Hash == hash)
+                        .Where(x => x.Uses != null)
                         .Select(x => x.Uses.Select(y => y.Hash))
                         .ToListAsync();
+#pragma warning restore CS8604 // Possible null reference argument.
 
                     //add all found items to
                     _archiveManager.Archives
@@ -436,12 +437,15 @@ namespace WolvenKit.ViewModels.Tools
 
             // check against existing files
             List<IGameFile> existingFiles = new();
-            foreach (var gamefile in filesToAdd)
+            if (_projectManager.ActiveProject is not null)
             {
-                FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, gamefile.Name));
-                if (diskPathInfo.Exists)
+                foreach (var gamefile in filesToAdd)
                 {
-                    existingFiles.Add(gamefile);
+                    FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, gamefile.Name));
+                    if (diskPathInfo.Exists)
+                    {
+                        existingFiles.Add(gamefile);
+                    }
                 }
             }
 
@@ -523,7 +527,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (RightSelectedItem is RedFileViewModel rfvm)
             {
-                Locator.Current.GetService<AppViewModel>().OpenRedFileCommand.SafeExecute(rfvm.GetGameFile());
+                Locator.Current.GetService<AppViewModel>().NotNull().OpenRedFileCommand.SafeExecute(rfvm.GetGameFile());
             }
         }
 
@@ -553,6 +557,10 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (!_archiveManager.IsModBrowserActive)
             {
+                if (_settings.CP77ExecutablePath is null)
+                {
+                    return;
+                }
                 _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath));
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
             }
@@ -577,7 +585,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
         private bool CanCopyRelPath() => RightSelectedItem != null; // _projectManager.ActiveProject != null && RightSelectedItem != null;
-        private void ExecuteCopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.FullName);
+        private void ExecuteCopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.NotNull().FullName);
         public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
         public ReactiveCommand<Unit, Unit> Expand { get; set; }
@@ -628,7 +636,7 @@ namespace WolvenKit.ViewModels.Tools
 
             try
             {
-                await Task.Run(() => CyberEnhancedSearch());
+                await Task.Run(CyberEnhancedSearch);
             }
             catch (AggregateException ae)
             {

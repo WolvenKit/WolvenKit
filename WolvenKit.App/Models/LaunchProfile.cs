@@ -39,7 +39,7 @@ public class LaunchProfile
 
     [Category("Game Launch")]
     [Display(Name = "Game Commandline Arguments")]
-    public string GameArguments { get; set; }
+    public string? GameArguments { get; set; }
 
 
     internal LaunchProfile Copy()

@@ -18,10 +18,10 @@ namespace WolvenKit
 
     public static class WkitBrushes
     {
-        public static SolidColorBrush Red = new SolidColorBrush(WkitColors.Red);
-        public static SolidColorBrush Cyan = new SolidColorBrush(WkitColors.Cyan);
-        public static SolidColorBrush Yellow = new SolidColorBrush(WkitColors.Yellow);
-        public static SolidColorBrush Purple = new SolidColorBrush(WkitColors.Purple);
-        public static SolidColorBrush Tan = new SolidColorBrush(WkitColors.Tan);
+        public static SolidColorBrush Red = new(WkitColors.Red);
+        public static SolidColorBrush Cyan = new(WkitColors.Cyan);
+        public static SolidColorBrush Yellow = new(WkitColors.Yellow);
+        public static SolidColorBrush Purple = new(WkitColors.Purple);
+        public static SolidColorBrush Tan = new(WkitColors.Tan);
     }
 }

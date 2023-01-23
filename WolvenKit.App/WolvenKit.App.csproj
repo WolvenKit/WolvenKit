@@ -5,7 +5,7 @@
     <Version>8.8.2</Version>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-
+	<Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
@@ -57,7 +57,7 @@
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
-    <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED4\WolvenKit.RED4.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -94,6 +94,10 @@
 
   <ItemGroup>
     <Resource Include="Resources\WolvenKitFileDefinitions.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Wizards\" />
   </ItemGroup>
 
 </Project>

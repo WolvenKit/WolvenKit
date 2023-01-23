@@ -4,14 +4,12 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.ProjectManagement.Project;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Models
 {
@@ -28,11 +26,12 @@ namespace WolvenKit.Models
             FullName = path;
             Project = project;
             string parentfullname;
+
             if (Directory.Exists(path))
             {
                 IsDirectory = true;
                 var di = new DirectoryInfo(path);
-                parentfullname = di.Parent.FullName;
+                parentfullname = di.Parent.NotNull().FullName;
                 Name = di.Name;
                 _extension = ECustomImageKeys.OpenDirImageKey.ToString();
                 if (FullName.StartsWith(project.ResourcesDirectory))
@@ -52,7 +51,7 @@ namespace WolvenKit.Models
             {
                 IsDirectory = false;
                 var fi = new FileInfo(path);
-                parentfullname = fi.Directory.FullName;
+                parentfullname = fi.Directory.NotNull().FullName;
                 Name = fi.Name;
                 _extension = fi.Extension;
             }
@@ -172,7 +171,7 @@ namespace WolvenKit.Models
             //throw new System.NullReferenceException("fuzzy exception");
         }
 
-        public static ulong GenerateKey(string fullname, Cp77Project project)
+        public static ulong GenerateKey(string fullname, Cp77Project? project)
         {
             if (project == null)
             {

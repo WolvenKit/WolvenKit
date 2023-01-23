@@ -16,6 +16,7 @@ using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
@@ -54,10 +55,10 @@ namespace WolvenKit.ViewModels.Tools
         private bool _showInlineEntries;
         private string _selectedRecordType = "";
 
-        private TweakEntry _selectedRecordEntry;
-        private TweakEntry _selectedFlatEntry;
-        private TweakEntry _selectedQueryEntry;
-        private TweakEntry _selectedGroupTagEntry;
+        private TweakEntry? _selectedRecordEntry;
+        private TweakEntry? _selectedFlatEntry;
+        private TweakEntry? _selectedQueryEntry;
+        private TweakEntry? _selectedGroupTagEntry;
 
         #endregion fields
 
@@ -91,7 +92,7 @@ namespace WolvenKit.ViewModels.Tools
         [Reactive] public ICollectionView Queries { get; set; } = new CollectionView(new List<object>());
         [Reactive] public ICollectionView GroupTags { get; set; } = new CollectionView(new List<object>());
 
-        [Reactive] public List<string> RecordTypes { get; set; }
+        [Reactive] public List<string> RecordTypes { get; set; } = new();
 
         public string RecordsHeader => $"Records ({Records.Cast<object>().Count()})";
         public string FlatsHeader => $"Flats ({Flats.Cast<object>().Count()})";
@@ -99,9 +100,9 @@ namespace WolvenKit.ViewModels.Tools
         public string GroupTagsHeader => $"GroupTags ({GroupTags.Cast<object>().Count()})";
 
         public ObservableCollection<ChunkViewModel> SelectedRecord { get; set; } = new();
-        [Reactive] public ChunkViewModel SelectedFlat { get; set; }
-        [Reactive] public ChunkViewModel SelectedQuery { get; set; }
-        [Reactive] public ChunkViewModel SelectedGroupTag { get; set; }
+        [Reactive] public ChunkViewModel? SelectedFlat { get; set; }
+        [Reactive] public ChunkViewModel? SelectedQuery { get; set; }
+        [Reactive] public ChunkViewModel? SelectedGroupTag { get; set; }
 
         public string SearchText
         {
@@ -151,7 +152,7 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        public TweakEntry SelectedRecordEntry
+        public TweakEntry? SelectedRecordEntry
         {
             get => _selectedRecordEntry;
             set
@@ -161,7 +162,7 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedRecordEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, _selectedRecordEntry.DisplayName, false, true) { IsExpanded = true });
+                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, _selectedRecordEntry.DisplayName, true) { IsExpanded = true });
                 }
                 else
                 {
@@ -171,7 +172,7 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        public TweakEntry SelectedFlatEntry
+        public TweakEntry? SelectedFlatEntry
         {
             get => _selectedFlatEntry;
             set
@@ -180,7 +181,7 @@ namespace WolvenKit.ViewModels.Tools
                 this.RaisePropertyChanged(nameof(SelectedFlatEntry));
                 if (_selectedFlatEntry != null && _tweakDB.IsLoaded)
                 {
-                    SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(_selectedFlatEntry.Item), null, true);
+                    SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(_selectedFlatEntry.Item));
                 }
                 else
                 {
@@ -190,7 +191,7 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        public TweakEntry SelectedQueryEntry
+        public TweakEntry? SelectedQueryEntry
         {
             get => _selectedQueryEntry;
             set
@@ -205,7 +206,7 @@ namespace WolvenKit.ViewModels.Tools
                         arr.Add(query);
                     }
 
-                    SelectedQuery = new ChunkViewModel(arr, null, true);
+                    SelectedQuery = new ChunkViewModel(arr);
                 }
                 else
                 {
@@ -215,7 +216,7 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        public TweakEntry SelectedGroupTagEntry
+        public TweakEntry? SelectedGroupTagEntry
         {
             get => _selectedGroupTagEntry;
             set
@@ -224,7 +225,11 @@ namespace WolvenKit.ViewModels.Tools
                 this.RaisePropertyChanged(nameof(SelectedGroupTagEntry));
                 if (_selectedGroupTagEntry != null && _tweakDB.IsLoaded)
                 {
-                    SelectedGroupTag = new ChunkViewModel((CUInt8)_tweakDB.GetGroupTag(_selectedGroupTagEntry.Item), null, true);
+                    var u = _tweakDB.GetGroupTag(_selectedGroupTagEntry.Item);
+                    if (u is not null)
+                    {
+                        SelectedGroupTag = new ChunkViewModel((CUInt8)u);
+                    }
                 }
                 else
                 {
@@ -248,7 +253,7 @@ namespace WolvenKit.ViewModels.Tools
             _tweakDB.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
         }
 
-        private void Load(object sender, EventArgs eventArgs)
+        private void Load(object? sender, EventArgs eventArgs)
         {
             var records = PrepareList(_tweakDB.GetRecords(), true);
             var flats = PrepareList(_tweakDB.GetFlats());
@@ -258,7 +263,7 @@ namespace WolvenKit.ViewModels.Tools
             var classes = new List<string> { "" };
             foreach (var record in records)
             {
-                if (!classes.Contains(record.RecordTypeName))
+                if (!classes.Contains(record.RecordTypeName.NotNull()))
                 {
                     classes.Add(record.RecordTypeName);
                 }
@@ -290,10 +295,7 @@ namespace WolvenKit.ViewModels.Tools
             List<TweakEntry> PrepareList(List<TweakDBID> tweaks, bool isRecord = false)
             {
                 var tmpRecords = new ConcurrentQueue<TweakEntry>();
-                Parallel.ForEach(tweaks, record =>
-                {
-                    tmpRecords.Enqueue(new TweakEntry(record, _tweakDB, isRecord));
-                });
+                Parallel.ForEach(tweaks, record => tmpRecords.Enqueue(new TweakEntry(record, _tweakDB, isRecord)));
                 return tmpRecords.AsParallel().OrderBy(x => x.DisplayName).ToList();
             }
         }
@@ -356,21 +358,26 @@ namespace WolvenKit.ViewModels.Tools
             return false;
         }
 
-        private DelegateCommand convertToYAML;
+        private DelegateCommand? convertToYAML;
         public ICommand ConvertToYAML => convertToYAML ??= new DelegateCommand(ExecuteConvertToYAML, CanExecuteConvertToYAML);
         public bool CanExecuteConvertToYAML() => true; //Locator.Current.GetService<IProjectManager>().IsProjectLoaded;
 
         private void ExecuteConvertToYAML()
         {
+            if (SelectedRecordEntry is null)
+            {
+                return;
+            }
+
             var txl = new TweakXL
             {
                 ID = SelectedRecordEntry.DisplayName
             };
 
-            var baseRecord = _tweakDB.GetRecord(_selectedRecordEntry.Item);
-            txl.Type = "gamedata" + _selectedRecordEntry.RecordTypeName + "_Record";
+            var baseRecord = _tweakDB.GetRecord(SelectedRecordEntry.Item);
+            txl.Type = "gamedata" + SelectedRecordEntry.RecordTypeName + "_Record";
 
-            txl.ID = _selectedRecordEntry.Item;
+            txl.ID = SelectedRecordEntry.Item;
 
             baseRecord.GetPropertyNames().ForEach(name => txl.Properties.Add(name, baseRecord.GetProperty(name)));
 
@@ -423,7 +430,7 @@ namespace WolvenKit.ViewModels.Tools
             public bool IsResolved { get; }
 
             public bool IsInlineRecord { get; }
-            public string RecordTypeName { get; }
+            public string? RecordTypeName { get; }
 
             public TweakEntry(TweakDBID item, TweakDBService tweakDbService, bool isRecord = false)
             {
@@ -444,7 +451,11 @@ namespace WolvenKit.ViewModels.Tools
                     }
 
                     var type = tweakDbService.GetType(Item);
-                    RecordTypeName = type.Name[8..^7];
+                    if (type != null)
+                    {
+                        RecordTypeName = type.Name[8..^7];
+                    }
+
                 }
             }
         }

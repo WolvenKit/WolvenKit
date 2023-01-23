@@ -1,11 +1,12 @@
 using System.ComponentModel;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Prism.Commands;
 using WolvenKit.Common;
 
 namespace WolvenKit.Models
 {
-    public class SearchParameters : ObservableObject, INotifyPropertyChanged, INotifyPropertyChanging
+    public class SearchParameters : ObservableObject
     {
         #region Constructors
 
@@ -28,9 +29,9 @@ namespace WolvenKit.Models
 
         #region SearchText
 
-        private string _searchText;
+        private string? _searchText;
 
-        public string SearchText
+        public string? SearchText
         {
             get => _searchText;
             set
@@ -47,9 +48,9 @@ namespace WolvenKit.Models
 
         #region SearchBundleText
 
-        private string _searchBundleText;
+        private string? _searchBundleText;
 
-        public string SearchBundleText
+        public string? SearchBundleText
         {
             get => _searchBundleText;
             set
@@ -66,9 +67,9 @@ namespace WolvenKit.Models
 
         #region SearchTypeText
 
-        private string _searchTypeText;
+        private string? _searchTypeText;
 
-        public string SearchTypeText
+        public string? SearchTypeText
         {
             get => _searchTypeText;
             set

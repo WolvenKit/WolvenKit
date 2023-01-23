@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.Types;
 using Activator = System.Activator;
@@ -19,17 +20,9 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
     {
         private readonly IEnumerable<Type> _types;
 
-        public ITypeConverterWithTypeDiscriminator()
-        {
+        public ITypeConverterWithTypeDiscriminator() =>
             // This is faster than reflection for few types
-            _types = Enum.GetValues<ETweakType>().Select(Serialization.GetTypeFromEnum);
-
-            // otherwise use reflection
-            //var type = typeof(IType);
-            //_types = assmembly.GetTypes()
-            //    .Where(p => type.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
-            //    .ToList();
-        }
+            _types = Enum.GetValues<ETweakType>().Select(Serialization.GetTypeFromEnum);// otherwise use reflection//var type = typeof(IType);//_types = assmembly.GetTypes()//    .Where(p => type.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)//    .ToList();
 
         public override bool CanConvert(Type typeToConvert)
         {
@@ -84,23 +77,20 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                 var items = JsonSerializer.Deserialize<IList>(jsonObject, options);
 
 
-                var array = (IRedArray)Activator.CreateInstance(
+                var array = Activator.CreateInstance(
                     typeof(CArray<>).MakeGenericType(innertype),
                     BindingFlags.Instance | BindingFlags.Public,
                     binder: null,
                     args: null,
-                    culture: null);
-                if (array is null)
-                {
-                    throw new JsonException();
-                }
+                    culture: null) as IRedArray ?? throw new JsonException();
                 array.AddRange(items);
 
                 return array is IRedType o ? o : throw new JsonException();
             }
             else
             {
-                return (IRedType)JsonSerializer.Deserialize(jsonObject, type, options);
+                var r = JsonSerializer.Deserialize(jsonObject, type, options) as IRedType;
+                return r.NotNull();
             }
 
         }

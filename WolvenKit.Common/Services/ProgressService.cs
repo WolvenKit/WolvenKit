@@ -64,7 +64,7 @@ namespace System
         /// </remarks>
         public event EventHandler<T>? ProgressChanged;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         /// <summary>Reports a progress change.</summary>

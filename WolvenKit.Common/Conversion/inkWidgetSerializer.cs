@@ -9,19 +9,16 @@ namespace WolvenKit.Common.Conversion
 {
     public class inkWidgetSerializer : IXmlSerializable
     {
-        public inkWidget Root;
+        public inkWidget? Root;
 
         public inkWidgetSerializer()
         {
 
         }
 
-        public inkWidgetSerializer(inkWidget widget)
-        {
-            Root = widget;
-        }
+        public inkWidgetSerializer(inkWidget widget) => Root = widget;
 
-        public XmlSchema GetSchema() => null;
+        public XmlSchema? GetSchema() => null;
 
         public void ReadXml(XmlReader reader) => throw new NotImplementedException();
 
@@ -192,6 +189,8 @@ namespace WolvenKit.Common.Conversion
                             }
                         }
                         writer.WriteEndElement();
+                        break;
+                    default:
                         break;
                 }
             }

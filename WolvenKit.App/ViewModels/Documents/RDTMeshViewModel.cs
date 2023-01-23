@@ -11,12 +11,15 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using Microsoft.Win32;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -28,15 +31,15 @@ namespace WolvenKit.ViewModels.Documents
     public interface IBindable
     {
         public SeparateMatrix Matrix { get; set; }
-        public string BindName { get; set; }
-        public string SlotName { get; set; }
+        public string? BindName { get; set; }
+        public string? SlotName { get; set; }
     }
 
     public interface INode
     {
         public string Name { get; set; }
         public SeparateMatrix Matrix { get; set; }
-        public INode Parent { get; set; }
+        public INode? Parent { get; set; }
         public List<LoadableModel> Models { get; set; }
 
         public void AddModel(LoadableModel child);
@@ -44,6 +47,8 @@ namespace WolvenKit.ViewModels.Documents
 
     public class Appearance
     {
+        public Appearance(string name) => Name = name;
+
         public Dictionary<uint, List<SubmeshComponent>> LODLUT { get; set; } = new();
 
         private uint _selectedLOD = 1;
@@ -62,8 +67,9 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
         }
-        public string AppearanceName { get; set; }
+        public string? AppearanceName { get; set; }
         public string Name { get; set; }
+
         public List<LoadableModel> Models { get; set; } = new();
         public CName Resource { get; set; }
         public List<INode> Nodes { get; set; } = new();
@@ -74,29 +80,33 @@ namespace WolvenKit.ViewModels.Documents
 
     public class LoadableModel : IBindable, INode
     {
+        public LoadableModel(string name) => Name = name;
+
+
         public int AppearanceIndex { get; set; }
-        public string AppearanceName { get; set; }
-        public CR2WFile MeshFile { get; set; }
+        public string? AppearanceName { get; set; }
+        public CR2WFile? MeshFile { get; set; }
         public CName DepotPath { get; set; }
         public List<SubmeshComponent> Meshes { get; set; } = new();
-        public string FilePath { get; set; }
-        public Model3D OriginalModel { get; set; }
-        public Model3D Model { get; set; }
-        public Transform3D Transform { get; set; }
+        public string? FilePath { get; set; }
+        public Model3D? OriginalModel { get; set; }
+        public Model3D? Model { get; set; }
+        public Transform3D? Transform { get; set; }
         public bool IsEnabled { get; set; }
         public string Name { get; set; }
+
         public List<Material> Materials { get; set; } = new();
 
         public SeparateMatrix Matrix { get; set; } = new();
-        public string BindName { get; set; }
-        public string SlotName { get; set; }
+        public string? BindName { get; set; }
+        public string? SlotName { get; set; }
 
         public ulong ChunkMask { get; set; } = ulong.MaxValue;
         public List<bool> ChunkList { get; set; } = new(64);
         public ObservableCollection<int> AllChunks { get; set; } = new();
         public ObservableCollection<int> EnabledChunks { get; set; } = new();
 
-        public INode Parent { get; set; }
+        public INode? Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -107,13 +117,15 @@ namespace WolvenKit.ViewModels.Documents
 
     public class Rig : IBindable, INode
     {
+        public Rig(string name) => Name = name;
+
         public string Name { get; set; }
         public List<RigBone> Bones { get; set; } = new();
         public List<Rig> Children { get; set; } = new();
 
         public SeparateMatrix Matrix { get; set; } = new();
-        public string BindName { get; set; }
-        public string SlotName { get; set; }
+        public string? BindName { get; set; }
+        public string? SlotName { get; set; }
 
         public void AddChild(Rig child)
         {
@@ -121,7 +133,7 @@ namespace WolvenKit.ViewModels.Documents
             Children.Add(child);
         }
 
-        public INode Parent { get; set; }
+        public INode? Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -132,6 +144,8 @@ namespace WolvenKit.ViewModels.Documents
 
     public class RigBone : INode
     {
+        public RigBone(string name) => Name = name;
+
         public string Name { get; set; }
         public List<RigBone> Children { get; set; } = new();
         public SeparateMatrix Matrix { get; set; } = new();
@@ -142,7 +156,7 @@ namespace WolvenKit.ViewModels.Documents
             Children.Add(child);
         }
 
-        public INode Parent { get; set; }
+        public INode? Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -153,23 +167,29 @@ namespace WolvenKit.ViewModels.Documents
 
     public class SlotSet : IBindable
     {
+        public SlotSet(string name, string bindname)
+        {
+            Name = name;
+            BindName = bindname;
+        }
         public string Name { get; set; }
-        public Dictionary<string, string> Slots { get; set; }
+        public Dictionary<string, string> Slots { get; set; } = new();
 
         public SeparateMatrix Matrix { get; set; } = new();
-        public string BindName { get; set; }
-        public string SlotName { get; set; }
+        public string? BindName { get; set; }
+        public string? SlotName { get; set; }
     }
 
     public class Material
     {
+        public Material(string name) => Name = name;
         public string Name { get; set; }
-        public CMaterialInstance Instance { get; set; }
+        public CMaterialInstance? Instance { get; set; }
         public Dictionary<string, object> Values { get; set; } = new();
-        public Material Base { get; set; }
-        public Bitmap ColorTexture { get; set; }
-        public string ColorTexturePath { get; set; }
-        public string TemplateName { get; set; }
+        public Material? Base { get; set; }
+        public Bitmap? ColorTexture { get; set; }
+        public string? ColorTexturePath { get; set; }
+        public string? TemplateName { get; set; }
         public float Metalness { get; set; } = 0.0f;
         public float Roughness { get; set; } = 0.75f;
     }
@@ -194,21 +214,21 @@ namespace WolvenKit.ViewModels.Documents
     {
         public ViewModelActivator Activator { get; } = new();
 
-        protected readonly RedBaseClass _data;
+        protected readonly RedBaseClass? _data;
 
         private readonly Dictionary<string, LoadableModel> _modelList = new();
         private readonly Dictionary<string, SlotSet> _slotSets = new();
 
-        public EffectsManager EffectsManager { get; }
+        public EffectsManager? EffectsManager { get; }
 
-        public HelixToolkit.Wpf.SharpDX.Camera Camera { get; }
+        public HelixToolkit.Wpf.SharpDX.Camera? Camera { get; }
 
         public SceneNodeGroupModel3D GroupModel { get; set; } = new SceneNodeGroupModel3D();
 
         //public List<Element3D> ModelGroup { get; set; } = new();
         public SmartElement3DCollection ModelGroup { get; set; } = new();
 
-        public TextureModel EnvironmentMap { get; set; }
+        public TextureModel? EnvironmentMap { get; set; }
 
         public bool IsRendered;
 
@@ -218,16 +238,59 @@ namespace WolvenKit.ViewModels.Documents
 
         public PanelVisibility PanelVisibility { get; set; } = new();
 
-        public RDTMeshViewModel(RedDocumentViewModel file)
+        [Reactive] public ImageSource? Image { get; set; }
+
+        [Reactive] public object? SelectedItem { get; set; }
+
+        [Reactive] public string? LoadedModelPath { get; set; }
+
+        [Reactive] public List<LoadableModel> Models { get; set; } = new();
+
+        [Reactive] public Dictionary<string, Rig> Rigs { get; set; } = new();
+
+        [Reactive] public List<Appearance> Appearances { get; set; } = new();
+
+        [Reactive] public Appearance? SelectedAppearance { get; set; }
+
+        public RDTMeshViewModel(RedDocumentViewModel parent, string header) : base(parent, header)
         {
+            SearchForPointCommand = new DelegateCommand(ExecuteSearchForPoint);
+            ClearSearchCommand = new DelegateCommand(ExecuteClearSearch);
+            ExtractShadersCommand = new DelegateCommand(ExtractShaders);
+            LoadMaterialsCommand = new DelegateCommand(LoadMaterials);
+            ExportEntity = new DelegateCommand(() =>
+            {
+                if (SelectedAppearance is null)
+                {
+                    return;
+                }
+
+                var dlg = new SaveFileDialog
+                {
+                    FileName = Path.GetFileNameWithoutExtension(parent.RelativePath) + ".glb",
+                    Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
+                };
+
+                if (dlg.ShowDialog().GetValueOrDefault())
+                {
+                    var outFile = new FileInfo(dlg.FileName);
+                    // will only use archive files (for now)
+                    if (Locator.Current.GetService<ModTools>().NotNull().ExportEntity(File.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
+                    {
+                        Locator.Current.GetService<ILoggerService>().NotNull().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
+                    }
+                    else
+                    {
+                        Locator.Current.GetService<ILoggerService>().NotNull().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
+                    }
+                }
+            });
+
             try
             {
-                if (Header == null)
-                {
-                    Header = MeshViewHeaders.MeshPreview;
-                } 
+                Header ??= MeshViewHeaders.MeshPreview;
 
-                File = file;
+                File = parent;
 
                 foreach (var res in File.Cr2wFile.EmbeddedFiles)
                 {
@@ -249,14 +312,16 @@ namespace WolvenKit.ViewModels.Documents
                     LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f)
                 };
 
-                ExtractShadersCommand = new DelegateCommand(ExtractShaders);
-                LoadMaterialsCommand = new DelegateCommand(LoadMaterials);
+
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+            catch (Exception ex)
+            {
+                Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
+            }
 
         }
 
-        public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file)
+        public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file, "NO DATA")
         {
             _data = data;
             //Render = RenderMesh;
@@ -271,27 +336,27 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
             IsRendered = true;
-            var data = (CMesh)_data;
+            if (_data is not CMesh data)
+            {
+                return;
+            }
             var materials = new Dictionary<string, Material>();
 
-            var localList = (CR2WList)data.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
+            var localList = data.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
 
             foreach (var me in data.MaterialEntries)
             {
                 var name = GetUniqueMaterialName(me.Name, data);
                 if (!me.IsLocalInstance)
                 {
-                    materials.Add(name, new Material()
-                    {
-                        Name = name
-                    });
+                    materials.Add(name, new Material(name));
                     continue;
                 }
-                CMaterialInstance inst = null;
+                CMaterialInstance? inst = null;
 
                 if (localList != null && localList.Files.Count > me.Index)
                 {
-                    inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+                    inst = localList.Files[me.Index].RootChunk as CMaterialInstance;
                 }
                 else
                 {
@@ -299,7 +364,7 @@ namespace WolvenKit.ViewModels.Documents
                     //{
                     //inst = (CMaterialInstance)pme.GetValue();
                     //}
-                    inst = (CMaterialInstance)data.PreloadLocalMaterialInstances[me.Index].GetValue();
+                    inst = data.PreloadLocalMaterialInstances[me.Index].GetValue() as CMaterialInstance;
                 }
 
                 //CMaterialInstance bm = null;
@@ -307,11 +372,12 @@ namespace WolvenKit.ViewModels.Documents
                 //{
                 //    bm = (CMaterialInstance)file.RootChunk;
                 //}
-                var material = new Material()
+                var material = new Material(name)
                 {
                     Instance = inst,
-                    Name = name
                 };
+
+                ArgumentNullException.ThrowIfNull(inst);
 
                 foreach (var pair in inst.Values)
                 {
@@ -338,25 +404,18 @@ namespace WolvenKit.ViewModels.Documents
                         }
                         else
                         {
-                            appMaterials.Add(new Material()
-                            {
-                                Name = name
-                            });
+                            appMaterials.Add(new Material(name));
                         }
                     }
 
-                    var a = new Appearance()
-                    {
-                        Name = mmapp.Name
-                    };
+                    var a = new Appearance(mmapp.Name);
 
-                    var model = new LoadableModel()
+                    var model = new LoadableModel(Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_").Replace(".", "_"))
                     {
                         MeshFile = File.Cr2wFile,
                         AppearanceIndex = appIndex,
                         AppearanceName = mmapp.Name,
                         Materials = appMaterials,
-                        Name = Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_").Replace(".", "_"),
                         IsEnabled = true
                     };
                     a.Models.Add(model);
@@ -404,9 +463,9 @@ namespace WolvenKit.ViewModels.Documents
 
         public class MeshComponent : GroupModel3D
         {
-            public string AppearanceName { get; set; }
-            public string MaterialName { get; set; }
-            public string WorldNodeIndex { get; set; }
+            public string? AppearanceName { get; set; }
+            public string? MaterialName { get; set; }
+            public string? WorldNodeIndex { get; set; }
             public CName DepotPath { get; set; }
         }
 
@@ -487,7 +546,7 @@ namespace WolvenKit.ViewModels.Documents
             return modelGroups;
         }
 
-        private List<LoadableModel> LoadMeshs(IList<RedBaseClass> chunks)
+        private List<LoadableModel>? LoadMeshs(IList<RedBaseClass> chunks)
         {
             if (chunks == null)
             {
@@ -535,13 +594,13 @@ namespace WolvenKit.ViewModels.Documents
 
                     if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
                     {
-                        Locator.Current.GetService<ILoggerService>().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
+                        Locator.Current.GetService<ILoggerService>().NotNull().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
                         continue;
                     }
 
                     var matrix = ToSeparateMatrix(epc.LocalTransform);
 
-                    string bindName = null, slotName = null;
+                    string? bindName = null, slotName = null;
                     if ((epc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
                     {
                         bindName = ehtb.BindName;
@@ -552,21 +611,18 @@ namespace WolvenKit.ViewModels.Documents
 
                     var materials = new Dictionary<string, Material>();
 
-                    var localList = (CR2WList)mesh.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
+                    var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
 
                     foreach (var me in mesh.MaterialEntries)
                     {
                         var name = GetUniqueMaterialName(me.Name, mesh);
                         if (!me.IsLocalInstance)
                         {
-                            materials.Add(name, new Material()
-                            {
-                                Name = name
-                            });
+                            materials.Add(name, new Material(name));
                             continue;
                         }
 
-                        CMaterialInstance inst = null;
+                        CMaterialInstance? inst = null;
 
                         if (localList != null && localList.Files.Count > me.Index)
                         {
@@ -587,10 +643,9 @@ namespace WolvenKit.ViewModels.Documents
                         //    bm = (CMaterialInstance)file.RootChunk;
                         //}
 
-                        var material = new Material()
+                        var material = new Material(name)
                         {
                             Instance = inst,
-                            Name = name
                         };
 
                         foreach (var pair in inst.Values)
@@ -633,17 +688,14 @@ namespace WolvenKit.ViewModels.Documents
                                 }
                                 else
                                 {
-                                    appMaterials.Add(new Material()
-                                    {
-                                        Name = name
-                                    });
+                                    appMaterials.Add(new Material(name));
                                 }
                             }
                             break;
                         }
                     }
 
-                    var model = new LoadableModel()
+                    var model = new LoadableModel(epc.Name.ToString().Replace(".", ""))
                     {
                         MeshFile = meshFile,
                         AppearanceIndex = appIndex,
@@ -651,7 +703,6 @@ namespace WolvenKit.ViewModels.Documents
                         Matrix = matrix,
                         Materials = appMaterials,
                         IsEnabled = enabled,
-                        Name = epc.Name.ToString().Replace(".", ""),
                         BindName = bindName,
                         SlotName = slotName,
                         ChunkMask = chunkMask,
@@ -686,61 +737,58 @@ namespace WolvenKit.ViewModels.Documents
             return null;
         }
 
-        public void AddToRigs(Dictionary<string, LoadableModel> models)
-        {
-            SelectedAppearance.Nodes.Clear();
-            foreach (var (name, rig) in Rigs)
-            {
-                SelectedAppearance.Nodes.Add(rig);
-                rig.Models.Clear();
-                foreach (var rigbone in rig.Bones)
-                {
-                    rigbone.Models.Clear();
-                    SelectedAppearance.Nodes.Add(rigbone);
-                }
-            }
+        //public void AddToRigs(Dictionary<string, LoadableModel> models)
+        //{
+        //    SelectedAppearance.Nodes.Clear();
+        //    foreach (var (name, rig) in Rigs)
+        //    {
+        //        SelectedAppearance.Nodes.Add(rig);
+        //        rig.Models.Clear();
+        //        foreach (var rigbone in rig.Bones)
+        //        {
+        //            rigbone.Models.Clear();
+        //            SelectedAppearance.Nodes.Add(rigbone);
+        //        }
+        //    }
 
-            foreach (var (name, model) in models)
-            {
-                SelectedAppearance.Nodes.Add(model);
-                if (model.BindName == null)
-                {
-                    continue;
-                }
+        //    foreach (var (name, model) in models)
+        //    {
+        //        SelectedAppearance.Nodes.Add(model);
+        //        if (model.BindName == null)
+        //        {
+        //            continue;
+        //        }
 
-                if (models.ContainsKey(model.BindName))
-                {
-                    models[model.BindName].AddModel(model);
-                }
-                else if (_slotSets.ContainsKey(model.BindName))
-                {
-                    if (model.SlotName != null && _slotSets[model.BindName].Slots.ContainsKey(model.SlotName))
-                    {
-                        var slot = _slotSets[model.BindName].Slots[model.SlotName];
+        //        if (models.ContainsKey(model.BindName))
+        //        {
+        //            models[model.BindName].AddModel(model);
+        //        }
+        //        else if (_slotSets.ContainsKey(model.BindName))
+        //        {
+        //            if (model.SlotName != null && _slotSets[model.BindName].Slots.ContainsKey(model.SlotName))
+        //            {
+        //                var slot = _slotSets[model.BindName].Slots[model.SlotName];
 
-                        if (Rigs.ContainsKey(_slotSets[model.BindName].BindName))
-                        {
-                            var rigBone = Rigs[_slotSets[model.BindName].BindName].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
+        //                if (Rigs.ContainsKey(_slotSets[model.BindName].BindName))
+        //                {
+        //                    var rigBone = Rigs[_slotSets[model.BindName].BindName].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
 
-                            if (rigBone != null)
-                            {
-                                rigBone.AddModel(model);
-                            }
-                        }
-                    }
-                }
-                else if (Rigs.ContainsKey(model.BindName))
-                {
-                    Rigs[model.BindName].AddModel(model);
-                }
-                else
-                {
-                    Rigs.First().Value.AddModel(model);
-                }
-            }
+        //                    rigBone?.AddModel(model);
+        //                }
+        //            }
+        //        }
+        //        else if (Rigs.ContainsKey(model.BindName))
+        //        {
+        //            Rigs[model.BindName].AddModel(model);
+        //        }
+        //        else
+        //        {
+        //            Rigs.First().Value.AddModel(model);
+        //        }
+        //    }
 
-            // return root?
-        }
+        //    // return root?
+        //}
 
         public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
         {
@@ -760,14 +808,15 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             var slot = _slotSets[bindable.BindName].Slots[bindable.SlotName];
 
-                            if (Rigs.ContainsKey(_slotSets[bindable.BindName].BindName))
+                            var bindname = _slotSets[bindable.BindName].BindName;
+                            if (bindname is not null && Rigs.ContainsKey(bindname))
                             {
-                                var rigBone = Rigs[_slotSets[bindable.BindName].BindName].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
+                                var rigBone = Rigs[bindname].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
 
                                 while (rigBone != null)
                                 {
                                     matrix.AppendPost(rigBone.Matrix);
-                                    rigBone = (RigBone)rigBone.Parent;
+                                    rigBone = rigBone.Parent as RigBone;
                                 }
                             }
                         }
@@ -787,25 +836,16 @@ namespace WolvenKit.ViewModels.Documents
         public ICommand ExtractShadersCommand { get; set; }
         public static void ExtractShaders()
         {
-            var _settingsManager = Locator.Current.GetService<ISettingsManager>();
-            ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
+            var _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
+            if (_settingsManager.CP77ExecutablePath is not null)
+            {
+                ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
+            }
         }
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
-        [Reactive] public ImageSource Image { get; set; }
 
-        [Reactive] public object SelectedItem { get; set; }
-
-        [Reactive] public string LoadedModelPath { get; set; }
-
-        [Reactive] public List<LoadableModel> Models { get; set; } = new();
-
-        [Reactive] public Dictionary<string, Rig> Rigs { get; set; } = new();
-
-        [Reactive] public List<Appearance> Appearances { get; set; } = new();
-
-        [Reactive] public Appearance SelectedAppearance { get; set; }
 
         public static Matrix3D ToMatrix3D(QsTransform qs)
         {
@@ -881,8 +921,8 @@ namespace WolvenKit.ViewModels.Documents
 
         public void CenterCameraToCoord(Vector3 coord)
         {
-            Camera.AnimateTo(
-                    new System.Windows.Media.Media3D.Point3D(coord.X, coord.Z + (s_distanceCameraUnits), -coord.Y + (s_distanceCameraUnits)),
+            Camera?.AnimateTo(
+                    new System.Windows.Media.Media3D.Point3D(coord.X, coord.Z + s_distanceCameraUnits, -coord.Y + s_distanceCameraUnits),
                     new Vector3D(0, -s_distanceCameraUnits, -s_distanceCameraUnits),
                     new Vector3D(0, s_cameraUpDirectionFactor, -s_cameraUpDirectionFactor),
                     s_cameraAnimationTime);
@@ -892,7 +932,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             if (e is MouseDown3DEventArgs args && args.HitTestResult != null)
             {
-                var mouseButtonEventArgs = ((MouseButtonEventArgs)args.OriginalInputEventArgs);
+                var mouseButtonEventArgs = (MouseButtonEventArgs)args.OriginalInputEventArgs;
                 MouseDown3DSector(sender, args, mouseButtonEventArgs);
                 MouseDown3DBlock(sender, args, mouseButtonEventArgs);
 
@@ -900,13 +940,13 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        private void CommonMouseDownEvents(object modelHit, MouseButtonEventArgs mouseButtonEventArgs) 
+        private void CommonMouseDownEvents(object modelHit, MouseButtonEventArgs mouseButtonEventArgs)
         {
             if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed && modelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
             {
-                Locator.Current.GetService<ILoggerService>().Info((mesh.WorldNodeIndex != null ? "worldNodeData[" + mesh.WorldNodeIndex + "] : " : "Mesh Name :") + mesh.Name);
+                Locator.Current.GetService<ILoggerService>().NotNull().Info((mesh.WorldNodeIndex != null ? "worldNodeData[" + mesh.WorldNodeIndex + "] : " : "Mesh Name :") + mesh.Name);
             }
-        
+
         }
     }
 

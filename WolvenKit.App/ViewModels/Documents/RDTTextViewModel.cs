@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -14,26 +15,20 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class RDTTextViewModel : RedDocumentTabViewModel, INotifyPropertyChanged
     {
-        protected readonly IRedType _data;
+        //protected readonly IRedType _data;
 
-        public RDTTextViewModel(IRedType data, RedDocumentViewModel _) => throw new NotImplementedException();
-
-        public RDTTextViewModel(Stream stream, RedDocumentViewModel file)
+        public RDTTextViewModel(Stream stream, RedDocumentViewModel parent) : base(parent, "Source YAML")
         {
-            Header = "Source YAML";
-            File = file;
-            FilePath = file.FilePath;
-
             SetupText(stream);
 
             this.WhenAnyPropertyChanged(nameof(IsDirty))
-                .Do(x =>
-                {
-                    x.File.SetIsDirty(IsDirty);
-                })
+                .Do(x => x?.File.SetIsDirty(IsDirty))
                 .Subscribe();
         }
 
+        [MemberNotNull(nameof(Document))]
+        [MemberNotNull(nameof(HighlightingDefinition))]
+        [MemberNotNull(nameof(TextEditorOptions))]
         private void SetupText(Stream stream)
         {
             using var sr = new StreamReader(stream);
@@ -52,7 +47,7 @@ namespace WolvenKit.ViewModels.Documents
         public override void OnSelected()
         {
             // serialize from Data tab
-            if (File is TweakXLDocumentViewModel tweakFile)
+            //if (File is TweakXLDocumentViewModel tweakFile)
             {
                 // TODO: enable when working on ChunkViewModel
                 // get data tab

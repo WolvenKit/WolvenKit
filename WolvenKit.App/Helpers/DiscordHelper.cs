@@ -6,7 +6,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
     public static class DiscordHelper
     {
-        public static DiscordRPC.DiscordRpcClient Client;
+        public static DiscordRPC.DiscordRpcClient? Client;
         public static string DiscordAppID = "897813293480169532";
         public static bool DiscordRPCEnabled = true;
         public static bool DiscordRPCInitizialized = false;
@@ -40,7 +40,10 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                         Client.Invoke();
                     }
                 }
-                catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                catch (Exception ex)
+                {
+                    ILoggerService.GetUnsafe().Error(ex);
+                }
             }
         }
     }

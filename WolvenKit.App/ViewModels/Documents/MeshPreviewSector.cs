@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reactive.Disposables;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
@@ -11,17 +10,17 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public partial class RDTMeshViewModel
     {
-        public class MeshComponentSelector: ReactiveObject 
+        public class MeshComponentSelector : ReactiveObject
         {
             private const string s_noSelection = "No_Selection";
 
@@ -29,8 +28,8 @@ namespace WolvenKit.ViewModels.Documents
             [Reactive] public string WorldNodeIndex { get; private set; } = string.Empty;
             [Reactive] public bool IsValid { get; private set; }
 
-            private MeshComponent _meshComponent;
-            public MeshComponent SelectedMesh
+            private MeshComponent? _meshComponent;
+            public MeshComponent? SelectedMesh
             {
                 get => _meshComponent;
                 set
@@ -47,23 +46,16 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public MeshComponentSelector CurrentSelection { get; set; } = new();
 
-        public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file)
+        public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file, MeshViewHeaders.SectorPreview)
         {
-            Header = MeshViewHeaders.SectorPreview;
             PanelVisibility.ShowSelectionPanel = true;
             _data = data;
-            var app = new Appearance()
-            {
-                Name = Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"),
-            };
+            var app = new Appearance(Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"));
 
             Appearances.Add(app);
             SelectedAppearance = app;
 
-            this.WhenActivated((CompositeDisposable disposables) =>
-            {
-                RenderSectorSolo();
-            });
+            this.WhenActivated((CompositeDisposable disposables) => RenderSectorSolo());
         }
 
         public void RenderSectorSolo()
@@ -75,11 +67,15 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
             IsRendered = true;
-            RenderSector((worldStreamingSector)_data, Appearances[0]);
+            if (_data is worldStreamingSector wss)
+            {
+                RenderSector(wss, Appearances[0]);
+            }
         }
 
         public Element3D RenderSector(worldStreamingSector data, Appearance app)
         {
+
             var ssTransforms = ((worldNodeDataBuffer)data.NodeData.Data).Lookup;
 
             var groups = new List<Element3D>();
@@ -108,13 +104,12 @@ namespace WolvenKit.ViewModels.Documents
                         DepotPath = irmn.Mesh.DepotPath
                     };
 
-                    var model = new LoadableModel()
+                    var model = new LoadableModel(name)
                     {
                         MeshFile = File.Cr2wFile,
                         AppearanceIndex = 0,
                         AppearanceName = irmn.MeshAppearance,
                         Materials = appMaterials,
-                        Name = name,
                         IsEnabled = true,
                     };
 
@@ -131,7 +126,7 @@ namespace WolvenKit.ViewModels.Documents
                         }
 
                         var wtbTransforms = wtb.Transforms;
-                        for (int i = 0; i < wimn.WorldTransformsBuffer.NumElements; i++)
+                        for (var i = 0; i < wimn.WorldTransformsBuffer.NumElements; i++)
                         {
                             var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
 
@@ -180,7 +175,7 @@ namespace WolvenKit.ViewModels.Documents
                         }
 
                         var citbTransforms = citb.Transforms;
-                        for (int i = 0; i < widmn.CookedInstanceTransforms.NumElements; i++)
+                        for (var i = 0; i < widmn.CookedInstanceTransforms.NumElements; i++)
                         {
                             //for (int j = 0; j < transforms.Count; j++)
                             //{
@@ -270,7 +265,7 @@ namespace WolvenKit.ViewModels.Documents
                         continue;
                     }
 
-                    var gcs = Locator.Current.GetService<GeometryCacheService>();
+                    var gcs = Locator.Current.GetService<GeometryCacheService>().NotNull();
 
                     var mesh = new MeshComponent()
                     {
@@ -299,12 +294,14 @@ namespace WolvenKit.ViewModels.Documents
 
                         foreach (var shape in actor.Shapes)
                         {
-                            HelixToolkit.SharpDX.Core.MeshGeometry3D geometry = null;
+                            HelixToolkit.SharpDX.Core.MeshGeometry3D? geometry = null;
 
                             if (shape is CollisionShapeSimple simpleShape && simpleShape.ShapeType == Enums.physicsShapeType.Box)
                             {
-                                var mb = new MeshBuilder();
-                                mb.CreateNormals = true;
+                                var mb = new MeshBuilder
+                                {
+                                    CreateNormals = true
+                                };
                                 mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), simpleShape.Size.X * 2, simpleShape.Size.Z * 2, simpleShape.Size.Y * 2);
 
                                 mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
@@ -323,9 +320,10 @@ namespace WolvenKit.ViewModels.Documents
 
                                 if (geo is CVXMCacheEntry cce)
                                 {
-                                    var mb = new MeshBuilder();
-
-                                    mb.CreateNormals = true;
+                                    var mb = new MeshBuilder
+                                    {
+                                        CreateNormals = true
+                                    };
 
                                     var positions = new Vector3Collection();
                                     for (var i = 0; i < cce.Vertices.Count; i++)
@@ -396,12 +394,12 @@ namespace WolvenKit.ViewModels.Documents
                                                 mb.TriangleIndices.Add(count);
                                                 break;
                                             default:
-                                                for (int j = 0; j < cce.Faces[i].Count; j++)
+                                                for (var j = 0; j < cce.Faces[i].Count; j++)
                                                 {
                                                     mb.Positions.Add(positions[cce.Faces[i][j]]);
                                                     mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
                                                 }
-                                                for (int j = 0; j + 2 < cce.Faces[i].Count; j++)
+                                                for (var j = 0; j + 2 < cce.Faces[i].Count; j++)
                                                 {
                                                     mb.TriangleIndices.Add(count);
                                                     mb.TriangleIndices.Add(count + j + 1);
@@ -417,9 +415,10 @@ namespace WolvenKit.ViewModels.Documents
                                 }
                                 else if (geo is MeshCacheEntry mce)
                                 {
-                                    var mb = new MeshBuilder();
-
-                                    mb.CreateNormals = true;
+                                    var mb = new MeshBuilder
+                                    {
+                                        CreateNormals = true
+                                    };
 
                                     var positions = new Vector3Collection();
                                     for (var i = 0; i < mce.Vertices.Count; i++)
@@ -592,7 +591,7 @@ namespace WolvenKit.ViewModels.Documents
                             }
                         }
                     }
-                    catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                    catch (Exception ex) { ILoggerService.GetUnsafe().Error(ex); }
                 }
                 else if (handle.Chunk is worldPopulationSpawnerNode wpsn)
                 {
@@ -631,9 +630,9 @@ namespace WolvenKit.ViewModels.Documents
 
                     foreach (var point in shape.Points)
                     {
-                        center.X += (point.X / shape.Points.Count);
-                        center.Y += (point.Z / shape.Points.Count);
-                        center.Z += (-point.Y / shape.Points.Count);
+                        center.X += point.X / shape.Points.Count;
+                        center.Y += point.Z / shape.Points.Count;
+                        center.Z += -point.Y / shape.Points.Count;
                     }
 
                     mb.AddBox(center, Math.Abs(shape.Points[0].X) * 2, shape.Height, Math.Abs(shape.Points[0].Y) * 2);
@@ -669,7 +668,7 @@ namespace WolvenKit.ViewModels.Documents
 
             var element = new SectorGroup()
             {
-                Name=""
+                Name = ""
             };
             foreach (var group in groups)
             {
@@ -679,10 +678,7 @@ namespace WolvenKit.ViewModels.Documents
             return element;
         }
 
-        public static SharpDX.Vector3 ToVector3(Vector3 v)
-        {
-            return new SharpDX.Vector3(v.X, v.Y, v.Z);
-        }
+        public static SharpDX.Vector3 ToVector3(Vector3 v) => new(v.X, v.Y, v.Z);
 
         public void UpdateSelection(MeshComponent mesh)
         {
@@ -703,7 +699,7 @@ namespace WolvenKit.ViewModels.Documents
             });
         }
 
-        private void UpdateChildrenSubmesh(MeshComponent mesh, Action<SubmeshComponent> submeshUpdater)
+        private void UpdateChildrenSubmesh(MeshComponent? mesh, Action<SubmeshComponent>? submeshUpdater)
         {
             if (mesh != null)
             {
@@ -722,7 +718,7 @@ namespace WolvenKit.ViewModels.Documents
                     }
                     else
                     {
-                        Locator.Current.GetService<ILoggerService>().Warning("Child is a " + child.GetType());
+                        ILoggerService.GetUnsafe().Warning("Child is a " + child.GetType());
                     }
                 }
             }
@@ -730,12 +726,12 @@ namespace WolvenKit.ViewModels.Documents
 
         private void MouseDown3DSector(object sender, MouseDown3DEventArgs args, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            
+
             if (Header == MeshViewHeaders.SectorPreview && args.HitTestResult.ModelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
             {
                 if (mouseButtonEventArgs.RightButton == MouseButtonState.Pressed)
                 {
-                    Locator.Current.GetService<ILoggerService>().Info("RighClick: " + mesh.Name);
+                    ILoggerService.GetUnsafe().Info("RighClick: " + mesh.Name);
                 }
                 else if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed)
                 {
@@ -747,8 +743,8 @@ namespace WolvenKit.ViewModels.Documents
 
     public class SectorGroup : GroupModel3D
     {
-        public string MaterialName { get; set; }
-        public string AppearanceName { get; set; }
+        public string? MaterialName { get; set; }
+        public string? AppearanceName { get; set; }
     }
 
 }
