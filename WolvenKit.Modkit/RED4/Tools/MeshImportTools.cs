@@ -448,7 +448,7 @@ namespace WolvenKit.Modkit.RED4
 
             UpdateSkinningParamCloth(ref Meshes, ref cr2w, args);
 
-            UpdateGarmentSupportParameters(Meshes, ref cr2w);
+            UpdateGarmentSupportParameters(Meshes, cr2w);
 
             var expMeshes = Meshes.Select(_ => RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
 
@@ -1732,24 +1732,26 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, ref CR2WFile cr2w)
+        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w)
         {
-            var cMesh = (CMesh)cr2w.RootChunk;
-
-            if (meshes.All(x => x.garmentMorph?.Length > 0 && x.garmentSupportWeight?.Length > 0))
+            if (cr2w.RootChunk is CMesh cMesh)
             {
-                var garmentMeshBlobChunk = GetParameter_meshMeshParamGarmentSupport(cMesh);
 
-                var garmentBlobChunk = GetParameter_garmentMeshParamGarment(cMesh);
-
-                for (var i = 0; i < meshes.Count; i++)
+                if (meshes.All(x => x.garmentMorph?.Length > 0 && x.garmentSupportWeight?.Length > 0))
                 {
-                    WriteToGarmentSupportParameters(meshes[i], garmentMeshBlobChunk, garmentBlobChunk);
+                    var garmentMeshBlobChunk = GetParameter_meshMeshParamGarmentSupport(cMesh);
+
+                    var garmentBlobChunk = GetParameter_garmentMeshParamGarment(cMesh);
+
+                    for (var i = 0; i < meshes.Count; i++)
+                    {
+                        WriteToGarmentSupportParameters(meshes[i], garmentMeshBlobChunk, garmentBlobChunk);
+                    }
                 }
-            }
-            else
-            {
-                RemoveGarmentSupportParameters(ref cMesh);
+                else
+                {
+                    RemoveGarmentSupportParameters(cMesh);
+                }
             }
         }
 
@@ -1761,7 +1763,13 @@ namespace WolvenKit.Modkit.RED4
                 garmentMeshBlob = new CHandle<meshMeshParameter> { Chunk = new meshMeshParamGarmentSupport() };
                 cMesh.Parameters.Add(garmentMeshBlob);
             }
-            var garmentMeshBlobChunk = (meshMeshParamGarmentSupport)garmentMeshBlob.Chunk;
+
+            if (garmentMeshBlob.Chunk is not meshMeshParamGarmentSupport garmentMeshBlobChunk)
+            {
+                garmentMeshBlobChunk = new meshMeshParamGarmentSupport();
+                garmentMeshBlob.Chunk = garmentMeshBlobChunk;
+            }
+
             garmentMeshBlobChunk.ChunkCapVertices = new CArray<CArray<CUInt32>>();
             garmentMeshBlobChunk.CustomMorph = true;
 
@@ -1776,7 +1784,13 @@ namespace WolvenKit.Modkit.RED4
                 garmentBlob = new CHandle<meshMeshParameter> { Chunk = new garmentMeshParamGarment() };
                 cMesh.Parameters.Add(garmentBlob);
             }
-            var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk;
+
+            if (garmentBlob.Chunk is not garmentMeshParamGarment garmentBlobChunk)
+            {
+                garmentBlobChunk = new garmentMeshParamGarment();
+                garmentBlob.Chunk = garmentBlobChunk;
+            }
+
             garmentBlobChunk.Chunks = new CArray<garmentMeshParamGarmentChunkData>();
 
             return garmentBlobChunk;
@@ -1842,7 +1856,7 @@ namespace WolvenKit.Modkit.RED4
             });
         }
 
-        private static void RemoveGarmentSupportParameters(ref CMesh cMesh)
+        private static void RemoveGarmentSupportParameters(CMesh cMesh)
         {
             var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamGarmentSupport);
             if (garmentMeshBlob != null)
