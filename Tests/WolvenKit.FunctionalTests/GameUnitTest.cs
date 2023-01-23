@@ -27,7 +27,7 @@ namespace WolvenKit.FunctionalTests
     public class GameUnitTest
     {
         internal const string s_testResultsDirectory = "_CR2WTestResults";
-        internal static Dictionary<string, IEnumerable<FileEntry>> s_groupedFiles = new();
+        internal static Dictionary<string, IEnumerable<IGameFile>> s_groupedFiles = new();
         internal static IArchiveManager? s_bm;
         internal static bool s_writeToFile;
         private const string s_gameDirectorySetting = "GameDirectory";

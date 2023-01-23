@@ -7,10 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.RED4.Archive.IO;
-using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
+using WolvenKit.Common.Model;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.FunctionalTests.Model;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.IO;
+using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -448,7 +450,7 @@ namespace WolvenKit.FunctionalTests
 
             // Run Test
             List<WriteTestResult> results = new();
-            List<FileEntry> filesToTest = new();
+            List<IGameFile> filesToTest = new();
             var resultPath = Path.Combine(resultDir, $"write.{extension[1..]}.csv");
             if (File.Exists(resultPath) && TEST_EXISTING)
             {
@@ -505,13 +507,13 @@ namespace WolvenKit.FunctionalTests
             }
         }
 
-        private static IEnumerable<WriteTestResult> Write_Archive_Items(IEnumerable<FileEntry> files)
+        private static IEnumerable<WriteTestResult> Write_Archive_Items(IEnumerable<IGameFile> files)
         {
             ArgumentNullException.ThrowIfNull(s_bm);
             var results = new ConcurrentBag<WriteTestResult>();
 
             var filesGroups = files.Select((f, i) => new { Value = f, Index = i })
-                .GroupBy(item => item.Value.Archive.ArchiveAbsolutePath);
+                .GroupBy(item => item.Value.GetArchive().ArchiveAbsolutePath);
 
             foreach (var fileGroup in filesGroups)
             {
@@ -530,7 +532,11 @@ namespace WolvenKit.FunctionalTests
                 foreach (var tmpFile in fileList)
 #endif
                 {
-                    var file = tmpFile.Value;
+                    if (tmpFile.Value is not FileEntry file)
+                    {
+                        throw new InvalidGameContextException();
+                    }
+
                     try
                     {
                         using var originalStream = new MemoryStream();

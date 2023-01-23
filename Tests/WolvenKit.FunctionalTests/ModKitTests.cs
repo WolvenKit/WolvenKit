@@ -75,7 +75,10 @@ namespace WolvenKit.FunctionalTests
 
             for (var i = 0; i < filesToTest.Count; i++)
             {
-                var fileEntry = filesToTest[i];
+                if (filesToTest[i] is not FileEntry fileEntry)
+                {
+                    throw new InvalidGameContextException();
+                }
                 // skip files without buffers
                 var hasBuffers = (fileEntry.SegmentsEnd - fileEntry.SegmentsStart) > 1;
                 if (!hasBuffers)
@@ -83,7 +86,7 @@ namespace WolvenKit.FunctionalTests
                     continue;
                 }
 
-                var ar = fileEntry.Archive as Archive;
+                var ar = fileEntry.Archive;
                 ArgumentNullException.ThrowIfNull(ar);
                 using var cr2wstream = new MemoryStream();
                 ar.CopyFileToStream(cr2wstream, fileEntry.NameHash64, false);
@@ -368,9 +371,14 @@ namespace WolvenKit.FunctionalTests
             //var filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
             var filesToTest = infiles.ToList();
 
-            Parallel.ForEach(filesToTest, fileEntry =>
+            Parallel.ForEach(filesToTest, file =>
             //foreach (var fileEntry in filesToTest)
             {
+                if (file is not FileEntry fileEntry)
+                {
+                    throw new InvalidGameContextException();
+                }
+
                 // skip files without buffers
                 var hasBuffers = (fileEntry.SegmentsEnd - fileEntry.SegmentsStart) > 1;
                 if (!hasBuffers)

@@ -8,9 +8,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.RED4.Archive.IO;
+using WolvenKit.Common.Model;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.FunctionalTests.Model;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.IO;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -447,13 +449,13 @@ namespace WolvenKit.FunctionalTests
 
         #endregion test methods
 
-        private static IEnumerable<ReadTestResult> Read_Archive_Items(IEnumerable<FileEntry> files)
+        private static IEnumerable<ReadTestResult> Read_Archive_Items(IEnumerable<IGameFile> files)
         {
             ArgumentNullException.ThrowIfNull(s_bm);
             var results = new ConcurrentBag<ReadTestResult>();
 
             var filesGroups = files.Select((f, i) => new { Value = f, Index = i })
-                .GroupBy(item => item.Value.Archive.ArchiveAbsolutePath);
+                .GroupBy(item => item.Value.GetArchive<Archive>().ArchiveAbsolutePath);
 
             foreach (var fileGroup in filesGroups)
             {
@@ -472,7 +474,11 @@ namespace WolvenKit.FunctionalTests
                 foreach (var tmpFile in fileList)
 #endif
                 {
-                    var file = tmpFile.Value;
+                    if (tmpFile.Value is not FileEntry file)
+                    {
+                        throw new InvalidGameContextException();
+                    }
+
                     try
                     {
                         using var ms = new MemoryStream();
@@ -562,17 +568,16 @@ namespace WolvenKit.FunctionalTests
 
             // Run Test
             List<ReadTestResult> results = new();
-            List<FileEntry> filesToTest = new();
+            List<IGameFile> filesToTest = new();
             var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
             if (File.Exists(resultPath) && TEST_EXISTING)
             {
-                ulong hash;
                 foreach (var line in File.ReadAllLines(resultPath)
                              .Skip(1)
                              .Where(_ => !string.IsNullOrEmpty(_)))
                 {
                     var hashStr = line.Split(',').First();
-                    if (ulong.TryParse(hashStr, out hash) || ulong.TryParse(hashStr.TrimStart('0', 'x'), NumberStyles.HexNumber, null, out hash))
+                    if (ulong.TryParse(hashStr, out var hash) || ulong.TryParse(hashStr.TrimStart('0', 'x'), NumberStyles.HexNumber, null, out hash))
                     {
                         if (s_bm.Lookup(hash).Value is FileEntry entry)
                         {
