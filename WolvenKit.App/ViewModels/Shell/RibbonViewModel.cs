@@ -70,6 +70,11 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> LaunchProfileCommand { get; }
         private async Task LaunchProfileAsync()
         {
+            if (_settingsManager.LaunchProfiles is null)
+            {
+                _settingsManager.LaunchProfiles = new();
+            }
+
             if (_settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))
             {
                 _watcherService.IsSuspended = true;

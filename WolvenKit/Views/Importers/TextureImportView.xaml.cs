@@ -17,6 +17,7 @@ using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -62,9 +63,15 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
     // TODO refactor this and move to ViewModel
     private void ShowSettings()
     {
+        var mod = Locator.Current.GetService<IProjectManager>().NotNull().ActiveProject;
+        if (mod is null)
+        {
+            return;
+        }
+
         if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport && Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat rawExtension) && rawExtension == ERawFileFormat.re)
         {
-            var mod = ViewModel.GetActiveProject();
+            
             var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
             var depotPaths = animsets.Select(x => x[(mod.ModDirectory.Length + 1)..]);
 
@@ -104,6 +111,12 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
     // TODO refactor this and move to ViewModel
     private void AnimsetComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
+        var mod = Locator.Current.GetService<IProjectManager>().NotNull().ActiveProject;
+        if (mod is null)
+        {
+            return;
+        }
+
         if (ImportGrid.SelectedItem is ImportableItemViewModel selectedImport && selectedImport.Properties is ReImportArgs args)
         {
             if (AnimsetComboBox.SelectedItem is not string selectedItem)
@@ -114,7 +127,7 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
             args.Animset = selectedItem;
 
             // parse animset and populate the animnameBox
-            var path = Path.Combine(ViewModel.GetActiveProject().ModDirectory, selectedItem);
+            var path = Path.Combine(mod.ModDirectory, selectedItem);
             if (File.Exists(path))
             {
                 using var fs = new FileStream(path, FileMode.Open);
@@ -210,7 +223,7 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
         ViewModel.ImportSettingsCommand.NotifyCanExecuteChanged();
         ViewModel.DefaultSettingsCommand.NotifyCanExecuteChanged();
 
-        // toglle additional options
+        // toggle additional options
         ShowSettings();
     }
 

@@ -270,7 +270,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                                 ArgumentNullException.ThrowIfNull(exportArgs); // TODO WHY???
 
                                 exportArgs.Get<MlmaskExportArgs>().AsList = false;
-                                await _modTools.UncookSingleAsync(entry.Archive, entry.Key, materialRepoDir, exportArgs);
+                                await _modTools.UncookSingleAsync(entry.GetArchive<ICyberGameArchive>(), entry.Key, materialRepoDir, exportArgs);
 
                                 Interlocked.Increment(ref progress);
                                 _progress.Report(progress / (float)fileCount);

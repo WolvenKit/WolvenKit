@@ -66,8 +66,23 @@ namespace WolvenKit.Modkit.RED4
             var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
             var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
 
-            Meshes.ForEach(p => p.positions.ToList().ForEach(q => { max.X = Math.Max(q.X, max.X); max.Y = Math.Max(q.Y, max.Y); max.Z = Math.Max(q.Z, max.Z); }));
-            Meshes.ForEach(p => p.positions.ToList().ForEach(q => { min.X = Math.Min(q.X, min.X); min.Y = Math.Min(q.Y, min.Y); min.Z = Math.Min(q.Z, min.Z); }));
+            foreach (var p in Meshes)
+            {
+                ArgumentNullException.ThrowIfNull(p.positions);
+                foreach (var q in p.positions.ToList())
+                {
+                    max.X = Math.Max(q.X, max.X); max.Y = Math.Max(q.Y, max.Y); max.Z = Math.Max(q.Z, max.Z);
+                }
+            }
+
+            foreach (var p in Meshes)
+            {
+                ArgumentNullException.ThrowIfNull(p.positions);
+                foreach (var q in p.positions.ToList())
+                {
+                    min.X = Math.Min(q.X, min.X); min.Y = Math.Min(q.Y, min.Y); min.Z = Math.Min(q.Z, min.Z);
+                }
+            }
 
             blob.BoundingBox.Min = new Vector4 { X = min.X, Y = min.Y, Z = min.Z, W = 1f };
             blob.BoundingBox.Max = new Vector4 { X = max.X, Y = max.Y, Z = max.Z, W = 1f };

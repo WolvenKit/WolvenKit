@@ -200,10 +200,15 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        private Task LoadArchiveManager() =>
-            Task.Run(() =>
+        private Task LoadArchiveManager()
+        {
+            return Task.Run(() =>
             {
                 if (_archiveManager.IsManagerLoaded)
+                {
+                    return;
+                }
+                if (_settingsManager.CP77ExecutablePath is null)
                 {
                     return;
                 }
@@ -225,6 +230,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 LoadCustomHashes();
             });
+        }
 
         #region Packing
 

@@ -534,7 +534,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var am = Locator.Current.GetService<IArchiveManager>().NotNull();
                 var sm = Locator.Current.GetService<ISettingsManager>().NotNull();
-                am.LoadModsArchives(new FileInfo(sm.CP77ExecutablePath));
+                am.LoadModsArchives(new FileInfo(sm.CP77ExecutablePath.NotNull()));
                 var af = am.GetGroupedFiles();
 
                 var tempbool = am.IsModBrowserActive;

@@ -35,4 +35,5 @@ public interface IGameFile
 
     public Task ExtractAsync(Stream output);
     T GetArchive<T>() where T : IGameArchive;
+    IGameArchive GetArchive();
 }

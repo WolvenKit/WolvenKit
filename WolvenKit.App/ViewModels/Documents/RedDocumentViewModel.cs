@@ -102,7 +102,7 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
-        public override Task OnSave(object parameter)
+        public override Task OnSave(object? parameter)
         {
             var tmpPath = Path.ChangeExtension(FilePath, ".tmp");
 
@@ -268,7 +268,7 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        private void PopulateItems()
+        public void PopulateItems()
         {
             if (Cr2wFile is null)
             {
@@ -349,7 +349,7 @@ namespace WolvenKit.ViewModels.Documents
             });
         }
 
-        public void HandleEmbeddedFile(DialogViewModel sender)
+        public void HandleEmbeddedFile(DialogViewModel? sender)
         {
             if (Cr2wFile is null)
             {

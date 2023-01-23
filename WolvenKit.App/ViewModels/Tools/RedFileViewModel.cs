@@ -20,10 +20,10 @@ namespace WolvenKit.ViewModels.Tools
         {
             _fileEntry = fileEntry;
 
-            ArchiveName = _fileEntry.Archive.Name;
-            if (!string.IsNullOrEmpty(_fileEntry.Archive.ArchiveRelativePath))
+            ArchiveName = _fileEntry.GetArchive().Name;
+            if (!string.IsNullOrEmpty(_fileEntry.GetArchive().ArchiveRelativePath))
             {
-                ArchiveName = _fileEntry.Archive.ArchiveRelativePath;
+                ArchiveName = _fileEntry.GetArchive().ArchiveRelativePath;
             }
         }
 
