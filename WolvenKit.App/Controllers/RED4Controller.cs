@@ -583,8 +583,7 @@ namespace WolvenKit.Functionality.Controllers
                 .Where(file => file.EndsWith(".yaml") || file.EndsWith(".yml"));
             foreach (var f in tweakFiles)
             {
-                var outDir = Path.Combine(cp77Proj.PackedTweakDirectory,
-                    Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(f)));
+                var outDir = Path.Combine(cp77Proj.PackedTweakDirectory, Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(f).NotNull()));
 
                 if (!Directory.Exists(outDir))
                 {

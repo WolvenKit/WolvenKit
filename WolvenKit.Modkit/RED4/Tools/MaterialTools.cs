@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -21,7 +22,6 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
-using System.Drawing.Drawing2D;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -344,19 +344,17 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            var matData = new MatData
-            {
-                MaterialRepo = matRepo,
-                Materials = RawMaterials,
-                TexturesList = TexturesList,
-                MaterialTemplates = matTemplates,
-                Appearances = info.appearances
-            };
+            var matData = new MatData(matRepo, RawMaterials, TexturesList, matTemplates, info.appearances);
 
             return matData;
             void ExtractFile(string path)
             {
-                var extension = Path.GetExtension(path).ToLower();
+                if (string.IsNullOrEmpty(path))
+                {
+                    return;
+                }
+                var extension = Path.GetExtension(path)?.ToLower();
+                ArgumentNullException.ThrowIfNull(extension);
 
                 switch (extension)
                 {
@@ -383,6 +381,8 @@ namespace WolvenKit.Modkit.RED4
                     case ".gradient":
                         ExtractGradient(path);
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 void ExtractXBM(string path)
@@ -429,7 +429,8 @@ namespace WolvenKit.Modkit.RED4
                         var findStatus = TryFindFile(archives, path, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
-                            if (!fi.Directory.Exists)
+                            ArgumentNullException.ThrowIfNull(result, "result");
+                            if (!fi.Directory.NotNull().Exists)
                             {
                                 fi.Directory.Create();
                             }
@@ -460,7 +461,8 @@ namespace WolvenKit.Modkit.RED4
                         var findStatus = TryFindFile(archives, path, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
-                            if (!fi.Directory.Exists)
+                            ArgumentNullException.ThrowIfNull(result, "result");
+                            if (!fi.Directory.NotNull().Exists)
                             {
                                 fi.Directory.Create();
                             }
@@ -496,7 +498,8 @@ namespace WolvenKit.Modkit.RED4
                         var findStatus = TryFindFile(archives, path, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
-                            if (!fi.Directory.Exists)
+                            ArgumentNullException.ThrowIfNull(result, "result");
+                            if (!fi.Directory.NotNull().Exists)
                             {
                                 fi.Directory.Create();
                             }
@@ -539,7 +542,8 @@ namespace WolvenKit.Modkit.RED4
                         var findStatus = TryFindFile(archives, path, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
-                            if (!fi.Directory.Exists)
+                            ArgumentNullException.ThrowIfNull(result, "result");
+                            if (!fi.Directory.NotNull().Exists)
                             {
                                 fi.Directory.Create();
                             }
@@ -558,22 +562,14 @@ namespace WolvenKit.Modkit.RED4
         }
         private void SaveMaterials(FileInfo outfile, List<MatData> mats)
         {
-            var consMatData = new MatData
-            {
-                MaterialRepo = mats[0].MaterialRepo,
-                Materials = new List<RawMaterial>(),
-                TexturesList = new List<string>(),
-                MaterialTemplates = new List<RawMaterial>(),
-                Appearances = new Dictionary<string, string[]>()
+            var consMatData = new MatData(mats[0].MaterialRepo, new List<RawMaterial>(), new List<string>(), new List<RawMaterial>(), new());
 
-            };
-
-            foreach(var matData in mats)
+            foreach (var matData in mats)
             {
                 matData.Materials.ForEach(m => consMatData.Materials.Add(m));
                 matData.TexturesList.ForEach(m => consMatData.TexturesList.Add(m));
                 matData.MaterialTemplates.ForEach(m => consMatData.MaterialTemplates.Add(m));
-                foreach(var app in matData.Appearances)
+                foreach (var app in matData.Appearances)
                 {
                     if (!consMatData.Appearances.ContainsKey(app.Key))
                     {
@@ -643,14 +639,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            var matData = new MatData
-            {
-                MaterialRepo = matRepo,
-                Materials = RawMaterials,
-                TexturesList = TexturesList,
-                MaterialTemplates = matTemplates,
-                Appearances = info.appearances
-            };
+            var matData = new MatData(matRepo, RawMaterials, TexturesList, matTemplates, info.appearances);
 
             var str = RedJsonSerializer.Serialize(matData);
 

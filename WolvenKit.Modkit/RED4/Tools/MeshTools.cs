@@ -212,7 +212,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             return true;
         }
-        
+
         public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendmeshblob, CMesh? cMesh = null)
         {
             var meshesInfo = new MeshesInfo(rendmeshblob.Header.RenderChunkInfos.Count);
@@ -326,7 +326,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
             }
 
-            meshesInfo.appearances = new Dictionary<string, string[]?>();
+            meshesInfo.appearances = new();
 
             if (cMesh != null)
             {
@@ -771,7 +771,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             var BuffViewoffset = 0;
 
             var nodes = new Dictionary<uint, Node>();
-            int meshCounter = 0;
+            var meshCounter = 0;
             foreach (var mesh in meshes)
             {
                 ArgumentNullException.ThrowIfNull(mesh.positions);
@@ -802,7 +802,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
                 else
                 {
-                    string name = withMaterials ? $"{meshCounter}_{mesh.name}" : mesh.name;
+                    var name = withMaterials ? $"{meshCounter}_{mesh.name}" : mesh.name;
                     node = parent.CreateNode(name);
                     mes = model.CreateMesh(name);
                 }

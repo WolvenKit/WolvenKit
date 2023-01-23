@@ -370,7 +370,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region commands
 
-        private static (SemVersion, string) GetInstallerPackage()
+        private static (SemVersion?, string) GetInstallerPackage()
         {
             using var p = new Process();
             p.StartInfo.FileName = "powershell.exe";
@@ -384,7 +384,7 @@ namespace WolvenKit.ViewModels.Shell
 
             p.WaitForExit();
 
-            SemVersion semVersion = null;
+            SemVersion? semVersion = null;
             var path = "";
 
             if (!string.IsNullOrEmpty(output))
@@ -438,7 +438,10 @@ namespace WolvenKit.ViewModels.Shell
                 HttpClient _client = new();
                 var response = await _client.GetAsync(new Uri(githuburl));
                 response.EnsureSuccessStatusCode();
-
+                if (response?.RequestMessage?.RequestUri is null)
+                {
+                    return;
+                }
                 var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
                 remoteVersion = SemVersion.Parse(version, SemVersionStyles.OptionalMinorPatch);
             }
@@ -865,7 +868,7 @@ namespace WolvenKit.ViewModels.Shell
                 vm.FileHandler = OpenSoundModdingView;
                 SetActiveDialog(vm);
             }
-            
+
             //var vm = new SoundModdingViewModel
             //{
             //    FileHandler = OpenSoundModdingView
@@ -936,7 +939,9 @@ namespace WolvenKit.ViewModels.Shell
                 _watcherService.IsSuspended = false;
                 await _watcherService.RefreshAsync(ActiveProject);
                 if (file.FullPath is not null)
-                await RequestFileOpen(file.FullPath);
+                {
+                    await RequestFileOpen(file.FullPath);
+                }
             });
         }
 
@@ -946,7 +951,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 return;
             }
-             if (file.FullPath is null)
+            if (file.FullPath is null)
             {
                 return;
             }
@@ -1391,7 +1396,7 @@ namespace WolvenKit.ViewModels.Shell
                 _loggerService.Error($"Failed to read cr2w file {path}");
                 return false;
             }
-            
+
             return true;
         }
 
@@ -1414,7 +1419,7 @@ namespace WolvenKit.ViewModels.Shell
             return false;
         }
 
-        
+
 
         private Task LoadTweakDB()
         {
@@ -1486,7 +1491,9 @@ namespace WolvenKit.ViewModels.Shell
         public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
         {
             if (_projectManager.ActiveProject is null)
+            {
                 return;
+            }
 
             var needSaveAsDialog =
                 fileToSave switch
@@ -1726,10 +1733,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public void SetLaunchProfiles(ObservableCollection<LaunchProfileViewModel> launchProfiles)
         {
-            if (_settingsManager.LaunchProfiles is null)
-            {
-                _settingsManager.LaunchProfiles = new();
-            }
+            _settingsManager.LaunchProfiles ??= new();
 
             _settingsManager.LaunchProfiles.Clear();
             var _launchProfiles = new Dictionary<string, LaunchProfile>();

@@ -15,6 +15,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Opus;
@@ -719,6 +720,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (meshExportArgs.withMaterials)
             {
+                if (meshExportArgs.MaterialRepo is null)
+                {
+                    _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
+                    return false;
+                }
                 ParseMaterials(cr2w, meshStream, outfile, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension);
             }
 
@@ -746,13 +752,14 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-        public bool ExportMultiMeshWithRig(Dictionary<Stream, String> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportMultiMeshWithRig(Dictionary<Stream, string> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             var Rigs = new List<RawArmature>();
             foreach (var rigStream in rigStreamS)
             {
                 var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
-                Rigs.Add(Rig);
+
+                Rigs.Add(Rig.NotNull());
 
                 rigStream.Dispose();
                 rigStream.Close();
@@ -760,7 +767,7 @@ namespace WolvenKit.Modkit.RED4
             var expRig = RIG.CombineRigs(Rigs);
 
             var expMeshes = new List<RawMeshContainer>();
-            List<MatData> matData = new List<MatData>();
+            var matData = new List<MatData>();
             foreach (var meshStream in meshStreamS.Keys)
             {
                 var cr2w = _red4ParserService.ReadRed4File(meshStream);
@@ -782,6 +789,11 @@ namespace WolvenKit.Modkit.RED4
 
                 if (meshExportArgs.withMaterials)
                 {
+                    if (meshExportArgs.MaterialRepo is null)
+                    {
+                        _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
+                        return false;
+                    }
                     matData.Add(SetupMaterial(cr2w, meshStream, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension));
                 }
 
@@ -790,7 +802,7 @@ namespace WolvenKit.Modkit.RED4
                 meshStream.Dispose();
                 meshStream.Close();
             }
-            var model = MeshTools.RawMeshesToGLTF(expMeshes, expRig, withMaterials:meshExportArgs.withMaterials);
+            var model = MeshTools.RawMeshesToGLTF(expMeshes, expRig, withMaterials: meshExportArgs.withMaterials);
 
             SaveMaterials(outfile, matData);
 
@@ -815,11 +827,7 @@ namespace WolvenKit.Modkit.RED4
         public bool ExportMesh(Stream meshStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             var archives = meshExportArgs.Archives;
-            var matRepo = meshExportArgs.MaterialRepo;
             var eUncookExtension = meshExportArgs.MaterialUncookExtension;
-            var isGLBinary = meshExportArgs.isGLBinary;
-            var LodFilter = meshExportArgs.LodFilter;
-            var mergeMeshes = meshExportArgs.ExperimentalMergedExport;
 
             var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
@@ -834,7 +842,12 @@ namespace WolvenKit.Modkit.RED4
 
             if (meshExportArgs.withMaterials)
             {
-                ParseMaterials(cr2w, meshStream, outfile, archives, matRepo, meshesinfo, eUncookExtension);
+                if (meshExportArgs.MaterialRepo is null)
+                {
+                    _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
+                    return false;
+                }
+                ParseMaterials(cr2w, meshStream, outfile, archives, meshExportArgs.MaterialRepo, meshesinfo, eUncookExtension);
             }
 
             return MeshTools.ExportMesh(cr2w, outfile, meshExportArgs, vmode);
@@ -855,7 +868,7 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    var ar = entry.Archive as Archive;
+                    var ar = entry.Archive;
                     using var ms = new MemoryStream();
                     ar?.CopyFileToStream(ms, entry.NameHash64, false);
 
@@ -873,7 +886,7 @@ namespace WolvenKit.Modkit.RED4
                     var rigstreams = rigs.Select(
                             delegate (FileEntry entry)
                             {
-                                var ar = entry.Archive as Archive;
+                                var ar = entry.Archive;
                                 var ms = new MemoryStream();
                                 ar?.CopyFileToStream(ms, entry.NameHash64, false);
                                 return (Stream)ms;
@@ -884,7 +897,7 @@ namespace WolvenKit.Modkit.RED4
                     var meshstreams = meshes.Select(
                               delegate (FileEntry entry)
                               {
-                                  var ar = entry.Archive as Archive;
+                                  var ar = entry.Archive;
                                   var ms = new MemoryStream();
                                   ar?.CopyFileToStream(ms, entry.NameHash64, false);
                                   return new KeyValuePair<Stream, string>(ms, entry.FileName);

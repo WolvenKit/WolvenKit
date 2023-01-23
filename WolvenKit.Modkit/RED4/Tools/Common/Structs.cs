@@ -45,7 +45,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public Vector4 quantScale { get; set; }
         public int meshCount { get; set; }
         public uint[] LODLvl { get; set; }
-        public Dictionary<string, string[]?>? appearances { get; set; }
+        public Dictionary<string, string[]> appearances { get; set; } = new();
         public uint vertBufferSize { get; set; }
         public uint indexBufferSize { get; set; }
         public uint indexBufferOffset { get; set; }
@@ -162,14 +162,8 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             W = w;
         }
     }
-    public class MatData
-    {
-        public string? MaterialRepo { get; set; }
-        public List<RawMaterial>? Materials { get; set; }
-        public List<string>? TexturesList { get; set; }
-        public List<RawMaterial>? MaterialTemplates { get; set; }
-        public Dictionary<string, string[]?>? Appearances { get; set; }
-    }
+    public record MatData(string MaterialRepo, List<RawMaterial> Materials, List<string> TexturesList, List<RawMaterial> MaterialTemplates, Dictionary<string, string[]> Appearances);
+
     public class RawMaterial
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
