@@ -1,6 +1,6 @@
-﻿using ReactiveUI;
+﻿using System;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using System;
 using WolvenKit.App.Models;
 
 namespace WolvenKit.ViewModels.Dialogs

@@ -94,7 +94,7 @@ namespace WolvenKit.ViewModels.Shared
         public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
         public ICommand OpenInExplorer { get; private set; }
         public ICommand PinItem { get; private set; }
-       // public ICommand SettingsCommand { get; private set; }
+        // public ICommand SettingsCommand { get; private set; }
         //public ICommand TutorialsCommand { get; private set; }
         public ICommand UnpinItem { get; private set; }
         //public ICommand WikiCommand { get; private set; }

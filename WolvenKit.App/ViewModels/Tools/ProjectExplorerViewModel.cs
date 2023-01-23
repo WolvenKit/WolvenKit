@@ -411,10 +411,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region red4
 
-        private bool IsInRawFolder(FileModel model)
-        {
-            return ActiveProject is not null && model.FullName.Contains(ActiveProject.RawDirectory);
-        }
+        private bool IsInRawFolder(FileModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.RawDirectory);
 
         public ICommand Bk2ImportCommand { get; private set; }
         private bool CanBk2Import() => SelectedItem != null && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("avi") && ActiveProject is not null;

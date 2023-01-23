@@ -14,11 +14,9 @@ namespace WolvenKit.ViewModels.HomePage
 
         protected PageViewModel(
             //HomePageViewModel homePageViewModel
-            )
-        {
+            ) =>
             //_homePageViewModel = homePageViewModel;
             _homePageViewModel = Locator.Current.GetService<HomePageViewModel>().NotNull();
-        }
 
 
     }

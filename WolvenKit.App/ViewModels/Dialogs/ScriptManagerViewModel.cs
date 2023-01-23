@@ -26,8 +26,8 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
     {
         _appViewModel = appViewModel ?? Locator.Current.GetService<AppViewModel>().NotNull();
 
-        OkCommand = ReactiveCommand.Create(() => { _appViewModel.CloseModalCommand.Execute(null); });
-        CancelCommand = ReactiveCommand.Create(() => { _appViewModel.CloseModalCommand.Execute(null); });
+        OkCommand = ReactiveCommand.Create(() => _appViewModel.CloseModalCommand.Execute(null));
+        CancelCommand = ReactiveCommand.Create(() => _appViewModel.CloseModalCommand.Execute(null));
 
         this.WhenActivated(disposables =>
         {
@@ -39,10 +39,7 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
         });
 
         this.WhenAnyValue(x => x.SelectedItem)
-            .Subscribe(x =>
-            {
-                DeleteScriptCommand.NotifyCanExecuteChanged();
-            });
+            .Subscribe(x => DeleteScriptCommand.NotifyCanExecuteChanged());
     }
 
     public ObservableCollection<string> Scripts { get; } = new();
@@ -53,10 +50,7 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
     public override ReactiveCommand<Unit, Unit> OkCommand { get; }
     public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
-    private void HandleActivation()
-    {
-        GetScriptFiles();
-    }
+    private void HandleActivation() => GetScriptFiles();
 
     private void HandleDeactivation()
     {

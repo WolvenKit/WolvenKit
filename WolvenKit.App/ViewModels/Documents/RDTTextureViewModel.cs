@@ -98,7 +98,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public void ReplaceTexture()
         {
-            if (File.Cr2wFile.RootChunk is not CBitmapTexture bitmap )
+            if (File.Cr2wFile.RootChunk is not CBitmapTexture bitmap)
             {
                 return;
             }

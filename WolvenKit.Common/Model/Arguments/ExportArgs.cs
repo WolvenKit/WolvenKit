@@ -227,7 +227,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Select Additional Meshes")]
         [Description("Select additional meshes to be included within a single export.")]
         public List<FileEntry> MultiMeshMeshes { get; set; } = new();      // meshes?
-    
+
         /// <summary>
         /// MultiMesh Rig List.
         /// </summary>

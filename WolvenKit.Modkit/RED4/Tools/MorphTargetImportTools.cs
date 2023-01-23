@@ -71,7 +71,9 @@ namespace WolvenKit.Modkit.RED4
                 ArgumentNullException.ThrowIfNull(p.positions);
                 foreach (var q in p.positions.ToList())
                 {
-                    max.X = Math.Max(q.X, max.X); max.Y = Math.Max(q.Y, max.Y); max.Z = Math.Max(q.Z, max.Z);
+                    max.X = Math.Max(q.X, max.X);
+                    max.Y = Math.Max(q.Y, max.Y);
+                    max.Z = Math.Max(q.Z, max.Z);
                 }
             }
 
@@ -80,7 +82,9 @@ namespace WolvenKit.Modkit.RED4
                 ArgumentNullException.ThrowIfNull(p.positions);
                 foreach (var q in p.positions.ToList())
                 {
-                    min.X = Math.Min(q.X, min.X); min.Y = Math.Min(q.Y, min.Y); min.Z = Math.Min(q.Z, min.Z);
+                    min.X = Math.Min(q.X, min.X);
+                    min.Y = Math.Min(q.Y, min.Y);
+                    min.Z = Math.Min(q.Z, min.Z);
                 }
             }
 

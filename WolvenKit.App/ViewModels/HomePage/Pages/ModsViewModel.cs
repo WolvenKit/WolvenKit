@@ -282,7 +282,7 @@ namespace WolvenKit.ViewModels.HomePage
             {
                 try
                 {
-                    var modsInfo = JsonSerializer.Deserialize<ModsInfo>(File.ReadAllText(modsInfoPath), _options).NotNull() ;
+                    var modsInfo = JsonSerializer.Deserialize<ModsInfo>(File.ReadAllText(modsInfoPath), _options).NotNull();
                     for (var i = 0; i < modsInfo.Mods.Count; i++)
                     {
                         var mod = modsInfo.Mods[i];
@@ -303,7 +303,7 @@ namespace WolvenKit.ViewModels.HomePage
                 }
 
 
-                
+
             }
 
             // loop through all existing mods

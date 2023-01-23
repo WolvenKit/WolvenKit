@@ -40,9 +40,9 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                         Client.Invoke();
                     }
                 }
-                catch (Exception ex) 
-                { 
-                    ILoggerService.GetUnsafe().Error(ex); 
+                catch (Exception ex)
+                {
+                    ILoggerService.GetUnsafe().Error(ex);
                 }
             }
         }

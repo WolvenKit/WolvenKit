@@ -9,10 +9,7 @@ namespace WolvenKit.ViewModels.Tools
 {
     public class ExportableItemViewModel : ImportExportItemViewModel
     {
-        public ExportableItemViewModel(string fileName) : base(fileName, DecideExportOptions(Path.GetExtension(fileName).TrimStart('.')))
-        {
-            Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
-        }
+        public ExportableItemViewModel(string fileName) : base(fileName, DecideExportOptions(Path.GetExtension(fileName).TrimStart('.'))) => Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
 
         private static ExportArgs DecideExportOptions(string extension)
         {

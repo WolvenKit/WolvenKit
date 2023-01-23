@@ -1,8 +1,8 @@
-namespace WolvenKit.Core.Compression;
 
 using System;
 using System.Runtime.InteropServices;
 
+namespace WolvenKit.Core.Compression;
 internal static class OodleLZNative
 {
     [DllImport("oo2ext_7_win64.dll", EntryPoint = "OodleLZ_GetCompressedBufferSizeNeeded", CallingConvention = CallingConvention.StdCall)]

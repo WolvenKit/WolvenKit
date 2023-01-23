@@ -22,12 +22,9 @@ namespace WolvenKit.ViewModels.Documents
     {
         public inkWidgetLibraryResource library;
 
-       
 
-        public RDTWidgetViewModel(inkWidgetLibraryResource data, RedDocumentViewModel file) : base(file, "Widget Preview")
-        {
-            library = data;
-        }
+
+        public RDTWidgetViewModel(inkWidgetLibraryResource data, RedDocumentViewModel file) : base(file, "Widget Preview") => library = data;
 
         [Reactive] public Dictionary<object, inkTextWidget> TextWidgets { get; set; } = new();
 

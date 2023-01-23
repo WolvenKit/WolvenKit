@@ -26,7 +26,7 @@ namespace WolvenKit.ViewModels.Documents
             _data = ent;
 
             PanelVisibility.ShowExportEntity = true;
-            
+
 
             this.WhenActivated((CompositeDisposable disposables) => RenderEntitySolo());
         }
@@ -265,7 +265,9 @@ namespace WolvenKit.ViewModels.Documents
                         a.RawMaterials[material.Name] = material;
                     }
                     if (model.MeshFile?.RootChunk is CMesh mesh)
-                    model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
+                    {
+                        model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
+                    }
 
                     foreach (var m in model.Meshes)
                     {

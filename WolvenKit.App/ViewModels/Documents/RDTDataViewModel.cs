@@ -120,7 +120,7 @@ namespace WolvenKit.ViewModels.Documents
 
             this.WhenActivated((CompositeDisposable disposables) =>
             {
-                
+
 
                 if (SelectedChunk == null && Chunks.Count > 0)
                 {

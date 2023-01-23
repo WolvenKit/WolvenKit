@@ -281,9 +281,9 @@ namespace WolvenKit.App.Services
                     var dateTimeOffset = "";
                     if (whenDoesTheLimitReset is not null)
                     {
-                        dateTimeOffset=  whenDoesTheLimitReset.Value.ToLocalTime().ToString();
+                        dateTimeOffset = whenDoesTheLimitReset.Value.ToLocalTime().ToString();
                     }
-                     
+
                     _loggerService.Info($"[Update] {howManyRequestsDoIHaveLeft}/{howManyRequestsCanIMakePerHour} - reset: {dateTimeOffset}");
 
                     _loggerService.Error("API rate limit exceeded");

@@ -68,8 +68,8 @@ namespace WolvenKit.ViewModels.Documents
             _isInitialized = true;
             PopulateItems();
 
-            
-            
+
+
 
             // assume files that don't exist are relative paths
             RelativePath = File.Exists(path)
@@ -147,7 +147,7 @@ namespace WolvenKit.ViewModels.Documents
             return Task.CompletedTask;
         }
 
-       
+
 
         //public override Task<bool> OpenFileAsync(string path)
         //{

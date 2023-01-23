@@ -117,10 +117,7 @@ namespace WolvenKit.ViewModels.Documents
 
     public class Rig : IBindable, INode
     {
-        public Rig(string name)
-        {
-            Name = name;
-        }
+        public Rig(string name) => Name = name;
 
         public string Name { get; set; }
         public List<RigBone> Bones { get; set; } = new();
@@ -147,10 +144,7 @@ namespace WolvenKit.ViewModels.Documents
 
     public class RigBone : INode
     {
-        public RigBone(string name)
-        {
-            Name = name;
-        }
+        public RigBone(string name) => Name = name;
 
         public string Name { get; set; }
         public List<RigBone> Children { get; set; } = new();
@@ -188,10 +182,7 @@ namespace WolvenKit.ViewModels.Documents
 
     public class Material
     {
-        public Material(string name)
-        {
-            Name = name;
-        }
+        public Material(string name) => Name = name;
         public string Name { get; set; }
         public CMaterialInstance? Instance { get; set; }
         public Dictionary<string, object> Values { get; set; } = new();
@@ -321,7 +312,7 @@ namespace WolvenKit.ViewModels.Documents
                     LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f)
                 };
 
-                
+
             }
             catch (Exception ex)
             {
@@ -847,12 +838,14 @@ namespace WolvenKit.ViewModels.Documents
         {
             var _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
             if (_settingsManager.CP77ExecutablePath is not null)
-            ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
+            {
+                ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
+            }
         }
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
-       
+
 
         public static Matrix3D ToMatrix3D(QsTransform qs)
         {

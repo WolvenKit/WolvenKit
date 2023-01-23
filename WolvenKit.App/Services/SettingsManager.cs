@@ -249,7 +249,7 @@ namespace WolvenKit.Functionality.Services
         public string GetRED4GameRootDir()
         {
             ArgumentNullException.ThrowIfNull(CP77ExecutablePath);
-        
+
             var fi = new FileInfo(CP77ExecutablePath);
 
             return fi.Directory is { Parent.Parent: { } }

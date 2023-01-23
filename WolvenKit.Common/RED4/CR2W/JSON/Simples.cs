@@ -241,10 +241,7 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
 {
     private readonly ReferenceResolver<RedBuffer> _referenceResolver;
 
-    public DataBufferConverter(ReferenceResolver<RedBuffer> referenceResolver)
-    {
-        _referenceResolver = referenceResolver;
-    }
+    public DataBufferConverter(ReferenceResolver<RedBuffer> referenceResolver) => _referenceResolver = referenceResolver;
 
 
     public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
@@ -573,10 +570,7 @@ public class SerializationDeferredDataBufferConverter : JsonConverter<Serializat
 {
     private readonly ReferenceResolver<RedBuffer> _referenceResolver;
 
-    public SerializationDeferredDataBufferConverter(ReferenceResolver<RedBuffer> referenceResolver)
-    {
-        _referenceResolver = referenceResolver;
-    }
+    public SerializationDeferredDataBufferConverter(ReferenceResolver<RedBuffer> referenceResolver) => _referenceResolver = referenceResolver;
 
 
     public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);

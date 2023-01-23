@@ -16,10 +16,7 @@ namespace WolvenKit.Core.CRC
 
         #region Constructors
 
-        internal SafeProxyC()
-        {
-            Init(Poly);
-        }
+        internal SafeProxyC() => Init(Poly);
 
         #endregion Constructors
     }

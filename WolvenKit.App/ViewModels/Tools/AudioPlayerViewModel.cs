@@ -6,6 +6,6 @@ public class AudioPlayerViewModel : ReactiveObject
 {
     public AudioPlayerViewModel()
     {
-        
+
     }
 }

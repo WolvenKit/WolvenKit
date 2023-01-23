@@ -557,7 +557,9 @@ namespace WolvenKit.Models
                             {
                                 var item = ReadTweakXL(parser);
                                 if (item is not null)
-                                ((TweakXLSequence)propertyValue).Items.Add(item);
+                                {
+                                    ((TweakXLSequence)propertyValue).Items.Add(item);
+                                }
                             }
                         }
 

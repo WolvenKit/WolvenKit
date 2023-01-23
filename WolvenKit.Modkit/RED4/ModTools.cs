@@ -34,7 +34,7 @@ namespace WolvenKit.Modkit.RED4
             _wolvenkitFileService = wolvenkitFileService;
             _meshTools = meshTools;
             _archiveManager = archiveManager;
-            _red4ParserService= red4ParserService;
+            _red4ParserService = red4ParserService;
         }
     }
 }

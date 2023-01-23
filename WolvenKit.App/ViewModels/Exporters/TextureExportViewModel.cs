@@ -100,7 +100,9 @@ public partial class TextureExportViewModel : ExportViewModel
             }
 
             if (Activator.CreateInstance(item.Properties.GetType()) is ImportExportArgs a)
-            item.Properties = a;
+            {
+                item.Properties = a;
+            }
         }
     }
 
@@ -216,7 +218,7 @@ public partial class TextureExportViewModel : ExportViewModel
             }
 
             var settings = new GlobalExportArgs().Register(e);
-            return _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory),new DirectoryInfo(proj.RawDirectory));
+            return _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
         }
 
         return false;
@@ -362,7 +364,7 @@ public partial class TextureExportViewModel : ExportViewModel
                 case nameof(MeshExportArgs.Rig):
                     var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault();
                     if (rig is not null)
-{
+                    {
                         meshExportArgs.Rig = new List<FileEntry>() { rig };
                         _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
                     }

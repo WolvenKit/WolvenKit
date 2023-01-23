@@ -119,7 +119,7 @@ namespace WolvenKit.ViewModels.Tools
                     })
                     : null;
                 }
-                
+
                 this.RaisePropertyChanged(nameof(SearchText));
             }
         }

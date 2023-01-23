@@ -9,10 +9,7 @@ namespace WolvenKit.ViewModels.Documents
 {
     public abstract class TweakEntryViewModel : ReactiveObject
     {
-        protected TweakEntryViewModel(string name)
-        {
-            Name = name;
-        }
+        protected TweakEntryViewModel(string name) => Name = name;
 
         public string Name { get; set; }
 
@@ -26,7 +23,7 @@ namespace WolvenKit.ViewModels.Documents
     {
         private readonly gamedataTweakDBRecord _value;
 
-        public GroupViewModel(string name, gamedataTweakDBRecord value) : base(name) 
+        public GroupViewModel(string name, gamedataTweakDBRecord value) : base(name)
         {
             _value = value;
 

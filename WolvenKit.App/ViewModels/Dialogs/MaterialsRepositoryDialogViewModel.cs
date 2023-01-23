@@ -114,7 +114,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private async Task GenerateMaterialRepoAsync()
         {
-            DirectoryInfo materialRepoDir = new DirectoryInfo(MaterialsDepotPath);
+            var materialRepoDir = new DirectoryInfo(MaterialsDepotPath);
             var textureExtension = UncookExtension.Extension;
 
             var unbundle = new List<string>()
@@ -239,7 +239,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                     new XbmExportArgs() { UncookExtension = textureExtension },
                     new MlmaskExportArgs() { UncookExtension = textureExtension }
                 );
-            
+
 
             foreach (var (key, fileEntries) in groupedFiles)
             {
@@ -330,7 +330,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
             if (_settingsManager.MaterialRepositoryPath is null)
             {
                 return;
-            }    
+            }
 
             var depotPath = new DirectoryInfo(_settingsManager.MaterialRepositoryPath);
             if (depotPath.Exists)
@@ -375,5 +375,5 @@ namespace WolvenKit.App.ViewModels.Dialogs
         #endregion Methods
     }
 
-    
+
 }

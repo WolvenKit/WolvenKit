@@ -295,10 +295,7 @@ namespace WolvenKit.ViewModels.Tools
             List<TweakEntry> PrepareList(List<TweakDBID> tweaks, bool isRecord = false)
             {
                 var tmpRecords = new ConcurrentQueue<TweakEntry>();
-                Parallel.ForEach(tweaks, record =>
-                {
-                    tmpRecords.Enqueue(new TweakEntry(record, _tweakDB, isRecord));
-                });
+                Parallel.ForEach(tweaks, record => tmpRecords.Enqueue(new TweakEntry(record, _tweakDB, isRecord)));
                 return tmpRecords.AsParallel().OrderBy(x => x.DisplayName).ToList();
             }
         }

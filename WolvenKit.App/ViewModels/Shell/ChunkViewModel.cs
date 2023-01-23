@@ -110,7 +110,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 TempList = new ObservableCollectionExtended<ChunkViewModel>(new[] { new ChunkViewModel(null, this) });
             }
-           
+
 
             this.WhenAnyValue(x => x.IsSelected)
                 .Where(x => IsSelected && !_propertiesLoaded)
@@ -225,13 +225,7 @@ namespace WolvenKit.ViewModels.Shell
                 //this.RaisePropertyChanged("Data");
             }
 
-            this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) =>
-            {
-                if (Tab is not null)
-                {
-                    Tab.File.SetIsDirty(true);
-                }
-            });
+            this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) => Tab?.File.SetIsDirty(true));
         }
 
         public ChunkViewModel(IRedType export, ReferenceSocket socket) : this(export)
@@ -529,7 +523,9 @@ namespace WolvenKit.ViewModels.Shell
                     foreach (var name in pns)
                     {
                         if (ibd.GetPropertyValue(name) is IRedType t)
-                        Properties.Add(new ChunkViewModel(t, this, name, isreadonly));
+                        {
+                            Properties.Add(new ChunkViewModel(t, this, name, isreadonly));
+                        }
                     }
                 }
                 else if (Data is IList list)
@@ -626,7 +622,7 @@ namespace WolvenKit.ViewModels.Shell
                 var index = 0;
                 foreach (var item in ary)
                 {
-                    if (child.Data is not null  && item.GetHashCode() == child.Data.GetHashCode())
+                    if (child.Data is not null && item.GetHashCode() == child.Data.GetHashCode())
                     {
                         if (!_propertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
                         {
@@ -1251,7 +1247,7 @@ namespace WolvenKit.ViewModels.Shell
                     if (Data is not null)
                     {
                         var prop = Data.GetType().GetProperty(propName);
-                        
+
                         if (prop is not null)
                         {
                             var val = prop.GetValue(Data);
@@ -1483,8 +1479,7 @@ namespace WolvenKit.ViewModels.Shell
                     _propertiesLoaded = false;
                     CalculateProperties();
                     this.RaisePropertyChanged(nameof(Data));
-                    if (Tab is not null)
-                    Tab.File.SetIsDirty(true);
+                    Tab?.File.SetIsDirty(true);
                 }
             }
         }
@@ -1506,17 +1501,21 @@ namespace WolvenKit.ViewModels.Shell
                     if (propertyInfo.Flags.Equals(Flags.Empty))
                     {
                         if (System.Activator.CreateInstance(propertyInfo.Type) is IRedType o)
-                        Data = o;
+                        {
+                            Data = o;
+                        }
                     }
                     else
                     {
                         var flags = propertyInfo.Flags.NotNull();
                         if (System.Activator.CreateInstance(propertyInfo.Type, flags.MoveNext() ? flags.Current : 0) is IRedType o)
-                        Data = o;
+                        {
+                            Data = o;
+                        }
                     }
                 }
 
-                if( Data is IRedArray arr)
+                if (Data is IRedArray arr)
                 {
                     var innerType = arr.InnerType;
                     if (innerType.IsValueType)
@@ -1707,7 +1706,7 @@ namespace WolvenKit.ViewModels.Shell
                         }
                     });
                 }
-                
+
             }
             if (Data is DataBuffer db2)
             {
@@ -1893,8 +1892,7 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
             IsDeleteReady = false;
-            if (Tab is not null)
-            Tab.File.SetIsDirty(true);
+            Tab?.File.SetIsDirty(true);
             RecalculateProperties();
         }
 
@@ -1989,8 +1987,7 @@ namespace WolvenKit.ViewModels.Shell
 
             if (Parent?.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
             {
-                if (Tab is not null)
-                Tab.File.SetIsDirty(true);
+                Tab?.File.SetIsDirty(true);
                 RecalculateProperties(irtt);
             }
 
@@ -2049,12 +2046,12 @@ namespace WolvenKit.ViewModels.Shell
             foreach (var i in l)
             {
                 try
-                { 
-                    a.Remove(i); 
+                {
+                    a.Remove(i);
                 }
                 catch (Exception ex)
-                { 
-                    Locator.Current.GetService<ILoggerService>().NotNull().Error(ex); 
+                {
+                    Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
                 }
             }
 
@@ -2146,13 +2143,13 @@ namespace WolvenKit.ViewModels.Shell
             try
             {
                 if (Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector && rb.Data is worldNodeDataBuffer wndb)
-                { 
-                    WriteObjectToJSON(wndb.ToList()); 
+                {
+                    WriteObjectToJSON(wndb.ToList());
                 }
             }
-            catch (Exception ex) 
-            { 
-                Locator.Current.GetService<ILoggerService>().NotNull().Error(ex); 
+            catch (Exception ex)
+            {
+                Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
             }
         }
 
@@ -2328,7 +2325,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand DeleteAllCommand { get; private set; }
-        private bool CanDeleteAll() => !IsReadOnly && ((IsArray && PropertyCount > 0) || (IsInArray && Parent is not null && Parent.PropertyCount > 0) );
+        private bool CanDeleteAll() => !IsReadOnly && ((IsArray && PropertyCount > 0) || (IsInArray && Parent is not null && Parent.PropertyCount > 0));
         private void ExecuteDeleteAll()
         {
             if (IsArray)
@@ -2377,7 +2374,9 @@ namespace WolvenKit.ViewModels.Shell
                     var tr = RedJsonSerializer.Serialize(elem);
                     var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
                     if (copied is not null)
+                    {
                         RedDocumentTabViewModel.CopiedChunks.Add(copied);
+                    }
                 }
                 else
                 {
@@ -2746,7 +2745,7 @@ namespace WolvenKit.ViewModels.Shell
             get => new List<ReferenceSocket>(new ReferenceSocket[] { Socket.NotNull() });
             set
             {
-               
+
             }
         }
 

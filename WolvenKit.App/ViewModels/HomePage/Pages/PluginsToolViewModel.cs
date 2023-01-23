@@ -28,9 +28,12 @@ namespace WolvenKit.ViewModels.HomePage
             _logger = Locator.Current.GetService<ILoggerService>().NotNull();
             _pluginService = Locator.Current.GetService<IPluginService>().NotNull();
 
-            CancelCommand = ReactiveCommand.Create(() => {
+#pragma warning disable IDE0053 // Use expression body for lambda expression
+            CancelCommand = ReactiveCommand.Create(() =>
+            {
                 FileHandler?.Invoke(null);
             });
+#pragma warning restore IDE0053 // Use expression body for lambda expression
             SyncCommand = ReactiveCommand.CreateFromTask(SyncAsync);
         }
 

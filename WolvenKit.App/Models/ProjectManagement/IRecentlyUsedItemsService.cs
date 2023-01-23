@@ -37,29 +37,20 @@ namespace WolvenKit.Functionality.ProjectManagement
                 var dto = JsonSerializer.Deserialize<Dictionary<string, RecentlyUsedItemModel>>(jsonString);
                 if (dto != null)
                 {
-                    _recentlyUsedItems.Edit(innerCache =>
-                    {
-                        innerCache.AddOrUpdate(dto.Values);
-                    });
+                    _recentlyUsedItems.Edit(innerCache => innerCache.AddOrUpdate(dto.Values));
                 }
             }
         }
 
         public void AddItem(RecentlyUsedItemModel itemModel)
         {
-            _recentlyUsedItems.Edit(innerCache =>
-            {
-                innerCache.AddOrUpdate(itemModel);
-            });
+            _recentlyUsedItems.Edit(innerCache => innerCache.AddOrUpdate(itemModel));
             Save();
         }
 
         public void RemoveItem(RecentlyUsedItemModel itemModel)
         {
-            _recentlyUsedItems.Edit(innerCache =>
-            {
-                innerCache.Remove(itemModel);
-            });
+            _recentlyUsedItems.Edit(innerCache => innerCache.Remove(itemModel));
             Save();
         }
 

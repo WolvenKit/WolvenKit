@@ -62,13 +62,7 @@ namespace WolvenKit.ViewModels.Shell
                 .Select(_ => _.EventArgs * 100)
                 .ToProperty(this, x => x.Progress, out _progress);
 
-            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b =>
-            {
-                DispatcherHelper.RunOnMainThread(() =>
-                {
-                    IsIndeterminate = b;
-                });
-            });
+            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => DispatcherHelper.RunOnMainThread(() => IsIndeterminate = b));
             _ = _progressService.WhenAnyValue(x => x.Status).Subscribe(s =>
             {
                 DispatcherHelper.RunOnMainThread(() =>
@@ -81,7 +75,10 @@ namespace WolvenKit.ViewModels.Shell
                             break;
                         case EStatus.Ready:
                             if (new BrushConverter().ConvertFromString("#951C2D") is SolidColorBrush brush)
-                            BarColor = brush;
+                            {
+                                BarColor = brush;
+                            }
+
                             break;
                         default:
                             break;
