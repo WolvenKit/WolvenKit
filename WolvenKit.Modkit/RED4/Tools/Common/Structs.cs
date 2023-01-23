@@ -86,6 +86,8 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public ushort[,]? boneindices { get; set; }
         public Vector3[]? garmentMorph { get; set; }
         public string? name { get; set; }
+        public Vector4[]? garmentSupportWeight { get; set; }
+        public Vector4[]? garmentSupportCap { get; set; }
         public uint weightCount { get; set; }
         public string[]? materialNames { get; set; }
         public uint lod { get; set; }

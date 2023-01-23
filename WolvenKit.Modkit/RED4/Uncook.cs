@@ -712,6 +712,8 @@ namespace WolvenKit.Modkit.RED4
             var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter);
             MeshTools.UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
+            MeshTools.WriteGarmentParametersToMesh(ref expMeshes, cMesh);
+
             var meshRig = MeshTools.GetOrphanRig(cMesh);
 
             var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
@@ -782,6 +784,8 @@ namespace WolvenKit.Modkit.RED4
 
                 var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter);
                 MeshTools.UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
+
+                MeshTools.WriteGarmentParametersToMesh(ref Meshes, cMesh);
 
                 var meshRig = MeshTools.GetOrphanRig(cMesh);
 
