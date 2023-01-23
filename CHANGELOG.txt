@@ -1,3 +1,141 @@
+WolvenKit 8.8.1
+-----------------
+
+    TweakXL YAML Editing and Export From TweakBrowserViewModel by @dragonzkiller in #1006
+    Fix/texture import stuff by @rfuzzo in #1016
+    feat: Add ExportFiles command to WKit Scripting by @dragonzkiller in #1017
+    Net7 by @rfuzzo in #1011
+    Add the apps list of the mesh to the material.json by @Simarilius-uk in #1020
+    Updated (almost) all nugets by @seberoth in #1018
+    Clean all button--issue 1022. by @kwekmaster in #1024
+    Remove Dependency on System.Windows.Forms From the .NET 7 Fix by @dragonzkiller in #1019
+    Added a script category to New File, with appropriate directory structure by @kwekmaster in #1027
+    Change Mesh export defaults to withMaterials and no LODs by @Simarilius-uk in #1030
+    Improves tracebility on MeshPreview to respective worldNodeData by @llicursi in #1031
+    Feature/break out importers by @rfuzzo in #1033
+    Sector Previews improvements by @llicursi in #1038
+    issue 1035: prevent exception (does not write back yet) by @manavortex in #1042
+    Adds Mesh selection on Sector Preview by @llicursi in #1049
+    Restore ExportFiles for Scripting and Add Export Settings by @dragonzkiller in #1046
+    Fixed multiply assignment KeyUp event by @Onichan410 in #1051
+    Onichan410/bugfix/filelock mod archive by @Onichan410 in #1053
+    Implemented mesh name to MultiMesh missing bone error message by @Syrrr in #1066
+    Added material import toggle to Importer (Issue #1041) by @Syrrr in #1068
+    Implemented saveAs for wscript files (Issue #1028) by @Syrrr in #1070
+    Implemented filter to .json import to exclude material json files by @Syrrr in #1071
+    Fix/importexport views by @rfuzzo in #1069
+    Implemented import option to handle LOD0 as LOD8 if needed. by @Syrrr in #1074
+    Skip packages with empty chunks instead of running into an exception by @Syrrr in #1076
+    fix: added logging if can't find xbm on inkatlas export by @Syrrr in #1077
+    Fix submesh order being determined by mesh name (MeshData in Blender) instead of node name (Object name in Blender) by @Syrrr in #1081
+    RedPackage fix by @seberoth in #1083
+    Fix/readmes by @rfuzzo in #1085
+    CR2W fixes by @seberoth in #1086
+    Ci/remove cartificate by @rfuzzo in #1087
+    Feature/morphtarget-naming by @Syrrr in #1088
+
+
+Features
+
+    added regionName to output targetName (0ebe325)
+    add RedHotTools to plugins (6b5fbb4), closes #1054 #1063
+    Add export settings to ExportFiles in scripts (ceaae24)
+    persist all docked panes after restart (19f4cd2)
+    add option to load texture import settings from the game (01cadfa)
+    changing texturegroup in import tool sets other defaults values (7c2e9f7)
+    Add ExportFiles command to WKit Scripting (820861c)
+
+Bug Fixes
+
+    Fixes writing of CName None for RedPackages (#1083) (d2d258b)
+    submesh order being determined by mesh name (MeshData in Blender) instead of node name (Object name in Blender) (#1081) (5914e72), closes #1036
+    added logging if can't find xbm on inkatlas export (9d45cec)
+    cleanup (ceeed5f)
+    launch msixbundle directly instead of powershell script (91c0354)
+    missing } (6303c84)
+    updater check not affecting installing the installer (5f30484), closes #1073
+    fixed a bug where no layout would be loaded if the existing one fails (3f02956), closes #1047
+    add collectionview editor back (5eaff91)
+    add missing animation import settings (5b5eb95)
+    Better? handling of archive file handles (068119b)
+    Catch exceptions while guessing file formats (892e02b)
+    Changed archive file size calculation to better reflect disk size in AB (c8655b5)
+    collection editor (364b0fa)    
+    fixed a bug where the importall button was always disabled (64c7da5), closes #1055
+    Prevent creation of empty soundbanks folder on import (0f4650b)
+    Saving for new entEntityTemplates (37addf5)
+    Restore ExportFiles for Scripting (2db5aa1)
+    fixed a bug where texture groups were not assigned properly (37708df)
+    remove Windows.Forms dependency (a70c771)
+    add missing MaterialUncookExtension to the CLI (b0e6dea), closes #1029
+    fixed a bug where import settings were calculated incorrectly (8723d36)
+    fixed a bug where texture import would crash (cdee8e3)
+    CommonOpenFileDialog crash in .NET 7 (17d2d56)
+    catch import errors (28faae2)
+    add some error checks around powershell use (f5da644)
+
+Continuous Integration
+
+    add inno installer (abe30d1)
+    fix ci incorrect versions for console (6f36b81)
+    fix nightly date check (6691d52)
+
+Code Refactoring
+
+    Grouping material generator file by archive (b746e8b)
+
+
+
+WolvenKit 8.8.0
+-----------------
+
+    Feature/node editor 2 update by @E1337Kat in #964
+    Sector Editing Tweaks by @justarandomguyintheinternet in #975
+    CR2W Improvements by @seberoth in #969
+    Save related fixes and improvements by @seberoth in #976
+    Faster archive loading by @seberoth in #978
+    Fix the settings command for OSes other than Windows by @ADawesomeguy in #973
+    ⬆️ Update Nodify to 4.1.0 by @E1337Kat in #980
+    Scripting support by @seberoth in #981
+    Feature/node editor 2 by @rfuzzo in #927
+    Scriptable UI by @seberoth in #990
+    Feature/wolvenkit.installer by @rfuzzo in #991
+    feat: skip cli publish when no CI commits have been made by @rfuzzo in #997
+    Issue 993--Add a textbox to the settings to add ignored extensions by @kwekmaster in #998
+    QOL: Discord Issue--Notify and Log items that fail Import/Export. Total count bugfix by @kwekmaster in #999
+    ImportExportViewModel Refactoring: consolidating Process Selected and Process All paths by @kwekmaster in #1000
+    Update for 1.6.1 by @seberoth in #1002
+    Restore performance--fix a potential slight slowdown introduced by PR#1000 by @kwekmaster in #1003
+    Enhancement--Script deployment support. Issue 926 by @kwekmaster in #1004
+    Feature/installer integration by @rfuzzo in #1007
+
+
+
+WolvenKit 8.7
+-----------------
+
+    Support for Cyberpunk 2077 game version 1.6
+    Support for REDmod
+    Animation I/O
+    New Sound Modding Tool
+    Support for hot archive installation with RedHotTools by psiberx
+    XBM import arguments are now exposed
+    Import/Export arguments are now saved
+    Added Title Menu
+    Mod Manager and Plugins added to Home
+    Simplified Menu Bar
+    Added new Build options
+    Numerous fixes & improvements under-the-hood and within the UI
+
+WolvenKit 8.6
+-----------------
+
+    Tweakdb types
+    .mltemplate export fixes
+    UI enhancements
+    File editor fixes and enhancements
+    Many Bugfixes
+
 WolvenKit 8.5.3
 -----------------
 - fixed a bug that would cause the game to crash on certain inkwidget files
