@@ -166,7 +166,7 @@ namespace WolvenKit.Common.Model.Arguments
         public bool ReplaceLod { get; set; } = false;
 
         /// <summary>
-        /// Assigns found LOD0 submeshes to LOD8 to allow import of certain meshes that handle LOD0 as LOD8.
+        /// Imports garment support data from GLB.
         /// </summary>
         [Category("Import Settings")]
         [Display(Name = "Import Garment Support (Experimental)")]
