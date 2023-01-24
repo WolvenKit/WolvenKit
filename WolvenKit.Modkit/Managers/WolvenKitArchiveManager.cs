@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Kernel;
 using ProtoBuf;
-using ReactiveUI;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Core;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Common.Model
 {
     [ProtoContract]
-    public abstract class WolvenKitArchiveManager : ReactiveObject, IArchiveManager
+    public abstract class WolvenKitArchiveManager : ObservableObject, IArchiveManager
     {
         #region properties
 

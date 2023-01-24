@@ -155,7 +155,7 @@ public partial class CR2WReader
 
             if (!BufferQueue.ContainsKey(i))
             {
-                _logger?.Warning("Unused buffer found!");
+                LoggerService?.Warning("Unused buffer found!");
                 continue;
             }
 

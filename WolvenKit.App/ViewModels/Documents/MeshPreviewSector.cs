@@ -9,6 +9,7 @@ using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -591,7 +592,7 @@ namespace WolvenKit.ViewModels.Documents
                             }
                         }
                     }
-                    catch (Exception ex) { ILoggerService.GetUnsafe().Error(ex); }
+                    catch (Exception ex) { LoggerHelper.GetUnsafe().Error(ex); }
                 }
                 else if (handle.Chunk is worldPopulationSpawnerNode wpsn)
                 {
@@ -718,7 +719,7 @@ namespace WolvenKit.ViewModels.Documents
                     }
                     else
                     {
-                        ILoggerService.GetUnsafe().Warning("Child is a " + child.GetType());
+                        LoggerHelper.GetUnsafe().Warning("Child is a " + child.GetType());
                     }
                 }
             }
@@ -731,7 +732,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (mouseButtonEventArgs.RightButton == MouseButtonState.Pressed)
                 {
-                    ILoggerService.GetUnsafe().Info("RighClick: " + mesh.Name);
+                    LoggerHelper.GetUnsafe().Info("RighClick: " + mesh.Name);
                 }
                 else if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed)
                 {

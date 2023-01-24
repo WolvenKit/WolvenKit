@@ -17,6 +17,7 @@ using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
@@ -1776,7 +1777,7 @@ namespace WolvenKit.ViewModels.Shell
                 var instance = RedTypeManager.CreateRedType(vm.SelectedType);
                 if (!InsertChild(-1, instance))
                 {
-                    ILoggerService.GetUnsafe().Error("Unable to insert child");
+                    LoggerHelper.GetUnsafe().Error("Unable to insert child");
                 }
             }
         }
@@ -1794,7 +1795,7 @@ namespace WolvenKit.ViewModels.Shell
                     handle.SetValue(instance);
                     if (!InsertChild(-1, newItem))
                     {
-                        ILoggerService.GetUnsafe().Error("Unable to insert child");
+                        LoggerHelper.GetUnsafe().Error("Unable to insert child");
                     }
                 }
             }
@@ -1939,7 +1940,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 catch (Exception ex)
                 {
-                    ILoggerService.GetUnsafe().Error(ex);
+                    LoggerHelper.GetUnsafe().Error(ex);
                 }
             }
             return Task.FromResult(false);
@@ -1989,13 +1990,13 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    ILoggerService.GetUnsafe().Warning("nodeData and your JSON must contain the same number of elements");
+                    LoggerHelper.GetUnsafe().Warning("nodeData and your JSON must contain the same number of elements");
                     return false;
                 }
             }
             else
             {
-                ILoggerService.GetUnsafe().Warning("Could not recognize the format of your JSON");
+                LoggerHelper.GetUnsafe().Warning("Could not recognize the format of your JSON");
                 return false;
             }
 
@@ -2012,7 +2013,7 @@ namespace WolvenKit.ViewModels.Shell
 
             await Refresh();
 
-            ILoggerService.GetUnsafe().Success($"Successfully imported from JSON");
+            LoggerHelper.GetUnsafe().Success($"Successfully imported from JSON");
             return true;
         }
 
@@ -2127,11 +2128,11 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (Parent.Data is null)
                 {
-                    ILoggerService.GetUnsafe().Warning($"Parent.Data is null");
+                    LoggerHelper.GetUnsafe().Warning($"Parent.Data is null");
                 }
                 else
                 {
-                    ILoggerService.GetUnsafe().Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
+                    LoggerHelper.GetUnsafe().Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
                 }
             }
             catch (Exception ex)
@@ -2440,11 +2441,11 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (Parent.Data is null)
                 {
-                    ILoggerService.GetUnsafe().Warning($"Parent.Data is null");
+                    LoggerHelper.GetUnsafe().Warning($"Parent.Data is null");
                 }
                 else
                 {
-                    ILoggerService.GetUnsafe().Warning($"Cannot copy unsupported type: {Parent.Data.GetType().Name}");
+                    LoggerHelper.GetUnsafe().Warning($"Cannot copy unsupported type: {Parent.Data.GetType().Name}");
                 }
             }
             catch (Exception ex)

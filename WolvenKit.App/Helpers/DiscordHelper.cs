@@ -1,5 +1,6 @@
 using System;
 using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
@@ -42,7 +43,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                 }
                 catch (Exception ex)
                 {
-                    ILoggerService.GetUnsafe().Error(ex);
+                    LoggerHelper.GetUnsafe().Error(ex);
                 }
             }
         }

@@ -66,18 +66,19 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4File(Stream stream, [NotNullWhen(true)] out CR2WFile? redFile)
         {
+            var logger = Locator.Current.GetService<ILoggerService>();
+
             try
             {
                 // TODO: Shouldn't be done here...
                 stream.Seek(0, SeekOrigin.Begin);
-                using var reader = new CR2WReader(stream, Encoding.Default, true);
+                using var reader = new CR2WReader(stream, Encoding.Default, true) { LoggerService = logger };
                 reader.ParsingError += TypeGlobal.OnParsingError;
 
                 return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
             {
-                var logger = Locator.Current.GetService<ILoggerService>();
                 logger?.Error(e);
 
                 redFile = null;
@@ -93,18 +94,19 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4File(BinaryReader br, [NotNullWhen(true)] out CR2WFile? redFile)
         {
+            var logger = Locator.Current.GetService<ILoggerService>();
+
             try
             {
                 // TODO: Shouldn't be done here...
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
-                using var reader = new CR2WReader(br);
+                using var reader = new CR2WReader(br) { LoggerService = logger };
                 reader.ParsingError += TypeGlobal.OnParsingError;
 
                 return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
             {
-                var logger = Locator.Current.GetService<ILoggerService>();
                 logger?.Error(e);
 
                 redFile = null;
