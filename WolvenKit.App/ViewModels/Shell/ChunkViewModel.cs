@@ -64,10 +64,13 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Constructors
 
-        public ChunkViewModel(IRedType? data, ChunkViewModel? parent = null, string? name = null, bool isReadOnly = false)
+        public ChunkViewModel(IRedType data, ChunkViewModel? parent = null, string? name = null, bool isReadOnly = false)
         {
-            Parent = parent;
             Data = data;
+
+            Parent = parent;
+            propertyName = name;
+            IsReadOnly = isReadOnly;
 
             CreateTXLOverride = new DelegateCommand(ExecuteCreateTXLOverride);
             OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef).ObservesProperty(() => Data);
@@ -100,15 +103,15 @@ namespace WolvenKit.ViewModels.Shell
             RegenerateAppearanceVisualControllerCommand = new DelegateCommand(ExecuteRegenerateAppearanceVisualController, CanRegenerateAppearanceVisualController);
 
 
-            IsReadOnly = isReadOnly;
+            
 
-            propertyName = name;
+            
 
             SelfList = new ObservableCollectionExtended<ChunkViewModel>(new[] { this });
 
             if (HasChildren())
             {
-                TempList = new ObservableCollectionExtended<ChunkViewModel>(new[] { new ChunkViewModel(null, this) });
+                TempList = new ObservableCollectionExtended<ChunkViewModel>(new[] { new ChunkViewModel(new RedDummy(), this) });
             }
 
 
@@ -276,40 +279,43 @@ namespace WolvenKit.ViewModels.Shell
 
         public RDTDataViewModel? Tab => _tab ?? Parent?.Tab;
 
-        [Reactive] public IRedType? Data { get; set; }  // TODO make this not nullable
+        [Reactive] public IRedType Data { get; set; }  // TODO make this not nullable
 
         [Reactive] public CName RelativePath { get; set; }
 
-        private IRedType? _resolvedDataCache;
+        //private IRedType? _resolvedDataCache;
 
         public IRedType ResolvedData
         {
             get
             {
-                if (_resolvedDataCache == null)
+                //if (_resolvedDataCache == null)
+                //{
+                var data = Data;
+                if (Data is IRedBaseHandle handle)
                 {
-                    var data = Data;
-                    if (Data is IRedBaseHandle handle)
-                    {
-                        data = handle.GetValue();
-                    }
-                    else if (Data is CVariant v)
-                    {
-                        data = v.Value;
-                    }
-                    else if (Data is TweakDBID tdb && _propertiesLoaded)
-                    {
-                        data = Locator.Current.GetService<TweakDBService>().NotNull().GetFlat(tdb);
-                        data ??= Locator.Current.GetService<TweakDBService>().NotNull().GetRecord(tdb);
-                    }
-                    else if (Data is DataBuffer db && db.Buffer.Data is IRedType irt)
-                    {
-                        data = irt;
-                    }
-                    _resolvedDataCache = data;
-                    //this.RaisePropertyChanged("ResolvedData");
+                    data = handle.GetValue();
                 }
-                return _resolvedDataCache.NotNull();
+                else if (Data is CVariant v)
+                {
+                    data = v.Value;
+                }
+                else if (Data is TweakDBID tdb && _propertiesLoaded)
+                {
+                    data = Locator.Current.GetService<TweakDBService>().NotNull().GetFlat(tdb);
+                    data ??= Locator.Current.GetService<TweakDBService>().NotNull().GetRecord(tdb);
+                }
+                else if (Data is DataBuffer db && db.Buffer.Data is IRedType irt)
+                {
+                    data = irt;
+                }
+
+                //_resolvedDataCache = data;
+                //this.RaisePropertyChanged("ResolvedData");
+                //}
+
+                //return _resolvedDataCache.NotNull();
+                return data;
             }
         }
 
@@ -575,28 +581,36 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public bool IsHandled { get; set; }
 
-        public string? propertyName { get; }
+        [Reactive] public string? propertyName { get; set; }
 
-        private string? _name;
         public string Name
         {
             get
             {
-                if (_name == null)
+                if (propertyName is not null)
                 {
-                    var name = propertyName;
-                    if (IsInArray && Parent is not null)
-                    {
-                        name = Parent.GetIndexOf(this).ToString().NotNull();
-                    }
-                    else if (name == null && Data is IBrowsableType ibt)
-                    {
-                        name = ibt.GetBrowsableName();
-                    }
-                    _name = name;
-                    //this.RaisePropertyChanged("Name");
+                    return propertyName;
                 }
-                return _name.NotNull();
+
+                var name = propertyName;
+                if (IsInArray && Parent is not null)
+                {
+                    name = Parent.GetIndexOf(this).ToString().NotNull();
+                }
+                else if (Data is IBrowsableType ibt)
+                {
+                    name = ibt.GetBrowsableName();
+                }
+                else if (Data is RedDummy dummy)
+                {
+                    name = nameof(RedDummy);
+                }
+                
+                if (name is null)
+                {
+                    name = "TODO";
+                }
+                return name.NotNull();
             }
         }
 
@@ -1835,7 +1849,7 @@ namespace WolvenKit.ViewModels.Shell
                     curve.Remove((IRedCurvePoint)Data);
                     if (curve.Count == 0)
                     {
-                        Parent._resolvedDataCache = null;
+                        //Parent.ResolvedData = null;
                         //Parent.Data = null; // TODO ???
                     }
                 }
@@ -1876,7 +1890,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (ResolvedData is IRedLegacySingleChannelCurve curve)
             {
-                _resolvedDataCache = null;
+                //_resolvedDataCache = null;
                 //Data = null;     // TODO ???
             }
             else if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is RedPackage pkg)
@@ -2709,7 +2723,7 @@ namespace WolvenKit.ViewModels.Shell
             PropertyCount = -1;
             // might not be needed
             _propertiesLoaded = false;
-            _resolvedDataCache = null;
+            //_resolvedDataCache = null;
             CalculateProperties();
             CalculateDescriptor();
 

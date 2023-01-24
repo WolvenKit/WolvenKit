@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using Syncfusion.UI.Xaml.TreeView.Engine;
-using Syncfusion.Windows.Shared;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -56,8 +55,8 @@ namespace WolvenKit.ViewModels.Documents
         {
             DataViewModel = vm;
             Socket = socket;
-            OpenRefCommand = new DelegateCommand(_ => ExecuteOpenRef(), _ => CanOpenRef());
-            LoadRefCommand = new DelegateCommand(_ => ExecuteLoadRef(), _ => CanLoadRef());
+            OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef);
+            LoadRefCommand = new DelegateCommand(ExecuteLoadRef, CanLoadRef);
         }
 
         public ICommand OpenRefCommand { get; private set; }
@@ -115,7 +114,7 @@ namespace WolvenKit.ViewModels.Documents
             //    Header = _data.GetType().Name;
             //}
 
-            OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
+            //OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
             OpenImportCommand = new DelegateCommand<ICR2WImport>(async (i) => await ExecuteOpenImport(i));
 
             this.WhenActivated((CompositeDisposable disposables) =>
@@ -237,7 +236,7 @@ namespace WolvenKit.ViewModels.Documents
         #endregion
 
         #region commands
-
+        /*
         public ICommand OnDemandLoadingCommand { get; private set; }
 
         private bool CanExecuteOnDemandLoading(TreeViewNode node) => node.Content is GroupedChunkViewModel || (node.Content is ChunkViewModel cvm && cvm.HasChildren());
@@ -283,6 +282,7 @@ namespace WolvenKit.ViewModels.Documents
                     }));
             }
         }
+        */
 
         public ICommand OpenImportCommand { get; private set; }
         private Task ExecuteOpenImport(ICR2WImport input)

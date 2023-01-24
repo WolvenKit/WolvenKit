@@ -18,6 +18,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit
