@@ -219,6 +219,14 @@ namespace WolvenKit.Common.Model.Arguments
         [WkitScriptAccess("WithMaterials")]
         public bool withMaterials { get; set; } = true;
 
+        /// <summary>
+        /// Garment Export Bool, Decides if we should export garment support data
+        /// </summary>
+        [Category("Default Export Settings")]
+        [Display(Name = "Export Garment Support (Experimental)")]
+        [Description("If selected mesh exports will include garment support data.")]
+        public bool ExportGarmentSupport { get; set; } = true;
+
 
         /// <summary>
         /// MultiMesh Mesh List.
