@@ -1,5 +1,5 @@
 using System;
-using WolvenKit.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WolvenKit.Common.Services
 {

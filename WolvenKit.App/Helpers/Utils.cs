@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using DynamicData;
 using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -640,7 +641,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch (Exception ex) { ILoggerService.GetUnsafe().Error(ex); }
+            catch (Exception ex) { LoggerHelper.GetUnsafe().Error(ex); }
         }
 
         private void AddFromAMM2(JsonAMM2 json, string tr, bool updatecoords = true)

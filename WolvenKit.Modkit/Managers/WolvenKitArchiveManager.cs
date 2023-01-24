@@ -4,12 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Kernel;
 using ProtoBuf;
 using Splat;
 using WolvenKit.Common.Services;
-using WolvenKit.Core;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 

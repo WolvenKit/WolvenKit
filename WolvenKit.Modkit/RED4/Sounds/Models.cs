@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Text.Json.Serialization;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Core;
 
 namespace WolvenKit.Modkit.RED4.Sounds

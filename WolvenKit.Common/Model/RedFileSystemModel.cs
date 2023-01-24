@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WolvenKit.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Common.Model

@@ -1,5 +1,5 @@
 using System.ComponentModel;
-using WolvenKit.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WolvenKit.Common.Model.Arguments
 {
