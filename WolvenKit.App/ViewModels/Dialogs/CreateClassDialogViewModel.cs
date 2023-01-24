@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using System.Reflection;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.App.ViewModels.Dialogs
 {
-    public class CreateClassDialogViewModel : DialogViewModel
+    public partial class CreateClassDialogViewModel : DialogViewModel
     {
         private readonly Dictionary<string, Type> _typeMap = new();
 
         public CreateClassDialogViewModel(ObservableCollection<string> existingClasses, bool allowOthers = true)
         {
-            ExistingClasses = existingClasses;
-            Classes = allowOthers
+            _existingClasses = existingClasses;
+            _classes = allowOthers
                 ? new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
                     .Where(t => t.IsAssignableTo(typeof(IRedClass)) && t.IsClass && !t.IsAbstract)
                     .Select(t => t.Name))
-                : ExistingClasses;
+                : _existingClasses;
 
             if (allowOthers)
             {
@@ -32,7 +31,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                     .Where(t => t.IsAssignableTo(typeof(IRedClass)) && t.IsClass && !t.IsAbstract)
                     .ToDictionary(obj => obj.Name, obj => obj);
 
-                Classes = new ObservableCollection<string>(_typeMap.Keys);
+                _classes = new ObservableCollection<string>(_typeMap.Keys);
             }
 
             OkCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(this), CanOk);
@@ -48,11 +47,11 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 (c) => c is not null && Classes.Contains(c)
             );
 
-        [Reactive] public ObservableCollection<string> Classes { get; set; }
+        [ObservableProperty] private ObservableCollection<string> _classes;
 
-        [Reactive] public ObservableCollection<string> ExistingClasses { get; set; }
+        [ObservableProperty] private ObservableCollection<string> _existingClasses;
 
-        [Reactive] public string? SelectedClass { get; set; }
+        [ObservableProperty] private string? _selectedClass;
 
         public Type? SelectedType
         {

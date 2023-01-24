@@ -9,8 +9,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Extensions;
@@ -22,7 +21,7 @@ using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.App.Services
 {
-    public class PluginService : ReactiveObject, IPluginService
+    public partial class PluginService : ObservableObject, IPluginService
     {
         private const string _pluginFileName = "wolvenkit_plugins.json";
 
@@ -43,7 +42,8 @@ namespace WolvenKit.App.Services
             _progressService = progressService;
         }
 
-        [Reactive] public ObservableCollection<PluginViewModel> Plugins { get; set; } = new ObservableCollection<PluginViewModel>();
+        [ObservableProperty]
+        private ObservableCollection<PluginViewModel> _plugins = new ObservableCollection<PluginViewModel>();
 
 
         public void Init()

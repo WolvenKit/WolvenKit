@@ -1,11 +1,11 @@
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.ProjectManagement;
@@ -16,7 +16,7 @@ namespace WolvenKit.Functionality.Services
     /// <summary>
     /// Singleton Service
     /// </summary>
-    public class ProjectManager : ReactiveObject, IProjectManager
+    public partial class ProjectManager : ObservableObject, IProjectManager
     {
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly INotificationService _notificationService;
@@ -35,26 +35,31 @@ namespace WolvenKit.Functionality.Services
             _loggerService = loggerService;
             _hashService = hashService;
 
-            this.WhenAnyValue(x => x.ActiveProject).Subscribe(async _ =>
+            this.PropertyChanged += async delegate(object? sender, PropertyChangedEventArgs args)
             {
-                if (IsProjectLoaded)
+                if (args.PropertyName == nameof(ActiveProject))
                 {
-                    await SaveAsync();
+                    if (IsProjectLoaded)
+                    {
+                        await SaveAsync();
+                    }
                 }
-            });
+            };
         }
 
         #region properties
 
-        [Reactive] public bool IsProjectLoaded { get; set; }
+        [ObservableProperty]
+        private bool _isProjectLoaded;
 
-        [Reactive] public Cp77Project? ActiveProject { get; set; }
+        [ObservableProperty]
+        private Cp77Project? _activeProject;
 
         #endregion
 
         #region commands
 
-        public ReactiveCommand<string, Unit>? OpenProjectCommand { get; set; }
+        public AsyncRelayCommand<string>? OpenProjectCommand { get; set; }
 
         #endregion
 

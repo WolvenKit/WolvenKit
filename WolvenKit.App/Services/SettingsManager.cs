@@ -5,9 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Core;
@@ -18,7 +17,7 @@ namespace WolvenKit.Functionality.Services
     /// <summary>
     /// This handles the application settings defined by the user.
     /// </summary>
-    public class SettingsManager : ReactiveObject, ISettingsManager
+    public partial class SettingsManager : ObservableObject, ISettingsManager
     {
         private bool _isLoaded;
 
@@ -130,107 +129,107 @@ namespace WolvenKit.Functionality.Services
 
         [Category("General")]
         [Display(Name = "Settings Version")]
-        [Reactive]
+        [ObservableProperty]
         [Browsable(false)]
-        public int SettingsVersion { get; set; }
+        private int _settingsVersion;
 
         [Category("General")]
         [Display(Name = "Do not check for updates")]
-        [Reactive]
-        public bool SkipUpdateCheck { get; set; }
+        [ObservableProperty]
+        private bool _skipUpdateCheck;
 
         [Category("General")]
         [Display(Name = "Update Channel")]
-        [Reactive]
-        public EUpdateChannel UpdateChannel { get; set; } // deprecated
+        [ObservableProperty]
+        private EUpdateChannel _updateChannel;  // deprecated
 
         [Category("General")]
         [Display(Name = "Show Guided Tour")]
-        [Reactive]
-        public bool ShowGuidedTour { get; set; } = true;
+        [ObservableProperty]
+        private bool _showGuidedTour = true;
 
         [Category("General")]
         [Display(Name = "Theme Accent")]
-        [Reactive]
-        public string? ThemeAccentString { get; set; }
+        [ObservableProperty]
+        private string? _themeAccentString;
 
         [Category("Cyberpunk")]
         [Display(Name = "Game Executable Path (.exe)")]
-        [Reactive]
-        public string? CP77ExecutablePath { get; set; }
+        [ObservableProperty]
+        private string? _cP77ExecutablePath;
 
         // This should be conditionally updated by CP77ExecutablePath, but not implemented..
         [Category("Cyberpunk")]
         [Display(Name = "Launch Command (executable or other command (e.g. steam:// uri)")]
-        [Reactive]
-        public string? CP77LaunchCommand { get; set; }
+        [ObservableProperty]
+        private string? _cP77LaunchCommand;
 
         [Category("Cyberpunk")]
         [Display(Name = "Launch Options or Command-Line Parameters To Launch Command")]
-        [Reactive]
-        public string? CP77LaunchOptions { get; set; }
+        [ObservableProperty]
+        private string? _cP77LaunchOptions;
 
         [Category("Cyberpunk")]
         [Display(Name = "Show File Preview")]
-        [Reactive]
-        public bool ShowFilePreview { get; set; } = true;
+        [ObservableProperty]
+        private bool _showFilePreview = true;
 
         [Browsable(false)]
-        [Reactive]
-        public string? ReddbHash { get; set; }
+        [ObservableProperty]
+        private string? _reddbHash;
 
         [Browsable(false)]
-        [Reactive]
-        public string? InstallerHash { get; set; }
+        [ObservableProperty]
+        private string? _installerHash;
 
         [Category("Cyberpunk")]
         [Display(Name = "Depot Path")]
-        [Reactive]
-        public string? MaterialRepositoryPath { get; set; }
+        [ObservableProperty]
+        private string? _materialRepositoryPath;
 
         [Category("File Editor")]
         [Display(Name = "Group Large Collections")]
-        [Reactive]
-        public bool TreeViewGroups { get; set; } = false;
+        [ObservableProperty]
+        private bool _treeViewGroups;
 
         [Category("File Editor")]
         [Display(Name = "Group Size")]
-        [Reactive]
-        public uint TreeViewGroupSize { get; set; } = 100;
+        [ObservableProperty]
+        private uint _treeViewGroupSize = 100;
 
         [Category("File Editor")]
         [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)")]
-        [Reactive]
-        public string? TreeViewIgnoredExtensions { get; set; } = "";
+        [ObservableProperty]
+        private string? _treeViewIgnoredExtensions = "";
 
         [Category("Import / Export")]
         [Display(Name = "Show advanced Options")]
-        [Reactive]
-        public bool ShowAdvancedOptions { get; set; }
+        [ObservableProperty]
+        private bool _showAdvancedOptions;
 
         [Category("Display")]
         [Display(Name = "Show CName hashes as hex")]
-        [Reactive]
-        public bool ShowCNameAsHex { get; set; }
+        [ObservableProperty]
+        private bool _showCNameAsHex;
 
         [Category("Display")]
         [Display(Name = "Show NodeRef hashes as hex")]
-        [Reactive]
-        public bool ShowNodeRefAsHex { get; set; }
+        [ObservableProperty]
+        private bool _showNodeRefAsHex;
 
         [Category("Display")]
         [Display(Name = "Show TweakDBID hashes as hex")]
-        [Reactive]
-        public bool ShowTweakDBIDAsHex { get; set; }
+        [ObservableProperty]
+        private bool _showTweakDBIDAsHex;
 
         [Category("Display")]
         [Display(Name = "Show reference graph")]
-        [Reactive]
-        public bool ShowReferenceGraph { get; set; }
+        [ObservableProperty]
+        private bool _showReferenceGraph;
 
-        [Reactive]
+        [ObservableProperty]
         [Browsable(false)]
-        public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
+        private Dictionary<string, LaunchProfile>? _launchProfiles;
 
         #endregion properties
 

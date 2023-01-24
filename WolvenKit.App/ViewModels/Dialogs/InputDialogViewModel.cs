@@ -1,5 +1,4 @@
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 
 namespace WolvenKit.App.ViewModels.Dialogs
@@ -7,7 +6,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
     /// <summary>
     /// Implements the viewmodel that drives the log view.
     /// </summary>
-    public class InputDialogViewModel : ReactiveObject
+    public partial class InputDialogViewModel : ObservableObject
     {
         public InputDialogViewModel()
         {
@@ -17,6 +16,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
         /// The application log.
         /// Bound to the logview, implements OnPropertyRaised through Fody
         /// </summary>
-        [Reactive] public string? Text { get; set; }
+        [ObservableProperty] private string? _text;
     }
 }

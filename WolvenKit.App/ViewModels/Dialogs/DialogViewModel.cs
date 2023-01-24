@@ -1,13 +1,10 @@
 using System.Reactive;
-using System.Windows.Input;
-using Newtonsoft.Json;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Dialogs
 {
-    public abstract class DialogViewModel : ReactiveObject
+    public abstract class DialogViewModel : ObservableObject
     {
         public delegate void DialogHandlerDelegate(DialogViewModel? sender);
         public DialogHandlerDelegate? DialogHandler { get; set; }
@@ -16,7 +13,7 @@ namespace WolvenKit.ViewModels.Dialogs
         public abstract ReactiveCommand<Unit, Unit> CancelCommand { get; }
     }
 
-    public abstract class DialogWindowViewModel : ReactiveObject
+    public abstract class DialogWindowViewModel : ObservableObject
     {
 
     }
