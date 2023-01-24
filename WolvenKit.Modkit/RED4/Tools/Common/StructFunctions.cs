@@ -29,7 +29,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             }
             else
             {
-                value = Convert.ToSingle(Math.Pow(2, pow - 15)) * (1 + sp / 1024f);
+                value = Convert.ToSingle(Math.Pow(2, pow - 15)) * (1 + (sp / 1024f));
             }
 
             if (sign == 1)
@@ -53,7 +53,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             {
                 value = 65504;      // if number provided is > Half.Max or < Half.Min then normalized
             }
-            if (value >= 0 && value <= (float)0.000060975552)
+            if (value is >= 0 and <= ((float)0.000060975552))
             {
                 pow = 0;
                 sp = Convert.ToUInt16(value * 1024 * Math.Pow(2, 14));
@@ -67,13 +67,13 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
                     sp = 55; // sp can be anything in this case i randomly put 55
                 }
             }
-            else if (value >= (float)0.00006103515625 && value <= 65504)
+            else if (value is >= ((float)0.00006103515625) and <= 65504)
             {
                 short temp1 = 14;
-                var temp2 = Convert.ToUInt64((value * Math.Pow(2, temp1) - 1) * 1024);
+                var temp2 = Convert.ToUInt64(((value * Math.Pow(2, temp1)) - 1) * 1024);
                 for (; temp2 > 1023; temp1--)
                 {
-                    temp2 = Convert.ToUInt64((value * Math.Pow(2, temp1 - 1) - 1) * 1024);
+                    temp2 = Convert.ToUInt64(((value * Math.Pow(2, temp1 - 1)) - 1) * 1024);
                 }
                 sp = Convert.ToUInt16(temp2);
                 var temp3 = Convert.ToUInt16((-1 * temp1) + 15);
@@ -92,7 +92,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             X = (X * 2 * dequant) - 1f;
             Y = (Y * 2 * dequant) - 1f;
             Z = (Z * 2 * dequant) - 1f;
-            W = W / 3f;
+            W /= 3f;
             return new Vector4(X, Y, Z, W);
         }
         public static TargetVec4 TenBitUnsigned(uint U32)
@@ -172,13 +172,13 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public static float CalculateRealPart(Quaternion Q)
         {
             float w;
-            if ((Q.X * Q.X + Q.Y * Q.Y + Q.Z * Q.Z) >= 1f)
+            if (((Q.X * Q.X) + (Q.Y * Q.Y) + (Q.Z * Q.Z)) >= 1f)
             {
-                w = (float)Math.Sqrt((Q.X * Q.X + Q.Y * Q.Y + Q.Z * Q.Z) - 1f);
+                w = (float)Math.Sqrt((Q.X * Q.X) + (Q.Y * Q.Y) + (Q.Z * Q.Z) - 1f);
             }
             else
             {
-                w = (float)Math.Sqrt(1f - (Q.X * Q.X + Q.Y * Q.Y + Q.Z * Q.Z));
+                w = (float)Math.Sqrt(1f - ((Q.X * Q.X) + (Q.Y * Q.Y) + (Q.Z * Q.Z)));
             }
 
             return w;

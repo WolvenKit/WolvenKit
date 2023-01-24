@@ -16,22 +16,18 @@ namespace WolvenKit.Core.CRC
         /// <summary>
         /// Initializes a new instance of the <see cref="Crc32CAlgorithm"/> class.
         /// </summary>
-        public Crc32CAlgorithm()
-        {
+        public Crc32CAlgorithm() =>
 #if !NETCORE13
             HashSizeValue = 32;
 #endif
-        }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Crc32CAlgorithm"/> class.
         /// </summary>
         /// <param name="isBigEndian">Should return bytes result as big endian or little endian</param>
         public Crc32CAlgorithm(bool isBigEndian = true)
-            : this()
-        {
-            _isBigEndian = isBigEndian;
-        }
+            : this() => _isBigEndian = isBigEndian;
 
         /// <summary>
         /// Computes CRC-32C from multiple buffers.
@@ -183,7 +179,7 @@ namespace WolvenKit.Core.CRC
             }
         }
 
-        private static readonly SafeProxyC _proxy = new SafeProxyC();
+        private static readonly SafeProxyC _proxy = new();
 
         private static uint AppendInternal(uint initial, byte[] input, int offset, int length)
         {

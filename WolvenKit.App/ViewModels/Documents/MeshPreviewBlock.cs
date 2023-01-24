@@ -83,7 +83,7 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
 
             PanelVisibility.ShowSearchPanel = true;
-            
+
 
             this.WhenActivated((CompositeDisposable disposables) => RenderBlockSolo());
         }

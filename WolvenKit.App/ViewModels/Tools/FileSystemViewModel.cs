@@ -21,6 +21,6 @@ namespace WolvenKit.ViewModels.Tools
 
         //public abstract ulong ParentKey { get; }
 
-        [Browsable(false)] [Reactive] public bool IsChecked { get; set; }
+        [Browsable(false)][Reactive] public bool IsChecked { get; set; }
     }
 }

@@ -271,7 +271,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public async Task Refresh()
         {
-            var document  = Locator.Current.GetService<AppViewModel>().NotNull().ActiveDocument;
+            var document = Locator.Current.GetService<AppViewModel>().NotNull().ActiveDocument;
 
             if (Tab is not null && document is not null)
             {
@@ -384,7 +384,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
 
                 ((IRedArray)wss.Nodes).Insert(index, wenh);
-                 SetCoords(current, index, line, updatecoords);
+                SetCoords(current, index, line, updatecoords);
             }
         }
 
@@ -534,7 +534,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var am = Locator.Current.GetService<IArchiveManager>().NotNull();
                 var sm = Locator.Current.GetService<ISettingsManager>().NotNull();
-                am.LoadModsArchives(new FileInfo(sm.CP77ExecutablePath));
+                am.LoadModsArchives(new FileInfo(sm.CP77ExecutablePath.NotNull()));
                 var af = am.GetGroupedFiles();
 
                 var tempbool = am.IsModBrowserActive;
@@ -652,8 +652,8 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var line = Prop.FromChild(c);
                 if (updatecoords)
-                { 
-                    line.center = center; 
+                {
+                    line.center = center;
                 }
                 AddEntity(tr, line, updatecoords);
             }
@@ -670,8 +670,8 @@ namespace WolvenKit.ViewModels.Shell
                 var line = Prop.FromObjectList(o, pm.ActiveProject);
 
                 if (updatecoords)
-                { 
-                    line.center = center; 
+                {
+                    line.center = center;
                 }
                 line.isunreal = true;
                 AddMesh(tr, line, updatecoords);
@@ -694,8 +694,8 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var line = Prop.FromJsonObjectSpawner(o);
                 if (updatecoords)
-                { 
-                    line.center = center; 
+                {
+                    line.center = center;
                 }
                 AddEntity(tr, line, updatecoords);
             }
@@ -715,7 +715,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private Vec3 GetScale(Prop line, float factor = (float)0.01)
         {
-            var scala = line.scale == "nil" 
+            var scala = line.scale == "nil"
                 ? null
                 : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
 
@@ -729,7 +729,7 @@ namespace WolvenKit.ViewModels.Shell
                 ArgumentNullException.ThrowIfNull(scala.y);
                 ArgumentNullException.ThrowIfNull(scala.z);
 
-                return new Vec3(float.Parse(scala.x) * factor, float.Parse(scala.y) * factor, float.Parse(scala.z) * factor );
+                return new Vec3(float.Parse(scala.x) * factor, float.Parse(scala.y) * factor, float.Parse(scala.z) * factor);
             }
         }
 
@@ -885,7 +885,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 throw new ArgumentException("invalid argument type", nameof(C));
             }
-            
+
             var meshname = jsonElement.GetString().NotNull().ToLower();
             var foundnames = fileslist
                 .Where(x => x.Contains(meshname) && x.Contains(".mesh"))

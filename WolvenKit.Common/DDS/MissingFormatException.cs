@@ -20,10 +20,7 @@ namespace WolvenKit.Common.DDS
         {
         }
 
-        protected MissingFormatException(SerializationInfo serializationInfo, StreamingContext streamingContext)
-        {
-            throw new NotImplementedException();
-        }
+        protected MissingFormatException(SerializationInfo serializationInfo, StreamingContext streamingContext) => throw new NotImplementedException();
 
         #endregion Constructors
     }

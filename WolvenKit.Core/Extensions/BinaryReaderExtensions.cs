@@ -54,7 +54,7 @@ namespace WolvenKit.Core.Extensions
                         mask = 63;
                     }
                 }
-                result |= ((b & mask) << shift);
+                result |= (b & mask) << shift;
                 shift += s;
                 i++;
             } while (!(b < 64 || (i >= 3 && b < 128)));

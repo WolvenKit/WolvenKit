@@ -57,7 +57,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml").NotNull();
 
                 XmlSerializer serializer = new(typeof(WolvenKitFileDefinitions));
-                if( serializer.Deserialize(stream) is not WolvenKitFileDefinitions newdef)
+                if (serializer.Deserialize(stream) is not WolvenKitFileDefinitions newdef)
                 {
                     throw new ArgumentNullException("WolvenKitFileDefinitions");
                 }
@@ -119,7 +119,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                         WhyNotCreate = "";
                     }
                 });
-            
+
         }
 
         [Reactive] public string? Text { get; set; }
@@ -145,19 +145,19 @@ namespace WolvenKit.App.ViewModels.Dialogs
         {
             ArgumentNullException.ThrowIfNull(_projectManager.ActiveProject);
 
-            
-                return type switch
-                {
-                    EWolvenKitFile.TweakXl => _projectManager.ActiveProject.ResourcesDirectory,
-                    EWolvenKitFile.Cr2w => _projectManager.ActiveProject.ModDirectory,
-                    EWolvenKitFile.ArchiveXl => _projectManager.ActiveProject.ResourcesDirectory,
-                    EWolvenKitFile.RedScript => _projectManager.ActiveProject.ResourcesDirectory,
-                    EWolvenKitFile.CETLua => _projectManager.ActiveProject.ResourcesDirectory,
-                    EWolvenKitFile.WScript => throw new NotImplementedException(),
-                    _ => throw new ArgumentOutOfRangeException(nameof(type)),
-                };
-            
-            
+
+            return type switch
+            {
+                EWolvenKitFile.TweakXl => _projectManager.ActiveProject.ResourcesDirectory,
+                EWolvenKitFile.Cr2w => _projectManager.ActiveProject.ModDirectory,
+                EWolvenKitFile.ArchiveXl => _projectManager.ActiveProject.ResourcesDirectory,
+                EWolvenKitFile.RedScript => _projectManager.ActiveProject.ResourcesDirectory,
+                EWolvenKitFile.CETLua => _projectManager.ActiveProject.ResourcesDirectory,
+                EWolvenKitFile.WScript => throw new NotImplementedException(),
+                _ => throw new ArgumentOutOfRangeException(nameof(type)),
+            };
+
+
         }
     }
 

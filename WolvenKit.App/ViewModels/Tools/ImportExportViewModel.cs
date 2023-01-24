@@ -23,7 +23,7 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 {
-    
+
     protected (JsonObject, Type) currentSettings;
     protected static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
     {

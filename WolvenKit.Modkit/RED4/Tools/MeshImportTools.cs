@@ -375,8 +375,27 @@ namespace WolvenKit.Modkit.RED4
             var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
             var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
 
-            Meshes.ForEach(p => p.positions.ToList().ForEach(q => { max.X = Math.Max(q.X, max.X); max.Y = Math.Max(q.Y, max.Y); max.Z = Math.Max(q.Z, max.Z); }));
-            Meshes.ForEach(p => p.positions.ToList().ForEach(q => { min.X = Math.Min(q.X, min.X); min.Y = Math.Min(q.Y, min.Y); min.Z = Math.Min(q.Z, min.Z); }));
+            foreach (var p in Meshes)
+            {
+                ArgumentNullException.ThrowIfNull(p.positions);
+                foreach (var q in p.positions.ToList())
+                {
+                    max.X = Math.Max(q.X, max.X);
+                    max.Y = Math.Max(q.Y, max.Y);
+                    max.Z = Math.Max(q.Z, max.Z);
+                }
+            }
+
+            foreach (var p in Meshes)
+            {
+                ArgumentNullException.ThrowIfNull(p.positions);
+                foreach (var q in p.positions.ToList())
+                {
+                    min.X = Math.Min(q.X, min.X);
+                    min.Y = Math.Min(q.Y, min.Y);
+                    min.Z = Math.Min(q.Z, min.Z);
+                }
+            }
 
             meshBlob.BoundingBox.Min = new Vector4 { X = min.X, Y = min.Y, Z = min.Z, W = 1f };
             meshBlob.BoundingBox.Max = new Vector4 { X = max.X, Y = max.Y, Z = max.Z, W = 1f };
@@ -406,7 +425,7 @@ namespace WolvenKit.Modkit.RED4
                 oldRig = MeshTools.GetOrphanRig(meshBlob);
 
 
-                var ar = originalRig.Archive as Archive;
+                var ar = originalRig.Archive;
                 using var msr = new MemoryStream();
                 ar?.CopyFileToStream(msr, originalRig.NameHash64, false);
                 newRig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(msr));
@@ -428,6 +447,8 @@ namespace WolvenKit.Modkit.RED4
             MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
 
             UpdateSkinningParamCloth(ref Meshes, ref cr2w, args);
+
+            UpdateGarmentSupportParameters(Meshes, cr2w, args.ImportGarmentSupport);
 
             var expMeshes = Meshes.Select(_ => RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
 
@@ -530,7 +551,10 @@ namespace WolvenKit.Modkit.RED4
                 colors0 = accessors.Contains("COLOR_0") ? mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray() : Array.Empty<Vec4>(),
                 colors1 = accessors.Contains("COLOR_1") ? mesh.Primitives[0].GetVertices("COLOR_1").AsVector4Array().ToArray() : Array.Empty<Vec4>(),
                 texCoords0 = accessors.Contains("TEXCOORD_0") ? mesh.Primitives[0].GetVertices("TEXCOORD_0").AsVector2Array().ToArray() : Array.Empty<Vec2>(),
-                texCoords1 = accessors.Contains("TEXCOORD_1") ? mesh.Primitives[0].GetVertices("TEXCOORD_1").AsVector2Array().ToArray() : Array.Empty<Vec2>()
+                texCoords1 = accessors.Contains("TEXCOORD_1") ? mesh.Primitives[0].GetVertices("TEXCOORD_1").AsVector2Array().ToArray() : Array.Empty<Vec2>(),
+
+                garmentSupportWeight = accessors.Contains("_GARMENTSUPPORTWEIGHT") ? mesh.Primitives[0].GetVertices("_GARMENTSUPPORTWEIGHT").AsVector4Array().ToArray() : Array.Empty<Vec4>(),
+                garmentSupportCap = accessors.Contains("_GARMENTSUPPORTCAP") ? mesh.Primitives[0].GetVertices("_GARMENTSUPPORTCAP").AsVector4Array().ToArray() : Array.Empty<Vec4>()
             };
 
             var indicesList = mesh.Primitives[0].GetIndices().ToList();
@@ -1705,6 +1729,144 @@ namespace WolvenKit.Modkit.RED4
                         blob.LodChunkIndices[3].Add(i);
                     }
                 }
+            }
+        }
+
+        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = false)
+        {
+            if (importGarmentSupport && cr2w.RootChunk is CMesh cMesh)
+            {
+
+                if (meshes.All(x => x.garmentMorph?.Length > 0 && x.garmentSupportWeight?.Length > 0))
+                {
+                    var garmentMeshBlobChunk = GetParameter_meshMeshParamGarmentSupport(cMesh);
+
+                    var garmentBlobChunk = GetParameter_garmentMeshParamGarment(cMesh);
+
+                    for (var i = 0; i < meshes.Count; i++)
+                    {
+                        WriteToGarmentSupportParameters(meshes[i], garmentMeshBlobChunk, garmentBlobChunk);
+                    }
+                }
+                else
+                {
+                    RemoveGarmentSupportParameters(cMesh);
+                }
+            }
+        }
+
+        private static meshMeshParamGarmentSupport GetParameter_meshMeshParamGarmentSupport(CMesh cMesh)
+        {
+            var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamGarmentSupport);
+            if (garmentMeshBlob == null)
+            {
+                garmentMeshBlob = new CHandle<meshMeshParameter> { Chunk = new meshMeshParamGarmentSupport() };
+                cMesh.Parameters.Add(garmentMeshBlob);
+            }
+
+            if (garmentMeshBlob.Chunk is not meshMeshParamGarmentSupport garmentMeshBlobChunk)
+            {
+                garmentMeshBlobChunk = new meshMeshParamGarmentSupport();
+                garmentMeshBlob.Chunk = garmentMeshBlobChunk;
+            }
+
+            garmentMeshBlobChunk.ChunkCapVertices = new CArray<CArray<CUInt32>>();
+            garmentMeshBlobChunk.CustomMorph = true;
+
+            return garmentMeshBlobChunk;
+        }
+
+        private static garmentMeshParamGarment GetParameter_garmentMeshParamGarment(CMesh cMesh)
+        {
+            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
+            if (garmentBlob == null)
+            {
+                garmentBlob = new CHandle<meshMeshParameter> { Chunk = new garmentMeshParamGarment() };
+                cMesh.Parameters.Add(garmentBlob);
+            }
+
+            if (garmentBlob.Chunk is not garmentMeshParamGarment garmentBlobChunk)
+            {
+                garmentBlobChunk = new garmentMeshParamGarment();
+                garmentBlob.Chunk = garmentBlobChunk;
+            }
+
+            garmentBlobChunk.Chunks = new CArray<garmentMeshParamGarmentChunkData>();
+
+            return garmentBlobChunk;
+        }
+
+        private static void WriteToGarmentSupportParameters(RawMeshContainer mesh, meshMeshParamGarmentSupport garmentMeshBlobChunk, garmentMeshParamGarment garmentBlobChunk)
+        {
+            ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
+            ArgumentNullException.ThrowIfNull(mesh.indices, nameof(mesh));
+            ArgumentNullException.ThrowIfNull(mesh.garmentMorph, nameof(mesh));
+            ArgumentNullException.ThrowIfNull(mesh.garmentSupportWeight, nameof(mesh));
+
+            var vertBuffer = new MemoryStream();
+            var vertBW = new BinaryWriter(vertBuffer);
+
+            var indBuffer = new MemoryStream();
+            var indBW = new BinaryWriter(indBuffer);
+
+            var morphBuffer = new MemoryStream();
+            var morphBW = new BinaryWriter(morphBuffer);
+
+            var flagBuffer = new MemoryStream();
+            var flagBW = new BinaryWriter(flagBuffer);
+
+            var capVertices = new CArray<CUInt32>();
+
+            for (var v = 0; v < mesh.positions.Length; v++)
+            {
+                vertBW.Write(mesh.positions[v].X);
+                vertBW.Write(mesh.positions[v].Y);
+                vertBW.Write(mesh.positions[v].Z);
+
+                morphBW.Write(mesh.garmentMorph[v].X);
+                morphBW.Write(mesh.garmentMorph[v].Y);
+                morphBW.Write(mesh.garmentMorph[v].Z);
+
+                var vertexHasValidCap = mesh.garmentSupportCap?.Length > v ? mesh.garmentSupportCap[v].X >= .5f : false;
+                flagBW.Write(Convert.ToByte(mesh.garmentSupportWeight.Length > v ? mesh.garmentSupportWeight[v].X * 255 : 0));
+                flagBW.Write(Convert.ToByte(vertexHasValidCap ? 1 : 0));
+                flagBW.Write((byte)0);
+                flagBW.Write((byte)0);
+                if (vertexHasValidCap)
+                {
+                    capVertices.Add(v);
+                }
+            }
+
+            for (var n = 0; n < mesh.indices.Length; n++)
+            {
+                indBW.Write(Convert.ToUInt16(mesh.indices[n]));
+            }
+
+            garmentMeshBlobChunk.ChunkCapVertices.Add(capVertices);
+
+            garmentBlobChunk.Chunks.Add(new garmentMeshParamGarmentChunkData
+            {
+                GarmentFlags = new DataBuffer(flagBuffer.ToArray()),
+                Indices = new DataBuffer(indBuffer.ToArray()),
+                MorphOffsets = new DataBuffer(morphBuffer.ToArray()),
+                Vertices = new DataBuffer(vertBuffer.ToArray()),
+                NumVertices = Convert.ToUInt32(mesh.positions.Length),
+                LodMask = 1
+            });
+        }
+
+        private static void RemoveGarmentSupportParameters(CMesh cMesh)
+        {
+            var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamGarmentSupport);
+            if (garmentMeshBlob != null)
+            {
+                cMesh.Parameters.Remove(garmentMeshBlob);
+            }
+            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
+            if (garmentBlob != null)
+            {
+                cMesh.Parameters.Remove(garmentBlob);
             }
         }
     }

@@ -162,7 +162,7 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedRecordEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, _selectedRecordEntry.DisplayName, false, true) { IsExpanded = true });
+                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, _selectedRecordEntry.DisplayName, true) { IsExpanded = true });
                 }
                 else
                 {
@@ -181,7 +181,7 @@ namespace WolvenKit.ViewModels.Tools
                 this.RaisePropertyChanged(nameof(SelectedFlatEntry));
                 if (_selectedFlatEntry != null && _tweakDB.IsLoaded)
                 {
-                    SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(_selectedFlatEntry.Item), null, true);
+                    SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(_selectedFlatEntry.Item));
                 }
                 else
                 {
@@ -206,7 +206,7 @@ namespace WolvenKit.ViewModels.Tools
                         arr.Add(query);
                     }
 
-                    SelectedQuery = new ChunkViewModel(arr, null, true);
+                    SelectedQuery = new ChunkViewModel(arr);
                 }
                 else
                 {
@@ -228,7 +228,7 @@ namespace WolvenKit.ViewModels.Tools
                     var u = _tweakDB.GetGroupTag(_selectedGroupTagEntry.Item);
                     if (u is not null)
                     {
-                        SelectedGroupTag = new ChunkViewModel((CUInt8)u, null, true);
+                        SelectedGroupTag = new ChunkViewModel((CUInt8)u);
                     }
                 }
                 else
@@ -295,10 +295,7 @@ namespace WolvenKit.ViewModels.Tools
             List<TweakEntry> PrepareList(List<TweakDBID> tweaks, bool isRecord = false)
             {
                 var tmpRecords = new ConcurrentQueue<TweakEntry>();
-                Parallel.ForEach(tweaks, record =>
-                {
-                    tmpRecords.Enqueue(new TweakEntry(record, _tweakDB, isRecord));
-                });
+                Parallel.ForEach(tweaks, record => tmpRecords.Enqueue(new TweakEntry(record, _tweakDB, isRecord)));
                 return tmpRecords.AsParallel().OrderBy(x => x.DisplayName).ToList();
             }
         }

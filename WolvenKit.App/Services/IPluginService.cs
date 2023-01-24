@@ -29,8 +29,8 @@ namespace WolvenKit.Functionality.Services
         {
             var n = Enum.GetName(typeof(EPlugin), p);
             if (n == null)
-            { 
-                return null; 
+            {
+                return null;
             }
             return typeof(EPlugin).GetField(n);
         }

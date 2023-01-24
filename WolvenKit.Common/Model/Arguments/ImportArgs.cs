@@ -166,6 +166,14 @@ namespace WolvenKit.Common.Model.Arguments
         public bool ReplaceLod { get; set; } = false;
 
         /// <summary>
+        /// Imports garment support data from GLB.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Import Garment Support (Experimental)")]
+        [Description("If checked the Garment Support data will be imported from the mesh")]
+        public bool ImportGarmentSupport { get; set; } = false;
+
+        /// <summary>
         /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
         /// </summary>
         [Category("WithRig Settings")]

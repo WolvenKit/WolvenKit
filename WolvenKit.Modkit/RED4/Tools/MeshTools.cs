@@ -29,19 +29,9 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public MeshTools(Red4ParserService red4ParserService) => _red4ParserService = red4ParserService;
 
-        public bool ExportMesh(Stream meshStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
-        {
-            var cr2w = _red4ParserService.ReadRed4File(meshStream);
-            if (cr2w is not null)
-            {
-                return ExportMesh(cr2w, outfile, meshExportArgs, vmode);
-            }
-            return false;
-        }
-
         public static bool ExportMesh(CR2WFile cr2w, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var model = GetModel(cr2w, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport);
+            var model = GetModel(cr2w, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport, exportGarmentSupport: meshExportArgs.ExportGarmentSupport);
 
             if (model == null)
             {
@@ -66,7 +56,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             return true;
         }
 
-        public static ModelRoot? GetModel(CR2WFile cr2w, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false)
+        public static ModelRoot? GetModel(CR2WFile cr2w, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false, bool exportGarmentSupport = false)
         {
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -90,6 +80,8 @@ namespace WolvenKit.Modkit.RED4.Tools
             {
                 UpdateSkinningParamCloth(ref expMeshes, cr2w);
             }
+
+            WriteGarmentParametersToMesh(ref expMeshes, cMesh, exportGarmentSupport);
 
             var model = RawMeshesToGLTF(expMeshes, rig, mergeMeshes);
 
@@ -197,6 +189,8 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 var Meshes = ContainRawMesh(ms, meshesinfo, lodFilter);
 
+                WriteGarmentParametersToMesh(ref Meshes, cMesh);
+
                 expMeshes.AddRange(Meshes);
 
                 meshStream.Dispose();
@@ -222,114 +216,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             return true;
         }
-        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
-        {
-            var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
-            {
-                return false;
-            }
-
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
-
-            var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
-
-            var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter);
-            UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
-
-            var meshRig = GetOrphanRig(cMesh);
-
-            var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
-
-            UpdateMeshJoints(ref expMeshes, Rig, meshRig);
-
-            var model = RawMeshesToGLTF(expMeshes, Rig);
-
-
-            if (WolvenTesting.IsTesting)
-            {
-                model.WriteGLB(new WriteSettings(vmode));
-                return true;
-            }
-
-            if (isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
-            }
-
-            meshStream.Dispose();
-            meshStream.Close();
-            rigStream.Dispose();
-            rigStream.Close();
-
-            return true;
-        }
-        public bool ExportMultiMeshWithRig(Dictionary<Stream, string> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
-        {
-            var Rigs = new List<RawArmature>();
-            foreach (var rigStream in rigStreamS)
-            {
-                var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
-                if (Rig is not null)
-                {
-                    Rigs.Add(Rig);
-                }
-
-                rigStream.Dispose();
-                rigStream.Close();
-            }
-            var expRig = RIG.CombineRigs(Rigs);
-
-            var expMeshes = new List<RawMeshContainer>();
-
-            foreach (var meshStream in meshStreamS.Keys)
-            {
-                var cr2w = _red4ParserService.ReadRed4File(meshStream);
-                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
-                {
-                    continue;
-                }
-
-                using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
-
-                var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
-
-                var Meshes = ContainRawMesh(ms, meshesinfo, lodFilter);
-                UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
-
-                var meshRig = GetOrphanRig(cMesh);
-
-                UpdateMeshJoints(ref Meshes, expRig, meshRig, meshStreamS[meshStream]);
-
-                expMeshes.AddRange(Meshes);
-
-                meshStream.Dispose();
-                meshStream.Close();
-            }
-            var model = RawMeshesToGLTF(expMeshes, expRig);
-
-            if (WolvenTesting.IsTesting)
-            {
-                model.WriteGLB(new WriteSettings(vmode));
-                return true;
-            }
-
-            if (isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
-            }
-
-            return true;
-        }
         public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendmeshblob, CMesh? cMesh = null)
         {
             var meshesInfo = new MeshesInfo(rendmeshblob.Header.RenderChunkInfos.Count);
@@ -443,7 +330,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
             }
 
-            meshesInfo.appearances = new Dictionary<string, string[]?>();
+            meshesInfo.appearances = new();
 
             if (cMesh != null)
             {
@@ -765,7 +652,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
         }
 
-        public static void AddSubmeshesToModel(List<RawMeshContainer> meshes, Skin? skin, ref ModelRoot model, IVisualNodeContainer parent, Dictionary<string, Material>? materials = null, bool mergeMeshes = false)
+        public static void AddSubmeshesToModel(List<RawMeshContainer> meshes, Skin? skin, ref ModelRoot model, IVisualNodeContainer parent, Dictionary<string, Material>? materials = null, bool mergeMeshes = false, bool withMaterials = false)
         {
             var mat = model.CreateMaterial("Default");
             mat.WithPBRMetallicRoughness().WithDefault();
@@ -819,6 +706,26 @@ namespace WolvenKit.Modkit.RED4.Tools
                     bw.Write(mesh.colors1[i].Y);
                     bw.Write(mesh.colors1[i].Z);
                     bw.Write(mesh.colors1[i].W);
+                }
+                if (mesh.garmentSupportWeight != null)
+                {
+                    for (var i = 0; i < mesh.garmentSupportWeight.Length; i++)
+                    {
+                        bw.Write(mesh.garmentSupportWeight[i].X);
+                        bw.Write(mesh.garmentSupportWeight[i].Y);
+                        bw.Write(mesh.garmentSupportWeight[i].Z);
+                        bw.Write(mesh.garmentSupportWeight[i].W);
+                    }
+                }
+                if (mesh.garmentSupportCap != null)
+                {
+                    for (var i = 0; i < mesh.garmentSupportCap.Length; i++)
+                    {
+                        bw.Write(mesh.garmentSupportCap[i].X);
+                        bw.Write(mesh.garmentSupportCap[i].Y);
+                        bw.Write(mesh.garmentSupportCap[i].Z);
+                        bw.Write(mesh.garmentSupportCap[i].W);
+                    }
                 }
                 for (var i = 0; i < mesh.texCoords0.Length; i++)
                 {
@@ -888,6 +795,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             var BuffViewoffset = 0;
 
             var nodes = new Dictionary<uint, Node>();
+            var meshCounter = 0;
             foreach (var mesh in meshes)
             {
                 ArgumentNullException.ThrowIfNull(mesh.positions);
@@ -918,8 +826,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
                 else
                 {
-                    node = parent.CreateNode(mesh.name);
-                    mes = model.CreateMesh(mesh.name);
+                    var name = withMaterials ? $"{meshCounter}_{mesh.name}" : mesh.name;
+                    node = parent.CreateNode(name);
+                    mes = model.CreateMesh(name);
                 }
                 var prim = mes.CreatePrimitive();
                 ArgumentNullException.ThrowIfNull(mesh.materialNames, nameof(mesh.materialNames));
@@ -970,6 +879,30 @@ namespace WolvenKit.Modkit.RED4.Tools
                     prim.SetVertexAccessor("COLOR_1", acc);
                     BuffViewoffset += mesh.colors1.Length * 16;
                 }
+
+                if (mesh.garmentSupportWeight != null)
+                {
+                    if (mesh.garmentSupportWeight.Length > 0)
+                    {
+                        var acc = model.CreateAccessor();
+                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.garmentSupportWeight.Length * 16);
+                        acc.SetData(buff, 0, mesh.garmentSupportWeight.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                        prim.SetVertexAccessor("_GARMENTSUPPORTWEIGHT", acc);
+                        BuffViewoffset += mesh.garmentSupportWeight.Length * 16;
+                    }
+                }
+                if (mesh.garmentSupportCap != null)
+                {
+                    if (mesh.garmentSupportCap.Length > 0)
+                    {
+                        var acc = model.CreateAccessor();
+                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.garmentSupportCap.Length * 16);
+                        acc.SetData(buff, 0, mesh.garmentSupportCap.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                        prim.SetVertexAccessor("_GARMENTSUPPORTCAP", acc);
+                        BuffViewoffset += mesh.garmentSupportCap.Length * 16;
+                    }
+                }
+
                 if (mesh.texCoords0.Length > 0)
                 {
                     var acc = model.CreateAccessor();
@@ -1059,11 +992,11 @@ namespace WolvenKit.Modkit.RED4.Tools
                     prim.SetMorphTargetAccessors(0, dict);
                     BuffViewoffset += mesh.garmentMorph.Length * 12;
                 }
-
+                meshCounter++;
             }
         }
 
-        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature? rig, bool mergeMeshes = false)
+        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature? rig, bool mergeMeshes = false, bool withMaterials = false)
         {
             var model = ModelRoot.CreateModel();
             model.Extras = SharpGLTF.IO.JsonContent.Serialize(new { ExperimentalMergedMeshes = mergeMeshes });
@@ -1097,7 +1030,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
             }
 
-            AddSubmeshesToModel(meshes, skin, ref model, model.UseScene(0), materials, mergeMeshes);
+            AddSubmeshesToModel(meshes, skin, ref model, model.UseScene(0), materials, mergeMeshes, withMaterials);
 
             model.UseScene(0).Name = "Scene";
             model.DefaultScene = model.UseScene(0);
@@ -1461,5 +1394,56 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
             }
         }
+
+        /// <summary>
+        /// Check if cMesh has a garmentMeshParamGarment parameter; if it does then for each submesh in the mesh with a garmentFlags buffer of size greater than 0, then write to the GarmentSupport attributes.
+        /// These attributes will be imported into Blender as color attributes, with the values stored in the red channel.
+        /// </summary>
+        /// <param name="meshes"></param>
+        /// <param name="cMesh"></param>
+        public static void WriteGarmentParametersToMesh(ref List<RawMeshContainer> meshes, CMesh cMesh, bool exportGarmentSupport = false)
+        {
+            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
+            if (garmentBlob != null && exportGarmentSupport)
+            {
+                var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk;
+
+                for (var i = 0; i < garmentBlobChunk.Chunks.Count && i < meshes.Count; i++)
+                {
+                    var mesh = meshes[i];
+
+                    ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
+
+                    if (garmentBlobChunk.Chunks[i]?.GarmentFlags is { Buffer.MemSize: > 0 })
+                    {
+                        meshes[i].garmentSupportWeight = new Vec4[mesh.positions.Length];
+                        meshes[i].garmentSupportCap = new Vec4[mesh.positions.Length];
+
+                        var stream = new MemoryStream(garmentBlobChunk.Chunks[i].GarmentFlags.Buffer.GetBytes());
+                        var br = new BinaryReader(stream);
+                        stream.Seek(0, SeekOrigin.Begin);
+
+                        for (var e = 0; e < mesh.positions.Length; e++)
+                        {
+                            if (mesh.garmentSupportWeight != null)
+                            {
+                                mesh.garmentSupportWeight[e] = PrepareGarmentVertexWeight(br.ReadByte());
+                            }
+
+                            if (mesh.garmentSupportCap != null)
+                            {
+                                mesh.garmentSupportCap[e] = PrepareGarmentVertexCap(br.ReadByte());
+                            }
+
+                            br.ReadByte();
+                            br.ReadByte();
+                        }
+                    }
+                }
+            }
+        }
+
+        private static Vec4 PrepareGarmentVertexWeight(byte vertexWeightData) => new() { X = vertexWeightData / 255f, Y = 0f, Z = 0f, W = 1f };
+        private static Vec4 PrepareGarmentVertexCap(byte vertexCapData) => new() { X = vertexCapData * 1f, Y = 0f, Z = 0f, W = 1f };
     }
 }

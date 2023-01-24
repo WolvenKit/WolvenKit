@@ -120,7 +120,7 @@ namespace WolvenKit.ViewModels.Documents
 
             this.WhenActivated((CompositeDisposable disposables) =>
             {
-                
+
 
                 if (SelectedChunk == null && Chunks.Count > 0)
                 {
@@ -330,6 +330,11 @@ namespace WolvenKit.ViewModels.Documents
 
         public void LookForReferences(ChunkViewModel cvm)
         {
+            if (cvm.Data is null)
+            {
+                return;
+            }
+
             LookForReferences(cvm, (RedBaseClass)cvm.Data, "root");
 
             foreach (var reference in References)

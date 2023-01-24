@@ -55,10 +55,7 @@ namespace WolvenKit.ViewModels.Documents
             Appearances.Add(app);
             SelectedAppearance = app;
 
-            this.WhenActivated((CompositeDisposable disposables) =>
-            {
-                RenderSectorSolo();
-            });
+            this.WhenActivated((CompositeDisposable disposables) => RenderSectorSolo());
         }
 
         public void RenderSectorSolo()
@@ -71,7 +68,9 @@ namespace WolvenKit.ViewModels.Documents
             }
             IsRendered = true;
             if (_data is worldStreamingSector wss)
-            RenderSector(wss, Appearances[0]);
+            {
+                RenderSector(wss, Appearances[0]);
+            }
         }
 
         public Element3D RenderSector(worldStreamingSector data, Appearance app)
@@ -127,7 +126,7 @@ namespace WolvenKit.ViewModels.Documents
                         }
 
                         var wtbTransforms = wtb.Transforms;
-                        for (int i = 0; i < wimn.WorldTransformsBuffer.NumElements; i++)
+                        for (var i = 0; i < wimn.WorldTransformsBuffer.NumElements; i++)
                         {
                             var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
 
@@ -176,7 +175,7 @@ namespace WolvenKit.ViewModels.Documents
                         }
 
                         var citbTransforms = citb.Transforms;
-                        for (int i = 0; i < widmn.CookedInstanceTransforms.NumElements; i++)
+                        for (var i = 0; i < widmn.CookedInstanceTransforms.NumElements; i++)
                         {
                             //for (int j = 0; j < transforms.Count; j++)
                             //{
@@ -299,8 +298,10 @@ namespace WolvenKit.ViewModels.Documents
 
                             if (shape is CollisionShapeSimple simpleShape && simpleShape.ShapeType == Enums.physicsShapeType.Box)
                             {
-                                var mb = new MeshBuilder();
-                                mb.CreateNormals = true;
+                                var mb = new MeshBuilder
+                                {
+                                    CreateNormals = true
+                                };
                                 mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), simpleShape.Size.X * 2, simpleShape.Size.Z * 2, simpleShape.Size.Y * 2);
 
                                 mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
@@ -319,9 +320,10 @@ namespace WolvenKit.ViewModels.Documents
 
                                 if (geo is CVXMCacheEntry cce)
                                 {
-                                    var mb = new MeshBuilder();
-
-                                    mb.CreateNormals = true;
+                                    var mb = new MeshBuilder
+                                    {
+                                        CreateNormals = true
+                                    };
 
                                     var positions = new Vector3Collection();
                                     for (var i = 0; i < cce.Vertices.Count; i++)
@@ -392,12 +394,12 @@ namespace WolvenKit.ViewModels.Documents
                                                 mb.TriangleIndices.Add(count);
                                                 break;
                                             default:
-                                                for (int j = 0; j < cce.Faces[i].Count; j++)
+                                                for (var j = 0; j < cce.Faces[i].Count; j++)
                                                 {
                                                     mb.Positions.Add(positions[cce.Faces[i][j]]);
                                                     mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
                                                 }
-                                                for (int j = 0; j + 2 < cce.Faces[i].Count; j++)
+                                                for (var j = 0; j + 2 < cce.Faces[i].Count; j++)
                                                 {
                                                     mb.TriangleIndices.Add(count);
                                                     mb.TriangleIndices.Add(count + j + 1);
@@ -413,9 +415,10 @@ namespace WolvenKit.ViewModels.Documents
                                 }
                                 else if (geo is MeshCacheEntry mce)
                                 {
-                                    var mb = new MeshBuilder();
-
-                                    mb.CreateNormals = true;
+                                    var mb = new MeshBuilder
+                                    {
+                                        CreateNormals = true
+                                    };
 
                                     var positions = new Vector3Collection();
                                     for (var i = 0; i < mce.Vertices.Count; i++)
@@ -627,9 +630,9 @@ namespace WolvenKit.ViewModels.Documents
 
                     foreach (var point in shape.Points)
                     {
-                        center.X += (point.X / shape.Points.Count);
-                        center.Y += (point.Z / shape.Points.Count);
-                        center.Z += (-point.Y / shape.Points.Count);
+                        center.X += point.X / shape.Points.Count;
+                        center.Y += point.Z / shape.Points.Count;
+                        center.Z += -point.Y / shape.Points.Count;
                     }
 
                     mb.AddBox(center, Math.Abs(shape.Points[0].X) * 2, shape.Height, Math.Abs(shape.Points[0].Y) * 2);
@@ -675,10 +678,7 @@ namespace WolvenKit.ViewModels.Documents
             return element;
         }
 
-        public static SharpDX.Vector3 ToVector3(Vector3 v)
-        {
-            return new SharpDX.Vector3(v.X, v.Y, v.Z);
-        }
+        public static SharpDX.Vector3 ToVector3(Vector3 v) => new(v.X, v.Y, v.Z);
 
         public void UpdateSelection(MeshComponent mesh)
         {

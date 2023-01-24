@@ -144,6 +144,8 @@ public class FileEntry : ICyberGameFile
 
     public override string ToString() => ShortName;
 
+    public IGameArchive GetArchive() => Archive;
+
     public T GetArchive<T>() where T : IGameArchive
     {
         if (Archive is T ta)

@@ -16,10 +16,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Constructors
 
-        public RedDirectoryViewModel(RedFileSystemModel model)
-        {
-            _model = model;
-        }
+        public RedDirectoryViewModel(RedFileSystemModel model) => _model = model;
 
         #endregion Constructors
 

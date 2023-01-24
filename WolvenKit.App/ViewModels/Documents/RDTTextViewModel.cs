@@ -22,10 +22,7 @@ namespace WolvenKit.ViewModels.Documents
             SetupText(stream);
 
             this.WhenAnyPropertyChanged(nameof(IsDirty))
-                .Do(x =>
-                {
-                    x?.File.SetIsDirty(IsDirty);
-                })
+                .Do(x => x?.File.SetIsDirty(IsDirty))
                 .Subscribe();
         }
 

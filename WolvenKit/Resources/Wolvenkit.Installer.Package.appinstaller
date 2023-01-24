@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AppInstaller
+	Uri="https://wolvenkit.github.io/WolvenKit.Installer/Wolvenkit.Installer.Package.appinstaller"
+	Version="0.2.3.0" xmlns="http://schemas.microsoft.com/appx/appinstaller/2017/2">
+	<MainBundle
+		Name="26499Wolvenkit.WolvenKit.Installer"
+		Version="0.2.3.0"
+		Publisher="E=moritz.v.baron@gmail.com, CN=&quot;Open Source Developer, Moritz Baron&quot;, O=Open Source Developer, L=Gmunden, S=Oberösterreich, C=AT"
+		Uri="https://wolvenkit.github.io/WolvenKit.Installer/Wolvenkit.Installer.Package_0.2.3.0_Test/Wolvenkit.Installer.Package_0.2.3.0_x64.msixbundle" />
+	<Dependencies>
+		<Package
+			Name="Microsoft.VCLibs.140.00"
+			Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+			ProcessorArchitecture="x64"
+			Uri="https://wolvenkit.github.io/WolvenKit.Installer/Wolvenkit.Installer.Package_0.2.3.0_Test/Dependencies/x64/Microsoft.VCLibs.x64.14.00.appx"
+			Version="14.0.30704.0" />
+		<Package
+			Name="Microsoft.VCLibs.140.00.UWPDesktop"
+			Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+			ProcessorArchitecture="x64"
+			Uri="https://wolvenkit.github.io/WolvenKit.Installer/Wolvenkit.Installer.Package_0.2.3.0_Test/Dependencies/x64/Microsoft.VCLibs.x64.14.00.Desktop.appx"
+			Version="14.0.30704.0" />
+	</Dependencies>
+	<UpdateSettings>
+		<OnLaunch
+			HoursBetweenUpdateChecks="0" />
+	</UpdateSettings>
+</AppInstaller>

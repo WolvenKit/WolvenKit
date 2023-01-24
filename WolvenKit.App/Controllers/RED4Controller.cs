@@ -200,10 +200,15 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        private Task LoadArchiveManager() =>
-            Task.Run(() =>
+        private Task LoadArchiveManager()
+        {
+            return Task.Run(() =>
             {
                 if (_archiveManager.IsManagerLoaded)
+                {
+                    return;
+                }
+                if (_settingsManager.CP77ExecutablePath is null)
                 {
                     return;
                 }
@@ -225,6 +230,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 LoadCustomHashes();
             });
+        }
 
         #region Packing
 
@@ -577,12 +583,15 @@ namespace WolvenKit.Functionality.Controllers
                 .Where(file => file.EndsWith(".yaml") || file.EndsWith(".yml"));
             foreach (var f in tweakFiles)
             {
-                if (!Directory.Exists(cp77Proj.PackedTweakDirectory))
+                var outDir = Path.Combine(cp77Proj.PackedTweakDirectory, Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(f).NotNull()));
+
+                if (!Directory.Exists(outDir))
                 {
-                    Directory.CreateDirectory(cp77Proj.PackedTweakDirectory);
+                    Directory.CreateDirectory(outDir);
                 }
+
                 var filename = Path.GetFileName(f);
-                var outPath = Path.Combine(cp77Proj.PackedTweakDirectory, filename);
+                var outPath = Path.Combine(outDir, filename);
                 File.Copy(f, outPath, true);
             }
             return true;

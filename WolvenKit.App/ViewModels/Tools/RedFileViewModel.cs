@@ -20,10 +20,10 @@ namespace WolvenKit.ViewModels.Tools
         {
             _fileEntry = fileEntry;
 
-            ArchiveName = _fileEntry.Archive.Name;
-            if (!string.IsNullOrEmpty(_fileEntry.Archive.ArchiveRelativePath))
+            ArchiveName = _fileEntry.GetArchive().Name;
+            if (!string.IsNullOrEmpty(_fileEntry.GetArchive().ArchiveRelativePath))
             {
-                ArchiveName = _fileEntry.Archive.ArchiveRelativePath;
+                ArchiveName = _fileEntry.GetArchive().ArchiveRelativePath;
             }
         }
 
@@ -60,7 +60,7 @@ namespace WolvenKit.ViewModels.Tools
             var number = (decimal)size;
             while (Math.Round(number / 1024) >= 1)
             {
-                number = number / 1024;
+                number /= 1024;
                 counter++;
             }
             return $"{number:n1} {suffixes[counter]}";

@@ -22,10 +22,10 @@ namespace WolvenKit.Functionality.Other
             return bitmapImage;
         }
 
-        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, WolvenKit.Common.DDS.DXGI_FORMAT format) => 
+        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, WolvenKit.Common.DDS.DXGI_FORMAT format) =>
             Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
 
-        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, Enums.ETextureRawFormat format) => 
+        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, Enums.ETextureRawFormat format) =>
             Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
 
         /// <summary>

@@ -308,7 +308,6 @@ namespace WolvenKit.ViewModels.Shell
 
             // check package
             var helpers = new DesktopBridgeHelper();
-            IsPackage = DesktopBridgeHelper.IsRunningAsPackage();
 
             Observable.Start(() => CheckForUpdatesCommand.Execute(true).Subscribe())
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -371,7 +370,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region commands
 
-        private static (string, string) GetInstallerPackage()
+        private static (SemVersion?, string) GetInstallerPackage()
         {
             using var p = new Process();
             p.StartInfo.FileName = "powershell.exe";
@@ -385,23 +384,24 @@ namespace WolvenKit.ViewModels.Shell
 
             p.WaitForExit();
 
-            var version = "";
+            SemVersion? semVersion = null;
             var path = "";
 
             if (!string.IsNullOrEmpty(output))
             {
                 output = output.Replace("\r\n", string.Empty).Trim();
                 var pieces = output.Split(new[] { ' ' }, 2);
-                version = pieces[0];
+                var version = pieces[0];
+                semVersion = string.IsNullOrEmpty(version) ? null : SemVersion.Parse(version.TrimEnd('0').TrimEnd('.'), SemVersionStyles.OptionalMinorPatch);
                 path = pieces[1];
             }
-            return (version, path);
+            return (semVersion, path);
         }
 
         public ReactiveCommand<bool, Unit> CheckForUpdatesCommand { get; }
         private async Task CheckForUpdate(bool checkForCheckForUpdates)
         {
-            if (IsPackage)
+            if (DesktopBridgeHelper.IsRunningAsPackage())
             {
                 // don't check for updates for packaged apps
                 return;
@@ -415,123 +415,154 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
 
-            string location;
-            if (!DesktopBridgeHelper.IsWindows7OrLower() && DesktopBridgeHelper.PowershellExists())
+            // check if installer is installed
+            await InstallInstaller();
+
+            // get remote version without GitHub API calls
+            var owner = "WolvenKit";
+            var name = "WolvenKit";
+            switch (_settingsManager.UpdateChannel)
             {
-                (var localInstallerVersion, location) = GetInstallerPackage();
-                var fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", WolvenKit.Functionality.Constants.InstallerMsixName);
-                var remoteInstallerVersion = Path.GetFileNameWithoutExtension(fileName).Split('_')[1];
+                case EUpdateChannel.Nightly:
+                    name = "WolvenKit-nightly-releases";
+                    break;
+                case EUpdateChannel.Stable:
+                default:
+                    break;
+            }
 
-                if (string.IsNullOrEmpty(location) || !remoteInstallerVersion.Equals(localInstallerVersion))
+            SemVersion remoteVersion;
+            var githuburl = $@"https://github.com/{owner}/{name}/releases/latest";
+            try
+            {
+                HttpClient _client = new();
+                var response = await _client.GetAsync(new Uri(githuburl));
+                response.EnsureSuccessStatusCode();
+                if (response?.RequestMessage?.RequestUri is null)
                 {
-                    if (await Interactions.ShowMessageBoxAsync($"WolvenKit will install a helper tool to check for updates.", "WolvenKit.Installer", WMessageBoxButtons.OkCancel) == WMessageBoxResult.OK)
-                    {
-                        try
-                        {
-                            using var p = new Process();
-                            p.StartInfo.FileName = "cmd";
-                            p.StartInfo.Arguments = string.Format("/C {0}", fileName);
-                            p.Start();
-                            p.WaitForExit();
-                        }
-                        catch (Exception ex)
-                        {
-                            _loggerService.Success("Error installing Wolvenkit.Installer.Package.");
-                            _loggerService.Error(ex);
-                        }
-                    }
-                }
-
-                var owner = "WolvenKit";
-                var name = "WolvenKit";
-
-                switch (_settingsManager.UpdateChannel)
-                {
-                    case EUpdateChannel.Nightly:
-                        name = "WolvenKit-nightly-releases";
-                        break;
-                    case EUpdateChannel.Stable:
-                    default:
-                        break;
-                }
-
-                // get remote version without GitHub API calls
-                SemVersion remoteVersion;
-                var githuburl = $@"https://github.com/{owner}/{name}/releases/latest";
-                try
-                {
-                    HttpClient _client = new();
-                    var response = await _client.GetAsync(new Uri(githuburl));
-                    response.EnsureSuccessStatusCode();
-
-                    if (response.RequestMessage?.RequestUri is null)
-                    {
-                        _loggerService.Error($"Failed to respond to url: {githuburl}");
-                        return;
-                    }
-
-                    var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
-                    remoteVersion = SemVersion.Parse(version, SemVersionStyles.OptionalMinorPatch);
-                }
-                catch (HttpRequestException ex)
-                {
-                    _loggerService.Error($"Failed to respond to url: {githuburl}");
-                    _loggerService.Error(ex);
                     return;
                 }
+                var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
+                remoteVersion = SemVersion.Parse(version, SemVersionStyles.OptionalMinorPatch);
+            }
+            catch (HttpRequestException ex)
+            {
+                _loggerService.Error($"Failed to respond to updater url: {githuburl}");
+                _loggerService.Error(ex);
+                return;
+            }
 
-                var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Functionality.Constants.AssemblyName);
+            var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Functionality.Constants.AssemblyName);
 
-                if (remoteVersion.CompareSortOrderTo(thisVersion) > 0)
+            // if remoteVersion is later than thisVersion
+            if (remoteVersion.CompareSortOrderTo(thisVersion) <= 0)
+            {
+                if (!checkForCheckForUpdates)
                 {
-                    if (DesktopBridgeHelper.IsWindows7OrLower() || !DesktopBridgeHelper.PowershellExists())
+                    await Interactions.ShowMessageBoxAsync($"No update available. You are on the latest version.", name, WMessageBoxButtons.Ok);
+                }
+            }
+            else
+            {
+                if (DesktopBridgeHelper.IsWindows10OrHigher() && DesktopBridgeHelper.PowershellExists())
+                {
+                    // win10 updater app
+                    var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nUpdate now?", name, WMessageBoxButtons.OkCancel);
+                    if (res == WMessageBoxResult.OK)
                     {
-                        // old style update info
-                        var url = $"https://github.com/{owner}/{name}/releases/latest";
-                        var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
-                        if (res == WMessageBoxResult.OK)
+                        // run installer app
+                        (_, var location) = GetInstallerPackage();
+                        if (!string.IsNullOrEmpty(location))
                         {
-                            Process.Start("explorer", url);
-                        }
-                    }
-                    else
-                    {
-                        var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nUpdate now?", name, WMessageBoxButtons.OkCancel);
-                        if (res == WMessageBoxResult.OK)
-                        {
-                            // run installer app
-                            (_, location) = GetInstallerPackage();
-                            if (!string.IsNullOrEmpty(location))
+                            var executable = Path.Combine(location, "Wolvenkit.Installer.exe");
+                            if (File.Exists(executable))
                             {
-                                var executable = Path.Combine(location, "Wolvenkit.Installer", "Wolvenkit.Installer.exe");
-                                if (File.Exists(executable))
+                                var id = name;
+                                if (thisVersion.ToString().Contains("nightly"))
                                 {
-                                    var id = name;
-                                    if (thisVersion.ToString().Contains("nightly"))
-                                    {
-                                        id = "WolvenKit Nightly";
-                                    }
-                                    var thisLocation = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
-
-                                    var process = new Process();
-                                    process.StartInfo.FileName = executable;
-                                    process.StartInfo.Arguments = $"-t \"{thisLocation}\" -i \"{id}\" -v {thisVersion}";
-                                    process.Start();
+                                    id = "WolvenKit Nightly";
                                 }
+                                var thisLocation = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
+
+                                var process = new Process();
+                                process.StartInfo.FileName = executable;
+                                var args = $"-t \"{thisLocation}\" -i \"{id}\" -v {thisVersion}";
+                                process.StartInfo.Arguments = args;
+                                process.Start();
                             }
                         }
                     }
                 }
                 else
                 {
-                    if (!checkForCheckForUpdates)
+                    // old style update
+                    // TODO use inno
+                    var url = $"https://github.com/{owner}/{name}/releases/latest";
+                    var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
+                    if (res == WMessageBoxResult.OK)
                     {
-                        var res = await Interactions.ShowMessageBoxAsync($"No update available. You are on the latest version.", name, WMessageBoxButtons.Ok);
+                        Process.Start("explorer", url);
+                    }
+                }
+
+            }
+
+        }
+
+        private async Task InstallInstaller()
+        {
+            if (!DesktopBridgeHelper.IsWindows10OrHigher())
+            {
+                _loggerService.Warning("The auto-update feature is only supported for Windows 10 or later");
+                return;
+            }
+
+            if (!DesktopBridgeHelper.PowershellExists())
+            {
+                _loggerService.Warning("The auto-update feature requires powershell to be installed");
+                return;
+            }
+
+            string location;
+
+            // only check if installer has been installed.
+            (var localInstallerVersion, location) = GetInstallerPackage();
+            // and check if version is > 0.2.2
+
+            var minVersion = SemVersion.Parse("0.2.2", SemVersionStyles.OptionalMinorPatch);
+
+            // if not installed or installed version is lower than minversion
+            if (string.IsNullOrEmpty(location) || (localInstallerVersion is not null && localInstallerVersion.CompareSortOrderTo(minVersion) <= 0))
+            {
+                if (await Interactions.ShowMessageBoxAsync($"WolvenKit will install a helper tool to check for updates.", "WolvenKit.Installer", WMessageBoxButtons.OkCancel) == WMessageBoxResult.OK)
+                {
+                    var fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Wolvenkit.Installer.Package.appinstaller");
+
+                    try
+                    {
+                        using var p = new Process();
+                        p.StartInfo.FileName = "powershell.exe";
+                        p.StartInfo.Arguments = $"Add-AppxPackage -AppInstallerFile '{fileName}'";
+                        p.StartInfo.UseShellExecute = false;
+                        p.StartInfo.CreateNoWindow = true;
+                        p.StartInfo.RedirectStandardOutput = true;
+                        p.Start();
+
+                        var output = p.StandardOutput.ReadToEnd();
+
+                        p.WaitForExit();
+
+                        _loggerService.Info("Wolvenkit.Installer was installed");
+                        _loggerService.Info(output);
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService.Success("Error installing Wolvenkit.Installer");
+                        _loggerService.Error(ex);
                     }
                 }
             }
         }
-
 
         public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
         private void DeleteProject(string parameter)
@@ -837,7 +868,7 @@ namespace WolvenKit.ViewModels.Shell
                 vm.FileHandler = OpenSoundModdingView;
                 SetActiveDialog(vm);
             }
-            
+
             //var vm = new SoundModdingViewModel
             //{
             //    FileHandler = OpenSoundModdingView
@@ -908,7 +939,9 @@ namespace WolvenKit.ViewModels.Shell
                 _watcherService.IsSuspended = false;
                 await _watcherService.RefreshAsync(ActiveProject);
                 if (file.FullPath is not null)
-                await RequestFileOpen(file.FullPath);
+                {
+                    await RequestFileOpen(file.FullPath);
+                }
             });
         }
 
@@ -918,7 +951,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 return;
             }
-             if (file.FullPath is null)
+            if (file.FullPath is null)
             {
                 return;
             }
@@ -1283,8 +1316,6 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion ToolViewModels
 
-        public bool IsPackage { get; private set; }
-
         public bool IsUpdateAvailable { get; set; }
 
         [Reactive] public EAppStatus? Status { get; set; }
@@ -1365,7 +1396,7 @@ namespace WolvenKit.ViewModels.Shell
                 _loggerService.Error($"Failed to read cr2w file {path}");
                 return false;
             }
-            
+
             return true;
         }
 
@@ -1388,7 +1419,7 @@ namespace WolvenKit.ViewModels.Shell
             return false;
         }
 
-        
+
 
         private Task LoadTweakDB()
         {
@@ -1460,7 +1491,9 @@ namespace WolvenKit.ViewModels.Shell
         public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
         {
             if (_projectManager.ActiveProject is null)
+            {
                 return;
+            }
 
             var needSaveAsDialog =
                 fileToSave switch
@@ -1700,10 +1733,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public void SetLaunchProfiles(ObservableCollection<LaunchProfileViewModel> launchProfiles)
         {
-            if (_settingsManager.LaunchProfiles is null)
-            {
-                _settingsManager.LaunchProfiles = new();
-            }
+            _settingsManager.LaunchProfiles ??= new();
 
             _settingsManager.LaunchProfiles.Clear();
             var _launchProfiles = new Dictionary<string, LaunchProfile>();

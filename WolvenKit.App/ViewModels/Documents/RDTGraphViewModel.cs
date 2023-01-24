@@ -40,7 +40,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public PendingConnectionViewModel PendingConnection { get; }
 
-        public RDTGraphViewModel(IRedType data, RedDocumentViewModel file) : base(file , "Graph Editor")
+        public RDTGraphViewModel(IRedType data, RedDocumentViewModel file) : base(file, "Graph Editor")
         {
             _data = data;
 

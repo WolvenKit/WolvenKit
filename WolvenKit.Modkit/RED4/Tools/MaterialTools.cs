@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -55,6 +56,7 @@ namespace WolvenKit.Modkit.RED4
 
             var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, LodFilter);
             MeshTools.UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
+            MeshTools.WriteGarmentParametersToMesh(ref expMeshes, cMesh, meshArgs.ExportGarmentSupport);
 
             var Rig = MeshTools.GetOrphanRig(cMesh);
 
@@ -76,7 +78,7 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-        private void GetMateriaEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<ICyberGameArchive> archives)
+        private void GetMaterialEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<ICyberGameArchive> archives)
         {
             if (cr2w.RootChunk is not CMesh cmesh)
             {
@@ -288,14 +290,14 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, List<ICyberGameArchive> archives, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private MatData SetupMaterial(CR2WFile cr2w, Stream meshStream, List<ICyberGameArchive> archives, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             var primaryDependencies = new List<string>();
 
             var materialEntryNames = new List<string>();
             var materialEntries = new List<CMaterialInstance>();
 
-            GetMateriaEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
+            GetMaterialEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
 
             var mlSetupNames = new List<string>();
 
@@ -343,14 +345,302 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            var matData = new MatData
+            var matData = new MatData(matRepo, RawMaterials, TexturesList, matTemplates, info.appearances);
+
+            return matData;
+            void ExtractFile(string path)
             {
-                MaterialRepo = matRepo,
-                Materials = RawMaterials,
-                TexturesList = TexturesList,
-                MaterialTemplates = matTemplates,
-                Appearances = info.appearances
-            };
+                if (string.IsNullOrEmpty(path))
+                {
+                    return;
+                }
+                var extension = Path.GetExtension(path)?.ToLower();
+                ArgumentNullException.ThrowIfNull(extension);
+
+                switch (extension)
+                {
+                    case ".xbm":
+                        ExtractXBM(path);
+                        break;
+
+                    case ".mlmask":
+                        ExtractMlMask(path);
+                        break;
+
+                    case ".hp":
+                        ExtractHP(path);
+                        break;
+
+                    case ".mlsetup":
+                        ExtractMlSetup(path);
+                        break;
+
+                    case ".mltemplate":
+                        ExtractMlTemplate(path);
+                        break;
+
+                    case ".gradient":
+                        ExtractGradient(path);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                void ExtractXBM(string path)
+                {
+                    if (!TexturesList.Contains(path))
+                    {
+                        TexturesList.Add(path);
+                    }
+
+                    var destFileName = Path.Combine(matRepo, Path.ChangeExtension(path, "." + exportArgs.Get<XbmExportArgs>().UncookExtension));
+                    if (!File.Exists(destFileName))
+                    {
+                        UncookFile(archives, path, matRepo, exportArgs);
+                    }
+                }
+
+                void ExtractMlMask(string path)
+                {
+                    if (!TexturesList.Contains(path))
+                    {
+                        TexturesList.Add(path);
+                    }
+
+                    var destFileName = Path.Combine(matRepo, path.Replace(".mlmask", $"_0.{exportArgs.Get<XbmExportArgs>().UncookExtension}"));
+                    if (!File.Exists(destFileName))
+                    {
+                        exportArgs.Get<MlmaskExportArgs>().AsList = false;
+                        UncookFile(archives, path, matRepo, exportArgs);
+                    }
+                }
+
+                void ExtractHP(string path)
+                {
+                    if (HairProfileNames.Contains(path))
+                    {
+                        return;
+                    }
+
+                    HairProfileNames.Add(path);
+
+                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".hp.json")));
+                    if (!fi.Exists)
+                    {
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
+                        {
+                            ArgumentNullException.ThrowIfNull(result, "result");
+                            if (!fi.Directory.NotNull().Exists)
+                            {
+                                fi.Directory.Create();
+                            }
+
+                            var dto = new RedFileDto(result.File);
+                            var doc = RedJsonSerializer.Serialize(dto);
+                            File.WriteAllText(fi.FullName, doc);
+                        }
+                        else if (findStatus == FindFileResult.NoCR2W)
+                        {
+                            throw new InvalidParsingException("Error while parsing a file");
+                        }
+                    }
+                }
+
+                void ExtractMlSetup(string path)
+                {
+                    if (mlSetupNames.Contains(path))
+                    {
+                        return;
+                    }
+
+                    mlSetupNames.Add(path);
+
+                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".mlsetup.json")));
+                    if (!fi.Exists)
+                    {
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
+                        {
+                            ArgumentNullException.ThrowIfNull(result, "result");
+                            if (!fi.Directory.NotNull().Exists)
+                            {
+                                fi.Directory.Create();
+                            }
+
+                            var dto = new RedFileDto(result.File);
+                            var doc = RedJsonSerializer.Serialize(dto);
+                            File.WriteAllText(fi.FullName, doc);
+
+                            foreach (var import in result.Imports)
+                            {
+                                ExtractFile(import.DepotPath);
+                            }
+                        }
+                        else if (findStatus == FindFileResult.NoCR2W)
+                        {
+                            throw new InvalidParsingException("Error while parsing a file");
+                        }
+                    }
+                }
+
+                void ExtractMlTemplate(string path)
+                {
+                    if (mlTemplateNames.Contains(path))
+                    {
+                        return;
+                    }
+
+                    mlTemplateNames.Add(path);
+
+                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".mltemplate.json")));
+                    if (!fi.Exists)
+                    {
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
+                        {
+                            ArgumentNullException.ThrowIfNull(result, "result");
+                            if (!fi.Directory.NotNull().Exists)
+                            {
+                                fi.Directory.Create();
+                            }
+
+                            var dto = new RedFileDto(result.File);
+                            var doc = RedJsonSerializer.Serialize(dto);
+                            File.WriteAllText(fi.FullName, doc);
+
+                            foreach (var import in result.Imports)
+                            {
+                                ExtractFile(import.DepotPath);
+                            }
+
+                            var mlTemplateMats = result.File.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
+                            foreach (var mlTemplateMat in mlTemplateMats)
+                            {
+                                var mat = (CResourceReference<CBitmapTexture>)mlTemplateMat.Value;
+                                ExtractXBM(mat.DepotPath);
+                            }
+                        }
+                        else if (findStatus == FindFileResult.NoCR2W)
+                        {
+                            throw new InvalidParsingException("Error while parsing a file");
+                        }
+                    }
+                }
+
+                void ExtractGradient(string path)
+                {
+                    if (TexturesList.Contains(path))
+                    {
+                        return;
+                    }
+
+                    TexturesList.Add(path);
+
+                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".gradient.json")));
+                    if (!fi.Exists)
+                    {
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
+                        {
+                            ArgumentNullException.ThrowIfNull(result, "result");
+                            if (!fi.Directory.NotNull().Exists)
+                            {
+                                fi.Directory.Create();
+                            }
+
+                            var dto = new RedFileDto(result.File);
+                            var doc = RedJsonSerializer.Serialize(dto);
+                            File.WriteAllText(fi.FullName, doc);
+                        }
+                        else if (findStatus == FindFileResult.NoCR2W)
+                        {
+                            throw new InvalidParsingException("Error while parsing a file");
+                        }
+                    }
+                }
+            }
+        }
+        private void SaveMaterials(FileInfo outfile, List<MatData> mats)
+        {
+            var consMatData = new MatData(mats[0].MaterialRepo, new List<RawMaterial>(), new List<string>(), new List<RawMaterial>(), new());
+
+            foreach (var matData in mats)
+            {
+                matData.Materials.ForEach(m => consMatData.Materials.Add(m));
+                matData.TexturesList.ForEach(m => consMatData.TexturesList.Add(m));
+                matData.MaterialTemplates.ForEach(m => consMatData.MaterialTemplates.Add(m));
+                foreach (var app in matData.Appearances)
+                {
+                    if (!consMatData.Appearances.ContainsKey(app.Key))
+                    {
+                        consMatData.Appearances.Add(app.Key, app.Value);
+                    }
+                }
+            }
+
+            var str = RedJsonSerializer.Serialize(consMatData);
+
+            File.WriteAllText(Path.ChangeExtension(outfile.FullName, ".Material.json"), str);
+
+        }
+
+        private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, List<ICyberGameArchive> archives, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        {
+            var primaryDependencies = new List<string>();
+
+            var materialEntryNames = new List<string>();
+            var materialEntries = new List<CMaterialInstance>();
+
+            GetMaterialEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
+
+            var mlSetupNames = new List<string>();
+
+            var mlTemplateNames = new List<string>();
+
+            var HairProfileNames = new List<string>();
+
+            var TexturesList = new List<string>();
+
+            var exportArgs =
+                new GlobalExportArgs().Register(
+                    new XbmExportArgs() { UncookExtension = eUncookExtension },
+                    new MlmaskExportArgs() { UncookExtension = eUncookExtension }
+                );
+
+            for (var i = 0; i < primaryDependencies.Count; i++)
+            {
+                ExtractFile(primaryDependencies[i]);
+            }
+
+            var RawMaterials = new List<RawMaterial>();
+            var usedMts = GetEmbeddedMaterialTemplates(ref cr2w);
+            for (var i = 0; i < materialEntries.Count; i++)
+            {
+                RawMaterials.Add(ContainRawMaterial(materialEntries[i], materialEntryNames[i], archives, ref usedMts));
+            }
+
+            var matTemplates = new List<RawMaterial>();
+            {
+                var keys = usedMts.Keys.ToList();
+                for (var i = 0; i < keys.Count; i++)
+                {
+                    var rawMat = new RawMaterial
+                    {
+                        Name = keys[i],
+                        Data = new Dictionary<string, object>()
+                    };
+
+                    foreach (var item in usedMts[keys[i]].Parameters[2])
+                    {
+                        rawMat.Data.Add(item.Chunk.ParameterName, GetSerializableValue(item.Chunk));
+                    }
+
+                    matTemplates.Add(rawMat);
+                }
+            }
+
+            var matData = new MatData(matRepo, RawMaterials, TexturesList, matTemplates, info.appearances);
 
             var str = RedJsonSerializer.Serialize(matData);
 

@@ -49,10 +49,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
         private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
 
 
-        private void NewItem()
-        {
-            LaunchProfiles.Add(new LaunchProfileViewModel("New LaunchProfile", new()));
-        }
+        private void NewItem() => LaunchProfiles.Add(new LaunchProfileViewModel("New LaunchProfile", new()));
 
         private void DuplicateItem()
         {
@@ -65,7 +62,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
         private void DeleteItem()
         {
             if (SelectedLaunchProfile != null)
-            LaunchProfiles.Remove(SelectedLaunchProfile);
+            {
+                LaunchProfiles.Remove(SelectedLaunchProfile);
+            }
         }
 
         //private void RenameItem()

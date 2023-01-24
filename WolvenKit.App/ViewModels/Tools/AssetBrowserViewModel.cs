@@ -557,6 +557,10 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (!_archiveManager.IsModBrowserActive)
             {
+                if (_settings.CP77ExecutablePath is null)
+                {
+                    return;
+                }
                 _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath));
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
             }
