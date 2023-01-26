@@ -162,7 +162,10 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedRecordEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, _selectedRecordEntry.DisplayName, true) { IsExpanded = true });
+                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), _selectedRecordEntry.DisplayName, null, true)
+                    { 
+                        IsExpanded = true 
+                    });
                 }
                 else
                 {
@@ -181,7 +184,8 @@ namespace WolvenKit.ViewModels.Tools
                 this.RaisePropertyChanged(nameof(SelectedFlatEntry));
                 if (_selectedFlatEntry != null && _tweakDB.IsLoaded)
                 {
-                    SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(_selectedFlatEntry.Item));
+                    var flat = _tweakDB.GetFlat(_selectedFlatEntry.Item);
+                    SelectedFlat = new ChunkViewModel(flat, flat.GetType().Name);
                 }
                 else
                 {
@@ -206,7 +210,7 @@ namespace WolvenKit.ViewModels.Tools
                         arr.Add(query);
                     }
 
-                    SelectedQuery = new ChunkViewModel(arr);
+                    SelectedQuery = new ChunkViewModel(arr, nameof(CArray<TweakDBID>));
                 }
                 else
                 {
@@ -228,7 +232,7 @@ namespace WolvenKit.ViewModels.Tools
                     var u = _tweakDB.GetGroupTag(_selectedGroupTagEntry.Item);
                     if (u is not null)
                     {
-                        SelectedGroupTag = new ChunkViewModel((CUInt8)u);
+                        SelectedGroupTag = new ChunkViewModel((CUInt8)u, nameof(CUInt8));
                     }
                 }
                 else
