@@ -41,10 +41,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" Version="17.4.0" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.5.1" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22272.1" />
+    <PackageReference Include="Microsoft.Build.Framework" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="System.CommandLine.Hosting" />
 
   </ItemGroup>
 
