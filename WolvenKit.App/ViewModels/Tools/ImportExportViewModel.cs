@@ -4,17 +4,12 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Tools;
@@ -39,11 +34,11 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
     {
     }
 
-    [Reactive] public ImportExportItemViewModel? SelectedObject { get; set; }
+    [ObservableProperty] private ImportExportItemViewModel? _selectedObject;
 
-    [Reactive] public ObservableCollection<ImportExportItemViewModel> Items { get; set; } = new();
+    [ObservableProperty] private ObservableCollection<ImportExportItemViewModel> _items = new();
 
-    [Reactive] public bool IsProcessing { get; set; } = false;
+    [ObservableProperty] private bool _isProcessing;
 
     #region MyRegion
 

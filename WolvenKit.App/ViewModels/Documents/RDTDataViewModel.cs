@@ -1,42 +1,35 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Interfaces;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
-using YamlDotNet.Serialization;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class CNameWrapper : ReactiveObject, INode<ReferenceSocket>
+    public partial class CNameWrapper : ObservableObject, INode<ReferenceSocket>
     {
         public CName CName => Socket.File;
 
-        [Reactive] public System.Windows.Point Location { get; set; }
+        [ObservableProperty] private System.Windows.Point _location;
 
         public double Width { get; set; }
 
         public double Height { get; set; }
 
-        [Reactive] public ReferenceSocket Socket { get; set; }
+        [ObservableProperty] private ReferenceSocket _socket;
 
         public IList<ReferenceSocket> Inputs
         {
@@ -54,7 +47,7 @@ namespace WolvenKit.ViewModels.Documents
         public CNameWrapper(RDTDataViewModel vm, ReferenceSocket socket)
         {
             DataViewModel = vm;
-            Socket = socket;
+            _socket = socket;
             OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef);
             LoadRefCommand = new DelegateCommand(ExecuteLoadRef, CanLoadRef);
         }
@@ -511,19 +504,19 @@ namespace WolvenKit.ViewModels.Documents
         #endregion
     }
 
-    public class RedReference : ReactiveObject, INodeConnection<ReferenceSocket>
+    public partial class RedReference : ObservableObject, INodeConnection<ReferenceSocket>
     {
-        [Reactive] public RDTDataViewModel Graph { get; set; }
+        [ObservableProperty] private RDTDataViewModel _graph;
 
-        [Reactive] public ReferenceSocket Destination { get; set; }
+        [ObservableProperty] private ReferenceSocket _destination;
 
-        [Reactive] public ReferenceSocket Source { get; set; }
+        [ObservableProperty] private ReferenceSocket _source;
 
         public RedReference(RDTDataViewModel graph, ReferenceSocket source, ReferenceSocket destination)
         {
-            Graph = graph;
-            Source = source;
-            Destination = destination;
+            _graph = graph;
+            _source = source;
+            _destination = destination;
         }
 
         //public ConnectionViewModel(RDTGraphViewModel graph, graphGraphConnectionDefinition connection)
@@ -536,25 +529,25 @@ namespace WolvenKit.ViewModels.Documents
         //}
     }
 
-    public class ReferenceSocket : ReactiveObject, INodeSocket<WolvenKit.Functionality.Interfaces.INode>
+    public partial class ReferenceSocket : ObservableObject, INodeSocket<WolvenKit.Functionality.Interfaces.INode>
     {
         public WolvenKit.Functionality.Interfaces.INode? Node { get; set; }
 
-        [Reactive] public CName File { get; set; }
+        [ObservableProperty] private CName _file;
 
-        [Reactive] public string Property { get; set; } = "";
+        [ObservableProperty] private string _property = "";
 
-        [Reactive] public System.Windows.Point Anchor { get; set; }
+        [ObservableProperty] private System.Windows.Point _anchor;
 
-        [Reactive] public bool IsConnected { get; set; }
+        [ObservableProperty] private bool _isConnected;
 
-        [Reactive] public string Type { get; set; } = "";
+        [ObservableProperty] private string _type = "";
 
         public ReferenceSocket(CName file, string property = "", string type = "")
         {
-            File = file;
-            Property = property;
-            Type = type;
+            _file = file;
+            _property = property;
+            _type = type;
         }
     }
 }

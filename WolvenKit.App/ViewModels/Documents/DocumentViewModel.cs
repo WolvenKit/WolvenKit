@@ -3,6 +3,7 @@ using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -11,14 +12,14 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public abstract class DocumentViewModel : PaneViewModel, IDocumentViewModel
+    public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewModel
     {
         protected bool _isInitialized;
 
 
         public DocumentViewModel(string path) : base(Path.GetFileName(path), path)
         {
-            FilePath = path;
+            _filePath = path;
 
             State = DockState.Document;
             SideInDockedMode = DockSide.Tabbed;
@@ -59,11 +60,14 @@ namespace WolvenKit.ViewModels.Documents
 
         #region Properties
 
-        [Reactive] public string FilePath { get; set; }
+        [ObservableProperty] private string _filePath;
+        private bool _isDirty;
 
-        [Reactive] public bool IsDirty { get; protected set; }
-
-
+        public bool IsDirty
+        {
+            get => _isDirty;
+            protected set => SetProperty(ref _isDirty, value);
+        }
 
         #endregion Properties
 

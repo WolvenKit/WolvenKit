@@ -1,6 +1,7 @@
 using System.Reactive;
 using System.Windows.Input;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
@@ -8,7 +9,7 @@ using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class ChunkPropertyViewModel : ReactiveObject
+    public partial class ChunkPropertyViewModel : ObservableObject
     {
         #region Constructors
 
@@ -65,13 +66,13 @@ namespace WolvenKit.ViewModels.Shell
         public IRedType Property { get; }
 
 
-        [Reactive] public bool IsSelected { get; set; }
-        [Reactive] public bool IsExpanded { get; set; }
+        [ObservableProperty] private bool _isSelected;
+        [ObservableProperty] private bool _isExpanded;
 
         //public string Name => Property.REDName;
         //public string Type => Property.REDType;
         //public string Value => Property.REDValue;
-        //[Reactive] public bool IsSerialized { get; set; }
+        //[ObservableProperty] private bool _isSerialized;
 
         //private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
         //public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;
@@ -94,7 +95,7 @@ namespace WolvenKit.ViewModels.Shell
             };
     }
 
-    public class RedColorViewModel : ChunkPropertyViewModel
+    public partial class RedColorViewModel : ChunkPropertyViewModel
     {
         public RedColorViewModel(RED4.Types.CColor prop) : base(prop)
         {
@@ -105,7 +106,7 @@ namespace WolvenKit.ViewModels.Shell
 
         }
 
-        [Reactive] public Color DisplayColor { get; set; }
+        [ObservableProperty] private Color _displayColor;
 
         public ReactiveCommand<object, Unit> SelectedColorCommand { get; set; }
 

@@ -1,14 +1,13 @@
 using System.Windows.Input;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Prism.Commands;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ProjectManagement.Project;
 
 namespace WolvenKit.ViewModels.Tools
 {
-    public class CodeEditorViewModel : ToolViewModel
+    public partial class CodeEditorViewModel : ToolViewModel
     {
         #region Fields
 
@@ -36,7 +35,7 @@ namespace WolvenKit.ViewModels.Tools
             _loggerService = loggerService;
             SetupToolDefaults();
 
-            SelectedFont = new FontFamily("Verdana");
+            _selectedFont = new FontFamily("Verdana");
             IsChecked = false;
             //Language = Languages.C;
             SampleCommand = new DelegateCommand<object>(ExecuteSampleCommand);
@@ -67,12 +66,12 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Gets or sets the command for code sample for checked property.
         /// </summary>
-        [Reactive] public bool IsChecked { get; set; }
+        [ObservableProperty] private bool _isChecked;
 
         /// <summary>
         /// Gets or sets the document source of the edit control
         /// </summary>
-        [Reactive] public string? DocumentSource { get; set; }
+        [ObservableProperty] private string? _documentSource;
 
         ///// <summary>
         ///// Gets or sets the langugae of the content to be displayed in the edit control
@@ -82,7 +81,7 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Gets or sets the font family for the content to  be displayed in the edit control
         /// </summary>
-        [Reactive] public FontFamily SelectedFont { get; set; }
+        [ObservableProperty] private FontFamily _selectedFont;
 
         /// <summary>
         /// Method toe execute code samples

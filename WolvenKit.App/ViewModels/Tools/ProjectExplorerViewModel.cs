@@ -9,11 +9,11 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Binding;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -33,7 +33,7 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Tools
 {
-    public class ProjectExplorerViewModel : ToolViewModel
+    public partial class ProjectExplorerViewModel : ToolViewModel
     {
         #region fields
 
@@ -144,7 +144,7 @@ namespace WolvenKit.ViewModels.Tools
         #region properties
 
         public AppViewModel MainViewModel => Locator.Current.GetService<AppViewModel>().NotNull();
-        [Reactive] private Cp77Project? ActiveProject { get; set; }
+        [ObservableProperty] private Cp77Project? _activeProject;
 
         public ReactiveCommand<Unit, Unit> ExpandAll { get; private set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; private set; }
@@ -152,15 +152,15 @@ namespace WolvenKit.ViewModels.Tools
         public ReactiveCommand<Unit, Unit> ExpandChildren { get; private set; }
 
 
-        [Reactive] public ObservableCollection<FileModel> BindGrid1 { get; private set; } = new();
+        [ObservableProperty] private ObservableCollection<FileModel> _bindGrid1 = new();
 
-        [Reactive] public FileModel? SelectedItem { get; set; }
+        [ObservableProperty] private FileModel? _selectedItem;
 
-        [Reactive] public ObservableCollection<object>? SelectedItems { get; set; } = new();
+        [ObservableProperty] private ObservableCollection<object>? _selectedItems = new();
 
-        [Reactive] public bool IsFlatModeEnabled { get; set; }
+        [ObservableProperty] private bool _isFlatModeEnabled;
 
-        [Reactive] public int SelectedTabIndex { get; set; }
+        [ObservableProperty] private int _selectedTabIndex;
 
         public FileModel? LastSelected => _watcherService.LastSelect;
 

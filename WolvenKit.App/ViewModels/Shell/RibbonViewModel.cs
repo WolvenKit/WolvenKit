@@ -1,18 +1,15 @@
-using System;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class RibbonViewModel : ReactiveObject
+    public partial class RibbonViewModel : ObservableObject
     {
         private readonly IWatcherService _watcherService;
         private readonly ISettingsManager _settingsManager;
@@ -34,7 +31,7 @@ namespace WolvenKit.ViewModels.Shell
 
             MainViewModel = appViewModel;
 
-            LaunchProfileText = "Launch Profiles";
+            _launchProfileText = "Launch Profiles";
 
             NewFileCommand = ReactiveCommand.Create(() => MainViewModel.NewFileCommand.SafeExecute(null));
             SaveFileCommand = ReactiveCommand.Create(() => MainViewModel.SaveFileCommand.SafeExecute());
@@ -87,7 +84,7 @@ namespace WolvenKit.ViewModels.Shell
 
 
 
-        [Reactive] public string LaunchProfileText { get; set; }
+        [ObservableProperty] private string _launchProfileText;
 
     }
 }

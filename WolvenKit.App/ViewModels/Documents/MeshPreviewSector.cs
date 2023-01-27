@@ -4,15 +4,14 @@ using System.IO;
 using System.Reactive.Disposables;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
+using CommunityToolkit.Mvvm.ComponentModel;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -21,15 +20,33 @@ namespace WolvenKit.ViewModels.Documents
 {
     public partial class RDTMeshViewModel
     {
-        public class MeshComponentSelector : ReactiveObject
+        public partial class MeshComponentSelector : ObservableObject
         {
             private const string s_noSelection = "No_Selection";
 
-            [Reactive] public string Name { get; private set; } = s_noSelection;
-            [Reactive] public string WorldNodeIndex { get; private set; } = string.Empty;
-            [Reactive] public bool IsValid { get; private set; }
+            public string Name
+            {
+                get => _name;
+                private set => SetProperty(ref _name, value);
+            }
+
+            public string WorldNodeIndex
+            {
+                get => _worldNodeIndex;
+                private set => SetProperty(ref _worldNodeIndex, value);
+            }
+
+            public bool IsValid
+            {
+                get => _isValid;
+                private set => SetProperty(ref _isValid, value);
+            }
 
             private MeshComponent? _meshComponent;
+            private string _name = s_noSelection;
+            private string _worldNodeIndex = string.Empty;
+            private bool _isValid;
+
             public MeshComponent? SelectedMesh
             {
                 get => _meshComponent;
@@ -45,7 +62,7 @@ namespace WolvenKit.ViewModels.Documents
             public void Unselect() => SelectedMesh = null;
         }
 
-        [Reactive] public MeshComponentSelector CurrentSelection { get; set; } = new();
+        [ObservableProperty] private MeshComponentSelector _currentSelection = new();
 
         public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file, MeshViewHeaders.SectorPreview)
         {

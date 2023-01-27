@@ -1,4 +1,5 @@
 using System.Windows.Documents;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Models.Docking;
@@ -8,7 +9,7 @@ namespace WolvenKit.ViewModels.Tools
     /// <summary>
     /// Implements the viewmodel that drives the log view.
     /// </summary>
-    public class LogViewModel : ToolViewModel
+    public partial class LogViewModel : ToolViewModel
     {
         #region Fields
 
@@ -27,7 +28,7 @@ namespace WolvenKit.ViewModels.Tools
         // private readonly ReadOnlyObservableCollection<LogEntry> _logEntries;
         // public ReadOnlyObservableCollection<LogEntry> LogEntries => _logEntries;
 
-        [Reactive] public FlowDocument Document { get; set; } = new();
+        [ObservableProperty] private FlowDocument _document = new();
 
         #endregion Fields
 

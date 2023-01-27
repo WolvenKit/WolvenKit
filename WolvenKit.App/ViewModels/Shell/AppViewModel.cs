@@ -14,11 +14,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Semver;
 using Splat;
 using WolvenKit.App.Helpers;
@@ -57,7 +57,7 @@ using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class AppViewModel : ReactiveObject/*, IAppViewModel*/
+    public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         #region fields
 
@@ -795,7 +795,7 @@ namespace WolvenKit.ViewModels.Shell
         public ICommand OpenLogsCommand { get; private set; }
         private void ExecuteOpenLogs() => Commonfunctions.ShowFolderInExplorer(ISettingsManager.GetAppData());
 
-        [Reactive] public int? SelectedGameCommandIdx { get; set; }
+        [ObservableProperty] private int? _selectedGameCommandIdx;
 
         public record GameLaunchCommand(string Name, EGameLaunchCommand Command);
         public enum EGameLaunchCommand
@@ -1318,14 +1318,14 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool IsUpdateAvailable { get; set; }
 
-        [Reactive] public EAppStatus? Status { get; set; }
+        [ObservableProperty] private EAppStatus? _status;
 
-        [Reactive] public string? Title { get; set; }
+        [ObservableProperty] private string? _title;
 
-        [Reactive] public bool ShouldDialogShow { get; set; }
-        [Reactive] public bool ShouldOverlayShow { get; set; }
-        [Reactive] public bool IsOverlayShown { get; set; }
-        [Reactive] public bool IsDialogShown { get; set; }
+        [ObservableProperty] private bool _shouldDialogShow;
+        [ObservableProperty] private bool _shouldOverlayShow;
+        [ObservableProperty] private bool _isOverlayShown;
+        [ObservableProperty] private bool _isDialogShown;
 
         private void OnAfterOverlayRendered()
         {
@@ -1338,7 +1338,7 @@ namespace WolvenKit.ViewModels.Shell
             ShouldDialogShow = true;
         }
 
-        [Reactive] public ReactiveObject? ActiveOverlay { get; set; }
+        [ObservableProperty] private ReactiveObject? _activeOverlay;
 
         public void SetActiveOverlay(ReactiveObject overlay)
         {
@@ -1347,7 +1347,7 @@ namespace WolvenKit.ViewModels.Shell
             Task.Run(OnAfterOverlayRendered);
         }
 
-        [Reactive] public DialogViewModel? ActiveDialog { get; set; }
+        [ObservableProperty] private DialogViewModel? _activeDialog;
         public void SetActiveDialog(DialogViewModel modal)
         {
             ActiveDialog = modal;
@@ -1355,13 +1355,13 @@ namespace WolvenKit.ViewModels.Shell
             Task.Run(OnAfterDialogRendered);
         }
 
-        [Reactive] public IDocumentViewModel? ActiveDocument { get; set; }
+        [ObservableProperty] private IDocumentViewModel? _activeDocument;
 
-        [Reactive] public Cp77Project? ActiveProject { get; set; }
+        [ObservableProperty] private Cp77Project? _activeProject;
 
         private List<IDocumentViewModel> OpenDocuments => DockedViews.OfType<IDocumentViewModel>().ToList();
 
-        [Reactive] public ObservableCollection<IDockElement> DockedViews { get; set; } = new();
+        [ObservableProperty] private ObservableCollection<IDockElement> _dockedViews = new();
 
         #endregion properties
 

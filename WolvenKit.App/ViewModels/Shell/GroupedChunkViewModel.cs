@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Shell;
 
-public class GroupedChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
+public partial class GroupedChunkViewModel : ObservableObject, ISelectableTreeViewItemModel
 {
     public string Name { get; }
     public ObservableCollection<ChunkViewModel> TVProperties { get; }
@@ -17,6 +18,6 @@ public class GroupedChunkViewModel : ReactiveObject, ISelectableTreeViewItemMode
         TVProperties = new ObservableCollection<ChunkViewModel>(chunkViewModels);
     }
 
-    [Reactive] public bool IsExpanded { get; set; }
-    [Reactive] public bool IsSelected { get; set; }
+    [ObservableProperty] private bool _isExpanded;
+    [ObservableProperty] private bool _isSelected;
 }
