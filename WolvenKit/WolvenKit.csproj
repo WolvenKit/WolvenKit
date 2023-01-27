@@ -38,66 +38,66 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
-    <PackageReference Include="Nodify" Version="4.1.0" />
-    <PackageReference Include="ScottPlot.WPF" Version="4.1.60" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
-    <PackageReference Include="protobuf-net" Version="3.1.26" />
-    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
-    <PackageReference Include="SharpVectors.Wpf" Version="1.8.1" />
-    <PackageReference Include="Splat" Version="14.6.1" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.6.1" />
-    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="14.6.1" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1518.46" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Nodify" />
+    <PackageReference Include="ScottPlot.WPF" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+    <PackageReference Include="protobuf-net" />
+    <PackageReference Include="Serilog.Sinks.Async" />
+    <PackageReference Include="SharpVectors.Wpf" />
+    <PackageReference Include="Splat" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Splat.Microsoft.Extensions.Logging" />
+    <PackageReference Include="Microsoft.Web.WebView2" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Sinks.File" />
 
-    <PackageReference Include="ReactiveUI" Version="18.4.1" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="18.4.1" />
-    <PackageReference Include="ReactiveUI.WPF" Version="18.4.1" />
+    <PackageReference Include="ReactiveUI" />
+    <PackageReference Include="ReactiveUI.Events.WPF" />
+    <PackageReference Include="ReactiveUI.Fody" />
+    <PackageReference Include="ReactiveUI.WPF" />
   </ItemGroup>
 
 
   <ItemGroup>
-      <PackageReference Include="AdonisUI" Version="1.17.1" />
-      <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
-      <PackageReference Include="Fluent.Ribbon" Version="9.0.4" />
-      <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-      <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-      <PackageReference Include="HandyControls" Version="3.3.11" />
-      <PackageReference Include="ControlzEx" Version="5.0.2" />
-      <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
-      <PackageReference Include="WpfAnalyzers" Version="4.1.1" PrivateAssets="all">
+      <PackageReference Include="AdonisUI" />
+      <PackageReference Include="AdonisUI.ClassicTheme" />
+      <PackageReference Include="Fluent.Ribbon" />
+      <PackageReference Include="MahApps.Metro" />
+      <PackageReference Include="MahApps.Metro.IconPacks" />
+      <PackageReference Include="HandyControls" />
+      <PackageReference Include="ControlzEx" />
+      <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" />
+      <PackageReference Include="WpfAnalyzers" PrivateAssets="all">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       </PackageReference>
 
-      <PackageReference Include="NodeNetwork" Version="6.0.0" />
-      <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
-      <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
-      <PackageReference Include="PixiEditor.ColorPicker" Version="3.3.1" />
-      <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+      <PackageReference Include="NodeNetwork" />
+      <PackageReference Include="NodeNetworkToolkit" />
+      <PackageReference Include="DrawStringLineHeight" />
+      <PackageReference Include="PixiEditor.ColorPicker" />
+      <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
   </ItemGroup>
     
   <ItemGroup>
-    <PackageReference Include="Syncfusion.Edit.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfInput.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfProgressBar.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="20.4.0.44" />
-    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="20.4.0.44" />
+    <PackageReference Include="Syncfusion.Edit.WPF" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" />
+    <PackageReference Include="Syncfusion.SfHubTile.WPF" />
+    <PackageReference Include="Syncfusion.SfImageEditor.WPF" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" />
+    <PackageReference Include="Syncfusion.SfProgressBar.WPF" />
+    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" />
+    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" />
+    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" />
+    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" />
   </ItemGroup>
 
   <ItemGroup>

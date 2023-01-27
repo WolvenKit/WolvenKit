@@ -33,6 +33,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{F1348669-20CA-400C-9726-A9645C1FEF50}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.FunctionalTests", "Tests\WolvenKit.FunctionalTests\WolvenKit.FunctionalTests.csproj", "{62A4F19A-5AF0-47A1-BEF1-C7004B22A9ED}"

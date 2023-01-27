@@ -38,7 +38,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IModTools _modTools;
         private readonly IProgressService<double> _progressService;
         private readonly IGameControllerFactory _gameController;
-        private readonly LocKeyService _locKey;
+        private readonly LocKeyService _locKeyService;
         private readonly IArchiveManager _archive;
 
         public string Extension { get; set; } = "json";
@@ -64,7 +64,7 @@ namespace WolvenKit.ViewModels.Tools
             _progressService = progressService;
             _gameController = gameController;
             _archive = archive;
-            _locKey = Locator.Current.GetService<LocKeyService>().NotNull();
+            _locKeyService = Locator.Current.GetService<LocKeyService>().NotNull();
 
             //State = DockState.Document;
 
@@ -87,14 +87,16 @@ namespace WolvenKit.ViewModels.Tools
 
         #endregion constructors
 
+        public ICollectionView? LocKeys { get; set; }
+
+
         public void SetupLocKeys()
         {
-            LocKeys = CollectionViewSource.GetDefaultView(_locKey.GetEntries());
+            var entries = _locKeyService.GetEntries();
+            LocKeys = CollectionViewSource.GetDefaultView(entries);
             LocKeys.SortDescriptions.Add(new SortDescription("SecondaryKey", ListSortDirection.Ascending));
             OnPropertyChanged(nameof(LocKeys));
         }
-
-        public ICollectionView? LocKeys { get; set; }
 
         private string _searchText = "";
         public string SearchText
@@ -135,7 +137,7 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedLocKey != null)
                 {
                     SelectedChunk.Clear();
-                    SelectedChunk.Add(new ChunkViewModel(_selectedLocKey)
+                    SelectedChunk.Add(new ChunkViewModel(_selectedLocKey, _selectedLocKey.GetType().Name, null, false)
                     {
                         IsReadOnly = true,
                         IsExpanded = true

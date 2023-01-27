@@ -10,10 +10,11 @@ namespace WolvenKit.Functionality.Controllers
 {
     public interface IGameController
     {
-        public void AddToMod(ulong hash);
-        public void AddToMod(IGameFile file);
-        Task AddFileToModModal(IGameFile file);
-        Task AddFileToModModal(ulong hash);
+        public bool AddToMod(ulong hash);
+        public bool AddToMod(IGameFile file);
+        Task<bool> AddFileToModModal(IGameFile file);
+        Task<bool> AddFileToModModal(ulong hash);
+
         public Task HandleStartup();
 
         Task<bool> LaunchProject(LaunchProfile profile);
