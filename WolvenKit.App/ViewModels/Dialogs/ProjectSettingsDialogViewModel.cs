@@ -3,8 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Services;
@@ -14,7 +14,7 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
-public class ProjectSettingsDialogViewModel : DialogViewModel, IActivatableViewModel
+public partial class ProjectSettingsDialogViewModel : DialogViewModel, IActivatableViewModel
 {
     private readonly IProjectManager _projectManager;
     private readonly IPluginService _pluginService;
@@ -26,7 +26,7 @@ public class ProjectSettingsDialogViewModel : DialogViewModel, IActivatableViewM
     public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
 
-    [Reactive] public Cp77Project Project { get; set; }
+    [ObservableProperty] private Cp77Project _project = null!;
 
 
     public bool IsRedModInstalled => _pluginService.IsInstalled(EPlugin.redmod);

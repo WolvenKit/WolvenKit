@@ -5,24 +5,20 @@ using System.Linq;
 using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using System.Xml.Serialization;
-using Octokit;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.App.ViewModels.Dialogs
 {
-    public class NewFileViewModel : DialogViewModel
+    public partial class NewFileViewModel : DialogViewModel
     {
 
         public delegate Task ReturnHandler(NewFileViewModel? file);
@@ -122,24 +118,24 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         }
 
-        [Reactive] public string? Text { get; set; }
+        [ObservableProperty] private string? _text;
 
-        [Reactive] public bool IsCreating { get; set; }
+        [ObservableProperty] private bool _isCreating;
 
-        [Reactive] public string? FileName { get; set; }
-        [Reactive] public string? FullPath { get; set; }
+        [ObservableProperty] private string? _fileName;
+        [ObservableProperty] private string? _fullPath;
 
         public string Title { get; set; }
 
-        [Reactive] public ObservableCollection<FileCategoryModel> Categories { get; set; } = new();
+        [ObservableProperty] private ObservableCollection<FileCategoryModel> _categories = new();
 
-        [Reactive] public FileCategoryModel? SelectedCategory { get; set; }
+        [ObservableProperty] private FileCategoryModel? _selectedCategory;
 
-        [Reactive] public AddFileModel? SelectedFile { get; set; }
+        [ObservableProperty] private AddFileModel? _selectedFile;
 
         public override ReactiveCommand<Unit, Unit> OkCommand { get; }
         public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
-        [Reactive] public string? WhyNotCreate { get; set; }
+        [ObservableProperty] private string? _whyNotCreate;
 
         private string GetDefaultDir(EWolvenKitFile type)
         {

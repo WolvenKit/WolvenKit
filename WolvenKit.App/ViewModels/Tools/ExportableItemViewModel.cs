@@ -1,7 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
-using DynamicData.Binding;
-using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 
@@ -9,7 +8,11 @@ namespace WolvenKit.ViewModels.Tools
 {
     public class ExportableItemViewModel : ImportExportItemViewModel
     {
-        public ExportableItemViewModel(string fileName) : base(fileName, DecideExportOptions(Path.GetExtension(fileName).TrimStart('.'))) => Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
+        public ExportableItemViewModel(string fileName) : base(fileName, DecideExportOptions(Path.GetExtension(fileName).TrimStart('.'))) =>
+            Properties.PropertyChanged += delegate(object? sender, PropertyChangedEventArgs args)
+            {
+                OnPropertyChanged(nameof(Properties));
+            };
 
         private static ExportArgs DecideExportOptions(string extension)
         {

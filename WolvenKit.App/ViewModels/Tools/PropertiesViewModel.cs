@@ -4,10 +4,10 @@ using System.IO;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
@@ -28,7 +28,7 @@ using static WolvenKit.ViewModels.Documents.RDTMeshViewModel;
 
 namespace WolvenKit.ViewModels.Tools
 {
-    public class PropertiesViewModel : ToolViewModel
+    public partial class PropertiesViewModel : ToolViewModel
     {
         #region fields
 
@@ -96,39 +96,39 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         #region properties
-        [Reactive] public int SelectedIndex { get; set; }
+        [ObservableProperty] private int _selectedIndex;
 
-        [Reactive] public FileModel? PE_SelectedItem { get; set; }
+        [ObservableProperty] private FileModel? _pE_SelectedItem;
 
         /// <summary>
         /// Selected Item from Asset Browser If Available.
         /// </summary>
-        [Reactive] public IFileSystemViewModel? AB_SelectedItem { get; set; }
+        [ObservableProperty] private IFileSystemViewModel? _aB_SelectedItem;
 
         /// <summary>
         /// Decides if Asset browser Selected File info should be visible.
         /// </summary>
-        [Reactive] public bool AB_FileInfoVisible { get; set; }
+        [ObservableProperty] private bool _aB_FileInfoVisible;
 
         /// <summary>
         /// Decides if Project Explorer Selected file info should be Visible.
         /// </summary>
-        [Reactive] public bool PE_FileInfoVisible { get; set; }
+        [ObservableProperty] private bool _pE_FileInfoVisible;
 
         /// <summary>
         /// Decides if the mesh previewer Tab should be visible or not.
         /// </summary>
-        [Reactive] public bool IsMeshPreviewVisible { get; set; }
+        [ObservableProperty] private bool _isMeshPreviewVisible;
 
-        [Reactive] public bool IsAudioPreviewVisible { get; set; }
-        [Reactive] public bool IsImagePreviewVisible { get; set; }
-        [Reactive] public bool IsVideoPreviewVisible { get; set; }
+        [ObservableProperty] private bool _isAudioPreviewVisible;
+        [ObservableProperty] private bool _isImagePreviewVisible;
+        [ObservableProperty] private bool _isVideoPreviewVisible;
 
-        [Reactive] public string? ExeCommand { get; set; }
+        [ObservableProperty] private string? _exeCommand;
 
-        [Reactive] public string? LoadedModelPath { get; set; }
+        [ObservableProperty] private string? _loadedModelPath;
 
-        [Reactive] public BitmapSource? LoadedBitmapFrame { get; set; }
+        [ObservableProperty] private BitmapSource? _loadedBitmapFrame;
 
         #endregion properties
 

@@ -12,9 +12,8 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Prism.Commands;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -26,7 +25,7 @@ using YamlDotNet.Serialization;
 
 namespace WolvenKit.ViewModels.Tools
 {
-    public class TweakBrowserViewModel : ToolViewModel
+    public partial class TweakBrowserViewModel : ToolViewModel
     {
         #region fields
 
@@ -50,15 +49,15 @@ namespace WolvenKit.ViewModels.Tools
         public string Extension { get; set; } = "tweak";
 
 
-        private string _searchText = string.Empty;
-        private bool _showNonResolvableEntries;
-        private bool _showInlineEntries;
-        private string _selectedRecordType = "";
+        [ObservableProperty] private string _searchText = string.Empty;
+        [ObservableProperty] private bool _showNonResolvableEntries;
+        [ObservableProperty] private bool _showInlineEntries;
+        [ObservableProperty] private string _selectedRecordType = "";
 
-        private TweakEntry? _selectedRecordEntry;
-        private TweakEntry? _selectedFlatEntry;
-        private TweakEntry? _selectedQueryEntry;
-        private TweakEntry? _selectedGroupTagEntry;
+        [ObservableProperty] private TweakEntry? _selectedRecordEntry;
+        [ObservableProperty] private TweakEntry? _selectedFlatEntry;
+        [ObservableProperty] private TweakEntry? _selectedQueryEntry;
+        [ObservableProperty] private TweakEntry? _selectedGroupTagEntry;
 
         #endregion fields
 
@@ -79,20 +78,105 @@ namespace WolvenKit.ViewModels.Tools
             _tweakDB = tweakDbService;
 
             _tweakDB.Loaded += Load;
+
+            PropertyChanged += InternalPropertyChanged;
+        }
+
+        private void InternalPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(SearchText):
+                case nameof(ShowNonResolvableEntries):
+                case nameof(ShowInlineEntries):
+                case nameof(SelectedRecordType):
+                    Refresh();
+                    break;
+
+                case nameof(SelectedRecordEntry):
+                {
+                    if (SelectedRecordEntry != null && _tweakDB.IsLoaded)
+                    {
+                        SelectedRecord.Clear();
+                        SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(SelectedRecordEntry.Item), null, SelectedRecordEntry.DisplayName, true) { IsExpanded = true });
+                    }
+                    else
+                    {
+                        SelectedRecord.Clear();
+                    }
+                    OnPropertyChanged(nameof(SelectedRecord));
+                    break;
+                }
+
+                case nameof(SelectedFlatEntry):
+                {
+                    if (SelectedFlatEntry != null && _tweakDB.IsLoaded)
+                    {
+                        SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(SelectedFlatEntry.Item));
+                    }
+                    else
+                    {
+                        SelectedFlat = null;
+                    }
+                    OnPropertyChanged(nameof(SelectedFlat));
+                    break;
+                }
+
+                case nameof(SelectedQueryEntry):
+                {
+                    if (SelectedQueryEntry != null && _tweakDB.IsLoaded)
+                    {
+                        var arr = new CArray<TweakDBID>();
+                        foreach (var query in _tweakDB.GetQuery(SelectedQueryEntry.Item))
+                        {
+                            arr.Add(query);
+                        }
+
+                        SelectedQuery = new ChunkViewModel(arr);
+                    }
+                    else
+                    {
+                        SelectedQuery = null;
+                    }
+                    OnPropertyChanged(nameof(SelectedQuery));
+                    break;
+                }
+
+                case nameof(SelectedGroupTagEntry):
+                {
+                    if (SelectedGroupTagEntry != null && _tweakDB.IsLoaded)
+                    {
+                        var u = _tweakDB.GetGroupTag(SelectedGroupTagEntry.Item);
+                        if (u is not null)
+                        {
+                            SelectedGroupTag = new ChunkViewModel((CUInt8)u);
+                        }
+                    }
+                    else
+                    {
+                        SelectedGroupTag = null;
+                    }
+                    OnPropertyChanged(nameof(SelectedGroupTag));
+                    break;
+                }
+
+                default:
+                    break;
+            }
         }
 
         #endregion constructors
 
         #region Properties
 
-        [Reactive] public Visibility LoadVisibility { get; set; } = Visibility.Visible;
+        [ObservableProperty] private Visibility _loadVisibility = Visibility.Visible;
 
-        [Reactive] public ICollectionView Records { get; set; } = new CollectionView(new List<object>());
-        [Reactive] public ICollectionView Flats { get; set; } = new CollectionView(new List<object>());
-        [Reactive] public ICollectionView Queries { get; set; } = new CollectionView(new List<object>());
-        [Reactive] public ICollectionView GroupTags { get; set; } = new CollectionView(new List<object>());
+        [ObservableProperty] private ICollectionView _records = new CollectionView(new List<object>());
+        [ObservableProperty] private ICollectionView _flats = new CollectionView(new List<object>());
+        [ObservableProperty] private ICollectionView _queries = new CollectionView(new List<object>());
+        [ObservableProperty] private ICollectionView _groupTags = new CollectionView(new List<object>());
 
-        [Reactive] public List<string> RecordTypes { get; set; } = new();
+        [ObservableProperty] private List<string> _recordTypes = new();
 
         public string RecordsHeader => $"Records ({Records.Cast<object>().Count()})";
         public string FlatsHeader => $"Flats ({Flats.Cast<object>().Count()})";
@@ -100,144 +184,9 @@ namespace WolvenKit.ViewModels.Tools
         public string GroupTagsHeader => $"GroupTags ({GroupTags.Cast<object>().Count()})";
 
         public ObservableCollection<ChunkViewModel> SelectedRecord { get; set; } = new();
-        [Reactive] public ChunkViewModel? SelectedFlat { get; set; }
-        [Reactive] public ChunkViewModel? SelectedQuery { get; set; }
-        [Reactive] public ChunkViewModel? SelectedGroupTag { get; set; }
-
-        public string SearchText
-        {
-            get => _searchText;
-            set
-            {
-                _searchText = value;
-                this.RaisePropertyChanged(nameof(SearchText));
-
-                Refresh();
-            }
-        }
-
-        public bool ShowNonResolvableEntries
-        {
-            get => _showNonResolvableEntries;
-            set
-            {
-                _showNonResolvableEntries = value;
-                this.RaisePropertyChanged(nameof(ShowNonResolvableEntries));
-
-                Refresh();
-            }
-        }
-
-        public bool ShowInlineEntries
-        {
-            get => _showInlineEntries;
-            set
-            {
-                _showInlineEntries = value;
-                this.RaisePropertyChanged(nameof(ShowInlineEntries));
-
-                Refresh();
-            }
-        }
-
-        public string SelectedRecordType
-        {
-            get => _selectedRecordType;
-            set
-            {
-                _selectedRecordType = value;
-                this.RaisePropertyChanged(nameof(SelectedRecordType));
-
-                Refresh();
-            }
-        }
-
-        public TweakEntry? SelectedRecordEntry
-        {
-            get => _selectedRecordEntry;
-            set
-            {
-                _selectedRecordEntry = value;
-                this.RaisePropertyChanged(nameof(SelectedRecordEntry));
-                if (_selectedRecordEntry != null && _tweakDB.IsLoaded)
-                {
-                    SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry.Item), null, _selectedRecordEntry.DisplayName, true) { IsExpanded = true });
-                }
-                else
-                {
-                    SelectedRecord.Clear();
-                }
-                this.RaisePropertyChanged(nameof(SelectedRecord));
-            }
-        }
-
-        public TweakEntry? SelectedFlatEntry
-        {
-            get => _selectedFlatEntry;
-            set
-            {
-                _selectedFlatEntry = value;
-                this.RaisePropertyChanged(nameof(SelectedFlatEntry));
-                if (_selectedFlatEntry != null && _tweakDB.IsLoaded)
-                {
-                    SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(_selectedFlatEntry.Item));
-                }
-                else
-                {
-                    SelectedFlat = null;
-                }
-                this.RaisePropertyChanged(nameof(SelectedFlat));
-            }
-        }
-
-        public TweakEntry? SelectedQueryEntry
-        {
-            get => _selectedQueryEntry;
-            set
-            {
-                _selectedQueryEntry = value;
-                this.RaisePropertyChanged(nameof(SelectedQueryEntry));
-                if (_selectedQueryEntry != null && _tweakDB.IsLoaded)
-                {
-                    var arr = new CArray<TweakDBID>();
-                    foreach (var query in _tweakDB.GetQuery(_selectedQueryEntry.Item))
-                    {
-                        arr.Add(query);
-                    }
-
-                    SelectedQuery = new ChunkViewModel(arr);
-                }
-                else
-                {
-                    SelectedQuery = null;
-                }
-                this.RaisePropertyChanged(nameof(SelectedQuery));
-            }
-        }
-
-        public TweakEntry? SelectedGroupTagEntry
-        {
-            get => _selectedGroupTagEntry;
-            set
-            {
-                _selectedGroupTagEntry = value;
-                this.RaisePropertyChanged(nameof(SelectedGroupTagEntry));
-                if (_selectedGroupTagEntry != null && _tweakDB.IsLoaded)
-                {
-                    var u = _tweakDB.GetGroupTag(_selectedGroupTagEntry.Item);
-                    if (u is not null)
-                    {
-                        SelectedGroupTag = new ChunkViewModel((CUInt8)u);
-                    }
-                }
-                else
-                {
-                    SelectedGroupTag = null;
-                }
-                this.RaisePropertyChanged(nameof(SelectedGroupTag));
-            }
-        }
+        [ObservableProperty] private ChunkViewModel? _selectedFlat;
+        [ObservableProperty] private ChunkViewModel? _selectedQuery;
+        [ObservableProperty] private ChunkViewModel? _selectedGroupTag;
 
         #endregion
 
@@ -303,17 +252,17 @@ namespace WolvenKit.ViewModels.Tools
         private void Refresh()
         {
             Records.Refresh();
-            this.RaisePropertyChanged(nameof(Records));
-            this.RaisePropertyChanged(nameof(RecordsHeader));
+            OnPropertyChanged(nameof(Records));
+            OnPropertyChanged(nameof(RecordsHeader));
 
             Flats.Refresh();
-            this.RaisePropertyChanged(nameof(FlatsHeader));
+            OnPropertyChanged(nameof(FlatsHeader));
 
             Queries.Refresh();
-            this.RaisePropertyChanged(nameof(QueriesHeader));
+            OnPropertyChanged(nameof(QueriesHeader));
 
             GroupTags.Refresh();
-            this.RaisePropertyChanged(nameof(GroupTagsHeader));
+            OnPropertyChanged(nameof(GroupTagsHeader));
         }
 
         private bool Filter(object obj)
@@ -358,8 +307,8 @@ namespace WolvenKit.ViewModels.Tools
             return false;
         }
 
-        private DelegateCommand? convertToYAML;
-        public ICommand ConvertToYAML => convertToYAML ??= new DelegateCommand(ExecuteConvertToYAML, CanExecuteConvertToYAML);
+        private RelayCommand? convertToYAML;
+        public ICommand ConvertToYAML => convertToYAML ??= new RelayCommand(ExecuteConvertToYAML, CanExecuteConvertToYAML);
         public bool CanExecuteConvertToYAML() => true; //Locator.Current.GetService<IProjectManager>().IsProjectLoaded;
 
         private void ExecuteConvertToYAML()

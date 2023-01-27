@@ -1,21 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using Prism.Commands;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
-using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
@@ -31,7 +23,7 @@ using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.App.ViewModels.Dialogs
 {
-    public class MaterialsRepositoryViewModel : DialogWindowViewModel
+    public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
     {
         public record class UncookExtensionViewModel(string Name, EUncookExtension Extension);
 
@@ -63,21 +55,20 @@ namespace WolvenKit.App.ViewModels.Dialogs
             UnbundleGameCommand = ReactiveCommand.CreateFromTask(UnbundleGame);
             GenerateMaterialRepoCommand = ReactiveCommand.CreateFromTask(GenerateMaterialRepoAsync);
 
-            MaterialsDepotPath = _settingsManager.MaterialRepositoryPath;
-            UncookExtensions = new();
+            _materialsDepotPath = _settingsManager.MaterialRepositoryPath;
+            _uncookExtensions = new();
             foreach (var item in Enum.GetValues<EUncookExtension>())
             {
-                UncookExtensions.Add(new(item.ToString(), item));
+                _uncookExtensions.Add(new(item.ToString(), item));
             }
-            UncookExtension = UncookExtensions.First(x => x.Extension == EUncookExtension.png);
+            _uncookExtension = _uncookExtensions.First(x => x.Extension == EUncookExtension.png);
         }
 
         #region Properties
 
-        [Reactive] public string MaterialsDepotPath { get; set; }
-        [Reactive] public UncookExtensionViewModel UncookExtension { get; set; }
-        [Reactive] public List<UncookExtensionViewModel> UncookExtensions { get; set; }
-
+        [ObservableProperty] private string _materialsDepotPath;
+        [ObservableProperty] private UncookExtensionViewModel _uncookExtension;
+        [ObservableProperty] private List<UncookExtensionViewModel> _uncookExtensions;
 
         public string WikiHelpLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
 

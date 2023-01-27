@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Services;
@@ -43,8 +43,8 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
     }
 
     public ObservableCollection<string> Scripts { get; } = new();
-    [Reactive] public string? SelectedItem { get; set; }
-    [Reactive] public string? FileName { get; set; }
+    [ObservableProperty] private string? _selectedItem;
+    [ObservableProperty] private string? _fileName;
 
     public ViewModelActivator Activator { get; } = new();
     public override ReactiveCommand<Unit, Unit> OkCommand { get; }

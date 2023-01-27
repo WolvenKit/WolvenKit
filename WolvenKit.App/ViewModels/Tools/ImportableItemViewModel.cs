@@ -1,7 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
-using DynamicData.Binding;
-using ReactiveUI;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -16,25 +15,26 @@ namespace WolvenKit.ViewModels.Tools
 {
     public class ImportableItemViewModel : ImportExportItemViewModel
     {
-        public ImportableItemViewModel(string fileName) : base(fileName, DecideImportOptions(fileName))
-        {
-            Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
-
-            Properties.WhenAnyPropertyChanged(nameof(XbmImportArgs.TextureGroup)).Subscribe(p =>
+        public ImportableItemViewModel(string fileName) : base(fileName, DecideImportOptions(fileName)) =>
+            Properties.PropertyChanged += delegate(object? sender, PropertyChangedEventArgs args)
             {
-                if (p is XbmImportArgs importArgs)
+                OnPropertyChanged(nameof(Properties));
+
+                if (args.PropertyName == nameof(XbmImportArgs.TextureGroup))
                 {
-                    // when manually changing texturegroup, recalculate values
-                    // IsGamma, RawFormat, Compression, GenerateMipMaps, IsStreamable
-                    var args = CommonFunctions.TextureSetupFromTextureGroup(importArgs.TextureGroup);
-                    importArgs.IsGamma = args.IsGamma;
-                    importArgs.RawFormat = args.RawFormat;
-                    importArgs.Compression = args.Compression;
-                    importArgs.GenerateMipMaps = args.GenerateMipMaps;
-                    importArgs.IsStreamable = args.IsStreamable;
+                    if (Properties is XbmImportArgs importArgs)
+                    {
+                        // when manually changing texturegroup, recalculate values
+                        // IsGamma, RawFormat, Compression, GenerateMipMaps, IsStreamable
+                        var propArgs = CommonFunctions.TextureSetupFromTextureGroup(importArgs.TextureGroup);
+                        importArgs.IsGamma = propArgs.IsGamma;
+                        importArgs.RawFormat = propArgs.RawFormat;
+                        importArgs.Compression = propArgs.Compression;
+                        importArgs.GenerateMipMaps = propArgs.GenerateMipMaps;
+                        importArgs.IsStreamable = propArgs.IsStreamable;
+                    }
                 }
-            });
-        }
+            };
 
         private static ImportArgs DecideImportOptions(string fileName)
         {

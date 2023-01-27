@@ -1,6 +1,4 @@
-using System;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using System.ComponentModel;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Shell;
 
@@ -18,7 +16,13 @@ namespace WolvenKit.ViewModels.Tools
 
             Name = name;
 
-            this.WhenAnyValue(x => x.State).Subscribe(b => this.RaisePropertyChanged(nameof(IsVisible)));
+            this.PropertyChanged += delegate(object? sender, PropertyChangedEventArgs args)
+            {
+                if (args.PropertyName == nameof(State))
+                {
+                    OnPropertyChanged(nameof(IsVisible));
+                }
+            };
         }
 
 
@@ -37,7 +41,7 @@ namespace WolvenKit.ViewModels.Tools
             set
             {
                 State = value ? DockState.Dock : DockState.Hidden;
-                this.RaisePropertyChanged(nameof(IsVisible));
+                OnPropertyChanged();
             }
         }
 

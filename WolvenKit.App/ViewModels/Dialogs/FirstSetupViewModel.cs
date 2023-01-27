@@ -4,11 +4,11 @@ using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
@@ -19,7 +19,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
     /// <summary>
     /// During the first time setup it tries to automatically determine the missing paths and settings.
     /// </summary>
-    public class FirstSetupViewModel : DialogWindowViewModel
+    public partial class FirstSetupViewModel : DialogWindowViewModel
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
@@ -39,10 +39,10 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
             TryToFindCP77ExecutableAutomatically();
 
-            MaterialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "Depot");
-            if (!Directory.Exists(MaterialDepotPath))
+            _materialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "Depot");
+            if (!Directory.Exists(_materialDepotPath))
             {
-                Directory.CreateDirectory(MaterialDepotPath);
+                Directory.CreateDirectory(_materialDepotPath);
             }
         }
 
@@ -54,9 +54,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
         //public string Email { get; set; }
         //public string DonateLink { get; set; }
         //public string Description { get; set; }
-        [Reactive] public string MaterialDepotPath { get; set; }
+        [ObservableProperty] private string _materialDepotPath;
 
-        [Reactive] public bool AllFieldsValid { get; set; }
+        [ObservableProperty] private bool _allFieldsValid;
         private IObservable<bool> CanExecute =>
             this.WhenAnyValue(
                 x => x.AllFieldsValid,
@@ -64,9 +64,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
             );
 
 
-        [Reactive] public bool CheckForUpdates { get; set; }
+        [ObservableProperty] private bool _checkForUpdates;
 
-        [Reactive] public string? CP77ExePath { get; set; }
+        [ObservableProperty] private string? _cP77ExePath;
 
         public string WikiHelpLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
 

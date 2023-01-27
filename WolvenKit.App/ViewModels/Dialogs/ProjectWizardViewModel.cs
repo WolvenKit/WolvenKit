@@ -3,16 +3,14 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.App.ViewModels.Dialogs
 {
-    public class ProjectWizardViewModel : DialogViewModel
+    public partial class ProjectWizardViewModel : DialogViewModel
     {
         #region Fields
 
@@ -39,7 +37,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
             CancelCommand = ReactiveCommand.Create(() => { FileHandler?.Invoke(null); });
 #pragma warning restore IDE0053 // Use expression body for lambda expressions
 
-            ProjectType = new ObservableCollection<string> { "Cyberpunk 2077" };
+            _projectType = new ObservableCollection<string> { "Cyberpunk 2077" };
         }
 
         #endregion Constructors
@@ -49,13 +47,13 @@ namespace WolvenKit.App.ViewModels.Dialogs
         public string Title { get; set; }
 
         [NotNull]
-        [Reactive] public string? ProjectName { get; set; }
+        [ObservableProperty] private string? _projectName = null!;
         [NotNull]
-        [Reactive] public string? ProjectPath { get; set; }
-        [Reactive] public string? Author { get; set; }
-        [Reactive] public string? Email { get; set; }
-        [Reactive] public string? Version { get; set; }
-        [Reactive] public ObservableCollection<string> ProjectType { get; set; } = new();
+        [ObservableProperty] private string? _projectPath = null!;
+        [ObservableProperty] private string? _author;
+        [ObservableProperty] private string? _email;
+        [ObservableProperty] private string? _version;
+        [ObservableProperty] private ObservableCollection<string> _projectType = new();
 
         private IObservable<bool> CanExecute =>
             this.WhenAnyValue(
@@ -66,7 +64,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
         /// <summary>
         /// Gets/Sets if all the fields are valid.
         /// </summary>
-        [Reactive] public bool AllFieldsValid { get; set; }
+        [ObservableProperty] private bool _allFieldsValid;
 
         ///// <summary>
         ///// Gets/Sets the author's profile image brush.
@@ -86,7 +84,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         public override ReactiveCommand<Unit, Unit> OkCommand { get; }
 
-        [Reactive] public string? WhyNotCreate { get; set; }
+        [ObservableProperty] private string? _whyNotCreate;
 
         public ReactiveCommand<Unit, Unit> OpenProjectPathCommand { get; private set; }
 

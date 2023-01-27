@@ -91,7 +91,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             LocKeys = CollectionViewSource.GetDefaultView(_locKey.GetEntries());
             LocKeys.SortDescriptions.Add(new SortDescription("SecondaryKey", ListSortDirection.Ascending));
-            this.RaisePropertyChanged(nameof(LocKeys));
+            OnPropertyChanged(nameof(LocKeys));
         }
 
         public ICollectionView? LocKeys { get; set; }
@@ -120,7 +120,7 @@ namespace WolvenKit.ViewModels.Tools
                     : null;
                 }
 
-                this.RaisePropertyChanged(nameof(SearchText));
+                OnPropertyChanged();
             }
         }
 
@@ -131,7 +131,7 @@ namespace WolvenKit.ViewModels.Tools
             set
             {
                 _selectedLocKey = value;
-                this.RaisePropertyChanged(nameof(SelectedLocKey));
+                OnPropertyChanged();
                 if (_selectedLocKey != null)
                 {
                     SelectedChunk.Clear();
@@ -145,7 +145,7 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     SelectedChunk.Clear();
                 }
-                this.RaisePropertyChanged(nameof(SelectedChunk));
+                OnPropertyChanged(nameof(SelectedChunk));
             }
         }
 

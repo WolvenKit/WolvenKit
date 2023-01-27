@@ -1,6 +1,5 @@
 using System.IO;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 
@@ -9,20 +8,20 @@ namespace WolvenKit.ViewModels.Tools
     /// <summary>
     /// ImportExportItem ViewModel
     /// </summary>
-    public abstract class ImportExportItemViewModel : ReactiveObject, ISelectableViewModel
+    public abstract partial class ImportExportItemViewModel : ObservableObject, ISelectableViewModel
     {
         protected ImportExportItemViewModel(string baseFile, ImportExportArgs properties)
         {
             BaseFile = baseFile;
-            Properties = properties;
+            _properties = properties;
         }
 
 
         public string BaseFile { get; set; }
 
-        [Reactive] public ImportExportArgs Properties { get; set; }
+        [ObservableProperty] private ImportExportArgs _properties;
 
-        [Reactive] public bool IsChecked { get; set; }
+        [ObservableProperty] private bool _isChecked;
 
         public string? ExportTaskIdentifier => Properties.ToString();
         public string Extension => Path.GetExtension(BaseFile).TrimStart('.');

@@ -9,11 +9,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using Microsoft.EntityFrameworkCore;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -35,7 +35,7 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Tools
 {
-    public class AssetBrowserViewModel : ToolViewModel
+    public partial class AssetBrowserViewModel : ToolViewModel
     {
         #region constants
 
@@ -76,8 +76,8 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IWatcherService _watcherService;
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
         private bool _manuallyLoading = false;
-        [Reactive] private bool _projectLoaded { get; set; } = false;
-        [Reactive] private bool _archiveDirNotFound { get; set; } = true;
+        [ObservableProperty] private bool _projectLoaded = false;
+        [ObservableProperty] private bool _archiveDirNotFound = true;
 
         #endregion fields
 
@@ -188,36 +188,36 @@ namespace WolvenKit.ViewModels.Tools
 
         #region properties
 
-        // [Reactive] public string Extension { get; set; } = "reds";
+        //[ObservableProperty] private string _extension = "reds";
 
-        [Reactive] public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
+        [ObservableProperty] private GridLength _previewWidth = new(0, GridUnitType.Pixel);
 
-        [Reactive] public Visibility LoadVisibility { get; set; } = Visibility.Visible;
+        [ObservableProperty] private Visibility _loadVisibility = Visibility.Visible;
 
-        [Reactive] public Visibility NoProjectBorderVisibility { get; set; } = Visibility.Visible;
+        [ObservableProperty] private Visibility _noProjectBorderVisibility = Visibility.Visible;
 
-        [Reactive] public bool ShouldShowLoadButton { get; set; }
-        [Reactive] public bool ShouldShowExecutablePathWarning { get; set; } = true;
+        [ObservableProperty] private bool _shouldShowLoadButton;
+        [ObservableProperty] private bool _shouldShowExecutablePathWarning = true;
 
-        [Reactive] public ObservableCollection<RedFileSystemModel> LeftItems { get; set; } = new();
+        [ObservableProperty] private ObservableCollection<RedFileSystemModel> _leftItems = new();
 
-        [Reactive] public object? LeftSelectedItem { get; set; }
+        [ObservableProperty] private object? _leftSelectedItem;
 
-        [Reactive] public IFileSystemViewModel? RightSelectedItem { get; set; }
+        [ObservableProperty] private IFileSystemViewModel? _rightSelectedItem;
 
-        [Reactive] public ObservableCollectionEx<IFileSystemViewModel> RightItems { get; set; } = new();
+        [ObservableProperty] private ObservableCollectionEx<IFileSystemViewModel> _rightItems = new();
 
-        //[Reactive] public ObservableCollection<object> RightSelectedItems { get; set; } = new();
+        //[ObservableProperty] private ObservableCollection<object> _rightSelectedItems = new();
 
-        //[Reactive] public List<string> Classes { get; set; }
+        //[ObservableProperty] private List<string> _classes;
 
-        [Reactive] public string? SelectedClass { get; set; }
+        [ObservableProperty] private string? _selectedClass;
 
-        [Reactive] public string? SelectedExtension { get; set; }
+        [ObservableProperty] private string? _selectedExtension;
 
-        [Reactive] public string? SearchBarText { get; set; }
+        [ObservableProperty] private string? _searchBarText;
 
-        [Reactive] public string? OptionsSearchBarText { get; set; }
+        [ObservableProperty] private string? _optionsSearchBarText;
 
         #endregion properties
 
@@ -227,7 +227,7 @@ namespace WolvenKit.ViewModels.Tools
         private async Task<Unit> LoadAssetBrowser()
         {
             _manuallyLoading = true;
-            ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded && !_archiveDirNotFound;
+            ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
             await _gameController.GetRed4Controller().HandleStartup();
             return Unit.Default;
         }

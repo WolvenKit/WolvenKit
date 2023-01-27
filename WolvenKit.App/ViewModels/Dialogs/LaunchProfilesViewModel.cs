@@ -1,19 +1,15 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.App.Models;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.App.ViewModels.Dialogs
 {
-    public class LaunchProfilesViewModel : DialogViewModel
+    public partial class LaunchProfilesViewModel : DialogViewModel
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
@@ -88,8 +84,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
         //    SelectedLaunchProfile.SetEditable(false);
         //}
 
-        [Reactive] public ObservableCollection<LaunchProfileViewModel> LaunchProfiles { get; set; } = new();
-        [Reactive] public LaunchProfileViewModel? SelectedLaunchProfile { get; set; }
+        [ObservableProperty] private ObservableCollection<LaunchProfileViewModel> _launchProfiles = new();
+
+        [ObservableProperty] private LaunchProfileViewModel? _selectedLaunchProfile;
 
 
         public string Title { get; set; }

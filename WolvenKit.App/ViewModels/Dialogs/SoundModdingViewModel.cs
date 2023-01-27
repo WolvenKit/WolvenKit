@@ -4,25 +4,22 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Sounds;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.App.ViewModels.Dialogs
 {
-    public class SoundModdingViewModel : DialogViewModel
+    public partial class SoundModdingViewModel : DialogViewModel
     {
         private readonly INotificationService _notificationService;
         private readonly ILoggerService _logger;
@@ -140,9 +137,9 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         public List<string> Tags { get; set; } = new();
 
-        [Reactive] public CustomSoundsModel? SelectedObject { get; set; }
-        [Reactive] public ObservableCollection<CustomSoundsModel> CustomEvents { get; set; } = new();
-        [Reactive] public ObservableCollection<SoundEvent> SoundEvents { get; set; } = new();
+        [ObservableProperty] private CustomSoundsModel? _selectedObject;
+        [ObservableProperty] private ObservableCollection<CustomSoundsModel> _customEvents = new();
+        [ObservableProperty] private ObservableCollection<SoundEvent> _soundEvents = new();
 
 
         #region commands
