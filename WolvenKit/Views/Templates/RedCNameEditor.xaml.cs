@@ -62,15 +62,15 @@ namespace WolvenKit.Views.Editors
             var strResult = new StringBuilder();
 
             // replace all forward slashes with backslash
-            text.Replace('/', '\\');
+            text = text.Replace('/', '\\');
 
             // strip all leading and trailing slashes and quotes
-            while ("\"'\\/".Contains(text[0]))
+            while ("\"'\\".Contains(text[0]))
             {
                 text = text.Substring(1, text.Length - 1);
             }
 
-            while ("\"'\\/".Contains(text[text.Length - 1]))
+            while ("\"'\\".Contains(text[text.Length - 1]))
             {
                 text = text.Substring(0, text.Length - 1);
             }
@@ -84,7 +84,7 @@ namespace WolvenKit.Views.Editors
                     continue;
                 }
 
-                if ("\\/".Contains(element))
+                if (element == '\\')
                 {
                     if (strResult[strResult.Length - 1] != '\\')
                     {
