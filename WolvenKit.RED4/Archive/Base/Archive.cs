@@ -1,4 +1,3 @@
-using ProtoBuf;
 using System.IO.MemoryMappedFiles;
 using WolvenKit.Common;
 using WolvenKit.Core.Compression;
@@ -6,7 +5,6 @@ using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.RED4.Archive;
 
-[ProtoContract]
 public class Archive : ICyberGameArchive, IDisposable
 {
     private MemoryMappedFile _mmf;
@@ -28,13 +26,13 @@ public class Archive : ICyberGameArchive, IDisposable
 
     #region properties
 
-    [ProtoMember(1)] public string ArchiveAbsolutePath { get; set; }
+    public string ArchiveAbsolutePath { get; set; }
 
-    [ProtoMember(2)] public Header Header { get; set; }
+    public Header Header { get; set; }
 
-    [ProtoMember(3)] public Index Index { get; set; }
+    public Index Index { get; set; }
 
-    [ProtoMember(4)] public string ArchiveRelativePath { get; set; }
+    public string ArchiveRelativePath { get; set; }
 
 
     public Dictionary<ulong, IGameFile> Files { get; }

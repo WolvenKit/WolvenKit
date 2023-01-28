@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ProtoBuf.Meta;
 using ReactiveUI;
 using Serilog;
 using Splat;
@@ -112,7 +111,7 @@ namespace WolvenKit
             // Set application licenses.
             Initializations.InitializeLicenses();
             //protobuf
-            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
+            //RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
             _host = GenericHost.CreateHostBuilder().Build();
 

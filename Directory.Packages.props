@@ -90,8 +90,6 @@
     <PackageVersion Include="YamlDotNet" Version="12.3.1" />
     <PackageVersion Include="coverlet.collector" Version="3.2.0" />
     <PackageVersion Include="morelinq" Version="3.3.2" />
-    <PackageVersion Include="protobuf-net" Version="3.1.26" />
-    <PackageVersion Include="protobuf-net.Core" Version="3.1.26" />
     <PackageVersion Include="semver" Version="2.2.0" />
   </ItemGroup>
 </Project>

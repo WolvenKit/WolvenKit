@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using DynamicData;
 using DynamicData.Kernel;
-using ProtoBuf;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -16,7 +15,6 @@ using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
-    [ProtoContract]
     public class ArchiveManager : RED4ArchiveManager
     {
         #region Fields
@@ -61,7 +59,6 @@ namespace WolvenKit.RED4.CR2W.Archive
         }
 
 
-        [ProtoMember(1)]
         public override SourceCache<IGameArchive, string> Archives { get; set; } = new(x => x.ArchiveAbsolutePath);
 
         public override SourceCache<IGameArchive, string> ModArchives { get; set; } = new(x => x.ArchiveAbsolutePath);

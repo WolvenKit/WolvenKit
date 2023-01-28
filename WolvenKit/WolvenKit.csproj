@@ -43,7 +43,6 @@
     <PackageReference Include="ScottPlot.WPF" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
-    <PackageReference Include="protobuf-net" />
     <PackageReference Include="Serilog.Sinks.Async" />
     <PackageReference Include="SharpVectors.Wpf" />
     <PackageReference Include="Splat" />

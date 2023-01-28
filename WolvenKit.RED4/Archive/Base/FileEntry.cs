@@ -1,11 +1,8 @@
-using ProtoBuf;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive;
-
-[ProtoContract]
 public class FileEntry : ICyberGameFile
 {
     private IHashService _hashService;
@@ -42,12 +39,6 @@ public class FileEntry : ICyberGameFile
         SHA1Hash = sha1hash;
     }
 
-    [ProtoAfterDeserialization]
-    public void AfterDeserializationCallback()
-    {
-
-    }
-
     #endregion Constructors
 
     #region Properties
@@ -55,17 +46,17 @@ public class FileEntry : ICyberGameFile
     public Archive Archive { get; set; }
 
 
-    [ProtoMember(1)] public ulong NameHash64 { get; set; }
-    [ProtoMember(2)] public DateTime Timestamp { get; set; }
-    [ProtoMember(3)] public uint NumInlineBufferSegments { get; set; }
-    [ProtoMember(4)] public uint SegmentsStart { get; set; }
-    [ProtoMember(5)] public uint SegmentsEnd { get; set; }
-    [ProtoMember(6)] public uint ResourceDependenciesStart { get; set; }
-    [ProtoMember(7)] public uint ResourceDependenciesEnd { get; set; }
-    [ProtoMember(8)] public byte[] SHA1Hash { get; set; }
-    [ProtoMember(9)] public uint Size { get; set; }
-    [ProtoMember(10)] public uint ZSize { get; set; }
-    [ProtoMember(11)] public string GuessedExtension { get; set; }
+    public ulong NameHash64 { get; set; }
+    public DateTime Timestamp { get; set; }
+    public uint NumInlineBufferSegments { get; set; }
+    public uint SegmentsStart { get; set; }
+    public uint SegmentsEnd { get; set; }
+    public uint ResourceDependenciesStart { get; set; }
+    public uint ResourceDependenciesEnd { get; set; }
+    public byte[] SHA1Hash { get; set; }
+    public uint Size { get; set; }
+    public uint ZSize { get; set; }
+    public string GuessedExtension { get; set; }
 
     public ulong Key => NameHash64;
     public string Name => !string.IsNullOrEmpty(GetNameString()) ? GetNameString() : NameHash64.ToString();
