@@ -30,7 +30,8 @@
             x:Name="DepotPathEditor"
             Grid.Row="0"
             Grid.Column="1"
-            RedString="{Binding RedRef.DepotPath, Mode=OneWay}" />
+            RedString="{Binding RedRef.DepotPath, Mode=OneWay}"
+            SanitizeHash="True"/>
 
         <TextBlock
             Grid.Row="1"

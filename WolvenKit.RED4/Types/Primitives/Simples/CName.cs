@@ -53,7 +53,7 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
     public int CompareTo(CName other)
     {
         var strA = GetResolvedText();
-        var strB = GetResolvedText();
+        var strB = other.GetResolvedText();
 
         if (strA != null && strB != null)
         {

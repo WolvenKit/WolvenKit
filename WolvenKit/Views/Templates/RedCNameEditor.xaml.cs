@@ -1,8 +1,10 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using HandyControl.Tools.Extension;
 using Splat;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Types;
@@ -40,6 +42,63 @@ namespace WolvenKit.Views.Editors
             }
         }
 
+        // sanitize hashes when control is used for ResourcePath
+        public bool SanitizeHash
+        {
+            get => (bool)GetValue(SanitizeHashProperty);
+            set => SetValue(SanitizeHashProperty, value);
+        }
+
+        public static readonly DependencyProperty SanitizeHashProperty = DependencyProperty.Register(
+            nameof(SanitizeHash), typeof(bool), typeof(RedCNameEditor), new PropertyMetadata(false));
+
+        private CName GetHashSanitized(string text)
+        {
+            if (text.IsNullOrEmpty() || text == "None")
+            {
+                return 0;
+            }
+
+            var strResult = new StringBuilder();
+
+            // replace all forward slashes with backslash
+            text.Replace('/', '\\');
+
+            // strip all leading and trailing slashes and quotes
+            while ("\"'\\/".Contains(text[0]))
+            {
+                text = text.Substring(1, text.Length - 1);
+            }
+
+            while ("\"'\\/".Contains(text[text.Length - 1]))
+            {
+                text = text.Substring(0, text.Length - 1);
+            }
+
+            // append all remaining characters except repeated slashes
+            foreach (var element in text.ToCharArray())
+            {
+                if (strResult.Length == 0)
+                {
+                    strResult.Append(element);
+                    continue;
+                }
+
+                if ("\\/".Contains(element))
+                {
+                    if (strResult[strResult.Length - 1] != '\\')
+                    {
+                        strResult.Append('\\');
+                    }
+                    continue;
+                }
+
+                strResult.Append(element);
+            }
+            return strResult.ToString().ToLowerInvariant();
+
+        }
+
         public string Text
         {
             get => RedString;
@@ -50,13 +109,14 @@ namespace WolvenKit.Views.Editors
         {
             get
             {
+                ulong retHash = SanitizeHash ? GetHashSanitized(RedString) : RedString;
                 if (_settingsManager.ShowCNameAsHex)
                 {
-                    return ((ulong)RedString).ToString("X");
+                    return retHash.ToString("X");
                 }
                 else
                 {
-                    return ((ulong)RedString).ToString();
+                    return retHash.ToString();
                 }
             }
             set

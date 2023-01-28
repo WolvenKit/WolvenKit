@@ -1,18 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using ReactiveUI;
 using WolvenKit.RED4.Types;
-using WolvenKit.Views.Templates;
-using YamlDotNet.Core.Tokens;
 
 namespace WolvenKit.Views.Editors
 {
