@@ -46,7 +46,6 @@
     <PackageVersion Include="Octokit" Version="5.0.0" />
     <PackageVersion Include="PixiEditor.ColorPicker" Version="3.3.1" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
-    <PackageVersion Include="Prism.Core" Version="8.1.97" />
     <PackageVersion Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.2.3" />
     <PackageVersion Include="ReactiveUI" Version="18.4.1" />
     <PackageVersion Include="ReactiveUI.Events.WPF" Version="15.1.1" />

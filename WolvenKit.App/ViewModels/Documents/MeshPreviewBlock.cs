@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
-using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Core.Extensions;
@@ -60,8 +60,8 @@ namespace WolvenKit.ViewModels.Documents
 
         public bool SearchActive = false;
 
-        public ICommand LoadSectorCommand => new DelegateCommand<Sector>(LoadSector);
-        public void LoadSector(Sector sector)
+        [RelayCommand]
+        private void LoadSector(Sector sector)
         {
             if (!sector.IsLoaded)
             {
@@ -88,15 +88,15 @@ namespace WolvenKit.ViewModels.Documents
             this.WhenActivated((CompositeDisposable disposables) => RenderBlockSolo());
         }
 
-        public ICommand ClearSearchCommand { get; set; }
-        public void ExecuteClearSearch()
+        [RelayCommand]
+        public void ClearSearch()
         {
             SearchActive = false;
             RenderBlock(_data as worldStreamingBlock);
         }
 
-        public ICommand SearchForPointCommand { get; set; }
-        public void ExecuteSearchForPoint()
+        [RelayCommand]
+        public void SearchForPoint()
         {
             SearchActive = true;
             RenderBlock(_data as worldStreamingBlock);

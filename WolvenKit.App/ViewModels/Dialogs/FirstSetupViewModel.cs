@@ -5,9 +5,9 @@ using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using Prism.Commands;
 using ReactiveUI;
 using WolvenKit.App.Helpers;
 using WolvenKit.Core.Interfaces;
@@ -33,9 +33,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
             _loggerService = loggerService;
 
             Title = "Settings";
-
-            OpenCP77GamePathCommand = new DelegateCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
-            OpenDepotPathCommand = new DelegateCommand(ExecuteOpenDepotPath, CanOpenDepotPath);
 
             TryToFindCP77ExecutableAutomatically();
 
@@ -85,14 +82,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         #region Commands
 
-        public ICommand OpenDepotPathCommand { get; private set; }
-        public ICommand OpenCP77GamePathCommand { get; private set; }
-
-
-        private bool CanOpenGamePath() => true;
-        private bool CanOpenDepotPath() => true;
-
-        private void ExecuteOpenCP77GamePath()
+        [RelayCommand]
+        private void OpenCP77GamePath()
         {
             var dlg = new CommonOpenFileDialog
             {
@@ -118,7 +109,8 @@ namespace WolvenKit.App.ViewModels.Dialogs
             CP77ExePath = result;
         }
 
-        private void ExecuteOpenDepotPath()
+        [RelayCommand]
+        private void OpenDepotPath()
         {
             var dlg = new CommonOpenFileDialog
             {

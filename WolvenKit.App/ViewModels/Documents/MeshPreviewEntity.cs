@@ -5,7 +5,6 @@ using System.Reactive.Disposables;
 using System.Windows.Input;
 using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
-using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Core.Extensions;
@@ -18,9 +17,6 @@ namespace WolvenKit.ViewModels.Documents
 {
     public partial class RDTMeshViewModel
     {
-        public ICommand ExportEntity { get; set; }
-
-
         public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file, MeshViewHeaders.EntityPreview)
         {
             _data = ent;

@@ -38,8 +38,6 @@ namespace WolvenKit.ViewModels.Documents
 
         [ObservableProperty] private string? _isReadOnlyReason;
 
-        public override Task OnSave(object parameter) => throw new NotImplementedException();
-
         //public override bool OpenFile(string path)
         //{
         //    _isInitialized = false;
@@ -102,5 +100,7 @@ namespace WolvenKit.ViewModels.Documents
 
         }
 
+        public override Task Save(object parameter) => throw new NotImplementedException();
+        public override void SaveAs(object parameter) => throw new NotImplementedException();
     }
 }

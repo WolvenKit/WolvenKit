@@ -15,9 +15,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Discord.Rest;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using Prism.Commands;
 using ReactiveUI;
 using Semver;
 using Splat;
@@ -116,18 +117,6 @@ namespace WolvenKit.ViewModels.Shell
                 await Task.FromResult(Task.CompletedTask);
             });
 
-            ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog).ObservesProperty(() => ActiveProject);
-            ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer).ObservesProperty(() => ActiveProject);
-            ShowPropertiesCommand = new DelegateCommand(ExecuteShowProperties, CanShowProperties).ObservesProperty(() => ActiveProject);
-            ShowAssetsCommand = new DelegateCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
-
-            //ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool).ObservesProperty(() => ActiveProject);
-
-            ShowSoundModdingToolCommand = new DelegateCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool).ObservesProperty(() => IsDialogShown);
-            ShowModsViewCommand = new DelegateCommand(ExecuteShowModsView, CanShowModsView).ObservesProperty(() => IsDialogShown);
-            ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin).ObservesProperty(() => IsDialogShown);
-            ShowScriptManagerCommand = new DelegateCommand(ExecuteShowScriptManager, CanShowScriptManager).ObservesProperty(() => IsDialogShown);
-
             OpenFileCommand = ReactiveCommand.CreateFromTask<FileModel>(OpenFileAsync);
             OpenRedFileCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
@@ -166,37 +155,14 @@ namespace WolvenKit.ViewModels.Shell
             }));
 
             CleanAllCommand = ReactiveCommand.CreateFromTask(CleanAllAsync);
-
             HotInstallModCommand = ReactiveCommand.CreateFromTask(HotInstallModAsync);
-
             LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
-
             ShowTextureImporterCommand = ReactiveCommand.Create(ShowTextureImporter);
             ShowTextureExporterCommand = ReactiveCommand.Create(ShowTextureExporter);
-
-            NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => IsDialogShown);
-
-            // File
-            SaveFileCommand = new DelegateCommand(ExecuteSaveFile, CanSaveFile).ObservesProperty(() => ActiveDocument);
-            SaveAsCommand = new DelegateCommand(ExecuteSaveAs, CanSaveFile).ObservesProperty(() => ActiveDocument);
-            SaveAllCommand = new DelegateCommand(ExecuteSaveAll, CanSaveAll).ObservesProperty(() => DockedViews);
-
-            FileSelectedCommand = new DelegateCommand<FileModel>(ExecuteSelectFile, CanSelectFile);
-
             OpenProjectCommand = ReactiveCommand.CreateFromTask<string, Unit>(OpenProjectAsync);
             DeleteProjectCommand = ReactiveCommand.Create<string>(DeleteProject);
             NewProjectCommand = ReactiveCommand.Create(ExecuteNewProject);
-
-            ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage).ObservesProperty(() => IsDialogShown);
-            ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings).ObservesProperty(() => IsDialogShown);
-            ShowProjectSettingsCommand = new DelegateCommand(ExecuteShowProjectSettings, CanShowProjectSettings).ObservesProperty(() => IsDialogShown).ObservesProperty(() => ActiveProject);
-            OpenLogsCommand = new DelegateCommand(ExecuteOpenLogs);
-
             LaunchGameCommand = ReactiveCommand.Create<string>(ExecuteLaunchGame);
-
-            CloseModalCommand = new DelegateCommand(ExecuteCloseModal, CanCloseModal).ObservesProperty(() => IsDialogShown).ObservesProperty(() => IsOverlayShown);
-            CloseOverlayCommand = new DelegateCommand(ExecuteCloseOverlay, CanCloseOverlay).ObservesProperty(() => IsOverlayShown);
-            CloseDialogCommand = new DelegateCommand(ExecuteCloseDialog, CanCloseDialog).ObservesProperty(() => IsDialogShown);
 
 
             OpenFileCommand.ThrownExceptions.Subscribe(LogExtended);
@@ -746,20 +712,19 @@ namespace WolvenKit.ViewModels.Shell
 
         }
 
-        public ICommand FileSelectedCommand { get; set; }
-        private bool CanSelectFile(FileModel model) => true;
-        private void ExecuteSelectFile(FileModel model) => PropertiesViewModel.ExecuteSelectFile(model);
+        [RelayCommand]
+        private void SelectFile(FileModel model) => PropertiesViewModel.ExecuteSelectFile(model);
 
-        public ICommand SaveFileCommand { get; private set; }
         private bool CanSaveFile() => ActiveDocument is not null; // _projectManager.ActiveProject != null &&
-        private void ExecuteSaveFile() => Save(ActiveDocument.NotNull());
+        [RelayCommand(CanExecute = nameof(CanSaveFile))]
+        private void SaveFile() => Save(ActiveDocument.NotNull());
 
-        public ICommand SaveAsCommand { get; private set; }
-        private void ExecuteSaveAs() => Save(ActiveDocument.NotNull(), true);
+        [RelayCommand(CanExecute = nameof(CanSaveFile))]
+        private void SaveAs() => Save(ActiveDocument.NotNull(), true);
 
-        public ICommand SaveAllCommand { get; private set; }
         private bool CanSaveAll() => OpenDocuments?.Count > 0; //  _projectManager.ActiveProject != null &&
-        private void ExecuteSaveAll()
+        [RelayCommand(CanExecute = nameof(CanSaveAll))]
+        private void SaveAll()
         {
             foreach (var file in OpenDocuments)
             {
@@ -767,33 +732,33 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public ICommand ShowHomePageCommand { get; private set; }
         private bool CanShowHomePage() => !IsDialogShown;
-        private void ExecuteShowHomePage()
+        [RelayCommand(CanExecute = nameof(CanShowHomePage))]
+        private void ShowHomePage()
         {
             _homePageViewModel.NavigateTo(EHomePage.Welcome);
             SetActiveOverlay(_homePageViewModel);
         }
 
-        public ICommand ShowSettingsCommand { get; private set; }
         private bool CanShowSettings() => !IsDialogShown;
-        private void ExecuteShowSettings()
+        [RelayCommand(CanExecute = nameof(CanShowSettings))]
+        private void ShowSettings()
         {
 
             _homePageViewModel.NavigateTo(EHomePage.Settings);
             SetActiveOverlay(_homePageViewModel);
         }
 
-        public ICommand ShowProjectSettingsCommand { get; private set; }
         private bool CanShowProjectSettings() => !IsDialogShown && ActiveProject != null;
-        private void ExecuteShowProjectSettings()
+        [RelayCommand(CanExecute = nameof(CanShowProjectSettings))]
+        private void ShowProjectSettings()
         {
             CloseModalCommand.Execute(null);
             SetActiveDialog(new ProjectSettingsDialogViewModel());
         }
 
-        public ICommand OpenLogsCommand { get; private set; }
-        private void ExecuteOpenLogs() => Commonfunctions.ShowFolderInExplorer(ISettingsManager.GetAppData());
+        [RelayCommand]
+        private void OpenLogs() => Commonfunctions.ShowFolderInExplorer(ISettingsManager.GetAppData());
 
         [ObservableProperty] private int? _selectedGameCommandIdx;
 
@@ -858,9 +823,9 @@ namespace WolvenKit.ViewModels.Shell
             _loggerService.Success("Game launching.");
         }
 
-        public ICommand ShowSoundModdingToolCommand { get; private set; }
         private bool CanShowSoundModdingTool() => !IsDialogShown && ActiveProject != null;
-        private void ExecuteShowSoundModdingTool()
+        [RelayCommand(CanExecute =nameof(CanShowSoundModdingTool))]
+        private void ShowSoundModdingTool()
         {
             var vm = Locator.Current.GetService<SoundModdingViewModel>();
             if (vm != null)
@@ -885,33 +850,34 @@ namespace WolvenKit.ViewModels.Shell
             await Task.CompletedTask;
         }
 
-        public ICommand ShowScriptManagerCommand { get; private set; }
         private bool CanShowScriptManager() => !IsDialogShown;
-        private void ExecuteShowScriptManager()
+        [RelayCommand(CanExecute = nameof(CanShowScriptManager))]
+        private void ShowScriptManager()
         {
             CloseModalCommand.Execute(null);
             SetActiveDialog(new ScriptManagerViewModel());
         }
 
-        public ICommand ShowPluginCommand { get; private set; }
         private bool CanShowPlugin() => !IsDialogShown;
-        private void ExecuteShowPlugin()
+        [RelayCommand(CanExecute = nameof(CanShowPlugin))]
+        private void ShowPlugin()
         {
             _homePageViewModel.NavigateTo(EHomePage.Plugins);
             SetActiveOverlay(_homePageViewModel);
         }
 
-        public ICommand ShowModsViewCommand { get; private set; }
         private bool CanShowModsView() => !IsDialogShown;
-        private void ExecuteShowModsView()
+        [RelayCommand(CanExecute = nameof(CanShowModsView))]
+        private void ShowModsView()
         {
             _homePageViewModel.NavigateTo(EHomePage.Mods);
             SetActiveOverlay(_homePageViewModel);
         }
 
-        public ICommand NewFileCommand { get; private set; }
         private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
-        private void ExecuteNewFile(string? inputDir)
+        [RelayCommand(CanExecute = nameof(CanNewFile))]
+
+        private void NewFile(string? inputDir)
         {
             var vm = Locator.Current.GetService<NewFileViewModel>();
             if (vm != null)
@@ -1187,37 +1153,25 @@ namespace WolvenKit.ViewModels.Shell
                 Process.Start(ps);
             });
 
-        public ICommand ShowAssetsCommand { get; private set; }
-        private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
-        private void ExecuteAssetBrowser() => AssetBrowserViewModel.IsVisible = !AssetBrowserViewModel.IsVisible;
 
-        //public ICommand ShowImportExportToolCommand { get; private set; }
-        //private bool CanShowImportExportTool() => ActiveProject is not null;
-        //private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
+        [RelayCommand]
+        private void ShowAssetBrowser() => AssetBrowserViewModel.IsVisible = !AssetBrowserViewModel.IsVisible;
 
-        public ICommand ShowLogCommand { get; private set; }
         private bool CanShowLog() => ActiveProject is not null;
-        private void ExecuteShowLog() => LogViewModel.IsVisible = !LogViewModel.IsVisible;
+        [RelayCommand(CanExecute =nameof(CanShowLog))]
+        private void ShowLog() => LogViewModel.IsVisible = !LogViewModel.IsVisible;
 
-        public ICommand ShowProjectExplorerCommand { get; private set; }
         private bool CanShowProjectExplorer() => ActiveProject is not null;
-        private void ExecuteShowProjectExplorer() => ProjectExplorerViewModel.IsVisible = !ProjectExplorerViewModel.IsVisible;
+        [RelayCommand(CanExecute = nameof(CanShowProjectExplorer))]
+        private void ShowProjectExplorer() => ProjectExplorerViewModel.IsVisible = !ProjectExplorerViewModel.IsVisible;
 
-        public ICommand ShowPropertiesCommand { get; private set; }
         private bool CanShowProperties() => ActiveProject is not null;
-        private void ExecuteShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
+        [RelayCommand(CanExecute = nameof(CanShowProperties))]
+        private void ShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
 
-        //public ICommand ShowVisualEditorCommand { get; private set; }
-        //private bool CanShowVisualEditor() => _projectManager.ActiveProject != null;
-        //private void ExecuteVisualEditor() => VisualEditorVM.IsVisible = !VisualEditorVM.IsVisible;
-
-        //public ICommand ShowCodeEditorCommand { get; private set; }
-        //private bool CanShowCodeEditor() => _projectManager.ActiveProject != null;
-        //private void ExecuteCodeEditor() => CodeEditorVM.IsVisible = !CodeEditorVM.IsVisible;
-
-        public ICommand CloseModalCommand { get; private set; }
         private bool CanCloseModal() => IsDialogShown || IsOverlayShown;
-        private void ExecuteCloseModal()
+        [RelayCommand(CanExecute = nameof(CanCloseModal))]
+        private void CloseModal()
         {
             if (IsDialogShown)
             {
@@ -1241,12 +1195,14 @@ namespace WolvenKit.ViewModels.Shell
                 IsOverlayShown = false;
             }
         }
-        public ICommand CloseOverlayCommand { get; private set; }
+
         private bool CanCloseOverlay() => IsOverlayShown;
-        private void ExecuteCloseOverlay() => ShouldOverlayShow = false;
-        public ICommand CloseDialogCommand { get; private set; }
+        [RelayCommand(CanExecute = nameof(CanCloseOverlay))]
+        private void CloseOverlay() => ShouldOverlayShow = false;
+        
         private bool CanCloseDialog() => IsDialogShown;
-        private void ExecuteCloseDialog() => ShouldDialogShow = false;
+        [RelayCommand(CanExecute = nameof(CanCloseDialog))]
+        private void CloseDialog() => ShouldDialogShow = false;
 
         #endregion commands
 
@@ -1357,7 +1313,9 @@ namespace WolvenKit.ViewModels.Shell
 
         [ObservableProperty] private IDocumentViewModel? _activeDocument;
 
-        [ObservableProperty] private Cp77Project? _activeProject;
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
+        private Cp77Project? _activeProject;
 
         private List<IDocumentViewModel> OpenDocuments => DockedViews.OfType<IDocumentViewModel>().ToList();
 

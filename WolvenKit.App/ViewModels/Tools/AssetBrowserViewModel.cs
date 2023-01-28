@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Microsoft.EntityFrameworkCore;
-using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common;
@@ -110,27 +110,17 @@ namespace WolvenKit.ViewModels.Tools
             State = DockState.Dock;
             SideInDockedMode = DockSide.Tabbed;
 
-            TogglePreviewCommand = new DelegateCommand(ExecuteTogglePreview, CanTogglePreview);
-            ToggleModBrowserCommand = new DelegateCommand(ExecuteToggleModBrowser, CanToggleModBrowser);
-            CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath).ObservesProperty(() => RightSelectedItem);
-
-            OpenFileOnlyCommand = new DelegateCommand(ExecuteOpenFileOnly, CanOpenFileOnly).ObservesProperty(() => RightSelectedItem);
             AddSelectedCommand = ReactiveCommand.CreateFromTask(AddSelectedAsync);
-
             OpenFileSystemItemCommand = ReactiveCommand.CreateFromTask(ExecuteOpenFileAsync);
-
             ExpandAll = ReactiveCommand.Create(() => { });
             CollapseAll = ReactiveCommand.Create(() => { });
             Collapse = ReactiveCommand.Create(() => { });
             Expand = ReactiveCommand.Create(() => { });
-
             AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
             FindUsesCommand = ReactiveCommand.CreateFromTask(FindUses);
             FindUsingCommand = ReactiveCommand.CreateFromTask(FindUsing);
-            BrowseToFolderCommand = new DelegateCommand(BrowseToFolder, CanBrowseToFolder).ObservesProperty(() => RightSelectedItem);
             LoadAssetBrowserCommand = ReactiveCommand.CreateFromTask(LoadAssetBrowser);
 
-            OpenWolvenKitSettingsCommand = new DelegateCommand(OpenWolvenKitSettings, CanOpenWolvenKitSettings);
 
             archiveManager.ConnectGameRoot()
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -232,8 +222,7 @@ namespace WolvenKit.ViewModels.Tools
             return Unit.Default;
         }
 
-        private bool CanOpenWolvenKitSettings() => true;
-        public ICommand OpenWolvenKitSettingsCommand { get; private set; }
+        [RelayCommand]
         private void OpenWolvenKitSettings()
         {
             var homepageViewModel = Locator.Current.GetService<HomePage.HomePageViewModel>().NotNull();
@@ -385,8 +374,8 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Browse the left side folder tree to the folder containing the selected item. (e.g. for after searching)
         /// </summary>
-        public ICommand BrowseToFolderCommand { get; private set; }
         private bool CanBrowseToFolder() => RightSelectedItem is RedFileViewModel;
+        [RelayCommand(CanExecute =nameof(CanBrowseToFolder))]
         private void BrowseToFolder()
         {
             if (RightSelectedItem is RedFileViewModel file)
@@ -521,9 +510,9 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Open file without adding to project
         /// </summary>
-        public ICommand OpenFileOnlyCommand { get; private set; }
         private bool CanOpenFileOnly() => RightSelectedItem is RedFileViewModel;
-        private void ExecuteOpenFileOnly()
+        [RelayCommand(CanExecute = nameof(CanOpenFileOnly))]
+        private void OpenFileOnly()
         {
             if (RightSelectedItem is RedFileViewModel rfvm)
             {
@@ -550,10 +539,9 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        public ICommand ToggleModBrowserCommand { get; private set; }
         public bool IsModBrowserActive() => _archiveManager.IsModBrowserActive;
-        private bool CanToggleModBrowser() => true;//_archiveManager.IsManagerLoaded;
-        private void ExecuteToggleModBrowser()
+        [RelayCommand]
+        private void ToggleModBrowser()
         {
             if (!_archiveManager.IsModBrowserActive)
             {
@@ -573,19 +561,20 @@ namespace WolvenKit.ViewModels.Tools
             _archiveManager.IsModBrowserActive = !_archiveManager.IsModBrowserActive;
         }
 
-        public ICommand TogglePreviewCommand { get; private set; }
-        private bool CanTogglePreview() => true;
-        private void ExecuteTogglePreview() =>
+        [RelayCommand]
+        private void TogglePreview()
+        {
             PreviewWidth = PreviewWidth.GridUnitType != System.Windows.GridUnitType.Pixel
                 ? new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel)
                 : new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
+        }
 
         /// <summary>
         /// Copies relative path of node.
         /// </summary>
-        public ICommand CopyRelPathCommand { get; private set; }
         private bool CanCopyRelPath() => RightSelectedItem != null; // _projectManager.ActiveProject != null && RightSelectedItem != null;
-        private void ExecuteCopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.NotNull().FullName);
+        [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+        private void CopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.NotNull().FullName);
         public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
         public ReactiveCommand<Unit, Unit> Expand { get; set; }

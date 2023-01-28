@@ -9,8 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Core.Interfaces;
@@ -49,8 +49,6 @@ namespace WolvenKit.Views.Documents
                         x => x.TextWidgets.Values,
                         x => x.TextWidgetList.ItemsSource)
                     .DisposeWith(disposables);
-
-                ExportWidgetCommand = new DelegateCommand<object>((w) => ViewModel.ExportWidget((inkWidget)w));
 
                 if (!ResourcesLoaded)
                 {
@@ -137,8 +135,11 @@ namespace WolvenKit.Views.Documents
         }
 
         // Image Preview
-
-        public ICommand ExportWidgetCommand { get; set; }
+        [RelayCommand]
+        private void ExportWidget(object w)
+        {
+            ViewModel.ExportWidget((inkWidget)w);
+        }
 
         private System.Windows.Point origin;
         private System.Windows.Point start;

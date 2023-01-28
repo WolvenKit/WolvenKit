@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
-using Prism.Commands;
 using ReactiveUI;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
@@ -15,7 +15,7 @@ using Point = System.Windows.Point;
 
 namespace WolvenKit.ViewModels.Documents;
 
-public class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableViewModel
+public partial class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableViewModel
 {
     public ViewModelActivator Activator { get; } = new();
 
@@ -57,8 +57,6 @@ public class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableViewModel
         //        //SelectedChunk = new ChunkViewModel(fnvm.RedNode, (RDTDataViewModel)File.TabItemViewModels[0]);
         //    }
         //};
-
-        CreateConnectionCommand = new DelegateCommand(CreateConnection);
     }
 
     public GeometryGraph RenderNodes(CArray<CHandle<scnSceneGraphNode>> nodes)
@@ -73,6 +71,7 @@ public class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableViewModel
         return graph;
     }
 
+    [RelayCommand]
     private void CreateConnection()
     {
 
@@ -199,8 +198,6 @@ public class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableViewModel
     public ObservableCollection<NodeViewModel> SelectedNodes { get; set; } = new();
 
     public ChunkViewModel? SelectedChunk { get; set; }
-
-    public ICommand CreateConnectionCommand { get; set; }
 }
 
 public enum ConnectorFlow

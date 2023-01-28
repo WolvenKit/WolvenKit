@@ -34,7 +34,7 @@ namespace WolvenKit.Views.HomePage
                     .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.CloseHomePage,
+                        viewModel => viewModel.CloseHomePageCommand,
                         view => view.ToEditorButton)
                     .DisposeWith(disposables);
             });

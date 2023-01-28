@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using DynamicData.Binding;
-using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common;
@@ -83,31 +83,6 @@ namespace WolvenKit.ViewModels.Tools
 
             SideInDockedMode = DockSide.Left;
 
-            CutFileCommand = new DelegateCommand(ExecuteCutFile, CanCutFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            CopyFileCommand = new DelegateCommand(CopyFile, CanCopyFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            PasteFileCommand = new DelegateCommand(PasteFile, CanPasteFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-
-            DeleteFileCommand = new DelegateCommand(ExecuteDeleteFile, CanDeleteFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            RenameFileCommand = new DelegateCommand(ExecuteRenameFile, CanRenameFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-
-            CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            ReimportFileCommand = new DelegateCommand(async () => await ExecuteReimportFile(), CanReimportFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            OpenInFileExplorerCommand = new DelegateCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-
-            OpenRootFolderCommand = new DelegateCommand(ExecuteOpenRootFolder, CanOpenRootFolder).ObservesProperty(() => ActiveProject);
-            RefreshCommand = new DelegateCommand(async () => await ExecuteRefresh(), CanRefresh).ObservesProperty(() => ActiveProject);
-
-            Bk2ImportCommand = new DelegateCommand(ExecuteBk2Import, CanBk2Import).ObservesProperty(() => SelectedItem);
-            Bk2ExportCommand = new DelegateCommand(ExecuteBk2Export, CanBk2Export).ObservesProperty(() => SelectedItem);
-
-            ConvertToJsonCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(), CanConvertTo).ObservesProperty(() => SelectedItem);
-            ConvertFromJsonCommand = new DelegateCommand(async () => await ExecuteConvertFromAsync(), CanConvertFromJson).ObservesProperty(() => SelectedItem);
-
-
-            OpenInAssetBrowserCommand = new DelegateCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-            OpenInMlsbCommand = new DelegateCommand(ExecuteOpenInMlsb, CanOpenInMlsb).ObservesProperty(() => ActiveProject).ObservesProperty(() => SelectedItem);
-
-
             SetupToolDefaults();
 
             _watcherService.Files
@@ -125,7 +100,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 if (model is not null)
                 {
-                    Locator.Current.GetService<AppViewModel>().NotNull().FileSelectedCommand.SafeExecute(model);
+                    Locator.Current.GetService<AppViewModel>().NotNull().SelectFileCommand.SafeExecute(model);
                 }
             });
 
@@ -143,12 +118,18 @@ namespace WolvenKit.ViewModels.Tools
 
         #region properties
 
+        public bool IsKeyUpEventAssigned { get; set; }
+
         public AppViewModel MainViewModel => Locator.Current.GetService<AppViewModel>().NotNull();
+
         [ObservableProperty] private Cp77Project? _activeProject;
 
         public ReactiveCommand<Unit, Unit> ExpandAll { get; private set; }
+
         public ReactiveCommand<Unit, Unit> CollapseAll { get; private set; }
+
         public ReactiveCommand<Unit, Unit> CollapseChildren { get; private set; }
+
         public ReactiveCommand<Unit, Unit> ExpandChildren { get; private set; }
 
 
@@ -173,16 +154,16 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Refreshes all files in the Grid
         /// </summary>
-        public ICommand RefreshCommand { get; private set; }
         private bool CanRefresh() => ActiveProject != null;
-        private Task ExecuteRefresh() => _watcherService.RefreshAsync(ActiveProject.NotNull());
+        [RelayCommand(CanExecute =nameof(CanRefresh))]
+        private Task Refresh() => _watcherService.RefreshAsync(ActiveProject.NotNull());
 
         /// <summary>
         /// Opens the currently selected folder in the tab
         /// </summary>
-        public ICommand OpenRootFolderCommand { get; private set; }
         private bool CanOpenRootFolder() => ActiveProject != null;
-        private void ExecuteOpenRootFolder()
+        [RelayCommand(CanExecute = nameof(CanOpenRootFolder))]
+        private void OpenRootFolder()
         {
             switch (SelectedTabIndex)
             {
@@ -206,23 +187,23 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Copies selected node to the clipboard.
         /// </summary>
-        public ICommand CopyFileCommand { get; private set; }
         private bool CanCopyFile() => ActiveProject != null && SelectedItem != null;
+        [RelayCommand(CanExecute = nameof(CanCopyFile))]
         private void CopyFile() => Clipboard.SetDataObject(SelectedItem.NotNull().FullName);
 
         /// <summary>
         /// Copies relative path of node.
         /// </summary>
-        public ICommand CopyRelPathCommand { get; private set; }
         private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
-        private void ExecuteCopyRelPath() => Clipboard.SetDataObject(FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject.NotNull()));
+        [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+        private void CopyRelPath() => Clipboard.SetDataObject(FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject.NotNull()));
 
         /// <summary>
         /// Reimports the game file to replace the current one
         /// </summary>
-        public ICommand ReimportFileCommand { get; private set; }
         private bool CanReimportFile() => ActiveProject != null && SelectedItem != null && !IsInRawFolder(SelectedItem);
-        private async Task ExecuteReimportFile()
+        [RelayCommand(CanExecute = nameof(CanReimportFile))]
+        private async Task ReimportFile()
         {
             if (SelectedItem.NotNull().IsDirectory)
             {
@@ -256,18 +237,18 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Cuts selected node to the clipboard.
         /// </summary>
-        public ICommand CutFileCommand { get; private set; }
         private bool CanCutFile() => ActiveProject != null && SelectedItem != null;
-        private void ExecuteCutFile()
+        [RelayCommand(CanExecute = nameof(CanCutFile))]
+        private void CutFile()
         {
         }
 
         /// <summary>
         /// Delets selected node.
         /// </summary>
-        public ICommand DeleteFileCommand { get; private set; }
         private bool CanDeleteFile() => ActiveProject != null && SelectedItems != null;
-        public async void ExecuteDeleteFile()
+        [RelayCommand(CanExecute = nameof(CanDeleteFile))]
+        public async void DeleteFile()
         {
             var selected = SelectedItems.NotNull().OfType<FileModel>().ToList();
             var delete = await Interactions.DeleteFiles.Handle(selected.Select(_ => _.Name));
@@ -305,9 +286,9 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Opens selected node in File Explorer.
         /// </summary>
-        public ICommand OpenInFileExplorerCommand { get; private set; }
         private bool CanOpenInFileExplorer() => ActiveProject != null && SelectedItem != null;
-        private void ExecuteOpenInFileExplorer()
+        [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
+        private void OpenInFileExplorer()
         {
             if (SelectedItem.NotNull().IsDirectory)
             {
@@ -322,8 +303,8 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Pastes a file from the clipboard into selected node.
         /// </summary>
-        public ICommand PasteFileCommand { get; private set; }
         private bool CanPasteFile() => ActiveProject != null && SelectedItem != null && Clipboard.ContainsText();
+        [RelayCommand(CanExecute = nameof(CanPasteFile))]
         private void PasteFile()
         {
             if (File.Exists(Clipboard.GetText()))
@@ -364,14 +345,13 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        public bool IsKeyUpEventAssigned { get; set; }
 
         /// <summary>
         /// Renames selected node.
         /// </summary>
-        public ICommand RenameFileCommand { get; private set; }
         private bool CanRenameFile() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
-        private async void ExecuteRenameFile()
+        [RelayCommand(CanExecute = nameof(CanRenameFile))]
+        private async void RenameFile()
         {
             var filename = SelectedItem.NotNull().FullName;
             var newfilename = await Interactions.Rename.Handle(filename);
@@ -413,9 +393,9 @@ namespace WolvenKit.ViewModels.Tools
 
         private bool IsInRawFolder(FileModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.RawDirectory);
 
-        public ICommand Bk2ImportCommand { get; private set; }
         private bool CanBk2Import() => SelectedItem != null && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("avi") && ActiveProject is not null;
-        private void ExecuteBk2Import()
+        [RelayCommand(CanExecute = nameof(CanBk2Import))]
+        private void Bk2Import()
         {
             var modpath = Path.Combine(ActiveProject.NotNull().ModDirectory, FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject));
             modpath = Path.ChangeExtension(modpath, ".bk2");
@@ -433,9 +413,10 @@ namespace WolvenKit.ViewModels.Tools
             var process = Process.Start(procInfo);
             process?.WaitForInputIdle();
         }
-        public ICommand Bk2ExportCommand { get; private set; }
+
         private bool CanBk2Export() => SelectedItem != null && !IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("bk2") && ActiveProject is not null;
-        private void ExecuteBk2Export()
+        [RelayCommand(CanExecute = nameof(CanBk2Export))]
+        private void Bk2Export()
         {
             var rawpath = Path.Combine(ActiveProject.NotNull().RawDirectory, FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject));
             rawpath = Path.ChangeExtension(rawpath, ".avi");
@@ -455,9 +436,9 @@ namespace WolvenKit.ViewModels.Tools
             process?.WaitForInputIdle();
         }
 
-        public ICommand ConvertToJsonCommand { get; private set; }
         private bool CanConvertTo() => SelectedItem != null && !IsInRawFolder(SelectedItem) && ActiveProject is not null;
-        private async Task ExecuteConvertToAsync()
+        [RelayCommand(CanExecute = nameof(CanConvertTo))]
+        private async Task ConvertToAsync()
         {
             if (SelectedItem.NotNull().IsDirectory)
             {
@@ -511,9 +492,9 @@ namespace WolvenKit.ViewModels.Tools
         }
 
 
-        public ICommand ConvertFromJsonCommand { get; private set; }
         private bool CanConvertFromJson() => SelectedItem != null && IsInRawFolder(SelectedItem) && ActiveProject is not null;
-        private async Task ExecuteConvertFromAsync()
+        [RelayCommand(CanExecute = nameof(CanConvertFromJson))]
+        private async Task ConvertFromAsync()
         {
             if (SelectedItem.NotNull().IsDirectory)
             {
@@ -570,9 +551,9 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Opens selected node in asset browser.
         /// </summary>
-        public ICommand OpenInAssetBrowserCommand { get; private set; }
         private bool CanOpenInAssetBrowser() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
-        private void ExecuteOpenInAssetBrowser()
+        [RelayCommand(CanExecute = nameof(CanOpenInAssetBrowser))]
+        private void OpenInAssetBrowser()
         {
             Locator.Current.GetService<AppViewModel>().NotNull().AssetBrowserViewModel.IsVisible = true;
             Locator.Current.GetService<AssetBrowserViewModel>().NotNull().ShowFile(SelectedItem.NotNull());
@@ -580,7 +561,6 @@ namespace WolvenKit.ViewModels.Tools
 
         private static string GetSecondExtension(FileModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
 
-        public ICommand OpenInMlsbCommand { get; private set; }
         private bool CanOpenInMlsb() => ActiveProject != null
             && SelectedItem != null
             && !SelectedItem.IsDirectory
@@ -588,6 +568,7 @@ namespace WolvenKit.ViewModels.Tools
             && SelectedItem.Extension.ToLower().Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal)
             && GetSecondExtension(SelectedItem).Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal)
             && _pluginService.IsInstalled(EPlugin.mlsetupbuilder);
+        [RelayCommand(CanExecute = nameof(CanOpenInMlsb))]
         private void ExecuteOpenInMlsb()
         {
             if (_pluginService.TryGetInstallPath(EPlugin.mlsetupbuilder, out var path))

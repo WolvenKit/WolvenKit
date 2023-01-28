@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
-using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App;
@@ -66,8 +66,6 @@ namespace WolvenKit.ViewModels.Documents
            
 
             _extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
-            NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile, CanExecuteNewEmbeddedFile);
-
 
             Cr2wFile = file;
             _isInitialized = true;
@@ -101,7 +99,7 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
-        public override Task OnSave(object? parameter)
+        public override Task Save(object? parameter)
         {
             var tmpPath = Path.ChangeExtension(FilePath, ".tmp");
 
@@ -145,6 +143,8 @@ namespace WolvenKit.ViewModels.Documents
 
             return Task.CompletedTask;
         }
+
+        public override void SaveAs(object parameter) => throw new NotImplementedException();
 
 
 
@@ -332,9 +332,9 @@ namespace WolvenKit.ViewModels.Documents
             return Files[depotPath];
         }
 
-        public ICommand NewEmbeddedFileCommand { get; private set; }
         private bool CanExecuteNewEmbeddedFile() => !_embedHashSet.Contains(Extension);
-        private void ExecuteNewEmbeddedFile()
+        [RelayCommand(CanExecute =nameof(CanExecuteNewEmbeddedFile))]
+        private void NewEmbeddedFile()
         {
             var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
@@ -490,6 +490,7 @@ namespace WolvenKit.ViewModels.Documents
             return tab;
         }
 
+       
         #endregion
 
     }

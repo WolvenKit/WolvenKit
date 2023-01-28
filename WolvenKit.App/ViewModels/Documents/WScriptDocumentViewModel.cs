@@ -94,7 +94,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         }
     }
 
-    public override Task OnSave(object parameter)
+    public override Task Save(object parameter)
     {
         using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
         using var bw = new StreamWriter(fs);
@@ -106,6 +106,8 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
         return Task.CompletedTask;
     }
+
+    public override void SaveAs(object parameter) => throw new NotImplementedException();
 
     private void LoadDocument(string paramFilePath)
     {

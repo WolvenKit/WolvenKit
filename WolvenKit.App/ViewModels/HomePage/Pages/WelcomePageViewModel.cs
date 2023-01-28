@@ -9,9 +9,9 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Core.Extensions;
@@ -46,11 +46,6 @@ namespace WolvenKit.ViewModels.Shared
 
             _recentlyUsedItemsService = recentlyUsedItemsService;
 
-            CloseHomePage = new DelegateCommand(ExecuteHome, CanHome);
-            PinItem = new DelegateCommand<string>(OnPinItemExecute);
-            UnpinItem = new DelegateCommand<string>(OnUnpinItemExecute);
-            OpenInExplorer = new DelegateCommand<string>(OnOpenInExplorerExecute);
-
             OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
             DeleteProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.DeleteProjectCommand.Execute(s).Subscribe());
 
@@ -84,20 +79,12 @@ namespace WolvenKit.ViewModels.Shared
 
         [ObservableProperty] private ObservableCollection<FancyProjectObject> _fancyProjects  = new();
 
-        [ObservableProperty] private List<RecentlyUsedItemModel> _pinnedItems = new();
-
-        // Close HomePage (Navigates to Project Editor
-        public ICommand CloseHomePage { get; private set; }
+        [ObservableProperty] private List<RecentlyUsedItemModel> _pinnedItems = new();        
 
         public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
         public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
         public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
-        public ICommand OpenInExplorer { get; private set; }
-        public ICommand PinItem { get; private set; }
-        // public ICommand SettingsCommand { get; private set; }
-        //public ICommand TutorialsCommand { get; private set; }
-        public ICommand UnpinItem { get; private set; }
-        //public ICommand WikiCommand { get; private set; }
+
         public readonly ReactiveCommand<string, Unit> OpenLinkCommand = ReactiveCommand.Create<string>(
             link =>
             {
@@ -112,9 +99,8 @@ namespace WolvenKit.ViewModels.Shared
 
         #endregion Properties
 
-        #region Methods
-
-        private async void OnOpenInExplorerExecute(string parameter)
+        [RelayCommand]
+        private async void OpenInExplorer(string parameter)
         {
             if (!File.Exists(parameter))
             {
@@ -262,11 +248,12 @@ namespace WolvenKit.ViewModels.Shared
                 }
             }
         }
-        private void OnPinItemExecute(string parameter) => _recentlyUsedItemsService.PinItem(parameter);
 
-        private bool CanHome() => true;
+        [RelayCommand]
+        private void PinItem(string parameter) => _recentlyUsedItemsService.PinItem(parameter);
 
-        private void ExecuteHome() => _mainViewModel.CloseModalCommand.Execute(null);
+        [RelayCommand]
+        private void CloseHomePage() => _mainViewModel.CloseModalCommand.Execute(null);
 
         //private void OnRecentlyUsedItemsServiceUpdated(object sender, EventArgs e)
         //{
@@ -274,7 +261,8 @@ namespace WolvenKit.ViewModels.Shared
         //    UpdatePinnedItem();
         //}
 
-        private void OnUnpinItemExecute(string parameter)
+        [RelayCommand]
+        private void UnpinItem(string parameter)
         {
             //Argument.IsNotNullOrWhitespace(() => parameter);
 
@@ -289,9 +277,7 @@ namespace WolvenKit.ViewModels.Shared
         //    //ConvertRecentProjects();
         //}
 
-        #endregion Methods
 
-        #region Classes
 
         public class FancyProjectObject : ObservableObject
         {
@@ -324,7 +310,5 @@ namespace WolvenKit.ViewModels.Shared
 
             #endregion Properties
         }
-
-        #endregion Classes
     }
 }

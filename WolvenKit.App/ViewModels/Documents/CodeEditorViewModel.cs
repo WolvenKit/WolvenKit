@@ -1,7 +1,7 @@
 using System.Windows.Input;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Prism.Commands;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 
@@ -38,7 +38,6 @@ namespace WolvenKit.ViewModels.Tools
             _selectedFont = new FontFamily("Verdana");
             IsChecked = false;
             //Language = Languages.C;
-            SampleCommand = new DelegateCommand<object>(ExecuteSampleCommand);
         }
 
         #endregion Constructors
@@ -48,20 +47,6 @@ namespace WolvenKit.ViewModels.Tools
         private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
         #endregion Methods
-
-        /// <summary>
-        /// Maintains the command for code samples
-        /// </summary>
-
-        /// <summary>
-        /// Initializes the instance of the <see cref="SyntaxHighlightingViewModel"/> class
-        /// </summary>
-
-
-        /// <summary>
-        /// Gets or sets the command for code sample 1 in menu items
-        /// </summary>
-        public ICommand SampleCommand { get; }
 
         /// <summary>
         /// Gets or sets the command for code sample for checked property.
@@ -87,7 +72,8 @@ namespace WolvenKit.ViewModels.Tools
         /// Method toe execute code samples
         /// </summary>
         /// <param name="param">Speicfies the object paramter</param>
-        private void ExecuteSampleCommand(object param)
+        [RelayCommand]
+        private void Sample(object param)
         {
             //string choice = (param as ComboBoxAdv).SelectedItem.ToString();
             //if (choice == "C")

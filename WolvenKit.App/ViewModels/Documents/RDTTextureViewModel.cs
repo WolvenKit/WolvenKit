@@ -180,7 +180,7 @@ namespace WolvenKit.ViewModels.Documents
                 // set properties in file
                 File.Cr2wFile.RootChunk = newxbm;
                 // save file
-                File.OnSave(null);
+                File.Save(null);
 
                 // reload from itself
                 File.TabItemViewModels.Clear();

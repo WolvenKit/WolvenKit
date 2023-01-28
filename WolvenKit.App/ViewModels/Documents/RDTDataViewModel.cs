@@ -4,7 +4,7 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Prism.Commands;
+using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common.FNV1A;
@@ -47,17 +47,15 @@ namespace WolvenKit.ViewModels.Documents
         {
             DataViewModel = vm;
             _socket = socket;
-            OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef);
-            LoadRefCommand = new DelegateCommand(ExecuteLoadRef, CanLoadRef);
         }
 
-        public ICommand OpenRefCommand { get; private set; }
         private bool CanOpenRef() => CName != CName.Empty && DataViewModel.File.RelativePath != CName;
-        private void ExecuteOpenRef() => Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromDepotPath(CName);
+        [RelayCommand(CanExecute = nameof(CanOpenRef))]
+        private void OpenRef() => Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromDepotPath(CName);
 
-        public ICommand LoadRefCommand { get; private set; }
         private bool CanLoadRef() => CName != CName.Empty;
-        private void ExecuteLoadRef()
+        [RelayCommand(CanExecute = nameof(CanLoadRef))]
+        private void LoadRef()
         {
             var cr2w = DataViewModel.File.GetFileFromDepotPathOrCache(CName);
             if (cr2w != null && cr2w.RootChunk != null)
@@ -107,7 +105,6 @@ namespace WolvenKit.ViewModels.Documents
             //}
 
             //OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
-            OpenImportCommand = new DelegateCommand<ICR2WImport>(async (i) => await ExecuteOpenImport(i));
 
             this.WhenActivated((CompositeDisposable disposables) =>
             {
@@ -276,8 +273,8 @@ namespace WolvenKit.ViewModels.Documents
         }
         */
 
-        public ICommand OpenImportCommand { get; private set; }
-        private Task ExecuteOpenImport(ICR2WImport input)
+        [RelayCommand]
+        private Task OpenImport(ICR2WImport input)
         {
             var depotpath = input.DepotPath;
             var key = FNV1A64HashAlgorithm.HashString(depotpath);

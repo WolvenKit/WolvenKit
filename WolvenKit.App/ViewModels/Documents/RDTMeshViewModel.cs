@@ -10,10 +10,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
-using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Core.Extensions;
@@ -254,38 +254,6 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTMeshViewModel(RedDocumentViewModel parent, string header) : base(parent, header)
         {
-            SearchForPointCommand = new DelegateCommand(ExecuteSearchForPoint);
-            ClearSearchCommand = new DelegateCommand(ExecuteClearSearch);
-            ExtractShadersCommand = new DelegateCommand(ExtractShaders);
-            LoadMaterialsCommand = new DelegateCommand(LoadMaterials);
-            ExportEntity = new DelegateCommand(() =>
-            {
-                if (SelectedAppearance is null)
-                {
-                    return;
-                }
-
-                var dlg = new SaveFileDialog
-                {
-                    FileName = Path.GetFileNameWithoutExtension(parent.RelativePath) + ".glb",
-                    Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
-                };
-
-                if (dlg.ShowDialog().GetValueOrDefault())
-                {
-                    var outFile = new FileInfo(dlg.FileName);
-                    // will only use archive files (for now)
-                    if (Locator.Current.GetService<ModTools>().NotNull().ExportEntity(File.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
-                    {
-                        Locator.Current.GetService<ILoggerService>().NotNull().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
-                    }
-                    else
-                    {
-                        Locator.Current.GetService<ILoggerService>().NotNull().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
-                    }
-                }
-            });
-
             try
             {
                 Header ??= MeshViewHeaders.MeshPreview;
@@ -832,8 +800,36 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
+        [RelayCommand]
+        private void ExportEntity()
+        {
+            if (SelectedAppearance is null)
+            {
+                return;
+            }
 
-        public ICommand ExtractShadersCommand { get; set; }
+            var dlg = new SaveFileDialog
+            {
+                FileName = Path.GetFileNameWithoutExtension(File.RelativePath) + ".glb",
+                Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
+            };
+
+            if (dlg.ShowDialog().GetValueOrDefault())
+            {
+                var outFile = new FileInfo(dlg.FileName);
+                // will only use archive files (for now)
+                if (Locator.Current.GetService<ModTools>().NotNull().ExportEntity(File.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
+                {
+                    Locator.Current.GetService<ILoggerService>().NotNull().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
+                }
+                else
+                {
+                    Locator.Current.GetService<ILoggerService>().NotNull().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
+                }
+            }
+        }
+
+        [RelayCommand]
         public static void ExtractShaders()
         {
             var _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();

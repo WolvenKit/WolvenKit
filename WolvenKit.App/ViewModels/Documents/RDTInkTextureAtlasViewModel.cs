@@ -9,8 +9,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Prism.Commands;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -144,7 +144,6 @@ image.SetTexturePart(n""{PartName}"");";
                 Width = Math.Round(itam.ClippingRectInUVCoords.Right * xbm.Width) - Left;
                 Height = Math.Round(itam.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
                 _name = $"{itam.PartName} ({(uint)Width}x{(uint)Height})";
-                SaveImageCommand = new DelegateCommand(ExecuteSaveImage, CanSaveImage); // .ObservesProperty(() => Image); WKit crashs when using this, don't know why...
 
                 try
                 {
@@ -156,10 +155,10 @@ image.SetTexturePart(n""{PartName}"");";
                 }
             }
 
-            [Browsable(false)]
-            public ICommand SaveImageCommand { get; private set; }
             private bool CanSaveImage() => Image != null;
-            private void ExecuteSaveImage()
+
+            [RelayCommand(CanExecute =nameof(CanSaveImage))]
+            private void SaveImage()
             {
                 var saveFileDialog1 = new SaveFileDialog
                 {

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Splat;
@@ -436,7 +437,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public bool IsLoadingMaterials { get; set; }
 
-        public ICommand LoadMaterialsCommand { get; set; }
+        [RelayCommand]
         public void LoadMaterials()
         {
             if (SelectedAppearance == null)

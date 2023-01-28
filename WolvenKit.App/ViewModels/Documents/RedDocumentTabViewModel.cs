@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Prism.Commands;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.Interaction;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -13,9 +13,6 @@ namespace WolvenKit.ViewModels.Documents
     {
         protected RedDocumentTabViewModel(RedDocumentViewModel parent, string header)
         {
-            DeleteEmbeddedFileCommand = new DelegateCommand(ExecuteDeleteEmbeddedFile, CanDeleteEmbeddedFile);
-            RenameEmbeddedFileCommand = new DelegateCommand(ExecuteRenameEmbeddedFile, CanRenameEmbeddedFile);
-
             _file = parent;
             FilePath = parent.FilePath;
             Header = header;
@@ -33,9 +30,9 @@ namespace WolvenKit.ViewModels.Documents
 
         public static List<IRedType> CopiedChunks = new();
 
-        public ICommand DeleteEmbeddedFileCommand { get; private set; }
         private bool CanDeleteEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
-        private void ExecuteDeleteEmbeddedFile()
+        [RelayCommand(CanExecute =nameof(CanDeleteEmbeddedFile))]
+        private void DeleteEmbeddedFile()
         {
             if (this is RDTDataViewModel datavm)
             {
@@ -61,9 +58,9 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public ICommand RenameEmbeddedFileCommand { get; private set; }
         private bool CanRenameEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
-        private async void ExecuteRenameEmbeddedFile()
+        [RelayCommand(CanExecute = nameof(CanRenameEmbeddedFile))]
+        private async void RenameEmbeddedFile()
         {
             if (this is RDTDataViewModel datavm)
             {
