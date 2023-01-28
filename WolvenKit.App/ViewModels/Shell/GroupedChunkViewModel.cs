@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Shell;

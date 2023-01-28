@@ -14,7 +14,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         /// <summary>
         /// The application log.
-        /// Bound to the logview, implements OnPropertyRaised through Fody
+        /// Bound to the logview, implements OnPropertyRaised
         /// </summary>
         [ObservableProperty] private string? _text;
     }

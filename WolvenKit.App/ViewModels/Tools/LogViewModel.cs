@@ -1,6 +1,5 @@
 using System.Windows.Documents;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Models.Docking;
 

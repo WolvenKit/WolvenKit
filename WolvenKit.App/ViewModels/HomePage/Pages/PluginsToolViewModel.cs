@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;

@@ -3,7 +3,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 

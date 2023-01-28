@@ -1,6 +1,5 @@
 ﻿using System;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
 
 namespace WolvenKit.ViewModels.Dialogs

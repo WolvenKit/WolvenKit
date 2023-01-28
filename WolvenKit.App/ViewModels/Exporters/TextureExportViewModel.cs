@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Dialogs;

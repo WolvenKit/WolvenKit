@@ -1,6 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Models;
 

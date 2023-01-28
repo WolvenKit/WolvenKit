@@ -69,7 +69,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ReactiveUI" />
-    <PackageReference Include="ReactiveUI.Fody" />
     <PackageReference Include="ReactiveUI.Validation" />
     <PackageReference Include="AvalonEdit" />
     <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
