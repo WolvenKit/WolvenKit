@@ -2,6 +2,7 @@ using System;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -14,10 +15,10 @@ namespace WolvenKit.ViewModels.HomePage
 {
 
 
-    public class PluginsToolViewModel : DialogViewModel
+    public partial class PluginsToolViewModel : DialogViewModel
     {
         private readonly ILoggerService _logger;
-        [Reactive] public IPluginService _pluginService { get; set; }
+        [ObservableProperty] private IPluginService _pluginService;
 
 
         public delegate Task ReturnHandler(PluginsToolViewModel? file);
@@ -38,7 +39,7 @@ namespace WolvenKit.ViewModels.HomePage
         }
 
 
-        [Reactive] public PluginViewModel? SelectedPlugin { get; set; }
+        [ObservableProperty] private PluginViewModel? _selectedPlugin;
 
 
         public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
@@ -46,7 +47,7 @@ namespace WolvenKit.ViewModels.HomePage
 
         public override ReactiveCommand<Unit, Unit> OkCommand => throw new NotImplementedException();
 
-        public async Task SyncAsync() => await _pluginService.CheckForUpdatesAsync();
+        public async Task SyncAsync() => await PluginService.CheckForUpdatesAsync();
 
     }
 

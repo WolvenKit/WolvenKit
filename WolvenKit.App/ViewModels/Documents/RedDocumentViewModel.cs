@@ -5,10 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Options;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -37,7 +37,7 @@ namespace WolvenKit.ViewModels.Documents
         Editor
     }
 
-    public class RedDocumentViewModel : DocumentViewModel
+    public partial class RedDocumentViewModel : DocumentViewModel
     {
         protected readonly HashSet<string> _embedHashSet;
         protected readonly ILoggerService _loggerService;
@@ -65,7 +65,7 @@ namespace WolvenKit.ViewModels.Documents
             _path = path;
            
 
-            Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
+            _extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
             NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile, CanExecuteNewEmbeddedFile);
 
 
@@ -83,18 +83,18 @@ namespace WolvenKit.ViewModels.Documents
 
         public CR2WFile Cr2wFile { get; set; }
 
-        [Reactive] public ObservableCollection<RedDocumentTabViewModel> TabItemViewModels { get; set; } = new();
+        [ObservableProperty] private ObservableCollection<RedDocumentTabViewModel> _tabItemViewModels = new();
 
-        [Reactive] public int SelectedIndex { get; set; }
+        [ObservableProperty] private int _selectedIndex;
 
-        [Reactive] public RedDocumentTabViewModel? SelectedTabItemViewModel { get; set; }
+        [ObservableProperty] private RedDocumentTabViewModel? _selectedTabItemViewModel;
 
         // assume files that don't exist are relative paths
         public string RelativePath => File.Exists(_path)
                 ? Path.GetRelativePath(_projectManager.ActiveProject.NotNull().ModDirectory, _path)
                 : _path;
 
-        [Reactive] public string Extension { get; set; }
+        [ObservableProperty] private string _extension;
 
         #endregion
 

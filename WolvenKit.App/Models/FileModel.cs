@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -13,7 +14,7 @@ using WolvenKit.ProjectManagement.Project;
 
 namespace WolvenKit.Models
 {
-    public class FileModel : ReactiveObject
+    public class FileModel : ObservableObject
     {
         private readonly string _extension = ".default";
 

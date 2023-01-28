@@ -125,7 +125,7 @@ namespace WolvenKit.Views.Documents
 
                 WidgetExportButtons.SetCurrentValue(ItemsControl.ItemsSourceProperty, Widgets.Select(x => x.Widget));
 
-                foreach (var animation in ViewModel.inkAnimations)
+                foreach (var animation in ViewModel.InkAnimations)
                 {
                     Animations.Add(new inkControlAnimation(animation, this));
                 }

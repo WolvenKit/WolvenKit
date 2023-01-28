@@ -1,5 +1,5 @@
 using System;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Splat;
 using WolvenKit.Core.Extensions;
 
@@ -8,7 +8,7 @@ namespace WolvenKit.ViewModels.HomePage
     /// <summary>
     /// A mainViewModel class for Pages
     /// </summary>
-    public class PageViewModel : ReactiveObject
+    public class PageViewModel : ObservableObject
     {
         protected readonly HomePageViewModel _homePageViewModel;
 

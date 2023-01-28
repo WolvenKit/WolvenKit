@@ -5,11 +5,11 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.Core.Extensions;
@@ -27,7 +27,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
     public WScriptDocumentViewModel(string path) : base(path)
     {
-        Document = new TextDocument();
+        _document = new TextDocument();
         Extension = "wscript";
 
         _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
@@ -46,14 +46,14 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
             });
     }
 
-    [Reactive] public TextDocument Document { get; set; }
+    [ObservableProperty] private TextDocument _document;
     public string Extension { get; }
-    [Reactive] public bool IsReadOnly { get; set; }
-    [Reactive] public string? IsReadOnlyReason { get; set; }
+    [ObservableProperty] private bool _isReadOnly;
+    [ObservableProperty] private string? _isReadOnlyReason;
     public Dictionary<string, List<(string name, string? desc)>> CompletionData { get; } = new();
 
-    [Reactive] public bool IsUIScript { get; set; }
-    [Reactive] public bool IsNormalScript { get; set; }
+    [ObservableProperty] private bool _isUIScript;
+    [ObservableProperty] private bool _isNormalScript;
 
     [RelayCommand(CanExecute = nameof(CanRun))]
     private async void Run() => await _scriptService.ExecuteAsync(Document.Text, _hostObjects, ISettingsManager.GetWScriptDir());

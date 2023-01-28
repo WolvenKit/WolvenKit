@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
@@ -15,7 +15,7 @@ namespace WolvenKit.ViewModels.Dialogs
     public record PluginModel(EPlugin Id, string Version, List<string> Files);
 
 
-    public class PluginViewModel : ReactiveObject
+    public partial class PluginViewModel : ObservableObject
     {
         private readonly IPluginService _pluginService;
         private readonly ILoggerService _loggerService;
@@ -37,7 +37,7 @@ namespace WolvenKit.ViewModels.Dialogs
             _pluginModel = plugin;
 
             InstallPath = installPath;
-            Version = plugin.Version;
+            _version = plugin.Version;
 
             InstallCommand = ReactiveCommand.CreateFromTask(InstallAsync, this.WhenAnyValue(x => x.IsBusy, (busy) => !busy));
             OpenCommand = ReactiveCommand.Create(Open);
@@ -73,11 +73,11 @@ namespace WolvenKit.ViewModels.Dialogs
                 handler => _progressService.ProgressChanged += handler,
                 handler => _progressService.ProgressChanged -= handler)
                 .Select(_ => _.EventArgs * 100)
-                .ToProperty(this, x => x.Progress, out _progress);
+                .Subscribe(x => Progress = x);
 
             _ = _progressService
                 .WhenAnyValue(x => x.IsIndeterminate)
-                .ToProperty(this, x => x.IsIndeterminate, out _isIndeterminate);
+                .Subscribe(x => IsIndeterminate = x);
 
             _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => IsIndeterminate = b);
         }
@@ -88,18 +88,16 @@ namespace WolvenKit.ViewModels.Dialogs
 
         public string InstallPath { get; init; }
 
-        [Reactive] public string Version { get; set; }
-        [Reactive] public EPluginStatus Status { get; set; }
-        [Reactive] public string? Label { get; set; }
+        [ObservableProperty] private string _version;
+        [ObservableProperty] private EPluginStatus _status;
+        [ObservableProperty] private string? _label;
 
-        private readonly ObservableAsPropertyHelper<bool> _isIndeterminate;
-        [Reactive] public bool IsIndeterminate { get; set; }
-        [Reactive] public bool IsBusy { get; set; }
+        [ObservableProperty] private bool _isIndeterminate;
+        [ObservableProperty] private bool _isBusy;
 
-        private readonly ObservableAsPropertyHelper<double> _progress;
-        public double Progress => _progress.Value;
-        [Reactive] public bool IsNotInstalled { get; set; }
-        [Reactive] public bool IsOpenEnabled { get; set; } // = IsInstalled
+        [ObservableProperty] private double _progress;
+        [ObservableProperty] private bool _isNotInstalled;
+        [ObservableProperty] private bool _isOpenEnabled; // = IsInstalled
 
 
         public ICommand OpenCommand { get; init; }

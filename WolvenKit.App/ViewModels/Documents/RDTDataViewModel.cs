@@ -6,7 +6,6 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
@@ -74,7 +73,7 @@ namespace WolvenKit.ViewModels.Documents
         }
     }
 
-    public class RDTDataViewModel : RedDocumentTabViewModel, IActivatableViewModel
+    public partial class RDTDataViewModel : RedDocumentTabViewModel, IActivatableViewModel
     {
         private readonly ISettingsManager _settingsManager;
 
@@ -205,18 +204,18 @@ namespace WolvenKit.ViewModels.Documents
 
         public virtual ChunkViewModel GenerateChunks() => new(_data, this);
 
-        [Reactive] public ChunkViewModel? SelectedChunk { get; set; }
+        [ObservableProperty] private ChunkViewModel? _selectedChunk;
 
-        [Reactive] public ObservableCollection<ChunkViewModel> SelectedChunks { get; set; } = new ObservableCollection<ChunkViewModel>();
+        [ObservableProperty] private ObservableCollection<ChunkViewModel> _selectedChunks = new ObservableCollection<ChunkViewModel>();
 
 
-        [Reactive] public ChunkViewModel? RootChunk { get; set; }
+        [ObservableProperty] private ChunkViewModel? _rootChunk;
 
-        [Reactive] public ObservableCollection<object> Nodes { get; set; } = new();
+        [ObservableProperty] private ObservableCollection<object> _nodes = new();
 
-        [Reactive] public ObservableCollection<RedReference> References { get; set; } = new();
+        [ObservableProperty] private ObservableCollection<RedReference> _references = new();
 
-        [Reactive] public IRedRef? SelectedImport { get; set; }
+        [ObservableProperty] private IRedRef? _selectedImport;
 
         public bool ShowReferenceGraph => _settingsManager.ShowReferenceGraph;
 

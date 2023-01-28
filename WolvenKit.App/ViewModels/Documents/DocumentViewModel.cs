@@ -6,7 +6,6 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Shell;
 
@@ -61,6 +60,7 @@ namespace WolvenKit.ViewModels.Documents
         #region Properties
 
         [ObservableProperty] private string _filePath;
+
         private bool _isDirty;
 
         public bool IsDirty

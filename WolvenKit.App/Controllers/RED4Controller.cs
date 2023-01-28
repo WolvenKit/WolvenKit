@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using MoreLinq;
 using ReactiveUI;
 using Splat;
@@ -29,7 +30,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Functionality.Controllers
 {
-    public class RED4Controller : ReactiveObject, IGameController
+    public class RED4Controller : ObservableObject, IGameController
     {
         #region fields
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using ReactiveUI;
 using WolvenKit.Core.Extensions;
@@ -14,7 +15,7 @@ namespace WolvenKit.Functionality.Services
     /// <summary>
     /// This service watches certain locations in the game files and notifies changes
     /// </summary>
-    public class WatcherService : ReactiveObject, IWatcherService
+    public class WatcherService : ObservableObject, IWatcherService
     {
         #region fields
 

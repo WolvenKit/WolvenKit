@@ -63,7 +63,7 @@ namespace WolvenKit.Converters
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
                 {
-                    if (vm.propertyName == "chunkMask")
+                    if (vm.PropertyName == "chunkMask")
                     {
                         return RedChunkMaskEditor;
                     }

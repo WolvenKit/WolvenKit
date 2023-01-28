@@ -8,11 +8,11 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Helpers;
@@ -24,7 +24,7 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Shared
 {
-    public class WelcomePageViewModel : PageViewModel
+    public partial class WelcomePageViewModel : PageViewModel
     {
         #region Fields
 
@@ -82,9 +82,9 @@ namespace WolvenKit.ViewModels.Shared
         public string YoutubeLink = "https://www.youtube.com/channel/UCl3JpsP49JgYLMYAYQvoaLg";
 
 
-        [Reactive] public ObservableCollection<FancyProjectObject> FancyProjects { get; set; } = new();
+        [ObservableProperty] private ObservableCollection<FancyProjectObject> _fancyProjects  = new();
 
-        [Reactive] public List<RecentlyUsedItemModel> PinnedItems { get; private set; } = new();
+        [ObservableProperty] private List<RecentlyUsedItemModel> _pinnedItems = new();
 
         // Close HomePage (Navigates to Project Editor
         public ICommand CloseHomePage { get; private set; }
@@ -293,7 +293,7 @@ namespace WolvenKit.ViewModels.Shared
 
         #region Classes
 
-        public class FancyProjectObject : ReactiveObject
+        public class FancyProjectObject : ObservableObject
         {
             #region Constructors
 

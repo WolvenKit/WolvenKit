@@ -2,41 +2,41 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Utils;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class ScriptDocumentViewModel : DocumentViewModel
+    public partial class ScriptDocumentViewModel : DocumentViewModel
     {
         private readonly ILoggerService _loggerService;
 
         public ScriptDocumentViewModel(string path) : base(path)
         {
 
-            Document = new TextDocument();
-            Extension = "reds";
+            _document = new TextDocument();
+            _extension = "reds";
 
             var hlManager = HighlightingManager.Instance;
-            HighlightingDefinition = hlManager.GetDefinitionByExtension("swift");
+            _highlightingDefinition = hlManager.GetDefinitionByExtension("swift");
 
             _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
         }
 
-        [Reactive] public TextDocument Document { get; set; }
+        [ObservableProperty] private TextDocument _document;
 
-        [Reactive] public string Extension { get; set; }
+        [ObservableProperty] private string _extension;
 
-        [Reactive] public IHighlightingDefinition HighlightingDefinition { get; set; }
+        [ObservableProperty] private IHighlightingDefinition _highlightingDefinition;
 
-        [Reactive] public bool IsReadOnly { get; set; }
+        [ObservableProperty] private bool _isReadOnly;
 
-        [Reactive] public string? IsReadOnlyReason { get; set; }
+        [ObservableProperty] private string? _isReadOnlyReason;
 
         public override Task OnSave(object parameter) => throw new NotImplementedException();
 

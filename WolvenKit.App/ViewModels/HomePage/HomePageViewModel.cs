@@ -1,9 +1,9 @@
 using System;
 using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Services;
@@ -22,7 +22,7 @@ namespace WolvenKit.ViewModels.HomePage
         Website
     }
 
-    public class HomePageViewModel : ReactiveObject
+    public partial class HomePageViewModel : ObservableObject
     {
         // #needs_MVVM
 
@@ -51,7 +51,7 @@ namespace WolvenKit.ViewModels.HomePage
 
         #region Properties
 
-        [Reactive] public int SelectedIndex { get; set; }
+        [ObservableProperty] private int _selectedIndex;
 
         // Close HomePage (Navigates to Project Editor
         public ICommand CloseHomePage { get; private set; }

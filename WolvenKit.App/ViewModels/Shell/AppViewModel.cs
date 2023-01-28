@@ -1338,9 +1338,9 @@ namespace WolvenKit.ViewModels.Shell
             ShouldDialogShow = true;
         }
 
-        [ObservableProperty] private ReactiveObject? _activeOverlay;
+        [ObservableProperty] private ObservableObject? _activeOverlay;
 
-        public void SetActiveOverlay(ReactiveObject overlay)
+        public void SetActiveOverlay(ObservableObject overlay)
         {
             ActiveOverlay = overlay;
             //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);

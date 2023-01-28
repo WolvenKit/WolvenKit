@@ -11,11 +11,11 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
 using Microsoft.Win32;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -40,7 +40,7 @@ using IRedString = WolvenKit.RED4.Types.IRedString;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public partial class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, WolvenKit.Functionality.Interfaces.INode<ReferenceSocket>
+    public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemModel, WolvenKit.Functionality.Interfaces.INode<ReferenceSocket>
     {
         private static readonly List<string> s_hiddenProperties = new() { "meshMeshMaterialBuffer.rawDataHeaders", "meshMeshMaterialBuffer.rawData", "entEntityTemplate.compiledData", "appearanceAppearanceDefinition.compiledData" };
 
@@ -56,10 +56,25 @@ namespace WolvenKit.ViewModels.Shell
 
         public ObservableCollectionExtended<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
 
-        [Reactive] public string? Value { get; private set; }
-        [Reactive] public string? Descriptor { get; private set; }
-        [Reactive] public bool IsDefault { get; private set; }
-        [Reactive] public bool IsReadOnly { get; set; }
+        [ObservableProperty] private string? _value;
+        [ObservableProperty] private string? _descriptor;
+        [ObservableProperty] private bool _isDefault;
+        [ObservableProperty] private bool _isReadOnly;
+        [ObservableProperty] private IRedType _data;
+        [ObservableProperty] private CName _relativePath;
+        [ObservableProperty] private bool _isSelected;
+
+        [ObservableProperty] private bool _isDeleteReady;
+
+        [ObservableProperty] private bool _isExpanded;
+
+        [ObservableProperty] private bool _isHandled;
+
+        [ObservableProperty] private string _propertyName;
+        [ObservableProperty] private ReferenceSocket? _socket;
+        [ObservableProperty] private IList<ReferenceSocket> _outputs = new ObservableCollection<ReferenceSocket>();
+
+        [ObservableProperty] private System.Windows.Point _location;
 
         private const BindingFlags s_defaultLookup = BindingFlags.Instance | BindingFlags.Public;
 
@@ -67,10 +82,10 @@ namespace WolvenKit.ViewModels.Shell
 
         public ChunkViewModel(IRedType data, string name, ChunkViewModel? parent = null, bool isReadOnly = false)
         {
-            Data = data;
+            _data = data;
 
             Parent = parent;
-            propertyName = name;
+            _propertyName = name;
             IsReadOnly = isReadOnly;
 
             CreateTXLOverride = new DelegateCommand(ExecuteCreateTXLOverride);
@@ -164,14 +179,14 @@ namespace WolvenKit.ViewModels.Shell
                             {
                                 //if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
                                 //{
-                                rbc.SetProperty(propertyName, Data);
+                                rbc.SetProperty(_propertyName, Data);
                                 Tab.File.SetIsDirty(true);
                                 Parent.NotifyChain("Data");
                                 //}
                             }
                             else
                             {
-                                var pi = parentData?.GetType().GetProperty(propertyName);
+                                var pi = parentData?.GetType().GetProperty(_propertyName);
                                 if (pi is not null)
                                 {
                                     if (pi.CanWrite)
@@ -237,7 +252,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public void NotifyChain(string property)
         {
-            this.RaisePropertyChanged(property);
+            this.OnPropertyChanged(property);
             Parent?.NotifyChain(property);
         }
 
@@ -273,10 +288,6 @@ namespace WolvenKit.ViewModels.Shell
         private readonly RDTDataViewModel? _tab;
 
         public RDTDataViewModel? Tab => _tab ?? Parent?.Tab;
-
-        [Reactive] public IRedType Data { get; set; }  // TODO make this not nullable
-
-        [Reactive] public CName RelativePath { get; set; }
 
         //private IRedType? _resolvedDataCache;
 
@@ -324,7 +335,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             _propertiesLoaded = true;
-            this.RaisePropertyChanged(nameof(ResolvedData));
+            this.OnPropertyChanged(nameof(ResolvedData));
 
             Properties.Clear();
 
@@ -348,7 +359,7 @@ namespace WolvenKit.ViewModels.Shell
                 if (obj is not null)
                 {
                     Properties.Add(new ChunkViewModel(obj, nameof(TweakDBID), this, true));
-                    this.RaisePropertyChanged(nameof(TVProperties));
+                    this.OnPropertyChanged(nameof(TVProperties));
                     return;
                 }
                 else
@@ -568,18 +579,10 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            this.RaisePropertyChanged(nameof(TVProperties));
+            this.OnPropertyChanged(nameof(TVProperties));
         }
 
-        [Reactive] public bool IsSelected { get; set; }
-
-        [Reactive] public bool IsDeleteReady { get; set; }
-
-        [Reactive] public bool IsExpanded { get; set; }
-
-        [Reactive] public bool IsHandled { get; set; }
-
-        [Reactive] public string propertyName { get; set; }
+        
 
         public string Name
         {
@@ -599,7 +602,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    return propertyName;
+                    return PropertyName;
                 }
             }
         }
@@ -610,7 +613,7 @@ namespace WolvenKit.ViewModels.Shell
 
             if (Parent is not null && Data is not IRedBaseHandle)
             {
-                var epi = GetPropertyByRedName(Parent.ResolvedPropertyType, propertyName);
+                var epi = GetPropertyByRedName(Parent.ResolvedPropertyType, PropertyName);
                 if (epi is not null)
                 {
                     //IsDefault = IsDefault(Parent.ResolvedPropertyType, epi, Data);
@@ -690,7 +693,7 @@ namespace WolvenKit.ViewModels.Shell
                     //    parent = handle.GetValue();
                     //    parentType = handle.GetValue().GetType();
                     //}
-                    var propInfo = GetPropertyByRedName(parentType, propertyName) ?? null;
+                    var propInfo = GetPropertyByRedName(parentType, PropertyName) ?? null;
                     if (propInfo is not null)
                     {
                         if (type == null || type == propInfo.Type)
@@ -922,7 +925,7 @@ namespace WolvenKit.ViewModels.Shell
             set
             {
                 _propertyCountCache = -1;
-                this.RaisePropertyChanged(nameof(PropertyCount));
+                this.OnPropertyChanged(nameof(PropertyCount));
             }
         }
 
@@ -1475,14 +1478,14 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (Parent?.ResolvedData is RedBaseClass rbc)
                     {
-                        rbc.SetProperty(propertyName, Data);
+                        rbc.SetProperty(PropertyName, Data);
                     }
                     PropertyCount = -1;
                     // might not be needed
                     CalculateDescriptor();
                     _propertiesLoaded = false;
                     CalculateProperties();
-                    this.RaisePropertyChanged(nameof(Data));
+                    this.OnPropertyChanged(nameof(Data));
                     Tab?.File.SetIsDirty(true);
                 }
             }
@@ -2717,7 +2720,7 @@ namespace WolvenKit.ViewModels.Shell
             CalculateProperties();
             CalculateDescriptor();
 
-            this.RaisePropertyChanged("Data");
+            this.OnPropertyChanged("Data");
 
             IsExpanded = true;
 
@@ -2742,7 +2745,7 @@ namespace WolvenKit.ViewModels.Shell
 
         // node stuff
 
-        [Reactive] public ReferenceSocket? Socket { get; set; }
+        
 
         public IList<ReferenceSocket> Inputs
         {
@@ -2752,10 +2755,7 @@ namespace WolvenKit.ViewModels.Shell
 
             }
         }
-
-        [Reactive] public IList<ReferenceSocket> Outputs { get; set; } = new ObservableCollection<ReferenceSocket>();
-
-        [Reactive] public System.Windows.Point Location { get; set; }
+       
 
         //public ICommand OpenSelfCommand { get; private set; }
         //private bool CanOpenSelf() => RelativePath != CName.Empty && _tab == null;

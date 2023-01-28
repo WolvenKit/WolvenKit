@@ -1,3 +1,4 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
@@ -5,7 +6,7 @@ using WolvenKit.Models;
 
 namespace WolvenKit.ViewModels.HomePage
 {
-    public class ModInfoViewModel : ReactiveObject
+    public partial class ModInfoViewModel : ObservableObject
     {
         private readonly ILoggerService _logger;
 
@@ -25,7 +26,7 @@ namespace WolvenKit.ViewModels.HomePage
         public string Path { get; init; }
         public string Folder { get; init; }
 
-        [Reactive] public int LoadOrder { get; set; }
+        [ObservableProperty] private int _loadOrder;
 
         public bool IsEnabled { get; set; }
 

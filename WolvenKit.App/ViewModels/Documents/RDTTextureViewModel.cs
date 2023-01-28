@@ -5,10 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Win32;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using SharpDX;
 using Splat;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
@@ -23,11 +21,11 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class RDTTextureViewModel : RedDocumentTabViewModel
+    public partial class RDTTextureViewModel : RedDocumentTabViewModel
     {
         protected readonly RedBaseClass? _data;
 
-        protected readonly RedImage _image;
+        protected readonly RedImage _redImage;
 
         public delegate void RenderDelegate();
         public RenderDelegate Render;
@@ -42,7 +40,7 @@ namespace WolvenKit.ViewModels.Documents
             _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
 
             _data = data;
-            _image = RedImage.FromRedClass(data);
+            _redImage = RedImage.FromRedClass(data);
 
             Render = SetupImage;
         }
@@ -55,10 +53,16 @@ namespace WolvenKit.ViewModels.Documents
             var buffer = new byte[stream.Length];
             stream.Read(buffer, 0, buffer.Length);
 
-            _image = RedImage.LoadFromDDSMemory(buffer);
+            _redImage = RedImage.LoadFromDDSMemory(buffer);
 
             Render = SetupImage;
         }
+
+        [ObservableProperty] private ImageSource? _image;
+
+        [ObservableProperty] private object? _selectedItem;
+
+        [ObservableProperty] private bool _isDragging;
 
         public override void OnSelected() => Render.Invoke();
 
@@ -69,14 +73,14 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            if (_image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
+            if (_redImage.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
             {
                 return;
             }
 
             var bitmapImage = new BitmapImage();
             bitmapImage.BeginInit();
-            bitmapImage.StreamSource = new MemoryStream(_image.GetPreview());
+            bitmapImage.StreamSource = new MemoryStream(_redImage.GetPreview());
             bitmapImage.EndInit();
 
             Image = bitmapImage;
@@ -91,7 +95,7 @@ namespace WolvenKit.ViewModels.Documents
                 xbm.Height = (uint)Image.Height;
                 if (File.GetMainFile() is RDTDataViewModel file)
                 {
-                    file.Chunks[0].Properties.Where(x => x.Name is "Width" or "Height").ToList().ForEach(x => x.RaisePropertyChanged("Data"));
+                    file.Chunks[0].Properties.Where(x => x.Name is "Width" or "Height").ToList().ForEach(x => OnPropertyChanged("Data"));
                 }
             }
         }
@@ -227,11 +231,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
-        [Reactive] public ImageSource? Image { get; set; }
-
-        [Reactive] public object? SelectedItem { get; set; }
-
-        [Reactive] public bool IsDragging { get; set; }
+       
 
     }
 }

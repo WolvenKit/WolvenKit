@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.TweakDB;
@@ -7,7 +8,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public abstract class TweakEntryViewModel : ReactiveObject
+    public abstract class TweakEntryViewModel : ObservableObject
     {
         protected TweakEntryViewModel(string name) => Name = name;
 

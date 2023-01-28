@@ -1,8 +1,8 @@
 using System;
 using System.Reactive.Linq;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Helpers;
@@ -10,7 +10,7 @@ using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class StatusBarViewModel : ReactiveObject
+    public partial class StatusBarViewModel : ObservableObject
     {
         #region Fields
 
@@ -23,9 +23,6 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IProjectManager _projectManager;
         private readonly IProgressService<double> _progressService;
 
-        private readonly ObservableAsPropertyHelper<double> _progress;
-
-        private readonly ObservableAsPropertyHelper<string> _currentProject;
 
         #endregion Fields
 
@@ -45,22 +42,26 @@ namespace WolvenKit.ViewModels.Shell
 
             IsLoading = false;
             LoadingString = "";
-
+            _currentProject = "";
 
             _projectManager
                 .WhenAnyValue(
                     x => x.ActiveProject,
                     project => project != null ? project.Name : s_noProjectLoaded)
-                .ToProperty(
-                    this,
-                    x => x.CurrentProject,
-                    out _currentProject);
+                .Subscribe(p =>
+                {
+                    _currentProject = p;
+                });
+                
 
             _ = Observable.FromEventPattern<EventHandler<double>, double>(
                 handler => _progressService.ProgressChanged += handler,
                 handler => _progressService.ProgressChanged -= handler)
                 .Select(_ => _.EventArgs * 100)
-                .ToProperty(this, x => x.Progress, out _progress);
+                .Subscribe(x =>
+                {
+                    _progress = x;
+                });
 
             _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => DispatcherHelper.RunOnMainThread(() => IsIndeterminate = b));
             _ = _progressService.WhenAnyValue(x => x.Status).Subscribe(s =>
@@ -92,9 +93,9 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        public double Progress => _progress.Value;
+        [ObservableProperty] private double _progress;
 
-        [Reactive] public bool IsIndeterminate { get; set; }
+        [ObservableProperty] private bool _isIndeterminate;
 
         public string? InternetConnected { get; private set; }
 
@@ -102,14 +103,14 @@ namespace WolvenKit.ViewModels.Shell
 
         public string LoadingString { get; set; }
 
-        public string CurrentProject => _currentProject.Value;
+        [ObservableProperty] private string _currentProject;
 
-        [Reactive] public string Status { get; set; } = "Ready";
+        [ObservableProperty] private string _status = "Ready";
 
         public object VersionNumber => _settingsManager.GetVersionNumber();
 
 
-        [Reactive] public Brush BarColor { get; set; } = Brushes.Black;
+        [ObservableProperty] private Brush _barColor  = Brushes.Black;
 
         #endregion Properties
 

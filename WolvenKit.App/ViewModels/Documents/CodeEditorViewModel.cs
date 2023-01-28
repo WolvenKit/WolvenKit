@@ -76,7 +76,7 @@ namespace WolvenKit.ViewModels.Tools
         ///// <summary>
         ///// Gets or sets the langugae of the content to be displayed in the edit control
         ///// </summary>
-        //[Reactive] public Languages Language { get; set; }
+        // [ObservableProperty] private Languages _language;
 
         /// <summary>
         /// Gets or sets the font family for the content to  be displayed in the edit control

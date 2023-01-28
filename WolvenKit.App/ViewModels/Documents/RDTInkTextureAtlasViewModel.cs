@@ -8,14 +8,14 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Win32;
 using Prism.Commands;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class RDTInkTextureAtlasViewModel : RDTTextureViewModel
+    public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
     {
         private readonly inkTextureAtlas _atlas;
 
@@ -99,52 +99,51 @@ namespace WolvenKit.ViewModels.Documents
 
         }
 
-        [Reactive] public ObservableCollection<InkTextureAtlasMapperViewModel> OverlayItems { get; set; } = new();
+        [ObservableProperty] private ObservableCollection<InkTextureAtlasMapperViewModel> _overlayItems = new();
 
-        [Reactive] public float Width { get; set; }
+        [ObservableProperty] private float _width;
 
-        [Reactive] public float Height { get; set; }
+        [ObservableProperty] private float _height;
 
-        public class InkTextureAtlasMapperViewModel
+        public partial class InkTextureAtlasMapperViewModel : ObservableObject
         {
-            [Reactive] public string PartName { get; set; }
-            [Reactive] public string DepotPath { get; set; }
-            [Reactive] public double Width { get; set; }
-            [Reactive] public double Height { get; set; }
-            [Reactive] public string AtlasPath { get; set; }
-            [Reactive] public ImageSource? Image { get; set; }
+            [ObservableProperty] private string _partName;
+            [ObservableProperty] private string _depotPath;
+            [ObservableProperty] private double _width;
+            [ObservableProperty] private double _height;
+            [ObservableProperty] private string _atlasPath;
+            [ObservableProperty] private ImageSource? _image;
+            
             [Browsable(false)]
             public inkTextureAtlasMapper Itam;
+
             [Browsable(false)]
-            [Reactive] public double Left { get; set; }
+            [ObservableProperty] private double _left;
+
             [Browsable(false)]
-            [Reactive] public double Top { get; set; }
+            [ObservableProperty] private double _top;
+
             [Browsable(false)]
-            [Reactive] public string Name { get; set; }
+            [ObservableProperty] private string _name;
+
+            // TODO
             [Browsable(false)]
-            [Reactive]
-            public string RedscriptExample
-            {
-                get => $@"let image = new inkImage();
+            //[ObservableProperty] 
+            public string RedscriptExample => $@"let image = new inkImage();
 image.SetAtlasResource(r""{AtlasPath.Replace("\\", "\\\\")}"");
 image.SetTexturePart(n""{PartName}"");";
-                set
-                {
-
-                }
-            }
 
             public InkTextureAtlasMapperViewModel(inkTextureAtlasMapper itam, CBitmapTexture xbm, string path, string atlasPath, BitmapSource image)
             {
                 Itam = itam;
-                PartName = itam.PartName;
-                DepotPath = path;
-                AtlasPath = atlasPath;
+                _partName = itam.PartName;
+                _depotPath = path;
+                _atlasPath = atlasPath;
                 Left = Math.Round(itam.ClippingRectInUVCoords.Left * xbm.Width);
                 Top = Math.Round(itam.ClippingRectInUVCoords.Top * xbm.Height);
                 Width = Math.Round(itam.ClippingRectInUVCoords.Right * xbm.Width) - Left;
                 Height = Math.Round(itam.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
-                Name = $"{itam.PartName} ({(uint)Width}x{(uint)Height})";
+                _name = $"{itam.PartName} ({(uint)Width}x{(uint)Height})";
                 SaveImageCommand = new DelegateCommand(ExecuteSaveImage, CanSaveImage); // .ObservesProperty(() => Image); WKit crashs when using this, don't know why...
 
                 try

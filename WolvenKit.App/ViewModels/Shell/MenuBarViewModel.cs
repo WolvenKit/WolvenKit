@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -17,7 +18,7 @@ using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class MenuBarViewModel : ReactiveObject
+    public class MenuBarViewModel : ObservableObject
     {
         private readonly IProgressService<double> _progressService;
         private readonly IArchiveManager _archiveManager;

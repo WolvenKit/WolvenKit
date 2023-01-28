@@ -9,12 +9,12 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using CommunityToolkit.Mvvm.ComponentModel;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
 using Prism.Commands;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -238,19 +238,19 @@ namespace WolvenKit.ViewModels.Documents
 
         public PanelVisibility PanelVisibility { get; set; } = new();
 
-        [Reactive] public ImageSource? Image { get; set; }
+        [ObservableProperty] private ImageSource? _image;
 
-        [Reactive] public object? SelectedItem { get; set; }
+        [ObservableProperty] private object? _selectedItem;
 
-        [Reactive] public string? LoadedModelPath { get; set; }
+        [ObservableProperty] private string? _loadedModelPath;
 
-        [Reactive] public List<LoadableModel> Models { get; set; } = new();
+        [ObservableProperty] private List<LoadableModel> _models = new();
 
-        [Reactive] public Dictionary<string, Rig> Rigs { get; set; } = new();
+        [ObservableProperty] private Dictionary<string, Rig> _rigs = new();
 
-        [Reactive] public List<Appearance> Appearances { get; set; } = new();
+        [ObservableProperty] private List<Appearance> _appearances = new();
 
-        [Reactive] public Appearance? SelectedAppearance { get; set; }
+        [ObservableProperty] private Appearance? _selectedAppearance;
 
         public RDTMeshViewModel(RedDocumentViewModel parent, string header) : base(parent, header)
         {

@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Serialization;
-using ReactiveUI.Fody.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Functionality.Other;
 using WolvenKit.Modkit.RED4;
@@ -18,7 +18,7 @@ using Application = System.Windows.Application;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class RDTWidgetViewModel : RedDocumentTabViewModel
+    public partial class RDTWidgetViewModel : RedDocumentTabViewModel
     {
         public inkWidgetLibraryResource library;
 
@@ -26,29 +26,29 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTWidgetViewModel(inkWidgetLibraryResource data, RedDocumentViewModel file) : base(file, "Widget Preview") => library = data;
 
-        [Reactive] public Dictionary<object, inkTextWidget> TextWidgets { get; set; } = new();
+        [ObservableProperty] private Dictionary<object, inkTextWidget> _textWidgets = new();
 
-        [Reactive] public List<string> StyleStates { get; set; } = new();
+        [ObservableProperty] private List<string> _styleStates = new();
 
-        [Reactive] public string? CurrentStyleState { get; set; }
+        [ObservableProperty] private string? _currentStyleState;
 
-        [Reactive] public List<string> Themes { get; set; } = new();
+        [ObservableProperty] private List<string> _themes = new();
 
-        [Reactive] public string? CurrentTheme { get; set; }
+        [ObservableProperty] private string? _currentTheme;
 
-        [Reactive] public Color WidgetBackground { get; set; }
+        [ObservableProperty] private Color _widgetBackground;
 
-        [Reactive] public List<string> Bindings { get; set; } = new();
+        [ObservableProperty] private List<string> _bindings = new();
 
-        [Reactive] public List<inkanimSequence> inkAnimations { get; set; } = new();
+        [ObservableProperty] private List<inkanimSequence> _inkAnimations = new();
 
-        [Reactive] public List<inkIEffect> inkEffects { get; set; } = new();
+        [ObservableProperty] private List<inkIEffect> _inkEffects = new();
 
-        [Reactive] public ImageSource? Image { get; set; }
+        [ObservableProperty] private ImageSource? _image;
 
-        [Reactive] public object? SelectedItem { get; set; }
+        [ObservableProperty] private object? _selectedItem;
 
-        [Reactive] public bool IsDragging { get; set; }
+        [ObservableProperty] private bool _isDragging;
 
 
 
@@ -86,7 +86,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             return Task.Run(() =>
             {
-                inkAnimations = new();
+                InkAnimations = new();
 
                 var animFile = File.GetFileFromDepotPath(library.AnimationLibraryResRef.DepotPath);
 
@@ -94,7 +94,7 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     foreach (var seq in alr.Sequences)
                     {
-                        inkAnimations.Add((inkanimSequence)seq.GetValue());
+                        InkAnimations.Add((inkanimSequence)seq.GetValue());
                     }
                 }
             });

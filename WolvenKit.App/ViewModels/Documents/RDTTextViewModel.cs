@@ -1,38 +1,25 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class RDTTextViewModel : RedDocumentTabViewModel, INotifyPropertyChanged
+    public partial class RDTTextViewModel : RedDocumentTabViewModel
     {
         //protected readonly IRedType _data;
 
         public RDTTextViewModel(Stream stream, RedDocumentViewModel parent) : base(parent, "Source YAML")
         {
-            SetupText(stream);
-
-            this.WhenAnyPropertyChanged(nameof(IsDirty))
-                .Do(x => x?.File.SetIsDirty(IsDirty))
-                .Subscribe();
-        }
-
-        [MemberNotNull(nameof(Document))]
-        [MemberNotNull(nameof(HighlightingDefinition))]
-        [MemberNotNull(nameof(TextEditorOptions))]
-        private void SetupText(Stream stream)
-        {
             using var sr = new StreamReader(stream);
-            Document = new TextDocument(sr.ReadToEnd());
+            _document = new TextDocument(sr.ReadToEnd());
             TextEditorOptions = new TextEditorOptions
             {
                 IndentationSize = 2,
@@ -41,7 +28,11 @@ namespace WolvenKit.ViewModels.Documents
                 EnableEmailHyperlinks = false
             };
 
-            HighlightingDefinition = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(FilePath));
+            _highlightingDefinition = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(FilePath));
+
+            this.WhenAnyPropertyChanged(nameof(IsDirty))
+                .Do(x => x?.File.SetIsDirty(IsDirty))
+                .Subscribe();
         }
 
         public override void OnSelected()
@@ -66,11 +57,11 @@ namespace WolvenKit.ViewModels.Documents
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
-        [Reactive] public TextDocument Document { get; set; }
-        [Reactive] public IHighlightingDefinition HighlightingDefinition { get; protected set; }
+        [ObservableProperty] private TextDocument _document;
+        [ObservableProperty] private IHighlightingDefinition _highlightingDefinition;
         public TextEditorOptions TextEditorOptions { get; protected set; }
 
         public string GetText() => Document.Text;
-        [Reactive] public bool IsDirty { get; protected set; }
+        [ObservableProperty] private bool _isDirty;
     }
 }

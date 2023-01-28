@@ -8,8 +8,8 @@ using System.Reactive.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -22,7 +22,7 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.HomePage
 {
-    public class ModsViewModel : PageViewModel
+    public partial class ModsViewModel : PageViewModel
     {
         private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
@@ -63,17 +63,15 @@ namespace WolvenKit.ViewModels.HomePage
                 handler => _progressService.ProgressChanged += handler,
                 handler => _progressService.ProgressChanged -= handler)
                 .Select(_ => _.EventArgs * 100)
-                .ToProperty(this, x => x.Progress, out _progress);
+                .Subscribe(x => Progress = x);
         }
 
-        private readonly ObservableAsPropertyHelper<double> _progress;
-        public double Progress => _progress.Value;
-
-        [Reactive] public bool LoadOrderChanged { get; private set; }
-        [Reactive] public ObservableCollection<ModInfoViewModel> Mods { get; set; } = new();
-        [Reactive] public ModInfoViewModel? SelectedMod { get; set; }
-        [Reactive] public IEnumerable<ModInfoViewModel>? SelectedMods { get; set; }
-        [Reactive] public bool IsProcessing { get; set; }
+        [ObservableProperty] private double _progress;
+        [ObservableProperty] private bool _loadOrderChanged;
+        [ObservableProperty] private ObservableCollection<ModInfoViewModel> _mods = new();
+        [ObservableProperty] private ModInfoViewModel? _selectedMod;
+        [ObservableProperty] private IEnumerable<ModInfoViewModel>? _selectedMods;
+        [ObservableProperty] private bool _isProcessing;
 
         #region commands
 
