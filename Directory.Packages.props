@@ -5,10 +5,8 @@
   <ItemGroup>
     <PackageVersion Include="AdonisUI" Version="1.17.1" />
     <PackageVersion Include="AdonisUI.ClassicTheme" Version="1.17.1" />
-    <PackageVersion Include="AsyncEnumerator" Version="4.0.2" />
     <PackageVersion Include="AutomaticGraphLayout" Version="1.1.12" />
     <PackageVersion Include="AvalonEdit" Version="6.2.0.78" />
-    <PackageVersion Include="BigGustave" Version="1.0.6" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.1.0" />
     <PackageVersion Include="ControlzEx" Version="5.0.2" />
     <PackageVersion Include="Discord.Net" Version="3.9.0" />
