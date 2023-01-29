@@ -366,10 +366,10 @@ public class ResourceReferenceConverter : JsonConverter<IRedRef>, ICustomRedConv
                 case "DepotPath":
                 {
                     var converter = options.GetConverter(typeof(CName));
-                    if (converter is ICustomRedConverter conv)
+                    if (converter is CNameConverter conv)
                     {
                         reader.Read();
-                        depotPath = (CName)conv.ReadRedType(ref reader, typeof(CName), options)!;
+                        depotPath = (CName)conv.ReadRedTypeSanitized(ref reader, typeof(CName), options)!;
                     }
                     else
                     {

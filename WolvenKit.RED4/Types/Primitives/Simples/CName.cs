@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Types;
@@ -33,6 +34,53 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
 
     public static bool operator ==(CName a, CName b) => Equals(a, b);
     public static bool operator !=(CName a, CName b) => !(a == b);
+
+    // used to sanitize resource paths
+    public static CName GetHashSanitized(string text)
+    {
+        if (string.IsNullOrEmpty(text) || text == "None")
+        {
+            return 0;
+        }
+
+        var strResult = new StringBuilder();
+
+        // replace all forward slashes with backslash
+        text = text.Replace('/', '\\');
+
+        // strip all leading and trailing slashes and quotes
+        while ("\"'\\".Contains(text[0]))
+        {
+            text = text.Substring(1, text.Length - 1);
+        }
+
+        while ("\"'\\".Contains(text[text.Length - 1]))
+        {
+            text = text.Substring(0, text.Length - 1);
+        }
+
+        // append all remaining characters except repeated slashes
+        foreach (var element in text.ToCharArray())
+        {
+            if (strResult.Length == 0)
+            {
+                strResult.Append(element);
+                continue;
+            }
+
+            if (element == '\\')
+            {
+                if (strResult[strResult.Length - 1] != '\\')
+                {
+                    strResult.Append('\\');
+                }
+                continue;
+            }
+
+            strResult.Append(element);
+        }
+        return strResult.ToString().ToLowerInvariant();
+    }
 
 
     public int CompareTo(object value)

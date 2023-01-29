@@ -29,7 +29,15 @@ public class CGuidConverter : JsonConverter<CGuid>, ICustomRedConverter
 
 public class CNameConverter : JsonConverter<CName>, ICustomRedConverter
 {
+    private bool _sanitizedHash = false;
+
     public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
+
+    public object ReadRedTypeSanitized(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        _sanitizedHash = true;
+        return Read(ref reader, typeToConvert, options);
+    }
 
     public override CName Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -40,7 +48,14 @@ public class CNameConverter : JsonConverter<CName>, ICustomRedConverter
 
         if (reader.TokenType == JsonTokenType.String)
         {
-            return reader.GetString();
+            if (_sanitizedHash)
+            {
+                return CName.GetHashSanitized(reader.GetString());
+            }
+            else
+            {
+                return reader.GetString();
+            }
         }
         else if (reader.TokenType == JsonTokenType.Number)
         {
