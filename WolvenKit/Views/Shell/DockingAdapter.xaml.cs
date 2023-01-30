@@ -212,7 +212,7 @@ namespace WolvenKit.Views.Shell
                 }
             }
 
-            vm.Close.Execute().Subscribe();
+            //vm.Close.Execute().Subscribe();
 
             (ItemsSource as IList).Remove(vm);
             _viewModel.UpdateTitle();

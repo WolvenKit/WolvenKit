@@ -6,8 +6,9 @@ using System.Linq;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
@@ -19,6 +20,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
+using Path = System.IO.Path;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -50,10 +52,6 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
 
         ArgumentNullException.ThrowIfNull(_settingsManager.MaterialRepositoryPath);
 
-        OpenMaterialRepositoryCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath));
-        UnbundleGameCommand = ReactiveCommand.CreateFromTask(UnbundleGame);
-        GenerateMaterialRepoCommand = ReactiveCommand.CreateFromTask(GenerateMaterialRepoAsync);
-
         _materialsDepotPath = _settingsManager.MaterialRepositoryPath;
         _uncookExtensions = new();
         foreach (var item in Enum.GetValues<EUncookExtension>())
@@ -71,38 +69,33 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
 
     public string WikiHelpLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
 
-    public readonly ReactiveCommand<string, Unit> OpenLinkCommand = ReactiveCommand.Create<string>(
-        link =>
+    [RelayCommand]
+    private void OpenLink(string link)
+    {
+        var ps = new ProcessStartInfo(link)
         {
-            var ps = new ProcessStartInfo(link)
-            {
-                UseShellExecute = true,
-                Verb = "open"
-            };
-            Process.Start(ps);
-        });
+            UseShellExecute = true,
+            Verb = "open"
+        };
+        Process.Start(ps);
+    }
 
     #endregion Properties
 
     #region Commands
 
-    public ReactiveCommand<Unit, Unit> OpenMaterialRepositoryCommand { get; }
-    public ReactiveCommand<Unit, Unit> GenerateMaterialRepoCommand { get; }
-    public ReactiveCommand<Unit, Unit> UnbundleGameCommand { get; }
-
-    #endregion Commands
-
-    #region Methods
-
-    private static readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
-    private readonly ParallelOptions _parallelOptions = new()
+    [RelayCommand]
+    private void OpenMaterialRepository()
     {
-        MaxDegreeOfParallelism = _maxDoP,
-    };
+        var path = _settingsManager.MaterialRepositoryPath;
+        if (path is not null)
+        {
+            Commonfunctions.ShowFolderInExplorer(path);
+        }
+    }
 
-    public static bool UseNewParallelism { get; set; } = true;
-
-    private async Task GenerateMaterialRepoAsync()
+    [RelayCommand]
+    private async Task GenerateMaterialRepo()
     {
         var materialRepoDir = new DirectoryInfo(MaterialsDepotPath);
         var textureExtension = UncookExtension.Extension;
@@ -315,6 +308,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
         OpenDepotFolder();
     }
 
+    [RelayCommand]
     private async Task UnbundleGame()
     {
         if (_settingsManager.MaterialRepositoryPath is null)
@@ -353,6 +347,20 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
         OpenDepotFolder();
     }
 
+
+    #endregion Commands
+
+    #region Methods
+
+    private static readonly int _maxDoP = Environment.ProcessorCount > 1 ? Environment.ProcessorCount : 1;
+    private readonly ParallelOptions _parallelOptions = new()
+    {
+        MaxDegreeOfParallelism = _maxDoP,
+    };
+
+    public static bool UseNewParallelism { get; set; } = true;
+
+   
     private void OpenDepotFolder()
     {
         if (_settingsManager.MaterialRepositoryPath is null)

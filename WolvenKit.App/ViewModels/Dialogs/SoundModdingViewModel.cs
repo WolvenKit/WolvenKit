@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
@@ -37,18 +37,7 @@ public partial class SoundModdingViewModel : DialogViewModel
 
     public SoundModdingViewModel(INotificationService notificationService, ILoggerService logger, IProjectManager projectManager)
     {
-        //_notificationService = Locator.Current.GetService<INotificationService>();
-        //_logger = Locator.Current.GetService<ILoggerService>();
-        //_projectManager = Locator.Current.GetService<IProjectManager>();
-
         _metadata = new SoundEventMetadata();
-
-        OkCommand = ReactiveCommand.Create(Save);
-#pragma warning disable IDE0053 // Use expression body for lambda expressions
-        CancelCommand = ReactiveCommand.Create(() => { FileHandler?.Invoke(null); });
-#pragma warning restore IDE0053 // Use expression body for lambda expressions
-
-        AddCommand = ReactiveCommand.Create(AddEvents);
 
         LoadEvents();
         LoadInfo();
@@ -143,11 +132,8 @@ public partial class SoundModdingViewModel : DialogViewModel
 
     #region commands
 
-    public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
-
-    public override ReactiveCommand<Unit, Unit> OkCommand { get; }
-
-    private void Save()
+    [RelayCommand]
+    private void Ok()
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -211,19 +197,11 @@ public partial class SoundModdingViewModel : DialogViewModel
         }
     }
 
-    //private static string GetEngineType(string type)
-    //{
-    //    if (Enum.TryParse<ECustomSoundType>(type, out var en))
-    //    {
-    //        var engineType = (ECustomSoundTypeEngine)en;
-    //        return engineType.ToString();
-    //    }
-    //    // default
-    //    return ECustomSoundTypeEngine.mod_sfx_2d.ToString();
-    //}
+    [RelayCommand]
+    private void Cancel() => FileHandler?.Invoke(null);
 
-    public ReactiveCommand<Unit, Unit> AddCommand { get; private set; }
-    private void AddEvents()
+    [RelayCommand]
+    private void Add()
     {
         foreach (var item in SelectedEvents)
         {

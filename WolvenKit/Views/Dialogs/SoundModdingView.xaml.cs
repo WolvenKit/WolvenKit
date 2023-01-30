@@ -5,6 +5,7 @@ using System.Reactive.Disposables;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Modkit.RED4.Sounds;
+using WolvenKit.App.Extensions;
 
 namespace WolvenKit.Views.Dialogs
 {
@@ -45,7 +46,7 @@ namespace WolvenKit.Views.Dialogs
             }
 
             ViewModel.SelectedEvents = selectedtems;
-            ViewModel.AddCommand.Execute().Subscribe();
+            ViewModel.AddCommand.SafeExecute();
         }
 
         private List<string> _selectedtems = new();
@@ -89,7 +90,7 @@ namespace WolvenKit.Views.Dialogs
                 item
             };
             ViewModel.SelectedEvents = selectedtems;
-            ViewModel.AddCommand.Execute().Subscribe();
+            ViewModel.AddCommand.SafeExecute();
         }
 
         private void ButtonDel_Click(object sender, System.Windows.RoutedEventArgs e)

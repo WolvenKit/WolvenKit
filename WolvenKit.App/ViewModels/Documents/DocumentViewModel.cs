@@ -53,16 +53,7 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
 
         State = DockState.Document;
         SideInDockedMode = DockSide.Tabbed;
-
-        Close = ReactiveCommand.Create(() => { });
     }
-
-    #region commands
-
-
-    public ReactiveCommand<Unit, Unit> Close { get; set; }
-
-    #endregion commands
 
     #region Properties
 

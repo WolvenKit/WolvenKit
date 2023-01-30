@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -21,8 +22,6 @@ public partial class ProjectSettingsDialogViewModel : DialogViewModel, IActivata
 
 
     public ViewModelActivator Activator { get; } = new();
-    public override ReactiveCommand<Unit, Unit> OkCommand { get; }
-    public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
 
     [ObservableProperty] private Cp77Project _project = null!;
@@ -35,9 +34,6 @@ public partial class ProjectSettingsDialogViewModel : DialogViewModel, IActivata
         _projectManager = projectManager ?? Locator.Current.GetService<IProjectManager>().NotNull();
         _pluginService = pluginService ?? Locator.Current.GetService<IPluginService>().NotNull();
         _appViewModel = appViewModel ?? Locator.Current.GetService<AppViewModel>().NotNull();
-
-        OkCommand = ReactiveCommand.CreateFromTask(ExecuteOk);
-        CancelCommand = ReactiveCommand.Create(ExecuteCancel);
 
         HandleActivation();
 
@@ -65,7 +61,8 @@ public partial class ProjectSettingsDialogViewModel : DialogViewModel, IActivata
 
     }
 
-    private async Task<Unit> ExecuteOk()
+    [RelayCommand]
+    private async Task<Unit> Ok()
     {
         await _projectManager.SaveAsync();
 
@@ -74,5 +71,6 @@ public partial class ProjectSettingsDialogViewModel : DialogViewModel, IActivata
         return Unit.Default;
     }
 
-    private void ExecuteCancel() => _appViewModel.CloseModalCommand.Execute(null);
+    [RelayCommand]
+    private void Cancel() => _appViewModel.CloseModalCommand.Execute(null);
 }

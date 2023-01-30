@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -32,25 +32,25 @@ public partial class CreateClassDialogViewModel : DialogViewModel
 
             _classes = new ObservableCollection<string>(_typeMap.Keys);
         }
-
-        OkCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(this), CanOk);
-        CancelCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(null));
     }
 
-    public override ReactiveCommand<Unit, Unit> OkCommand { get; }
-    public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
+    private bool CanExecuteOk() => SelectedClass is not null && Classes.Contains(SelectedClass);
 
-    private IObservable<bool> CanOk =>
-        this.WhenAnyValue(
-            x => x.SelectedClass,
-            (c) => c is not null && Classes.Contains(c)
-        );
+    [RelayCommand(CanExecute = nameof(CanExecuteOk))]
+    private void Ok() => DialogHandler?.Invoke(this);
 
-    [ObservableProperty] private ObservableCollection<string> _classes;
+    [RelayCommand]
+    private void Cancel() => DialogHandler?.Invoke(null);
 
-    [ObservableProperty] private ObservableCollection<string> _existingClasses;
+    [ObservableProperty]
+    private ObservableCollection<string> _classes;
 
-    [ObservableProperty] private string? _selectedClass;
+    [ObservableProperty]
+    private ObservableCollection<string> _existingClasses;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OkCommand))]
+    private string? _selectedClass;
 
     public Type? SelectedType
     {

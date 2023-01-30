@@ -35,10 +35,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                 this.BindCommand(ViewModel, x => x.DeleteItemCommand, x => x.ToolbarDeleteItem)
                    .DisposeWith(disposables);
 
-                Observable
-                    .FromEventPattern(WizardControl, nameof(Syncfusion.Windows.Tools.Controls.WizardControl.Finish))
-                    .Subscribe(_ => ViewModel.OkCommand.Execute().Subscribe())
-                    .DisposeWith(disposables);
+                //Observable
+                //    .FromEventPattern(WizardControl, nameof(Syncfusion.Windows.Tools.Controls.WizardControl.Finish))
+                //    .Subscribe(_ => ViewModel.OkCommand.Execute().Subscribe())
+                //    .DisposeWith(disposables);
 
                 ProfilesListView.RowDragDropController.Dropped += OnRowDropped;
             });

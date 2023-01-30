@@ -1,6 +1,6 @@
 using System.Reactive;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using ReactiveUI;
 using WolvenKit.App.Models.Docking;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -16,7 +16,7 @@ public interface IDocumentViewModel : IDockElement
     IAsyncRelayCommand<object> SaveCommand { get; }
     IRelayCommand<object> SaveAsCommand { get; }
 
-    public ReactiveCommand<Unit, Unit> Close { get; set; }
+    //public ICommand Close { get; set; }
 
     string ContentId { get; }
 

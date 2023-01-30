@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
-using ReactiveUI;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Core.Extensions;
@@ -33,10 +32,14 @@ public class WatcherService : ObservableObject, IWatcherService
     public WatcherService(IProjectManager projectManager)
     {
         _projectManager = projectManager;
+        _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
+    }
 
-        _projectManager.WhenAnyValue(_ => _.IsProjectLoaded).Subscribe(async loaded =>
+    private async void ProjectManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName ==  nameof(IProjectManager.IsProjectLoaded))
         {
-            if (loaded)
+            if (_projectManager.IsProjectLoaded)
             {
                 WatchLocation(_projectManager.ActiveProject.NotNull().ProjectDirectory);
                 await RefreshAsync(_projectManager.ActiveProject);
@@ -45,8 +48,7 @@ public class WatcherService : ObservableObject, IWatcherService
             {
                 UnwatchLocation();
             }
-
-        });
+        }
     }
 
     private void WatchLocation(string location)

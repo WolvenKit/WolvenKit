@@ -1,13 +1,11 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reactive;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using ReactiveUI;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
@@ -51,13 +49,9 @@ public partial class FirstSetupViewModel : DialogWindowViewModel
     //public string Description { get; set; }
     [ObservableProperty] private string _materialDepotPath;
 
-    [ObservableProperty] private bool _allFieldsValid;
-    private IObservable<bool> CanExecute =>
-        this.WhenAnyValue(
-            x => x.AllFieldsValid,
-            (b) => b == true
-        );
-
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OpenLinkCommand))]
+    private bool _allFieldsValid;
 
     [ObservableProperty] private bool _checkForUpdates;
 
@@ -65,20 +59,21 @@ public partial class FirstSetupViewModel : DialogWindowViewModel
 
     public string WikiHelpLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
 
-    public readonly ReactiveCommand<string, Unit> OpenLinkCommand = ReactiveCommand.Create<string>(
-        link =>
-        {
-            var ps = new ProcessStartInfo(link)
-            {
-                UseShellExecute = true,
-                Verb = "open"
-            };
-            Process.Start(ps);
-        });
-
     #endregion Properties
 
     #region Commands
+
+    private bool CanOpenLink() => AllFieldsValid;
+    [RelayCommand]
+    private void OpenLink(string link)
+    {
+        var ps = new ProcessStartInfo(link)
+        {
+            UseShellExecute = true,
+            Verb = "open"
+        };
+        Process.Start(ps);
+    }
 
     [RelayCommand]
     private void OpenCP77GamePath()

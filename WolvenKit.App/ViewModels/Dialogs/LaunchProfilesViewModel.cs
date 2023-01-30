@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
 
@@ -18,9 +18,6 @@ public partial class LaunchProfilesViewModel : DialogViewModel
         _settingsManager = settingsManager;
         _loggerService = loggerService;
 
-        OkCommand = ReactiveCommand.Create(() => { });
-        CancelCommand = ReactiveCommand.Create(() => { });
-
         Title = "Rename";
 
         // populate profiles
@@ -32,20 +29,14 @@ public partial class LaunchProfilesViewModel : DialogViewModel
                 LaunchProfiles.Add(new LaunchProfileViewModel(key, value));
             }
         }
-
-        NewItemCommand = ReactiveCommand.Create(NewItem);
-        DuplicateItemCommand = ReactiveCommand.Create(DuplicateItem);
-        DeleteItemCommand = ReactiveCommand.Create(DeleteItem);
-        //RenameItemCommand = ReactiveCommand.Create(RenameItem);
-
-
     }
 
-    private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
+    //private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
 
-
+    [RelayCommand]
     private void NewItem() => LaunchProfiles.Add(new LaunchProfileViewModel("New LaunchProfile", new()));
 
+    [RelayCommand]
     private void DuplicateItem()
     {
         if (SelectedLaunchProfile != null)
@@ -54,6 +45,7 @@ public partial class LaunchProfilesViewModel : DialogViewModel
         }
     }
 
+    [RelayCommand]
     private void DeleteItem()
     {
         if (SelectedLaunchProfile != null)
@@ -62,41 +54,10 @@ public partial class LaunchProfilesViewModel : DialogViewModel
         }
     }
 
-    //private void RenameItem()
-    //{
-    //    _lastName = SelectedLaunchProfile.Name;
-    //    SelectedLaunchProfile.SetEditable(true);
-    //}
-
-    //public void SetEditableFalse(LaunchProfileViewModel viewModel)
-    //{
-    //    if (!viewModel.IsEditable)
-    //    {
-    //        return;
-    //    }
-
-    //    if (LaunchProfiles.Where(x => x.Name == viewModel.Name).Count() > 1)
-    //    {
-    //        // duplicate Name
-    //        SelectedLaunchProfile.Name = _lastName;
-    //    }
-    //    SelectedLaunchProfile.SetEditable(false);
-    //}
-
     [ObservableProperty] private ObservableCollection<LaunchProfileViewModel> _launchProfiles = new();
 
     [ObservableProperty] private LaunchProfileViewModel? _selectedLaunchProfile;
 
 
     public string Title { get; set; }
-
-    public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
-    public override ReactiveCommand<Unit, Unit> OkCommand { get; }
-
-
-    public ReactiveCommand<Unit, Unit> NewItemCommand { get; }
-    public ReactiveCommand<Unit, Unit> DuplicateItemCommand { get; }
-    public ReactiveCommand<Unit, Unit> DeleteItemCommand { get; }
-
-
 }
