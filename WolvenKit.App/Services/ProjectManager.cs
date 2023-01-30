@@ -6,274 +6,273 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Models.ProjectManagement;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.ProjectManagement;
-using WolvenKit.ProjectManagement.Project;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services;
+
+/// <summary>
+/// Singleton Service
+/// </summary>
+public partial class ProjectManager : ObservableObject, IProjectManager
 {
-    /// <summary>
-    /// Singleton Service
-    /// </summary>
-    public partial class ProjectManager : ObservableObject, IProjectManager
+    private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+    private readonly INotificationService _notificationService;
+    private readonly ILoggerService _loggerService;
+    private readonly IHashService _hashService;
+
+    public ProjectManager(
+        IRecentlyUsedItemsService recentlyUsedItemsService,
+        INotificationService notificationService,
+        ILoggerService loggerService,
+        IHashService hashService
+    )
     {
-        private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
-        private readonly INotificationService _notificationService;
-        private readonly ILoggerService _loggerService;
-        private readonly IHashService _hashService;
+        _recentlyUsedItemsService = recentlyUsedItemsService;
+        _notificationService = notificationService;
+        _loggerService = loggerService;
+        _hashService = hashService;
 
-        public ProjectManager(
-            IRecentlyUsedItemsService recentlyUsedItemsService,
-            INotificationService notificationService,
-            ILoggerService loggerService,
-            IHashService hashService
-        )
+        PropertyChanged += async delegate (object? sender, PropertyChangedEventArgs args)
         {
-            _recentlyUsedItemsService = recentlyUsedItemsService;
-            _notificationService = notificationService;
-            _loggerService = loggerService;
-            _hashService = hashService;
-
-            this.PropertyChanged += async delegate(object? sender, PropertyChangedEventArgs args)
+            if (args.PropertyName == nameof(ActiveProject))
             {
-                if (args.PropertyName == nameof(ActiveProject))
+                if (IsProjectLoaded)
                 {
-                    if (IsProjectLoaded)
-                    {
-                        await SaveAsync();
-                    }
+                    await SaveAsync();
                 }
-            };
+            }
+        };
+    }
+
+    #region properties
+
+    [ObservableProperty]
+    private bool _isProjectLoaded;
+
+    [ObservableProperty]
+    private Cp77Project? _activeProject;
+
+    #endregion
+
+    #region commands
+
+    public AsyncRelayCommand<string>? OpenProjectCommand { get; set; }
+
+    #endregion
+
+    #region methods
+
+    public async Task<bool> SaveAsync() => await Save();
+
+    public async Task<Cp77Project?> LoadAsync(string location)
+    {
+        if (IsProjectLoaded)
+        {
+            await SaveAsync();
         }
 
-        #region properties
-
-        [ObservableProperty]
-        private bool _isProjectLoaded;
-
-        [ObservableProperty]
-        private Cp77Project? _activeProject;
-
-        #endregion
-
-        #region commands
-
-        public AsyncRelayCommand<string>? OpenProjectCommand { get; set; }
-
-        #endregion
-
-        #region methods
-
-        public async Task<bool> SaveAsync() => await Save();
-
-        public async Task<Cp77Project?> LoadAsync(string location)
+        IsProjectLoaded = false;
+        await ReadFromLocationAsync(location).ContinueWith(x =>
         {
-            if (IsProjectLoaded)
+            if (x.IsCompletedSuccessfully)
             {
-                await SaveAsync();
-            }
-
-            IsProjectLoaded = false;
-            await ReadFromLocationAsync(location).ContinueWith(x =>
-            {
-                if (x.IsCompletedSuccessfully)
+                if (x.Result == null)
                 {
-                    if (x.Result == null)
-                    {
 
-                    }
-                    else
-                    {
-                        ActiveProject = x.Result;
-                        IsProjectLoaded = true;
-
-                        if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
-                        {
-                            _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now));
-                        }
-                    }
                 }
                 else
                 {
+                    ActiveProject = x.Result;
+                    IsProjectLoaded = true;
 
-                }
-            });
-
-
-            return ActiveProject;
-        }
-
-        private async Task<Cp77Project?> ReadFromLocationAsync(string location)
-        {
-            try
-            {
-                FileInfo fi = new(location);
-                if (!fi.Exists)
-                {
-                    return null;
-                }
-
-                var project = fi.Extension switch
-                {
-                    ".cpmodproj" => await Load(location),
-                    _ => null
-                };
-
-                return project;
-            }
-            catch (IOException ex)
-            {
-                _notificationService.Error(ex.Message);
-            }
-
-            return null;
-        }
-
-        private async Task<Cp77Project?> Load(string path)
-        {
-            try
-            {
-                await using FileStream lf = new(path, FileMode.Open, FileAccess.Read);
-                XmlSerializer ser = new(typeof(CP77Mod));
-                if (ser.Deserialize(lf) is not CP77Mod obj)
-                {
-                    return null;
-                }
-
-                if (obj.Name is null)
-                {
-                    _loggerService.Error($"Failed to load project: project has no name");
-                    return null;
-                }
-
-                Cp77Project result = new(path, obj.Name)
-                {
-                    Author = obj.Author,
-                    Email = obj.Email,
-                    Version = obj.Version,
-                };
-
-                var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
-                if (File.Exists(projectHashesFile) && _hashService is HashService hashService)
-                {
-                    var paths = await File.ReadAllLinesAsync(projectHashesFile);
-                    foreach (var p in paths)
+                    if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
                     {
-                        hashService.AddProjectPath(p);
+                        _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now));
                     }
                 }
-
-                // fix legacy folders
-                MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "tweaks")), result);
-                MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "scripts")), result);
-                MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "archiveXL")), result);
-
-                return result;
             }
-            catch (Exception e)
+            else
             {
-                _loggerService.Error($"Failed to load project.");
-                _loggerService.Error(e);
+
+            }
+        });
+
+
+        return ActiveProject;
+    }
+
+    private async Task<Cp77Project?> ReadFromLocationAsync(string location)
+    {
+        try
+        {
+            FileInfo fi = new(location);
+            if (!fi.Exists)
+            {
                 return null;
             }
+
+            var project = fi.Extension switch
+            {
+                ".cpmodproj" => await Load(location),
+                _ => null
+            };
+
+            return project;
+        }
+        catch (IOException ex)
+        {
+            _notificationService.Error(ex.Message);
         }
 
-        private void MoveLegacyFolder(DirectoryInfo dir, Cp77Project result)
-        {
-            if (dir.Exists)
-            {
-                var files = dir.GetFiles("*", SearchOption.AllDirectories);
-                foreach (var f in files)
-                {
-                    try
-                    {
-                        var relPath = Path.GetRelativePath(dir.FullName, f.FullName);
-                        f.MoveTo(Path.Combine(result.ResourcesDirectory, relPath));
-                    }
-                    catch (Exception)
-                    {
-                        _loggerService.Error($"Could not move {f.FullName}");
-                    }
-                }
+        return null;
+    }
 
+    private async Task<Cp77Project?> Load(string path)
+    {
+        try
+        {
+            await using FileStream lf = new(path, FileMode.Open, FileAccess.Read);
+            XmlSerializer ser = new(typeof(CP77Mod));
+            if (ser.Deserialize(lf) is not CP77Mod obj)
+            {
+                return null;
+            }
+
+            if (obj.Name is null)
+            {
+                _loggerService.Error($"Failed to load project: project has no name");
+                return null;
+            }
+
+            Cp77Project result = new(path, obj.Name)
+            {
+                Author = obj.Author,
+                Email = obj.Email,
+                Version = obj.Version,
+            };
+
+            var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
+            if (File.Exists(projectHashesFile) && _hashService is HashService hashService)
+            {
+                var paths = await File.ReadAllLinesAsync(projectHashesFile);
+                foreach (var p in paths)
+                {
+                    hashService.AddProjectPath(p);
+                }
+            }
+
+            // fix legacy folders
+            MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "tweaks")), result);
+            MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "scripts")), result);
+            MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "archiveXL")), result);
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error($"Failed to load project.");
+            _loggerService.Error(e);
+            return null;
+        }
+    }
+
+    private void MoveLegacyFolder(DirectoryInfo dir, Cp77Project result)
+    {
+        if (dir.Exists)
+        {
+            var files = dir.GetFiles("*", SearchOption.AllDirectories);
+            foreach (var f in files)
+            {
                 try
                 {
-                    dir.Delete();
+                    var relPath = Path.GetRelativePath(dir.FullName, f.FullName);
+                    f.MoveTo(Path.Combine(result.ResourcesDirectory, relPath));
                 }
                 catch (Exception)
                 {
-                    _loggerService.Error($"Could not delete {dir.FullName}");
+                    _loggerService.Error($"Could not move {f.FullName}");
                 }
-
-            }
-        }
-
-        private async Task<bool> Save()
-        {
-            if (ActiveProject is null)
-            {
-                return false;
             }
 
             try
             {
-                if (!Directory.Exists(ActiveProject.ProjectDirectory))
-                {
-                    Directory.CreateDirectory(ActiveProject.ProjectDirectory);
-                }
-
-                await using FileStream fs = new(ActiveProject.Location, FileMode.Create, FileAccess.Write);
-                XmlSerializer ser = new(typeof(CP77Mod));
-                ser.Serialize(fs, new CP77Mod(ActiveProject));
-
-                if (_hashService is HashService hashService)
-                {
-                    var projectHashes = hashService.GetProjectHashes();
-                    if (projectHashes.Count > 0)
-                    {
-                        await File.WriteAllLinesAsync(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
-                    }
-                }
+                dir.Delete();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                _loggerService.Error($"Failed to save project");
-                _loggerService.Error(e);
-                return false;
+                _loggerService.Error($"Could not delete {dir.FullName}");
             }
 
-            return true;
         }
+    }
 
-        #endregion
-
-
-        public class CP77Mod
+    private async Task<bool> Save()
+    {
+        if (ActiveProject is null)
         {
-            // Default contructor for serialization
-            public CP77Mod()
-            {
-
-            }
-
-            public CP77Mod(Cp77Project project)
-            {
-                Author = project.Author;
-                Email = project.Email;
-                Name = project.Name;
-                Version = project.Version;
-            }
-
-            public string? Author { get; set; }
-
-            public string? Email { get; set; }
-
-            public string? Name { get; set; }
-
-            public string? Version { get; set; }
-            public bool IsRedMod { get; set; }
-            public bool ExecuteDeploy { get; set; }
+            return false;
         }
+
+        try
+        {
+            if (!Directory.Exists(ActiveProject.ProjectDirectory))
+            {
+                Directory.CreateDirectory(ActiveProject.ProjectDirectory);
+            }
+
+            await using FileStream fs = new(ActiveProject.Location, FileMode.Create, FileAccess.Write);
+            XmlSerializer ser = new(typeof(CP77Mod));
+            ser.Serialize(fs, new CP77Mod(ActiveProject));
+
+            if (_hashService is HashService hashService)
+            {
+                var projectHashes = hashService.GetProjectHashes();
+                if (projectHashes.Count > 0)
+                {
+                    await File.WriteAllLinesAsync(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error($"Failed to save project");
+            _loggerService.Error(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    #endregion
+
+
+    public class CP77Mod
+    {
+        // Default contructor for serialization
+        public CP77Mod()
+        {
+
+        }
+
+        public CP77Mod(Cp77Project project)
+        {
+            Author = project.Author;
+            Email = project.Email;
+            Name = project.Name;
+            Version = project.Version;
+        }
+
+        public string? Author { get; set; }
+
+        public string? Email { get; set; }
+
+        public string? Name { get; set; }
+
+        public string? Version { get; set; }
+        public bool IsRedMod { get; set; }
+        public bool ExecuteDeploy { get; set; }
     }
 }

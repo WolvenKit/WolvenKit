@@ -1,7 +1,7 @@
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Documents;
 //using Syncfusion.Windows.Edit;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Documents
 {

@@ -7,7 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -16,12 +19,8 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
@@ -29,7 +28,7 @@ public record class CallbackArguments(ImportExportArgs Arg, string PropertyName)
 
 public abstract partial class ExportViewModel : ImportExportViewModel
 {
-    protected ExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId) 
+    protected ExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
         : base(archiveManager, notificationService, settingsManager, header, contentId)
     {
     }
@@ -274,7 +273,7 @@ public partial class TextureExportViewModel : ExportViewModel
             selectedItems = selectedEntries.Select(x => new CollectionItemViewModel<uint>(x)).ToList();
         }
 
-        
+
         OpusTools opusTools = new(_projectManager.ActiveProject.NotNull().ModDirectory, _projectManager.ActiveProject.RawDirectory, _archiveManager, opusExportArgs.UseMod);
         var availableItems = opusTools.Info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
 

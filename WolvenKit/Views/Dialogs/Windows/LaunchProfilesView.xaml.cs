@@ -12,7 +12,6 @@ using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
-using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {

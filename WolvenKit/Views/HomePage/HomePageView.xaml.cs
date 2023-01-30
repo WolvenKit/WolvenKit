@@ -3,10 +3,11 @@ using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Extensions;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.HomePage;
+using WolvenKit.App.ViewModels.HomePage.Pages;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.HomePage

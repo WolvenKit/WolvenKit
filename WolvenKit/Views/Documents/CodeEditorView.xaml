@@ -9,7 +9,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:system="clr-namespace:System;assembly=netstandard"
-    xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     x:TypeArguments="tools:CodeEditorViewModel"
     BorderBrush="{x:Null}">
 

@@ -16,10 +16,11 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit

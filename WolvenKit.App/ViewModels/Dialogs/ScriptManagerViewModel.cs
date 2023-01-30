@@ -8,11 +8,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 

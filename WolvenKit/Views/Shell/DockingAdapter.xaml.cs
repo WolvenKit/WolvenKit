@@ -15,18 +15,18 @@ using System.Xml;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Layout;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Interaction;
-using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.ViewModels.Tools;
-using DockState = WolvenKit.Models.Docking.DockState;
+using DockState = WolvenKit.App.Models.Docking.DockState;
 
 namespace WolvenKit.Views.Shell
 {

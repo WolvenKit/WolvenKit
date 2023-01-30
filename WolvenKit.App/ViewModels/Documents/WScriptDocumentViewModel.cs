@@ -11,9 +11,9 @@ using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI;
 using WolvenKit.App.Helpers;
-using WolvenKit.Functionality.Services;
+using WolvenKit.App.Services;
 
-namespace WolvenKit.ViewModels.Documents;
+namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class WScriptDocumentViewModel : DocumentViewModel
 {

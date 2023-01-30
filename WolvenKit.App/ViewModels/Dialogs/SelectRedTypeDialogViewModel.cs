@@ -8,7 +8,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 

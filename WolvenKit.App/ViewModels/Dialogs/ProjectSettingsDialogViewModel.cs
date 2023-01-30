@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ProjectManagement.Project;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 

@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogs="clr-namespace:WolvenKit.Views.Dialogs"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
+    xmlns:homePage="clr-namespace:WolvenKit.App.ViewModels.HomePage;assembly=WolvenKit.App"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

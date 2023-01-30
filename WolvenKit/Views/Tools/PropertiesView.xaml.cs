@@ -1,26 +1,18 @@
 using System;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Tools;
-using WolvenKit.Views.Editor.AudioTool;
-using WPFSoundVisualizationLib;
+using WolvenKit.App.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
 {

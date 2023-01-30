@@ -8,7 +8,7 @@ using Microsoft.ClearScript.V8;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
 
-namespace WolvenKit.Functionality.Services;
+namespace WolvenKit.App.Services;
 
 public class ExtendedScriptService : ScriptService
 {

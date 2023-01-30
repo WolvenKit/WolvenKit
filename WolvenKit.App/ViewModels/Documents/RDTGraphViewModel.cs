@@ -2,18 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
 using ReactiveUI;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 using Point = System.Windows.Point;
 
-namespace WolvenKit.ViewModels.Documents;
+namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableViewModel
 {
@@ -81,7 +80,7 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableVi
     {
         var graph = new GeometryGraph();
         var connections = new Dictionary<int, graphGraphConnectionDefinition>();
-        var msaglNodes = new Dictionary<int, Microsoft.Msagl.Core.Layout.Node>();
+        var msaglNodes = new Dictionary<int, Node>();
         var socketNodeLookup = new Dictionary<int, int>();
         foreach (var node in nodes)
         {
@@ -142,7 +141,7 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableVi
             }
             NodeLookup.Add(node.Chunk.GetHashCode(), nvm);
             var size = nvm.GetSize();
-            var msaglNode = new Microsoft.Msagl.Core.Layout.Node(
+            var msaglNode = new Node(
                 CurveFactory.CreateRectangle(size.Width, size.Height, new Microsoft.Msagl.Core.Geometry.Point()))
             {
                 UserData = node.Chunk.GetHashCode()
@@ -180,8 +179,8 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableVi
         {
             var nvm = NodeLookup[(int)node.UserData];
             nvm.Location = new Point(
-                node.Center.X - graph.BoundingBox.Center.X - (nvm.GetSize().Width / 2) + xOffset,
-                node.Center.Y - graph.BoundingBox.Center.Y - (nvm.GetSize().Height / 2) + yOffset);
+                node.Center.X - graph.BoundingBox.Center.X - nvm.GetSize().Width / 2 + xOffset,
+                node.Center.Y - graph.BoundingBox.Center.Y - nvm.GetSize().Height / 2 + yOffset);
             if (nvm is PhaseNodeViewModel pnvm)
             {
                 ArrangeNodes(pnvm.GeoGraph, node.Center.X - graph.BoundingBox.Center.X + xOffset, node.Center.Y - graph.BoundingBox.Center.Y + yOffset);

@@ -15,12 +15,12 @@ using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
-using WolvenKit.Models;
-using WolvenKit.ProjectManagement.Project;
-using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Tools

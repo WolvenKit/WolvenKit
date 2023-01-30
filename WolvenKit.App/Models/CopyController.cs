@@ -1,12 +1,11 @@
-namespace WolvenKit.Models
-{
-    //public static class CopyController
-    //{
-    //    #region Properties
+namespace WolvenKit.App.Models;
 
-    //    public static List<IEditableVariable> Source { get; set; }
-    //    public static IEditableVariable Target { get; set; }
+//public static class CopyController
+//{
+//    #region Properties
 
-    //    #endregion Properties
-    //}
-}
+//    public static List<IEditableVariable> Source { get; set; }
+//    public static IEditableVariable Target { get; set; }
+
+//    #endregion Properties
+//}

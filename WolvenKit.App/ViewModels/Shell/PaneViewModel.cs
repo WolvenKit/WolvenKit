@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using WolvenKit.Models.Docking;
+using WolvenKit.App.Models.Docking;
 
-namespace WolvenKit.ViewModels.Shell;
+namespace WolvenKit.App.ViewModels.Shell;
 
 public abstract partial class PaneViewModel : ObservableObject, IDockElement
 {

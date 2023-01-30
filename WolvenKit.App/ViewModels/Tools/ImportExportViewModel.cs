@@ -6,12 +6,11 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Converters;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Converters;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Tools;
 

@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.ViewModels.Shell;
+namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class GroupedChunkViewModel : ObservableObject, ISelectableTreeViewItemModel
 {

@@ -2,14 +2,15 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
+using WolvenKit.App.Models.Nodify;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Functionality.Interfaces;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Documents;
+namespace WolvenKit.App.Models;
 
-public partial class CNameWrapper : ObservableObject, INode<ReferenceSocket>
+public partial class CNameWrapper : ObservableObject, Nodify.INode<ReferenceSocket>
 {
     public CName CName => Socket.File;
 
@@ -26,7 +27,7 @@ public partial class CNameWrapper : ObservableObject, INode<ReferenceSocket>
         get => new List<ReferenceSocket>(new ReferenceSocket[] { Socket });
         set
         {
-            
+
         }
     }
 
@@ -40,7 +41,7 @@ public partial class CNameWrapper : ObservableObject, INode<ReferenceSocket>
         _socket = socket;
     }
 
-    private bool CanOpenRef() => CName != CName.Empty && DataViewModel.File.RelativePath != CName;
+    private bool CanOpenRef() => CName != CName.Empty && DataViewModel.Parent.RelativePath != CName;
     [RelayCommand(CanExecute = nameof(CanOpenRef))]
     private void OpenRef() => Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromDepotPath(CName);
 
@@ -48,7 +49,7 @@ public partial class CNameWrapper : ObservableObject, INode<ReferenceSocket>
     [RelayCommand(CanExecute = nameof(CanLoadRef))]
     private void LoadRef()
     {
-        var cr2w = DataViewModel.File.GetFileFromDepotPathOrCache(CName);
+        var cr2w = DataViewModel.Parent.GetFileFromDepotPathOrCache(CName);
         if (cr2w != null && cr2w.RootChunk != null)
         {
             var chunk = new ChunkViewModel(cr2w.RootChunk, Socket)

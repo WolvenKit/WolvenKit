@@ -2,7 +2,7 @@ using System;
 using System.Reactive.Disposables;
 using ReactiveUI;
 using Splat;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell
 {

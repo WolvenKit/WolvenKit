@@ -1,25 +1,10 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Text;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Reactive.Disposables;
 using ReactiveUI;
-using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Exporters;
-using WolvenKit.App.ViewModels.Importers;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.ViewModels.Tools;
-using static WolvenKit.Converters.PropertyGridEditors;
 
 namespace WolvenKit.Views.Exporters;
 

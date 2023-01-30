@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
 
-namespace WolvenKit.ViewModels.Tools;
+namespace WolvenKit.App.ViewModels.Tools;
 
 public class AudioPlayerViewModel : ObservableObject
 {

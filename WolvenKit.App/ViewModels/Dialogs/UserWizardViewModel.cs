@@ -1,11 +1,9 @@
 
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
 
-namespace WolvenKit.ViewModels.Wizards
+namespace WolvenKit.App.ViewModels.Dialogs;
+
+public class UserWizardViewModel : ObservableObject
 {
-    public class UserWizardViewModel : ObservableObject
-    {
-    }
 }

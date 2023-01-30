@@ -10,11 +10,12 @@ using ReactiveUI;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using WolvenKit.App;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Interaction;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit

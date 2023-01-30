@@ -7,7 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Tools;
@@ -19,12 +22,8 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Importers;
 
@@ -191,7 +190,7 @@ public partial class TextureImportViewModel : ImportViewModel
 
         if (_gameController.GetController() is RED4Controller cp77Controller)
         {
-            OpusTools opusTools = new( proj.ModDirectory, proj.RawDirectory, _archiveManager, true);
+            OpusTools opusTools = new(proj.ModDirectory, proj.RawDirectory, _archiveManager, true);
 
             return Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
         }

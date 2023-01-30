@@ -1,5 +1,5 @@
 using ReactiveUI;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.Views.Editors
 {

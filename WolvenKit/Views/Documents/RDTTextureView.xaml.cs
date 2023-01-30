@@ -9,12 +9,12 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Views.Documents

@@ -13,11 +13,11 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Layout.inkWidgets;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {

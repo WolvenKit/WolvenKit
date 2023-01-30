@@ -6,63 +6,61 @@ using System.Reactive;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.App.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs;
+
+public partial class CreateClassDialogViewModel : DialogViewModel
 {
-    public partial class CreateClassDialogViewModel : DialogViewModel
+    private readonly Dictionary<string, Type> _typeMap = new();
+
+    public CreateClassDialogViewModel(ObservableCollection<string> existingClasses, bool allowOthers = true)
     {
-        private readonly Dictionary<string, Type> _typeMap = new();
+        _existingClasses = existingClasses;
+        _classes = allowOthers
+            ? new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(t => t.IsAssignableTo(typeof(IRedClass)) && t.IsClass && !t.IsAbstract)
+                .Select(t => t.Name))
+            : _existingClasses;
 
-        public CreateClassDialogViewModel(ObservableCollection<string> existingClasses, bool allowOthers = true)
+        if (allowOthers)
         {
-            _existingClasses = existingClasses;
-            _classes = allowOthers
-                ? new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(s => s.GetTypes())
-                    .Where(t => t.IsAssignableTo(typeof(IRedClass)) && t.IsClass && !t.IsAbstract)
-                    .Select(t => t.Name))
-                : _existingClasses;
+            _typeMap = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(t => t.IsAssignableTo(typeof(IRedClass)) && t.IsClass && !t.IsAbstract)
+                .ToDictionary(obj => obj.Name, obj => obj);
 
-            if (allowOthers)
-            {
-                _typeMap = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(s => s.GetTypes())
-                    .Where(t => t.IsAssignableTo(typeof(IRedClass)) && t.IsClass && !t.IsAbstract)
-                    .ToDictionary(obj => obj.Name, obj => obj);
-
-                _classes = new ObservableCollection<string>(_typeMap.Keys);
-            }
-
-            OkCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(this), CanOk);
-            CancelCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(null));
+            _classes = new ObservableCollection<string>(_typeMap.Keys);
         }
 
-        public override ReactiveCommand<Unit, Unit> OkCommand { get; }
-        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
+        OkCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(this), CanOk);
+        CancelCommand = ReactiveCommand.Create(() => DialogHandler?.Invoke(null));
+    }
 
-        private IObservable<bool> CanOk =>
-            this.WhenAnyValue(
-                x => x.SelectedClass,
-                (c) => c is not null && Classes.Contains(c)
-            );
+    public override ReactiveCommand<Unit, Unit> OkCommand { get; }
+    public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
-        [ObservableProperty] private ObservableCollection<string> _classes;
+    private IObservable<bool> CanOk =>
+        this.WhenAnyValue(
+            x => x.SelectedClass,
+            (c) => c is not null && Classes.Contains(c)
+        );
 
-        [ObservableProperty] private ObservableCollection<string> _existingClasses;
+    [ObservableProperty] private ObservableCollection<string> _classes;
 
-        [ObservableProperty] private string? _selectedClass;
+    [ObservableProperty] private ObservableCollection<string> _existingClasses;
 
-        public Type? SelectedType
+    [ObservableProperty] private string? _selectedClass;
+
+    public Type? SelectedType
+    {
+        get
         {
-            get
+            if (SelectedClass == null)
             {
-                if (SelectedClass == null)
-                {
-                    return null;
-                }
-                return _typeMap[SelectedClass];
+                return null;
             }
+            return _typeMap[SelectedClass];
         }
     }
 }

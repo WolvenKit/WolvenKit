@@ -1,4 +1,4 @@
-﻿using WolvenKit.ViewModels.Shell;
+﻿using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.App.ViewModels;
 public abstract class FloatingPaneViewModel : PaneViewModel

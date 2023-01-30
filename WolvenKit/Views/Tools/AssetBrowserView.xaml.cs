@@ -14,20 +14,16 @@ using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
-using WolvenKit.App.Helpers;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Models;
-using WolvenKit.Common;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Other;
-using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
 {

@@ -7,7 +7,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
 
-namespace WolvenKit.Functionality.Converters;
+namespace WolvenKit.App.Converters;
 
 public class JsonFileEntryConverter : JsonConverter<FileEntry>
 {

@@ -8,8 +8,8 @@ using System.Threading;
 using System.Windows.Threading;
 using NAudio.Vorbis;
 using NAudio.Wave;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
-using WolvenKit.Functionality.Helpers;
 using WPFSoundVisualizationLib;
 
 namespace WolvenKit.Views.Editor.AudioTool

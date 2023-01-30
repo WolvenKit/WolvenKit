@@ -15,8 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 

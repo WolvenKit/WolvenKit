@@ -1,8 +1,6 @@
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -11,20 +9,16 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.PropertyGrid;
-using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Importers;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Core;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Exporters;
-using YamlDotNet.Core;
 
 namespace WolvenKit.Views.Importers;
 

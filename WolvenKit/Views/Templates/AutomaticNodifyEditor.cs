@@ -12,7 +12,9 @@ using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.Layout.MDS;
 using Nodify;
-using WolvenKit.Functionality.Interfaces;
+using WolvenKit.App.Models;
+using WolvenKit.App.Models.Nodify;
+using INode = WolvenKit.App.Models.Nodify.INode;
 
 namespace WolvenKit.Views.Editors
 {
