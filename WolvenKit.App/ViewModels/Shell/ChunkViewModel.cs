@@ -45,6 +45,7 @@ using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.App.Models;
 
 namespace WolvenKit.ViewModels.Shell
 {

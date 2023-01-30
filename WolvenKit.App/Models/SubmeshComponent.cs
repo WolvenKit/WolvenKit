@@ -1,7 +1,7 @@
 using HelixToolkit.Wpf.SharpDX;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.Models
 {
     public class SubmeshComponent : MeshGeometryModel3D
     {

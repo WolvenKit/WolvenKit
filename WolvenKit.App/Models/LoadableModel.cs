@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Media3D;
+using WolvenKit.App.Models;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 

@@ -6,7 +6,7 @@
 using System;
 using NAudio.Dsp;
 
-namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
+namespace WolvenKit.App.Models
 {
     public class SampleAggregator
     {
@@ -95,7 +95,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             for (var i = 0; i < channelDataClone.Length / 2; i++)
             {
                 // Calculate actual intensities for the FFT results.
-                fftBuffer[i] = (float)Math.Sqrt((channelDataClone[i].X * channelDataClone[i].X) + (channelDataClone[i].Y * channelDataClone[i].Y));
+                fftBuffer[i] = (float)Math.Sqrt(channelDataClone[i].X * channelDataClone[i].X + channelDataClone[i].Y * channelDataClone[i].Y);
             }
         }
 

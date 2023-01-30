@@ -11,7 +11,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
 using WolvenKit.Core.Extensions;
 
-namespace WolvenKit.Models
+namespace WolvenKit.App.Helpers
 {
     public static class Commonfunctions
     {

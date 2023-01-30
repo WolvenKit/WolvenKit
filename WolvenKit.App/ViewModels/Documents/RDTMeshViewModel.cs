@@ -33,6 +33,7 @@ using WolvenKit.Functionality.Other;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common.Services;
+using WolvenKit.App.Models;
 
 namespace WolvenKit.ViewModels.Documents
 {

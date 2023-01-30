@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WolvenKit.ViewModels.Shell
+namespace WolvenKit.App.Models
 {
     // serializable
     public class JsonAMM

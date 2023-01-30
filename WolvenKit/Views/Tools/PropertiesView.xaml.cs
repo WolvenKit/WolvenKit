@@ -14,7 +14,7 @@ using System.Windows.Threading;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
-using WolvenKit.App.Helpers;
+using WolvenKit.App.Models;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;

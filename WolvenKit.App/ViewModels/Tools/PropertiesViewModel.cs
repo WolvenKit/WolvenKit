@@ -8,7 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
-using WolvenKit.App.Helpers;
+using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
@@ -23,7 +23,6 @@ using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
 using static WolvenKit.ViewModels.Documents.RDTMeshViewModel;
 
 namespace WolvenKit.ViewModels.Tools

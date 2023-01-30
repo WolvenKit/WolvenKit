@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using HelixToolkit.Wpf.SharpDX;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.Models
 {
     public class SmartElement3DCollection : ObservableElement3DCollection
     {

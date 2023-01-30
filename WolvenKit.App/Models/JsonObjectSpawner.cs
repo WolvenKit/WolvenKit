@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.ViewModels.Shell
+﻿namespace WolvenKit.App.Models
 {
     // serializable
     public class JsonObjectSpawner

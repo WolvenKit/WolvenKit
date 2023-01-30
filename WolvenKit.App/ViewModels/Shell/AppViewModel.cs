@@ -54,7 +54,7 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Tools;
-using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
+using NativeMethods = WolvenKit.App.Helpers.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
 {

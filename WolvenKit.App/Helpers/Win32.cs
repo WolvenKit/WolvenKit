@@ -2,12 +2,10 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace WolvenKit.Functionality.NativeWin
+namespace WolvenKit.App.Helpers
 {
     public class NativeMethods
     {
-        #region Fields
-
         // offset of window style value
         public const int GWL_STYLE = -16;
 
@@ -15,10 +13,6 @@ namespace WolvenKit.Functionality.NativeWin
 
         // window style constants for scrollbars
         public const int WS_VSCROLL = 0x00200000;
-
-        #endregion Fields
-
-        #region Methods
 
         [DllImport("shell32.dll")]
         public static extern int FindExecutable(string lpFile, string lpDirectory, [Out] StringBuilder lpResult);
@@ -30,7 +24,5 @@ namespace WolvenKit.Functionality.NativeWin
         CharSet = CharSet.Unicode, ExactSpelling = true,
         CallingConvention = CallingConvention.StdCall)]
         private static extern bool MoveFile(string lpExistingFileName, string lpNewFileName);
-
-        #endregion Methods
     }
 }

@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ReactiveUI;
+using WolvenKit.App.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
 
 namespace WolvenKit.ViewModels.Dialogs
 {

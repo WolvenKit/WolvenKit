@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.ViewModels.Shell
+﻿namespace WolvenKit.App.Models
 {
     public class Rot
     {

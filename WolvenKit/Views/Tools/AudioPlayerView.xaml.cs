@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using CommunityToolkit.Mvvm.Input;
-using WolvenKit.App.Helpers;
+using WolvenKit.App.Models;
 using WolvenKit.Core.Wwise;
 using WolvenKit.Views.Editor.AudioTool;
 using WPFSoundVisualizationLib;

@@ -9,7 +9,7 @@ using WolvenKit.ProjectManagement.Project;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 
-namespace WolvenKit.ViewModels.Shell
+namespace WolvenKit.App.Models
 {
     public class Prop
     {
