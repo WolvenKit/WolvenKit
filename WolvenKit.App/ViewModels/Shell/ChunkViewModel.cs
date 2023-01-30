@@ -19,10 +19,8 @@ using ReactiveUI;
 using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
@@ -37,11 +35,22 @@ using YamlDotNet.Serialization;
 using static WolvenKit.RED4.Types.RedReflection;
 using static WolvenKit.ViewModels.Dialogs.DialogViewModel;
 using IRedString = WolvenKit.RED4.Types.IRedString;
+using System.Text.Json;
+using WolvenKit.Common;
+using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W;
+
+using Mat4 = System.Numerics.Matrix4x4;
+using Quat = System.Numerics.Quaternion;
+using Vec3 = System.Numerics.Vector3;
+using Vec4 = System.Numerics.Vector4;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemModel, WolvenKit.Functionality.Interfaces.INode<ReferenceSocket>
+    public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemModel, Functionality.Interfaces.INode<ReferenceSocket>
     {
+        private readonly ILoggerService _loggerService;
         private static readonly List<string> s_hiddenProperties = new() { "meshMeshMaterialBuffer.rawDataHeaders", "meshMeshMaterialBuffer.rawData", "entEntityTemplate.compiledData", "appearanceAppearanceDefinition.compiledData" };
 
         private bool _propertiesLoaded;
@@ -58,6 +67,8 @@ namespace WolvenKit.ViewModels.Shell
 
         public ChunkViewModel(IRedType data, string name, ChunkViewModel? parent = null, bool isReadOnly = false)
         {
+            _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
+
             _data = data;
             Parent = parent;
             _propertyName = name;
@@ -743,11 +754,11 @@ namespace WolvenKit.ViewModels.Shell
                     var yaml = serializer.Serialize(new TweakXLFile { txl });
                     stream.Write(yaml.ToCharArray().Select(c => (byte)c).ToArray());
 
-                    Locator.Current.GetService<ILoggerService>().NotNull().Success($"TweakXL YAML written for {recordName}.");
+                    _loggerService.Success($"TweakXL YAML written for {recordName}.");
                 }
                 catch (Exception ex)
                 {
-                    Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
+                    _loggerService.Error(ex);
                 }
             }
         }
@@ -1093,7 +1104,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     if (!pkg.Chunks.Remove((RedBaseClass)Data))
                     {
-                        Locator.Current.GetService<ILoggerService>().NotNull().Error("Unable to delete chunk");
+                        _loggerService.Error("Unable to delete chunk");
                         return;
                     }
                 }
@@ -1108,14 +1119,14 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    Locator.Current.GetService<ILoggerService>().NotNull().Error("Unknown collection - unable to delete chunk");
+                    _loggerService.Error("Unknown collection - unable to delete chunk");
                     return;
                 }
 
                 Tab.File.SetIsDirty(true);
                 Parent.RecalculateProperties();
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().NotNull().Error(ex); }
+            catch (Exception ex) { _loggerService.Error(ex); }
         }
 
         private bool CanImportWorldNodeData() => Data is worldNodeData && PropertyCount > 0;
@@ -1149,7 +1160,7 @@ namespace WolvenKit.ViewModels.Shell
                     var indices = ts.Select(_ => _.Name).ToList().ConvertAll(int.Parse);
                     if (indices.Count == 0)
                     {
-                        Locator.Current.GetService<ILoggerService>().NotNull().Warning("Please select something first");
+                        _loggerService.Warning("Please select something first");
                     }
                     else
                     {
@@ -1179,16 +1190,16 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (Parent.Data is null)
                 {
-                    LoggerHelper.GetUnsafe().Warning($"Parent.Data is null");
+                    _loggerService.Warning($"Parent.Data is null");
                 }
                 else
                 {
-                    LoggerHelper.GetUnsafe().Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
+                    _loggerService.Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
                 }
             }
             catch (Exception ex)
             {
-                Locator.Current.GetService<ILoggerService>().NotNull().Warning($"Something went wrong while trying to delete the selection : {ex}");
+                _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
             }
 
             Tab.SelectedChunk = Parent;
@@ -1207,7 +1218,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             catch (Exception ex)
             {
-                Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
+                _loggerService.Error(ex);
             }
         }
 
@@ -1243,11 +1254,11 @@ namespace WolvenKit.ViewModels.Shell
                     myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
                     myStream.Close();
 
-                    Locator.Current.GetService<ILoggerService>().NotNull().Success($"{ResolvedType} written to: {saveFileDialog.FileName}");
+                    _loggerService.Success($"{ResolvedType} written to: {saveFileDialog.FileName}");
                 }
                 else
                 {
-                    Locator.Current.GetService<ILoggerService>().NotNull().Error($"Could not open file: {saveFileDialog.FileName}");
+                    _loggerService.Error($"Could not open file: {saveFileDialog.FileName}");
                 }
             }
         }
@@ -1274,7 +1285,7 @@ namespace WolvenKit.ViewModels.Shell
                     RedDocumentTabViewModel.CopiedChunk = irbh;
                 }
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().NotNull().Error(ex); }
+            catch (Exception ex) { _loggerService.Error(ex); }
 
         }
 
@@ -1324,7 +1335,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 RedDocumentTabViewModel.CopiedChunk = Data is IRedCloneable irc ? (IRedType)irc.DeepCopy() : Data;
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().NotNull().Error(ex); }
+            catch (Exception ex) { _loggerService.Error(ex); }
         }
 
         private bool CanPasteChunk()
@@ -1369,7 +1380,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().NotNull().Error(ex); }
+            catch (Exception ex) { _loggerService.Error(ex); }
         }
 
         private bool CanDeleteAll() => !IsReadOnly && ((IsArray && PropertyCount > 0) || (IsInArray && Parent is not null && Parent.PropertyCount > 0));
@@ -1445,16 +1456,16 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (Parent.Data is null)
                 {
-                    LoggerHelper.GetUnsafe().Warning($"Parent.Data is null");
+                    _loggerService.Warning($"Parent.Data is null");
                 }
                 else
                 {
-                    LoggerHelper.GetUnsafe().Warning($"Cannot copy unsupported type: {Parent.Data.GetType().Name}");
+                    _loggerService.Warning($"Cannot copy unsupported type: {Parent.Data.GetType().Name}");
                 }
             }
             catch (Exception ex)
             {
-                Locator.Current.GetService<ILoggerService>().NotNull().Error($"Something went wrong while trying to copy the selection : {ex}");
+                _loggerService.Error($"Something went wrong while trying to copy the selection : {ex}");
             }
             //Tab.SelectedChunk = Parent;
         }
@@ -1522,7 +1533,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().NotNull().Error(ex); }
+            catch (Exception ex) { _loggerService.Error(ex); }
         }
 
         #endregion
@@ -2051,7 +2062,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             Properties.Add(new ChunkViewModel(wss.Nodes[sst.NodeIndex], "Node", this, isreadonly));
                         }
-                        catch (Exception ex) { Locator.Current.GetService<ILoggerService>().NotNull().Error(ex); }
+                        catch (Exception ex) { _loggerService.Error(ex); }
                     }
                 }
             }
@@ -2311,7 +2322,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 return true;
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().NotNull().Error(ex); }
+            catch (Exception ex) { _loggerService.Error(ex); }
             return false;
         }
 
@@ -2478,7 +2489,7 @@ namespace WolvenKit.ViewModels.Shell
                 var instance = RedTypeManager.CreateRedType(vm.SelectedType);
                 if (!InsertChild(-1, instance))
                 {
-                    LoggerHelper.GetUnsafe().Error("Unable to insert child");
+                    _loggerService.Error("Unable to insert child");
                 }
             }
         }
@@ -2496,7 +2507,7 @@ namespace WolvenKit.ViewModels.Shell
                     handle.SetValue(instance);
                     if (!InsertChild(-1, newItem))
                     {
-                        LoggerHelper.GetUnsafe().Error("Unable to insert child");
+                        _loggerService.Error("Unable to insert child");
                     }
                 }
             }
@@ -2557,7 +2568,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 catch (Exception ex)
                 {
-                    LoggerHelper.GetUnsafe().Error(ex);
+                    _loggerService.Error(ex);
                 }
             }
             return Task.FromResult(false);
@@ -2574,7 +2585,7 @@ namespace WolvenKit.ViewModels.Shell
             var text = File.ReadAllText(openFileDialog.FileName);
             if (string.IsNullOrEmpty(text) || current is null)
             {
-                Locator.Current.GetService<ILoggerService>().NotNull().Error("Could not read file");
+                _loggerService.Error("Could not read file");
                 return false;
             }
 
@@ -2607,13 +2618,13 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    LoggerHelper.GetUnsafe().Warning("nodeData and your JSON must contain the same number of elements");
+                    _loggerService.Warning("nodeData and your JSON must contain the same number of elements");
                     return false;
                 }
             }
             else
             {
-                LoggerHelper.GetUnsafe().Warning("Could not recognize the format of your JSON");
+                _loggerService.Warning("Could not recognize the format of your JSON");
                 return false;
             }
 
@@ -2630,7 +2641,7 @@ namespace WolvenKit.ViewModels.Shell
 
             await Refresh();
 
-            LoggerHelper.GetUnsafe().Success($"Successfully imported from JSON");
+            _loggerService.Success($"Successfully imported from JSON");
             return true;
         }
 
@@ -2657,18 +2668,18 @@ namespace WolvenKit.ViewModels.Shell
                             myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
                             myStream.Close();
 
-                            Locator.Current.GetService<ILoggerService>().NotNull().Success($"{irt.GetType().Name} written to: {saveFileDialog.FileName}");
+                            _loggerService.Success($"{irt.GetType().Name} written to: {saveFileDialog.FileName}");
                         }
                     }
                     else
                     {
-                        Locator.Current.GetService<ILoggerService>().NotNull().Error($"Could not open file: {saveFileDialog.FileName}");
+                        _loggerService.Error($"Could not open file: {saveFileDialog.FileName}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
+                _loggerService.Error(ex);
             }
         }
 
@@ -2683,7 +2694,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 catch (Exception ex)
                 {
-                    Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
+                    _loggerService.Error(ex);
                 }
             }
 
@@ -2691,7 +2702,7 @@ namespace WolvenKit.ViewModels.Shell
             Parent?.RecalculateProperties();
         }
 
-        private static void AddToCopiedChunks(object elem)
+        private void AddToCopiedChunks(object elem)
         {
             try
             {
@@ -2715,10 +2726,727 @@ namespace WolvenKit.ViewModels.Shell
                     throw new NotImplementedException();
                 }
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().NotNull().Error(ex); }
+            catch (Exception ex) { _loggerService.Error(ex); }
         }
 
         #endregion
+
+
+        #region utils
+
+        private static Vec4 GetCenter(List<Vec4> poslist)
+        {
+            //minX + (maxX - minX)/2 == (maxX + minX)/2;
+            var (minX, maxX) = (poslist.Select(_ => _.X).Min(), poslist.Select(_ => _.X).Max());
+            var cX = (maxX + minX) / 2;
+
+            var (minY, maxY) = (poslist.Select(_ => _.Y).Min(), poslist.Select(_ => _.Y).Max());
+            var cY = (maxY + minY) / 2;
+
+            var (minZ, maxZ) = (poslist.Select(_ => _.Z).Min(), poslist.Select(_ => _.Z).Max());
+            var cZ = (maxZ + minZ) / 2;
+
+            var (minW, maxW) = (poslist.Select(_ => _.W).Min(), poslist.Select(_ => _.W).Max());
+            var cW = (maxW + minW) / 2;
+
+            return new Vec4(cX, cY, cZ, cW);
+        }
+
+        private static Vec4 GetCenter(List<List<object>> json)
+        {
+            var poslist =
+                json.Select(j =>
+                new Vec3()
+                {
+                    X = float.Parse(
+                        ((JsonElement)j[5])[0].GetRawText()
+                        ),
+                    Y = float.Parse(
+                        ((JsonElement)j[5])[1].GetRawText()
+                        ),
+                    Z = float.Parse(
+                        ((JsonElement)j[5])[2].GetRawText()
+                        )
+                }
+                ).ToList();
+
+            //minX + (maxX - minX)/2 == (maxX + minX)/2;
+            var (minX, maxX) = (poslist.Select(_ => _.X).Min(), poslist.Select(_ => _.X).Max());
+            var cX = (maxX + minX) / 2;
+
+            var (minY, maxY) = (poslist.Select(_ => _.Y).Min(), poslist.Select(_ => _.Y).Max());
+            var cY = (maxY + minY) / 2;
+
+            var (minZ, maxZ) = (poslist.Select(_ => _.Z).Min(), poslist.Select(_ => _.Z).Max());
+            var cZ = (maxZ + minZ) / 2;
+
+            return new Vec4(cX, cY, cZ, 1);
+        }
+
+        //private static Vec4 GetPos(Prop line)
+        //{
+        //    var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+        //    return new Vec4()
+        //    {
+        //        X = float.Parse(posandrot.x),
+        //        Y = float.Parse(posandrot.y),
+        //        Z = float.Parse(posandrot.z),
+        //        W = float.Parse(posandrot.w)
+        //    };
+        //}
+
+        private static List<Vec4> GetPos(List<Prop> props)
+        {
+            var poslist = new List<Vec4>();
+            foreach (var line in props)
+            {
+                var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos)).NotNull();
+
+                ArgumentNullException.ThrowIfNull(posandrot.x);
+                ArgumentNullException.ThrowIfNull(posandrot.y);
+                ArgumentNullException.ThrowIfNull(posandrot.z);
+                ArgumentNullException.ThrowIfNull(posandrot.w);
+
+                var v = new Vec4()
+                {
+                    X = float.Parse(posandrot.x),
+                    Y = float.Parse(posandrot.y),
+                    Z = float.Parse(posandrot.z),
+                    W = float.Parse(posandrot.w)
+                };
+                poslist.Add(v);
+            }
+            return poslist;
+        }
+
+        private (Vec4, Quat) GetPosRot(Prop line)
+        {
+            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos)).NotNull();
+
+            ArgumentNullException.ThrowIfNull(posandrot.x);
+            ArgumentNullException.ThrowIfNull(posandrot.y);
+            ArgumentNullException.ThrowIfNull(posandrot.z);
+            ArgumentNullException.ThrowIfNull(posandrot.w);
+            ArgumentNullException.ThrowIfNull(posandrot.yaw);
+            ArgumentNullException.ThrowIfNull(posandrot.pitch);
+            ArgumentNullException.ThrowIfNull(posandrot.roll);
+
+            var v =
+                posandrot == null
+                ? new Vec4()
+                : new Vec4()
+                {
+                    X = float.Parse(posandrot.x),
+                    Y = float.Parse(posandrot.y),
+                    Z = float.Parse(posandrot.z),
+                    W = float.Parse(posandrot.w)
+                };
+
+            var euler =
+                posandrot == null
+                ? new Vec3()
+                : new Vec3()
+                {
+                    X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+                    Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+                    Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+                };
+            var q = line.isunreal ? FixRotation2(euler) :
+                FixRotation(euler);
+
+            return (v, q);
+        }
+
+        //private (List<Vec4>, List<Quat>) GetPosRot(List<Prop> props)
+        //{
+        //    var poslist = new List<Vec4>();
+        //    var rotlist = new List<Quat>();
+
+        //    foreach (var line in props)
+        //    {
+        //        var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+        //        var v = new Vec4()
+        //        {
+        //            X = float.Parse(posandrot.x),
+        //            Y = float.Parse(posandrot.y),
+        //            Z = float.Parse(posandrot.z),
+        //            W = float.Parse(posandrot.w)
+        //        };
+        //        poslist.Add(v);
+
+        //        var euler = new Vec3()
+        //        {
+        //            X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+        //            Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+        //            Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+        //        };
+        //        var q = FixRotation(euler);
+
+        //        rotlist.Add(q);
+        //    }
+        //    return (poslist, rotlist);
+        //}
+
+        //private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props)
+        //{
+        //    var poslist = new List<Vec4>();
+        //    var rotlist = new List<Quat>();
+        //    var applist = new List<string>();
+
+        //    foreach (var line in props)
+        //    {
+        //        var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+        //        var v = new Vec4()
+        //        {
+        //            X = float.Parse(posandrot.x),
+        //            Y = float.Parse(posandrot.y),
+        //            Z = float.Parse(posandrot.z),
+        //            W = float.Parse(posandrot.w)
+        //        };
+        //        poslist.Add(v);
+
+        //        var euler = new Vec3()
+        //        {
+        //            X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+        //            Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+        //            Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+        //        };
+
+        //        var q = FixRotation(euler);
+
+        //        // (q.Y, q.Z) = (-q.Z, -q.Y);
+        //        rotlist.Add(q);
+
+        //        applist.Add(line.app);
+        //    }
+        //    return (poslist, rotlist, applist);
+        //}
+
+        private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Child> props)
+        {
+            var poslist = new List<Vec4>();
+            var rotlist = new List<Quat>();
+            var applist = new List<string>();
+
+            foreach (var line in props)
+            {
+                var pos = line.pos;
+                var rot = line.rot;
+                var v = new Vec4()
+                {
+                    X = pos.x,
+                    Y = pos.y,
+                    Z = pos.z,
+                    W = pos.w
+                };
+                poslist.Add(v);
+
+                var euler = new Vec3()
+                {
+                    X = (float)(Math.PI / 180) * rot.yaw,
+                    Y = (float)(Math.PI / 180) * rot.pitch,
+                    Z = (float)(Math.PI / 180) * rot.roll
+                };
+
+                var q = FixRotation(euler);
+
+                rotlist.Add(q);
+
+                if (line.app != null)
+                {
+                    var app = line.app == "" ? "default" : line.app;
+                    applist.Add(app);
+                }
+                else
+                {
+                    applist.Add("default");
+                }
+            }
+            return (poslist, rotlist, applist);
+        }
+
+        private static string PutQuotes(string w)
+        {
+            w = w.Replace("{", "{\"");
+            w = w.Replace("}", "\"}");
+            w = w.Replace(", ", "\",\"");
+            w = w.Replace(" = ", "\":\"");
+            return w;
+        }
+
+        public async Task Refresh()
+        {
+            var document = Locator.Current.GetService<AppViewModel>().NotNull().ActiveDocument;
+
+            if (Tab is not null && document is not null)
+            {
+                Tab.File.TabItemViewModels.Clear();
+                await Task.Delay(1);
+                throw new NotImplementedException();
+
+                //await document.OpenFileAsync(Tab.File.FilePath);
+            }
+        }
+
+
+        public static Quat FixRotation(Vec3 euler) =>
+            Quat.CreateFromRotationMatrix(
+                Mat4.Identity
+                * Mat4.CreateFromAxisAngle(Vec3.UnitY, euler.Z)
+                * Mat4.CreateFromAxisAngle(Vec3.UnitX, euler.Y)
+                * Mat4.CreateFromAxisAngle(Vec3.UnitZ, euler.X)
+                );
+
+        public static Quat FixRotation2(Vec3 euler) =>
+            Quat.CreateFromRotationMatrix(
+                Mat4.Identity
+                * Mat4.CreateFromAxisAngle(Vec3.UnitZ, (float)Math.PI)
+                * Mat4.CreateFromAxisAngle(-Vec3.UnitX, euler.Y)
+                * Mat4.CreateFromAxisAngle(Vec3.UnitY, euler.Z)
+                * Mat4.CreateFromAxisAngle(-Vec3.UnitZ, euler.X)
+                );
+
+
+        private static Vec4 UpdateCoords(Vec4 pos, Vec4 center)
+        {
+            pos.X -= center.X;
+            pos.Y -= center.Y;
+            pos.Z -= center.Z;
+            //pos.W -= center.W;
+
+            return pos;
+        }
+
+        private static List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
+        {
+            for (var i = 0; i < poslist.Count; i++)
+            {
+                var pos = poslist[i];
+                pos.X -= center.X;
+                pos.Y -= center.Y;
+                pos.Z -= center.Z;
+                //pos.W -= center.W;
+                poslist[i] = pos;
+            }
+            return poslist;
+        }
+
+        //private void AddToData(string tr, Prop line, string ff = "", bool updatecoords = true)
+        //{
+        //    if (Parent.Parent is not null &&
+        //        Parent.Parent.Data is not null &&
+        //        Parent.Parent.Data is worldStreamingSector)
+        //    {
+        //        //loads the mesh when found and scaled
+        //        if (GetScale(line) == Vec3.One)
+        //        {
+        //            AddEntity(tr, line, updatecoords);
+        //        }
+        //        else if (ff != "")
+        //        {
+        //            AddMesh(tr, line, updatecoords);
+        //        }
+        //    }
+        //}
+
+        private void AddEntity(string tr, Prop line, bool updatecoords = true, bool visible = true)
+        {
+            if (line.template_path is not null && Parent?.Parent?.Data is worldStreamingSector wss)
+            {
+                //var wss = (worldStreamingSector)Parent.Parent.Data;
+                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr).NotNull();
+
+                var wen = new worldEntityNode();
+                var wenh = new CHandle<worldNode>(wen);
+                var index = wss.Nodes.Count;
+
+                //gotta figure out colliders
+                wen.IsVisibleInGame = visible;
+                wen.EntityTemplate = new CResourceAsyncReference<entEntityTemplate>(line.template_path);
+                wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
+                wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
+
+                current.QuestPrefabRefHash = Convert.ToUInt64(current.GetHashCode()); // Add hash to make object interactible and persistent
+
+                if (line.isdoor is bool b && b)
+                {
+                    var eeid = new entEntityInstanceData();
+                    var eeidh = new CHandle<entEntityInstanceData>(eeid);
+
+                    wen.InstanceData = eeidh;
+                    eeid.Buffer = new DataBuffer();
+
+                    var pk = new RedPackage();
+                    var dc = new DoorController();
+                    pk.Chunks = new List<RedBaseClass>();
+
+                    dc.PersistentState = new DoorControllerPS()
+                    {
+                        IsInteractive = true
+                    };
+                    pk.Chunks.Add(dc);
+                    eeid.Buffer.Data = pk;
+                }
+
+                ((IRedArray)wss.Nodes).Insert(index, wenh);
+                SetCoords(current, index, line, updatecoords);
+            }
+        }
+
+        private void AddMesh(string tr, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
+        {
+            if (Parent?.Parent?.Data is not worldStreamingSector wss)
+            {
+                return;
+            }
+            var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+            if (current == null)
+            {
+                return;
+            }
+
+            //var cmesh = new worldStaticMeshNode();
+            var cmesh = new worldGenericProxyMeshNode();
+
+            var wenh = new CHandle<worldNode>(cmesh);
+            var index = wss.Nodes.Count;
+
+            cmesh.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
+            cmesh.ForceAutoHideDistance = 20000;
+            cmesh.NearAutoHideDistance = 0;
+            //not sure what these do
+            //cmesh.RemoveFromRainMap = true;
+            //cmesh.OccluderType = visWorldOccluderType.Exterior;
+
+            cmesh.Mesh = new CResourceAsyncReference<CMesh>(line.template_path);
+            cmesh.MeshAppearance = string.IsNullOrEmpty(line.app) ? "default" : line.app;
+
+            ((IRedArray)wss.Nodes).Insert(index, wenh);
+            SetCoords(current, index, line, updatecoords, pos, rot);
+        }
+
+        private void SetCoords(worldNodeData current, int index, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
+        {
+            if (pos == default || rot == default)
+            {
+                (pos, rot) = GetPosRot(line);
+            }
+
+            var scale = line.isunreal ? GetScale(line, 1) : GetScale(line);
+            var f = line.isunreal ? (float)0.01 : 1;
+            var s = line.isunreal ? -1 : 1;
+
+            if (line.center != default && updatecoords)
+            {
+                pos = UpdateCoords(pos, line.center);
+                current.Position.X += s * pos.X * f;
+                current.Position.Y += pos.Y * f;
+                current.Position.Z += pos.Z * f;
+                current.Position.W *= pos.W * f;
+            }
+            else
+            {
+                current.Position = Vec4.Multiply(f, pos);
+                current.Position.X = s * current.Position.X;
+            }
+
+            current.Orientation = rot;
+            //doesn't do anything in ents ?!?
+            current.Scale = scale;
+            current.Pivot.X = current.Position.X;
+            current.Pivot.Y = current.Position.Y;
+            current.Pivot.Z = current.Position.Z;
+            //definitely does not go to 5000
+            current.MaxStreamingDistance = 20000;
+            //seem to be doing something to the max distance, kinda
+            current.UkFloat1 = 20000;
+            current.Uk11 = 20000;
+            current.NodeIndex = (CUInt16)index;
+            AddCurrent(current);
+        }
+
+        private void AddCurrent(worldNodeData current)
+        {
+            if (Parent?.Data is DataBuffer db00 &&
+                db00.Buffer.Data is worldNodeDataBuffer db0)
+            {
+                if (!db0.Lookup.ContainsKey(current.NodeIndex))
+                {
+                    db0.Lookup[current.NodeIndex] = new();
+                }
+                db0.Lookup[current.NodeIndex].Add(current);
+            }
+
+            if (Parent?.Data is DataBuffer db && db.Buffer.Data is IRedType irt)
+            {
+                if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
+                {
+                    var indexx = Parent.GetIndexOf(this) + 1;
+                    if (indexx == -1 || indexx > ira.Count)
+                    {
+                        indexx = ira.Count;
+                    }
+                    ira.Insert(indexx, current);
+                }
+            }
+        }
+
+        private List<Child> GetLines(JsonAMM2 json)
+        {
+            ArgumentNullException.ThrowIfNull(json.name, nameof(json));
+            ArgumentNullException.ThrowIfNull(json.pos, nameof(json));
+            ArgumentNullException.ThrowIfNull(json.rot, nameof(json));
+
+            var props = new List<Child>();
+
+            var v = new Child(json.name, json.pos, json.rot);
+            props.Add(v);
+
+            foreach (var child in json.childs)
+            {
+                GetLines(child, props);
+            }
+
+            return props;
+        }
+
+        private void GetLines(Child c, List<Child> props)
+        {
+            var v = new Child(c.name, c.pos, c.rot)
+            {
+                path = c.path,
+                app = c.app
+            };
+            props.Add(v);
+            if (c.childs is not null)
+            {
+                foreach (var cc in c.childs)
+                {
+                    GetLines(cc, props);
+                }
+            }
+        }
+
+        private static Vec4 GetCenter(JsonAMM2 r)
+        {
+            ArgumentNullException.ThrowIfNull(r.pos, nameof(r));
+            return new(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
+        }
+
+        private void AddFromAMM(List<Prop> props, string tr, bool updatecoords = true)
+        {
+            try
+            {
+                var am = Locator.Current.GetService<IArchiveManager>().NotNull();
+                var sm = Locator.Current.GetService<ISettingsManager>().NotNull();
+                am.LoadModsArchives(new FileInfo(sm.CP77ExecutablePath.NotNull()));
+                var af = am.GetGroupedFiles();
+
+                var tempbool = am.IsModBrowserActive;
+                am.IsModBrowserActive = true;
+                var tt2 = am.GetGroupedFiles();
+
+                var archiveMeshList = af[".mesh"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
+                var modMeshList = tt2[".mesh"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
+                var archiveEntList = af[".ent"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
+                var modEntList = tt2[".ent"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
+                am.IsModBrowserActive = tempbool;
+
+                //lists of all ents and mesh found in archives and mods
+                var entList = archiveEntList.Concat(modEntList).ToList();
+                var meshList = archiveMeshList.Concat(modMeshList).ToList();
+
+                var center = updatecoords ? GetCenter(GetPos(props)) : new Vec4();
+
+                foreach (var line in props)
+                {
+                    if (updatecoords)
+                    { line.center = center; }
+                    var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+
+                    var scale = GetScale(line);
+                    var door = line.isdoor is bool b && b;
+
+                    if (scale != Vec3.One)
+                    {
+                        var path = line.template_path;
+                        var sp = Path.GetFileName(path);
+                        var spm = Path.ChangeExtension(sp, ".mesh");
+
+                        //find ent
+                        var foundents = entList.Where(x => x.FileName.Contains(sp)).Select(_ => _).ToList();
+
+                        if (foundents.Any() && foundents.Last() is FileEntry foundent)
+                        {
+                            using var stream = new MemoryStream();
+                            foundent.Extract(stream);
+                            using var reader = new BinaryReader(stream);
+                            var cr2wFile = Locator.Current.GetService<Red4ParserService>().NotNull().ReadRed4File(reader);
+
+                            //open ent
+                            if (cr2wFile is not null &&
+                                cr2wFile.RootChunk is entEntityTemplate rc &&
+                                rc.CompiledData.Data is RedPackage data)
+                            {
+                                var meshes = data.Chunks.Where(x => x is entMeshComponent)
+                                             .Select(_ => (entMeshComponent)_).ToList();
+
+                                for (var i1 = 0; i1 < meshes.Count; i1++)
+                                {
+                                    var mesh = meshes[i1];
+                                    var (p, r) = GetPosRot(line);
+
+                                    var t = mesh.LocalTransform.Position;
+                                    var mp = new Vec4(t.X, t.Y, t.Z, 1);
+
+                                    var np = p + mp;
+                                    var nrq = r * mesh.LocalTransform.Orientation;
+
+                                    var newline = new Prop()
+                                    {
+                                        name = line.name + "_" + i1,
+                                        app = line.app == "" ? "default" : line.app,
+                                        template_path = mesh.Mesh.DepotPath,
+                                        scale = line.scale
+                                    };
+
+                                    AddMesh(tr, newline, updatecoords, np, nrq);
+                                }
+                            }
+                            else
+                            {
+                                var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _.FileName).ToList();
+                                if (foundmesh.Count > 0)
+                                {
+                                    line.template_path = foundmesh.Last();
+                                    AddMesh(tr, line, updatecoords);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _.FileName).ToList();
+                            if (foundmesh.Count > 0)
+                            {
+                                line.template_path = foundmesh.Last();
+                                AddMesh(tr, line, updatecoords);
+                            }
+                            else
+                            {
+                                //those ents will not be scaled properly
+                                //if they load anything at all
+                                AddEntity(tr, line, updatecoords);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        AddEntity(tr, line, updatecoords);
+                    }
+                }
+            }
+            catch (Exception ex) { _loggerService.Error(ex); }
+        }
+
+        private void AddFromAMM2(JsonAMM2 json, string tr, bool updatecoords = true)
+        {
+            var center = updatecoords ? GetCenter(json) : new Vec4();
+            var props = GetLines(json);
+
+            foreach (var c in props)
+            {
+                var line = Prop.FromChild(c);
+                if (updatecoords)
+                {
+                    line.center = center;
+                }
+                AddEntity(tr, line, updatecoords);
+            }
+        }
+
+        private void AddFromUnreal(List<List<object>> json, string tr, bool updatecoords = true)
+        {
+            var center = updatecoords ? GetCenter(json) : new Vec4();
+            var pm = Locator.Current.GetService<IProjectManager>().NotNull();
+            ArgumentNullException.ThrowIfNull(pm.ActiveProject);
+
+            foreach (var o in json)
+            {
+                var line = Prop.FromObjectList(o, pm.ActiveProject);
+
+                if (updatecoords)
+                {
+                    line.center = center;
+                }
+                line.isunreal = true;
+                AddMesh(tr, line, updatecoords);
+            }
+        }
+
+        private void AddFromObjectSpawner(List<JsonObjectSpawner> json, string tr, bool updatecoords = true)
+        {
+            var v = json.Select(x =>
+            {
+                ArgumentNullException.ThrowIfNull(x.pos);
+
+                return new Vec4(x.pos.x, x.pos.y, x.pos.z, x.pos.w);
+            }).ToList();
+
+
+            var center = updatecoords ? GetCenter(v) : new Vec4();
+
+            foreach (var o in json)
+            {
+                var line = Prop.FromJsonObjectSpawner(o);
+                if (updatecoords)
+                {
+                    line.center = center;
+                }
+                AddEntity(tr, line, updatecoords);
+            }
+        }
+
+        private void AddFromBlender(List<worldNodeData> json, string tr, bool updatecoords = false)
+        {
+            if (Parent?.Data is DataBuffer db && db.Buffer.Data is IRedArray ira)
+            {
+                for (var i = 0; i < json.Count; i++)
+                {
+                    var line = json[i];
+                    ira[i] = line;
+                }
+            }
+        }
+
+        private Vec3 GetScale(Prop line, float factor = (float)0.01)
+        {
+            var scala = line.scale == "nil"
+                ? null
+                : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
+
+            if (scala is null)
+            {
+                return Vec3.One;
+            }
+            else
+            {
+                ArgumentNullException.ThrowIfNull(scala.x);
+                ArgumentNullException.ThrowIfNull(scala.y);
+                ArgumentNullException.ThrowIfNull(scala.z);
+
+                return new Vec3(float.Parse(scala.x) * factor, float.Parse(scala.y) * factor, float.Parse(scala.z) * factor);
+            }
+        }
+
+        public static void CreateFromYawPitchRoll(Quaternion r, out float yaw, out float pitch, out float roll)
+        {
+            yaw = MathF.Atan2(2.0f * ((r.J * r.R) + (r.I * r.K)), 1.0f - (2.0f * ((r.I * r.I) + (r.J * r.J))));
+            pitch = MathF.Asin(2.0f * ((r.I * r.R) - (r.J * r.K)));
+            roll = MathF.Atan2(2.0f * ((r.I * r.J) + (r.K * r.R)), 1.0f - (2.0f * ((r.I * r.I) + (r.K * r.K))));
+        }
+
+        #endregion
+
 
     }
 }

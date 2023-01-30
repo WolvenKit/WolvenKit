@@ -9,8 +9,6 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
-using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -44,6 +42,7 @@ namespace WolvenKit.Functionality.Controllers
         private readonly IArchiveManager _archiveManager;
         private readonly IProgressService<double> _progressService;
         private readonly IPluginService _pluginService;
+        private readonly Red4ParserService _parserService;
 
         private bool _initialized = false;
 
@@ -58,8 +57,8 @@ namespace WolvenKit.Functionality.Controllers
             IModTools modTools,
             IArchiveManager gameArchiveManager,
             IProgressService<double> progressService,
-            IPluginService pluginService
-            )
+            IPluginService pluginService,
+            Red4ParserService parserService)
         {
             _notificationService = notificationService;
             _loggerService = loggerService;
@@ -70,6 +69,7 @@ namespace WolvenKit.Functionality.Controllers
             _archiveManager = gameArchiveManager;
             _progressService = progressService;
             _pluginService = pluginService;
+            _parserService = parserService;
         }
 
         public async Task HandleStartup()
@@ -93,8 +93,6 @@ namespace WolvenKit.Functionality.Controllers
         // TODO: Move this somewhere else
         private void LoadCustomHashes()
         {
-            var parser = Locator.Current.GetService<Red4ParserService>().NotNull();
-
             CName physMatLibPath = "base\\physics\\physicsmaterials.physmatlib";
             CName presetPath = "engine\\physics\\collision_presets.json";
 
@@ -105,7 +103,7 @@ namespace WolvenKit.Functionality.Controllers
                 physMatLib.Value.Extract(ms);
                 ms.Position = 0;
 
-                if (parser.TryReadRed4File(ms, out var file))
+                if (_parserService.TryReadRed4File(ms, out var file))
                 {
                     var root = (physicsMaterialLibraryResource)file.RootChunk;
 
@@ -123,7 +121,7 @@ namespace WolvenKit.Functionality.Controllers
                 preset.Value.Extract(ms);
                 ms.Position = 0;
 
-                if (parser.TryReadRed4File(ms, out var file))
+                if (_parserService.TryReadRed4File(ms, out var file))
                 {
                     var root = (JsonResource)file.RootChunk;
                     var res = (physicsCollisionPresetsResource)root.Root.Chunk;

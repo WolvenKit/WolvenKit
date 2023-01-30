@@ -10,24 +10,13 @@ using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI;
-using Splat;
 using WolvenKit.App.Helpers;
-using WolvenKit.Common;
-using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
-using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Documents;
 
 public partial class WScriptDocumentViewModel : DocumentViewModel
 {
-    private readonly ILoggerService _loggerService;
-    private readonly IProjectManager _projectManagerService;
-    private readonly IArchiveManager _archiveManager;
-    private readonly ExtendedScriptService _scriptService;
-    private readonly Red4ParserService _parserService;
-
     private readonly Dictionary<string, object> _hostObjects;
 
     public WScriptDocumentViewModel(string path) : base(path)
@@ -35,13 +24,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         _document = new TextDocument();
         Extension = "wscript";
 
-        _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
-        _projectManagerService = Locator.Current.GetService<IProjectManager>().NotNull();
-        _archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
-        _scriptService = Locator.Current.GetService<ExtendedScriptService>().NotNull();
-        _parserService = Locator.Current.GetService<Red4ParserService>().NotNull();
-
-        _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService, _projectManagerService, _archiveManager, _parserService) } };
+        _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService, _projectManager, _archiveManager, _parserService) } };
         GenerateCompletionData();
 
         LoadDocument(path);

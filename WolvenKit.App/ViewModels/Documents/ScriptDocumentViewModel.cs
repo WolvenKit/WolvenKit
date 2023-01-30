@@ -14,8 +14,6 @@ namespace WolvenKit.ViewModels.Documents
 {
     public partial class ScriptDocumentViewModel : DocumentViewModel
     {
-        private readonly ILoggerService _loggerService;
-
         public ScriptDocumentViewModel(string path) : base(path)
         {
 
@@ -24,8 +22,6 @@ namespace WolvenKit.ViewModels.Documents
 
             var hlManager = HighlightingManager.Instance;
             _highlightingDefinition = hlManager.GetDefinitionByExtension("swift");
-
-            _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
         }
 
         [ObservableProperty] private TextDocument _document;

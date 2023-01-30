@@ -6,10 +6,9 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Splat;
+using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Tools;
@@ -18,20 +17,28 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 {
+    private readonly IArchiveManager _archiveManager;
+    private readonly INotificationService _notificationService;
+    private readonly ISettingsManager _settingsManager;
 
-    protected (JsonObject, Type) currentSettings;
-    protected static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
+    protected (JsonObject, Type) _currentSettings;
+    protected readonly JsonSerializerOptions _jsonSerializerSettings;
+
+    protected ImportExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId) : base(header, contentId)
     {
-        Converters =
+        _archiveManager = archiveManager;
+        _notificationService = notificationService;
+        _settingsManager = settingsManager;
+
+        _jsonSerializerSettings = new()
+        {
+            Converters =
             {
-                new JsonFileEntryConverter(),
+                new JsonFileEntryConverter(_archiveManager),
                 new JsonArchiveConverter()
             },
-        WriteIndented = true
-    };
-
-    protected ImportExportViewModel(string header, string contentId) : base(header, contentId)
-    {
+            WriteIndented = true
+        };
     }
 
     [ObservableProperty] private ImportExportItemViewModel? _selectedObject;
@@ -56,7 +63,7 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
             return;
         }
 
-        currentSettings = (SerializeArgs(args), args.GetType());
+        _currentSettings = (SerializeArgs(args), args.GetType());
     }
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
@@ -67,14 +74,14 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
         foreach (var item in results)
         {
-            var (settings, type) = currentSettings;
+            var (settings, type) = _currentSettings;
 
             if (item.Properties is null || item.Properties.GetType() != type)
             {
                 continue;
             }
 
-            if (settings.Deserialize(type, s_jsonSerializerSettings) is ImportExportArgs ds)
+            if (settings.Deserialize(type, _jsonSerializerSettings) is ImportExportArgs ds)
             {
                 item.Properties = ds;
                 count++;
@@ -83,7 +90,7 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
         if (count > 0)
         {
-            Locator.Current.GetService<INotificationService>().NotNull().Success($"Template has been copied to the selected items.");
+            _notificationService.Success($"Template has been copied to the selected items.");
         }
     }
 
@@ -93,7 +100,6 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
     [RelayCommand]
     private void ToggleAdvancedOptions()
     {
-        var _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
         _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
     }
 
@@ -108,7 +114,7 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
     private JsonObject SerializeArgs(ImportExportArgs args)
     {
-        if (JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings) is JsonObject node)
+        if (JsonSerializer.SerializeToNode(args, args.GetType(), _jsonSerializerSettings) is JsonObject node)
         {
             node.Remove("Changing");
             node.Remove("Changed");

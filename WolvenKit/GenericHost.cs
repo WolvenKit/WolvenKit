@@ -6,6 +6,7 @@ using ReactiveUI;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.App;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;

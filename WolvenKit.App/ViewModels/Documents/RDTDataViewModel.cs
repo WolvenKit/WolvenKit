@@ -2,78 +2,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
-using Splat;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Core.Extensions;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Interfaces;
-using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public partial class CNameWrapper : ObservableObject, INode<ReferenceSocket>
-    {
-        public CName CName => Socket.File;
-
-        [ObservableProperty] private System.Windows.Point _location;
-
-        public double Width { get; set; }
-
-        public double Height { get; set; }
-
-        [ObservableProperty] private ReferenceSocket _socket;
-
-        public IList<ReferenceSocket> Inputs
-        {
-            get => new List<ReferenceSocket>(new ReferenceSocket[] { Socket });
-            set
-            {
-                ;
-            }
-        }
-
-        public IList<ReferenceSocket> Outputs { get; set; } = new List<ReferenceSocket>();
-
-        public RDTDataViewModel DataViewModel { get; set; }
-
-        public CNameWrapper(RDTDataViewModel vm, ReferenceSocket socket)
-        {
-            DataViewModel = vm;
-            _socket = socket;
-        }
-
-        private bool CanOpenRef() => CName != CName.Empty && DataViewModel.File.RelativePath != CName;
-        [RelayCommand(CanExecute = nameof(CanOpenRef))]
-        private void OpenRef() => Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromDepotPath(CName);
-
-        private bool CanLoadRef() => CName != CName.Empty;
-        [RelayCommand(CanExecute = nameof(CanLoadRef))]
-        private void LoadRef()
-        {
-            var cr2w = DataViewModel.File.GetFileFromDepotPathOrCache(CName);
-            if (cr2w != null && cr2w.RootChunk != null)
-            {
-                var chunk = new ChunkViewModel(cr2w.RootChunk, Socket)
-                {
-                    Location = Location
-                };
-                DataViewModel.Nodes.Remove(this);
-                DataViewModel.Nodes.Add(chunk);
-                DataViewModel.LookForReferences(chunk);
-            }
-        }
-    }
 
     public partial class RDTDataViewModel : RedDocumentTabViewModel, IActivatableViewModel
     {
-        private readonly ISettingsManager _settingsManager;
 
         public ViewModelActivator Activator { get; } = new();
 
@@ -83,7 +24,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTDataViewModel(IRedType data, RedDocumentViewModel parent) : base(parent, data.GetType().Name)
         {
-            _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
+           
 
             _data = data;
 
@@ -278,8 +219,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             var depotpath = input.DepotPath;
             var key = FNV1A64HashAlgorithm.HashString(depotpath);
-
-            var _gameController = Locator.Current.GetService<IGameControllerFactory>().NotNull();
+            
             return _gameController.GetController().AddFileToModModal(key);
         }
 
@@ -493,57 +433,10 @@ namespace WolvenKit.ViewModels.Documents
             //    }
             //    catch (Exception ex)
             //    {
-            //        Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
+            //        _loggerService.Error(ex);
             //    }
             //}
         }
         #endregion
-    }
-
-    public partial class RedReference : ObservableObject, INodeConnection<ReferenceSocket>
-    {
-        [ObservableProperty] private RDTDataViewModel _graph;
-
-        [ObservableProperty] private ReferenceSocket _destination;
-
-        [ObservableProperty] private ReferenceSocket _source;
-
-        public RedReference(RDTDataViewModel graph, ReferenceSocket source, ReferenceSocket destination)
-        {
-            _graph = graph;
-            _source = source;
-            _destination = destination;
-        }
-
-        //public ConnectionViewModel(RDTGraphViewModel graph, graphGraphConnectionDefinition connection)
-        //{
-        //    Graph = graph;
-        //    Input = Graph.SocketLookup[connection.Source.Chunk.GetHashCode()];
-        //    Input.Connections.Add(this);
-        //    Output = Graph.SocketLookup[connection.Destination.Chunk.GetHashCode()];
-        //    Output.Connections.Add(this);
-        //}
-    }
-
-    public partial class ReferenceSocket : ObservableObject, INodeSocket<WolvenKit.Functionality.Interfaces.INode>
-    {
-        public WolvenKit.Functionality.Interfaces.INode? Node { get; set; }
-
-        [ObservableProperty] private CName _file;
-
-        [ObservableProperty] private string _property = "";
-
-        [ObservableProperty] private System.Windows.Point _anchor;
-
-        [ObservableProperty] private bool _isConnected;
-
-        [ObservableProperty] private string _type = "";
-
-        public ReferenceSocket(CName file, string property = "", string type = "")
-        {
-            _file = file;
-            _property = property;
-            _type = type;
-        }
     }
 }

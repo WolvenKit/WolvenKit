@@ -16,6 +16,7 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.App.ViewModels;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Services;
@@ -338,7 +339,7 @@ namespace WolvenKit.Views.Shell
 
                 if (content.Content != null)
                 {
-                    DiscordHelper.SetDiscordRPCStatus(content.Content as string);
+                    DiscordHelper.SetDiscordRPCStatus(content.Content as string, Locator.Current.GetService<ILoggerService>().NotNull());
                 }
 
                 //if (((IDockElement)content.Content).State == DockState.Document)

@@ -30,7 +30,8 @@ namespace WolvenKit.App.ViewModels.Importers;
 
 public abstract partial class ImportViewModel : ImportExportViewModel
 {
-    protected ImportViewModel(string header, string contentId) : base(header, contentId)
+    protected ImportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
+        : base(archiveManager, notificationService, settingsManager, header, contentId)
     {
     }
 }
@@ -58,7 +59,7 @@ public partial class TextureImportViewModel : ImportViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
-        IProgressService<double> progressService) : base("Import Tool", "Import Tool")
+        IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Import Tool", "Import Tool")
     {
         _gameController = gameController;
         _settingsManager = settingsManager;

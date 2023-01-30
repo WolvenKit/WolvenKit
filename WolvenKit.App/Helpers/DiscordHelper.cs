@@ -1,5 +1,4 @@
 using System;
-using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.Core.Interfaces;
 
@@ -24,7 +23,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
             }
         }
 
-        public static void SetDiscordRPCStatus(string details)
+        public static void SetDiscordRPCStatus(string details, ILoggerService logger)
         {
             if (DiscordRPCEnabled == true)
             {
@@ -43,7 +42,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                 }
                 catch (Exception ex)
                 {
-                    LoggerHelper.GetUnsafe().Error(ex);
+                    logger.Error(ex);
                 }
             }
         }

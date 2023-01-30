@@ -3,16 +3,38 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using Splat;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.Modkit.RED4;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public abstract partial class RedDocumentTabViewModel : ObservableObject
     {
+        protected readonly ISettingsManager _settingsManager;
+        protected readonly IGameControllerFactory _gameController;
+        protected readonly ILoggerService _loggerService;
+        protected readonly Red4ParserService _parser;
+        protected readonly ModTools _modTools;
+        protected readonly GeometryCacheService _geometryCacheService;
+
         protected RedDocumentTabViewModel(RedDocumentViewModel parent, string header)
         {
+            _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
+            _gameController = Locator.Current.GetService<IGameControllerFactory>().NotNull();
+            _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
+            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
+            _modTools = Locator.Current.GetService<ModTools>().NotNull();
+            _geometryCacheService = Locator.Current.GetService<GeometryCacheService>().NotNull();
+
             _file = parent;
             FilePath = parent.FilePath;
             Header = header;

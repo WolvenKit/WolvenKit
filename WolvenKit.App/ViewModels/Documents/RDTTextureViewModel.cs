@@ -31,13 +31,8 @@ namespace WolvenKit.ViewModels.Documents
         public RenderDelegate Render;
         public bool IsRendered;
 
-        private readonly Red4ParserService _parser;
-        private readonly ILoggerService _loggerService;
-
         public RDTTextureViewModel(RedBaseClass data, RedDocumentViewModel file) : base(file, "Texture Preview")
         {
-            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
-            _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
 
             _data = data;
             _redImage = RedImage.FromRedClass(data);
@@ -47,8 +42,6 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTTextureViewModel(Stream stream, RedDocumentViewModel file) : base(file, "Texture Preview")
         {
-            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
-            _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
 
             var buffer = new byte[stream.Length];
             stream.Read(buffer, 0, buffer.Length);

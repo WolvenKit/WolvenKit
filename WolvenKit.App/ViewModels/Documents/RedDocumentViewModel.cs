@@ -4,17 +4,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.Options;
 using ReactiveUI;
 using Splat;
-using WolvenKit.App;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
@@ -22,7 +18,6 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Shell;
@@ -40,21 +35,11 @@ namespace WolvenKit.ViewModels.Documents
     public partial class RedDocumentViewModel : DocumentViewModel
     {
         protected readonly HashSet<string> _embedHashSet;
-        protected readonly ILoggerService _loggerService;
-        protected readonly Red4ParserService _parser;
-        protected readonly IHashService _hashService;
-        protected readonly IProjectManager _projectManager;
-        protected readonly IOptions<Globals> _globals;
 
         private readonly string _path;
 
         public RedDocumentViewModel(CR2WFile file, string path) : base(path)
         {
-            _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
-            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
-            _hashService = Locator.Current.GetService<IHashService>().NotNull();
-            _projectManager = Locator.Current.GetService<IProjectManager>().NotNull();
-            _globals = Locator.Current.GetService<IOptions<Globals>>().NotNull();
             _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
                 "yaml",
@@ -98,6 +83,8 @@ namespace WolvenKit.ViewModels.Documents
 
 
         #region methods
+
+        public ILoggerService GetLoggerService() => _loggerService;
 
         public override Task Save(object? parameter)
         {
@@ -341,8 +328,7 @@ namespace WolvenKit.ViewModels.Documents
                 .Where(p => p.IsAssignableTo(typeof(CResource)) && p.IsClass)
                 .Select(x => x.Name));
 
-            var app = Locator.Current.GetService<AppViewModel>().NotNull();
-            app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+            _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
             {
                 DialogHandler = HandleEmbeddedFile
             });
@@ -355,8 +341,7 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            var app = Locator.Current.GetService<AppViewModel>().NotNull();
-            app.CloseDialogCommand.Execute(null);
+            _appViewModel.CloseDialogCommand.Execute(null);
             if (sender is not null and CreateClassDialogViewModel dvm)
             {
                 var instance = RedTypeManager.Create(dvm.SelectedClass);
@@ -393,17 +378,16 @@ namespace WolvenKit.ViewModels.Documents
 
                 if (!original)
                 {
-                    var projectManager = Locator.Current.GetService<IProjectManager>().NotNull();
-                    if (projectManager.ActiveProject != null)
+                    if (_projectManager.ActiveProject != null)
                     {
                         string? path = null;
                         if (!string.IsNullOrEmpty(depotPath))
                         {
-                            path = Path.Combine(projectManager.ActiveProject.ModDirectory, (string)depotPath);
+                            path = Path.Combine(_projectManager.ActiveProject.ModDirectory, (string)depotPath);
                         }
                         else
                         {
-                            var fm = Locator.Current.GetService<IWatcherService>().NotNull().GetFileModelFromHash(depotPath.GetRedHash());
+                            var fm = _watcherService.GetFileModelFromHash(depotPath.GetRedHash());
                             if (fm != null)
                             {
                                 path = fm.FullName;
@@ -414,21 +398,20 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                             using var reader = new BinaryReader(stream);
-                            cr2wFile = _parser.ReadRed4File(reader);
+                            cr2wFile = _parserService.ReadRed4File(reader);
                         }
                     }
                 }
 
                 if (cr2wFile == null)
                 {
-                    var _archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
                     var file = _archiveManager.Lookup(depotPath.GetRedHash());
                     if (file.HasValue && file.Value is FileEntry fe)
                     {
                         using var stream = new MemoryStream();
                         fe.Extract(stream);
 
-                        cr2wFile = _parser.ReadRed4File(stream);
+                        cr2wFile = _parserService.ReadRed4File(stream);
                     }
                 }
 

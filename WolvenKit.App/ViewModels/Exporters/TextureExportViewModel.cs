@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using Microsoft.VisualBasic;
-using Splat;
 using WolvenKit.App.Models;
-using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -27,13 +17,10 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Exporters;
@@ -42,7 +29,8 @@ public record class CallbackArguments(ImportExportArgs Arg, string PropertyName)
 
 public abstract partial class ExportViewModel : ImportExportViewModel
 {
-    protected ExportViewModel(string header, string contentId) : base(header, contentId)
+    protected ExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId) 
+        : base(archiveManager, notificationService, settingsManager, header, contentId)
     {
     }
 }
@@ -71,7 +59,7 @@ public partial class TextureExportViewModel : ExportViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
-        IProgressService<double> progressService) : base("Export Tool", "Export Tool")
+        IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
     {
         _gameController = gameController;
         _settingsManager = settingsManager;
