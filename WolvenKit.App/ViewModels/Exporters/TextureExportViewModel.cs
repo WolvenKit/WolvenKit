@@ -76,7 +76,7 @@ public partial class TextureExportViewModel : ExportViewModel
 
     #region Commands
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // notify in TextureImportView.xaml.cs
     private void ImportSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))

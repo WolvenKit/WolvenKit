@@ -10,6 +10,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -37,6 +38,17 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         _parent = parent;
         FilePath = parent.FilePath;
         Header = header;
+
+        this.PropertyChanged += RedDocumentTabViewModel_PropertyChanged;
+    }
+
+    private void RedDocumentTabViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(RDTDataViewModel.IsEmbeddedFile))
+        {
+            DeleteEmbeddedFileCommand.NotifyCanExecuteChanged();
+            RenameEmbeddedFileCommand.NotifyCanExecuteChanged();
+        }
     }
 
     public abstract ERedDocumentItemType DocumentItemType { get; }

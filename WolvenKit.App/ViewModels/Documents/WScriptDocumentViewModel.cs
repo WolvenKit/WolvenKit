@@ -12,6 +12,7 @@ using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
+using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
@@ -29,30 +30,44 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
         LoadDocument(path);
 
-        this.WhenAnyValue(x => x._scriptService.IsRunning)
-            .Subscribe(_ =>
-            {
-                RunCommand.NotifyCanExecuteChanged();
-                StopCommand.NotifyCanExecuteChanged();
-            });
+        _scriptService.PropertyChanged += _scriptService_PropertyChanged;
     }
 
-    [ObservableProperty] private TextDocument _document;
+    private void _scriptService_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if(e.PropertyName == nameof(ScriptService.IsRunning))
+        {
+            RunCommand.NotifyCanExecuteChanged();
+            StopCommand.NotifyCanExecuteChanged();
+        }
+    }
+
+    [ObservableProperty]
+    private TextDocument _document;
+    
     public string Extension { get; }
-    [ObservableProperty] private bool _isReadOnly;
-    [ObservableProperty] private string? _isReadOnlyReason;
+    
+    [ObservableProperty]
+    private bool _isReadOnly;
+    
+    [ObservableProperty]
+    private string? _isReadOnlyReason;
+    
     public Dictionary<string, List<(string name, string? desc)>> CompletionData { get; } = new();
 
-    [ObservableProperty] private bool _isUIScript;
-    [ObservableProperty] private bool _isNormalScript;
+    [ObservableProperty]
+    private bool _isUIScript;
+    
+    [ObservableProperty]
+    private bool _isNormalScript;
 
+    private bool CanRun() => !_scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanRun))]
     private async void Run() => await _scriptService.ExecuteAsync(Document.Text, _hostObjects, ISettingsManager.GetWScriptDir());
-    private bool CanRun() => !_scriptService.IsRunning;
 
+    private bool CanStop() => _scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanStop))]
     private void Stop() => _scriptService.Stop();
-    private bool CanStop() => _scriptService.IsRunning;
 
     [RelayCommand]
     private void ReloadUI() => _scriptService.RefreshUIScripts();

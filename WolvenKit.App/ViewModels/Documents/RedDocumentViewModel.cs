@@ -68,11 +68,19 @@ public partial class RedDocumentViewModel : DocumentViewModel
     [ObservableProperty] private RedDocumentTabViewModel? _selectedTabItemViewModel;
 
     // assume files that don't exist are relative paths
-    public string RelativePath => File.Exists(_path)
-            ? Path.GetRelativePath(_projectManager.ActiveProject.NotNull().ModDirectory, _path)
-            : _path;
+    public string RelativePath
+    {
+        get
+        {
+            return File.Exists(_path)
+                ? Path.GetRelativePath(_projectManager.ActiveProject.NotNull().ModDirectory, _path)
+                : _path;
+        }
+    }
 
-    [ObservableProperty] private string _extension;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(NewEmbeddedFileCommand))]
+    private string _extension;
 
     #endregion
 

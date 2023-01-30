@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Discord.Rest;
 using Microsoft.Win32;
 using WolvenKit.RED4.Types;
 
@@ -106,24 +107,39 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
 
     public partial class InkTextureAtlasMapperViewModel : ObservableObject
     {
-        [ObservableProperty] private string _partName;
-        [ObservableProperty] private string _depotPath;
-        [ObservableProperty] private double _width;
-        [ObservableProperty] private double _height;
-        [ObservableProperty] private string _atlasPath;
-        [ObservableProperty] private ImageSource? _image;
+        [ObservableProperty]
+        private string _partName;
+        
+        [ObservableProperty]
+        private string _depotPath;
+        
+        [ObservableProperty]
+        private double _width;
+        
+        [ObservableProperty]
+        private double _height;
+        
+        [ObservableProperty]
+        private string _atlasPath;
+        
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(SaveImageCommand))]
+        private ImageSource? _image;
 
         [Browsable(false)]
         public inkTextureAtlasMapper Itam;
 
         [Browsable(false)]
-        [ObservableProperty] private double _left;
+        [ObservableProperty]
+        private double _left;
 
         [Browsable(false)]
-        [ObservableProperty] private double _top;
+        [ObservableProperty]
+        private double _top;
 
         [Browsable(false)]
-        [ObservableProperty] private string _name;
+        [ObservableProperty]
+        private string _name;
 
         // TODO
         [Browsable(false)]

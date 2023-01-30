@@ -631,10 +631,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
             }, TaskContinuationOptions.OnlyOnRanToCompletion);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             // TODO: Are we intentionally swallowing this?
             //Log.Error(ex, "Failed to open file");
+            _loggerService.Error(e);
         }
 
         return Unit.Default;
@@ -716,11 +717,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
     private void SaveAs() => Save(ActiveDocument.NotNull(), true);
 
-    private bool CanSaveAll() => OpenDocuments?.Count > 0;
+    private bool CanSaveAll() => DockedViews.OfType<IDocumentViewModel>().Count() > 0;
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
     private void SaveAll()
     {
-        foreach (var file in OpenDocuments)
+        foreach (var file in DockedViews.OfType<IDocumentViewModel>())
         {
             Save(file);
         }
@@ -754,7 +755,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void OpenLogs() => Commonfunctions.ShowFolderInExplorer(ISettingsManager.GetAppData());
 
-    [ObservableProperty] private int? _selectedGameCommandIdx;
+    [ObservableProperty]
+    private int? _selectedGameCommandIdx;
 
     public record GameLaunchCommand(string Name, EGameLaunchCommand Command);
     public enum EGameLaunchCommand
@@ -870,7 +872,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanNewFile))]
-
     private void NewFile(string? inputDir)
     {
         var vm = Locator.Current.GetService<NewFileViewModel>();
@@ -1268,14 +1269,77 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public bool IsUpdateAvailable { get; set; }
 
-    [ObservableProperty] private EAppStatus? _status;
+    [ObservableProperty]
+    private EAppStatus? _status;
 
-    [ObservableProperty] private string? _title;
+    [ObservableProperty]
+    private string? _title;
 
-    [ObservableProperty] private bool _shouldDialogShow;
-    [ObservableProperty] private bool _shouldOverlayShow;
-    [ObservableProperty] private bool _isOverlayShown;
-    [ObservableProperty] private bool _isDialogShown;
+    [ObservableProperty]
+    private bool _shouldDialogShow;
+
+    [ObservableProperty]
+    private bool _shouldOverlayShow;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CloseOverlayCommand))]
+    private bool _isOverlayShown;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ShowHomePageCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowSettingsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowProjectSettingsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowSoundModdingToolCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowScriptManagerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowPluginCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowModsViewCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CloseDialogCommand))]
+    private bool _isDialogShown;
+
+    [ObservableProperty]
+    private ObservableObject? _activeOverlay;
+
+    [ObservableProperty] 
+    private DialogViewModel? _activeDialog;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SaveAsCommand))]
+    private IDocumentViewModel? _activeDocument;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ShowProjectSettingsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowSoundModdingToolCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowLogCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowProjectExplorerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
+    private Cp77Project? _activeProject;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SaveAllCommand))]
+    private ObservableCollection<IDockElement> _dockedViews = new();
+
+    #endregion properties
+
+    #region methods
+
+    public void SetActiveOverlay(ObservableObject overlay)
+    {
+        ActiveOverlay = overlay;
+        //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);
+        Task.Run(OnAfterOverlayRendered);
+    }
+
+    public void SetActiveDialog(DialogViewModel modal)
+    {
+        ActiveDialog = modal;
+        //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);
+        Task.Run(OnAfterDialogRendered);
+    }
 
     private void OnAfterOverlayRendered()
     {
@@ -1287,39 +1351,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IsDialogShown = true;
         ShouldDialogShow = true;
     }
-
-    [ObservableProperty] private ObservableObject? _activeOverlay;
-
-    public void SetActiveOverlay(ObservableObject overlay)
-    {
-        ActiveOverlay = overlay;
-        //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);
-        Task.Run(OnAfterOverlayRendered);
-    }
-
-    [ObservableProperty] private DialogViewModel? _activeDialog;
-    public void SetActiveDialog(DialogViewModel modal)
-    {
-        ActiveDialog = modal;
-        //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);
-        Task.Run(OnAfterDialogRendered);
-    }
-
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
-    [NotifyCanExecuteChangedFor(nameof(SaveAsCommand))]
-    private IDocumentViewModel? _activeDocument;
-
-    [ObservableProperty]
-    private Cp77Project? _activeProject;
-
-    private List<IDocumentViewModel> OpenDocuments => DockedViews.OfType<IDocumentViewModel>().ToList();
-
-    [ObservableProperty] private ObservableCollection<IDockElement> _dockedViews = new();
-
-    #endregion properties
-
-    #region methods
 
     private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
 
@@ -1395,7 +1426,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         var result = false;
 
         // Check if we have already loaded this file and return it if so
-        var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == fullPath);
+        var fileViewModel = DockedViews.OfType<IDocumentViewModel>().FirstOrDefault(fm => fm.ContentId == fullPath);
         if (fileViewModel is not null)
         {
             return fileViewModel;

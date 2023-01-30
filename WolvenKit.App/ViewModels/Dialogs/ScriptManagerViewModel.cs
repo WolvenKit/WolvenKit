@@ -6,6 +6,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Discord.Rest;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Interaction;
@@ -42,8 +43,13 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
     }
 
     public ObservableCollection<string> Scripts { get; } = new();
-    [ObservableProperty] private string? _selectedItem;
-    [ObservableProperty] private string? _fileName;
+    
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(DeleteScriptCommand))] 
+    private string? _selectedItem;
+    
+    [ObservableProperty]
+    private string? _fileName;
 
     public ViewModelActivator Activator { get; } = new();
     public override ReactiveCommand<Unit, Unit> OkCommand { get; }
@@ -78,6 +84,7 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
         Scripts.Add(FileName);
     }
 
+    public bool CanDeleteScript() => SelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanDeleteScript))]
     private async void DeleteScript()
     {
@@ -99,7 +106,7 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
         }
     }
 
-    public bool CanDeleteScript() => SelectedItem != null;
+    
 
     public void GetScriptFiles()
     {

@@ -48,13 +48,13 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
     #region MyRegion
 
-    [RelayCommand(CanExecute = nameof(IsAnyFile))]
+    [RelayCommand(CanExecute = nameof(IsAnyFile))]  // TODO NotifyCanExecuteChangedFor
     public async Task ProcessAll() => await ExecuteProcessBulk(true);
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // TODO NotifyCanExecuteChangedFor
     public async Task ProcessSelected() => await ExecuteProcessBulk();
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // TODO NotifyCanExecuteChangedFor
     private void CopyArgumentsTemplateTo()
     {
         if (SelectedObject?.Properties is not ImportExportArgs args)
@@ -65,7 +65,7 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
         _currentSettings = (SerializeArgs(args), args.GetType());
     }
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // TODO NotifyCanExecuteChangedFor
     private void PasteArgumentsTemplateTo()
     {
         var results = Items.Where(x => x.IsChecked);
@@ -97,10 +97,7 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
     private void Refresh() => LoadFiles();
 
     [RelayCommand]
-    private void ToggleAdvancedOptions()
-    {
-        _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
-    }
+    private void ToggleAdvancedOptions() => _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
 
 
     #endregion

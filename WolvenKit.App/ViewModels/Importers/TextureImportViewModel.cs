@@ -76,7 +76,7 @@ public partial class TextureImportViewModel : ImportViewModel
 
     #region Commands
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // notify in TextureImportView.xaml.cs
     private void DefaultSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -92,7 +92,7 @@ public partial class TextureImportViewModel : ImportViewModel
         }
     }
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // notify in TextureImportView.xaml.cs
     private void ImportSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))

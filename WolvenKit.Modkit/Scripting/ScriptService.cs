@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
@@ -12,11 +13,13 @@ using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.Scripting;
 
-public class ScriptService : INotifyPropertyChanged
+public partial class ScriptService : ObservableObject
 {
     protected readonly ILoggerService _loggerService;
 
     private V8ScriptEngine? _mainEngine;
+
+    [ObservableProperty]
     private bool _isRunning;
 
     public ScriptService(ILoggerService loggerService)
@@ -24,11 +27,6 @@ public class ScriptService : INotifyPropertyChanged
         _loggerService = loggerService;
     }
 
-    public bool IsRunning
-    {
-        get => _isRunning;
-        set => SetField(ref _isRunning, value);
-    }
 
     public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, string? searchPath = null)
     {
@@ -102,23 +100,4 @@ public class ScriptService : INotifyPropertyChanged
         return engine;
     }
 
-    #region INotifyPropertyChanged
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value))
-        {
-            return false;
-        }
-
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
-    }
-
-    #endregion
 }

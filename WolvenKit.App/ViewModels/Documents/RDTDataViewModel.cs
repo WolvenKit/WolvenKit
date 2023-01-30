@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Discord.Rest;
 using ReactiveUI;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
@@ -22,7 +23,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel, IActivatableVie
 
     protected IRedType _data;
 
-    public bool IsEmbeddedFile { get; set; }
+    [ObservableProperty]
+    private bool _isEmbeddedFile;
 
     public RDTDataViewModel(IRedType data, RedDocumentViewModel parent) : base(parent, data.GetType().Name)
     {

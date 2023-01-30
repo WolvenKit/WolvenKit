@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Splat;
+using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 
@@ -34,26 +37,32 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         _notificationService = notificationService;
         _loggerService = loggerService;
         _hashService = hashService;
-
-        PropertyChanged += async delegate (object? sender, PropertyChangedEventArgs args)
-        {
-            if (args.PropertyName == nameof(ActiveProject))
-            {
-                if (IsProjectLoaded)
-                {
-                    await SaveAsync();
-                }
-            }
-        };
     }
 
     #region properties
+
+    public event EventHandler<ActiveProjectChangedEventArgs>? ActiveProjectChanged;
 
     [ObservableProperty]
     private bool _isProjectLoaded;
 
     [ObservableProperty]
     private Cp77Project? _activeProject;
+
+    partial void OnActiveProjectChanged(Cp77Project? value)
+    {
+        if (value is not null)
+        {
+            if (IsProjectLoaded)
+            {
+                Save();
+            }
+
+            ActiveProjectChangedEventArgs args = new(value);
+            ActiveProjectChanged?.Invoke(this, args);
+        }
+       
+    }
 
     #endregion
 
@@ -64,8 +73,6 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     #endregion
 
     #region methods
-
-    public async Task<bool> SaveAsync() => await Save();
 
     public async Task<Cp77Project?> LoadAsync(string location)
     {
@@ -209,7 +216,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         }
     }
 
-    private async Task<bool> Save()
+    public async Task<bool> SaveAsync()
     {
         if (ActiveProject is null)
         {
@@ -246,33 +253,49 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         return true;
     }
 
-    #endregion
-
-
-    public class CP77Mod
+    private bool Save()
     {
-        // Default contructor for serialization
-        public CP77Mod()
+        if (ActiveProject is null)
         {
-
+            return false;
         }
 
-        public CP77Mod(Cp77Project project)
+        try
         {
-            Author = project.Author;
-            Email = project.Email;
-            Name = project.Name;
-            Version = project.Version;
+            if (!Directory.Exists(ActiveProject.ProjectDirectory))
+            {
+                Directory.CreateDirectory(ActiveProject.ProjectDirectory);
+            }
+
+            using FileStream fs = new(ActiveProject.Location, FileMode.Create, FileAccess.Write);
+            XmlSerializer ser = new(typeof(CP77Mod));
+            ser.Serialize(fs, new CP77Mod(ActiveProject));
+
+            if (_hashService is HashService hashService)
+            {
+                var projectHashes = hashService.GetProjectHashes();
+                if (projectHashes.Count > 0)
+                {
+                    File.WriteAllLines(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error($"Failed to save project");
+            _loggerService.Error(e);
+            return false;
         }
 
-        public string? Author { get; set; }
-
-        public string? Email { get; set; }
-
-        public string? Name { get; set; }
-
-        public string? Version { get; set; }
-        public bool IsRedMod { get; set; }
-        public bool ExecuteDeploy { get; set; }
+        return true;
     }
+
+    #endregion
+}
+
+public class ActiveProjectChangedEventArgs : EventArgs
+{
+    public Cp77Project Project { get; set; }
+
+    public ActiveProjectChangedEventArgs(Cp77Project project) => Project = project;
 }

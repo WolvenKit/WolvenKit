@@ -144,7 +144,7 @@ namespace WolvenKit
             }
         }
 
-        public static void InitializeLicenses() => Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDM1MDYwQDMxMzkyZTMxMmUzMGNBRjJJdnZoVnJjaklqMTVNL0FNR0JJR3dqR0Fac21YalpQOVEyTkd6bms9");
+        public static void InitializeLicenses() => Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTAyOTE5MEAzMjMwMmUzNDJlMzBIUHZua0RGUW5HZmIxekNYR1ZFY2lOOFFQSVBQam1sbWkxSXJLa3NWN1hFPQ==");
 
         public static /*async Task*/ void InitializeShell(ISettingsManager settings)
         {

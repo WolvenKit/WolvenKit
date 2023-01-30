@@ -8,6 +8,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
@@ -100,22 +101,29 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         CollapseChildren = ReactiveCommand.Create(() => { });
         ExpandChildren = ReactiveCommand.Create(() => { });
 
-        this.WhenAnyValue(x => x.SelectedItem).Subscribe(model =>
-        {
-            if (model is not null)
-            {
-                Locator.Current.GetService<AppViewModel>().NotNull().SelectFileCommand.SafeExecute(model);
-            }
-        });
+        _projectManager.ActiveProjectChanged += _projectManager_ActiveProjectChanged;
 
-        this.WhenAnyValue(x => x._projectManager.ActiveProject).Subscribe(proj =>
-        {
-            if (proj is not null)
-            {
-                ActiveProject = proj;
-            }
-        });
     }
+
+    private void _projectManager_ActiveProjectChanged(object? sender, ActiveProjectChangedEventArgs e)
+    {
+        if (e.Project is not null)
+        {
+            Application.Current.Dispatcher.Invoke( () => {
+                ActiveProject = e.Project;
+            }, DispatcherPriority.ContextIdle);
+        }
+    }
+
+    partial void OnSelectedItemChanged(FileModel? value)
+    {
+        if (value is not null)
+        {
+            Locator.Current.GetService<AppViewModel>().NotNull().SelectFileCommand.SafeExecute(value);
+        }
+    }
+
+
 
 
     #endregion constructors

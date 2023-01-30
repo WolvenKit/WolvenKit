@@ -191,7 +191,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     [ObservableProperty] private object? _leftSelectedItem;
 
-    [ObservableProperty] private IFileSystemViewModel? _rightSelectedItem;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(BrowseToFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(OpenFileOnlyCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    private IFileSystemViewModel? _rightSelectedItem;
 
     [ObservableProperty] private ObservableCollectionEx<IFileSystemViewModel> _rightItems = new();
 
@@ -573,6 +577,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool CanCopyRelPath() => RightSelectedItem != null; // _projectManager.ActiveProject != null && RightSelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
     private void CopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.NotNull().FullName);
+    
     public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
     public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
     public ReactiveCommand<Unit, Unit> Expand { get; set; }

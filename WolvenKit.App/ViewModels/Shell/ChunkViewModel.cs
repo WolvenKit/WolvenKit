@@ -217,7 +217,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     [ObservableProperty] private bool _isReadOnly;
 
-    [ObservableProperty] private IRedType _data;
+    [ObservableProperty]
+    //[NotifyCanExecuteChangedFor(nameof(OpenRefCommand))]
+    //[NotifyCanExecuteChangedFor(nameof(AddRefCommand))]
+    //[NotifyCanExecuteChangedFor(nameof(AddHandleCommand))]
+    //[NotifyCanExecuteChangedFor(nameof(AddItemToArrayCommand))]
+    //[NotifyCanExecuteChangedFor(nameof(SaveBufferToDiskCommand))]
+    //[NotifyCanExecuteChangedFor(nameof(LoadBufferFromDiskCommand))]
+    //[NotifyCanExecuteChangedFor(nameof(RegenerateAppearanceVisualControllerCommand))]
+    //[NotifyCanExecuteChangedFor(nameof(AddItemToCompiledDataCommand))]
+    //[NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
+    private IRedType _data;
 
     [ObservableProperty] private CName _relativePath;
 
@@ -763,7 +773,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool CanBeDroppedOn(ChunkViewModel target) => PropertyType == target.PropertyType;
 
-    private bool CanOpenRef() => Data is IRedRef r && r.DepotPath != CName.Empty;
+    private bool CanOpenRef() => Data is IRedRef r && r.DepotPath != CName.Empty;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanOpenRef))]
     private void OpenRef()
     {
@@ -784,7 +794,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         //}
     }
 
-    private bool CanAddRef() => Data is IRedRef r && r.DepotPath != CName.Empty;
+    private bool CanAddRef() => Data is IRedRef r && r.DepotPath != CName.Empty;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddRef))]
     private async Task AddRef()
     {
@@ -799,7 +809,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanAddHandle() => PropertyType?.IsAssignableTo(typeof(IRedBaseHandle)) ?? false;
+    private bool CanAddHandle() => PropertyType?.IsAssignableTo(typeof(IRedBaseHandle)) ?? false;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddHandle))]
     private void AddHandle()
     {
@@ -815,7 +825,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanAddItemToArray() => Parent is not null && !IsReadOnly && PropertyType is not null && (PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)));
+    private bool CanAddItemToArray() => Parent is not null && !IsReadOnly && PropertyType is not null && (PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)));   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddItemToArray))]
     private void AddItemToArray()
     {
@@ -916,7 +926,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanSaveBufferToDisk() => Data is IRedBufferWrapper { Buffer.MemSize: > 0 };
+    private bool CanSaveBufferToDisk() => Data is IRedBufferWrapper { Buffer.MemSize: > 0 };   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanSaveBufferToDisk))]
     private void SaveBufferToDisk()
     {
@@ -936,7 +946,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanLoadBufferFromDisk() => PropertyType != null && PropertyType.IsAssignableTo(typeof(IRedBufferWrapper));
+    private bool CanLoadBufferFromDisk() => PropertyType != null && PropertyType.IsAssignableTo(typeof(IRedBufferWrapper));   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanLoadBufferFromDisk))]
     private void LoadBufferFromDisk()
     {
@@ -973,7 +983,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Tab?.Parent.SetIsDirty(true);
     }
 
-    private bool CanRegenerateAppearanceVisualController() => Name == "components" && Data is CArray<entIComponent>;
+    private bool CanRegenerateAppearanceVisualController() => Name == "components" && Data is CArray<entIComponent>;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanRegenerateAppearanceVisualController))]
     private void RegenerateAppearanceVisualController()
     {
@@ -1020,7 +1030,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanAddItemToCompiledData() => ResolvedPropertyType is not null && PropertyType is not null && PropertyType.IsAssignableTo(typeof(IRedBufferPointer));
+    private bool CanAddItemToCompiledData() => ResolvedPropertyType is not null && PropertyType is not null && PropertyType.IsAssignableTo(typeof(IRedBufferPointer));   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddItemToCompiledData))]
     private void AddItemToCompiledData()
     {
@@ -1070,7 +1080,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanDeleteItem() => !IsReadOnly && IsInArray && Tab is not null && Data is not null;
+    private bool CanDeleteItem() => !IsReadOnly && IsInArray && Tab is not null && Data is not null;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanDeleteItem))]
     private void DeleteItem()
     {
@@ -1127,14 +1137,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    private bool CanImportWorldNodeData() => Data is worldNodeData && PropertyCount > 0;
+    private bool CanImportWorldNodeData() => Data is worldNodeData && PropertyCount > 0;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]
     private Task ImportWorldNodeDataTask() => ImportWorldNodeDataTask(true);
 
-    [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]
+    [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]   // TODO RelayCommand check notify
     private Task ImportWorldNodeDataWithoutCoordsTask() => ImportWorldNodeDataTask(false);
 
-    private bool CanDeleteSelection() => IsInArray && Tab is not null && Parent is not null;
+    private bool CanDeleteSelection() => IsInArray && Tab is not null && Parent is not null;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
     private void DeleteSelection()
     {
@@ -1203,7 +1213,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Tab.SelectedChunk = Parent;
     }
 
-    private bool CanExportNodeData() => IsInArray && Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector && rb.Data is worldNodeDataBuffer;
+    private bool CanExportNodeData() => IsInArray && Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector && rb.Data is worldNodeDataBuffer;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanExportNodeData))]
     private void ExportNodeData()
     {
@@ -1220,7 +1230,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanExportChunk() => PropertyCount > 0;
+    private bool CanExportChunk() => PropertyCount > 0;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanExportChunk))]
     private void ExportChunk()
     {
@@ -1261,7 +1271,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanOpenChunk() => Data is RedBaseClass && Parent is not null && Tab is not null;
+    private bool CanOpenChunk() => Data is RedBaseClass && Parent is not null && Tab is not null;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanOpenChunk))]
     private void OpenChunk()
     {
@@ -1272,7 +1282,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanCopyHandle() => Data is IRedBaseHandle;
+    private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopyHandle))]
     private void CopyHandle()
     {
@@ -1302,7 +1312,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
         return false;
-    }
+    }   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanPasteHandle))]
     private void PasteHandle()
     {
@@ -1325,7 +1335,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanCopyChunk() => IsInArray;
+    private bool CanCopyChunk() => IsInArray;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopyChunk))]
     private void CopyChunk()
     {
@@ -1352,7 +1362,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return destinationArray.InnerType.IsAssignableFrom(RedDocumentTabViewModel.CopiedChunk.GetType());
         }
         return false;
-    }
+    }   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanPasteChunk))]
     private void PasteChunk()
     {
@@ -1381,7 +1391,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    private bool CanDeleteAll() => !IsReadOnly && (IsArray && PropertyCount > 0 || IsInArray && Parent is not null && Parent.PropertyCount > 0);
+    private bool CanDeleteAll() => !IsReadOnly && (IsArray && PropertyCount > 0 || IsInArray && Parent is not null && Parent.PropertyCount > 0);   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanDeleteAll))]
     private void DeleteAll()
     {
@@ -1395,7 +1405,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanDuplicateChunk() => IsInArray && Parent is not null;
+    private bool CanDuplicateChunk() => IsInArray && Parent is not null;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
     private void DuplicateChunk()
     {
@@ -1414,7 +1424,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanCopySelection() => IsInArray && Parent is not null;
+    private bool CanCopySelection() => IsInArray && Parent is not null;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopySelection))]
     private void CopySelection()
     {
@@ -1468,7 +1478,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         //Tab.SelectedChunk = Parent;
     }
 
-    private bool CanPasteSelection() => (IsArray || IsInArray) && Parent is not null && RedDocumentTabViewModel.CopiedChunks.Count > 0 && (ArraySelfOrParent?.InnerType.IsAssignableFrom(RedDocumentTabViewModel.CopiedChunks.First().GetType()) ?? true);
+    private bool CanPasteSelection() => (IsArray || IsInArray) && Parent is not null && RedDocumentTabViewModel.CopiedChunks.Count > 0 && (ArraySelfOrParent?.InnerType.IsAssignableFrom(RedDocumentTabViewModel.CopiedChunks.First().GetType()) ?? true);   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanPasteSelection))]
     private void ExecutePasteSelection()
     {
