@@ -42,8 +42,7 @@ namespace WolvenKit.App.Services
             _progressService = progressService;
         }
 
-        [ObservableProperty]
-        private ObservableCollection<PluginViewModel> _plugins = new ObservableCollection<PluginViewModel>();
+        [ObservableProperty] private ObservableCollection<PluginViewModel> _plugins = new();
 
 
         public void Init()

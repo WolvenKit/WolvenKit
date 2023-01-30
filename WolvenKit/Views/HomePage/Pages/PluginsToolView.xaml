@@ -85,7 +85,7 @@
             Margin="10"
             HorizontalContentAlignment="Stretch"
             d:ItemsSource="{d:SampleData ItemCount=5}"
-            ItemsSource="{Binding _pluginService.Plugins, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding PluginService.Plugins, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedPlugin}">
 
             <ListBox.ItemTemplate>
