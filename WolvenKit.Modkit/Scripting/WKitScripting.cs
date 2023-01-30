@@ -2,7 +2,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.IO;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
@@ -21,12 +20,11 @@ public class WKitScripting
     protected IArchiveManager _archiveManager;
     protected Red4ParserService _redParserService;
 
-    public WKitScripting(ILoggerService loggerService)
+    public WKitScripting(ILoggerService loggerService, IArchiveManager archiveManager, Red4ParserService parserService)
     {
         _loggerService = loggerService;
-
-        _archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
-        _redParserService = Locator.Current.GetService<Red4ParserService>().NotNull();
+        _archiveManager = archiveManager;
+        _redParserService = parserService;
     }
 
     [Description("GetFileFromBase")]

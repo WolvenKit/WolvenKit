@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Kernel;
-using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
@@ -56,14 +55,8 @@ namespace WolvenKit.Common.Model
             return path;
         }
 
-        protected void RebuildGameRoot()
+        protected void RebuildGameRoot(IHashService hashService)
         {
-            var hashService = Locator.Current.GetService<IHashService>();
-            if (hashService == null)
-            {
-                throw new Exception();
-            }
-
             RootNode = new RedFileSystemModel(TypeName.ToString());
 
             var allFiles = Archives.Items.SelectMany(x => x.Files);

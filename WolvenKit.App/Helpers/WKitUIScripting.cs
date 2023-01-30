@@ -15,6 +15,7 @@ using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.Helpers;
 
@@ -22,8 +23,10 @@ public class WKitUIScripting : WKitScripting
 {
     private readonly IProjectManager _projectManager;
 
-    public WKitUIScripting(ILoggerService loggerService)
-        : base(loggerService) => _projectManager = Locator.Current.GetService<IProjectManager>().NotNull();
+    public WKitUIScripting(ILoggerService loggerService, IProjectManager projectManager, IArchiveManager archiveManager, Red4ParserService parserService) : base(loggerService, archiveManager, parserService)
+    {
+        _projectManager = projectManager;
+    }
 
     public void SuspendFileWatcher(bool suspend)
     {

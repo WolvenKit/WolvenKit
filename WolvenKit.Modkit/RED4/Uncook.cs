@@ -566,15 +566,12 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private static bool HandleOpus(OpusExportArgs opusExportArgs)
+        private bool HandleOpus(OpusExportArgs opusExportArgs)
         {
             ArgumentNullException.ThrowIfNull(opusExportArgs.ModFolderPath, nameof(opusExportArgs.ModFolderPath));
             ArgumentNullException.ThrowIfNull(opusExportArgs.RawFolderPath, nameof(opusExportArgs.RawFolderPath));
 
-            OpusTools opusTools = new(
-                opusExportArgs.ModFolderPath,
-                opusExportArgs.RawFolderPath,
-                opusExportArgs.UseMod);
+            OpusTools opusTools = new( opusExportArgs.ModFolderPath, opusExportArgs.RawFolderPath, _archiveManager, opusExportArgs.UseMod);
 
             // If More than 0 selected from opusinfo export to wem.
             if (opusExportArgs.SelectedForExport.Count > 0)

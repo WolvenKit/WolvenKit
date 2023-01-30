@@ -202,7 +202,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 sw.Restart();
 
-                RebuildGameRoot();
+                RebuildGameRoot(_hashService);
 
                 _logger.Debug($"Finished rebuilding root in {sw.ElapsedMilliseconds}ms");
 

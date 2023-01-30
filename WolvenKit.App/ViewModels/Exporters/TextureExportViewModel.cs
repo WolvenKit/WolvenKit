@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using Microsoft.VisualBasic;
 using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -284,7 +285,9 @@ public partial class TextureExportViewModel : ExportViewModel
         {
             selectedItems = selectedEntries.Select(x => new CollectionItemViewModel<uint>(x)).ToList();
         }
-        OpusTools opusTools = new(_projectManager.ActiveProject.NotNull().ModDirectory, _projectManager.ActiveProject.RawDirectory, opusExportArgs.UseMod);
+
+        
+        OpusTools opusTools = new(_projectManager.ActiveProject.NotNull().ModDirectory, _projectManager.ActiveProject.RawDirectory, _archiveManager, opusExportArgs.UseMod);
         var availableItems = opusTools.Info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
 
         // open dialogue

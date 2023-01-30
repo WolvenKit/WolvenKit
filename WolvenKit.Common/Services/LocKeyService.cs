@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W;
@@ -20,10 +19,10 @@ namespace WolvenKit.Common.Services
 
         public string Language { get; set; } = "en-us";
 
-        public LocKeyService()
+        public LocKeyService(Red4ParserService parser, IArchiveManager archive)
         {
-            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
-            _archive = Locator.Current.GetService<IArchiveManager>().NotNull();
+            _parser = parser;
+            _archive = archive;
         }
 
         public void LoadCurrentLanguage() => (_primaryKeys[Language], _secondaryKeys[Language]) = Load("base\\localization\\en-us\\onscreens\\onscreens_final.json");

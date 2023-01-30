@@ -53,7 +53,11 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IModTools _modTools;
         private readonly IProgressService<double> _progressService;
         private readonly IGameControllerFactory _gameController;
-        private readonly IPluginService _pluginService;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
+        private IPluginService _pluginService;
+
         private readonly ISettingsManager _settingsManager;
         private readonly IObservableList<FileModel> _observableList;
 
@@ -122,8 +126,6 @@ namespace WolvenKit.ViewModels.Tools
 
         public AppViewModel MainViewModel => Locator.Current.GetService<AppViewModel>().NotNull();
 
-        [ObservableProperty] private Cp77Project? _activeProject;
-
         public ReactiveCommand<Unit, Unit> ExpandAll { get; private set; }
 
         public ReactiveCommand<Unit, Unit> CollapseAll { get; private set; }
@@ -132,12 +134,46 @@ namespace WolvenKit.ViewModels.Tools
 
         public ReactiveCommand<Unit, Unit> ExpandChildren { get; private set; }
 
-
         [ObservableProperty] private ObservableCollection<FileModel> _bindGrid1 = new();
 
-        [ObservableProperty] private FileModel? _selectedItem;
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
+        [NotifyCanExecuteChangedFor(nameof(OpenRootFolderCommand))]
+        [NotifyCanExecuteChangedFor(nameof(CopyFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ReimportFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(CutFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
+        [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(Bk2ImportCommand))]
+        [NotifyCanExecuteChangedFor(nameof(Bk2ExportCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ConvertFromCommand))]
+        [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
+        [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
+        private Cp77Project? _activeProject;
 
-        [ObservableProperty] private ObservableCollection<object>? _selectedItems = new();
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(CopyFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ReimportFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(CutFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
+        [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(Bk2ImportCommand))]
+        [NotifyCanExecuteChangedFor(nameof(Bk2ExportCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
+        [NotifyCanExecuteChangedFor(nameof(ConvertFromCommand))]
+        [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
+        [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
+        private FileModel? _selectedItem;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
+        private ObservableCollection<object>? _selectedItems = new();
 
         [ObservableProperty] private bool _isFlatModeEnabled;
 
@@ -239,9 +275,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         private bool CanCutFile() => ActiveProject != null && SelectedItem != null;
         [RelayCommand(CanExecute = nameof(CanCutFile))]
-        private void CutFile()
-        {
-        }
+        private void CutFile() => throw new NotImplementedException();
 
         /// <summary>
         /// Delets selected node.
@@ -467,6 +501,7 @@ namespace WolvenKit.ViewModels.Tools
                 await ConvertToTask(inpath);
             }
         }
+        
         private Task ConvertToTask(string file)
         {
             if (!File.Exists(file))
@@ -561,17 +596,21 @@ namespace WolvenKit.ViewModels.Tools
 
         private static string GetSecondExtension(FileModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
 
-        private bool CanOpenInMlsb() => ActiveProject != null
+        private bool CanOpenInMlsb()
+        {
+            return ActiveProject != null
             && SelectedItem != null
             && !SelectedItem.IsDirectory
             && IsInRawFolder(SelectedItem)
             && SelectedItem.Extension.ToLower().Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal)
             && GetSecondExtension(SelectedItem).Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal)
-            && _pluginService.IsInstalled(EPlugin.mlsetupbuilder);
+            && PluginService.IsInstalled(EPlugin.mlsetupbuilder);
+        }
+
         [RelayCommand(CanExecute = nameof(CanOpenInMlsb))]
-        private void ExecuteOpenInMlsb()
+        private void OpenInMlsb()
         {
-            if (_pluginService.TryGetInstallPath(EPlugin.mlsetupbuilder, out var path))
+            if (PluginService.TryGetInstallPath(EPlugin.mlsetupbuilder, out var path))
             {
                 if (!Directory.Exists(path))
                 {

@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Semver;
-using Splat;
-using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
@@ -735,7 +733,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
             }
             else
             {
-                Locator.Current.GetService<ILoggerService>()?.Error($"propertyInfo was null i guess");
+                //Locator.Current.GetService<ILoggerService>()?.Error($"propertyInfo was null i guess");
             }
         }
 

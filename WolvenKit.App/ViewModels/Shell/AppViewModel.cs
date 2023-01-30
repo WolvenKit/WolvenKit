@@ -715,14 +715,14 @@ namespace WolvenKit.ViewModels.Shell
         [RelayCommand]
         private void SelectFile(FileModel model) => PropertiesViewModel.ExecuteSelectFile(model);
 
-        private bool CanSaveFile() => ActiveDocument is not null; // _projectManager.ActiveProject != null &&
+        private bool CanSaveFile() => ActiveDocument is not null;
         [RelayCommand(CanExecute = nameof(CanSaveFile))]
         private void SaveFile() => Save(ActiveDocument.NotNull());
 
         [RelayCommand(CanExecute = nameof(CanSaveFile))]
         private void SaveAs() => Save(ActiveDocument.NotNull(), true);
 
-        private bool CanSaveAll() => OpenDocuments?.Count > 0; //  _projectManager.ActiveProject != null &&
+        private bool CanSaveAll() => OpenDocuments?.Count > 0;
         [RelayCommand(CanExecute = nameof(CanSaveAll))]
         private void SaveAll()
         {
@@ -1311,10 +1311,12 @@ namespace WolvenKit.ViewModels.Shell
             Task.Run(OnAfterDialogRendered);
         }
 
-        [ObservableProperty] private IDocumentViewModel? _activeDocument;
-
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
+        [NotifyCanExecuteChangedFor(nameof(SaveAsCommand))]
+        private IDocumentViewModel? _activeDocument;
+
+        [ObservableProperty]
         private Cp77Project? _activeProject;
 
         private List<IDocumentViewModel> OpenDocuments => DockedViews.OfType<IDocumentViewModel>().ToList();

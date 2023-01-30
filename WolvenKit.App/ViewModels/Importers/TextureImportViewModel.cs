@@ -190,10 +190,7 @@ public partial class TextureImportViewModel : ImportViewModel
 
         if (_gameController.GetController() is RED4Controller cp77Controller)
         {
-            OpusTools opusTools = new(
-                proj.ModDirectory,
-                proj.RawDirectory,
-                true);
+            OpusTools opusTools = new( proj.ModDirectory, proj.RawDirectory, _archiveManager, true);
 
             return Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
         }

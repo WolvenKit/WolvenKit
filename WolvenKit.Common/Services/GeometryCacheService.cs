@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
@@ -23,10 +22,10 @@ namespace WolvenKit.Common.Services
         private readonly CName _cachePath = (CName)@"base\worlds\03_night_city\sectors\_generated\collisions\03_night_city.geometry_cache";
         private bool _isLoaded;
 
-        public GeometryCacheService()
+        public GeometryCacheService(IArchiveManager archive, Red4ParserService parser)
         {
-            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
-            _archive = Locator.Current.GetService<IArchiveManager>().NotNull();
+            _archive = archive;
+            _parser = parser;
         }
 
         public void Load()
