@@ -66,21 +66,18 @@
   <ItemGroup>
     <PackageReference Include="Octokit" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
+	<PackageReference Include="Discord.Net" />
+	<PackageReference Include="DiscordRichPresence" />
+	
+	<PackageReference Include="NAudio" />
     <PackageReference Include="NAudio.Vorbis" />
-    <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="ReactiveUI" />
-    <PackageReference Include="ReactiveUI.Validation" />
     <PackageReference Include="AvalonEdit" />
-    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
-    <PackageReference Include="morelinq" /> 
-    <PackageReference Include="Discord.Net" />
+	<PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
     <PackageReference Include="AutomaticGraphLayout" />
     <PackageReference Include="Nodify" />
-    <PackageReference Include="DiscordRichPresence" />
-    <PackageReference Include="NAudio" />
+
+	<PackageReference Include="ReactiveUI" />
+	<PackageReference Include="ReactiveUI.Validation" />
   </ItemGroup>
 
   <ItemGroup>

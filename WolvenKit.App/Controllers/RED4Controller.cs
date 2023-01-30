@@ -9,7 +9,6 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using MoreLinq;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Models;
@@ -479,12 +478,18 @@ namespace WolvenKit.Functionality.Controllers
                 result = true; //base condition -- if packed/ is already empty, then the command is 'successful'.
 
                 //top level directories
-                Directory.GetDirectories(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly)
-                .ForEach(dir => result = SafeDirectoryDelete(dir, true) && result);
+                var dirs = Directory.GetDirectories(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < dirs.Count(); i++)
+                {
+                    result = SafeDirectoryDelete(dirs[i], true);
+                }
 
                 //top level files
-                Directory.GetFiles(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly)
-                .ForEach(file => result = SafeFileDelete(file) && result);
+                var files = Directory.GetFiles(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly);
+                for (int i = 0; i < files.Count(); i++)
+                {
+                    result = SafeFileDelete(files[i]);
+                }
                 return result;
             }
 
@@ -558,23 +563,23 @@ namespace WolvenKit.Functionality.Controllers
             //preliminary approach -- everything under resources, except for *.yaml, *.xl, is a 'script' element
             //this will cover all potential add-ons/mods/redscript
             //All such files goes into the root of the cp77Proj.PackedRootDirectory
-            Directory.GetFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
-                .Where(name => !name.ToLower().EndsWith(".xl") && !name.ToLower().EndsWith(".yaml"))
-                .ForEach(f =>
-                {
-                    var fileName = Path.GetFileName(f);
-                    var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(f).NotNull());
-                    var fileOutputDir = Path.Combine(cp77Proj.PackedRootDirectory, fileRelativeDir);
-                    var fileOutputPath = Path.Combine(fileOutputDir, fileName);
-                    if (!Directory.Exists(fileOutputDir))
-                    {
-                        Directory.CreateDirectory(fileOutputDir);
-                    }
+            var files = Directory.GetFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories).Where(name => !name.ToLower().EndsWith(".xl") && !name.ToLower().EndsWith(".yaml")).ToList();
+            for (int i = 0; i < files.Count; i++)
+            {
+                var file = files[i];
 
-                    // copy files, with overwriting
-                    File.Copy(f, fileOutputPath, true);
+                var fileName = Path.GetFileName(file);
+                var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
+                var fileOutputDir = Path.Combine(cp77Proj.PackedRootDirectory, fileRelativeDir);
+                var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+                if (!Directory.Exists(fileOutputDir))
+                {
+                    Directory.CreateDirectory(fileOutputDir);
                 }
-            );
+
+                // copy files, with overwriting
+                File.Copy(file, fileOutputPath, true);
+            }
             return true;
         }
 

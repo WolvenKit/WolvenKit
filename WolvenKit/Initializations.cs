@@ -162,8 +162,6 @@ namespace WolvenKit
 
         private static void ThemeInnerInit(ISettingsManager settings)
         {
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
-                ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", settings.GetThemeAccent(), false));
             var themeSettings = new MaterialDarkThemeSettings
             {
                 PrimaryBackground = new SolidColorBrush(settings.GetThemeAccent()),

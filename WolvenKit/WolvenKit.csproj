@@ -40,7 +40,6 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Nodify" />
-    <PackageReference Include="ScottPlot.WPF" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
     <PackageReference Include="Serilog.Sinks.Async" />
@@ -65,14 +64,11 @@
       <PackageReference Include="MahApps.Metro" />
       <PackageReference Include="MahApps.Metro.IconPacks" />
       <PackageReference Include="HandyControls" />
-      <PackageReference Include="ControlzEx" />
       <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" />
       <PackageReference Include="WpfAnalyzers" PrivateAssets="all">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       </PackageReference>
 
-      <PackageReference Include="NodeNetwork" />
-      <PackageReference Include="NodeNetworkToolkit" />
       <PackageReference Include="DrawStringLineHeight" />
       <PackageReference Include="PixiEditor.ColorPicker" />
       <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
