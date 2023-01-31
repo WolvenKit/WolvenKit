@@ -100,11 +100,7 @@ namespace WolvenKit
 
                     services.AddSingleton<IPluginService, PluginService>();
 
-
-
-
                     services.AddTransient<ExtendedScriptService>();
-
 
                     // register views
                     #region shell

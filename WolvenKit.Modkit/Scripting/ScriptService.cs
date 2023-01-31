@@ -22,11 +22,7 @@ public partial class ScriptService : ObservableObject
     [ObservableProperty]
     private bool _isRunning;
 
-    public ScriptService(ILoggerService loggerService)
-    {
-        _loggerService = loggerService;
-    }
-
+    public ScriptService(ILoggerService loggerService) => _loggerService = loggerService;
 
     public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, string? searchPath = null)
     {
