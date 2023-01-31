@@ -142,6 +142,7 @@ public partial class ConsoleFunctions
         {
             exportArgs.Get<XbmExportArgs>().UncookExtension = options.uext.Value;
             exportArgs.Get<MlmaskExportArgs>().UncookExtension = options.uext.Value;
+            exportArgs.Get<MeshExportArgs>().MaterialUncookExtension = options.uext.Value;
         }
         if (options.meshExportType != null)
         {
