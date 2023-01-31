@@ -306,6 +306,92 @@ namespace WolvenKit.Utility
         }
 
         [TestMethod]
+        public void MergeAllStrings() => MergeStrings(false);
+
+        [TestMethod]
+        public void MergeFactStrings() => MergeStrings(true);
+
+        private void MergeStrings(bool factOnly)
+        {
+            ArgumentNullException.ThrowIfNull(s_bm);
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "infodump");
+
+            var list = new HashSet<string>();
+
+            foreach (var file in Directory.EnumerateFiles(resultDir, "*.json", SearchOption.AllDirectories))
+            {
+                DumpFileInfo(JsonSerializer.Deserialize<DataCollection>(File.ReadAllText(file))!);
+            }
+
+            var nLst = new List<string>(list);
+            nLst.Sort();
+
+            File.WriteAllLines(Path.Join(resultDir, factOnly ? "facts.txt" : "merged.txt"), nLst);
+
+            void DumpFileInfo(DataCollection dc)
+            {
+                if (!factOnly)
+                {
+                    if (dc.UnusedStrings != null)
+                    {
+                        foreach (var str in dc.UnusedStrings)
+                        {
+                            list.Add(str);
+                        }
+                    }
+
+                    if (dc.Imports != null)
+                    {
+                        foreach (var str in dc.Imports)
+                        {
+                            list.Add(str);
+                        }
+                    }
+
+                    if (dc.UsedStrings != null)
+                    {
+                        foreach (var str in dc.UsedStrings)
+                        {
+                            list.Add(str);
+                        }
+                    }
+
+                    if (dc.TweakStrings != null)
+                    {
+                        foreach (var str in dc.TweakStrings)
+                        {
+                            list.Add(str);
+                        }
+                    }
+
+                    if (dc.NodeRefs != null)
+                    {
+                        foreach (var str in dc.NodeRefs)
+                        {
+                            list.Add(str);
+                        }
+                    }
+                }
+
+                if (dc.FactStrings != null)
+                {
+                    foreach (var str in dc.FactStrings)
+                    {
+                        list.Add(str);
+                    }
+                }
+
+                if (dc.Buffers != null)
+                {
+                    foreach (var buffer in dc.Buffers)
+                    {
+                        DumpFileInfo(buffer);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
         public void DumpStrings()
         {
             ArgumentNullException.ThrowIfNull(s_bm);
@@ -317,6 +403,8 @@ namespace WolvenKit.Utility
             {
                 existingFiles.TryAdd(file, 0);
             }
+
+            var failedFiles = new ConcurrentDictionary<string, byte>();
 
             var archives = s_bm.Archives.KeyValues.Select(_ => _.Value).ToList();
             foreach (var gameArchive in archives)
@@ -368,12 +456,18 @@ namespace WolvenKit.Utility
                     }
                     catch (Exception)
                     {
+                        failedFiles.TryAdd(fileEntry.NameOrHash, 0);
                         // ignore
                     }
                 });
 
                 archive.SetBulkExtract(false);
             }
+
+            var lst = failedFiles.Keys.ToList();
+            lst.Sort();
+
+            File.WriteAllLines(Path.Join(resultDir, "failed.txt"), lst);
         }
 
         [TestMethod]
