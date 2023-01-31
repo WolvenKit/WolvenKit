@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpGLTF.Schema2;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -22,11 +23,23 @@ namespace WolvenKit.Modkit.RED4.RigFile
             var Rig = new RawArmature
             {
                 BoneCount = animrig.BoneNames.Count,
-                Names = animrig.BoneNames.Select(_ => _.GetResolvedText()).ToArray(),
+                Names = animrig.BoneNames.Select(_ => _.GetResolvedText().NotNull()).ToArray(),
                 Parent = animrig.BoneParentIndexes.Select(_ => (short)_).ToArray(),
-                LocalPosn = animrig.BoneTransforms.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray(),
-                LocalRot = animrig.BoneTransforms.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray(),
-                LocalScale = animrig.BoneTransforms.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray(),
+                LocalPosn = animrig.BoneTransforms.Select(p =>
+                {
+                    ArgumentNullException.ThrowIfNull(p);
+                    return new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y);
+                }).ToArray(),
+                LocalRot = animrig.BoneTransforms.Select(p =>
+                {
+                    ArgumentNullException.ThrowIfNull(p);
+                    return new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R);
+                }).ToArray(),
+                LocalScale = animrig.BoneTransforms.Select(p =>
+                {
+                    ArgumentNullException.ThrowIfNull(p);
+                    return new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z);
+                }).ToArray(),
             };
 
             // if AposeWorld/AposeMS Exists then..... this can be done better i guess...
@@ -36,7 +49,11 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 {
                     Rig.AposeMSExits = true;
 
-                    Rig.AposeMSTrans = aRig.APoseMS.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray();
+                    Rig.AposeMSTrans = aRig.APoseMS.Select(p =>
+                    {
+                        ArgumentNullException.ThrowIfNull(p);
+                        return new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y);
+                    }).ToArray();
                     Rig.AposeMSRot = aRig.APoseMS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray();
                     Rig.AposeMSScale = aRig.APoseMS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
                 }

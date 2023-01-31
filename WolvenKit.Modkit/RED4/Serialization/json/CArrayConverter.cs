@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 using Activator = System.Activator;
 
@@ -62,7 +63,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                 Type typeToConvert,
                 JsonSerializerOptions options)
             {
-                var value = _valueConverter.Read(ref reader, _baseType, options) ?? JsonSerializer.Deserialize<IList<T>>(ref reader, options);
+                var value = _valueConverter.Read(ref reader, _baseType, options) ?? JsonSerializer.Deserialize<IList<T>>(ref reader, options).NotNull();
 
                 var instance = Activator.CreateInstance(typeToConvert) as CArray<T> ?? throw new JsonException();
 

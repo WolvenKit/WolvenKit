@@ -190,7 +190,7 @@ public class CVariantConverter : JsonConverter<CVariant>, ICustomRedConverter
     {
         writer.WriteStartObject();
 
-        var redTypeName = RedReflection.GetRedTypeFromCSType(value.Value.GetType());
+        var redTypeName = RedReflection.GetRedTypeFromCSType(value.Value.NotNull().GetType());
         writer.WriteString("$type", redTypeName);
 
         writer.WritePropertyName("Value");

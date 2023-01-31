@@ -56,11 +56,13 @@ namespace WolvenKit.Modkit.RED4.Animation
                 for (var i = 0; i < numPositions; i++)
                 {
                     var v = lc.PosFrames[i];
+                    ArgumentNullException.ThrowIfNull(v);
                     positions[0].Add(posTime[i], new Vec3(v.X, v.Z, -v.Y));
                 }
                 for (var i = 0; i < numRotations; i++)
                 {
                     var q = lc.RotFrames[i];
+                    ArgumentNullException.ThrowIfNull(q);
                     rotations[0].Add(rotTime[i], new Quat(q.I, q.K, -q.J, q.R));
                 }
             }
@@ -81,6 +83,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                 for (var i = 0; i < numFrames; i++)
                 {
                     var v = pc.Frames[i];
+                    ArgumentNullException.ThrowIfNull(v);
                     positions[0].Add(ft * i, new Vec3(v.X, v.Z, -v.Y));
                 }
             }
@@ -260,8 +263,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                 }
                 for (var i = 0; i < numFrames; i++)
                 {
-                    var v = aa.Frames[i].Position;
-                    var q = aa.Frames[i].Orientation;
+                    var frame = aa.Frames[i];
+                    ArgumentNullException.ThrowIfNull(frame);
+                    var v = frame.Position;
+                    var q = frame.Orientation;
                     positions[0].Add(ft * i, new Vec3(v.X, v.Z, -v.Y));
                     rotations[0].Add(ft * i, new Quat(q.I, q.K, -q.J, q.R));
                 }
@@ -283,6 +288,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                 for (var i = 0; i < numFrames; i++)
                 {
                     var v = uc.Frames[i];
+                    ArgumentNullException.ThrowIfNull(v);
                     if (v.W != 0f || v.W != 1f)
                     {
                         throw new Exception("vec4 W unexpected value ???");

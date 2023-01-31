@@ -34,7 +34,7 @@ public class Archive : ICyberGameArchive, IDisposable
 
     public Index Index { get; set; }
 
-    public string? ArchiveRelativePath { get; set; }
+    public string ArchiveRelativePath { get; set; }
 
     public Dictionary<ulong, IGameFile> Files { get; }
 

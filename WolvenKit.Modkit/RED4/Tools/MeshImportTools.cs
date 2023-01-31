@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
@@ -134,34 +135,35 @@ namespace WolvenKit.Modkit.RED4
                 for (var i = 0; i < rig.BoneNames.Count; i++)
                 {
                     var currentbone = rig.BoneNames[i];
-                    var index = jointnames.IndexOf(currentbone);
+                    var index = jointnames.IndexOf(currentbone.ToString().NotNull());
                     var parindex = jointnames.IndexOf(jointlist[index].VisualParent.Name);
+                    var transform = rig.BoneTransforms[i].NotNull();
 
                     {
                         /*
-                                            rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
-                                            rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
-                                            rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
-                                            rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
+                                            transform.Rotation.I = jointlist[index].LocalTransform.Rotation.X;
+                                            transform.Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
+                                            transform.Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
+                                            transform.Rotation.R = jointlist[index].LocalTransform.Rotation.W;
 
-                                            rig.BoneTransforms[i].Scale.W = 1;
-                                            rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
-                                            rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
-                                            rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
+                                            transform.Scale.W = 1;
+                                            transform.Scale.X = jointlist[index].LocalTransform.Scale.X;
+                                            transform.Scale.Y = jointlist[index].LocalTransform.Scale.Y;
+                                            transform.Scale.Z = jointlist[index].LocalTransform.Scale.Z;
 
-                                            rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-                                            rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
-                                            rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
-                                            rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;
+                                            transform.Translation.W = i == 0 ? 1 : 0;
+                                            transform.Translation.X = jointlist[index].LocalTransform.Translation.X;
+                                            transform.Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
+                                            transform.Translation.Z = jointlist[index].LocalTransform.Translation.Y;
                         */
                     } //gotta figure out those rotations
 
-                    var oriR = rig.BoneTransforms[i].Rotation;
+                    var oriR = transform.Rotation;
                     var oriRquat = new Quat(oriR.I, oriR.J, oriR.K, oriR.R);
                     var newR = jointlist[index].LocalTransform.Rotation;
                     var parR = jointlist[index].VisualParent.LocalTransform.Rotation;
 
-                    var oriT = rig.BoneTransforms[i].Translation;
+                    var oriT = transform.Translation;
                     var oriTvec = new Vec4(oriT.X, oriT.Y, oriT.Z, oriT.W);
                     var newT = jointlist[index].LocalTransform.Translation;
                     var parT = jointlist[index].VisualParent.LocalTransform.Translation;
@@ -216,7 +218,7 @@ namespace WolvenKit.Modkit.RED4
 
                     Quat AllOriginalRotations(int i)
                     {
-                        var wquat = rig.BoneTransforms[i].Rotation;
+                        var wquat = transform.Rotation;
                         var quat = new Quat(wquat.I, wquat.J, wquat.K, wquat.R);
                         return (rig.BoneNames[i] == "Root") ? quat : AllOriginalRotations(rig.BoneParentIndexes[i]) * quat;
                     }
@@ -236,7 +238,7 @@ namespace WolvenKit.Modkit.RED4
                     var aynifni = Vec4.Transform(newT, Quat.Inverse(infinya));
 
 
-                    var before = rig.BoneTransforms[i].Translation.DeepCopy();
+                    var before = transform.Translation.DeepCopy();
 
                     //level = 0;
 
@@ -246,7 +248,7 @@ namespace WolvenKit.Modkit.RED4
 
 
                     //works only for the rig of the kusanagi bike
-                    rig.BoneTransforms[i].Translation = level == 1 ? Vec4.Transform(newT, x90) :
+                    transform.Translation = level == 1 ? Vec4.Transform(newT, x90) :
                                                         level is 3 or
                                                         4 ? Vec4.Transform(newT, new Quat(0, 1, 0, 0) * x90) :
                                                         level == 5 ? Vec4.Transform(newT, x90) :
@@ -254,20 +256,20 @@ namespace WolvenKit.Modkit.RED4
                                                         level == 8 ? Vec4.Transform(newT, y90 * new Quat(0, 0, 0, 1)) : // Quat(0, 0, 0, 1) is z90 * z90
                                                         new Vec4(newT.X, newT.Y, newT.Z, 0);
 
-                    rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
+                    transform.Translation.W = i == 0 ? 1 : 0;
 
                     /*
-                                            rig.BoneTransforms[i].Translation.X = level == 6 ? -newT.Y :
+                                            transform.Translation.X = level == 6 ? -newT.Y :
                                                                                   level == 8 ? newT.Z :
                                                                                   newT.X;
-                                            rig.BoneTransforms[i].Translation.Y = level == 1 ? newT.Z :
+                                            transform.Translation.Y = level == 1 ? newT.Z :
                                                                                   level == 3 ? -newT.Z :
                                                                                   level == 4 ? -newT.Z :
                                                                                   level == 5 ? -newT.Z :
                                                                                   level == 6 ? newT.X :
                                                                                   level == 8 ? -newT.Y :
                                                                                   newT.Y;
-                                            rig.BoneTransforms[i].Translation.Z = level == 1 ? newT.Y :
+                                            transform.Translation.Z = level == 1 ? newT.Y :
                                                                                   level == 3 ? -newT.Y :
                                                                                   level == 4 ? -newT.Y :
                                                                                   level == 5 ? newT.Y :
@@ -275,7 +277,7 @@ namespace WolvenKit.Modkit.RED4
                                                                                   newT.Z;
                     */
 
-                    var after = rig.BoneTransforms[i].Translation;
+                    var after = transform.Translation;
                 }
             }
             var ms = new MemoryStream();
@@ -347,8 +349,8 @@ namespace WolvenKit.Modkit.RED4
                             System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out var inversedWorldMatrix);
 
                             root.BoneRigMatrices[i] = inversedWorldMatrix;
-                            root.BoneRigMatrices[i].W.Y = -inversedWorldMatrix.M43;
-                            root.BoneRigMatrices[i].W.Z = inversedWorldMatrix.M42;
+                            root.BoneRigMatrices[i].NotNull().W.Y = -inversedWorldMatrix.M43;
+                            root.BoneRigMatrices[i].NotNull().W.Z = inversedWorldMatrix.M42;
                             //component Y and -Z are being swapped in vector W
                             //should probably figure out why
                         }
@@ -1296,7 +1298,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     if (boneNames is not null)
                     {
-                        var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i]) && x.Length == root.BoneNames[i].Length);
+                        var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i].ToString().NotNull()) && x.Length == root.BoneNames[i].Length);
 
                         blob.Header.BonePositions[i].X = inverseBindMatrices[index].M41;
                         blob.Header.BonePositions[i].Y = -inverseBindMatrices[index].M43;
