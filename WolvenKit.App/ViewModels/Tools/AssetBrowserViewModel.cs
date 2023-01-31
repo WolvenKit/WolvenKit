@@ -249,12 +249,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
     }
 
     [RelayCommand]
-    private void OpenWolvenKitSettings()
+    private async Task OpenWolvenKitSettings()
     {
         var homepageViewModel = IocHelper.GetService<HomePageViewModel>();
 
         homepageViewModel.SelectedIndex = 1;
-        _appViewModel.SetActiveOverlay(homepageViewModel);
+        await _appViewModel.SetActiveOverlay(homepageViewModel);
     }
 
     [RelayCommand]
@@ -279,7 +279,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
                     var homepage = IocHelper.GetService<HomePageViewModel>();
 
                     homepage.NavigateTo(EHomePage.Plugins);
-                    _appViewModel.SetActiveOverlay(homepage);
+                    await _appViewModel.SetActiveOverlay(homepage);
                     break;
                 }
 
@@ -346,7 +346,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
                     var homepage = IocHelper.GetService<HomePageViewModel>();
 
                     homepage.NavigateTo(EHomePage.Plugins);
-                    _appViewModel.SetActiveOverlay(homepage);
+                    await _appViewModel.SetActiveOverlay(homepage);
                     break;
                 }
 
@@ -557,7 +557,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
         switch (RightSelectedItem)
         {
             case RedFileViewModel fileVm:
+                _watcherService.IsSuspended = true;
+
                 await _gameController.GetController().AddFileToModModal(fileVm.GetGameFile());
+
+                _watcherService.IsSuspended = false;
+                await _watcherService.RefreshAsync(_projectManager.ActiveProject);
                 break;
             case RedDirectoryViewModel dirVm:
                 MoveToFolder(dirVm);

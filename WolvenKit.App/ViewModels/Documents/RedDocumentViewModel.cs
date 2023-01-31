@@ -87,14 +87,14 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     private bool CanExecuteNewEmbeddedFile() => !_embedHashSet.Contains(Extension);
     [RelayCommand(CanExecute = nameof(CanExecuteNewEmbeddedFile))]
-    private void NewEmbeddedFile()
+    private async Task NewEmbeddedFile()
     {
         var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
             .Where(p => p.IsAssignableTo(typeof(CResource)) && p.IsClass)
             .Select(x => x.Name));
 
-        _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+        await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
         {
             DialogHandler = HandleEmbeddedFile
         });

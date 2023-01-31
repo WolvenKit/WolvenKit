@@ -113,9 +113,9 @@ public partial class NewFileViewModel : DialogViewModel
 #pragma warning disable IDE0072 // Add missing cases
         FileName = SelectedFile?.Type switch
         {
-            EWolvenKitFile.RedScript => $"r6{sep}scripts{sep}{project.Name}{sep}untitled.{value.Extension.ToLower()}",
-            EWolvenKitFile.CETLua => $"bin{sep}x64{sep}plugins{sep}cyber_engine_tweaks{sep}mods{sep}{project.Name}{sep}init.{value.Extension.ToLower()}",
-            _ => $"{value.Name.Split(' ').First()}1.{value.Extension.ToLower()}",
+            EWolvenKitFile.RedScript => $"r6{sep}scripts{sep}{project.Name}{sep}untitled.{value.Extension.NotNull().ToLower()}",
+            EWolvenKitFile.CETLua => $"bin{sep}x64{sep}plugins{sep}cyber_engine_tweaks{sep}mods{sep}{project.Name}{sep}init.{value.Extension.NotNull().ToLower()}",
+            _ => $"{value.Name.NotNull().Split(' ').First()}1.{value.Extension.NotNull().ToLower()}",
         };
 #pragma warning restore IDE0072 // Add missing cases
     }

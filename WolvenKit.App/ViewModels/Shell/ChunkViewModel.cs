@@ -826,13 +826,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private bool CanAddHandle() => PropertyType?.IsAssignableTo(typeof(IRedBaseHandle)) ?? false;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddHandle))]
-    private void AddHandle()
+    private async Task AddHandle()
     {
         var data = RedTypeManager.CreateRedType(PropertyType);
         if (data is IRedBaseHandle handle)
         {
             var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
-            _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, false)
+            await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, false)
             {
                 DialogHandler = HandlePointer
             });
@@ -841,7 +841,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private bool CanAddItemToArray() => Parent is not null && !IsReadOnly && PropertyType is not null && (PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)));   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddItemToArray))]
-    private void AddItemToArray()
+    private async Task AddItemToArray()
     {
         ArgumentNullException.ThrowIfNull(Parent);
         ArgumentNullException.ThrowIfNull(PropertyType);
@@ -900,7 +900,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     var type = arr.InnerType;
                     if (type == typeof(CKeyValuePair))
                     {
-                        _appViewModel.SetActiveDialog(new SelectRedTypeDialogViewModel
+                        await _appViewModel.SetActiveDialog(new SelectRedTypeDialogViewModel
                         {
                             DialogHandler = HandleCKeyValuePair
                         });
@@ -918,7 +918,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
                 else
                 {
-                    _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+                    await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
                     {
                         DialogHandler = handler
                     });
@@ -1044,7 +1044,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private bool CanAddItemToCompiledData() => ResolvedPropertyType is not null && PropertyType is not null && PropertyType.IsAssignableTo(typeof(IRedBufferPointer));   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddItemToCompiledData))]
-    private void AddItemToCompiledData()
+    private async Task AddItemToCompiledData()
     {
         if (Data == null)
         {
@@ -1084,7 +1084,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 existing = new ObservableCollection<string>(pkg.Chunks.Select(t => t.GetType().Name).Distinct());
             }
-            _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+            await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
             {
                 DialogHandler = HandleChunk
             });

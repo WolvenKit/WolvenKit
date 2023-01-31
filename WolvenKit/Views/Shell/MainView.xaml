@@ -209,7 +209,7 @@
                     <Border.Style>
                         <Style TargetType="{x:Type Border}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ShouldDialogShow}" Value="True">
+                                <DataTrigger Binding="{Binding ShouldDialogShow, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard Storyboard="{StaticResource OverlayFadeIn}" />
                                     </DataTrigger.EnterActions>
@@ -353,7 +353,7 @@
                         <Grid
                             Grid.Row="2"
                             Grid.Column="2"
-                            Visibility="{Binding IsDialogShown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            Visibility="{Binding IsDialogShown, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Grid.OpacityMask>
                                 <VisualBrush Visual="{Binding ElementName=ModalOverlayMask}" />
                             </Grid.OpacityMask>

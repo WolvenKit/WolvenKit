@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
@@ -35,6 +36,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -120,7 +122,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _pluginService.Init();
         if (!TryLoadingArguments())
         {
-            SetActiveOverlay(IocHelper.GetService<HomePageViewModel>());
+            SetActiveOverlaySync(IocHelper.GetService<HomePageViewModel>());
         }
 
         AddDockedPanes();       
@@ -535,10 +537,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private void NewProject()
+    private async Task NewProject()
     {
         //IsOverlayShown = false;
-        SetActiveDialog(new ProjectWizardViewModel
+        await SetActiveDialog(new ProjectWizardViewModel
         {
             FileHandler = NewProject
         });
@@ -622,27 +624,27 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanShowHomePage() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowHomePage))]
-    private void ShowHomePage()
+    private async Task ShowHomePage()
     {
         IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Welcome);
-        SetActiveOverlay( IocHelper.GetService<HomePageViewModel>());
+        await SetActiveOverlay( IocHelper.GetService<HomePageViewModel>());
     }
 
     private bool CanShowSettings() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowSettings))]
-    private void ShowSettings()
+    private async Task ShowSettings()
     {
 
         IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Settings);
-        SetActiveOverlay( IocHelper.GetService<HomePageViewModel>());
+        await SetActiveOverlay( IocHelper.GetService<HomePageViewModel>());
     }
 
     private bool CanShowProjectSettings() => !IsDialogShown && ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanShowProjectSettings))]
-    private void ShowProjectSettings()
+    private async Task ShowProjectSettings()
     {
         CloseModalCommand.Execute(null);
-        SetActiveDialog(new ProjectSettingsDialogViewModel(_projectManager, _pluginService, this));
+        await SetActiveDialog(new ProjectSettingsDialogViewModel(_projectManager, _pluginService, this));
     }
 
     [RelayCommand]
@@ -714,13 +716,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanShowSoundModdingTool() => !IsDialogShown && ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanShowSoundModdingTool))]
-    private void ShowSoundModdingTool()
+    private async Task ShowSoundModdingTool()
     {
         var vm = IocHelper.GetService<SoundModdingViewModel>();
         if (vm != null)
         {
             vm.FileHandler = OpenSoundModdingView;
-            SetActiveDialog(vm);
+            await SetActiveDialog(vm);
         }
 
         //var vm = new SoundModdingViewModel
@@ -741,37 +743,37 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanShowScriptManager() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowScriptManager))]
-    private void ShowScriptManager()
+    private async Task ShowScriptManager()
     {
         CloseModalCommand.Execute(null);
-        SetActiveDialog(new ScriptManagerViewModel(this));
+        await SetActiveDialog(new ScriptManagerViewModel(this));
     }
 
     private bool CanShowPlugin() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowPlugin))]
-    private void ShowPlugin()
+    private async Task ShowPlugin()
     {
         IocHelper.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Plugins);
-        SetActiveOverlay(IocHelper.GetService<HomePageViewModel>());
+        await SetActiveOverlay(IocHelper.GetService<HomePageViewModel>());
     }
 
     private bool CanShowModsView() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowModsView))]
-    private void ShowModsView()
+    private async Task ShowModsView()
     {
         IocHelper.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Mods);
-        SetActiveOverlay(IocHelper.GetService<HomePageViewModel>());
+        await SetActiveOverlay(IocHelper.GetService<HomePageViewModel>());
     }
 
     private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanNewFile))]
-    private void NewFile(string? inputDir)
+    private async Task NewFile(string? inputDir)
     {
         var vm = IocHelper.GetService<NewFileViewModel>();
         if (vm != null)
         {
             vm.FileHandler = OpenFromNewFile;
-            SetActiveDialog(vm);
+            await SetActiveDialog(vm);
         }
         //SetActiveDialog(new NewFileViewModel
         //{
@@ -788,6 +790,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         _watcherService.IsSuspended = true;
+
         await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (result) =>
         {
             _watcherService.IsSuspended = false;
@@ -1189,29 +1192,40 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         return (semVersion, path);
     }
-    public void SetActiveOverlay(ObservableObject overlay)
+    public async Task SetActiveOverlay(ObservableObject overlay)
     {
         ActiveOverlay = overlay;
-        //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);
-        Task.Run(OnAfterOverlayRendered);
+        await Task.Run(OnAfterOverlayRendered);
+    }
+    public void SetActiveOverlaySync(ObservableObject overlay)
+    {
+        ActiveOverlay = overlay;
+        IsOverlayShown = true;
+        ShouldOverlayShow = true;
+        
     }
 
-    public void SetActiveDialog(DialogViewModel modal)
+    public async Task SetActiveDialog(DialogViewModel modal)
     {
         ActiveDialog = modal;
-        //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);
-        Task.Run(OnAfterDialogRendered);
+        await Task.Run(OnAfterDialogRendered);
     }
 
     private void OnAfterOverlayRendered()
     {
-        IsOverlayShown = true;
-        ShouldOverlayShow = true;
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            IsOverlayShown = true;
+            ShouldOverlayShow = true;
+        }, DispatcherPriority.Render);
     }
     private void OnAfterDialogRendered()
     {
-        IsDialogShown = true;
-        ShouldDialogShow = true;
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            IsDialogShown = true;
+            ShouldDialogShow = true;
+        }, DispatcherPriority.Render);
     }
 
     private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
