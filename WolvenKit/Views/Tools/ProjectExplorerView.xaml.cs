@@ -95,10 +95,12 @@ namespace WolvenKit.Views.Tools
                         }, RxApp.MainThreadScheduler);
                     });
 
-                ViewModel.ExpandAll.Subscribe(x => ExpandAll());
-                ViewModel.CollapseAll.Subscribe(x => CollapseAll());
-                ViewModel.ExpandChildren.Subscribe(x => ExpandChildren());
-                ViewModel.CollapseChildren.Subscribe(x => CollapseChildren());
+                //ViewModel.ExpandAllCommand.Subscribe(x => ExpandAll());
+                //ViewModel.CollapseAllCommand.Subscribe(x => CollapseAll());
+                //ViewModel.ExpandChildrenCommand.Subscribe(x => ExpandChildren());
+                //ViewModel.CollapseChildrenCommand.Subscribe(x => CollapseChildren());
+
+                
 
                 //EventBindings
                 Observable

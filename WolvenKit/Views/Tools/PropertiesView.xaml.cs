@@ -71,13 +71,6 @@ namespace WolvenKit.Views.Tools
 
                 ImagePreview.SetCurrentValue(RenderTransformProperty, group);
             });
-
-            this.WhenActivated(disposables =>
-            {
-                ViewModel.PreviewAudioCommand
-                    .ObserveOn(RxApp.MainThreadScheduler)
-                    .Subscribe(async path => await TempConvertToWemWavAsync(path));
-            });
         }
 
         #region Image Preview
@@ -187,11 +180,7 @@ namespace WolvenKit.Views.Tools
 
         #region AudioPreview
 
-        /// <summary>
-        /// convert a file to wav to preview it.
-        /// </summary>
-        /// <param name="path"></param>
-        private async Task TempConvertToWemWavAsync(AudioObject obj) => await Task.Run(() => TempConvertToWemWav(obj));
+       
 
         private void TempConvertToWemWav(AudioObject obj)
         {

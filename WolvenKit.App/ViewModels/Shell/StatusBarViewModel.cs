@@ -1,19 +1,17 @@
 using System;
-using System.Reactive.Linq;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
+using Octokit;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class StatusBarViewModel : ObservableObject
 {
-    #region Fields
-
     private const string s_noProjectLoaded =
         "NO PROJECT LOADED | Create a New Project or Open an existing Project to get started with WolvenKit";
 
@@ -23,8 +21,6 @@ public partial class StatusBarViewModel : ObservableObject
     private readonly IProjectManager _projectManager;
     private readonly IProgressService<double> _progressService;
 
-
-    #endregion Fields
 
     #region Constructors
 
@@ -44,32 +40,27 @@ public partial class StatusBarViewModel : ObservableObject
         LoadingString = "";
         _currentProject = "";
 
-        _projectManager
-            .WhenAnyValue(
-                x => x.ActiveProject,
-                project => project != null ? project.Name : s_noProjectLoaded)
-            .Subscribe(p =>
-            {
-                _currentProject = p;
-            });
+        _projectManager.ActiveProjectChanged += ProjectManager_ActiveProjectChanged;
 
+        _progressService.ProgressChanged += ProgressService_ProgressChanged;
+        _progressService.PropertyChanged += ProgressService_PropertyChanged;
+    }
 
-        _ = Observable.FromEventPattern<EventHandler<double>, double>(
-            handler => _progressService.ProgressChanged += handler,
-            handler => _progressService.ProgressChanged -= handler)
-            .Select(_ => _.EventArgs * 100)
-            .Subscribe(x =>
-            {
-                _progress = x;
-            });
-
-        _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => DispatcherHelper.RunOnMainThread(() => IsIndeterminate = b));
-        _ = _progressService.WhenAnyValue(x => x.Status).Subscribe(s =>
+    private void ProgressService_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(IProgressService<double>.IsIndeterminate))
         {
             DispatcherHelper.RunOnMainThread(() =>
             {
-                Status = s.ToString();
-                switch (s)
+                IsIndeterminate = _progressService.IsIndeterminate;
+            });
+        }
+        else if (e.PropertyName == nameof(IProgressService<double>.Status))
+        {
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                Status = _progressService.Status.ToString();
+                switch (_progressService.Status)
                 {
                     case EStatus.Running:
                         BarColor = Brushes.DarkOrange;
@@ -85,17 +76,29 @@ public partial class StatusBarViewModel : ObservableObject
                         break;
                 }
             });
-
-        });
+        }
     }
+
+    private void ProgressService_ProgressChanged(object? sender, double e)
+    {
+        Progress = e * 100;
+    }
+
+    private void ProjectManager_ActiveProjectChanged(object? sender, ActiveProjectChangedEventArgs e)
+    {
+        CurrentProject = e.Project != null ? e.Project.Name : s_noProjectLoaded;
+    }
+
 
     #endregion Constructors
 
     #region Properties
 
-    [ObservableProperty] private double _progress;
+    [ObservableProperty]
+    private double _progress;
 
-    [ObservableProperty] private bool _isIndeterminate;
+    [ObservableProperty]
+    private bool _isIndeterminate;
 
     public string? InternetConnected { get; private set; }
 

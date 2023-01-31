@@ -4,13 +4,10 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
-using Splat;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
@@ -37,33 +34,31 @@ public partial class ModsViewModel : PageViewModel
         IgnoreReadOnlyProperties = true,
     };
 
-    public ModsViewModel()
+    public ModsViewModel(ISettingsManager settings, ILoggerService logger, IPluginService pluginService, IProgressService<double> progressService)
     {
-        _settings = Locator.Current.GetService<ISettingsManager>().NotNull();
-        _logger = Locator.Current.GetService<ILoggerService>().NotNull();
-        _pluginService = Locator.Current.GetService<IPluginService>().NotNull();
-        _progressService = Locator.Current.GetService<IProgressService<double>>().NotNull();
+        _settings = settings;
+        _logger = logger;
+        _pluginService = pluginService;
+        _progressService = progressService;
 
-        RefreshCommand = ReactiveCommand.Create(() => Refresh());
-        DeployCommand = ReactiveCommand.Create(() => Deploy());
-        LaunchGameCommand = ReactiveCommand.Create(() => LaunchGame());
-        CheckRedModCommand = ReactiveCommand.Create(() => CheckRedMod());
-        OpenModFolderCommand = ReactiveCommand.Create(() => OpenModFolder());
+        _settings.PropertyChanged += Settings_PropertyChanged;
+        _progressService.ProgressChanged += ProgressService_ProgressChanged;
+    }
 
-        RemoveCommand = ReactiveCommand.Create(() => Remove());
+    private void ProgressService_ProgressChanged(object? sender, double e)
+    {
+        Progress = e * 100;
+    }
 
-        // LoadMods when we're good and ready
-        _settings
-            .WhenAnyValue(x => x.CP77ExecutablePath)
-            .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)) // -.-
-            .Take(1)
-            .Subscribe(x => LoadMods());
-
-        _ = Observable.FromEventPattern<EventHandler<double>, double>(
-            handler => _progressService.ProgressChanged += handler,
-            handler => _progressService.ProgressChanged -= handler)
-            .Select(_ => _.EventArgs * 100)
-            .Subscribe(x => Progress = x);
+    private void Settings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ISettingsManager.CP77ExecutablePath))
+        {
+            if (!string.IsNullOrEmpty(_settings.CP77ExecutablePath))
+            {
+                LoadMods();
+            }
+        }
     }
 
     [ObservableProperty] private double _progress;
@@ -75,9 +70,88 @@ public partial class ModsViewModel : PageViewModel
 
     #region commands
 
-    public ICommand DeployCommand { get; private set; }
+    [RelayCommand]
     private async Task Deploy() => await DeployRedmod();
+
+    [RelayCommand]
+    private void Refresh() => LoadMods();
+
+    [RelayCommand]
+    private void OpenModFolder() => Commonfunctions.ShowFolderInExplorer(_settings.GetRED4GameModDir());
+
+    [RelayCommand]
+    private void LaunchGame()
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = _settings.GetRED4GameLaunchCommand(),
+                Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded",
+                ErrorDialog = true,
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.Error("Launch: error launching game! Please check your executable path in Settings.");
+            _logger.Info($"Launch: error debug info: {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    private async Task CheckRedMod()
+    {
+        if (!_pluginService.IsInstalled(EPlugin.redmod))
+        {
+            var res = await Interactions
+                .ShowMessageBoxAsync("The RedMod tools are not installed and mod compilation will not work. Would you like to install the RedMod tools now?",
+                "RedMod not found");
+
+            switch (res)
+            {
+                case WMessageBoxResult.OK:
+                case WMessageBoxResult.Yes:
+                    _homePageViewModel.NavigateTo(EHomePage.Plugins);
+                    break;
+                case WMessageBoxResult.None:
+                case WMessageBoxResult.Cancel:
+                case WMessageBoxResult.No:
+                case WMessageBoxResult.Custom:
+                default:
+                    break;
+            }
+        }
+    }
+
+    [RelayCommand]
+    private void Remove()
+    {
+        if (SelectedMod is null)
+        {
+            return;
+        }
+
+        if (!Directory.Exists(SelectedMod.Path))
+        {
+            _logger.Warning($"Could not find mod: {SelectedMod.Path}");
+        }
+
+        try
+        {
+            Directory.Delete(SelectedMod.Path, true);
+
+            Mods.Remove(SelectedMod);
+        }
+        catch (Exception)
+        {
+            _logger.Error($"Could not delete mod: {SelectedMod.Path}");
+        }
+    }
+
+    #endregion
+
     private IEnumerable<ModInfoViewModel> GetEnabledMods() => Mods.Where(x => x.IsEnabled);
+
     private async Task<bool> DeployRedmod()
     {
         if (!_pluginService.IsInstalled(EPlugin.redmod))
@@ -163,83 +237,6 @@ public partial class ModsViewModel : PageViewModel
             return result;
         }
     }
-
-    public ICommand RefreshCommand { get; private set; }
-    private void Refresh() => LoadMods();
-
-    public ICommand OpenModFolderCommand { get; private set; }
-    private void OpenModFolder() => Commonfunctions.ShowFolderInExplorer(_settings.GetRED4GameModDir());
-
-    public ICommand LaunchGameCommand { get; private set; }
-    private void LaunchGame()
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = _settings.GetRED4GameLaunchCommand(),
-                Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded",
-                ErrorDialog = true,
-            });
-        }
-        catch (Exception ex)
-        {
-            _logger.Error("Launch: error launching game! Please check your executable path in Settings.");
-            _logger.Info($"Launch: error debug info: {ex.Message}");
-        }
-    }
-
-    public ICommand CheckRedModCommand { get; private set; }
-    private async Task CheckRedMod()
-    {
-        if (!_pluginService.IsInstalled(EPlugin.redmod))
-        {
-            var res = await Interactions
-                .ShowMessageBoxAsync("The RedMod tools are not installed and mod compilation will not work. Would you like to install the RedMod tools now?",
-                "RedMod not found");
-
-            switch (res)
-            {
-                case WMessageBoxResult.OK:
-                case WMessageBoxResult.Yes:
-                    _homePageViewModel.NavigateTo(EHomePage.Plugins);
-                    break;
-                case WMessageBoxResult.None:
-                case WMessageBoxResult.Cancel:
-                case WMessageBoxResult.No:
-                case WMessageBoxResult.Custom:
-                default:
-                    break;
-            }
-        }
-    }
-
-    public ICommand RemoveCommand { get; private set; }
-    private void Remove()
-    {
-        if (SelectedMod is null)
-        {
-            return;
-        }
-
-        if (!Directory.Exists(SelectedMod.Path))
-        {
-            _logger.Warning($"Could not find mod: {SelectedMod.Path}");
-        }
-
-        try
-        {
-            Directory.Delete(SelectedMod.Path, true);
-
-            Mods.Remove(SelectedMod);
-        }
-        catch (Exception)
-        {
-            _logger.Error($"Could not delete mod: {SelectedMod.Path}");
-        }
-    }
-
-    #endregion
 
     private void LoadMods()
     {

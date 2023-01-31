@@ -1,6 +1,6 @@
 using System.Reactive;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
@@ -9,13 +9,11 @@ using WolvenKit.Core.Services;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
-public class MenuBarViewModel : ObservableObject
+public partial class MenuBarViewModel : ObservableObject
 {
     private readonly IProgressService<double> _progressService;
     private readonly IArchiveManager _archiveManager;
     private readonly IModTools _modTools;
-
-
 
     public MenuBarViewModel(
         ISettingsManager settingsManager,
@@ -29,13 +27,12 @@ public class MenuBarViewModel : ObservableObject
         _progressService = progressService;
         _modTools = modTools;
         SettingsManager = settingsManager;
-
-        OpenGameFolderCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(SettingsManager.GetRED4GameRootDir()));
     }
 
     public ISettingsManager SettingsManager { get; }
     public AppViewModel MainViewModel { get; }
 
-    public ReactiveCommand<Unit, Unit> OpenGameFolderCommand { get; }
+    [RelayCommand]
+    private void OpenGameFolder() => Commonfunctions.ShowFolderInExplorer(SettingsManager.GetRED4GameRootDir());
 
 }

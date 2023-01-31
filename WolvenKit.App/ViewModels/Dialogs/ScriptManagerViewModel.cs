@@ -2,38 +2,25 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Disposables;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Discord.Rest;
-using ReactiveUI;
-using Splat;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
-public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewModel
+public partial class ScriptManagerViewModel : DialogViewModel
 {
     private readonly AppViewModel _appViewModel;
 
     private const string ScriptExtension = ".wscript";
 
-    public ScriptManagerViewModel(AppViewModel? appViewModel = null)
+    public ScriptManagerViewModel(AppViewModel appViewModel)
     {
-        _appViewModel = appViewModel ?? Locator.Current.GetService<AppViewModel>().NotNull();
+        _appViewModel = appViewModel;
 
-        this.WhenActivated(disposables =>
-        {
-            HandleActivation();
-
-            Disposable
-                .Create(HandleDeactivation)
-                .DisposeWith(disposables);
-        });
+        GetScriptFiles();
     }
 
     public ObservableCollection<string> Scripts { get; } = new();
@@ -45,14 +32,7 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
     [ObservableProperty]
     private string? _fileName;
 
-    public ViewModelActivator Activator { get; } = new();
 
-    private void HandleActivation() => GetScriptFiles();
-
-    private void HandleDeactivation()
-    {
-
-    }
 
     [RelayCommand]
     private void AddScript()
@@ -105,10 +85,7 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
     }
 
     [RelayCommand]
-    private void Cancel()
-    {
-        _appViewModel.CloseModalCommand.Execute(null);
-    }
+    private void Cancel() => _appViewModel.CloseModalCommand.Execute(null);
 
 
 

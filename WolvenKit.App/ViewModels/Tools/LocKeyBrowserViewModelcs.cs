@@ -2,8 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
-using ReactiveUI;
-using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
@@ -38,7 +36,7 @@ public class LocKeyBrowserViewModel : ToolViewModel
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
     private readonly LocKeyService _locKeyService;
-    private readonly IArchiveManager _archive;
+    private readonly IArchiveManager _archiveManager;
 
     public string Extension { get; set; } = "json";
 
@@ -53,8 +51,8 @@ public class LocKeyBrowserViewModel : ToolViewModel
         IProgressService<double> progressService,
         IModTools modTools,
         IGameControllerFactory gameController,
-        IArchiveManager archive
-    ) : base(ToolTitle)
+        IArchiveManager archive,
+        LocKeyService locKeyService) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
@@ -62,25 +60,24 @@ public class LocKeyBrowserViewModel : ToolViewModel
         _modTools = modTools;
         _progressService = progressService;
         _gameController = gameController;
-        _archive = archive;
-        _locKeyService = Locator.Current.GetService<LocKeyService>().NotNull();
+        _archiveManager = archive;
 
         //State = DockState.Document;
 
-
-        if (_archive.IsManagerLoaded)
+        _archiveManager.PropertyChanged += ArchiveManager_PropertyChanged;
+        if (_archiveManager.IsManagerLoaded)
         {
             SetupLocKeys();
         }
-        else
+
+        _locKeyService = locKeyService;
+    }
+
+    private void ArchiveManager_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(IArchiveManager.IsManagerLoaded))
         {
-            _archive.WhenAnyValue(x => x.IsManagerLoaded).Subscribe(x =>
-            {
-                if (x)
-                {
-                    SetupLocKeys();
-                }
-            });
+            SetupLocKeys();
         }
     }
 

@@ -7,33 +7,14 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
-using ReactiveUI;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 using Point = System.Windows.Point;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
-public partial class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableViewModel
+public partial class RDTGraphViewModel : RedDocumentTabViewModel
 {
-    public ViewModelActivator Activator { get; } = new();
-
-    protected readonly IRedType _data;
-
-    public Dictionary<int, NodeViewModel> NodeLookup = new();
-
-    public List<NodeViewModel> Nodes => NodeLookup.Values.ToList();
-
-    public Dictionary<int, ConnectionViewModel> ConnectionLookup = new();
-
-    public List<ConnectionViewModel> Connections => ConnectionLookup.Values.ToList();
-
-    public Dictionary<int, SocketViewModel> SocketLookup = new();
-
-    public List<SocketViewModel> Sockets => SocketLookup.Values.ToList();
-
-    public PendingConnectionViewModel PendingConnection { get; }
-
     public RDTGraphViewModel(IRedType data, RedDocumentViewModel file) : base(file, "Graph Editor")
     {
         _data = data;
@@ -58,6 +39,23 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableVi
         //};
     }
 
+    protected readonly IRedType _data;
+
+    public Dictionary<int, NodeViewModel> NodeLookup = new();
+
+    public List<NodeViewModel> Nodes => NodeLookup.Values.ToList();
+
+    public Dictionary<int, ConnectionViewModel> ConnectionLookup = new();
+
+    public List<ConnectionViewModel> Connections => ConnectionLookup.Values.ToList();
+
+    public Dictionary<int, SocketViewModel> SocketLookup = new();
+
+    public List<SocketViewModel> Sockets => SocketLookup.Values.ToList();
+
+    public PendingConnectionViewModel PendingConnection { get; }
+
+   
     public GeometryGraph RenderNodes(CArray<CHandle<scnSceneGraphNode>> nodes)
     {
         var graph = new GeometryGraph();

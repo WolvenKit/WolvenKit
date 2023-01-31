@@ -4,8 +4,6 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Discord.Rest;
-using ReactiveUI;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.ViewModels.Shell;
@@ -16,117 +14,36 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.App.ViewModels.Documents;
 
 
-public partial class RDTDataViewModel : RedDocumentTabViewModel, IActivatableViewModel
+public partial class RDTDataViewModel : RedDocumentTabViewModel
 {
-
-    public ViewModelActivator Activator { get; } = new();
-
     protected IRedType _data;
 
-    [ObservableProperty]
-    private bool _isEmbeddedFile;
+    private List<CName> _nodePaths = new();
+
+    private List<ChunkViewModel> _chunks = new();
+
 
     public RDTDataViewModel(IRedType data, RedDocumentViewModel parent) : base(parent, data.GetType().Name)
     {
-
-
         _data = data;
 
-        // set header
-        //if (data is null && parent is TweakXLDocumentViewModel)
-        //{
-        //    var ext = Path.GetExtension(parent.FilePath).ToLower();
-        //    Header = ext switch
-        //    {
-        //        ".yaml" => "TweakXL",
-        //        ".yml" => "TweakXL",
-        //        ".xl" => "TweakXL",
-        //        _ => throw new NotImplementedException(),
-        //    };
-        //}
-        //else
-        //{
-        //    Header = _data.GetType().Name;
-        //}
-
-        //OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
-
-        this.WhenActivated((CompositeDisposable disposables) =>
+        if (SelectedChunk == null && Chunks.Count > 0)
         {
-
-
-            if (SelectedChunk == null && Chunks.Count > 0)
-            {
-                SelectedChunk = Chunks[0];
-                SelectedChunks.Add(Chunks[0]);
-            }
-        });
-
-
-        //if (!Nodes.Contains(Chunks[0]))
-        //{
-        //    Nodes.Add(Chunks[0]);
-        //    _nodePaths.Add(Chunks[0].RelativePath);
-        //}
-        //LookForReferences(Chunks[0]);
-
+            SelectedChunk = Chunks[0];
+            SelectedChunks.Add(Chunks[0]);
+        }
 
         Nodes.Add(new CNameWrapper(this, new ReferenceSocket(Chunks[0].RelativePath)));
         _nodePaths.Add(Chunks[0].RelativePath);
-
-        //var refCopy = References.ToList();
-
-        //foreach (var reference in refCopy)
-        //{
-        //    if (Nodes.Where(x => x is ChunkViewModel cvm && cvm.RelativePath == reference.Input.File).Count() == 0)
-        //    {
-        //        var cr2w = File.GetFileFromDepotPathOrCache(reference.Input.File);
-        //        if (cr2w != null && cr2w.RootChunk != null)
-        //        {
-        //            var chunk = new ChunkViewModel(cr2w.RootChunk, reference.Input);
-        //            Nodes.Add(chunk);
-        //            LookForReferences(chunk, cr2w.RootChunk);
-        //        }
-        //    }
-        //}
-
-        //refCopy = References.ToList();
-
-        //foreach (var reference in refCopy)
-        //{
-        //    if (Nodes.Where(x => x is ChunkViewModel cvm && cvm.RelativePath == reference.Input.File).Count() == 0)
-        //    {
-        //        var cr2w = File.GetFileFromDepotPathOrCache(reference.Input.File);
-        //        if (cr2w != null && cr2w.RootChunk != null)
-        //        {
-        //            var chunk = new ChunkViewModel(cr2w.RootChunk, reference.Input);
-        //            Nodes.Add(chunk);
-        //            LookForReferences(chunk, cr2w.RootChunk);
-        //        }
-        //    }
-        //}
-
-        //RootChunk = Chunks[0];
-
-        //if (Chunks != null)
-        //{
-        //    foreach (ChunkViewModel item in Chunks)
-        //    {
-        //        item.WhenAnyValue(x => x.IsDirty).Subscribe(x => IsDirty |= x);
-        //    }
-        //}
-        //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
     }
 
-    public IRedType GetData() => _data;
     public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file) => Header = header;
 
     #region properties
 
+    public IRedType GetData() => _data;
+
     public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
-
-
-    private List<ChunkViewModel> _chunks = new();
 
     public List<ChunkViewModel> Chunks
     {
@@ -145,6 +62,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel, IActivatableVie
     }
 
     public virtual ChunkViewModel GenerateChunks() => new(_data, this);
+
+    [ObservableProperty]
+    private bool _isEmbeddedFile;
 
     [ObservableProperty] private ChunkViewModel? _selectedChunk;
 
@@ -165,59 +85,11 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel, IActivatableVie
 
     public LayoutNodesDelegate? LayoutNodes;
 
-    private List<CName> _nodePaths = new();
 
     #endregion
 
     #region commands
-    /*
-    public ICommand OnDemandLoadingCommand { get; private set; }
-
-    private bool CanExecuteOnDemandLoading(TreeViewNode node) => node.Content is GroupedChunkViewModel || (node.Content is ChunkViewModel cvm && cvm.HasChildren());
-
-    private void ExecuteOnDemandLoading(TreeViewNode node)
-    {
-        if (node.ChildNodes.Count > 0)
-        {
-            node.IsExpanded = true;
-            return;
-        }
-
-        node.ShowExpanderAnimation = true;
-
-        if (node.Content is GroupedChunkViewModel gcvm)
-        {
-            Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
-                new Action(() =>
-                {
-                    node.PopulateChildNodes(gcvm.TVProperties);
-                    if (gcvm.TVProperties.Count > 0)
-                    {
-                        node.IsExpanded = true;
-                    }
-
-                    node.ShowExpanderAnimation = false;
-                }));
-        }
-
-        if (node.Content is ChunkViewModel cvm)
-        {
-            Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
-                new Action(() =>
-                {
-                    cvm.CalculateProperties();
-                    node.PopulateChildNodes(cvm.TVProperties);
-                    if (cvm.TVProperties.Count > 0)
-                    {
-                        node.IsExpanded = true;
-                    }
-
-                    node.ShowExpanderAnimation = false;
-                }));
-        }
-    }
-    */
-
+    
     [RelayCommand]
     private Task OpenImport(ICR2WImport input)
     {
@@ -226,36 +98,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel, IActivatableVie
 
         return _gameController.GetController().AddFileToModModal(key);
     }
-
-    //public ICommand ExportChunkCommand { get; private set; }
-    //private bool CanExportChunk(ChunkViewModel cvm) => cvm.Properties.Count > 0;
-    //private void ExecuteExportChunk(ChunkViewModel cvm)
-    //{
-    //    Stream myStream;
-    //    var saveFileDialog = new SaveFileDialog();
-
-    //    saveFileDialog.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
-    //    saveFileDialog.FilterIndex = 2;
-    //    saveFileDialog.FileName = cvm.Type + ".json";
-    //    saveFileDialog.RestoreDirectory = true;
-
-    //    if (saveFileDialog.ShowDialog() == DialogResult.OK)
-    //    {
-    //        if ((myStream = saveFileDialog.OpenFile()) != null)
-    //        {
-    //            var dto = new RedClassDto(cvm.Data);
-    //            var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
-
-    //            if (string.IsNullOrEmpty(json))
-    //            {
-    //                throw new SerializationException();
-    //            }
-
-    //            myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
-    //            myStream.Close();
-    //        }
-    //    }
-    //}
 
     #endregion
 
@@ -411,7 +253,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel, IActivatableVie
 
     }
 
-    //public Red4File GetFile() => _file;
     public override void OnSelected()
     {
         // if tweak file, deserialize from text

@@ -1,7 +1,7 @@
 using System.Reactive;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Services;
@@ -32,22 +32,6 @@ public partial class RibbonViewModel : ObservableObject
         MainViewModel = appViewModel;
 
         _launchProfileText = "Launch Profiles";
-
-        NewFileCommand = ReactiveCommand.Create(() => MainViewModel.NewFileCommand.SafeExecute(null));
-        SaveFileCommand = ReactiveCommand.Create(() => MainViewModel.SaveFileCommand.SafeExecute());
-        SaveAsCommand = ReactiveCommand.Create(() => MainViewModel.SaveAsCommand.SafeExecute());
-        SaveAllCommand = ReactiveCommand.Create(() => MainViewModel.SaveAllCommand.SafeExecute());
-
-        LaunchProfileCommand = ReactiveCommand.CreateFromTask(LaunchProfileAsync);
-
-        /*this.WhenAnyValue(x => x.MainViewModel.ActiveProject).WhereNotNull().Subscribe(p =>
-        {
-            if (p is not null)
-            {
-                LaunchProfileText = p.Name;
-            }
-        });*/
-
     }
 
 
@@ -55,16 +39,31 @@ public partial class RibbonViewModel : ObservableObject
     public AppViewModel MainViewModel { get; }
 
 
-    public ReactiveCommand<Unit, Unit> NewFileCommand { get; }
-    public ReactiveCommand<Unit, Unit> SaveFileCommand { get; }
-    public ReactiveCommand<Unit, Unit> SaveAsCommand { get; }
-    public ReactiveCommand<Unit, Unit> SaveAllCommand { get; }
+    [RelayCommand]
+    private void NewFile()
+    {
+        MainViewModel.NewFileCommand.SafeExecute(null);
+    }
 
+    [RelayCommand]
+    private void SaveFile()
+    {
+        MainViewModel.SaveFileCommand.SafeExecute();
+    }
+    
+    [RelayCommand]
+    private void SaveAs()
+    {
+        MainViewModel.SaveAsCommand.SafeExecute();
+    }
 
+    [RelayCommand]
+    private void SaveAll()
+    {
+        MainViewModel.SaveAllCommand.SafeExecute();
+    }
 
-
-
-    public ReactiveCommand<Unit, Unit> LaunchProfileCommand { get; }
+    [RelayCommand]
     private async Task LaunchProfileAsync()
     {
         _settingsManager.LaunchProfiles ??= new();

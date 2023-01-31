@@ -1,11 +1,9 @@
 using System;
 using System.IO;
-using System.Reactive;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
-using ReactiveUI;
 using Splat;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;

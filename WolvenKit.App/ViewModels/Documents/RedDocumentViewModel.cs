@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ReactiveUI;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
@@ -50,11 +49,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
         Cr2wFile = file;
         _isInitialized = true;
         PopulateItems();
-
-
-
-        this.WhenAnyValue(x => x.SelectedTabItemViewModel)
-            .Subscribe(x => x?.OnSelected());
     }
 
     #region properties
@@ -66,6 +60,11 @@ public partial class RedDocumentViewModel : DocumentViewModel
     [ObservableProperty] private int _selectedIndex;
 
     [ObservableProperty] private RedDocumentTabViewModel? _selectedTabItemViewModel;
+
+    partial void OnSelectedTabItemViewModelChanged(RedDocumentTabViewModel? value)
+    {
+        value?.OnSelected();
+    }
 
     // assume files that don't exist are relative paths
     public string RelativePath
@@ -84,6 +83,24 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     #endregion
 
+    #region commands
+
+    private bool CanExecuteNewEmbeddedFile() => !_embedHashSet.Contains(Extension);
+    [RelayCommand(CanExecute = nameof(CanExecuteNewEmbeddedFile))]
+    private void NewEmbeddedFile()
+    {
+        var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(p => p.IsAssignableTo(typeof(CResource)) && p.IsClass)
+            .Select(x => x.Name));
+
+        _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+        {
+            DialogHandler = HandleEmbeddedFile
+        });
+    }
+
+    #endregion
 
     #region methods
 
@@ -135,31 +152,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
     }
 
     public override void SaveAs(object parameter) => throw new NotImplementedException();
-
-
-
-    //public override Task<bool> OpenFileAsync(string path)
-    //{
-    //    _isInitialized = false;
-
-    //    try
-    //    {
-    //        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-    //        {
-    //            OpenStream(stream, path);
-    //        }
-
-    //        return Task.FromResult(true);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        _loggerService.Error(e);
-    //        // Not processing this catch in any other way than rejecting to initialize this
-    //        _isInitialized = false;
-    //    }
-
-    //    return Task.FromResult(false);
-    //}
 
     public RedDocumentTabViewModel? GetMainFile()
     {
@@ -320,21 +312,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
             }
         }
         return Files[depotPath];
-    }
-
-    private bool CanExecuteNewEmbeddedFile() => !_embedHashSet.Contains(Extension);
-    [RelayCommand(CanExecute = nameof(CanExecuteNewEmbeddedFile))]
-    private void NewEmbeddedFile()
-    {
-        var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(p => p.IsAssignableTo(typeof(CResource)) && p.IsClass)
-            .Select(x => x.Name));
-
-        _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
-        {
-            DialogHandler = HandleEmbeddedFile
-        });
     }
 
     public void HandleEmbeddedFile(DialogViewModel? sender)

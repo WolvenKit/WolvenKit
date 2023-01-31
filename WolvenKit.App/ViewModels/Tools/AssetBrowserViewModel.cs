@@ -12,7 +12,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Microsoft.EntityFrameworkCore;
-using ReactiveUI;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -74,8 +73,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly IWatcherService _watcherService;
     private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
     private bool _manuallyLoading = false;
-    [ObservableProperty] private bool _projectLoaded = false;
-    [ObservableProperty] private bool _archiveDirNotFound = true;
+   
 
     #endregion fields
 
@@ -108,76 +106,69 @@ public partial class AssetBrowserViewModel : ToolViewModel
         State = DockState.Dock;
         SideInDockedMode = DockSide.Tabbed;
 
-        AddSelectedCommand = ReactiveCommand.CreateFromTask(AddSelectedAsync);
-        OpenFileSystemItemCommand = ReactiveCommand.CreateFromTask(ExecuteOpenFileAsync);
-        ExpandAll = ReactiveCommand.Create(() => { });
-        CollapseAll = ReactiveCommand.Create(() => { });
-        Collapse = ReactiveCommand.Create(() => { });
-        Expand = ReactiveCommand.Create(() => { });
-        AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
-        FindUsesCommand = ReactiveCommand.CreateFromTask(FindUses);
-        FindUsingCommand = ReactiveCommand.CreateFromTask(FindUsing);
-        LoadAssetBrowserCommand = ReactiveCommand.CreateFromTask(LoadAssetBrowser);
-
-
         archiveManager.ConnectGameRoot()
-            .ObserveOn(RxApp.MainThreadScheduler)
+            //.ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _boundRootNodes)
             .Subscribe(
-            _ =>
+            _ => {
                 // binds only the root node
-                LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes));
-
-        _archiveManager
-            .WhenAnyValue(x => x.IsManagerLoaded)
-            .Subscribe(loaded =>
-            {
-                LoadVisibility = loaded ? Visibility.Collapsed : Visibility.Visible;
-                if (loaded)
-                {
-                    _notificationService.Success($"Asset Browser is initialized");
-                    NoProjectBorderVisibility = Visibility.Collapsed;
-                }
+                LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
             });
 
-        _projectManager
-            .WhenAnyValue(_ => _.IsProjectLoaded)
-            .Subscribe(loaded =>
+        _archiveManager.PropertyChanged += ArchiveManager_PropertyChanged;
+        _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
+        _settings.PropertyChanged += Settings_PropertyChanged;
+    }
+
+    private void Settings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ISettingsManager.CP77ExecutablePath))
+        {
+            var execPath = _settings.CP77ExecutablePath;
+            if (string.IsNullOrEmpty(execPath) || !File.Exists(execPath))
             {
-                _projectLoaded = loaded;
-                ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded && !_archiveDirNotFound;
-            });
-
-        _settings
-            .WhenAnyValue(_ => _.CP77ExecutablePath)
-            .Subscribe(execPath =>
+                ArchiveDirNotFound = true;
+            }
+            else
             {
-                if (string.IsNullOrEmpty(execPath) || !File.Exists(execPath))
-                {
-                    _archiveDirNotFound = true;
-                }
-                else
-                {
-                    DirectoryInfo execDirInfo = new(Path.GetDirectoryName(execPath).NotNull());
+                DirectoryInfo execDirInfo = new(Path.GetDirectoryName(execPath).NotNull());
 
-                    _archiveDirNotFound = execDirInfo.Parent is not null && execDirInfo.Parent.Parent is not null && execDirInfo.Parent.Parent.GetDirectories("archive").Length == 0;
-                }
-                ShouldShowExecutablePathWarning = _archiveDirNotFound;
-                ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded && !_archiveDirNotFound;
-            });
+                ArchiveDirNotFound = execDirInfo.Parent is not null && execDirInfo.Parent.Parent is not null && execDirInfo.Parent.Parent.GetDirectories("archive").Length == 0;
+            }
+            ShouldShowExecutablePathWarning = ArchiveDirNotFound;
+            ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
+        }
+    }
 
+    private void ProjectManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(IProjectManager.IsProjectLoaded))
+        {
+            ProjectLoaded = _projectManager.IsProjectLoaded;
+            ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
+        }
+    }
 
-        //Classes = _gameController
-        //    .GetController()
-        //    .GetAvaliableClasses();
+    private void ArchiveManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(IArchiveManager.IsManagerLoaded))
+        {
+            var loaded = _archiveManager.IsManagerLoaded;
+            LoadVisibility = loaded ? Visibility.Collapsed : Visibility.Visible;
+            if (loaded)
+            {
+                _notificationService.Success($"Asset Browser is initialized");
+                NoProjectBorderVisibility = Visibility.Collapsed;
+            }
+        }
     }
 
     #endregion ctor
 
     #region properties
 
-    //[ObservableProperty] private string _extension = "reds";
-
+    [ObservableProperty] private bool _projectLoaded = false;
+    [ObservableProperty] private bool _archiveDirNotFound = true;
     [ObservableProperty] private GridLength _previewWidth = new(0, GridUnitType.Pixel);
 
     [ObservableProperty] private Visibility _loadVisibility = Visibility.Visible;
@@ -215,7 +206,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     #region commands
 
-    public ReactiveCommand<Unit, Unit> LoadAssetBrowserCommand { get; }
+    [RelayCommand]
     private async Task<Unit> LoadAssetBrowser()
     {
         _manuallyLoading = true;
@@ -234,8 +225,13 @@ public partial class AssetBrowserViewModel : ToolViewModel
         appViewModel.SetActiveOverlay(homepageViewModel);
     }
 
-    public ReactiveCommand<string, Unit> AddSearchKeyCommand { get; set; }
-    public ReactiveCommand<Unit, Unit> FindUsingCommand { get; }
+    [RelayCommand]
+    private void AddSearchKey(string value)
+    {
+        SearchBarText += $" {value}:";
+    }
+
+    [RelayCommand]
     private async Task FindUsing()
     {
         if (!_pluginService.IsInstalled(EPlugin.wolvenkit_resources))
@@ -302,7 +298,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _progressService.IsIndeterminate = false;
     }
 
-    public ReactiveCommand<Unit, Unit> FindUsesCommand { get; }
+    [RelayCommand]
     private async Task FindUses()
     {
         if (!_pluginService.IsInstalled(EPlugin.wolvenkit_resources))
@@ -404,7 +400,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// <summary>
     /// Add File to Project
     /// </summary>
-    public ReactiveCommand<Unit, Unit> AddSelectedCommand { get; private set; }
+    [RelayCommand]
     private async Task AddSelectedAsync()
     {
         _watcherService.IsSuspended = true;
@@ -525,8 +521,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// <summary>
     /// Add file or go into directory
     /// </summary>
-    public ReactiveCommand<Unit, Unit> OpenFileSystemItemCommand { get; private set; }
-    private async Task ExecuteOpenFileAsync()
+    [RelayCommand]
+    private async Task OpenFileSystemItem()
     {
         switch (RightSelectedItem)
         {
@@ -577,11 +573,18 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool CanCopyRelPath() => RightSelectedItem != null; // _projectManager.ActiveProject != null && RightSelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
     private void CopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.NotNull().FullName);
-    
-    public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
-    public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
-    public ReactiveCommand<Unit, Unit> Expand { get; set; }
-    public ReactiveCommand<Unit, Unit> Collapse { get; set; }
+
+    //[RelayCommand]
+    //private void ExpandAll() { }
+
+    //[RelayCommand]
+    //private void CollapseAll() { }
+
+    //[RelayCommand]
+    //private void Collapse() { }
+
+    //[RelayCommand]
+    //private void Expand() { }
 
     #endregion commands
 

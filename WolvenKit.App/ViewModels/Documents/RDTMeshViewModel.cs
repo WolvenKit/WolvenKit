@@ -17,8 +17,6 @@ using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
-using ReactiveUI;
-using Splat;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
@@ -34,47 +32,19 @@ using Material = WolvenKit.App.Models.Material;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
-public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableViewModel
+public partial class RDTMeshViewModel : RedDocumentTabViewModel
 {
-    public ViewModelActivator Activator { get; } = new();
-
     protected readonly RedBaseClass? _data;
 
     private readonly Dictionary<string, LoadableModel> _modelList = new();
     private readonly Dictionary<string, SlotSet> _slotSets = new();
 
-    public EffectsManager? EffectsManager { get; }
-
-    public HelixToolkit.Wpf.SharpDX.Camera? Camera { get; }
-
-    public SceneNodeGroupModel3D GroupModel { get; set; } = new SceneNodeGroupModel3D();
-
-    //public List<Element3D> ModelGroup { get; set; } = new();
-    public SmartElement3DCollection ModelGroup { get; set; } = new();
-
-    public TextureModel? EnvironmentMap { get; set; }
-
-    public bool IsRendered;
 
     private const int s_distanceCameraUnits = 145;
     private const double s_cameraUpDirectionFactor = 0.7;
     private const int s_cameraAnimationTime = 400;
 
-    public PanelVisibility PanelVisibility { get; set; } = new();
-
-    [ObservableProperty] private ImageSource? _image;
-
-    [ObservableProperty] private object? _selectedItem;
-
-    [ObservableProperty] private string? _loadedModelPath;
-
-    [ObservableProperty] private List<LoadableModel> _models = new();
-
-    [ObservableProperty] private Dictionary<string, Rig> _rigs = new();
-
-    [ObservableProperty] private List<Appearance> _appearances = new();
-
-    [ObservableProperty] private Appearance? _selectedAppearance;
+    #region ctor
 
     public RDTMeshViewModel(RedDocumentViewModel parent, string header) : base(parent, header)
     {
@@ -113,13 +83,123 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableVie
 
     }
 
+    // TODO refactor this into inherited viewmodels
+
     public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file, "NO DATA")
     {
         _data = data;
-        //Render = RenderMesh;
 
-        this.WhenActivated((CompositeDisposable disposables) => RenderMesh());
+        RenderMesh();
     }
+
+    public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file, MeshViewHeaders.SectorPreview)
+    {
+        PanelVisibility.ShowSelectionPanel = true;
+        _data = data;
+        var app = new Appearance(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_"));
+
+        Appearances.Add(app);
+        SelectedAppearance = app;
+
+        RenderSectorSolo();
+    }
+
+    public RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file) : this(file, MeshViewHeaders.AllSectorPreview)
+    {
+        _data = data;
+
+        PanelVisibility.ShowSearchPanel = true;
+
+        RenderBlockSolo();
+    }
+
+    public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file, MeshViewHeaders.EntityPreview)
+    {
+        _data = ent;
+
+        PanelVisibility.ShowExportEntity = true;
+
+        RenderEntitySolo();
+    }
+
+    #endregion
+
+    #region properties
+
+    public EffectsManager? EffectsManager { get; }
+
+    public HelixToolkit.Wpf.SharpDX.Camera? Camera { get; }
+
+    public SceneNodeGroupModel3D GroupModel { get; set; } = new SceneNodeGroupModel3D();
+
+    //public List<Element3D> ModelGroup { get; set; } = new();
+    public SmartElement3DCollection ModelGroup { get; set; } = new();
+
+    public TextureModel? EnvironmentMap { get; set; }
+
+    public bool IsRendered;
+
+    public PanelVisibility PanelVisibility { get; set; } = new();
+
+    [ObservableProperty] private ImageSource? _image;
+
+    [ObservableProperty] private object? _selectedItem;
+
+    [ObservableProperty] private string? _loadedModelPath;
+
+    [ObservableProperty] private List<LoadableModel> _models = new();
+
+    [ObservableProperty] private Dictionary<string, Rig> _rigs = new();
+
+    [ObservableProperty] private List<Appearance> _appearances = new();
+
+    [ObservableProperty] private Appearance? _selectedAppearance;
+
+    #endregion
+
+    #region commands
+
+    [RelayCommand]
+    private void ExportEntity()
+    {
+        if (SelectedAppearance is null)
+        {
+            return;
+        }
+
+        var dlg = new SaveFileDialog
+        {
+            FileName = Path.GetFileNameWithoutExtension(Parent.RelativePath) + ".glb",
+            Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
+        };
+
+        if (dlg.ShowDialog().GetValueOrDefault())
+        {
+            var outFile = new FileInfo(dlg.FileName);
+            // will only use archive files (for now)
+            if (_modTools.ExportEntity(Parent.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
+            {
+                Parent.GetLoggerService().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
+            }
+            else
+            {
+                Parent.GetLoggerService().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
+            }
+        }
+    }
+
+    [RelayCommand]
+    public void ExtractShaders()
+    {
+        if (_settingsManager.CP77ExecutablePath is not null)
+        {
+            ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
+        }
+    }
+
+    #endregion
+
+    #region methods
 
     public void RenderMesh()
     {
@@ -236,7 +316,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableVie
 
         SelectedAppearance = Appearances.FirstOrDefault();
     }
-
 
     public GroupModel3D GroupFromRigBone(Rig rig, RigBone bone, Dictionary<string, GroupModel3D> groups)
     {
@@ -624,43 +703,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableVie
         }
     }
 
-    [RelayCommand]
-    private void ExportEntity()
-    {
-        if (SelectedAppearance is null)
-        {
-            return;
-        }
-
-        var dlg = new SaveFileDialog
-        {
-            FileName = Path.GetFileNameWithoutExtension(Parent.RelativePath) + ".glb",
-            Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
-        };
-
-        if (dlg.ShowDialog().GetValueOrDefault())
-        {
-            var outFile = new FileInfo(dlg.FileName);
-            // will only use archive files (for now)
-            if (_modTools.ExportEntity(Parent.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
-            {
-                Parent.GetLoggerService().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
-            }
-            else
-            {
-                Parent.GetLoggerService().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
-            }
-        }
-    }
-
-    [RelayCommand]
-    public void ExtractShaders()
-    {
-        if (_settingsManager.CP77ExecutablePath is not null)
-        {
-            ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
-        }
-    }
+   
 
     public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
@@ -768,7 +811,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableVie
 
     }
 
+    #endregion
 
+    // TODO sort this
 
     #region meshhelper
 
@@ -1749,17 +1794,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableVie
 
     [ObservableProperty] private MeshComponentSelector _currentSelection = new();
 
-    public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file, MeshViewHeaders.SectorPreview)
-    {
-        PanelVisibility.ShowSelectionPanel = true;
-        _data = data;
-        var app = new Appearance(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_"));
-
-        Appearances.Add(app);
-        SelectedAppearance = app;
-
-        this.WhenActivated((CompositeDisposable disposables) => RenderSectorSolo());
-    }
+   
 
     public void RenderSectorSolo()
     {
@@ -2469,15 +2504,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableVie
         }
     }
 
-    public RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file) : this(file, MeshViewHeaders.AllSectorPreview)
-    {
-        _data = data;
-
-        PanelVisibility.ShowSearchPanel = true;
-
-
-        this.WhenActivated((CompositeDisposable disposables) => RenderBlockSolo());
-    }
+    
 
     [RelayCommand]
     public void ClearSearch()
@@ -2734,15 +2761,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableVie
 
     #region meshpreviewentity
 
-    public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file, MeshViewHeaders.EntityPreview)
-    {
-        _data = ent;
-
-        PanelVisibility.ShowExportEntity = true;
-
-
-        this.WhenActivated((CompositeDisposable disposables) => RenderEntitySolo());
-    }
+   
 
     public void RenderEntitySolo()
     {

@@ -96,11 +96,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .BindToObservableList(out _observableList)
             .Subscribe(OnNext);
 
-        ExpandAll = ReactiveCommand.Create(() => { });
-        CollapseAll = ReactiveCommand.Create(() => { });
-        CollapseChildren = ReactiveCommand.Create(() => { });
-        ExpandChildren = ReactiveCommand.Create(() => { });
-
         _projectManager.ActiveProjectChanged += _projectManager_ActiveProjectChanged;
 
     }
@@ -134,15 +129,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public AppViewModel MainViewModel => Locator.Current.GetService<AppViewModel>().NotNull();
 
-    public ReactiveCommand<Unit, Unit> ExpandAll { get; private set; }
 
-    public ReactiveCommand<Unit, Unit> CollapseAll { get; private set; }
-
-    public ReactiveCommand<Unit, Unit> CollapseChildren { get; private set; }
-
-    public ReactiveCommand<Unit, Unit> ExpandChildren { get; private set; }
-
-    [ObservableProperty] private ObservableCollection<FileModel> _bindGrid1 = new();
+    [ObservableProperty]
+    private ObservableCollection<FileModel> _bindGrid1 = new();
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
@@ -194,6 +183,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #region commands
 
     #region general commands
+
+    //[RelayCommand]
+    //private void ExpandAll() {  }
+
+    //[RelayCommand]
+    //private void CollapseAll() { }
+
+    //[RelayCommand]
+    //private void CollapseChildren() { }
+
+    //[RelayCommand]
+    //private void ExpandChildren() { }
 
     /// <summary>
     /// Refreshes all files in the Grid
@@ -606,13 +607,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private bool CanOpenInMlsb()
     {
-        return ActiveProject != null
-        && SelectedItem != null
-        && !SelectedItem.IsDirectory
-        && IsInRawFolder(SelectedItem)
-        && SelectedItem.Extension.ToLower().Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal)
-        && GetSecondExtension(SelectedItem).Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal)
-        && PluginService.IsInstalled(EPlugin.mlsetupbuilder);
+        return ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory 
+            && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal) 
+            && GetSecondExtension(SelectedItem).Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal)
+            && PluginService.IsInstalled(EPlugin.mlsetupbuilder);
     }
 
     [RelayCommand(CanExecute = nameof(CanOpenInMlsb))]
@@ -679,99 +677,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
-
-    //private async void RequestFileCook(object sender, RequestFileOpenArgs e)
-    //{
-    //    if (ActiveProject is not Tw3Project tw3mod)
-    //    {
-    //        return;
-    //    }
-
-    //    var filename = e.File;
-    //    var fullpath = Path.Combine(ActiveProject.FileDirectory, filename);
-    //    if (!File.Exists(fullpath) && !Directory.Exists(fullpath))
-    //    {
-    //        return;
-    //    }
-
-    //    var dir = File.Exists(fullpath) ? Path.GetDirectoryName(fullpath) : fullpath;
-    //    var reldir = dir[(ActiveProject.FileDirectory.Length + 1)..];
-
-    //    // Trim working directories in path
-    //    var reg = new Regex(@"^(Raw|Mod|DLC)\\(.*)");
-    //    var match = reg.Match(reldir);
-    //    var isDlc = false;
-    //    if (match.Success)
-    //    {
-    //        reldir = match.Groups[2].Value;
-    //        if (match.Groups[1].Value == "Raw")
-    //        {
-    //            return;
-    //        }
-    //        else if (match.Groups[1].Value == "DLC")
-    //        {
-    //            isDlc = true;
-    //        }
-    //        else if (match.Groups[1].Value == "Mod")
-    //        {
-    //            isDlc = false;
-    //        }
-    //    }
-
-    //    if (reldir.StartsWith(EProjectFolders.Cooked.ToString()))
-    //    {
-    //        reldir = reldir[EProjectFolders.Cooked.ToString().Length..];
-    //    }
-
-    //    if (reldir.StartsWith(EProjectFolders.Uncooked.ToString()))
-    //    {
-    //        reldir = reldir[EProjectFolders.Uncooked.ToString().Length..];
-    //    }
-
-    //    reldir = reldir.TrimStart(Path.DirectorySeparatorChar);
-
-    //    // create cooked mod Dir
-    //    var cookedtargetDir = isDlc
-    //        ? Path.Combine(tw3mod.DlcCookedDirectory, reldir)
-    //        : Path.Combine(tw3mod.ModCookedDirectory, reldir);
-    //    if (!Directory.Exists(cookedtargetDir))
-    //    {
-    //        Directory.CreateDirectory(cookedtargetDir);
-    //    }
-
-    //    // lazy check for existing files in Active Mod
-    //    var filenames = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories)
-    //        .Select(_ => Path.GetFileName(_));
-    //    var existingfiles = Directory.GetFiles(cookedtargetDir, "*.*", SearchOption.AllDirectories)
-    //        .Select(_ => Path.GetFileName(_));
-
-    //    if (existingfiles.Intersect(filenames).Any())
-    //    {
-    //        //if (MessageBox.Show(
-    //        //     "Some of the files you are about to cook already exist in your mod. These files will be overwritten. Are you sure you want to permanently overwrite them?"
-    //        //     , "Confirmation", MessageBoxButtons.YesNo
-    //        // ) != DialogResult.Yes)
-    //        //{
-    //        //    return;
-    //        //}
-    //    }
-
-    //    try
-    //    {
-    //        var cook = new Wcc_lite.cook()
-    //        {
-    //            Platform = platform.pc,
-    //            mod = dir,
-    //            basedir = dir,
-    //            outdir = cookedtargetDir
-    //        };
-    //        await Task.Run(() => _tw3Controller.RunCommand(cook));
-    //    }
-    //    catch (Exception)
-    //    {
-    //        _loggerService.LogString("Error cooking files.", Logtype.Error);
-    //    }
-    //}
 
     #endregion Methods
 }

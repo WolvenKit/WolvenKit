@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Utils;
-using ReactiveUI;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.Modkit.Scripting;
@@ -42,6 +41,8 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         }
     }
 
+    #region properties
+
     [ObservableProperty]
     private TextDocument _document;
     
@@ -61,6 +62,10 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     [ObservableProperty]
     private bool _isNormalScript;
 
+    #endregion
+
+    #region commands
+
     private bool CanRun() => !_scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanRun))]
     private async void Run() => await _scriptService.ExecuteAsync(Document.Text, _hostObjects, ISettingsManager.GetWScriptDir());
@@ -71,6 +76,9 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
     [RelayCommand]
     private void ReloadUI() => _scriptService.RefreshUIScripts();
+
+    #endregion
+
 
     private void GenerateCompletionData()
     {

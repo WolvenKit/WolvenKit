@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
@@ -39,48 +38,23 @@ public partial class PluginViewModel : ObservableObject
         InstallPath = installPath;
         _version = plugin.Version;
 
-        InstallCommand = ReactiveCommand.CreateFromTask(InstallAsync, this.WhenAnyValue(x => x.IsBusy, (busy) => !busy));
-        OpenCommand = ReactiveCommand.Create(Open);
-        RemoveCommand = ReactiveCommand.Create(RemoveAsync);
-
-        this.WhenAnyValue(x => x.Status).Subscribe(status =>
-        {
-            switch (status)
-            {
-                case EPluginStatus.NotInstalled:
-                    IsOpenEnabled = false;
-                    IsNotInstalled = true;
-                    Label = "Install";
-                    break;
-                case EPluginStatus.Outdated:
-                    IsOpenEnabled = true;
-                    IsNotInstalled = false;
-                    Label = "Update";
-                    break;
-                case EPluginStatus.Latest:
-                    IsOpenEnabled = true;
-                    IsNotInstalled = false;
-                    Label = "Repair";
-                    break;
-                case EPluginStatus.Installed:
-                    break;
-                default:
-                    break;
-            }
-        });
-
-        _ = Observable.FromEventPattern<EventHandler<double>, double>(
-            handler => _progressService.ProgressChanged += handler,
-            handler => _progressService.ProgressChanged -= handler)
-            .Select(_ => _.EventArgs * 100)
-            .Subscribe(x => Progress = x);
-
-        _ = _progressService
-            .WhenAnyValue(x => x.IsIndeterminate)
-            .Subscribe(x => IsIndeterminate = x);
-
-        _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => IsIndeterminate = b);
+        _progressService.PropertyChanged += ProgressService_PropertyChanged;
+        _progressService.ProgressChanged += ProgressService_ProgressChanged;
     }
+
+    private void ProgressService_ProgressChanged(object? sender, double e)
+    {
+        Progress = e * 100;
+    }
+
+    private void ProgressService_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(IsIndeterminate))
+        {
+            IsIndeterminate = _progressService.IsIndeterminate;
+        }
+    }
+
 
     public EPlugin Id => _pluginModel.Id;
     public string Name => Id.GetDisplayName();
@@ -89,22 +63,58 @@ public partial class PluginViewModel : ObservableObject
     public string InstallPath { get; init; }
 
     [ObservableProperty] private string _version;
-    [ObservableProperty] private EPluginStatus _status;
+    
+    [ObservableProperty]
+    private EPluginStatus _status;
+    partial void OnStatusChanged(EPluginStatus value)
+    {
+        switch (value)
+        {
+            case EPluginStatus.NotInstalled:
+                IsOpenEnabled = false;
+                IsNotInstalled = true;
+                Label = "Install";
+                break;
+            case EPluginStatus.Outdated:
+                IsOpenEnabled = true;
+                IsNotInstalled = false;
+                Label = "Update";
+                break;
+            case EPluginStatus.Latest:
+                IsOpenEnabled = true;
+                IsNotInstalled = false;
+                Label = "Repair";
+                break;
+            case EPluginStatus.Installed:
+                break;
+            default:
+                break;
+        }
+    }
+
     [ObservableProperty] private string? _label;
 
     [ObservableProperty] private bool _isIndeterminate;
-    [ObservableProperty] private bool _isBusy;
 
-    [ObservableProperty] private double _progress;
-    [ObservableProperty] private bool _isNotInstalled;
-    [ObservableProperty] private bool _isOpenEnabled; // = IsInstalled
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(InstallCommand))]
+    private bool _isBusy;
+
+    [ObservableProperty]
+    private double _progress;
+
+    [ObservableProperty]
+    private bool _isNotInstalled;
+
+    [ObservableProperty]
+    private bool _isOpenEnabled; // = IsInstalled
 
 
-    public ICommand OpenCommand { get; init; }
+    [RelayCommand]
     private void Open() => Commonfunctions.ShowFolderInExplorer(InstallPath);
 
-    public ICommand RemoveCommand { get; init; }
-    private async Task RemoveAsync()
+    [RelayCommand]
+    private async Task Remove()
     {
         IsBusy = true;
 
@@ -113,8 +123,9 @@ public partial class PluginViewModel : ObservableObject
         IsBusy = false;
     }
 
-    public ICommand InstallCommand { get; init; }
-    private async Task InstallAsync()
+    private bool CanInstall() => !IsBusy;
+    [RelayCommand]
+    private async Task Install()
     {
         IsBusy = true;
 
@@ -146,6 +157,7 @@ public partial class PluginViewModel : ObservableObject
         IsBusy = false;
         _progressService.IsIndeterminate = false;
     }
+
 
     internal PluginModel GetModel() => _pluginModel;
     internal void SetModel(PluginModel model) => _pluginModel = model;

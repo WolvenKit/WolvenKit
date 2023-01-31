@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
-using ReactiveUI;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;
@@ -22,6 +25,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using static WolvenKit.App.ViewModels.Documents.RDTMeshViewModel;
+using Path = System.IO.Path;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -82,7 +86,6 @@ public partial class PropertiesViewModel : ToolViewModel
 
         SetToNullAndResetVisibility();
 
-        PreviewAudioCommand = ReactiveCommand.Create<AudioObject, AudioObject>(obj => obj);
 
         EffectsManager = new DefaultEffectsManager();
         Camera = new PerspectiveCamera()
@@ -131,9 +134,25 @@ public partial class PropertiesViewModel : ToolViewModel
 
     #region commands
 
-    public ReactiveCommand<AudioObject, AudioObject> PreviewAudioCommand { get; set; }
+    [RelayCommand]
+    private async Task PreviewAudio(AudioObject obj)
+    {
+        await TempConvertToWemWavAsync(obj);
+    }
 
-    public ICommand? FileSelectedCommand { get; private set; }
+    /// <summary>
+    /// convert a file to wav to preview it.
+    /// </summary>
+    /// <param name="path"></param>
+    private async Task TempConvertToWemWavAsync(AudioObject obj) => await Task.Run(() => TempConvertToWemWav(obj));
+    private void TempConvertToWemWav(AudioObject obj)
+    {
+        //DispatcherHelper.RunOnMainThread(() =>
+        //{
+        //    AudioPlayer.OpenAudioObject(obj);
+        //});
+        throw new NotImplementedException();
+    }
 
     private bool CanOpenFile(FileModel model) => model != null;
 

@@ -42,10 +42,10 @@ namespace WolvenKit.Views.Tools
             this.WhenActivated(disposables =>
             {
 
-                ViewModel.ExpandAll.Subscribe(x => ExpandAllNodes());
-                ViewModel.CollapseAll.Subscribe(x => CollapseAllNodes());
-                ViewModel.Expand.Subscribe(x => ExpandNode());
-                ViewModel.Collapse.Subscribe(x => CollapseNode());
+                //ViewModel.ExpandAllCommand.Subscribe(x => ExpandAllNodes());
+                //ViewModel.CollapseAllCommand.Subscribe(x => CollapseAllNodes());
+                //ViewModel.ExpandCommand.Subscribe(x => ExpandNode());
+                //ViewModel.CollapseCommand.Subscribe(x => CollapseNode());
 
                 // top search
                 //var observable1 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(

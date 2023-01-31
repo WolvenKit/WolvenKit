@@ -749,7 +749,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private void ShowProjectSettings()
     {
         CloseModalCommand.Execute(null);
-        SetActiveDialog(new ProjectSettingsDialogViewModel());
+        SetActiveDialog(new ProjectSettingsDialogViewModel(_projectManager, _pluginService, this));
     }
 
     [RelayCommand]
@@ -851,7 +851,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private void ShowScriptManager()
     {
         CloseModalCommand.Execute(null);
-        SetActiveDialog(new ScriptManagerViewModel());
+        SetActiveDialog(new ScriptManagerViewModel(this));
     }
 
     private bool CanShowPlugin() => !IsDialogShown;
