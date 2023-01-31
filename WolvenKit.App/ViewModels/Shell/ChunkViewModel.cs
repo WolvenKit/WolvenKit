@@ -15,9 +15,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.Win32;
-using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
@@ -47,6 +47,15 @@ namespace WolvenKit.App.ViewModels.Shell;
 public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
 {
     private readonly ILoggerService _loggerService;
+    private readonly ISettingsManager _settingsManager;
+    private readonly IProjectManager _projectManager;
+    private readonly IGameControllerFactory _gameController;
+    private readonly IArchiveManager _archiveManager;
+    private readonly AppViewModel _appViewModel;
+    private readonly TweakDBService _tweakDbService;
+    private readonly LocKeyService _locKeyService;
+    private readonly Red4ParserService _parserService;
+
     private static readonly List<string> s_hiddenProperties = new() { "meshMeshMaterialBuffer.rawDataHeaders", "meshMeshMaterialBuffer.rawData", "entEntityTemplate.compiledData", "appearanceAppearanceDefinition.compiledData" };
 
     private bool _propertiesLoaded;
@@ -63,7 +72,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public ChunkViewModel(IRedType data, string name, ChunkViewModel? parent = null, bool isReadOnly = false)
     {
-        _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
+        _settingsManager = IocHelper.GetService<ISettingsManager>();
+        _loggerService = IocHelper.GetService<ILoggerService>();
+        _archiveManager = IocHelper.GetService<IArchiveManager>();
+        _tweakDbService = IocHelper.GetService<TweakDBService>();
+        _projectManager = IocHelper.GetService<IProjectManager>();
+        _gameController = IocHelper.GetService<IGameControllerFactory>();
+        _appViewModel = IocHelper.GetService<AppViewModel>();
+        _locKeyService = IocHelper.GetService<LocKeyService>();
+        _parserService = IocHelper.GetService<Red4ParserService>();
 
         _data = data;
         Parent = parent;
@@ -276,8 +293,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             else if (Data is TweakDBID tdb && _propertiesLoaded)
             {
-                data = Locator.Current.GetService<TweakDBService>().NotNull().GetFlat(tdb);
-                data ??= Locator.Current.GetService<TweakDBService>().NotNull().GetRecord(tdb);
+                data = _tweakDbService.GetFlat(tdb);
+                data ??= _tweakDbService.GetRecord(tdb);
             }
             else if (Data is DataBuffer db && db.Buffer.Data is IRedType irt)
             {
@@ -365,7 +382,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             if (Data is TweakDBID tdb)
             {
-                var type = Locator.Current.GetService<TweakDBService>().NotNull().GetType(tdb);
+                var type = _tweakDbService.GetType(tdb);
                 if (type is not null)
                 {
                     return type;
@@ -373,7 +390,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             if (Data is ITweakXLItem iti)
             {
-                var type = Locator.Current.GetService<TweakDBService>().NotNull().GetType(iti.ID);
+                var type = _tweakDbService.GetType(iti.ID);
                 if (type is not null)
                 {
                     return type;
@@ -463,7 +480,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 else if (Data is TweakDBID tdb)
                 {
                     // not actual
-                    if (Locator.Current.GetService<TweakDBService>().NotNull().Exists(tdb))
+                    if (_tweakDbService.Exists(tdb))
                     {
                         count += 1;
                     }
@@ -693,7 +710,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         var recordName = Name;
         IRedType? tdbEntry = null;
-        var tdbs = Locator.Current.GetService<TweakDBService>().NotNull();
 
         var txl = new TweakXL();
 
@@ -721,10 +737,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 txl.Type = tweakDBRecord.GetType().Name;
                 break;
             case TweakDBID tweakDBID:
-                tdbEntry = tdbs.GetFlat(tweakDBID);
-                tdbEntry ??= tdbs.GetRecord(tweakDBID);
+                tdbEntry = _tweakDbService.GetFlat(tweakDBID);
+                tdbEntry ??= _tweakDbService.GetRecord(tweakDBID);
                 txl.ID = tweakDBID;
-                txl.Type = tdbs.GetType(tweakDBID).Name;
+                txl.Type = _tweakDbService.GetType(tweakDBID).Name;
                 break;
             case IRedType redType:
                 tdbEntry = Data;
@@ -746,7 +762,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Filter = "YAML files (*.yaml; *.yml)|*.yaml;*.yml|All files (*.*)|*.*",
             FilterIndex = 1,
             FileName = $"{txl.ID.ResolvedText}.yaml",
-            InitialDirectory = Locator.Current.GetService<IProjectManager>().NotNull().ActiveProject?.ResourcesDirectory
+            InitialDirectory = _projectManager.ActiveProject?.ResourcesDirectory
         };
 
         if (saveFileDialog.ShowDialog() == true)
@@ -755,7 +771,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 using var stream = saveFileDialog.OpenFile();
                 var serializer = new SerializerBuilder()
-                    .WithTypeConverter(new TweakXLYamlTypeConverter())
+                    .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDbService))
                     .WithIndentedSequences()
                     .Build();
 
@@ -781,7 +797,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             //string depotpath = r.DepotPath;
             //Tab.File.OpenRefAsTab(depotpath);
-            Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromHash(r.DepotPath.GetRedHash());
+            _appViewModel.OpenFileFromHash(r.DepotPath.GetRedHash());
         }
         //var key = FNV1A64HashAlgorithm.HashString(depotpath);
 
@@ -804,8 +820,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             //Tab.File.OpenRefAsTab(depotpath);
             //Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
             var key = r.DepotPath.GetRedHash();
-            var gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>().NotNull();
-            await gameControllerFactory.GetController().AddFileToModModal(key);
+            await _gameController.GetController().AddFileToModModal(key);
         }
     }
 
@@ -817,8 +832,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (data is IRedBaseHandle handle)
         {
             var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
-            var app = Locator.Current.GetService<AppViewModel>().NotNull();
-            app.SetActiveDialog(new CreateClassDialogViewModel(existing, false)
+            _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, false)
             {
                 DialogHandler = HandlePointer
             });
@@ -886,8 +900,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     var type = arr.InnerType;
                     if (type == typeof(CKeyValuePair))
                     {
-                        var app = Locator.Current.GetService<AppViewModel>().NotNull();
-                        app.SetActiveDialog(new SelectRedTypeDialogViewModel
+                        _appViewModel.SetActiveDialog(new SelectRedTypeDialogViewModel
                         {
                             DialogHandler = HandleCKeyValuePair
                         });
@@ -905,8 +918,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
                 else
                 {
-                    var app = Locator.Current.GetService<AppViewModel>().NotNull();
-                    app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+                    _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
                     {
                         DialogHandler = handler
                     });
@@ -1072,8 +1084,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 existing = new ObservableCollection<string>(pkg.Chunks.Select(t => t.GetType().Name).Distinct());
             }
-            var app = Locator.Current.GetService<AppViewModel>().NotNull();
-            app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+            _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
             {
                 DialogHandler = HandleChunk
             });
@@ -1850,7 +1861,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
         if (obj is TweakDBID tdb)
         {
-            obj = Locator.Current.GetService<TweakDBService>().NotNull().GetFlat(tdb);
+            obj = _tweakDbService.GetFlat(tdb);
             if (obj is not null)
             {
                 Properties.Add(new ChunkViewModel(obj, nameof(TweakDBID), this, true));
@@ -1859,7 +1870,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             else
             {
-                obj = Locator.Current.GetService<TweakDBService>().NotNull().GetRecord(tdb);
+                obj = _tweakDbService.GetRecord(tdb);
             }
             isreadonly = true;
             //var record = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
@@ -1873,13 +1884,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var s = str.GetString();
             if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey))
             {
-                obj = Locator.Current.GetService<LocKeyService>().NotNull().GetEntry(locKey);
+                obj = _locKeyService.GetEntry(locKey);
                 isreadonly = true;
             }
         }
         else if (obj is gamedataLocKeyWrapper locKey)
         {
-            obj = Locator.Current.GetService<LocKeyService>().NotNull().GetEntry(locKey);
+            obj = _locKeyService.GetEntry(locKey);
             isreadonly = true;
         }
 
@@ -2448,8 +2459,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public void HandlePointer(DialogViewModel? sender)
     {
-        var app = Locator.Current.GetService<AppViewModel>().NotNull();
-        app.CloseDialogCommand.Execute(null);
+        _appViewModel.CloseDialogCommand.Execute(null);
         if (sender is CreateClassDialogViewModel vm)
         {
             var instance = RedTypeManager.Create(vm.SelectedClass);
@@ -2476,8 +2486,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public void HandleCKeyValuePair(DialogViewModel? sender)
     {
-        var app = Locator.Current.GetService<AppViewModel>().NotNull();
-        app.CloseDialogCommand.Execute(null);
+        _appViewModel.CloseDialogCommand.Execute(null);
         if (sender is SelectRedTypeDialogViewModel vm && vm.SelectedType is not null)
         {
             if (System.Activator.CreateInstance(vm.SelectedType) is IRedType t)
@@ -2490,8 +2499,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public void HandleChunk(DialogViewModel? sender)
     {
-        var app = Locator.Current.GetService<AppViewModel>().NotNull();
-        app.CloseDialogCommand.Execute(null);
+        _appViewModel.CloseDialogCommand.Execute(null);
         if (sender is CreateClassDialogViewModel vm && vm.SelectedType is not null)
         {
             var instance = RedTypeManager.CreateRedType(vm.SelectedType);
@@ -2504,8 +2512,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public void HandleChunkPointer(DialogViewModel? sender)
     {
-        var app = Locator.Current.GetService<AppViewModel>().NotNull();
-        app.CloseDialogCommand.Execute(null);
+        _appViewModel.CloseDialogCommand.Execute(null);
         if (sender is CreateClassDialogViewModel vm && Data is IRedArray arr)
         {
             var newItem = RedTypeManager.CreateRedType(arr.InnerType);
@@ -2643,9 +2650,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         ArgumentNullException.ThrowIfNull(Tab);
-        var currentfile = new FileModel(Tab.Parent.FilePath, Locator.Current.GetService<AppViewModel>().NotNull().ActiveProject.NotNull());
+        var currentfile = new FileModel(Tab.Parent.FilePath, _appViewModel.ActiveProject.NotNull());
 
-        Locator.Current.GetService<AppViewModel>().NotNull().SaveFileCommand.SafeExecute(currentfile);
+        _appViewModel.SaveFileCommand.SafeExecute(currentfile);
 
         await Refresh();
 
@@ -2984,7 +2991,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public async Task Refresh()
     {
-        var document = Locator.Current.GetService<AppViewModel>().NotNull().ActiveDocument;
+        var document = _appViewModel.ActiveDocument;
 
         if (Tab is not null && document is not null)
         {
@@ -3245,8 +3252,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         try
         {
-            var am = Locator.Current.GetService<IArchiveManager>().NotNull();
-            var sm = Locator.Current.GetService<ISettingsManager>().NotNull();
+            var am = _archiveManager;
+            var sm = _settingsManager;
             am.LoadModsArchives(new FileInfo(sm.CP77ExecutablePath.NotNull()));
             var af = am.GetGroupedFiles();
 
@@ -3289,7 +3296,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         using var stream = new MemoryStream();
                         foundent.Extract(stream);
                         using var reader = new BinaryReader(stream);
-                        var cr2wFile = Locator.Current.GetService<Red4ParserService>().NotNull().ReadRed4File(reader);
+                        var cr2wFile = _parserService.ReadRed4File(reader);
 
                         //open ent
                         if (cr2wFile is not null &&
@@ -3375,12 +3382,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private void AddFromUnreal(List<List<object>> json, string tr, bool updatecoords = true)
     {
         var center = updatecoords ? GetCenter(json) : new Vec4();
-        var pm = Locator.Current.GetService<IProjectManager>().NotNull();
-        ArgumentNullException.ThrowIfNull(pm.ActiveProject);
+        ArgumentNullException.ThrowIfNull(_projectManager.ActiveProject);
 
         foreach (var o in json)
         {
-            var line = Prop.FromObjectList(o, pm.ActiveProject);
+            var line = Prop.FromObjectList(o, _projectManager.ActiveProject);
 
             if (updatecoords)
             {

@@ -24,6 +24,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Importers;
 
@@ -42,11 +43,13 @@ public partial class TextureImportViewModel : ImportViewModel
     private ISettingsManager _settingsManager;
     private IWatcherService _watcherService;
     private IProgressService<double> _progressService;
+    private readonly Red4ParserService _parserService;
     private IProjectManager _projectManager;
     private IGameControllerFactory _gameController;
     private IArchiveManager _archiveManager;
     private IPluginService _pluginService;
     private IModTools _modTools;
+
 
     public TextureImportViewModel(
         IGameControllerFactory gameController,
@@ -58,7 +61,8 @@ public partial class TextureImportViewModel : ImportViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
-        IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Import Tool", "Import Tool")
+        IProgressService<double> progressService,
+        Red4ParserService parserService) : base(archiveManager, notificationService, settingsManager, "Import Tool", "Import Tool")
     {
         _gameController = gameController;
         _settingsManager = settingsManager;
@@ -70,7 +74,7 @@ public partial class TextureImportViewModel : ImportViewModel
         _pluginService = pluginService;
         _modTools = modTools;
         _progressService = progressService;
-
+        _parserService = parserService;
         LoadFiles();
     }
 
@@ -103,7 +107,7 @@ public partial class TextureImportViewModel : ImportViewModel
             }
 
             // import settings from vanilla
-            item.Properties = ImportableItemViewModel.LoadXbmSettingsFromGame(item.BaseFile);
+            item.Properties = ImportableItemViewModel.LoadXbmSettingsFromGame(item.BaseFile, _archiveManager, _projectManager, _parserService);
             _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed game file");
         }
     }
@@ -268,7 +272,7 @@ public partial class TextureImportViewModel : ImportViewModel
 
         var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
             .Where(CanImport)
-            .Select(x => new ImportableItemViewModel(x));
+            .Select(x => new ImportableItemViewModel(x, _archiveManager, _projectManager, _parserService));
 
         Items.Clear();
         Items = new(files);

@@ -32,18 +32,5 @@ public abstract class ToolViewModel : PaneViewModel
     public string Name { get; }
 
 
-    /// <summary>
-    /// Gets/sets whether this tool window is visible or not.
-    /// </summary>
-    public bool IsVisible
-    {
-        get => State != DockState.Hidden;
-        set
-        {
-            State = value ? DockState.Dock : DockState.Hidden;
-            OnPropertyChanged();
-        }
-    }
-
-
+    
 }

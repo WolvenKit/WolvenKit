@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Discord.Rest;
-using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
@@ -48,7 +47,7 @@ public partial class CNameWrapper : ObservableObject, Nodify.INode<ReferenceSock
 
     private bool CanOpenRef() => Socket.File != CName.Empty && DataViewModel.Parent.RelativePath != Socket.File;
     [RelayCommand(CanExecute = nameof(CanOpenRef))]
-    private void OpenRef() => Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromDepotPath(Socket.File);
+    private void OpenRef() => IocHelper.GetService<AppViewModel>().OpenFileFromDepotPath(Socket.File);
 
     private bool CanLoadRef() => Socket.File != CName.Empty;
     [RelayCommand(CanExecute = nameof(CanLoadRef))]

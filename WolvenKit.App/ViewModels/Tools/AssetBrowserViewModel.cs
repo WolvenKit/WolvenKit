@@ -8,13 +8,14 @@ using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Microsoft.EntityFrameworkCore;
-using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Docking;
@@ -110,60 +111,75 @@ public partial class AssetBrowserViewModel : ToolViewModel
         SideInDockedMode = DockSide.Tabbed;
 
         archiveManager.ConnectGameRoot()
-            //.ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _boundRootNodes)
-            .Subscribe(
-            _ =>
-            {
-                // binds only the root node
-                LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
-            });
+            .Subscribe(OnNext);
 
         _archiveManager.PropertyChanged += ArchiveManager_PropertyChanged;
         _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
         _settings.PropertyChanged += Settings_PropertyChanged;
     }
 
+    private void OnNext(IChangeSet<RedFileSystemModel> obj)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
+        }, DispatcherPriority.ContextIdle);
+    }
+
+    private void CheckView()
+    {
+        var execPath = _settings.CP77ExecutablePath;
+        if (string.IsNullOrEmpty(execPath) || !File.Exists(execPath))
+        {
+            ArchiveDirNotFound = true;
+        }
+        else
+        {
+            DirectoryInfo execDirInfo = new(Path.GetDirectoryName(execPath).NotNull());
+            ArchiveDirNotFound = execDirInfo.Parent is not null && execDirInfo.Parent.Parent is not null && execDirInfo.Parent.Parent.GetDirectories("archive").Length == 0;
+        }
+
+        ShouldShowExecutablePathWarning = ArchiveDirNotFound;
+        ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
+    }
+
+    // if the game exe path changes
     private void Settings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(ISettingsManager.CP77ExecutablePath))
         {
-            var execPath = _settings.CP77ExecutablePath;
-            if (string.IsNullOrEmpty(execPath) || !File.Exists(execPath))
-            {
-                ArchiveDirNotFound = true;
-            }
-            else
-            {
-                DirectoryInfo execDirInfo = new(Path.GetDirectoryName(execPath).NotNull());
-
-                ArchiveDirNotFound = execDirInfo.Parent is not null && execDirInfo.Parent.Parent is not null && execDirInfo.Parent.Parent.GetDirectories("archive").Length == 0;
-            }
-            ShouldShowExecutablePathWarning = ArchiveDirNotFound;
-            ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
+            CheckView();
         }
     }
 
+    // if the mod is loaded
     private void ProjectManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IProjectManager.IsProjectLoaded))
         {
             ProjectLoaded = _projectManager.IsProjectLoaded;
-            ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
+            
+            CheckView();
         }
     }
 
+    // if the archive manager is loaded
     private void ArchiveManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IArchiveManager.IsManagerLoaded))
         {
             var loaded = _archiveManager.IsManagerLoaded;
+
             LoadVisibility = loaded ? Visibility.Collapsed : Visibility.Visible;
+            
             if (loaded)
             {
                 _notificationService.Success($"Asset Browser is initialized");
                 NoProjectBorderVisibility = Visibility.Collapsed;
             }
+
+            CheckView();
         }
     }
 
@@ -171,20 +187,32 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     #region properties
 
-    [ObservableProperty] private bool _projectLoaded = false;
-    [ObservableProperty] private bool _archiveDirNotFound = true;
-    [ObservableProperty] private GridLength _previewWidth = new(0, GridUnitType.Pixel);
+    [ObservableProperty]
+    private bool _projectLoaded;
 
-    [ObservableProperty] private Visibility _loadVisibility = Visibility.Visible;
+    [ObservableProperty]
+    private bool _archiveDirNotFound = true;
 
-    [ObservableProperty] private Visibility _noProjectBorderVisibility = Visibility.Visible;
+    [ObservableProperty]
+    private GridLength _previewWidth = new(0, GridUnitType.Pixel);
 
-    [ObservableProperty] private bool _shouldShowLoadButton;
-    [ObservableProperty] private bool _shouldShowExecutablePathWarning = true;
+    [ObservableProperty]
+    private Visibility _loadVisibility = Visibility.Visible;
 
-    [ObservableProperty] private ObservableCollection<RedFileSystemModel> _leftItems = new();
+    [ObservableProperty]
+    private Visibility _noProjectBorderVisibility = Visibility.Visible;
 
-    [ObservableProperty] private object? _leftSelectedItem;
+    [ObservableProperty]
+    private bool _shouldShowLoadButton;
+
+    [ObservableProperty]
+    private bool _shouldShowExecutablePathWarning = true;
+
+    [ObservableProperty]
+    private ObservableCollection<RedFileSystemModel> _leftItems = new();
+
+    [ObservableProperty] 
+    private object? _leftSelectedItem;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(BrowseToFolderCommand))]
@@ -192,19 +220,20 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
     private IFileSystemViewModel? _rightSelectedItem;
 
-    [ObservableProperty] private ObservableCollectionEx<IFileSystemViewModel> _rightItems = new();
+    [ObservableProperty]
+    private ObservableCollectionEx<IFileSystemViewModel> _rightItems = new();
 
-    //[ObservableProperty] private ObservableCollection<object> _rightSelectedItems = new();
+    [ObservableProperty] 
+    private string? _selectedClass;
 
-    //[ObservableProperty] private List<string> _classes;
+    [ObservableProperty] 
+    private string? _selectedExtension;
 
-    [ObservableProperty] private string? _selectedClass;
+    [ObservableProperty] 
+    private string? _searchBarText;
 
-    [ObservableProperty] private string? _selectedExtension;
-
-    [ObservableProperty] private string? _searchBarText;
-
-    [ObservableProperty] private string? _optionsSearchBarText;
+    [ObservableProperty] 
+    private string? _optionsSearchBarText;
 
     #endregion properties
 
@@ -222,7 +251,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand]
     private void OpenWolvenKitSettings()
     {
-        var homepageViewModel = Locator.Current.GetService<HomePage.HomePageViewModel>().NotNull();
+        var homepageViewModel = IocHelper.GetService<HomePageViewModel>();
 
         homepageViewModel.SelectedIndex = 1;
         _appViewModel.SetActiveOverlay(homepageViewModel);
@@ -247,7 +276,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
                 {
-                    var homepage = Locator.Current.GetService<HomePageViewModel>().NotNull();
+                    var homepage = IocHelper.GetService<HomePageViewModel>();
 
                     homepage.NavigateTo(EHomePage.Plugins);
                     _appViewModel.SetActiveOverlay(homepage);
@@ -314,7 +343,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
                 {
-                    var homepage = Locator.Current.GetService<HomePageViewModel>().NotNull();
+                    var homepage = IocHelper.GetService<HomePageViewModel>();
 
                     homepage.NavigateTo(EHomePage.Plugins);
                     _appViewModel.SetActiveOverlay(homepage);

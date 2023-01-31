@@ -16,7 +16,6 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Semver;
-using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -51,8 +50,6 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 {
-    #region fields
-
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
     private readonly IGameControllerFactory _gameControllerFactory;
@@ -62,12 +59,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IProgressService<double> _progressService;
     private readonly IWatcherService _watcherService;
     private readonly IPluginService _pluginService;
+    private readonly IArchiveManager _archiveManager;
     private readonly TweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
-
-    #endregion fields
-
-    #region constructors
 
     /// <summary>
     /// Class constructor
@@ -82,6 +76,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IProgressService<double> progressService,
         IWatcherService watcherService,
         IPluginService pluginService,
+        IArchiveManager archiveManager,
         TweakDBService tweakDBService,
         Red4ParserService parserService
     )
@@ -95,33 +90,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _progressService = progressService;
         _watcherService = watcherService;
         _pluginService = pluginService;
+        _archiveManager = archiveManager;
         _tweakDBService = tweakDBService;
         _parser = parserService;
 
         UpdateTitle();
 
-        if (!TryLoadingArguments())
-        {
-            SetActiveOverlay( Locator.Current.GetService<HomePageViewModel>().NotNull());
-        }
-
-        OnStartup();
-
-        AddDockedPanes();
-
-        _settingsManager.PropertyChanged += SettingsManager_PropertyChanged;
+        ShowFirstTimeSetup();
     }
 
-    private void SettingsManager_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(ISettingsManager.CP77ExecutablePath))
-        {
-            if (!string.IsNullOrWhiteSpace(_settingsManager.CP77ExecutablePath) && File.Exists(_settingsManager.CP77ExecutablePath))
-            {
-                _pluginService.Init();
-            }
-        }
-    }
+    #region init
 
     partial void OnStatusChanged(EAppStatus? value)
     {
@@ -129,6 +107,25 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             HandleActivation();
         }
+    }
+
+    private void HandleActivation()
+    {
+        var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
+        if (thisVersion.ToString().Contains("nightly") && _settingsManager.UpdateChannel != EUpdateChannel.Nightly)
+        {
+            _settingsManager.UpdateChannel = EUpdateChannel.Nightly;
+        }
+
+        _pluginService.Init();
+        if (!TryLoadingArguments())
+        {
+            SetActiveOverlay(IocHelper.GetService<HomePageViewModel>());
+        }
+
+        AddDockedPanes();       
+
+        CheckForUpdatesCommand.SafeExecute(true);
     }
 
     private void AddDockedPanes()
@@ -144,26 +141,26 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     switch (pane)
                     {
                         case EDockedViews.LogViewModel:
-                            DockedViews.Add(LogViewModel);
+                            DockedViews.Add(IocHelper.GetService<LogViewModel>());
                             break;
                         case EDockedViews.ProjectExplorerViewModel:
-                            DockedViews.Add(ProjectExplorerViewModel);
+                            DockedViews.Add(IocHelper.GetService<ProjectExplorerViewModel>());
                             break;
                         case EDockedViews.PropertiesViewModel:
-                            DockedViews.Add(PropertiesViewModel);
+                            DockedViews.Add(IocHelper.GetService<PropertiesViewModel>());
                             break;
                         case EDockedViews.AssetBrowserViewModel:
-                            DockedViews.Add(AssetBrowserViewModel);
+                            DockedViews.Add(IocHelper.GetService<AssetBrowserViewModel>());
                             break;
                         case EDockedViews.TweakBrowserViewModel:
-                            DockedViews.Add(TweakBrowserViewModel);
+                            DockedViews.Add(IocHelper.GetService<TweakBrowserViewModel>());
                             break;
                         case EDockedViews.LocKeyBrowserViewModel:
-                            DockedViews.Add(LocKeyBrowserViewModel);
+                            DockedViews.Add(IocHelper.GetService<LocKeyBrowserViewModel>());
                             break;
                         case EDockedViews.TextureImportViewModel:
                         {
-                            var vm = Locator.Current.GetService<TextureImportViewModel>().NotNull();
+                            var vm = IocHelper.GetService<TextureImportViewModel>();
                             vm.State = DockState.Dock;
                             vm.SideInDockedMode = DockSide.Right;
                             DockedViews.Add(vm);
@@ -171,7 +168,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                         }
                         case EDockedViews.TextureExportViewModel:
                         {
-                            var vm = Locator.Current.GetService<TextureExportViewModel>().NotNull();
+                            var vm = IocHelper.GetService<TextureExportViewModel>();
                             vm.State = DockState.Dock;
                             vm.SideInDockedMode = DockSide.Right;
                             DockedViews.Add(vm);
@@ -186,33 +183,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         else
         {
             DockedViews = new ObservableCollection<IDockElement> {
-                LogViewModel,
-                ProjectExplorerViewModel,
-                PropertiesViewModel,
-                AssetBrowserViewModel,
-                TweakBrowserViewModel,
-                LocKeyBrowserViewModel
+                IocHelper.GetService<LogViewModel>(),
+                IocHelper.GetService<ProjectExplorerViewModel>(),
+                IocHelper.GetService<PropertiesViewModel>(),
+                IocHelper.GetService<AssetBrowserViewModel>(),
+                IocHelper.GetService<TweakBrowserViewModel>(),
+                IocHelper.GetService<LocKeyBrowserViewModel>()
             };
         }
     }
 
-    #endregion constructors
-
-    #region init
-
-    private void HandleActivation()
-    {
-        var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
-        if (thisVersion.ToString().Contains("nightly") && _settingsManager.UpdateChannel != EUpdateChannel.Nightly)
-        {
-            _settingsManager.UpdateChannel = EUpdateChannel.Nightly;
-        }
-
-        // check package
-        var helpers = new DesktopBridgeHelper();
-
-        CheckForUpdatesCommand.SafeExecute(true);
-    }
 
     private bool TryLoadingArguments()
     {
@@ -252,17 +232,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return false;
     }
 
-    private void OnStartup() => ShowFirstTimeSetup();
-
     private void ShowFirstTimeSetup()
     {
         if (!_settingsManager.IsHealthy())
         {
             var setupWasOk = Interactions.ShowFirstTimeSetup();
-            if (setupWasOk)
-            {
-                _pluginService.Init();
-            }
         }
     }
 
@@ -627,7 +601,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private void SelectFile(FileModel model) => PropertiesViewModel.ExecuteSelectFile(model);
+    private void SelectFile(FileModel model) => GetToolViewModel<PropertiesViewModel>().ExecuteSelectFile(model);
 
     private bool CanSaveFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
@@ -650,8 +624,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowHomePage))]
     private void ShowHomePage()
     {
-        Locator.Current.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Welcome);
-        SetActiveOverlay( Locator.Current.GetService<HomePageViewModel>().NotNull());
+        IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Welcome);
+        SetActiveOverlay( IocHelper.GetService<HomePageViewModel>());
     }
 
     private bool CanShowSettings() => !IsDialogShown;
@@ -659,8 +633,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private void ShowSettings()
     {
 
-         Locator.Current.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Settings);
-        SetActiveOverlay( Locator.Current.GetService<HomePageViewModel>().NotNull());
+        IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Settings);
+        SetActiveOverlay( IocHelper.GetService<HomePageViewModel>());
     }
 
     private bool CanShowProjectSettings() => !IsDialogShown && ActiveProject != null;
@@ -742,7 +716,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowSoundModdingTool))]
     private void ShowSoundModdingTool()
     {
-        var vm = Locator.Current.GetService<SoundModdingViewModel>();
+        var vm = IocHelper.GetService<SoundModdingViewModel>();
         if (vm != null)
         {
             vm.FileHandler = OpenSoundModdingView;
@@ -777,23 +751,23 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowPlugin))]
     private void ShowPlugin()
     {
-         Locator.Current.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Plugins);
-        SetActiveOverlay( Locator.Current.GetService<HomePageViewModel>().NotNull());
+        IocHelper.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Plugins);
+        SetActiveOverlay(IocHelper.GetService<HomePageViewModel>());
     }
 
     private bool CanShowModsView() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowModsView))]
     private void ShowModsView()
     {
-         Locator.Current.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Mods);
-        SetActiveOverlay( Locator.Current.GetService<HomePageViewModel>().NotNull());
+        IocHelper.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Mods);
+        SetActiveOverlay(IocHelper.GetService<HomePageViewModel>());
     }
 
     private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanNewFile))]
     private void NewFile(string? inputDir)
     {
-        var vm = Locator.Current.GetService<NewFileViewModel>();
+        var vm = IocHelper.GetService<NewFileViewModel>();
         if (vm != null)
         {
             vm.FileHandler = OpenFromNewFile;
@@ -970,7 +944,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             _progressService.IsIndeterminate = true;
             try
             {
-                var _archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
                 var file = _archiveManager.Lookup(hash);
                 if (file.HasValue && file.Value is FileEntry fe)
                 {
@@ -1028,7 +1001,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void ShowTextureImporter()
     {
-        var vm = Locator.Current.GetService<TextureImportViewModel>().NotNull();
+        var vm = IocHelper.GetService<TextureImportViewModel>();
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }
@@ -1036,7 +1009,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void ShowTextureExporter()
     {
-        var vm = Locator.Current.GetService<TextureExportViewModel>().NotNull();
+        var vm = IocHelper.GetService<TextureExportViewModel>();
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }
@@ -1059,20 +1032,36 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         Process.Start(ps);
     }
 
+    public T GetToolViewModel<T>() where T : IDockElement
+    {
+        var vm = DockedViews.FirstOrDefault(x => x is T);
+        if (vm is T result)
+        {
+            return result;
+        }
+        else
+        {
+            var newvm = IocHelper.GetService<T>();
+            DockedViews.Add(newvm);
+            return newvm;
+        }
+    }
+
+
     [RelayCommand]
-    private void ShowAssetBrowser() => AssetBrowserViewModel.IsVisible = !AssetBrowserViewModel.IsVisible;
+    private void ShowAssetBrowser() => GetToolViewModel<AssetBrowserViewModel>().IsVisible = !GetToolViewModel<AssetBrowserViewModel>().IsVisible;
 
     private bool CanShowLog() => ActiveProject is not null;
     [RelayCommand(CanExecute = nameof(CanShowLog))]
-    private void ShowLog() => LogViewModel.IsVisible = !LogViewModel.IsVisible;
+    private void ShowLog() => GetToolViewModel<LogViewModel>().IsVisible = !GetToolViewModel<LogViewModel>().IsVisible;
 
     private bool CanShowProjectExplorer() => ActiveProject is not null;
     [RelayCommand(CanExecute = nameof(CanShowProjectExplorer))]
-    private void ShowProjectExplorer() => ProjectExplorerViewModel.IsVisible = !ProjectExplorerViewModel.IsVisible;
+    private void ShowProjectExplorer() => GetToolViewModel<ProjectExplorerViewModel>().IsVisible = !GetToolViewModel<ProjectExplorerViewModel>().IsVisible;
 
     private bool CanShowProperties() => ActiveProject is not null;
     [RelayCommand(CanExecute = nameof(CanShowProperties))]
-    private void ShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
+    private void ShowProperties() => GetToolViewModel<PropertiesViewModel>().IsVisible = !GetToolViewModel<PropertiesViewModel>().IsVisible;
 
     //private bool CanCloseModal() => IsDialogShown || IsOverlayShown;
     [RelayCommand]
@@ -1112,70 +1101,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     #endregion commands
 
     #region properties
-
-    #region ToolViewModels
-
-    private AssetBrowserViewModel? _assetBrowserViewModel;
-    public AssetBrowserViewModel AssetBrowserViewModel
-    {
-        get
-        {
-            _assetBrowserViewModel ??= Locator.Current.GetService<AssetBrowserViewModel>().NotNull();
-            return _assetBrowserViewModel;
-        }
-    }
-
-    private LogViewModel? _logViewModel;
-    public LogViewModel LogViewModel
-    {
-        get
-        {
-            _logViewModel ??= Locator.Current.GetService<LogViewModel>().NotNull();
-            return _logViewModel;
-        }
-    }
-
-    private ProjectExplorerViewModel? _projectExplorerViewModel;
-    public ProjectExplorerViewModel ProjectExplorerViewModel
-    {
-        get
-        {
-            _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>().NotNull();
-            return _projectExplorerViewModel;
-        }
-    }
-
-    private PropertiesViewModel? _propertiesViewModel;
-    public PropertiesViewModel PropertiesViewModel
-    {
-        get
-        {
-            _propertiesViewModel ??= Locator.Current.GetService<PropertiesViewModel>().NotNull();
-            return _propertiesViewModel;
-        }
-    }
-
-    private TweakBrowserViewModel? _tweakBrowserViewModel;
-    public TweakBrowserViewModel TweakBrowserViewModel
-    {
-        get
-        {
-            _tweakBrowserViewModel ??= Locator.Current.GetService<TweakBrowserViewModel>().NotNull();
-            return _tweakBrowserViewModel;
-        }
-    }
-
-    private LocKeyBrowserViewModel? _locKeyBrowserViewModel;
-    public LocKeyBrowserViewModel LocKeyBrowserViewModel
-    {
-        get
-        {
-            _locKeyBrowserViewModel ??= Locator.Current.GetService<LocKeyBrowserViewModel>().NotNull();
-            return _locKeyBrowserViewModel;
-        }
-    }
-
-    #endregion ToolViewModels
 
     public bool IsUpdateAvailable { get; set; }
 
@@ -1345,13 +1270,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private Task LoadTweakDB()
     {
-        var _tdbs = Locator.Current.GetService<TweakDBService>().NotNull();
-        if (_tdbs.IsLoaded)
+        if (_tweakDBService.IsLoaded)
         {
             return Task.CompletedTask;
         }
 
-        return _tdbs.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+        return _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
     }
 
     /// <summary>

@@ -101,9 +101,7 @@ public class WatcherService : ObservableObject, IWatcherService
 
     private void DetectProjectFiles(Cp77Project proj)
     {
-        var allFiles = Directory
-                .GetFileSystemEntries(proj.ProjectDirectory, "*", SearchOption.AllDirectories)
-            ;
+        var allFiles = Directory.GetFileSystemEntries(proj.ProjectDirectory, "*", SearchOption.AllDirectories);
 
         _files.Edit(innerList =>
         {

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
@@ -194,6 +193,15 @@ public class TweakXLAppend : TweakXL
 
 public class TweakXLYamlTypeConverter : IYamlTypeConverter
 {
+    private readonly LocKeyService _locKeyService;
+    private readonly TweakDBService _tweakDBService;
+
+    public TweakXLYamlTypeConverter(LocKeyService locKeyService, TweakDBService tweakDBService)
+    {
+        _locKeyService = locKeyService;
+        _tweakDBService = tweakDBService;
+    }
+
     public bool Accepts(Type type) => type == typeof(TweakXLFile);
 
     public object ReadYaml(IParser parser, Type type)
@@ -275,7 +283,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
     {
         if (locKeyWrapper.Key != 0)
         {
-            var loc = Locator.Current.GetService<LocKeyService>().NotNull().GetEntry(locKeyWrapper.Key).NotNull();
+            var loc = _locKeyService.GetEntry(locKeyWrapper.Key).NotNull();
 
             if (!string.IsNullOrWhiteSpace(property))
             {
@@ -468,7 +476,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
 
     public ITweakXLItem? ReadTweakXL(IParser parser, string? id = null, Type? type = null)
     {
-        var _tdbs = Locator.Current.GetService<TweakDBService>().NotNull();
+        var _tdbs = _tweakDBService;
         if (parser.TryConsume<SequenceStart>(out var _))
         {
             var tweak = new TweakXLSequence();

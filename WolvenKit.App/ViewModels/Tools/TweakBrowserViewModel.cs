@@ -46,6 +46,8 @@ public partial class TweakBrowserViewModel : ToolViewModel
     private readonly IProjectManager _projectManager;
     private readonly ILoggerService _loggerService;
     private readonly TweakDBService _tweakDB;
+    private readonly LocKeyService _locKeyService;
+
     public string Extension { get; set; } = "tweak";
 
 
@@ -68,7 +70,8 @@ public partial class TweakBrowserViewModel : ToolViewModel
         INotificationService notificationService,
         IProjectManager projectManager,
         ILoggerService loggerService,
-        TweakDBService tweakDbService
+        TweakDBService tweakDbService,
+        LocKeyService locKeyService
     ) : base(ToolTitle)
     {
         _settingsManager = settingsManager;
@@ -76,7 +79,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
         _projectManager = projectManager;
         _loggerService = loggerService;
         _tweakDB = tweakDbService;
-
+        _locKeyService = locKeyService;
         _tweakDB.Loaded += Load;
 
         PropertyChanged += InternalPropertyChanged;
@@ -350,7 +353,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
             if ((myStream = saveFileDialog.OpenFile()) is not null)
             {
                 var serializer = new SerializerBuilder()
-                    .WithTypeConverter(new TweakXLYamlTypeConverter())
+                    .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDB))
                     .WithIndentedSequences()
                     .Build();
 

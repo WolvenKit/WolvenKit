@@ -1,13 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -15,7 +13,16 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public class ImportableItemViewModel : ImportExportItemViewModel
 {
-    public ImportableItemViewModel(string fileName) : base(fileName, DecideImportOptions(fileName)) =>
+    private readonly IArchiveManager _archiveManager;
+    private readonly IProjectManager _projectManager;
+    private readonly Red4ParserService _parserService;
+
+    public ImportableItemViewModel(string fileName, IArchiveManager archiveManager, IProjectManager projectManager, Red4ParserService parserService) 
+        : base(fileName, DecideImportOptions(fileName, archiveManager, projectManager, parserService))
+    {
+        _archiveManager = archiveManager;
+        _projectManager = projectManager;
+        _parserService = parserService;
         Properties.PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
         {
             OnPropertyChanged(nameof(Properties));
@@ -35,8 +42,9 @@ public class ImportableItemViewModel : ImportExportItemViewModel
                 }
             }
         };
+    }
 
-    private static ImportArgs DecideImportOptions(string fileName)
+    private static ImportArgs DecideImportOptions(string fileName, IArchiveManager archiveManager, IProjectManager projectManager, Red4ParserService parserService)
     {
         var extension = Path.GetExtension(fileName).TrimStart('.');
         if (!Enum.TryParse(extension, out ERawFileFormat rawFileFormat))
@@ -49,7 +57,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         if (IsRawTexture(rawFileFormat))
         {
             // first get settings from game
-            xbmArgs = LoadXbmSettingsFromGame(fileName);
+            xbmArgs = LoadXbmSettingsFromGame(fileName, archiveManager, projectManager, parserService);
             // if not, get defaults from filename
             xbmArgs ??= LoadXbmDefaultSettings(fileName);
         }
@@ -119,10 +127,9 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         return xbmArgs;
     }
 
-    public static XbmImportArgs LoadXbmSettingsFromGame(string fileName)
+    public static XbmImportArgs LoadXbmSettingsFromGame(string fileName, IArchiveManager archiveManager, IProjectManager projectManager, Red4ParserService parserService)
     {
-        var archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
-        var activeProject = Locator.Current.GetService<IProjectManager>().NotNull().ActiveProject;
+        var activeProject = projectManager.ActiveProject;
         if (activeProject == null)
         {
             return new XbmImportArgs();
@@ -144,8 +151,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
             // file exists in vanilla
             using MemoryStream stream = new();
             file.Value.Extract(stream);
-            var parser = Locator.Current.GetService<Red4ParserService>();
-            if (parser != null && parser.TryReadRed4File(stream, out var cr2w))
+            if (parserService.TryReadRed4File(stream, out var cr2w))
             {
                 if (cr2w.RootChunk is CBitmapTexture bitmapTexture)
                 {

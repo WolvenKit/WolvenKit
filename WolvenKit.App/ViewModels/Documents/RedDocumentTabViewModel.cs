@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Splat;
 using WolvenKit.App.Controllers;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
@@ -28,18 +27,18 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
 
     protected RedDocumentTabViewModel(RedDocumentViewModel parent, string header)
     {
-        _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
-        _gameController = Locator.Current.GetService<IGameControllerFactory>().NotNull();
-        _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
-        _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
-        _modTools = Locator.Current.GetService<ModTools>().NotNull();
-        _geometryCacheService = Locator.Current.GetService<GeometryCacheService>().NotNull();
+        _settingsManager = IocHelper.GetService<ISettingsManager>();
+        _gameController = IocHelper.GetService<IGameControllerFactory>();
+        _loggerService = IocHelper.GetService<ILoggerService>();
+        _parser = IocHelper.GetService<Red4ParserService>();
+        _modTools = IocHelper.GetService<ModTools>();
+        _geometryCacheService = IocHelper.GetService<GeometryCacheService>();
 
         _parent = parent;
         FilePath = parent.FilePath;
         Header = header;
 
-        this.PropertyChanged += RedDocumentTabViewModel_PropertyChanged;
+        PropertyChanged += RedDocumentTabViewModel_PropertyChanged;
     }
 
     private void RedDocumentTabViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

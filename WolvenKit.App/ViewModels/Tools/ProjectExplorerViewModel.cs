@@ -11,7 +11,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using DynamicData.Binding;
-using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -119,7 +118,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-
+    private void OnNext(IChangeSet<FileModel, ulong> obj)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            BeforeDataSourceUpdate?.Invoke(this, EventArgs.Empty);
+            BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
+            AfterDataSourceUpdate?.Invoke(this, EventArgs.Empty);
+        }, DispatcherPriority.ContextIdle);
+    }
 
 
     #endregion constructors
@@ -600,8 +607,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanOpenInAssetBrowser))]
     private void OpenInAssetBrowser()
     {
-        _mainViewModel.NotNull().AssetBrowserViewModel.IsVisible = true;
-        _mainViewModel.AssetBrowserViewModel.ShowFile(SelectedItem.NotNull());
+        _mainViewModel.NotNull().GetToolViewModel<AssetBrowserViewModel>().IsVisible = true;
+        _mainViewModel.GetToolViewModel<AssetBrowserViewModel>().ShowFile(SelectedItem.NotNull());
     }
 
     private static string GetSecondExtension(FileModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
@@ -666,14 +673,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public event EventHandler? BeforeDataSourceUpdate;
     public event EventHandler? AfterDataSourceUpdate;
 
-    private void OnNext(IChangeSet<FileModel, ulong> obj)
-    {
-        BeforeDataSourceUpdate?.Invoke(this, EventArgs.Empty);
-
-        BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
-
-        AfterDataSourceUpdate?.Invoke(this, EventArgs.Empty);
-    }
+    
 
     /// <summary>
     /// Initialize Avalondock specific defaults that are specific to this tool window.

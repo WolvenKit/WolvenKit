@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using Microsoft.ClearScript;
-using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.Common;
@@ -169,7 +168,7 @@ public class WKitUIScripting : WKitScripting
         }
 
         // get the export view model and clear the items
-        var expVM = Locator.Current.GetService<TextureExportViewModel>().NotNull();
+        var expVM = IocHelper.GetService<TextureExportViewModel>();
         foreach (var item in expVM.Items)
         {
             item.IsChecked = false;

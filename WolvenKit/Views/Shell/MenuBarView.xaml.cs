@@ -17,6 +17,7 @@ using ReactiveUI;
 using Splat;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -211,31 +212,27 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
             // visibility
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.ProjectExplorerViewModel.IsVisible,
+                    viewModel => viewModel.ProjectExplorerCheckbox,
                     view => view.ProjectExplorerCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.AssetBrowserViewModel.IsVisible,
+                    viewModel => viewModel.AssetBrowserCheckbox,
                     view => view.AssetBrowserCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                viewModel => viewModel.MainViewModel.PropertiesViewModel.IsVisible,
+                viewModel => viewModel.PropertiesCheckbox,
                     view => view.PropertiesCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.LogViewModel.IsVisible,
+                    viewModel => viewModel.LogCheckbox,
                     view => view.LogCheckbox.IsChecked)
                 .DisposeWith(disposables);
-            //this.Bind(ViewModel,
-            //        viewModel => viewModel.MainViewModel.ImportExportToolVM.IsVisible,
-            //        view => view.ImportExportCheckbox.IsChecked)
-            //    .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.TweakBrowserViewModel.IsVisible,
+                    viewModel => viewModel.TweakBrowserCheckbox,
                     view => view.TweakBrowserCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.LocKeyBrowserViewModel.IsVisible,
+                    viewModel => viewModel.LocKeyBrowserCheckbox,
                     view => view.LocKeyBrowserCheckbox.IsChecked)
                 .DisposeWith(disposables);
         });

@@ -28,12 +28,15 @@ namespace WolvenKit
         // Constructor #1
         static AppImpl()
         {
-
+            
         }
 
         // Constructor #2
         public AppImpl()
         {
+            // init ioc helpers
+            IocHelper.GetFunc = t => Locator.Current.GetService(t);
+
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
             Init();
@@ -67,6 +70,8 @@ namespace WolvenKit
             //        interaction.SetOutput(result);
             //    }, RxApp.MainThreadScheduler);
             //});
+
+           
 
             var settings = Locator.Current.GetService<ISettingsManager>();
             var loggerService = Locator.Current.GetService<ILoggerService>();

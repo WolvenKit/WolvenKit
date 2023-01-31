@@ -111,7 +111,7 @@ public partial class ModsViewModel : PageViewModel
             {
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
-                    _homePageViewModel.NavigateTo(EHomePage.Plugins);
+                    IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Plugins);
                     break;
                 case WMessageBoxResult.None:
                 case WMessageBoxResult.Cancel:
@@ -163,7 +163,7 @@ public partial class ModsViewModel : PageViewModel
             {
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
-                    _homePageViewModel.NavigateTo(EHomePage.Plugins);
+                    IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Plugins);
                     break;
                 case WMessageBoxResult.None:
                 case WMessageBoxResult.Cancel:

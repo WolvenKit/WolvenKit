@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
-using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
@@ -35,17 +35,17 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
 
     public DocumentViewModel(string path) : base(Path.GetFileName(path), path)
     {
-        _tdbs = Locator.Current.GetService<TweakDBService>().NotNull();
-        _settingsManager = Locator.Current.GetService<ISettingsManager>().NotNull();
-        _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
-        _projectManager = Locator.Current.GetService<IProjectManager>().NotNull();
-        _archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
-        _scriptService = Locator.Current.GetService<ExtendedScriptService>().NotNull();
-        _parserService = Locator.Current.GetService<Red4ParserService>().NotNull();
-        _hashService = Locator.Current.GetService<IHashService>().NotNull();
-        _globals = Locator.Current.GetService<IOptions<Globals>>().NotNull();
-        _watcherService = Locator.Current.GetService<IWatcherService>().NotNull();
-        _appViewModel = Locator.Current.GetService<AppViewModel>().NotNull();
+        _tdbs = IocHelper.GetService<TweakDBService>();
+        _settingsManager = IocHelper.GetService<ISettingsManager>();
+        _loggerService = IocHelper.GetService<ILoggerService>();
+        _projectManager = IocHelper.GetService<IProjectManager>();
+        _archiveManager = IocHelper.GetService<IArchiveManager>();
+        _scriptService = IocHelper.GetService<ExtendedScriptService>();
+        _parserService = IocHelper.GetService<Red4ParserService>();
+        _hashService = IocHelper.GetService<IHashService>();
+        _globals = IocHelper.GetService<IOptions<Globals>>();
+        _watcherService = IocHelper.GetService<IWatcherService>();
+        _appViewModel = IocHelper.GetService<AppViewModel>();
 
         _filePath = path;
 

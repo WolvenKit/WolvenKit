@@ -9,4 +9,6 @@ public interface IDockElement
     public DockSide SideInDockedMode { get; set; }
 
     public bool IsActive { get; set; }
+
+    bool IsVisible { get; set; }
 }
