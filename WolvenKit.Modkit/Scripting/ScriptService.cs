@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
-using Splat;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.Scripting;
@@ -20,7 +18,7 @@ public class ScriptService : INotifyPropertyChanged
     private V8ScriptEngine? _mainEngine;
     private bool _isRunning;
 
-    public ScriptService(ILoggerService? loggerService = null) => _loggerService = loggerService ?? Locator.Current.GetService<ILoggerService>().NotNull();
+    public ScriptService(ILoggerService loggerService) => _loggerService = loggerService;
 
     public bool IsRunning
     {

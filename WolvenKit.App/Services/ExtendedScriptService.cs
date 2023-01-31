@@ -17,7 +17,7 @@ public class ExtendedScriptService : ScriptService
 
     private V8ScriptEngine? _uiEngine;
 
-    public ExtendedScriptService(ILoggerService? loggerService = null) : base(loggerService) => RefreshUIScripts();
+    public ExtendedScriptService(ILoggerService loggerService) : base(loggerService) => RefreshUIScripts();
 
     public void RegisterControl(IScriptableControl scriptableControl)
     {
