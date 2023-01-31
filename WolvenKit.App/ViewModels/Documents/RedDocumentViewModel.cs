@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using DynamicData.Kernel;
 using Microsoft.Extensions.Options;
 using Prism.Commands;
 using ReactiveUI;
@@ -47,6 +46,8 @@ namespace WolvenKit.ViewModels.Documents
         protected readonly IProjectManager _projectManager;
         protected readonly IOptions<Globals> _globals;
 
+        private readonly string _path;
+
         public RedDocumentViewModel(CR2WFile file, string path) : base(path)
         {
             _loggerService = Locator.Current.GetService<ILoggerService>().NotNull();
@@ -61,23 +62,18 @@ namespace WolvenKit.ViewModels.Documents
                 "xl"
             };
 
+            _path = path;
+           
 
+            Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
+            NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile, CanExecuteNewEmbeddedFile);
 
 
             Cr2wFile = file;
             _isInitialized = true;
             PopulateItems();
 
-
-
-
-            // assume files that don't exist are relative paths
-            RelativePath = File.Exists(path)
-                ? Path.GetRelativePath(_projectManager.ActiveProject.NotNull().ModDirectory, path)
-                : path;
-
-            Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
-            NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile, CanExecuteNewEmbeddedFile);
+           
 
             this.WhenAnyValue(x => x.SelectedTabItemViewModel)
                 .Subscribe(x => x?.OnSelected());
@@ -93,7 +89,10 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public RedDocumentTabViewModel? SelectedTabItemViewModel { get; set; }
 
-        [Reactive] public string RelativePath { get; set; }
+        // assume files that don't exist are relative paths
+        public string RelativePath => File.Exists(_path)
+                ? Path.GetRelativePath(_projectManager.ActiveProject.NotNull().ModDirectory, _path)
+                : _path;
 
         [Reactive] public string Extension { get; set; }
 

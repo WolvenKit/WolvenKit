@@ -140,14 +140,14 @@ namespace WolvenKit.Functionality.Services
                 return;
             }
 
+            // special case for temporary textures
             var extension = Path.GetExtension(e.Name);
-            if (string.IsNullOrEmpty(extension))
+            if (!string.IsNullOrEmpty(extension))
             {
-                return;
-            }
-            if (extension.ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal) || extension.ToUpper().Equals(".TMP", StringComparison.Ordinal))
-            {
-                return;
+                if (extension.ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal) || extension.ToUpper().Equals(".TMP", StringComparison.Ordinal))
+                {
+                    return;
+                }
             }
 
             switch (e.ChangeType)

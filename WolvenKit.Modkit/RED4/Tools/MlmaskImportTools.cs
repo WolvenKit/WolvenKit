@@ -75,51 +75,51 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     image.Convert(DXGI_FORMAT.DXGI_FORMAT_R8_UNORM);
                 }
 
-                if (image.Metadata.Width != image.Metadata.Height)
+
+                // Bitset arithmetic to check that both width and height is a power of 2
+                if (
+                        ((image.Metadata.Width - 1) & image.Metadata.Width) == 0 &&
+                        ((image.Metadata.Height - 1) & image.Metadata.Height) == 0
+                   )
                 {
-                    throw new Exception($"Texture {f}: width={image.Metadata.Width},height={image.Metadata.Height} must have an aspect ratio of 1:1");
+                    //if (header.dwMipMapCount > 1)
+                    //    throw new Exception($"Texture {f}: Mipmaps={header.dwMipMapCount}, mimap count must be equal to 1");
+
+                    //if ((ms.Length - headerLength) != (header.dwWidth * header.dwHeight))
+                    //    throw new Exception("Not R8_UNORM 8bpp image format or more than 1mipmaps or rowstride is not equal to width or its a dx10 dds(unsupported)");
+
+                    using var ms = new MemoryStream(image.SaveToDDSMemory());
+                    using var br = new BinaryReader(ms);
+                    ms.Seek(s_headerLength, SeekOrigin.Begin);
+                    var bytes = br.ReadBytes(image.Metadata.Width * image.Metadata.Height);
+
+                    //var whiteCheck = true;
+                    //for (var i = 0; i < bytes.Length; i++)
+                    //{
+                    //    if (bytes[i] != 255)
+                    //    {
+                    //        whiteCheck = false;
+                    //        break;
+                    //    }
+                    //}
+                    //if (whiteCheck)
+                    //{
+                    //    throw new Exception("No need to provide the 1st/any blank white mask layer, tool will generate 1st blank white layer automatically");
+                    //}
+
+                    var tex = new RawTexContainer
+                    {
+                        Width = (uint)image.Metadata.Width,
+                        Height = (uint)image.Metadata.Height,
+                        Pixels = bytes
+                    };
+                    textures.Add(tex);
+                    lineIdx++;
                 }
-
-                // One bitset check
-                if (((image.Metadata.Width - 1) & image.Metadata.Height) != 0 || image.Metadata.Width == 0)
+                else
                 {
-                    throw new Exception($"Texture {f}: width={image.Metadata.Height},height={image.Metadata.Height} must have dimensions in powers of 2");
+                    throw new Exception($"Texture {f}: width={image.Metadata.Width},height={image.Metadata.Height} must have dimensions in powers of 2");
                 }
-
-
-                //if (header.dwMipMapCount > 1)
-                //    throw new Exception($"Texture {f}: Mipmaps={header.dwMipMapCount}, mimap count must be equal to 1");
-
-                //if ((ms.Length - headerLength) != (header.dwWidth * header.dwHeight))
-                //    throw new Exception("Not R8_UNORM 8bpp image format or more than 1mipmaps or rowstride is not equal to width or its a dx10 dds(unsupported)");
-
-                using var ms = new MemoryStream(image.SaveToDDSMemory());
-                using var br = new BinaryReader(ms);
-                ms.Seek(s_headerLength, SeekOrigin.Begin);
-                var bytes = br.ReadBytes(image.Metadata.Width * image.Metadata.Height);
-
-                //var whiteCheck = true;
-                //for (var i = 0; i < bytes.Length; i++)
-                //{
-                //    if (bytes[i] != 255)
-                //    {
-                //        whiteCheck = false;
-                //        break;
-                //    }
-                //}
-                //if (whiteCheck)
-                //{
-                //    throw new Exception("No need to provide the 1st/any blank white mask layer, tool will generate 1st blank white layer automatically");
-                //}
-
-                var tex = new RawTexContainer
-                {
-                    Width = (uint)image.Metadata.Width,
-                    Height = (uint)image.Metadata.Height,
-                    Pixels = bytes
-                };
-                textures.Add(tex);
-                lineIdx++;
             }
             _mlmask.Layers = textures.ToArray();
             #endregion

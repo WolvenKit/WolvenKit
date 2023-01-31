@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Splat;
-using Syncfusion.Windows.Shared;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
@@ -234,7 +233,7 @@ namespace WolvenKit.Models
         {
             if (!cName.Equals(CName.Empty))
             {
-                if (!property.IsNullOrWhiteSpace())
+                if (!string.IsNullOrWhiteSpace(property))
                 {
                     emitter.Emit(new Scalar(property));
                 }
@@ -247,7 +246,7 @@ namespace WolvenKit.Models
         {
             if (tweakDBID.Length > 0)
             {
-                if (!property.IsNullOrWhiteSpace())
+                if (!string.IsNullOrWhiteSpace(property))
                 {
                     emitter.Emit(new Scalar(property));
                 }
@@ -257,7 +256,7 @@ namespace WolvenKit.Models
         }
         private void WriteREDRaRef(IEmitter emitter, IRedResourceAsyncReference raRef, string property = "")
         {
-            if (!property.IsNullOrWhiteSpace())
+            if (!string.IsNullOrWhiteSpace(property))
             {
                 emitter.Emit(new Scalar(property));
             }
@@ -278,7 +277,7 @@ namespace WolvenKit.Models
             {
                 var loc = Locator.Current.GetService<LocKeyService>().NotNull().GetEntry(locKeyWrapper.Key).NotNull();
 
-                if (!property.IsNullOrWhiteSpace())
+                if (!string.IsNullOrWhiteSpace(property))
                 {
                     emitter.Emit(new Scalar(property));
                 }
@@ -289,7 +288,7 @@ namespace WolvenKit.Models
 
         private void WriteVector2(IEmitter emitter, Vector2 vector2, string property = "")
         {
-            if (!property.IsNullOrWhiteSpace())
+            if (!string.IsNullOrWhiteSpace(property))
             {
                 emitter.Emit(new Scalar(property));
             }
@@ -304,7 +303,7 @@ namespace WolvenKit.Models
 
         private void WriteVector3(IEmitter emitter, Vector3 vector3, string property = "")
         {
-            if (!property.IsNullOrWhiteSpace())
+            if (!string.IsNullOrWhiteSpace(property))
             {
                 emitter.Emit(new Scalar(property));
             }

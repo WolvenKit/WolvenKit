@@ -18,3 +18,8 @@ public interface IRedGenericType : IRedType
 public interface IRedGenericType<T> : IRedGenericType
 {
 }
+
+public class RedDummy : IRedType
+{
+
+}

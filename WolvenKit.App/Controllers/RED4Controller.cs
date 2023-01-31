@@ -828,13 +828,14 @@ namespace WolvenKit.Functionality.Controllers
 
         #endregion
 
-        public async Task AddFileToModModal(ulong hash)
+        public async Task<bool> AddFileToModModal(ulong hash)
         {
             var file = _archiveManager.Lookup(hash);
             if (file.HasValue)
             {
-                await AddFileToModModal(file.Value);
+                return await AddFileToModModal(file.Value);
             }
+            return false;
         }
 
         public async Task<bool> AddFileToModModal(IGameFile file)
@@ -881,13 +882,14 @@ namespace WolvenKit.Functionality.Controllers
             return true;
         }
 
-        public void AddToMod(ulong hash)
+        public bool AddToMod(ulong hash)
         {
             var file = _archiveManager.Lookup(hash);
             if (file.HasValue)
             {
-                AddToMod(file.Value);
+                return AddToMod(file.Value);
             }
+            return false;
         }
 
         public bool AddToMod(IGameFile file)
@@ -944,8 +946,5 @@ namespace WolvenKit.Functionality.Controllers
 
             return true;
         }
-
-        void IGameController.AddToMod(IGameFile file) => throw new NotImplementedException();
-        Task IGameController.AddFileToModModal(IGameFile file) => throw new NotImplementedException();
     }
 }

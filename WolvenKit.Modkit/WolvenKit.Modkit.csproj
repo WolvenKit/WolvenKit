@@ -33,14 +33,14 @@
   </ItemGroup>
 
   <ItemGroup>
-      <PackageReference Include="BigGustave" Version="1.0.6" />
-      <PackageReference Include="Microsoft.ClearScript.V8" Version="7.3.5" />
-      <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" Version="7.3.5" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
-      <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
-      <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0023" />
-      <PackageReference Include="ReactiveUI.Fody" Version="18.4.1" />
-      <PackageReference Include="YamlDotNet" Version="12.0.2" />
+      <PackageReference Include="BigGustave" />
+      <PackageReference Include="Microsoft.ClearScript.V8" />
+      <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" />
+      <PackageReference Include="Microsoft.Extensions.Options" />
+      <PackageReference Include="AsyncEnumerator" />
+      <PackageReference Include="SharpGLTF.Toolkit" />
+      <PackageReference Include="ReactiveUI.Fody" />
+      <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 
     <ItemGroup>

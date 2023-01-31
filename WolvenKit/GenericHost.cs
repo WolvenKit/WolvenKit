@@ -101,7 +101,7 @@ namespace WolvenKit
 
                     services.AddSingleton<IPluginService, PluginService>();
 
-                    services.AddSingleton(new ExtendedScriptService());
+                    services.AddSingleton<ExtendedScriptService>();
 
 
                     // register views

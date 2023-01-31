@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Reflection;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -23,12 +24,12 @@ public static class RedReflection
     {
         foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
         {
-            AddRedType(type);
+            var res = AddRedType(type);
         }
 
         foreach (var type in typeof(Enums).GetNestedTypes())
         {
-            AddEnumType(type);
+            var res = AddEnumType(type);
         }
     }
 
@@ -163,9 +164,9 @@ public static class RedReflection
             var isFixedArray = subType[0] == '[';
             while (subType[0] == '[')
             {
-                var strVal = subType.Substring(1, subType.IndexOf(']') - 1);
+                var strVal = subType[1..subType.IndexOf(']')];
                 flagValues.Add(int.Parse(strVal));
-                subType = subType.Substring(strVal.Length + 2);
+                subType = subType[(strVal.Length + 2)..];
             }
 
             if (s_redTypeCache.TryGetValue(subType, out var tType))
@@ -294,18 +295,42 @@ public static class RedReflection
 
     public static bool AddRedType(Type type)
     {
+        // hack skipping custom types derived from IRedType
+        if (type.FullName.StartsWith("WolvenKit.RED4.Archive.Buffer"))
+        {
+            return false;
+        }
+
         if (typeof(IRedType).IsAssignableFrom(type))
         {
             var redAttr = type.GetCustomAttribute<REDAttribute>();
             if (redAttr != null)
             {
-                s_redTypeCache.Add(redAttr.Name, type);
-                s_redTypeCacheReverse.Add(type, redAttr.Name);
+                if (s_redTypeCache.ContainsKey(redAttr.Name))
+                {
+                    Debugger.Break();
+                }
+                if (s_redTypeCacheReverse.ContainsKey(type))
+                {
+                    Debugger.Break();
+                }
+
+                s_redTypeCache.TryAdd(redAttr.Name, type);
+                s_redTypeCacheReverse.TryAdd(type, redAttr.Name);
             }
             else
             {
-                s_redTypeCache.Add(type.Name, type);
-                s_redTypeCacheReverse.Add(type, type.Name);
+                if (s_redTypeCache.ContainsKey(type.Name))
+                {
+                    Debugger.Break();
+                }
+                if (s_redTypeCacheReverse.ContainsKey(type))
+                {
+                    Debugger.Break();
+                }
+
+                s_redTypeCache.TryAdd(type.Name, type);
+                s_redTypeCacheReverse.TryAdd(type, type.Name);
             }
 
             BuildTypeCache(type);
@@ -314,7 +339,7 @@ public static class RedReflection
 
         return false;
 
-        void BuildTypeCache(Type innerType)
+        static void BuildTypeCache(Type innerType)
         {
             if (s_typeInfoCache.ContainsKey(innerType))
             {
@@ -334,8 +359,7 @@ public static class RedReflection
     {
         if (type.IsEnum)
         {
-            s_redEnumCache.Add(type.Name, new ExtendedEnumInfo(type));
-            return true;
+            return s_redEnumCache.TryAdd(type.Name, new ExtendedEnumInfo(type));
         }
 
         return false;

@@ -10,9 +10,9 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Syncfusion.Windows.Shared;
 using WolvenKit.Functionality.Interfaces;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
@@ -63,7 +63,7 @@ namespace WolvenKit.ViewModels.Documents
             //    }
             //};
 
-            CreateConnectionCommand = new DelegateCommand(x => { });
+            CreateConnectionCommand = new DelegateCommand(CreateConnection);
         }
 
         public GeometryGraph RenderNodes(CArray<CHandle<scnSceneGraphNode>> nodes)
@@ -76,6 +76,11 @@ namespace WolvenKit.ViewModels.Documents
             //}
 
             return graph;
+        }
+
+        private void CreateConnection()
+        {
+
         }
 
         public GeometryGraph RenderNodes(CArray<CHandle<graphGraphNodeDefinition>> nodes, graphGraphNodeDefinition? parent = null)
