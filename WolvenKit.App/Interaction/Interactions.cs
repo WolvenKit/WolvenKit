@@ -1,8 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
-using ReactiveUI;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Dialogs;
 
@@ -18,23 +16,27 @@ public static class Interactions
         WMessageBoxImage image = WMessageBoxImage.Question)
     {
         var result = WMessageBoxResult.None;
-        DispatcherHelper.RunOnMainThread(async () => result = await ShowConfirmation.Handle((text, caption, image, messageBoxButtons)));
+        DispatcherHelper.RunOnMainThread(() => result = ShowConfirmation((text, caption, image, messageBoxButtons)));
         return await Task.FromResult(result);
     }
 
 
 
     // classic popups
-    public static readonly Interaction<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation = new();
+    public static Func<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation { get; set; } 
+        = _ => throw new NotImplementedException();
 
-    public static readonly Interaction<IEnumerable<string>, bool> DeleteFiles = new();
-    public static readonly Interaction<string, string> Rename = new();
+    public static Func<IEnumerable<string>, bool> DeleteFiles { get; set; } = _ => throw new NotImplementedException();
+
+    public static Func<string, string> Rename { get; set; } = _ => throw new NotImplementedException();
 
     //custom views
-    public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();
-    public static readonly Interaction<Unit, bool> ShowLaunchProfilesView = new();
-    public static readonly Interaction<Unit, bool> ShowMaterialRepositoryView = new();
-    public static readonly Interaction<(IEnumerable<IDisplayable>?, IEnumerable<IDisplayable>?), IEnumerable<IDisplayable>> ShowCollectionView = new();
+    public static Func<bool> ShowFirstTimeSetup { get; set; } = () => throw new NotImplementedException();
+    public static Func<bool> ShowLaunchProfilesView { get; set; } = () => throw new NotImplementedException();
+    public static Func<bool> ShowMaterialRepositoryView { get; set; } = () => throw new NotImplementedException();
+
+    public static Func<(IEnumerable<IDisplayable>?, IEnumerable<IDisplayable>?), IEnumerable<IDisplayable>> ShowCollectionView { get; set; } 
+        = _ => throw new NotImplementedException();
 }
 
 public enum WMessageBoxImage

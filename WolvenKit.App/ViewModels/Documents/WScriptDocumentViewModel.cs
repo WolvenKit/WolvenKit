@@ -24,7 +24,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         _document = new TextDocument();
         Extension = "wscript";
 
-        _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService, _projectManager, _archiveManager, _parserService) } };
+        _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService, _projectManager, _archiveManager, _parserService, _watcherService) } };
         GenerateCompletionData();
 
         LoadDocument(path);

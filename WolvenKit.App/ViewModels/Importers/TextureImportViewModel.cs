@@ -278,26 +278,28 @@ public partial class TextureImportViewModel : ImportViewModel
 
     private static bool CanImport(string x) => Enum.TryParse<ERawFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
 
-    public async Task InitCollectionEditor(CallbackArguments args)
+    public Task InitCollectionEditor(CallbackArguments args)
     {
         if (args.Arg is not ImportArgs importArgs)
         {
-            return;
+            return Task.CompletedTask;
         }
 
         switch (importArgs)
         {
             case GltfImportArgs gltfimport:
             {
-                await InitGltfCollectionEditor(args, gltfimport);
+                InitGltfCollectionEditor(args, gltfimport);
                 break;
             }
             default:
                 break;
         }
+
+        return Task.CompletedTask;
     }
 
-    private async Task InitGltfCollectionEditor(CallbackArguments args, GltfImportArgs gltfImportArgs)
+    private void InitGltfCollectionEditor(CallbackArguments args, GltfImportArgs gltfImportArgs)
     {
         var fetchExtension = ERedExtension.mesh;
         List<FileEntry> selectedEntries = new();
@@ -338,7 +340,7 @@ public partial class TextureImportViewModel : ImportViewModel
             throw new NotImplementedException();
         }
 
-        var result = await Interactions.ShowCollectionView.Handle(a);
+        var result = Interactions.ShowCollectionView(a);
         if (result is not null)
         {
             switch (args.PropertyName)

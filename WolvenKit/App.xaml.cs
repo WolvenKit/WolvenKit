@@ -50,16 +50,23 @@ namespace WolvenKit
         // Application OnStartup Override.
         protected override async void OnStartup(StartupEventArgs e)
         {
-            Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
-            {
+            Interactions.ShowFirstTimeSetup = () => {
                 var dialog = new FirstSetupView();
 
-                return Observable.Start(() =>
-                {
-                    var result = dialog.ShowDialog() == true;
-                    interaction.SetOutput(result);
-                }, RxApp.MainThreadScheduler);
-            });
+                var result = dialog.ShowDialog() == true;
+                return result;
+            };
+
+            //Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
+            //{
+            //    var dialog = new FirstSetupView();
+
+            //    return Observable.Start(() =>
+            //    {
+            //        var result = dialog.ShowDialog() == true;
+            //        interaction.SetOutput(result);
+            //    }, RxApp.MainThreadScheduler);
+            //});
 
             var settings = Locator.Current.GetService<ISettingsManager>();
             var loggerService = Locator.Current.GetService<ILoggerService>();

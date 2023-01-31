@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
@@ -16,7 +15,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.Win32;
-using ReactiveUI;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -79,97 +77,99 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
 
-        this.WhenAnyValue(x => x.IsSelected)
-            .Where(x => IsSelected && !_propertiesLoaded)
-            .Subscribe(x => CalculateProperties());
+        CalculateValue();
+        CalculateDescriptor();
+        CalculateIsDefault();
+    }
 
-        this.WhenAnyValue(x => x.IsExpanded)
-            .Where(x => IsExpanded && !_propertiesLoaded)
-            .Subscribe(x => CalculateProperties());
+    partial void OnIsSelectedChanged(bool value)
+    {
+        if (IsSelected && !_propertiesLoaded)
+        CalculateProperties();
+    }
 
+    partial void OnIsExpandedChanged(bool value)
+    {
+        if (IsExpanded && !_propertiesLoaded)
+            CalculateProperties();
+    }
+
+    partial void OnDataChanged(IRedType value)
+    {
         CalculateValue();
         CalculateDescriptor();
         CalculateIsDefault();
 
-        this.WhenAnyValue(x => x.Data).Skip(1)
-            .Subscribe((_) =>
+        if (Parent is not null)
+        {
+            if (Tab is not null)
             {
-                CalculateValue();
-                CalculateDescriptor();
-                CalculateIsDefault();
-
-                if (Parent is not null)
+                if (Parent.Data is IRedArray arr)
                 {
-                    if (Tab is not null)
+                    var index = int.Parse(Name);
+                    if (index != -1)
                     {
-                        if (Parent.Data is IRedArray arr)
-                        {
-                            var index = int.Parse(Name);
-                            if (index != -1)
-                            {
-                                arr[index] = Data;
-                                Tab.Parent.SetIsDirty(true);
-                                Parent.NotifyChain("Data");
-                            }
-                        }
+                        arr[index] = Data;
+                        Tab.Parent.SetIsDirty(true);
+                        Parent.NotifyChain("Data");
+                    }
+                }
 
-                        var parentData = Parent.Data;
+                var parentData = Parent.Data;
 
-                        if (Parent.Data is IRedBaseHandle handle)
+                if (Parent.Data is IRedBaseHandle handle)
+                {
+                    parentData = handle.GetValue();
+                }
+                else if (Parent.Data is CVariant cVariant)
+                {
+                    parentData = cVariant.Value;
+                }
+                else if (parentData is RedBaseClass rbc)
+                {
+                    //if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
+                    //{
+                    rbc.SetProperty(PropertyName, Data);
+                    Tab.Parent.SetIsDirty(true);
+                    Parent.NotifyChain("Data");
+                    //}
+                }
+                else
+                {
+                    var pi = parentData?.GetType().GetProperty(PropertyName);
+                    if (pi is not null)
+                    {
+                        if (pi.CanWrite)
                         {
-                            parentData = handle.GetValue();
-                        }
-                        else if (Parent.Data is CVariant cVariant)
-                        {
-                            parentData = cVariant.Value;
-                        }
-                        else if (parentData is RedBaseClass rbc)
-                        {
-                            //if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
-                            //{
-                            rbc.SetProperty(_propertyName, Data);
-                            Tab.Parent.SetIsDirty(true);
-                            Parent.NotifyChain("Data");
-                            //}
+                            pi.SetValue(parentData, Data);
                         }
                         else
                         {
-                            var pi = parentData?.GetType().GetProperty(_propertyName);
-                            if (pi is not null)
-                            {
-                                if (pi.CanWrite)
-                                {
-                                    pi.SetValue(parentData, Data);
-                                }
-                                else
-                                {
-                                    Parent.Data = parentData is IRedRef ? RedTypeManager.CreateRedType(parentData.RedType, Data) : throw new Exception();
-                                }
-                                Tab.Parent.SetIsDirty(true);
-                                Parent.NotifyChain("Data");
-                            }
+                            Parent.Data = parentData is IRedRef ? RedTypeManager.CreateRedType(parentData.RedType, Data) : throw new Exception();
                         }
-                    }
-
-                    Parent.CalculateDescriptor();
-
-                    if (Parent.Data is CMeshMaterialEntry meshMaterialEntry && meshMaterialEntry.IsLocalInstance)
-                    {
-                        var materials = GetRootModel().GetModelFromPath("localMaterialBuffer.materials");
-                        if (materials != null && materials.Properties.Count > meshMaterialEntry.Index)
-                        {
-                            materials.Properties[meshMaterialEntry.Index].CalculateDescriptor();
-                        }
-
-                        var preload = GetRootModel().GetModelFromPath("preloadLocalMaterialInstances");
-                        if (preload != null && preload.Properties.Count > meshMaterialEntry.Index)
-                        {
-                            preload.Properties[meshMaterialEntry.Index].CalculateDescriptor();
-                        }
+                        Tab.Parent.SetIsDirty(true);
+                        Parent.NotifyChain("Data");
                     }
                 }
-            });
+            }
 
+            Parent.CalculateDescriptor();
+
+            if (Parent.Data is CMeshMaterialEntry meshMaterialEntry && meshMaterialEntry.IsLocalInstance)
+            {
+                var materials = GetRootModel().GetModelFromPath("localMaterialBuffer.materials");
+                if (materials != null && materials.Properties.Count > meshMaterialEntry.Index)
+                {
+                    materials.Properties[meshMaterialEntry.Index].CalculateDescriptor();
+                }
+
+                var preload = GetRootModel().GetModelFromPath("preloadLocalMaterialInstances");
+                if (preload != null && preload.Properties.Count > meshMaterialEntry.Index)
+                {
+                    preload.Properties[meshMaterialEntry.Index].CalculateDescriptor();
+                }
+            }
+        }
     }
 
     public ChunkViewModel(IRedType data, RDTDataViewModel tab) : this(data, nameof(RDTDataViewModel))
@@ -185,7 +185,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         //TVProperties.AddRange(Properties);
         //this.RaisePropertyChanged("Data");
 
-        this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) => Tab?.Parent.SetIsDirty(true));
+        //this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) => Tab?.Parent.SetIsDirty(true));
     }
 
     public ChunkViewModel(IRedType export, ReferenceSocket socket) : this(export, nameof(ReferenceSocket))

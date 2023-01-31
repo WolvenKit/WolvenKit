@@ -7,8 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +15,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using ReactiveUI;
 using Semver;
 using Splat;
 using WolvenKit.App.Controllers;
@@ -66,7 +63,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IWatcherService _watcherService;
     private readonly IPluginService _pluginService;
     private readonly TweakDBService _tweakDBService;
-    private readonly HomePageViewModel _homePageViewModel;
     private readonly Red4ParserService _parser;
 
     #endregion fields
@@ -101,92 +97,38 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _pluginService = pluginService;
         _tweakDBService = tweakDBService;
         _parser = parserService;
-        _homePageViewModel = Locator.Current.GetService<HomePageViewModel>().NotNull();
-
-        #region commands
-
-        CheckForUpdatesCommand = ReactiveCommand.CreateFromTask<bool>(async x =>
-        {
-            DispatcherHelper.RunOnMainThread(async () => await CheckForUpdate(x));
-            await Task.FromResult(Task.CompletedTask);
-        });
-
-        OpenFileCommand = ReactiveCommand.CreateFromTask<FileModel>(OpenFileAsync);
-        OpenRedFileCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
-
-        // Build
-        PackModCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
-        {
-            CreateBackup = true
-        }));
-        PackRedModCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
-        {
-            CreateBackup = true,
-            IsRedmod = true
-        }));
-
-        PackInstallModCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
-        {
-            Install = true
-        }));
-        PackInstallRedModCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
-        {
-            Install = true,
-            IsRedmod = true,
-        }));
-
-        PackInstallRunCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
-        {
-            Install = true,
-            LaunchGame = true
-        }));
-        PackInstallRedModRunCommand = ReactiveCommand.CreateFromTask(async () => await LaunchAsync(new LaunchProfile()
-        {
-            Install = true,
-            IsRedmod = true,
-            DeployWithRedmod = true,
-            LaunchGame = true
-        }));
-
-        CleanAllCommand = ReactiveCommand.CreateFromTask(CleanAllAsync);
-        HotInstallModCommand = ReactiveCommand.CreateFromTask(HotInstallModAsync);
-        LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
-        ShowTextureImporterCommand = ReactiveCommand.Create(ShowTextureImporter);
-        ShowTextureExporterCommand = ReactiveCommand.Create(ShowTextureExporter);
-        OpenProjectCommand = ReactiveCommand.CreateFromTask<string, Unit>(OpenProjectAsync);
-        DeleteProjectCommand = ReactiveCommand.Create<string>(DeleteProject);
-        NewProjectCommand = ReactiveCommand.Create(ExecuteNewProject);
-        LaunchGameCommand = ReactiveCommand.Create<string>(ExecuteLaunchGame);
-
-
-        OpenFileCommand.ThrownExceptions.Subscribe(LogExtended);
-        OpenRedFileCommand.ThrownExceptions.Subscribe(LogExtended);
-        OpenProjectCommand.ThrownExceptions.Subscribe(LogExtended);
-
-        #endregion commands
 
         UpdateTitle();
 
         if (!TryLoadingArguments())
         {
-            SetActiveOverlay(_homePageViewModel);
+            SetActiveOverlay( Locator.Current.GetService<HomePageViewModel>().NotNull());
         }
 
         OnStartup();
 
         AddDockedPanes();
 
-        // TweakDB when we're good and ready
-        _settingsManager
-            .WhenAnyValue(x => x.CP77ExecutablePath)
-            .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)) // -.-
-            .Take(1)
-            .Subscribe(x => _pluginService.Init());
+        _settingsManager.PropertyChanged += SettingsManager_PropertyChanged;
+    }
 
-        this
-            .WhenAnyValue(x => x.Status)
-            .Where(x => x == EAppStatus.Loaded)
-            .Subscribe(x => HandleActivation());
+    private void SettingsManager_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ISettingsManager.CP77ExecutablePath))
+        {
+            if (!string.IsNullOrWhiteSpace(_settingsManager.CP77ExecutablePath) && File.Exists(_settingsManager.CP77ExecutablePath))
+            {
+                _pluginService.Init();
+            }
+        }
+    }
+
+    partial void OnStatusChanged(EAppStatus? value)
+    {
+        if (value == EAppStatus.Loaded)
+        {
+            HandleActivation();
+        }
     }
 
     private void AddDockedPanes()
@@ -269,9 +211,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         // check package
         var helpers = new DesktopBridgeHelper();
 
-        Observable.Start(() => CheckForUpdatesCommand.Execute(true).Subscribe())
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe();
+        CheckForUpdatesCommand.SafeExecute(true);
     }
 
     private bool TryLoadingArguments()
@@ -312,13 +252,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return false;
     }
 
-    private async void OnStartup() => await ShowFirstTimeSetup();
+    private void OnStartup() => ShowFirstTimeSetup();
 
-    private async Task ShowFirstTimeSetup()
+    private void ShowFirstTimeSetup()
     {
         if (!_settingsManager.IsHealthy())
         {
-            var setupWasOk = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
+            var setupWasOk = Interactions.ShowFirstTimeSetup();
             if (setupWasOk)
             {
                 _pluginService.Init();
@@ -330,36 +270,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     #region commands
 
-    private static (SemVersion?, string) GetInstallerPackage()
-    {
-        using var p = new Process();
-        p.StartInfo.FileName = "powershell.exe";
-        p.StartInfo.Arguments = $"Get-AppxPackage -Name \"*WolvenKit.Installer*\" | ft Version, InstallLocation -AutoSize -HideTableHeaders";
-        p.StartInfo.UseShellExecute = false;
-        p.StartInfo.CreateNoWindow = true;
-        p.StartInfo.RedirectStandardOutput = true;
-        p.Start();
+    [RelayCommand] private async Task PackMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true });
+    [RelayCommand] private async Task PackRedMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true, IsRedmod = true });
+    [RelayCommand] private async Task PackInstallMod() => await LaunchAsync(new LaunchProfile() { Install = true });
+    [RelayCommand] private async Task PackInstallRedMod() => await LaunchAsync(new LaunchProfile() { Install = true, IsRedmod = true });
+    [RelayCommand] private async Task PackInstallRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true });
+    [RelayCommand] private async Task PackInstallRedModRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true });
 
-        var output = p.StandardOutput.ReadToEnd();
-
-        p.WaitForExit();
-
-        SemVersion? semVersion = null;
-        var path = "";
-
-        if (!string.IsNullOrEmpty(output))
-        {
-            output = output.Replace("\r\n", string.Empty).Trim();
-            var pieces = output.Split(new[] { ' ' }, 2);
-            var version = pieces[0];
-            semVersion = string.IsNullOrEmpty(version) ? null : SemVersion.Parse(version.TrimEnd('0').TrimEnd('.'), SemVersionStyles.OptionalMinorPatch);
-            path = pieces[1];
-        }
-        return (semVersion, path);
-    }
-
-    public ReactiveCommand<bool, Unit> CheckForUpdatesCommand { get; }
-    private async Task CheckForUpdate(bool checkForCheckForUpdates)
+    [RelayCommand]
+    private async Task CheckForUpdates(bool checkForCheckForUpdates)
     {
         if (DesktopBridgeHelper.IsRunningAsPackage())
         {
@@ -524,7 +443,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
+    [RelayCommand]
     private void DeleteProject(string parameter)
     {
         try
@@ -543,8 +462,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
-    private async Task<Unit> OpenProjectAsync(string location)
+    [RelayCommand]
+    private async Task OpenProjectAsync(string location)
     {
         // switch from one active project to another
 
@@ -552,7 +471,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             if (_projectManager.ActiveProject.Location == location)
             {
-                return Unit.Default;
+                return;
             }
         }
 
@@ -572,7 +491,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     {
                         // user canceled locating a project
                         DeleteProject(location);
-                        return Unit.Default;
+                        return;
                     }
                 }
                 // open an existing project
@@ -589,13 +508,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
                     if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
                     {
-                        return Unit.Default;
+                        return;
                     }
 
                     var result = dlg.FileName;
                     if (string.IsNullOrEmpty(result))
                     {
-                        return Unit.Default;
+                        return;
                     }
 
                     location = result;
@@ -605,15 +524,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             // one last check
             if (!File.Exists(location))
             {
-                return Unit.Default;
+                return;
             }
 
-            CloseModalCommand.Execute(null);
+            CloseModalCommand.SafeExecute(null);
 
             var p = await _projectManager.LoadAsync(location);
             if (p is null)
             {
-                return Unit.Default;
+                return;
             }
             ActiveProject = p;
 
@@ -622,7 +541,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             {
                 UpdateTitle();
                 _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
-                return Unit.Default;
+                return;
             }
 
             await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
@@ -638,11 +557,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             _loggerService.Error(e);
         }
 
-        return Unit.Default;
+        return;
     }
 
-    public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
-    private void ExecuteNewProject()
+    [RelayCommand]
+    private void NewProject()
     {
         //IsOverlayShown = false;
         SetActiveDialog(new ProjectWizardViewModel
@@ -731,8 +650,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowHomePage))]
     private void ShowHomePage()
     {
-        _homePageViewModel.NavigateTo(EHomePage.Welcome);
-        SetActiveOverlay(_homePageViewModel);
+        Locator.Current.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Welcome);
+        SetActiveOverlay( Locator.Current.GetService<HomePageViewModel>().NotNull());
     }
 
     private bool CanShowSettings() => !IsDialogShown;
@@ -740,8 +659,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private void ShowSettings()
     {
 
-        _homePageViewModel.NavigateTo(EHomePage.Settings);
-        SetActiveOverlay(_homePageViewModel);
+         Locator.Current.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Settings);
+        SetActiveOverlay( Locator.Current.GetService<HomePageViewModel>().NotNull());
     }
 
     private bool CanShowProjectSettings() => !IsDialogShown && ActiveProject != null;
@@ -765,8 +684,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         SteamLaunch
     }
 
-    public ReactiveCommand<string, Unit> LaunchGameCommand { get; private set; }
-    private void ExecuteLaunchGame(string stridx)
+    [RelayCommand]
+    private void LaunchGame(string stridx)
     {
         if (!int.TryParse(stridx, out var idx))
         {
@@ -858,16 +777,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowPlugin))]
     private void ShowPlugin()
     {
-        _homePageViewModel.NavigateTo(EHomePage.Plugins);
-        SetActiveOverlay(_homePageViewModel);
+         Locator.Current.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Plugins);
+        SetActiveOverlay( Locator.Current.GetService<HomePageViewModel>().NotNull());
     }
 
     private bool CanShowModsView() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowModsView))]
     private void ShowModsView()
     {
-        _homePageViewModel.NavigateTo(EHomePage.Mods);
-        SetActiveOverlay(_homePageViewModel);
+         Locator.Current.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Mods);
+        SetActiveOverlay( Locator.Current.GetService<HomePageViewModel>().NotNull());
     }
 
     private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
@@ -971,7 +890,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         stream?.Dispose();
     }
 
-    public ReactiveCommand<FileModel, Unit> OpenFileCommand { get; }
+    [RelayCommand]
     private async Task OpenFileAsync(FileModel model)
     {
         if (model == null)
@@ -1009,8 +928,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    public ReactiveCommand<FileEntry, Unit> OpenRedFileCommand { get; }
-    private async Task<Unit> OpenRedFileAsync(FileEntry file)
+    [RelayCommand]
+    private async Task OpenRedFileAsync(FileEntry file)
     {
         if (file is not null)
         {
@@ -1040,8 +959,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 _progressService.IsIndeterminate = false;
             }
         }
-
-        return Unit.Default;
     }
 
     public void OpenFileFromDepotPath(string path) => OpenFileFromHash(FNV1A64HashAlgorithm.HashString(path));
@@ -1087,17 +1004,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public bool HasActiveProject() => ActiveProject is not null;
 
-    // Clean all
-    public ReactiveCommand<Unit, Unit> CleanAllCommand { get; private set; }
 
-    // Pack mod
-    public ReactiveCommand<Unit, Unit> PackModCommand { get; private set; }
-    public ReactiveCommand<Unit, Unit> PackRedModCommand { get; private set; }
-    public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
-    public ReactiveCommand<Unit, Unit> PackInstallRedModCommand { get; private set; }
-    public ReactiveCommand<Unit, Unit> PackInstallRunCommand { get; private set; }
-    public ReactiveCommand<Unit, Unit> PackInstallRedModRunCommand { get; private set; }
-
+    [RelayCommand]
     private Task CleanAllAsync() => Task.Run(() => _gameControllerFactory.GetController().CleanAll());
 
     private async Task LaunchAsync(LaunchProfile profile)
@@ -1108,14 +1016,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         await _watcherService.RefreshAsync(ActiveProject);
     }
 
-    public ReactiveCommand<Unit, Unit> HotInstallModCommand { get; private set; }
+    [RelayCommand]
     private Task HotInstallModAsync() => Task.Run(() => _gameControllerFactory.GetController().PackProjectHot());
 
-    public ReactiveCommand<Unit, Unit> LaunchOptionsCommand { get; }
-    private async void LaunchOptions() => await Interactions.ShowLaunchProfilesView.Handle(Unit.Default);
+    [RelayCommand]
+    private void LaunchOptions()
+    {
+        Interactions.ShowLaunchProfilesView();
+    }
 
-    public ReactiveCommand<Unit, Unit> ShowTextureImporterCommand { get; }
-    public ReactiveCommand<Unit, Unit> ShowTextureExporterCommand { get; }
+    [RelayCommand]
     private void ShowTextureImporter()
     {
         var vm = Locator.Current.GetService<TextureImportViewModel>().NotNull();
@@ -1123,6 +1033,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         DockedViews.Add(vm);
     }
 
+    [RelayCommand]
     private void ShowTextureExporter()
     {
         var vm = Locator.Current.GetService<TextureExportViewModel>().NotNull();
@@ -1137,17 +1048,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     public string AboutWolvenKitLink = "https://wiki.redmodding.org/wolvenkit/about";
 
 
-    public ReactiveCommand<string, Unit> OpenExternalLinkCommand = ReactiveCommand.Create<string>(
-        link =>
+    [RelayCommand]
+    private void OpenExternalLink(string link)
+    {
+        var ps = new ProcessStartInfo(link)
         {
-            var ps = new ProcessStartInfo(link)
-            {
-                UseShellExecute = true,
-                Verb = "open"
-            };
-            Process.Start(ps);
-        });
-
+            UseShellExecute = true,
+            Verb = "open"
+        };
+        Process.Start(ps);
+    }
 
     [RelayCommand]
     private void ShowAssetBrowser() => AssetBrowserViewModel.IsVisible = !AssetBrowserViewModel.IsVisible;
@@ -1164,8 +1074,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowProperties))]
     private void ShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
 
-    private bool CanCloseModal() => IsDialogShown || IsOverlayShown;
-    [RelayCommand(CanExecute = nameof(CanCloseModal))]
+    //private bool CanCloseModal() => IsDialogShown || IsOverlayShown;
+    [RelayCommand]
     private void CloseModal()
     {
         if (IsDialogShown)
@@ -1282,7 +1192,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private bool _shouldOverlayShow;
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
+    //[NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
     [NotifyCanExecuteChangedFor(nameof(CloseOverlayCommand))]
     private bool _isOverlayShown;
 
@@ -1295,7 +1205,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(ShowPluginCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowModsViewCommand))]
     [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
-    [NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
+    //[NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
     [NotifyCanExecuteChangedFor(nameof(CloseDialogCommand))]
     private bool _isDialogShown;
 
@@ -1327,6 +1237,33 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     #region methods
 
+    private static (SemVersion?, string) GetInstallerPackage()
+    {
+        using var p = new Process();
+        p.StartInfo.FileName = "powershell.exe";
+        p.StartInfo.Arguments = $"Get-AppxPackage -Name \"*WolvenKit.Installer*\" | ft Version, InstallLocation -AutoSize -HideTableHeaders";
+        p.StartInfo.UseShellExecute = false;
+        p.StartInfo.CreateNoWindow = true;
+        p.StartInfo.RedirectStandardOutput = true;
+        p.Start();
+
+        var output = p.StandardOutput.ReadToEnd();
+
+        p.WaitForExit();
+
+        SemVersion? semVersion = null;
+        var path = "";
+
+        if (!string.IsNullOrEmpty(output))
+        {
+            output = output.Replace("\r\n", string.Empty).Trim();
+            var pieces = output.Split(new[] { ' ' }, 2);
+            var version = pieces[0];
+            semVersion = string.IsNullOrEmpty(version) ? null : SemVersion.Parse(version.TrimEnd('0').TrimEnd('.'), SemVersionStyles.OptionalMinorPatch);
+            path = pieces[1];
+        }
+        return (semVersion, path);
+    }
     public void SetActiveOverlay(ObservableObject overlay)
     {
         ActiveOverlay = overlay;

@@ -230,32 +230,34 @@ public partial class TextureExportViewModel : ExportViewModel
 
     private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
 
-    public async Task InitCollectionEditor(CallbackArguments args)
+    public Task InitCollectionEditor(CallbackArguments args)
     {
         if (args.Arg is not ExportArgs exportArgs)
         {
-            return;
+            return Task.CompletedTask;
         }
 
         switch (exportArgs)
         {
             case MeshExportArgs meshExportArgs:
             {
-                await InitMeshCollectionEditor(args, meshExportArgs);
+                InitMeshCollectionEditor(args, meshExportArgs);
                 break;
             }
             case OpusExportArgs opusExportArgs:
             {
-                await InitOpusCollectionEditor(args, opusExportArgs);
+                InitOpusCollectionEditor(args, opusExportArgs);
                 break;
             }
 
             default:
                 break;
         }
+
+        return Task.CompletedTask;
     }
 
-    private async Task InitOpusCollectionEditor(CallbackArguments args, OpusExportArgs opusExportArgs)
+    private void InitOpusCollectionEditor(CallbackArguments args, OpusExportArgs opusExportArgs)
     {
         List<uint> selectedEntries = new();
         switch (args.PropertyName)
@@ -278,7 +280,7 @@ public partial class TextureExportViewModel : ExportViewModel
         var availableItems = opusTools.Info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
 
         // open dialogue
-        var result = await Interactions.ShowCollectionView.Handle((availableItems, selectedItems));
+        var result = Interactions.ShowCollectionView((availableItems, selectedItems));
         if (result is not null)
         {
             switch (args.PropertyName)
@@ -295,7 +297,7 @@ public partial class TextureExportViewModel : ExportViewModel
         }
     }
 
-    private async Task InitMeshCollectionEditor(CallbackArguments args, MeshExportArgs meshExportArgs)
+    private void InitMeshCollectionEditor(CallbackArguments args, MeshExportArgs meshExportArgs)
     {
         var fetchExtension = ERedExtension.mesh;
         List<FileEntry> selectedEntries = new();
@@ -333,7 +335,7 @@ public partial class TextureExportViewModel : ExportViewModel
             .Select(x => x.First());
 
         // open dialogue
-        var result = await Interactions.ShowCollectionView.Handle((availableItems, selectedItems));
+        var result = Interactions.ShowCollectionView((availableItems, selectedItems));
         if (result is not null)
         {
             switch (args.PropertyName)

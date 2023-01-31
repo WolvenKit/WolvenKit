@@ -22,21 +22,22 @@ namespace WolvenKit.App.Helpers;
 public class WKitUIScripting : WKitScripting
 {
     private readonly IProjectManager _projectManager;
+    private readonly IWatcherService _watcherService;
 
-    public WKitUIScripting(ILoggerService loggerService, IProjectManager projectManager, IArchiveManager archiveManager, Red4ParserService parserService) : base(loggerService, archiveManager, parserService)
+    public WKitUIScripting(ILoggerService loggerService, IProjectManager projectManager, IArchiveManager archiveManager, Red4ParserService parserService, IWatcherService watcherService) : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
+        _watcherService = watcherService;
     }
 
     public void SuspendFileWatcher(bool suspend)
     {
-        var watcherService = Locator.Current.GetService<IWatcherService>();
-        if (watcherService != null && watcherService.IsSuspended != suspend)
+        if (_watcherService != null && _watcherService.IsSuspended != suspend)
         {
-            watcherService.IsSuspended = suspend;
+            _watcherService.IsSuspended = suspend;
             if (!suspend)
             {
-                watcherService.RefreshAsync(_projectManager.ActiveProject);
+                _watcherService.RefreshAsync(_projectManager.ActiveProject);
             }
         }
     }

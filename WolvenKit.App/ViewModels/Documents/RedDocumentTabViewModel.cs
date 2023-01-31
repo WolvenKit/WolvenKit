@@ -93,7 +93,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
 
     private bool CanRenameEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
     [RelayCommand(CanExecute = nameof(CanRenameEmbeddedFile))]
-    private async void RenameEmbeddedFile()
+    private void RenameEmbeddedFile()
     {
         if (this is RDTDataViewModel datavm)
         {
@@ -108,7 +108,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
             }
             if (embeddedFile != null)
             {
-                var newfilename = await Interactions.Rename.Handle(embeddedFile.FileName);
+                var newfilename = Interactions.Rename(embeddedFile.FileName);
 
                 if (string.IsNullOrEmpty(newfilename))
                 {

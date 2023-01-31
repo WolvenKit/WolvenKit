@@ -64,7 +64,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Octokit" />
+	<PackageReference Include="Splat" /> 
+
+	<PackageReference Include="Octokit" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
 	<PackageReference Include="Discord.Net" />
 	<PackageReference Include="DiscordRichPresence" />
@@ -75,9 +77,6 @@
 	<PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
     <PackageReference Include="AutomaticGraphLayout" />
     <PackageReference Include="Nodify" />
-
-	<PackageReference Include="ReactiveUI" />
-	<PackageReference Include="ReactiveUI.Validation" />
   </ItemGroup>
 
   <ItemGroup>

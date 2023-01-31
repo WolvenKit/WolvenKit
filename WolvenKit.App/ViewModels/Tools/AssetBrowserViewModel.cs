@@ -67,13 +67,15 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly ISettingsManager _settings;
     private readonly IProjectManager _projectManager;
     private readonly IProgressService<double> _progressService;
-
     private readonly ILoggerService _loggerService;
     private readonly IPluginService _pluginService;
     private readonly IWatcherService _watcherService;
+    private readonly AppViewModel _appViewModel;
+
     private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
+
     private bool _manuallyLoading = false;
-   
+
 
     #endregion fields
 
@@ -88,8 +90,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         IProgressService<double> progressService,
         ILoggerService loggerService,
         IPluginService pluginService,
-        IWatcherService watcherService
-    ) : base(ToolTitle)
+        IWatcherService watcherService,
+        AppViewModel appViewModel) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -100,6 +102,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _pluginService = pluginService;
         _watcherService = watcherService;
         _loggerService = loggerService;
+        _appViewModel = appViewModel;
 
         ContentId = ToolContentId;
 
@@ -110,7 +113,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
             //.ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _boundRootNodes)
             .Subscribe(
-            _ => {
+            _ =>
+            {
                 // binds only the root node
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
             });
@@ -219,10 +223,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private void OpenWolvenKitSettings()
     {
         var homepageViewModel = Locator.Current.GetService<HomePage.HomePageViewModel>().NotNull();
-        var appViewModel = Locator.Current.GetService<AppViewModel>().NotNull();
 
         homepageViewModel.SelectedIndex = 1;
-        appViewModel.SetActiveOverlay(homepageViewModel);
+        _appViewModel.SetActiveOverlay(homepageViewModel);
     }
 
     [RelayCommand]
@@ -245,10 +248,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case WMessageBoxResult.Yes:
                 {
                     var homepage = Locator.Current.GetService<HomePageViewModel>().NotNull();
-                    var appViewModel = Locator.Current.GetService<AppViewModel>().NotNull();
 
                     homepage.NavigateTo(EHomePage.Plugins);
-                    appViewModel.SetActiveOverlay(homepage);
+                    _appViewModel.SetActiveOverlay(homepage);
                     break;
                 }
 
@@ -313,10 +315,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case WMessageBoxResult.Yes:
                 {
                     var homepage = Locator.Current.GetService<HomePageViewModel>().NotNull();
-                    var appViewModel = Locator.Current.GetService<AppViewModel>().NotNull();
 
                     homepage.NavigateTo(EHomePage.Plugins);
-                    appViewModel.SetActiveOverlay(homepage);
+                    _appViewModel.SetActiveOverlay(homepage);
                     break;
                 }
 
@@ -514,7 +515,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (RightSelectedItem is RedFileViewModel rfvm)
         {
-            Locator.Current.GetService<AppViewModel>().NotNull().OpenRedFileCommand.SafeExecute(rfvm.GetGameFile());
+            _appViewModel.OpenRedFileCommand.SafeExecute(rfvm.GetGameFile());
         }
     }
 

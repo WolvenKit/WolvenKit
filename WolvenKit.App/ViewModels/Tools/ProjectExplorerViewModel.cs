@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -13,7 +11,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using DynamicData.Binding;
-using ReactiveUI;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -54,6 +51,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
+    private readonly AppViewModel _mainViewModel;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -74,8 +72,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IModTools modTools,
         IGameControllerFactory gameController,
         IPluginService pluginService,
-        ISettingsManager settingsManager
-    ) : base(ToolTitle)
+        ISettingsManager settingsManager,
+        AppViewModel appViewModel ) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
@@ -86,13 +84,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _pluginService = pluginService;
         _settingsManager = settingsManager;
 
+        _mainViewModel = appViewModel;
+
         SideInDockedMode = DockSide.Left;
 
         SetupToolDefaults();
 
         _watcherService.Files
             .Connect()
-            .ObserveOn(RxApp.MainThreadScheduler)
+            //.ObserveOn(RxApp.MainThreadScheduler)
             .BindToObservableList(out _observableList)
             .Subscribe(OnNext);
 
@@ -104,7 +104,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (e.Project is not null)
         {
-            Application.Current.Dispatcher.Invoke( () => {
+            Application.Current.Dispatcher.Invoke( () => 
+            {
                 ActiveProject = e.Project;
             }, DispatcherPriority.ContextIdle);
         }
@@ -114,7 +115,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (value is not null)
         {
-            Locator.Current.GetService<AppViewModel>().NotNull().SelectFileCommand.SafeExecute(value);
+            _mainViewModel.SelectFileCommand.SafeExecute(value);
         }
     }
 
@@ -127,7 +128,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public bool IsKeyUpEventAssigned { get; set; }
 
-    public AppViewModel MainViewModel => Locator.Current.GetService<AppViewModel>().NotNull();
+    
 
 
     [ObservableProperty]
@@ -291,10 +292,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanDeleteFile() => ActiveProject != null && SelectedItems != null;
     [RelayCommand(CanExecute = nameof(CanDeleteFile))]
-    public async void DeleteFile()
+    public void DeleteFile()
     {
         var selected = SelectedItems.NotNull().OfType<FileModel>().ToList();
-        var delete = await Interactions.DeleteFiles.Handle(selected.Select(_ => _.Name));
+        var delete = Interactions.DeleteFiles(selected.Select(_ => _.Name));
         if (!delete)
         {
             return;
@@ -394,10 +395,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanRenameFile() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
     [RelayCommand(CanExecute = nameof(CanRenameFile))]
-    private async void RenameFile()
+    private void RenameFile()
     {
         var filename = SelectedItem.NotNull().FullName;
-        var newfilename = await Interactions.Rename.Handle(filename);
+        var newfilename = Interactions.Rename(filename);
 
         if (string.IsNullOrEmpty(newfilename))
         {
@@ -599,8 +600,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanOpenInAssetBrowser))]
     private void OpenInAssetBrowser()
     {
-        Locator.Current.GetService<AppViewModel>().NotNull().AssetBrowserViewModel.IsVisible = true;
-        Locator.Current.GetService<AssetBrowserViewModel>().NotNull().ShowFile(SelectedItem.NotNull());
+        _mainViewModel.NotNull().AssetBrowserViewModel.IsVisible = true;
+        _mainViewModel.AssetBrowserViewModel.ShowFile(SelectedItem.NotNull());
     }
 
     private static string GetSecondExtension(FileModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
@@ -659,6 +660,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #endregion commands
 
     #region Methods
+
+    public AppViewModel GetAppViewModel() => _mainViewModel;
 
     public event EventHandler? BeforeDataSourceUpdate;
     public event EventHandler? AfterDataSourceUpdate;
