@@ -29,7 +29,7 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
         {
-            var writer = new ArchiveWriter(_hashService);
+            var writer = new ArchiveWriter(_hashService) { LoggerService = _loggerService };
             return writer.WriteArchive(infolder, outpath, modname);
         }
     }

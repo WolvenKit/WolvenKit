@@ -127,7 +127,7 @@ namespace WolvenKit.Modkit.RED4
             var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name), ext);
 
             using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
-            using var writer = new CR2WWriter(fs2);
+            using var writer = new CR2WWriter(fs2) { LoggerService = _loggerService };
             writer.WriteFile(w2rc);
 
             _loggerService.Success($"Imported {fileInfo.Name} to {outpath}");
