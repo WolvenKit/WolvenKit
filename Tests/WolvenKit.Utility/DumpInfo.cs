@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,11 +10,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
-using WolvenKit.Core.CRC;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Sounds;
 using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.TweakDB;
@@ -314,21 +311,61 @@ namespace WolvenKit.Utility
         private void MergeStrings(bool factOnly)
         {
             ArgumentNullException.ThrowIfNull(s_bm);
+
+            var hashService = _host.Services.GetRequiredService<IHashService>();
+            ArgumentNullException.ThrowIfNull(hashService);
+
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "infodump");
 
-            var list = new HashSet<string>();
+            var dict = new ConcurrentDictionary<string, List<string>>();
 
-            foreach (var file in Directory.EnumerateFiles(resultDir, "*.json", SearchOption.AllDirectories))
+            Parallel.ForEach(Directory.EnumerateFiles(resultDir, "*.json", SearchOption.AllDirectories), filePath =>
             {
-                DumpFileInfo(JsonSerializer.Deserialize<DataCollection>(File.ReadAllText(file))!);
+                var dc = JsonSerializer.Deserialize<DataCollection>(File.ReadAllText(filePath))!;
+
+                var lst = new HashSet<string>();
+
+                if (factOnly)
+                {
+                    var ext = Path.GetExtension(dc.FileName);
+                    if (dc.FileName == dc.Hash.ToString())
+                    {
+                        ext = hashService.GetGuessedExtension(dc.Hash);
+                    }
+
+                    if (ext == ".questphase")
+                    {
+                        DumpFileInfo(dc, lst);
+                    }
+                }
+                else
+                {
+                    DumpFileInfo(dc, lst);
+                }
+
+                if (lst.Count > 0)
+                {
+                    var orderedLst = new List<string>(lst);
+                    orderedLst.Sort();
+
+                    dict.TryAdd(dc.FileName, orderedLst);
+                }
+            });
+
+            if (factOnly)
+            {
+                var nDict = dict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+                File.WriteAllText(Path.Join(resultDir, "facts.json"), JsonSerializer.Serialize(nDict, new JsonSerializerOptions {WriteIndented = true}));
+            }
+            else
+            {
+                var nList = dict.Values.SelectMany(x => x).ToList();
+                nList.Sort();
+
+                File.WriteAllLines(Path.Join(resultDir, "merged.txt"), nList);
             }
 
-            var nLst = new List<string>(list);
-            nLst.Sort();
-
-            File.WriteAllLines(Path.Join(resultDir, factOnly ? "facts.txt" : "merged.txt"), nLst);
-
-            void DumpFileInfo(DataCollection dc)
+            void DumpFileInfo(DataCollection dc, HashSet<string> lst)
             {
                 if (!factOnly)
                 {
@@ -336,7 +373,7 @@ namespace WolvenKit.Utility
                     {
                         foreach (var str in dc.UnusedStrings)
                         {
-                            list.Add(str);
+                            lst.Add(str);
                         }
                     }
 
@@ -344,7 +381,7 @@ namespace WolvenKit.Utility
                     {
                         foreach (var str in dc.Imports)
                         {
-                            list.Add(str);
+                            lst.Add(str);
                         }
                     }
 
@@ -352,7 +389,7 @@ namespace WolvenKit.Utility
                     {
                         foreach (var str in dc.UsedStrings)
                         {
-                            list.Add(str);
+                            lst.Add(str);
                         }
                     }
 
@@ -360,7 +397,7 @@ namespace WolvenKit.Utility
                     {
                         foreach (var str in dc.TweakStrings)
                         {
-                            list.Add(str);
+                            lst.Add(str);
                         }
                     }
 
@@ -368,7 +405,7 @@ namespace WolvenKit.Utility
                     {
                         foreach (var str in dc.NodeRefs)
                         {
-                            list.Add(str);
+                            lst.Add(str);
                         }
                     }
                 }
@@ -377,7 +414,7 @@ namespace WolvenKit.Utility
                 {
                     foreach (var str in dc.FactStrings)
                     {
-                        list.Add(str);
+                        lst.Add(str);
                     }
                 }
 
@@ -385,7 +422,7 @@ namespace WolvenKit.Utility
                 {
                     foreach (var buffer in dc.Buffers)
                     {
-                        DumpFileInfo(buffer);
+                        DumpFileInfo(buffer, lst);
                     }
                 }
             }
