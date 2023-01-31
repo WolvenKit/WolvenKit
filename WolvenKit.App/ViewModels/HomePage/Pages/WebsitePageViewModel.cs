@@ -1,6 +1,5 @@
-namespace WolvenKit.ViewModels.HomePage.Pages
+namespace WolvenKit.App.ViewModels.HomePage.Pages;
+
+public class WebsitePageViewModel : PageViewModel
 {
-    public class WebsitePageViewModel : PageViewModel
-    {
-    }
 }

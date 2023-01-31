@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Dasync.Collections;
 using WolvenKit.Common.Extensions;
 using WolvenKit.RED4.Archive;
 
@@ -143,13 +142,13 @@ namespace WolvenKit.Modkit.RED4
             var progress = 0;
 
             var bag = new ConcurrentBag<object>();
-            await finalMatchesList.ParallelForEachAsync(async info =>
+            foreach (var info in finalMatchesList)
             {
                 var response = await ExtractSingleAsync(ar, info.NameHash64, outDir, decompressBuffers);
                 bag.Add(response);
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
-            });
+            };
 
             _progressService.Completed();
             var count = bag.Count;

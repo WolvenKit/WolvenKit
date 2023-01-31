@@ -1,4 +1,3 @@
-using Splat;
 using System.Text;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.IO;
@@ -9,7 +8,7 @@ namespace WolvenKit.RED4.Archive.IO;
 
 public partial class CR2WReader : Red4Reader
 {
-    private ILoggerService? _logger;
+    public ILoggerService? LoggerService { get; set; }
 
     public CR2WReader(Stream input) : this(input, Encoding.UTF8, false)
     {
@@ -25,7 +24,6 @@ public partial class CR2WReader : Red4Reader
 
     public CR2WReader(BinaryReader reader) : base(reader)
     {
-        _logger = Locator.Current.GetService<ILoggerService>();
     }
 
     public override void ReadClass(RedBaseClass cls, uint size)

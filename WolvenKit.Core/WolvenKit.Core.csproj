@@ -61,10 +61,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Build.Framework" />
-        <PackageReference Include="protobuf-net.Core" />
-        <PackageReference Include="ReactiveUI" />
-        <PackageReference Include="semver" />
+	    <PackageReference Include="CommunityToolkit.Mvvm" />
+	    <PackageReference Include="Microsoft.Build.Framework" />
+	    <PackageReference Include="semver" />
         <PackageReference Include="System.Reflection.MetadataLoadContext" />
         <PackageReference Include="Serilog" />
     </ItemGroup>

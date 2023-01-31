@@ -1,9 +1,9 @@
 using System;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.HomePage.Pages;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Helpers;
-using WolvenKit.ViewModels.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {

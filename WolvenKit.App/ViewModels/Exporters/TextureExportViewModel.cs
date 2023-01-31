@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using ReactiveUI.Fody.Helpers;
-using Splat;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
-using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -26,15 +19,8 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Converters;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
@@ -42,7 +28,8 @@ public record class CallbackArguments(ImportExportArgs Arg, string PropertyName)
 
 public abstract partial class ExportViewModel : ImportExportViewModel
 {
-    protected ExportViewModel(string header, string contentId) : base(header, contentId)
+    protected ExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
+        : base(archiveManager, notificationService, settingsManager, header, contentId)
     {
     }
 }
@@ -71,7 +58,7 @@ public partial class TextureExportViewModel : ExportViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
-        IProgressService<double> progressService) : base("Export Tool", "Export Tool")
+        IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
     {
         _gameController = gameController;
         _settingsManager = settingsManager;
@@ -89,7 +76,7 @@ public partial class TextureExportViewModel : ExportViewModel
 
     #region Commands
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // notify in TextureImportView.xaml.cs
     private void ImportSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -243,32 +230,34 @@ public partial class TextureExportViewModel : ExportViewModel
 
     private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
 
-    public async Task InitCollectionEditor(CallbackArguments args)
+    public Task InitCollectionEditor(CallbackArguments args)
     {
         if (args.Arg is not ExportArgs exportArgs)
         {
-            return;
+            return Task.CompletedTask;
         }
 
         switch (exportArgs)
         {
             case MeshExportArgs meshExportArgs:
             {
-                await InitMeshCollectionEditor(args, meshExportArgs);
+                InitMeshCollectionEditor(args, meshExportArgs);
                 break;
             }
             case OpusExportArgs opusExportArgs:
             {
-                await InitOpusCollectionEditor(args, opusExportArgs);
+                InitOpusCollectionEditor(args, opusExportArgs);
                 break;
             }
 
             default:
                 break;
         }
+
+        return Task.CompletedTask;
     }
 
-    private async Task InitOpusCollectionEditor(CallbackArguments args, OpusExportArgs opusExportArgs)
+    private void InitOpusCollectionEditor(CallbackArguments args, OpusExportArgs opusExportArgs)
     {
         List<uint> selectedEntries = new();
         switch (args.PropertyName)
@@ -285,11 +274,13 @@ public partial class TextureExportViewModel : ExportViewModel
         {
             selectedItems = selectedEntries.Select(x => new CollectionItemViewModel<uint>(x)).ToList();
         }
-        OpusTools opusTools = new(_projectManager.ActiveProject.NotNull().ModDirectory, _projectManager.ActiveProject.RawDirectory, opusExportArgs.UseMod);
+
+
+        OpusTools opusTools = new(_projectManager.ActiveProject.NotNull().ModDirectory, _projectManager.ActiveProject.RawDirectory, _archiveManager, opusExportArgs.UseMod);
         var availableItems = opusTools.Info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
 
         // open dialogue
-        var result = await Interactions.ShowCollectionView.Handle((availableItems, selectedItems));
+        var result = Interactions.ShowCollectionView((availableItems, selectedItems));
         if (result is not null)
         {
             switch (args.PropertyName)
@@ -306,7 +297,7 @@ public partial class TextureExportViewModel : ExportViewModel
         }
     }
 
-    private async Task InitMeshCollectionEditor(CallbackArguments args, MeshExportArgs meshExportArgs)
+    private void InitMeshCollectionEditor(CallbackArguments args, MeshExportArgs meshExportArgs)
     {
         var fetchExtension = ERedExtension.mesh;
         List<FileEntry> selectedEntries = new();
@@ -344,7 +335,7 @@ public partial class TextureExportViewModel : ExportViewModel
             .Select(x => x.First());
 
         // open dialogue
-        var result = await Interactions.ShowCollectionView.Handle((availableItems, selectedItems));
+        var result = Interactions.ShowCollectionView((availableItems, selectedItems));
         if (result is not null)
         {
             switch (args.PropertyName)

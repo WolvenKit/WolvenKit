@@ -12,10 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Wizards\**" />
     <Compile Remove="ViewModels\Others\**" />
     <Compile Remove="ViewModels\Shared\**" />
+    <EmbeddedResource Remove="Models\Wizards\**" />
     <EmbeddedResource Remove="ViewModels\Others\**" />
     <EmbeddedResource Remove="ViewModels\Shared\**" />
+    <None Remove="Models\Wizards\**" />
     <None Remove="ViewModels\Others\**" />
     <None Remove="ViewModels\Shared\**" />
     <Page Remove="ViewModels\Others\**" />
@@ -61,25 +64,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Octokit" />
+	<!--<PackageReference Include="Splat" />--> 
+
+	<PackageReference Include="Octokit" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
+	<PackageReference Include="Discord.Net" />
+	<PackageReference Include="DiscordRichPresence" />
+	
+	<PackageReference Include="NAudio" />
     <PackageReference Include="NAudio.Vorbis" />
-    <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="ReactiveUI" />
-    <PackageReference Include="ReactiveUI.Fody" />
-    <PackageReference Include="ReactiveUI.Validation" />
     <PackageReference Include="AvalonEdit" />
-    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
-    <PackageReference Include="morelinq" /> 
-    <PackageReference Include="Prism.Core" />
-    <PackageReference Include="Discord.Net" />
+	<PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
     <PackageReference Include="AutomaticGraphLayout" />
     <PackageReference Include="Nodify" />
-    <PackageReference Include="DiscordRichPresence" />
-    <PackageReference Include="NAudio" />
   </ItemGroup>
 
   <ItemGroup>
@@ -93,10 +90,6 @@
 
   <ItemGroup>
     <Resource Include="Resources\WolvenKitFileDefinitions.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\Wizards\" />
   </ItemGroup>
 
 </Project>

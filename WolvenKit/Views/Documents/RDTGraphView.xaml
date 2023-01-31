@@ -2,12 +2,12 @@
     x:Class="WolvenKit.Views.Documents.RDTGraphView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
+    xmlns:converters="clr-namespace:WolvenKit.App.Converters;assembly=WolvenKit.App"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
-    xmlns:local="clr-namespace:WolvenKit.Views.Documents"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:WolvenKit.Views.Documents"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nodify="https://miroiu.github.io/nodify"
     xmlns:reactiveUi="http://reactiveui.net"
@@ -51,42 +51,42 @@
                     <MenuItem Command="{x:Static nodify:EditorCommands.ZoomIn}">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="MagnifyPlusOutline" />
+                                Width="13"
+                                Height="13"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Kind="MagnifyPlusOutline" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Command="{x:Static nodify:EditorCommands.ZoomOut}">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="MagnifyMinusOutline" />
+                                Width="13"
+                                Height="13"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Kind="MagnifyMinusOutline" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
                     <MenuItem Command="SelectAll">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="SelectAll" />
+                                Width="13"
+                                Height="13"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Kind="SelectAll" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Command="{x:Static nodify:EditorCommands.FitToScreen}">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="FitToScreen" />
+                                Width="13"
+                                Height="13"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Kind="FitToScreen" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
@@ -276,9 +276,10 @@
                         <Setter.Value>
                             <ContextMenu>
                                 <MenuItem Header="_Alignment">
-                                    <MenuItem Header="_Top"
-                                              Command="{x:Static nodify:EditorCommands.Align}"
-                                              CommandParameter="Top">
+                                    <MenuItem
+                                        Command="{x:Static nodify:EditorCommands.Align}"
+                                        CommandParameter="Top"
+                                        Header="_Top">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
                                                 Width="13"
@@ -288,9 +289,10 @@
                                                 Kind="AlignVerticalTop" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="_Left"
-                                              Command="{x:Static nodify:EditorCommands.Align}"
-                                              CommandParameter="Left">
+                                    <MenuItem
+                                        Command="{x:Static nodify:EditorCommands.Align}"
+                                        CommandParameter="Left"
+                                        Header="_Left">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
                                                 Width="13"
@@ -300,9 +302,10 @@
                                                 Kind="AlignHorizontalLeft" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="_Bottom"
-                                              Command="{x:Static nodify:EditorCommands.Align}"
-                                              CommandParameter="Bottom">
+                                    <MenuItem
+                                        Command="{x:Static nodify:EditorCommands.Align}"
+                                        CommandParameter="Bottom"
+                                        Header="_Bottom">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
                                                 Width="13"
@@ -312,9 +315,10 @@
                                                 Kind="AlignVerticalBottom" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="_Right"
-                                              Command="{x:Static nodify:EditorCommands.Align}"
-                                              CommandParameter="Right">
+                                    <MenuItem
+                                        Command="{x:Static nodify:EditorCommands.Align}"
+                                        CommandParameter="Right"
+                                        Header="_Right">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
                                                 Width="13"
@@ -324,9 +328,10 @@
                                                 Kind="AlignHorizontalRight" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="_Middle"
-                                              Command="{x:Static nodify:EditorCommands.Align}"
-                                              CommandParameter="Middle">
+                                    <MenuItem
+                                        Command="{x:Static nodify:EditorCommands.Align}"
+                                        CommandParameter="Middle"
+                                        Header="_Middle">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
                                                 Width="13"
@@ -336,9 +341,10 @@
                                                 Kind="AlignVerticalCenter" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="_Center"
-                                              Command="{x:Static nodify:EditorCommands.Align}"
-                                              CommandParameter="Center">
+                                    <MenuItem
+                                        Command="{x:Static nodify:EditorCommands.Align}"
+                                        CommandParameter="Center"
+                                        Header="_Center">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconMaterial
                                                 Width="13"

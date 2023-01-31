@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using DynamicData;
 using DynamicData.Kernel;
@@ -12,7 +13,7 @@ namespace WolvenKit.Common
     /// <summary>
     /// Top-level game bundle/archive manager
     /// </summary>
-    public interface IArchiveManager
+    public interface IArchiveManager : INotifyPropertyChanged
     {
         #region Properties
 

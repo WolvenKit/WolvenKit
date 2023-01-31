@@ -8,8 +8,8 @@ using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Models;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell
 {

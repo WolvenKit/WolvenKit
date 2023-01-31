@@ -8,7 +8,7 @@
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
-    xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     x:TypeArguments="shell:MenuBarViewModel"
     mc:Ignorable="d">
 
@@ -336,7 +336,7 @@
                 Margin="1,0"
                 Padding="12,0"
                 Header="Build">
-                
+
                 <!--  Pack  -->
                 <MenuItem
                     x:Name="MenuItemPack"
@@ -622,8 +622,8 @@
                             Kind="JavaScript" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
-                <Separator/>
+
+                <Separator />
 
                 <MenuItem
                     x:Name="MenuItemShowTextureImporter"

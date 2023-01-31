@@ -33,13 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-      <PackageReference Include="BigGustave" />
       <PackageReference Include="Microsoft.ClearScript.V8" />
       <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" />
       <PackageReference Include="Microsoft.Extensions.Options" />
-      <PackageReference Include="AsyncEnumerator" />
       <PackageReference Include="SharpGLTF.Toolkit" />
-      <PackageReference Include="ReactiveUI.Fody" />
       <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 

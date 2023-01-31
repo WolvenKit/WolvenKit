@@ -1,9 +1,5 @@
 using System;
-using DynamicData;
 using Microsoft.Build.Framework;
-using Serilog.Core;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit
@@ -11,8 +7,6 @@ namespace WolvenKit
     public class SerilogWrapper : ILoggerService
     {
         public LoggerVerbosity LoggerVerbosity { get; private set; } = LoggerVerbosity.Normal;
-
-        public IObservable<IChangeSet<LogEntry>> Connect() => throw new NotImplementedException();
 
         public void SetLoggerVerbosity(LoggerVerbosity verbosity) => LoggerVerbosity = verbosity;
 

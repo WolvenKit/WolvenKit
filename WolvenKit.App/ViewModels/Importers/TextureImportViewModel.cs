@@ -7,7 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Tools;
@@ -19,18 +22,16 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Tools;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Importers;
 
 public abstract partial class ImportViewModel : ImportExportViewModel
 {
-    protected ImportViewModel(string header, string contentId) : base(header, contentId)
+    protected ImportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
+        : base(archiveManager, notificationService, settingsManager, header, contentId)
     {
     }
 }
@@ -42,11 +43,13 @@ public partial class TextureImportViewModel : ImportViewModel
     private ISettingsManager _settingsManager;
     private IWatcherService _watcherService;
     private IProgressService<double> _progressService;
+    private readonly Red4ParserService _parserService;
     private IProjectManager _projectManager;
     private IGameControllerFactory _gameController;
     private IArchiveManager _archiveManager;
     private IPluginService _pluginService;
     private IModTools _modTools;
+
 
     public TextureImportViewModel(
         IGameControllerFactory gameController,
@@ -58,7 +61,8 @@ public partial class TextureImportViewModel : ImportViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
-        IProgressService<double> progressService) : base("Import Tool", "Import Tool")
+        IProgressService<double> progressService,
+        Red4ParserService parserService) : base(archiveManager, notificationService, settingsManager, "Import Tool", "Import Tool")
     {
         _gameController = gameController;
         _settingsManager = settingsManager;
@@ -70,13 +74,13 @@ public partial class TextureImportViewModel : ImportViewModel
         _pluginService = pluginService;
         _modTools = modTools;
         _progressService = progressService;
-
+        _parserService = parserService;
         LoadFiles();
     }
 
     #region Commands
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // notify in TextureImportView.xaml.cs
     private void DefaultSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -92,7 +96,7 @@ public partial class TextureImportViewModel : ImportViewModel
         }
     }
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // notify in TextureImportView.xaml.cs
     private void ImportSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -103,7 +107,7 @@ public partial class TextureImportViewModel : ImportViewModel
             }
 
             // import settings from vanilla
-            item.Properties = ImportableItemViewModel.LoadXbmSettingsFromGame(item.BaseFile);
+            item.Properties = ImportableItemViewModel.LoadXbmSettingsFromGame(item.BaseFile, _archiveManager, _projectManager, _parserService);
             _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed game file");
         }
     }
@@ -190,10 +194,7 @@ public partial class TextureImportViewModel : ImportViewModel
 
         if (_gameController.GetController() is RED4Controller cp77Controller)
         {
-            OpusTools opusTools = new(
-                proj.ModDirectory,
-                proj.RawDirectory,
-                true);
+            OpusTools opusTools = new(proj.ModDirectory, proj.RawDirectory, _archiveManager, true);
 
             return Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
         }
@@ -271,7 +272,7 @@ public partial class TextureImportViewModel : ImportViewModel
 
         var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
             .Where(CanImport)
-            .Select(x => new ImportableItemViewModel(x));
+            .Select(x => new ImportableItemViewModel(x, _archiveManager, _projectManager, _parserService));
 
         Items.Clear();
         Items = new(files);
@@ -281,26 +282,28 @@ public partial class TextureImportViewModel : ImportViewModel
 
     private static bool CanImport(string x) => Enum.TryParse<ERawFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
 
-    public async Task InitCollectionEditor(CallbackArguments args)
+    public Task InitCollectionEditor(CallbackArguments args)
     {
         if (args.Arg is not ImportArgs importArgs)
         {
-            return;
+            return Task.CompletedTask;
         }
 
         switch (importArgs)
         {
             case GltfImportArgs gltfimport:
             {
-                await InitGltfCollectionEditor(args, gltfimport);
+                InitGltfCollectionEditor(args, gltfimport);
                 break;
             }
             default:
                 break;
         }
+
+        return Task.CompletedTask;
     }
 
-    private async Task InitGltfCollectionEditor(CallbackArguments args, GltfImportArgs gltfImportArgs)
+    private void InitGltfCollectionEditor(CallbackArguments args, GltfImportArgs gltfImportArgs)
     {
         var fetchExtension = ERedExtension.mesh;
         List<FileEntry> selectedEntries = new();
@@ -341,7 +344,7 @@ public partial class TextureImportViewModel : ImportViewModel
             throw new NotImplementedException();
         }
 
-        var result = await Interactions.ShowCollectionView.Handle(a);
+        var result = Interactions.ShowCollectionView(a);
         if (result is not null)
         {
             switch (args.PropertyName)

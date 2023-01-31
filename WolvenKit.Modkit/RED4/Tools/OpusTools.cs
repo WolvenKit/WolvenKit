@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Modkit.RED4.Opus
 {
@@ -21,18 +21,15 @@ namespace WolvenKit.Modkit.RED4.Opus
         public OpusInfo Info { get; set; }
         private readonly bool _isModded;
 
-        public OpusTools(string modFolder, string rawFolder, bool useMod = false) //audio_2_soundbanks.archive
+        public OpusTools(string modFolder, string rawFolder, IArchiveManager archiveManager, bool useMod = false)
         {
-            var archiveManager = Locator.Current.GetService<IArchiveManager>().NotNull();
-
+            _modFolder = new DirectoryInfo(modFolder);
+            _rawFolder = new DirectoryInfo(rawFolder);
+            _isModded = useMod;
             _soundBanks = archiveManager.Archives.Items
                 .Cast<Archive>()
                 .First(_ => _.Name.Equals($"{EVanillaArchives.audio_2_soundbanks}.archive"));
 
-
-            _modFolder = new DirectoryInfo(modFolder);
-            _rawFolder = new DirectoryInfo(rawFolder);
-            _isModded = useMod;
             if (!Directory.Exists(Path.Combine(_modFolder.FullName, "base\\sound\\soundbanks")))
             {
                 Directory.CreateDirectory(Path.Combine(_modFolder.FullName, "base\\sound\\soundbanks"));
@@ -151,15 +148,8 @@ namespace WolvenKit.Modkit.RED4.Opus
             var foundids = new List<uint>();
             foreach (var wav in wavFiles)
             {
-                try
-                {
-                    var idddd = Convert.ToUInt32(Path.GetFileNameWithoutExtension(wav));
-                    foundids.Add(idddd);
-                }
-                catch (Exception ex)
-                {
-                    Locator.Current.GetService<ILoggerService>().NotNull().Error(ex);
-                }
+                var id = Convert.ToUInt32(Path.GetFileNameWithoutExtension(wav));
+                foundids.Add(id);
             }
 
             var validids = new List<uint>();

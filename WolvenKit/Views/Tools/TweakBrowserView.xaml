@@ -2,7 +2,7 @@
     x:Class="WolvenKit.Views.Tools.TweakBrowserView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
+    xmlns:converters="clr-namespace:WolvenKit.App.Converters;assembly=WolvenKit.App"
     xmlns:converters1="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
@@ -13,7 +13,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
-    xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=tools:TweakBrowserViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -88,9 +88,7 @@
             </Grid>
         </Border>
         <TabControl Grid.Row="1">
-            <TabItem
-                d:Header="Records (12345)"
-                Header="{Binding RecordsHeader}">
+            <TabItem d:Header="Records (12345)" Header="{Binding RecordsHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300" />
@@ -100,10 +98,10 @@
 
                     <ListBox
                         Margin="-3,0,0,-3"
-                        BorderThickness="1,0,0,1"
-                        ItemsSource="{Binding Records}"
                         d:ItemsSource="{d:SampleData}"
                         d:SelectedIndex="1"
+                        BorderThickness="1,0,0,1"
+                        ItemsSource="{Binding Records}"
                         SelectedItem="{Binding SelectedRecordEntry, Mode=TwoWay}">
                         <ListBox.ContextMenu>
                             <ContextMenu>
@@ -136,9 +134,7 @@
                     <local:RedTreeView Grid.Column="2" ItemsSource="{Binding SelectedRecord}" />
                 </Grid>
             </TabItem>
-            <TabItem
-                d:Header="Flats (12345)"
-                Header="{Binding FlatsHeader}">
+            <TabItem d:Header="Flats (12345)" Header="{Binding FlatsHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300" />
@@ -164,9 +160,7 @@
                     <editors:RedTypeView Grid.Column="2" DataContext="{Binding SelectedFlat}" />
                 </Grid>
             </TabItem>
-            <TabItem
-                d:Header="Queries (12345)"
-                Header="{Binding QueriesHeader}">
+            <TabItem d:Header="Queries (12345)" Header="{Binding QueriesHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300" />
@@ -192,9 +186,7 @@
                     <editors:RedTypeView Grid.Column="2" DataContext="{Binding SelectedQuery}" />
                 </Grid>
             </TabItem>
-            <TabItem
-                d:Header="Groups (12345)"
-                Header="{Binding GroupTagsHeader}">
+            <TabItem d:Header="Groups (12345)" Header="{Binding GroupTagsHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300" />
@@ -225,11 +217,11 @@
         <Border
             x:Name="LoadingBorder"
             Grid.RowSpan="3"
+            d:Visibility="Hidden"
             Background="{StaticResource ContentBackgroundAlt3}"
             BorderBrush="Black"
             BorderThickness="0"
-            Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-            d:Visibility="Hidden">
+            Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock

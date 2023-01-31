@@ -1,27 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Common;
-using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.RED4.Archive;
-using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {

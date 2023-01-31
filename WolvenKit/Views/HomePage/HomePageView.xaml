@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogs="clr-namespace:WolvenKit.Views.Dialogs"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
+    xmlns:homePage="clr-namespace:WolvenKit.App.ViewModels.HomePage;assembly=WolvenKit.App"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -35,7 +35,7 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="HomePageSideBar" Width="200"/>
+                <ColumnDefinition x:Name="HomePageSideBar" Width="200" />
                 <ColumnDefinition x:Name="HomePageContent" Width="5*" />
             </Grid.ColumnDefinitions>
         </Grid>
@@ -68,7 +68,7 @@
                                         VerticalAlignment="Center"
                                         ContentSource="Header"
                                         RecognizesAccessKey="True" />
-                                    </Border>
+                                </Border>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -133,7 +133,7 @@
                                                 VerticalAlignment="Stretch"
                                                 Background="{DynamicResource TransparentWhiteBrush}"
                                                 BorderBrush="{DynamicResource TransparentWhiteBrush}"
-                                                Command="{Binding CloseHomePage}"
+                                                Command="{Binding CloseHomePageCommand}"
                                                 Foreground="{DynamicResource TransparentWhiteBrush}"
                                                 IsCancel="True"
                                                 Opacity=".15"
@@ -318,20 +318,23 @@
         </TabControl>
 
         <!--  Bottom Left Sidebar Grid  -->
-        <Grid Width="200" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+        <Grid
+            Width="200"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            
+
             <!--  Left Bottom Button  -->
             <Button
                 x:Name="ToEditorButton"
                 Grid.Row="0"
-                Padding="0"
                 Margin="4,4,4,30"
-                Background="{StaticResource ContentBackgroundAlt}"
+                Padding="0"
                 HorizontalAlignment="Stretch"
+                Background="{StaticResource ContentBackgroundAlt}"
                 BorderThickness="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -356,7 +359,11 @@
             </Button>
 
             <!--  Left Bottom Version Number  -->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="6" >
+            <StackPanel
+                Grid.Row="1"
+                Margin="6"
+                HorizontalAlignment="Left"
+                Orientation="Horizontal">
                 <TextBlock
                     Margin="5"
                     VerticalAlignment="Center"

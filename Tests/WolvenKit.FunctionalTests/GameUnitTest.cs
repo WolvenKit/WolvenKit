@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProtoBuf.Meta;
 using Serilog;
 using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
@@ -118,7 +117,7 @@ namespace WolvenKit.FunctionalTests
             #endregion
 
             //protobuf
-            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
+            //RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
 
             //var hashService = _host.Services.GetRequiredService<IHashService>();

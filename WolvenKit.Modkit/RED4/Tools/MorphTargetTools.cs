@@ -5,7 +5,6 @@ using System.Linq;
 using Microsoft.Extensions.DependencyModel;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
-using Splat;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;

@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Semver;
-using Splat;
-using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -732,8 +730,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
             }
             else if (propertyInfo is { Name: { } })
             {
-                writer.WritePropertyName(propertyInfo.Name);
-                JsonSerializer.Serialize(writer, (object?)value.GetProperty(propertyInfo.Name), options);
+                //Locator.Current.GetService<ILoggerService>()?.Error($"propertyInfo was null i guess");
             }
         }
 

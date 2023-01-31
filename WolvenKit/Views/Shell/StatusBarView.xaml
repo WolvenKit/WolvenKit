@@ -8,7 +8,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DataContext="{d:DesignInstance Type=shell:StatusBarViewModel}"
     d:DesignWidth="800"
