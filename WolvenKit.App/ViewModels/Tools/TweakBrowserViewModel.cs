@@ -101,7 +101,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
                 if (SelectedRecordEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(SelectedRecordEntry.Item), SelectedRecordEntry.DisplayName, null, true)
+                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(SelectedRecordEntry.Item).NotNull(), SelectedRecordEntry.DisplayName, null, true)
                     {
                         IsExpanded = true
                     });
@@ -119,6 +119,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
                 if (SelectedFlatEntry != null && _tweakDB.IsLoaded)
                 {
                     var flat = _tweakDB.GetFlat(SelectedFlatEntry.Item);
+                    ArgumentNullException.ThrowIfNull(flat);
                     SelectedFlat = new ChunkViewModel(flat, flat.GetType().Name);
                 }
                 else
@@ -134,7 +135,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
                 if (SelectedQueryEntry != null && _tweakDB.IsLoaded)
                 {
                     var arr = new CArray<TweakDBID>();
-                    foreach (var query in _tweakDB.GetQuery(SelectedQueryEntry.Item))
+                    foreach (var query in _tweakDB.GetQuery(SelectedQueryEntry.Item).NotNull())
                     {
                         arr.Add(query);
                     }
@@ -330,12 +331,12 @@ public partial class TweakBrowserViewModel : ToolViewModel
             ID = SelectedRecordEntry.DisplayName
         };
 
-        var baseRecord = _tweakDB.GetRecord(SelectedRecordEntry.Item);
+        var baseRecord = _tweakDB.GetRecord(SelectedRecordEntry.Item).NotNull();
         txl.Type = "gamedata" + SelectedRecordEntry.RecordTypeName + "_Record";
 
         txl.ID = SelectedRecordEntry.Item;
 
-        baseRecord.GetPropertyNames().ForEach(name => txl.Properties.Add(name, baseRecord.GetProperty(name)));
+        baseRecord.GetPropertyNames().ForEach(name => txl.Properties.Add(name, baseRecord.GetProperty(name).NotNull()));
 
         var txlFile = new TweakXLFile { txl };
 

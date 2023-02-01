@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Types;
@@ -91,5 +92,7 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
     }
 
     public string? GetString() => this;
-    public override string? ToString() => GetResolvedText();
+    public override string? ToString() => GetString();
+
+    public static bool IsNullOrEmpty([NotNullWhen(false)] CName name) => name == CName.Empty ? true : string.IsNullOrEmpty(name.ToString());
 }

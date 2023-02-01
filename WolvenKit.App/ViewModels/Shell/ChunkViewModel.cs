@@ -289,12 +289,23 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             else if (Data is CVariant v)
             {
-                data = v.Value;
+                data = v.Value.NotNull();
             }
             else if (Data is TweakDBID tdb && _propertiesLoaded)
             {
-                data = _tweakDbService.GetFlat(tdb);
-                data ??= _tweakDbService.GetRecord(tdb);
+                var flat = _tweakDbService.GetFlat(tdb);
+                if (flat is not null)
+                {
+                    data = flat;
+                }
+                else
+                {
+                    var record = _tweakDbService.GetRecord(tdb);
+                    if (record is not null)
+                    {
+                        data = record;
+                    }
+                }
             }
             else if (Data is DataBuffer db && db.Buffer.Data is IRedType irt)
             {
@@ -378,7 +389,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             if (Data is CVariant v)
             {
-                return v.Value.GetType() ?? null;
+                return v.Value?.GetType() ?? null;
             }
             if (Data is TweakDBID tdb)
             {
@@ -752,9 +763,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         // if a record was found, parse its data
-        if (tdbEntry is gamedataTweakDBRecord)
+        if (tdbEntry is gamedataTweakDBRecord record)
         {
-            ((gamedataTweakDBRecord)tdbEntry).GetPropertyNames().ForEach(name => txl.Properties.Add(name, ((gamedataTweakDBRecord)tdbEntry).GetProperty(name)));
+            record.GetPropertyNames().ForEach(name => txl.Properties.Add(name, record.GetProperty(name).NotNull()));
         }
 
         var saveFileDialog = new SaveFileDialog
@@ -828,6 +839,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanAddHandle))]
     private async Task AddHandle()
     {
+        ArgumentNullException.ThrowIfNull(PropertyType);
         var data = RedTypeManager.CreateRedType(PropertyType);
         if (data is IRedBaseHandle handle)
         {
@@ -851,7 +863,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             if (Data == null)
             {
                 var typeInfo = GetTypeInfo(Parent.ResolvedData);
-                var propertyInfo = typeInfo.GetPropertyInfoByName(Name);
+                var propertyInfo = typeInfo.GetPropertyInfoByName(Name).NotNull();
 
                 if (propertyInfo.Flags.Equals(Flags.Empty))
                 {
@@ -1046,6 +1058,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanAddItemToCompiledData))]
     private async Task AddItemToCompiledData()
     {
+        ArgumentNullException.ThrowIfNull(ResolvedPropertyType);
         if (Data == null)
         {
             Data = RedTypeManager.CreateRedType(ResolvedPropertyType);
@@ -1656,6 +1669,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Value = ibt.GetBrowsableValue();
         }
+
+        if (Value is null)
+        {
+            Value = "null";
+        }
     }
 
     public void CalculateDescriptor()
@@ -1668,13 +1686,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
         {
-            Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].Chunk.DebugName}";
+            Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].NotNull().Chunk.DebugName}";
             return;
         }
 
         if (Data is worldStreamingSectorDescriptor wssd)
         {
-            Descriptor = wssd.Data.DepotPath.ToString().Replace("base\\worlds\\03_night_city\\_compiled\\default\\", "").Replace(".streamingsector", "");
+            Descriptor = wssd.Data.DepotPath.ToString().NotNull().Replace("base\\worlds\\03_night_city\\_compiled\\default\\", "").Replace(".streamingsector", "");
             return;
         }
 
@@ -1740,7 +1758,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     if (list.Files[i].RootChunk == Data)
                     {
-                        var entry = mesh.MaterialEntries.FirstOrDefault(x => x.IsLocalInstance && x.Index == i);
+                        var entry = mesh.MaterialEntries.FirstOrDefault(x => x is not null && x.IsLocalInstance && x.Index == i);
                         if (entry != null)
                         {
                             Descriptor = entry.Name;
@@ -1758,7 +1776,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     if (mesh2.MaterialEntries.Count > i)
                     {
-                        Descriptor = mesh2.MaterialEntries[i].Name;
+                        Descriptor = mesh2.MaterialEntries[i].NotNull().Name;
                     }
                     break;
                 }
@@ -1806,7 +1824,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 var prop = GetPropertyByRedName(irc.GetType(), propName);
                 if (prop is not null)
                 {
-                    Descriptor = irc.GetProperty(prop.RedName).ToString().NotNull();
+                    var p = irc.GetProperty(prop.RedName.NotNull());
+                    Descriptor = p?.ToString();
                     return;
                 }
             }
@@ -1942,12 +1961,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
 
                 var name = !string.IsNullOrEmpty(propertyInfo.RedName) ? propertyInfo.RedName : propertyInfo.Name;
-                Properties.Add(new ChunkViewModel(redClass.GetProperty(name), propertyInfo.RedName, this, isreadonly));
+                var t = redClass.GetProperty(name.NotNull()).NotNull();
+                Properties.Add(new ChunkViewModel(t, propertyInfo.RedName.NotNull(), this, isreadonly));
             }
 
             foreach (var dp in dps)
             {
-                Properties.Add(new ChunkViewModel(redClass.GetProperty(dp), dp, this, isreadonly));
+                ArgumentNullException.ThrowIfNull(dp);
+                Properties.Add(new ChunkViewModel(redClass.GetProperty(dp).NotNull(), dp, this, isreadonly));
             }
         }
         else if (obj is SerializationDeferredDataBuffer sddb)
@@ -1992,7 +2013,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             if (sdb.Data is IParseableBuffer ipb)
             {
-                Properties.Add(new ChunkViewModel(ipb.Data, ipb.Data.GetType().Name, this, isreadonly));
+                Properties.Add(new ChunkViewModel(ipb.Data.NotNull(), ipb.Data.GetType().Name, this, isreadonly));
             }
         }
         else if (obj is DataBuffer db)
@@ -2079,7 +2100,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     try
                     {
-                        Properties.Add(new ChunkViewModel(wss.Nodes[sst.NodeIndex], "Node", this, isreadonly));
+                        Properties.Add(new ChunkViewModel(wss.Nodes[sst.NodeIndex].NotNull(), "Node", this, isreadonly));
                     }
                     catch (Exception ex) { _loggerService.Error(ex); }
                 }
@@ -2098,7 +2119,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             if (epi is not null)
             {
                 //IsDefault = IsDefault(Parent.ResolvedPropertyType, epi, Data);
-                IsDefault = IsDefault(Parent.ResolvedPropertyType, epi, ResolvedData);
+                IsDefault = IsDefault(Parent.ResolvedPropertyType.NotNull(), epi, ResolvedData);
             }
         }
     }
@@ -2460,7 +2481,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandlePointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is CreateClassDialogViewModel vm)
+        if (sender is CreateClassDialogViewModel vm && vm.SelectedClass is not null && PropertyType is not null)
         {
             var instance = RedTypeManager.Create(vm.SelectedClass);
             var data = RedTypeManager.CreateRedType(PropertyType);
@@ -2513,7 +2534,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandleChunkPointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is CreateClassDialogViewModel vm && Data is IRedArray arr)
+        if (sender is CreateClassDialogViewModel vm && Data is IRedArray arr && vm.SelectedClass is not null)
         {
             var newItem = RedTypeManager.CreateRedType(arr.InnerType);
             if (newItem is IRedBaseHandle handle)
@@ -3321,7 +3342,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                                 {
                                     name = line.name + "_" + i1,
                                     app = line.app == "" ? "default" : line.app,
-                                    template_path = mesh.Mesh.DepotPath,
+                                    template_path = mesh.Mesh.DepotPath.ToString().NotNull(),
                                     scale = line.scale
                                 };
 

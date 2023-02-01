@@ -13,7 +13,7 @@ namespace WolvenKit.App.Models;
 public interface IBrowsableType
 {
     public string GetBrowsableName();
-    public string GetBrowsableValue();
+    public string? GetBrowsableValue();
     public string? GetBrowsableType();
 }
 
@@ -58,7 +58,7 @@ public class TweakXL : ITweakXLItem, IBrowsableType, IBrowsableDictionary
     public virtual string GetBrowsableName() => Type;
 
     //public virtual string GetBrowsableValue() => Value != null ? Value.ToString() : ID.GetResolvedText();
-    public virtual string GetBrowsableValue() => ID.GetResolvedText();
+    public virtual string? GetBrowsableValue() => ID.GetResolvedText();
 
     public virtual string GetBrowsableType() => Type;
 
@@ -123,7 +123,7 @@ public class TweakXLSequence : IBrowsableType, ITweakXLItem, IBrowsableDictionar
 
     public string GetBrowsableName() => "";
 
-    public string GetBrowsableValue() => ID.GetResolvedText();
+    public string? GetBrowsableValue() => ID.GetResolvedText();
 
     public string? GetBrowsableType() => null;
 
@@ -239,14 +239,14 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
 
     private void WriteCName(IEmitter emitter, CName cName, string property = "")
     {
-        if (!cName.Equals(CName.Empty))
+        if (!CName.IsNullOrEmpty(cName))
         {
             if (!string.IsNullOrWhiteSpace(property))
             {
                 emitter.Emit(new Scalar(property));
             }
 
-            emitter.Emit(new Scalar(cName.GetResolvedText()));
+            emitter.Emit(new Scalar(cName.ToString().NotNull()));
         }
     }
 
@@ -259,7 +259,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                 emitter.Emit(new Scalar(property));
             }
 
-            emitter.Emit(new Scalar(tweakDBID.GetResolvedText()));
+            emitter.Emit(new Scalar(tweakDBID.GetResolvedText().NotNull()));
         }
     }
     private void WriteREDRaRef(IEmitter emitter, IRedResourceAsyncReference raRef, string property = "")
@@ -271,7 +271,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
 
         if (raRef.IsSet)
         {
-            emitter.Emit(new Scalar(raRef.DepotPath));
+            emitter.Emit(new Scalar(raRef.DepotPath.ToString().NotNull()));
         }
         else
         {
@@ -387,7 +387,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
             {
                 if (txl.Properties.Count > 0)
                 {
-                    emitter.Emit(new Scalar(null, txlEntry.ID));
+                    emitter.Emit(new Scalar(null, txlEntry.ID.GetResolvedText().NotNull()));
                     emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
                 }
 
@@ -413,6 +413,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                         propertyToWrite = txl.ID.ResolvedText;
                     }
 
+                    ArgumentNullException.ThrowIfNull(propertyToWrite);
                     var propertyValue = txl.GetPropertyValue(property);
                     switch (propertyValue)
                     {
@@ -615,7 +616,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
             {
                 var tweak = new TweakXLAppend
                 {
-                    ID = ReadScalar(s, _tdbs).ToString()
+                    ID = ReadScalar(s, _tdbs).ToString().NotNull()
                 };
                 if (tag.EndsWith("-once"))
                 {

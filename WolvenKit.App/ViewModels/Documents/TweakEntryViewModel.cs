@@ -27,7 +27,7 @@ public sealed class GroupViewModel : TweakEntryViewModel
         _value = value;
 
         Members = new ObservableCollection<FlatViewModel>(_value.GetPropertyNames()
-            .Select(f => new FlatViewModel(f, _value.GetProperty(f))
+            .Select(f => new FlatViewModel(f, _value.GetProperty(f).NotNull())
             {
                 GroupName = Name
             }));

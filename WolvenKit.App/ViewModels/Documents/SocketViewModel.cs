@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models.Nodify;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 using Point = System.Windows.Point;
 
@@ -67,7 +68,7 @@ public partial class SocketViewModel : ObservableObject, INodeSocket
         };
     }
 
-    public SocketViewModel(graphGraphSocketDefinition socket) : this(socket.Name)
+    public SocketViewModel(graphGraphSocketDefinition socket) : this(socket.Name.ToString().NotNull())
     {
     }
 

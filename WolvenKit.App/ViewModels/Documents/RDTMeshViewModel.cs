@@ -28,6 +28,7 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
+using static SharpGLTF.Scenes.LightBuilder;
 using Material = WolvenKit.App.Models.Material;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -166,6 +167,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             return;
         }
+        if (SelectedAppearance.AppearanceName is null)
+        {
+            return;
+        }
 
         var dlg = new SaveFileDialog
         {
@@ -177,13 +182,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             var outFile = new FileInfo(dlg.FileName);
             // will only use archive files (for now)
-            if (_modTools.ExportEntity(Parent.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
+            var appearanceName = SelectedAppearance.AppearanceName.ToString().NotNull();
+            if (_modTools.ExportEntity(Parent.Cr2wFile, appearanceName, outFile))
             {
-                Parent.GetLoggerService().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
+                Parent.GetLoggerService().Success($"Entity with appearance '{appearanceName}'exported: {dlg.FileName}");
             }
             else
             {
-                Parent.GetLoggerService().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
+                Parent.GetLoggerService().Error($"Error exporting entity with appearance '{appearanceName}'");
             }
         }
     }
@@ -218,7 +224,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         foreach (var me in data.MaterialEntries)
         {
-            var name = GetUniqueMaterialName(me.Name, data);
+            ArgumentNullException.ThrowIfNull(me);
+
+            var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), data);
             if (!me.IsLocalInstance)
             {
                 materials.Add(name, new Material(name));
@@ -236,7 +244,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 //{
                 //inst = (CMaterialInstance)pme.GetValue();
                 //}
-                inst = data.PreloadLocalMaterialInstances[me.Index].GetValue() as CMaterialInstance;
+                inst = data.PreloadLocalMaterialInstances[me.Index]?.GetValue() as CMaterialInstance;
             }
 
             //CMaterialInstance bm = null;
@@ -253,7 +261,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             foreach (var pair in inst.Values)
             {
-                material.Values[pair.Key] = pair.Value;
+                ArgumentNullException.ThrowIfNull(pair);
+                var k = pair.Key.ToString().NotNull();
+                material.Values[k] = pair.Value;
             }
 
             materials[name] = material;
@@ -262,6 +272,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var appIndex = 0;
         foreach (var handle in data.Appearances)
         {
+            ArgumentNullException.ThrowIfNull(handle);
+
             var app = handle.GetValue();
             if (app is meshMeshAppearance mmapp)
             {
@@ -269,7 +281,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var materialName in mmapp.ChunkMaterials)
                 {
-                    var name = GetUniqueMaterialName(materialName, data);
+                    var name = GetUniqueMaterialName(materialName.ToString().NotNull(), data);
                     if (materials.ContainsKey(name))
                     {
                         appMaterials.Add(materials[name]);
@@ -280,7 +292,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     }
                 }
 
-                var a = new Appearance(mmapp.Name);
+                var a = new Appearance(mmapp.Name.ToString().NotNull());
 
                 var model = new LoadableModel(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_").Replace(".", "_"))
                 {
@@ -486,7 +498,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var me in mesh.MaterialEntries)
                 {
-                    var name = GetUniqueMaterialName(me.Name, mesh);
+                    ArgumentNullException.ThrowIfNull(me);
+
+                    var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
                     if (!me.IsLocalInstance)
                     {
                         materials.Add(name, new Material(name));
@@ -505,7 +519,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         //{
                         //inst = (CMaterialInstance)pme.GetValue();
                         //}
-                        inst = (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].GetValue();
+                        inst = (CMaterialInstance?)mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue();
                     }
 
                     //CMaterialInstance bm = null;
@@ -514,6 +528,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     //    bm = (CMaterialInstance)file.RootChunk;
                     //}
 
+                    ArgumentNullException.ThrowIfNull(inst);
+
                     var material = new Material(name)
                     {
                         Instance = inst,
@@ -521,7 +537,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     foreach (var pair in inst.Values)
                     {
-                        material.Values[pair.Key] = pair.Value;
+                        ArgumentNullException.ThrowIfNull(pair);
+                        var k = pair.Key.ToString().NotNull();
+                        material.Values[k] = pair.Value;
                     }
 
                     materials[name] = material;
@@ -529,15 +547,17 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 var apps = new List<string>();
                 foreach (var handle in mesh.Appearances)
                 {
+                    ArgumentNullException.ThrowIfNull(handle);
+
                     var app = handle.GetValue();
                     if (app is meshMeshAppearance mmapp)
                     {
-                        apps.Add(mmapp.Name);
+                        apps.Add(mmapp.Name.ToString().NotNull());
                     }
                 }
 
                 var appIndex = 0;
-
+                ArgumentNullException.ThrowIfNull(meshApp);
                 if (meshApp != "default" && apps.IndexOf(meshApp) is var index && index != -1)
                 {
                     appIndex = index;
@@ -547,12 +567,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var handle in mesh.Appearances)
                 {
+                    ArgumentNullException.ThrowIfNull(handle);
+
                     var app = handle.GetValue();
                     if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
                     {
                         foreach (var m in mmapp.ChunkMaterials)
                         {
-                            var name = GetUniqueMaterialName(m, mesh);
+                            var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
                             if (materials.ContainsKey(name))
                             {
                                 appMaterials.Add(materials[name]);
@@ -566,7 +588,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     }
                 }
 
-                var model = new LoadableModel(epc.Name.ToString().Replace(".", ""))
+                var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
                 {
                     MeshFile = meshFile,
                     AppearanceIndex = appIndex,
@@ -581,7 +603,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     EnabledChunks = enabledChunks,
                     DepotPath = depotPath
                 };
-                appModels.Add(epc.Name, model);
+                appModels.Add(epc.Name.ToString().NotNull(), model);
             }
         }
 
@@ -887,11 +909,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             else
             {
                 textureCoordinates = new Vector2Collection(mesh.positions.Length);
-                if (cMesh.Parameters[0].Chunk is meshMeshParamTerrain mmpt)
+                if (cMesh.Parameters[0].NotNull().Chunk is meshMeshParamTerrain mmpt)
                 {
                     float xMax = 0, xMin = 0, yMin = 0, yMax = 0;
                     foreach (var chunk in mmpt.ChunkBoundingBoxes)
                     {
+                        ArgumentNullException.ThrowIfNull(chunk);
+
                         xMax = Math.Max(xMax, chunk.Max.X);
                         yMax = Math.Max(yMax, chunk.Max.Y);
                         xMin = Math.Min(xMin, chunk.Min.X);
@@ -1118,50 +1142,55 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return Materials[name];
     }
 
-    public List<WolvenKit.App.Models.Material> GetMaterialsForAppearance(CMesh mesh, CName appearance)
+    public List<Material> GetMaterialsForAppearance(CMesh mesh, CName appearance)
     {
         var materials = GetMaterialsFromMesh(mesh);
 
-        var appMaterials = new List<WolvenKit.App.Models.Material>();
+        var appMaterials = new List<Material>();
 
-        foreach (var materialName in mesh.Appearances.FirstOrDefault(x => x.Chunk.Name == appearance, mesh.Appearances[0]).Chunk.ChunkMaterials)
+        var amaterials = mesh.Appearances.FirstOrDefault(x => x is not null && x.Chunk.Name == appearance, mesh.Appearances[0].NotNull()).NotNull().Chunk.ChunkMaterials;
+        foreach (var materialName in amaterials)
         {
-            var name = GetUniqueMaterialName(materialName, mesh);
+            var name = GetUniqueMaterialName(materialName.ToString().NotNull(), mesh);
             if (materials.ContainsKey(name))
             {
                 appMaterials.Add(materials[name]);
             }
             else
             {
-                appMaterials.Add(new WolvenKit.App.Models.Material(name));
+                appMaterials.Add(new Material(name));
             }
         }
 
         return appMaterials;
     }
 
-    public string GetUniqueMaterialName(string name, CMesh mesh) => mesh.InplaceResources.Count > 0 ? Path.GetFileNameWithoutExtension(mesh.InplaceResources[0].DepotPath.ToString()) : name;
+    public string GetUniqueMaterialName(string name, CMesh mesh) => mesh.InplaceResources.Count > 0 
+        ? Path.GetFileNameWithoutExtension(mesh.InplaceResources[0].DepotPath.ToString().NotNull()) 
+        : name;
 
-    public Dictionary<string, WolvenKit.App.Models.Material> GetMaterialsFromMesh(CMesh mesh)
+    public Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh)
     {
-        var materials = new Dictionary<string, WolvenKit.App.Models.Material>();
+        var materials = new Dictionary<string, Material>();
 
         var localList = mesh.LocalMaterialBuffer.RawData.Buffer.Data as CR2WList ?? null;
 
         foreach (var me in mesh.MaterialEntries)
         {
-            var name = GetUniqueMaterialName(me.Name, mesh);
+            ArgumentNullException.ThrowIfNull(me);
+
+            var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
             if (!me.IsLocalInstance)
             {
-                if (!materials.ContainsKey(me.Name))
+                if (!materials.ContainsKey(me.Name.ToString().NotNull()))
                 {
-                    materials.Add(me.Name, new WolvenKit.App.Models.Material(name));
+                    materials.Add(me.Name.ToString().NotNull(), new Material(name));
                 }
                 continue;
             }
             var inst = localList != null && localList.Files.Count > me.Index
                 ? (CMaterialInstance)localList.Files[me.Index].RootChunk
-                : (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].GetValue();
+                : (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].NotNull().GetValue();
 
             var material = new Material(name)
             {
@@ -1170,9 +1199,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             foreach (var pair in inst.Values)
             {
-                if (!material.Values.ContainsKey(pair.Key))
+                ArgumentNullException.ThrowIfNull(pair);
+                var k = pair.Key.ToString().NotNull();
+
+                if (!material.Values.ContainsKey(k))
                 {
-                    material.Values.Add(pair.Key, pair.Value);
+                    material.Values.Add(k, pair.Value);
                 }
             }
 
@@ -1238,9 +1270,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 foreach (var pair in cmi.Values)
                 {
-                    if (!dictionary.ContainsKey(pair.Key))
+                    ArgumentNullException.ThrowIfNull(pair);
+                    var k = pair.Key.ToString().NotNull();
+
+                    if (!dictionary.ContainsKey(k))
                     {
-                        dictionary.Add(pair.Key, pair.Value);
+                        dictionary.Add(k, pair.Value);
                     }
                 }
                 mat = cmi;
@@ -1353,6 +1388,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var i = 0;
             foreach (var layer in mls.Layers)
             {
+                ArgumentNullException.ThrowIfNull(layer);
                 if (i >= streams.Count)
                 {
                     break;
@@ -1388,7 +1424,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
 
                 {
-                    var color = mllt.Overrides.ColorScale.Where(x => x.N == layer.ColorScale).FirstOrDefault()?.V ?? null;
+                    var color = mllt.Overrides.ColorScale.Where(x => x is not null && x.N == layer.ColorScale).FirstOrDefault()?.V ?? null;
 
                     if (color == null)
                     {
@@ -1420,9 +1456,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             SkipColor:
 
                 {
-                    var roughOut = mllt.Overrides.RoughLevelsOut.Where(x => x.N == layer.RoughLevelsOut).FirstOrDefault()?.V ?? null;
+                    var roughOut = mllt.Overrides.RoughLevelsOut.Where(x => x is not null && x.N == layer.RoughLevelsOut).FirstOrDefault()?.V ?? null;
 
-                    var metalOut = mllt.Overrides.MetalLevelsOut.Where(x => x.N == layer.MetalLevelsOut).FirstOrDefault()?.V ?? null;
+                    var metalOut = mllt.Overrides.MetalLevelsOut.Where(x => x is not null && x.N == layer.MetalLevelsOut).FirstOrDefault()?.V ?? null;
 
                     var colorMatrix = new ColorMatrix(new float[][]
                     {
@@ -1490,6 +1526,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     foreach (var strength in mllt.Overrides.NormalStrength)
                     {
+                        ArgumentNullException.ThrowIfNull(strength);
+
                         if (strength.N == layer.NormalStrength)
                         {
                             for (var y = 0; y < maskBitmap.Height; y++)
@@ -1813,15 +1851,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public Element3D RenderSector(worldStreamingSector data, Appearance app)
     {
+        if ( data.NodeData.Data is not worldNodeDataBuffer buffer)
+        {
+            throw new ArgumentNullException();
+        }
 
-        var ssTransforms = ((worldNodeDataBuffer)data.NodeData.Data).Lookup;
+        var ssTransforms = buffer.Lookup;
 
         var groups = new List<Element3D>();
         foreach (var (handleIndex, transforms) in ssTransforms)
         {
-            var handle = data.Nodes[handleIndex];
-            var name = (string)handle.Chunk.DebugName;
-            name = "_" + name?.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
+            var handle = data.Nodes[handleIndex].NotNull();
+            var name = handle.Chunk.DebugName.ToString().NotNull();
+            name = "_" + name.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
             if (handle.Chunk is IRedMeshNode irmn)
             {
@@ -1895,8 +1937,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         {
                             wtbMatrix.Scale(ToScaleVector3D(wte.Scale));
                         }
-                        wtbMatrix.Rotate(ToQuaternion(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Rotation));
-                        wtbMatrix.Translate(ToVector3D(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Translation));
+
+                        var transform = wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].NotNull();
+                        wtbMatrix.Rotate(ToQuaternion(transform.Rotation));
+                        wtbMatrix.Translate(ToVector3D(transform.Translation));
 
                         wtbMatrix.Append(matrix);
 
@@ -1942,8 +1986,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         matrix.Translate(ToVector3D(transforms[0].Position));
 
                         var citbMatrix = new Matrix3D();
-                        citbMatrix.Rotate(ToQuaternion(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Orientation));
-                        citbMatrix.Translate(ToVector3D(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Position));
+                        var transform = citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].NotNull();
+                        citbMatrix.Rotate(ToQuaternion(transform.Orientation));
+                        citbMatrix.Translate(ToVector3D(transform.Position));
 
                         citbMatrix.Append(matrix);
 
@@ -2022,6 +2067,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var actor in cb.Actors)
                 {
+                    ArgumentNullException.ThrowIfNull(actor);
                     var actorGroup = new MeshComponent()
                     {
                         WorldNodeIndex = $"{handleIndex}",
@@ -2030,6 +2076,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     foreach (var shape in actor.Shapes)
                     {
+                        ArgumentNullException.ThrowIfNull(shape);
+
                         HelixToolkit.SharpDX.Core.MeshGeometry3D? geometry = null;
 
                         if (shape is CollisionShapeSimple simpleShape && simpleShape.ShapeType == Enums.physicsShapeType.Box)
@@ -2064,7 +2112,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 var positions = new Vector3Collection();
                                 for (var i = 0; i < cce.Vertices.Count; i++)
                                 {
-                                    positions.Add(cce.Vertices[i].ToVector3());
+                                    positions.Add(cce.Vertices[i].NotNull().ToVector3());
                                 }
 
                                 //foreach (var face in cce.Faces)
@@ -2100,28 +2148,31 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 for (var i = 0; i < cce.FaceData.Count; i++)
                                 {
                                     var count = mb.Positions.Count;
-                                    switch (cce.Faces[i].Count)
+                                    var face = cce.Faces[i].NotNull();
+                                    var faceData = cce.FaceData[i].NotNull();
+
+                                    switch (face.Count)
                                     {
                                         case 3:
-                                            mb.Positions.Add(positions[cce.Faces[i][0]]);
-                                            mb.Positions.Add(positions[cce.Faces[i][1]]);
-                                            mb.Positions.Add(positions[cce.Faces[i][2]]);
-                                            mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
-                                            mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
-                                            mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                            mb.Positions.Add(positions[face[0]]);
+                                            mb.Positions.Add(positions[face[1]]);
+                                            mb.Positions.Add(positions[face[2]]);
+                                            mb.Normals.Add(faceData.Normal.ToVector3());
+                                            mb.Normals.Add(faceData.Normal.ToVector3());
+                                            mb.Normals.Add(faceData.Normal.ToVector3());
                                             mb.TriangleIndices.Add(count);
                                             mb.TriangleIndices.Add(count + 1);
                                             mb.TriangleIndices.Add(count + 2);
                                             break;
                                         case 4:
-                                            mb.Positions.Add(positions[cce.Faces[i][0]]);
-                                            mb.Positions.Add(positions[cce.Faces[i][1]]);
-                                            mb.Positions.Add(positions[cce.Faces[i][2]]);
-                                            mb.Positions.Add(positions[cce.Faces[i][3]]);
-                                            mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
-                                            mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
-                                            mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
-                                            mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                            mb.Positions.Add(positions[face[0]]);
+                                            mb.Positions.Add(positions[face[1]]);
+                                            mb.Positions.Add(positions[face[2]]);
+                                            mb.Positions.Add(positions[face[3]]);
+                                            mb.Normals.Add(faceData.Normal.ToVector3());
+                                            mb.Normals.Add(faceData.Normal.ToVector3());
+                                            mb.Normals.Add(faceData.Normal.ToVector3());
+                                            mb.Normals.Add(faceData.Normal.ToVector3());
                                             mb.TriangleIndices.Add(count);
                                             mb.TriangleIndices.Add(count + 1);
                                             mb.TriangleIndices.Add(count + 2);
@@ -2130,12 +2181,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                             mb.TriangleIndices.Add(count);
                                             break;
                                         default:
-                                            for (var j = 0; j < cce.Faces[i].Count; j++)
+                                            for (var j = 0; j < face.Count; j++)
                                             {
-                                                mb.Positions.Add(positions[cce.Faces[i][j]]);
-                                                mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                                mb.Positions.Add(positions[face[j]]);
+                                                mb.Normals.Add(faceData.Normal.ToVector3());
                                             }
-                                            for (var j = 0; j + 2 < cce.Faces[i].Count; j++)
+                                            for (var j = 0; j + 2 < face.Count; j++)
                                             {
                                                 mb.TriangleIndices.Add(count);
                                                 mb.TriangleIndices.Add(count + j + 1);
@@ -2159,11 +2210,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 var positions = new Vector3Collection();
                                 for (var i = 0; i < mce.Vertices.Count; i++)
                                 {
-                                    positions.Add(mce.Vertices[i].ToVector3());
+                                    positions.Add(mce.Vertices[i].NotNull().ToVector3());
                                 }
 
                                 foreach (var face in mce.Faces)
                                 {
+                                    ArgumentNullException.ThrowIfNull(face);
+
                                     var points = new List<SharpDX.Vector3>();
                                     foreach (var point in face)
                                     {
@@ -2237,6 +2290,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var tile in wntr.TilesData)
                 {
+                    ArgumentNullException.ThrowIfNull(tile);
+
                     if (tile.TilesBuffer.Data is not TilesBuffer tb)
                     {
                         continue;
@@ -2246,6 +2301,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     foreach (var v in tb.Vertices)
                     {
+                        ArgumentNullException.ThrowIfNull(v);
                         positions.Add(new SharpDX.Vector3(v.X, v.Y, -v.Z));
                     }
 
@@ -2253,6 +2309,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     foreach (var f in tb.FaceInfo)
                     {
+                        ArgumentNullException.ThrowIfNull(f);
+
                         if (f.NumIndices == 3)
                         {
                             mb.AddTriangle(positions[f.Indices[0]], positions[f.Indices[2]], positions[f.Indices[1]]);
@@ -2365,12 +2423,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var point in shape.Points)
                 {
+                    ArgumentNullException.ThrowIfNull(point);
+
                     center.X += point.X / shape.Points.Count;
                     center.Y += point.Z / shape.Points.Count;
                     center.Z += -point.Y / shape.Points.Count;
                 }
 
-                mb.AddBox(center, Math.Abs(shape.Points[0].X) * 2, shape.Height, Math.Abs(shape.Points[0].Y) * 2);
+                mb.AddBox(center, Math.Abs(shape.Points[0].NotNull().X) * 2, shape.Height, Math.Abs(shape.Points[0].NotNull().Y) * 2);
                 mb.ComputeNormalsAndTangents(MeshFaces.Default);
 
                 var material = SetupPBRMaterial("DefaultMaterial");
@@ -2610,6 +2670,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         foreach (var desc in data.Descriptors)
         {
+            ArgumentNullException.ThrowIfNull(desc);
+
             if (!SearchActive || SearchPoint.X < desc.StreamingBox.Max.X && SearchPoint.X > desc.StreamingBox.Min.X &&
                 SearchPoint.Y < desc.StreamingBox.Max.Y && SearchPoint.Y > desc.StreamingBox.Min.Y &&
                 SearchPoint.Z < desc.StreamingBox.Max.Z && SearchPoint.Z > desc.StreamingBox.Min.Z)
@@ -2627,7 +2689,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 var bbText = new WKBillboardTextModel3D()
                 {
                     Geometry = text,
-                    Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()).Replace("-", "n")
+                    Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()).Replace("-", "n")
                 };
 
                 if (desc.Category == Enums.worldStreamingSectorCategory.Exterior)
@@ -2709,7 +2771,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 {
                     other.Children.Add(bbText);
                 }
-                sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()), bbText)
+                sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()), bbText)
                 {
                     DepotPath = desc.Data.DepotPath,
                     NumberOfHandles = desc.NumNodeRanges
@@ -2793,9 +2855,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     var slots = new Dictionary<string, string>();
                     foreach (var slot in slotset.Slots)
                     {
-                        if (!slots.ContainsKey(slot.SlotName))
+                        ArgumentNullException.ThrowIfNull(slot);
+                        var name = slot.SlotName.ToString().NotNull();
+
+                        if (!slots.ContainsKey(name))
                         {
-                            slots.Add(slot.SlotName, slot.BoneName);
+                            slots.Add(name, slot.BoneName.ToString().NotNull());
                         }
                     }
 
@@ -2805,9 +2870,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         bindName = ehtb.BindName;
                         slotName = ehtb.SlotName;
                     }
-                    if (!_slotSets.ContainsKey(slotset.Name))
+
+                    var slotSetName = slotset.Name.ToString().NotNull();
+                    if (!_slotSets.ContainsKey(slotSetName))
                     {
-                        _slotSets.Add(slotset.Name, new SlotSet(slotset.Name, bindName.NotNull())
+                        _slotSets.Add(slotSetName, new SlotSet(slotSetName, bindName.NotNull())
                         {
                             Matrix = ToSeparateMatrix(slotset.LocalTransform),
                             Slots = slots,
@@ -2825,9 +2892,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         var rigBones = new List<RigBone>();
                         for (var i = 0; i < rig.BoneNames.Count; i++)
                         {
-                            var rigBone = new RigBone(rig.BoneNames[i])
+                            var rigBone = new RigBone(rig.BoneNames[i].ToString().NotNull())
                             {
-                                Matrix = ToSeparateMatrix(rig.BoneTransforms[i])
+                                Matrix = ToSeparateMatrix(rig.BoneTransforms[i].NotNull())
                             };
 
                             if (rig.BoneParentIndexes[i] != -1)
@@ -2845,7 +2912,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             slotName = ehtb.SlotName;
                         }
 
-                        Rigs[enc.Name] = new Rig(enc.Name)
+                        Rigs[enc.Name.ToString().NotNull()] = new Rig(enc.Name.ToString().NotNull())
                         {
                             Bones = rigBones,
                             BindName = bindName,
@@ -2863,20 +2930,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
             }
 
-            List<entTemplateAppearance> appearances;
+            List<entTemplateAppearance?> appearances;
             if (appearanceName == null)
             {
                 appearances = ent.Appearances.ToList();
             }
             else
             {
-                appearances = ent.Appearances.Where(x => x.AppearanceName == appearanceName).ToList();
+                appearances = ent.Appearances.Where(x => x is not null && x.AppearanceName == appearanceName).ToList();
             }
 
             var element = new GroupModel3D();
 
             foreach (var app in appearances)
             {
+                ArgumentNullException.ThrowIfNull(app);
+
                 var appFile = Parent.GetFileFromDepotPathOrCache(app.AppearanceResource.DepotPath);
 
                 if (appFile == null || appFile.RootChunk is not appearanceAppearanceResource aar)
@@ -2886,6 +2955,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var handle in aar.Appearances)
                 {
+                    ArgumentNullException.ThrowIfNull(handle);
+
                     var appDef = (appearanceAppearanceDefinition)handle.GetValue();
 
                     if (appDef.Name != app.AppearanceName || appDef.CompiledData.Data is not RedPackage appPkg)
@@ -2893,7 +2964,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         continue;
                     }
 
-                    var a = new Appearance(app.Name)
+                    var a = new Appearance(app.Name.ToString().NotNull())
                     {
                         AppearanceName = app.AppearanceName,
                         Resource = app.AppearanceResource.DepotPath,

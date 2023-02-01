@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common.Conversion;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Types;
 using Application = System.Windows.Application;
@@ -63,7 +64,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             foreach (var f in library.ExternalDependenciesForInternalItems)
             {
-                var itemPath = (string)f.DepotPath;
+                var itemPath = f.DepotPath.ToString().NotNull();
                 if (Path.GetExtension(itemPath) == ".inkatlas")
                 {
                     tasks.Add(LoadInkAtlasAsync(itemPath));
@@ -94,7 +95,10 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
             {
                 foreach (var seq in alr.Sequences)
                 {
-                    InkAnimations.Add((inkanimSequence)seq.GetValue());
+                    if (seq.NotNull().GetValue() is inkanimSequence inkanimSequence)
+                    {
+                        InkAnimations.Add(inkanimSequence);
+                    }
                 }
             }
         });
@@ -119,6 +123,8 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             foreach (var fs in ffr.FontStyles)
             {
+                ArgumentNullException.ThrowIfNull(fs);
+                
                 var key = "FontCollection/" + path + "#" + fs.StyleName;
                 if (!Application.Current.Resources.Contains(key))
                 {
@@ -162,13 +168,17 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             foreach (var style in sr.Styles)
             {
-                if (!StyleStates.Contains(style.State))
+                ArgumentNullException.ThrowIfNull(style);
+
+                if (!StyleStates.Contains(style.State.ToString().NotNull()))
                 {
-                    StyleStates.Add(style.State);
+                    StyleStates.Add(style.State.ToString().NotNull());
                 }
 
                 foreach (var prop in style.Properties)
                 {
+                    ArgumentNullException.ThrowIfNull(prop);
+
                     var key = "CVariant/Default/" + prop.PropertyPath + "#" + style.State;
                     if (!Application.Current.Resources.Contains(key))
                     {
@@ -184,6 +194,8 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             foreach (var theme in sr.Themes)
             {
+                ArgumentNullException.ThrowIfNull(theme);
+
                 var themeFile = Parent.GetFileFromDepotPath(theme.StyleResource.DepotPath);
                 if (themeFile == null || themeFile.RootChunk is not inkStyleResource isr)
                 {
@@ -192,13 +204,17 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
                 foreach (var style in isr.Styles)
                 {
-                    if (!StyleStates.Contains(style.State))
+                    ArgumentNullException.ThrowIfNull(style);
+
+                    if (!StyleStates.Contains(style.State.ToString().NotNull()))
                     {
-                        StyleStates.Add(style.State);
+                        StyleStates.Add(style.State.ToString().NotNull());
                     }
 
                     foreach (var prop in style.Properties)
                     {
+                        ArgumentNullException.ThrowIfNull(prop);
+
                         var key = "CVariant/" + theme.ThemeID + "/" + prop.PropertyPath + "#" + style.State;
                         if (!Application.Current.Resources.Contains(key))
                         {
@@ -207,9 +223,9 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
                     }
                 }
 
-                if (!Themes.Contains(theme.ThemeID))
+                if (!Themes.Contains(theme.ThemeID.ToString().NotNull()))
                 {
-                    Themes.Add(theme.ThemeID);
+                    Themes.Add(theme.ThemeID.ToString().NotNull());
                 }
             }
         });
@@ -230,12 +246,13 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
             return;
         }
 
-        if (atlas.Slots[0] == null)
+        var slot = atlas.Slots[0];
+        if (slot == null)
         {
             return;
         }
 
-        var xbmFile = Parent.GetFileFromDepotPath(atlas.Slots[0].Texture.DepotPath);
+        var xbmFile = Parent.GetFileFromDepotPath(slot.Texture.DepotPath);
         if (xbmFile == null || xbmFile.RootChunk is not CBitmapTexture xbm)
         {
             return;
@@ -255,8 +272,10 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
         var image = new TransformedBitmap(qa, new ScaleTransform(1, -1));
 
-        foreach (var part in atlas.Slots[0].Parts)
+        foreach (var part in slot.Parts)
         {
+            ArgumentNullException.ThrowIfNull(part);
+
             var key = "ImageSource/" + path + "#" + part.PartName;
             if (!Application.Current.Resources.Contains(key))
             {
@@ -271,8 +290,10 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
             }
         }
 
-        foreach (var slice in atlas.Slots[0].Slices)
+        foreach (var slice in slot.Slices)
         {
+            ArgumentNullException.ThrowIfNull(slice);
+
             var key = "RectF/" + path + "#" + slice.PartName;
             if (!Application.Current.Resources.Contains(key))
             {

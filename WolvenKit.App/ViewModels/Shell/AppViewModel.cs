@@ -847,7 +847,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 break;
             case EWolvenKitFile.Cr2w:
                 var redType = file.SelectedFile.Name;
-                if (redType != "")
+                if (!string.IsNullOrEmpty(redType))
                 {
                     CR2WFile cr2w = new()
                     {

@@ -204,9 +204,10 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
         if (cls is inkTextureAtlas atlas)
         {
-            if (atlas.Slots[0] != null)
+            var slot = atlas.Slots[0];
+            if (slot != null)
             {
-                var file = GetFileFromDepotPath(atlas.Slots[0].Texture.DepotPath);
+                var file = GetFileFromDepotPath(slot.Texture.DepotPath);
                 if (file != null)
                 {
                     TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
@@ -324,7 +325,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _appViewModel.CloseDialogCommand.Execute(null);
         if (sender is not null and CreateClassDialogViewModel dvm)
         {
-            var instance = RedTypeManager.Create(dvm.SelectedClass);
+            var instance = RedTypeManager.Create(dvm.SelectedClass.NotNull());
 
             var file = new CR2WEmbedded
             {
@@ -363,7 +364,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
                     string? path = null;
                     if (!string.IsNullOrEmpty(depotPath))
                     {
-                        path = Path.Combine(_projectManager.ActiveProject.ModDirectory, (string)depotPath);
+                        path = Path.Combine(_projectManager.ActiveProject.ModDirectory, depotPath.GetString().NotNull());
                     }
                     else
                     {

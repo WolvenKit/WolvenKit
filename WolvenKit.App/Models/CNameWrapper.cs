@@ -5,6 +5,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
@@ -45,9 +46,12 @@ public partial class CNameWrapper : ObservableObject, Nodify.INode<ReferenceSock
         _socket = socket;
     }
 
-    private bool CanOpenRef() => Socket.File != CName.Empty && DataViewModel.Parent.RelativePath != Socket.File;
+    private bool CanOpenRef() => !CName.IsNullOrEmpty(Socket.File) && DataViewModel.Parent.RelativePath != Socket.File;
     [RelayCommand(CanExecute = nameof(CanOpenRef))]
-    private void OpenRef() => IocHelper.GetService<AppViewModel>().OpenFileFromDepotPath(Socket.File);
+    private void OpenRef()
+    {
+        IocHelper.GetService<AppViewModel>().OpenFileFromDepotPath(Socket.File.ToString().NotNull());
+    }
 
     private bool CanLoadRef() => Socket.File != CName.Empty;
     [RelayCommand(CanExecute = nameof(CanLoadRef))]

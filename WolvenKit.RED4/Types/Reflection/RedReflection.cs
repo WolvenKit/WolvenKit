@@ -96,8 +96,13 @@ public static class RedReflection
         return result;
     }
 
-    public static ExtendedPropertyInfo? GetPropertyByRedName(Type type, string redPropertyName)
+    public static ExtendedPropertyInfo? GetPropertyByRedName(Type? type, string redPropertyName)
     {
+        if (type is null)
+        {
+            return null;
+        }
+
         var typeInfo = GetTypeInfo(type);
 
         return typeInfo.PropertyInfos.FirstOrDefault(p => p.RedName == redPropertyName);

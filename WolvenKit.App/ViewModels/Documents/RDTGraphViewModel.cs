@@ -82,11 +82,17 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
         var socketNodeLookup = new Dictionary<int, int>();
         foreach (var node in nodes)
         {
+            ArgumentNullException.ThrowIfNull(node);
+
             foreach (var socket in node.Chunk.Sockets)
             {
+                ArgumentNullException.ThrowIfNull(socket);
+
                 socketNodeLookup.Add(socket.Chunk.GetHashCode(), node.Chunk.GetHashCode());
                 foreach (var connection in socket.Chunk.Connections)
                 {
+                    ArgumentNullException.ThrowIfNull(connection);
+
                     if (!connections.ContainsKey(connection.Chunk.GetHashCode()))
                     {
                         connections.Add(connection.Chunk.GetHashCode(), connection.Chunk);
@@ -115,6 +121,8 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
                     {
                         foreach (var socket in parent.Sockets)
                         {
+                            ArgumentNullException.ThrowIfNull(socket);
+
                             if (socket.Chunk is questSocketDefinition socketDef && socketDef.Name == input.SocketName)
                             {
                                 var svm = new SocketViewModel(socketDef);
@@ -127,6 +135,8 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
                     {
                         foreach (var socket in parent.Sockets)
                         {
+                            ArgumentNullException.ThrowIfNull(socket);
+
                             if (socket.Chunk is questSocketDefinition socketDef && socketDef.Name == output.SocketName)
                             {
                                 var svm = new SocketViewModel(socketDef);

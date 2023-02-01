@@ -12,6 +12,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.CRC;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Sounds;
 using WolvenKit.RED4.Archive;
@@ -63,10 +64,11 @@ namespace WolvenKit.Utility
                 var events = eventArray.Events;
                 foreach (var e in events)
                 {
+                    ArgumentNullException.ThrowIfNull(e);
                     var item = new SoundEvent()
                     {
                         Name = e.RedId.ToString(),
-                        Tags = e.Tags.Select(x => x.ToString()).ToList(),
+                        Tags = e.Tags.Select(x => x.ToString().NotNull()).ToList(),
                     };
                     md.Events.Add(item);
                 }
@@ -119,7 +121,7 @@ namespace WolvenKit.Utility
                         ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
                         if (parser.TryReadRed4FileHeaders(originalMemoryStream, out var originalFile))
                         {
-                            results[ext].TryAdd(originalFile.StringDict[1], 0);
+                            results[ext].TryAdd(originalFile.StringDict[1].GetString().NotNull(), 0);
                         }
                         else
                         {
@@ -401,7 +403,7 @@ namespace WolvenKit.Utility
             {
                 return;
             }
-
+            ArgumentNullException.ThrowIfNull(tweakDb);
             var ass = typeof(gamedataTweakDBRecord).Assembly;
 
             var rts = new Dictionary<string, Dictionary<string, string>>();

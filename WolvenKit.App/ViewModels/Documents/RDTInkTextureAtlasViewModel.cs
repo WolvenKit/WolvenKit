@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Discord.Rest;
 using Microsoft.Win32;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -92,9 +93,11 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
             Int32Rect.Empty,
             BitmapSizeOptions.FromEmptyOptions());
 
-        foreach (var part in _atlas.Slots[0].Parts)
+        var slot = _atlas.Slots[0].NotNull();
+        foreach (var part in slot.Parts)
         {
-            OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, _atlas.Slots[0].Texture.DepotPath.ToString(), Parent.RelativePath, (BitmapSource)Image));
+            ArgumentNullException.ThrowIfNull(part);
+            OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, slot.Texture.DepotPath.ToString().NotNull(), Parent.RelativePath, (BitmapSource)Image));
         }
 
     }
@@ -151,7 +154,7 @@ image.SetTexturePart(n""{PartName}"");";
         public InkTextureAtlasMapperViewModel(inkTextureAtlasMapper itam, CBitmapTexture xbm, string path, string atlasPath, BitmapSource image)
         {
             Itam = itam;
-            _partName = itam.PartName;
+            _partName = itam.PartName.ToString().NotNull();
             _depotPath = path;
             _atlasPath = atlasPath;
             Left = Math.Round(itam.ClippingRectInUVCoords.Left * xbm.Width);

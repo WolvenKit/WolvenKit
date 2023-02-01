@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
@@ -8,6 +9,7 @@ using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 
@@ -94,7 +96,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     private Task OpenImport(ICR2WImport input)
     {
         var depotpath = input.DepotPath;
-        var key = FNV1A64HashAlgorithm.HashString(depotpath);
+        var key = FNV1A64HashAlgorithm.HashString(depotpath.ToString().NotNull());
 
         return _gameController.GetController().AddFileToModModal(key);
     }
@@ -136,7 +138,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             if (pi.Type.IsAssignableTo(typeof(IRedRef)))
             {
-                var res = (IRedRef)data.GetProperty(pi.RedName);
+                var res = data.GetProperty(pi.RedName.NotNull()) as IRedRef ?? throw new ArgumentException();
                 var innerType = res.GetType().GenericTypeArguments[0];
                 var sourceSocket = new ReferenceSocket(cvm.RelativePath, xpath + "." + pi.RedName, innerType.Name);
                 cvm.Outputs.Add(sourceSocket);

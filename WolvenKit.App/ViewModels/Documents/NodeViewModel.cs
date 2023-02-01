@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models.Nodify;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 using Point = System.Windows.Point;
 
@@ -36,6 +37,7 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
 
         foreach (var socket in node.Sockets)
         {
+            ArgumentNullException.ThrowIfNull(socket);
             var svm = new SocketViewModel(socket.Chunk);
 
             bool isInput;
@@ -49,7 +51,8 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
             }
             else
             {
-                isInput = socket.Chunk.Name.ToString().Contains("In") || socket.Chunk.Name.ToString().Contains("Source");
+                var n = socket.Chunk.Name.ToString();
+                isInput = n is not null && ( n.Contains("In") || n.Contains("Source") );
             }
             if (isInput)
             {
@@ -153,7 +156,7 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
             if (condition is questTriggerCondition qtc)
             {
                 Header += "Trigger Condition";
-                Details["Trigger Area"] = qtc.TriggerAreaRef;
+                Details["Trigger Area"] = qtc.TriggerAreaRef.GetResolvedText().NotNull();
                 Details["Type"] = qtc.Type.ToEnumString();
             }
             else if (condition is questObjectCondition qoc)
@@ -161,9 +164,9 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
                 Header += "Object Condition";
                 if (qoc.Type.Chunk is questDevice_ConditionType qdct)
                 {
-                    Details["Object"] = qdct.ObjectRef;
-                    Details["Class"] = qdct.DeviceControllerClass;
-                    Details["Function"] = qdct.DeviceConditionFunction;
+                    Details["Object"] = qdct.ObjectRef.GetResolvedText().NotNull();
+                    Details["Class"] = qdct.DeviceControllerClass.ToString().NotNull();
+                    Details["Function"] = qdct.DeviceConditionFunction.ToString().NotNull();
                 }
             }
             else if (condition is questFactsDBCondition qfc)
@@ -183,7 +186,7 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
                 if (qsc.Type.Chunk is questSpawnerReady_ConditionType qsrct)
                 {
                     Header += " - Is Ready";
-                    Details["Reference"] = qsrct.SpawnerReference;
+                    Details["Reference"] = qsrct.SpawnerReference.GetResolvedText().NotNull();
                 }
             }
             else if (condition is questCharacterCondition qcc)
@@ -192,7 +195,7 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
                 if (qcc.Type.Chunk is questCharacterMount_ConditionType qcmct)
                 {
                     Header += " - Is Mounted";
-                    Details["Parent Ref"] = qcmct.ParentRef.Reference;
+                    Details["Parent Ref"] = qcmct.ParentRef.Reference.GetResolvedText().NotNull();
                 }
             }
             else
@@ -205,6 +208,7 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
             Header = "Spawn Manager";
             foreach (var action in qsmnd.Actions)
             {
+                ArgumentNullException.ThrowIfNull(action);
                 Header += " - " + action.Type.Chunk.Action.ToEnumString();
             }
         }
