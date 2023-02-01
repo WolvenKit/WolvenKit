@@ -78,14 +78,14 @@ public static class Oodle
 
     public const uint KARK = 1263681867; // 0x4b, 0x41, 0x52, 0x4b
 
-    public static bool Load()
+    public static bool Load(string? filePath = null)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             // try get oodle dll from game
-            if (TryCopyOodleLib())
+            if (TryCopyOodleLib(filePath))
             {
-                var result = OodleLib.Load(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "oo2ext_7_win64.dll"));
+                var result = OodleLib.Load(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Constants.Oodle));
                 if (result)
                 {
                     CompressionSettings.Get().CompressionLevel = CompressionLevel.Optimal2;
@@ -379,12 +379,18 @@ public static class Oodle
         return (int)n;
     }
 
-    private static bool TryCopyOodleLib()
+    private static bool TryCopyOodleLib(string? filePath)
     {
         var localData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        var destFileName = Path.Combine(localData, "oo2ext_7_win64.dll");
+        var destFileName = Path.Combine(localData, Constants.Oodle);
         if (File.Exists(destFileName))
         {
+            return true;
+        }
+
+        if (File.Exists(filePath) && filePath.Contains(Constants.Oodle))
+        {
+            File.Copy(filePath, destFileName);
             return true;
         }
 
@@ -404,7 +410,7 @@ public static class Oodle
         }
 
         // copy oodle dll
-        var oodleInfo = new FileInfo(Path.Combine(cp77BinDir, "oo2ext_7_win64.dll"));
+        var oodleInfo = new FileInfo(Path.Combine(cp77BinDir, Constants.Oodle));
         if (!oodleInfo.Exists)
         {
             return false;

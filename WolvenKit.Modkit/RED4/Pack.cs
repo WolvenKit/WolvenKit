@@ -42,7 +42,7 @@ namespace WolvenKit.Modkit.RED4
                 throw new PackException();
             }
 
-            ArchiveWriter writer = new(_hashService);
+            ArchiveWriter writer = new(_hashService){ LoggerService = _loggerService };
             return writer.WriteArchive(infolder, outpath, modname);
         }
     }

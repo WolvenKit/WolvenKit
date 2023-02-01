@@ -125,7 +125,7 @@ namespace WolvenKit.Modkit.RED4
                     .ChangeBaseDir(outDir)
                     .ChangeExtension("");
                 using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
-                using var writer = new CR2WWriter(fs);
+                using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
                 writer.WriteFile(red);
 
                 return true;
@@ -312,7 +312,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             using var fs = new FileStream(redpath.FullPath, FileMode.Create, FileAccess.Write);
-            using var writer = new CR2WWriter(fs);
+            using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
             writer.WriteFile(red);
 
             return true;
@@ -386,7 +386,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
-            using var writer = new CR2WWriter(fs);
+            using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
             writer.WriteFile(new CR2WFile { RootChunk = bitmap });
 
             return true;

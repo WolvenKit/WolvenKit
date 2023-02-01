@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using WolvenKit.Core.Compression;
 using WolvenKit.Core.CRC;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
@@ -23,6 +24,11 @@ public partial class CR2WWriter
 
     public void WriteFile(CR2WFile file)
     {
+        if (LoggerService != null && !CompressionSettings.Get().UseOodle)
+        {
+            LoggerService.Warning("Oodle couldn't be loaded. Using Kraken.dll instead could cause errors.");
+        }
+
         _file = file;
 
         BaseStream.WriteStruct(CR2WFile.MAGIC);
@@ -328,7 +334,7 @@ public partial class CR2WWriter
         if (buffer.Data is CR2WList list)
         {
             using var ms = new MemoryStream();
-            using var listWriter = new CR2WListWriter(ms);
+            using var listWriter = new CR2WListWriter(ms) { LoggerService = LoggerService };
 
             listWriter.WriteList(list, buffer.Parent);
             //listWriter.WriteList(list);
@@ -452,7 +458,7 @@ public partial class CR2WWriter
     private (List<CR2WEmbeddedInfo>, byte[]) GenerateEmbeddedData(IList<ImportEntry> importsList)
     {
         using var ms = new MemoryStream();
-        using var writer = new CR2WWriter(ms) { IsRoot = IsRoot };
+        using var writer = new CR2WWriter(ms) { IsRoot = IsRoot, LoggerService = LoggerService };
 
         var embeddedInfoList = new List<CR2WEmbeddedInfo>();
         foreach (var embedded in _file!.EmbeddedFiles)
@@ -537,7 +543,7 @@ public partial class CR2WWriter
         var result = new DataCollection();
 
         using var ms = new MemoryStream();
-        using var file = new CR2WWriter(ms) { IsRoot = IsRoot, _file = _file };
+        using var file = new CR2WWriter(ms) { IsRoot = IsRoot, _file = _file, LoggerService = LoggerService };
 
         file._chunkInfos = _chunkInfos;
 

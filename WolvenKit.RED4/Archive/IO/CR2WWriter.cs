@@ -1,4 +1,5 @@
 using System.Text;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
@@ -7,6 +8,8 @@ namespace WolvenKit.RED4.Archive.IO;
 
 public partial class CR2WWriter : Red4Writer
 {
+    public ILoggerService LoggerService { get; set; }
+
     public CR2WWriter(Stream output) : base(output)
     {
     }
@@ -79,7 +82,7 @@ public partial class CR2WWriter : Red4Writer
         if (val.File != null)
         {
             using var ms = new MemoryStream();
-            using var cr2wWriter = new CR2WWriter(ms) { IsRoot = false };
+            using var cr2wWriter = new CR2WWriter(ms) { IsRoot = false, LoggerService = LoggerService };
 
             cr2wWriter.WriteFile((CR2WFile)val.File);
 

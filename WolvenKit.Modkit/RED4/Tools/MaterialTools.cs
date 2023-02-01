@@ -1523,7 +1523,7 @@ namespace WolvenKit.Modkit.RED4
                 offsets.Add((uint)materialbuffer.Position);
 
                 using var m = new MemoryStream();
-                using var writer = new CR2WWriter(m);
+                using var writer = new CR2WWriter(m) { LoggerService = _loggerService };
                 writer.WriteFile(mi);
 
                 materialbuffer.Write(m.ToArray(), 0, (int)m.Length);

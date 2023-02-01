@@ -291,7 +291,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var outMs = new MemoryStream();
-            using var writer = new CR2WWriter(outMs, Encoding.UTF8, true);
+            using var writer = new CR2WWriter(outMs, Encoding.UTF8, true) { LoggerService = _loggerService };
             writer.WriteFile(animsFile);
 
             outMs.Seek(0, SeekOrigin.Begin);

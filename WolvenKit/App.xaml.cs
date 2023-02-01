@@ -44,9 +44,10 @@ namespace WolvenKit
             SetupExceptionHandling();
 
             // load oodle
-            if (!Oodle.Load())
+            var settingsManager = Locator.Current.GetService<ISettingsManager>();
+            if (!Oodle.Load(settingsManager?.GetRED4OodleDll()))
             {
-                throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
+                throw new FileNotFoundException($"{Core.Constants.Oodle} not found.");
             }
         }
 

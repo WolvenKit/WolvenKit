@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
@@ -168,7 +170,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 Directory.CreateDirectory(dir.FullName);
             }
             using var fs = new FileStream(f.FullName, FileMode.Create, FileAccess.Write);
-            using var writer = new CR2WWriter(fs);
+            using var writer = new CR2WWriter(fs) { LoggerService = Locator.Current.GetService<ILoggerService>() };
             writer.WriteFile(cr2w);
         }
 

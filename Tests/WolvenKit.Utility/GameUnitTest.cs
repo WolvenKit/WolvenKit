@@ -114,7 +114,7 @@ namespace WolvenKit.Utility
 
             if (!Oodle.Load())
             {
-                Assert.Fail("Could not load oo2ext_7_win64.dll.");
+                Assert.Fail($"Could not load {Core.Constants.Oodle}.");
             }
 
             #endregion

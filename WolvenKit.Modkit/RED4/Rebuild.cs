@@ -58,7 +58,7 @@ namespace WolvenKit.Modkit.RED4
 
             // write cr2w
             redfileStream.Seek(0, SeekOrigin.Begin);
-            using var writer = new CR2WWriter(redfileStream);
+            using var writer = new CR2WWriter(redfileStream) { LoggerService = _loggerService };
             writer.WriteFile(cr2w);
 
             return true;
@@ -139,7 +139,7 @@ namespace WolvenKit.Modkit.RED4
 
                 // write cr2w
                 redfileStream.Seek(0, SeekOrigin.Begin);
-                using var writer = new CR2WWriter(redfileStream);
+                using var writer = new CR2WWriter(redfileStream) { LoggerService = _loggerService };
                 writer.WriteFile(cr2w);
             }
 

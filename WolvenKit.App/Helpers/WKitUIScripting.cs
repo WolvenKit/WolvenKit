@@ -50,7 +50,7 @@ public class WKitUIScripting : WKitScripting
         SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
         {
             using FileStream fs = new(s, FileMode.Create);
-            using var writer = new CR2WWriter(fs);
+            using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
             writer.WriteFile(cr2w);
         });
     }
