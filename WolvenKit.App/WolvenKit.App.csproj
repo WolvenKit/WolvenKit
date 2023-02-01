@@ -64,8 +64,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<!--<PackageReference Include="Splat" />--> 
-
 	<PackageReference Include="Octokit" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
 	<PackageReference Include="Discord.Net" />

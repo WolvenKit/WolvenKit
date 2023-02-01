@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SharpGLTF.Schema2;
-using Splat;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -976,7 +975,7 @@ namespace WolvenKit.Modkit.RED4
             return meshesInfo;
         }
 
-        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, Mat4[]? inverseBindMatrices = null, string[]? boneNames = null)
+        private MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, Mat4[]? inverseBindMatrices = null, string[]? boneNames = null)
         //private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
         {
             rendRenderMeshBlob? blob = null;
@@ -1314,7 +1313,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var ms = new MemoryStream();
-            using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = Splat.Locator.Current.GetService<ILoggerService>() };
+            using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
             writer.WriteFile(cr2w);
 
             return ms;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Core.Extensions;
@@ -24,8 +23,13 @@ namespace WolvenKit.Modkit.RED4.MLMask
         //if it creates a dx9 or both we will have to check for it, headerlength = 128, if(dx10) headerlength += 20
 
         private MlMaskContainer _mlmask;
+        private ILoggerService _logger;
 
-        public MLMASK(MlMaskContainer mlmask) => _mlmask = mlmask;
+        public MLMASK(MlMaskContainer mlmask, ILoggerService logger)
+        {
+            _mlmask = mlmask;
+            _logger = logger;
+        }
 
         public void Import(FileInfo txtimageList, FileInfo outFile)
         {
@@ -170,7 +174,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 Directory.CreateDirectory(dir.FullName);
             }
             using var fs = new FileStream(f.FullName, FileMode.Create, FileAccess.Write);
-            using var writer = new CR2WWriter(fs) { LoggerService = Locator.Current.GetService<ILoggerService>() };
+            using var writer = new CR2WWriter(fs) { LoggerService = _logger };
             writer.WriteFile(cr2w);
         }
 
