@@ -41,10 +41,6 @@ namespace WolvenKit.Converters
             }
             if (item is ChunkViewModel vm)
             {
-                if (vm.PropertyType == null)
-                {
-                    return RedTypeViewer;
-                }
                 if (vm.PropertyType.IsAssignableTo(typeof(NodeRef)))
                 {
                     return RedNodeRefEditor;

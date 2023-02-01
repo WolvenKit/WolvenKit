@@ -26,11 +26,7 @@ namespace WolvenKit.Converters
 
                 if (tvn.Content is ChunkViewModel vm)
                 {
-                    if (vm.PropertyType == null)
-                    {
-                        return PropertyTemplate;
-                    }
-                    else if (vm.PropertyType.IsAssignableTo(typeof(IList)))
+                    if (vm.PropertyType.IsAssignableTo(typeof(IList)))
                     {
                         return ArrayTemplate;
                     }

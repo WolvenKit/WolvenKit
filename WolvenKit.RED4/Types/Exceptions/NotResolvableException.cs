@@ -11,7 +11,7 @@ public class NotResolvableException : Exception
 
     public static void ThrowIfNotResolvable([NotNull] CName argument, [CallerArgumentExpression("argument")] string? paramName = null)
     {
-        if (argument.IsResolvable)
+        if (!argument.IsResolvable)
         {
             Throw(paramName);
         }
@@ -19,7 +19,7 @@ public class NotResolvableException : Exception
 
     public static void ThrowIfNotResolvable([NotNull] NodeRef argument, [CallerArgumentExpression("argument")] string? paramName = null)
     {
-        if (argument.IsResolvable)
+        if (!argument.IsResolvable)
         {
             Throw(paramName);
         }
@@ -27,13 +27,12 @@ public class NotResolvableException : Exception
 
     public static void ThrowIfNotResolvable([NotNull] TweakDBID argument, [CallerArgumentExpression("argument")] string? paramName = null)
     {
-        if (argument.IsResolvable)
+        if (!argument.IsResolvable)
         {
             Throw(paramName);
         }
     }
 
     [DoesNotReturn]
-    private static void Throw(string? paramName) =>
-        throw new NotResolvableException(paramName);
+    private static void Throw(string? paramName) => throw new NotResolvableException(paramName);
 }

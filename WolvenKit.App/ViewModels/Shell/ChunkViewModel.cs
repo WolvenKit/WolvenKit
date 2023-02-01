@@ -335,10 +335,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 return ibt.GetBrowsableName();
             }
-            else if (Data is RedDummy dummy)
-            {
-                return nameof(RedDummy);
-            }
+            //else if (Data is RedDummy dummy)
+            //{
+            //    return nameof(RedDummy);
+            //}
             else
             {
                 return PropertyName;
@@ -350,11 +350,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public int DetailsLevel => IsSelected || Parent == null ? 0 : Parent.DetailsLevel + 1;
 
-    public Type? PropertyType
+    public Type PropertyType
     {
         get
         {
-            var type = Data?.GetType();
+            var type = Data.GetType();
             if (Parent is not null)
             {
                 //var parent = Parent.Data;
@@ -368,7 +368,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 var propInfo = GetPropertyByRedName(parentType, PropertyName) ?? null;
                 if (propInfo is not null)
                 {
-                    if (type == null || type == propInfo.Type)
+                    if (type == typeof(RedDummy) || type == propInfo.Type)
                     {
                         _flags = propInfo.Flags;
                         type = propInfo.Type;
@@ -443,12 +443,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            if (PropertyType is not null)
-            {
-                var redName = GetRedTypeFromCSType(PropertyType, _flags);
-                return redName != "" ? redName : PropertyType.Name;
-            }
-            return "null";
+            var redName = GetRedTypeFromCSType(PropertyType, _flags);
+            return redName != "" ? redName : PropertyType.Name;
         }
     }
 
@@ -458,8 +454,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool IsInArray => Parent is not null && Parent.IsArray;
 
-    public bool IsArray => PropertyType is not null &&
-                (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
+    public bool IsArray =>(PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                 ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
                 ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(CR2WList)) ||
                 ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(RedPackage)));
@@ -632,7 +627,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     width += 36;
                 }
             }
-            if (PropertyType?.IsAssignableTo(typeof(IRedArray)) ?? false)
+            if (PropertyType.IsAssignableTo(typeof(IRedArray)))
             {
                 width += 20;
             }
@@ -670,10 +665,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            if (PropertyType == null)
-            {
-                return "Error";
-            }
             if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
             {
                 return "SymbolNumeric";
@@ -835,11 +826,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanAddHandle() => PropertyType?.IsAssignableTo(typeof(IRedBaseHandle)) ?? false;   // TODO RelayCommand check notify
+    private bool CanAddHandle() => PropertyType.IsAssignableTo(typeof(IRedBaseHandle));   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddHandle))]
     private async Task AddHandle()
     {
-        ArgumentNullException.ThrowIfNull(PropertyType);
         var data = RedTypeManager.CreateRedType(PropertyType);
         if (data is IRedBaseHandle handle)
         {
@@ -851,12 +841,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanAddItemToArray() => Parent is not null && !IsReadOnly && PropertyType is not null && (PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)));   // TODO RelayCommand check notify
+    private bool CanAddItemToArray() => Parent is not null && !IsReadOnly && (PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)));   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddItemToArray))]
     private async Task AddItemToArray()
     {
         ArgumentNullException.ThrowIfNull(Parent);
-        ArgumentNullException.ThrowIfNull(PropertyType);
 
         if (PropertyType.IsAssignableTo(typeof(IRedArray)))
         {
@@ -970,7 +959,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanLoadBufferFromDisk() => PropertyType != null && PropertyType.IsAssignableTo(typeof(IRedBufferWrapper));   // TODO RelayCommand check notify
+    private bool CanLoadBufferFromDisk() => PropertyType.IsAssignableTo(typeof(IRedBufferWrapper));   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanLoadBufferFromDisk))]
     private void LoadBufferFromDisk()
     {
@@ -1054,7 +1043,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanAddItemToCompiledData() => ResolvedPropertyType is not null && PropertyType is not null && PropertyType.IsAssignableTo(typeof(IRedBufferPointer));   // TODO RelayCommand check notify
+    private bool CanAddItemToCompiledData() => ResolvedPropertyType is not null  && PropertyType.IsAssignableTo(typeof(IRedBufferPointer));   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddItemToCompiledData))]
     private async Task AddItemToCompiledData()
     {
@@ -1581,11 +1570,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Value = "null";
         }
 
-        if (PropertyType is null)
-        {
-            return;
-        }
-
         if (PropertyType.IsAssignableTo(typeof(IRedString)) && Data is IRedString s)
         {
             var value = s.GetString();
@@ -1679,10 +1663,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void CalculateDescriptor()
     {
         Descriptor = "";
-        if (PropertyType == null)
-        {
-            return;
-        }
 
         if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
         {
@@ -1967,7 +1947,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 if (t is null)
                 {
-                    _loggerService.Warning($"Property is null: {name}");
+                    //_loggerService.Warning($"Property is null: {name}");
+                    Properties.Add(new ChunkViewModel(new RedDummy(), propertyInfo.RedName.NotNull(), this, isreadonly));
                 }
                 else
                 {
@@ -2491,7 +2472,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandlePointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is CreateClassDialogViewModel vm && vm.SelectedClass is not null && PropertyType is not null)
+        if (sender is CreateClassDialogViewModel vm && vm.SelectedClass is not null )
         {
             var instance = RedTypeManager.Create(vm.SelectedClass);
             var data = RedTypeManager.CreateRedType(PropertyType);
