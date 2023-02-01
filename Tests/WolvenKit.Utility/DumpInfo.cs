@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,11 +10,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
-using WolvenKit.Core.CRC;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Sounds;
 using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.TweakDB;
@@ -306,6 +303,132 @@ namespace WolvenKit.Utility
         }
 
         [TestMethod]
+        public void MergeAllStrings() => MergeStrings(false);
+
+        [TestMethod]
+        public void MergeFactStrings() => MergeStrings(true);
+
+        private void MergeStrings(bool factOnly)
+        {
+            ArgumentNullException.ThrowIfNull(s_bm);
+
+            var hashService = _host.Services.GetRequiredService<IHashService>();
+            ArgumentNullException.ThrowIfNull(hashService);
+
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "infodump");
+
+            var dict = new ConcurrentDictionary<string, List<string>>();
+
+            Parallel.ForEach(Directory.EnumerateFiles(resultDir, "*.json", SearchOption.AllDirectories), filePath =>
+            {
+                var dc = JsonSerializer.Deserialize<DataCollection>(File.ReadAllText(filePath))!;
+
+                var lst = new HashSet<string>();
+
+                if (factOnly)
+                {
+                    var ext = Path.GetExtension(dc.FileName);
+                    if (dc.FileName == dc.Hash.ToString())
+                    {
+                        ext = hashService.GetGuessedExtension(dc.Hash);
+                    }
+
+                    if (ext == ".questphase")
+                    {
+                        DumpFileInfo(dc, lst);
+                    }
+                }
+                else
+                {
+                    DumpFileInfo(dc, lst);
+                }
+
+                if (lst.Count > 0)
+                {
+                    var orderedLst = new List<string>(lst);
+                    orderedLst.Sort();
+
+                    dict.TryAdd(dc.FileName, orderedLst);
+                }
+            });
+
+            if (factOnly)
+            {
+                var nDict = dict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+                File.WriteAllText(Path.Join(resultDir, "facts.json"), JsonSerializer.Serialize(nDict, new JsonSerializerOptions {WriteIndented = true}));
+            }
+            else
+            {
+                var nList = dict.Values.SelectMany(x => x).ToList();
+                nList.Sort();
+
+                File.WriteAllLines(Path.Join(resultDir, "merged.txt"), nList);
+            }
+
+            void DumpFileInfo(DataCollection dc, HashSet<string> lst)
+            {
+                if (!factOnly)
+                {
+                    if (dc.UnusedStrings != null)
+                    {
+                        foreach (var str in dc.UnusedStrings)
+                        {
+                            lst.Add(str);
+                        }
+                    }
+
+                    if (dc.Imports != null)
+                    {
+                        foreach (var str in dc.Imports)
+                        {
+                            lst.Add(str);
+                        }
+                    }
+
+                    if (dc.UsedStrings != null)
+                    {
+                        foreach (var str in dc.UsedStrings)
+                        {
+                            lst.Add(str);
+                        }
+                    }
+
+                    if (dc.TweakStrings != null)
+                    {
+                        foreach (var str in dc.TweakStrings)
+                        {
+                            lst.Add(str);
+                        }
+                    }
+
+                    if (dc.NodeRefs != null)
+                    {
+                        foreach (var str in dc.NodeRefs)
+                        {
+                            lst.Add(str);
+                        }
+                    }
+                }
+
+                if (dc.FactStrings != null)
+                {
+                    foreach (var str in dc.FactStrings)
+                    {
+                        lst.Add(str);
+                    }
+                }
+
+                if (dc.Buffers != null)
+                {
+                    foreach (var buffer in dc.Buffers)
+                    {
+                        DumpFileInfo(buffer, lst);
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
         public void DumpStrings()
         {
             ArgumentNullException.ThrowIfNull(s_bm);
@@ -317,6 +440,8 @@ namespace WolvenKit.Utility
             {
                 existingFiles.TryAdd(file, 0);
             }
+
+            var failedFiles = new ConcurrentDictionary<string, byte>();
 
             var archives = s_bm.Archives.KeyValues.Select(_ => _.Value).ToList();
             foreach (var gameArchive in archives)
@@ -368,12 +493,18 @@ namespace WolvenKit.Utility
                     }
                     catch (Exception)
                     {
+                        failedFiles.TryAdd(fileEntry.NameOrHash, 0);
                         // ignore
                     }
                 });
 
                 archive.SetBulkExtract(false);
             }
+
+            var lst = failedFiles.Keys.ToList();
+            lst.Sort();
+
+            File.WriteAllLines(Path.Join(resultDir, "failed.txt"), lst);
         }
 
         [TestMethod]
