@@ -1961,8 +1961,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
 
                 var name = !string.IsNullOrEmpty(propertyInfo.RedName) ? propertyInfo.RedName : propertyInfo.Name;
-                var t = redClass.GetProperty(name.NotNull()).NotNull();
-                Properties.Add(new ChunkViewModel(t, propertyInfo.RedName.NotNull(), this, isreadonly));
+                ArgumentNullException.ThrowIfNull(name);
+
+                var t = redClass.GetProperty(name);
+
+                if (t is null)
+                {
+                    _loggerService.Warning($"Property is null: {name}");
+                }
+                else
+                {
+                    Properties.Add(new ChunkViewModel(t, propertyInfo.RedName.NotNull(), this, isreadonly));
+                }
             }
 
             foreach (var dp in dps)

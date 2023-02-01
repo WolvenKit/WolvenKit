@@ -337,18 +337,36 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Opens selected node in File Explorer.
     /// </summary>
-    private bool CanOpenInFileExplorer() => ActiveProject != null && SelectedItem != null;
+    private bool CanOpenInFileExplorer() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
-    private void OpenInFileExplorer()
+    private void OpenInFileExplorer(FileModel value)
     {
-        if (SelectedItem.NotNull().IsDirectory)
+        var model = value ?? SelectedItem;
+        if (model is null)
         {
-            Commonfunctions.ShowFolderInExplorer(SelectedItem.FullName);
+            return;
+        }
+
+        if (model.IsDirectory)
+        {
+            Commonfunctions.ShowFolderInExplorer(model.FullName);
         }
         else
         {
-            Commonfunctions.ShowFileInExplorer(SelectedItem.FullName);
+            Commonfunctions.ShowFileInExplorer(model.FullName);
         }
+    }
+
+    [RelayCommand]
+    private async Task OpenFile(FileModel value)
+    {
+        var model = value ?? SelectedItem;
+        if (model is null)
+        {
+            return;
+        }
+
+        await _mainViewModel.OpenFileAsync(model);
     }
 
     /// <summary>

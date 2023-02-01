@@ -244,9 +244,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 for (var e = 0; e < cv.VertexLayout.Elements.Count; e++)
                 {
                     var element = cv.VertexLayout.Elements[e];
-                    ArgumentNullException.ThrowIfNull(element);
-
-                    if (cv.VertexLayout.Elements[e] == null)
+                    if (element is null)
                     {
                         break;
                     }

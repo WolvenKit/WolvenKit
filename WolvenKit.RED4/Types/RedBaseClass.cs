@@ -72,11 +72,6 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
                     var flags = propertyInfo.Flags;
                     var maxSize = flags.MoveNext() ? flags.Current : 0;
 
-                    if (value != null)
-                    {
-                        throw new ArgumentNullException();
-                    }
-
                     ((IRedArray)value!).MaxSize = maxSize;
                 }
             }

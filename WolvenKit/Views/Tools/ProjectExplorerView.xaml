@@ -313,7 +313,7 @@
 
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitCyan}"
-                            Command="{Binding ViewModel.MainViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
+                            Command="{Binding ViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
                             HoverBackground="{StaticResource WolvenKitCyanShadow}"
                             Style="{StaticResource WolvenKitTreeGridButton}"

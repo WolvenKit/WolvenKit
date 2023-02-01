@@ -868,39 +868,26 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private async Task OpenFileAsync(FileModel model)
+    public async Task OpenFileAsync(FileModel model)
     {
-        if (model == null)
+        if (model.IsDirectory)
         {
-            OpenFileDialog dlg = new();
-            if (dlg.ShowDialog().GetValueOrDefault())
-            {
-                //model = new FileViewModel(new FileModel(new FileInfo(dlg.FileName)));
-                //TODO
-                //ActiveDocument = await OpenAsync(model.FullName);
-            }
+            model.IsExpanded = !model.IsExpanded;
         }
-        else
+        else if (!model.IsDirectory)
         {
-            if (model.IsDirectory)
+            _progressService.IsIndeterminate = true;
+            try
             {
-                model.IsExpanded = !model.IsExpanded;
+                await RequestFileOpen(model.FullName);
             }
-            else if (!model.IsDirectory)
+            catch (Exception e)
             {
-                _progressService.IsIndeterminate = true;
-                try
-                {
-                    await RequestFileOpen(model.FullName);
-                }
-                catch (Exception e)
-                {
-                    _loggerService.Error(e.Message);
-                }
-                finally
-                {
-                    _progressService.IsIndeterminate = false;
-                }
+                _loggerService.Error(e.Message);
+            }
+            finally
+            {
+                _progressService.IsIndeterminate = false;
             }
         }
     }
