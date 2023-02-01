@@ -997,7 +997,7 @@ namespace WolvenKit.ViewModels.Shell
                             RootChunk = RedTypeManager.Create(redType)
                         };
                         stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
-                        using CR2WWriter writer = new(stream);
+                        using CR2WWriter writer = new(stream) { LoggerService = Locator.Current.GetService<ILoggerService>() };
                         writer.WriteFile(cr2w);
                     }
                     break;

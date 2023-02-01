@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SharpGLTF.Schema2;
+using Splat;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
@@ -279,7 +281,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
             var ms = new MemoryStream();
-            using var writer = new CR2WWriter(ms, Encoding.UTF8, true);
+            using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
             writer.WriteFile(cr2w);
             ms.Seek(0, SeekOrigin.Begin);
 
@@ -312,7 +314,7 @@ namespace WolvenKit.Modkit.RED4
                     var matOnlyStream = new MemoryStream();
 
                     //cr2w.Write(new BinaryWriter(matOnlyStream));
-                    using var writer = new CR2WWriter(matOnlyStream);
+                    using var writer = new CR2WWriter(matOnlyStream) { LoggerService = _loggerService };
                     writer.WriteFile(cr2w);
 
 
@@ -1308,7 +1310,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var ms = new MemoryStream();
-            using var writer = new CR2WWriter(ms, Encoding.UTF8, true);
+            using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = Splat.Locator.Current.GetService<ILoggerService>() };
             writer.WriteFile(cr2w);
 
             return ms;

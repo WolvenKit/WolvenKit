@@ -5,11 +5,14 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.CRC;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.RED4.Archive.IO;
 
 public class ArchiveWriter
 {
+    public ILoggerService LoggerService { get; set; }
+
     #region Fields
 
     // The first 4 files need to be aligned to 0x1000, added .bin because of unknown file type
@@ -53,6 +56,11 @@ public class ArchiveWriter
         if (!outpath.Exists)
         {
             return null;
+        }
+
+        if (LoggerService != null && !CompressionSettings.Get().UseOodle)
+        {
+            LoggerService.Warning("Oodle couldn't be loaded. Using Kraken.dll instead could cause errors.");
         }
 
         // get files

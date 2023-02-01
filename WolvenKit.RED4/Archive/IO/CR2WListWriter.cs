@@ -1,3 +1,4 @@
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -6,6 +7,8 @@ namespace WolvenKit.RED4.Archive.IO;
 
 public class CR2WListWriter : IDisposable
 {
+    public ILoggerService LoggerService { get; set; }
+
     private Stream _ms;
     private bool _disposed;
 
@@ -36,7 +39,7 @@ public class CR2WListWriter : IDisposable
         {
             var header = new meshLocalMaterialHeader();
             var ms = new MemoryStream();
-            var cr2wWriter = new CR2WWriter(ms) {IsRoot = meshMeshMaterialBuffer != null};
+            var cr2wWriter = new CR2WWriter(ms) {IsRoot = meshMeshMaterialBuffer != null, LoggerService = LoggerService };
             cr2wWriter.WriteFile(file);
             header.Offset = (CUInt32)(_ms.Position - startingPosition);
             _ms.Write(ms.ToArray());
