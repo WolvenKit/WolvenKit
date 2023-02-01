@@ -22,6 +22,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
+using WolvenKit.Modkit.Exceptions;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -109,7 +110,7 @@ public class RED4Controller : ObservableObject, IGameController
 
                 foreach (var physMat in root.Unk1)
                 {
-                    _hashService.AddCustom(physMat);
+                    _hashService.AddCustom(physMat.ToString().NotNull());
                 }
             }
         }
@@ -128,7 +129,7 @@ public class RED4Controller : ObservableObject, IGameController
 
                 foreach (var presetEntry in res.Presets)
                 {
-                    _hashService.AddCustom(presetEntry.Name);
+                    _hashService.AddCustom(presetEntry.NotNull().Name.ToString().NotNull());
                 }
             }
         }
@@ -258,11 +259,14 @@ public class RED4Controller : ObservableObject, IGameController
         var modfiles = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories);
         if (modfiles.Any())
         {
-            _modTools.Pack(
-                new DirectoryInfo(_projectManager.ActiveProject.ModDirectory),
-                new DirectoryInfo(hotdirectory),
-                _projectManager.ActiveProject.Name);
-            _loggerService.Info("Hot archive installation complete!");
+            try
+            {
+                _modTools.Pack( new DirectoryInfo(_projectManager.ActiveProject.ModDirectory), new DirectoryInfo(hotdirectory), _projectManager.ActiveProject.Name);
+            }
+            catch (PackException)
+            {
+                return false;
+            }
         }
         _loggerService.Success($"{_projectManager.ActiveProject.Name} packed into {hotdirectory}");
         _notificationService.Success($"{_projectManager.ActiveProject.Name} packed into {hotdirectory}");
@@ -546,10 +550,14 @@ public class RED4Controller : ObservableObject, IGameController
         var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
         if (modfiles.Any())
         {
-            _modTools.Pack(
-                new DirectoryInfo(cp77Proj.ModDirectory),
-                new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)),
-                cp77Proj.Name);
+            try
+            {
+                _modTools.Pack( new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)), cp77Proj.Name);
+            }
+            catch (PackException)
+            {
+                return false;
+            }
         }
 
         return true;

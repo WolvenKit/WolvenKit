@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Core;
@@ -262,7 +263,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                         }
                         case CResourceAsyncReference<CResource> cres:
                         {
-                            emitter.WriteProperty(nameof(CResourceAsyncReference<CResource>.DepotPath), cres.DepotPath.ToString());
+                            emitter.WriteProperty(nameof(CResourceAsyncReference<CResource>.DepotPath), cres.DepotPath.ToString().NotNull());
                             break;
                         }
 

@@ -25,7 +25,7 @@ namespace WolvenKit.Modkit.RED4
         {
             using var instream = new FileStream(infile, FileMode.Open, FileAccess.Read);
 
-            if (!_wolvenkitFileService.TryReadRed4File(instream, out var cr2w))
+            if (!_parserService.TryReadRed4File(instream, out var cr2w))
             {
                 throw new InvalidParsingException("ConvertToText");
             }

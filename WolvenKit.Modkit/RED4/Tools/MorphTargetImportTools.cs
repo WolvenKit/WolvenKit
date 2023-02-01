@@ -5,6 +5,7 @@ using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
@@ -21,7 +22,7 @@ namespace WolvenKit.Modkit.RED4
     {
         public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, GltfImportArgs args/*, Stream outStream = null*/)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(intargetStream);
+            var cr2w = _parserService.ReadRed4File(intargetStream);
             if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh blob || blob.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderblob || renderblob.BaseBlob.Chunk is not rendRenderMeshBlob)
             {
                 return false;
@@ -29,7 +30,7 @@ namespace WolvenKit.Modkit.RED4
 
             RawArmature? newRig = null;
             {
-                var hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath);
+                var hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath.ToString().NotNull());
                 var meshStream = new MemoryStream();
                 foreach (var ar in args.Archives)
                 {
@@ -39,7 +40,7 @@ namespace WolvenKit.Modkit.RED4
                         break;
                     }
                 }
-                var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
+                var meshCr2w = _parserService.ReadRed4File(meshStream);
                 if (meshCr2w != null && meshCr2w.RootChunk is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob rendBlob)
                 {
                     newRig = MeshTools.GetOrphanRig(mesh);
@@ -264,15 +265,21 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < morphTargetCount; i++)
             {
-
                 // Write scale and offsets
                 var (scale, offset) = CalculateTargetQuant(model, i);
-                blob.Header.TargetPositionDiffOffset[i].X = offset.X;
-                blob.Header.TargetPositionDiffOffset[i].Y = offset.Y;
-                blob.Header.TargetPositionDiffOffset[i].Z = offset.Z;
-                blob.Header.TargetPositionDiffScale[i].X = scale.X;
-                blob.Header.TargetPositionDiffScale[i].Y = scale.Y;
-                blob.Header.TargetPositionDiffScale[i].Z = scale.Z;
+
+                var posOffset = blob.Header.TargetPositionDiffOffset[i];
+                var posScale = blob.Header.TargetPositionDiffScale[i];
+
+                ArgumentNullException.ThrowIfNull(posOffset);
+                ArgumentNullException.ThrowIfNull(posScale);
+
+                posOffset.X = offset.X;
+                posOffset.Y = offset.Y;
+                posOffset.Z = offset.Z;
+                posScale.X = scale.X;
+                posScale.Y = scale.Y;
+                posScale.Z = scale.Z;
 
 
                 for (var subMeshId = 0; subMeshId < model.LogicalMeshes.Count; subMeshId++)
@@ -344,8 +351,8 @@ namespace WolvenKit.Modkit.RED4
                         mappingsWriter.Write((ushort)0);
                     }
 
-                    blob.Header.NumVertexDiffsInEachChunk[i][subMeshId] = (uint)deltaCount;
-                    blob.Header.NumVertexDiffsMappingInEachChunk[i][subMeshId] = (uint)deltaCount;
+                    blob.Header.NumVertexDiffsInEachChunk[i].NotNull()[subMeshId] = (uint)deltaCount;
+                    blob.Header.NumVertexDiffsMappingInEachChunk[i].NotNull()[subMeshId] = (uint)deltaCount;
                     blob.Header.NumDiffs += (uint)deltaCount;
                 }
             }

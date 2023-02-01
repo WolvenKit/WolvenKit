@@ -26,7 +26,7 @@ namespace WolvenKit.Modkit.RED4
         //WIP does not do the thing yet
         public bool ImportRig(FileInfo inGltfFile, Stream rigStream, GltfImportArgs args)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(rigStream);
+            var cr2w = _parserService.ReadRed4File(rigStream);
 
             if (cr2w == null || cr2w.RootChunk is not animRig rig)
             {
@@ -294,7 +294,7 @@ namespace WolvenKit.Modkit.RED4
 
         public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, GltfImportArgs args)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);
+            var cr2w = _parserService.ReadRed4File(inmeshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh meshBlob || meshBlob.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -430,7 +430,7 @@ namespace WolvenKit.Modkit.RED4
                 var ar = originalRig.Archive;
                 using var msr = new MemoryStream();
                 ar?.CopyFileToStream(msr, originalRig.NameHash64, false);
-                newRig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(msr));
+                newRig = RIG.ProcessRig(_parserService.ReadRed4File(msr));
             }
             else
             {
@@ -1300,11 +1300,13 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i].ToString().NotNull()) && x.Length == root.BoneNames[i].Length);
 
-                        blob.Header.BonePositions[i].X = inverseBindMatrices[index].M41;
-                        blob.Header.BonePositions[i].Y = -inverseBindMatrices[index].M43;
-                        blob.Header.BonePositions[i].Z = inverseBindMatrices[index].M42;
-                        blob.Header.BonePositions[i].W = inverseBindMatrices[index].M44;
-                        //blob.Header.BonePositions[i] = root.BoneRigMatrices[i].W;
+                        var position = blob.Header.BonePositions[i].NotNull();
+
+                        position.X = inverseBindMatrices[index].M41;
+                        position.Y = -inverseBindMatrices[index].M43;
+                        position.Z = inverseBindMatrices[index].M42;
+                        position.W = inverseBindMatrices[index].M44;
+                        //position = root.BoneRigMatrices[i].W;
                     }
                 }
             }
@@ -1438,8 +1440,8 @@ namespace WolvenKit.Modkit.RED4
             cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Pointer = meshBufferIdx + 1;
             cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Pointer = materialBufferIdx + 1;*/
 
-            var clothBlob = cmesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth);
-            var clothGraphicalBlob = cmesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth_Graphical);
+            var clothBlob = cmesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is meshMeshParamCloth);
+            var clothGraphicalBlob = cmesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is meshMeshParamCloth_Graphical);
 
             if (clothBlob != null)
             {
@@ -1570,19 +1572,19 @@ namespace WolvenKit.Modkit.RED4
                 {
                     if (LODLvl[i] == 1)
                     {
-                        blob.LodChunkIndices[0].Add(i);
+                        blob.LodChunkIndices[0].NotNull().Add(i);
                     }
                     if (LODLvl[i] == 2)
                     {
-                        blob.LodChunkIndices[1].Add(i);
+                        blob.LodChunkIndices[1].NotNull().Add(i);
                     }
                     if (LODLvl[i] == 4)
                     {
-                        blob.LodChunkIndices[2].Add(i);
+                        blob.LodChunkIndices[2].NotNull().Add(i);
                     }
                     if (LODLvl[i] == 8)
                     {
-                        blob.LodChunkIndices[3].Add(i);
+                        blob.LodChunkIndices[3].NotNull().Add(i);
                     }
                 }
             }
@@ -1716,19 +1718,19 @@ namespace WolvenKit.Modkit.RED4
                 {
                     if (LODLvl[i] == 1)
                     {
-                        blob.LodChunkIndices[0].Add(i);
+                        blob.LodChunkIndices[0].NotNull().Add(i);
                     }
                     if (LODLvl[i] == 2)
                     {
-                        blob.LodChunkIndices[1].Add(i);
+                        blob.LodChunkIndices[1].NotNull().Add(i);
                     }
                     if (LODLvl[i] == 4)
                     {
-                        blob.LodChunkIndices[2].Add(i);
+                        blob.LodChunkIndices[2].NotNull().Add(i);
                     }
                     if (LODLvl[i] == 8)
                     {
-                        blob.LodChunkIndices[3].Add(i);
+                        blob.LodChunkIndices[3].NotNull().Add(i);
                     }
                 }
             }
@@ -1759,10 +1761,10 @@ namespace WolvenKit.Modkit.RED4
 
         private static meshMeshParamGarmentSupport GetParameter_meshMeshParamGarmentSupport(CMesh cMesh)
         {
-            var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamGarmentSupport);
+            var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is meshMeshParamGarmentSupport);
             if (garmentMeshBlob == null)
             {
-                garmentMeshBlob = new CHandle<meshMeshParameter> { Chunk = new meshMeshParamGarmentSupport() };
+                garmentMeshBlob = new CHandle<meshMeshParameter>( new meshMeshParamGarmentSupport() );
                 cMesh.Parameters.Add(garmentMeshBlob);
             }
 
@@ -1780,10 +1782,10 @@ namespace WolvenKit.Modkit.RED4
 
         private static garmentMeshParamGarment GetParameter_garmentMeshParamGarment(CMesh cMesh)
         {
-            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
+            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is garmentMeshParamGarment);
             if (garmentBlob == null)
             {
-                garmentBlob = new CHandle<meshMeshParameter> { Chunk = new garmentMeshParamGarment() };
+                garmentBlob = new CHandle<meshMeshParameter> ( new garmentMeshParamGarment() );
                 cMesh.Parameters.Add(garmentBlob);
             }
 
@@ -1860,12 +1862,12 @@ namespace WolvenKit.Modkit.RED4
 
         private static void RemoveGarmentSupportParameters(CMesh cMesh)
         {
-            var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamGarmentSupport);
+            var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is meshMeshParamGarmentSupport);
             if (garmentMeshBlob != null)
             {
                 cMesh.Parameters.Remove(garmentMeshBlob);
             }
-            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
+            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is garmentMeshParamGarment);
             if (garmentBlob != null)
             {
                 cMesh.Parameters.Remove(garmentBlob);

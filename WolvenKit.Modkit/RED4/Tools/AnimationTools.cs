@@ -21,7 +21,7 @@ namespace WolvenKit.Modkit.RED4
     {
         public bool ExportAnim(Stream animStream, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
         {
-            var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
+            var animsFile = _parserService.ReadRed4File(animStream);
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
                 return false;
@@ -55,7 +55,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var ms = new MemoryStream();
                     gameFile.Extract(ms);
-                    if (_wolvenkitFileService.TryReadRed4File(ms, out rigFile))
+                    if (_parserService.TryReadRed4File(ms, out rigFile))
                     {
                         break;
                     }
@@ -84,7 +84,7 @@ namespace WolvenKit.Modkit.RED4
         }
         public bool ImportAnims(FileInfo gltfFile, Stream animStream, List<ICyberGameArchive> archives)
         {
-            var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
+            var animsFile = _parserService.ReadRed4File(animStream);
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
                 return false;
@@ -98,7 +98,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var ms = new MemoryStream();
                     gameFile.Extract(ms);
-                    if (_wolvenkitFileService.TryReadRed4File(ms, out rigFile))
+                    if (_parserService.TryReadRed4File(ms, out rigFile))
                     {
                         break;
                     }

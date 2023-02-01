@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -88,7 +90,8 @@ public partial class ModTools
                     return FindFileResult.NoCR2W;
                 }
 
-                result = new FindFileEntry(file, reader.ImportsList);
+                ArgumentNullException.ThrowIfNull(file);
+                result = new FindFileEntry(file.NotNull(), reader.ImportsList);
 
                 return FindFileResult.NoError;
             }

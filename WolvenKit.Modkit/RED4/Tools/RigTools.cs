@@ -54,8 +54,16 @@ namespace WolvenKit.Modkit.RED4.RigFile
                         ArgumentNullException.ThrowIfNull(p);
                         return new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y);
                     }).ToArray();
-                    Rig.AposeMSRot = aRig.APoseMS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray();
-                    Rig.AposeMSScale = aRig.APoseMS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
+                    Rig.AposeMSRot = aRig.APoseMS.Select(p =>
+                    {
+                        ArgumentNullException.ThrowIfNull(p);
+                        return new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R);
+                    }).ToArray();
+                    Rig.AposeMSScale = aRig.APoseMS.Select(p =>
+                    {
+                        ArgumentNullException.ThrowIfNull(p);
+                        return new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z);
+                    }).ToArray();
                 }
 
                 // not sure how APose works or how the matrix multiplication will be, maybe its a recursive mul
@@ -63,9 +71,21 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 {
                     Rig.AposeLSExits = true;
 
-                    Rig.AposeLSTrans = aRig.APoseLS.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray();
-                    Rig.AposeLSRot = aRig.APoseLS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray();
-                    Rig.AposeLSScale = aRig.APoseLS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
+                    Rig.AposeLSTrans = aRig.APoseLS.Select(p =>
+                    {
+                        ArgumentNullException.ThrowIfNull(p);
+                        return new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y);
+                    }).ToArray();
+                    Rig.AposeLSRot = aRig.APoseLS.Select(p =>
+                    {
+                        ArgumentNullException.ThrowIfNull(p);
+                        return new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R);
+                    }).ToArray();
+                    Rig.AposeLSScale = aRig.APoseLS.Select(p =>
+                    {
+                        ArgumentNullException.ThrowIfNull(p);
+                        return new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z);
+                    }).ToArray();
                 }
             }
 

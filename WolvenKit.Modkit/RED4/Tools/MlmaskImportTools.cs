@@ -156,8 +156,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     MaskTileSize = _mlmask.TileSize,
                     Flags = 2
                 },
-                AtlasData = new SerializationDeferredDataBuffer(_mlmask.AtlasBuffer),
-                TilesData = new SerializationDeferredDataBuffer(_mlmask.TilesBuffer)
+                AtlasData = new SerializationDeferredDataBuffer(_mlmask.AtlasBuffer.NotNull()),
+                TilesData = new SerializationDeferredDataBuffer(_mlmask.TilesBuffer.NotNull())
             };
 
             mask.RenderResourceBlob.RenderResourceBlobPC = blob;

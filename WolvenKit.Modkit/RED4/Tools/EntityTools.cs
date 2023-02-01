@@ -34,7 +34,7 @@ namespace WolvenKit.Modkit.RED4
 
         public bool GetFileFromCName(CName cname, [NotNullWhen(true)] out CR2WFile? cr2w)
         {
-            if (GetStreamFromCName(cname, out var stream) && _wolvenkitFileService.TryReadRed4File(stream, out cr2w))
+            if (GetStreamFromCName(cname, out var stream) && _parserService.TryReadRed4File(stream, out cr2w))
             {
                 return true;
             }
@@ -45,7 +45,7 @@ namespace WolvenKit.Modkit.RED4
 
         public bool ExportEntity(Stream entStream, CName appearance, FileInfo outfile)
         {
-            if (_wolvenkitFileService.TryReadRed4File(entStream, out var cr2w))
+            if (_parserService.TryReadRed4File(entStream, out var cr2w))
             {
                 return ExportEntity(cr2w, appearance, outfile);
             }

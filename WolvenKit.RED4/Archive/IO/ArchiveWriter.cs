@@ -43,18 +43,8 @@ public class ArchiveWriter
         _hashService = hashService;
     }
 
-    public Archive? WriteArchive(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
+    public Archive WriteArchive(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
     {
-        if (!infolder.Exists)
-        {
-            return null;
-        }
-
-        if (!outpath.Exists)
-        {
-            return null;
-        }
-
         // get files
         var includedExtensions = Enum.GetNames<ERedExtension>().ToList();
         includedExtensions.Add("bin");

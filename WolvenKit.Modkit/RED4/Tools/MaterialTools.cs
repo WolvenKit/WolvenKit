@@ -40,7 +40,7 @@ namespace WolvenKit.Modkit.RED4
                 throw new Exception("Depot path is not set: Choose a Depot location within Settings for generating materials.");
             }
 
-            var cr2w = _wolvenkitFileService.ReadRed4File(meshStream);
+            var cr2w = _parserService.ReadRed4File(meshStream);
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
@@ -174,7 +174,7 @@ namespace WolvenKit.Modkit.RED4
 
                     var ms = new MemoryStream(bytes, (int)offset, (int)size);
 
-                    var isResource = _wolvenkitFileService.IsCR2WFile(ms);
+                    var isResource = _parserService.IsCR2WFile(ms);
                     if (!isResource)
                     {
                         throw new InvalidParsingException("not a cr2w file");
@@ -1245,7 +1245,7 @@ namespace WolvenKit.Modkit.RED4
                     gameFile.Extract(ms);
                     ms.Seek(0, SeekOrigin.Begin);
 
-                    if (!_wolvenkitFileService.TryReadRed4File(ms, out var file))
+                    if (!_parserService.TryReadRed4File(ms, out var file))
                     {
                         throw new Exception("Invalid CR2W file");
                     }
@@ -1453,7 +1453,7 @@ namespace WolvenKit.Modkit.RED4
                                 gameFile.Extract(ms);
                                 ms.Seek(0, SeekOrigin.Begin);
 
-                                if (_wolvenkitFileService.TryReadRed4File(ms, out var f) && f.RootChunk is CMaterialTemplate _mt)
+                                if (_parserService.TryReadRed4File(ms, out var f) && f.RootChunk is CMaterialTemplate _mt)
                                 {
                                     mt = _mt;
                                     mts.Add(mat.MaterialTemplate, mt);
