@@ -11,8 +11,7 @@ public interface IWorkspaceService
     void SetWorkspace(DirectoryInfo directoryInfo);
 }
 
-[ObservableObject]
-public partial class WorkspaceService : IWorkspaceService
+public partial class WorkspaceService : ObservableObject, IWorkspaceService
 {
 
     [ObservableProperty]

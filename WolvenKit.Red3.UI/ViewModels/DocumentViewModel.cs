@@ -2,8 +2,7 @@
 
 namespace WolvenKit.Red3.UI.ViewModels;
 
-[ObservableObject]
-public partial class DocumentViewModel
+public partial class DocumentViewModel : ObservableObject
 {
 	public DocumentViewModel(string text, string dataHeader)
 	{

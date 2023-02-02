@@ -26,8 +26,7 @@ public interface INotificationService
     void Completed();
 }
 
-[ObservableObject]
-public partial class NotificationService : INotificationService
+public partial class NotificationService : ObservableObject, INotificationService
 {
     public NotificationService()
     {
@@ -73,8 +72,7 @@ public partial class NotificationService : INotificationService
     }
 }
 
-[ObservableObject]
-public partial class BannerNotification
+public partial class BannerNotification : ObservableObject
 {
     [ObservableProperty]
     private string title;
@@ -89,8 +87,7 @@ public partial class BannerNotification
     private InfoBarSeverity severity;
 }
 
-[ObservableObject]
-public partial class Progress
+public partial class Progress : ObservableObject
 {
     [ObservableProperty]
     private int value;

@@ -10,8 +10,7 @@ using WolvenKit.Red3.UI.Services;
 
 namespace WolvenKit.Red3.UI.ViewModels;
 
-[ObservableObject]
-public partial class MainViewModel
+public partial class MainViewModel : ObservableObject
 {
     private readonly IDialogService _dialogService;
     private readonly IWorkspaceService _workspaceService;

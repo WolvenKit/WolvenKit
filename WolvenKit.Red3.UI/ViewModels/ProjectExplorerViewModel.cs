@@ -11,8 +11,7 @@ using WolvenKit.Red3.UI.Services;
 
 namespace WolvenKit.Red3.UI.ViewModels;
 
-[ObservableObject]
-internal partial class ProjectExplorerViewModel
+internal partial class ProjectExplorerViewModel : ObservableObject
 {
     private readonly IDialogService _dialogService;
     private readonly IWorkspaceService _workspaceService;
@@ -88,8 +87,7 @@ internal partial class ProjectExplorerViewModel
     }
 }
 
-[ObservableObject]
-public partial class ExplorerItem
+public partial class ExplorerItem : ObservableObject
 {
     public enum ExplorerItemType { Folder, File };
 
