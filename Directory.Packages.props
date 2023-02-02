@@ -45,10 +45,10 @@
     <PackageVersion Include="Octokit" Version="5.0.0" />
     <PackageVersion Include="PixiEditor.ColorPicker" Version="3.3.1" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
-    <PackageVersion Include="ReactiveUI" Version="18.4.20" />
+    <PackageVersion Include="ReactiveUI" Version="18.4.1" />
     <PackageVersion Include="ReactiveUI.Events.WPF" Version="15.1.1" />
     <PackageVersion Include="ReactiveUI.Validation" Version="3.0.22" />
-    <PackageVersion Include="ReactiveUI.WPF" Version="18.4.20" />
+    <PackageVersion Include="ReactiveUI.WPF" Version="18.4.1" />
     <PackageVersion Include="Serilog" Version="2.12.0" />
     <PackageVersion Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="4.1.0" />
@@ -89,6 +89,5 @@
     <PackageVersion Include="CommunityToolkit.WinUI" Version="7.1.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.2.230118.102" />
-    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
   </ItemGroup>
 </Project>
