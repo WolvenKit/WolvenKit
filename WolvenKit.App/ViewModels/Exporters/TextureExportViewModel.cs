@@ -1,39 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Converters;
-using WolvenKit.Functionality.Services;
+using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
+public record class CallbackArguments(ImportExportArgs Arg, string PropertyName);
+
 public abstract partial class ExportViewModel : ImportExportViewModel
 {
-
+    protected ExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
+        : base(archiveManager, notificationService, settingsManager, header, contentId)
+    {
+    }
 }
 
 public partial class TextureExportViewModel : ExportViewModel
 {
+    private ILoggerService _loggerService;
+    private INotificationService _notificationService;
+    private ISettingsManager _settingsManager;
+    private IWatcherService _watcherService;
+    private IProgressService<double> _progressService;
+    private IProjectManager _projectManager;
+    private IGameControllerFactory _gameController;
+    private IArchiveManager _archiveManager;
+    private IPluginService _pluginService;
+    private IModTools _modTools;
+
+
     public TextureExportViewModel(
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
@@ -44,7 +58,7 @@ public partial class TextureExportViewModel : ExportViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
-        IProgressService<double> progressService)
+        IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
     {
         _gameController = gameController;
         _settingsManager = settingsManager;
@@ -58,15 +72,11 @@ public partial class TextureExportViewModel : ExportViewModel
         _progressService = progressService;
 
         LoadFiles();
-
-        Header = Name;
     }
-
-    public override string Name => "Export Tool";
 
     #region Commands
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // notify in TextureImportView.xaml.cs
     private void ImportSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -76,7 +86,10 @@ public partial class TextureExportViewModel : ExportViewModel
                 continue;
             }
 
-            item.Properties = (ImportExportArgs)System.Activator.CreateInstance(item.Properties.GetType());
+            if (Activator.CreateInstance(item.Properties.GetType()) is ImportExportArgs a)
+            {
+                item.Properties = a;
+            }
         }
     }
 
@@ -87,7 +100,7 @@ public partial class TextureExportViewModel : ExportViewModel
         IsProcessing = true;
         _watcherService.IsSuspended = true;
         var progress = 0;
-        _progressService.Report(0);
+        _progressService.Report(0.1);
 
         var total = 0;
         var sucessful = 0;
@@ -108,7 +121,7 @@ public partial class TextureExportViewModel : ExportViewModel
             }
             else
             {
-                failedItems.Add(item.FullName);
+                failedItems.Add(item.BaseFile);
             }
 
             Interlocked.Increment(ref progress);
@@ -138,7 +151,12 @@ public partial class TextureExportViewModel : ExportViewModel
     private bool ExportSingle(ExportableItemViewModel item)
     {
         var proj = _projectManager.ActiveProject;
-        var fi = new FileInfo(item.FullName);
+        if (proj == null)
+        {
+            return false;
+        }
+
+        var fi = new FileInfo(item.BaseFile);
         if (fi.Exists)
         {
             if (item.Properties is MeshExportArgs meshExportArgs)
@@ -149,7 +167,7 @@ public partial class TextureExportViewModel : ExportViewModel
                     meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
                 }
 
-                meshExportArgs.Archives.Insert(0, new FileSystemArchive(_projectManager.ActiveProject.ModDirectory));
+                meshExportArgs.Archives.Insert(0, new FileSystemArchive(proj.ModDirectory));
 
                 meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
             }
@@ -159,7 +177,7 @@ public partial class TextureExportViewModel : ExportViewModel
                 {
                     morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                 }
-                morphTargetExportArgs.ModFolderPath = _projectManager.ActiveProject.ModDirectory;
+                morphTargetExportArgs.ModFolderPath = proj.ModDirectory;
             }
             if (item.Properties is OpusExportArgs opusExportArgs)
             {
@@ -181,15 +199,13 @@ public partial class TextureExportViewModel : ExportViewModel
                 }
             }
 
-            if (proj != null)
+            if (item.Properties is not ExportArgs e)
             {
-
+                throw new NotImplementedException();
             }
 
-            var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
-            return _modTools.Export(fi, settings,
-                new DirectoryInfo(proj.ModDirectory),
-                new DirectoryInfo(proj.RawDirectory));
+            var settings = new GlobalExportArgs().Register(e);
+            return _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
         }
 
         return false;
@@ -208,7 +224,147 @@ public partial class TextureExportViewModel : ExportViewModel
 
         Items.Clear();
         Items = new(files);
+
+        ProcessAllCommand.NotifyCanExecuteChanged();
     }
 
     private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
+
+    public Task InitCollectionEditor(CallbackArguments args)
+    {
+        if (args.Arg is not ExportArgs exportArgs)
+        {
+            return Task.CompletedTask;
+        }
+
+        switch (exportArgs)
+        {
+            case MeshExportArgs meshExportArgs:
+            {
+                InitMeshCollectionEditor(args, meshExportArgs);
+                break;
+            }
+            case OpusExportArgs opusExportArgs:
+            {
+                InitOpusCollectionEditor(args, opusExportArgs);
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private void InitOpusCollectionEditor(CallbackArguments args, OpusExportArgs opusExportArgs)
+    {
+        List<uint> selectedEntries = new();
+        switch (args.PropertyName)
+        {
+            case nameof(OpusExportArgs.SelectedForExport):
+                selectedEntries = opusExportArgs.SelectedForExport;
+                break;
+            default:
+                break;
+        }
+        // TODO init collectionEditor with this
+        List<CollectionItemViewModel<uint>> selectedItems = new();
+        if (selectedEntries is not null)
+        {
+            selectedItems = selectedEntries.Select(x => new CollectionItemViewModel<uint>(x)).ToList();
+        }
+
+
+        OpusTools opusTools = new(_projectManager.ActiveProject.NotNull().ModDirectory, _projectManager.ActiveProject.RawDirectory, _archiveManager, opusExportArgs.UseMod);
+        var availableItems = opusTools.Info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
+
+        // open dialogue
+        var result = Interactions.ShowCollectionView((availableItems, selectedItems));
+        if (result is not null)
+        {
+            switch (args.PropertyName)
+            {
+                case nameof(OpusExportArgs.SelectedForExport):
+                    opusExportArgs.SelectedForExport =
+                        new List<uint>(result.Cast<CollectionItemViewModel<uint>>().Select(_ => _.Model));
+                    _notificationService.Success($"Selected opus items were added.");
+                    break;
+                default:
+                    break;
+            }
+
+        }
+    }
+
+    private void InitMeshCollectionEditor(CallbackArguments args, MeshExportArgs meshExportArgs)
+    {
+        var fetchExtension = ERedExtension.mesh;
+        List<FileEntry> selectedEntries = new();
+        switch (args.PropertyName)
+        {
+            case nameof(MeshExportArgs.MultiMeshMeshes):
+                selectedEntries = meshExportArgs.MultiMeshMeshes;
+                fetchExtension = ERedExtension.mesh;
+                break;
+
+            case nameof(MeshExportArgs.MultiMeshRigs):
+                selectedEntries = meshExportArgs.MultiMeshRigs;
+                fetchExtension = ERedExtension.rig;
+                break;
+
+            case nameof(MeshExportArgs.Rig):
+                selectedEntries = meshExportArgs.Rig;
+                fetchExtension = ERedExtension.rig;
+                break;
+
+            default:
+                break;
+        }
+
+        IEnumerable<CollectionItemViewModel<FileEntry>>? selectedItems = null;
+        if (selectedEntries is not null)
+        {
+            selectedItems = selectedEntries.Select(_ => new CollectionItemViewModel<FileEntry>(_));
+        }
+
+        var availableItems = _archiveManager
+            .GetGroupedFiles()[$".{fetchExtension}"]
+            .Cast<FileEntry>()
+            .Select(_ => new CollectionItemViewModel<FileEntry>(_)).GroupBy(x => x.Name)
+            .Select(x => x.First());
+
+        // open dialogue
+        var result = Interactions.ShowCollectionView((availableItems, selectedItems));
+        if (result is not null)
+        {
+            switch (args.PropertyName)
+            {
+                case nameof(MeshExportArgs.MultiMeshMeshes):
+                    meshExportArgs.MultiMeshMeshes = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+                    _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
+                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
+                    break;
+
+                case nameof(MeshExportArgs.MultiMeshRigs):
+                    meshExportArgs.MultiMeshRigs = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+                    _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
+                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
+                    break;
+
+                case nameof(MeshExportArgs.Rig):
+                    var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault();
+                    if (rig is not null)
+                    {
+                        meshExportArgs.Rig = new List<FileEntry>() { rig };
+                        _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                    }
+                    meshExportArgs.meshExportType = MeshExportType.WithRig;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
 }

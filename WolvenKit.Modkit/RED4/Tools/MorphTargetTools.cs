@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.DependencyModel;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
@@ -22,30 +25,30 @@ namespace WolvenKit.Modkit.RED4
     {
         public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<ICyberGameArchive> archives, string modFolder, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(targetStream);
+            var cr2w = _parserService.ReadRed4File(targetStream);
             if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh morphBlob || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
 
-            RawArmature Rig = null;
+            RawArmature? Rig = null;
+
+            var hash = FNV1A64HashAlgorithm.HashString(morphBlob.BaseMesh.DepotPath.ToString().NotNull());
+            var meshStream = new MemoryStream();
+            foreach (var ar in archives)
             {
-                var hash = FNV1A64HashAlgorithm.HashString(morphBlob.BaseMesh.DepotPath);
-                var meshStream = new MemoryStream();
-                foreach (var ar in archives)
+                if (ar.Files.TryGetValue(hash, out var gameFile))
                 {
-                    if (ar.Files.TryGetValue(hash, out var gameFile))
-                    {
-                        gameFile.Extract(meshStream);
-                        break;
-                    }
-                }
-                var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
-                if (meshCr2w != null && meshCr2w.RootChunk is CMesh baseMeshBlob && baseMeshBlob.RenderResourceBlob != null && baseMeshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob)
-                {
-                    Rig = MeshTools.GetOrphanRig(baseMeshBlob);
+                    gameFile.Extract(meshStream);
+                    break;
                 }
             }
+            var meshCr2w = _parserService.ReadRed4File(meshStream);
+            if (meshCr2w != null && meshCr2w.RootChunk is CMesh baseMeshBlob && baseMeshBlob.RenderResourceBlob != null && baseMeshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob)
+            {
+                Rig = MeshTools.GetOrphanRig(baseMeshBlob);
+            }
+
 
             using var meshbuffer = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
@@ -58,6 +61,14 @@ namespace WolvenKit.Modkit.RED4
             var texbuffer = (blob.TextureDiffsBuffer is not null) ? new MemoryStream(blob.TextureDiffsBuffer.Buffer.GetBytes()) : new MemoryStream();
 
             var targetsInfo = GetTargetInfos(cr2w, expMeshes.Count);
+
+            ArgumentNullException.ThrowIfNull(targetsInfo.NumVertexDiffsInEachChunk);
+            ArgumentNullException.ThrowIfNull(targetsInfo.NumVertexDiffsMappingInEachChunk);
+            ArgumentNullException.ThrowIfNull(targetsInfo.TargetStartsInVertexDiffs);
+            ArgumentNullException.ThrowIfNull(targetsInfo.TargetStartsInVertexDiffsMapping);
+            ArgumentNullException.ThrowIfNull(targetsInfo.Names);
+            ArgumentNullException.ThrowIfNull(targetsInfo.TargetPositionDiffOffset);
+            ArgumentNullException.ThrowIfNull(targetsInfo.TargetPositionDiffScale);
 
             var expTargets = new List<RawTargetContainer[]>();
 
@@ -99,7 +110,7 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < textureStreams.Count; i++)
             {
-                File.WriteAllBytes(Path.Combine(dir.FullName,$"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
+                File.WriteAllBytes(Path.Combine(dir.FullName, $"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
             }
 
             targetStream.Dispose();
@@ -127,8 +138,11 @@ namespace WolvenKit.Modkit.RED4
             {
                 for (var e = 0; e < subMeshC; e++)
                 {
-                    NumVertexDiffsInEachChunk[i, e] = rendMorphBlob.Header.NumVertexDiffsInEachChunk[i][e];
-                    NumVertexDiffsMappingInEachChunk[i, e] = rendMorphBlob.Header.NumVertexDiffsMappingInEachChunk[i][e];
+                    var diff = rendMorphBlob.Header.NumVertexDiffsInEachChunk[i];
+                    ArgumentNullException.ThrowIfNull(diff);
+
+                    NumVertexDiffsInEachChunk[i, e] = diff[e];
+                    NumVertexDiffsMappingInEachChunk[i, e] = diff[e];
                 }
 
                 TargetStartsInVertexDiffs[i] = rendMorphBlob.Header.TargetStartsInVertexDiffs[i];
@@ -136,20 +150,26 @@ namespace WolvenKit.Modkit.RED4
 
 
                 var o = rendMorphBlob.Header.TargetPositionDiffOffset[i];
+                ArgumentNullException.ThrowIfNull(o);
                 TargetPositionDiffOffset[i] = new Vec4(o.X, o.Y, o.Z, o.W);
+
                 var s = rendMorphBlob.Header.TargetPositionDiffScale[i];
+                ArgumentNullException.ThrowIfNull(s);
                 TargetPositionDiffScale[i] = new Vec4(s.X, s.Y, s.Z, s.W);
             }
 
             var Names = new string[NumTargets];
             var RegionNames = new string[NumTargets];
-            string BaseMesh = morphBlob.BaseMesh.DepotPath;
-            string BaseTexture = morphBlob.BaseTexture.DepotPath;
+            string BaseMesh = morphBlob.BaseMesh.DepotPath.ToString().NotNull();
+            string BaseTexture = morphBlob.BaseTexture.DepotPath.ToString().NotNull();
 
             for (var i = 0; i < NumTargets; i++)
             {
-                Names[i] = morphBlob.Targets[i].Name;
-                RegionNames[i] = morphBlob.Targets[i].RegionName;
+                var target = morphBlob.Targets[i];
+                ArgumentNullException.ThrowIfNull(target);
+
+                Names[i] = string.Format("{0}_{1}", target.Name, target.RegionName);
+                RegionNames[i] = target.RegionName.ToString().NotNull();
             }
 
             var targetsInfo = new TargetsInfo()
@@ -268,15 +288,18 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < Count; i++)
             {
-                if (blob.Header.TargetTextureDiffsData[i].TargetDiffsDataSize.Count == 0)
+                var diff = blob.Header.TargetTextureDiffsData[i];
+                ArgumentNullException.ThrowIfNull(diff);
+
+                if (diff.TargetDiffsDataSize.Count == 0)
                 {
                     break;
                 }
 
-                TargetDiffsDataOffset.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsDataOffset[0]);
-                TargetDiffsDataSize.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsDataSize[0]);
-                TargetDiffsMipLevelCounts.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsMipLevelCounts[0]);
-                TargetDiffsWidth.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsWidth[0]);
+                TargetDiffsDataOffset.Add(diff.TargetDiffsDataOffset[0]);
+                TargetDiffsDataSize.Add(diff.TargetDiffsDataSize[0]);
+                TargetDiffsMipLevelCounts.Add(diff.TargetDiffsMipLevelCounts[0]);
+                TargetDiffsWidth.Add(diff.TargetDiffsWidth[0]);
                 texCount++;
             }
 
@@ -299,7 +322,7 @@ namespace WolvenKit.Modkit.RED4
             return textureStreams;
         }
 
-        private static ModelRoot RawTargetsToGLTF(List<RawMeshContainer> meshes, List<RawTargetContainer[]> expTargets, string[] names, RawArmature rig)
+        private static ModelRoot RawTargetsToGLTF(List<RawMeshContainer> meshes, List<RawTargetContainer[]> expTargets, string[] names, RawArmature? rig)
         {
             var model = ModelRoot.CreateModel();
             var mat = model.CreateMaterial("Default");
@@ -318,6 +341,17 @@ namespace WolvenKit.Modkit.RED4
             var mIndex = -1;
             foreach (var mesh in meshes)
             {
+                ArgumentNullException.ThrowIfNull(mesh.positions);
+                ArgumentNullException.ThrowIfNull(mesh.normals);
+                ArgumentNullException.ThrowIfNull(mesh.tangents);
+                ArgumentNullException.ThrowIfNull(mesh.colors0);
+                ArgumentNullException.ThrowIfNull(mesh.colors1);
+                ArgumentNullException.ThrowIfNull(mesh.texCoords0);
+                ArgumentNullException.ThrowIfNull(mesh.texCoords1);
+                ArgumentNullException.ThrowIfNull(mesh.boneindices);
+                ArgumentNullException.ThrowIfNull(mesh.weights);
+                ArgumentNullException.ThrowIfNull(mesh.indices);
+
                 ++mIndex;
                 for (var i = 0; i < mesh.positions.Length; i++)
                 {
@@ -408,15 +442,20 @@ namespace WolvenKit.Modkit.RED4
                 }
                 for (var i = 0; i < expTargets.Count; i++)
                 {
-                    var mappings = expTargets[i][mIndex].vertexMapping.ToList();
+                    ArgumentNullException.ThrowIfNull(expTargets[i][mIndex].vertexMapping);
+
+                    var mappings = expTargets[i][mIndex].vertexMapping.NotNull().ToList();
                     for (ushort e = 0; e < mesh.positions.Length; e++)
                     {
                         if (mappings.Contains(e))
                         {
                             var idx = mappings.IndexOf(e);
-                            bw.Write(expTargets[i][mIndex].vertexDelta[idx].X);
-                            bw.Write(expTargets[i][mIndex].vertexDelta[idx].Y);
-                            bw.Write(expTargets[i][mIndex].vertexDelta[idx].Z);
+
+                            var vd = expTargets[i][mIndex].vertexDelta.NotNull();
+
+                            bw.Write(vd[idx].X);
+                            bw.Write(vd[idx].Y);
+                            bw.Write(vd[idx].Z);
                         }
                         else
                         {
@@ -430,9 +469,12 @@ namespace WolvenKit.Modkit.RED4
                         if (mappings.Contains(e))
                         {
                             var idx = mappings.IndexOf(e);
-                            bw.Write(expTargets[i][mIndex].normalDelta[idx].X);
-                            bw.Write(expTargets[i][mIndex].normalDelta[idx].Y);
-                            bw.Write(expTargets[i][mIndex].normalDelta[idx].Z);
+
+                            var nd = expTargets[i][mIndex].normalDelta.NotNull();
+
+                            bw.Write(nd[idx].X);
+                            bw.Write(nd[idx].Y);
+                            bw.Write(nd[idx].Z);
                         }
                         else
                         {
@@ -446,9 +488,12 @@ namespace WolvenKit.Modkit.RED4
                         if (mappings.Contains(e))
                         {
                             var idx = mappings.IndexOf(e);
-                            bw.Write(expTargets[i][mIndex].tangentDelta[idx].X);
-                            bw.Write(expTargets[i][mIndex].tangentDelta[idx].Y);
-                            bw.Write(expTargets[i][mIndex].tangentDelta[idx].Z);
+
+                            var td = expTargets[i][mIndex].tangentDelta.NotNull();
+
+                            bw.Write(td[idx].X);
+                            bw.Write(td[idx].Y);
+                            bw.Write(td[idx].Z);
                         }
                         else
                         {
@@ -464,6 +509,17 @@ namespace WolvenKit.Modkit.RED4
 
             foreach (var mesh in meshes)
             {
+                ArgumentNullException.ThrowIfNull(mesh.positions);
+                ArgumentNullException.ThrowIfNull(mesh.normals);
+                ArgumentNullException.ThrowIfNull(mesh.tangents);
+                ArgumentNullException.ThrowIfNull(mesh.colors0);
+                ArgumentNullException.ThrowIfNull(mesh.colors1);
+                ArgumentNullException.ThrowIfNull(mesh.texCoords0);
+                ArgumentNullException.ThrowIfNull(mesh.texCoords1);
+                ArgumentNullException.ThrowIfNull(mesh.boneindices);
+                ArgumentNullException.ThrowIfNull(mesh.weights);
+                ArgumentNullException.ThrowIfNull(mesh.indices);
+
                 var mes = model.CreateMesh(mesh.name);
                 var prim = mes.CreatePrimitive();
                 prim.Material = mat;

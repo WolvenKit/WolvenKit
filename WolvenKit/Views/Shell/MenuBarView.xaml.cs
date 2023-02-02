@@ -15,8 +15,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -211,31 +212,27 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
             // visibility
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.ProjectExplorer.IsVisible,
+                    viewModel => viewModel.ProjectExplorerCheckbox,
                     view => view.ProjectExplorerCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.AssetBrowserVM.IsVisible,
+                    viewModel => viewModel.AssetBrowserCheckbox,
                     view => view.AssetBrowserCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                viewModel => viewModel.MainViewModel.PropertiesViewModel.IsVisible,
+                viewModel => viewModel.PropertiesCheckbox,
                     view => view.PropertiesCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.Log.IsVisible,
+                    viewModel => viewModel.LogCheckbox,
                     view => view.LogCheckbox.IsChecked)
                 .DisposeWith(disposables);
-            //this.Bind(ViewModel,
-            //        viewModel => viewModel.MainViewModel.ImportExportToolVM.IsVisible,
-            //        view => view.ImportExportCheckbox.IsChecked)
-            //    .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.TweakBrowserVM.IsVisible,
+                    viewModel => viewModel.TweakBrowserCheckbox,
                     view => view.TweakBrowserCheckbox.IsChecked)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
-                    viewModel => viewModel.MainViewModel.LocKeyBrowserVM.IsVisible,
+                    viewModel => viewModel.LocKeyBrowserCheckbox,
                     view => view.LocKeyBrowserCheckbox.IsChecked)
                 .DisposeWith(disposables);
         });
@@ -243,6 +240,8 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
     private void SetLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.LoadLayoutDefault();
     private void SaveLayoutToProject(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayoutToProject();
-    private async void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e) => await Interactions.ShowMaterialRepositoryView.Handle(Unit.Default);
-
+    private void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e)
+    {
+        Interactions.ShowMaterialRepositoryView();
+    }
 }

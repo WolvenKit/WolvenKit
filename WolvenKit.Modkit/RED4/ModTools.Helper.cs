@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -30,7 +33,7 @@ public partial class ModTools
         }
     }
 
-    private FindFileResult TryFindFile(List<ICyberGameArchive> archives, CName path, out FindFileEntry result, bool excludeCustomArchives = false)
+    private FindFileResult TryFindFile(List<ICyberGameArchive> archives, CName path, out FindFileEntry? result, bool excludeCustomArchives = false)
     {
         var status = InternalTryFindFile(archives, path, out result, excludeCustomArchives);
 
@@ -62,7 +65,7 @@ public partial class ModTools
         return status;
     }
 
-    private FindFileResult InternalTryFindFile(List<ICyberGameArchive> archives, ulong hash, out FindFileEntry result, bool excludeCustomArchives = false)
+    private FindFileResult InternalTryFindFile(List<ICyberGameArchive> archives, ulong hash, out FindFileEntry? result, bool excludeCustomArchives = false)
     {
         result = null;
 
@@ -87,7 +90,8 @@ public partial class ModTools
                     return FindFileResult.NoCR2W;
                 }
 
-                result = new FindFileEntry(file, reader.ImportsList);
+                ArgumentNullException.ThrowIfNull(file);
+                result = new FindFileEntry(file.NotNull(), reader.ImportsList);
 
                 return FindFileResult.NoError;
             }
@@ -96,10 +100,7 @@ public partial class ModTools
         return FindFileResult.FileNotFound;
     }
 
-    private bool UncookFile(List<ICyberGameArchive> archives, string path, string matRepo, GlobalExportArgs args, bool excludeCustomArchives = false)
-    {
-        return UncookFile(archives, FNV1A64HashAlgorithm.HashString(path), matRepo, args, excludeCustomArchives);
-    }
+    private bool UncookFile(List<ICyberGameArchive> archives, string path, string matRepo, GlobalExportArgs args, bool excludeCustomArchives = false) => UncookFile(archives, FNV1A64HashAlgorithm.HashString(path), matRepo, args, excludeCustomArchives);
 
     private bool UncookFile(List<ICyberGameArchive> archives, ulong hash, string matRepo, GlobalExportArgs args, bool excludeCustomArchives = false)
     {

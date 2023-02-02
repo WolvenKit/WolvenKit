@@ -2,8 +2,8 @@ using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using Syncfusion.UI.Xaml.TreeView.Engine;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Converters
 {
@@ -26,11 +26,7 @@ namespace WolvenKit.Converters
 
                 if (tvn.Content is ChunkViewModel vm)
                 {
-                    if (vm.PropertyType == null)
-                    {
-                        return PropertyTemplate;
-                    }
-                    else if (vm.PropertyType.IsAssignableTo(typeof(IList)))
+                    if (vm.PropertyType.IsAssignableTo(typeof(IList)))
                     {
                         return ArrayTemplate;
                     }

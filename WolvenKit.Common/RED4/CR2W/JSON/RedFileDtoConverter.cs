@@ -46,11 +46,7 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
             throw new JsonException();
         }
 
-        result.Header = JsonSerializer.Deserialize<JsonHeader>(ref reader, options);
-        if (result.Header == null)
-        {
-            throw new JsonException("Invalid JSON format");
-        }
+        result.Header = JsonSerializer.Deserialize<JsonHeader>(ref reader, options) ?? throw new JsonException("Invalid JSON format");
         RedJsonSerializer.SetHeader(result.Header);
 
         if (RedJsonSerializer.IsNewerThen(new JsonHeader().WKitJsonVersion))
@@ -149,7 +145,7 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
                 {
                     var converter = options.GetConverter(typeof(RedBaseClass));
                     result.RootChunk = converter is ICustomRedConverter conv
-                        ? (RedBaseClass?)conv.ReadRedType(ref reader, typeof(RedBaseClass), options)
+                        ? (RedBaseClass?)conv.ReadRedType(ref reader, typeof(RedBaseClass), options) ?? throw new ArgumentNullException()
                         : throw new JsonException();
 
                     break;
@@ -169,7 +165,7 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
                             break;
                         }
 
-                        result.EmbeddedFiles.Add(JsonSerializer.Deserialize<CR2WEmbedded>(ref reader, options));
+                        result.EmbeddedFiles.Add(JsonSerializer.Deserialize<CR2WEmbedded>(ref reader, options) ?? throw new ArgumentNullException());
                     }
 
                     break;
@@ -242,7 +238,7 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
                         throw new JsonException();
                     }
 
-                    result.RootChunk = JsonSerializer.Deserialize<RedBaseClass>(ref reader, options);
+                    result.RootChunk = JsonSerializer.Deserialize<RedBaseClass>(ref reader, options) ?? throw new ArgumentNullException();
 
                     break;
                 }
@@ -261,7 +257,7 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
                             break;
                         }
 
-                        result.EmbeddedFiles.Add(JsonSerializer.Deserialize<CR2WEmbedded>(ref reader, options));
+                        result.EmbeddedFiles.Add(JsonSerializer.Deserialize<CR2WEmbedded>(ref reader, options) ?? throw new ArgumentNullException());
                     }
 
                     break;

@@ -1,4 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Extensions
 {

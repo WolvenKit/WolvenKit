@@ -7,14 +7,20 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using SharpGLTF.Schema2;
+using SharpGLTF.Validation;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.Extensions;
+using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Opus;
+using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
@@ -39,8 +45,8 @@ namespace WolvenKit.Modkit.RED4
             ulong hash,
             DirectoryInfo outDir,
             GlobalExportArgs args,
-            DirectoryInfo rawOutDir = null,
-            ECookedFileFormat[] forcebuffers = null,
+            DirectoryInfo? rawOutDir = null,
+            ECookedFileFormat[]? forcebuffers = null,
             bool serialize = false)
         {
             if (!archive.Files.TryGetValue(hash, out var gameFile))
@@ -147,8 +153,8 @@ namespace WolvenKit.Modkit.RED4
             ulong hash,
             DirectoryInfo outDir,
             GlobalExportArgs args,
-            DirectoryInfo rawOutDir = null,
-            ECookedFileFormat[] forcebuffers = null,
+            DirectoryInfo? rawOutDir = null,
+            ECookedFileFormat[]? forcebuffers = null,
             bool serialize = false)
         {
             if (!archive.Files.TryGetValue(hash, out var gameFile))
@@ -261,10 +267,10 @@ namespace WolvenKit.Modkit.RED4
             DirectoryInfo outDir,
             GlobalExportArgs args,
             bool unbundle = false,
-            string pattern = "",
-            string regex = "",
-            DirectoryInfo rawOutDir = null,
-            ECookedFileFormat[] forcebuffers = null,
+            string? pattern = null,
+            string? regex = null,
+            DirectoryInfo? rawOutDir = null,
+            ECookedFileFormat[]? forcebuffers = null,
             bool serialize = false)
         {
             var extractedList = new ConcurrentBag<string>();
@@ -272,7 +278,7 @@ namespace WolvenKit.Modkit.RED4
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
-            var totalInArchiveCount = ar.Files?.Count ?? 0;
+            var totalInArchiveCount = ar.Files.Count;
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
@@ -349,7 +355,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="rawOutDir">the output directory. the outfile is conbined from the rawoutdir and the relative path</param>
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
-        private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[] forcebuffers = null)
+        private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[]? forcebuffers = null)
         {
             var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, $"{relPath.Replace('\\', Path.DirectorySeparatorChar)}"));
             if (outfile.Directory == null)
@@ -396,7 +402,7 @@ namespace WolvenKit.Modkit.RED4
             // wems are not cr2w files, need to be handled first
             if (extAsEnum == ECookedFileFormat.wem)
             {
-                if (settings.Get<WemExportArgs>() is { } wemaArgs)
+                if (settings.Get<WemExportArgs>() is { } wemaArgs && wemaArgs.FileName is not null)
                 {
                     var wemoutfile = Path.ChangeExtension(outfile.FullName, wemaArgs.wemExportType.ToString());
                     UncookWem(wemaArgs.FileName, wemoutfile);
@@ -553,17 +559,19 @@ namespace WolvenKit.Modkit.RED4
                 {
                     return UncookInkAtlas(cr2wStream, outfile);
                 }
+
+                case ECookedFileFormat.wem:
                 default:
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
         }
 
-        private static bool HandleOpus(OpusExportArgs opusExportArgs)
+        private bool HandleOpus(OpusExportArgs opusExportArgs)
         {
-            OpusTools opusTools = new(
-                opusExportArgs.ModFolderPath,
-                opusExportArgs.RawFolderPath,
-                opusExportArgs.UseMod);
+            ArgumentNullException.ThrowIfNull(opusExportArgs.ModFolderPath, nameof(opusExportArgs.ModFolderPath));
+            ArgumentNullException.ThrowIfNull(opusExportArgs.RawFolderPath, nameof(opusExportArgs.RawFolderPath));
+
+            OpusTools opusTools = new( opusExportArgs.ModFolderPath, opusExportArgs.RawFolderPath, _archiveManager, opusExportArgs.UseMod);
 
             // If More than 0 selected from opusinfo export to wem.
             if (opusExportArgs.SelectedForExport.Count > 0)
@@ -579,11 +587,13 @@ namespace WolvenKit.Modkit.RED4
 
         private string SerializeMainFile(Stream redstream)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(redstream);
-            var dto = new RedFileDto(cr2w);
-            var json = RedJsonSerializer.Serialize(dto);
-
-            return json;
+            if (_parserService.TryReadRed4File(redstream, out var cr2w))
+            {
+                var dto = new RedFileDto(cr2w);
+                var json = RedJsonSerializer.Serialize(dto);
+                return json;
+            }
+            throw new Red4ParserException();
         }
 
         private bool UncookInkAtlas(Stream redStream, FileInfo outFile)
@@ -593,7 +603,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (!_wolvenkitFileService.TryReadRed4File(redStream, out var cr2w))
+            if (!_parserService.TryReadRed4File(redStream, out var cr2w))
             {
                 return false;
             }
@@ -614,19 +624,19 @@ namespace WolvenKit.Modkit.RED4
                 ExtractParts(inkTextureAtlas.Texture.DepotPath, inkTextureAtlas.Parts, Path.Combine(outFile.FullName, "main"));
             }
 
-            if (inkTextureAtlas.Slots[0] != null && inkTextureAtlas.Slots[0].Texture.DepotPath != CName.Empty)
+            if (inkTextureAtlas.Slots[0] != null && inkTextureAtlas.Slots[0]!.Texture.DepotPath != CName.Empty)
             {
-                ExtractParts(inkTextureAtlas.Slots[0].Texture.DepotPath, inkTextureAtlas.Slots[0].Parts, Path.Combine(outFile.FullName, "2160p"));
+                ExtractParts(inkTextureAtlas.Slots[0]!.Texture.DepotPath, inkTextureAtlas.Slots[0]!.Parts, Path.Combine(outFile.FullName, "2160p"));
             }
 
-            if (inkTextureAtlas.Slots[1] != null && inkTextureAtlas.Slots[1].Texture.DepotPath != CName.Empty)
+            if (inkTextureAtlas.Slots[1] != null && inkTextureAtlas.Slots[1]!.Texture.DepotPath != CName.Empty)
             {
-                ExtractParts(inkTextureAtlas.Slots[1].Texture.DepotPath, inkTextureAtlas.Slots[1].Parts, Path.Combine(outFile.FullName, "1080p"));
+                ExtractParts(inkTextureAtlas.Slots[1]!.Texture.DepotPath, inkTextureAtlas.Slots[1]!.Parts, Path.Combine(outFile.FullName, "1080p"));
             }
 
-            if (inkTextureAtlas.Slots[2] != null && inkTextureAtlas.Slots[2].Texture.DepotPath != CName.Empty)
+            if (inkTextureAtlas.Slots[2] != null && inkTextureAtlas.Slots[2]!.Texture.DepotPath != CName.Empty)
             {
-                ExtractParts(inkTextureAtlas.Slots[2].Texture.DepotPath, inkTextureAtlas.Slots[2].Parts, Path.Combine(outFile.FullName, "720p"));
+                ExtractParts(inkTextureAtlas.Slots[2]!.Texture.DepotPath, inkTextureAtlas.Slots[2]!.Parts, Path.Combine(outFile.FullName, "720p"));
             }
 
             return false;
@@ -634,6 +644,13 @@ namespace WolvenKit.Modkit.RED4
             void ExtractParts(CName texturePath, CArray<inkTextureAtlasMapper> parts, string outDir)
             {
                 var xbmFile = _archiveManager.Lookup(texturePath);
+
+                if (xbmFile == null)
+                {
+                    _loggerService.Error(string.Format("File: {0} was not found in any archive.", texturePath));
+                    return;
+                }
+
                 if (xbmFile.HasValue)
                 {
                     Directory.CreateDirectory(outDir);
@@ -642,17 +659,21 @@ namespace WolvenKit.Modkit.RED4
                     xbmFile.Value.Extract(ms);
                     ms.Seek(0, SeekOrigin.Begin);
 
-                    var img = RedImage.FromRedFile(_wolvenkitFileService.ReadRed4File(ms));
-
-                    foreach (var part in parts)
+                    if (_parserService.TryReadRed4File(ms, out var file))
                     {
-                        var x = Math.Round(part.ClippingRectInUVCoords.Left * img.Metadata.Width);
-                        var y = Math.Round(part.ClippingRectInUVCoords.Top * img.Metadata.Height);
-                        var width = Math.Round(part.ClippingRectInUVCoords.Right * img.Metadata.Width) - x;
-                        var height = Math.Round(part.ClippingRectInUVCoords.Bottom * img.Metadata.Height) - y;
+                        var img = RedImage.FromRedFile(file);
+                        foreach (var part in parts)
+                        {
+                            ArgumentNullException.ThrowIfNull(part);
 
-                        var croppedImg = img.Crop((int)x, (int)y, (int)width, (int)height);
-                        croppedImg.SaveToPNG(Path.Combine(outDir, $"{part.PartName}.png"));
+                            var x = Math.Round(part.ClippingRectInUVCoords.Left * img.Metadata.Width);
+                            var y = Math.Round(part.ClippingRectInUVCoords.Top * img.Metadata.Height);
+                            var width = Math.Round(part.ClippingRectInUVCoords.Right * img.Metadata.Width) - x;
+                            var height = Math.Round(part.ClippingRectInUVCoords.Bottom * img.Metadata.Height) - y;
+
+                            var croppedImg = img.Crop((int)x, (int)y, (int)width, (int)height);
+                            croppedImg.SaveToPNG(Path.Combine(outDir, $"{part.PartName}.png"));
+                        }
                     }
                 }
             }
@@ -660,7 +681,7 @@ namespace WolvenKit.Modkit.RED4
 
         private bool UncookFont(Stream redstream, Stream outstream)
         {
-            if (!_wolvenkitFileService.TryReadRed4File(redstream, out var cr2w))
+            if (!_parserService.TryReadRed4File(redstream, out var cr2w))
             {
                 return false;
             }
@@ -674,30 +695,187 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
+        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
+        {
+            var cr2w = _red4ParserService.ReadRed4File(meshStream);
+
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            {
+                return false;
+            }
+
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
+
+            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
+
+            var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter);
+            MeshTools.UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
+
+            MeshTools.WriteGarmentParametersToMesh(ref expMeshes, cMesh, meshExportArgs.ExportGarmentSupport);
+
+            var meshRig = MeshTools.GetOrphanRig(cMesh);
+
+            var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
+
+            MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshRig);
+
+            if (meshExportArgs.withMaterials)
+            {
+                if (meshExportArgs.MaterialRepo is null)
+                {
+                    _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
+                    return false;
+                }
+                ParseMaterials(cr2w, meshStream, outfile, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension);
+            }
+
+            var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
+
+            if (WolvenTesting.IsTesting)
+            {
+                model.WriteGLB(new WriteSettings(vmode));
+                return true;
+            }
+
+            if (meshExportArgs.isGLBinary)
+            {
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
+            }
+            else
+            {
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
+            }
+
+            meshStream.Dispose();
+            meshStream.Close();
+            rigStream.Dispose();
+            rigStream.Close();
+
+            return true;
+        }
+        public bool ExportMultiMeshWithRig(Dictionary<Stream, string> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
+        {
+            var Rigs = new List<RawArmature>();
+            foreach (var rigStream in rigStreamS)
+            {
+                var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
+
+                Rigs.Add(Rig.NotNull());
+
+                rigStream.Dispose();
+                rigStream.Close();
+            }
+            var expRig = RIG.CombineRigs(Rigs);
+
+            var expMeshes = new List<RawMeshContainer>();
+            var matData = new List<MatData>();
+            foreach (var meshStream in meshStreamS.Keys)
+            {
+                var cr2w = _red4ParserService.ReadRed4File(meshStream);
+                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+                {
+                    continue;
+                }
+
+                using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
+
+                var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
+
+                var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter);
+                MeshTools.UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
+
+                MeshTools.WriteGarmentParametersToMesh(ref Meshes, cMesh, meshExportArgs.ExportGarmentSupport);
+
+                var meshRig = MeshTools.GetOrphanRig(cMesh);
+
+                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshStreamS[meshStream]);
+
+                if (meshExportArgs.withMaterials)
+                {
+                    if (meshExportArgs.MaterialRepo is null)
+                    {
+                        _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
+                        return false;
+                    }
+                    matData.Add(SetupMaterial(cr2w, meshStream, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension));
+                }
+
+                expMeshes.AddRange(Meshes);
+
+                meshStream.Dispose();
+                meshStream.Close();
+            }
+            var model = MeshTools.RawMeshesToGLTF(expMeshes, expRig, withMaterials: meshExportArgs.withMaterials);
+
+            SaveMaterials(outfile, matData);
+
+            if (WolvenTesting.IsTesting)
+            {
+                model.WriteGLB(new WriteSettings(vmode));
+                return true;
+            }
+
+            if (meshExportArgs.isGLBinary)
+            {
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
+            }
+            else
+            {
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
+            }
+
+            return true;
+        }
+
+        public bool ExportMesh(Stream meshStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
+        {
+            var archives = meshExportArgs.Archives;
+            var eUncookExtension = meshExportArgs.MaterialUncookExtension;
+
+            var cr2w = _red4ParserService.ReadRed4File(meshStream);
+
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            {
+                return false;
+            }
+
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
+
+            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
+
+            if (meshExportArgs.withMaterials)
+            {
+                if (meshExportArgs.MaterialRepo is null)
+                {
+                    _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
+                    return false;
+                }
+                ParseMaterials(cr2w, meshStream, outfile, archives, meshExportArgs.MaterialRepo, meshesinfo, eUncookExtension);
+            }
+
+            return MeshTools.ExportMesh(cr2w, outfile, meshExportArgs, vmode);
+        }
 
         private bool HandleMesh(Stream cr2wStream, FileInfo cr2wFileName, MeshExportArgs meshargs)
         {
             switch (meshargs.meshExportType)
             {
                 case MeshExportType.MeshOnly:
-                    return _meshTools.ExportMesh(cr2wStream, cr2wFileName, meshargs);
-
-                case MeshExportType.WithMaterials:
-                    return ExportMeshWithMaterials(cr2wStream, cr2wFileName, meshargs);
+                    return ExportMesh(cr2wStream, cr2wFileName, meshargs);
 
                 case MeshExportType.WithRig:
                 {
-                    var entry = meshargs.Rig.FirstOrDefault();
-                    if (entry == null)
+                    var entry = meshargs.Rig?.FirstOrDefault();
+                    if (entry is null)
                     {
                         return false;
                     }
 
-                    var ar = entry.Archive as Archive;
+                    var ar = entry.Archive;
                     using var ms = new MemoryStream();
                     ar?.CopyFileToStream(ms, entry.NameHash64, false);
 
-                    return _meshTools.ExportMeshWithRig(cr2wStream, ms, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
+                    return ExportMeshWithRig(cr2wStream, ms, cr2wFileName, meshargs);
                 }
                 case MeshExportType.Multimesh:
                 {
@@ -708,27 +886,28 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    var meshstreams = meshes.Select(
-                            delegate (FileEntry entry)
-                            {
-                                var ar = entry.Archive as Archive;
-                                var ms = new MemoryStream();
-                                ar?.CopyFileToStream(ms, entry.NameHash64, false);
-                                return (Stream)ms;
-                            })
-                        .ToList();
-
                     var rigstreams = rigs.Select(
                             delegate (FileEntry entry)
                             {
-                                var ar = entry.Archive as Archive;
+                                var ar = entry.Archive;
                                 var ms = new MemoryStream();
                                 ar?.CopyFileToStream(ms, entry.NameHash64, false);
                                 return (Stream)ms;
                             })
                         .ToList();
 
-                    return _meshTools.ExportMultiMeshWithRig(meshstreams, rigstreams, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
+
+                    var meshstreams = meshes.Select(
+                              delegate (FileEntry entry)
+                              {
+                                  var ar = entry.Archive;
+                                  var ms = new MemoryStream();
+                                  ar?.CopyFileToStream(ms, entry.NameHash64, false);
+                                  return new KeyValuePair<Stream, string>(ms, entry.FileName);
+                              }).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+
+                    return ExportMultiMeshWithRig(meshstreams, rigstreams, cr2wFileName, meshargs);
                 }
                 default:
                     return false;
@@ -763,7 +942,7 @@ namespace WolvenKit.Modkit.RED4
         public IEnumerable<Stream> GenerateBuffers(Stream cr2wStream)
         {
             // read the cr2wfile
-            if (!_wolvenkitFileService.TryReadRed4File(cr2wStream, out var cr2w))
+            if (!_parserService.TryReadRed4File(cr2wStream, out var cr2w))
             {
                 yield break;
             }
@@ -780,7 +959,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookTexarray(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
+            var cr2w = _parserService.ReadRed4File(cr2wStream);
             if (cr2w == null || cr2w.RootChunk is not CTextureArray texa || texa.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
@@ -795,7 +974,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookEnvprobe(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
+            var cr2w = _parserService.ReadRed4File(cr2wStream);
             if (cr2w == null || cr2w.RootChunk is not CReflectionProbeDataResource refl || refl.TextureData.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
@@ -810,7 +989,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookCubeMap(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
+            var cr2w = _parserService.ReadRed4File(cr2wStream);
             if (cr2w == null || cr2w.RootChunk is not CCubeTexture ctex || ctex.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
@@ -825,7 +1004,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookCsv(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            if (!_wolvenkitFileService.TryReadRed4File(cr2wStream, out var cr2w))
+            if (!_parserService.TryReadRed4File(cr2wStream, out var cr2w))
             {
                 return false;
             }
@@ -846,8 +1025,7 @@ namespace WolvenKit.Modkit.RED4
             decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
             // read the cr2wfile
-            return _wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w)
-&& ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
+            return _parserService.TryReadRed4File(redInFile, out var cr2w) && ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
         }
 
         public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat, bool flipV = false)

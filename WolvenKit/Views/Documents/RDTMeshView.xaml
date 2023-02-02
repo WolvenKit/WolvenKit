@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -46,11 +46,6 @@
                 <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="MiddleClick" />
                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="Shift+MiddleClick" />
             </hx:Viewport3DX.InputBindings>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDown3D">
-                    <i:CallMethodAction MethodName="OnMouseDown3DHandler" TargetObject="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
             <hx:DirectionalLight3D Direction="0, -1, 0" Color="White" />
             <hx:DirectionalLight3D Direction="0, 0, 1" Color="White" />
             <hx:DirectionalLight3D Direction="0, 0, -1" Color="White" />
@@ -174,97 +169,172 @@
                 </StackPanel>
             </Border>
         </syncfusion:DropDownButton-->
+
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Vertical">
+            <StackPanel
+                Width="Auto"
+                Grid.IsSharedSizeScope="True"
+                Orientation="Vertical">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-
+                        <ColumnDefinition SharedSizeGroup="ColumnHeader" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="1,0,1,1" />
+                    <Border
+                        Grid.Column="1"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,0,1,1" />
                     <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
                         Text="Appearance: " />
                     <ComboBox
-                        x:Name="appearanceComboBox"
                         Grid.Column="1"
-                        Width="{Binding ElementName=lodComboBox, Path=ActualWidth}"
                         Height="30"
                         Padding="10,0"
-                        HorizontalAlignment="Right"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding Appearances, Mode=OneWay}"
                         SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
-
+                        <ColumnDefinition SharedSizeGroup="ColumnHeader" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="1,0,1,1" />
+                    <Border
+                        Grid.Column="1"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,0,1,1" />
                     <TextBlock
-                        Margin="5,0,0,0"
+                        Grid.Column="0"
+                        Margin="5,0"
                         VerticalAlignment="Center"
                         Text="Level of Detail: " />
                     <ComboBox
-                        x:Name="lodComboBox"
                         Grid.Column="1"
                         Height="30"
                         Padding="10,0"
                         ItemsSource="{Binding SelectedAppearance.LODLUT.Keys, Mode=OneWay}"
                         SelectedItem="{Binding SelectedAppearance.SelectedLOD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
                 </Grid>
-                <TextBlock
-                    Margin="5,6,0,3"
-                    VerticalAlignment="Center"
-                    Text="Search Coordinate:" />
-                <Grid>
+                <Grid Grid.Column="2" Visibility="{Binding PanelVisibility.ShowSelectionPanel, Converter={StaticResource VisibilityConverter}}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition />
+                        <ColumnDefinition SharedSizeGroup="ColumnHeader" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Margin="5,0,0,0"
-                        VerticalAlignment="Center"
-                        Text="X: " />
-                    <editors:RedFloatEditor
+                    <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="1,0,1,1" />
+                    <Border
                         Grid.Column="1"
-                        Height="24"
-                        RedNumber="{Binding SearchPoint.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,0,1,1" />
                     <TextBlock
-                        Margin="5,0,0,0"
+                        Grid.Column="0"
+                        Margin="5,7"
                         VerticalAlignment="Center"
-                        Text="Y: " />
-                    <editors:RedFloatEditor
+                        Text="Selection: " />
+                    <StackPanel
                         Grid.Column="1"
-                        Height="24"
-                        RedNumber="{Binding SearchPoint.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Height="15"
+                        Margin="0,7,0,3"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Visibility="{Binding CurrentSelection.IsValid, Converter={StaticResource VisibilityConverter}}">
+                        <iconPacks:PackIconCodicons
+                            Width="15"
+                            Height="15"
+                            Margin="6,0,0,2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="SymbolClass" />
+
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            Foreground="{StaticResource WolvenKitTan}"
+                            Text="worldNodeData" />
+                        <TextBlock Margin="3,0,0,0" Text="{Binding CurrentSelection.WorldNodeIndex, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Margin="3,0,0,0" Text="{Binding CurrentSelection.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
                 </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Vertical" Visibility="{Binding PanelVisibility.ShowSearchPanel, Converter={StaticResource VisibilityConverter}}">
                     <TextBlock
-                        Margin="5,0,0,0"
+                        Margin="5,6,0,3"
                         VerticalAlignment="Center"
-                        Text="Z: " />
-                    <editors:RedFloatEditor
-                        Grid.Column="1"
-                        Height="24"
-                        RedNumber="{Binding SearchPoint.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
+                        Text="Search Coordinate:" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="X: " />
+                        <editors:RedFloatEditor
+                            Grid.Column="1"
+                            Height="24"
+                            RedNumber="{Binding SearchPoint.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="Y: " />
+                        <editors:RedFloatEditor
+                            Grid.Column="1"
+                            Height="24"
+                            RedNumber="{Binding SearchPoint.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="Z: " />
+                        <editors:RedFloatEditor
+                            Grid.Column="1"
+                            Height="24"
+                            RedNumber="{Binding SearchPoint.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Button
+                            Grid.Column="0"
+                            Margin="4"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding SearchForPointCommand}"
+                            Content="Search for Coordinate" />
+                        <Button
+                            Grid.Column="1"
+                            Height="24"
+                            Margin="4"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding ClearSearchCommand}"
+                            Content="Clear Search" />
+                    </Grid>
+                </StackPanel>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -274,19 +344,6 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Button
-                        Grid.Column="0"
-                        Margin="4"
-                        HorizontalAlignment="Stretch"
-                        Command="{Binding SearchForPointCommand}"
-                        Content="Search for Coordinate" />
-                    <Button
-                        Grid.Column="1"
-                        Height="24"
-                        Margin="4"
-                        HorizontalAlignment="Stretch"
-                        Command="{Binding ClearSearchCommand}"
-                        Content="Clear Search" />
                     <Button
                         Grid.Row="1"
                         Grid.Column="0"
@@ -305,7 +362,7 @@
                         HorizontalAlignment="Stretch"
                         Command="{Binding ExportEntity}"
                         Content="Export Appearance with Rig (experimental)"
-                        Visibility="{Binding ShowExportEntity, Converter={StaticResource VisibilityConverter}}" />
+                        Visibility="{Binding PanelVisibility.ShowExportEntity, Converter={StaticResource VisibilityConverter}}" />
                 </Grid>
 
                 <!--  Button Click="ReloadModels" Content="Zoom to Extents" /  -->
@@ -409,38 +466,38 @@
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.Template>
-                            <ControlTemplate>
-                                <ItemsPresenter />
-                            </ControlTemplate>
-                        </ItemsControl.Template>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="5,0,0,0" Orientation="Vertical">
-                                    <CheckBox
-                                        Margin="0,2"
-                                        Checked="ReloadModels"
-                                        IsChecked="{Binding IsEnabled, Mode=TwoWay}"
-                                        Unchecked="ReloadModels">
-                                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                    </CheckBox>
-                                    <TextBlock
-                                        Margin="20,0,0,0"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding BindName, StringFormat='bind: {0}'}" />
-                                    <TextBlock
-                                        Margin="20,0,0,0"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding SlotName, StringFormat='slot: {0}'}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl-->
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                                <CheckBox
+                                    Margin="0,2"
+                                    Checked="ReloadModels"
+                                    IsChecked="{Binding IsEnabled, Mode=TwoWay}"
+                                    Unchecked="ReloadModels">
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                </CheckBox>
+                                <TextBlock
+                                    Margin="20,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding BindName, StringFormat='bind: {0}'}" />
+                                <TextBlock
+                                    Margin="20,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding SlotName, StringFormat='slot: {0}'}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl-->
         </Grid>
     </Grid>
 </reactiveUi:ReactiveUserControl>

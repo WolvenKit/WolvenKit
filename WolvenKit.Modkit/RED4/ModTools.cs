@@ -13,25 +13,28 @@ namespace WolvenKit.Modkit.RED4
         private readonly ILoggerService _loggerService;
         private readonly IProgressService<double> _progressService;
         private readonly IHashService _hashService;
-        private readonly Red4ParserService _wolvenkitFileService;
+        private readonly Red4ParserService _parserService;
         private readonly MeshTools _meshTools;
         private readonly IArchiveManager _archiveManager;
+        private readonly Red4ParserService _red4ParserService;
 
         public ModTools(
             ILoggerService loggerService,
             IProgressService<double> progressService,
             IHashService hashService,
-            Red4ParserService wolvenkitFileService,
+            Red4ParserService parserService,
             MeshTools meshTools,
-            IArchiveManager archiveManager
+            IArchiveManager archiveManager,
+            Red4ParserService red4ParserService
         )
         {
             _loggerService = loggerService;
             _progressService = progressService;
             _hashService = hashService;
-            _wolvenkitFileService = wolvenkitFileService;
+            _parserService = parserService;
             _meshTools = meshTools;
             _archiveManager = archiveManager;
+            _red4ParserService = red4ParserService;
         }
     }
 }

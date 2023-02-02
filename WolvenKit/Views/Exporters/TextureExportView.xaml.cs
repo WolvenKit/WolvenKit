@@ -1,27 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Reactive.Disposables;
 using ReactiveUI;
-using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Exporters;
-using WolvenKit.App.ViewModels.Importers;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Exporters;
+
 /// <summary>
 /// Interaction logic for TextureExportView.xaml
 /// </summary>
@@ -53,6 +39,8 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
                    x => x.ExportGrid.SelectedItem)
                .DisposeWith(disposables);
         });
+
+
     }
 
     private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
@@ -64,18 +52,37 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
             case nameof(ReactiveObject.ThrownExceptions):
                 e.Cancel = true;
                 return;
+            default:
+                break;
+        }
+
+        // Generate special editors for certain properties
+        // we need the callback function
+        // we need the propertyname
+        // we need the type of the arguments
+        if (e.OriginalSource is PropertyItem { } propertyItem && sender is PropertyGrid pg && pg.SelectedObject is ExportArgs args)
+        {
+            switch (propertyItem.DisplayName)
+            {
+                case nameof(MeshExportArgs.Rig):
+                case nameof(MeshExportArgs.MultiMeshMeshes):
+                case nameof(MeshExportArgs.MultiMeshRigs):
+                case nameof(OpusExportArgs.SelectedForExport):
+                    propertyItem.Editor = new CustomCollectionEditor(ViewModel.InitCollectionEditor, new CallbackArguments(args, propertyItem.DisplayName));
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
-    private void ExportGrid_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+    private void ExportGrid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
     {
         foreach (var item in e.AddedItems)
         {
             if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
             {
                 vm.IsChecked = true;
-
-                //RightFileView.ScrollInView(new RowColumnIndex(info.RowIndex, 0));
             }
         }
 
@@ -93,4 +100,6 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
         ViewModel.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
         ViewModel.ImportSettingsCommand.NotifyCanExecuteChanged();
     }
+
 }
+

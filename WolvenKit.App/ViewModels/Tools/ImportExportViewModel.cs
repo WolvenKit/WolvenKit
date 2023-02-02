@@ -4,95 +4,68 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Converters;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Converters;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
 public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 {
-    protected ILoggerService _loggerService;
-    protected INotificationService _notificationService;
-    protected ISettingsManager _settingsManager;
-    protected IWatcherService _watcherService;
-    protected IProgressService<double> _progressService;
-    protected IProjectManager _projectManager;
-    protected IGameControllerFactory _gameController;
-    protected IArchiveManager _archiveManager;
-    protected IPluginService _pluginService;
-    protected IModTools _modTools;
+    private readonly IArchiveManager _archiveManager;
+    private readonly INotificationService _notificationService;
+    private readonly ISettingsManager _settingsManager;
 
-    protected (JsonObject, Type) currentSettings;
-    protected static readonly JsonSerializerOptions s_jsonSerializerSettings = new()
+    protected (JsonObject, Type) _currentSettings;
+    protected readonly JsonSerializerOptions _jsonSerializerSettings;
+
+    protected ImportExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId) : base(header, contentId)
     {
-        Converters =
+        _archiveManager = archiveManager;
+        _notificationService = notificationService;
+        _settingsManager = settingsManager;
+
+        _jsonSerializerSettings = new()
+        {
+            Converters =
             {
-                new JsonFileEntryConverter(),
+                new JsonFileEntryConverter(_archiveManager),
                 new JsonArchiveConverter()
             },
-        WriteIndented = true
-    };
+            WriteIndented = true
+        };
+    }
 
-    //public ImportExportViewModel(
-    //    IGameControllerFactory gameController,
-    //    ISettingsManager settingsManager,
-    //    IWatcherService watcherService,
-    //    ILoggerService loggerService,
-    //    IProjectManager projectManager,
-    //    INotificationService notificationService,
-    //    IArchiveManager archiveManager,
-    //    IPluginService pluginService,
-    //    IModTools modTools,
-    //    IProgressService<double> progressService)
-    //{
-    //    _gameController = gameController;
-    //    _settingsManager = settingsManager;
-    //    _watcherService = watcherService;
-    //    _loggerService = loggerService;
-    //    _projectManager = projectManager;
-    //    _notificationService = notificationService;
-    //    _archiveManager = archiveManager;
-    //    _pluginService = pluginService;
-    //    _modTools = modTools;
-    //    _progressService = progressService;
-    //}
+    [ObservableProperty] private ImportExportItemViewModel? _selectedObject;
 
-    [Reactive] public ImportExportItemViewModel SelectedObject { get; set; }
+    [ObservableProperty] private ObservableCollection<ImportExportItemViewModel> _items = new();
 
-    [Reactive] public ObservableCollection<ImportExportItemViewModel> Items { get; set; } = new();
-
-    [Reactive] public bool IsProcessing { get; set; } = false;
+    [ObservableProperty] private bool _isProcessing;
 
     #region MyRegion
 
-    [RelayCommand(CanExecute = nameof(IsAnyFile))]
+    [RelayCommand(CanExecute = nameof(IsAnyFile))]  // TODO NotifyCanExecuteChangedFor
     public async Task ProcessAll() => await ExecuteProcessBulk(true);
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // TODO NotifyCanExecuteChangedFor
     public async Task ProcessSelected() => await ExecuteProcessBulk();
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // TODO NotifyCanExecuteChangedFor
     private void CopyArgumentsTemplateTo()
     {
-        if (SelectedObject.Properties is not ImportExportArgs args)
+        if (SelectedObject?.Properties is not ImportExportArgs args)
         {
             return;
         }
 
-        currentSettings = (SerializeArgs(args), args.GetType());
+        _currentSettings = (SerializeArgs(args), args.GetType());
     }
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // TODO NotifyCanExecuteChangedFor
     private void PasteArgumentsTemplateTo()
     {
         var results = Items.Where(x => x.IsChecked);
@@ -100,15 +73,18 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
         foreach (var item in results)
         {
-            var (settings, type) = currentSettings;
+            var (settings, type) = _currentSettings;
 
-            if (item.Properties.GetType() != type)
+            if (item.Properties is null || item.Properties.GetType() != type)
             {
                 continue;
             }
 
-            item.Properties = (ImportExportArgs)settings.Deserialize(type, s_jsonSerializerSettings);
-            count++;
+            if (settings.Deserialize(type, _jsonSerializerSettings) is ImportExportArgs ds)
+            {
+                item.Properties = ds;
+                count++;
+            }
         }
 
         if (count > 0)
@@ -134,13 +110,16 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
     private JsonObject SerializeArgs(ImportExportArgs args)
     {
-        var node = (JsonObject)JsonSerializer.SerializeToNode(args, args.GetType(), s_jsonSerializerSettings);
+        if (JsonSerializer.SerializeToNode(args, args.GetType(), _jsonSerializerSettings) is JsonObject node)
+        {
+            node.Remove("Changing");
+            node.Remove("Changed");
+            node.Remove("ThrownExceptions");
 
-        node.Remove("Changing");
-        node.Remove("Changed");
-        node.Remove("ThrownExceptions");
+            return node;
+        }
 
-        return node;
+        throw new ArgumentNullException();
     }
 
     protected abstract Task ExecuteProcessBulk(bool all = false);

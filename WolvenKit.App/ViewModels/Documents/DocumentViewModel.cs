@@ -1,128 +1,93 @@
 using System;
 using System.IO;
-using System.Reactive;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Prism.Commands;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Shell;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Options;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common;
+using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.CR2W;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents;
+
+public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewModel
 {
-    public abstract class DocumentViewModel : PaneViewModel, IDocumentViewModel
+    protected readonly TweakDBService _tdbs;
+    protected readonly ISettingsManager _settingsManager;
+    protected readonly ILoggerService _loggerService;
+    protected readonly IProjectManager _projectManager;
+    protected readonly IArchiveManager _archiveManager;
+    protected readonly ExtendedScriptService _scriptService;
+    protected readonly Red4ParserService _parserService;
+    protected readonly IHashService _hashService;
+    protected readonly IOptions<Globals> _globals;
+    protected readonly IWatcherService _watcherService;
+    protected readonly AppViewModel _appViewModel;
+
+    protected bool _isInitialized;
+
+
+    public DocumentViewModel(string path) : base(Path.GetFileName(path), path)
     {
-        #region fields
+        _tdbs = IocHelper.GetService<TweakDBService>();
+        _settingsManager = IocHelper.GetService<ISettingsManager>();
+        _loggerService = IocHelper.GetService<ILoggerService>();
+        _projectManager = IocHelper.GetService<IProjectManager>();
+        _archiveManager = IocHelper.GetService<IArchiveManager>();
+        _scriptService = IocHelper.GetService<ExtendedScriptService>();
+        _parserService = IocHelper.GetService<Red4ParserService>();
+        _hashService = IocHelper.GetService<IHashService>();
+        _globals = IocHelper.GetService<IOptions<Globals>>();
+        _watcherService = IocHelper.GetService<IWatcherService>();
+        _appViewModel = IocHelper.GetService<AppViewModel>();
 
-        protected bool _isInitialized;
+        _filePath = path;
 
-        #endregion fields
-
-        #region ctors
-
-        public DocumentViewModel(string path) : this()
-        {
-            Header = Path.GetFileName(path);
-            ContentId = path;
-        }
-
-        private DocumentViewModel()
-        {
-            State = DockState.Document;
-            SideInDockedMode = DockSide.Tabbed;
-
-            Close = ReactiveCommand.Create(() => { });
-        }
-
-        #endregion ctors
-
-        #region commands
-
-        private ICommand _saveAsCommand = null;
-        /// <summary>Gets a command to save this document's content into another file in the file system.</summary>
-        public ICommand SaveAsCommand
-        {
-            get
-            {
-                if (_saveAsCommand == null)
-                {
-                    _saveAsCommand = new DelegateCommand<object>((p) => OnSaveAs(p), (p) => CanSaveAs(p));
-                }
-
-                return _saveAsCommand;
-            }
-        }
-
-        private ICommand _saveCommand = null;
-
-        /// <summary>Gets a command to save this document's content into the file system.</summary>
-        public ICommand SaveCommand
-        {
-            get
-            {
-                if (_saveCommand == null)
-                {
-                    _saveCommand = new DelegateCommand<object>((p) => OnSave(p), (p) => CanSave(p));
-                }
-
-                return _saveCommand;
-            }
-        }
-
-        public ReactiveCommand<Unit, Unit> Close { get; set; }
-
-        #endregion commands
-
-        #region Properties
-
-        [Reactive] public string FilePath { get; set; }
-
-        [Reactive] public bool IsDirty { get; protected set; }
-
-
-
-        #endregion Properties
-
-        #region methods
-
-        public void SetIsDirty(bool b)
-        {
-            IsDirty = b;
-            Header = GetHeader();
-        }
-
-        private string GetHeader() =>
-            // not sure this is that useful
-            //if (FilePath == null)
-            //{
-            //    return "Noname" + (IsDirty ? "*" : "");
-            //}
-
-            Path.GetFileName(ContentId) + (IsDirty ? "*" : "");
-
-
-        /// <summary>
-        /// Attempts to read the contents of a wolvenkit file
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns>True if file read was successful, otherwise false</returns>
-        public abstract Task<bool> OpenFileAsync(string path);
-
-        public abstract bool OpenFile(string path);
-
-        private bool CanClose() => true;
-
-        private bool CanSave(object parameter) => true/*IsDirty*/;
-
-        private bool CanSaveAs(object parameter) => true/*IsDirty*/;
-
-        public abstract Task OnSave(object parameter);
-
-        private void OnSaveAs(object parameter) => throw new NotImplementedException();
-
-        #endregion methods
-
-
+        State = DockState.Document;
+        SideInDockedMode = DockSide.Tabbed;
     }
+
+    #region Properties
+
+    [ObservableProperty] private string _filePath;
+
+    private bool _isDirty;
+
+    public bool IsDirty
+    {
+        get => _isDirty;
+        protected set => SetProperty(ref _isDirty, value);
+    }
+
+    #endregion Properties
+
+    #region methods
+
+    public bool IsInitialized() => _isInitialized;
+
+    public void SetIsDirty(bool b)
+    {
+        IsDirty = b;
+        Header = GetHeader();
+    }
+
+    private string GetHeader() => Path.GetFileName(ContentId) + (IsDirty ? "*" : "");
+
+
+    [RelayCommand]
+    public abstract Task Save(object parameter);
+
+    [RelayCommand]
+    public abstract void SaveAs(object parameter);
+
+
+    #endregion methods
+
+
 }

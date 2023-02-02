@@ -78,7 +78,11 @@ public partial class ConsoleFunctions
         {
             // read archive
             var ar = _wolvenkitFileService.ReadRed4Archive(processedarchive.FullName, _hashService);
-
+            if (ar is null)
+            {
+                _loggerService.Error($"Could not parse {processedarchive.FullName}");
+                continue;
+            }
             // run
 
             // check search pattern then regex

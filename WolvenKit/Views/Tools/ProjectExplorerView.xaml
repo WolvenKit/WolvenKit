@@ -11,7 +11,7 @@
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=tools:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
@@ -313,7 +313,7 @@
 
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitCyan}"
-                            Command="{Binding ViewModel.MainViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
+                            Command="{Binding ViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
                             HoverBackground="{StaticResource WolvenKitCyanShadow}"
                             Style="{StaticResource WolvenKitTreeGridButton}"

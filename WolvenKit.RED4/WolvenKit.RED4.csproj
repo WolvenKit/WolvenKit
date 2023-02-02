@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="K4os.Compression.LZ4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
+  </ItemGroup>
+
+</Project>

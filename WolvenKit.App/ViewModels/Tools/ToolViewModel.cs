@@ -1,54 +1,36 @@
-using System;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Shell;
+using System.ComponentModel;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools;
+
+public abstract class ToolViewModel : PaneViewModel
 {
-    public abstract class ToolViewModel : PaneViewModel
+    /// <summary>
+    /// Class constructor.
+    /// </summary>
+    /// <param name="name"></param>
+    public ToolViewModel(string name) : base(name, name)
     {
-        /// <summary>
-        /// Class constructor.
-        /// </summary>
-        /// <param name="name"></param>
-        public ToolViewModel(string name)
+        State = DockState.Dock;
+
+        Name = name;
+
+        PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
         {
-            State = DockState.Dock;
-
-            Name = name;
-            Header = name;
-
-            this.WhenAnyValue(x => x.State).Subscribe(b => this.RaisePropertyChanged(nameof(IsVisible)));
-        }
-
-        /// <summary>
-        /// Hidden default class constructor
-        /// </summary>
-        protected ToolViewModel()
-        {
-        }
-
-
-        /// <summary>
-        /// Gets the name of this tool window.
-        /// </summary>
-        public string Name { get; }
-
-
-        /// <summary>
-        /// Gets/sets whether this tool window is visible or not.
-        /// </summary>
-        public bool IsVisible
-        {
-            get => State != DockState.Hidden;
-            set
+            if (args.PropertyName == nameof(State))
             {
-                State = value ? DockState.Dock : DockState.Hidden;
-                this.RaisePropertyChanged(nameof(IsVisible));
+                OnPropertyChanged(nameof(IsVisible));
             }
-        }
-
-
+        };
     }
+
+
+    /// <summary>
+    /// Gets the name of this tool window.
+    /// </summary>
+    public string Name { get; }
+
+
+    
 }

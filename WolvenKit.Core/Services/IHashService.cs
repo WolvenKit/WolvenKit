@@ -6,7 +6,7 @@ namespace WolvenKit.Common.Services
     {
         bool Contains(ulong key);
 
-        string Get(ulong key);
+        string? Get(ulong key);
 
         void AddCustom(string path);
 
@@ -14,6 +14,6 @@ namespace WolvenKit.Common.Services
 
         public IEnumerable<ulong> GetMissingHashes();
 
-        public string GetGuessedExtension(ulong key);
+        public string? GetGuessedExtension(ulong key);
     }
 }

@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
-    xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types"
+    xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4"
     x:Name="uc"
     d:DesignHeight="450"
     d:DesignWidth="800"

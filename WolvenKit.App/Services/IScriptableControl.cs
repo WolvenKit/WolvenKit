@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WolvenKit.Functionality.Services;
+namespace WolvenKit.App.Services;
 
 public interface IScriptableControl : IDisposable
 {

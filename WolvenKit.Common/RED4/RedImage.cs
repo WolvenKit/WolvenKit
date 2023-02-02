@@ -41,7 +41,7 @@ public class TexMetadataWrapper
 
 public class RedImage : IDisposable
 {
-    private static readonly SharpDX.Direct3D11.Device s_device;
+    private static readonly SharpDX.Direct3D11.Device? s_device;
 
     private ScratchImage _scratchImage;
     private TexMetadata _metadata;
@@ -50,7 +50,15 @@ public class RedImage : IDisposable
 
     private bool _disposed = false;
 
-    private RedImage() { }
+    private RedImage(ScratchImage scratchImage)
+    {
+        if (_scratchImage is { IsDisposed: false })
+        {
+            _scratchImage.Dispose();
+        }
+        _scratchImage = scratchImage;
+        _metadata = _scratchImage.GetMetadata();
+    }
 
     private ScratchImage InternalScratchImage
     {
@@ -131,10 +139,7 @@ public class RedImage : IDisposable
             scratchImage = scratchImage.Decompress(format);
         }
 
-        return new RedImage
-        {
-            InternalScratchImage = scratchImage
-        };
+        return new RedImage(scratchImage);
     }
 
     // load from files
@@ -148,21 +153,18 @@ public class RedImage : IDisposable
             scratchImage = scratchImage.Decompress((DXGI_FORMAT)format);
         }
 
-        return new()
-        {
-            InternalScratchImage = scratchImage
-        };
+        return new RedImage(scratchImage);
     }
 
-    public static RedImage LoadFromTGAFile(string szFile) => new() { InternalScratchImage = TexHelper.Instance.LoadFromTGAFile(szFile) };
+    public static RedImage LoadFromTGAFile(string szFile) => new(TexHelper.Instance.LoadFromTGAFile(szFile));
 
-    public static RedImage LoadFromBMPFile(string szFile) => new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
+    public static RedImage LoadFromBMPFile(string szFile) => new(TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE));
 
-    public static RedImage LoadFromJPGFile(string szFile) => new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
+    public static RedImage LoadFromJPGFile(string szFile) => new(TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE));
 
     public static RedImage LoadFromPNGFile(string szFile)
     {
-        var result = new RedImage { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
+        var result = new RedImage(TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE));
 
         if (result._metadata.Format == DXGI_FORMAT.B8G8R8A8_UNORM)
         {
@@ -178,7 +180,7 @@ public class RedImage : IDisposable
     }
 
     public static RedImage LoadFromTIFFFile(string szFile) =>
-        new() { InternalScratchImage = TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE) };
+        new(TexHelper.Instance.LoadFromWICFile(szFile, WIC_FLAGS.NONE));
 
     #endregion
 
@@ -206,7 +208,7 @@ public class RedImage : IDisposable
 
     public void SaveToTGA(string szFile)
     {
-        ScratchImage tmpImage = null;
+        ScratchImage? tmpImage = null;
         if (TexHelper.Instance.IsSRGB(_metadata.Format))
         {
             if (_metadata.Format != DXGI_FORMAT.R8G8B8A8_UNORM_SRGB)
@@ -235,7 +237,7 @@ public class RedImage : IDisposable
 
     public byte[] SaveToTGAMemory()
     {
-        ScratchImage tmpImage = null;
+        ScratchImage? tmpImage = null;
         if (TexHelper.Instance.IsSRGB(_metadata.Format))
         {
             if (_metadata.Format != DXGI_FORMAT.R8G8B8A8_UNORM_SRGB)
@@ -355,7 +357,7 @@ public class RedImage : IDisposable
 
         TexHelper.Instance.CopyRectangle(InternalScratchImage.GetImage(0), x, y, width, height, croppedImage.GetImage(0), TEX_FILTER_FLAGS.DEFAULT, 0, 0);
 
-        return new RedImage { InternalScratchImage = croppedImage };
+        return new RedImage(croppedImage);
     }
 
     public void FlipV() => InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
@@ -567,8 +569,8 @@ public class RedImage : IDisposable
 
         var mipBiasMaxUnclamped = metadata.MipLevels - 3;
         var mipBiasMax = Math.Max(0, mipBiasMaxUnclamped);
-        setup.PlatformMipBiasPC = (byte)mipBiasMax;
-        setup.PlatformMipBiasConsole = (byte)mipBiasMax;
+        setup.PlatformMipBiasPC = Math.Clamp(setup.PlatformMipBiasPC, (byte)0, (byte)mipBiasMax);
+        setup.PlatformMipBiasConsole = Math.Clamp(setup.PlatformMipBiasConsole, (byte)0, (byte)mipBiasMax);
 
         setup.AllowTextureDowngrade = settings.AllowTextureDowngrade;
         setup.AlphaToCoverageThreshold = settings.AlphaToCoverageThreshold;
@@ -603,6 +605,7 @@ public class RedImage : IDisposable
             case TEX_DIMENSION.TEXTURE3D:
                 blob.Header.TextureInfo.Type = Enums.GpuWrapApieTextureType.TEXTYPE_2D;
                 break;
+            case TEX_DIMENSION.TEXTURE1D:
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -640,7 +643,12 @@ public class RedImage : IDisposable
             }
         }
 
-        blob.Header.TextureInfo.SliceSize = blob.Header.MipMapInfo[^1].Placement.Offset + blob.Header.MipMapInfo[^1].Placement.Size;
+        if (blob.Header.MipMapInfo == null || blob.Header.MipMapInfo.Count == 0)
+        {
+            throw new ArgumentNullException();
+        }
+
+        blob.Header.TextureInfo.SliceSize = blob.Header.MipMapInfo[^1]!.Placement.Offset + blob.Header.MipMapInfo[^1]!.Placement.Size;
 
         #endregion rendRenderTextureBlobPC
 
@@ -760,20 +768,14 @@ public class RedImage : IDisposable
     {
         var scratchImage = TexHelper.Instance.LoadFromWICMemory(buffer, WIC_FLAGS.NONE);
 
-        return new RedImage
-        {
-            InternalScratchImage = scratchImage
-        };
+        return new RedImage(scratchImage);
     }
 
     public static RedImage FromTGABuffer(byte[] buffer)
     {
         var scratchImage = TexHelper.Instance.LoadFromTGAMemory(buffer);
 
-        return new RedImage
-        {
-            InternalScratchImage = scratchImage
-        };
+        return new RedImage(scratchImage);
     }
 
     private static unsafe RedImage Create(STextureGroupSetup setup, rendRenderTextureBlobPC blob)
@@ -808,8 +810,6 @@ public class RedImage : IDisposable
 
     public static unsafe RedImage Create(DDSUtils.DDSInfo info, byte[] imgData)
     {
-        var result = new RedImage();
-
         var ddsLength = 148 + imgData.Length;
         var memIntPtr = Marshal.AllocHGlobal(ddsLength);
 
@@ -820,7 +820,7 @@ public class RedImage : IDisposable
             ms.Write(imgData);
         }
 
-        result.InternalScratchImage = TexHelper.Instance.LoadFromDDSMemory(memIntPtr, ddsLength, DDS_FLAGS.NONE, out var metadata);
+        var result = new RedImage(TexHelper.Instance.LoadFromDDSMemory(memIntPtr, ddsLength, DDS_FLAGS.NONE, out var metadata));
         if (TexHelper.Instance.IsCompressed(metadata.Format))
         {
             result._compressionFormat = metadata.Format;

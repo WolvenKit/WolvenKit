@@ -101,10 +101,21 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class GltfImportArgs : ImportArgs
     {
+        /// <summary>
+        /// Should a Material.Json be imported?
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Import with Material.Json")]
+        [Description("If selected materials will be updated from a Material.json file.")]
+        public bool ImportMaterials { get; set; } = false;
+
+        /// <summary>
+        /// Should only materials be imported and no mesh data be changed?
+        /// </summary>
         [Category("Import Settings")]
         [Display(Name = "Import Material.Json Only")]
         [Description("If selected only materials will be updated from a Material.json file. Mesh geometry will remain unchanged.")]
-        public bool importMaterialOnly { get; set; } = false;
+        public bool ImportMaterialOnly { get; set; } = false;
 
         /// <summary>
         /// Validation type for the selected GLB/GLTF.
@@ -112,15 +123,14 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "GLTF Validation Checks")]
         [Description("Optional validation check for glb/glTF files")]
-        public ValidationMode validationMode { get; set; } = ValidationMode.Skip;
+        public ValidationMode ValidationMode { get; set; } = ValidationMode.Skip;
 
         /// <summary>
         /// RedEngine4 Cooked File type for the selected GLB/GLTF.
         /// </summary>
         [Category("Import Settings")]
         [Display(Name = "Target File Format")]
-        public GltfImportAsFormat importFormat { get; set; } = GltfImportAsFormat.Mesh;
-
+        public GltfImportAsFormat ImportFormat { get; set; } = GltfImportAsFormat.Mesh;
 
 
         /// <summary>
@@ -137,7 +147,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "Select base mesh (experimental)")]
         [Description("Select a base mesh to import on.")]
-        public List<FileEntry> BaseMesh { get; set; }
+        public List<FileEntry> BaseMesh { get; set; } = new();
 
         /// <summary>
         /// Uses a selected mesh from archives as base mesh for import instead of mod project archive directory mesh
@@ -148,12 +158,28 @@ namespace WolvenKit.Common.Model.Arguments
         public bool SelectBase { get; set; } = false;
 
         /// <summary>
+        /// Assigns found LOD0 submeshes to LOD8 to allow import of certain meshes that handle LOD0 as LOD8.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Contains LOD8 named LOD0")]
+        [Description("If checked the included LOD0 submesh will be handled as LOD8")]
+        public bool ReplaceLod { get; set; } = false;
+
+        /// <summary>
+        /// Imports garment support data from GLB.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Import Garment Support (Experimental)")]
+        [Description("If checked the Garment Support data will be imported from the mesh")]
+        public bool ImportGarmentSupport { get; set; } = false;
+
+        /// <summary>
         /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
         /// </summary>
         [Category("WithRig Settings")]
         [Display(Name = "Select rig (experimental)")]
         [Description("Select a rig to import within the mesh.")]
-        public List<FileEntry> Rig { get; set; }
+        public List<FileEntry> Rig { get; set; } = new();
 
 
         /// <summary>
@@ -173,7 +199,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"Mesh/Morphtarget | Import Format :  {importFormat}";
+        public override string ToString() => $"Mesh/Morphtarget | Import Format :  {ImportFormat}";
     }
 
     public enum GltfImportAsFormat

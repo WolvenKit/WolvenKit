@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -8,11 +9,12 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Views.Documents
@@ -223,87 +225,9 @@ namespace WolvenKit.Views.Documents
 
         private void ReplaceTexture(object sender, RoutedEventArgs e)
         {
-            if (ViewModel is not { File.Cr2wFile.RootChunk: CBitmapTexture bitmap })
-            {
-                return;
-            }
-
-            var dlg = new OpenFileDialog()
-            {
-                Filter = "PNG files (*.png)|*.png|TGA files (*.tga)|*.tga|DDS files (*.dds)|*.dds|BMP files (*.bmp)|*.bmp|JPG files (*.jpg)|*.jpg|TIFF files (*.tiff)|*.tiff|All files (*.*)|*.*",
-            };
-
-            if (dlg.ShowDialog().GetValueOrDefault())
-            {
-                var ext = Path.GetExtension(dlg.FileName).ToUpperInvariant();
-
-                RedImage image;
-                switch (ext)
-                {
-                    case ".JPG":
-                    case ".JPEG":
-                    case ".JPE":
-                    {
-                        image = RedImage.LoadFromJPGFile(dlg.FileName);
-                        break;
-                    }
-                    case ".PNG":
-                    {
-                        image = RedImage.LoadFromPNGFile(dlg.FileName);
-                        break;
-                    }
-                    case ".BMP":
-                    {
-                        image = RedImage.LoadFromBMPFile(dlg.FileName);
-                        break;
-                    }
-
-                    case ".TIF":
-                    case ".TIFF":
-                    {
-                        image = RedImage.LoadFromTIFFFile(dlg.FileName);
-                        break;
-                    }
-
-                    case ".DDS":
-                    {
-                        image = RedImage.LoadFromDDSFile(dlg.FileName);
-                        break;
-                    }
-
-                    case ".TGA":
-                    {
-                        image = RedImage.LoadFromTGAFile(dlg.FileName);
-                        break;
-                    }
-
-                    default:
-                        throw new NotImplementedException();
-                }
-
-                var xbmImportArgs = new XbmImportArgs
-                {
-                    RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString()),
-                    Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString()),
-                    GenerateMipMaps = bitmap.Setup.HasMipchain,
-                    IsGamma = bitmap.Setup.IsGamma,
-                    TextureGroup = bitmap.Setup.Group,
-                    //IsStreamable = bitmap.Setup.IsStreamable,
-                    //PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC,
-                    //PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole,
-                    //AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade,
-                    //AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold
-                };
-
-                var newBitmap = image.SaveToXBM(xbmImportArgs);
-
-                ViewModel.File.Cr2wFile.RootChunk = newBitmap;
-                ViewModel.File.OnSave(null);
-
-                ViewModel.File.TabItemViewModels.Clear();
-                ViewModel.File.OpenFile(ViewModel.File.FilePath);
-                ViewModel.File.SelectedIndex = 1;
-            }
+            ViewModel.ReplaceTexture();
         }
+
+       
     }
 }

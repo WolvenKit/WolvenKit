@@ -10,6 +10,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Modkit.Exceptions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
 
@@ -20,8 +21,6 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
-        #region Methods
-
         /// <summary>
         ///     Creates and archive from a folder and packs all files inside into it
         /// </summary>
@@ -29,12 +28,22 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outpath"></param>
         /// <param name="modname">Optional archivename</param>
         /// <returns></returns>
-        public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath, string modname = null)
+        public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
         {
-            var writer = new ArchiveWriter(_hashService);
+            if (!infolder.Exists)
+            {
+                _loggerService.Error($"Could not pack archive from {infolder}");
+                throw new PackException();
+            }
+
+            if (!outpath.Exists)
+            {
+                _loggerService.Error($"Could not pack archive from {infolder}");
+                throw new PackException();
+            }
+
+            ArchiveWriter writer = new(_hashService){ LoggerService = _loggerService };
             return writer.WriteArchive(infolder, outpath, modname);
         }
-
-        #endregion Methods
     }
 }

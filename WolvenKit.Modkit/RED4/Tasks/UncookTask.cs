@@ -7,24 +7,25 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
 
 namespace CP77Tools.Tasks;
 
 public record UncookTaskOptions
 {
-    public DirectoryInfo outpath { get; init; }
-    public string rawOutDir { get; init; }
+    public DirectoryInfo? outpath { get; init; }
+    public string? rawOutDir { get; init; }
     public EUncookExtension? uext { get; init; }
     public bool? flip { get; init; }
     public ulong hash { get; init; }
-    public string pattern { get; init; }
-    public string regex { get; init; }
+    public string? pattern { get; init; }
+    public string? regex { get; init; }
     public bool unbundle { get; init; }
-    public ECookedFileFormat[] forcebuffers { get; init; }
+    public ECookedFileFormat[]? forcebuffers { get; init; }
     public bool? serialize { get; init; }
     public MeshExportType? meshExportType { get; init; }
-    public string meshExportMaterialRepo { get; init; }
+    public string? meshExportMaterialRepo { get; init; }
     public bool? meshExportLodFilter { get; init; }
     public bool? meshExportExperimentalMergedExport { get; init; }
 }
@@ -81,7 +82,7 @@ public partial class ConsoleFunctions
                     return ERROR_BAD_ARGUMENTS;
                 }
                 archiveFileInfos = new List<FileInfo> { file };
-                basedir = file.Directory;
+                basedir = file.Directory.NotNull();
                 break;
             case DirectoryInfo directory:
                 archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
@@ -112,7 +113,7 @@ public partial class ConsoleFunctions
             }
         }
 
-        DirectoryInfo rawOutDirInfo = null;
+        DirectoryInfo? rawOutDirInfo = null;
         if (string.IsNullOrEmpty(options.rawOutDir))
         {
             rawOutDirInfo = outDir;
@@ -141,6 +142,7 @@ public partial class ConsoleFunctions
         {
             exportArgs.Get<XbmExportArgs>().UncookExtension = options.uext.Value;
             exportArgs.Get<MlmaskExportArgs>().UncookExtension = options.uext.Value;
+            exportArgs.Get<MeshExportArgs>().MaterialUncookExtension = options.uext.Value;
         }
         if (options.meshExportType != null)
         {
@@ -149,11 +151,13 @@ public partial class ConsoleFunctions
             exportArgs.Get<MeshExportArgs>().ArchiveDepot = basedir.FullName;
         }
 
-        if(options.meshExportExperimentalMergedExport == true){
+        if (options.meshExportExperimentalMergedExport == true)
+        {
             exportArgs.Get<MeshExportArgs>().ExperimentalMergedExport = true;
         }
 
-        if(options.meshExportLodFilter == true){
+        if (options.meshExportLodFilter == true)
+        {
             exportArgs.Get<MeshExportArgs>().LodFilter = true;
         }
 
@@ -191,24 +195,30 @@ public partial class ConsoleFunctions
         var result = 0;
         foreach (var fileInfo in archiveFileInfos)
         {
-            var ar = _wolvenkitFileService.ReadRed4Archive(fileInfo.FullName, _hashService);
-
-            if (options.hash != 0)
+            if (_wolvenkitFileService.TryReadRed4Archive(fileInfo.FullName, _hashService, out var ar))
             {
-                if (_modTools.UncookSingle(ar, options.hash, outDir, exportArgs, rawOutDirInfo, options.forcebuffers, options.serialize ?? false))
+                if (options.hash != 0)
                 {
-                    _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked file: {options.hash}");
+                    if (_modTools.UncookSingle(ar, options.hash, outDir, exportArgs, rawOutDirInfo, options.forcebuffers, options.serialize ?? false))
+                    {
+                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked file: {options.hash}");
+                    }
+                    else
+                    {
+                        _loggerService.Warning($" {ar.ArchiveAbsolutePath}: Failed to uncook file: {options.hash}");
+                        result += 1;
+                    }
                 }
                 else
                 {
-                    _loggerService.Warning($" {ar.ArchiveAbsolutePath}: Failed to uncook file: {options.hash}");
-                    result += 1;
+                    // TODO return success
+                    _modTools.UncookAll(ar, outDir, exportArgs, options.unbundle, options.pattern, options.regex, rawOutDirInfo, options.forcebuffers, options.serialize ?? false);
                 }
             }
             else
             {
-                // TODO return success
-                _modTools.UncookAll(ar, outDir, exportArgs, options.unbundle, options.pattern, options.regex, rawOutDirInfo, options.forcebuffers, options.serialize ?? false);
+                _loggerService.Error($"Could not parse archive {fileInfo}");
+                continue;
             }
         }
 

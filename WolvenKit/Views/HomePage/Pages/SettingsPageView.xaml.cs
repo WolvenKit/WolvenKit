@@ -1,11 +1,10 @@
 using System.Reactive.Disposables;
-using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.App.Services;
 using WolvenKit.Controls;
-using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels;
 using static WolvenKit.Converters.PropertyGridEditors;
 
@@ -41,12 +40,6 @@ namespace WolvenKit.Views.HomePage.Pages
 
         public ItemCollection AccordionItems { get; set; }
 
-        private void ExitRestart_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.Application.Restart();
-            System.Windows.Application.Current.Shutdown();
-        }
-
         private void SettingsPropertygrid_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
         {
             switch (e.DisplayName)
@@ -55,6 +48,8 @@ namespace WolvenKit.Views.HomePage.Pages
                 case nameof(ReactiveObject.Changing):
                 case nameof(ReactiveObject.ThrownExceptions):
                     e.Cancel = true;
+                    break;
+                default:
                     break;
             }
             // Generate special editors for the properties for which default is not ok
@@ -70,6 +65,8 @@ namespace WolvenKit.Views.HomePage.Pages
                         break;
                     case nameof(ISettingsDto.ThemeAccentString):
                         propertyItem.Editor = new BrushEditor();
+                        break;
+                    default:
                         break;
                 }
             }

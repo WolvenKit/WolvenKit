@@ -2,19 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
-    <Version>8.8.1</Version>
+    <Version>8.8.2</Version>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-
+	<Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Wizards\**" />
     <Compile Remove="ViewModels\Others\**" />
     <Compile Remove="ViewModels\Shared\**" />
+    <EmbeddedResource Remove="Models\Wizards\**" />
     <EmbeddedResource Remove="ViewModels\Others\**" />
     <EmbeddedResource Remove="ViewModels\Shared\**" />
+    <None Remove="Models\Wizards\**" />
     <None Remove="ViewModels\Others\**" />
     <None Remove="ViewModels\Shared\**" />
     <Page Remove="ViewModels\Others\**" />
@@ -56,30 +60,21 @@
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
-    <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED4\WolvenKit.RED4.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Octokit" Version="4.0.2" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-    <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
-    <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.2.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="ReactiveUI" Version="18.4.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="18.4.1" />
-    <PackageReference Include="ReactiveUI.Validation" Version="3.0.22" />
-    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
-    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.22.0" />
-    <PackageReference Include="morelinq" Version="3.3.2" /> 
-    <PackageReference Include="Prism.Core" Version="8.1.97" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="20.3.0.58" />
-    <PackageReference Include="Discord.Net" Version="3.8.1" />
-    <PackageReference Include="AutomaticGraphLayout" Version="1.1.12" />
-    <PackageReference Include="Nodify" Version="4.1.0" />
-    <PackageReference Include="DiscordRichPresence" Version="1.1.3.18" />
-    <PackageReference Include="NAudio" Version="2.1.0" />
+	<PackageReference Include="Octokit" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+	<PackageReference Include="Discord.Net" />
+	<PackageReference Include="DiscordRichPresence" />
+	
+	<PackageReference Include="NAudio" />
+    <PackageReference Include="NAudio.Vorbis" />
+    <PackageReference Include="AvalonEdit" />
+	<PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
+    <PackageReference Include="AutomaticGraphLayout" />
+    <PackageReference Include="Nodify" />
   </ItemGroup>
 
   <ItemGroup>

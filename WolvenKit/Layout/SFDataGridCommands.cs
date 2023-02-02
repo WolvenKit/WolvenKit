@@ -1,5 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Input;
+using DynamicData;
 using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.Common.Interfaces;
 
@@ -7,12 +10,9 @@ namespace WolvenKit.Layout
 {
     public static class SFDataGridCommands
     {
-        public static readonly RoutedCommand CheckAndUnCheck = new RoutedCommand(nameof(CheckAndUnCheck), typeof(SFDataGridCommands));
+        public static readonly RoutedCommand CheckAndUnCheck = new(nameof(CheckAndUnCheck), typeof(SFDataGridCommands));
 
-        static SFDataGridCommands()
-        {
-            CommandManager.RegisterClassCommandBinding(typeof(CheckBox), new CommandBinding(CheckAndUnCheck, OnCheckUnCheckCommand, OnCanExecuteCheckAndUnCheck));
-        }
+        static SFDataGridCommands() => CommandManager.RegisterClassCommandBinding(typeof(CheckBox), new CommandBinding(CheckAndUnCheck, OnCheckUnCheckCommand, OnCanExecuteCheckAndUnCheck));
 
         private static void OnCanExecuteCheckAndUnCheck(object sender, CanExecuteRoutedEventArgs args) => args.CanExecute = true;
 
@@ -22,31 +22,19 @@ namespace WolvenKit.Layout
             {
                 return;
             }
-            var checkbox = (sender as CheckBox).IsChecked;
-
-            if (checkbox == true)
+            if (sender is not CheckBox checkBox)
             {
-                sfdatagrid.SelectAll();
-                foreach (var item in sfdatagrid.SelectedItems)
-                {
-                    var selectablevm = (ISelectableViewModel)item;
-                    if (selectablevm.IsChecked == false)
-                    {
-                        selectablevm.IsChecked = true;
-                    }
-                }
+                return;
             }
-            else if (checkbox == false)
+
+            // NOTE: this is needed because sfdatagrid.SelectAll() does not send OnSelectionChanged events
+            if (checkBox.IsChecked.Value)
             {
-                foreach (var item in sfdatagrid.SelectedItems)
-                {
-                    var selectablevm = (ISelectableViewModel)item;
-                    if (selectablevm.IsChecked == true)
-                    {
-                        selectablevm.IsChecked = false;
-                    }
-                }
-                sfdatagrid.ClearSelections(false);
+                sfdatagrid.SelectedItems.AddRange(sfdatagrid.ItemsSource as IEnumerable<object>);
+            }
+            else
+            {
+                sfdatagrid.SelectedItems.RemoveMany(sfdatagrid.ItemsSource as IEnumerable<object>);
             }
         }
     }

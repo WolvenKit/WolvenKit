@@ -11,10 +11,7 @@ namespace WolvenKit.Views.Editors
     /// </summary>
     public partial class RedUlongEditor : UserControl
     {
-        public RedUlongEditor()
-        {
-            InitializeComponent();
-        }
+        public RedUlongEditor() => InitializeComponent();
 
         public IRedPrimitive<ulong> RedNumber
         {
@@ -43,6 +40,8 @@ namespace WolvenKit.Views.Editors
                     break;
                 case TweakDBID:
                     SetCurrentValue(RedNumberProperty, (TweakDBID)ulong.Parse(value));
+                    break;
+                default:
                     break;
             }
         }

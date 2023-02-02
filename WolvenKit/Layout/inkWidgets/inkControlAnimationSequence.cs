@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using Prism.Commands;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
 
@@ -19,7 +18,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public string Target;
     }
 
-    public class inkControlAnimation
+    public partial class inkControlAnimation
     {
         public string Name => Sequence.Name;
         public inkanimSequence Sequence { get; set; }
@@ -31,9 +30,6 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             Sequence = seq;
             WidgetView = wv;
-
-            PlayCommand = new DelegateCommand(Play);
-            StopCommand = new DelegateCommand(Stop);
 
             if (Sequence.Targets.Count != Sequence.Definitions.Count)
             {
@@ -305,13 +301,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-        public ICommand PlayCommand { get; set; }
-        //public bool CanPlay() => Storyboard != null && Storyboard.GetCurrentState() == ClockState.Stopped;
-        public void Play() => Storyboard.Begin(WidgetView, true);
+        [RelayCommand]
+        private void Play() => Storyboard.Begin(WidgetView, true);
 
-        public ICommand StopCommand { get; set; }
-        //public bool CanStop() => Storyboard != null && Storyboard.GetCurrentState() != ClockState.Stopped;
-        public void Stop() => Storyboard.Stop(WidgetView);
+        [RelayCommand]
+        private void Stop() => Storyboard.Stop(WidgetView);
 
         public static DoubleKeyFrame ToDoubleKeyframe(Enums.inkanimInterpolationType? type, Enums.inkanimInterpolationMode? mode, float value, float keyframe) => type switch
         {
@@ -454,6 +448,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             Enums.inkanimInterpolationMode.EasyOut => EasingMode.EaseOut,
             Enums.inkanimInterpolationMode.EasyInOut or Enums.inkanimInterpolationMode.EasyOutIn => EasingMode.EaseInOut,
+            Enums.inkanimInterpolationMode.EasyIn => EasingMode.EaseIn,
+            null => EasingMode.EaseIn,
             _ => EasingMode.EaseIn,
         };
     }

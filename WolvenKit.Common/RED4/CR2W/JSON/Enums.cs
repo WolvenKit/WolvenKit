@@ -2,6 +2,7 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.JSON;
@@ -46,7 +47,7 @@ public class CBitFieldConverter : JsonConverter<IRedBitField>, ICustomRedConvert
         }
 
         var enumType = typeToConvert.GetGenericArguments()[0];
-        var str = reader.GetString();
+        var str = reader.GetString().NotNull();
         return CBitField.Parse(enumType, str);
     }
 
@@ -70,7 +71,7 @@ public class CEnumConverter : JsonConverter<IRedEnum>, ICustomRedConverter
         }
 
         var enumType = typeToConvert.GetGenericArguments()[0];
-        var str = reader.GetString();
+        var str = reader.GetString().NotNull();
         return CEnum.Parse(enumType, str);
     }
 

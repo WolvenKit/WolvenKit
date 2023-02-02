@@ -2,6 +2,7 @@ using System.IO;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -17,8 +18,8 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="args"></param>
         /// <param name="basedir"></param>
         /// <param name="rawoutdir"></param>
-        public bool Export(FileInfo cr2wfile, GlobalExportArgs args, DirectoryInfo basedir = null,
-            DirectoryInfo rawoutdir = null, ECookedFileFormat[] forcebuffers = null)
+        public bool Export(FileInfo cr2wfile, GlobalExportArgs args, DirectoryInfo basedir,
+            DirectoryInfo? rawoutdir = null, ECookedFileFormat[]? forcebuffers = null)
         {
             if (cr2wfile is null or { Exists: false })
             {
@@ -32,11 +33,11 @@ namespace WolvenKit.Modkit.RED4
             // if no basedir is supplied use the file directory
             if (basedir is not { Exists: true })
             {
-                basedir = cr2wfile.Directory;
+                basedir = cr2wfile.Directory.NotNull();
             }
             if (rawoutdir is not { Exists: true })
             {
-                rawoutdir = cr2wfile.Directory;
+                rawoutdir = cr2wfile.Directory.NotNull();
             }
 
             if (!cr2wfile.FullName.Contains(basedir.FullName))

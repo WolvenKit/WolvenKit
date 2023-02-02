@@ -8,8 +8,9 @@ using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Views.Dialogs.Windows;
 using WolvenKit.Views.Exporters;
 using WolvenKit.Views.Importers;
@@ -37,33 +38,48 @@ namespace WolvenKit.Views.Shell
 
             this.WhenActivated(disposables =>
             {
-                Interactions.ShowConfirmation.RegisterHandler(interaction => interaction.SetOutput(ShowConfirmation(interaction.Input)));
-                Interactions.ShowLaunchProfilesView.RegisterHandler(interaction =>
+                Interactions.ShowConfirmation = input =>
+                {
+                    return ShowConfirmation(input);
+                };
+
+                Interactions.ShowLaunchProfilesView = () =>
                 {
                     LaunchProfilesView dialog = new();
 
-                    return Observable.Start(() =>
+                    if (dialog.ShowDialog(this) == true)
                     {
-                        if (dialog.ShowDialog(this) == true)
-                        {
-                            ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
-                        }
+                        ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
+                    }
 
-                        interaction.SetOutput(true);
-                    }, RxApp.MainThreadScheduler);
-                });
-                Interactions.ShowMaterialRepositoryView.RegisterHandler(interaction =>
+                    return true;
+                };
+
+                Interactions.ShowMaterialRepositoryView = () =>
                 {
                     MaterialsRepositoryView dialog = new();
 
-                    return Observable.Start(() =>
+                    if (dialog.ShowDialog(this) == true)
                     {
-                        if (dialog.ShowDialog(this) == true)
-                        { }
+                    }
 
-                        interaction.SetOutput(true);
-                    }, RxApp.MainThreadScheduler);
-                });
+                    return true;
+                };
+
+                Interactions.ShowCollectionView = input =>
+                {
+                    ChooseCollectionView dialog = new();
+                    dialog.ViewModel.SetAvailableItems(input.Item1);
+                    dialog.ViewModel.SetSelectedItems(input.Item2);
+
+                    IEnumerable<IDisplayable> result = null;
+                    if (dialog.ShowDialog(this) == true)
+                    {
+                        result = dialog.ViewModel.SelectedItems;
+                    }
+
+                    return result;
+                };
 
 
                 this.Bind(ViewModel,

@@ -5,74 +5,80 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Utils;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
 using WolvenKit.App.Helpers;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Services;
+using WolvenKit.App.Services;
+using WolvenKit.Modkit.Scripting;
 
-namespace WolvenKit.ViewModels.Documents;
+namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class WScriptDocumentViewModel : DocumentViewModel
 {
-    private readonly ILoggerService _loggerService;
-    private readonly ExtendedScriptService _scriptService;
-
     private readonly Dictionary<string, object> _hostObjects;
 
     public WScriptDocumentViewModel(string path) : base(path)
     {
-        Document = new TextDocument();
+        _document = new TextDocument();
         Extension = "wscript";
 
-        _loggerService = Locator.Current.GetService<ILoggerService>();
-        _scriptService = Locator.Current.GetService<ExtendedScriptService>();
-
-        _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService) } };
+        _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService, _projectManager, _archiveManager, _parserService, _watcherService) } };
         GenerateCompletionData();
 
-        this.WhenAnyValue(x => x._scriptService.IsRunning)
-            .Subscribe(_ =>
-            {
-                RunCommand.NotifyCanExecuteChanged();
-                StopCommand.NotifyCanExecuteChanged();
-            });
+        LoadDocument(path);
+
+        _scriptService.PropertyChanged += _scriptService_PropertyChanged;
     }
 
-    [Reactive] public TextDocument Document { get; set; }
+    private void _scriptService_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if(e.PropertyName == nameof(ScriptService.IsRunning))
+        {
+            RunCommand.NotifyCanExecuteChanged();
+            StopCommand.NotifyCanExecuteChanged();
+        }
+    }
+
+    #region properties
+
+    [ObservableProperty]
+    private TextDocument _document;
+    
     public string Extension { get; }
-    [Reactive] public bool IsReadOnly { get; set; }
-    [Reactive] public string IsReadOnlyReason { get; set; }
-    public Dictionary<string, List<(string name, string desc)>> CompletionData { get; } = new();
+    
+    [ObservableProperty]
+    private bool _isReadOnly;
+    
+    [ObservableProperty]
+    private string? _isReadOnlyReason;
+    
+    public Dictionary<string, List<(string name, string? desc)>> CompletionData { get; } = new();
 
-    [Reactive] public bool IsUIScript { get; set; }
-    [Reactive] public bool IsNormalScript { get; set; }
+    [ObservableProperty]
+    private bool _isUIScript;
+    
+    [ObservableProperty]
+    private bool _isNormalScript;
 
-    [RelayCommand(CanExecute = nameof(CanRun))]
-    private async void Run()
-    {
-        var code = Document.Text;
+    #endregion
 
-        await _scriptService.ExecuteAsync(code, _hostObjects, ISettingsManager.GetWScriptDir());
-    }
+    #region commands
+
     private bool CanRun() => !_scriptService.IsRunning;
+    [RelayCommand(CanExecute = nameof(CanRun))]
+    private async void Run() => await _scriptService.ExecuteAsync(Document.Text, _hostObjects, ISettingsManager.GetWScriptDir());
 
-    [RelayCommand(CanExecute = nameof(CanStop))]
-    private void Stop()
-    {
-        _scriptService.Stop();
-    }
     private bool CanStop() => _scriptService.IsRunning;
+    [RelayCommand(CanExecute = nameof(CanStop))]
+    private void Stop() => _scriptService.Stop();
 
     [RelayCommand]
-    private void ReloadUI()
-    {
-        _scriptService.RefreshUIScripts();
-    }
+    private void ReloadUI() => _scriptService.RefreshUIScripts();
+
+    #endregion
+
 
     private void GenerateCompletionData()
     {
@@ -80,7 +86,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
         foreach (var (name, instance) in _hostObjects)
         {
-            CompletionData.Add(name, new List<(string name, string desc)>());
+            CompletionData.Add(name, new List<(string name, string? desc)>());
 
             foreach (var methodInfo in instance.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public))
             {
@@ -102,42 +108,20 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         }
     }
 
-    public override Task<bool> OpenFileAsync(string path)
-    {
-        _isInitialized = false;
-
-        LoadDocument(path);
-
-        ContentId = path;
-        FilePath = path;
-        _isInitialized = true;
-
-        return Task.FromResult(true);
-    }
-
-    public override bool OpenFile(string path)
-    {
-        _isInitialized = false;
-
-        LoadDocument(path);
-
-        ContentId = path;
-        FilePath = path;
-        _isInitialized = true;
-
-        return true;
-    }
-
-    public override Task OnSave(object parameter)
+    public override Task Save(object parameter)
     {
         using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
         using var bw = new StreamWriter(fs);
         bw.Write(Document.Text);
+        bw.Close();
 
         SetIsDirty(false);
+        LoadDocument(FilePath);
 
         return Task.CompletedTask;
     }
+
+    public override void SaveAs(object parameter) => throw new NotImplementedException();
 
     private void LoadDocument(string paramFilePath)
     {
@@ -165,10 +149,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         FilePath = paramFilePath;
         GetScriptType(Path.GetFileNameWithoutExtension(paramFilePath));
 
-        if (string.IsNullOrEmpty(Document.Text))
-        {
-            return;
-        }
+        _isInitialized = true;
     }
 
     private void GetScriptType(string fileName)

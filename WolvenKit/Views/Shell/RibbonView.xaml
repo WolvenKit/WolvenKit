@@ -5,7 +5,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
-    xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     x:TypeArguments="shell:RibbonViewModel">
 
     <!--  Resources  -->
@@ -265,7 +265,7 @@
                 </Button>
 
                 <Separator />
-                
+
                 <Menu x:Name="LaunchMenu">
                     <MenuItem x:Name="LaunchMenuMainItem">
                         <MenuItem.Header>

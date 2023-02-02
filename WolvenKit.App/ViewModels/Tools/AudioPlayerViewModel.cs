@@ -1,11 +1,11 @@
-using ReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace WolvenKit.ViewModels.Tools;
+namespace WolvenKit.App.ViewModels.Tools;
 
-public class AudioPlayerViewModel : ReactiveObject
+public class AudioPlayerViewModel : ObservableObject
 {
     public AudioPlayerViewModel()
     {
-        
+
     }
 }

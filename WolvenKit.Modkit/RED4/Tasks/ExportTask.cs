@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
 
 namespace CP77Tools.Tasks;
@@ -51,7 +52,7 @@ public partial class ConsoleFunctions
         switch (path)
         {
             case FileInfo file:
-                basedir = file.Directory;
+                basedir = file.Directory.NotNull();
                 filesToExport = new List<FileInfo> { file };
                 break;
             case DirectoryInfo directory:
@@ -80,6 +81,7 @@ public partial class ConsoleFunctions
         {
             exportArgs.Get<XbmExportArgs>().UncookExtension = uext.Value;
             exportArgs.Get<MlmaskExportArgs>().UncookExtension = uext.Value;
+            exportArgs.Get<MeshExportArgs>().MaterialUncookExtension = uext.Value;
         }
 
         var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;

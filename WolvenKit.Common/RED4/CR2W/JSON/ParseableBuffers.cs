@@ -31,7 +31,7 @@ public class ParseableBufferConverter : JsonConverter<IParseableBuffer>, ICustom
 
 
         var result = System.Activator.CreateInstance(typeToConvert);
-        
+
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)

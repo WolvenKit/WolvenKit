@@ -59,6 +59,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         break;
                     case Enums.inkBrushMirrorType.NoMirror:
                         break;
+                    default:
+                        break;
                 }
 
                 ImageSource.Freeze();

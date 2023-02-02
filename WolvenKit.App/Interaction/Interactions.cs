@@ -1,70 +1,73 @@
+using System;
 using System.Collections.Generic;
-using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
-using ReactiveUI;
-using WolvenKit.Functionality.Helpers;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.ViewModels.Dialogs;
 
-namespace WolvenKit.Interaction
+namespace WolvenKit.App.Interaction;
+
+public static class Interactions
 {
-    public static class Interactions
+    // wrappers
+    public static async Task<WMessageBoxResult> ShowMessageBoxAsync(
+        string text,
+        string caption,
+        WMessageBoxButtons messageBoxButtons = WMessageBoxButtons.OkCancel,
+        WMessageBoxImage image = WMessageBoxImage.Question)
     {
-        // wrappers
-        public static async Task<WMessageBoxResult> ShowMessageBoxAsync(
-            string text,
-            string caption,
-            WMessageBoxButtons messageBoxButtons = WMessageBoxButtons.OkCancel,
-            WMessageBoxImage image = WMessageBoxImage.Question)
-        {
-            var result = WMessageBoxResult.None;
-            DispatcherHelper.RunOnMainThread(async () => result = await ShowConfirmation.Handle((text, caption, image, messageBoxButtons)));
-            return await Task.FromResult(result);
-        }
-
-
-
-        // classic popups
-        public static readonly Interaction<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation = new();
-
-        public static readonly Interaction<IEnumerable<string>, bool> DeleteFiles = new();
-        public static readonly Interaction<string, string> Rename = new();
-
-        //custom views
-        public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();
-        public static readonly Interaction<Unit, bool> ShowLaunchProfilesView = new();
-        public static readonly Interaction<Unit, bool> ShowMaterialRepositoryView = new();
+        var result = WMessageBoxResult.None;
+        DispatcherHelper.RunOnMainThread(() => result = ShowConfirmation((text, caption, image, messageBoxButtons)));
+        return await Task.FromResult(result);
     }
 
-    public enum WMessageBoxImage
-    {
-        None = 0,
-        Hand = 1,
-        Stop = 2,
-        Error = 3,
-        Question = 4,
-        Exclamation = 5,
-        Warning = 6,
-        Asterisk = 7,
-        Information = 8
-    }
 
-    public enum WMessageBoxButtons
-    {
-        Ok,
-        OkCancel,
-        Yes,
-        YesNo,
-        YesNoCancel,
-        No
-    }
 
-    public enum WMessageBoxResult
-    {
-        None = 0,
-        OK = 1,
-        Cancel = 2,
-        Yes = 3,
-        No = 4,
-        Custom = 5
-    }
+    // classic popups
+    public static Func<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation { get; set; } 
+        = _ => throw new NotImplementedException();
+
+    public static Func<IEnumerable<string>, bool> DeleteFiles { get; set; } = _ => throw new NotImplementedException();
+
+    public static Func<string, string> Rename { get; set; } = _ => throw new NotImplementedException();
+
+    //custom views
+    public static Func<bool> ShowFirstTimeSetup { get; set; } = () => throw new NotImplementedException();
+    public static Func<bool> ShowLaunchProfilesView { get; set; } = () => throw new NotImplementedException();
+    public static Func<bool> ShowMaterialRepositoryView { get; set; } = () => throw new NotImplementedException();
+
+    public static Func<(IEnumerable<IDisplayable>?, IEnumerable<IDisplayable>?), IEnumerable<IDisplayable>> ShowCollectionView { get; set; } 
+        = _ => throw new NotImplementedException();
+}
+
+public enum WMessageBoxImage
+{
+    None = 0,
+    Hand = 1,
+    Stop = 2,
+    Error = 3,
+    Question = 4,
+    Exclamation = 5,
+    Warning = 6,
+    Asterisk = 7,
+    Information = 8
+}
+
+public enum WMessageBoxButtons
+{
+    Ok,
+    OkCancel,
+    Yes,
+    YesNo,
+    YesNoCancel,
+    No
+}
+
+public enum WMessageBoxResult
+{
+    None = 0,
+    OK = 1,
+    Cancel = 2,
+    Yes = 3,
+    No = 4,
+    Custom = 5
 }

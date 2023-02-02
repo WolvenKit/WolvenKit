@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.CR2W;
@@ -22,10 +22,10 @@ namespace WolvenKit.Common.Services
         private readonly CName _cachePath = (CName)@"base\worlds\03_night_city\sectors\_generated\collisions\03_night_city.geometry_cache";
         private bool _isLoaded;
 
-        public GeometryCacheService()
+        public GeometryCacheService(IArchiveManager archive, Red4ParserService parser)
         {
-            _parser = Locator.Current.GetService<Red4ParserService>();
-            _archive = Locator.Current.GetService<IArchiveManager>();
+            _archive = archive;
+            _parser = parser;
         }
 
         public void Load()
@@ -34,68 +34,94 @@ namespace WolvenKit.Common.Services
             var file = _archive.Lookup(_cachePath.GetRedHash());
             if (file.HasValue && file.Value is IGameFile fe)
             {
-                using (var stream = new MemoryStream())
+                using var stream = new MemoryStream();
+                fe.Extract(stream);
+                using var reader = new BinaryReader(stream);
+                var cr2wFile = _parser.ReadRed4File(reader);
+
+                if (cr2wFile?.RootChunk is physicsGeometryCache pgc)
                 {
-                    fe.Extract(stream);
-                    using var reader = new BinaryReader(stream);
-                    var cr2wFile = _parser.ReadRed4File(reader);
-
-                    if (cr2wFile.RootChunk is physicsGeometryCache pgc)
+                    var totalEntryIndex = 0;
+                    for (var sectorIndex = 0; sectorIndex < pgc.BufferTableSectors.Count; sectorIndex++)
                     {
-                        var totalEntryIndex = 0;
-                        for (var sectorIndex = 0; sectorIndex < pgc.BufferTableSectors.Count; sectorIndex++)
+                        if (pgc.SectorEntries == null || pgc.SectorEntries.Count <= sectorIndex || pgc.SectorEntries[sectorIndex] == null)
                         {
-                            var sectorHash = pgc.SectorEntries[sectorIndex].SectorHash;
-                            if (!_entries.ContainsKey(sectorHash))
-                            {
-                                _entries[sectorHash] = new();
-                            }
-
-                            if (pgc.BufferTableSectors[sectorIndex].Data is not GeometryCacheBuffer gcb)
-                            {
-                                continue;
-                            }
-                            
-                            for (int entryIndex = 0; entryIndex < gcb.Entries.Count; entryIndex++)
-                            {
-                                var entry = pgc.SectorGeometries[totalEntryIndex];
-                                ulong entryHash = 0;
-                                for (int i = 0; i < 8; i++)
-                                {
-                                    entryHash |= (ulong)(entry.Ta[i]) << (i * 8);
-                                }
-                                _entries[sectorHash][entryHash] = gcb.Entries[entryIndex];
-                                totalEntryIndex++;
-                            }
+                            throw new ArgumentNullException();
                         }
 
-                        if (!_entries.ContainsKey(0))
+                        var sectorHash = pgc.SectorEntries[sectorIndex]!.SectorHash;
+                        if (!_entries.ContainsKey(sectorHash))
                         {
-                            _entries[0] = new();
+                            _entries[sectorHash] = new();
                         }
 
-                        if (pgc.AlwaysLoadedSectorDDB.Data is not GeometryCacheBuffer algcb)
+                        if (pgc.BufferTableSectors == null || pgc.BufferTableSectors.Count <= sectorIndex || pgc.BufferTableSectors[sectorIndex] == null)
                         {
-                            return;
+                            throw new ArgumentNullException();
                         }
 
-                        foreach (var als in algcb.Entries)
+                        if (pgc.BufferTableSectors[sectorIndex]!.Data is not GeometryCacheBuffer gcb)
                         {
-                            var entry = pgc.SectorGeometries[totalEntryIndex];
+                            continue;
+                        }
+
+                        for (var entryIndex = 0; entryIndex < gcb.Entries.Count; entryIndex++)
+                        {
+                            if (pgc.SectorGeometries == null || pgc.SectorGeometries.Count <= totalEntryIndex || pgc.SectorGeometries[totalEntryIndex] == null)
+                            {
+                                throw new ArgumentNullException();
+                            }
+
+                            var entry = pgc.SectorGeometries[totalEntryIndex]!;
                             ulong entryHash = 0;
-                            for (int i = 0; i < 8; i++)
+                            for (var i = 0; i < 8; i++)
                             {
-                                entryHash |= (ulong)(entry.Ta[i]) << (i * 8);
+                                entryHash |= (ulong)entry.Ta[i] << (i * 8);
                             }
-                            _entries[0][entryHash] = als;
+
+                            if (gcb.Entries == null || gcb.Entries.Count <= entryIndex)
+                            {
+                                throw new ArgumentNullException();
+                            }
+
+                            _entries[sectorHash][entryHash] = gcb.Entries[entryIndex]!;
                             totalEntryIndex++;
                         }
+                    }
+
+                    if (!_entries.ContainsKey(0))
+                    {
+                        _entries[0] = new();
+                    }
+
+                    if (pgc.AlwaysLoadedSectorDDB.Data is not GeometryCacheBuffer algcb)
+                    {
+                        return;
+                    }
+
+                    foreach (var als in algcb.Entries)
+                    {
+                        ArgumentNullException.ThrowIfNull(als);
+
+                        if (pgc.SectorGeometries == null || pgc.SectorGeometries.Count <= totalEntryIndex || pgc.SectorGeometries[totalEntryIndex] == null)
+                        {
+                            throw new ArgumentNullException();
+                        }
+
+                        var entry = pgc.SectorGeometries[totalEntryIndex];
+                        ulong entryHash = 0;
+                        for (var i = 0; i < 8; i++)
+                        {
+                            entryHash |= (ulong)entry!.Ta[i] << (i * 8);
+                        }
+                        _entries[0][entryHash] = als;
+                        totalEntryIndex++;
                     }
                 }
             }
         }
 
-        public GeometryCacheEntry GetEntry(ulong sectorHash, ulong entryHash)
+        public GeometryCacheEntry? GetEntry(ulong sectorHash, ulong entryHash)
         {
             if (!_isLoaded)
             {

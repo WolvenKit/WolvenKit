@@ -13,8 +13,8 @@ namespace WolvenKit.Converters
     {
         private static readonly char[] _allOperators = new[] { '+', '-', '*', '/', '%', '(', ')' };
 
-        private static readonly List<string> _grouping = new List<string> { "(", ")" };
-        private static readonly List<string> _operators = new List<string> { "+", "-", "*", "/", "%" };
+        private static readonly List<string> _grouping = new() { "(", ")" };
+        private static readonly List<string> _operators = new() { "+", "-", "*", "/", "%" };
 
         #region IValueConverter Members
 
@@ -77,6 +77,8 @@ namespace WolvenKit.Converters
 
                         case ")":
                             return;
+                        default:
+                            break;
                     }
                 }
 
@@ -113,6 +115,8 @@ namespace WolvenKit.Converters
                             case "%":
                                 numbers[index] = numbers[index] % numbers[index + 1];
                                 break;
+                            default:
+                                break;
                         }
                         numbers.RemoveAt(index + 1);
                     }
@@ -142,7 +146,7 @@ namespace WolvenKit.Converters
             {
                 if (_allOperators.Contains(c))
                 {
-                    return (tmp == "" ? c.ToString() : tmp);
+                    return tmp == "" ? c.ToString() : tmp;
                 }
                 else
                 {

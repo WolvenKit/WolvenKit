@@ -40,7 +40,7 @@ namespace WolvenKit.FunctionalTests
         [DataRow(ECookedFileFormat.xbm)]
         public async Task Test_ImportExport(ECookedFileFormat extension)
         {
-            var ext = $".{extension.ToString()}";
+            var ext = $".{extension}";
             var infiles = s_groupedFiles[ext].ToList();
 
             var modtools = _host.Services.GetRequiredService<IModTools>();
@@ -75,7 +75,10 @@ namespace WolvenKit.FunctionalTests
 
             for (var i = 0; i < filesToTest.Count; i++)
             {
-                var fileEntry = filesToTest[i];
+                if (filesToTest[i] is not FileEntry fileEntry)
+                {
+                    throw new InvalidGameContextException();
+                }
                 // skip files without buffers
                 var hasBuffers = (fileEntry.SegmentsEnd - fileEntry.SegmentsStart) > 1;
                 if (!hasBuffers)
@@ -83,7 +86,7 @@ namespace WolvenKit.FunctionalTests
                     continue;
                 }
 
-                var ar = fileEntry.Archive as Archive;
+                var ar = fileEntry.Archive;
                 ArgumentNullException.ThrowIfNull(ar);
                 using var cr2wstream = new MemoryStream();
                 ar.CopyFileToStream(cr2wstream, fileEntry.NameHash64, false);
@@ -91,7 +94,12 @@ namespace WolvenKit.FunctionalTests
 
 
                 // uncook
-                var resUncook = modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir, esettings,
+                if (fileEntry.Archive is not Archive a)
+                {
+                    Assert.Fail($"Not a RED4 archive");
+                    return;
+                }
+                var resUncook = modtools.UncookSingle(a, fileEntry.Key, resultDir, esettings,
                     resultDir);
 
                 if (!resUncook)
@@ -105,6 +113,10 @@ namespace WolvenKit.FunctionalTests
                 var allfiles = resultDir.GetFiles("*", SearchOption.AllDirectories);
                 var rawfile = allfiles.FirstOrDefault(_ => _.Extension != ext);
                 if (rawfile == null)
+                {
+                    Assert.Fail($"No raw file found in {resultDir}");
+                }
+                if (rawfile.Directory == null)
                 {
                     Assert.Fail($"No raw file found in {resultDir}");
                 }
@@ -328,7 +340,7 @@ namespace WolvenKit.FunctionalTests
             ArgumentNullException.ThrowIfNull(s_config);
             Environment.SetEnvironmentVariable("WOLVENKIT_ENVIRONMENT", "Testing", EnvironmentVariableTarget.Process);
 
-            var ext = $".{extension.ToString()}";
+            var ext = $".{extension}";
             var infiles = s_groupedFiles[ext].ToList();
 
             var modtools = _host.Services.GetRequiredService<IModTools>();
@@ -359,9 +371,14 @@ namespace WolvenKit.FunctionalTests
             //var filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
             var filesToTest = infiles.ToList();
 
-            Parallel.ForEach(filesToTest, fileEntry =>
+            Parallel.ForEach(filesToTest, file =>
             //foreach (var fileEntry in filesToTest)
             {
+                if (file is not FileEntry fileEntry)
+                {
+                    throw new InvalidGameContextException();
+                }
+
                 // skip files without buffers
                 var hasBuffers = (fileEntry.SegmentsEnd - fileEntry.SegmentsStart) > 1;
                 if (!hasBuffers)
@@ -371,7 +388,12 @@ namespace WolvenKit.FunctionalTests
                 }
 
                 // uncook
-                var resUncook = modtools.UncookSingle(fileEntry.Archive as Archive, fileEntry.Key, resultDir,
+                if (fileEntry.Archive is not Archive a)
+                {
+                    Assert.Fail($"Not a RED4 archive");
+                    return;
+                }
+                var resUncook = modtools.UncookSingle(a, fileEntry.Key, resultDir,
                     exportArgs, resultDir);
 
                 if (!resUncook)

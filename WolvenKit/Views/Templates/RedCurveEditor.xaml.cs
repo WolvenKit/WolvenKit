@@ -1,8 +1,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Editors
 {
@@ -29,8 +29,7 @@ namespace WolvenKit.Views.Editors
 
         private void CurveEditorButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var data = (IRedLegacySingleChannelCurve)cvm.Data;
-            if (data == null)
+            if (cvm.Data is not IRedLegacySingleChannelCurve data)
             {
                 data = (IRedLegacySingleChannelCurve)System.Activator.CreateInstance(cvm.PropertyType);
             }

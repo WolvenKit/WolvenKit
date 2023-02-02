@@ -1,15 +1,25 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace WolvenKit.Common.Model
 {
+    [Serializable]
     public class InvalidGameContextException : Exception
     {
-        #region Constructors
-
-        public InvalidGameContextException(string message) : base(message)
+        public InvalidGameContextException()
         {
         }
 
-        #endregion Constructors
+        public InvalidGameContextException(string? message) : base(message)
+        {
+        }
+
+        public InvalidGameContextException(string? message, Exception? innerException) : base(message, innerException)
+        {
+        }
+
+        protected InvalidGameContextException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
     }
 }

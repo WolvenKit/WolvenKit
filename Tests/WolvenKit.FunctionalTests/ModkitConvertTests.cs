@@ -469,7 +469,7 @@ namespace WolvenKit.FunctionalTests
 #endif
             {
                 var hash = file.Key;
-                var archive = file.Archive as Archive;
+                var archive = file.GetArchive<Archive>();
                 ArgumentNullException.ThrowIfNull(archive);
 
                 try
@@ -497,13 +497,9 @@ namespace WolvenKit.FunctionalTests
 
                     #region convert back from json
 
-                    var newdto = RedJsonSerializer.Deserialize<RedFileDto>(json);
-                    if (newdto == null)
-                    {
-                        throw new SerializationException();
-                    }
+                    var newdto = RedJsonSerializer.Deserialize<RedFileDto>(json) ?? throw new SerializationException();
 
-                    var newFile = newdto.Data;
+                    var newFile = newdto.Data ?? throw new SerializationException();
 
                     #endregion
 

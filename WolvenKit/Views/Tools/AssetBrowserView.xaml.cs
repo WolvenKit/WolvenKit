@@ -14,19 +14,16 @@ using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
-using WolvenKit.App.Helpers;
-using WolvenKit.Common;
+using WolvenKit.App.Extensions;
+using WolvenKit.App.Models;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Other;
-using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
 {
@@ -45,10 +42,10 @@ namespace WolvenKit.Views.Tools
             this.WhenActivated(disposables =>
             {
 
-                ViewModel.ExpandAll.Subscribe(x => ExpandAllNodes());
-                ViewModel.CollapseAll.Subscribe(x => CollapseAllNodes());
-                ViewModel.Expand.Subscribe(x => ExpandNode());
-                ViewModel.Collapse.Subscribe(x => CollapseNode());
+                //ViewModel.ExpandAllCommand.Subscribe(x => ExpandAllNodes());
+                //ViewModel.CollapseAllCommand.Subscribe(x => CollapseAllNodes());
+                //ViewModel.ExpandCommand.Subscribe(x => ExpandNode());
+                //ViewModel.CollapseCommand.Subscribe(x => CollapseNode());
 
                 // top search
                 //var observable1 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(

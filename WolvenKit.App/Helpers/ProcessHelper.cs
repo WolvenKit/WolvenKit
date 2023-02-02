@@ -24,166 +24,164 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.Core.Interfaces;
 
-namespace WolvenKit.MVVM.Model
+namespace WolvenKit.App.Helpers;
+
+public static class ProcessHelper
 {
-    public static class ProcessHelper
+    public static int RunCommandLine(string workingDirectory = "", params string[] commands) => RunProcess(Path.Combine(Environment.SystemDirectory, "cmd.exe"), workingDirectory, commands);
+
+    public static async Task<int> RunCommandLineAsync(ILoggerService loggerService, string workingDirectory = "", params string[] commands) => await RunProcessAsync(loggerService,
+                Path.Combine(Environment.SystemDirectory, "cmd.exe"),
+                workingDirectory,
+                commands)
+            .ConfigureAwait(false);
+
+    public static int RunProcess(string filePath, string workingDirectory = "", params string[] commands)
     {
-        public static int RunCommandLine(string workingDirectory = "", params string[] commands) => RunProcess(Path.Combine(Environment.SystemDirectory, "cmd.exe"), workingDirectory, commands);
-
-        public static async Task<int> RunCommandLineAsync(ILoggerService loggerService, string workingDirectory = "", params string[] commands) => await RunProcessAsync(loggerService,
-                    Path.Combine(Environment.SystemDirectory, "cmd.exe"),
-                    workingDirectory,
-                    commands)
-                .ConfigureAwait(false);
-
-        public static int RunProcess(string filePath, string workingDirectory = "", params string[] commands)
+        using var process = new Process
         {
-            using var process = new Process
+            EnableRaisingEvents = true,
+            StartInfo =
             {
-                EnableRaisingEvents = true,
-                StartInfo =
-                {
-                    FileName = filePath,
-                    UseShellExecute = false,
-                    RedirectStandardInput = true,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    WorkingDirectory = workingDirectory
-                }
-            };
-            return RunProcess(process, commands);
+                FileName = filePath,
+                UseShellExecute = false,
+                RedirectStandardInput = true,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                WorkingDirectory = workingDirectory
+            }
+        };
+        return RunProcess(process, commands);
+    }
+
+    /// <summary>
+    /// Waits asynchronously for the process to exit.
+    /// </summary>
+    /// <param name="process">The process to wait for cancellation.</param>
+    /// <param name="cancellationToken">A cancellation token. If invoked, the task will return
+    /// immediately as canceled.</param>
+    /// <returns>A Task representing waiting for the process to end.</returns>
+    //public static Task WaitForExitAsync(this Process process, CancellationToken cancellationToken = default(CancellationToken))
+    //{
+    //    var tcs = new TaskCompletionSource<object>();
+    //    process.EnableRaisingEvents = true;
+    //    process.Exited += (sender, args) => tcs.TrySetResult(null);
+    //    if (cancellationToken != default(CancellationToken))
+    //    {
+    //        cancellationToken.Register(tcs.SetCanceled);
+    //    }
+
+    //    return tcs.Task;
+    //}
+
+    private static int RunProcess(Process process, params string[] commands)
+    {
+        var started = process.Start();
+        if (!started)
+        {
+            //you may allow for the process to be re-used (started = false)
+            //but I'm not sure about the guarantees of the Exited event in such a case
+            throw new InvalidOperationException("Could not start process: " + process);
         }
-
-        /// <summary>
-        /// Waits asynchronously for the process to exit.
-        /// </summary>
-        /// <param name="process">The process to wait for cancellation.</param>
-        /// <param name="cancellationToken">A cancellation token. If invoked, the task will return
-        /// immediately as canceled.</param>
-        /// <returns>A Task representing waiting for the process to end.</returns>
-        public static Task WaitForExitAsync(this Process process, CancellationToken cancellationToken = default(CancellationToken))
+        else
         {
-            var tcs = new TaskCompletionSource<object>();
-            process.EnableRaisingEvents = true;
-            process.Exited += (sender, args) => tcs.TrySetResult(null);
-            if (cancellationToken != default(CancellationToken))
+            if (commands != null && commands.Length > 0)
             {
-                cancellationToken.Register(tcs.SetCanceled);
+                var stream = process.StandardInput;
+
+                for (var i = 0; i < commands.Length; i++)
+                {
+                    stream.WriteLine(commands[i]);
+                }
+
+                stream.Close();
             }
 
-            return tcs.Task;
+            var fiveMinutes = new TimeSpan(0, 5, 0);
+            process.WaitForExit(fiveMinutes.Milliseconds);
+            return process.ExitCode;
         }
+    }
 
-        private static int RunProcess(Process process, params string[] commands)
+    private static async Task<int> RunProcessAsync(ILoggerService loggerService, Process process, params string[] commands)
+    {
+        var result = -1;
+        //process.OutputDataReceived += (s, ea) => Console.WriteLine(ea.Data);
+        //process.ErrorDataReceived += (s, ea) => Console.WriteLine("ERR: " + ea.Data);
+        var errorLog = new List<string>();
+        process.ErrorDataReceived += (sender, e) =>
         {
-            var started = process.Start();
-            if (!started)
+            if (!string.IsNullOrEmpty(e.Data))
             {
-                //you may allow for the process to be re-used (started = false)
-                //but I'm not sure about the guarantees of the Exited event in such a case
-                throw new InvalidOperationException("Could not start process: " + process);
+                errorLog.Add(e.Data);
+                loggerService.Error($"ERR: {e.Data}");
             }
-            else
-            {
-                if (commands != null && commands.Length > 0)
-                {
-                    var stream = process.StandardInput;
+        };
+        //process.OutputDataReceived += (sender, e) =>
+        //    { loggerService.LogString($"O: {e.Data}", Logtype.Normal); };
 
-                    for (var i = 0; i < commands.Length; i++)
-                    {
-                        stream.WriteLine(commands[i]);
-                    }
-
-                    stream.Close();
-                }
-
-                var fiveMinutes = new TimeSpan(0, 5, 0);
-                process.WaitForExit(fiveMinutes.Milliseconds);
-                return process.ExitCode;
-            }
+        var started = process.Start();
+        if (!started)
+        {
+            //you may allow for the process to be re-used (started = false)
+            //but I'm not sure about the guarantees of the Exited event in such a case
+            throw new InvalidOperationException("Could not start process: " + process);
         }
-
-        private static async Task<int> RunProcessAsync(ILoggerService loggerService, Process process, params string[] commands)
+        else
         {
-            var result = -1;
-            //process.OutputDataReceived += (s, ea) => Console.WriteLine(ea.Data);
-            //process.ErrorDataReceived += (s, ea) => Console.WriteLine("ERR: " + ea.Data);
-            var errorLog = new List<string>();
-            process.ErrorDataReceived += (sender, e) =>
-            {
-                if (!string.IsNullOrEmpty(e.Data))
-                {
-                    errorLog.Add(e.Data);
-                    loggerService.Error($"ERR: {e.Data}");
-                }
-            };
-            //process.OutputDataReceived += (sender, e) =>
-            //    { loggerService.LogString($"O: {e.Data}", Logtype.Normal); };
-
-            var started = process.Start();
-            if (!started)
-            {
-                //you may allow for the process to be re-used (started = false)
-                //but I'm not sure about the guarantees of the Exited event in such a case
-                throw new InvalidOperationException("Could not start process: " + process);
-            }
-            else
-            {
-                process.BeginErrorReadLine();
-                //process.BeginOutputReadLine();
-
-                if (commands != null && commands.Length > 0)
-                {
-                    var stream = process.StandardInput;
-
-                    for (var i = 0; i < commands.Length; i++)
-                    {
-                        stream.WriteLine(commands[i]);
-
-                        await Task.Delay(10).ConfigureAwait(false);
-                    }
-
-                    stream.Close();
-                }
-
-                process.WaitForExit();
-                result = process.ExitCode;
-                if (errorLog.Any())
-                {
-                    result = 1;
-                }
-                //loggerService.LogString($"Process exited with code {result}", Logtype.Important);
-                //await process.WaitForExitAsync();
-            }
-
+            process.BeginErrorReadLine();
             //process.BeginOutputReadLine();
-            //process.BeginErrorReadLine();
 
-            return result;
+            if (commands != null && commands.Length > 0)
+            {
+                var stream = process.StandardInput;
+
+                for (var i = 0; i < commands.Length; i++)
+                {
+                    stream.WriteLine(commands[i]);
+
+                    await Task.Delay(10).ConfigureAwait(false);
+                }
+
+                stream.Close();
+            }
+
+            process.WaitForExit();
+            result = process.ExitCode;
+            if (errorLog.Any())
+            {
+                result = 1;
+            }
+            //loggerService.LogString($"Process exited with code {result}", Logtype.Important);
+            //await process.WaitForExitAsync();
         }
 
-        private static Task<int> RunProcessAsync(ILoggerService loggerService, string filePath, string workingDirectory = "", params string[] commands)
+        //process.BeginOutputReadLine();
+        //process.BeginErrorReadLine();
+
+        return result;
+    }
+
+    private static Task<int> RunProcessAsync(ILoggerService loggerService, string filePath, string workingDirectory = "", params string[] commands)
+    {
+        using var process = new Process
         {
-            using var process = new Process
+            EnableRaisingEvents = true,
+            StartInfo =
             {
-                EnableRaisingEvents = true,
-                StartInfo =
-                {
-                    FileName = filePath,
-                    UseShellExecute = false,
-                    RedirectStandardInput = true,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    WorkingDirectory = workingDirectory,
-                    RedirectStandardError = true,
+                FileName = filePath,
+                UseShellExecute = false,
+                RedirectStandardInput = true,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                WorkingDirectory = workingDirectory,
+                RedirectStandardError = true,
 					//RedirectStandardOutput = true
 		}
-            };
-            return RunProcessAsync(loggerService, process, commands);
-        }
+        };
+        return RunProcessAsync(loggerService, process, commands);
     }
 }

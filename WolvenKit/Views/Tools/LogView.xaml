@@ -10,7 +10,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:sfgrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=tools:LogViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"

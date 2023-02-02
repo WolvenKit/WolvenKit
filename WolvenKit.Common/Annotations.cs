@@ -125,10 +125,7 @@ namespace WolvenKit.Common.Annotations
         /// <param name="formatParameterName">
         /// Specifies which parameter of an annotated method should be treated as the format string
         /// </param>
-        public StringFormatMethodAttribute([NotNull] string formatParameterName)
-        {
-            FormatParameterName = formatParameterName;
-        }
+        public StringFormatMethodAttribute([NotNull] string formatParameterName) => FormatParameterName = formatParameterName;
 
         [NotNull] public string FormatParameterName { get; }
     }
@@ -165,10 +162,7 @@ namespace WolvenKit.Common.Annotations
       AllowMultiple = true)]
     public sealed class ValueProviderAttribute : Attribute
     {
-        public ValueProviderAttribute([NotNull] string name)
-        {
-            Name = name;
-        }
+        public ValueProviderAttribute([NotNull] string name) => Name = name;
 
         [NotNull] public string Name { get; }
     }
@@ -206,15 +200,9 @@ namespace WolvenKit.Common.Annotations
             To = to;
         }
 
-        public ValueRangeAttribute(long value)
-        {
-            From = To = value;
-        }
+        public ValueRangeAttribute(long value) => From = To = value;
 
-        public ValueRangeAttribute(ulong value)
-        {
-            From = To = value;
-        }
+        public ValueRangeAttribute(ulong value) => From = To = value;
     }
 
     /// <summary>
@@ -288,12 +276,9 @@ namespace WolvenKit.Common.Annotations
     public sealed class NotifyPropertyChangedInvocatorAttribute : Attribute
     {
         public NotifyPropertyChangedInvocatorAttribute() { }
-        public NotifyPropertyChangedInvocatorAttribute([NotNull] string parameterName)
-        {
-            ParameterName = parameterName;
-        }
+        public NotifyPropertyChangedInvocatorAttribute([NotNull] string parameterName) => ParameterName = parameterName;
 
-        [CanBeNull] public string ParameterName { get; }
+        [CanBeNull] public string? ParameterName { get; }
     }
 
     /// <summary>
@@ -352,7 +337,7 @@ namespace WolvenKit.Common.Annotations
             ForceFullStates = forceFullStates;
         }
 
-        [NotNull] public string Contract { get; }
+        [NotNull] public string? Contract { get; }
 
         public bool ForceFullStates { get; }
     }
@@ -371,10 +356,7 @@ namespace WolvenKit.Common.Annotations
     {
         public LocalizationRequiredAttribute() : this(true) { }
 
-        public LocalizationRequiredAttribute(bool required)
-        {
-            Required = required;
-        }
+        public LocalizationRequiredAttribute(bool required) => Required = required;
 
         public bool Required { get; }
     }
@@ -417,10 +399,7 @@ namespace WolvenKit.Common.Annotations
     [BaseTypeRequired(typeof(Attribute))]
     public sealed class BaseTypeRequiredAttribute : Attribute
     {
-        public BaseTypeRequiredAttribute([NotNull] Type baseType)
-        {
-            BaseType = baseType;
-        }
+        public BaseTypeRequiredAttribute([NotNull] Type baseType) => BaseType = baseType;
 
         [NotNull] public Type BaseType { get; }
     }
@@ -529,12 +508,9 @@ namespace WolvenKit.Common.Annotations
     {
         public PublicAPIAttribute() { }
 
-        public PublicAPIAttribute([NotNull] string comment)
-        {
-            Comment = comment;
-        }
+        public PublicAPIAttribute([NotNull] string comment) => Comment = comment;
 
-        [CanBeNull] public string Comment { get; }
+        [CanBeNull] public string? Comment { get; }
     }
 
     /// <summary>
@@ -575,12 +551,9 @@ namespace WolvenKit.Common.Annotations
     {
         public MustUseReturnValueAttribute() { }
 
-        public MustUseReturnValueAttribute([NotNull] string justification)
-        {
-            Justification = justification;
-        }
+        public MustUseReturnValueAttribute([NotNull] string justification) => Justification = justification;
 
-        [CanBeNull] public string Justification { get; }
+        [CanBeNull] public string? Justification { get; }
     }
 
     /// <summary>
@@ -612,12 +585,9 @@ namespace WolvenKit.Common.Annotations
     {
         public PathReferenceAttribute() { }
 
-        public PathReferenceAttribute([NotNull, PathReference] string basePath)
-        {
-            BasePath = basePath;
-        }
+        public PathReferenceAttribute([NotNull, PathReference] string basePath) => BasePath = basePath;
 
-        [CanBeNull] public string BasePath { get; }
+        [CanBeNull] public string? BasePath { get; }
     }
 
     /// <summary>
@@ -681,7 +651,7 @@ namespace WolvenKit.Common.Annotations
         /// Allows specifying a macro that will be executed for a <see cref="SourceTemplateAttribute">source template</see>
         /// parameter when the template is expanded.
         /// </summary>
-        [CanBeNull] public string Expression { get; set; }
+        [CanBeNull] public string? Expression { get; set; }
 
         /// <summary>
         /// Allows specifying which occurrence of the target parameter becomes editable when the template is deployed.
@@ -697,16 +667,13 @@ namespace WolvenKit.Common.Annotations
         /// Identifies the target parameter of a <see cref="SourceTemplateAttribute">source template</see> if the
         /// <see cref="MacroAttribute"/> is applied on a template method.
         /// </summary>
-        [CanBeNull] public string Target { get; set; }
+        [CanBeNull] public string? Target { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public sealed class AspMvcAreaMasterLocationFormatAttribute : Attribute
     {
-        public AspMvcAreaMasterLocationFormatAttribute([NotNull] string format)
-        {
-            Format = format;
-        }
+        public AspMvcAreaMasterLocationFormatAttribute([NotNull] string format) => Format = format;
 
         [NotNull] public string Format { get; }
     }
@@ -714,10 +681,7 @@ namespace WolvenKit.Common.Annotations
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public sealed class AspMvcAreaPartialViewLocationFormatAttribute : Attribute
     {
-        public AspMvcAreaPartialViewLocationFormatAttribute([NotNull] string format)
-        {
-            Format = format;
-        }
+        public AspMvcAreaPartialViewLocationFormatAttribute([NotNull] string format) => Format = format;
 
         [NotNull] public string Format { get; }
     }
@@ -725,10 +689,7 @@ namespace WolvenKit.Common.Annotations
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public sealed class AspMvcAreaViewLocationFormatAttribute : Attribute
     {
-        public AspMvcAreaViewLocationFormatAttribute([NotNull] string format)
-        {
-            Format = format;
-        }
+        public AspMvcAreaViewLocationFormatAttribute([NotNull] string format) => Format = format;
 
         [NotNull] public string Format { get; }
     }
@@ -736,10 +697,7 @@ namespace WolvenKit.Common.Annotations
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public sealed class AspMvcMasterLocationFormatAttribute : Attribute
     {
-        public AspMvcMasterLocationFormatAttribute([NotNull] string format)
-        {
-            Format = format;
-        }
+        public AspMvcMasterLocationFormatAttribute([NotNull] string format) => Format = format;
 
         [NotNull] public string Format { get; }
     }
@@ -747,10 +705,7 @@ namespace WolvenKit.Common.Annotations
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public sealed class AspMvcPartialViewLocationFormatAttribute : Attribute
     {
-        public AspMvcPartialViewLocationFormatAttribute([NotNull] string format)
-        {
-            Format = format;
-        }
+        public AspMvcPartialViewLocationFormatAttribute([NotNull] string format) => Format = format;
 
         [NotNull] public string Format { get; }
     }
@@ -758,10 +713,7 @@ namespace WolvenKit.Common.Annotations
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
     public sealed class AspMvcViewLocationFormatAttribute : Attribute
     {
-        public AspMvcViewLocationFormatAttribute([NotNull] string format)
-        {
-            Format = format;
-        }
+        public AspMvcViewLocationFormatAttribute([NotNull] string format) => Format = format;
 
         [NotNull] public string Format { get; }
     }
@@ -777,12 +729,9 @@ namespace WolvenKit.Common.Annotations
     {
         public AspMvcActionAttribute() { }
 
-        public AspMvcActionAttribute([NotNull] string anonymousProperty)
-        {
-            AnonymousProperty = anonymousProperty;
-        }
+        public AspMvcActionAttribute([NotNull] string anonymousProperty) => AnonymousProperty = anonymousProperty;
 
-        [CanBeNull] public string AnonymousProperty { get; }
+        [CanBeNull] public string? AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -795,12 +744,9 @@ namespace WolvenKit.Common.Annotations
     {
         public AspMvcAreaAttribute() { }
 
-        public AspMvcAreaAttribute([NotNull] string anonymousProperty)
-        {
-            AnonymousProperty = anonymousProperty;
-        }
+        public AspMvcAreaAttribute([NotNull] string anonymousProperty) => AnonymousProperty = anonymousProperty;
 
-        [CanBeNull] public string AnonymousProperty { get; }
+        [CanBeNull] public string? AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -814,12 +760,9 @@ namespace WolvenKit.Common.Annotations
     {
         public AspMvcControllerAttribute() { }
 
-        public AspMvcControllerAttribute([NotNull] string anonymousProperty)
-        {
-            AnonymousProperty = anonymousProperty;
-        }
+        public AspMvcControllerAttribute([NotNull] string anonymousProperty) => AnonymousProperty = anonymousProperty;
 
-        [CanBeNull] public string AnonymousProperty { get; }
+        [CanBeNull] public string? AnonymousProperty { get; }
     }
 
     /// <summary>
@@ -917,21 +860,15 @@ namespace WolvenKit.Common.Annotations
     {
         public HtmlElementAttributesAttribute() { }
 
-        public HtmlElementAttributesAttribute([NotNull] string name)
-        {
-            Name = name;
-        }
+        public HtmlElementAttributesAttribute([NotNull] string name) => Name = name;
 
-        [CanBeNull] public string Name { get; }
+        [CanBeNull] public string? Name { get; }
     }
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class HtmlAttributeValueAttribute : Attribute
     {
-        public HtmlAttributeValueAttribute([NotNull] string name)
-        {
-            Name = name;
-        }
+        public HtmlAttributeValueAttribute([NotNull] string name) => Name = name;
 
         [NotNull] public string Name { get; }
     }
@@ -974,10 +911,7 @@ namespace WolvenKit.Common.Annotations
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor | AttributeTargets.Property)]
     public sealed class CollectionAccessAttribute : Attribute
     {
-        public CollectionAccessAttribute(CollectionAccessType collectionAccessType)
-        {
-            CollectionAccessType = collectionAccessType;
-        }
+        public CollectionAccessAttribute(CollectionAccessType collectionAccessType) => CollectionAccessType = collectionAccessType;
 
         public CollectionAccessType CollectionAccessType { get; }
     }
@@ -1015,10 +949,7 @@ namespace WolvenKit.Common.Annotations
     [AttributeUsage(AttributeTargets.Parameter)]
     public sealed class AssertionConditionAttribute : Attribute
     {
-        public AssertionConditionAttribute(AssertionConditionType conditionType)
-        {
-            ConditionType = conditionType;
-        }
+        public AssertionConditionAttribute(AssertionConditionType conditionType) => ConditionType = conditionType;
 
         public AssertionConditionType ConditionType { get; }
     }
@@ -1147,10 +1078,7 @@ namespace WolvenKit.Common.Annotations
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class AspRequiredAttributeAttribute : Attribute
     {
-        public AspRequiredAttributeAttribute([NotNull] string attribute)
-        {
-            Attribute = attribute;
-        }
+        public AspRequiredAttributeAttribute([NotNull] string attribute) => Attribute = attribute;
 
         [NotNull] public string Attribute { get; }
     }
@@ -1160,19 +1088,13 @@ namespace WolvenKit.Common.Annotations
     {
         public bool CreateConstructorReferences { get; }
 
-        public AspTypePropertyAttribute(bool createConstructorReferences)
-        {
-            CreateConstructorReferences = createConstructorReferences;
-        }
+        public AspTypePropertyAttribute(bool createConstructorReferences) => CreateConstructorReferences = createConstructorReferences;
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public sealed class RazorImportNamespaceAttribute : Attribute
     {
-        public RazorImportNamespaceAttribute([NotNull] string name)
-        {
-            Name = name;
-        }
+        public RazorImportNamespaceAttribute([NotNull] string name) => Name = name;
 
         [NotNull] public string Name { get; }
     }
@@ -1194,10 +1116,7 @@ namespace WolvenKit.Common.Annotations
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public sealed class RazorDirectiveAttribute : Attribute
     {
-        public RazorDirectiveAttribute([NotNull] string directive)
-        {
-            Directive = directive;
-        }
+        public RazorDirectiveAttribute([NotNull] string directive) => Directive = directive;
 
         [NotNull] public string Directive { get; }
     }
@@ -1205,10 +1124,7 @@ namespace WolvenKit.Common.Annotations
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
     public sealed class RazorPageBaseTypeAttribute : Attribute
     {
-        public RazorPageBaseTypeAttribute([NotNull] string baseType)
-        {
-            BaseType = baseType;
-        }
+        public RazorPageBaseTypeAttribute([NotNull] string baseType) => BaseType = baseType;
         public RazorPageBaseTypeAttribute([NotNull] string baseType, string pageName)
         {
             BaseType = baseType;
@@ -1216,7 +1132,7 @@ namespace WolvenKit.Common.Annotations
         }
 
         [NotNull] public string BaseType { get; }
-        [CanBeNull] public string PageName { get; }
+        [CanBeNull] public string? PageName { get; }
     }
 
     [AttributeUsage(AttributeTargets.Method)]

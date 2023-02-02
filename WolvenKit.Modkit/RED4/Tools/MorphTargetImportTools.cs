@@ -4,15 +4,15 @@ using System.IO;
 using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
-using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.Common.Model.Arguments;
-
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 
@@ -20,17 +20,17 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, GltfImportArgs args, Stream outStream = null)
+        public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, GltfImportArgs args/*, Stream outStream = null*/)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(intargetStream);
+            var cr2w = _parserService.ReadRed4File(intargetStream);
             if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh blob || blob.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderblob || renderblob.BaseBlob.Chunk is not rendRenderMeshBlob)
             {
                 return false;
             }
 
-            RawArmature newRig = null;
+            RawArmature? newRig = null;
             {
-                var hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath);
+                var hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath.ToString().NotNull());
                 var meshStream = new MemoryStream();
                 foreach (var ar in args.Archives)
                 {
@@ -40,15 +40,15 @@ namespace WolvenKit.Modkit.RED4
                         break;
                     }
                 }
-                var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
+                var meshCr2w = _parserService.ReadRed4File(meshStream);
                 if (meshCr2w != null && meshCr2w.RootChunk is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob rendBlob)
                 {
                     newRig = MeshTools.GetOrphanRig(mesh);
                 }
             }
 
-            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.validationMode));
-            VerifyGLTF(model);
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
+            VerifyGLTF(model, args);
 
             var Meshes = new List<RawMeshContainer>();
             foreach (var node in model.LogicalNodes)
@@ -64,11 +64,30 @@ namespace WolvenKit.Modkit.RED4
             }
             Meshes = Meshes.OrderBy(o => o.name).ToList();
 
-            var max = new Vec3(Single.MinValue, Single.MinValue, Single.MinValue);
-            var min = new Vec3(Single.MaxValue, Single.MaxValue, Single.MaxValue);
+            var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
+            var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
 
-            Meshes.ForEach(p => p.positions.ToList().ForEach(q => { max.X = Math.Max(q.X, max.X); max.Y = Math.Max(q.Y, max.Y); max.Z = Math.Max(q.Z, max.Z); }));
-            Meshes.ForEach(p => p.positions.ToList().ForEach(q => { min.X = Math.Min(q.X, min.X); min.Y = Math.Min(q.Y, min.Y); min.Z = Math.Min(q.Z, min.Z); }));
+            foreach (var p in Meshes)
+            {
+                ArgumentNullException.ThrowIfNull(p.positions);
+                foreach (var q in p.positions.ToList())
+                {
+                    max.X = Math.Max(q.X, max.X);
+                    max.Y = Math.Max(q.Y, max.Y);
+                    max.Z = Math.Max(q.Z, max.Z);
+                }
+            }
+
+            foreach (var p in Meshes)
+            {
+                ArgumentNullException.ThrowIfNull(p.positions);
+                foreach (var q in p.positions.ToList())
+                {
+                    min.X = Math.Min(q.X, min.X);
+                    min.Y = Math.Min(q.Y, min.Y);
+                    min.Z = Math.Min(q.Z, min.Z);
+                }
+            }
 
             blob.BoundingBox.Min = new Vector4 { X = min.X, Y = min.Y, Z = min.Z, W = 1f };
             blob.BoundingBox.Max = new Vector4 { X = max.X, Y = max.Y, Z = max.Z, W = 1f };
@@ -77,22 +96,22 @@ namespace WolvenKit.Modkit.RED4
             var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
 
-            RawArmature oldRig = null;
+            RawArmature? oldRig = null;
             if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
             {
                 oldRig = new RawArmature
                 {
                     BoneCount = model.LogicalSkins[0].JointsCount,
-                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_=> model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
                 };
             }
 
             MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
 
-            var expMeshes = Meshes.Select(_=> RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
+            var expMeshes = Meshes.Select(_ => RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
 
             var meshBuffer = new MemoryStream();
-            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
+            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer, args);
 
             meshesInfo.quantScale = QuantScale;
             meshesInfo.quantTrans = QuantTrans;
@@ -128,11 +147,11 @@ namespace WolvenKit.Modkit.RED4
             var ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
 
             ms.Seek(0, SeekOrigin.Begin);
-            if (outStream != null)
-            {
-                ms.CopyTo(outStream);
-            }
-            else
+            //if (outStream != null)
+            //{
+            //    ms.CopyTo(outStream);
+            //}
+            //else
             {
                 intargetStream.SetLength(0);
                 ms.CopyTo(intargetStream);
@@ -246,15 +265,21 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < morphTargetCount; i++)
             {
-
                 // Write scale and offsets
                 var (scale, offset) = CalculateTargetQuant(model, i);
-                blob.Header.TargetPositionDiffOffset[i].X = offset.X;
-                blob.Header.TargetPositionDiffOffset[i].Y = offset.Y;
-                blob.Header.TargetPositionDiffOffset[i].Z = offset.Z;
-                blob.Header.TargetPositionDiffScale[i].X = scale.X;
-                blob.Header.TargetPositionDiffScale[i].Y = scale.Y;
-                blob.Header.TargetPositionDiffScale[i].Z = scale.Z;
+
+                var posOffset = blob.Header.TargetPositionDiffOffset[i];
+                var posScale = blob.Header.TargetPositionDiffScale[i];
+
+                ArgumentNullException.ThrowIfNull(posOffset);
+                ArgumentNullException.ThrowIfNull(posScale);
+
+                posOffset.X = offset.X;
+                posOffset.Y = offset.Y;
+                posOffset.Z = offset.Z;
+                posScale.X = scale.X;
+                posScale.Y = scale.Y;
+                posScale.Z = scale.Z;
 
 
                 for (var subMeshId = 0; subMeshId < model.LogicalMeshes.Count; subMeshId++)
@@ -326,8 +351,8 @@ namespace WolvenKit.Modkit.RED4
                         mappingsWriter.Write((ushort)0);
                     }
 
-                    blob.Header.NumVertexDiffsInEachChunk[i][subMeshId] = (uint)deltaCount;
-                    blob.Header.NumVertexDiffsMappingInEachChunk[i][subMeshId] = (uint)deltaCount;
+                    blob.Header.NumVertexDiffsInEachChunk[i].NotNull()[subMeshId] = (uint)deltaCount;
+                    blob.Header.NumVertexDiffsMappingInEachChunk[i].NotNull()[subMeshId] = (uint)deltaCount;
                     blob.Header.NumDiffs += (uint)deltaCount;
                 }
             }

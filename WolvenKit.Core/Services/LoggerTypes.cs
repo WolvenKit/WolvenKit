@@ -23,45 +23,6 @@ namespace WolvenKit.Common.Services
         WLF_Info
     }
 
-    public abstract class InterpretedLogMessage
-    {
-        #region Properties
-
-        public string CommandName { get; set; }
-        public WccLogFlag Flag { get; set; }
-        public int Id { get; set; }
-
-        // global flags
-        public SystemLogFlag SystemFlag { get; set; }
-
-        public ToolLogFlag Tool { get; set; }
-        // Message
-
-        public string Value { get; set; }
-
-        #endregion Properties
-    }
-
-    /// <summary>
-    /// Interpreted Wcc Log Messages
-    /// </summary>
-    public class RADLogMessage : InterpretedLogMessage
-    {
-    }
-
-    /// <summary>
-    /// Interpreted Wcc Log Messages
-    /// </summary>
-    public class WCCLogMessage : InterpretedLogMessage
-    {
-        #region Properties
-
-        public string Timestamp { get; set; }
-        public string WccModule { get; set; }
-
-        #endregion Properties
-    }
-
     public class LogStringEventArgs
     {
         #region Constructors

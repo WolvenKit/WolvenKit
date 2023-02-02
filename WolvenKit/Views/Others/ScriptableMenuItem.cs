@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using Splat;
-using WolvenKit.Functionality.Services;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.Views.Others;
 

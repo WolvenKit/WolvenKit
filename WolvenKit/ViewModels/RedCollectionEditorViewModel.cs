@@ -3,31 +3,20 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Prism.Commands;
+using CommunityToolkit.Mvvm.Input;
 using WolvenKit.Common.Annotations;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels
 {
-    internal class RedCollectionEditorViewModel : INotifyPropertyChanged
+    internal partial class RedCollectionEditorViewModel : INotifyPropertyChanged
     {
         private RedCollectionItemViewModel _selectedElement;
         //private IEditableVariable _selectedElement;
 
         private IRedArray _redArray;
 
-        public RedCollectionEditorViewModel()
-        {
-            AddElementCommand = new DelegateCommand(AddElement);
-
-            RemoveElementCommand = new DelegateCommand(RemoveElement);
-        }
-
         #region properties
-
-        public ICommand AddElementCommand { get; private set; }
-
-        public ICommand RemoveElementCommand { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -79,6 +68,7 @@ namespace WolvenKit.ViewModels
             }
         }
 
+        [RelayCommand]
         private void AddElement()
         {
             var method = typeof(RedCollectionEditorViewModel)
@@ -110,6 +100,7 @@ namespace WolvenKit.ViewModels
 
         }
 
+        [RelayCommand]
         private void RemoveElement()
         {
             var method = typeof(RedCollectionEditorViewModel)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4;
 
 namespace CP77Tools.Tasks;
@@ -56,7 +57,7 @@ public partial class ConsoleFunctions
                     return ERROR_BAD_ARGUMENTS;
                 }
                 archiveFileInfos = new List<FileInfo> { file };
-                basedir = file.Directory;
+                basedir = file.Directory.NotNull();
                 break;
             case DirectoryInfo directory:
                 archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
@@ -92,6 +93,11 @@ public partial class ConsoleFunctions
         {
             // read archive
             var ar = _wolvenkitFileService.ReadRed4Archive(fileInfo.FullName, _hashService);
+            if (ar is null)
+            {
+                _loggerService.Error($"Could not parse archive {fileInfo}");
+                continue;
+            }
 
             var isHash = ulong.TryParse(hash, out var hashNumber);
 

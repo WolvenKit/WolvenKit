@@ -84,14 +84,14 @@ namespace WolvenKit.Modkit.RED4
         public bool UncookMlmask(Stream cr2wStream, FileInfo outfile, MlmaskExportArgs args)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
+            var cr2w = _parserService.ReadRed4File(cr2wStream);
             if (cr2w == null || cr2w.RootChunk is not Multilayer_Mask mlmask || mlmask.RenderResourceBlob.RenderResourceBlobPC.Chunk is not rendRenderMultilayerMaskBlobPC blob)
             {
                 return false;
             }
 
             // write texture to file
-            DirectoryInfo subdir = null;
+            DirectoryInfo? subdir = null;
             if (args.AsList)
             {
                 subdir = new DirectoryInfo(Path.ChangeExtension(outfile.FullName, null) + "_layers");
@@ -99,6 +99,12 @@ namespace WolvenKit.Modkit.RED4
                 {
                     Directory.CreateDirectory(subdir.FullName);
                 }
+            }
+
+            if (subdir is null || outfile.Directory is null)
+            {
+                _loggerService.Error("directory was null");
+                return false;
             }
 
             var cnt = 0;
@@ -151,7 +157,7 @@ namespace WolvenKit.Modkit.RED4
                 streams.Add(new MemoryStream(img.SaveToDDSMemory()));
                 img.Dispose();
             }
-            
+
             return true;
         }
 

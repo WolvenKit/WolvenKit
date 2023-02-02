@@ -4,281 +4,280 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
+using WolvenKit.App.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Helpers;
-using WolvenKit.Interaction;
-using WolvenKit.Models;
-using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.HomePage
+namespace WolvenKit.App.ViewModels.HomePage.Pages;
+
+public partial class ModsViewModel : PageViewModel
 {
-    public class ModsViewModel : PageViewModel
+    private readonly ISettingsManager _settings;
+    private readonly ILoggerService _logger;
+    private readonly IPluginService _pluginService;
+    private readonly IProgressService<double> _progressService;
+
+    private readonly JsonSerializerOptions _options = new()
     {
-        private readonly ISettingsManager _settings;
-        private readonly ILoggerService _logger;
-        private readonly IPluginService _pluginService;
-        private readonly IProgressService<double> _progressService;
+        WriteIndented = true,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        IgnoreReadOnlyProperties = true,
+    };
 
-        private readonly JsonSerializerOptions _options = new()
+    public ModsViewModel(ISettingsManager settings, ILoggerService logger, IPluginService pluginService, IProgressService<double> progressService)
+    {
+        _settings = settings;
+        _logger = logger;
+        _pluginService = pluginService;
+        _progressService = progressService;
+
+        _settings.PropertyChanged += Settings_PropertyChanged;
+        _progressService.ProgressChanged += ProgressService_ProgressChanged;
+    }
+
+    private void ProgressService_ProgressChanged(object? sender, double e)
+    {
+        Progress = e * 100;
+    }
+
+    private void Settings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ISettingsManager.CP77ExecutablePath))
         {
-            WriteIndented = true,
-            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            IgnoreReadOnlyProperties = true,
-        };
+            if (!string.IsNullOrEmpty(_settings.CP77ExecutablePath))
+            {
+                LoadMods();
+            }
+        }
+    }
 
-        public ModsViewModel()
+    [ObservableProperty] private double _progress;
+    [ObservableProperty] private bool _loadOrderChanged;
+    [ObservableProperty] private ObservableCollection<ModInfoViewModel> _mods = new();
+    [ObservableProperty] private ModInfoViewModel? _selectedMod;
+    [ObservableProperty] private IEnumerable<ModInfoViewModel>? _selectedMods;
+    [ObservableProperty] private bool _isProcessing;
+
+    #region commands
+
+    [RelayCommand]
+    private async Task Deploy() => await DeployRedmod();
+
+    [RelayCommand]
+    private void Refresh() => LoadMods();
+
+    [RelayCommand]
+    private void OpenModFolder() => Commonfunctions.ShowFolderInExplorer(_settings.GetRED4GameModDir());
+
+    [RelayCommand]
+    private void LaunchGame()
+    {
+        try
         {
-            _settings = Locator.Current.GetService<ISettingsManager>();
-            _logger = Locator.Current.GetService<ILoggerService>();
-            _pluginService = Locator.Current.GetService<IPluginService>();
-            _progressService = Locator.Current.GetService<IProgressService<double>>();
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = _settings.GetRED4GameLaunchCommand(),
+                Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded",
+                ErrorDialog = true,
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.Error("Launch: error launching game! Please check your executable path in Settings.");
+            _logger.Info($"Launch: error debug info: {ex.Message}");
+        }
+    }
 
-            RefreshCommand = ReactiveCommand.Create(() => Refresh());
-            DeployCommand = ReactiveCommand.Create(() => Deploy());
-            LaunchGameCommand = ReactiveCommand.Create(() => LaunchGame());
-            CheckRedModCommand = ReactiveCommand.Create(() => CheckRedMod());
-            OpenModFolderCommand = ReactiveCommand.Create(() => OpenModFolder());
+    [RelayCommand]
+    private async Task CheckRedMod()
+    {
+        if (!_pluginService.IsInstalled(EPlugin.redmod))
+        {
+            var res = await Interactions
+                .ShowMessageBoxAsync("The RedMod tools are not installed and mod compilation will not work. Would you like to install the RedMod tools now?",
+                "RedMod not found");
 
-            RemoveCommand = ReactiveCommand.Create(() => Remove());
+            switch (res)
+            {
+                case WMessageBoxResult.OK:
+                case WMessageBoxResult.Yes:
+                    IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Plugins);
+                    break;
+                case WMessageBoxResult.None:
+                case WMessageBoxResult.Cancel:
+                case WMessageBoxResult.No:
+                case WMessageBoxResult.Custom:
+                default:
+                    break;
+            }
+        }
+    }
 
-            // LoadMods when we're good and ready
-            _settings
-                .WhenAnyValue(x => x.CP77ExecutablePath)
-                .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)) // -.-
-                .Take(1)
-                .Subscribe(x => LoadMods());
-
-            _ = Observable.FromEventPattern<EventHandler<double>, double>(
-                handler => _progressService.ProgressChanged += handler,
-                handler => _progressService.ProgressChanged -= handler)
-                .Select(_ => _.EventArgs * 100)
-                .ToProperty(this, x => x.Progress, out _progress);
+    [RelayCommand]
+    private void Remove()
+    {
+        if (SelectedMod is null)
+        {
+            return;
         }
 
-        private readonly ObservableAsPropertyHelper<double> _progress;
-        public double Progress => _progress.Value;
-
-        [Reactive] public bool LoadOrderChanged { get; private set; }
-        [Reactive] public ObservableCollection<ModInfoViewModel> Mods { get; set; } = new();
-        [Reactive] public ModInfoViewModel SelectedMod { get; set; }
-        [Reactive] public IEnumerable<ModInfoViewModel> SelectedMods { get; set; }
-        [Reactive] public bool IsProcessing { get; set; }
-
-        #region commands
-
-        public ICommand DeployCommand { get; private set; }
-        private async Task Deploy() => await DeployRedmod();
-        private IEnumerable<ModInfoViewModel> GetEnabledMods() => Mods.Where(x => x.IsEnabled);
-        private async Task<bool> DeployRedmod()
+        if (!Directory.Exists(SelectedMod.Path))
         {
-            if (!_pluginService.IsInstalled(EPlugin.redmod))
+            _logger.Warning($"Could not find mod: {SelectedMod.Path}");
+        }
+
+        try
+        {
+            Directory.Delete(SelectedMod.Path, true);
+
+            Mods.Remove(SelectedMod);
+        }
+        catch (Exception)
+        {
+            _logger.Error($"Could not delete mod: {SelectedMod.Path}");
+        }
+    }
+
+    #endregion
+
+    private IEnumerable<ModInfoViewModel> GetEnabledMods() => Mods.Where(x => x.IsEnabled);
+
+    private async Task<bool> DeployRedmod()
+    {
+        if (!_pluginService.IsInstalled(EPlugin.redmod))
+        {
+            _logger.Error("Redmod needs to be installed to deploy mods.");
+            var response = await Interactions.ShowMessageBoxAsync("The RedMod tools are not installed. Would you like to install them?", "RedMod not found");
+
+            switch (response)
             {
-                _logger.Error("Redmod needs to be installed to deploy mods.");
-                var response = await Interactions.ShowMessageBoxAsync("The RedMod tools are not installed. Would you like to install them?", "RedMod not found");
-
-                switch (response)
-                {
-                    case WMessageBoxResult.OK:
-                    case WMessageBoxResult.Yes:
-                        _homePageViewModel.NavigateTo(EHomePage.Plugins);
-                        break;
-                }
-
-                return false;
+                case WMessageBoxResult.OK:
+                case WMessageBoxResult.Yes:
+                    IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Plugins);
+                    break;
+                case WMessageBoxResult.None:
+                case WMessageBoxResult.Cancel:
+                case WMessageBoxResult.No:
+                case WMessageBoxResult.Custom:
+                default:
+                    break;
             }
 
+            return false;
+        }
 
-            // compile with redmod
-            var redmodPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
-            if (!File.Exists(redmodPath))
+
+        // compile with redmod
+        var redmodPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        if (!File.Exists(redmodPath))
+        {
+            _logger.Error("RedMod tools are not installed. Please go to WolvenKit plugins and install RedMod.");
+            return false;
+        }
+        else
+        {
+            _progressService.Report(0);
+
+            var enabledMods = GetEnabledMods().OrderBy(x => x.LoadOrder).ToList();
+
+            IsProcessing = true;
+
+            var rttiSchemaPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
+            var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
+
+            if (LoadOrderChanged)
             {
-                _logger.Error("RedMod tools are not installed. Please go to WolvenKit plugins and install RedMod.");
-                return false;
+                args += " -force";
+            }
+
+            var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
+            args += $" -mod={modsStr}";
+
+            _logger.Info($"WorkDir: {redmodPath}");
+            _logger.Info($"Running commandlet: {args}");
+
+            _progressService.Report(0.1);
+
+            var workingDir = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin");
+            var result = await ProcessUtil.RunRedmodAsync(redmodPath, args, workingDir, progress: _progressService);
+
+            _progressService.Report(1.0);
+            _progressService.Completed();
+            IsProcessing = false;
+
+            if (!result)
+            {
+                await Interactions.ShowMessageBoxAsync(
+                    "RedMod deploy failed. Please check the log for details.",
+                    "RedMod",
+                    WMessageBoxButtons.Ok,
+                    WMessageBoxImage.Error);
             }
             else
             {
-                _progressService.Report(0);
+                await Interactions.ShowMessageBoxAsync(
+                    $"Deployed {enabledMods.Count} enabled mods with RedMod.",
+                    "RedMod deploy",
+                    WMessageBoxButtons.Ok,
+                    WMessageBoxImage.Exclamation);
 
-                var enabledMods = GetEnabledMods().OrderBy(x => x.LoadOrder).ToList();
-
-                IsProcessing = true;
-
-                var rttiSchemaPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
-                var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
-
-                if (LoadOrderChanged)
-                {
-                    args += " -force";
-                }
-
-                var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
-                args += $" -mod={modsStr}";
-
-                _logger.Info($"WorkDir: {redmodPath}");
-                _logger.Info($"Running commandlet: {args}");
-
-                _progressService.Report(0.1);
-
-                var workingDir = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin");
-                var result = await ProcessUtil.RunRedmodAsync(redmodPath, args, workingDir, progress: _progressService);
-
-                _progressService.Report(1.0);
-                _progressService.Completed();
-                IsProcessing = false;
-
-                if (!result)
-                {
-                    await Interactions.ShowMessageBoxAsync(
-                        "RedMod deploy failed. Please check the log for details.",
-                        "RedMod",
-                        WMessageBoxButtons.Ok,
-                        WMessageBoxImage.Error);
-                }
-                else
-                {
-                    await Interactions.ShowMessageBoxAsync(
-                        $"Deployed {enabledMods.Count} enabled mods with RedMod.",
-                        "RedMod deploy",
-                        WMessageBoxButtons.Ok,
-                        WMessageBoxImage.Exclamation);
-
-                    SetLoadOrderChanged(false);
-                }
-
-                return result;
+                SetLoadOrderChanged(false);
             }
+
+            return result;
         }
+    }
 
-        public ICommand RefreshCommand { get; private set; }
-        private void Refresh() => LoadMods();
+    private void LoadMods()
+    {
+        LoadModsInfo();
 
-        public ICommand OpenModFolderCommand { get; private set; }
-        private void OpenModFolder() => Commonfunctions.ShowFolderInExplorer(_settings.GetRED4GameModDir());
+        ParseMods();
+    }
 
-        public ICommand LaunchGameCommand { get; private set; }
-        private void LaunchGame()
+    private void LoadModsInfo()
+    {
+        Mods.Clear();
+
+        var di = new DirectoryInfo(_settings.GetRED4GameModDir());
+        var infos = di.GetFiles("info.json", SearchOption.AllDirectories);
+        foreach (var item in infos)
         {
             try
             {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = _settings.GetRED4GameLaunchCommand(),
-                    Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded",
-                    ErrorDialog = true,
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.Error("Launch: error launching game! Please check your executable path in Settings.");
-                _logger.Info($"Launch: error debug info: {ex.Message}");
-            }
-        }
-
-        public ICommand CheckRedModCommand { get; private set; }
-        private async Task CheckRedMod()
-        {
-            if (!_pluginService.IsInstalled(EPlugin.redmod))
-            {
-                var res = await Interactions
-                    .ShowMessageBoxAsync("The RedMod tools are not installed and mod compilation will not work. Would you like to install the RedMod tools now?",
-                    "RedMod not found");
-
-                switch (res)
-                {
-                    case WMessageBoxResult.OK:
-                    case WMessageBoxResult.Yes:
-                        _homePageViewModel.NavigateTo(EHomePage.Plugins);
-                        break;
-                }
-            }
-        }
-
-        public ICommand RemoveCommand { get; private set; }
-        private void Remove()
-        {
-            if (SelectedMod is null)
-            {
-                return;
-            }
-
-            if (!Directory.Exists(SelectedMod.Path))
-            {
-                _logger.Warning($"Could not find mod: {SelectedMod.Path}");
-            }
-
-            try
-            {
-                Directory.Delete(SelectedMod.Path, true);
-
-                Mods.Remove(SelectedMod);
+                var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(item.FullName), _options).NotNull();
+                var folder = item.Directory.NotNull().FullName;
+                Mods.Add(new ModInfoViewModel(info, folder, _logger));
             }
             catch (Exception)
             {
-                _logger.Error($"Could not delete mod: {SelectedMod.Path}");
+                _logger.Warning($"Could not read mod file: {item.FullName}");
             }
+
         }
+    }
 
-        #endregion
-
-        private void LoadMods()
+    private void ParseMods()
+    {
+        // parse existing mods.info and update enabled
+        // also update load order
+        var modsInfoPath = Path.Combine(_settings.GetRED4GameRootDir(), "r6", "cache", "modded", "mods.json");
+        var foundMods = new List<ModInfoViewModel>();
+        if (File.Exists(modsInfoPath))
         {
-            LoadModsInfo();
-
-            ParseMods();
-        }
-
-        private void LoadModsInfo()
-        {
-            Mods.Clear();
-
-            var di = new DirectoryInfo(_settings.GetRED4GameModDir());
-            var infos = di.GetFiles("info.json", SearchOption.AllDirectories);
-            foreach (var item in infos)
+            try
             {
-                try
-                {
-                    var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(item.FullName), _options);
-                    var folder = item.Directory.FullName;
-                    Mods.Add(new ModInfoViewModel(info, folder, _logger));
-                }
-                catch (Exception)
-                {
-                    _logger.Warning($"Could not read mod file: {item.FullName}");
-                }
-
-            }
-        }
-
-        private void ParseMods()
-        {
-            // parse existing mods.info and update enabled
-            // also update load order
-            var modsInfoPath = Path.Combine(_settings.GetRED4GameRootDir(), "r6", "cache", "modded", "mods.json");
-            ModsInfo modsInfo = null;
-            var foundMods = new List<ModInfoViewModel>();
-            if (File.Exists(modsInfoPath))
-            {
-                try
-                {
-                    modsInfo = JsonSerializer.Deserialize<ModsInfo>(File.ReadAllText(modsInfoPath), _options);
-                }
-                catch (Exception)
-                {
-                    _logger.Warning($"Could not read mods info file: {modsInfoPath}");
-                    return;
-                }
-
-
+                var modsInfo = JsonSerializer.Deserialize<ModsInfo>(File.ReadAllText(modsInfoPath), _options).NotNull();
                 for (var i = 0; i < modsInfo.Mods.Count; i++)
                 {
                     var mod = modsInfo.Mods[i];
@@ -292,21 +291,29 @@ namespace WolvenKit.ViewModels.HomePage
                     }
                 }
             }
-
-            // loop through all existing mods
-            // reorder according to modsInfo
-            // first come all the mods in mods.info
-            // then the rest
-            var rest = Mods.Where(x => !foundMods.Contains(x)).ToList();
-            for (var i = 0; i < rest.Count; i++)
+            catch (Exception)
             {
-                var mod = rest[i];
-                mod.LoadOrder = i + foundMods.Count;
+                _logger.Warning($"Could not read mods info file: {modsInfoPath}");
+                return;
             }
 
-            _logger.Info($"Found {Mods.Count} REDmods.");
+
+
         }
 
-        public void SetLoadOrderChanged(bool v) => LoadOrderChanged = v;
+        // loop through all existing mods
+        // reorder according to modsInfo
+        // first come all the mods in mods.info
+        // then the rest
+        var rest = Mods.Where(x => !foundMods.Contains(x)).ToList();
+        for (var i = 0; i < rest.Count; i++)
+        {
+            var mod = rest[i];
+            mod.LoadOrder = i + foundMods.Count;
+        }
+
+        _logger.Info($"Found {Mods.Count} REDmods.");
     }
+
+    public void SetLoadOrderChanged(bool v) => LoadOrderChanged = v;
 }

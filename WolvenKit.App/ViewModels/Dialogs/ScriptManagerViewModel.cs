@@ -2,65 +2,37 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Disposables;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
-public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewModel
+public partial class ScriptManagerViewModel : DialogViewModel
 {
     private readonly AppViewModel _appViewModel;
 
     private const string ScriptExtension = ".wscript";
 
-    public ScriptManagerViewModel(AppViewModel appViewModel = null)
+    public ScriptManagerViewModel(AppViewModel appViewModel)
     {
-        _appViewModel = appViewModel ?? Locator.Current.GetService<AppViewModel>();
+        _appViewModel = appViewModel;
 
-        OkCommand = ReactiveCommand.Create(() => { _appViewModel.CloseModalCommand.Execute(null); });
-        CancelCommand = ReactiveCommand.Create(() => { _appViewModel.CloseModalCommand.Execute(null); });
-
-        this.WhenActivated(disposables =>
-        {
-            HandleActivation();
-        
-            Disposable
-                .Create(HandleDeactivation)
-                .DisposeWith(disposables);
-        });
-
-        this.WhenAnyValue(x => x.SelectedItem)
-            .Subscribe(x =>
-            {
-                DeleteScriptCommand.NotifyCanExecuteChanged();
-            });
-    }
-
-    public ObservableCollection<string> Scripts { get; } = new();
-    [Reactive] public string SelectedItem { get; set; }
-    [Reactive] public string FileName { get; set; }
-
-    public ViewModelActivator Activator { get; } = new();
-    public override ReactiveCommand<Unit, Unit> OkCommand { get; }
-    public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
-
-    private void HandleActivation()
-    {
         GetScriptFiles();
     }
 
-    private void HandleDeactivation()
-    {
+    public ObservableCollection<string> Scripts { get; } = new();
+    
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(DeleteScriptCommand))] 
+    private string? _selectedItem;
+    
+    [ObservableProperty]
+    private string? _fileName;
 
-    }
+
 
     [RelayCommand]
     private void AddScript()
@@ -84,9 +56,15 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
         Scripts.Add(FileName);
     }
 
+    public bool CanDeleteScript() => SelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanDeleteScript))]
     private async void DeleteScript()
     {
+        if (SelectedItem is null)
+        {
+            return;
+        }
+
         var response = await Interactions.ShowMessageBoxAsync(
             $"Are you sure you want to delete \"{SelectedItem}\"?",
             "Add file",
@@ -100,7 +78,16 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
         }
     }
 
-    public bool CanDeleteScript() => SelectedItem != null;
+    [RelayCommand]
+    private void Ok()
+    {
+        _appViewModel.CloseModalCommand.Execute(null);
+    }
+
+    [RelayCommand]
+    private void Cancel() => _appViewModel.CloseModalCommand.Execute(null);
+
+
 
     public void GetScriptFiles()
     {
@@ -112,6 +99,10 @@ public partial class ScriptManagerViewModel : DialogViewModel, IActivatableViewM
 
     public void OpenFile()
     {
+        if (SelectedItem is null)
+        {
+            return;
+        }
         _appViewModel.RequestFileOpen(Path.Combine(ISettingsManager.GetWScriptDir(), SelectedItem));
         _appViewModel.CloseModalCommand.Execute(null);
     }

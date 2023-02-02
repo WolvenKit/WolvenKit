@@ -1,19 +1,20 @@
+using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.ProjectManagement.Project;
+using WolvenKit.App.Models.ProjectManagement.Project;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services;
+
+public interface IProjectManager : INotifyPropertyChanged
 {
-    public interface IProjectManager
-    {
-        [Reactive]
-        bool IsProjectLoaded { get; set; }
+    bool IsProjectLoaded { get; set; }
 
-        Cp77Project ActiveProject { get; set; }
+    Cp77Project? ActiveProject { get; set; }
 
-        Task<bool> SaveAsync();
+    event EventHandler<ActiveProjectChangedEventArgs>? ActiveProjectChanged;
 
-        Task<bool> LoadAsync(string location);
+    Task<bool> SaveAsync();
 
-    }
+    Task<Cp77Project?> LoadAsync(string location);
+
 }

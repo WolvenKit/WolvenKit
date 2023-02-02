@@ -9,26 +9,32 @@ namespace WolvenKit.Common.Model
 
     public class FileCategoryModel
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public List<AddFileModel> Files { get; set; }
+        public List<AddFileModel>? Files { get; set; }
     }
 
     public class AddFileModel
     {
-        public string Name { get; set; }
+        public AddFileModel()
+        {
 
-        public string Description { get; set; }
+        }
+        public AddFileModel(string? name, string? description, string? extension, EWolvenKitFile type, string? template)
+        {
+            Name = name;
+            Description = description;
+            Extension = extension;
+            Type = type;
+            Template = template;
+        }
 
-        public string Extension { get; set; }
-
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public string? Extension { get; set; }
         public EWolvenKitFile Type { get; set; }
-
-        public string Template { get; set; }
-
+        public string? Template { get; set; }
     }
-
-
 }

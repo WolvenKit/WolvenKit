@@ -1,43 +1,31 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using HelixToolkit.SharpDX.Core.Model;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
-using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.ProjectManagement.Project;
-using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools;
+
+/// <summary>
+/// ImportExportItem ViewModel
+/// </summary>
+public abstract partial class ImportExportItemViewModel : ObservableObject, ISelectableViewModel
 {
-    /// <summary>
-    /// ImportExportItem ViewModel
-    /// </summary>
-    public abstract class ImportExportItemViewModel : ReactiveObject, ISelectableViewModel
+    protected ImportExportItemViewModel(string baseFile, ImportExportArgs properties)
     {
-        /// <summary>
-        /// BaseFile "FileModel"
-        /// </summary>
-        protected string BaseFile { get; set; }
-
-        /// <summary>
-        /// Properties
-        /// </summary>
-        [Reactive] public ImportExportArgs Properties { get; set; }
-
-        public string ExportTaskIdentifier => Properties.ToString();
-
-        public string Extension => Path.GetExtension(BaseFile).TrimStart('.');
-        public string FullName => BaseFile;
-        public string Name => Path.GetFileName(BaseFile);
-
-        [Reactive] public bool IsChecked { get; set; }
+        BaseFile = baseFile;
+        _properties = properties;
     }
+
+
+    public string BaseFile { get; set; }
+
+    [ObservableProperty] private ImportExportArgs _properties;
+
+    [ObservableProperty] private bool _isChecked;
+
+    public string? ExportTaskIdentifier => Properties.ToString();
+    public string Extension => Path.GetExtension(BaseFile).TrimStart('.');
+    public string Name => Path.GetFileName(BaseFile);
+
+
 }

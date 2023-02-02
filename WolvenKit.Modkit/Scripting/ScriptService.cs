@@ -1,40 +1,34 @@
-﻿using Microsoft.ClearScript.V8;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
-using Splat;
+using Microsoft.ClearScript.V8;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.Scripting;
 
-public class ScriptService : INotifyPropertyChanged
+public partial class ScriptService : ObservableObject
 {
     protected readonly ILoggerService _loggerService;
 
-    private V8ScriptEngine _mainEngine;
+    private V8ScriptEngine? _mainEngine;
+
+    [ObservableProperty]
     private bool _isRunning;
 
-    public ScriptService(ILoggerService loggerService = null)
-    {
-        _loggerService = loggerService ?? Locator.Current.GetService<ILoggerService>();
-    }
+    public ScriptService(ILoggerService loggerService) => _loggerService = loggerService;
 
-    public bool IsRunning
-    {
-        get => _isRunning;
-        set => SetField(ref _isRunning, value);
-    }
-
-    public async Task ExecuteAsync(string code, Dictionary<string, object> hostObjects = null, string searchPath = null)
+    public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, string? searchPath = null)
     {
         if (_mainEngine != null)
         {
-            _loggerService.Warning("Another script is already running");
+            _loggerService?.Warning("Another script is already running");
             return;
         }
 
@@ -53,7 +47,7 @@ public class ScriptService : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            _loggerService.Error(ex);
+            _loggerService?.Error(ex);
         }
 
         if (_mainEngine != null)
@@ -63,9 +57,9 @@ public class ScriptService : INotifyPropertyChanged
         }
 
         IsRunning = false;
-        
+
         sw.Stop();
-        _loggerService.Info($"Execution time: {sw.Elapsed}");
+        _loggerService?.Info($"Execution time: {sw.Elapsed}");
     }
 
     public void Stop()
@@ -80,7 +74,7 @@ public class ScriptService : INotifyPropertyChanged
         IsRunning = false;
     }
 
-    protected virtual V8ScriptEngine GetScriptEngine(Dictionary<string, object> hostObjects = null, string searchPath = null)
+    protected virtual V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, string? searchPath = null)
     {
         var engine = new V8ScriptEngine();
 
@@ -102,22 +96,4 @@ public class ScriptService : INotifyPropertyChanged
         return engine;
     }
 
-    #region INotifyPropertyChanged
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
-    }
-
-    #endregion
 }

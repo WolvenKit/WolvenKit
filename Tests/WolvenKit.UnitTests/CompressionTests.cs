@@ -11,7 +11,7 @@ namespace WolvenKit.UnitTests
     {
         private const string s_gameDirectorySetting = "GameDirectory";
 
-        private const string s_oodleName = "oo2ext_7_win64.dll";
+        private const string s_oodleName = Core.Constants.Oodle;
         private const string s_uncompressedFile = "oodle.txt";
         private const string s_compressedFileSchema = "_oodle.kark";
 
@@ -22,7 +22,7 @@ namespace WolvenKit.UnitTests
             var ass = AppDomain.CurrentDomain.BaseDirectory;
             if (!Oodle.Load())
             {
-                Assert.Fail("Could not load oo2ext_7_win64.dll.");
+                Assert.Fail($"Could not load {Core.Constants.Oodle}.");
             }
         }
 

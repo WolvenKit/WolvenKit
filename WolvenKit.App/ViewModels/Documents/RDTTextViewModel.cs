@@ -1,81 +1,64 @@
 using System;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents;
+
+public partial class RDTTextViewModel : RedDocumentTabViewModel
 {
-    public class RDTTextViewModel : RedDocumentTabViewModel, INotifyPropertyChanged
+    //protected readonly IRedType _data;
+
+    public RDTTextViewModel(Stream stream, RedDocumentViewModel parent) : base(parent, "Source YAML")
     {
-        protected readonly IRedType _data;
-
-        public RDTTextViewModel(IRedType data, RedDocumentViewModel _) => throw new NotImplementedException();
-
-        public RDTTextViewModel(Stream stream, RedDocumentViewModel file)
+        using var sr = new StreamReader(stream);
+        _document = new TextDocument(sr.ReadToEnd());
+        TextEditorOptions = new TextEditorOptions
         {
-            Header = "Source YAML";
-            File = file;
-            FilePath = file.FilePath;
+            IndentationSize = 2,
+            ConvertTabsToSpaces = true,
+            EnableHyperlinks = false,
+            EnableEmailHyperlinks = false
+        };
 
-            SetupText(stream);
+        _highlightingDefinition = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(FilePath));
 
-            this.WhenAnyPropertyChanged(nameof(IsDirty))
-                .Do(x =>
-                {
-                    x.File.SetIsDirty(IsDirty);
-                })
-                .Subscribe();
-        }
-
-        private void SetupText(Stream stream)
-        {
-            using var sr = new StreamReader(stream);
-            Document = new TextDocument(sr.ReadToEnd());
-            TextEditorOptions = new TextEditorOptions
-            {
-                IndentationSize = 2,
-                ConvertTabsToSpaces = true,
-                EnableHyperlinks = false,
-                EnableEmailHyperlinks = false
-            };
-
-            HighlightingDefinition = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(FilePath));
-        }
-
-        public override void OnSelected()
-        {
-            // serialize from Data tab
-            if (File is TweakXLDocumentViewModel tweakFile)
-            {
-                // TODO: enable when working on ChunkViewModel
-                // get data tab
-                //var tab = tweakFile.TabItemViewModels.OfType<RDTDataViewModel>().FirstOrDefault();
-                //var obj = tab.GetData();
-                //using var writer = new StringWriter();
-                //var serializer = new SerializerBuilder()
-                //    .WithTypeConverter(new TweakXLYamlTypeConverter())
-                //    .Build();
-                //var file = serializer.Serialize(obj);
-
-                // refresh
-
-            }
-        }
-
-        public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
-
-        [Reactive] public TextDocument Document { get; set; }
-        [Reactive] public IHighlightingDefinition HighlightingDefinition { get; protected set; }
-        public TextEditorOptions TextEditorOptions { get; protected set; }
-
-        public string GetText() => Document.Text;
-        [Reactive] public bool IsDirty { get; protected set; }
+        this.WhenAnyPropertyChanged(nameof(IsDirty))
+            .Do(x => x?.Parent.SetIsDirty(IsDirty))
+            .Subscribe();
     }
+
+    public override void OnSelected()
+    {
+        // serialize from Data tab
+        //if (File is TweakXLDocumentViewModel tweakFile)
+        {
+            // TODO: enable when working on ChunkViewModel
+            // get data tab
+            //var tab = tweakFile.TabItemViewModels.OfType<RDTDataViewModel>().FirstOrDefault();
+            //var obj = tab.GetData();
+            //using var writer = new StringWriter();
+            //var serializer = new SerializerBuilder()
+            //    .WithTypeConverter(new TweakXLYamlTypeConverter())
+            //    .Build();
+            //var file = serializer.Serialize(obj);
+
+            // refresh
+
+        }
+    }
+
+    public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
+
+    [ObservableProperty] private TextDocument _document;
+    [ObservableProperty] private IHighlightingDefinition _highlightingDefinition;
+    public TextEditorOptions TextEditorOptions { get; protected set; }
+
+    public string GetText() => Document.Text;
+    [ObservableProperty] private bool _isDirty;
 }

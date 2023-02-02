@@ -1,10 +1,10 @@
-name: wkit-check-builds
+name: create-artifacts
 on:
   workflow_dispatch:
 
 jobs:
   desktop-win:
-    runs-on: windows-2022
+    runs-on: windows-latest
 
     steps:
     - name: Checkout
@@ -17,13 +17,21 @@ jobs:
     - name: Publish with Dotnet
       run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
 
-    - uses: actions/upload-artifact@v2
+    - name: create installer
+      run: ISCC /O".\outinstaller" .\Installers\installer.iss
+
+    - uses: actions/upload-artifact@v3
       with:
-        name: WolvenKit Desktop
+        name: wolvenkit-installer
+        path: .\outinstaller
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: wolvenkit-desktop
         path: .\publish
 
   console-win:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout
@@ -36,9 +44,9 @@ jobs:
     - name: Publish with Dotnet
       run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli -r win-x64 -c Release --no-self-contained
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
-        name: WolvenKit CLI
+        name: wolvenkit-cli
         path: ./publish_cli
 
 
@@ -56,7 +64,7 @@ jobs:
     - name: Publish with Dotnet
       run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
-        name: WolvenKit CLI Linux
+        name: wolvenkit-cli-linux
         path: ./publish_cli_linux

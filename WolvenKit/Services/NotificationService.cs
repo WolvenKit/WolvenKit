@@ -37,6 +37,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     ShowNotificationInDesktop(message, ENotificationType.Info);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
@@ -50,6 +52,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     ShowNotificationInDesktop(message, ENotificationType.Success);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
@@ -63,6 +67,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     ShowNotificationInDesktop(message, ENotificationType.Warning);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
@@ -76,6 +82,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     ShowNotificationInDesktop(message, ENotificationType.Error);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
@@ -89,6 +97,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     ShowNotificationInDesktop(message, ENotificationType.Fatal);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
@@ -117,6 +127,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     AskInDesktop(message, isConfirmedFunc);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
 
         }

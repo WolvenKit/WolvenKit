@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using DirectXTexNet;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -95,6 +96,7 @@ namespace WolvenKit.Common.DDS
                 EUncookExtension.png => TexconvNative.ESaveFileTypes.PNG,
                 EUncookExtension.tga => TexconvNative.ESaveFileTypes.TGA,
                 EUncookExtension.tiff => TexconvNative.ESaveFileTypes.TIFF,
+                EUncookExtension.dds => throw new NotImplementedException(),
                 _ => throw new ArgumentOutOfRangeException(nameof(extension), extension, null)
             };
 
@@ -131,6 +133,8 @@ namespace WolvenKit.Common.DDS
                 case MlmaskExportArgs ml:
                     uext = ml.UncookExtension;
                     break;
+                default:
+                    break;
             }
 
             return uext != EUncookExtension.dds && ConvertFromDdsAndSave(ms, outfilename, ToSaveFormat(uext), vflip, false, decompressedFormat);
@@ -142,8 +146,8 @@ namespace WolvenKit.Common.DDS
                 throw new NotImplementedException();
             }
 
-            RedImage image = null;
-            byte[] rentedBuffer = null;
+            RedImage? image = null;
+            byte[]? rentedBuffer = null;
             try
             {
                 var offset = 0;
@@ -158,8 +162,8 @@ namespace WolvenKit.Common.DDS
                     offset += readBytes;
                 }
 
-                var outDir = new FileInfo(outfilename).Directory.FullName;
-                Directory.CreateDirectory(outDir);
+                var outDir = new FileInfo(outfilename)?.Directory?.FullName;
+                Directory.CreateDirectory(outDir.NotNull());
                 var fileName = Path.GetFileNameWithoutExtension(outfilename);
                 var extension = filetype.ToString().ToLower();
                 var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
@@ -191,7 +195,7 @@ namespace WolvenKit.Common.DDS
             {
                 image?.Dispose();
 
-                if (rentedBuffer is object)
+                if (rentedBuffer is not null)
                 {
                     ArrayPool<byte>.Shared.Return(rentedBuffer);
                 }
@@ -215,8 +219,8 @@ namespace WolvenKit.Common.DDS
                 throw new NotSupportedException("texture to convert from dds must not be dds iteslf");
             }
 
-            RedImage image = null;
-            byte[] rentedBuffer = null;
+            RedImage? image = null;
+            byte[]? rentedBuffer = null;
             try
             {
                 var offset = 0;
@@ -235,27 +239,21 @@ namespace WolvenKit.Common.DDS
 
                 var filetype = ToSaveFormat(textureType);
 
-                switch (filetype)
+                return filetype switch
                 {
-                    case TexconvNative.ESaveFileTypes.BMP:
-                        return image.SaveToBMPMemory();
-                    case TexconvNative.ESaveFileTypes.PNG:
-                        return image.SaveToPNGMemory();
-                    case TexconvNative.ESaveFileTypes.TGA:
-                        return image.SaveToTGAMemory();
-                    case TexconvNative.ESaveFileTypes.TIFF:
-                        return image.SaveToTIFFMemory();
-                    case TexconvNative.ESaveFileTypes.JPEG:
-                        return image.SaveToJPEGMemory();
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(filetype), filetype, null);
-                }
+                    TexconvNative.ESaveFileTypes.BMP => image.SaveToBMPMemory(),
+                    TexconvNative.ESaveFileTypes.PNG => image.SaveToPNGMemory(),
+                    TexconvNative.ESaveFileTypes.TGA => image.SaveToTGAMemory(),
+                    TexconvNative.ESaveFileTypes.TIFF => image.SaveToTIFFMemory(),
+                    TexconvNative.ESaveFileTypes.JPEG => image.SaveToJPEGMemory(),
+                    _ => throw new ArgumentOutOfRangeException(nameof(filetype), filetype, null),
+                };
             }
             finally
             {
                 image?.Dispose();
 
-                if (rentedBuffer is object)
+                if (rentedBuffer is not null)
                 {
                     ArrayPool<byte>.Shared.Return(rentedBuffer);
                 }
@@ -277,8 +275,8 @@ namespace WolvenKit.Common.DDS
                 throw new NotSupportedException("texture to convert to dds must not be dds iteslf");
             }
 
-            RedImage image = null;
-            byte[] rentedBuffer = null;
+            RedImage? image = null;
+            byte[]? rentedBuffer = null;
             try
             {
                 var offset = 0;
@@ -295,33 +293,24 @@ namespace WolvenKit.Common.DDS
 
                 var fileType = ToSaveFormat(inExtension);
 
-                switch (fileType)
+                image = fileType switch
                 {
-                    case TexconvNative.ESaveFileTypes.BMP:
-                    case TexconvNative.ESaveFileTypes.JPEG:
-                    case TexconvNative.ESaveFileTypes.PNG:
-                    case TexconvNative.ESaveFileTypes.TIFF:
-                        image = RedImage.FromWICBuffer(rentedBuffer);
-                        break;
-                    case TexconvNative.ESaveFileTypes.TGA:
-                        image = RedImage.FromTGABuffer(rentedBuffer);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
+                    TexconvNative.ESaveFileTypes.BMP or TexconvNative.ESaveFileTypes.JPEG or TexconvNative.ESaveFileTypes.PNG or TexconvNative.ESaveFileTypes.TIFF => RedImage.FromWICBuffer(rentedBuffer),
+                    TexconvNative.ESaveFileTypes.TGA => RedImage.FromTGABuffer(rentedBuffer),
+                    _ => throw new ArgumentOutOfRangeException(),
+                };
                 if (outFormat != null && image.Metadata.Format != outFormat)
                 {
                     image.Convert((DXGI_FORMAT)outFormat);
                 }
-                
+
                 return image.SaveToDDSMemory();
             }
             finally
             {
                 image?.Dispose();
 
-                if (rentedBuffer is object)
+                if (rentedBuffer is not null)
                 {
                     ArrayPool<byte>.Shared.Return(rentedBuffer);
                 }

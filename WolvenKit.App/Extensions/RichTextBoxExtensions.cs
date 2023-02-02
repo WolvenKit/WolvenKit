@@ -3,28 +3,27 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace WolvenKit.Functionality.Extensions
+namespace WolvenKit.App.Extensions;
+
+public static class RichTextBoxExtensions
 {
-    public static class RichTextBoxExtensions
+    #region Methods
+
+    //https://stackoverflow.com/a/23402165
+    public static void AppendText(this RichTextBox box, string text, string color)
     {
-        #region Methods
-
-        //https://stackoverflow.com/a/23402165
-        public static void AppendText(this RichTextBox box, string text, string color)
+        var bc = new BrushConverter();
+        var tr = new TextRange(box.Document.ContentEnd, box.Document.ContentEnd)
         {
-            var bc = new BrushConverter();
-            var tr = new TextRange(box.Document.ContentEnd, box.Document.ContentEnd)
-            {
-                Text = text
-            };
-            try
-            {
-                tr.ApplyPropertyValue(TextElement.ForegroundProperty,
-                    bc.ConvertFromString(color));
-            }
-            catch (FormatException) { }
+            Text = text
+        };
+        try
+        {
+            tr.ApplyPropertyValue(TextElement.ForegroundProperty,
+                bc.ConvertFromString(color));
         }
-
-        #endregion Methods
+        catch (FormatException) { }
     }
+
+    #endregion Methods
 }

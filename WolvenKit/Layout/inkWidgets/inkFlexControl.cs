@@ -122,6 +122,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     case Enums.inkEHorizontalAlign.Center:
                         x = (finalRect.Size.Width - width) / 2 + child.Margin.Left - child.Margin.Right;
                         break;
+                    default:
+                        break;
                 }
 
                 switch ((Enums.inkEVerticalAlign)child.Widget.Layout.VAlign)
@@ -137,6 +139,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         break;
                     case Enums.inkEVerticalAlign.Center:
                         y = (finalRect.Size.Height - height) / 2 + child.Margin.Top - child.Margin.Bottom;
+                        break;
+                    default:
                         break;
                 }
 

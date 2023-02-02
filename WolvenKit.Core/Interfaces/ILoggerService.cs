@@ -1,8 +1,5 @@
 using System;
-using DynamicData;
 using Microsoft.Build.Framework;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit.Core.Interfaces;
 
@@ -17,10 +14,6 @@ public interface ILoggerService
     public void Success(string msg);
 
     public void Debug(string msg);
-
-
-
-    public IObservable<IChangeSet<LogEntry>> Connect();
 
 
     public void Error(Exception exception);

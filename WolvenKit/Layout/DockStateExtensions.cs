@@ -1,5 +1,5 @@
 using System;
-using WolvenKit.Models.Docking;
+using WolvenKit.App.Models.Docking;
 
 namespace WolvenKit.Functionality.Layout
 {

@@ -1,57 +1,81 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using MoreLinq;
-using Splat;
+using Microsoft.ClearScript;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.Common;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.Scripting;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.Helpers;
 
 public class WKitUIScripting : WKitScripting
 {
     private readonly IProjectManager _projectManager;
+    private readonly IWatcherService _watcherService;
 
-    public WKitUIScripting(ILoggerService loggerService) : base(loggerService) => _projectManager = Locator.Current.GetService<IProjectManager>();
+    public WKitUIScripting(ILoggerService loggerService, IProjectManager projectManager, IArchiveManager archiveManager, Red4ParserService parserService, IWatcherService watcherService) : base(loggerService, archiveManager, parserService)
+    {
+        _projectManager = projectManager;
+        _watcherService = watcherService;
+    }
 
     public void SuspendFileWatcher(bool suspend)
     {
-        var watcherService = Locator.Current.GetService<IWatcherService>();
-        if (watcherService != null && watcherService.IsSuspended != suspend)
+        if (_watcherService != null && _watcherService.IsSuspended != suspend)
         {
-            watcherService.IsSuspended = suspend;
+            _watcherService.IsSuspended = suspend;
             if (!suspend)
             {
-                watcherService.RefreshAsync(_projectManager.ActiveProject);
+                _watcherService.RefreshAsync(_projectManager.ActiveProject);
             }
         }
     }
 
-    public virtual void SaveToProject(string path, CR2WFile cr2w) =>
+    public virtual void SaveToProject(string path, CR2WFile cr2w)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return;
+        }
         SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
         {
             using FileStream fs = new(s, FileMode.Create);
-            using var writer = new CR2WWriter(fs);
+            using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
             writer.WriteFile(cr2w);
         });
+    }
 
-    public virtual void SaveToProject(string path, IGameFile gameFile) =>
+    public virtual void SaveToProject(string path, IGameFile gameFile)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return;
+        }
         SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
         {
             using FileStream fs = new(s, FileMode.Create);
             gameFile.Extract(fs);
         });
+    }
 
-    public virtual void SaveToRaw(string path, string content) =>
+    public virtual void SaveToRaw(string path, string content)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return;
+        }
         SaveAs(Path.Combine(_projectManager.ActiveProject.RawDirectory, path), s => File.WriteAllText(s, content));
+    }
 
     private void SaveAs(string path, Action<string> action)
     {
@@ -77,84 +101,211 @@ public class WKitUIScripting : WKitScripting
         }
     }
 
-    /*
-     * Todo Refactor
-    public void ExportFiles(dynamic relPaths)
+    private T ParseExportSettings<T>(ScriptObject scriptSettingsObject) where T : ExportArgs, new()
     {
-        if (relPaths is null)
-        {
-            throw new ArgumentNullException(nameof(relPaths));
-        }
-        else if (relPaths is string)
-        {
-            // since relPaths is dynamic we can support string, or string[]
-            // this converts a single string to an array (thanks JavaScript)
-            relPaths = new string[] { relPaths };
-        }
-        else
-        {
-            try
+        // find all of the matching scriptable properties the script provided
+        var exportArgs = new T();
+        var s = exportArgs.GetType().GetProperties()
+            .Where(x =>
             {
-                // this will catch exceptions with the (IList) conversion
-                // Cast<string> is lazy and  will be caught later
-                relPaths = ((IList)relPaths).Cast<string>();
-            }
-            catch (InvalidCastException ice)
-            {
-                _loggerService.Error("Unexpected data type found for argument \"relPaths\" in \"ExportFiles\".");
-                _loggerService.Error(ice.Message);
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-            }
-        }
-
-        var watcherService = Locator.Current.GetService<IWatcherService>();
-        var impExpVM = Locator.Current.GetService<AppViewModel>().ImportExportToolVM;
-
-        impExpVM.IsExportsSelected = true;
-        impExpVM.IsImportsSelected = false;
-
-        // unset every item in ExportItems
-        foreach (var expItem in impExpVM.ExportableItems)
-        {
-            expItem.IsChecked = false;
-        }
-
-        try
-        {
-            var uncookExts = Enum.GetNames(typeof(ECookedFileFormat));
-            foreach (var relPath in relPaths)
-            {
-                var filePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, (string)relPath);
-                var ext = Path.GetExtension(filePath).Replace(".", "");
-                if (!File.Exists(filePath))
+                var includeProp = Attribute.IsDefined(x, typeof(WkitScriptAccess));
+                if (includeProp)
                 {
-                    _loggerService.Info($"{relPath} could not be found.");
+                    if (Attribute.GetCustomAttribute(x, typeof(WkitScriptAccess)) is WkitScriptAccess scriptAccess)
+                    {
+                        includeProp &= scriptSettingsObject.PropertyNames.Contains(scriptAccess.ScriptName);
+                    }
+                }
+
+                return includeProp;
+            });
+
+        foreach (var prop in s)
+        {
+            // now set their value
+            if (Attribute.GetCustomAttribute(prop, typeof(WkitScriptAccess)) is WkitScriptAccess scriptAccess)
+            {
+                if (prop.PropertyType.IsEnum)
+                {
+                    Enum.TryParse(prop.PropertyType, scriptSettingsObject[scriptAccess.ScriptName].ToString(), out var val);
+                    prop.SetValue(exportArgs, val);
+                }
+                else
+                {
+                    prop.SetValue(exportArgs, scriptSettingsObject[scriptAccess.ScriptName]);
+                }
+            }
+        }
+
+        return exportArgs;
+    }
+
+    public void ExportFiles(dynamic exportList, dynamic? exportSettings = null)
+    {
+        // dynamic type checking
+        // TODO: mix in hashes (V8 doesn't have a ulong equivalent though)
+        switch (exportList)
+        {
+            case IList list:
+                foreach (var item in list)
+                {
+                    if (item is not string)
+                    {
+                        throw new Exception($"Unexpected datatype found for {nameof(exportList)}. Expected string or string[].");
+                    }
+                }
+                break;
+            case string exportString:
+                exportList = new string[] { exportString };
+                break;
+            case FileEntry fileEntry:
+                exportList = new string[] { fileEntry.FileName };
+                break;
+            case null:
+                throw new ArgumentNullException(nameof(exportList));
+            default:
+                throw new Exception($"Unexpected datatype found for {nameof(exportList)}. Expected string or string[].");
+        }
+
+        // get the export view model and clear the items
+        var expVM = IocHelper.GetService<TextureExportViewModel>();
+        foreach (var item in expVM.Items)
+        {
+            item.IsChecked = false;
+        }
+
+        // handle any settings if we have them
+        // TODO: clean this up a bit to auto handle all export types instead of manually checking
+        switch (exportSettings)
+        {
+            case ScriptObject settings:
+                if (settings["Mesh"] is ScriptObject meshSettings)
+                {
+                    var exportArgs = ParseExportSettings<MeshExportArgs>(meshSettings);
+
+                    // set the export settings for meshes in the vm
+                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(MeshExportArgs)))
+                    {
+                        x.Properties = exportArgs;
+                    }
+                }
+                if (settings["Xbm"] is ScriptObject xbmSettings)
+                {
+                    var exportArgs = ParseExportSettings<XbmExportArgs>(xbmSettings);
+
+                    // set the export settings for images in the vm
+                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(XbmExportArgs)))
+                    {
+                        x.Properties = exportArgs;
+                    }
+                }
+                if (settings["Opus"] is ScriptObject opusSettings)
+                {
+                    var exportArgs = ParseExportSettings<OpusExportArgs>(opusSettings);
+
+                    // set the export settings for opus files in the vm
+                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(OpusExportArgs)))
+                    {
+                        x.Properties = exportArgs;
+                    }
+                }
+                if (settings["Wem"] is ScriptObject wemSettings)
+                {
+                    var exportArgs = ParseExportSettings<WemExportArgs>(wemSettings);
+
+                    // set the export settings for wems in the vm
+                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(WemExportArgs)))
+                    {
+                        x.Properties = exportArgs;
+                    }
+                }
+                if (settings["MorphTarget"] is ScriptObject morphTargetSettings)
+                {
+                    var exportArgs = ParseExportSettings<MorphTargetExportArgs>(morphTargetSettings);
+
+                    // set the export settings for morphtargets in the vm
+                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(MorphTargetExportArgs)))
+                    {
+                        x.Properties = exportArgs;
+                    }
+                }
+                if (settings["MlMask"] is ScriptObject mlMaskSettings)
+                {
+                    var exportArgs = ParseExportSettings<MlmaskExportArgs>(mlMaskSettings);
+
+                    // set the export settings for mlmasks in the vm
+                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(MlmaskExportArgs)))
+                    {
+                        x.Properties = exportArgs;
+                    }
+                }
+                if (settings["Animation"] is ScriptObject animationSettings)
+                {
+                    var exportArgs = ParseExportSettings<AnimationExportArgs>(animationSettings);
+
+                    // set the export settings for animations in the vm
+                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(AnimationExportArgs)))
+                    {
+                        x.Properties = exportArgs;
+                    }
+                }
+                break;
+            default:
+                _loggerService.Warning("Unknown type found for ExportFiles settings. The settings used in the Export Tool will be used.");
+                break;
+        }
+
+        // loop over each item to export and export the item
+        foreach (var exportItem in exportList)
+        {
+            if (exportItem is string exportPath)
+            {
+                if (exportPath.Length == 0)
+                {
                     continue;
                 }
-                if (!uncookExts.Any(e => e == ext))
+
+                // check extension is exportable
+                var uncookExts = Enum.GetNames(typeof(ECookedFileFormat));
+                var ext = Path.GetExtension(exportPath).Replace(".", "");
+                if (!uncookExts.Any(_ => _.Equals(ext, StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    _loggerService.Info($"{relPath} is not an exportable CR2W file.");
+                    _loggerService.Warning($"{exportPath} does not contain a valid export extension. Skipping.");
+                    continue;
+                }
+
+                // we possibly have a relative path, so convert it to the project path
+                if (!Path.IsPathFullyQualified(exportPath))
+                {
+                    if (_projectManager.IsProjectLoaded)
+                    {
+                        exportPath = Path.Combine(_projectManager.ActiveProject.NotNull().ModDirectory, exportPath);
+                    }
+                    else
+                    {
+                        _loggerService.Warning($"{exportPath} is a relative path and therefore cannot be resolved with an unloaded project. Skipping.");
+                        continue;
+                    }
+                }
+
+                if (!Path.Exists(exportPath))
+                {
+                    _loggerService.Warning($"{exportPath} could not be found. Skipping.");
                     continue;
                 }
 
                 // Set the item to be checked
-                impExpVM.ExportableItems.Where(_ => _.FullName == filePath)
-                    .ForEach(_ => _.IsChecked = true);
+                foreach (var item in expVM.Items.Where(_ => _.BaseFile.EndsWith(exportPath, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    item.IsChecked = true;
+                }
             }
-            impExpVM.ProcessSelectedCommand.Execute(Unit.Default);
         }
-        catch (InvalidCastException ice)
+
+        // export all the checked items if we have any
+        if (expVM.Items.Any(_ => _.IsChecked))
         {
-            _loggerService.Error("Unexpected data type found for argument \"relPaths\" in \"ExportFiles\".");
-            _loggerService.Error(ice.Message);
-        }
-        catch (Exception e)
-        {
-            _loggerService.Error(e);
+            expVM.ProcessSelectedCommand.Execute(Unit.Default);
         }
     }
-    */
 }

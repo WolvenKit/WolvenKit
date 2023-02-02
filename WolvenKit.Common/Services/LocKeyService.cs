@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Splat;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -18,17 +19,10 @@ namespace WolvenKit.Common.Services
 
         public string Language { get; set; } = "en-us";
 
-        public LocKeyService()
+        public LocKeyService(Red4ParserService parser, IArchiveManager archive)
         {
-            _parser = Locator.Current.GetService<Red4ParserService>();
-            _archive = Locator.Current.GetService<IArchiveManager>();
-            //_archive.WhenAnyValue(x => x.IsManagerLoaded).Subscribe(x =>
-            //{
-            //    if (x)
-            //    {
-            //        LoadCurrentLanguage();
-            //    }
-            //});
+            _parser = parser;
+            _archive = archive;
         }
 
         public void LoadCurrentLanguage() => (_primaryKeys[Language], _secondaryKeys[Language]) = Load("base\\localization\\en-us\\onscreens\\onscreens_final.json");
@@ -47,17 +41,16 @@ namespace WolvenKit.Common.Services
                 using var reader = new BinaryReader(stream);
                 var cr2wFile = _parser.ReadRed4File(reader);
 
-                if (cr2wFile.RootChunk is JsonResource json)
+                if (cr2wFile?.RootChunk is JsonResource json)
                 {
                     if (json.Root.Chunk is localizationPersistenceOnScreenEntries os)
                     {
                         foreach (var entry in os.Entries)
                         {
+                            ArgumentNullException.ThrowIfNull(entry);
+
                             primary[entry.PrimaryKey] = entry;
-                            if ((string)entry.SecondaryKey is not null)
-                            {
-                                secondary[entry.SecondaryKey] = entry;
-                            }
+                            secondary[entry.SecondaryKey] = entry;
                         }
                     }
                 }
@@ -83,30 +76,46 @@ namespace WolvenKit.Common.Services
             return _secondaryKeys[Language].Values.ToList();
         }
 
-        public localizationPersistenceOnScreenEntry GetEntry(ulong key)
+        public localizationPersistenceOnScreenEntry? GetEntry(ulong key)
         {
             if (!_primaryKeys.ContainsKey(Language))
             {
                 LoadCurrentLanguage();
             }
-            return _primaryKeys[Language].GetValueOrDefault(key, null);
+
+            if (_primaryKeys.TryGetValue(Language, out var outerdict))
+            {
+                if (outerdict.TryGetValue(key, out var innerdict))
+                {
+                    return innerdict;
+                }
+            }
+            return null;
         }
 
-        public localizationPersistenceOnScreenEntry GetEntry(string key)
+        public localizationPersistenceOnScreenEntry? GetEntry(string key)
         {
             if (!_secondaryKeys.ContainsKey(Language))
             {
                 LoadCurrentLanguage();
             }
-            return _secondaryKeys[Language].GetValueOrDefault(key, null);
+
+            if (_secondaryKeys.TryGetValue(Language, out var outerdict))
+            {
+                if (outerdict.TryGetValue(key, out var innerdict))
+                {
+                    return innerdict;
+                }
+            }
+            return null;
         }
 
-        public string GetFemaleVariant(ulong key) => GetEntry(key)?.FemaleVariant ?? null;
+        public string? GetFemaleVariant(ulong key) => GetEntry(key)?.FemaleVariant;
 
-        public string GetFemaleVariant(string key) => GetEntry(key)?.FemaleVariant ?? null;
+        public string? GetFemaleVariant(string key) => GetEntry(key)?.FemaleVariant;
 
-        public string GetMaleVariant(ulong key) => GetEntry(key)?.MaleVariant ?? null;
+        public string? GetMaleVariant(ulong key) => GetEntry(key)?.MaleVariant;
 
-        public string GetMaleVariant(string key) => GetEntry(key)?.MaleVariant ?? null;
+        public string? GetMaleVariant(string key) => GetEntry(key)?.MaleVariant;
     }
 }

@@ -25,7 +25,7 @@ namespace WolvenKit.Modkit.RED4
         {
             using var instream = new FileStream(infile, FileMode.Open, FileAccess.Read);
 
-            if (!_wolvenkitFileService.TryReadRed4File(instream, out var cr2w))
+            if (!_parserService.TryReadRed4File(instream, out var cr2w))
             {
                 throw new InvalidParsingException("ConvertToText");
             }
@@ -88,7 +88,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="json"></param>
         /// <returns></returns>
         /// <exception cref="InvalidParsingException"></exception>
-        public static CR2WFile ConvertFromJson(string json)
+        public static CR2WFile? ConvertFromJson(string json)
         {
             var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
 
@@ -127,7 +127,7 @@ namespace WolvenKit.Modkit.RED4
             var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name), ext);
 
             using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
-            using var writer = new CR2WWriter(fs2);
+            using var writer = new CR2WWriter(fs2) { LoggerService = _loggerService };
             writer.WriteFile(w2rc);
 
             _loggerService.Success($"Imported {fileInfo.Name} to {outpath}");

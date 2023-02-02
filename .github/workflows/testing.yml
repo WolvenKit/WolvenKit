@@ -15,56 +15,23 @@ jobs:
       with:
         dotnet-version: 7.x
         
-    - name: Get version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1.1.2
-      id: get-version
+    - name: Publish with Dotnet
+      run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
+
+    - name: create installer
+      run: ISCC /O".\outinstaller" .\Installers\installer.iss
+
+    - uses: actions/upload-artifact@v3
       with:
-        proj-path: ./WolvenKit/WolvenKit.csproj
-        
-    - name: Get Date
-      run: |
-        $date = Get-Date -Format "yyyy-MM-dd"
-        echo "ISODATE=$date" >> $env:GITHUB_ENV
-        
-    - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
-    
+        name: installer
+        path: .\outinstaller\*.exe
 
-    # tag this commit
-    - name: Create Tag
-      id: tag_version
-      uses: rfuzzo/github-tag-action@7b0316b3fb8aa236fdc20bee0614ea6ef99f4bf1
+    ##########################################
+    # Download artifacts
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        default_bump: false
-        custom_tag: ${{ env.VERSION }}
-        tag_prefix: ""
-        dry_run: true
+        name: installer
+        path: out
 
-    # echo
-    - name: output
-      run: |
-        echo "This is a beta release so you may encounter bugs. Please report them. \n ${{ steps.tag_version.outputs.changelog }}"
-
-    - run: git fetch --tags
-
-    - name: Get CLI commits
-      id: get_cli_commits
-      run: |
-        $commits = (git --no-pager diff --name-only ${{ steps.tag_version.outputs.previous_tag }}) | Out-String
-        $i = 0
-        $commits -Split "`r`n" | ForEach-Object {  if ( $_.StartsWith("WolvenKit.CLI/") -or $_.StartsWith("WolvenKit.Common/") -or $_.StartsWith("WolvenKit.Core/") -or $_.StartsWith("WolvenKit.Modkit/") -or $_.StartsWith("WolvenKit.RED4.") ) { $i = $i + 1  } }
-        if ($i -eq 0) { $b = "NO" } else { $b = "YES" }
-        $b
-        echo "has_cli_commits=$b" >> $env:GITHUB_ENV
-
-    - run: |
-        echo "${{ env.has_cli_commits }}" 
-
-    - name: conditional
-      if: ${{ env.has_cli_commits == 'YES' }} 
-      run: |
-        echo "continue with cli" 
-    - name: conditional
-      if: ${{ env.has_cli_commits == 'NO' }} 
-      run: |
-        echo "continue without cli" 
+    - run: Get-ChildItem -Path./out -Recurse -Force

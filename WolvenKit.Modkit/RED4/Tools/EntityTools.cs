@@ -1,20 +1,22 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool GetStreamFromCName(CName cname, out Stream stream)
+        public bool GetStreamFromCName(CName cname, [NotNullWhen(true)] out Stream? stream)
         {
             var file = _archiveManager.Lookup(cname.GetRedHash());
             if (file.HasValue && file.Value is FileEntry fe)
@@ -24,22 +26,31 @@ namespace WolvenKit.Modkit.RED4
 
                 return true;
             }
+
             stream = null;
             return false;
 
         }
 
-        public bool GetFileFromCName(CName cname, out CR2WFile cr2w)
+        public bool GetFileFromCName(CName cname, [NotNullWhen(true)] out CR2WFile? cr2w)
         {
+            if (GetStreamFromCName(cname, out var stream) && _parserService.TryReadRed4File(stream, out cr2w))
+            {
+                return true;
+            }
+
             cr2w = null;
-            return GetStreamFromCName(cname, out var stream) &&
-                _wolvenkitFileService.TryReadRed4File(stream, out cr2w);
+            return false;
         }
 
         public bool ExportEntity(Stream entStream, CName appearance, FileInfo outfile)
         {
-            _wolvenkitFileService.TryReadRed4File(entStream, out var cr2w);
-            return ExportEntity(cr2w, appearance, outfile);
+            if (_parserService.TryReadRed4File(entStream, out var cr2w))
+            {
+                return ExportEntity(cr2w, appearance, outfile);
+            }
+
+            return false;
         }
 
         public bool ExportEntity(CR2WFile entFile, CName appearance, FileInfo outfile)
@@ -54,8 +65,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            CR2WFile animsFile = null;
-            animAnimSet anims = null;
+            CR2WFile? animsFile = null;
             var rigs = new Dictionary<string, List<string>>();
             var slots = new Dictionary<string, Dictionary<string, string>>();
             var slotParents = new Dictionary<string, string>();
@@ -66,10 +76,14 @@ namespace WolvenKit.Modkit.RED4
                 {
                     if (GetFileFromCName(eac.Rig.DepotPath, out var rigFile) && rigFile.RootChunk is animRig rig)
                     {
-                        rigs[eac.Name] = new List<string>();
+                        NotResolvableException.ThrowIfNotResolvable(eac.Name);
+
+                        rigs[eac.Name!] = new List<string>();
                         foreach (var name in rig.BoneNames)
                         {
-                            rigs[eac.Name].Add(name);
+                            NotResolvableException.ThrowIfNotResolvable(name);
+
+                            rigs[eac.Name!].Add(name!);
                         }
                     }
 
@@ -89,25 +103,40 @@ namespace WolvenKit.Modkit.RED4
 
                 if (component is entSlotComponent esc)
                 {
+                    NotResolvableException.ThrowIfNotResolvable(esc.Name);
+
                     if (esc.ParentTransform != null && esc.ParentTransform.GetValue() is entHardTransformBinding ehtb)
                     {
-                        slotParents[esc.Name] = ehtb.BindName;
+                        NotResolvableException.ThrowIfNotResolvable(ehtb.BindName);
+
+                        slotParents[esc.Name!] = ehtb.BindName!;
                     }
-                    slots[esc.Name] = new Dictionary<string, string>();
+                    slots[esc.Name!] = new Dictionary<string, string>();
                     foreach (var slot in esc.Slots)
                     {
-                        slots[esc.Name][slot.SlotName] = slot.BoneName;
+                        ArgumentNullException.ThrowIfNull(slot);
+                        NotResolvableException.ThrowIfNotResolvable(slot.SlotName);
+                        NotResolvableException.ThrowIfNotResolvable(slot.BoneName);
+
+                        slots[esc.Name!][slot.SlotName!] = slot.BoneName!;
                     }
                 }
             }
 
-            if (animsFile != null)
+            if (animsFile is null)
             {
-                anims = animsFile.RootChunk as animAnimSet;
+                throw new InvalidParsingException(nameof(animsFile));
+            }
+
+            if (animsFile.RootChunk is not animAnimSet anims)
+            {
+                throw new InvalidParsingException(nameof(animsFile));
             }
 
             foreach (var app in eet.Appearances)
             {
+                ArgumentNullException.ThrowIfNull(app);
+
                 if (app.AppearanceName != appearance && appearance != "default")
                 {
                     continue;
@@ -125,6 +154,8 @@ namespace WolvenKit.Modkit.RED4
 
                 foreach (var appApp in aar.Appearances)
                 {
+                    ArgumentNullException.ThrowIfNull(appApp);
+
                     if (appApp.GetValue() is not appearanceAppearanceDefinition aad || (aad.Name != appearance && appearance != "default") || aad.CompiledData.Data is not RedPackage appPkg)
                     {
                         continue;
@@ -147,20 +178,25 @@ namespace WolvenKit.Modkit.RED4
                     {
                         if (component is IRedMeshComponent mc && mc.ParentTransform != null)
                         {
+                            NotResolvableException.ThrowIfNotResolvable(mc.Name);
+
                             var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
 
-                            Node node = null;
+                            NotResolvableException.ThrowIfNotResolvable(transform.BindName);
+                            NotResolvableException.ThrowIfNotResolvable(transform.SlotName);
 
-                            if (slots.ContainsKey(transform.BindName))
+                            Node? node = null;
+
+                            if (slots.ContainsKey(transform.BindName!))
                             {
-                                if (slots[transform.BindName].ContainsKey(transform.SlotName))
+                                if (slots[transform.BindName!].ContainsKey(transform.SlotName!))
                                 {
-                                    var boneName = slots[transform.BindName][transform.SlotName];
-                                    if (rigs.ContainsKey(slotParents[transform.BindName]))
+                                    var boneName = slots[transform.BindName!][transform.SlotName!];
+                                    if (rigs.ContainsKey(slotParents[transform.BindName!]))
                                     {
-                                        if (rigs[slotParents[transform.BindName]].Contains(boneName))
+                                        if (rigs[slotParents[transform.BindName!]].Contains(boneName))
                                         {
-                                            node = root.LogicalSkins[0].GetJoint(rigs[slotParents[transform.BindName]].IndexOf(boneName)).Joint.CreateNode(mc.Name);
+                                            node = root.LogicalSkins[0].GetJoint(rigs[slotParents[transform.BindName!]].IndexOf(boneName)).Joint.CreateNode(mc.Name);
                                         }
                                     }
                                 }
@@ -179,7 +215,7 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(new System.Numerics.Vector3(1f, 1f, 1f), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
                             }
-                            nodes.Add(mc.Name, node);
+                            nodes.Add(mc.Name!, node);
 
                             if (!GetFileFromCName(mc.Mesh.DepotPath, out var meshFile))
                             {
@@ -190,7 +226,7 @@ namespace WolvenKit.Modkit.RED4
 
                             foreach (var child in node.VisualChildren)
                             {
-                                child.Name = mc.Name + "_" + child.Name;
+                                child.Name = mc.Name! + "_" + child.Name;
                             }
                         }
                     }
@@ -199,17 +235,22 @@ namespace WolvenKit.Modkit.RED4
                     {
                         if (component is IRedMeshComponent mc)
                         {
+                            NotResolvableException.ThrowIfNotResolvable(mc.Name);
+
                             if (!GetFileFromCName(mc.Mesh.DepotPath, out var meshFile))
                             {
                                 continue;
                             }
 
-                            Node node = null;
+                            Node? node = null;
 
                             var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
-                            if (nodes.ContainsKey(transform.BindName))
+
+                            NotResolvableException.ThrowIfNotResolvable(transform.BindName);
+
+                            if (nodes.ContainsKey(transform.BindName!))
                             {
-                                node = nodes[transform.BindName].CreateNode(mc.Name);
+                                node = nodes[transform.BindName!].CreateNode(mc.Name);
                             }
                             else
                             {
@@ -224,13 +265,13 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(new System.Numerics.Vector3(1f, 1f, 1f), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
                             }
-                            nodes.Add(mc.Name, node);
+                            nodes.Add(mc.Name!, node);
 
                             MeshTools.AddMeshToModel(meshFile, root, root.LogicalSkins[0], node, true, mc.ChunkMask, materials);
 
                             foreach (var child in node.VisualChildren)
                             {
-                                child.Name = mc.Name + "_" + child.Name;
+                                child.Name = mc.Name! + "_" + child.Name;
                             }
                         }
                     }
@@ -242,75 +283,10 @@ namespace WolvenKit.Modkit.RED4
             return false;
         }
 
-        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.Vector3 v) => new System.Numerics.Vector3(v.X, v.Z, v.Y);
+        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.Vector3 v) => new(v.X, v.Z, v.Y);
 
-        public static System.Numerics.Quaternion ToQuaternion(WolvenKit.RED4.Types.Quaternion q) => new System.Numerics.Quaternion(q.I, q.K, -q.J, q.R);
+        public static System.Numerics.Quaternion ToQuaternion(WolvenKit.RED4.Types.Quaternion q) => new(q.I, q.K, -q.J, q.R);
 
-        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.WorldPosition p) => new System.Numerics.Vector3(p.X, p.Z, -p.Y);
-
-        public bool DumpEntityPackageAsJson(Stream entStream, FileInfo outfile)
-        {
-            var outpath = Path.ChangeExtension(outfile.FullName, ".json");
-            if (!_wolvenkitFileService.TryReadRed4File(entStream, out var cr2w))
-            {
-                return false;
-            }
-            if (cr2w.RootChunk is entEntityTemplate)
-            {
-                return DumpEntPackage(cr2w, entStream, outpath);
-            }
-            if (cr2w.RootChunk is appearanceAppearanceResource)
-            {
-                return DumpAppPackage(cr2w, entStream, outpath);
-            }
-            return false;
-        }
-
-        private bool DumpEntPackage(CR2WFile cr2w, Stream entStream, string outfile)
-        {
-            var blob = cr2w.RootChunk as entEntityTemplate;
-
-            if (blob.CompiledData.Buffer.MemSize > 0)
-            {
-                var packageStream = new MemoryStream();
-                packageStream.Write(blob.CompiledData.Buffer.GetBytes());
-
-                var package = new CompiledPackage(_hashService);
-                packageStream.Seek(0, SeekOrigin.Begin);
-                package.Read(new BinaryReader(packageStream));
-                var data = RedJsonSerializer.Serialize(new RedFileDto(cr2w));
-                File.WriteAllText(outfile, data);
-                return true;
-            }
-            return false;
-        }
-
-        private bool DumpAppPackage(CR2WFile cr2w, Stream appStream, string outfile)
-        {
-            var blob = cr2w.RootChunk as appearanceAppearanceResource;
-
-            var datas = new List<RedFileDto>();
-            foreach (var appearance in blob.Appearances)
-            {
-                if (appearance.Chunk.CompiledData.Buffer.MemSize > 0)
-                {
-                    var packageStream = new MemoryStream();
-                    packageStream.Write(appearance.Chunk.CompiledData.Buffer.GetBytes());
-
-                    var package = new CompiledPackage(_hashService);
-                    packageStream.Seek(0, SeekOrigin.Begin);
-                    package.Read(new BinaryReader(packageStream));
-                    datas.Add(new RedFileDto(cr2w));
-                }
-            }
-            if (datas.Count > 1)
-            {
-                var data = RedJsonSerializer.Serialize(datas);
-                File.WriteAllText(outfile, data);
-                return true;
-            }
-            return false;
-        }
-
+        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.WorldPosition p) => new(p.X, p.Z, -p.Y);
     }
 }

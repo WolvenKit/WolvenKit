@@ -7,7 +7,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit.Views.Tools"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:treeViewEngine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
     x:Name="redTreeView"
@@ -228,7 +228,8 @@
                     </Style>
                 </ContextMenu.Resources>
 
-                <MenuItem Header="TweakXL"
+                <MenuItem
+                    Header="TweakXL"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowTweakXLMenu, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -242,48 +243,42 @@
                             Kind="DatabaseExportOutline" />
                     </MenuItem.Icon>
                     <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Override Value"
                         IsCheckable="False"
-                        Style="{StaticResource SyncfusionMenuItemStyle}">
-                    </MenuItem>
+                        Style="{StaticResource SyncfusionMenuItemStyle}" />
                     <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Append to Array"
                         IsCheckable="False"
                         IsEnabled="False"
-                        Style="{StaticResource SyncfusionMenuItemStyle}">
-                    </MenuItem>
+                        Style="{StaticResource SyncfusionMenuItemStyle}" />
                     <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Prepend to Array"
                         IsCheckable="False"
                         IsEnabled="False"
-                        Style="{StaticResource SyncfusionMenuItemStyle}">
-                    </MenuItem>
-                    <Separator/>
+                        Style="{StaticResource SyncfusionMenuItemStyle}" />
+                    <Separator />
                     <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Append to Array (Once)"
                         IsCheckable="False"
                         IsEnabled="False"
-                        Style="{StaticResource SyncfusionMenuItemStyle}">
-                    </MenuItem>
+                        Style="{StaticResource SyncfusionMenuItemStyle}" />
                     <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Prepend to Array (Once)"
                         IsCheckable="False"
                         IsEnabled="False"
-                        Style="{StaticResource SyncfusionMenuItemStyle}">
-                    </MenuItem>
-                    <Separator/>
+                        Style="{StaticResource SyncfusionMenuItemStyle}" />
+                    <Separator />
                     <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverride, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Remove from Array"
                         IsCheckable="False"
                         IsEnabled="False"
-                        Style="{StaticResource SyncfusionMenuItemStyle}">
-                    </MenuItem>
+                        Style="{StaticResource SyncfusionMenuItemStyle}" />
                 </MenuItem>
 
                 <MenuItem

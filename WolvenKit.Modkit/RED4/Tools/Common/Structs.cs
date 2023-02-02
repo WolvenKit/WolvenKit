@@ -7,23 +7,23 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
 {
     public class RawArmature
     {
-        public string[] Names;
+        public string[]? Names;
 
-        public short[] Parent;
+        public short[]? Parent;
         public int BoneCount;
-        public Vector3[] LocalPosn;
-        public Quaternion[] LocalRot;
-        public Vector3[] LocalScale;
+        public Vector3[]? LocalPosn;
+        public Quaternion[]? LocalRot;
+        public Vector3[]? LocalScale;
 
         public bool AposeMSExits;
-        public Vector3[] AposeMSTrans;
-        public Quaternion[] AposeMSRot;
-        public Vector3[] AposeMSScale;
+        public Vector3[]? AposeMSTrans;
+        public Quaternion[]? AposeMSRot;
+        public Vector3[]? AposeMSScale;
 
         public bool AposeLSExits;
-        public Vector3[] AposeLSTrans;
-        public Quaternion[] AposeLSRot;
-        public Vector3[] AposeLSScale;
+        public Vector3[]? AposeLSTrans;
+        public Quaternion[]? AposeLSRot;
+        public Vector3[]? AposeLSScale;
         public int baseTendencyCount;
     }
     public class MeshesInfo
@@ -45,12 +45,12 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public Vector4 quantScale { get; set; }
         public int meshCount { get; set; }
         public uint[] LODLvl { get; set; }
-        public Dictionary<string, string[]> appearances { get; set; }
+        public Dictionary<string, string[]> appearances { get; set; } = new();
         public uint vertBufferSize { get; set; }
         public uint indexBufferSize { get; set; }
         public uint indexBufferOffset { get; set; }
 
-        public MeshesInfo() { }
+        //public MeshesInfo() { }
         public MeshesInfo(int meshCount)
         {
             this.meshCount = meshCount;
@@ -74,61 +74,63 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
     }
     public class RawMeshContainer
     {
-        public Vector3[] positions { get; set; }
-        public uint[] indices { get; set; }
-        public Vector2[] texCoords0 { get; set; }
-        public Vector2[] texCoords1 { get; set; }
-        public Vector3[] normals { get; set; }
-        public Vector4[] tangents { get; set; }
-        public Vector4[] colors0 { get; set; }
-        public Vector4[] colors1 { get; set; }
-        public float[,] weights { get; set; }
-        public ushort[,] boneindices { get; set; }
-        public Vector3[] garmentMorph { get; set; }
-        public string name { get; set; }
+        public Vector3[]? positions { get; set; }
+        public uint[]? indices { get; set; }
+        public Vector2[]? texCoords0 { get; set; }
+        public Vector2[]? texCoords1 { get; set; }
+        public Vector3[]? normals { get; set; }
+        public Vector4[]? tangents { get; set; }
+        public Vector4[]? colors0 { get; set; }
+        public Vector4[]? colors1 { get; set; }
+        public float[,]? weights { get; set; }
+        public ushort[,]? boneindices { get; set; }
+        public Vector3[]? garmentMorph { get; set; }
+        public string? name { get; set; }
+        public Vector4[]? garmentSupportWeight { get; set; }
+        public Vector4[]? garmentSupportCap { get; set; }
         public uint weightCount { get; set; }
-        public string[] materialNames { get; set; }
+        public string[]? materialNames { get; set; }
         public uint lod { get; set; }
     }
     public class Re4MeshContainer
     {
-        public short[,] ExpVerts { get; set; }
-        public uint[] Nor32s { get; set; }
-        public uint[] Tan32s { get; set; }
-        public ushort[] indices { get; set; }
-        public ushort[,] uv0s { get; set; }
-        public ushort[,] uv1s { get; set; }
-        public byte[,] colors { get; set; }
-        public byte[,] weights { get; set; }
-        public byte[,] boneindices { get; set; }
-        public string name { get; set; }
+        public short[,]? ExpVerts { get; set; }
+        public uint[]? Nor32s { get; set; }
+        public uint[]? Tan32s { get; set; }
+        public ushort[]? indices { get; set; }
+        public ushort[,]? uv0s { get; set; }
+        public ushort[,]? uv1s { get; set; }
+        public byte[,]? colors { get; set; }
+        public byte[,]? weights { get; set; }
+        public byte[,]? boneindices { get; set; }
+        public string? name { get; set; }
         public uint weightcount { get; set; }
-        public ushort[,] garmentMorph { get; set; }
+        public ushort[,]? garmentMorph { get; set; }
     }
 
     public class RawTargetContainer
     {
-        public TargetVec3[] vertexDelta { get; set; }
-        public Vector3[] normalDelta { get; set; }
-        public Vector3[] tangentDelta { get; set; }
-        public ushort[] vertexMapping { get; set; }
+        public TargetVec3[]? vertexDelta { get; set; }
+        public Vector3[]? normalDelta { get; set; }
+        public Vector3[]? tangentDelta { get; set; }
+        public ushort[]? vertexMapping { get; set; }
         public uint diffsCount { get; set; }
     }
     public class TargetsInfo
     {
-        public uint[,] NumVertexDiffsInEachChunk { get; set; }
+        public uint[,]? NumVertexDiffsInEachChunk { get; set; }
         public uint NumDiffs { get; set; }
         public uint NumDiffsMapping { get; set; }
-        public uint[,] NumVertexDiffsMappingInEachChunk { get; set; }
-        public uint[] TargetStartsInVertexDiffs { get; set; }
-        public uint[] TargetStartsInVertexDiffsMapping { get; set; }
-        public Vector4[] TargetPositionDiffOffset { get; set; }
-        public Vector4[] TargetPositionDiffScale { get; set; }
-        public string[] Names { get; set; }
-        public string[] RegionNames { get; set; }
+        public uint[,]? NumVertexDiffsMappingInEachChunk { get; set; }
+        public uint[]? TargetStartsInVertexDiffs { get; set; }
+        public uint[]? TargetStartsInVertexDiffsMapping { get; set; }
+        public Vector4[]? TargetPositionDiffOffset { get; set; }
+        public Vector4[]? TargetPositionDiffScale { get; set; }
+        public string[]? Names { get; set; }
+        public string[]? RegionNames { get; set; }
         public uint NumTargets { get; set; }
-        public string BaseMesh { get; set; }
-        public string BaseTexture { get; set; }
+        public string? BaseMesh { get; set; }
+        public string? BaseTexture { get; set; }
     }
 
     public struct TargetVec3
@@ -162,29 +164,23 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             W = w;
         }
     }
-    public class MatData
-    {
-        public string MaterialRepo { get; set; }
-        public List<RawMaterial> Materials { get; set; }
-        public List<string> TexturesList { get; set; }
-        public List<RawMaterial> MaterialTemplates { get; set; }
-        public Dictionary<string, string[]> Appearances { get; set; }
-    }
+    public record MatData(string MaterialRepo, List<RawMaterial> Materials, List<string> TexturesList, List<RawMaterial> MaterialTemplates, Dictionary<string, string[]> Appearances);
+
     public class RawMaterial
     {
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string BaseMaterial { get; set; }
+        public string? BaseMaterial { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string MaterialTemplate { get; set; }
+        public string? MaterialTemplate { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public Dictionary<string, object> Data { get; set; }
+        public Dictionary<string, object>? Data { get; set; }
     }
 
     public class MaterialValueWrapper
     {
-        public string Type { get; set; }
-        public object Value { get; set; }
+        public string? Type { get; set; }
+        public object? Value { get; set; }
     }
 }

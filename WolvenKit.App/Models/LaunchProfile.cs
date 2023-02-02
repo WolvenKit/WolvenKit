@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Common.RED4.Compiled;
 
 namespace WolvenKit.App.Models;
 public class LaunchProfile
@@ -39,7 +33,7 @@ public class LaunchProfile
 
     [Category("Game Launch")]
     [Display(Name = "Game Commandline Arguments")]
-    public string GameArguments { get; set; }
+    public string? GameArguments { get; set; }
 
 
     internal LaunchProfile Copy()

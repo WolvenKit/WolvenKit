@@ -1,24 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
 using System.Reactive.Disposables;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Nodify;
 using ReactiveUI;
 using Splat;
-using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.App;
-using WolvenKit.Common.Conversion;
-using WolvenKit.Functionality.Interfaces;
-using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.Views.Editors;
+using WolvenKit.App.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {
@@ -132,6 +119,7 @@ namespace WolvenKit.Views.Documents
                 //   .DisposeWith(disposables);
 
             });
+            
 
 
             //PropertyGrid.CustomEditorCollection = CustomEditorCollection;

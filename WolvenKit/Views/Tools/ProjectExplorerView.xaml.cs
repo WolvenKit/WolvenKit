@@ -15,12 +15,13 @@ using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
+using WolvenKit.App.Extensions;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
-using WolvenKit.Models;
-using WolvenKit.ProjectManagement.Project;
-using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Tools
@@ -54,51 +55,61 @@ namespace WolvenKit.Views.Tools
 
             this.WhenActivated(disposables =>
             {
-                Interactions.DeleteFiles.RegisterHandler(
-                    interaction =>
+                Interactions.DeleteFiles = input =>
+                {
+                    var count = input.Count();
+
+                    var result = AdonisUI.Controls.MessageBox.Show(
+                    "The selected item(s) will be moved to the Recycle Bin.",
+                    "WolvenKit",
+                    AdonisUI.Controls.MessageBoxButton.OKCancel,
+                    AdonisUI.Controls.MessageBoxImage.Information,
+                    AdonisUI.Controls.MessageBoxResult.OK);
+                    if (result == AdonisUI.Controls.MessageBoxResult.OK)
                     {
-                        var count = interaction.Input.Count();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
 
-                        var result = AdonisUI.Controls.MessageBox.Show(
-                        "The selected item(s) will be moved to the Recycle Bin.",
-                        "WolvenKit",
-                        AdonisUI.Controls.MessageBoxButton.OKCancel,
-                        AdonisUI.Controls.MessageBoxImage.Information,
-                        AdonisUI.Controls.MessageBoxResult.OK);
-                        if (result == AdonisUI.Controls.MessageBoxResult.OK)
-                        {
-                            interaction.SetOutput(true);
-                        }
-                        else
-                        {
-                            interaction.SetOutput(false);
-                        }
+                };
 
-                    });
-                Interactions.Rename.RegisterHandler(
-                    interaction =>
+                Interactions.Rename = input =>
                     {
                         var dialog = new RenameDialog();
-                        dialog.ViewModel.Text = interaction.Input;
+                        dialog.ViewModel.Text = input;
 
-                        return Observable.Start(() =>
+                        var result = "";
+                        if (dialog.ShowDialog(Application.Current.MainWindow) == true)
                         {
-                            var result = "";
-                            if (dialog.ShowDialog(Application.Current.MainWindow) == true)
-                            {
-                                var innerVm = dialog.ViewModel;
+                            var innerVm = dialog.ViewModel;
 
-                                result = innerVm.Text;
-                            }
+                            result = innerVm.Text;
+                        }
+                        return result;
 
-                            interaction.SetOutput(result);
-                        }, RxApp.MainThreadScheduler);
-                    });
+                        //return Observable.Start(() =>
+                        //{
+                        //    var result = "";
+                        //    if (dialog.ShowDialog(Application.Current.MainWindow) == true)
+                        //    {
+                        //        var innerVm = dialog.ViewModel;
 
-                ViewModel.ExpandAll.Subscribe(x => ExpandAll());
-                ViewModel.CollapseAll.Subscribe(x => CollapseAll());
-                ViewModel.ExpandChildren.Subscribe(x => ExpandChildren());
-                ViewModel.CollapseChildren.Subscribe(x => CollapseChildren());
+                        //        result = innerVm.Text;
+                        //    }
+
+                        //    interaction.SetOutput(result);
+                        //}, RxApp.MainThreadScheduler);
+                    };
+
+                //ViewModel.ExpandAllCommand.Subscribe(x => ExpandAll());
+                //ViewModel.CollapseAllCommand.Subscribe(x => CollapseAll());
+                //ViewModel.ExpandChildrenCommand.Subscribe(x => ExpandChildren());
+                //ViewModel.CollapseChildrenCommand.Subscribe(x => CollapseChildren());
+
+                
 
                 //EventBindings
                 Observable
@@ -128,13 +139,21 @@ namespace WolvenKit.Views.Tools
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.RefreshCommand,
                     view => view.RefreshButton);
-
-                // register to KeyUp because KeyDown doesn't forward "F2"
-                KeyUp += OnKeyUp;
-
-
             });
 
+            AddKeyUpEvent();
+        }
+
+        private void AddKeyUpEvent()
+        {
+            if (ViewModel.IsKeyUpEventAssigned)
+            {
+                return;
+            }
+
+            // register to KeyUp because KeyDown doesn't forward "F2"
+            KeyUp += OnKeyUp;
+            ViewModel.IsKeyUpEventAssigned = true;
         }
 
         private Dictionary<string, bool> _nodeState;
@@ -224,20 +243,20 @@ namespace WolvenKit.Views.Tools
         {
             if (treeGridCellDoubleTappedEventArgs.Node.Item is FileModel model)
             {
-                ViewModel.MainViewModel.OpenFileCommand.Execute(model).Subscribe();
+                ViewModel.GetAppViewModel().OpenFileCommand.SafeExecute(model);
             }
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.F2 && ViewModel.RenameFileCommand.CanExecute(null))
+            if (e.Key == Key.F2 )
             {
-                ViewModel.RenameFileCommand.Execute(null);
+                ViewModel.RenameFileCommand.SafeExecute(null);
 
             }
-            else if (e.Key == Key.Delete && ViewModel.DeleteFileCommand.CanExecute(null))
+            else if (e.Key == Key.Delete)
             {
-                ViewModel.DeleteFileCommand.Execute(null);
+                ViewModel.DeleteFileCommand.SafeExecute(null);
 
             }
         }

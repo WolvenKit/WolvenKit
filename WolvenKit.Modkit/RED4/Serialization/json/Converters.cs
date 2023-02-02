@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4.Serialization.json
@@ -95,7 +96,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
     public sealed class CNameJsonConverter : JsonConverter<CName>
     {
         public override CName Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
-            reader.GetString();
+            reader.GetString().NotNull();
 
         public override void Write(Utf8JsonWriter writer, CName value, JsonSerializerOptions options) =>
             writer.WriteStringValue(value);
@@ -104,7 +105,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
     public sealed class CStringJsonConverter : JsonConverter<CString>
     {
         public override CString Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
-            reader.GetString();
+            reader.GetString().NotNull();
 
         public override void Write(Utf8JsonWriter writer, CString value, JsonSerializerOptions options) =>
             writer.WriteStringValue(value);
@@ -115,12 +116,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
         public override CColor Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var json = JsonDocument.ParseValue(ref reader).RootElement.GetRawText();
-            var list = (List<byte>)JsonSerializer.Deserialize(json, typeof(List<byte>));
-            if (list == null)
-            {
-                throw new JsonException();
-            }
-            return new CColor() { Red = list[0], Green = list[1], Blue = list[2], Alpha = list[3] };
+            return JsonSerializer.Deserialize(json, typeof(List<byte>)) is not List<byte> list ? throw new JsonException() : new CColor() { Red = list[0], Green = list[1], Blue = list[2], Alpha = list[3] };
         }
 
         public override void Write(Utf8JsonWriter writer, CColor value, JsonSerializerOptions options)
@@ -135,12 +131,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
         public override EulerAngles Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var json = JsonDocument.ParseValue(ref reader).RootElement.GetRawText();
-            var list = (List<float>)JsonSerializer.Deserialize(json, typeof(List<float>));
-            if (list == null)
-            {
-                throw new JsonException();
-            }
-            return new EulerAngles() { Pitch = list[0], Yaw = list[1], Roll = list[2] };
+            return JsonSerializer.Deserialize(json, typeof(List<float>)) is not List<float> list ? throw new JsonException() : new EulerAngles() { Pitch = list[0], Yaw = list[1], Roll = list[2] };
         }
 
         public override void Write(Utf8JsonWriter writer, EulerAngles value, JsonSerializerOptions options)
@@ -155,12 +146,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
         public override Quaternion Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var json = JsonDocument.ParseValue(ref reader).RootElement.GetRawText();
-            var list = (List<float>)JsonSerializer.Deserialize(json, typeof(List<float>));
-            if (list == null)
-            {
-                throw new JsonException();
-            }
-            return new Quaternion() { I = list[0], J = list[1], K = list[2], R = list[3] };
+            return JsonSerializer.Deserialize(json, typeof(List<float>)) is not List<float> list ? throw new JsonException() : new Quaternion() { I = list[0], J = list[1], K = list[2], R = list[3] };
         }
 
         public override void Write(Utf8JsonWriter writer, Quaternion value, JsonSerializerOptions options)
@@ -175,12 +161,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
         public override Vector2 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var json = JsonDocument.ParseValue(ref reader).RootElement.GetRawText();
-            var list = (List<float>)JsonSerializer.Deserialize(json, typeof(List<float>));
-            if (list == null)
-            {
-                throw new JsonException();
-            }
-            return new Vector2() { X = list[0], Y = list[1], };
+            return JsonSerializer.Deserialize(json, typeof(List<float>)) is not List<float> list ? throw new JsonException() : new Vector2() { X = list[0], Y = list[1], };
         }
 
         public override void Write(Utf8JsonWriter writer, Vector2 value, JsonSerializerOptions options)
@@ -195,12 +176,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
         public override Vector3 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var json = JsonDocument.ParseValue(ref reader).RootElement.GetRawText();
-            var list = (List<float>)JsonSerializer.Deserialize(json, typeof(List<float>));
-            if (list == null)
-            {
-                throw new JsonException();
-            }
-            return new Vector3() { X = list[0], Y = list[1], Z = list[2] };
+            return JsonSerializer.Deserialize(json, typeof(List<float>)) is not List<float> list ? throw new JsonException() : new Vector3() { X = list[0], Y = list[1], Z = list[2] };
         }
 
         public override void Write(Utf8JsonWriter writer, Vector3 value, JsonSerializerOptions options)
@@ -214,10 +190,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
     {
         private readonly CResourceConverter _resourceReferenceConverter = new();
 
-        public override bool CanConvert(Type typeToConvert)
-        {
-            return typeof(IRedResourceAsyncReference).IsAssignableFrom(typeToConvert);
-        }
+        public override bool CanConvert(Type typeToConvert) => typeof(IRedResourceAsyncReference).IsAssignableFrom(typeToConvert);
 
         public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
@@ -233,7 +206,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
         {
             public override CResourceAsyncReference<CResource> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
-                var text = reader.GetString();
+                var text = reader.GetString().NotNull();
                 if (ulong.TryParse(text, out var hash))
                 {
                     return new CResourceAsyncReference<CResource>(hash);
@@ -244,10 +217,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                 }
             }
 
-            public override void Write(Utf8JsonWriter writer, CResourceAsyncReference<CResource> value, JsonSerializerOptions options)
-            {
-                writer.WriteStringValue(value.DepotPath);
-            }
+            public override void Write(Utf8JsonWriter writer, CResourceAsyncReference<CResource> value, JsonSerializerOptions options) => writer.WriteStringValue(value.DepotPath);
         }
     }
 }

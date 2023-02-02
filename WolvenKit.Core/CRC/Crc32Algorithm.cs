@@ -20,12 +20,11 @@ namespace WolvenKit.Core.CRC
         /// <summary>
         /// Initializes a new instance of the <see cref="Crc32Algorithm"/> class.
         /// </summary>
-        public Crc32Algorithm()
-        {
+        public Crc32Algorithm() =>
 #if !NETCORE13
             HashSizeValue = 32;
 #endif
-        }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Crc32Algorithm"/> class.
@@ -33,10 +32,7 @@ namespace WolvenKit.Core.CRC
         /// <param name="isBigEndian">Should return bytes result as big endian or little endian</param>
         // Crc32 by dariogriffo uses big endian, so, we need to be compatible and return big endian as default
         public Crc32Algorithm(bool isBigEndian = true)
-            : this()
-        {
-            _isBigEndian = isBigEndian;
-        }
+            : this() => _isBigEndian = isBigEndian;
 
         /// <summary>
         /// Computes CRC-32 from multiple buffers.

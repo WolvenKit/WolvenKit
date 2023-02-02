@@ -3,7 +3,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
-using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
@@ -12,6 +11,14 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W
 {
+    public class Red4ParserException : Exception
+    {
+        public Red4ParserException() : base() { }
+
+
+
+    }
+
     public class Red4ParserService : IRedParserService
     {
         private readonly IHashService _hashService;
@@ -62,15 +69,14 @@ namespace WolvenKit.RED4.CR2W
             {
                 // TODO: Shouldn't be done here...
                 stream.Seek(0, SeekOrigin.Begin);
-                using var reader = new CR2WReader(stream, Encoding.Default, true);
+                using var reader = new CR2WReader(stream, Encoding.Default, true) { LoggerService = _loggerService };
                 reader.ParsingError += TypeGlobal.OnParsingError;
 
                 return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
             {
-                var logger = Locator.Current.GetService<ILoggerService>();
-                logger?.Error(e);
+                _loggerService.Error(e);
 
                 redFile = null;
                 return false;
@@ -89,15 +95,14 @@ namespace WolvenKit.RED4.CR2W
             {
                 // TODO: Shouldn't be done here...
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
-                using var reader = new CR2WReader(br);
+                using var reader = new CR2WReader(br) { LoggerService = _loggerService };
                 reader.ParsingError += TypeGlobal.OnParsingError;
 
                 return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
             {
-                var logger = Locator.Current.GetService<ILoggerService>();
-                logger?.Error(e);
+                _loggerService.Error(e);
 
                 redFile = null;
                 return false;
@@ -111,8 +116,11 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>The resulting <see cref="CR2WFile">CR2WFile</see> or null if unsuccessful</returns>
         public CR2WFile? ReadRed4File(Stream stream)
         {
-            TryReadRed4File(stream, out var redFile);
-            return redFile;
+            if (TryReadRed4File(stream, out var redFile))
+            {
+                return redFile;
+            }
+            return null;
         }
 
         /// <summary>
@@ -143,8 +151,7 @@ namespace WolvenKit.RED4.CR2W
             }
             catch (Exception e)
             {
-                var logger = Locator.Current.GetService<ILoggerService>();
-                logger?.Error(e);
+                _loggerService.Error(e);
 
                 info = null;
                 return false;
@@ -168,8 +175,7 @@ namespace WolvenKit.RED4.CR2W
             }
             catch (Exception e)
             {
-                var logger = Locator.Current.GetService<ILoggerService>();
-                logger?.Error(e);
+                _loggerService.Error(e);
 
                 info = null;
                 return false;

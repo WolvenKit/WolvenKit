@@ -1,26 +1,42 @@
-using System.Windows.Media;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.Models.Docking;
+using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.App.Models.Docking;
 
-namespace WolvenKit.ViewModels.Shell;
+namespace WolvenKit.App.ViewModels.Shell;
 
-public abstract class PaneViewModel : ReactiveObject, IDockElement
+public abstract partial class PaneViewModel : ObservableObject, IDockElement
 {
-    [Reactive] public virtual string Header { get; set; }
-
-    [Reactive] public DockState State { get; set; }
-
-    [Reactive] public DockSide SideInDockedMode { get; set; }
-
-    [Reactive] public string ContentId { get; set; }
-
-    public ImageSource IconSource
+    protected PaneViewModel(string header, string contentId)
     {
-        get;
-        protected set;
+        _header = header;
+        _contentId = contentId;
     }
 
-    [Reactive] public bool IsActive { get; set; }
+    [ObservableProperty] private string _header;
 
+    [ObservableProperty] private DockState _state;
+
+    [ObservableProperty] private DockSide _sideInDockedMode;
+
+    [ObservableProperty] private string _contentId;
+
+    //public ImageSource IconSource
+    //{
+    //    get;
+    //    protected set;
+    //}
+
+    [ObservableProperty] private bool _isActive;
+
+    /// <summary>
+    /// Gets/sets whether this tool window is visible or not.
+    /// </summary>
+    public bool IsVisible
+    {
+        get => State != DockState.Hidden;
+        set
+        {
+            State = value ? DockState.Dock : DockState.Hidden;
+            OnPropertyChanged();
+        }
+    }
 }

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -6,8 +6,8 @@
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-      
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+	<Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,NU5104</WarningsNotAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -33,14 +33,11 @@
   </ItemGroup>
 
   <ItemGroup>
-      <PackageReference Include="BigGustave" Version="1.0.6" />
-      <PackageReference Include="Microsoft.ClearScript.V8" Version="7.3.5" />
-      <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" Version="7.3.5" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
-      <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
-      <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0023" />
-      <PackageReference Include="ReactiveUI.Fody" Version="18.4.1" />
-      <PackageReference Include="YamlDotNet" Version="12.0.2" />
+      <PackageReference Include="Microsoft.ClearScript.V8" />
+      <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" />
+      <PackageReference Include="Microsoft.Extensions.Options" />
+      <PackageReference Include="SharpGLTF.Toolkit" />
+      <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 
     <ItemGroup>

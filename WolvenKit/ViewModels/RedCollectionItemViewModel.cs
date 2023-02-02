@@ -1,4 +1,5 @@
-﻿using WolvenKit.Common;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.Common;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels

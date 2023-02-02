@@ -6,18 +6,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ProtoBuf.Meta;
 using ReactiveUI;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using WolvenKit.App;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Interaction;
-using WolvenKit.RED4.Archive;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit
@@ -30,12 +28,15 @@ namespace WolvenKit
         // Constructor #1
         static AppImpl()
         {
-
+            
         }
 
         // Constructor #2
         public AppImpl()
         {
+            // init ioc helpers
+            IocHelper.GetFunc = t => Locator.Current.GetService(t);
+
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
             Init();
@@ -43,25 +44,35 @@ namespace WolvenKit
             SetupExceptionHandling();
 
             // load oodle
-            if (!Oodle.Load())
+            var settingsManager = Locator.Current.GetService<ISettingsManager>();
+            if (!Oodle.Load(settingsManager?.GetRED4OodleDll()))
             {
-                throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
+                throw new FileNotFoundException($"{Core.Constants.Oodle} not found.");
             }
         }
 
         // Application OnStartup Override.
         protected override async void OnStartup(StartupEventArgs e)
         {
-            Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
-            {
+            Interactions.ShowFirstTimeSetup = () => {
                 var dialog = new FirstSetupView();
 
-                return Observable.Start(() =>
-                {
-                    var result = dialog.ShowDialog() == true;
-                    interaction.SetOutput(result);
-                }, RxApp.MainThreadScheduler);
-            });
+                var result = dialog.ShowDialog() == true;
+                return result;
+            };
+
+            //Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
+            //{
+            //    var dialog = new FirstSetupView();
+
+            //    return Observable.Start(() =>
+            //    {
+            //        var result = dialog.ShowDialog() == true;
+            //        interaction.SetOutput(result);
+            //    }, RxApp.MainThreadScheduler);
+            //});
+
+           
 
             var settings = Locator.Current.GetService<ISettingsManager>();
             var loggerService = Locator.Current.GetService<ILoggerService>();
@@ -111,7 +122,7 @@ namespace WolvenKit
             // Set application licenses.
             Initializations.InitializeLicenses();
             //protobuf
-            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
+            //RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
             _host = GenericHost.CreateHostBuilder().Build();
 

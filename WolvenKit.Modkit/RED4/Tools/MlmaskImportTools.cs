@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
@@ -12,26 +14,35 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4.MLMask
 {
-    internal class MLMASK
+    // TODO refactor all this, it's completely unsafe
+
+    public class MLMASK
     {
         private const uint s_headerLength = 148;
         //assuming DDSUtils.ConvertToDdsMemory always creates a dx10 dds,
         //if it creates a dx9 or both we will have to check for it, headerlength = 128, if(dx10) headerlength += 20
 
         private MlMaskContainer _mlmask;
+        private ILoggerService _logger;
+
+        public MLMASK(MlMaskContainer mlmask, ILoggerService logger)
+        {
+            _mlmask = mlmask;
+            _logger = logger;
+        }
 
         public void Import(FileInfo txtimageList, FileInfo outFile)
         {
             // relative and absolute paths
             var paths = File.ReadAllLines(txtimageList.FullName);
-            var baseDir = txtimageList.Directory;
+            var baseDir = txtimageList.Directory.NotNull();
             var files = paths.Select(x => Path.Combine(baseDir.FullName, x)).ToList();
 
             #region InitandVerify
 
             _mlmask = new MlMaskContainer();
             var textures = new List<RawTexContainer>();
-            
+
             var firstLayerName = Path.GetFileNameWithoutExtension(files[0]);
             if (!firstLayerName.EndsWith("_0"))
             {
@@ -53,83 +64,68 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     throw new FileNotFoundException($"Line{{lineIdx}}: \"{f}\" Make sure the file path is valid and exists (paths are specified line by line in ascending layer order in masklist)");
                 }
 
-                RedImage image;
-
                 var euncook = Enum.Parse<EUncookExtension>(Path.GetExtension(f).ToLower().TrimStart('.'));
-                switch (euncook)
-                {
-                    case EUncookExtension.dds:
-                        image = RedImage.LoadFromDDSFile(f);
-                        break;
-                    case EUncookExtension.tga:
-                        image = RedImage.LoadFromTGAFile(f);
-                        break;
-                    case EUncookExtension.bmp:
-                        image = RedImage.LoadFromBMPFile(f);
-                        break;
-                    case EUncookExtension.jpg:
-                        image = RedImage.LoadFromJPGFile(f);
-                        break;
-                    case EUncookExtension.png:
-                        image = RedImage.LoadFromPNGFile(f);
-                        break;
-                    case EUncookExtension.tiff:
-                        image = RedImage.LoadFromTIFFFile(f);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
 
+                var image = euncook switch
+                {
+                    EUncookExtension.dds => RedImage.LoadFromDDSFile(f),
+                    EUncookExtension.tga => RedImage.LoadFromTGAFile(f),
+                    EUncookExtension.bmp => RedImage.LoadFromBMPFile(f),
+                    EUncookExtension.jpg => RedImage.LoadFromJPGFile(f),
+                    EUncookExtension.png => RedImage.LoadFromPNGFile(f),
+                    EUncookExtension.tiff => RedImage.LoadFromTIFFFile(f),
+                    _ => throw new ArgumentOutOfRangeException(),
+                };
                 if (image.Metadata.Format != DXGI_FORMAT.DXGI_FORMAT_R8_UNORM)
                 {
                     image.Convert(DXGI_FORMAT.DXGI_FORMAT_R8_UNORM);
                 }
 
-                if (image.Metadata.Width != image.Metadata.Height)
+
+                // Bitset arithmetic to check that both width and height is a power of 2
+                if (
+                        ((image.Metadata.Width - 1) & image.Metadata.Width) == 0 &&
+                        ((image.Metadata.Height - 1) & image.Metadata.Height) == 0
+                   )
                 {
-                    throw new Exception($"Texture {f}: width={image.Metadata.Width},height={image.Metadata.Height} must have an aspect ratio of 1:1");
+                    //if (header.dwMipMapCount > 1)
+                    //    throw new Exception($"Texture {f}: Mipmaps={header.dwMipMapCount}, mimap count must be equal to 1");
+
+                    //if ((ms.Length - headerLength) != (header.dwWidth * header.dwHeight))
+                    //    throw new Exception("Not R8_UNORM 8bpp image format or more than 1mipmaps or rowstride is not equal to width or its a dx10 dds(unsupported)");
+
+                    using var ms = new MemoryStream(image.SaveToDDSMemory());
+                    using var br = new BinaryReader(ms);
+                    ms.Seek(s_headerLength, SeekOrigin.Begin);
+                    var bytes = br.ReadBytes(image.Metadata.Width * image.Metadata.Height);
+
+                    //var whiteCheck = true;
+                    //for (var i = 0; i < bytes.Length; i++)
+                    //{
+                    //    if (bytes[i] != 255)
+                    //    {
+                    //        whiteCheck = false;
+                    //        break;
+                    //    }
+                    //}
+                    //if (whiteCheck)
+                    //{
+                    //    throw new Exception("No need to provide the 1st/any blank white mask layer, tool will generate 1st blank white layer automatically");
+                    //}
+
+                    var tex = new RawTexContainer
+                    {
+                        Width = (uint)image.Metadata.Width,
+                        Height = (uint)image.Metadata.Height,
+                        Pixels = bytes
+                    };
+                    textures.Add(tex);
+                    lineIdx++;
                 }
-
-                // One bitset check
-                if (((image.Metadata.Width - 1) & image.Metadata.Height) != 0 || image.Metadata.Width == 0)
+                else
                 {
-                    throw new Exception($"Texture {f}: width={image.Metadata.Height},height={image.Metadata.Height} must have dimensions in powers of 2");
+                    throw new Exception($"Texture {f}: width={image.Metadata.Width},height={image.Metadata.Height} must have dimensions in powers of 2");
                 }
-
-
-                //if (header.dwMipMapCount > 1)
-                //    throw new Exception($"Texture {f}: Mipmaps={header.dwMipMapCount}, mimap count must be equal to 1");
-
-                //if ((ms.Length - headerLength) != (header.dwWidth * header.dwHeight))
-                //    throw new Exception("Not R8_UNORM 8bpp image format or more than 1mipmaps or rowstride is not equal to width or its a dx10 dds(unsupported)");
-
-                using var ms = new MemoryStream(image.SaveToDDSMemory());
-                using var br = new BinaryReader(ms);
-                ms.Seek(s_headerLength, SeekOrigin.Begin);
-                var bytes = br.ReadBytes(image.Metadata.Width * image.Metadata.Height);
-
-                //var whiteCheck = true;
-                //for (var i = 0; i < bytes.Length; i++)
-                //{
-                //    if (bytes[i] != 255)
-                //    {
-                //        whiteCheck = false;
-                //        break;
-                //    }
-                //}
-                //if (whiteCheck)
-                //{
-                //    throw new Exception("No need to provide the 1st/any blank white mask layer, tool will generate 1st blank white layer automatically");
-                //}
-
-                var tex = new RawTexContainer
-                {
-                    Width = (uint)image.Metadata.Width,
-                    Height = (uint)image.Metadata.Height,
-                    Pixels = bytes
-                };
-                textures.Add(tex);
-                lineIdx++;
             }
             _mlmask.Layers = textures.ToArray();
             #endregion
@@ -149,6 +145,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
             };
             cr2w.RootChunk = mask;
 
+            ArgumentNullException.ThrowIfNull(_mlmask.Layers, nameof(_mlmask.Layers));
+
             var blob = new rendRenderMultilayerMaskBlobPC
             {
                 Header = new rendRenderMultilayerMaskBlobHeader
@@ -164,23 +162,26 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     MaskTileSize = _mlmask.TileSize,
                     Flags = 2
                 },
-                AtlasData = new SerializationDeferredDataBuffer(_mlmask.AtlasBuffer),
-                TilesData = new SerializationDeferredDataBuffer(_mlmask.TilesBuffer)
+                AtlasData = new SerializationDeferredDataBuffer(_mlmask.AtlasBuffer.NotNull()),
+                TilesData = new SerializationDeferredDataBuffer(_mlmask.TilesBuffer.NotNull())
             };
 
             mask.RenderResourceBlob.RenderResourceBlobPC = blob;
 
-            if (!Directory.Exists(f.Directory.FullName))
+            var dir = f.Directory.NotNull();
+            if (!Directory.Exists(dir.FullName))
             {
-                Directory.CreateDirectory(f.Directory.FullName);
+                Directory.CreateDirectory(dir.FullName);
             }
             using var fs = new FileStream(f.FullName, FileMode.Create, FileAccess.Write);
-            using var writer = new CR2WWriter(fs);
+            using var writer = new CR2WWriter(fs) { LoggerService = _logger };
             writer.WriteFile(cr2w);
         }
 
         private void PutTiles(ref List<uint> tilesDataList, MaskTile[] tilez, uint basisTileIdx, uint widthInTiles0, uint heightInTiles0)
         {
+            ArgumentNullException.ThrowIfNull(_mlmask.Layers, nameof(_mlmask.Layers));
+
             var atlasTileSize = _mlmask.AtlasWidth / _mlmask.AtlasTileSize;
             var widthInTilesShift0 = (uint)Math.Log2(atlasTileSize);
             var widthInTilesGrayUP = Convert.ToUInt32((1 << Convert.ToInt32(widthInTilesShift0)) - 1);
@@ -223,15 +224,20 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         private void InitializeMaskLayers()
         {
-            for (uint I = 0; I < _mlmask.Layers.Length; I++)
+            if (_mlmask.Layers is null)
             {
-                _mlmask.Layers[I].WidthInTiles0 = (_mlmask.Layers[I].Width + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
-                _mlmask.Layers[I].HeightInTiles0 = (_mlmask.Layers[I].Height + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
-                _mlmask.Layers[I].Tiles = new List<Tile>();
+                return;
+            }
 
-                for (uint y = 0; y < _mlmask.Layers[I].HeightInTiles0; y++)
+            for (uint i = 0; i < _mlmask.Layers.Length; i++)
+            {
+                _mlmask.Layers[i].WidthInTiles0 = (_mlmask.Layers[i].Width + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
+                _mlmask.Layers[i].HeightInTiles0 = (_mlmask.Layers[i].Height + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
+                _mlmask.Layers[i].Tiles = new List<Tile>();
+
+                for (uint y = 0; y < _mlmask.Layers[i].HeightInTiles0; y++)
                 {
-                    for (uint x = 0; x < _mlmask.Layers[I].WidthInTiles0; x++)
+                    for (uint x = 0; x < _mlmask.Layers[i].WidthInTiles0; x++)
                     {
                         var tile = new Tile
                         {
@@ -239,7 +245,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                             AtlasUnCompressed = new byte[_mlmask.AtlasTileSize * _mlmask.AtlasTileSize]
                         };
 
-                        if (I == 0)
+                        if (i == 0)
                         {
                             tile.RangeMin = 255;
                             tile.RangeMax = 255;
@@ -254,7 +260,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                             {
                                 for (uint xx = 0; xx < _mlmask.AtlasTileSize; xx++)
                                 {
-                                    var v = GetPixelFromLayer(I, x, y, Convert.ToInt32(xx) - 1, Convert.ToInt32(yy) - 1);
+                                    var v = GetPixelFromLayer(i, x, y, Convert.ToInt32(xx) - 1, Convert.ToInt32(yy) - 1);
                                     tile.AtlasUnCompressed[xx + (yy * _mlmask.AtlasTileSize)] = v;
                                     tile.RangeMin = Math.Min(tile.RangeMin, v);
                                     tile.RangeMax = Math.Max(tile.RangeMax, v);
@@ -262,7 +268,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                             }
                         }
 
-                        _mlmask.Layers[I].Tiles.Add(tile);
+                        _mlmask.Layers[i].Tiles.Add(tile);
                     }
                 }
             }
@@ -270,6 +276,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         private byte GetPixelFromLayer(uint layerIdx, uint tx, uint ty, int x, int y)
         {
+            ArgumentNullException.ThrowIfNull(_mlmask.Layers, nameof(_mlmask.Layers));
+
             if (layerIdx == 0)
             {
                 return 255;
@@ -284,6 +292,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         private void Create()
         {
+            ArgumentNullException.ThrowIfNull(_mlmask.Layers, nameof(_mlmask.Layers));
+
             _mlmask.WidthHigh = 0;
             _mlmask.HeightHigh = 0;
             _mlmask.WidthLow = uint.MaxValue;
@@ -370,6 +380,10 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         private void CleanTileLayers()
         {
+            ArgumentNullException.ThrowIfNull(_mlmask.Layers, nameof(_mlmask.Layers));
+            ArgumentNullException.ThrowIfNull(_mlmask.MaskTilesHigh, nameof(_mlmask.MaskTilesHigh));
+            ArgumentNullException.ThrowIfNull(_mlmask.MaskTilesLow, nameof(_mlmask.MaskTilesLow));
+
             for (uint I = 0; I < _mlmask.Layers.Length; I++)
             {
 
@@ -422,6 +436,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         private uint PackTileInAtlas(uint layerIdx, uint tx, uint ty)
         {
+            ArgumentNullException.ThrowIfNull(_mlmask.Layers, nameof(_mlmask.Layers));
+
             var tileIndex = tx + (ty * _mlmask.Layers[layerIdx].WidthInTiles0);
 
             if (_mlmask.Layers[layerIdx].Tiles[Convert.ToInt32(tileIndex)].AtlasInPosition == uint.MaxValue)
@@ -510,6 +526,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         private void CreateAtlasBuffer()
         {
+            ArgumentNullException.ThrowIfNull(_mlmask.Layers, nameof(_mlmask.Layers));
+
             if (_mlmask.AtlasWidth <= 0 || _mlmask.AtlasHeight <= 0)
             {
                 throw new Exception("Unable to generate MLmask atlas data");
@@ -651,7 +669,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         #region Structs
 
-        private struct RawTexContainer
+        public struct RawTexContainer
         {
             public byte[] Pixels;
             public uint Width;
@@ -663,7 +681,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             public uint HeightInTiles0;
         }
 
-        private struct Tile
+        public struct Tile
         {
             public byte RangeMin;
             public byte RangeMax;
@@ -672,25 +690,25 @@ namespace WolvenKit.Modkit.RED4.MLMask
             public uint AtlasInPosition;
         }
 
-        private struct MaskTile
+        public struct MaskTile
         {
             public List<TileView> Layers;
         }
 
-        private struct TileView
+        public struct TileView
         {
             public uint LayerIndex;
             public uint AtlasInPosition;
             public uint LayerTileIndex;
         }
 
-        private class MlMaskContainer
+        public class MlMaskContainer
         {
-            public RawTexContainer[] Layers;
+            public RawTexContainer[]? Layers;
 
-            public MaskTile[] MaskTilesHigh;
+            public MaskTile[]? MaskTilesHigh;
             public Dictionary<ulong, TileView> AtlasTiles = new();
-            public MaskTile[] MaskTilesLow;
+            public MaskTile[]? MaskTilesLow;
             public uint AtlasTileSize;
             public uint AtlasWidth;
             public uint AtlasHeight;
@@ -699,8 +717,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
             public uint HeightInTilesHigh;
             public uint WidthInTilesLow;
             public uint HeightLow;
-            public byte[] AtlasBuffer;
-            public byte[] TilesBuffer;
+            public byte[]? AtlasBuffer;
+            public byte[]? TilesBuffer;
             public uint WidthInTilesHigh;
             public uint HeightInTilesLow;
             public uint TileSize;
@@ -998,9 +1016,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
                 if (fX > fY)
                 {
-                    var f = fX;
-                    fX = fY;
-                    fY = f;
+                    (fY, fX) = (fX, fY);
                 }
 
                 if (dX * dX < 1.0f / 64.0f && dY * dY < 1.0f / 64.0f)

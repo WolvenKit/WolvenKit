@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProtoBuf.Meta;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
@@ -28,7 +27,7 @@ namespace WolvenKit.Utility
     public class GameUnitTest
     {
         internal const string s_testResultsDirectory = "_CR2WTestResults";
-        internal static Dictionary<string, IEnumerable<FileEntry>> s_groupedFiles = new();
+        internal static Dictionary<string, IEnumerable<IGameFile>> s_groupedFiles = new();
         internal static IArchiveManager? s_bm;
         internal static string? s_tweakDbPath;
         internal static bool s_writeToFile;
@@ -115,13 +114,13 @@ namespace WolvenKit.Utility
 
             if (!Oodle.Load())
             {
-                Assert.Fail("Could not load oo2ext_7_win64.dll.");
+                Assert.Fail($"Could not load {Core.Constants.Oodle}.");
             }
 
             #endregion
 
             //protobuf
-            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
+            //RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
 
             Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));
