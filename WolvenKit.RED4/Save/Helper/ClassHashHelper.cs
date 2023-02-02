@@ -55,7 +55,7 @@ public class ClassHashHelper
             }
         }
 
-        if (typeInfo.BaseType != typeof(RedBaseClass))
+        if (typeInfo.BaseType != null && typeInfo.BaseType != typeof(RedBaseClass))
         {
             return GetPropertyInfo(typeInfo.BaseType, propHash);
         }

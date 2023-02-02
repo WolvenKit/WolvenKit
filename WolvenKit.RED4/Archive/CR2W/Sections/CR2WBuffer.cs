@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.CR2W;
 
@@ -41,15 +40,4 @@ public struct CR2WBufferInfo
     /// </summary>
     [FieldOffset(20)]
     public uint crc32;
-}
-
-public class CR2WBuffer : ICR2WBuffer
-{
-    public byte[] Bytes { get; set; }
-    public uint Flags { get; set; }
-
-    public bool IsCompressed { get; set; }
-    public uint MemSize { get; set; }
-
-    public IParseableBuffer Data { get; set; }
 }

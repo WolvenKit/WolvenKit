@@ -27,16 +27,21 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         private bool Rebuild(Stream redfileStream, IEnumerable<byte[]> buffersenumerable)
         {
-            var isResource = _wolvenkitFileService.IsCR2WFile(redfileStream);
+            var isResource = _parserService.IsCR2WFile(redfileStream);
             if (!isResource)
             {
                 return false;
             }
 
-            using var reader = new CR2WReader(redfileStream);
-            reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
+            //using var reader = new CR2WReader(redfileStream);
+            //reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
+            //_ = reader.ReadFile(out var cr2w, false);
 
-            _ = reader.ReadFile(out var cr2w, false);
+            if (!_parserService.TryReadRed4File(redfileStream, out var cr2w))
+            {
+                _loggerService.Error("Could not read file");
+                return false;
+            }
 
             var existingBuffers = cr2w.GetBuffers();
             var buffers = buffersenumerable.ToList();
@@ -74,16 +79,21 @@ namespace WolvenKit.Modkit.RED4
 
             void AppendBuffersToFile(Stream fileStream)
             {
-                var isResource = _wolvenkitFileService.IsCR2WFile(redfileStream);
+                var isResource = _parserService.IsCR2WFile(redfileStream);
                 if (!isResource)
                 {
                     return;
                 }
 
-                using var reader = new CR2WReader(redfileStream);
-                reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
+                //using var reader = new CR2WReader(redfileStream);
+                //reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
+                //_ = reader.ReadFile(out var cr2w, false);
 
-                _ = reader.ReadFile(out var cr2w, false);
+                if (!_parserService.TryReadRed4File(redfileStream, out var cr2w))
+                {
+                    _loggerService.Error("Could not read file");
+                    return;
+                }
 
                 var existingBuffers = cr2w.GetBuffers();
 

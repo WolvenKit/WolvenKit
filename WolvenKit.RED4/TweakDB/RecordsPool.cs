@@ -46,7 +46,7 @@ public class RecordsPool : IEnumerable<(TweakDBID id, Type type)>
             .Select(x => (TweakDBID)x)
             .ToList();
 
-    public Type GetRecord(ulong hash)
+    public Type? GetRecord(ulong hash)
     {
         if (_records.ContainsKey(hash))
         {

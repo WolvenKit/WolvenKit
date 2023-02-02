@@ -6,7 +6,6 @@ using System.Windows.Input;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Functionality.Commands;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {

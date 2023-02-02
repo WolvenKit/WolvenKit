@@ -42,7 +42,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="System.CommandLine.Hosting" />
 

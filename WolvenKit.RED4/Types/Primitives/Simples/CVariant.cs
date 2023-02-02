@@ -3,9 +3,9 @@ namespace WolvenKit.RED4.Types;
 [RED("Variant")]
 public class CVariant : IRedPrimitive, IEquatable<CVariant>
 {
-    public IRedType Value { get; set; }
+    public IRedType? Value { get; set; }
 
-    public bool Equals(CVariant other)
+    public bool Equals(CVariant? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -20,7 +20,7 @@ public class CVariant : IRedPrimitive, IEquatable<CVariant>
         return Equals(Value, other.Value);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

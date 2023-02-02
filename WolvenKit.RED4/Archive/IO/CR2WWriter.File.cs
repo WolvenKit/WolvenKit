@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Archive.IO;
 
 public partial class CR2WWriter
 {
-    private CR2WFile _file;
+    private CR2WFile? _file;
 
     private static readonly Dictionary<Type, Type> s_preProcessors = new();
 
@@ -221,7 +221,7 @@ public partial class CR2WWriter
         for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
         {
             var newInfo = dataCollection.ChunkInfoList[i];
-            var oldInfo = _file.Info.ExportInfo[i];
+            var oldInfo = _file!.Info.ExportInfo[i];
 
             if ((newInfo.dataOffset + afterHeaderPosition) != oldInfo.dataOffset)
             {
@@ -257,7 +257,7 @@ public partial class CR2WWriter
         for (int i = 0; i < dataCollection.BufferInfoList.Count; i++)
         {
             var newInfo = dataCollection.BufferInfoList[i];
-            var oldInfo = _file.Info.BufferInfo[i];
+            var oldInfo = _file!.Info.BufferInfo[i];
 
             if (newInfo.index != oldInfo.index)
             {
@@ -311,16 +311,16 @@ public partial class CR2WWriter
             {
                 using var packageWriter = new RedPackageWriter(ms) { IsRoot = false };
 
-                if (_file.RootChunk.GetType() == typeof(appearanceAppearanceResource) && buffer.Parent is entEntityTemplate)
+                if (_file!.RootChunk.GetType() == typeof(appearanceAppearanceResource) && buffer.Parent is entEntityTemplate)
                 {
                     packageWriter.Settings.ImportsAsHash = true;
                 } 
                     
-                if (_file.RootChunk.GetType() == typeof(gamePersistentStateDataResource))
+                if (_file!.RootChunk.GetType() == typeof(gamePersistentStateDataResource))
                 {
                     packageWriter.Settings.RedPackageType = RedPackageType.SaveResource;
                 }
-                else if (_file.RootChunk.GetType() == typeof(inkWidgetLibraryResource))
+                else if (_file!.RootChunk.GetType() == typeof(inkWidgetLibraryResource))
                 {
                     packageWriter.Settings.RedPackageType = RedPackageType.InkLibResource;
                 }
@@ -461,7 +461,7 @@ public partial class CR2WWriter
         using var writer = new CR2WWriter(ms) { IsRoot = IsRoot, LoggerService = LoggerService };
 
         var embeddedInfoList = new List<CR2WEmbeddedInfo>();
-        foreach (var embedded in _file.EmbeddedFiles)
+        foreach (var embedded in _file!.EmbeddedFiles)
         {
             embeddedInfoList.Add(WriteEmbedded(writer, embedded, importsList));
         }
@@ -478,7 +478,10 @@ public partial class CR2WWriter
         var tmpQueue = file.ChunkQueue;
         file.ChunkQueue = new List<RedBaseClass>();
 
-        var redTypeName = GetClassName(chunkData);
+        if (GetClassName(chunkData) is not { } redTypeName)
+        {
+            throw new Exception("ClassName could not be resolved");
+        }
         var typeIndex = file.GetStringIndex(redTypeName);
 
         var result = new CR2WExportInfo
@@ -505,7 +508,7 @@ public partial class CR2WWriter
 
     #region Support
 
-    private string GetClassName(RedBaseClass cls)
+    private string? GetClassName(RedBaseClass cls)
     {
         if (cls is DynamicResource dres)
         {
@@ -550,8 +553,8 @@ public partial class CR2WWriter
 
         var bufferInfoList = new List<CR2WBufferInfo>();
 
-        InternalWriteChunks(_file.RootChunk);
-        foreach (var embeddedFile in _file.EmbeddedFiles)
+        InternalWriteChunks(_file!.RootChunk);
+        foreach (var embeddedFile in _file!.EmbeddedFiles)
         {
             InternalWriteChunks(embeddedFile.Content);
         }
@@ -574,7 +577,11 @@ public partial class CR2WWriter
                     continue;
                 }
 
-                chunkClassNames.Add(GetClassName(chunk));
+                if (GetClassName(chunk) is not { } className)
+                {
+                    throw new Exception("ClassName could not be resolved");
+                }
+                chunkClassNames.Add(className);
 
                 _chunkInfos[chunk].Id = chunkCounter;
 
@@ -715,7 +722,7 @@ public partial class CR2WWriter
         }
     }
 
-    private (byte[], Dictionary<CName, uint>) GenerateStringBuffer(List<CName> strings, Encoding encoding = null)
+    private (byte[], Dictionary<CName, uint>) GenerateStringBuffer(List<CName> strings, Encoding? encoding = null)
     {
         encoding ??= Encoding.UTF8;
 
@@ -726,7 +733,7 @@ public partial class CR2WWriter
             offsetDict.Add(str, (uint)bytes.Count);
             if (str != CName.Empty)
             {
-                bytes.AddRange(encoding.GetBytes(str));
+                bytes.AddRange(encoding.GetBytes(str!));
             }
             bytes.Add(0);
         }
@@ -739,10 +746,10 @@ public partial class CR2WWriter
 
         result += Marshal.SizeOf(typeof(CR2WNameInfo)) * dataCollection.StringList.Count;
         result += Marshal.SizeOf(typeof(CR2WImportInfo)) * dataCollection.ImportList.Count;
-        result += Marshal.SizeOf(typeof(CR2WPropertyInfo)) * _file.Properties.Count;
+        result += Marshal.SizeOf(typeof(CR2WPropertyInfo)) * _file!.Properties.Count;
         result += Marshal.SizeOf(typeof(CR2WExportInfo)) * dataCollection.ChunkInfoList.Count;
         result += Marshal.SizeOf(typeof(CR2WBufferInfo)) * dataCollection.BufferInfoList.Count;
-        result += Marshal.SizeOf(typeof(CR2WEmbeddedInfo)) * _file.EmbeddedFiles.Count;
+        result += Marshal.SizeOf(typeof(CR2WEmbeddedInfo)) * _file!.EmbeddedFiles.Count;
 
         return (int)result;
     }

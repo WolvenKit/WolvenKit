@@ -8,9 +8,18 @@ public static class CHandle
     public static IRedBaseHandle Parse(Type handleType, RedBaseClass value)
     {
         var method = typeof(CHandle).GetMethod(nameof(Parse), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(RedBaseClass) }, null);
-        var generic = method.MakeGenericMethod(handleType);
+        if (method == null)
+        {
+            throw new MissingMethodException(nameof(CBitField), nameof(Parse));
+        }
 
-        return (IRedBaseHandle)generic.Invoke(null, new object[] { value });
+        var generic = method.MakeGenericMethod(handleType);
+        if (generic.Invoke(null, new object[] { value }) is not IRedBaseHandle result)
+        {
+            throw new Exception();
+        }
+
+        return result;
     }
 
     public static CHandle<T> Parse<T>(RedBaseClass value) where T : RedBaseClass
@@ -20,74 +29,27 @@ public static class CHandle
 }
 
 [RED("handle")]
-public class CHandle<T> : IRedHandle<T>, /*IRedNotifyObjectChanged, */IEquatable<CHandle<T>>, IRedCloneable where T : RedBaseClass
+public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>>, IRedCloneable where T : RedBaseClass
 {
-    // public event ObjectChangedEventHandler ObjectChanged;
-
-    private T _chunk;
-
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-    public T Chunk {
-        get => _chunk;
-        set
-        {
-            _chunk = value;
-
-            //if (!Equals(_chunk, value))
-            //{
-            //    if (_chunk != null)
-            //    {
-            //        _chunk.ObjectChanged -= OnObjectChanged;
-            //    }
-            //
-            //    var oldChunk = _chunk;
-            //    _chunk = value;
-            //
-            //    if (_chunk != null)
-            //    {
-            //        _chunk.ObjectChanged += OnObjectChanged;
-            //    }
-            //
-            //    var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, null, oldChunk, _chunk);
-            //    args._callStack.Add(this);
-            //
-            //    ObjectChanged?.Invoke(null, args);
-            //}
-        }
-    }
-
-    //private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
-    //{
-    //    if (e._callStack.Contains(this))
-    //    {
-    //        return;
-    //    }
-    //    e._callStack.Add(this);
-    //
-    //    ObjectChanged?.Invoke(sender, e);
-    //}
+    public T Chunk { get; set; }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public Type InnerType => typeof(T);
 
 
+
     public RedBaseClass GetValue() => Chunk;
     public void SetValue(RedBaseClass cls) => Chunk = (T)cls;
 
-
-    public CHandle(){}
-
-    public CHandle(T chunk)
-    {
-        Chunk = chunk;
-    }
+    public CHandle(T chunk) => Chunk = chunk;
 
 
     public static implicit operator CHandle<T>(T value) => new(value);
     public static implicit operator T(CHandle<T> value) => value.Chunk;
 
 
-    public bool Equals(CHandle<T> other)
+    public bool Equals(CHandle<T>? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -107,7 +69,7 @@ public class CHandle<T> : IRedHandle<T>, /*IRedNotifyObjectChanged, */IEquatable
         return true;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {
@@ -127,7 +89,7 @@ public class CHandle<T> : IRedHandle<T>, /*IRedNotifyObjectChanged, */IEquatable
         return Equals((CHandle<T>)obj);
     }
 
-    public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode((T)Chunk);
+    public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(Chunk);
 
     public object ShallowCopy()
     {
@@ -136,6 +98,6 @@ public class CHandle<T> : IRedHandle<T>, /*IRedNotifyObjectChanged, */IEquatable
 
     public object DeepCopy()
     {
-        return CHandle.Parse(InnerType, (RedBaseClass)_chunk.DeepCopy());
+        return CHandle.Parse(InnerType, (RedBaseClass)Chunk.DeepCopy());
     }
 }

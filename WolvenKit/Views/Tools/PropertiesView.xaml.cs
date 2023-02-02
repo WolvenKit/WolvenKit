@@ -1,26 +1,18 @@
 using System;
 using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.Helpers;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Tools;
-using WolvenKit.Views.Editor.AudioTool;
-using WPFSoundVisualizationLib;
+using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
 {
@@ -78,13 +70,6 @@ namespace WolvenKit.Views.Tools
                 group.Children.Add(new TranslateTransform());
 
                 ImagePreview.SetCurrentValue(RenderTransformProperty, group);
-            });
-
-            this.WhenActivated(disposables =>
-            {
-                ViewModel.PreviewAudioCommand
-                    .ObserveOn(RxApp.MainThreadScheduler)
-                    .Subscribe(async path => await TempConvertToWemWavAsync(path));
             });
         }
 
@@ -195,11 +180,7 @@ namespace WolvenKit.Views.Tools
 
         #region AudioPreview
 
-        /// <summary>
-        /// convert a file to wav to preview it.
-        /// </summary>
-        /// <param name="path"></param>
-        private async Task TempConvertToWemWavAsync(AudioObject obj) => await Task.Run(() => TempConvertToWemWav(obj));
+       
 
         private void TempConvertToWemWav(AudioObject obj)
         {

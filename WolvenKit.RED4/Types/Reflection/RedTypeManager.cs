@@ -4,7 +4,15 @@ namespace WolvenKit.RED4.Types;
 
 public class RedTypeManager
 {
-    public static RedBaseClass Create(Type type) => (RedBaseClass)System.Activator.CreateInstance(type);
+    public static RedBaseClass Create(Type type)
+    {
+        if (System.Activator.CreateInstance(type) is not RedBaseClass result)
+        {
+            throw new Exception();
+        }
+
+        return result;
+    }
 
     public static RedBaseClass Create(string redTypeName)
     {
@@ -17,7 +25,15 @@ public class RedTypeManager
         return Create(type);
     }
 
-    public static IRedType CreateRedType(Type type, params object[] args) => (IRedType)System.Activator.CreateInstance(type, args);
+    public static IRedType CreateRedType(Type type, params object[] args)
+    {
+        if (System.Activator.CreateInstance(type, args) is not IRedType result)
+        {
+            throw new Exception();
+        }
+
+        return result;
+    }
 
     public static IRedType CreateRedType(string redTypeName, params object[] args)
     {

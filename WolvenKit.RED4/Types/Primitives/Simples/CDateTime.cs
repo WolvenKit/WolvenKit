@@ -91,7 +91,7 @@ public readonly struct CDateTime : IRedPrimitive<DateTime>, IEquatable<CDateTime
 
     public override int GetHashCode() => _value.GetHashCode();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

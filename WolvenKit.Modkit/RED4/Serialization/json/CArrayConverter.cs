@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
+using YamlDotNet.Core.Tokens;
 using Activator = System.Activator;
 
 namespace WolvenKit.Modkit.RED4.Serialization.json
@@ -46,6 +48,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
 
         }
 
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
         private class CArrayConverterInner<T> : JsonConverter<CArray<T>> where T : IRedType
         {
             private readonly JsonConverter<IList<T>> _valueConverter;
@@ -62,7 +65,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                 Type typeToConvert,
                 JsonSerializerOptions options)
             {
-                var value = _valueConverter.Read(ref reader, _baseType, options) ?? JsonSerializer.Deserialize<IList<T>>(ref reader, options);
+                var value = _valueConverter.Read(ref reader, _baseType, options) ?? JsonSerializer.Deserialize<IList<T>>(ref reader, options).NotNull();
 
                 var instance = Activator.CreateInstance(typeToConvert) as CArray<T> ?? throw new JsonException();
 
@@ -73,19 +76,10 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
             public override void Write(
                 Utf8JsonWriter writer,
                 CArray<T> fundamental,
-                JsonSerializerOptions options)
-            {
-
-                if (_valueConverter != null)
-                {
-                    _valueConverter.Write(writer, fundamental, options);
-                }
-                else
-                {
-                    JsonSerializer.Serialize(writer, fundamental, options);
-                }
-            }
+                JsonSerializerOptions options) => _valueConverter.Write(writer, fundamental, options);
         }
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+
     }
 
 }

@@ -1,4 +1,3 @@
-using Splat;
 using System.Text;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.IO;
@@ -9,7 +8,7 @@ namespace WolvenKit.RED4.Archive.IO;
 
 public partial class CR2WReader : Red4Reader
 {
-    private ILoggerService _logger;
+    public ILoggerService? LoggerService { get; set; }
 
     public CR2WReader(Stream input) : this(input, Encoding.UTF8, false)
     {
@@ -25,7 +24,6 @@ public partial class CR2WReader : Red4Reader
 
     public CR2WReader(BinaryReader reader) : base(reader)
     {
-        _logger = Locator.Current.GetService<ILoggerService>();
     }
 
     public override void ReadClass(RedBaseClass cls, uint size)
@@ -91,27 +89,29 @@ public partial class CR2WReader : Red4Reader
         var sizepos = _reader.BaseStream.Position;
         var size = _reader.ReadUInt32();
 
-        var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
-        var redTypeInfos = RedReflection.GetRedTypeInfos(typename);
+        var (type, flags) = RedReflection.GetCSTypeFromRedType(typename!);
+        var redTypeInfos = RedReflection.GetRedTypeInfos(typename!);
         CheckRedTypeInfos(ref redTypeInfos);
 
         var typeInfo = RedReflection.GetTypeInfo(cls);
 
-        IRedType value;
-        var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varName);
+        IRedType? value;
+        var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varName!);
         if (prop == null)
         {
-            prop = typeInfo.AddDynamicProperty(varName, typename);
+            prop = typeInfo.AddDynamicProperty(varName!, typename!);
         }
 
         if (prop.IsDynamic)
         {
             value = Read(redTypeInfos, size - 4);
 
-            cls.SetProperty(varName, value);
+            cls.SetProperty(varName!, value);
         }
         else
         {
+            ArgumentNullException.ThrowIfNull(prop.RedName);
+
             value = Read(redTypeInfos, size - 4);
 
             var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
@@ -125,7 +125,7 @@ public partial class CR2WReader : Red4Reader
                 value = args.Value;
             }
 
-            if (!typeInfo.SerializeDefault && !prop.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varName, value))
+            if (!typeInfo.SerializeDefault && !prop.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varName!, value))
             {
                 var args = new InvalidDefaultValueEventArgs();
                 if (!HandleParsingError(args))
@@ -147,10 +147,10 @@ public partial class CR2WReader : Red4Reader
                     DataCollection.RawFactStrings.Add(str1);
                 }
 
-                if (value is CName str2 && str2.IsResolvable)
+                if (value is CName { IsResolvable: true } str2)
                 {
-                    DataCollection.RawStringList.Remove(str2.GetResolvedText());
-                    DataCollection.RawFactStrings.Add(str2.GetResolvedText());
+                    DataCollection.RawStringList.Remove(str2.GetResolvedText()!);
+                    DataCollection.RawFactStrings.Add(str2.GetResolvedText()!);
                 }
 
                 if (value is CArray<CName> arr1)
@@ -159,8 +159,8 @@ public partial class CR2WReader : Red4Reader
                     {
                         if (cName.IsResolvable)
                         {
-                            DataCollection.RawStringList.Remove(cName.GetResolvedText());
-                            DataCollection.RawFactStrings.Add(cName.GetResolvedText());
+                            DataCollection.RawStringList.Remove(cName.GetResolvedText()!);
+                            DataCollection.RawFactStrings.Add(cName.GetResolvedText()!);
                         }
                     }
                 }
@@ -218,6 +218,51 @@ public partial class CR2WReader : Red4Reader
             }
 
             result.File = c;
+        }
+
+        return result;
+    }
+
+    public override IRedHandle? ReadCHandle<T>()
+    {
+        var pointer = _reader.ReadInt32() - 1;
+        if (pointer < 0)
+        {
+            return null;
+        }
+
+        return new CHandle<T>((T)_chunks[pointer]);
+    }
+
+    public override IRedHandle? ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
+    {
+        var pointer = _reader.ReadInt32() - 1;
+        if (pointer < 0)
+        {
+            return null;
+        }
+
+        var type = RedReflection.GetFullType(redTypeInfos);
+        if (System.Activator.CreateInstance(type, _chunks[pointer]) is not IRedHandle result)
+        {
+            throw new Exception();
+        }
+
+        return result;
+    }
+
+    public override IRedWeakHandle? ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
+    {
+        var pointer = _reader.ReadInt32() - 1;
+        if (pointer < 0)
+        {
+            return null;
+        }
+
+        var type = RedReflection.GetFullType(redTypeInfos);
+        if (System.Activator.CreateInstance(type, _chunks[pointer]) is not IRedWeakHandle result)
+        {
+            throw new Exception();
         }
 
         return result;

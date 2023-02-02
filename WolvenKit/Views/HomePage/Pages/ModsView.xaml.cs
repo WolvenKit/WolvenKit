@@ -2,8 +2,8 @@ using System.Linq;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.ViewModels.HomePage;
+using WolvenKit.App.Extensions;
+using WolvenKit.App.ViewModels.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {

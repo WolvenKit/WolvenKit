@@ -5,7 +5,7 @@
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:docsV="clr-namespace:WolvenKit.Views.Documents"
-    xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

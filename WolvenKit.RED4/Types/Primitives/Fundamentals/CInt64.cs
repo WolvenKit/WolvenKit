@@ -26,7 +26,7 @@ public readonly struct CInt64 : IRedPrimitive<long>, IEquatable<CInt64>, IRedInt
 
     public override int GetHashCode() => _value.GetHashCode();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

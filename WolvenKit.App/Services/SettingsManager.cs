@@ -5,293 +5,291 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Core;
 using WolvenKit.Core.Extensions;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services;
+
+/// <summary>
+/// This handles the application settings defined by the user.
+/// </summary>
+public partial class SettingsManager : ObservableObject, ISettingsManager
 {
+    private bool _isLoaded;
+
+    private readonly string _assemblyVersion;
+
     /// <summary>
-    /// This handles the application settings defined by the user.
+    /// Default constructor.
     /// </summary>
-    public class SettingsManager : ReactiveObject, ISettingsManager
+    public SettingsManager()
     {
-        private bool _isLoaded;
+        _assemblyVersion = CommonFunctions.GetAssemblyVersion(Constants.AssemblyName).ToString();
 
-        private readonly string _assemblyVersion;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public SettingsManager()
-        {
-            _assemblyVersion = CommonFunctions.GetAssemblyVersion(Constants.AssemblyName).ToString();
-
-            _ = this.WhenAnyPropertyChanged(
-                nameof(ShowGuidedTour),
-                nameof(MaterialRepositoryPath),
-                nameof(ThemeAccentString),
-                nameof(SkipUpdateCheck),
-                nameof(CP77ExecutablePath),
-                nameof(CP77LaunchCommand),
-                nameof(CP77LaunchOptions),
-                nameof(ShowFilePreview),
-                nameof(ReddbHash),
-                nameof(InstallerHash),
-                nameof(TreeViewGroups),
-                nameof(TreeViewGroupSize),
-                nameof(TreeViewIgnoredExtensions),
-                nameof(ShowAdvancedOptions),
-                nameof(ShowCNameAsHex),
-                nameof(ShowNodeRefAsHex),
-                nameof(ShowTweakDBIDAsHex),
-                nameof(ShowReferenceGraph)
-                )
-              .Subscribe(_ =>
+        _ = this.WhenAnyPropertyChanged(
+            nameof(ShowGuidedTour),
+            nameof(MaterialRepositoryPath),
+            nameof(ThemeAccentString),
+            nameof(SkipUpdateCheck),
+            nameof(CP77ExecutablePath),
+            nameof(CP77LaunchCommand),
+            nameof(CP77LaunchOptions),
+            nameof(ShowFilePreview),
+            nameof(ReddbHash),
+            nameof(InstallerHash),
+            nameof(TreeViewGroups),
+            nameof(TreeViewGroupSize),
+            nameof(TreeViewIgnoredExtensions),
+            nameof(ShowAdvancedOptions),
+            nameof(ShowCNameAsHex),
+            nameof(ShowNodeRefAsHex),
+            nameof(ShowTweakDBIDAsHex),
+            nameof(ShowReferenceGraph)
+            )
+          .Subscribe(_ =>
+          {
+              if (_isLoaded)
               {
-                  if (_isLoaded)
-                  {
-                      Save();
-                  }
-              });
+                  Save();
+              }
+          });
+    }
+
+    #region lifecycle
+
+    public static SettingsManager Load()
+    {
+        var dto = LoadFromFile();
+
+        var settings =
+            dto != null
+            ? dto.ToSettingsManager()
+            : new SettingsManager();
+
+        settings._isLoaded = true;
+        return settings;
+    }
+
+    public void Save()
+    {
+        if (!_isLoaded)
+        {
+            return;
         }
 
-        #region lifecycle
-
-        public static SettingsManager Load()
+        var options = new JsonSerializerOptions
         {
-            var dto = LoadFromFile();
+            WriteIndented = true,
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        };
+        var json = JsonSerializer.Serialize(new SettingsDto(this), options);
+        File.WriteAllText(GetConfigurationPath(), json);
+        // _loggerService.Info("Settings saved.");
+    }
 
-            var settings =
-                dto != null
-                ? dto.ToSettingsManager()
-                : new SettingsManager();
+    public void Bounce()
+    {
+        Save();
+        var bouncedSettings = LoadFromFile();
+        bouncedSettings?.ReconfigureSettingsManager(this);
+    }
 
-            settings._isLoaded = true;
-            return settings;
-        }
-
-        public void Save()
+    private static SettingsDto? LoadFromFile()
+    {
+        try
         {
-            if (!_isLoaded)
+            if (File.Exists(GetConfigurationPath()))
             {
-                return;
-            }
-
-            var options = new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-            };
-            var json = JsonSerializer.Serialize(new SettingsDto(this), options);
-            File.WriteAllText(GetConfigurationPath(), json);
-            // _loggerService.Info("Settings saved.");
-        }
-
-        public void Bounce()
-        {
-            Save();
-            var bouncedSettings = SettingsManager.LoadFromFile();
-            bouncedSettings?.ReconfigureSettingsManager(this);
-        }
-
-        private static SettingsDto? LoadFromFile()
-        {
-            try
-            {
-                if (File.Exists(GetConfigurationPath()))
+                var options = new JsonSerializerOptions
                 {
-                    var options = new JsonSerializerOptions
-                    {
-                        WriteIndented = true,
-                        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-                    };
-                    var jsonString = File.ReadAllText(GetConfigurationPath());
-                    var dto = JsonSerializer.Deserialize<SettingsDto>(jsonString, options);
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+                };
+                var jsonString = File.ReadAllText(GetConfigurationPath());
+                var dto = JsonSerializer.Deserialize<SettingsDto>(jsonString, options);
 
-                    return dto;
-                }
+                return dto;
             }
-            catch (Exception)
-            {
-                return null;
-            }
-
+        }
+        catch (Exception)
+        {
             return null;
         }
 
-        #endregion lifecycle
-
-        #region properties
-
-        [Category("General")]
-        [Display(Name = "Settings Version")]
-        [Reactive]
-        [Browsable(false)]
-        public int SettingsVersion { get; set; }
-
-        [Category("General")]
-        [Display(Name = "Do not check for updates")]
-        [Reactive]
-        public bool SkipUpdateCheck { get; set; }
-
-        [Category("General")]
-        [Display(Name = "Update Channel")]
-        [Reactive]
-        public EUpdateChannel UpdateChannel { get; set; } // deprecated
-
-        [Category("General")]
-        [Display(Name = "Show Guided Tour")]
-        [Reactive]
-        public bool ShowGuidedTour { get; set; } = true;
-
-        [Category("General")]
-        [Display(Name = "Theme Accent")]
-        [Reactive]
-        public string? ThemeAccentString { get; set; }
-
-        [Category("Cyberpunk")]
-        [Display(Name = "Game Executable Path (.exe)")]
-        [Reactive]
-        public string? CP77ExecutablePath { get; set; }
-
-        // This should be conditionally updated by CP77ExecutablePath, but not implemented..
-        [Category("Cyberpunk")]
-        [Display(Name = "Launch Command (executable or other command (e.g. steam:// uri)")]
-        [Reactive]
-        public string? CP77LaunchCommand { get; set; }
-
-        [Category("Cyberpunk")]
-        [Display(Name = "Launch Options or Command-Line Parameters To Launch Command")]
-        [Reactive]
-        public string? CP77LaunchOptions { get; set; }
-
-        [Category("Cyberpunk")]
-        [Display(Name = "Show File Preview")]
-        [Reactive]
-        public bool ShowFilePreview { get; set; } = true;
-
-        [Browsable(false)]
-        [Reactive]
-        public string? ReddbHash { get; set; }
-
-        [Browsable(false)]
-        [Reactive]
-        public string? InstallerHash { get; set; }
-
-        [Category("Cyberpunk")]
-        [Display(Name = "Depot Path")]
-        [Reactive]
-        public string? MaterialRepositoryPath { get; set; }
-
-        [Category("File Editor")]
-        [Display(Name = "Group Large Collections")]
-        [Reactive]
-        public bool TreeViewGroups { get; set; } = false;
-
-        [Category("File Editor")]
-        [Display(Name = "Group Size")]
-        [Reactive]
-        public uint TreeViewGroupSize { get; set; } = 100;
-
-        [Category("File Editor")]
-        [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)")]
-        [Reactive]
-        public string? TreeViewIgnoredExtensions { get; set; } = "";
-
-        [Category("Import / Export")]
-        [Display(Name = "Show advanced Options")]
-        [Reactive]
-        public bool ShowAdvancedOptions { get; set; }
-
-        [Category("Display")]
-        [Display(Name = "Show CName hashes as hex")]
-        [Reactive]
-        public bool ShowCNameAsHex { get; set; }
-
-        [Category("Display")]
-        [Display(Name = "Show NodeRef hashes as hex")]
-        [Reactive]
-        public bool ShowNodeRefAsHex { get; set; }
-
-        [Category("Display")]
-        [Display(Name = "Show TweakDBID hashes as hex")]
-        [Reactive]
-        public bool ShowTweakDBIDAsHex { get; set; }
-
-        [Category("Display")]
-        [Display(Name = "Show reference graph")]
-        [Reactive]
-        public bool ShowReferenceGraph { get; set; }
-
-        [Reactive]
-        [Browsable(false)]
-        public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
-
-        #endregion properties
-
-        #region methods
-
-        public string GetVersionNumber() => _assemblyVersion;
-
-        private static string GetConfigurationPath() => Path.Combine(ISettingsManager.GetAppData(), "config.json");
-
-        public Color GetThemeAccent() =>
-           !string.IsNullOrEmpty(ThemeAccentString)
-               ? (Color)ColorConverter.ConvertFromString(ThemeAccentString)
-               : (Color)ColorConverter.ConvertFromString("#DF2935");
-
-        public void SetThemeAccent(Color color) => ThemeAccentString = color.ToString();
-        public string GetRED4GameRootDir()
-        {
-            ArgumentNullException.ThrowIfNull(CP77ExecutablePath);
-
-            var fi = new FileInfo(CP77ExecutablePath);
-
-            return fi.Directory is { Parent.Parent: { } }
-                ? Path.Combine(fi.Directory.Parent.Parent.FullName)
-                : throw new DirectoryNotFoundException();
-        }
-
-        public string GetRED4GameExecutablePath() => CP77ExecutablePath.NotNull();
-
-        public string GetRED4GameLaunchCommand() => CP77LaunchCommand.NotNull();
-
-        public string GetRED4GameLaunchOptions() => CP77LaunchOptions.NotNull();
-
-        public string GetRED4GameLegacyModDir()
-        {
-            var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public string GetRED4GameModDir()
-        {
-            //var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");
-            var dir = Path.Combine(GetRED4GameRootDir(), "mods");
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
-        }
-
-        public string? GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir())
-                ? null
-                : Path.Combine(GetRED4GameRootDir(), "bin", "x64", WolvenKit.Core.Constants.Oodle);
-
-        public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
-
-        #endregion methods
+        return null;
     }
+
+    #endregion lifecycle
+
+    #region properties
+
+    [Category("General")]
+    [Display(Name = "Settings Version")]
+    [ObservableProperty]
+    [Browsable(false)]
+    private int _settingsVersion;
+
+    [Category("General")]
+    [Display(Name = "Do not check for updates")]
+    [ObservableProperty]
+    private bool _skipUpdateCheck;
+
+    [Category("General")]
+    [Display(Name = "Update Channel")]
+    [ObservableProperty]
+    private EUpdateChannel _updateChannel;  // deprecated
+
+    [Category("General")]
+    [Display(Name = "Show Guided Tour")]
+    [ObservableProperty]
+    private bool _showGuidedTour = true;
+
+    [Category("General")]
+    [Display(Name = "Theme Accent")]
+    [ObservableProperty]
+    private string? _themeAccentString;
+
+    [Category("Cyberpunk")]
+    [Display(Name = "Game Executable Path (.exe)")]
+    [ObservableProperty]
+    private string? _cP77ExecutablePath;
+
+    // This should be conditionally updated by CP77ExecutablePath, but not implemented..
+    [Category("Cyberpunk")]
+    [Display(Name = "Launch Command (executable or other command (e.g. steam:// uri)")]
+    [ObservableProperty]
+    private string? _cP77LaunchCommand;
+
+    [Category("Cyberpunk")]
+    [Display(Name = "Launch Options or Command-Line Parameters To Launch Command")]
+    [ObservableProperty]
+    private string? _cP77LaunchOptions;
+
+    [Category("Cyberpunk")]
+    [Display(Name = "Show File Preview")]
+    [ObservableProperty]
+    private bool _showFilePreview = true;
+
+    [Browsable(false)]
+    [ObservableProperty]
+    private string? _reddbHash;
+
+    [Browsable(false)]
+    [ObservableProperty]
+    private string? _installerHash;
+
+    [Category("Cyberpunk")]
+    [Display(Name = "Depot Path")]
+    [ObservableProperty]
+    private string? _materialRepositoryPath;
+
+    [Category("File Editor")]
+    [Display(Name = "Group Large Collections")]
+    [ObservableProperty]
+    private bool _treeViewGroups;
+
+    [Category("File Editor")]
+    [Display(Name = "Group Size")]
+    [ObservableProperty]
+    private uint _treeViewGroupSize = 100;
+
+    [Category("File Editor")]
+    [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)")]
+    [ObservableProperty]
+    private string? _treeViewIgnoredExtensions = "";
+
+    [Category("Import / Export")]
+    [Display(Name = "Show advanced Options")]
+    [ObservableProperty]
+    private bool _showAdvancedOptions;
+
+    [Category("Display")]
+    [Display(Name = "Show CName hashes as hex")]
+    [ObservableProperty]
+    private bool _showCNameAsHex;
+
+    [Category("Display")]
+    [Display(Name = "Show NodeRef hashes as hex")]
+    [ObservableProperty]
+    private bool _showNodeRefAsHex;
+
+    [Category("Display")]
+    [Display(Name = "Show TweakDBID hashes as hex")]
+    [ObservableProperty]
+    private bool _showTweakDBIDAsHex;
+
+    [Category("Display")]
+    [Display(Name = "Show reference graph")]
+    [ObservableProperty]
+    private bool _showReferenceGraph;
+
+    [ObservableProperty]
+    [Browsable(false)]
+    private Dictionary<string, LaunchProfile>? _launchProfiles;
+
+    #endregion properties
+
+    #region methods
+
+    public string GetVersionNumber() => _assemblyVersion;
+
+    private static string GetConfigurationPath() => Path.Combine(ISettingsManager.GetAppData(), "config.json");
+
+    public Color GetThemeAccent() =>
+       !string.IsNullOrEmpty(ThemeAccentString)
+           ? (Color)ColorConverter.ConvertFromString(ThemeAccentString)
+           : (Color)ColorConverter.ConvertFromString("#DF2935");
+
+    public void SetThemeAccent(Color color) => ThemeAccentString = color.ToString();
+    public string GetRED4GameRootDir()
+    {
+        ArgumentNullException.ThrowIfNull(CP77ExecutablePath);
+
+        var fi = new FileInfo(CP77ExecutablePath);
+
+        return fi.Directory is { Parent.Parent: { } }
+            ? Path.Combine(fi.Directory.Parent.Parent.FullName)
+            : throw new DirectoryNotFoundException();
+    }
+
+    public string GetRED4GameExecutablePath() => CP77ExecutablePath.NotNull();
+
+    public string GetRED4GameLaunchCommand() => CP77LaunchCommand.NotNull();
+
+    public string GetRED4GameLaunchOptions() => CP77LaunchOptions.NotNull();
+
+    public string GetRED4GameLegacyModDir()
+    {
+        var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        return dir;
+    }
+
+    public string GetRED4GameModDir()
+    {
+        //var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");
+        var dir = Path.Combine(GetRED4GameRootDir(), "mods");
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        return dir;
+    }
+
+    public string? GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir())
+            ? null
+            : Path.Combine(GetRED4GameRootDir(), "bin", "x64", Core.Constants.Oodle);
+
+    public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
+
+    #endregion methods
 }

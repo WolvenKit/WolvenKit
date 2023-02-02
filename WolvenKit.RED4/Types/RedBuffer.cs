@@ -2,7 +2,7 @@ using WolvenKit.Core.Compression;
 
 namespace WolvenKit.RED4.Types;
 
-public class RedBuffer : IRedBuffer, IEquatable<RedBuffer>
+public class RedBuffer : IEquatable<RedBuffer>
 {
     private byte[] _bytes = Array.Empty<byte>();
 
@@ -11,7 +11,7 @@ public class RedBuffer : IRedBuffer, IEquatable<RedBuffer>
 
     public uint Flags { get; set; }
     public bool IsEmpty => _bytes == Array.Empty<byte>();
-    public IParseableBuffer Data { get; set; }
+    public IParseableBuffer? Data { get; set; }
 
     public RedBaseClass RootChunk { get; set; }
 
@@ -70,7 +70,7 @@ public class RedBuffer : IRedBuffer, IEquatable<RedBuffer>
     private ReadOnlySpan<byte> GetSpan() => new(_bytes);
 
 
-    public bool Equals(RedBuffer other)
+    public bool Equals(RedBuffer? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -100,7 +100,7 @@ public class RedBuffer : IRedBuffer, IEquatable<RedBuffer>
         return true;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

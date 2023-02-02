@@ -40,10 +40,8 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Nodify" />
-    <PackageReference Include="ScottPlot.WPF" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
-    <PackageReference Include="protobuf-net" />
     <PackageReference Include="Serilog.Sinks.Async" />
     <PackageReference Include="SharpVectors.Wpf" />
     <PackageReference Include="Splat" />
@@ -55,7 +53,6 @@
 
     <PackageReference Include="ReactiveUI" />
     <PackageReference Include="ReactiveUI.Events.WPF" />
-    <PackageReference Include="ReactiveUI.Fody" />
     <PackageReference Include="ReactiveUI.WPF" />
   </ItemGroup>
 
@@ -67,14 +64,11 @@
       <PackageReference Include="MahApps.Metro" />
       <PackageReference Include="MahApps.Metro.IconPacks" />
       <PackageReference Include="HandyControls" />
-      <PackageReference Include="ControlzEx" />
       <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" />
       <PackageReference Include="WpfAnalyzers" PrivateAssets="all">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       </PackageReference>
 
-      <PackageReference Include="NodeNetwork" />
-      <PackageReference Include="NodeNetworkToolkit" />
       <PackageReference Include="DrawStringLineHeight" />
       <PackageReference Include="PixiEditor.ColorPicker" />
       <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />

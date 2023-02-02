@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Save;
 public sealed class Fact
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string _value;
+    private string? _value;
 
     private uint _hash;
 
@@ -25,11 +25,11 @@ public sealed class Fact
         _hash = value;
     }
 
-    private uint CalculateHash() => FNV1A32HashAlgorithm.HashString(_value);
+    private uint CalculateHash() => _value != null ? FNV1A32HashAlgorithm.HashString(_value) : 0;
 
 
     public static implicit operator Fact(string value) => new(value);
-    public static implicit operator string(Fact value) => value._value;
+    public static implicit operator string?(Fact value) => value._value;
 
     public static implicit operator Fact(uint value) => new(value);
     public static implicit operator uint(Fact value) => value._hash;

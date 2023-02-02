@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4.Serialization.json
@@ -95,7 +96,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
     public sealed class CNameJsonConverter : JsonConverter<CName>
     {
         public override CName Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
-            reader.GetString();
+            reader.GetString().NotNull();
 
         public override void Write(Utf8JsonWriter writer, CName value, JsonSerializerOptions options) =>
             writer.WriteStringValue(value);
@@ -104,7 +105,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
     public sealed class CStringJsonConverter : JsonConverter<CString>
     {
         public override CString Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
-            reader.GetString();
+            reader.GetString().NotNull();
 
         public override void Write(Utf8JsonWriter writer, CString value, JsonSerializerOptions options) =>
             writer.WriteStringValue(value);
@@ -205,7 +206,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
         {
             public override CResourceAsyncReference<CResource> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
             {
-                var text = reader.GetString();
+                var text = reader.GetString().NotNull();
                 if (ulong.TryParse(text, out var hash))
                 {
                     return new CResourceAsyncReference<CResource>(hash);

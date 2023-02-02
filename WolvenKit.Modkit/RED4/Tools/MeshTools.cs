@@ -232,54 +232,58 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             for (var i = 0; i < meshesInfo.meshCount; i++)
             {
-                meshesInfo.vertCounts[i] = rendmeshblob.Header.RenderChunkInfos[i].NumVertices;
-                meshesInfo.indCounts[i] = rendmeshblob.Header.RenderChunkInfos[i].NumIndices;
-                meshesInfo.posnOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[0];
-                meshesInfo.unknownOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.ByteOffsets[4];
+                var info = rendmeshblob.Header.RenderChunkInfos[i];
+                ArgumentNullException.ThrowIfNull(info);
 
-                var cv = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices;
+                meshesInfo.vertCounts[i] = info.NumVertices;
+                meshesInfo.indCounts[i] = info.NumIndices;
+                meshesInfo.posnOffsets[i] = info.ChunkVertices.ByteOffsets[0];
+                meshesInfo.unknownOffsets[i] = info.ChunkVertices.ByteOffsets[4];
+
+                var cv = info.ChunkVertices;
                 for (var e = 0; e < cv.VertexLayout.Elements.Count; e++)
                 {
-                    if (cv.VertexLayout.Elements[e] == null)
+                    var element = cv.VertexLayout.Elements[e];
+                    if (element is null)
                     {
                         break;
                     }
 
-                    if (cv.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_Normal)
+                    if (element.Usage == GpuWrapApiVertexPackingePackingUsage.PS_Normal)
                     {
-                        meshesInfo.normalOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
+                        meshesInfo.normalOffsets[i] = cv.ByteOffsets[element.StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_Tangent)
+                    if (element.Usage == GpuWrapApiVertexPackingePackingUsage.PS_Tangent)
                     {
-                        meshesInfo.tangentOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
+                        meshesInfo.tangentOffsets[i] = cv.ByteOffsets[element.StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_Color)
+                    if (element.Usage == GpuWrapApiVertexPackingePackingUsage.PS_Color)
                     {
-                        meshesInfo.colorOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
+                        meshesInfo.colorOffsets[i] = cv.ByteOffsets[element.StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_TexCoord)
+                    if (element.Usage == GpuWrapApiVertexPackingePackingUsage.PS_TexCoord)
                     {
                         if (meshesInfo.tex0Offsets[i] == 0)
                         {
-                            meshesInfo.tex0Offsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
+                            meshesInfo.tex0Offsets[i] = cv.ByteOffsets[element.StreamIndex];
                         }
                         else
                         {
-                            meshesInfo.tex1Offsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
+                            meshesInfo.tex1Offsets[i] = cv.ByteOffsets[element.StreamIndex];
                         }
                     }
                 }
 
-                if (rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset == 0)
+                if (info.ChunkIndices.TeOffset == 0)
                 {
                     meshesInfo.indicesOffsets[i] = rendmeshblob.Header.IndexBufferOffset;
                 }
                 else
                 {
-                    meshesInfo.indicesOffsets[i] = rendmeshblob.Header.IndexBufferOffset + rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset;
+                    meshesInfo.indicesOffsets[i] = rendmeshblob.Header.IndexBufferOffset + info.ChunkIndices.TeOffset;
                 }
-                meshesInfo.vpStrides[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.SlotStrides[0];
-                meshesInfo.LODLvl[i] = rendmeshblob.Header.RenderChunkInfos[i].LodMask;
+                meshesInfo.vpStrides[i] = info.ChunkVertices.VertexLayout.SlotStrides[0];
+                meshesInfo.LODLvl[i] = info.LodMask;
             }
 
             var count = 0;
@@ -287,13 +291,17 @@ namespace WolvenKit.Modkit.RED4.Tools
             // getting number of weights for the meshes
             for (var i = 0; i < meshesInfo.meshCount; i++)
             {
-                count = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements.Count;
+                var info = rendmeshblob.Header.RenderChunkInfos[i];
+                ArgumentNullException.ThrowIfNull(info);
+
+                count = info.ChunkVertices.VertexLayout.Elements.Count;
                 counter = 0;
                 for (var e = 0; e < count; e++)
                 {
-                    if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e] != null)
+                    var element = info.ChunkVertices.VertexLayout.Elements[e];
+                    if (element != null)
                     {
-                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices)
+                        if (element.Usage == GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices)
                         {
                             counter++;
                         }
@@ -304,16 +312,21 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             for (var i = 0; i < meshesInfo.meshCount; i++)
             {
+                var info = rendmeshblob.Header.RenderChunkInfos[i];
+                ArgumentNullException.ThrowIfNull(info);
+
                 meshesInfo.garmentSupportExists[i] = false;
-                count = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements.Count;
+                count = info.ChunkVertices.VertexLayout.Elements.Count;
 
                 for (var e = 0; e < count; e++)
                 {
-                    if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e] != null)
+                    var element = info.ChunkVertices.VertexLayout.Elements[e];
+
+                    if (element != null)
                     {
-                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_ExtraData)
+                        if (element.Usage == GpuWrapApiVertexPackingePackingUsage.PS_ExtraData)
                         {
-                            if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].StreamIndex == 0)
+                            if (element.StreamIndex == 0)
                             {
                                 meshesInfo.garmentSupportExists[i] = true;
                             }
@@ -323,7 +336,11 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 if (cMesh != null)
                 {
-                    if (!cMesh.Parameters.Select(x => x.Chunk).OfType<meshMeshParamGarmentSupport>().Any())
+                    if (!cMesh.Parameters.Select(x =>
+                    {
+                        ArgumentNullException.ThrowIfNull(x);
+                        return x.Chunk;
+                    }).OfType<meshMeshParamGarmentSupport>().Any())
                     {
                         meshesInfo.garmentSupportExists[i] = false;
                     }
@@ -336,12 +353,14 @@ namespace WolvenKit.Modkit.RED4.Tools
             {
                 for (var i = 0; i < cMesh.Appearances.Count; i++)
                 {
-                    var app = cMesh.Appearances[i].Chunk;
+                    var app = cMesh.Appearances[i].NotNull().Chunk;
 
                     var materialNames = new string[app.ChunkMaterials.Count];
                     for (var e = 0; e < app.ChunkMaterials.Count; e++)
                     {
-                        materialNames[e] = app.ChunkMaterials[e];
+                        var m = app.ChunkMaterials[e].ToString();
+                        ArgumentNullException.ThrowIfNull(m);
+                        materialNames[e] = m;
                     }
                     meshesInfo.appearances.Add(app.Name + $"{i}", materialNames);
                 }
@@ -1084,11 +1103,15 @@ namespace WolvenKit.Modkit.RED4.Tools
                     var Rig = new RawArmature
                     {
                         BoneCount = boneCount,
-                        LocalPosn = rendmeshblob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
+                        LocalPosn = rendmeshblob.Header.BonePositions.Select(p =>
+                        {
+                            ArgumentNullException.ThrowIfNull(p);
+                            return new Vec3(p.X, p.Z, -p.Y);
+                        }).ToArray(),
                         LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
                         LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
                         Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
-                        Names = meshBlob.BoneNames.Select(x => x.GetResolvedText()).ToArray()
+                        Names = meshBlob.BoneNames.Select(x => x.GetResolvedText().NotNull()).ToArray()
                     };
                     return Rig;
                 }
@@ -1179,7 +1202,11 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, CR2WFile cr2w)
         {
-            var clothBLob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth);
+            var clothBLob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x =>
+            {
+                ArgumentNullException.ThrowIfNull(x);
+                return x.Chunk is meshMeshParamCloth;
+            });
             if (clothBLob != null)
             {
                 var blob = (meshMeshParamCloth)clothBLob.Chunk;
@@ -1187,25 +1214,26 @@ namespace WolvenKit.Modkit.RED4.Tools
                 for (var i = 0; i < blob.Chunks.Count && i < meshes.Count; i++)
                 {
                     var mesh = meshes[i];
+                    var chunk = blob.Chunks[i];
 
                     ArgumentNullException.ThrowIfNull(mesh.indices, nameof(mesh));
                     ArgumentNullException.ThrowIfNull(mesh.normals, nameof(mesh));
                     ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
+                    ArgumentNullException.ThrowIfNull(chunk, nameof(chunk));
 
-
-                    if (blob.Chunks[i].SkinIndices is { Buffer.MemSize: > 0 } && blob.Chunks[i].SkinWeights is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinIndices is { Buffer.MemSize: > 0 } && chunk.SkinWeights is { Buffer.MemSize: > 0 })
                     {
                         mesh.weightCount = 4;
                     }
-                    if (blob.Chunks[i].SkinIndicesExt is { Buffer.MemSize: > 0 } && blob.Chunks[i].SkinWeightsExt is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinIndicesExt is { Buffer.MemSize: > 0 } && chunk.SkinWeightsExt is { Buffer.MemSize: > 0 })
                     {
                         mesh.weightCount += 4;
                     }
                     mesh.boneindices = new ushort[mesh.positions.Length, mesh.weightCount];
                     mesh.weights = new float[mesh.positions.Length, mesh.weightCount];
-                    if (blob.Chunks[i].SkinIndices is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinIndices is { Buffer.MemSize: > 0 })
                     {
-                        var stream = new MemoryStream(blob.Chunks[i].SkinWeights.Buffer.GetBytes());
+                        var stream = new MemoryStream(chunk.SkinWeights.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1217,9 +1245,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                             mesh.boneindices[e, 3] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeights is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinWeights is { Buffer.MemSize: > 0 })
                     {
-                        var stream = new MemoryStream(blob.Chunks[i].SkinWeights.Buffer.GetBytes());
+                        var stream = new MemoryStream(chunk.SkinWeights.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1231,9 +1259,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                             mesh.weights[e, 3] = br.ReadSingle();
                         }
                     }
-                    if (blob.Chunks[i].SkinIndicesExt is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinIndicesExt is { Buffer.MemSize: > 0 })
                     {
-                        var stream = new MemoryStream(blob.Chunks[i].SkinIndicesExt.Buffer.GetBytes());
+                        var stream = new MemoryStream(chunk.SkinIndicesExt.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1245,9 +1273,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                             mesh.boneindices[e, 7] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeightsExt is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinWeightsExt is { Buffer.MemSize: > 0 })
                     {
-                        var stream = new MemoryStream(blob.Chunks[i].SkinWeightsExt.Buffer.GetBytes());
+                        var stream = new MemoryStream(chunk.SkinWeightsExt.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1280,7 +1308,11 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
             }
 
-            var clothGraphicalBLob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth_Graphical);
+            var clothGraphicalBLob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x =>
+            {
+                ArgumentNullException.ThrowIfNull(x);
+                return x.Chunk is meshMeshParamCloth_Graphical;
+            });
             if (clothGraphicalBLob != null)
             {
                 var blob = (meshMeshParamCloth_Graphical)clothGraphicalBLob.Chunk;
@@ -1288,13 +1320,15 @@ namespace WolvenKit.Modkit.RED4.Tools
                 for (var i = 0; i < blob.Chunks.Count && i < meshes.Count; i++)
                 {
                     var mesh = meshes[i];
+                    var chunk = blob.Chunks[i];
 
                     ArgumentNullException.ThrowIfNull(mesh.colors1, nameof(mesh));
                     ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
                     ArgumentNullException.ThrowIfNull(mesh.boneindices, nameof(mesh));
+                    ArgumentNullException.ThrowIfNull(chunk, nameof(chunk));
 
 
-                    if (blob.Chunks[i].Simulation.Count > 0 && mesh.colors1.Length != mesh.positions.Length)
+                    if (chunk.Simulation.Count > 0 && mesh.colors1.Length != mesh.positions.Length)
                     {
                         mesh.colors1 = new Vec4[mesh.positions.Length];
                     }
@@ -1303,23 +1337,23 @@ namespace WolvenKit.Modkit.RED4.Tools
                     {
                         mesh.colors1[e] = Vec4.Zero;
                     }
-                    for (var e = 0; e < blob.Chunks[i].Simulation.Count; e++)
+                    for (var e = 0; e < chunk.Simulation.Count; e++)
                     {
-                        mesh.colors1[blob.Chunks[i].Simulation[e]].X = 1f;
+                        mesh.colors1[chunk.Simulation[e]].X = 1f;
                     }
-                    if (blob.Chunks[i].SkinIndices is { Buffer.MemSize: > 0 } && blob.Chunks[i].SkinWeights is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinIndices is { Buffer.MemSize: > 0 } && chunk.SkinWeights is { Buffer.MemSize: > 0 })
                     {
                         mesh.weightCount = 4;
                     }
-                    if (blob.Chunks[i].SkinIndicesExt is { Buffer.MemSize: > 0 } && blob.Chunks[i].SkinWeightsExt is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinIndicesExt is { Buffer.MemSize: > 0 } && chunk.SkinWeightsExt is { Buffer.MemSize: > 0 })
                     {
                         mesh.weightCount += 4;
                     }
                     mesh.boneindices = new ushort[mesh.positions.Length, mesh.weightCount];
                     mesh.weights = new float[mesh.positions.Length, mesh.weightCount];
-                    if (blob.Chunks[i].SkinIndices is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinIndices is { Buffer.MemSize: > 0 })
                     {
-                        var stream = new MemoryStream(blob.Chunks[i].SkinIndices.Buffer.GetBytes());
+                        var stream = new MemoryStream(chunk.SkinIndices.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1331,9 +1365,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                             mesh.boneindices[e, 3] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeights is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinWeights is { Buffer.MemSize: > 0 })
                     {
-                        var stream = new MemoryStream(blob.Chunks[i].SkinWeights.Buffer.GetBytes());
+                        var stream = new MemoryStream(chunk.SkinWeights.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1345,9 +1379,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                             mesh.weights[e, 3] = br.ReadSingle();
                         }
                     }
-                    if (blob.Chunks[i].SkinIndicesExt is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinIndicesExt is { Buffer.MemSize: > 0 })
                     {
-                        var stream = new MemoryStream(blob.Chunks[i].SkinIndicesExt.Buffer.GetBytes());
+                        var stream = new MemoryStream(chunk.SkinIndicesExt.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1359,9 +1393,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                             mesh.boneindices[e, 7] = br.ReadByte();
                         }
                     }
-                    if (blob.Chunks[i].SkinWeightsExt is { Buffer.MemSize: > 0 })
+                    if (chunk.SkinWeightsExt is { Buffer.MemSize: > 0 })
                     {
-                        var stream = new MemoryStream(blob.Chunks[i].SkinWeightsExt.Buffer.GetBytes());
+                        var stream = new MemoryStream(chunk.SkinWeightsExt.Buffer.GetBytes());
 
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
@@ -1403,7 +1437,11 @@ namespace WolvenKit.Modkit.RED4.Tools
         /// <param name="cMesh"></param>
         public static void WriteGarmentParametersToMesh(ref List<RawMeshContainer> meshes, CMesh cMesh, bool exportGarmentSupport = false)
         {
-            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
+            var garmentBlob = cMesh.Parameters.FirstOrDefault(x =>
+            {
+                ArgumentNullException.ThrowIfNull(x);
+                return x.Chunk is garmentMeshParamGarment;
+            });
             if (garmentBlob != null && exportGarmentSupport)
             {
                 var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk;
@@ -1411,15 +1449,17 @@ namespace WolvenKit.Modkit.RED4.Tools
                 for (var i = 0; i < garmentBlobChunk.Chunks.Count && i < meshes.Count; i++)
                 {
                     var mesh = meshes[i];
+                    var chunk = garmentBlobChunk.Chunks[i];
 
                     ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
+                    ArgumentNullException.ThrowIfNull(chunk, nameof(chunk));
 
-                    if (garmentBlobChunk.Chunks[i]?.GarmentFlags is { Buffer.MemSize: > 0 })
+                    if (chunk.GarmentFlags is { Buffer.MemSize: > 0 })
                     {
                         meshes[i].garmentSupportWeight = new Vec4[mesh.positions.Length];
                         meshes[i].garmentSupportCap = new Vec4[mesh.positions.Length];
 
-                        var stream = new MemoryStream(garmentBlobChunk.Chunks[i].GarmentFlags.Buffer.GetBytes());
+                        var stream = new MemoryStream(chunk.GarmentFlags.Buffer.GetBytes());
                         var br = new BinaryReader(stream);
                         stream.Seek(0, SeekOrigin.Begin);
 

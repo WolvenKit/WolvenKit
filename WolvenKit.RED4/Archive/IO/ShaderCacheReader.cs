@@ -89,7 +89,7 @@ public class ShaderCacheReader
             var shaderHeader = br.BaseStream.ReadStruct<ShaderCacheShader>();
             var shader = br.ReadBytes((int)shaderHeader.shaderSize);
             var shaderFile = Path.Combine(shaderDirectory, $"{shaderHeader.GUID}.compiled_hlsl");
-            ParameterSet p = null;
+            ParameterSet? p = null;
             if (paramSets.ContainsKey(shaderHeader.paramsGUID))
             {
                 p = paramSets[shaderHeader.paramsGUID];
@@ -129,14 +129,14 @@ public class ShaderCacheReader
             Debug.Assert(startThing == startThing2);
 
             var shaderGUID = br.ReadUInt64();
-            Shader pixelShader = null;
+            Shader? pixelShader = null;
             if (shaders.ContainsKey(shaderGUID))
             {
                 pixelShader = shaders[shaderGUID];
             }
 
             shaderGUID = br.ReadUInt64();
-            Shader vertexShader = null;
+            Shader? vertexShader = null;
             if (shaders.ContainsKey(shaderGUID))
             {
                 vertexShader = shaders[shaderGUID];

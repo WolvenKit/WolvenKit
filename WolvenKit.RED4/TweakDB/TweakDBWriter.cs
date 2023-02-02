@@ -154,6 +154,8 @@ public class TweakDBWriter : Red4Writer
         var typeInfo = RedReflection.GetTypeInfo(instance);
         foreach (var propertyInfo in typeInfo.GetWritableProperties())
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
             BaseWriter.WriteLengthPrefixedString(propertyInfo.RedName);
 
             var redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags.Clone());

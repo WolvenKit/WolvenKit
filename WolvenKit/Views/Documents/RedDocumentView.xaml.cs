@@ -1,5 +1,5 @@
 using ReactiveUI;
-using WolvenKit.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {

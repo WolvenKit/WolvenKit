@@ -14,6 +14,8 @@ public class WorldTransformsWriter : Red4Writer
     {
         foreach (var wnt in wtb.Transforms)
         {
+            ArgumentNullException.ThrowIfNull(wnt);
+
             _writer.Write((int)(wnt.Translation.X / 0.0000076293945F));
             _writer.Write((int)(wnt.Translation.Y / 0.0000076293945F));
             _writer.Write((int)(wnt.Translation.Z / 0.0000076293945F));

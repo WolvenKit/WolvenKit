@@ -47,7 +47,7 @@ public class ExtendedPropertyInfo
     public int After { get; private set; } = -1;
 
     public string Name { get; }
-    public string RedName { get; private set; }
+    public string? RedName { get; private set; }
     public string RedType { get; }
     public Flags Flags => _flags != null ? _flags.Clone() : Flags.Empty;
     public bool IsIgnored { get; internal set; }
@@ -55,10 +55,10 @@ public class ExtendedPropertyInfo
     public bool IsDynamic { get; }
 
     public Type Type { get; }
-    public Type GenericType { get; }
+    public Type? GenericType { get; }
 
     public bool SerializeDefault { get; private set; }
-    public object DefaultValue { get; internal set; }
+    public object? DefaultValue { get; internal set; }
 
     private void ProcessAttribute(Attribute attribute)
     {

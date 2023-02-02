@@ -142,7 +142,7 @@ namespace WolvenKit.Modkit.RED4
 
         private bool ImportMlmask(RedRelativePath rawRelative, DirectoryInfo outDir)
         {
-            var mlmask = new MLMASK(new MlMaskContainer());
+            var mlmask = new MLMASK(new MlMaskContainer(), _loggerService);
             var ext = rawRelative.Extension;
             if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
             {
@@ -337,7 +337,7 @@ namespace WolvenKit.Modkit.RED4
                 using var redstream = new FileStream(redfile, FileMode.Open);
                 using var fileReader = new BinaryReader(redstream);
 
-                var cr2w = _wolvenkitFileService.ReadRed4File(fileReader);
+                var cr2w = _parserService.ReadRed4File(fileReader);
                 if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderTextureResource == null || xbm.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC)
                 {
                     return false;

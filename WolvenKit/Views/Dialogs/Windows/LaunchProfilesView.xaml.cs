@@ -12,7 +12,6 @@ using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
-using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
@@ -36,10 +35,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                 this.BindCommand(ViewModel, x => x.DeleteItemCommand, x => x.ToolbarDeleteItem)
                    .DisposeWith(disposables);
 
-                Observable
-                    .FromEventPattern(WizardControl, nameof(Syncfusion.Windows.Tools.Controls.WizardControl.Finish))
-                    .Subscribe(_ => ViewModel.OkCommand.Execute().Subscribe())
-                    .DisposeWith(disposables);
+                //Observable
+                //    .FromEventPattern(WizardControl, nameof(Syncfusion.Windows.Tools.Controls.WizardControl.Finish))
+                //    .Subscribe(_ => ViewModel.OkCommand.Execute().Subscribe())
+                //    .DisposeWith(disposables);
 
                 ProfilesListView.RowDragDropController.Dropped += OnRowDropped;
             });

@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProtoBuf.Meta;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
@@ -121,7 +120,7 @@ namespace WolvenKit.Utility
             #endregion
 
             //protobuf
-            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
+            //RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
 
             Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));

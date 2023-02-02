@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Archive.Buffer;
 
 public class CGIDataBuffer : IParseableBuffer
 {
-    public IRedType Data => null;
+    public IRedType? Data => null;
 
     public CUInt32 Uk1 { get; set; }
 

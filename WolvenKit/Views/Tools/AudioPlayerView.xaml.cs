@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using CommunityToolkit.Mvvm.Input;
-using WolvenKit.App.Helpers;
+using WolvenKit.App.Models;
 using WolvenKit.Core.Wwise;
 using WolvenKit.Views.Editor.AudioTool;
 using WPFSoundVisualizationLib;
@@ -23,17 +23,17 @@ public partial class AudioPlayerView
         waveformTimeline.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
     }
 
+    private bool CanPlay() => NAudioSimpleEngine.Instance.CanPlay;
     [RelayCommand(CanExecute = nameof(CanPlay))]
     private void Play() => NAudioSimpleEngine.Instance.Play();
-    private bool CanPlay() => NAudioSimpleEngine.Instance.CanPlay;
 
+    private bool CanPause => NAudioSimpleEngine.Instance.CanPause;
     [RelayCommand(CanExecute = nameof(CanPause))]
     private void Pause() => NAudioSimpleEngine.Instance.Pause();
-    private bool CanPause => NAudioSimpleEngine.Instance.CanPause;
 
+    private bool CanStop => NAudioSimpleEngine.Instance.CanStop;
     [RelayCommand(CanExecute = nameof(CanStop))]
     private void Stop() => NAudioSimpleEngine.Instance.Stop();
-    private bool CanStop => NAudioSimpleEngine.Instance.CanStop;
 
     private void NAudioSimpleEngine_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {

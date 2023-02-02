@@ -35,6 +35,8 @@ public partial class CR2WWriter : Red4Writer
         var typeInfo = RedReflection.GetTypeInfo(cls);
         foreach (var propertyInfo in typeInfo.GetWritableProperties())
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
             string redTypeName;
             var value = cls.GetProperty(propertyInfo.RedName);
             if (!propertyInfo.IsDynamic)

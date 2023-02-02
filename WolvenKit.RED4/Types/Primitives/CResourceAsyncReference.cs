@@ -1,4 +1,5 @@
 using WolvenKit.Common.FNV1A;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Types;
 
@@ -47,7 +48,7 @@ public readonly struct CResourceAsyncReference<T> : IRedResourceAsyncReference<T
         return true;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {
@@ -66,9 +67,11 @@ public readonly struct CResourceAsyncReference<T> : IRedResourceAsyncReference<T
 
     public uint GetPersistentHash()
     {
+        NotResolvableException.ThrowIfNotResolvable(_depotPath);
+
         using (var fnv = new FNV1A32HashAlgorithm())
         {
-            fnv.AppendString(_depotPath);
+            fnv.AppendString(_depotPath!);
             fnv.AppendString(_flags.ToString());
 
             return fnv.HashUInt32;

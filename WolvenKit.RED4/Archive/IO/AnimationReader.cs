@@ -18,15 +18,20 @@ public class AnimationReader : IBufferReader
             var animDataBuffers = new List<MemoryStream>();
             foreach (var chk in aas.AnimationDataChunks)
             {
+                if (chk == null)
+                {
+                    throw new Exception("Invalid data in animAnimSet");
+                }
+
                 var ms = new MemoryStream();
                 ms.Write(chk.Buffer.Buffer.GetBytes());
 
                 animDataBuffers.Add(ms);
             }
 
-            for (int i = 0; i < aas.Animations.Count; i++)
+            for (var i = 0; i < aas.Animations.Count; i++)
             {
-                if (aas.Animations[i].GetValue() is animAnimSetEntry entry && entry.Animation.GetValue() is animAnimation animation)
+                if (aas.Animations[i]?.GetValue() is animAnimSetEntry entry && entry.Animation.GetValue() is animAnimation animation)
                 {
                     if (animation.AnimBuffer.GetValue() is animAnimationBufferCompressed animBuff)
                     {

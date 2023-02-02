@@ -20,8 +20,10 @@ public class ContainerManagerNPCLootBagsVer2 : INodeData
         public List<Item> Items { get; set; }
         public ulong EntityId { get; set; }
 
-        public Entry()
+        public Entry(string baseClassName)
         {
+            Unk_BaseClassName = baseClassName;
+            Unknown2 = Array.Empty<byte>();
             Items = new List<Item>();
         }
     }
@@ -47,8 +49,7 @@ public class ContainerManagerNPCLootBagsVer2Parser : INodeParser
         var entryCount = reader.ReadVLQInt32();
         for (int i = 0; i < entryCount; i++)
         {
-            var entry = new ContainerManagerNPCLootBagsVer2.Entry();
-            entry.Unk_BaseClassName = reader.ReadLengthPrefixedString();
+            var entry = new ContainerManagerNPCLootBagsVer2.Entry(reader.ReadLengthPrefixedString());
             entry.Unknown2 = reader.ReadBytes(12);
 
             var subCount = reader.ReadByte();

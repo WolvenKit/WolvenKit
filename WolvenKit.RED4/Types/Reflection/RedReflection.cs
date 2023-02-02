@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types;
 
 public static class RedReflection
 {
-    private static readonly ConcurrentDictionary<Type, object> s_defaultValueCache = new();
+    private static readonly ConcurrentDictionary<Type, object?> s_defaultValueCache = new();
     private static readonly Dictionary<string, Type> s_redTypeCache = new();
     private static readonly Dictionary<Type, string> s_redTypeCacheReverse = new();
 
@@ -72,20 +72,20 @@ public static class RedReflection
 
     public static Dictionary<string, Type> GetTypes() => new(s_redTypeCache);
 
-    public static ExtendedPropertyInfo GetNativePropertyInfo(Type classType, string propertyName) =>
+    public static ExtendedPropertyInfo? GetNativePropertyInfo(Type classType, string propertyName) =>
         GetTypeInfo(classType).GetNativePropertyInfoByName(propertyName);
 
-    public static object GetClassDefaultValue(Type classType, ExtendedPropertyInfo propertyInfo) =>
-        RedTypeManager.Create(classType).GetProperty(propertyInfo.RedName);
+    public static object? GetClassDefaultValue(Type classType, ExtendedPropertyInfo propertyInfo) =>
+        propertyInfo.RedName != null ? RedTypeManager.Create(classType).GetProperty(propertyInfo.RedName) : null;
 
-    public static object GetDefaultValue(Type type)
+    public static object? GetDefaultValue(Type type)
     {
         if (s_defaultValueCache.TryGetValue(type, out var value))
         {
             return value;
         }
 
-        object result = null;
+        object? result = null;
         if (type.IsValueType)
         {
             result = System.Activator.CreateInstance(type);
@@ -96,14 +96,19 @@ public static class RedReflection
         return result;
     }
 
-    public static ExtendedPropertyInfo GetPropertyByRedName(Type type, string redPropertyName)
+    public static ExtendedPropertyInfo? GetPropertyByRedName(Type? type, string redPropertyName)
     {
+        if (type is null)
+        {
+            return null;
+        }
+
         var typeInfo = GetTypeInfo(type);
 
         return typeInfo.PropertyInfos.FirstOrDefault(p => p.RedName == redPropertyName);
     }
 
-    public static bool IsDefault(Type clsType, string redPropertyName, object value)
+    public static bool IsDefault(Type clsType, string redPropertyName, object? value)
     {
         var extendedPropertyInfo = GetPropertyByRedName(clsType, redPropertyName);
         if (extendedPropertyInfo == null)
@@ -114,7 +119,7 @@ public static class RedReflection
         return IsDefault(clsType, extendedPropertyInfo, value);
     }
 
-    public static bool IsDefault(Type clsType, ExtendedPropertyInfo extendedPropertyInfo, object value)
+    public static bool IsDefault(Type clsType, ExtendedPropertyInfo extendedPropertyInfo, object? value)
     {
         if (!extendedPropertyInfo._isDefaultSet)
         {
@@ -125,8 +130,14 @@ public static class RedReflection
         return Equals(extendedPropertyInfo.DefaultValue, value);
     }
 
-    public static string GetTypeRedName(Type type) =>
-        s_redTypeCacheReverse.ContainsKey(type) ? s_redTypeCacheReverse[type] : null;
+    public static string? GetTypeRedName(Type type)
+    {
+        if (s_redTypeCacheReverse.TryGetValue(type, out var result))
+        {
+            return result;
+        }
+        return null;
+    }
 
     public static string GetEnumRedName(Type type) => s_redEnumCache.FirstOrDefault(t => t.Value.Type == type).Key;
 
@@ -140,7 +151,7 @@ public static class RedReflection
             return (tuple.Item1, tuple.Item2.Clone());
         }
 
-        Type type = null;
+        Type? type = null;
         List<int> flagValues = new();
 
         var subTypes = redTypeName.Split(':');
@@ -220,6 +231,11 @@ public static class RedReflection
             }
         }
 
+        if (type == null)
+        {
+            throw new TypeNotFoundException(redTypeName);
+        }
+
         flagValues.Reverse();
         var flags = new Flags(flagValues.ToArray());
 
@@ -228,7 +244,7 @@ public static class RedReflection
         return (type, flags);
     }
 
-    public static string GetRedTypeFromCSType(Type type, Flags flags = null)
+    public static string GetRedTypeFromCSType(Type type, Flags? flags = null)
     {
         flags ??= Flags.Empty;
 
@@ -358,7 +374,7 @@ public static class RedReflection
 
     public static Type GetFullType(List<RedTypeInfo> redTypeInfos)
     {
-        Type result = null;
+        Type? result = null;
 
         for (var i = redTypeInfos.Count - 1; i >= 0; i--)
         {
@@ -370,23 +386,34 @@ public static class RedReflection
                 }
                 else if (redTypeInfos[i].BaseRedType is BaseRedType.Enum or BaseRedType.BitField)
                 {
-                    result = redTypeInfos[i].MappedType.MakeGenericType(redTypeInfos[i].RedObjectType);
+                    ArgumentNullException.ThrowIfNull(redTypeInfos[i].MappedType);
+
+                    result = redTypeInfos[i].MappedType!.MakeGenericType(redTypeInfos[i].RedObjectType);
                 }
                 else
                 {
-                    result = redTypeInfos[i].MappedType;
+                    ArgumentNullException.ThrowIfNull(redTypeInfos[i].MappedType);
+
+                    result = redTypeInfos[i].MappedType!;
                 }
             }
             else
             {
-                result = redTypeInfos[i].MappedType.MakeGenericType(result);
+                ArgumentNullException.ThrowIfNull(redTypeInfos[i].MappedType);
+
+                result = redTypeInfos[i].MappedType!.MakeGenericType(result);
             }
+        }
+
+        if (result == null)
+        {
+            throw new TypeNotFoundException("");
         }
 
         return result;
     }
 
-    public static List<RedTypeInfo> GetRedTypeInfos(Type type, Flags flags = null) =>
+    public static List<RedTypeInfo> GetRedTypeInfos(Type type, Flags? flags = null) =>
         GetRedTypeInfos(GetRedTypeFromCSType(type, flags));
 
     public static List<RedTypeInfo> GetRedTypeInfos(string redTypeName)

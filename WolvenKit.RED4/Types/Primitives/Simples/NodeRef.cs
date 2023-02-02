@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Types;
 
@@ -13,11 +14,11 @@ public readonly struct NodeRef : IRedString, IRedPrimitive<NodeRef>, IEquatable<
 
     private NodeRef(ulong value) => _hash = value;
 
-    public string GetResolvedText() => NodeRefPool.ResolveHash(_hash);
-
+    public string? GetResolvedText() => NodeRefPool.ResolveHash(_hash);
+    public bool IsResolvable => NodeRefPool.ResolveHash(_hash) != null;
 
     public static implicit operator NodeRef(string value) => new(NodeRefPool.AddOrGetHash(value));
-    public static implicit operator string(NodeRef value) => value.GetResolvedText();
+    public static implicit operator string?(NodeRef value) => value.GetResolvedText();
 
     public static implicit operator NodeRef(ulong value) => new(value);
     public static implicit operator ulong(NodeRef value) => value._hash;
@@ -27,7 +28,7 @@ public readonly struct NodeRef : IRedString, IRedPrimitive<NodeRef>, IEquatable<
 
     public ulong GetRedHash() => _hash;
 
-    public int CompareTo(object value)
+    public int CompareTo(object? value)
     {
         if (value == null)
         {
@@ -57,7 +58,7 @@ public readonly struct NodeRef : IRedString, IRedPrimitive<NodeRef>, IEquatable<
 
     public override int GetHashCode() => _hash.GetHashCode();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {
@@ -82,6 +83,6 @@ public readonly struct NodeRef : IRedString, IRedPrimitive<NodeRef>, IEquatable<
         return true;
     }
 
-    public string GetString() => this;
+    public string? GetString() => this;
     public override string ToString() => (GetResolvedText() is var text && !string.IsNullOrEmpty(text)) ? text : _hash.ToString();
 }

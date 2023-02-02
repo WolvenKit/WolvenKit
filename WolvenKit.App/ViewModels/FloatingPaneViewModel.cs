@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.ViewModels.Shell;
+﻿using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.App.ViewModels;
 public abstract class FloatingPaneViewModel : PaneViewModel

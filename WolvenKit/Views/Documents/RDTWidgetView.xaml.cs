@@ -9,15 +9,15 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Prism.Commands;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Layout.inkWidgets;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {
@@ -49,8 +49,6 @@ namespace WolvenKit.Views.Documents
                         x => x.TextWidgets.Values,
                         x => x.TextWidgetList.ItemsSource)
                     .DisposeWith(disposables);
-
-                ExportWidgetCommand = new DelegateCommand<object>((w) => ViewModel.ExportWidget((inkWidget)w));
 
                 if (!ResourcesLoaded)
                 {
@@ -125,7 +123,7 @@ namespace WolvenKit.Views.Documents
 
                 WidgetExportButtons.SetCurrentValue(ItemsControl.ItemsSourceProperty, Widgets.Select(x => x.Widget));
 
-                foreach (var animation in ViewModel.inkAnimations)
+                foreach (var animation in ViewModel.InkAnimations)
                 {
                     Animations.Add(new inkControlAnimation(animation, this));
                 }
@@ -137,8 +135,11 @@ namespace WolvenKit.Views.Documents
         }
 
         // Image Preview
-
-        public ICommand ExportWidgetCommand { get; set; }
+        [RelayCommand]
+        private void ExportWidget(object w)
+        {
+            ViewModel.ExportWidget((inkWidget)w);
+        }
 
         private System.Windows.Point origin;
         private System.Windows.Point start;

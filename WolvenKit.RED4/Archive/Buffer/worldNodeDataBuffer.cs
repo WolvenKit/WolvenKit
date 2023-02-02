@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Archive.Buffer;
 
 public class worldNodeDataBuffer : CArray<worldNodeData>, IParseableBuffer, IRedType
 {
-    public IRedType Data => null;
+    public IRedType? Data => null;
 
     public Dictionary<int, List<worldNodeData>> Lookup = new();
 
@@ -14,7 +14,7 @@ public class worldNodeDataBuffer : CArray<worldNodeData>, IParseableBuffer, IRed
     }
 }
 
-public class RedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IRedType
+public class RedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IRedType where TKey : notnull
 {
 
 }

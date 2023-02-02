@@ -1,117 +1,120 @@
 using System;
-using System.Reactive.Linq;
 using System.Windows.Media;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
+using Octokit;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Services;
+using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Shell
+namespace WolvenKit.App.ViewModels.Shell;
+
+public partial class StatusBarViewModel : ObservableObject
 {
-    public class StatusBarViewModel : ReactiveObject
+    private const string s_noProjectLoaded =
+        "NO PROJECT LOADED | Create a New Project or Open an existing Project to get started with WolvenKit";
+
+    public ISettingsManager _settingsManager { get; set; }
+    private readonly ILoggerService _loggerService;
+
+    private readonly IProjectManager _projectManager;
+    private readonly IProgressService<double> _progressService;
+
+
+    #region Constructors
+
+    public StatusBarViewModel(
+        ISettingsManager settingsManager,
+        IProjectManager projectManager,
+        ILoggerService loggerService,
+        IProgressService<double> progressService
+        )
     {
-        #region Fields
+        _settingsManager = settingsManager;
+        _projectManager = projectManager;
+        _progressService = progressService;
+        _loggerService = loggerService;
 
-        private const string s_noProjectLoaded =
-            "NO PROJECT LOADED | Create a New Project or Open an existing Project to get started with WolvenKit";
+        IsLoading = false;
+        LoadingString = "";
+        _currentProject = "";
 
-        public ISettingsManager _settingsManager { get; set; }
-        private readonly ILoggerService _loggerService;
+        _projectManager.ActiveProjectChanged += ProjectManager_ActiveProjectChanged;
 
-        private readonly IProjectManager _projectManager;
-        private readonly IProgressService<double> _progressService;
+        _progressService.ProgressChanged += ProgressService_ProgressChanged;
+        _progressService.PropertyChanged += ProgressService_PropertyChanged;
+    }
 
-        private readonly ObservableAsPropertyHelper<double> _progress;
-
-        private readonly ObservableAsPropertyHelper<string> _currentProject;
-
-        #endregion Fields
-
-        #region Constructors
-
-        public StatusBarViewModel(
-            ISettingsManager settingsManager,
-            IProjectManager projectManager,
-            ILoggerService loggerService,
-            IProgressService<double> progressService
-            )
+    private void ProgressService_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(IProgressService<double>.IsIndeterminate))
         {
-            _settingsManager = settingsManager;
-            _projectManager = projectManager;
-            _progressService = progressService;
-            _loggerService = loggerService;
-
-            IsLoading = false;
-            LoadingString = "";
-
-
-            _projectManager
-                .WhenAnyValue(
-                    x => x.ActiveProject,
-                    project => project != null ? project.Name : s_noProjectLoaded)
-                .ToProperty(
-                    this,
-                    x => x.CurrentProject,
-                    out _currentProject);
-
-            _ = Observable.FromEventPattern<EventHandler<double>, double>(
-                handler => _progressService.ProgressChanged += handler,
-                handler => _progressService.ProgressChanged -= handler)
-                .Select(_ => _.EventArgs * 100)
-                .ToProperty(this, x => x.Progress, out _progress);
-
-            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => DispatcherHelper.RunOnMainThread(() => IsIndeterminate = b));
-            _ = _progressService.WhenAnyValue(x => x.Status).Subscribe(s =>
+            DispatcherHelper.RunOnMainThread(() =>
             {
-                DispatcherHelper.RunOnMainThread(() =>
-                {
-                    Status = s.ToString();
-                    switch (s)
-                    {
-                        case EStatus.Running:
-                            BarColor = Brushes.DarkOrange;
-                            break;
-                        case EStatus.Ready:
-                            if (new BrushConverter().ConvertFromString("#951C2D") is SolidColorBrush brush)
-                            {
-                                BarColor = brush;
-                            }
-
-                            break;
-                        default:
-                            break;
-                    }
-                });
-
+                IsIndeterminate = _progressService.IsIndeterminate;
             });
         }
+        else if (e.PropertyName == nameof(IProgressService<double>.Status))
+        {
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                Status = _progressService.Status.ToString();
+                switch (_progressService.Status)
+                {
+                    case EStatus.Running:
+                        BarColor = Brushes.DarkOrange;
+                        break;
+                    case EStatus.Ready:
+                        if (new BrushConverter().ConvertFromString("#951C2D") is SolidColorBrush brush)
+                        {
+                            BarColor = brush;
+                        }
 
-        #endregion Constructors
-
-        #region Properties
-
-        public double Progress => _progress.Value;
-
-        [Reactive] public bool IsIndeterminate { get; set; }
-
-        public string? InternetConnected { get; private set; }
-
-        public bool IsLoading { get; set; }
-
-        public string LoadingString { get; set; }
-
-        public string CurrentProject => _currentProject.Value;
-
-        [Reactive] public string Status { get; set; } = "Ready";
-
-        public object VersionNumber => _settingsManager.GetVersionNumber();
-
-
-        [Reactive] public Brush BarColor { get; set; } = Brushes.Black;
-
-        #endregion Properties
-
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
     }
+
+    private void ProgressService_ProgressChanged(object? sender, double e)
+    {
+        Progress = e * 100;
+    }
+
+    private void ProjectManager_ActiveProjectChanged(object? sender, ActiveProjectChangedEventArgs e)
+    {
+        CurrentProject = e.Project != null ? e.Project.Name : s_noProjectLoaded;
+    }
+
+
+    #endregion Constructors
+
+    #region Properties
+
+    [ObservableProperty]
+    private double _progress;
+
+    [ObservableProperty]
+    private bool _isIndeterminate;
+
+    public string? InternetConnected { get; private set; }
+
+    public bool IsLoading { get; set; }
+
+    public string LoadingString { get; set; }
+
+    [ObservableProperty] private string _currentProject;
+
+    [ObservableProperty] private string _status = "Ready";
+
+    public object VersionNumber => _settingsManager.GetVersionNumber();
+
+
+    [ObservableProperty] private Brush _barColor = Brushes.Black;
+
+    #endregion Properties
+
 }

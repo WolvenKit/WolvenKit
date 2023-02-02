@@ -50,7 +50,7 @@ public class FlatsPool : IEnumerable<(TweakDBID id, IRedType value)>
         _flatDictionary.Add(keyHash, redType);
     }
 
-    private void AddLookUp(string name)
+    private void AddLookUp(string? name)
     {
         if (name == null)
         {
@@ -81,13 +81,13 @@ public class FlatsPool : IEnumerable<(TweakDBID id, IRedType value)>
             .Select(x => (TweakDBID)x)
             .ToList();
 
-    public IRedType GetValue(string name)
+    public IRedType? GetValue(string name)
     {
         var id = Crc32Algorithm.Compute(name) + ((ulong)name.Length << 32);
         return GetValue(id);
     }
 
-    public IRedType GetValue(ulong id)
+    public IRedType? GetValue(ulong id)
     {
         if (_flatDictionary.ContainsKey(id))
         {

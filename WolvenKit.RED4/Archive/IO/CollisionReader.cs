@@ -173,7 +173,7 @@ public class CollisionReader : Red4Reader, IBufferReader
                 var shapeCount = _reader.ReadUInt16();
                 for (int shapeIndex = shapeStartIndex; shapeIndex < shapeStartIndex + shapeCount; shapeIndex++)
                 {
-                    data.Actors[i].Shapes.Add(shapes[shapeIndex]);
+                    a.Shapes.Add(shapes[shapeIndex]);
                 }
 
                 var scaleIndex = _reader.ReadInt16();

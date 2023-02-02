@@ -92,7 +92,7 @@ namespace WolvenKit.Core.Extensions
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The string to write.</param>
-        public static void WriteLengthPrefixedString(this BinaryWriter writer, string value)
+        public static void WriteLengthPrefixedString(this BinaryWriter writer, string? value)
         {
             if (string.IsNullOrEmpty(value))
             {

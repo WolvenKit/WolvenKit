@@ -8,15 +8,15 @@ public class SharedDataBuffer : IRedBufferWrapper, IRedPrimitive, IEquatable<Sha
     public RedBuffer Buffer { get; set; }
 
     [Browsable(false)]
-    public IParseableBuffer Data
+    public IParseableBuffer? Data
     {
         get => Buffer.Data;
         set => Buffer.Data = value;
     }
 
-    public Red4File File { get; set; }
+    public Red4File? File { get; set; }
 
-    public bool Equals(SharedDataBuffer other)
+    public bool Equals(SharedDataBuffer? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -36,7 +36,7 @@ public class SharedDataBuffer : IRedBufferWrapper, IRedPrimitive, IEquatable<Sha
         return true;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

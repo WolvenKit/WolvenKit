@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.RED4.Archive;
 
-namespace WolvenKit.Functionality.Converters;
+namespace WolvenKit.App.Converters;
 
 public class JsonArchiveConverter : JsonConverter<ICyberGameArchive>
 {

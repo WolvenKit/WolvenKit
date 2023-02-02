@@ -41,6 +41,8 @@ namespace WolvenKit.Common.Conversion
                 var imc = (inkMultiChildren)compoundWidget.Children.GetValue();
                 foreach (var childHandle in imc.Children)
                 {
+                    ArgumentNullException.ThrowIfNull(childHandle);
+
                     var child = (inkWidget)childHandle.GetValue();
                     WriteWidget(writer, child);
                 }
@@ -105,6 +107,8 @@ namespace WolvenKit.Common.Conversion
                             //writer.WriteStartElement("bindings");
                             foreach (var ipb in ary)
                             {
+                                ArgumentNullException.ThrowIfNull(ipb);
+
                                 //writer.WriteStartElement("propertyBinding");
                                 writer.WriteAttributeString(ipb.PropertyName + ".binding", ipb.StylePath);
                                 //writer.WriteEndElement();
@@ -135,7 +139,7 @@ namespace WolvenKit.Common.Conversion
                             //writer.WriteAttributeString(property + propertyName + ".Y", vector2.Y.ToString());
                             break;
                         default:
-                            writer.WriteAttributeString(property + propertyName, propertyValue.ToString());
+                            writer.WriteAttributeString(property + propertyName, propertyValue?.ToString());
                             break;
                     }
                 }
@@ -150,13 +154,13 @@ namespace WolvenKit.Common.Conversion
                         writer.WriteStartElement("effects");
                         foreach (var handle in effects)
                         {
+                            ArgumentNullException.ThrowIfNull(handle);
+
                             var effect = handle.GetValue();
-                            if (effect != null)
-                            {
-                                writer.WriteStartElement(effect.GetType().Name);
-                                WriteWidgetAttributes(writer, effect);
-                                writer.WriteEndElement();
-                            }
+
+                            writer.WriteStartElement(effect.GetType().Name);
+                            WriteWidgetAttributes(writer, effect);
+                            writer.WriteEndElement();
                         }
                         writer.WriteEndElement();
                         break;
@@ -165,13 +169,13 @@ namespace WolvenKit.Common.Conversion
                         writer.WriteStartElement("secondaryControllers");
                         foreach (var handle in controllers)
                         {
+                            ArgumentNullException.ThrowIfNull(handle);
+
                             var controller = handle.GetValue();
-                            if (controller != null)
-                            {
-                                writer.WriteStartElement(controller.GetType().Name);
-                                WriteWidgetAttributes(writer, controller);
-                                writer.WriteEndElement();
-                            }
+
+                            writer.WriteStartElement(controller.GetType().Name);
+                            WriteWidgetAttributes(writer, controller);
+                            writer.WriteEndElement();
                         }
                         writer.WriteEndElement();
                         break;
@@ -180,13 +184,13 @@ namespace WolvenKit.Common.Conversion
                         writer.WriteStartElement("userData");
                         foreach (var handle in ary)
                         {
+                            ArgumentNullException.ThrowIfNull(handle);
+
                             var item = handle.GetValue();
-                            if (item != null)
-                            {
-                                writer.WriteStartElement(item.GetType().Name);
-                                WriteWidgetAttributes(writer, item);
-                                writer.WriteEndElement();
-                            }
+
+                            writer.WriteStartElement(item.GetType().Name);
+                            WriteWidgetAttributes(writer, item);
+                            writer.WriteEndElement();
                         }
                         writer.WriteEndElement();
                         break;

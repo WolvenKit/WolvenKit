@@ -58,10 +58,7 @@ public class PersistencySystem2Reader : Red4Reader
             }
 
             var propertyInfo = ClassHashHelper.GetPropertyInfo(instance.GetType(), propNameHash);
-            if (propertyInfo == null)
-            {
-                throw new Exception();
-            }
+            ArgumentNullException.ThrowIfNull(propertyInfo?.RedName);
 
             var redTypeHash = ClassHashHelper.GetRedTypeHash(propertyInfo);
             var propTypeHash = BaseReader.ReadUInt64();
@@ -124,7 +121,10 @@ public class PersistencySystem2Reader : Red4Reader
     public override IRedHandle ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
         var type = RedReflection.GetFullType(redTypeInfos);
-        var result = (IRedHandle)Activator.CreateInstance(type);
+        if (Activator.CreateInstance(type) is not IRedHandle result)
+        {
+            throw new Exception();
+        }
 
         var clsType = ClassHashHelper.GetTypeFromHash(BaseReader.ReadUInt64())!;
         result.SetValue(ReadClass(clsType, (uint)Remaining));
@@ -154,6 +154,8 @@ public class PersistencySystem2Writer : Red4Writer
         var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
         foreach (var propertyInfo in typeInfo.GetWritableProperties())
         {
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+
             var value = instance.GetProperty(propertyInfo.RedName);
             if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(instance.GetType(), propertyInfo, value))
             {

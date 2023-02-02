@@ -26,7 +26,7 @@ public readonly struct CFloat : IRedPrimitive<float>, IEquatable<CFloat>, IRedIn
 
     public override int GetHashCode() => _value.GetHashCode();
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

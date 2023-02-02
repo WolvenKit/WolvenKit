@@ -4,7 +4,7 @@ public class Shader
 {
     public ulong GUID;
     public ulong ParamsGUID;
-    public ParameterSet Parameters;
+    public ParameterSet? Parameters;
     public string FileName;
     public uint Size;
 }
@@ -15,8 +15,8 @@ public class Extra
     public uint EndThing;
     public string ShaderInfo;
     public string TemplateName;
-    public Shader PixelShader;
-    public Shader VertexShader;
+    public Shader? PixelShader;
+    public Shader? VertexShader;
     public ulong MaterialGUID;
     public ulong uk1;
     public List<ulong> Flags1;

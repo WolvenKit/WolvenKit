@@ -1,10 +1,9 @@
 
 
-using ReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs;
+
+public class ExtractAmbigiousDialogViewModel : ObservableObject
 {
-    public class ExtractAmbigiousDialogViewModel : ReactiveObject
-    {
-    }
 }

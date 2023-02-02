@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Converters
 {
@@ -41,10 +41,6 @@ namespace WolvenKit.Converters
             }
             if (item is ChunkViewModel vm)
             {
-                if (vm.PropertyType == null)
-                {
-                    return RedTypeViewer;
-                }
                 if (vm.PropertyType.IsAssignableTo(typeof(NodeRef)))
                 {
                     return RedNodeRefEditor;
@@ -63,7 +59,7 @@ namespace WolvenKit.Converters
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
                 {
-                    if (vm.propertyName == "chunkMask")
+                    if (vm.PropertyName == "chunkMask")
                     {
                         return RedChunkMaskEditor;
                     }

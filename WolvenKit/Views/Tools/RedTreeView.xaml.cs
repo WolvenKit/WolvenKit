@@ -5,12 +5,12 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Interaction;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Tools
 {

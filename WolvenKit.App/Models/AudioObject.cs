@@ -1,4 +1,4 @@
-namespace WolvenKit.App.Helpers;
+namespace WolvenKit.App.Models;
 
 public class AudioObject
 {

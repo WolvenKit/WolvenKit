@@ -29,6 +29,8 @@ public class entEntityTemplatePreProcessor : IPreProcessor
         {
             foreach (var component in entEntityTemplate.Components)
             {
+                ArgumentNullException.ThrowIfNull(component);
+
                 rp.Chunks.Add(component);
             }
         }

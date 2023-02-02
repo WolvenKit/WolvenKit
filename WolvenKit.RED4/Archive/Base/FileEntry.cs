@@ -1,14 +1,11 @@
-using ProtoBuf;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive;
-
-[ProtoContract]
 public class FileEntry : ICyberGameFile
 {
-    private IHashService _hashService;
+    private IHashService? _hashService;
 
     #region Constructors
 
@@ -42,36 +39,29 @@ public class FileEntry : ICyberGameFile
         SHA1Hash = sha1hash;
     }
 
-    [ProtoAfterDeserialization]
-    public void AfterDeserializationCallback()
-    {
-
-    }
-
     #endregion Constructors
 
     #region Properties
 
     public Archive Archive { get; set; }
 
-
-    [ProtoMember(1)] public ulong NameHash64 { get; set; }
-    [ProtoMember(2)] public DateTime Timestamp { get; set; }
-    [ProtoMember(3)] public uint NumInlineBufferSegments { get; set; }
-    [ProtoMember(4)] public uint SegmentsStart { get; set; }
-    [ProtoMember(5)] public uint SegmentsEnd { get; set; }
-    [ProtoMember(6)] public uint ResourceDependenciesStart { get; set; }
-    [ProtoMember(7)] public uint ResourceDependenciesEnd { get; set; }
-    [ProtoMember(8)] public byte[] SHA1Hash { get; set; }
-    [ProtoMember(9)] public uint Size { get; set; }
-    [ProtoMember(10)] public uint ZSize { get; set; }
-    [ProtoMember(11)] public string GuessedExtension { get; set; }
+    public ulong NameHash64 { get; set; }
+    public DateTime Timestamp { get; set; }
+    public uint NumInlineBufferSegments { get; set; }
+    public uint SegmentsStart { get; set; }
+    public uint SegmentsEnd { get; set; }
+    public uint ResourceDependenciesStart { get; set; }
+    public uint ResourceDependenciesEnd { get; set; }
+    public byte[] SHA1Hash { get; set; }
+    public uint Size { get; set; }
+    public uint ZSize { get; set; }
+    public string GuessedExtension { get; set; }
 
     public ulong Key => NameHash64;
-    public string Name => !string.IsNullOrEmpty(GetNameString()) ? GetNameString() : NameHash64.ToString();
+    public string Name => GetNameString(NameHash64.ToString())!;
     public string BytesAsString => BitConverter.ToString(SHA1Hash);
-    public string FileName => string.IsNullOrEmpty(GetNameString()) ? $"{NameHash64}.bin" : GetNameString();
-    public string NameOrHash => string.IsNullOrEmpty(GetNameString()) ? $"{NameHash64}" : GetNameString();
+    public string FileName => GetNameString($"{NameHash64}.bin")!;
+    public string NameOrHash => GetNameString(NameHash64.ToString())!;
     public string Extension => GetExtension();
 
     public string ShortName => Path.GetFileName(FileName);
@@ -118,19 +108,24 @@ public class FileEntry : ICyberGameFile
         await ar.CopyFileToStreamAsync(output, NameHash64, decompressBuffers);
     }
 
-    private string GetNameString()
+    private string? GetNameString(string? defaultStr = null)
     {
-        var _nameStr = _hashService?.Get(NameHash64);
+        var nameStr = _hashService?.Get(NameHash64);
+        if (nameStr == null)
+        {
+            return defaultStr;
+        }
+
         // x-platform support
         if (System.Runtime.InteropServices.RuntimeInformation
             .IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
         {
-            if (!string.IsNullOrEmpty(_nameStr) && _nameStr.Contains('\\'))
+            if (!string.IsNullOrEmpty(nameStr) && nameStr.Contains('\\'))
             {
-                _nameStr = _nameStr.Replace('\\', Path.DirectorySeparatorChar);
+                nameStr = nameStr.Replace('\\', Path.DirectorySeparatorChar);
             }
         }
-        return _nameStr;
+        return nameStr;
     }
 
 

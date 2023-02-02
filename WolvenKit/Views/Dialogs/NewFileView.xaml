@@ -66,13 +66,12 @@
             <syncfusion:SfDataGrid.Columns>
 
                 <syncfusion:GridTemplateColumn
-                    MappingName="Name"
-                    AllowSorting="True"
                     AllowFiltering="True"
+                    AllowSorting="True"
                     ColumnSizer="AutoLastColumnFill"
                     HeaderText="File"
                     IsReadOnly="True"
-                    >
+                    MappingName="Name">
                     <syncfusion:GridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid Margin="0,4" VerticalAlignment="Center">

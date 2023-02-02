@@ -2,12 +2,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Common.Model
 {
-    public class RedFileSystemModel : ReactiveObject
+    public class RedFileSystemModel : ObservableObject
     {
         private bool _isExpanded;
         private string? _name;
@@ -33,7 +33,7 @@ namespace WolvenKit.Common.Model
         public bool IsExpanded
         {
             get => _isExpanded;
-            set => this.RaiseAndSetIfChanged(ref _isExpanded, value);
+            set => SetProperty(ref _isExpanded, value);
         }
     }
 }

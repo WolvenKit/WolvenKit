@@ -8,7 +8,7 @@ public class DataBuffer : IRedBufferWrapper, IRedBufferPointer, IRedPrimitive, I
     public RedBuffer Buffer { get; set; }
 
     [Browsable(false)]
-    public IParseableBuffer Data
+    public IParseableBuffer? Data
     {
         get => Buffer.Data;
         set => Buffer.Data = value;
@@ -28,7 +28,7 @@ public class DataBuffer : IRedBufferWrapper, IRedBufferPointer, IRedPrimitive, I
     public RedBuffer GetValue() => Buffer;
     public void SetValue(RedBuffer instance) => Buffer = instance;
 
-    public bool Equals(DataBuffer other)
+    public bool Equals(DataBuffer? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -48,7 +48,7 @@ public class DataBuffer : IRedBufferWrapper, IRedBufferPointer, IRedPrimitive, I
         return true;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

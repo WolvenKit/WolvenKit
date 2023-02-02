@@ -3,10 +3,11 @@ using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Extensions;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.HomePage;
+using WolvenKit.App.ViewModels.HomePage.Pages;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.HomePage
@@ -34,7 +35,7 @@ namespace WolvenKit.Views.HomePage
                     .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.CloseHomePage,
+                        viewModel => viewModel.CloseHomePageCommand,
                         view => view.ToEditorButton)
                     .DisposeWith(disposables);
             });

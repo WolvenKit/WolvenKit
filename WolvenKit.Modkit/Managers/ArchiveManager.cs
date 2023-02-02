@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using DynamicData;
 using DynamicData.Kernel;
-using ProtoBuf;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -17,7 +15,6 @@ using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
-    [ProtoContract]
     public class ArchiveManager : RED4ArchiveManager
     {
         #region Fields
@@ -33,6 +30,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         private readonly SourceList<RedFileSystemModel> _rootCache;
 
         private readonly SourceList<RedFileSystemModel> _modCache;
+        private bool _isManagerLoaded;
 
         private static readonly List<string> s_loadOrder = new() { "memoryresident", "basegame", "audio", "lang" };
 
@@ -54,10 +52,13 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region properties
 
-        [Reactive] public override bool IsManagerLoaded { get; set; }
+        public override bool IsManagerLoaded
+        {
+            get => _isManagerLoaded;
+            set => SetProperty(ref _isManagerLoaded, value);
+        }
 
 
-        [ProtoMember(1)]
         public override SourceCache<IGameArchive, string> Archives { get; set; } = new(x => x.ArchiveAbsolutePath);
 
         public override SourceCache<IGameArchive, string> ModArchives { get; set; } = new(x => x.ArchiveAbsolutePath);
@@ -201,7 +202,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 sw.Restart();
 
-                RebuildGameRoot();
+                RebuildGameRoot(_hashService);
 
                 _logger.Debug($"Finished rebuilding root in {sw.ElapsedMilliseconds}ms");
 

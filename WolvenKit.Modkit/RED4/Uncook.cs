@@ -566,15 +566,12 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private static bool HandleOpus(OpusExportArgs opusExportArgs)
+        private bool HandleOpus(OpusExportArgs opusExportArgs)
         {
             ArgumentNullException.ThrowIfNull(opusExportArgs.ModFolderPath, nameof(opusExportArgs.ModFolderPath));
             ArgumentNullException.ThrowIfNull(opusExportArgs.RawFolderPath, nameof(opusExportArgs.RawFolderPath));
 
-            OpusTools opusTools = new(
-                opusExportArgs.ModFolderPath,
-                opusExportArgs.RawFolderPath,
-                opusExportArgs.UseMod);
+            OpusTools opusTools = new( opusExportArgs.ModFolderPath, opusExportArgs.RawFolderPath, _archiveManager, opusExportArgs.UseMod);
 
             // If More than 0 selected from opusinfo export to wem.
             if (opusExportArgs.SelectedForExport.Count > 0)
@@ -590,7 +587,7 @@ namespace WolvenKit.Modkit.RED4
 
         private string SerializeMainFile(Stream redstream)
         {
-            if (_wolvenkitFileService.TryReadRed4File(redstream, out var cr2w))
+            if (_parserService.TryReadRed4File(redstream, out var cr2w))
             {
                 var dto = new RedFileDto(cr2w);
                 var json = RedJsonSerializer.Serialize(dto);
@@ -606,7 +603,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (!_wolvenkitFileService.TryReadRed4File(redStream, out var cr2w))
+            if (!_parserService.TryReadRed4File(redStream, out var cr2w))
             {
                 return false;
             }
@@ -627,19 +624,19 @@ namespace WolvenKit.Modkit.RED4
                 ExtractParts(inkTextureAtlas.Texture.DepotPath, inkTextureAtlas.Parts, Path.Combine(outFile.FullName, "main"));
             }
 
-            if (inkTextureAtlas.Slots[0] != null && inkTextureAtlas.Slots[0].Texture.DepotPath != CName.Empty)
+            if (inkTextureAtlas.Slots[0] != null && inkTextureAtlas.Slots[0]!.Texture.DepotPath != CName.Empty)
             {
-                ExtractParts(inkTextureAtlas.Slots[0].Texture.DepotPath, inkTextureAtlas.Slots[0].Parts, Path.Combine(outFile.FullName, "2160p"));
+                ExtractParts(inkTextureAtlas.Slots[0]!.Texture.DepotPath, inkTextureAtlas.Slots[0]!.Parts, Path.Combine(outFile.FullName, "2160p"));
             }
 
-            if (inkTextureAtlas.Slots[1] != null && inkTextureAtlas.Slots[1].Texture.DepotPath != CName.Empty)
+            if (inkTextureAtlas.Slots[1] != null && inkTextureAtlas.Slots[1]!.Texture.DepotPath != CName.Empty)
             {
-                ExtractParts(inkTextureAtlas.Slots[1].Texture.DepotPath, inkTextureAtlas.Slots[1].Parts, Path.Combine(outFile.FullName, "1080p"));
+                ExtractParts(inkTextureAtlas.Slots[1]!.Texture.DepotPath, inkTextureAtlas.Slots[1]!.Parts, Path.Combine(outFile.FullName, "1080p"));
             }
 
-            if (inkTextureAtlas.Slots[2] != null && inkTextureAtlas.Slots[2].Texture.DepotPath != CName.Empty)
+            if (inkTextureAtlas.Slots[2] != null && inkTextureAtlas.Slots[2]!.Texture.DepotPath != CName.Empty)
             {
-                ExtractParts(inkTextureAtlas.Slots[2].Texture.DepotPath, inkTextureAtlas.Slots[2].Parts, Path.Combine(outFile.FullName, "720p"));
+                ExtractParts(inkTextureAtlas.Slots[2]!.Texture.DepotPath, inkTextureAtlas.Slots[2]!.Parts, Path.Combine(outFile.FullName, "720p"));
             }
 
             return false;
@@ -662,11 +659,13 @@ namespace WolvenKit.Modkit.RED4
                     xbmFile.Value.Extract(ms);
                     ms.Seek(0, SeekOrigin.Begin);
 
-                    if (_wolvenkitFileService.TryReadRed4File(ms, out var file))
+                    if (_parserService.TryReadRed4File(ms, out var file))
                     {
                         var img = RedImage.FromRedFile(file);
                         foreach (var part in parts)
                         {
+                            ArgumentNullException.ThrowIfNull(part);
+
                             var x = Math.Round(part.ClippingRectInUVCoords.Left * img.Metadata.Width);
                             var y = Math.Round(part.ClippingRectInUVCoords.Top * img.Metadata.Height);
                             var width = Math.Round(part.ClippingRectInUVCoords.Right * img.Metadata.Width) - x;
@@ -682,7 +681,7 @@ namespace WolvenKit.Modkit.RED4
 
         private bool UncookFont(Stream redstream, Stream outstream)
         {
-            if (!_wolvenkitFileService.TryReadRed4File(redstream, out var cr2w))
+            if (!_parserService.TryReadRed4File(redstream, out var cr2w))
             {
                 return false;
             }
@@ -943,7 +942,7 @@ namespace WolvenKit.Modkit.RED4
         public IEnumerable<Stream> GenerateBuffers(Stream cr2wStream)
         {
             // read the cr2wfile
-            if (!_wolvenkitFileService.TryReadRed4File(cr2wStream, out var cr2w))
+            if (!_parserService.TryReadRed4File(cr2wStream, out var cr2w))
             {
                 yield break;
             }
@@ -960,7 +959,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookTexarray(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
+            var cr2w = _parserService.ReadRed4File(cr2wStream);
             if (cr2w == null || cr2w.RootChunk is not CTextureArray texa || texa.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
@@ -975,7 +974,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookEnvprobe(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
+            var cr2w = _parserService.ReadRed4File(cr2wStream);
             if (cr2w == null || cr2w.RootChunk is not CReflectionProbeDataResource refl || refl.TextureData.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
@@ -990,7 +989,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookCubeMap(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
+            var cr2w = _parserService.ReadRed4File(cr2wStream);
             if (cr2w == null || cr2w.RootChunk is not CCubeTexture ctex || ctex.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
@@ -1005,7 +1004,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookCsv(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            if (!_wolvenkitFileService.TryReadRed4File(cr2wStream, out var cr2w))
+            if (!_parserService.TryReadRed4File(cr2wStream, out var cr2w))
             {
                 return false;
             }
@@ -1026,8 +1025,7 @@ namespace WolvenKit.Modkit.RED4
             decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
             // read the cr2wfile
-            return _wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w)
-&& ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
+            return _parserService.TryReadRed4File(redInFile, out var cr2w) && ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
         }
 
         public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat, bool flipV = false)

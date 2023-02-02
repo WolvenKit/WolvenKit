@@ -10,6 +10,7 @@ public class CAttitudeManager : INodeData
     public CAttitudeManager()
     {
         Entries = new List<CAttitudeManagerEntry>();
+        Unknown2 = Array.Empty<byte>();
     }
 }
 

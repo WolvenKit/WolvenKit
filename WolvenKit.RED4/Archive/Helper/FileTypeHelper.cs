@@ -327,7 +327,7 @@ public class FileTypeHelper
         var extensions = new List<string>();
         foreach (var fileType in FileTypes)
         {
-            if (fileType.RootType.Name == info.StringDict[1])
+            if (fileType.RootType.Name == info!.StringDict[1])
             {
                 extensions.Add(fileType.Extension.ToString());
             }
@@ -361,7 +361,7 @@ public class FileTypeHelper
         return extensions.ToArray();
     }
 
-    public static Type GetRootNodeType(string ext)
+    public static Type? GetRootNodeType(string ext)
     {
         if (Enum.TryParse<ERedExtension>(ext, true, out var fileType))
         {

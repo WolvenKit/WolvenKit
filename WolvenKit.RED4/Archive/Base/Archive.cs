@@ -1,4 +1,3 @@
-using ProtoBuf;
 using System.IO.MemoryMappedFiles;
 using WolvenKit.Common;
 using WolvenKit.Core.Compression;
@@ -6,10 +5,9 @@ using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.RED4.Archive;
 
-[ProtoContract]
 public class Archive : ICyberGameArchive, IDisposable
 {
-    private MemoryMappedFile _mmf;
+    private MemoryMappedFile? _mmf;
     private bool _bulkExtract;
     private int _handleCount;
 
@@ -17,8 +15,10 @@ public class Archive : ICyberGameArchive, IDisposable
 
     #region constructors
 
-    public Archive()
+    public Archive(string archiveAbsolutePath)
     {
+        ArchiveAbsolutePath = archiveAbsolutePath;
+
         Header = new Header();
         Index = new Index();
         Files = new Dictionary<ulong, IGameFile>();
@@ -28,14 +28,13 @@ public class Archive : ICyberGameArchive, IDisposable
 
     #region properties
 
-    [ProtoMember(1)] public string ArchiveAbsolutePath { get; set; }
+    public string ArchiveAbsolutePath { get; set; }
 
-    [ProtoMember(2)] public Header Header { get; set; }
+    public Header Header { get; set; }
 
-    [ProtoMember(3)] public Index Index { get; set; }
+    public Index Index { get; set; }
 
-    [ProtoMember(4)] public string ArchiveRelativePath { get; set; }
-
+    public string ArchiveRelativePath { get; set; }
 
     public Dictionary<ulong, IGameFile> Files { get; }
 
@@ -87,12 +86,11 @@ public class Archive : ICyberGameArchive, IDisposable
     /// <returns></returns>
     public bool CanUncook(ulong hash)
     {
-        if (!Files.ContainsKey(hash))
+        if (!Files.TryGetValue(hash, out var file) || file is not FileEntry archiveItem)
         {
             return false;
         }
 
-        var archiveItem = Files[hash] as FileEntry;
         var hasBuffers = (archiveItem.SegmentsEnd - archiveItem.SegmentsStart) > 1;
 
         var values = Enum.GetNames(typeof(ECookedFileFormat));
@@ -102,14 +100,12 @@ public class Archive : ICyberGameArchive, IDisposable
 
     public void CopyFileToStreamWithoutBuffers(Stream stream, ulong hash)
     {
-        if (!Files.ContainsKey(hash))
+        if (!Files.TryGetValue(hash, out var file) || file is not FileEntry archiveItem)
         {
             return;
         }
 
-        var entry = Files[hash] as FileEntry;
-        var startIndex = (int)entry.SegmentsStart;
-        var nextIndex = (int)entry.SegmentsEnd;
+        var startIndex = (int)archiveItem.SegmentsStart;
 
         // decompress main file
         CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true);
@@ -123,14 +119,13 @@ public class Archive : ICyberGameArchive, IDisposable
     /// <param name="decompressBuffers"></param>
     public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers)
     {
-        if (!Files.ContainsKey(hash))
+        if (!Files.TryGetValue(hash, out var file) || file is not FileEntry archiveItem)
         {
             return;
         }
 
-        var entry = Files[hash] as FileEntry;
-        var startIndex = (int)entry.SegmentsStart;
-        var nextIndex = (int)entry.SegmentsEnd;
+        var startIndex = (int)archiveItem.SegmentsStart;
+        var nextIndex = (int)archiveItem.SegmentsEnd;
 
         // decompress main file
         CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true);
@@ -151,14 +146,13 @@ public class Archive : ICyberGameArchive, IDisposable
     /// <param name="decompressBuffers"></param>
     public async Task CopyFileToStreamAsync(Stream stream, ulong hash, bool decompressBuffers)
     {
-        if (!Files.ContainsKey(hash))
+        if (!Files.TryGetValue(hash, out var file) || file is not FileEntry archiveItem)
         {
             return;
         }
 
-        var entry = Files[hash] as FileEntry;
-        var startIndex = (int)entry.SegmentsStart;
-        var nextIndex = (int)entry.SegmentsEnd;
+        var startIndex = (int)archiveItem.SegmentsStart;
+        var nextIndex = (int)archiveItem.SegmentsEnd;
 
         // decompress main file
         await CopyFileSegmentToStreamAsync(stream, Index.FileSegments[startIndex], true);
@@ -260,7 +254,7 @@ public class Archive : ICyberGameArchive, IDisposable
         {
             if (disposing)
             {
-                _mmf.Dispose();
+                _mmf?.Dispose();
             }
 
             _disposed = true;

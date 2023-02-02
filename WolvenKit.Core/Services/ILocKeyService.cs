@@ -10,12 +10,12 @@ namespace WolvenKit.Common.Services
     {
         public string Language { get; set; }
 
-        public string GetFemaleVariant(ulong key);
+        public string? GetFemaleVariant(ulong key);
 
-        public string GetFemaleVariant(string key);
+        public string? GetFemaleVariant(string key);
 
-        public string GetMaleVariant(ulong key);
+        public string? GetMaleVariant(ulong key);
 
-        public string GetMaleVariant(string key);
+        public string? GetMaleVariant(string key);
     }
 }

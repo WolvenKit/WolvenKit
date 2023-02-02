@@ -192,9 +192,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 foreach (var handle in Widget.Effects)
                 {
                     var effect = (inkIEffect)handle.GetValue();
-                    if (!WidgetView.ViewModel.inkEffects.Contains(effect))
+                    if (!WidgetView.ViewModel.InkEffects.Contains(effect))
                     {
-                        WidgetView.ViewModel.inkEffects.Add(effect);
+                        WidgetView.ViewModel.InkEffects.Add(effect);
                     }
 
                     if (effect is inkMaskEffect me)

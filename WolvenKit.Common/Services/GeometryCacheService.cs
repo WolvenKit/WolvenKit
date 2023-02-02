@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Splat;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
@@ -23,10 +22,10 @@ namespace WolvenKit.Common.Services
         private readonly CName _cachePath = (CName)@"base\worlds\03_night_city\sectors\_generated\collisions\03_night_city.geometry_cache";
         private bool _isLoaded;
 
-        public GeometryCacheService()
+        public GeometryCacheService(IArchiveManager archive, Red4ParserService parser)
         {
-            _parser = Locator.Current.GetService<Red4ParserService>().NotNull();
-            _archive = Locator.Current.GetService<IArchiveManager>().NotNull();
+            _archive = archive;
+            _parser = parser;
         }
 
         public void Load()
@@ -45,26 +44,47 @@ namespace WolvenKit.Common.Services
                     var totalEntryIndex = 0;
                     for (var sectorIndex = 0; sectorIndex < pgc.BufferTableSectors.Count; sectorIndex++)
                     {
-                        var sectorHash = pgc.SectorEntries[sectorIndex].SectorHash;
+                        if (pgc.SectorEntries == null || pgc.SectorEntries.Count <= sectorIndex || pgc.SectorEntries[sectorIndex] == null)
+                        {
+                            throw new ArgumentNullException();
+                        }
+
+                        var sectorHash = pgc.SectorEntries[sectorIndex]!.SectorHash;
                         if (!_entries.ContainsKey(sectorHash))
                         {
                             _entries[sectorHash] = new();
                         }
 
-                        if (pgc.BufferTableSectors[sectorIndex].Data is not GeometryCacheBuffer gcb)
+                        if (pgc.BufferTableSectors == null || pgc.BufferTableSectors.Count <= sectorIndex || pgc.BufferTableSectors[sectorIndex] == null)
+                        {
+                            throw new ArgumentNullException();
+                        }
+
+                        if (pgc.BufferTableSectors[sectorIndex]!.Data is not GeometryCacheBuffer gcb)
                         {
                             continue;
                         }
 
                         for (var entryIndex = 0; entryIndex < gcb.Entries.Count; entryIndex++)
                         {
-                            var entry = pgc.SectorGeometries[totalEntryIndex];
+                            if (pgc.SectorGeometries == null || pgc.SectorGeometries.Count <= totalEntryIndex || pgc.SectorGeometries[totalEntryIndex] == null)
+                            {
+                                throw new ArgumentNullException();
+                            }
+
+                            var entry = pgc.SectorGeometries[totalEntryIndex]!;
                             ulong entryHash = 0;
                             for (var i = 0; i < 8; i++)
                             {
                                 entryHash |= (ulong)entry.Ta[i] << (i * 8);
                             }
-                            _entries[sectorHash][entryHash] = gcb.Entries[entryIndex];
+
+                            if (gcb.Entries == null || gcb.Entries.Count <= entryIndex)
+                            {
+                                throw new ArgumentNullException();
+                            }
+
+                            _entries[sectorHash][entryHash] = gcb.Entries[entryIndex]!;
                             totalEntryIndex++;
                         }
                     }
@@ -81,11 +101,18 @@ namespace WolvenKit.Common.Services
 
                     foreach (var als in algcb.Entries)
                     {
+                        ArgumentNullException.ThrowIfNull(als);
+
+                        if (pgc.SectorGeometries == null || pgc.SectorGeometries.Count <= totalEntryIndex || pgc.SectorGeometries[totalEntryIndex] == null)
+                        {
+                            throw new ArgumentNullException();
+                        }
+
                         var entry = pgc.SectorGeometries[totalEntryIndex];
                         ulong entryHash = 0;
                         for (var i = 0; i < 8; i++)
                         {
-                            entryHash |= (ulong)entry.Ta[i] << (i * 8);
+                            entryHash |= (ulong)entry!.Ta[i] << (i * 8);
                         }
                         _entries[0][entryHash] = als;
                         totalEntryIndex++;

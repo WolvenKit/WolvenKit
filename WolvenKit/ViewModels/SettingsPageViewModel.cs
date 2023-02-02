@@ -1,12 +1,10 @@
 using System.Reactive;
 using System.Threading.Tasks;
 using ReactiveUI;
-using Splat;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.HomePage;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels
 {

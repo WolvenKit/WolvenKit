@@ -74,7 +74,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                     throw new JsonException();
                 }
 
-                var items = JsonSerializer.Deserialize<IList>(jsonObject, options);
+                var items = JsonSerializer.Deserialize<IList>(jsonObject, options).NotNull();
 
 
                 var array = Activator.CreateInstance(

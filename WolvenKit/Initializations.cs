@@ -16,10 +16,11 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit
@@ -143,7 +144,7 @@ namespace WolvenKit
             }
         }
 
-        public static void InitializeLicenses() => Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDM1MDYwQDMxMzkyZTMxMmUzMGNBRjJJdnZoVnJjaklqMTVNL0FNR0JJR3dqR0Fac21YalpQOVEyTkd6bms9");
+        public static void InitializeLicenses() => Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTAyOTE5MEAzMjMwMmUzNDJlMzBIUHZua0RGUW5HZmIxekNYR1ZFY2lOOFFQSVBQam1sbWkxSXJLa3NWN1hFPQ==");
 
         public static /*async Task*/ void InitializeShell(ISettingsManager settings)
         {
@@ -162,8 +163,6 @@ namespace WolvenKit
 
         private static void ThemeInnerInit(ISettingsManager settings)
         {
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
-                ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", settings.GetThemeAccent(), false));
             var themeSettings = new MaterialDarkThemeSettings
             {
                 PrimaryBackground = new SolidColorBrush(settings.GetThemeAccent()),

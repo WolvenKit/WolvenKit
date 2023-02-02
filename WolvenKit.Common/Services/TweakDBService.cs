@@ -25,7 +25,10 @@ namespace WolvenKit.Common.Services
 
         public TweakDBService()
         {
-            s_stringHelper.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream(s_tweakdbstr));
+            var resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s_tweakdbstr);
+            ArgumentNullException.ThrowIfNull(resourceStream);
+
+            s_stringHelper.LoadFromStream(resourceStream);
 
             var userStrsPath = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory) ?? throw new InvalidOperationException(), s_userStrs);
             if (File.Exists(userStrsPath))
@@ -66,7 +69,7 @@ namespace WolvenKit.Common.Services
 
                 if (reader.ReadFile(out var tweakDb) == WolvenKit.RED4.TweakDB.EFileReadErrorCodes.NoError)
                 {
-                    s_tweakDb = tweakDb;
+                    s_tweakDb = tweakDb!;
                     OnLoadDB();
 
                     IsLoaded = true;
@@ -78,10 +81,10 @@ namespace WolvenKit.Common.Services
 
         public bool Exists(TweakDBID key) => s_tweakDb.Flats.Exists(key) || s_tweakDb.Records.Exists(key);
 
-        public string GetString(ulong key) => s_stringHelper.GetString(key);
+        public string? GetString(ulong key) => s_stringHelper.GetString(key);
 
-        public IRedType GetFlat(TweakDBID tdb) => s_tweakDb.Flats.GetValue((ulong)tdb);
-        public List<TweakDBID> GetQuery(TweakDBID tdb) => s_tweakDb.Queries.GetQuery((ulong)tdb);
+        public IRedType? GetFlat(TweakDBID tdb) => s_tweakDb.Flats.GetValue((ulong)tdb);
+        public List<TweakDBID>? GetQuery(TweakDBID tdb) => s_tweakDb.Queries.GetQuery((ulong)tdb);
         public byte? GetGroupTag(TweakDBID tdb) => s_tweakDb.GroupTags.GetGroupTag((ulong)tdb);
 
         public Type GetType(TweakDBID tdb)
@@ -108,9 +111,9 @@ namespace WolvenKit.Common.Services
         public List<TweakDBID> GetQueries() => s_tweakDb.GetQueries();
         public List<TweakDBID> GetGroupTags() => s_tweakDb.GetGroupTags();
 
-        public gamedataTweakDBRecord GetRecord(TweakDBID tdb) => s_tweakDb.GetFullRecord(tdb);
-        public gamedataTweakDBRecord GetRecord(SAsciiString path) => s_tweakDb.GetFullRecord(path.ToString());
+        public gamedataTweakDBRecord? GetRecord(TweakDBID tdb) => s_tweakDb.GetFullRecord(tdb);
+        public gamedataTweakDBRecord? GetRecord(SAsciiString path) => s_tweakDb.GetFullRecord(path.ToString());
 
-        public IRedType GetFlat(SAsciiString path) => s_tweakDb.GetFlatValue(path.ToString());
+        public IRedType? GetFlat(SAsciiString path) => s_tweakDb.GetFlatValue(path.ToString());
     }
 }

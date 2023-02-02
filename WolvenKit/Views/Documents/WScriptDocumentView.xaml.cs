@@ -10,7 +10,7 @@ using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
 using ReactiveUI;
-using WolvenKit.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents;
 /// <summary>

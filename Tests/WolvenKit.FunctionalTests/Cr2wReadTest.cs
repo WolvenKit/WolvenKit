@@ -505,12 +505,12 @@ namespace WolvenKit.FunctionalTests
                                     FileEntry = file,
                                     Success = false,
                                     ReadResult = ReadTestResult.ReadResultType.UnsupportedVersion,
-                                    Message = $"Unsupported Version ({c.MetaData.Version})"
+                                    Message = $"Unsupported Version ({c!.MetaData.Version})"
                                 });
                                 break;
 
                             case EFileReadErrorCodes.NoError:
-                                c.MetaData.FileName = file.NameOrHash;
+                                c!.MetaData.FileName = file.NameOrHash;
 
                                 var res = ReadTestResult.ReadResultType.NoError;
                                 var msg = "";

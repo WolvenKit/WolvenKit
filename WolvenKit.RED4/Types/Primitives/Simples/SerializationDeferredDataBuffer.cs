@@ -9,7 +9,7 @@ public class SerializationDeferredDataBuffer : IRedBufferWrapper, IRedBufferPoin
     public RedBuffer Buffer { get; set; }
 
     [Browsable(false)]
-    public IParseableBuffer Data
+    public IParseableBuffer? Data
     {
         get => Buffer.Data;
         set => Buffer.Data = value;
@@ -30,7 +30,7 @@ public class SerializationDeferredDataBuffer : IRedBufferWrapper, IRedBufferPoin
     public RedBuffer GetValue() => Buffer;
     public void SetValue(RedBuffer instance) => Buffer = instance;
 
-    public bool Equals(SerializationDeferredDataBuffer other)
+    public bool Equals(SerializationDeferredDataBuffer? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -50,7 +50,7 @@ public class SerializationDeferredDataBuffer : IRedBufferWrapper, IRedBufferPoin
         return true;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(null, obj))
         {

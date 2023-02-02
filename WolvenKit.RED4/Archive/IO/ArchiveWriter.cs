@@ -46,7 +46,7 @@ public class ArchiveWriter
         _hashService = hashService;
     }
 
-    public Archive WriteArchive(DirectoryInfo infolder, DirectoryInfo outpath, string modname = null)
+    public Archive WriteArchive(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
     {
         if (!infolder.Exists)
         {
@@ -87,7 +87,7 @@ public class ArchiveWriter
             outfile = Path.Combine(outpath.FullName, $"{modname}.archive");
         }
 
-        var ar = new Archive { ArchiveAbsolutePath = outfile };
+        var ar = new Archive(outfile);
         using var fs = new FileStream(outfile, FileMode.Create);
         using var bw = new BinaryWriter(fs);
 
@@ -157,7 +157,7 @@ public class ArchiveWriter
             if (reader.ReadFileInfo(out var info) == EFileReadErrorCodes.NoError)
             {
                 // kraken the file and write
-                var cr2wfilesize = (int)info.FileHeader.objectsEnd;
+                var cr2wfilesize = (int)info!.FileHeader.objectsEnd;
                 fileBinaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
                 var cr2winbuffer = fileBinaryReader.ReadBytes(cr2wfilesize);
                 var offset = bw.BaseStream.Position;
@@ -190,9 +190,9 @@ public class ArchiveWriter
                 //register imports
                 foreach (var cr2WImportWrapper in reader.ImportsList)
                 {
-                    if (cr2WImportWrapper.Flags != WolvenKit.RED4.Types.InternalEnums.EImportFlags.Soft)
+                    if (cr2WImportWrapper.Flags != Types.InternalEnums.EImportFlags.Soft)
                     {
-                        importsHashSet.Add(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPath));
+                        importsHashSet.Add(cr2WImportWrapper.DepotPath);
                     }
                 }
 
