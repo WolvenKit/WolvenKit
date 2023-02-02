@@ -1,12 +1,8 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Reactive.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Highlighting;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
@@ -17,16 +13,7 @@ public partial class RDTTextViewModel : RedDocumentTabViewModel
     public RDTTextViewModel(Stream stream, RedDocumentViewModel parent) : base(parent, "Source YAML")
     {
         using var sr = new StreamReader(stream);
-        _document = new TextDocument(sr.ReadToEnd());
-        TextEditorOptions = new TextEditorOptions
-        {
-            IndentationSize = 2,
-            ConvertTabsToSpaces = true,
-            EnableHyperlinks = false,
-            EnableEmailHyperlinks = false
-        };
-
-        _highlightingDefinition = HighlightingManager.Instance.GetDefinitionByExtension(Path.GetExtension(FilePath));
+        _text = sr.ReadToEnd();
 
         this.WhenAnyPropertyChanged(nameof(IsDirty))
             .Do(x => x?.Parent.SetIsDirty(IsDirty))
@@ -55,10 +42,8 @@ public partial class RDTTextViewModel : RedDocumentTabViewModel
 
     public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
-    [ObservableProperty] private TextDocument _document;
-    [ObservableProperty] private IHighlightingDefinition _highlightingDefinition;
-    public TextEditorOptions TextEditorOptions { get; protected set; }
+    [ObservableProperty] private string _text;
 
-    public string GetText() => Document.Text;
+    public string GetText() => Text;
     [ObservableProperty] private bool _isDirty;
 }

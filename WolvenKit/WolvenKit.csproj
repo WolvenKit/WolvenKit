@@ -38,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AvalonEdit" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Nodify" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />

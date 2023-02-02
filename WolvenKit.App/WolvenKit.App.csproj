@@ -71,7 +71,6 @@
 	
 	<PackageReference Include="NAudio" />
     <PackageReference Include="NAudio.Vorbis" />
-    <PackageReference Include="AvalonEdit" />
 	<PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
     <PackageReference Include="AutomaticGraphLayout" />
     <PackageReference Include="Nodify" />

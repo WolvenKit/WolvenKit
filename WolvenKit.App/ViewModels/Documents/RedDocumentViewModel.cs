@@ -119,7 +119,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             if (file is RDTTextViewModel textViewModel)
             {
                 using var tw = new StreamWriter(fs);
-                var text = textViewModel.Document.Text;
+                var text = textViewModel.Text;
                 tw.Write(text);
             }
             else if (file is not null && Cr2wFile != null)
