@@ -293,14 +293,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             else if (Data is TweakDBID tdb && _propertiesLoaded)
             {
-                var flat = _tweakDbService.GetFlat(tdb);
+                var flat = TweakDBService.GetFlat(tdb);
                 if (flat is not null)
                 {
                     data = flat;
                 }
                 else
                 {
-                    var record = _tweakDbService.GetRecord(tdb);
+                    var record = TweakDBService.GetRecord(tdb);
                     if (record is not null)
                     {
                         data = record;
@@ -393,16 +393,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             if (Data is TweakDBID tdb)
             {
-                var type = _tweakDbService.GetType(tdb);
-                if (type is not null)
+                if (TweakDBService.TryGetType(tdb, out var type))
                 {
                     return type;
                 }
             }
             if (Data is ITweakXLItem iti)
             {
-                var type = _tweakDbService.GetType(iti.ID);
-                if (type is not null)
+                if (TweakDBService.TryGetType(iti.ID, out var type))
                 {
                     return type;
                 }
@@ -486,7 +484,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 else if (Data is TweakDBID tdb)
                 {
                     // not actual
-                    if (_tweakDbService.Exists(tdb))
+                    if (TweakDBService.Exists(tdb))
                     {
                         count += 1;
                     }
@@ -739,10 +737,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 txl.Type = tweakDBRecord.GetType().Name;
                 break;
             case TweakDBID tweakDBID:
-                tdbEntry = _tweakDbService.GetFlat(tweakDBID);
-                tdbEntry ??= _tweakDbService.GetRecord(tweakDBID);
-                txl.ID = tweakDBID;
-                txl.Type = _tweakDbService.GetType(tweakDBID).Name;
+                tdbEntry = TweakDBService.GetFlat(tweakDBID);
+                tdbEntry ??= TweakDBService.GetRecord(tweakDBID);
+                txl.ID = tweakDBID;              
+                if (TweakDBService.TryGetType(tweakDBID, out var type))
+                {
+                    txl.Type = type.Name;
+                }
                 break;
             case IRedType redType:
                 tdbEntry = Data;
@@ -1860,7 +1861,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
         if (obj is TweakDBID tdb)
         {
-            obj = _tweakDbService.GetFlat(tdb);
+            obj = TweakDBService.GetFlat(tdb);
             if (obj is not null)
             {
                 Properties.Add(new ChunkViewModel(obj, nameof(TweakDBID), this, true));
@@ -1869,7 +1870,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             else
             {
-                obj = _tweakDbService.GetRecord(tdb);
+                obj = TweakDBService.GetRecord(tdb);
             }
             isreadonly = true;
             //var record = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);

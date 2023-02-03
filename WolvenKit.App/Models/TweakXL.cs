@@ -475,7 +475,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
         return (CString)s.Value;
     }
 
-    public ITweakXLItem? ReadTweakXL(IParser parser, string? id = null, Type? type = null)
+    public ITweakXLItem? ReadTweakXL(IParser parser, string? id = null/*, Type? type = null*/)
     {
         var _tdbs = _tweakDBService;
         if (parser.TryConsume<SequenceStart>(out var _))
@@ -526,7 +526,10 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                         Type? childType = null;
                         if (tweak.Base != TweakDBID.Empty && propertyName != null)
                         {
-                            childType = _tdbs.GetType(tweak.Base + "." + propertyName);
+                            if (TweakDBService.TryGetType(tweak.Base + "." + propertyName, out var type1))
+                            {
+                                childType = type1;
+                            }
                         }
                         propertyValue = ReadScalar(s, _tdbs, childType);
                     }
@@ -538,12 +541,15 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                         {
                             childID = childID + "." + propertyName;
                         }
-                        Type? childType = null;
-                        if (tweak.Base != TweakDBID.Empty && propertyName != null)
-                        {
-                            childType = _tdbs.GetType(tweak.Base + "." + propertyName);
-                        }
-                        propertyValue = ReadTweakXL(parser, id: childID, type: childType);
+                        //Type? childType = null;
+                        //if (tweak.Base != TweakDBID.Empty && propertyName != null)
+                        //{
+                        //    if (TweakDBService.TryGetType(tweak.Base + "." + propertyName, out var type1))
+                        //    {
+                        //        childType = type1;
+                        //    }
+                        //}
+                        propertyValue = ReadTweakXL(parser, id: childID/*, type: childType*/);
                     }
                     // array/list
                     else if (parser.TryConsume<SequenceStart>(out var _))
@@ -555,7 +561,10 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                         }
                         if (tweak.Base != TweakDBID.Empty && propertyName != null)
                         {
-                            ((TweakXLSequence)propertyValue).Type = _tdbs.GetType(tweak.Base + "." + propertyName).Name;
+                            if (TweakDBService.TryGetType(tweak.Base + "." + propertyName, out var type1))
+                            {
+                                ((TweakXLSequence)propertyValue).Type = type1.Name;
+                            }
                         }
                         //if (type != null)
                         //{
