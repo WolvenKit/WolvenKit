@@ -1428,6 +1428,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 case ".xml":
                 case ".txt":
                 case ".ws":
+                case ".lua":
 
                 // other
                 case ".mp3":
