@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Windows.Input;
-using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
@@ -23,7 +19,9 @@ public partial class WScriptDocumentView
     public WScriptDocumentView()
     {
         InitializeComponent();
-        
+
+        ScriptTextEditor.Document = new TextDocument();
+        ScriptTextEditor.Document.TextChanged += ScriptTextEditor_Document_TextChanged;
         ScriptTextEditor.TextArea.TextEntered += ScriptTextEditor_TextArea_TextEntered;
 
         this.WhenActivated(disposables =>
@@ -32,7 +30,25 @@ public partial class WScriptDocumentView
             {
                 SetCurrentValue(ViewModelProperty, vm);
             }
+
+            this.WhenAnyValue(x => x.ViewModel.Text)
+                .Subscribe(text =>
+                {
+                    if (ScriptTextEditor.Document.Text != text)
+                    {
+                        ScriptTextEditor.Document.Text = text;
+                    }
+                })
+                .DisposeWith(disposables);
         });
+    }
+
+    private void ScriptTextEditor_Document_TextChanged(object sender, EventArgs e)
+    {
+        if (ViewModel != null && ViewModel.Text != ScriptTextEditor.Document.Text)
+        {
+            ViewModel.Text = ScriptTextEditor.Document.Text;
+        }
     }
 
     private void ScriptTextEditor_TextArea_TextEntered(object sender, TextCompositionEventArgs e)

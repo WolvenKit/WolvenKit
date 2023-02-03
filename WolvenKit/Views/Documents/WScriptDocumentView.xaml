@@ -63,7 +63,6 @@
             Grid.Row="1"
             Margin="0"
             Background="{StaticResource ContentBackground}"
-            Document="{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             FontFamily="Consolas"
             FontSize="10pt"
             Foreground="{StaticResource ContentForeground}"

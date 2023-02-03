@@ -7,8 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Utils;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.Modkit.Scripting;
@@ -21,7 +19,6 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
     public WScriptDocumentViewModel(string path) : base(path)
     {
-        _document = new TextDocument();
         Extension = "wscript";
 
         _hostObjects = new() { { "wkit", new WKitUIScripting(_loggerService, _projectManager, _archiveManager, _parserService, _watcherService) } };
@@ -44,7 +41,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     #region properties
 
     [ObservableProperty]
-    private TextDocument _document;
+    private string _text = "";
     
     public string Extension { get; }
     
@@ -68,7 +65,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
     private bool CanRun() => !_scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanRun))]
-    private async void Run() => await _scriptService.ExecuteAsync(Document.Text, _hostObjects, ISettingsManager.GetWScriptDir());
+    private async void Run() => await _scriptService.ExecuteAsync(Text, _hostObjects, ISettingsManager.GetWScriptDir());
 
     private bool CanStop() => _scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanStop))]
@@ -112,7 +109,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     {
         using var fs = new FileStream(FilePath, FileMode.Create, FileAccess.ReadWrite);
         using var bw = new StreamWriter(fs);
-        bw.Write(Document.Text);
+        bw.Write(Text);
         bw.Close();
 
         SetIsDirty(false);
@@ -130,8 +127,6 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
             return;
         }
 
-        Document = new TextDocument();
-
         // Check file attributes and set to read-only if file attributes indicate that
         if ((File.GetAttributes(paramFilePath) & FileAttributes.ReadOnly) != 0)
         {
@@ -140,14 +135,10 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
                                "Change the file access permissions or save the file in a different location if you want to edit it.";
         }
 
-        using (var fs = new FileStream(paramFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-        using (var fr = FileReader.OpenStream(fs, Encoding.UTF8))
-        {
-            Document = new TextDocument(fr.ReadToEnd());
-        }
-
         FilePath = paramFilePath;
         GetScriptType(Path.GetFileNameWithoutExtension(paramFilePath));
+
+        Text = File.ReadAllText(FilePath);
 
         _isInitialized = true;
     }

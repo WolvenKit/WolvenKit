@@ -1,11 +1,7 @@
 using System;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ICSharpCode.AvalonEdit.Document;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Utils;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
@@ -13,19 +9,10 @@ public partial class ScriptDocumentViewModel : DocumentViewModel
 {
     public ScriptDocumentViewModel(string path) : base(path)
     {
-
-        _document = new TextDocument();
         _extension = "reds";
-
-        var hlManager = HighlightingManager.Instance;
-        _highlightingDefinition = hlManager.GetDefinitionByExtension("swift");
     }
 
-    [ObservableProperty] private TextDocument _document;
-
     [ObservableProperty] private string _extension;
-
-    [ObservableProperty] private IHighlightingDefinition _highlightingDefinition;
 
     [ObservableProperty] private bool _isReadOnly;
 
@@ -64,12 +51,6 @@ public partial class ScriptDocumentViewModel : DocumentViewModel
             return;
         }
 
-        var hlManager = HighlightingManager.Instance;
-
-        Document = new TextDocument();
-        var extension = Path.GetExtension(paramFilePath);
-        HighlightingDefinition = hlManager.GetDefinitionByExtension(extension);
-
         // Check file attributes and set to read-only if file attributes indicate that
         if ((File.GetAttributes(paramFilePath) & FileAttributes.ReadOnly) != 0)
         {
@@ -78,19 +59,7 @@ public partial class ScriptDocumentViewModel : DocumentViewModel
                                "Change the file access permissions or save the file in a different location if you want to edit it.";
         }
 
-        using (var fs = new FileStream(paramFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-        using (var fr = FileReader.OpenStream(fs, Encoding.UTF8))
-        {
-            Document = new TextDocument(fr.ReadToEnd());
-        }
-
         FilePath = paramFilePath;
-
-        if (string.IsNullOrEmpty(Document.Text))
-        {
-            return;
-        }
-
     }
 
     public override Task Save(object parameter) => throw new NotImplementedException();

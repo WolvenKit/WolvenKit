@@ -50,22 +50,6 @@
             </MenuItem>
         </Menu>
 
-        <!--  TEXT EDITOR  -->
-        <!--
-            avalonEdit:TextEditor
-            Grid.Row="1"
-            Margin="0"
-            ShowLineNumbers="True"
-            FontFamily="Consolas"
-            FontSize="10pt"
-            Name="textEditor"
-            Foreground="{StaticResource ContentForeground}"
-            Background="{StaticResource ContentBackground}"
-            Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-            SyntaxHighlighting="{Binding HighlightingDefinition}"
-            /
-        -->
-
         <syncfusion:EditControl
             x:Name="editControl1"
             Grid.Row="1"
