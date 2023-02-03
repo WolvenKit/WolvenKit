@@ -544,15 +544,18 @@ public class RedImage : IDisposable
         //}
 
         tmpImage = true;
-
-        if ((DXGI_FORMAT)outImageFormat is DXGI_FORMAT.BC6H_UF16 or DXGI_FORMAT.BC6H_SF16 or DXGI_FORMAT.BC7_UNORM or DXGI_FORMAT.BC7_UNORM_SRGB && s_device != null)
+        if (settings.Compression != ETextureCompression.TCM_None)
         {
-            img = img.Compress(s_device.NativePointer, (DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+            if ((DXGI_FORMAT)outImageFormat is DXGI_FORMAT.BC6H_UF16 or DXGI_FORMAT.BC6H_SF16 or DXGI_FORMAT.BC7_UNORM or DXGI_FORMAT.BC7_UNORM_SRGB && s_device != null)
+            {
+                img = img.Compress(s_device.NativePointer, (DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+            }
+            else
+            {
+                img = img.Compress((DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.PARALLEL, 0.5F);
+            }
         }
-        else
-        {
-            img = img.Compress((DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.PARALLEL, 0.5F);
-        }
+        
 
         metadata = img.GetMetadata();
 
