@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -13,8 +12,6 @@ public partial class CR2WReader
 {
     private CR2WFile _cr2wFile => (CR2WFile)_outputFile;
     private bool _parseBuffer;
-
-    private readonly Dictionary<int, RedBaseClass> _chunks = new();
 
     private static readonly Dictionary<string, Type> s_bufferReaders = new();
 
@@ -134,6 +131,7 @@ public partial class CR2WReader
             throw new TodoException("Found unsupported PropertyInfo");
         }
 
+        // Init before reading so CHandle/CWeakHandle can be resolved directly
         var chunkPos = BaseStream.Position;
         for (var i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
         {
@@ -144,21 +142,6 @@ public partial class CR2WReader
         for (var i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
         {
             ReadChunk(i);
-        }
-
-        for (var i = _chunks.Count - 1; i >= 0; i--)
-        {
-            if (!HandleQueue.ContainsKey(i))
-            {
-                continue;
-            }
-
-            foreach (var handle in HandleQueue[i])
-            {
-                handle.SetValue(_chunks[i]);
-            }
-
-            //_chunks.Remove(i);
         }
 
         for (var i = 0; i < _cr2wFile.Info.BufferInfo.Length; i++)
@@ -243,8 +226,6 @@ public partial class CR2WReader
     {
         var info = _cr2wFile.Info.ExportInfo[chunkIndex];
 
-        BaseStream.Position = info.dataOffset;
-
         var redTypeName = GetStringValue(info.className);
         var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!);
 
@@ -266,7 +247,7 @@ public partial class CR2WReader
             _cr2wFile.RootChunk = instance;
         }
 
-        _chunks.Add(chunkIndex, instance);
+        _chunks.Add(chunkIndex, new ChunkInfo(instance));
     }
 
     private void ReadChunk(int chunkIndex)
@@ -275,7 +256,7 @@ public partial class CR2WReader
 
         Debug.Assert(BaseStream.Position == info.dataOffset);
 
-        ReadClass(_chunks[chunkIndex], info.dataSize);
+        ReadClass(_chunks[chunkIndex].Instance, info.dataSize);
 
         if (BaseStream.Position - info.dataOffset != info.dataSize)
         {
@@ -371,10 +352,10 @@ public partial class CR2WReader
         var result = new CR2WEmbedded
         {
             FileName = importsList[(int)info.importIndex - 1].DepotPath!,
-            Content = _chunks[(int)info.chunkIndex]
+            Content = _chunks[(int)info.chunkIndex].Instance
         };
 
-        _chunks.Remove((int)info.chunkIndex);
+        _chunks[(int)info.chunkIndex].IsUsed = true;
 
         return result;
     }

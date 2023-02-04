@@ -109,29 +109,29 @@ public partial class RedPackageReader : IBufferReader
         // read chunks
         var chunkCount = (header.chunkDataOffset - header.chunkDescOffset) / 8;
         BaseStream.Position = baseOff + header.chunkDescOffset;
-        var chunkDesc = BaseStream.ReadStructs<RedPackageChunkHeader>(chunkCount);
+        var chunkHeaders = BaseStream.ReadStructs<RedPackageChunkHeader>(chunkCount);
 
-        for (var i = 0; i < chunkDesc.Length; i++)
+        // Init before reading so CHandle/CWeakHandle can be resolved directly
+
+        var chunkPos = BaseStream.Position;
+        for (var i = 0; i < chunkHeaders.Length; i++)
         {
-            chunks.Add(ReadChunk(chunkDesc[i]));
+            _chunks.Add(i, InitChunk(chunkHeaders[i]));
         }
 
-        var newChunks = new List<RedBaseClass>();
-        for (var i = 0; i < chunks.Count; i++)
+        BaseStream.Position = chunkPos;
+        for (var i = 0; i < _chunks.Count; i++)
         {
-            if (!HandleQueue.ContainsKey(i))
-            {
-                newChunks.Add(chunks[i]);
-                continue;
-            }
-
-            foreach (var handle in HandleQueue[i])
-            {
-                handle.SetValue(chunks[i]);
-            }
+            ReadClass(_chunks[i].Instance, 0);
         }
 
-        result.Chunks = newChunks;
+        foreach (var kvp in _chunks)
+        {
+            if (!kvp.Value.IsUsed)
+            {
+                result.Chunks.Add(kvp.Value.Instance);
+            }
+        }
 
         if (Settings.RedPackageType is RedPackageType.Default or RedPackageType.SaveResource)
         {
@@ -200,10 +200,8 @@ public partial class RedPackageReader : IBufferReader
         return s;
     }
 
-    protected virtual RedBaseClass ReadChunk(RedPackageChunkHeader c)
+    protected virtual ChunkInfo InitChunk(RedPackageChunkHeader c)
     {
-        // needs header offset
-        //Debug.Assert(BaseStream.Position == c.offset);
         var redTypeName = GetStringValue((ushort)c.typeID);
         var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!);
 
@@ -213,9 +211,7 @@ public partial class RedPackageReader : IBufferReader
             dbc.ClassName = redTypeName!;
         }
 
-        ReadClass(instance, 0);
-
-        return instance;
+        return new ChunkInfo(instance);
     }
 }
 
