@@ -101,7 +101,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
                 if (SelectedRecordEntry != null && _tweakDB.IsLoaded)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(SelectedRecordEntry.Item).NotNull(), SelectedRecordEntry.DisplayName, null, true)
+                    SelectedRecord.Add(new ChunkViewModel(TweakDBService.GetRecord(SelectedRecordEntry.Item).NotNull(), SelectedRecordEntry.DisplayName, null, true)
                     {
                         IsExpanded = true
                     });
@@ -118,7 +118,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
             {
                 if (SelectedFlatEntry != null && _tweakDB.IsLoaded)
                 {
-                    var flat = _tweakDB.GetFlat(SelectedFlatEntry.Item);
+                    var flat = TweakDBService.GetFlat(SelectedFlatEntry.Item);
                     ArgumentNullException.ThrowIfNull(flat);
                     SelectedFlat = new ChunkViewModel(flat, flat.GetType().Name);
                 }
@@ -135,7 +135,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
                 if (SelectedQueryEntry != null && _tweakDB.IsLoaded)
                 {
                     var arr = new CArray<TweakDBID>();
-                    foreach (var query in _tweakDB.GetQuery(SelectedQueryEntry.Item).NotNull())
+                    foreach (var query in TweakDBService.GetQuery(SelectedQueryEntry.Item).NotNull())
                     {
                         arr.Add(query);
                     }
@@ -154,7 +154,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
             {
                 if (SelectedGroupTagEntry != null && _tweakDB.IsLoaded)
                 {
-                    var u = _tweakDB.GetGroupTag(SelectedGroupTagEntry.Item);
+                    var u = TweakDBService.GetGroupTag(SelectedGroupTagEntry.Item);
                     if (u is not null)
                     {
                         SelectedGroupTag = new ChunkViewModel((CUInt8)u, nameof(CUInt8));
@@ -212,10 +212,10 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
     private void Load(object? sender, EventArgs eventArgs)
     {
-        var records = PrepareList(_tweakDB.GetRecords(), true);
-        var flats = PrepareList(_tweakDB.GetFlats());
-        var queries = PrepareList(_tweakDB.GetQueries());
-        var groupTags = PrepareList(_tweakDB.GetGroupTags());
+        var records = PrepareList(TweakDBService.GetRecords(), true);
+        var flats = PrepareList(TweakDBService.GetFlats());
+        var queries = PrepareList(TweakDBService.GetQueries());
+        var groupTags = PrepareList(TweakDBService.GetGroupTags());
 
         var classes = new List<string> { "" };
         foreach (var record in records)
@@ -252,7 +252,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
         List<TweakEntry> PrepareList(List<TweakDBID> tweaks, bool isRecord = false)
         {
             var tmpRecords = new ConcurrentQueue<TweakEntry>();
-            Parallel.ForEach(tweaks, record => tmpRecords.Enqueue(new TweakEntry(record, _tweakDB, isRecord)));
+            Parallel.ForEach(tweaks, record => tmpRecords.Enqueue(new TweakEntry(record, isRecord)));
             return tmpRecords.AsParallel().OrderBy(x => x.DisplayName).ToList();
         }
     }
@@ -331,7 +331,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
             ID = SelectedRecordEntry.DisplayName
         };
 
-        var baseRecord = _tweakDB.GetRecord(SelectedRecordEntry.Item).NotNull();
+        var baseRecord = TweakDBService.GetRecord(SelectedRecordEntry.Item).NotNull();
         txl.Type = "gamedata" + SelectedRecordEntry.RecordTypeName + "_Record";
 
         txl.ID = SelectedRecordEntry.Item;
@@ -389,7 +389,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
         public bool IsInlineRecord { get; }
         public string? RecordTypeName { get; }
 
-        public TweakEntry(TweakDBID item, TweakDBService tweakDbService, bool isRecord = false)
+        public TweakEntry(TweakDBID item, bool isRecord = false)
         {
             Item = item;
 
@@ -407,8 +407,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
                     IsInlineRecord = s_inlineRegex.IsMatch(Item.ResolvedText);
                 }
 
-                var type = tweakDbService.GetType(Item);
-                if (type != null)
+                if( TweakDBService.TryGetType(Item, out var type))
                 {
                     RecordTypeName = type.Name[8..^7];
                 }

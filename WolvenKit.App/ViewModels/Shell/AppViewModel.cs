@@ -1428,6 +1428,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 case ".xml":
                 case ".txt":
                 case ".ws":
+                case ".lua":
 
                 // other
                 case ".mp3":
@@ -1444,12 +1445,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 case ".zip":
                 case ".rar":
                 case ".bat":
-                //case ".yml":
+                case ".yml":
                 case ".log":
                 case ".ini":
                 case ".xl":
                 case ".reds":
-                    //case ".yaml":
+                case ".yaml":
+                case ".tweak":
                     ShellExecute();
                     break;
 
