@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -28,7 +27,7 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
-using static SharpGLTF.Scenes.LightBuilder;
+using IMaterial = WolvenKit.RED4.Types.IMaterial;
 using Material = WolvenKit.App.Models.Material;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -39,7 +38,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     private readonly Dictionary<string, LoadableModel> _modelList = new();
     private readonly Dictionary<string, SlotSet> _slotSets = new();
-
 
     private const int s_distanceCameraUnits = 145;
     private const double s_cameraUpDirectionFactor = 0.7;
@@ -209,7 +207,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public void RenderMesh()
     {
-        if (IsRendered)
+        // TODO [mana] does IsLoadingMaterials check work as expected here?
+        if (IsRendered && !IsLoadingMaterials)
         {
             return;
         }
@@ -221,7 +220,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var materials = new Dictionary<string, Material>();
 
         var localList = data.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
-
+        
         foreach (var me in data.MaterialEntries)
         {
             ArgumentNullException.ThrowIfNull(me);
@@ -233,31 +232,35 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 continue;
             }
             CMaterialInstance? inst = null;
-
+            
             if (localList != null && localList.Files.Count > me.Index)
             {
                 inst = localList.Files[me.Index].RootChunk as CMaterialInstance;
             }
             else
             {
-                //foreach (var pme in data.PreloadLocalMaterialInstances)
-                //{
-                //inst = (CMaterialInstance)pme.GetValue();
-                //}
+                // No further materials are defined (user was lazy)
+                if (me.Index >= data.PreloadLocalMaterialInstances.Count)
+                {
+                    Parent.GetLoggerService().Warning($"No material with index {me.Index} found. Not checking further entries…");
+                    break;
+                }
+
                 inst = data.PreloadLocalMaterialInstances[me.Index]?.GetValue() as CMaterialInstance;
             }
 
-            //CMaterialInstance bm = null;
-            //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
-            //{
-            //    bm = (CMaterialInstance)file.RootChunk;
-            //}
+            if (inst == null)
+            {
+                continue;
+            }
+            
+            // TODO [mana] throwIfNull? Not rather print a warning and go on?
+            // ArgumentNullException.ThrowIfNull(inst);
+            
             var material = new Material(name)
             {
                 Instance = inst,
             };
-
-            ArgumentNullException.ThrowIfNull(inst);
 
             foreach (var pair in inst.Values)
             {
@@ -429,7 +432,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return modelGroups;
     }
 
-    private List<LoadableModel>? LoadMeshs(IList<RedBaseClass> chunks)
+    private List<LoadableModel>? LoadMeshs(IList<RedBaseClass>? chunks)
     {
         if (chunks == null)
         {
@@ -1152,28 +1155,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         foreach (var materialName in amaterials)
         {
             var name = GetUniqueMaterialName(materialName.ToString().NotNull(), mesh);
-            if (materials.ContainsKey(name))
-            {
-                appMaterials.Add(materials[name]);
-            }
-            else
-            {
-                appMaterials.Add(new Material(name));
-            }
+            appMaterials.Add(materials.ContainsKey(name) ? materials[name] : new Material(name));
         }
 
         return appMaterials;
     }
 
-    public string GetUniqueMaterialName(string name, CMesh mesh) => mesh.InplaceResources.Count > 0 
+    private string GetUniqueMaterialName(string name, CMesh mesh) => mesh.InplaceResources.Count > 0 
         ? Path.GetFileNameWithoutExtension(mesh.InplaceResources[0].DepotPath.ToString().NotNull()) 
         : name;
 
-    public Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh)
+    private Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh)
     {
         var materials = new Dictionary<string, Material>();
 
         var localList = mesh.LocalMaterialBuffer.RawData.Buffer.Data as CR2WList ?? null;
+
 
         foreach (var me in mesh.MaterialEntries)
         {
@@ -1188,9 +1185,17 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
                 continue;
             }
+            
             var inst = localList != null && localList.Files.Count > me.Index
                 ? (CMaterialInstance)localList.Files[me.Index].RootChunk
                 : (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].NotNull().GetValue();
+
+            if (inst == null)
+            {
+                
+                Parent.GetLoggerService().Warning($"Couldn't find material instance for index {me.Index}");
+                continue;
+            }
 
             var material = new Material(name)
             {
@@ -1250,7 +1255,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         //});
     }
 
-    public async ValueTask LoadMaterial(WolvenKit.App.Models.Material material)
+    public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
     {
         if (material == null)
         {
@@ -1264,9 +1269,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var mat = material.Instance;
         while (mat != null && mat.BaseMaterial.DepotPath != CName.Empty)
         {
-            var baseMaterialFile = Parent.GetFileFromDepotPathOrCache(mat.BaseMaterial.DepotPath);
+            CR2WFile? baseMaterialFile = null;
 
-            if (baseMaterialFile != null && baseMaterialFile.RootChunk is CMaterialInstance cmi)
+            try
+            {
+                baseMaterialFile = Parent.GetFileFromDepotPathOrCache(mat.BaseMaterial.DepotPath);
+            }
+            catch
+            {
+                Parent.GetLoggerService().Warning($"Trying to find base material, but was not found: \n{mat.BaseMaterial.DepotPath}");
+                continue;
+            }
+
+            if (baseMaterialFile == null)
+            {
+                mat = null;
+                continue;
+            }
+            
+
+            if (baseMaterialFile.RootChunk is CMaterialInstance cmi)
             {
                 foreach (var pair in cmi.Values)
                 {
@@ -1280,51 +1302,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
                 mat = cmi;
             }
-            else if (baseMaterialFile != null && baseMaterialFile.RootChunk is CMaterialTemplate cmt)
+            else if ( baseMaterialFile.RootChunk is CMaterialTemplate cmt)
             {
                 material.TemplateName = cmt.Name;
                 mat = null;
             }
-            else
-            {
-                mat = null;
-            }
-        }
-        material.Values = dictionary;
-
-        if (dictionary.ContainsKey("Metalness") && dictionary["Metalness"] is CResourceReference<ITexture> metalTexture)
-        {
-            if (metalTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
-            {
-                material.Metalness = 0;
-            }
-            else if (metalTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
-            {
-                material.Metalness = 1;
-            }
+           
         }
 
-        if (dictionary.ContainsKey("MetalnessScale"))
-        {
-            material.Metalness = (CFloat)dictionary["MetalnessScale"];
-        }
-
-        if (dictionary.ContainsKey("Roughness") && dictionary["Roughness"] is CResourceReference<ITexture> roughTexture)
-        {
-            if (roughTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
-            {
-                material.Roughness = 0;
-            }
-            else if (roughTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
-            {
-                material.Roughness = 1;
-            }
-        }
-
-        if (dictionary.ContainsKey("RoughnessScale"))
-        {
-            material.Roughness = (CFloat)dictionary["RoughnessScale"];
-        }
+        // set numeric roughness, metalness etc. values from textures
+        adjustRoughness(dictionary, material);
 
         var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
         var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
@@ -1452,7 +1439,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     gfx.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
                 }
-
+        
+            
+            #region skipColor
             SkipColor:
 
                 {
@@ -1605,7 +1594,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 normalBitmap.Dispose();
             }
         }
-
+    
+        #endregion
+        #region diffuseMaps
     DiffuseMaps:
         if (File.Exists(filename_d))
         {
@@ -1654,6 +1645,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             stream.Dispose();
         }
 
+        #endregion
+        
+        #region normalMaps
     NormalMaps:
 
         // normals
@@ -1775,10 +1769,54 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
         }
 
+        #endregion
+        
+        #region skipNormals
     SkipNormals:
         DispatcherHelper.RunOnMainThread(() => SetupPBRMaterial(material.Name, true));
 
+        #endregion
         return;
+    }
+
+    /** Set default roughness values for material */
+    private static void adjustRoughness(Dictionary<string, object> dictionary, Material material)
+    {
+        material.Values = dictionary;
+
+        if (dictionary.ContainsKey("Metalness") && dictionary["Metalness"] is CResourceReference<ITexture> metalTexture)
+        {
+            if (metalTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
+            {
+                material.Metalness = 0;
+            }
+            else if (metalTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
+            {
+                material.Metalness = 1;
+            }
+        }
+
+        if (dictionary.ContainsKey("MetalnessScale"))
+        {
+            material.Metalness = (CFloat)dictionary["MetalnessScale"];
+        }
+
+        if (dictionary.ContainsKey("Roughness") && dictionary["Roughness"] is CResourceReference<ITexture> roughTexture)
+        {
+            if (roughTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
+            {
+                material.Roughness = 0;
+            }
+            else if (roughTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
+            {
+                material.Roughness = 1;
+            }
+        }
+
+        if (dictionary.ContainsKey("RoughnessScale"))
+        {
+            material.Roughness = (CFloat)dictionary["RoughnessScale"];
+        }
     }
 
     public byte ToBlue(byte r, byte g) => (byte)Math.Clamp(Math.Round((Math.Sqrt(1.02 - 2 * (r / 255F * 2 - 1) * (g / 255F * 2 - 1)) + 1) / 2 * 255), 0, 255);
@@ -2971,37 +3009,35 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         Models = LoadMeshs(appPkg.Chunks).NotNull(),
                     };
 
-                    if (a.Models is not null)
+                    foreach (var model in a.Models)
                     {
-                        foreach (var model in a.Models)
+                        if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel is not null)
                         {
-                            if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel is not null)
-                            {
-                                parentModel.AddModel(model);
-                            }
-                            else
-                            {
-                                a.BindableModels.Add(model);
-                            }
-                            foreach (var material in model.Materials)
-                            {
-                                a.RawMaterials[material.Name] = material;
-                            }
-                            if (model.MeshFile?.RootChunk is CMesh mesh)
-                            {
-                                model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
-                            }
+                            parentModel.AddModel(model);
+                        }
+                        else
+                        {
+                            a.BindableModels.Add(model);
+                        }
+                        foreach (var material in model.Materials)
+                        {
+                            a.RawMaterials[material.Name] = material;
+                        }
+                        if (model.MeshFile?.RootChunk is CMesh mesh)
+                        {
+                            model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
+                        }
 
-                            foreach (var m in model.Meshes)
+                        foreach (var m in model.Meshes)
+                        {
+                            if (!a.LODLUT.ContainsKey(m.LOD))
                             {
-                                if (!a.LODLUT.ContainsKey(m.LOD))
-                                {
-                                    a.LODLUT[m.LOD] = new List<SubmeshComponent>();
-                                }
-                                a.LODLUT[m.LOD].Add(m);
+                                a.LODLUT[m.LOD] = new List<SubmeshComponent>();
                             }
+                            a.LODLUT[m.LOD].Add(m);
                         }
                     }
+
 
                     if (appearance == null)
                     {
