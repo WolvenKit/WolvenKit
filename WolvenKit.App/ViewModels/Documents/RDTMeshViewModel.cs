@@ -1171,7 +1171,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         var materials = new Dictionary<string, Material>();
 
-        var localList = mesh.LocalMaterialBuffer.RawData.Buffer.Data as CR2WList ?? null;
+        var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
 
         foreach (var me in mesh.MaterialEntries)
         {
