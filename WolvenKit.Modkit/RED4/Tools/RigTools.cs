@@ -212,12 +212,16 @@ namespace WolvenKit.Modkit.RED4.RigFile
         {
             ArgumentNullException.ThrowIfNull(srcBones.Parent);
             ArgumentNullException.ThrowIfNull(srcBones.Names);
-            ArgumentNullException.ThrowIfNull(srcBones.AposeLSScale);
-            ArgumentNullException.ThrowIfNull(srcBones.AposeLSRot);
-            ArgumentNullException.ThrowIfNull(srcBones.AposeLSTrans);
             ArgumentNullException.ThrowIfNull(srcBones.LocalScale);
             ArgumentNullException.ThrowIfNull(srcBones.LocalRot);
             ArgumentNullException.ThrowIfNull(srcBones.LocalPosn);
+
+            if (srcBones.AposeLSExits)
+            {
+                ArgumentNullException.ThrowIfNull(srcBones.AposeLSScale);
+                ArgumentNullException.ThrowIfNull(srcBones.AposeLSRot);
+                ArgumentNullException.ThrowIfNull(srcBones.AposeLSTrans);
+            }
 
             var bonesMapping = new Dictionary<int, Node>();
             var armature = model.UseScene(0).CreateNode("Armature");
