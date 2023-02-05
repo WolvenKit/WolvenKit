@@ -72,9 +72,9 @@ public class CR2WFile : Red4File, IDisposable, IEquatable<CR2WFile>
         return result;
     }
 
-    public List<CName> GetImports()
+    public List<ResourcePath> GetImports()
     {
-        var result = new List<CName>();
+        var result = new List<ResourcePath>();
 
         foreach (var embeddedFile in EmbeddedFiles)
         {

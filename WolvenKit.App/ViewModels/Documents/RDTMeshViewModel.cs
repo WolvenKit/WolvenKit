@@ -350,7 +350,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         public string? AppearanceName { get; set; }
         public string? MaterialName { get; set; }
         public string? WorldNodeIndex { get; set; }
-        public CName DepotPath { get; set; }
+        public ResourcePath DepotPath { get; set; }
     }
 
     public GroupModel3D GroupFromModel(LoadableModel model)
@@ -442,7 +442,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         foreach (var component in chunks)
         {
             var scale = new Vector3() { X = 1, Y = 1, Z = 1 };
-            var depotPath = CName.Empty;
+            var depotPath = ResourcePath.Empty;
             var enabled = true;
             var meshApp = "default";
             var chunkMask = 18446744073709551615;
@@ -472,7 +472,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
             }
 
-            if (component is entIPlacedComponent epc && depotPath != CName.Empty && depotPath.GetRedHash() != 0)
+            if (component is entIPlacedComponent epc && depotPath != ResourcePath.Empty && depotPath.GetRedHash() != 0)
             {
                 var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
 
@@ -1265,7 +1265,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var dictionary = material.Values;
 
         var mat = material.Instance;
-        while (mat != null && mat.BaseMaterial.DepotPath != CName.Empty)
+        while (mat != null && mat.BaseMaterial.DepotPath != ResourcePath.Empty)
         {
             CR2WFile? baseMaterialFile = null;
 
@@ -1379,7 +1379,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     break;
                 }
 
-                if (layer.Material.DepotPath == CName.Empty)
+                if (layer.Material.DepotPath == ResourcePath.Empty)
                 {
                     goto SkipLayer;
                 }
@@ -1403,7 +1403,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     maskBitmap = new Bitmap(outStream);
                 }
 
-                if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material.DepotPath == CName.Empty)
+                if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material.DepotPath == ResourcePath.Empty)
                 {
                     goto SkipColor;
                 }

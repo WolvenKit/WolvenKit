@@ -1266,7 +1266,7 @@ namespace WolvenKit.Modkit.RED4
             var path = cMaterialInstance.BaseMaterial.DepotPath;
             while (!Path.GetExtension(path).Contains("mt"))
             {
-                if (path == CName.Empty)
+                if (path == ResourcePath.Empty)
                 {
                     return (null, resultDict);
                 }

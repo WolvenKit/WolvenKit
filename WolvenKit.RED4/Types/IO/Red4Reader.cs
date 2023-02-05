@@ -453,7 +453,7 @@ public partial class Red4Reader : IErrorHandler, IDisposable
             throw new TodoException();
         }
 
-        var depotPath = (CName)0;
+        var depotPath = ResourcePath.Empty;
         var flags = InternalEnums.EImportFlags.Default;
 
         var index = _reader.ReadUInt16();
@@ -479,7 +479,7 @@ public partial class Red4Reader : IErrorHandler, IDisposable
             throw new TodoException();
         }
 
-        var depotPath = (CName)0;
+        var depotPath = ResourcePath.Empty;
         var flags = InternalEnums.EImportFlags.Default;
 
         var index = _reader.ReadUInt16();

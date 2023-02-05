@@ -47,7 +47,7 @@ public partial class CR2WWriter
 
         fileHeader.objectsEnd = (uint)BaseStream.Position;
 
-        var (stringBuffer, stringOffsets) = GenerateStringBuffer(dataCollection.CombinedStringList);
+        var (stringBuffer, stringOffsets, importOffsets) = GenerateStringBuffer(dataCollection.StringList, dataCollection.PathList);
 
         tableHeaders[0] = new CR2WTable()
         {
@@ -102,7 +102,7 @@ public partial class CR2WWriter
                 var entry = new CR2WImportInfo()
                 {
                     className = (ushort)dataCollection.StringList.IndexOf(import.ClassName),
-                    offset = stringOffsets[import.DepotPath],
+                    offset = importOffsets[import.DepotPath],
                     flags = import.Flag
                 };
 
@@ -526,8 +526,8 @@ public partial class CR2WWriter
     private class DataCollection
     {
         public List<CName> StringList { get; set; }
+        public List<ResourcePath> PathList { get; set; }
         public List<ImportEntry> ImportList { get; set; }
-        public List<CName> CombinedStringList { get; set; }
 
         public List<CR2WExportInfo> ChunkInfoList { get; set; }
         public byte[] ChunkData { get; set; }
@@ -640,13 +640,10 @@ public partial class CR2WWriter
             }
         }
 
-        result.CombinedStringList = new List<CName>(result.StringList);
+        result.PathList = new List<ResourcePath>();
         foreach (var importEntry in result.ImportList)
         {
-            if (!result.CombinedStringList.Contains(importEntry.DepotPath))
-            {
-                result.CombinedStringList.Add(importEntry.DepotPath);
-            }
+            result.PathList.Add(importEntry.DepotPath);
         }
 
         for (var i = 0; i < chunkInfoList.Count; i++)
@@ -722,22 +719,32 @@ public partial class CR2WWriter
         }
     }
 
-    private (byte[], Dictionary<CName, uint>) GenerateStringBuffer(List<CName> strings, Encoding? encoding = null)
+    private (byte[], Dictionary<CName, uint>, Dictionary<ResourcePath, uint>) GenerateStringBuffer(List<CName> strings, List<ResourcePath> paths, Encoding? encoding = null)
     {
         encoding ??= Encoding.UTF8;
 
-        var offsetDict = new Dictionary<CName, uint>();
+        var stringOffsetDict = new Dictionary<CName, uint>();
+        var resOffsetDict = new Dictionary<ResourcePath, uint>();
         var bytes = new List<byte>();
         foreach (var str in strings)
         {
-            offsetDict.Add(str, (uint)bytes.Count);
+            stringOffsetDict.Add(str, (uint)bytes.Count);
             if (str != CName.Empty)
             {
                 bytes.AddRange(encoding.GetBytes(str!));
             }
             bytes.Add(0);
         }
-        return (bytes.ToArray(), offsetDict);
+        foreach (var path in paths)
+        {
+            resOffsetDict.Add(path, (uint)bytes.Count);
+            if (path != ResourcePath.Empty)
+            {
+                bytes.AddRange(encoding.GetBytes(path));
+            }
+            bytes.Add(0);
+        }
+        return (bytes.ToArray(), stringOffsetDict, resOffsetDict);
     }
 
     private int CalculateHeaderLength(DataCollection dataCollection)

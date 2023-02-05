@@ -46,14 +46,14 @@ public partial class CNameWrapper : ObservableObject, Nodify.INode<ReferenceSock
         _socket = socket;
     }
 
-    private bool CanOpenRef() => !CName.IsNullOrEmpty(Socket.File) && DataViewModel.Parent.RelativePath != Socket.File;
+    private bool CanOpenRef() => !ResourcePath.IsNullOrEmpty(Socket.File) && DataViewModel.Parent.RelativePath != Socket.File;
     [RelayCommand(CanExecute = nameof(CanOpenRef))]
     private void OpenRef()
     {
         IocHelper.GetService<AppViewModel>().OpenFileFromDepotPath(Socket.File.ToString().NotNull());
     }
 
-    private bool CanLoadRef() => Socket.File != CName.Empty;
+    private bool CanLoadRef() => Socket.File != ResourcePath.Empty;
     [RelayCommand(CanExecute = nameof(CanLoadRef))]
     private void LoadRef()
     {

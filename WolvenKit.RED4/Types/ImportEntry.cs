@@ -2,7 +2,7 @@ namespace WolvenKit.RED4.Types;
 
 public class ImportEntry
 {
-    public ImportEntry(CName className, CName depotPath, ushort flag)
+    public ImportEntry(CName className, ResourcePath depotPath, ushort flag)
     {
         ClassName = className;
         DepotPath = depotPath;
@@ -10,6 +10,6 @@ public class ImportEntry
     }
 
     public CName ClassName { get; }
-    public CName DepotPath { get; }
+    public ResourcePath DepotPath { get; }
     public ushort Flag { get; set; }
 }

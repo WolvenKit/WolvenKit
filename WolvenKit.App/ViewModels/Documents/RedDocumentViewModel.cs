@@ -283,9 +283,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
         SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
     }
 
-    public Dictionary<CName, CR2WFile> Files { get; set; } = new();
+    public Dictionary<ResourcePath, CR2WFile> Files { get; set; } = new();
 
-    public CR2WFile GetFileFromDepotPathOrCache(CName depotPath)
+    public CR2WFile GetFileFromDepotPathOrCache(ResourcePath depotPath)
     {
         lock (Files)
         {
@@ -346,9 +346,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
     }
 
-    public CR2WFile? GetFileFromDepotPath(CName depotPath, bool original = false)
+    public CR2WFile? GetFileFromDepotPath(ResourcePath depotPath, bool original = false)
     {
-        if (depotPath == CName.Empty)
+        if (depotPath == ResourcePath.Empty)
         {
             return null;
         }
