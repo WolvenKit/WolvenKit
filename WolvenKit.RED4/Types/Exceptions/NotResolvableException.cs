@@ -17,6 +17,14 @@ public class NotResolvableException : Exception
         }
     }
 
+    public static void ThrowIfNotResolvable([NotNull] ResourcePath argument, [CallerArgumentExpression("argument")] string? paramName = null)
+    {
+        if (!argument.IsResolvable)
+        {
+            Throw(paramName);
+        }
+    }
+
     public static void ThrowIfNotResolvable([NotNull] NodeRef argument, [CallerArgumentExpression("argument")] string? paramName = null)
     {
         if (!argument.IsResolvable)

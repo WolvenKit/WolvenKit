@@ -224,7 +224,7 @@ public partial class CR2WReader
         var ret = new CR2WImport
         {
             ClassName = _namesList[info.className]!,
-            DepotPath = stringDict[info.offset],
+            DepotPath = stringDict[info.offset].GetResolvedText().NotNull(),
             Flags = (InternalEnums.EImportFlags)info.flags
         };
 

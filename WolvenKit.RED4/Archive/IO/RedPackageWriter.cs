@@ -183,7 +183,7 @@ public partial class RedPackageWriter : Red4Writer
 
     public override void Write(IRedResourceReference instance)
     {
-        if (instance.DepotPath == CName.Empty)
+        if (instance.DepotPath == ResourcePath.Empty)
         {
             _writer.Write((short)-1);
             return;
@@ -197,7 +197,7 @@ public partial class RedPackageWriter : Red4Writer
 
     public override void Write(IRedResourceAsyncReference instance)
     {
-        if (instance.DepotPath == CName.Empty)
+        if (instance.DepotPath == ResourcePath.Empty)
         {
             _writer.Write((short)-1);
             return;

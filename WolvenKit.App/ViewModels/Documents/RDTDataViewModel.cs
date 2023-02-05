@@ -20,7 +20,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 {
     protected IRedType _data;
 
-    private List<CName> _nodePaths = new();
+    private List<ResourcePath> _nodePaths = new();
 
     private List<ChunkViewModel> _chunks = new();
 
@@ -118,7 +118,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             if (!_nodePaths.Contains(reference.Destination.File))
             {
-                if (reference.Destination.File != CName.Empty)
+                if (reference.Destination.File != ResourcePath.Empty)
                 {
                     Nodes.Add(new CNameWrapper(this, reference.Destination));
                     _nodePaths.Add(reference.Destination.File);

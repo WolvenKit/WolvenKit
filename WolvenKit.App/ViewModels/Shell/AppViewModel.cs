@@ -925,7 +925,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    public void OpenFileFromDepotPath(string path) => OpenFileFromHash(FNV1A64HashAlgorithm.HashString(path));
+    public void OpenFileFromDepotPath(string path) => OpenFileFromHash(FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(path)));
 
     public void OpenFileFromHash(ulong hash)
     {

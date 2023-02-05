@@ -6,32 +6,32 @@ namespace WolvenKit.RED4.Types;
 [RED("raRef")]
 public readonly struct CResourceAsyncReference<T> : IRedResourceAsyncReference<T>, IEquatable<CResourceAsyncReference<T>> where T : CResource
 {
-    private readonly CName _depotPath;
+    private readonly ResourcePath _depotPath;
     private readonly InternalEnums.EImportFlags _flags;
 
 
     public CResourceAsyncReference()
     {
-        _depotPath = CName.Empty;
+        _depotPath = ResourcePath.Empty;
         _flags = InternalEnums.EImportFlags.Default;
     }
 
-    public CResourceAsyncReference(CName depotPath)
+    public CResourceAsyncReference(ResourcePath depotPath)
     {
         _depotPath = depotPath;
         _flags = InternalEnums.EImportFlags.Default;
     }
 
-    public CResourceAsyncReference(CName depotPath, InternalEnums.EImportFlags flags)
+    public CResourceAsyncReference(ResourcePath depotPath, InternalEnums.EImportFlags flags)
     {
         _depotPath = depotPath;
         _flags = flags;
     }
 
-    public CName DepotPath => _depotPath;
+    public ResourcePath DepotPath => _depotPath;
     public InternalEnums.EImportFlags Flags => _flags;
 
-    public bool IsSet => _depotPath != CName.Empty;
+    public bool IsSet => _depotPath != ResourcePath.Empty;
 
     public bool Equals(CResourceAsyncReference<T> other)
     {

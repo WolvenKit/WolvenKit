@@ -246,7 +246,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     //[NotifyCanExecuteChangedFor(nameof(DeleteItemCommand))]
     private IRedType _data;
 
-    [ObservableProperty] private CName _relativePath;
+    [ObservableProperty] private ResourcePath _relativePath;
 
     [ObservableProperty] private bool _isSelected;
 
@@ -792,7 +792,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool CanBeDroppedOn(ChunkViewModel target) => PropertyType == target.PropertyType;
 
-    private bool CanOpenRef() => Data is IRedRef r && r.DepotPath != CName.Empty;   // TODO RelayCommand check notify
+    private bool CanOpenRef() => Data is IRedRef r && r.DepotPath != ResourcePath.Empty;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanOpenRef))]
     private void OpenRef()
     {
@@ -813,7 +813,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         //}
     }
 
-    private bool CanAddRef() => Data is IRedRef r && r.DepotPath != CName.Empty;   // TODO RelayCommand check notify
+    private bool CanAddRef() => Data is IRedRef r && r.DepotPath != ResourcePath.Empty;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanAddRef))]
     private async Task AddRef()
     {
