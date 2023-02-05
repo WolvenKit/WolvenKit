@@ -212,12 +212,16 @@ namespace WolvenKit.Modkit.RED4.RigFile
         {
             ArgumentNullException.ThrowIfNull(srcBones.Parent);
             ArgumentNullException.ThrowIfNull(srcBones.Names);
-            ArgumentNullException.ThrowIfNull(srcBones.AposeLSScale);
-            ArgumentNullException.ThrowIfNull(srcBones.AposeLSRot);
-            ArgumentNullException.ThrowIfNull(srcBones.AposeLSTrans);
             ArgumentNullException.ThrowIfNull(srcBones.LocalScale);
             ArgumentNullException.ThrowIfNull(srcBones.LocalRot);
             ArgumentNullException.ThrowIfNull(srcBones.LocalPosn);
+
+            if (srcBones.AposeLSExits)
+            {
+                ArgumentNullException.ThrowIfNull(srcBones.AposeLSScale);
+                ArgumentNullException.ThrowIfNull(srcBones.AposeLSRot);
+                ArgumentNullException.ThrowIfNull(srcBones.AposeLSTrans);
+            }
 
             var bonesMapping = new Dictionary<int, Node>();
             var armature = model.UseScene(0).CreateNode("Armature");
@@ -228,9 +232,9 @@ namespace WolvenKit.Modkit.RED4.RigFile
                     var bone = bonesMapping[srcBones.Parent[i]].CreateNode(srcBones.Names[i]);
                     if (srcBones.AposeLSExits)
                     {
-                        var s = new Vec3(srcBones.AposeLSScale[i].X, srcBones.AposeLSScale[i].Y, srcBones.AposeLSScale[i].Z);
-                        var r = new Quat(srcBones.AposeLSRot[i].X, srcBones.AposeLSRot[i].Y, srcBones.AposeLSRot[i].Z, srcBones.AposeLSRot[i].W);
-                        var t = new Vec3(srcBones.AposeLSTrans[i].X, srcBones.AposeLSTrans[i].Y, srcBones.AposeLSTrans[i].Z);
+                        var s = new Vec3(srcBones.AposeLSScale![i].X, srcBones.AposeLSScale[i].Y, srcBones.AposeLSScale[i].Z);
+                        var r = new Quat(srcBones.AposeLSRot![i].X, srcBones.AposeLSRot[i].Y, srcBones.AposeLSRot[i].Z, srcBones.AposeLSRot[i].W);
+                        var t = new Vec3(srcBones.AposeLSTrans![i].X, srcBones.AposeLSTrans[i].Y, srcBones.AposeLSTrans[i].Z);
 
                         bone.WithLocalScale(s).WithLocalRotation(r).WithLocalTranslation(t);
                     }
@@ -249,9 +253,9 @@ namespace WolvenKit.Modkit.RED4.RigFile
                     var root = armature.CreateNode(srcBones.Names[i]);
                     if (srcBones.AposeLSExits)
                     {
-                        var s = new Vec3(srcBones.AposeLSScale[i].X, srcBones.AposeLSScale[i].Y, srcBones.AposeLSScale[i].Z);
-                        var r = new Quat(srcBones.AposeLSRot[i].X, srcBones.AposeLSRot[i].Y, srcBones.AposeLSRot[i].Z, srcBones.AposeLSRot[i].W);
-                        var t = new Vec3(srcBones.AposeLSTrans[i].X, srcBones.AposeLSTrans[i].Y, srcBones.AposeLSTrans[i].Z);
+                        var s = new Vec3(srcBones.AposeLSScale![i].X, srcBones.AposeLSScale[i].Y, srcBones.AposeLSScale[i].Z);
+                        var r = new Quat(srcBones.AposeLSRot![i].X, srcBones.AposeLSRot[i].Y, srcBones.AposeLSRot[i].Z, srcBones.AposeLSRot[i].W);
+                        var t = new Vec3(srcBones.AposeLSTrans![i].X, srcBones.AposeLSTrans[i].Y, srcBones.AposeLSTrans[i].Z);
                         root.WithLocalScale(s).WithLocalRotation(r).WithLocalTranslation(t);
                     }
                     else

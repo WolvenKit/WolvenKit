@@ -49,8 +49,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         try
         {
-            Header ??= MeshViewHeaders.MeshPreview;
-
             Parent = parent;
 
             foreach (var res in Parent.Cr2wFile.EmbeddedFiles)
@@ -84,7 +82,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     // TODO refactor this into inherited viewmodels
 
-    public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file, "NO DATA")
+    public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file, MeshViewHeaders.MeshPreview)
     {
         _data = data;
 
@@ -1169,7 +1167,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         var materials = new Dictionary<string, Material>();
 
-        var localList = mesh.LocalMaterialBuffer.RawData.Buffer.Data as CR2WList ?? null;
+        var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
 
 
         foreach (var me in mesh.MaterialEntries)

@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
@@ -27,12 +27,31 @@ public class WatcherService : ObservableObject, IWatcherService
 
     public FileModel? LastSelect { get; set; }
 
+    private readonly Timer _timer;
+    private const int s_waitTime = 100;
+
+    private readonly List<string> _ignoredExtensions = new()
+    {
+        ".TMP",
+        ".PDNSAVE"
+    };
+
     #endregion
 
     public WatcherService(IProjectManager projectManager)
     {
         _projectManager = projectManager;
         _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
+
+        _timer = new Timer(OnTimer);
+    }
+
+    // HACK remove after e3 -S. Eberoth
+    private async void OnTimer(object? state)
+    {
+        _timer.Change(-1, -1);
+
+        await RefreshAsync(_projectManager.ActiveProject);
     }
 
     private async void ProjectManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -136,22 +155,21 @@ public class WatcherService : ObservableObject, IWatcherService
         {
             return;
         }
+
         if (IsSuspended)
         {
             return;
         }
 
-        // special case for temporary textures
         var extension = Path.GetExtension(e.Name);
-        if (!string.IsNullOrEmpty(extension))
+        if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension))
         {
-            if (extension.ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal) || extension.ToUpper().Equals(".TMP", StringComparison.Ordinal))
-            {
-                return;
-            }
+            return;
         }
 
-        switch (e.ChangeType)
+        _timer.Change(s_waitTime, -1);
+
+        /*switch (e.ChangeType)
         {
             case WatcherChangeTypes.Created:
             {
@@ -184,7 +202,7 @@ public class WatcherService : ObservableObject, IWatcherService
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
-        }
+        }*/
     }
 
     /// <summary>
@@ -198,18 +216,27 @@ public class WatcherService : ObservableObject, IWatcherService
         {
             return;
         }
+
         if (IsSuspended)
         {
             return;
         }
 
         var extension = Path.GetExtension(e.Name);
+        if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension))
+        {
+            return;
+        }
+
+        _timer.Change(s_waitTime, -1);
+
+        /*var extension = Path.GetExtension(e.Name);
         if (string.IsNullOrEmpty(extension))
         {
             return;
         }
-        var newIsTempFile = extension.ToUpper().Equals(".TMP", StringComparison.Ordinal) || extension.ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal);
 
+        var newIsTempFile = extension.ToUpper().Equals(".TMP", StringComparison.Ordinal) || extension.ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal);
         switch (e.ChangeType)
         {
             case WatcherChangeTypes.Renamed:
@@ -234,10 +261,6 @@ public class WatcherService : ObservableObject, IWatcherService
                 break;
             default:
                 break;
-        }
-
+        }*/
     }
-
-
-
 }

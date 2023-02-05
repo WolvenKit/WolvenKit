@@ -222,49 +222,4 @@ public partial class CR2WReader : Red4Reader
 
         return result;
     }
-
-    public override IRedHandle? ReadCHandle<T>()
-    {
-        var pointer = _reader.ReadInt32() - 1;
-        if (pointer < 0)
-        {
-            return null;
-        }
-
-        return new CHandle<T>((T)_chunks[pointer]);
-    }
-
-    public override IRedHandle? ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
-    {
-        var pointer = _reader.ReadInt32() - 1;
-        if (pointer < 0)
-        {
-            return null;
-        }
-
-        var type = RedReflection.GetFullType(redTypeInfos);
-        if (System.Activator.CreateInstance(type, _chunks[pointer]) is not IRedHandle result)
-        {
-            throw new Exception();
-        }
-
-        return result;
-    }
-
-    public override IRedWeakHandle? ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
-    {
-        var pointer = _reader.ReadInt32() - 1;
-        if (pointer < 0)
-        {
-            return null;
-        }
-
-        var type = RedReflection.GetFullType(redTypeInfos);
-        if (System.Activator.CreateInstance(type, _chunks[pointer]) is not IRedWeakHandle result)
-        {
-            throw new Exception();
-        }
-
-        return result;
-    }
 }

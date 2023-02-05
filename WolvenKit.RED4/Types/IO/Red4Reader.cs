@@ -24,7 +24,9 @@ public partial class Red4Reader : IErrorHandler, IDisposable
     public bool CollectData { get; set; } = false;
     public DataCollection DataCollection { get; } = new();
 
-        
+    protected readonly Dictionary<int, ChunkInfo> _chunks = new();
+
+
     public Red4Reader(Stream input) : this(input, Encoding.UTF8, false)
     {
     }
@@ -395,26 +397,54 @@ public partial class Red4Reader : IErrorHandler, IDisposable
 
     public virtual IRedHandle? ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
+        var pointer = _reader.ReadInt32() - 1;
+        if (pointer < 0)
+        {
+            return null;
+        }
+
         var type = RedReflection.GetFullType(redTypeInfos);
-        if (Activator.CreateInstance(type) is not IRedHandle result)
+        if (Activator.CreateInstance(type, _chunks[pointer].Instance) is not IRedHandle result)
         {
             throw new Exception();
         }
 
-        var pointer = _reader.ReadInt32() - 1;
-        if (!HandleQueue.ContainsKey(pointer))
-        {
-            HandleQueue.Add(pointer, new List<IRedBaseHandle>());
-        }
-
-        HandleQueue[pointer].Add(result);
+        _chunks[pointer].IsUsed = true;
 
         return result;
     }
 
-    public virtual IRedHandle? ReadCHandle<T>() where T : RedBaseClass => throw new NotImplementedException();
+    public virtual IRedHandle? ReadCHandle<T>() where T : RedBaseClass
+    {
+        var pointer = _reader.ReadInt32() - 1;
+        if (pointer < 0)
+        {
+            return null;
+        }
 
-    public virtual IRedWeakHandle? ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size) => throw new NotImplementedException();
+        _chunks[pointer].IsUsed = true;
+
+        return new CHandle<T>((T)_chunks[pointer].Instance);
+    }
+
+    public virtual IRedWeakHandle? ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
+    {
+        var pointer = _reader.ReadInt32() - 1;
+        if (pointer < 0)
+        {
+            return null;
+        }
+
+        var type = RedReflection.GetFullType(redTypeInfos);
+        if (System.Activator.CreateInstance(type, _chunks[pointer].Instance) is not IRedWeakHandle result)
+        {
+            throw new Exception();
+        }
+
+        _chunks[pointer].IsUsed = true;
+
+        return result;
+    }
 
     public virtual IRedResourceReference ReadCResourceReference(List<RedTypeInfo> redTypeInfos, uint size)
     {
@@ -799,4 +829,12 @@ public partial class Red4Reader : IErrorHandler, IDisposable
     public virtual void Close() => Dispose(true);
 
     #endregion IDisposable
+
+    protected class ChunkInfo
+    {
+        public RedBaseClass Instance { get; }
+        public bool IsUsed { get; set; }
+
+        public ChunkInfo(RedBaseClass instance) => Instance = instance;
+    }
 }

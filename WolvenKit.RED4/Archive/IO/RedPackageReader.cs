@@ -169,7 +169,7 @@ public partial class RedPackageReader : Red4Reader
         return result2;
     }
 
-    public override IRedHandle ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
+    public override IRedHandle? ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
         int pointer;
         if (header.version == 2)
@@ -185,37 +185,38 @@ public partial class RedPackageReader : Red4Reader
             throw new NotImplementedException(nameof(ReadCHandle));
         }
 
+        if (pointer < 0)
+        {
+            return null;
+        }
+
         var type = RedReflection.GetFullType(redTypeInfos);
-        if (Activator.CreateInstance(type) is not IRedHandle result)
+        if (Activator.CreateInstance(type, _chunks[pointer].Instance) is not IRedHandle result)
         {
             throw new Exception();
         }
 
-        if (!HandleQueue.ContainsKey(pointer))
-        {
-            HandleQueue.Add(pointer, new List<IRedBaseHandle>());
-        }
-
-        HandleQueue[pointer].Add(result);
+        _chunks[pointer].IsUsed = true;
 
         return result;
     }
 
-    public override IRedWeakHandle ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
+    public override IRedWeakHandle? ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
+        var pointer = _reader.ReadInt32();
+
+        if (pointer < 0)
+        {
+            return null;
+        }
+
         var type = RedReflection.GetFullType(redTypeInfos);
-        if (Activator.CreateInstance(type) is not IRedWeakHandle result)
+        if (Activator.CreateInstance(type, _chunks[pointer].Instance) is not IRedWeakHandle result)
         {
             throw new Exception();
         }
 
-        var pointer = _reader.ReadInt32();
-        if (!HandleQueue.ContainsKey(pointer))
-        {
-            HandleQueue.Add(pointer, new List<IRedBaseHandle>());
-        }
-
-        HandleQueue[pointer].Add(result);
+        _chunks[pointer].IsUsed = true;
 
         return result;
     }

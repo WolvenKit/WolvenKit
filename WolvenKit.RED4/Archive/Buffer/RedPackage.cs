@@ -26,7 +26,7 @@ public class RedPackage : Red4File, IParseableBuffer, IRedCloneable
 
     public IRedType Data => RootChunk;
 
-    public IList<RedBaseClass> Chunks { get; set; }
+    public List<RedBaseClass> Chunks { get; set; } = new();
     public RedBaseClass RootChunk => Chunks[0];
 
     public Dictionary<IRedType, CRUID> ChunkDictionary { get; set; } = new();
