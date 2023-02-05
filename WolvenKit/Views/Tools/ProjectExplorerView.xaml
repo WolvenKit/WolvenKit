@@ -62,7 +62,7 @@
 
                 <MenuItem
                     x:Name="ConvertToJsonMenuItem"
-                    Command="{Binding ConvertToJsonCommand}"
+                    Command="{Binding ConvertToCommand}"
                     Header="Convert to JSON"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
@@ -79,7 +79,7 @@
                 </MenuItem>
                 <MenuItem
                     x:Name="ConvertFromJsonMenuItem"
-                    Command="{Binding ConvertFromJsonCommand}"
+                    Command="{Binding ConvertFromCommand}"
                     Header="Convert from JSON"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
