@@ -92,7 +92,7 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
         return true;
     }
 
-    public static string SanitizePath(string text)
+    public static string SanitizePath(string? text)
     {
         if (string.IsNullOrEmpty(text))
         {
@@ -101,30 +101,20 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
 
         var strResult = new StringBuilder();
 
-        // replace all forward slashes with backslash
-        text = text.Replace('/', '\\');
-
         // strip all leading and trailing slashes and quotes
-        while ("\"'\\".Contains(text[0]))
-        {
-            text = text.Substring(1, text.Length - 1);
-        }
-
-        while ("\"'\\".Contains(text[text.Length - 1]))
-        {
-            text = text.Substring(0, text.Length - 1);
-        }
+        char[] trimChars = { '\'', '"', '/', '\\', ' ', '\n', '\r' };
+        text = text.Trim(trimChars);
 
         // append all remaining characters except repeated slashes
-        foreach (var element in text.ToCharArray())
+        for (var i = 0; i < text.Length; i++)
         {
             if (strResult.Length == 0)
             {
-                strResult.Append(element);
+                strResult.Append(text[i]);
                 continue;
             }
 
-            if (element == '\\')
+            if (text[i] == '\\' || text[i] == '/')
             {
                 if (strResult[strResult.Length - 1] != '\\')
                 {
@@ -133,7 +123,7 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
                 continue;
             }
 
-            strResult.Append(element);
+            strResult.Append(text[i]);
         }
         return strResult.ToString().ToLowerInvariant();
     }

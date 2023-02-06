@@ -9,7 +9,7 @@ public static class ResourcePathPool
     private static readonly ConcurrentDictionary<string, ulong> s_pool = new();
     private static readonly ConcurrentDictionary<ulong, string> s_poolReverse = new();
 
-    public static string ResolveHash(ulong hash)
+    public static string? ResolveHash(ulong hash)
     {
         if (s_poolReverse.TryGetValue(hash, out var value))
         {
@@ -35,5 +35,5 @@ public static class ResourcePathPool
     }
 
     public delegate string ExtResolveHash(ulong hash);
-    public static ExtResolveHash ResolveHashHandler;
+    public static ExtResolveHash? ResolveHashHandler;
 }
