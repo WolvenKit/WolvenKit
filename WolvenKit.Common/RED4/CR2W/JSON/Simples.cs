@@ -1333,6 +1333,45 @@ public class MultiChannelCurveConverter : JsonConverter<IRedMultiChannelCurve>, 
 
 #endregion MultiChannelCurveConverter
 
+public class ResourcePathConverter : JsonConverter<ResourcePath>, ICustomRedConverter
+{
+    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
+
+    public override ResourcePath Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return (ResourcePath)RedTypeManager.CreateRedType(typeToConvert);
+        }
+
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            return reader.GetString().NotNull();
+        }
+        else if (reader.TokenType == JsonTokenType.Number)
+        {
+            return reader.GetUInt64();
+        }
+        else
+        {
+            throw new JsonException();
+        }
+    }
+
+    public override void Write(Utf8JsonWriter writer, ResourcePath value, JsonSerializerOptions options)
+    {
+        var resolved = value.GetResolvedText();
+        if (!string.IsNullOrEmpty(resolved))
+        {
+            writer.WriteStringValue(resolved);
+        }
+        else
+        {
+            writer.WriteNumberValue(value);
+        }
+    }
+}
+
 public class NodeRefConverter : JsonConverter<NodeRef>, ICustomRedConverter
 {
     public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
