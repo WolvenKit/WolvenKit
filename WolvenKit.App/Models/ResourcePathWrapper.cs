@@ -5,13 +5,12 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models;
 
-public partial class CNameWrapper : ObservableObject, Nodify.INode<ReferenceSocket>
+public partial class ResoucePathWrapper : ObservableObject, INode<ReferenceSocket>
 {
     //public CName CName => Socket.File;
 
@@ -40,7 +39,7 @@ public partial class CNameWrapper : ObservableObject, Nodify.INode<ReferenceSock
 
     public RDTDataViewModel DataViewModel { get; set; }
 
-    public CNameWrapper(RDTDataViewModel vm, ReferenceSocket socket)
+    public ResoucePathWrapper(RDTDataViewModel vm, ReferenceSocket socket)
     {
         DataViewModel = vm;
         _socket = socket;

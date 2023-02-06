@@ -34,6 +34,6 @@ public static class ResourcePathPool
         return hash;
     }
 
-    public delegate string ExtResolveHash(ulong hash);
+    public delegate string? ExtResolveHash(ulong hash);
     public static ExtResolveHash? ResolveHashHandler;
 }

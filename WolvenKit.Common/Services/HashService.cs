@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using WolvenKit.Common.Annotations;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
@@ -41,7 +42,7 @@ namespace WolvenKit.Common.Services
             Load();
 
             ImportHandler.AddPathHandler = AddProjectPath;
-            CNamePool.ResolveHashHandler = Get;
+            ResourcePathPool.ResolveHashHandler = Get;
 
             NodeRefPool.ResolveHashHandler = GetNodeRef;
         }

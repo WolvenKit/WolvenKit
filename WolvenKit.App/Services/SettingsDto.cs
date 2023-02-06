@@ -29,6 +29,7 @@ public class SettingsDto : ISettingsDto
         TreeViewIgnoredExtensions = settings.TreeViewIgnoredExtensions;
         ShowAdvancedOptions = settings.ShowAdvancedOptions;
         ShowCNameAsHex = settings.ShowCNameAsHex;
+        ShowResourcePathAsHex = settings.ShowResourcePathAsHex;
         ShowNodeRefAsHex = settings.ShowNodeRefAsHex;
         ShowTweakDBIDAsHex = settings.ShowTweakDBIDAsHex;
         ShowReferenceGraph = settings.ShowReferenceGraph;
@@ -58,6 +59,7 @@ public class SettingsDto : ISettingsDto
     public string? TreeViewIgnoredExtensions { get; set; } = "";
     public bool ShowAdvancedOptions { get; set; }
     public bool ShowCNameAsHex { get; set; }
+    public bool ShowResourcePathAsHex { get; set; }
     public bool ShowNodeRefAsHex { get; set; }
     public bool ShowTweakDBIDAsHex { get; set; }
     public bool ShowReferenceGraph { get; set; }
@@ -88,6 +90,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.TreeViewIgnoredExtensions = TreeViewIgnoredExtensions;
         settingsManager.ShowAdvancedOptions = ShowAdvancedOptions;
         settingsManager.ShowCNameAsHex = ShowCNameAsHex;
+        settingsManager.ShowResourcePathAsHex = ShowResourcePathAsHex;
         settingsManager.ShowNodeRefAsHex = ShowNodeRefAsHex;
         settingsManager.ShowTweakDBIDAsHex = ShowTweakDBIDAsHex;
         settingsManager.ShowReferenceGraph = ShowReferenceGraph;

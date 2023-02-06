@@ -65,7 +65,7 @@ namespace WolvenKit.Views.Editors
         {
             get
             {
-                if (_settingsManager.ShowNodeRefAsHex)
+                if (_settingsManager.ShowResourcePathAsHex)
                 {
                     return RedRef.DepotPath.GetRedHash().ToString("X");
                 }
@@ -76,7 +76,7 @@ namespace WolvenKit.Views.Editors
             }
             set
             {
-                if (_settingsManager.ShowNodeRefAsHex)
+                if (_settingsManager.ShowResourcePathAsHex)
                 {
                     SetValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, (ResourcePath)ulong.Parse(value, NumberStyles.HexNumber), RedRef.Flags));
                 }
@@ -91,7 +91,7 @@ namespace WolvenKit.Views.Editors
         {
             var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, e.Text);
 
-            if (_settingsManager.ShowNodeRefAsHex)
+            if (_settingsManager.ShowResourcePathAsHex)
             {
                 e.Handled = !ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _);
             }
@@ -108,7 +108,7 @@ namespace WolvenKit.Views.Editors
                 var text = (string)e.DataObject.GetData(typeof(string));
                 var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text!);
 
-                if (_settingsManager.ShowNodeRefAsHex)
+                if (_settingsManager.ShowResourcePathAsHex)
                 {
                     if (!ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _))
                     {
