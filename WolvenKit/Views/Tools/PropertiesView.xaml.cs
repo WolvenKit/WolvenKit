@@ -23,7 +23,7 @@ namespace WolvenKit.Views.Tools
     {
         public string _fileName;
 
-        private readonly MediaPlayer mediaPlayer = new();
+        //private readonly MediaPlayer mediaPlayer = new();
 
         public PropertiesView()
         {
@@ -71,6 +71,17 @@ namespace WolvenKit.Views.Tools
 
                 ImagePreview.SetCurrentValue(RenderTransformProperty, group);
             });
+
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+        }
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(PropertiesViewModel.AudioObject))
+            {
+                // play in viewmodel
+                AudioPlayer.ViewModel.LoadOggFile(ViewModel.AudioObject);
+            }
         }
 
         #region Image Preview
@@ -165,32 +176,17 @@ namespace WolvenKit.Views.Tools
             e.ReadOnly = true;
         }
 
-        private Stream StreamFromBitmapSource(BitmapSource writeBmp)
-        {
-            Stream bmp = new MemoryStream();
+        //private Stream StreamFromBitmapSource(BitmapSource writeBmp)
+        //{
+        //    Stream bmp = new MemoryStream();
 
-            BitmapEncoder enc = new BmpBitmapEncoder();
-            enc.Frames.Add(BitmapFrame.Create(writeBmp));
-            enc.Save(bmp);
+        //    BitmapEncoder enc = new BmpBitmapEncoder();
+        //    enc.Frames.Add(BitmapFrame.Create(writeBmp));
+        //    enc.Save(bmp);
 
-            return bmp;
-        }
+        //    return bmp;
+        //}
 
         private void ReloadModels(object sender, RoutedEventArgs e) => hxViewport.ZoomExtents();
-
-        #region AudioPreview
-
-       
-
-        private void TempConvertToWemWav(AudioObject obj)
-        {
-            DispatcherHelper.RunOnMainThread(() =>
-            {
-                AudioPlayer.OpenAudioObject(obj);
-            });
-        }
-
-        #endregion AudioPreview
-
     }
 }

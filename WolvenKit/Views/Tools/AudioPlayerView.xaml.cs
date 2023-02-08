@@ -1,73 +1,35 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using CommunityToolkit.Mvvm.Input;
+using NAudioWpfDemo.AudioPlaybackDemo;
+using ReactiveUI;
+using Splat;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Wwise;
-using WolvenKit.Views.Editor.AudioTool;
-using WPFSoundVisualizationLib;
 
 namespace WolvenKit.Views.Tools;
 /// <summary>
 /// Interaktionslogik für AudioPlayerView.xaml
 /// </summary>
-public partial class AudioPlayerView
+public partial class AudioPlayerView : ReactiveUserControl<AudioPlayerViewModel>
 {
     public AudioPlayerView()
     {
+        ViewModel = Locator.Current.GetService<AudioPlayerViewModel>();
+
+        // TODO do this properly
+        ViewModel.Visualizations.Add(new SpectrumAnalyzerVisualization());
+        ViewModel.Visualizations.Add(new PolygonWaveFormVisualization());
+        ViewModel.Visualizations.Add(new PolylineWaveFormVisualization());
+        ViewModel.SelectedVisualization = ViewModel.Visualizations.FirstOrDefault();
+
+        DataContext = ViewModel;
+
         InitializeComponent();
-
-        NAudioSimpleEngine.Instance.PropertyChanged += NAudioSimpleEngine_PropertyChanged;
-
-        spectrumAnalyzer.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
-        waveformTimeline.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
     }
 
-    private bool CanPlay() => NAudioSimpleEngine.Instance.CanPlay;
-    [RelayCommand(CanExecute = nameof(CanPlay))]
-    private void Play() => NAudioSimpleEngine.Instance.Play();
 
-    private bool CanPause => NAudioSimpleEngine.Instance.CanPause;
-    [RelayCommand(CanExecute = nameof(CanPause))]
-    private void Pause() => NAudioSimpleEngine.Instance.Pause();
-
-    private bool CanStop => NAudioSimpleEngine.Instance.CanStop;
-    [RelayCommand(CanExecute = nameof(CanStop))]
-    private void Stop() => NAudioSimpleEngine.Instance.Stop();
-
-    private void NAudioSimpleEngine_PropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
-        {
-            case "CanPlay":
-                PlayCommand.NotifyCanExecuteChanged();
-                break;
-            case "CanPause":
-                PauseCommand.NotifyCanExecuteChanged();
-                break;
-            case "CanStop":
-                StopCommand.NotifyCanExecuteChanged();
-                break;
-            case "ChannelPosition":
-                clockDisplay.SetCurrentValue(DigitalClock.TimeProperty, TimeSpan.FromSeconds(NAudioSimpleEngine.Instance.ChannelPosition));
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void OpenFile(string filePath)
-    {
-        NAudioSimpleEngine.Instance.OpenFile(filePath);
-        RunnerText.SetCurrentValue(ContentProperty, Path.GetFileNameWithoutExtension(filePath));
-    }
-
-    public void OpenAudioObject(AudioObject audioObject)
-    {
-        var oggBuffer = Wem.Convert(audioObject.Data);
-
-        var ms = new MemoryStream(oggBuffer);
-        NAudioSimpleEngine.Instance.OpenOggStream(ms);
-        RunnerText.SetCurrentValue(ContentProperty, audioObject.Title);
-    }
 }
