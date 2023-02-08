@@ -17,7 +17,7 @@ public class LaunchProfile
 
     [Category("Install")]
     [Display(Name = "Clean packed directory completely first")]
-    public bool CleanAll { get; set; }
+    public bool CleanAll { get; set; } = true;
 
     [Category("REDmod")]
     [Display(Name = "Pack as REDmod")]

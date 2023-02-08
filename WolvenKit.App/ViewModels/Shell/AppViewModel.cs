@@ -1391,9 +1391,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     }
 
-    private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null &&
-                                                   path.Contains(_projectManager.ActiveProject
-                                                       .RawDirectory);
+    private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.RawDirectory);
+    private bool IsInResourceFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.ResourcesDirectory);
 
     public Task RequestFileOpen(string fullpath)
     {
@@ -1458,7 +1457,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 // double file formats
                 case ".csv":
                 case ".json":
-                    return IsInRawFolder(fullpath) ? Task.Run(ShellExecute) : Task.Run(OpenRedengineFile);
+                    return (IsInRawFolder(fullpath) || IsInResourceFolder(fullpath) ) ? Task.Run(ShellExecute) : Task.Run(OpenRedengineFile);
 
                 // VIDEO
                 case ".bk2":
