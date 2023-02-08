@@ -75,7 +75,20 @@ public partial class TextureImportViewModel : ImportViewModel
         _modTools = modTools;
         _progressService = progressService;
         _parserService = parserService;
+
         LoadFiles();
+
+        PropertyChanged += TextureExportViewModel_PropertyChanged;
+    }
+    private void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(IsActive))
+        {
+            if (IsActive)
+            {
+                LoadFiles();
+            }
+        }
     }
 
     #region Commands

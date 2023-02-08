@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using WolvenKit.App.Controllers;
@@ -72,6 +73,19 @@ public partial class TextureExportViewModel : ExportViewModel
         _progressService = progressService;
 
         LoadFiles();
+
+        PropertyChanged += TextureExportViewModel_PropertyChanged;
+    }
+
+    private void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName ==  nameof(IsActive))
+        { 
+            if (IsActive)
+            {
+                LoadFiles();
+            }
+        }
     }
 
     #region Commands
