@@ -1172,6 +1172,18 @@
             <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="bin">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
             </DataTrigger>
+
+            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="script">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ws">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="tweak">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
+            </DataTrigger>
+
+
             <Trigger Property="Source" Value="{x:Null}">
                 <Setter Property="Visibility" Value="Collapsed" />
             </Trigger>
@@ -1215,7 +1227,7 @@
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="OpenDirImageKey">
-                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
+                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="OpenDirImageKeyOpen">
