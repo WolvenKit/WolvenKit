@@ -154,7 +154,7 @@ public static class ProcessUtil
             }
 
             // Wait for Exited event, but not more than 30 seconds.
-            await await Task.WhenAny(eventHandled.Task, Task.Delay(30000));
+            await await Task.WhenAny(eventHandled.Task/*, Task.Delay(30000)*/);
             return p.ExitCode == 0;
         }
     }

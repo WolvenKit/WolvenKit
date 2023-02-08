@@ -110,7 +110,7 @@ namespace WolvenKit.Views.Tools
             Dispatcher.InvokeAsync(() => LogRichTextBox.ScrollToEnd(), DispatcherPriority.Background);
         }
 
-        private Logtype ToLogtype(LogEventLevel level)
+        private static Logtype ToLogtype(LogEventLevel level)
         {
             return level switch
             {
@@ -124,7 +124,7 @@ namespace WolvenKit.Views.Tools
             };
         }
 
-        private Brush GetBrushForLevel(Logtype level) => level switch
+        private static Brush GetBrushForLevel(Logtype level) => level switch
         {
             Logtype.Normal or Logtype.Debug => Brushes.White,
             Logtype.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
