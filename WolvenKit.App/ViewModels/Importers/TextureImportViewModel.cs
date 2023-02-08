@@ -178,8 +178,11 @@ public partial class TextureImportViewModel : ImportViewModel
         await _watcherService.RefreshAsync(_projectManager.ActiveProject);
         _progressService.IsIndeterminate = false;
 
-        _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
-        _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+        if (sucessful > 0)
+        {
+            _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+            _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+        }
 
         //We format the list of failed export/import items here
         if (failedItems.Count > 0)

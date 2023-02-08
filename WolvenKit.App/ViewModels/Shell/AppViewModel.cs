@@ -1269,14 +1269,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
 
 
-    private Task LoadTweakDB()
+    private async Task LoadTweakDB()
     {
         if (_tweakDBService.IsLoaded)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        return _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+        await _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
     }
 
     /// <summary>

@@ -48,16 +48,16 @@ namespace WolvenKit.Common.Services
 
         private void OnLoadDB() => Loaded?.Invoke(this, EventArgs.Empty);
 
-        public Task LoadDB(string path)
+        public async Task LoadDB(string path)
         {
             if (IsLoaded || _isLoading)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             _isLoading = true;
 
-            return Task.Run(() =>
+            await Task.Run(() =>
             {
                 using var fh = File.OpenRead(path);
                 using var reader = new TweakDBReader(fh);
