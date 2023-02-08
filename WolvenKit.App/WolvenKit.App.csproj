@@ -70,7 +70,7 @@
 	<PackageReference Include="DiscordRichPresence" />
 	
 	<PackageReference Include="NAudio" />
-    <PackageReference Include="NAudio.Vorbis" />
+	<PackageReference Include="NVorbis" />
 	<PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
     <PackageReference Include="AutomaticGraphLayout" />
     <PackageReference Include="Nodify" />
