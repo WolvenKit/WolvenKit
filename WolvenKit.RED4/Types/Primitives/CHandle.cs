@@ -32,7 +32,7 @@ public static class CHandle
 public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>>, IRedCloneable where T : RedBaseClass
 {
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-    public T Chunk { get; set; }
+    public T? Chunk { get; set; }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public Type InnerType => typeof(T);
@@ -46,7 +46,7 @@ public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>>, IRedCloneable w
 
 
     public static implicit operator CHandle<T>(T value) => new(value);
-    public static implicit operator T(CHandle<T> value) => value.Chunk;
+    public static implicit operator T?(CHandle<T> value) => value.Chunk;
 
 
     public bool Equals(CHandle<T>? other)

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 using Point = System.Windows.Point;
 
@@ -18,13 +19,13 @@ public partial class ConnectionViewModel : ObservableObject, INodeConnection<Soc
     public ConnectionViewModel(RDTGraphViewModel graph, graphGraphConnectionDefinition connection)
     {
         _graph = graph;
-        var hash = connection.Destination.Chunk.GetHashCode();
+        var hash = connection.Destination.Chunk.NotNull().GetHashCode();
 
         if (Graph.SocketLookup.ContainsKey(hash))
         {
             _destination = Graph.SocketLookup[connection.Destination.Chunk.GetHashCode()];
             Destination.Connections.Add(this);
-            _source = Graph.SocketLookup[connection.Source.Chunk.GetHashCode()];
+            _source = Graph.SocketLookup[connection.Source.Chunk.NotNull().GetHashCode()];
             Source.Connections.Add(this);
         }
         else

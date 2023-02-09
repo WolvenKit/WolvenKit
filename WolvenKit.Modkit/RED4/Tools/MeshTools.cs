@@ -353,7 +353,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             {
                 for (var i = 0; i < cMesh.Appearances.Count; i++)
                 {
-                    var app = cMesh.Appearances[i].NotNull().Chunk;
+                    var app = cMesh.Appearances[i].NotNull().Chunk.NotNull();
 
                     var materialNames = new string[app.ChunkMaterials.Count];
                     for (var e = 0; e < app.ChunkMaterials.Count; e++)
@@ -1209,7 +1209,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             });
             if (clothBLob != null)
             {
-                var blob = (meshMeshParamCloth)clothBLob.Chunk;
+                var blob = (meshMeshParamCloth)clothBLob.Chunk.NotNull();
 
                 for (var i = 0; i < blob.Chunks.Count && i < meshes.Count; i++)
                 {
@@ -1315,7 +1315,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             });
             if (clothGraphicalBLob != null)
             {
-                var blob = (meshMeshParamCloth_Graphical)clothGraphicalBLob.Chunk;
+                var blob = (meshMeshParamCloth_Graphical)clothGraphicalBLob.Chunk.NotNull();
 
                 for (var i = 0; i < blob.Chunks.Count && i < meshes.Count; i++)
                 {
@@ -1444,7 +1444,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             });
             if (garmentBlob != null && exportGarmentSupport)
             {
-                var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk;
+                var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk.NotNull();
 
                 for (var i = 0; i < garmentBlobChunk.Chunks.Count && i < meshes.Count; i++)
                 {

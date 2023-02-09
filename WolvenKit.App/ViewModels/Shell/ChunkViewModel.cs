@@ -1667,7 +1667,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
         {
-            Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].NotNull().Chunk.DebugName}";
+            Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].NotNull().Chunk.NotNull().DebugName}";
             return;
         }
 
