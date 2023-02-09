@@ -557,7 +557,7 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         var elementCount = _reader.ReadUInt32();
         for (var i = 0; i < elementCount; i++)
         {
-            var point = _reader.ReadSingle();
+            var point = ReadCFloat();
 
             IRedType? element;
             if (redTypeInfos[1].BaseRedType is BaseRedType.Class)

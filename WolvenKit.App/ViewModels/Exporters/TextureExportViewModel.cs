@@ -5,8 +5,11 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using SharpDX.DirectWrite;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
@@ -21,6 +24,8 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
@@ -46,7 +51,7 @@ public partial class TextureExportViewModel : ExportViewModel
     private IArchiveManager _archiveManager;
     private IPluginService _pluginService;
     private IModTools _modTools;
-
+    private readonly Red4ParserService _parserService;
 
     public TextureExportViewModel(
         IGameControllerFactory gameController,
@@ -58,6 +63,7 @@ public partial class TextureExportViewModel : ExportViewModel
         IArchiveManager archiveManager,
         IPluginService pluginService,
         IModTools modTools,
+        Red4ParserService red4ParserService,
         IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
     {
         _gameController = gameController;
@@ -69,9 +75,29 @@ public partial class TextureExportViewModel : ExportViewModel
         _archiveManager = archiveManager;
         _pluginService = pluginService;
         _modTools = modTools;
+        _parserService = red4ParserService;
         _progressService = progressService;
 
         LoadFiles();
+
+        PropertyChanged += TextureExportViewModel_PropertyChanged;
+    }
+
+    
+
+    private void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(IsActive):
+                if (IsActive)
+                {
+                    LoadFiles();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     #region Commands
@@ -134,8 +160,11 @@ public partial class TextureExportViewModel : ExportViewModel
         await _watcherService.RefreshAsync(_projectManager.ActiveProject);
         _progressService.IsIndeterminate = false;
 
-        _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
-        _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+        if (sucessful > 0)
+        {
+            _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+            _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+        }
 
         //We format the list of failed export/import items here
         if (failedItems.Count > 0)

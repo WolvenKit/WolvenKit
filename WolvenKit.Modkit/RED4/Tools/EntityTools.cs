@@ -125,7 +125,8 @@ namespace WolvenKit.Modkit.RED4
 
             if (animsFile is null)
             {
-                throw new InvalidParsingException(nameof(animsFile));
+                _loggerService.Warning("Entity contains no AnimatedComponent and can not be exported");
+                return false;
             }
 
             if (animsFile.RootChunk is not animAnimSet anims)

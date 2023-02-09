@@ -60,6 +60,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
@@ -89,7 +90,7 @@
 
                 <syncfusion:RibbonButton
                     x:Name="ButtonDeploy"
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Margin="5"
                     Command="{Binding DeployCommand}"
                     IconStretch="Fill"
@@ -111,7 +112,7 @@
 
                 <syncfusion:RibbonButton
                     x:Name="ButtonLaunchGame"
-                    Grid.Column="2"
+                    Grid.Column="3"
                     Margin="5"
                     Command="{Binding LaunchGameCommand}"
                     IconStretch="Fill"
@@ -131,9 +132,16 @@
                     </syncfusion:RibbonButton.IconTemplate>
                 </syncfusion:RibbonButton>
 
+                <syncfusion:RibbonCheckBox
+                    x:Name="CheckBoxForce"
+                    Grid.Column="1"
+                    Margin="5"
+                    Content="Force Redeploy"
+                    IsChecked="{Binding IsForceEnabled}" />
+
                 <syncfusion:RibbonButton
                     x:Name="ButtonOpenModFolder"
-                    Grid.Column="4"
+                    Grid.Column="5"
                     Margin="5"
                     Command="{Binding OpenModFolderCommand}"
                     IconStretch="Fill"
@@ -223,24 +231,63 @@
         </Grid>
 
         <!--  Overlay  -->
+        <!--    -->
         <Grid
             Grid.Row="2"
             Grid.RowSpan="2"
-            Background="Transparent"
+            Background="{StaticResource ContentBackground}"
             Visibility="{Binding IsProcessing, Converter={StaticResource boolToVisibilityConverter}}">
 
-            <syncfusion:SfBusyIndicator AnimationType="Gear" />
-            <TextBlock
-                x:Name="ImportExportOverlayText"
-                Margin="0,65,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Text="Mods are being deployed ..." />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+
+                <StackPanel VerticalAlignment="Center" Visibility="{Binding IsNotFinished, Converter={StaticResource boolToVisibilityConverter}}">
+                    <syncfusion:SfBusyIndicator AnimationType="Gear" />
+                    <TextBlock
+                        x:Name="ImportExportOverlayText"
+                        Margin="0,65,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        Text="Mods are being deployed ..." />
+                </StackPanel>
+
+                <StackPanel VerticalAlignment="Center" Visibility="{Binding IsFinished, Converter={StaticResource boolToVisibilityConverter}}">
+                    <TextBlock
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        Text="{Binding ConfirmText}" />
+                    <Button
+                        Height="40"
+                        Margin="0,65,0,0"
+                        Command="{Binding ConfirmCommand}">
+                        <TextBlock FontSize="14" Text="Close" />
+                    </Button>
+                </StackPanel>
+
+
+            </Grid>
+
             <syncfusion:SfLinearProgressBar
                 x:Name="DeploymentProgressBar"
+                Grid.Row="1"
                 Height="20"
-                Margin="50,150,50,0"
+                Margin="50,50,50,50"
                 Progress="{Binding Progress}" />
+
+            <TextBox
+                Grid.Row="2"
+                Margin="5"
+                VerticalContentAlignment="Top"
+                Background="{StaticResource ContentBackgroundAlt3}"
+                Text="{Binding LogText}" />
 
         </Grid>
 

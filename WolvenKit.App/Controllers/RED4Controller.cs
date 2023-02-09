@@ -313,6 +313,46 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
+    private static bool IsSpecialExtension(string fileName)
+    {
+        return Path.GetExtension(fileName) switch
+        {
+            ".yaml" or ".yml" or ".xl" or ".script" or ".ws" or ".tweak" => true,
+            _ => false,
+        };
+    }
+    private static bool IsYaml(string fileName)
+    {
+        return Path.GetExtension(fileName) switch
+        {
+            ".yaml" or ".yml" => true,
+            _ => false,
+        };
+    }
+    private static bool IsScript(string fileName)
+    {
+        return Path.GetExtension(fileName) switch
+        {
+            ".script" or ".ws" => true,
+            _ => false,
+        };
+    }
+    private static bool IsTweak(string fileName)
+    {
+        return Path.GetExtension(fileName) switch
+        {
+            ".tweak" => true,
+            _ => false,
+        };
+    }
+
+    private static IEnumerable<string> GetTweakXLFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*", SearchOption.AllDirectories).Where(file => IsYaml(file));
+    private static IEnumerable<string> GetArchiveXlFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories);
+    private static IEnumerable<string> GetResourceFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
+        .Where(name => !IsSpecialExtension(name))
+        .Where(x => Path.GetFileName(x) != "info.json");
+    private static IEnumerable<string> GetScriptFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsScript(name));
+    private static IEnumerable<string> GetTweakFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsScript(name));
 
     /// <summary>
     /// Pack mod with options
@@ -330,10 +370,18 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error("Cannot pack project (no project/not cyberpunk project)!");
             return false;
         }
-        if (!options.IsRedmod && Directory.EnumerateFileSystemEntries(cp77Proj.SoundDirectory).Any())
+        if (!options.IsRedmod && Directory.EnumerateFiles(cp77Proj.SoundDirectory).Any())
         {
             _loggerService.Warning("This project contains custom sound files but is packed as legacy mod!");
             _notificationService.Warning($"This project contains custom sound files and needs to be packed as a REDmod!");
+
+            _progressService.IsIndeterminate = false;
+            return false;
+        }
+        if (!options.IsRedmod && Directory.GetFiles(cp77Proj.ResourcesDirectory).Select(x => IsScript(x)).Any())
+        {
+            _loggerService.Warning("This project contains script files but is packed as legacy mod!");
+            _notificationService.Warning($"This project contains script files and needs to be packed as a REDmod!");
 
             _progressService.IsIndeterminate = false;
             return false;
@@ -347,51 +395,65 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error("Cleanup failed, aborting.");
             return false;
         }
-        _loggerService.Success($"{cp77Proj.Name} files cleaned up.");
+        _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
 
 
         // copy files to packed dir
         // pack archives
-        if (!await Task.Run(() => PackArchives(cp77Proj, options)))
+        var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+        if (modfiles.Any())
         {
-            _progressService.IsIndeterminate = false;
-            _loggerService.Error("Packing archives failed, aborting.");
-            _notificationService.Error("Packing archives failed, aborting.");
-            return false;
+            if (!await Task.Run(() => PackArchives(cp77Proj, options)))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing archives failed, aborting.");
+                _notificationService.Error("Packing archives failed, aborting.");
+                return false;
+            }
+            _loggerService.Info($"{cp77Proj.Name} archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
         }
-        _loggerService.Success($"{cp77Proj.Name} archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
 
         // pack tweakXL files
-        if (!PackTweakXlFiles(cp77Proj))
+        var files = GetTweakXLFiles(cp77Proj);
+        if (files.Any())
         {
-            _progressService.IsIndeterminate = false;
-            _loggerService.Error("Packing tweakXL files failed, aborting.");
-            _notificationService.Error("Packing tweakXL files failed, aborting.");
-            return false;
+            if (!PackTweakXlFiles(cp77Proj, files))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing tweakXL files failed, aborting.");
+                _notificationService.Error("Packing tweakXL files failed, aborting.");
+                return false;
+            }
+            _loggerService.Info($"{cp77Proj.Name} tweakXL files packed into {cp77Proj.PackedTweakDirectory}");
         }
-        _loggerService.Success($"{cp77Proj.Name} tweakXL files packed into {cp77Proj.PackedTweakDirectory}");
 
         // pack archiveXL files
-        if (!PackArchiveXlFiles(cp77Proj, options))
+        files = GetArchiveXlFiles(cp77Proj);
+        if (files.Any())
         {
-            _progressService.IsIndeterminate = false;
-            _loggerService.Error("Packing archiveXL files failed, aborting.");
-            _notificationService.Error("Packing archiveXL files failed, aborting.");
-            return false;
-        }
-        _loggerService.Success($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
-
-        // pack 'script' files
-        if (!PackResources(cp77Proj))
-        {
-            _progressService.IsIndeterminate = false;
-            _loggerService.Error("Packing other resource files failed, aborting.");
-            _notificationService.Error("Packing other resource files failed, aborting.");
-            return false;
+            if (!PackArchiveXlFiles(cp77Proj, files, options))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing archiveXL files failed, aborting.");
+                _notificationService.Error("Packing archiveXL files failed, aborting.");
+                return false;
+            }
+            _loggerService.Info($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
         }
 
-        _loggerService.Success($"{cp77Proj.Name} script files packed into {cp77Proj.PackedRootDirectory}");
-
+        // pack resources
+        files = GetResourceFiles(cp77Proj);
+        if (files.Any())
+        {
+            if (!PackResources(cp77Proj, files))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing other resource files failed, aborting.");
+                _notificationService.Error("Packing other resource files failed, aborting.");
+                return false;
+            }
+            _loggerService.Info($"{cp77Proj.Name} resource files packed into {cp77Proj.PackedRootDirectory}");
+        }
 
         // pack redmod files
         if (options.IsRedmod)
@@ -403,7 +465,7 @@ public class RED4Controller : ObservableObject, IGameController
                 _notificationService.Error("Packing redmod files failed, aborting.");
                 return false;
             }
-            _loggerService.Success($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
+            _loggerService.Info($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
         }
 
         if (!options.Install)
@@ -421,6 +483,7 @@ public class RED4Controller : ObservableObject, IGameController
                 _notificationService.Error("Creating backup failed, aborting.");
                 return false;
             }
+            
         }
 
 
@@ -547,33 +610,24 @@ public class RED4Controller : ObservableObject, IGameController
 
     private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options)
     {
-        var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
-        if (modfiles.Any())
+        try
         {
-            try
-            {
-                _modTools.Pack( new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)), cp77Proj.Name);
-            }
-            catch (PackException)
-            {
-                return false;
-            }
+            _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)), cp77Proj.Name);
+        }
+        catch (PackException ex)
+        {
+            _loggerService.Error(ex);
+            return false;
         }
 
         return true;
     }
 
-
-    private static bool PackResources(Cp77Project cp77Proj)
+    private static bool PackResources(Cp77Project cp77Proj, IEnumerable<string> files)
     {
-        //preliminary approach -- everything under resources, except for *.yaml, *.xl, is a 'script' element
-        //this will cover all potential add-ons/mods/redscript
         //All such files goes into the root of the cp77Proj.PackedRootDirectory
-        var files = Directory.GetFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories).Where(name => !name.ToLower().EndsWith(".xl") && !name.ToLower().EndsWith(".yaml")).ToList();
-        for (var i = 0; i < files.Count; i++)
+        foreach (var file in files)
         {
-            var file = files[i];
-
             var fileName = Path.GetFileName(file);
             var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
             var fileOutputDir = Path.Combine(cp77Proj.PackedRootDirectory, fileRelativeDir);
@@ -589,10 +643,8 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
-    private static bool PackTweakXlFiles(Cp77Project cp77Proj)
+    private static bool PackTweakXlFiles(Cp77Project cp77Proj, IEnumerable<string> tweakFiles)
     {
-        var tweakFiles = Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*", SearchOption.AllDirectories)
-            .Where(file => file.EndsWith(".yaml") || file.EndsWith(".yml"));
         foreach (var f in tweakFiles)
         {
             var outDir = Path.Combine(cp77Proj.PackedTweakDirectory, Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(f).NotNull()));
@@ -608,9 +660,9 @@ public class RED4Controller : ObservableObject, IGameController
         }
         return true;
     }
-    private static bool PackArchiveXlFiles(Cp77Project cp77Proj, LaunchProfile options)
+    
+    private static bool PackArchiveXlFiles(Cp77Project cp77Proj, IEnumerable<string> archiveXlFiles, LaunchProfile options)
     {
-        var archiveXlFiles = Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories);
         foreach (var f in archiveXlFiles)
         {
             var outDirectory = cp77Proj.GetPackedArchiveDirectory(options.IsRedmod);
@@ -624,17 +676,9 @@ public class RED4Controller : ObservableObject, IGameController
         }
         return true;
     }
+    
     private bool PackRedmodFiles(Cp77Project cp77Proj)
     {
-        // sounds
-        PackSoundFiles();
-
-        // tweaks
-        // TODO
-
-        // scripts
-        // TODO
-
         // write info.json file if it not exists
         var modInfoJsonPath = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
         if (!File.Exists(modInfoJsonPath))
@@ -649,8 +693,57 @@ public class RED4Controller : ObservableObject, IGameController
             File.WriteAllText(modInfoJsonPath, jsonString);
         }
 
+        // sounds
+        if (PackSoundFiles())
+        {
+            _loggerService.Info($"{cp77Proj.Name} redmod sound files packed into {cp77Proj.PackedRedModDirectory}");
+        }
+
+        // tweaks
+        var files = GetTweakFiles(cp77Proj);
+        if (files.Any())
+        {
+            foreach (var file in files)
+            {
+                var fileName = Path.GetFileName(file);
+                var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
+                var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
+                var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+                if (!Directory.Exists(fileOutputDir))
+                {
+                    Directory.CreateDirectory(fileOutputDir);
+                }
+
+                // copy files, with overwriting
+                File.Copy(file, fileOutputPath, true);
+            }
+            _loggerService.Info($"{cp77Proj.Name} redmod tweak files packed into {cp77Proj.PackedRedModDirectory}");
+        }
+
+        // scripts
+        files = GetScriptFiles(cp77Proj);
+        if (files.Any())
+        {
+            foreach (var file in files)
+            {
+                var fileName = Path.GetFileName(file);
+                var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
+                var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
+                var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+                if (!Directory.Exists(fileOutputDir))
+                {
+                    Directory.CreateDirectory(fileOutputDir);
+                }
+
+                // copy files, with overwriting
+                File.Copy(file, fileOutputPath, true);
+            }
+            _loggerService.Info($"{cp77Proj.Name} redmod script files packed into {cp77Proj.PackedRedModDirectory}");
+        }
+
         return true;
     }
+    
     private bool PackSoundFiles()
     {
         if (_projectManager.ActiveProject is null)
@@ -724,8 +817,7 @@ public class RED4Controller : ObservableObject, IGameController
             _loggerService.Error(e);
             return false;
         }
-
-        _loggerService.Success($"{cp77Proj.Name} zip available at {zipPath}");
+        _loggerService.Info($"{cp77Proj.Name} zip available at {zipPath}");
         return true;
     }
 
