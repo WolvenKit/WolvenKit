@@ -125,7 +125,7 @@ public class RED4Controller : ObservableObject, IGameController
             if (_parserService.TryReadRed4File(ms, out var file))
             {
                 var root = (JsonResource)file.RootChunk;
-                var res = (physicsCollisionPresetsResource)root.Root.Chunk;
+                var res = (physicsCollisionPresetsResource)root.Root.Chunk.NotNull();
 
                 foreach (var presetEntry in res.Presets)
                 {
