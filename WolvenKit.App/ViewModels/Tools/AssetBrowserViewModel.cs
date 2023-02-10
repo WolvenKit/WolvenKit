@@ -707,12 +707,14 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly record struct PatternRefinement(Term[] Terms) : SearchRefinement;
     private readonly record struct HashRefinement(ulong Hash) : SearchRefinement;
     private readonly record struct RegexRefinement(Regex Regex) : SearchRefinement;
+    private readonly record struct ArchivePathRefinement(string ArchivePath) : SearchRefinement;
     private readonly record struct VerbatimRefinement(string Verbatim) : SearchRefinement;
 
     // Refinement type matchers
     private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
     private static readonly Regex IsHashRefinement = new("^h(?:ash)?:(?<numbers>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
     private static readonly Regex IsRegexRefinement = new("^r(?:egexp?)?:(?<pattern>.*)$", RegexpOpts, RegexpSafetyTimeout);
+    private static readonly Regex IsArchivePathRefinement = new Regex("^a(?:rchive)?:(?<archivepath>.*)$", RegexpOpts, RegexpSafetyTimeout);
     private static readonly Regex IsVerbatimRefinement = new("^(?:@:?|path:)(?<verbatim>.*)$", RegexpOpts, RegexpSafetyTimeout);
 
     private readonly record struct CyberSearch(Func<IGameFile, bool> Match, SearchRefinement SourceRefinement);
@@ -783,6 +785,13 @@ public partial class AssetBrowserViewModel : ToolViewModel
             return new RegexRefinement { Regex = new Regex(regexMatch, RegexpOpts, RegexpSafetyTimeout) };
         }
 
+        var archivePathMatch = IsArchivePathRefinement.Match(refinementString).Groups["archivepath"].Value;
+
+        if (!string.IsNullOrEmpty(archivePathMatch))
+        {
+            return new ArchivePathRefinement { ArchivePath = archivePathMatch };
+        }
+
         var verbatimMatch = IsVerbatimRefinement.Match(refinementString).Groups["verbatim"].Value;
 
         return !string.IsNullOrEmpty(verbatimMatch)
@@ -824,6 +833,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
                     return new CyberSearch
                     {
                         Match = (candidate) => regexRefinement.Regex.IsMatch(candidate.Name)
+                    };
+
+                case ArchivePathRefinement archivePathRefinement:
+                    return new CyberSearch
+                    {
+                        Match = (candidate) => candidate.GetArchive().ArchiveRelativePath.Contains(archivePathRefinement.ArchivePath, StringComparison.CurrentCultureIgnoreCase)
                     };
 
                 case VerbatimRefinement verbatimRefinement:
