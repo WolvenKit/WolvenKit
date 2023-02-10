@@ -122,7 +122,7 @@ namespace WolvenKit.Modkit.RED4
         private static TargetsInfo GetTargetInfos(CR2WFile cr2w, int subMeshC)
         {
             var morphBlob = (MorphTargetMesh)cr2w.RootChunk;
-            var rendMorphBlob = (rendRenderMorphTargetMeshBlob)morphBlob.Blob.Chunk;
+            var rendMorphBlob = (rendRenderMorphTargetMeshBlob)morphBlob.Blob.Chunk.NotNull();
 
             uint NumTargets = rendMorphBlob.Header.NumTargets;
 

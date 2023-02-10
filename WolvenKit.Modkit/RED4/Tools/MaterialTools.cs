@@ -335,7 +335,7 @@ namespace WolvenKit.Modkit.RED4
 
                     foreach (var item in usedMts[key].Parameters[2].NotNull())
                     {
-                        rawMat.Data.Add(item.NotNull().Chunk.ParameterName.ToString().NotNull(), GetSerializableValue(item.Chunk));
+                        rawMat.Data.Add(item.NotNull().Chunk.NotNull().ParameterName.ToString().NotNull(), GetSerializableValue(item.Chunk.NotNull()));
                     }
 
                     matTemplates.Add(rawMat);
@@ -630,7 +630,7 @@ namespace WolvenKit.Modkit.RED4
 
                     foreach (var item in usedMts[keys[i]].Parameters[2].NotNull())
                     {
-                        rawMat.Data.Add(item.NotNull().Chunk.ParameterName.ToString().NotNull(), GetSerializableValue(item.Chunk));
+                        rawMat.Data.Add(item.NotNull().Chunk.NotNull().ParameterName.ToString().NotNull(), GetSerializableValue(item.Chunk.NotNull()));
                     }
 
                     matTemplates.Add(rawMat);
@@ -1300,7 +1300,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 foreach (var parameterHandle in mt.Parameters[2].NotNull())
                 {
-                    var refer = parameterHandle.NotNull().Chunk;
+                    var refer = parameterHandle.NotNull().Chunk.NotNull();
                     if (refer.ParameterName == usedParameter.NotNull().Name)
                     {
                         resultDict.Add(refer.ParameterName.ToString().NotNull(), GetMaterialParameterValue(refer));
@@ -1317,7 +1317,7 @@ namespace WolvenKit.Modkit.RED4
                     object? value = null;
                     foreach (var handle in mt.Parameters[2].NotNull())
                     {
-                        if (Equals(handle.NotNull().Chunk.ParameterName, kvp.NotNull().Key))
+                        if (Equals(handle.NotNull().Chunk.NotNull().ParameterName, kvp.NotNull().Key))
                         {
                             value = kvp.Value;
                         }
@@ -1481,7 +1481,7 @@ namespace WolvenKit.Modkit.RED4
                                 var param = mt.Parameters[2].NotNull();
                                 for (var k = 0; k < param.Count; k++)
                                 {
-                                    var refer = param[k].NotNull().Chunk;
+                                    var refer = param[k].NotNull().Chunk.NotNull();
 
                                     if (refer.ParameterName == key)
                                     {

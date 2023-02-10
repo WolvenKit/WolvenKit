@@ -38,7 +38,7 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
         foreach (var socket in node.Sockets)
         {
             ArgumentNullException.ThrowIfNull(socket);
-            var svm = new SocketViewModel(socket.Chunk);
+            var svm = new SocketViewModel(socket.Chunk.NotNull());
 
             bool isInput;
             if (socket.Chunk is questSocketDefinition qsd)
@@ -209,7 +209,7 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
             foreach (var action in qsmnd.Actions)
             {
                 ArgumentNullException.ThrowIfNull(action);
-                Header += " - " + action.Type.Chunk.Action.ToEnumString();
+                Header += " - " + action.Type.Chunk.NotNull().Action.ToEnumString();
             }
         }
         else if (node is questFactsDBManagerNodeDefinition qfmnd)

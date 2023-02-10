@@ -395,53 +395,56 @@ public partial class Red4Reader : IErrorHandler, IDisposable
 
     public virtual IRedType ReadPointer(List<RedTypeInfo> redTypeInfos, uint size) => throw new NotImplementedException();
 
-    public virtual IRedHandle? ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
+    public virtual IRedHandle ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
         var pointer = _reader.ReadInt32() - 1;
-        if (pointer < 0)
+        var type = RedReflection.GetFullType(redTypeInfos);
+
+        RedBaseClass? instance = null;
+        if (pointer >= 0)
         {
-            return null;
+            instance = _chunks[pointer].Instance;
+            _chunks[pointer].IsUsed = true;
         }
 
-        var type = RedReflection.GetFullType(redTypeInfos);
-        if (Activator.CreateInstance(type, _chunks[pointer].Instance) is not IRedHandle result)
+        if (Activator.CreateInstance(type, instance) is not IRedHandle result)
         {
             throw new Exception();
         }
-
-        _chunks[pointer].IsUsed = true;
 
         return result;
     }
 
-    public virtual IRedHandle? ReadCHandle<T>() where T : RedBaseClass
+    public virtual IRedHandle ReadCHandle<T>() where T : RedBaseClass
     {
         var pointer = _reader.ReadInt32() - 1;
-        if (pointer < 0)
+
+        RedBaseClass? instance = null;
+        if (pointer >= 0)
         {
-            return null;
+            instance = _chunks[pointer].Instance;
+            _chunks[pointer].IsUsed = true;
         }
 
-        _chunks[pointer].IsUsed = true;
-
-        return new CHandle<T>((T)_chunks[pointer].Instance);
+        return new CHandle<T>((T)instance);
     }
 
-    public virtual IRedWeakHandle? ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
+    public virtual IRedWeakHandle ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
         var pointer = _reader.ReadInt32() - 1;
-        if (pointer < 0)
+        var type = RedReflection.GetFullType(redTypeInfos);
+
+        RedBaseClass? instance = null;
+        if (pointer >= 0)
         {
-            return null;
+            instance = _chunks[pointer].Instance;
+            _chunks[pointer].IsUsed = true;
         }
 
-        var type = RedReflection.GetFullType(redTypeInfos);
-        if (System.Activator.CreateInstance(type, _chunks[pointer].Instance) is not IRedWeakHandle result)
+        if (Activator.CreateInstance(type, instance) is not IRedWeakHandle result)
         {
             throw new Exception();
         }
-
-        _chunks[pointer].IsUsed = true;
 
         return result;
     }

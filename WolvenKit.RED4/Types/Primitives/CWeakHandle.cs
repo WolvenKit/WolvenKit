@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types;
 public class CWeakHandle<T> : IRedWeakHandle<T>, IEquatable<CWeakHandle<T>> where T : RedBaseClass
 {
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-    public T Chunk { get; set; }
+    public T? Chunk { get; set; }
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public Type InnerType => typeof(T);

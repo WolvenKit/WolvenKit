@@ -8,6 +8,7 @@ using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 using Point = System.Windows.Point;
 
@@ -23,11 +24,11 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
 
         if (data is graphGraphResource ggr)
         {
-            RenderNodes(ggr.Graph.Chunk.Nodes);
+            RenderNodes(ggr.Graph.Chunk.NotNull().Nodes);
         }
         else if (data is scnSceneResource ssr)
         {
-            RenderNodes(ssr.SceneGraph.Chunk.Graph);
+            RenderNodes(ssr.SceneGraph.Chunk.NotNull().Graph);
         }
 
         //SelectedNodes.CollectionChanged += (object? sender, NotifyCollectionChangedEventArgs e) =>
@@ -84,16 +85,16 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
         {
             ArgumentNullException.ThrowIfNull(node);
 
-            foreach (var socket in node.Chunk.Sockets)
+            foreach (var socket in node.Chunk.NotNull().Sockets)
             {
                 ArgumentNullException.ThrowIfNull(socket);
 
-                socketNodeLookup.Add(socket.Chunk.GetHashCode(), node.Chunk.GetHashCode());
-                foreach (var connection in socket.Chunk.Connections)
+                socketNodeLookup.Add(socket.Chunk.NotNull().GetHashCode(), node.Chunk.NotNull().GetHashCode());
+                foreach (var connection in socket.Chunk.NotNull().Connections)
                 {
                     ArgumentNullException.ThrowIfNull(connection);
 
-                    if (!connections.ContainsKey(connection.Chunk.GetHashCode()))
+                    if (!connections.ContainsKey(connection.Chunk.NotNull().GetHashCode()))
                     {
                         connections.Add(connection.Chunk.GetHashCode(), connection.Chunk);
                     }
@@ -105,7 +106,7 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
             // make input/output knots? or hooked-up to parent graph
             if (node.Chunk is questPhaseNodeDefinition qpnd && qpnd.PhaseGraph != null)
             {
-                var subgraph = RenderNodes(qpnd.PhaseGraph.Chunk.Nodes, node.Chunk);
+                var subgraph = RenderNodes(qpnd.PhaseGraph.Chunk.NotNull().Nodes, node.Chunk);
                 nvm = new PhaseNodeViewModel(this, node.Chunk, subgraph)
                 {
                     Width = subgraph.BoundingBox.Size.Width + 40,
@@ -161,8 +162,8 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
         foreach (var (hash, connection) in connections)
         {
             ConnectionLookup.Add(hash, new ConnectionViewModel(this, connection));
-            var source = socketNodeLookup[connection.Source.Chunk.GetHashCode()];
-            var dest = socketNodeLookup[connection.Destination.Chunk.GetHashCode()];
+            var source = socketNodeLookup[connection.Source.Chunk.NotNull().GetHashCode()];
+            var dest = socketNodeLookup[connection.Destination.Chunk.NotNull().GetHashCode()];
             graph.Edges.Add(new Edge(msaglNodes[source], msaglNodes[dest]));
         }
 
