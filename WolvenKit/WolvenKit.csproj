@@ -13,14 +13,17 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishSingleFile>false</PublishSingleFile>
     <SelfContained>true</SelfContained>
-    <VersionPrefix>8.8.2</VersionPrefix>
-    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-    <InformationalVersion>8.8.2</InformationalVersion>
     <Description>WPF</Description>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Product>WolvenKit</Product>
     <ApplicationManifest>app.manifest</ApplicationManifest>
 	<Nullable>Disable</Nullable>
+  </PropertyGroup>
+	
+  <PropertyGroup>
+	  <VersionPrefix>8.8.2</VersionPrefix>
+	  <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+	  <InformationalVersion>8.8.2</InformationalVersion>
   </PropertyGroup>
 	
   <PropertyGroup>
