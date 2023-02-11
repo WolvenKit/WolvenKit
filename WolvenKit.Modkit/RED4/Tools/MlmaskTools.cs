@@ -101,7 +101,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            if (subdir is null || outfile.Directory is null)
+            if ((args.AsList && subdir is null) || (!args.AsList && outfile.Directory is null))
             {
                 _loggerService.Error("directory was null");
                 return false;
@@ -113,7 +113,7 @@ namespace WolvenKit.Modkit.RED4
             foreach (var img in GetRedImages(blob))
             {
                 var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{cnt++}";
-                var newPath = Path.Combine(args.AsList ? subdir.FullName : outfile.Directory.FullName, $"{mFilename}.{args.UncookExtension}");
+                var newPath = Path.Combine(args.AsList ? subdir!.FullName : outfile.Directory!.FullName, $"{mFilename}.{args.UncookExtension}");
 
                 var buffer = args.UncookExtension switch
                 {
@@ -130,7 +130,7 @@ namespace WolvenKit.Modkit.RED4
                 File.WriteAllBytes(newPath, buffer);
                 if (args.AsList)
                 {
-                    masks.Add($"{subdir.Name}/{mFilename}.{args.UncookExtension}");
+                    masks.Add($"{subdir!.Name}/{mFilename}.{args.UncookExtension}");
                 }
             }
 
