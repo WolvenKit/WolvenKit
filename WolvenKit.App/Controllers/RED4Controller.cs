@@ -94,8 +94,8 @@ public class RED4Controller : ObservableObject, IGameController
     // TODO: Move this somewhere else
     private void LoadCustomHashes()
     {
-        CName physMatLibPath = "base\\physics\\physicsmaterials.physmatlib";
-        CName presetPath = "engine\\physics\\collision_presets.json";
+        ResourcePath physMatLibPath = "base\\physics\\physicsmaterials.physmatlib";
+        ResourcePath presetPath = "engine\\physics\\collision_presets.json";
 
         var physMatLib = _archiveManager.Lookup(physMatLibPath);
         if (physMatLib.HasValue)

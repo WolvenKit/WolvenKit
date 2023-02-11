@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using WolvenKit.Common.Annotations;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
@@ -216,6 +215,17 @@ namespace WolvenKit.Common.Services
                 using var userFs = new FileStream(userHashesPath, FileMode.Open, FileAccess.Read);
                 ReadHashes(userFs, _userHashes);
             }
+        }
+
+        public void SaveUserHashes()
+        {
+            SaveUserHashesTo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit"));
+        }
+
+        private void SaveUserHashesTo(string path)
+        {
+            var userHashesPath = Path.Combine(path ?? throw new InvalidOperationException(), s_userHashes);
+            File.WriteAllLines(userHashesPath, _userHashes.Select(x => x.Value.ToString()).ToArray());
         }
 
         private void LoadEmbeddedHashes(string resourceName, Dictionary<ulong, SAsciiString> hashDictionary)
