@@ -175,7 +175,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string? MaterialTemplate { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public Dictionary<string, object>? Data { get; set; }
+        public Dictionary<string, object?>? Data { get; set; }
     }
 
     public class MaterialValueWrapper

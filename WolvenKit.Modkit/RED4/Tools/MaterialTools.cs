@@ -330,7 +330,7 @@ namespace WolvenKit.Modkit.RED4
                     var rawMat = new RawMaterial
                     {
                         Name = key,
-                        Data = new Dictionary<string, object>()
+                        Data = new Dictionary<string, object?>()
                     };
 
                     foreach (var item in usedMts[key].Parameters[2].NotNull())
@@ -625,7 +625,7 @@ namespace WolvenKit.Modkit.RED4
                     var rawMat = new RawMaterial
                     {
                         Name = keys[i],
-                        Data = new Dictionary<string, object>()
+                        Data = new Dictionary<string, object?>()
                     };
 
                     foreach (var item in usedMts[keys[i]].Parameters[2].NotNull())
@@ -971,6 +971,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (materialParameterType == typeof(CMaterialParameterStructBuffer))
             {
+                // TODO: What is this for?
                 return null;
             }
 
@@ -1070,7 +1071,7 @@ namespace WolvenKit.Modkit.RED4
             throw new NotImplementedException(value.GetType().Name);
         }
 
-        private object GetSerializableValue(CMaterialParameter materialParameter)
+        private object? GetSerializableValue(CMaterialParameter materialParameter)
         {
             if (materialParameter is CMaterialParameterColor col)
             {
@@ -1124,9 +1125,8 @@ namespace WolvenKit.Modkit.RED4
 
             if (materialParameter is CMaterialParameterStructBuffer str)
             {
-                // TODO: Is there something I'm missing here?
-                //return null;
-                throw new NotImplementedException();
+                // TODO: What is this for?
+                return null;
             }
 
             if (materialParameter is CMaterialParameterTerrainSetup ter)
@@ -1152,7 +1152,7 @@ namespace WolvenKit.Modkit.RED4
             throw new NotImplementedException(materialParameter.GetType().Name);
         }
 
-        private IRedType GetMaterialParameterValue(CMaterialParameter materialParameter)
+        private IRedType? GetMaterialParameterValue(CMaterialParameter materialParameter)
         {
             if (materialParameter is CMaterialParameterColor col)
             {
@@ -1206,9 +1206,8 @@ namespace WolvenKit.Modkit.RED4
 
             if (materialParameter is CMaterialParameterStructBuffer str)
             {
-                // TODO: Is there something I'm missing here?
-                //return null;
-                throw new NotImplementedException();
+                // TODO: What is this for?
+                return null;
             }
 
             if (materialParameter is CMaterialParameterTerrainSetup ter)
@@ -1257,9 +1256,9 @@ namespace WolvenKit.Modkit.RED4
             throw new FileNotFoundException(path);
         }
 
-        private (string? materialTemplate, Dictionary<string, object> valueDict) GetMaterialChain(CMaterialInstance cMaterialInstance, List<ICyberGameArchive> archives, ref Dictionary<string, CMaterialTemplate> mts)
+        private (string? materialTemplate, Dictionary<string, object?> valueDict) GetMaterialChain(CMaterialInstance cMaterialInstance, List<ICyberGameArchive> archives, ref Dictionary<string, CMaterialTemplate> mts)
         {
-            var resultDict = new Dictionary<string, object>();
+            var resultDict = new Dictionary<string, object?>();
 
             var baseMaterials = new List<CMaterialInstance>();
 
@@ -1352,7 +1351,7 @@ namespace WolvenKit.Modkit.RED4
                 Name = name,
                 BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath,
                 MaterialTemplate = materialTemplatePath,
-                Data = new Dictionary<string, object>()
+                Data = new Dictionary<string, object?>()
             };
 
             foreach (var pair in valueDict)
@@ -1495,7 +1494,7 @@ namespace WolvenKit.Modkit.RED4
                                     }
                                 }
 
-                                if (!found)
+                                if (!found && value != null)
                                 {
                                     var wrapper = ((JsonElement)value).Deserialize<MaterialValueWrapper>().NotNull();
                                     var (type, _) = RedReflection.GetCSTypeFromRedType(wrapper.Type.NotNull());
