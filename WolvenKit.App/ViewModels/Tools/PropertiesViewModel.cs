@@ -96,6 +96,9 @@ public partial class PropertiesViewModel : ToolViewModel
     }
 
     #region properties
+    
+    [ObservableProperty] private AudioObject? _audioObject;
+    
     [ObservableProperty] private int _selectedIndex;
 
     [ObservableProperty] private FileModel? _pE_SelectedItem;
@@ -135,24 +138,11 @@ public partial class PropertiesViewModel : ToolViewModel
     #region commands
 
     [RelayCommand]
-    private async Task PreviewAudio(AudioObject obj)
+    private void PreviewAudio(AudioObject obj)
     {
-        await TempConvertToWemWavAsync(obj);
+        AudioObject = obj;
     }
 
-    /// <summary>
-    /// convert a file to wav to preview it.
-    /// </summary>
-    /// <param name="path"></param>
-    private async Task TempConvertToWemWavAsync(AudioObject obj) => await Task.Run(() => TempConvertToWemWav(obj));
-    private void TempConvertToWemWav(AudioObject obj)
-    {
-        //DispatcherHelper.RunOnMainThread(() =>
-        //{
-        //    AudioPlayer.OpenAudioObject(obj);
-        //});
-        throw new NotImplementedException();
-    }
 
     private bool CanOpenFile(FileModel model) => model != null;
 
@@ -291,7 +281,7 @@ public partial class PropertiesViewModel : ToolViewModel
             IsAudioPreviewVisible = true;
             SelectedIndex = 2;
 
-            PreviewAudioCommand.SafeExecute(new AudioObject(Path.GetFileNameWithoutExtension(filename), stream.ToByteArray()));
+            AudioObject = new AudioObject(Path.GetFileNameWithoutExtension(filename), stream.ToByteArray());
         }
     }
 
@@ -315,7 +305,7 @@ public partial class PropertiesViewModel : ToolViewModel
             IsAudioPreviewVisible = true;
             SelectedIndex = 2;
 
-            PreviewAudioCommand.SafeExecute(new AudioObject(Path.GetFileNameWithoutExtension(filename), File.ReadAllBytes(filename)));
+            AudioObject = new AudioObject(Path.GetFileNameWithoutExtension(filename), File.ReadAllBytes(filename));
         }
         else if (Enum.TryParse<EUncookExtension>(extension, true, out var ext))
         {
@@ -580,19 +570,4 @@ public partial class PropertiesViewModel : ToolViewModel
 
     #endregion
 
-
-    #region AudioPreview
-
-    /// <summary>
-    /// Working directory for audio preview.
-    /// </summary>
-    //private const string wdir = "lib\\AudioWorkingDir\\";
-
-    /// <summary>
-    /// audio file list for opuspak type files with multiple wems inside. (not visually implemented)
-    /// </summary>
-    public List<TextBlock> AudioFileList { get; set; } = new List<TextBlock>();
-
-
-    #endregion AudioPreview
 }

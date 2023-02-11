@@ -186,11 +186,8 @@ namespace WolvenKit
                     //services.AddTransient<CodeEditorViewModel>();
                     //services.AddTransient<IViewFor<CodeEditorViewModel>, CodeEditorView>();
 
-                    //services.AddTransient<VisualEditorViewModel>();
-                    //services.AddTransient<IViewFor<VisualEditorViewModel>, VisualEditorView>();
-
-                    //services.AddSingleton<ImportExportViewModel>();
-                    //services.AddTransient<IViewFor<ImportExportViewModel>, ImportExportView>();
+                    services.AddTransient<AudioPlayerViewModel>();
+                    services.AddTransient<IViewFor<AudioPlayerViewModel>, AudioPlayerView>();
 
                     #endregion
 

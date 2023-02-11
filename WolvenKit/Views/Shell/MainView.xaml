@@ -114,7 +114,6 @@
 
             <Grid.Resources>
                 <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
-                <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             </Grid.Resources>
 
             <Grid.RowDefinitions>

@@ -11,7 +11,6 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:svl1="clr-namespace:WPFSoundVisualizationLib;assembly=WPFSoundVisualizationLibNet5"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
     xmlns:tools1="clr-namespace:WolvenKit.Views.Tools"
@@ -39,116 +38,7 @@
 
                 <conv:StringPathToItemStringConverter x:Key="PathConverter" />
 
-                <!--  Region: WaveformTimeline  -->
-                <LinearGradientBrush x:Key="WaveformRightLevelBrush" StartPoint="1,0" EndPoint="1,1">
-                    <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
-                    <GradientStop Offset="1" Color="Black" />
-                </LinearGradientBrush>
-                <LinearGradientBrush x:Key="WaveformLeftLevelBrush" StartPoint="1,1" EndPoint="1,0">
-                    <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.Accent4}" />
-                    <GradientStop Offset="1" Color="White" />
-                </LinearGradientBrush>
-                <Style TargetType="{x:Type svl1:WaveformTimeline}">
-                    <Setter Property="RepeatRegionBrush" Value="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" />
-                    <Setter Property="TimelineTickBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
-                    <Setter Property="ProgressBarBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
-                    <Setter Property="CenterLineBrush" Value="{DynamicResource MahApps.Brushes.SemiTransparent}" />
-                    <Setter Property="RightLevelBrush" Value="{DynamicResource MahApps.Brushes.Accent3}" />
-                    <Setter Property="LeftLevelBrush" Value="{DynamicResource MahApps.Brushes.AccentBase}" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type svl1:WaveformTimeline}">
-                                <Border
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="20" />
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-                                        <Canvas
-                                            Name="PART_Waveform"
-                                            Grid.Row="1"
-                                            ClipToBounds="True" />
-                                        <Border
-                                            Grid.Row="0"
-                                            Panel.ZIndex="0"
-                                            BorderBrush="{TemplateBinding TimelineTickBrush}"
-                                            BorderThickness="0,0,0,1">
-                                            <Canvas
-                                                Name="PART_Timeline"
-                                                Height="20"
-                                                ClipToBounds="True" />
-                                        </Border>
-                                        <Canvas
-                                            Name="PART_Repeat"
-                                            Grid.Row="1"
-                                            ClipToBounds="True" />
-                                        <Canvas
-                                            Name="PART_Progress"
-                                            Grid.Row="0"
-                                            Grid.RowSpan="2"
-                                            ClipToBounds="True" />
-                                    </Grid>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-                <!--  EndRegion: WaveformTimeline  -->
 
-                <Style TargetType="{x:Type svl1:SpectrumAnalyzer}">
-                    <Setter Property="BarStyle">
-                        <Setter.Value>
-                            <Style TargetType="{x:Type Rectangle}">
-                                <Setter Property="Fill">
-                                    <Setter.Value>
-                                        <LinearGradientBrush>
-                                            <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
-                                            <GradientStop Offset="1" Color="{DynamicResource MahApps.Colors.Gray.SemiTransparent}" />
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="PeakStyle">
-                        <Setter.Value>
-                            <Style TargetType="{x:Type Rectangle}">
-                                <Setter Property="Fill">
-                                    <Setter.Value>
-                                        <LinearGradientBrush>
-                                            <GradientStop Offset="0" Color="{DynamicResource MahApps.Colors.AccentBase}" />
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <hc:BrightnessEffect Brightness="3" />
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type svl1:SpectrumAnalyzer}">
-                                <Border
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                    <Canvas
-                                        Name="PART_SpectrumCanvas"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        ClipToBounds="True" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
 
                 <!--  region PreviewSlider  -->
 
@@ -330,6 +220,7 @@
             ShowTabItemContextMenu="False"
             ShowTabListContextMenu="False"
             Style="{StaticResource WolvenKitTabControl}">
+
             <syncfusion:TabItemExt Header="Properties">
 
                 <Grid>

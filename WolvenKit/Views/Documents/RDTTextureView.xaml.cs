@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -222,12 +223,5 @@ namespace WolvenKit.Views.Documents
             end.X = 0;
             end.Y = 0;
         }
-
-        private void ReplaceTexture(object sender, RoutedEventArgs e)
-        {
-            ViewModel.ReplaceTexture();
-        }
-
-       
     }
 }

@@ -2,9 +2,11 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
@@ -87,7 +89,8 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
         }
     }
 
-    public void ReplaceTexture()
+    [RelayCommand]
+    private async Task ReplaceTexture()
     {
         if (Parent.Cr2wFile.RootChunk is not CBitmapTexture bitmap)
         {
@@ -167,7 +170,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
             // set properties in file
             Parent.Cr2wFile.RootChunk = newxbm;
             // save file
-            Parent.Save(null);
+            await Parent.Save(null);
 
             // reload from itself
             Parent.TabItemViewModels.Clear();

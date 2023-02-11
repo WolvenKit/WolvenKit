@@ -6,12 +6,17 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows.Documents;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
+using Serilog.Events;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
+using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -25,6 +30,7 @@ public partial class ModsViewModel : PageViewModel
     private readonly ILoggerService _logger;
     private readonly IPluginService _pluginService;
     private readonly IProgressService<double> _progressService;
+    private readonly MySink _mySink;
 
     private readonly JsonSerializerOptions _options = new()
     {
@@ -34,21 +40,66 @@ public partial class ModsViewModel : PageViewModel
         IgnoreReadOnlyProperties = true,
     };
 
-    public ModsViewModel(ISettingsManager settings, ILoggerService logger, IPluginService pluginService, IProgressService<double> progressService)
+    public ModsViewModel(
+        ISettingsManager settings, 
+        ILoggerService logger, 
+        IPluginService pluginService, 
+        IProgressService<double> progressService,
+        MySink mySink)
     {
         _settings = settings;
         _logger = logger;
         _pluginService = pluginService;
         _progressService = progressService;
+        _mySink = mySink;
+        _logText = "";
+        _confirmText = "";
 
         _settings.PropertyChanged += Settings_PropertyChanged;
         _progressService.ProgressChanged += ProgressService_ProgressChanged;
+
+        var myOperation = _mySink.Connect()
+        .Bind(out var _logEntries)
+        .DisposeMany()
+        .Subscribe(OnNext);
+
     }
 
-    private void ProgressService_ProgressChanged(object? sender, double e)
+    private void OnNext(IChangeSet<LogEvent> obj)
     {
-        Progress = e * 100;
+        if (!IsProcessing)
+        {
+            return;
+        }
+
+        foreach (var change in obj)
+        {
+            switch (change.Reason)
+            {
+                case ListChangeReason.Add:
+                    var item = change.Item.Current;
+                    AddLog(item);
+                    break;
+                case ListChangeReason.AddRange:
+                    foreach (var logEntry in change.Range)
+                    {
+                        AddLog(logEntry);
+                    }
+                    break;
+                case ListChangeReason.Replace:
+                case ListChangeReason.Remove:
+                case ListChangeReason.RemoveRange:
+                case ListChangeReason.Refresh:
+                case ListChangeReason.Moved:
+                case ListChangeReason.Clear:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
+
+    private void ProgressService_ProgressChanged(object? sender, double e) => Progress = e * 100;
 
     private void Settings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -61,14 +112,39 @@ public partial class ModsViewModel : PageViewModel
         }
     }
 
+
+    [ObservableProperty] private string _logText;
+
+    [ObservableProperty] private string _confirmText;
+
     [ObservableProperty] private double _progress;
+
     [ObservableProperty] private bool _loadOrderChanged;
+
     [ObservableProperty] private ObservableCollection<ModInfoViewModel> _mods = new();
+
     [ObservableProperty] private ModInfoViewModel? _selectedMod;
+
     [ObservableProperty] private IEnumerable<ModInfoViewModel>? _selectedMods;
+
     [ObservableProperty] private bool _isProcessing;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotFinished))]
+    private bool _isFinished;
+
+    public bool IsNotFinished => !IsFinished;
+
+    [ObservableProperty] private bool _isForceEnabled;
+
     #region commands
+
+    [RelayCommand]
+    private void Confirm()
+    {
+        IsFinished = false;
+        IsProcessing = false;
+    }
 
     [RelayCommand]
     private async Task Deploy() => await DeployRedmod();
@@ -150,6 +226,12 @@ public partial class ModsViewModel : PageViewModel
 
     #endregion
 
+    private void AddLog(LogEvent item)
+    {
+        var msg = item.RenderMessage();
+        LogText += $"{msg}\n";
+    }
+
     private IEnumerable<ModInfoViewModel> GetEnabledMods() => Mods.Where(x => x.IsEnabled);
 
     private async Task<bool> DeployRedmod()
@@ -176,12 +258,15 @@ public partial class ModsViewModel : PageViewModel
             return false;
         }
 
+        IsProcessing = true;
+        LogText = "Deploying Redmod ...";
 
         // compile with redmod
         var redmodPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
         if (!File.Exists(redmodPath))
         {
             _logger.Error("RedMod tools are not installed. Please go to WolvenKit plugins and install RedMod.");
+            IsProcessing = false;
             return false;
         }
         else
@@ -190,12 +275,10 @@ public partial class ModsViewModel : PageViewModel
 
             var enabledMods = GetEnabledMods().OrderBy(x => x.LoadOrder).ToList();
 
-            IsProcessing = true;
-
             var rttiSchemaPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
             var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
 
-            if (LoadOrderChanged)
+            if (LoadOrderChanged || IsForceEnabled)
             {
                 args += " -force";
             }
@@ -213,26 +296,30 @@ public partial class ModsViewModel : PageViewModel
 
             _progressService.Report(1.0);
             _progressService.Completed();
-            IsProcessing = false;
 
-            if (!result)
-            {
-                await Interactions.ShowMessageBoxAsync(
-                    "RedMod deploy failed. Please check the log for details.",
-                    "RedMod",
-                    WMessageBoxButtons.Ok,
-                    WMessageBoxImage.Error);
-            }
-            else
-            {
-                await Interactions.ShowMessageBoxAsync(
-                    $"Deployed {enabledMods.Count} enabled mods with RedMod.",
-                    "RedMod deploy",
-                    WMessageBoxButtons.Ok,
-                    WMessageBoxImage.Exclamation);
+            IsFinished = true;
+            ConfirmText = result 
+                ? $"Deployed {enabledMods.Count} enabled mods with RedMod." 
+                : "RedMod deploy failed. Please check the log for details.";
 
-                SetLoadOrderChanged(false);
-            }
+            //if (!result)
+            //{
+            //    await Interactions.ShowMessageBoxAsync(
+            //        "RedMod deploy failed. Please check the log for details.",
+            //        "RedMod",
+            //        WMessageBoxButtons.Ok,
+            //        WMessageBoxImage.Error);
+            //}
+            //else
+            //{
+            //    await Interactions.ShowMessageBoxAsync(
+            //        $"Deployed {enabledMods.Count} enabled mods with RedMod.",
+            //        "RedMod deploy",
+            //        WMessageBoxButtons.Ok,
+            //        WMessageBoxImage.Exclamation);
+
+            //    SetLoadOrderChanged(false);
+            //}
 
             return result;
         }

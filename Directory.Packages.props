@@ -40,7 +40,6 @@
     <PackageVersion Include="MSTest.TestAdapter" Version="3.0.2" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.0.2" />
     <PackageVersion Include="NAudio" Version="2.1.0" />
-    <PackageVersion Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageVersion Include="Nodify" Version="4.1.0" />
     <PackageVersion Include="Octokit" Version="5.0.0" />
     <PackageVersion Include="PixiEditor.ColorPicker" Version="3.3.1" />
@@ -81,7 +80,6 @@
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageVersion Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22272.1" />
     <PackageVersion Include="System.Reflection.MetadataLoadContext" Version="7.0.0" />
-    <PackageVersion Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     <PackageVersion Include="WpfAnalyzers" Version="4.1.1" />
     <PackageVersion Include="YamlDotNet" Version="12.3.1" />
     <PackageVersion Include="coverlet.collector" Version="3.2.0" />
@@ -89,5 +87,6 @@
     <PackageVersion Include="CommunityToolkit.WinUI" Version="7.1.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.2.230118.102" />
+	<PackageVersion Include="NVorbis" Version="0.10.5" />
   </ItemGroup>
 </Project>

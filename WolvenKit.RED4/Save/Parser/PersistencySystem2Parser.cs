@@ -121,13 +121,13 @@ public class PersistencySystem2Reader : Red4Reader
     public override IRedHandle ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
         var type = RedReflection.GetFullType(redTypeInfos);
-        if (Activator.CreateInstance(type) is not IRedHandle result)
+        var clsType = ClassHashHelper.GetTypeFromHash(BaseReader.ReadUInt64())!;
+
+        var instance = ReadClass(clsType, (uint)Remaining);
+        if (Activator.CreateInstance(type, instance) is not IRedHandle result)
         {
             throw new Exception();
         }
-
-        var clsType = ClassHashHelper.GetTypeFromHash(BaseReader.ReadUInt64())!;
-        result.SetValue(ReadClass(clsType, (uint)Remaining));
 
         return result;
     }

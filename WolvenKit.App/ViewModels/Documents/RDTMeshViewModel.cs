@@ -1149,7 +1149,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         var appMaterials = new List<Material>();
 
-        var amaterials = mesh.Appearances.FirstOrDefault(x => x is not null && x.Chunk.Name == appearance, mesh.Appearances[0].NotNull()).NotNull().Chunk.ChunkMaterials;
+        var amaterials = mesh.Appearances.FirstOrDefault(x => x is not null && x.Chunk.NotNull().Name == appearance, mesh.Appearances[0].NotNull()).NotNull().Chunk.NotNull().ChunkMaterials;
         foreach (var materialName in amaterials)
         {
             var name = GetUniqueMaterialName(materialName.ToString().NotNull(), mesh);
@@ -1898,7 +1898,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         foreach (var (handleIndex, transforms) in ssTransforms)
         {
             var handle = data.Nodes[handleIndex].NotNull();
-            var name = handle.Chunk.DebugName.ToString().NotNull();
+            var name = handle.Chunk.NotNull().DebugName.ToString().NotNull();
             name = "_" + name.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
             if (handle.Chunk is IRedMeshNode irmn)
@@ -1936,7 +1936,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 if (handle.Chunk is worldInstancedMeshNode wimn)
                 {
-                    if (wimn.WorldTransformsBuffer.SharedDataBuffer.Chunk.Buffer.Data is not WorldTransformsBuffer wtb)
+                    if (wimn.WorldTransformsBuffer.SharedDataBuffer.Chunk.NotNull().Buffer.Data is not WorldTransformsBuffer wtb)
                     {
                         continue;
                     }
@@ -1987,7 +1987,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
                 else if (handle.Chunk is worldInstancedDestructibleMeshNode widmn)
                 {
-                    if (widmn.CookedInstanceTransforms.SharedDataBuffer.Chunk.Buffer.Data is not CookedInstanceTransformsBuffer citb)
+                    if (widmn.CookedInstanceTransforms.SharedDataBuffer.Chunk.NotNull().Buffer.Data is not CookedInstanceTransformsBuffer citb)
                     {
                         continue;
                     }
@@ -2452,7 +2452,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
             else if (handle.Chunk is worldAreaShapeNode wasn)
             {
-                var shape = wasn.Outline.Chunk;
+                var shape = wasn.Outline.Chunk.NotNull();
                 var mb = new MeshBuilder();
 
                 var center = new SharpDX.Vector3();

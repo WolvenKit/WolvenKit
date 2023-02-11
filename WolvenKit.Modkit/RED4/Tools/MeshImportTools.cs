@@ -1446,7 +1446,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (clothBlob != null)
             {
-                var blob = (meshMeshParamCloth)clothBlob.Chunk;
+                var blob = (meshMeshParamCloth)clothBlob.Chunk.NotNull();
                 blob.Chunks = new CArray<meshPhxClothChunkData>();
                 for (var i = 0; i < meshes.Count; i++)
                 {
@@ -1591,7 +1591,7 @@ namespace WolvenKit.Modkit.RED4
             }
             if (clothGraphicalBlob != null)
             {
-                var blob = (meshMeshParamCloth_Graphical)clothGraphicalBlob.Chunk;
+                var blob = (meshMeshParamCloth_Graphical)clothGraphicalBlob.Chunk.NotNull();
                 blob.Chunks = new CArray<meshGfxClothChunkData>();
                 for (var i = 0; i < meshes.Count; i++)
                 {

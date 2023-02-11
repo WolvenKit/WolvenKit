@@ -7,9 +7,12 @@ using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Common.Model
 {
-    public class RedFileSystemModel : ObservableObject
+    public partial class RedFileSystemModel : ObservableObject
     {
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(Extension))]
         private bool _isExpanded;
+
         private string? _name;
 
         public RedFileSystemModel(string fullname) => FullName = fullname;
@@ -28,12 +31,5 @@ namespace WolvenKit.Common.Model
             ? nameof(ECustomImageKeys.OpenDirImageKey)
             : nameof(ECustomImageKeys.ClosedDirImageKey);
 
-
-
-        public bool IsExpanded
-        {
-            get => _isExpanded;
-            set => SetProperty(ref _isExpanded, value);
-        }
     }
 }

@@ -67,13 +67,13 @@ namespace WolvenKit.Common.Services
             return _secondaryKeys[Language].Keys.ToList();
         }
 
-        public List<localizationPersistenceOnScreenEntry> GetEntries()
+        public IEnumerable<localizationPersistenceOnScreenEntry> GetEntries()
         {
             if (!_secondaryKeys.ContainsKey(Language))
             {
                 LoadCurrentLanguage();
             }
-            return _secondaryKeys[Language].Values.ToList();
+            return _secondaryKeys[Language].Values;
         }
 
         public localizationPersistenceOnScreenEntry? GetEntry(ulong key)

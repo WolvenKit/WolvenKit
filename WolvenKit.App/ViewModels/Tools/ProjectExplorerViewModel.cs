@@ -532,21 +532,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
         else
         {
+            _progressService.IsIndeterminate = true;
             var inpath = SelectedItem.FullName;
             await ConvertToTask(inpath);
+            _progressService.IsIndeterminate = false;
         }
     }
 
-    private Task ConvertToTask(string file)
+    private async Task ConvertToTask(string file)
     {
         if (!File.Exists(file))
         {
-            return Task.CompletedTask;
+            return;
         }
 
         if (!Enum.GetNames<ERedExtension>().Contains(Path.GetExtension(file).TrimStart('.').ToLower()))
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var rawOutPath = Path.Combine(ActiveProject.NotNull().RawDirectory, FileModel.GetRelativeName(file, ActiveProject));
@@ -555,10 +557,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             Directory.CreateDirectory(outDirectoryPath);
 
-            return Task.Run(() => _modTools.ConvertToAndWrite(ETextConvertFormat.json, file, new DirectoryInfo(outDirectoryPath)));
+            await Task.Run(() => _modTools.ConvertToAndWrite(ETextConvertFormat.json, file, new DirectoryInfo(outDirectoryPath)));
         }
-
-        return Task.CompletedTask;
     }
 
 
@@ -589,21 +589,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
         else
         {
+            _progressService.IsIndeterminate = true;
             var inpath = SelectedItem.FullName;
             await ConvertFromTask(inpath);
+            _progressService.IsIndeterminate = false;
         }
     }
 
-    private Task ConvertFromTask(string file)
+    private async Task ConvertFromTask(string file)
     {
         if (!File.Exists(file))
         {
-            return Task.CompletedTask;
+            return;
         }
 
         if (Path.GetExtension(file).TrimStart('.').ToLower() != ETextConvertFormat.json.ToString())
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, FileModel.GetRelativeName(file, ActiveProject));
@@ -612,10 +614,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             Directory.CreateDirectory(outDirectoryPath);
 
-            return Task.Run(() => _modTools.ConvertFromAndWrite(new FileInfo(file), new DirectoryInfo(outDirectoryPath)));
+            await Task.Run(() => _modTools.ConvertFromAndWrite(new FileInfo(file), new DirectoryInfo(outDirectoryPath)));
         }
 
-        return Task.CompletedTask;
     }
 
     /// <summary>

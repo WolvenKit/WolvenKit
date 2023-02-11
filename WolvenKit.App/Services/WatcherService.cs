@@ -162,7 +162,7 @@ public class WatcherService : ObservableObject, IWatcherService
         }
 
         var extension = Path.GetExtension(e.Name);
-        if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension))
+        if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension.ToUpper()))
         {
             return;
         }
@@ -223,7 +223,7 @@ public class WatcherService : ObservableObject, IWatcherService
         }
 
         var extension = Path.GetExtension(e.Name);
-        if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension))
+        if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension.ToUpper()))
         {
             return;
         }

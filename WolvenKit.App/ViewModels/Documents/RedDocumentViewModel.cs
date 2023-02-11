@@ -106,7 +106,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public ILoggerService GetLoggerService() => _loggerService;
 
-    public override Task Save(object? parameter)
+    public override async Task Save(object? parameter)
     {
         var tmpPath = Path.ChangeExtension(FilePath, ".tmp");
 
@@ -136,7 +136,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             fs.Dispose();
             File.Delete(tmpPath);
 
-            return Task.CompletedTask;
+            return;
         }
 
         if (File.Exists(FilePath))
@@ -148,7 +148,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         SetIsDirty(false);
         _loggerService.Success($"Saved file {FilePath}");
 
-        return Task.CompletedTask;
+        await Task.CompletedTask;
     }
 
     public override void SaveAs(object parameter) => throw new NotImplementedException();
@@ -301,14 +301,22 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 {
                     if (!Files.ContainsKey(res.FileName))
                     {
-                        Files.Add(res.FileName, new CR2WFile()
+                        if (!Files.ContainsKey(res.FileName))
                         {
-                            RootChunk = res.Content
-                        });
+                            Files.Add(res.FileName, new CR2WFile()
+                            {
+                                RootChunk = res.Content
+                            });
+                        }
                     }
+                }
+                else
+                {
+                    return null;
                 }
             }
         }
+
         return Files[depotPath];
     }
 

@@ -37,14 +37,15 @@ public partial class SoundModdingViewModel : DialogViewModel
 
     public SoundModdingViewModel(INotificationService notificationService, ILoggerService logger, IProjectManager projectManager)
     {
+        _notificationService = notificationService;
+        _logger = logger;
+        _projectManager = projectManager;
+
         _metadata = new SoundEventMetadata();
 
         LoadEvents();
         LoadInfo();
         PopulateFiles();
-        _notificationService = notificationService;
-        _logger = logger;
-        _projectManager = projectManager;
     }
 
     private void LoadEvents()
