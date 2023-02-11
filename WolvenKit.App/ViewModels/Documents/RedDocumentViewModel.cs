@@ -285,7 +285,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public Dictionary<CName, CR2WFile> Files { get; set; } = new();
 
-    public CR2WFile GetFileFromDepotPathOrCache(CName depotPath)
+    public CR2WFile? GetFileFromDepotPathOrCache(CName depotPath)
     {
         lock (Files)
         {
@@ -295,23 +295,24 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 if (file is not null)
                 {
                     Files[depotPath] = file;
-                }
-            }
-
-            if (Files[depotPath] != null)
-            {
-                foreach (var res in Files[depotPath].EmbeddedFiles)
-                {
-                    if (!Files.ContainsKey(res.FileName))
+                    foreach (var res in file.EmbeddedFiles)
                     {
-                        Files.Add(res.FileName, new CR2WFile()
+                        if (!Files.ContainsKey(res.FileName))
                         {
-                            RootChunk = res.Content
-                        });
+                            Files.Add(res.FileName, new CR2WFile()
+                            {
+                                RootChunk = res.Content
+                            });
+                        }
                     }
+                }
+                else
+                {
+                    return null;
                 }
             }
         }
+
         return Files[depotPath];
     }
 

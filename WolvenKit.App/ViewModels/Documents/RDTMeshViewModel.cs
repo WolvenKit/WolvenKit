@@ -1386,7 +1386,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 var templateFile = Parent.GetFileFromDepotPathOrCache(layer.Material.DepotPath);
 
-                if (templateFile.RootChunk is not Multilayer_LayerTemplate mllt)
+                if (templateFile == null || templateFile.RootChunk is not Multilayer_LayerTemplate mllt)
                 {
                     goto SkipLayer;
                 }
@@ -1605,7 +1605,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             var xbm = Parent.GetFileFromDepotPathOrCache(crrd.DepotPath);
 
-            if (xbm.RootChunk is not ITexture it)
+            if (xbm == null || xbm.RootChunk is not ITexture it)
             {
                 goto NormalMaps;
             }
@@ -1619,7 +1619,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             var xbm = Parent.GetFileFromDepotPathOrCache(crrp.DepotPath);
 
-            if (xbm.RootChunk is not ITexture it)
+            if (xbm == null || xbm.RootChunk is not ITexture it)
             {
                 goto NormalMaps;
             }
@@ -1659,7 +1659,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             var xbm = Parent.GetFileFromDepotPathOrCache(crrn.DepotPath);
 
-            if (xbm.RootChunk is not ITexture it)
+            if (xbm == null || xbm.RootChunk is not ITexture it)
             {
                 goto SkipNormals;
             }
@@ -2319,7 +2319,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 var navmeshFile = Parent.GetFileFromDepotPathOrCache(wnm.NavigationTileResource.DepotPath);
 
-                if (navmeshFile.RootChunk is not worldNavigationTileResource wntr)
+                if (navmeshFile == null || navmeshFile.RootChunk is not worldNavigationTileResource wntr)
                 {
                     continue;
                 }
@@ -2923,7 +2923,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 {
                     var rigFile = Parent.GetFileFromDepotPathOrCache(enc.Rig.DepotPath);
 
-                    if (rigFile.RootChunk is animRig rig)
+                    if (rigFile != null && rigFile.RootChunk is animRig rig)
                     {
                         var rigBones = new List<RigBone>();
                         for (var i = 0; i < rig.BoneNames.Count; i++)
