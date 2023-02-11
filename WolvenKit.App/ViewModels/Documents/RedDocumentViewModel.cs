@@ -6,7 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Options;
+using WolvenKit.App.Factories;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -14,6 +19,7 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -28,12 +34,37 @@ public enum ERedDocumentItemType
 
 public partial class RedDocumentViewModel : DocumentViewModel
 {
+    private readonly IProjectManager _projectManager;
+    private readonly ILoggerService _loggerService;
+    private readonly AppViewModel _appViewModel;
+    private readonly IOptions<Globals> _globals;
+    private readonly Red4ParserService _parserService;
+    private readonly IWatcherService _watcherService;
+    private readonly IArchiveManager _archiveManager;
+    private readonly ITabViewmodelFactory _tabViewmodelFactory;
+
     protected readonly HashSet<string> _embedHashSet;
 
     private readonly string _path;
 
-    public RedDocumentViewModel(CR2WFile file, string path) : base(path)
+    public RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel,
+        ITabViewmodelFactory tabViewmodelFactory,
+        IProjectManager projectManager,
+        ILoggerService loggerService,
+        IOptions<Globals> globals, 
+        Red4ParserService parserService, 
+        IWatcherService watcherService, 
+        IArchiveManager archiveManager) : base(path)
     {
+        _tabViewmodelFactory = tabViewmodelFactory;
+        _projectManager = projectManager;
+        _loggerService = loggerService;
+        _appViewModel = appViewModel;
+        _globals = globals;
+        _parserService = parserService;
+        _watcherService = watcherService;
+        _archiveManager = archiveManager;
+
         _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "yaml",
@@ -49,6 +80,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         Cr2wFile = file;
         _isInitialized = true;
         PopulateItems();
+        
     }
 
     #region properties
@@ -171,23 +203,23 @@ public partial class RedDocumentViewModel : DocumentViewModel
     {
         if (cls is CBitmapTexture xbm)
         {
-            TabItemViewModels.Add(new RDTTextureViewModel(xbm, this));
+            TabItemViewModels.Add(_tabViewmodelFactory.RDTTextureViewModel(xbm, this));
         }
         if (cls is CCubeTexture cube)
         {
-            TabItemViewModels.Add(new RDTTextureViewModel(cube, this));
+            TabItemViewModels.Add(_tabViewmodelFactory.RDTTextureViewModel(cube, this));
         }
         if (cls is CTextureArray texa)
         {
-            TabItemViewModels.Add(new RDTTextureViewModel(texa, this));
+            TabItemViewModels.Add(_tabViewmodelFactory.RDTTextureViewModel(texa, this));
         }
         if (cls is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
         {
-            TabItemViewModels.Add(new RDTTextureViewModel(mesh, this));
+            TabItemViewModels.Add(_tabViewmodelFactory.RDTTextureViewModel(mesh, this));
         }
         if (cls is CReflectionProbeDataResource probe && probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
         {
-            TabItemViewModels.Add(new RDTTextureViewModel(probe, this));
+            TabItemViewModels.Add(_tabViewmodelFactory.RDTTextureViewModel(probe, this));
         }
         if (cls is Multilayer_Mask mlmask)
         {
@@ -195,10 +227,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
             ModTools.ConvertMultilayerMaskToDdsStreams(mlmask, out var streams);
             for (var i = 0; i < streams.Count; i++)
             {
-                var tab = new RDTTextureViewModel(streams[i], this)
-                {
-                    Header = $"MultiLayer {i}"
-                };
+                var tab = _tabViewmodelFactory.RDTTextureViewModel(streams[i], this);
+                tab.Header = $"MultiLayer {i}";
                 TabItemViewModels.Add(tab);
             }
         }
@@ -210,7 +240,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 var file = GetFileFromDepotPath(slot.Texture.DepotPath);
                 if (file != null)
                 {
-                    TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
+                    TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this, _loggerService, _parserService));
                 }
             }
         }
@@ -220,19 +250,19 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
         if (cls is CMesh mesh2)
         {
-            TabItemViewModels.Add(new RDTMeshViewModel(mesh2, this));
+            TabItemViewModels.Add(_tabViewmodelFactory.RDTMeshViewModel(mesh2, this));
         }
         if (cls is entEntityTemplate ent)
         {
-            TabItemViewModels.Add(new RDTMeshViewModel(ent, this));
+            TabItemViewModels.Add(_tabViewmodelFactory.RDTMeshViewModel(ent, this));
         }
         if (cls is worldStreamingSector wss)
         {
-            TabItemViewModels.Add(new RDTMeshViewModel(wss, this));
+            TabItemViewModels.Add(_tabViewmodelFactory.RDTMeshViewModel(wss, this));
         }
         if (cls is worldStreamingBlock wsb)
         {
-            TabItemViewModels.Add(new RDTMeshViewModel(wsb, this));
+            TabItemViewModels.Add(_tabViewmodelFactory.RDTMeshViewModel(wsb, this));
         }
         if (cls is graphGraphResource ggr)
         {
@@ -257,10 +287,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return;
         }
 
-        var root = new RDTDataViewModel(Cr2wFile.RootChunk, this)
-        {
-            FilePath = "(root)"
-        };
+        var root = _tabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel);
+        root.FilePath = "(root)";
         TabItemViewModels.Add(root);
         AddTabForRedType(Cr2wFile.RootChunk);
 
@@ -268,11 +296,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             if (file.Content != null)
             {
-                var vm = new RDTDataViewModel(file.Content, this)
-                {
-                    FilePath = file.FileName,
-                    IsEmbeddedFile = true
-                };
+                var vm = _tabViewmodelFactory.RDTDataViewModel(file.Content, this, _appViewModel);
+                vm.FilePath = file.FileName;
+                vm.IsEmbeddedFile = true;
                 TabItemViewModels.Add(vm);
                 AddTabForRedType(file.Content);
             }
@@ -337,11 +363,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
             Cr2wFile.EmbeddedFiles.Add(file);
             IsDirty = true;
 
-            var vm = new RDTDataViewModel(file.Content, this)
-            {
-                FilePath = file.FileName,
-                IsEmbeddedFile = true
-            };
+            var vm = _tabViewmodelFactory.RDTDataViewModel(file.Content, this, _appViewModel);
+            vm.FilePath = file.FileName;
+            vm.IsEmbeddedFile = true;
             TabItemViewModels.Add(vm);
             AddTabForRedType(file.Content);
         }
@@ -450,7 +474,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return null;
         }
 
-        var tab = new RDTDataViewModel(hash.ToString(), file.RootChunk, this);
+        var tab = _tabViewmodelFactory.RDTDataViewModel(hash.ToString(), file.RootChunk, this, _appViewModel);
         TabItemViewModels.Add(tab);
         return tab;
     }

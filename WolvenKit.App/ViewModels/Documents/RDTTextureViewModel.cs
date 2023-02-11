@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -19,6 +20,9 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RDTTextureViewModel : RedDocumentTabViewModel
 {
+    protected readonly ILoggerService _loggerService;
+    protected readonly Red4ParserService _parser;
+
     protected readonly RedBaseClass? _data;
 
     protected readonly RedImage _redImage;
@@ -27,8 +31,10 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
     public RenderDelegate Render;
     public bool IsRendered;
 
-    public RDTTextureViewModel(RedBaseClass data, RedDocumentViewModel file) : base(file, "Texture Preview")
+    public RDTTextureViewModel(RedBaseClass data, RedDocumentViewModel file, ILoggerService loggerService, Red4ParserService parser) : base(file, "Texture Preview")
     {
+        _loggerService = loggerService;
+        _parser = parser;
 
         _data = data;
         _redImage = RedImage.FromRedClass(data);
@@ -36,8 +42,10 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
         Render = SetupImage;
     }
 
-    public RDTTextureViewModel(Stream stream, RedDocumentViewModel file) : base(file, "Texture Preview")
+    public RDTTextureViewModel(Stream stream, RedDocumentViewModel file, ILoggerService loggerService, Red4ParserService parser) : base(file, "Texture Preview")
     {
+        _loggerService = loggerService;
+        _parser = parser;
 
         var buffer = new byte[stream.Length];
         stream.Read(buffer, 0, buffer.Length);

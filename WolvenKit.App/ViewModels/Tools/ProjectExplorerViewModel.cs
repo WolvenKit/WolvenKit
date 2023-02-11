@@ -50,13 +50,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
+    private readonly ISettingsManager _settingsManager;
     private readonly AppViewModel _mainViewModel;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     private IPluginService _pluginService;
 
-    private readonly ISettingsManager _settingsManager;
+   
     private readonly IObservableList<FileModel> _observableList;
 
     #endregion fields
@@ -64,6 +65,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #region constructors
 
     public ProjectExplorerViewModel(
+        AppViewModel appViewModel,
         IProjectManager projectManager,
         ILoggerService loggerService,
         IWatcherService watcherService,
@@ -71,8 +73,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IModTools modTools,
         IGameControllerFactory gameController,
         IPluginService pluginService,
-        ISettingsManager settingsManager,
-        AppViewModel appViewModel ) : base(ToolTitle)
+        ISettingsManager settingsManager
+        ) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;

@@ -16,6 +16,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -31,6 +32,7 @@ public partial class ModsViewModel : PageViewModel
     private readonly IPluginService _pluginService;
     private readonly IProgressService<double> _progressService;
     private readonly MySink _mySink;
+    private readonly AppViewModel _appViewModel;
 
     private readonly JsonSerializerOptions _options = new()
     {
@@ -45,7 +47,8 @@ public partial class ModsViewModel : PageViewModel
         ILoggerService logger, 
         IPluginService pluginService, 
         IProgressService<double> progressService,
-        MySink mySink)
+        MySink mySink,
+        AppViewModel appViewModel)
     {
         _settings = settings;
         _logger = logger;
@@ -54,6 +57,7 @@ public partial class ModsViewModel : PageViewModel
         _mySink = mySink;
         _logText = "";
         _confirmText = "";
+        _appViewModel = appViewModel;
 
         _settings.PropertyChanged += Settings_PropertyChanged;
         _progressService.ProgressChanged += ProgressService_ProgressChanged;
@@ -187,7 +191,7 @@ public partial class ModsViewModel : PageViewModel
             {
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
-                    IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Plugins);
+                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
                     break;
                 case WMessageBoxResult.None:
                 case WMessageBoxResult.Cancel:
@@ -245,7 +249,7 @@ public partial class ModsViewModel : PageViewModel
             {
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
-                    IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Plugins);
+                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
                     break;
                 case WMessageBoxResult.None:
                 case WMessageBoxResult.Cancel:

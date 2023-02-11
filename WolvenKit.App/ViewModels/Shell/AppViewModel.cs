@@ -14,11 +14,13 @@ using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.Options;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Semver;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
@@ -41,6 +43,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -64,6 +67,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IArchiveManager _archiveManager;
     private readonly TweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
+    private readonly IDocumentViewmodelFactory _documentViewmodelFactory;
+    private readonly IPaneViewModelFactory _paneViewModelFactory;
+    private readonly IDialogViewModelFactory _dialogViewModelFactory;
+    private readonly IPageViewModelFactory _pageViewModelFactory;
 
     /// <summary>
     /// Class constructor
@@ -80,8 +87,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IPluginService pluginService,
         IArchiveManager archiveManager,
         TweakDBService tweakDBService,
-        Red4ParserService parserService
-    )
+        Red4ParserService parserService,
+        IDocumentViewmodelFactory documentViewmodelFactory,
+        IPaneViewModelFactory paneViewModelFactory,
+        IDialogViewModelFactory dialogViewModelFactory,
+        IPageViewModelFactory pageViewModelFactory)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
@@ -95,6 +105,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _archiveManager = archiveManager;
         _tweakDBService = tweakDBService;
         _parser = parserService;
+        _documentViewmodelFactory = documentViewmodelFactory;
+        _paneViewModelFactory = paneViewModelFactory;
+        _dialogViewModelFactory = dialogViewModelFactory;
+        _pageViewModelFactory = pageViewModelFactory;
 
         UpdateTitle();
 
@@ -122,7 +136,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _pluginService.Init();
         if (!TryLoadingArguments())
         {
-            SetActiveOverlaySync(IocHelper.GetService<HomePageViewModel>());
+            ShowHomePageSync();
         }
 
         AddDockedPanes();       
@@ -143,26 +157,26 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     switch (pane)
                     {
                         case EDockedViews.LogViewModel:
-                            DockedViews.Add(IocHelper.GetService<LogViewModel>());
+                            DockedViews.Add(_paneViewModelFactory.LogViewModel());
                             break;
                         case EDockedViews.ProjectExplorerViewModel:
-                            DockedViews.Add(IocHelper.GetService<ProjectExplorerViewModel>());
+                            DockedViews.Add(_paneViewModelFactory.ProjectExplorerViewModel(this));
                             break;
                         case EDockedViews.PropertiesViewModel:
-                            DockedViews.Add(IocHelper.GetService<PropertiesViewModel>());
+                            DockedViews.Add(_paneViewModelFactory.PropertiesViewModel());
                             break;
                         case EDockedViews.AssetBrowserViewModel:
-                            DockedViews.Add(IocHelper.GetService<AssetBrowserViewModel>());
+                            DockedViews.Add(_paneViewModelFactory.AssetBrowserViewModel(this));
                             break;
                         case EDockedViews.TweakBrowserViewModel:
-                            DockedViews.Add(IocHelper.GetService<TweakBrowserViewModel>());
+                            DockedViews.Add(_paneViewModelFactory.TweakBrowserViewModel());
                             break;
                         case EDockedViews.LocKeyBrowserViewModel:
-                            DockedViews.Add(IocHelper.GetService<LocKeyBrowserViewModel>());
+                            DockedViews.Add(_paneViewModelFactory.LocKeyBrowserViewModel());
                             break;
                         case EDockedViews.TextureImportViewModel:
                         {
-                            var vm = IocHelper.GetService<TextureImportViewModel>();
+                            var vm = _paneViewModelFactory.TextureImportViewModel();
                             vm.State = DockState.Dock;
                             vm.SideInDockedMode = DockSide.Right;
                             DockedViews.Add(vm);
@@ -170,7 +184,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                         }
                         case EDockedViews.TextureExportViewModel:
                         {
-                            var vm = IocHelper.GetService<TextureExportViewModel>();
+                            var vm = _paneViewModelFactory.TextureExportViewModel();
                             vm.State = DockState.Dock;
                             vm.SideInDockedMode = DockSide.Right;
                             DockedViews.Add(vm);
@@ -185,12 +199,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         else
         {
             DockedViews = new ObservableCollection<IDockElement> {
-                IocHelper.GetService<LogViewModel>(),
-                IocHelper.GetService<ProjectExplorerViewModel>(),
-                IocHelper.GetService<PropertiesViewModel>(),
-                IocHelper.GetService<AssetBrowserViewModel>(),
-                IocHelper.GetService<TweakBrowserViewModel>(),
-                IocHelper.GetService<LocKeyBrowserViewModel>()
+                _paneViewModelFactory.LogViewModel(),
+                _paneViewModelFactory.ProjectExplorerViewModel(this),
+                _paneViewModelFactory.PropertiesViewModel(),
+                _paneViewModelFactory.AssetBrowserViewModel(this),
+                _paneViewModelFactory.TweakBrowserViewModel(),
+                _paneViewModelFactory.LocKeyBrowserViewModel()
             };
         }
     }
@@ -626,17 +640,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowHomePage))]
     private async Task ShowHomePage()
     {
-        IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Welcome);
-        await SetActiveOverlay( IocHelper.GetService<HomePageViewModel>());
+        await ShowHomePage(EHomePage.Welcome);
     }
 
     private bool CanShowSettings() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowSettings))]
     private async Task ShowSettings()
     {
-
-        IocHelper.GetService<HomePageViewModel>().NavigateTo(EHomePage.Settings);
-        await SetActiveOverlay( IocHelper.GetService<HomePageViewModel>());
+        await ShowHomePage(EHomePage.Settings);
     }
 
     private bool CanShowProjectSettings() => !IsDialogShown && ActiveProject != null;
@@ -718,7 +729,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowSoundModdingTool))]
     private async Task ShowSoundModdingTool()
     {
-        var vm = IocHelper.GetService<SoundModdingViewModel>();
+        var vm = _dialogViewModelFactory.SoundModdingViewModel();
         if (vm != null)
         {
             vm.FileHandler = OpenSoundModdingView;
@@ -753,23 +764,21 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowPlugin))]
     private async Task ShowPlugin()
     {
-        IocHelper.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Plugins);
-        await SetActiveOverlay(IocHelper.GetService<HomePageViewModel>());
+        await ShowHomePage(EHomePage.Plugins);
     }
 
     private bool CanShowModsView() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowModsView))]
     private async Task ShowModsView()
     {
-        IocHelper.GetService<HomePageViewModel>().NotNull().NavigateTo(EHomePage.Mods);
-        await SetActiveOverlay(IocHelper.GetService<HomePageViewModel>());
+        await ShowHomePage(EHomePage.Mods);
     }
 
     private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanNewFile))]
     private async Task NewFile(string? inputDir)
     {
-        var vm = IocHelper.GetService<NewFileViewModel>();
+        var vm = _dialogViewModelFactory.NewFileViewModel();
         if (vm != null)
         {
             vm.FileHandler = OpenFromNewFile;
@@ -904,7 +913,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 file.Extract(stream);
                 if (OpenStream(stream, file.FileName, out var redfile))
                 {
-                    RedDocumentViewModel fileViewModel = new(redfile, file.FileName);
+                    RedDocumentViewModel fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this);
                     if (!DockedViews.Contains(fileViewModel))
                     {
                         DockedViews.Add(fileViewModel);
@@ -942,7 +951,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
                     if (OpenStream(stream, fe.FileName, out var redfile))
                     {
-                        RedDocumentViewModel fileViewModel = new(redfile, fe.FileName);
+                        RedDocumentViewModel fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, fe.FileName, this);
                         if (!DockedViews.Contains(fileViewModel))
                         {
                             DockedViews.Add(fileViewModel);
@@ -991,7 +1000,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void ShowTextureImporter()
     {
-        var vm = IocHelper.GetService<TextureImportViewModel>();
+        var vm = _paneViewModelFactory.TextureImportViewModel();
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }
@@ -999,7 +1008,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void ShowTextureExporter()
     {
-        var vm = IocHelper.GetService<TextureExportViewModel>();
+        var vm = _paneViewModelFactory.TextureExportViewModel();
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }
@@ -1031,7 +1040,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         else
         {
-            var newvm = IocHelper.GetService<T>();
+            var newvm = _paneViewModelFactory.GetToolViewModel<T>();
             DockedViews.Add(newvm);
             return newvm;
         }
@@ -1179,17 +1188,26 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         return (semVersion, path);
     }
-    public async Task SetActiveOverlay(ObservableObject overlay)
+
+    public void ShowHomePageSync(EHomePage page = EHomePage.Welcome)
     {
-        ActiveOverlay = overlay;
-        await Task.Run(OnAfterOverlayRendered);
-    }
-    public void SetActiveOverlaySync(ObservableObject overlay)
-    {
-        ActiveOverlay = overlay;
+        var homePage = _pageViewModelFactory.HomePageViewModel(this);
+        homePage.SelectedIndex = (int)page;
+
+        ActiveOverlay = homePage;
+
         IsOverlayShown = true;
         ShouldOverlayShow = true;
-        
+    }
+
+    public async Task ShowHomePage(EHomePage page)
+    {
+        var homePage = _pageViewModelFactory.HomePageViewModel(this);
+        homePage.SelectedIndex = (int)page;
+
+        ActiveOverlay = homePage;
+
+        await Task.Run(OnAfterOverlayRendered);
     }
 
     public async Task SetActiveDialog(DialogViewModel modal)
@@ -1300,17 +1318,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.Cr2w:
                 if (OpenFile(fullPath, out var file))
                 {
-                    fileViewModel = new RedDocumentViewModel(file, fullPath);
+                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this);
                     result = fileViewModel.IsInitialized();
                 }
                 break;
             case EWolvenKitFile.TweakXl:
                 await LoadTweakDB();
-                fileViewModel = new TweakXLDocumentViewModel(fullPath);
+                fileViewModel = _documentViewmodelFactory.TweakXLDocumentViewModel(fullPath);
                 result = fileViewModel.IsInitialized();
                 break;
             case EWolvenKitFile.WScript:
-                fileViewModel = new WScriptDocumentViewModel(fullPath);
+                fileViewModel = _documentViewmodelFactory.WScriptDocumentViewModel(fullPath);
                 result = fileViewModel.IsInitialized();
                 break;
             case EWolvenKitFile.ArchiveXl:
@@ -1598,6 +1616,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _settingsManager.Save();
 
     }
+
+   
 
     #endregion methods
 }

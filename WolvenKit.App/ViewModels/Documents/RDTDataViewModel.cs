@@ -5,8 +5,11 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Factories;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
@@ -18,28 +21,53 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RDTDataViewModel : RedDocumentTabViewModel
 {
-    protected IRedType _data;
+    private readonly ISettingsManager _settingsManager;
+    private readonly IGameControllerFactory _gameController;
+    private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
+    private readonly AppViewModel _appViewModel;
 
+    protected IRedType _data;
+   
     private List<CName> _nodePaths = new();
 
     private List<ChunkViewModel> _chunks = new();
 
 
-    public RDTDataViewModel(IRedType data, RedDocumentViewModel parent) : base(parent, data.GetType().Name)
+    public RDTDataViewModel(
+        IRedType data, 
+        RedDocumentViewModel parent,
+        AppViewModel appViewModel,
+        IChunkViewmodelFactory chunkViewmodelFactory,
+        ISettingsManager settingsManager, 
+        IGameControllerFactory gameController) 
+        : base(parent, data.GetType().Name)
     {
-        _data = data;
+        _settingsManager = settingsManager;
+        _gameController = gameController;
+        _chunkViewmodelFactory = chunkViewmodelFactory;
+        _appViewModel = appViewModel;
 
+        _data = data;
+        
         if (SelectedChunk == null && Chunks.Count > 0)
         {
             SelectedChunk = Chunks[0];
             SelectedChunks.Add(Chunks[0]);
         }
 
-        Nodes.Add(new CNameWrapper(this, new ReferenceSocket(Chunks[0].RelativePath)));
+        Nodes.Add(new CNameWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
         _nodePaths.Add(Chunks[0].RelativePath);
     }
 
-    public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file) => Header = header;
+    public RDTDataViewModel(
+        string header, 
+        IRedType data, 
+        RedDocumentViewModel file,
+        AppViewModel appViewModel,
+        IChunkViewmodelFactory chunkViewmodelFactory,
+        ISettingsManager settingsManager, 
+        IGameControllerFactory gameController) 
+        : this(data, file, appViewModel, chunkViewmodelFactory, settingsManager, gameController) => Header = header;
 
     #region properties
 
@@ -63,7 +91,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         set => _chunks = value;
     }
 
-    public virtual ChunkViewModel GenerateChunks() => new(_data, this);
+    public virtual ChunkViewModel GenerateChunks() => _chunkViewmodelFactory.ChunkViewModel(_data, this);
 
     [ObservableProperty]
     private bool _isEmbeddedFile;
@@ -120,7 +148,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             {
                 if (reference.Destination.File != CName.Empty)
                 {
-                    Nodes.Add(new CNameWrapper(this, reference.Destination));
+                    Nodes.Add(new CNameWrapper(this, reference.Destination, _appViewModel, _chunkViewmodelFactory));
                     _nodePaths.Add(reference.Destination.File);
                 }
             }

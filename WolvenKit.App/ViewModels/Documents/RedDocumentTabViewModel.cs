@@ -18,22 +18,8 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public abstract partial class RedDocumentTabViewModel : ObservableObject
 {
-    protected readonly ISettingsManager _settingsManager;
-    protected readonly IGameControllerFactory _gameController;
-    protected readonly ILoggerService _loggerService;
-    protected readonly Red4ParserService _parser;
-    protected readonly ModTools _modTools;
-    protected readonly GeometryCacheService _geometryCacheService;
-
     protected RedDocumentTabViewModel(RedDocumentViewModel parent, string header)
     {
-        _settingsManager = IocHelper.GetService<ISettingsManager>();
-        _gameController = IocHelper.GetService<IGameControllerFactory>();
-        _loggerService = IocHelper.GetService<ILoggerService>();
-        _parser = IocHelper.GetService<Red4ParserService>();
-        _modTools = IocHelper.GetService<ModTools>();
-        _geometryCacheService = IocHelper.GetService<GeometryCacheService>();
-
         _parent = parent;
         FilePath = parent.FilePath;
         Header = header;
