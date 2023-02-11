@@ -1,21 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ReactiveUI;
 using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.RED4.Types;
-using WolvenKit.Views.Templates;
-using YamlDotNet.Core.Tokens;
 
 namespace WolvenKit.Views.Editors
 {
@@ -58,7 +53,17 @@ namespace WolvenKit.Views.Editors
         public string DepotPath
         {
             get => RedRef.DepotPath;
-            set => SetValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, (ResourcePath)value, RedRef.Flags));
+            set
+            {
+                if (!string.IsNullOrEmpty(value.Trim()))
+                {
+                    SetValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, (ResourcePath)value, RedRef.Flags));
+                }
+                else
+                {
+                    SetValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, ResourcePath.Empty, InternalEnums.EImportFlags.Default));
+                }
+            }
         }
 
         public string Hash

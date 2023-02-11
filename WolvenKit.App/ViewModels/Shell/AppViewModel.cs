@@ -35,8 +35,6 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -62,6 +60,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IWatcherService _watcherService;
     private readonly IPluginService _pluginService;
     private readonly IArchiveManager _archiveManager;
+    private readonly IHashService _hashService;
     private readonly TweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
 
@@ -79,6 +78,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IWatcherService watcherService,
         IPluginService pluginService,
         IArchiveManager archiveManager,
+        IHashService hashService,
         TweakDBService tweakDBService,
         Red4ParserService parserService
     )
@@ -93,6 +93,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _watcherService = watcherService;
         _pluginService = pluginService;
         _archiveManager = archiveManager;
+        _hashService = hashService;
         _tweakDBService = tweakDBService;
         _parser = parserService;
 
@@ -925,7 +926,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    public void OpenFileFromDepotPath(string path) => OpenFileFromHash(FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(path)));
+    public void OpenFileFromDepotPath(ResourcePath path)
+    {
+        // it should be resolved by this point, but check just in case
+        if (!_hashService.Contains(path) && !ResourcePath.IsNullOrEmpty(path))
+        {
+            _hashService.AddCustom(path.GetResolvedText().NotNull());
+        }
+
+        OpenFileFromHash(path);
+    }
 
     public void OpenFileFromHash(ulong hash)
     {
@@ -942,7 +952,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
                     if (OpenStream(stream, fe.FileName, out var redfile))
                     {
-                        RedDocumentViewModel fileViewModel = new(redfile, fe.FileName);
+                        var fileNameWithExt = $"{Path.GetFileNameWithoutExtension(fe.FileName)}{fe.Extension}";
+                        RedDocumentViewModel fileViewModel = new(redfile, fileNameWithExt);
                         if (!DockedViews.Contains(fileViewModel))
                         {
                             DockedViews.Add(fileViewModel);

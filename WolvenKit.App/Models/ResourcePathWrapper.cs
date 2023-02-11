@@ -10,7 +10,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models;
 
-public partial class ResoucePathWrapper : ObservableObject, INode<ReferenceSocket>
+public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSocket>
 {
     //public CName CName => Socket.File;
 
@@ -39,7 +39,7 @@ public partial class ResoucePathWrapper : ObservableObject, INode<ReferenceSocke
 
     public RDTDataViewModel DataViewModel { get; set; }
 
-    public ResoucePathWrapper(RDTDataViewModel vm, ReferenceSocket socket)
+    public ResourcePathWrapper(RDTDataViewModel vm, ReferenceSocket socket)
     {
         DataViewModel = vm;
         _socket = socket;

@@ -51,6 +51,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly IProjectManager _projectManager;
     private readonly IGameControllerFactory _gameController;
     private readonly IArchiveManager _archiveManager;
+    private readonly IHashService _hashService;
     private readonly AppViewModel _appViewModel;
     private readonly TweakDBService _tweakDbService;
     private readonly LocKeyService _locKeyService;
@@ -78,6 +79,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _tweakDbService = IocHelper.GetService<TweakDBService>();
         _projectManager = IocHelper.GetService<IProjectManager>();
         _gameController = IocHelper.GetService<IGameControllerFactory>();
+        _hashService = IocHelper.GetService<IHashService>();
         _appViewModel = IocHelper.GetService<AppViewModel>();
         _locKeyService = IocHelper.GetService<LocKeyService>();
         _parserService = IocHelper.GetService<Red4ParserService>();
@@ -798,19 +800,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         if (Data is IRedRef r)
         {
-            //string depotpath = r.DepotPath;
-            //Tab.File.OpenRefAsTab(depotpath);
-            _appViewModel.OpenFileFromHash(r.DepotPath.GetRedHash());
+            _appViewModel.OpenFileFromDepotPath(r.DepotPath);
         }
-        //var key = FNV1A64HashAlgorithm.HashString(depotpath);
-
-        //var _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
-        //var _archiveManager = Locator.Current.GetService<IArchiveManager>();
-
-        //if (_archiveManager.Lookup(key).HasValue)
-        //{
-        //    _gameControllerFactory.GetController().AddToMod(key);
-        //}
     }
 
     private bool CanAddRef() => Data is IRedRef r && r.DepotPath != ResourcePath.Empty;   // TODO RelayCommand check notify
@@ -819,11 +810,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         if (Data is IRedRef r)
         {
-            //string depotpath = r.DepotPath;
-            //Tab.File.OpenRefAsTab(depotpath);
-            //Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
-            var key = r.DepotPath.GetRedHash();
-            await _gameController.GetController().AddFileToModModal(key);
+            await _gameController.GetController().AddFileToModModal(r.DepotPath.GetRedHash());
         }
     }
 
@@ -1647,8 +1634,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
         else if (PropertyType.IsAssignableTo(typeof(IRedRef)) && Data is IRedRef rr)
         {
-            var value = rr;
-            Value = value is not null && value.DepotPath.GetResolvedText() != "" ? value.DepotPath.GetResolvedText() : "null";
+            // if a path is resolved in the file, but is not yet added to the list of known hashes, add it
+            var depotPath = rr.DepotPath;
+            if (!_hashService.Contains(depotPath) && !ResourcePath.IsNullOrEmpty(depotPath))
+            {
+                _hashService.AddCustom(depotPath.GetResolvedText().NotNull());
+            }
+
+            if (depotPath.IsResolvable)
+            {
+                Value = depotPath.ToString();
+            }
+            else
+            {
+                Value = depotPath == ResourcePath.Empty ? "null" : $"{(ulong)depotPath}{_hashService.GetGuessedExtension(depotPath)}";
+            }
         }
         else if (Data is IBrowsableType ibt)
         {

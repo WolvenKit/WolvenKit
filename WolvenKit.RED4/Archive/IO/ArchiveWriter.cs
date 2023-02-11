@@ -6,6 +6,7 @@ using WolvenKit.Core.Compression;
 using WolvenKit.Core.CRC;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO;
 
@@ -76,7 +77,7 @@ public class ArchiveWriter
         var customPaths = (from fileInfo in fileInfos
                            select fileInfo.FullName[(infolder.FullName.Length + 1)..]
                            into relpath
-                           let hash = FNV1A64HashAlgorithm.HashString(relpath)
+                           let hash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(relpath))
                            where !_hashService.Contains(hash)
                            select relpath).ToList();
 
@@ -120,6 +121,7 @@ public class ArchiveWriter
         foreach (var fileInfo in fileInfos)
         {
             var relpath = fileInfo.FullName[(infolder.FullName.Length + 1)..];
+            var sanitizedPath = ResourcePath.SanitizePath(relpath);
 
             ulong hash;
             var match = regex.Match(relpath);
@@ -132,14 +134,14 @@ public class ArchiveWriter
             }
             else
             {
-                hash = FNV1A64HashAlgorithm.HashString(relpath);
+                hash = FNV1A64HashAlgorithm.HashString(sanitizedPath);
             }
 
             if (!_hashService.Contains(hash))
             {
                 if (!_hashService.GetMissingHashes().Contains(hash))
                 {
-                    customPaths.Add(relpath);
+                    customPaths.Add(sanitizedPath);
                 }
             }
 

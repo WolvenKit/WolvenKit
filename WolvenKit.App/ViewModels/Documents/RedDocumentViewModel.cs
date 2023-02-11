@@ -283,24 +283,21 @@ public partial class RedDocumentViewModel : DocumentViewModel
         SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
     }
 
-    public Dictionary<ResourcePath, CR2WFile> Files { get; set; } = new();
+    public Dictionary<ResourcePath, CR2WFile?> Files { get; set; } = new();
 
-    public CR2WFile GetFileFromDepotPathOrCache(ResourcePath depotPath)
+    public CR2WFile? GetFileFromDepotPathOrCache(ResourcePath depotPath)
     {
         lock (Files)
         {
             if (!Files.ContainsKey(depotPath))
             {
                 var file = GetFileFromDepotPath(depotPath);
-                if (file is not null)
-                {
-                    Files[depotPath] = file;
-                }
+                Files[depotPath] = file;
             }
 
             if (Files[depotPath] != null)
             {
-                foreach (var res in Files[depotPath].EmbeddedFiles)
+                foreach (var res in Files[depotPath]!.EmbeddedFiles)
                 {
                     if (!Files.ContainsKey(res.FileName))
                     {

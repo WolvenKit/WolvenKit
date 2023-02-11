@@ -35,7 +35,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             SelectedChunks.Add(Chunks[0]);
         }
 
-        Nodes.Add(new ResoucePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath)));
+        Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath)));
         _nodePaths.Add(Chunks[0].RelativePath);
     }
 
@@ -120,7 +120,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             {
                 if (reference.Destination.File != ResourcePath.Empty)
                 {
-                    Nodes.Add(new ResoucePathWrapper(this, reference.Destination));
+                    Nodes.Add(new ResourcePathWrapper(this, reference.Destination));
                     _nodePaths.Add(reference.Destination.File);
                 }
             }
