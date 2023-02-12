@@ -301,18 +301,11 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 {
                     if (!Files.ContainsKey(res.FileName))
                     {
-                        if (!Files.ContainsKey(res.FileName))
+                        Files.Add(res.FileName, new CR2WFile()
                         {
-                            Files.Add(res.FileName, new CR2WFile()
-                            {
-                                RootChunk = res.Content
-                            });
-                        }
+                            RootChunk = res.Content
+                        });
                     }
-                }
-                else
-                {
-                    return null;
                 }
             }
         }
