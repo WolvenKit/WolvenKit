@@ -41,7 +41,7 @@ public partial class CR2WWriter : Red4Writer
             var value = cls.GetProperty(propertyInfo.RedName);
             if (!propertyInfo.IsDynamic)
             {
-                if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
+                if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && propertyInfo.IsDefault(value))
                 {
                     continue;
                 }

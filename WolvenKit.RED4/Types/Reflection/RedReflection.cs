@@ -116,18 +116,7 @@ public static class RedReflection
             throw new MissingRTTIException(redPropertyName, "???", clsType.Name);
         }
 
-        return IsDefault(clsType, extendedPropertyInfo, value);
-    }
-
-    public static bool IsDefault(Type clsType, ExtendedPropertyInfo extendedPropertyInfo, object? value)
-    {
-        if (!extendedPropertyInfo._isDefaultSet)
-        {
-            extendedPropertyInfo.DefaultValue = GetClassDefaultValue(clsType, extendedPropertyInfo);
-            extendedPropertyInfo._isDefaultSet = true;
-        }
-
-        return Equals(extendedPropertyInfo.DefaultValue, value);
+        return extendedPropertyInfo.IsDefault(value);
     }
 
     public static string? GetTypeRedName(Type type)

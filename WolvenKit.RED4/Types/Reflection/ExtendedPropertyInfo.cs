@@ -7,17 +7,21 @@ public class ExtendedPropertyInfo
     private Flags _flags;
     internal bool _isDefaultSet;
 
-    public ExtendedPropertyInfo(string name, string type)
+    public ExtendedPropertyInfo(ExtendedTypeInfo containingType, string name, string type)
     {
         IsDynamic = true;
+
+        ContainingTypeInfo = containingType;
 
         RedName = name;
         RedType = type;
     }
 
-    public ExtendedPropertyInfo(Type parent, PropertyInfo propertyInfo)
+    public ExtendedPropertyInfo(ExtendedTypeInfo containingType, PropertyInfo propertyInfo)
     {
         IsDynamic = false;
+
+        ContainingTypeInfo = containingType;
 
         Name = propertyInfo.Name;
         Type = propertyInfo.PropertyType;
@@ -32,7 +36,7 @@ public class ExtendedPropertyInfo
             ProcessAttribute(attribute);
         }
 
-        var propName = $"{parent.Name}.{Name}";
+        var propName = $"{ContainingTypeInfo.Type.Name}.{Name}";
         if (Patches.AttributePatches.ContainsKey(propName))
         {
             foreach (var attribute in Patches.AttributePatches[propName])
@@ -45,6 +49,8 @@ public class ExtendedPropertyInfo
     public int Ordinal { get; private set; } = -1;
     public int Before { get; private set; } = -1;
     public int After { get; private set; } = -1;
+
+    public ExtendedTypeInfo ContainingTypeInfo { get; private set; }
 
     public string Name { get; }
     public string? RedName { get; private set; }
@@ -89,5 +95,16 @@ public class ExtendedPropertyInfo
             SerializeDefault = redPropertyAttribute.SerializeDefault;
             IsIgnored = redPropertyAttribute.IsIgnored;
         }
+    }
+
+    public bool IsDefault(object? value)
+    {
+        if (!_isDefaultSet)
+        {
+            DefaultValue = RedReflection.GetClassDefaultValue(ContainingTypeInfo.Type, this);
+            _isDefaultSet = true;
+        }
+
+        return Equals(DefaultValue, value);
     }
 }
