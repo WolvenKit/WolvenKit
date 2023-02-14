@@ -2910,7 +2910,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     var slotSetName = slotset.Name.ToString().NotNull();
                     if (!_slotSets.ContainsKey(slotSetName))
                     {
-                        _slotSets.Add(slotSetName, new SlotSet(slotSetName, bindName.NotNull())
+                        _slotSets.Add(slotSetName, new SlotSet(slotSetName, bindName)
                         {
                             Matrix = ToSeparateMatrix(slotset.LocalTransform),
                             Slots = slots,

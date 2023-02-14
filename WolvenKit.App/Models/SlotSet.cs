@@ -4,7 +4,7 @@ namespace WolvenKit.App.Models;
 
 public class SlotSet : IBindable
 {
-    public SlotSet(string name, string bindname)
+    public SlotSet(string name, string? bindname)
     {
         Name = name;
         BindName = bindname;
