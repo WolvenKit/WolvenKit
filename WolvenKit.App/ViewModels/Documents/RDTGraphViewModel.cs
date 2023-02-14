@@ -16,20 +16,11 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RDTGraphViewModel : RedDocumentTabViewModel
 {
+    private bool _isLoaded;
+
     public RDTGraphViewModel(IRedType data, RedDocumentViewModel file) : base(file, "Graph Editor")
     {
         _data = data;
-
-        PendingConnection = new PendingConnectionViewModel(this);
-
-        if (data is graphGraphResource ggr)
-        {
-            RenderNodes(ggr.Graph.Chunk.NotNull().Nodes);
-        }
-        else if (data is scnSceneResource ssr)
-        {
-            RenderNodes(ssr.SceneGraph.Chunk.NotNull().Graph);
-        }
 
         //SelectedNodes.CollectionChanged += (object? sender, NotifyCollectionChangedEventArgs e) =>
         //{
@@ -54,8 +45,28 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
 
     public List<SocketViewModel> Sockets => SocketLookup.Values.ToList();
 
-    public PendingConnectionViewModel PendingConnection { get; }
+    public PendingConnectionViewModel? PendingConnection { get; private set; }
 
+    public void Load()
+    {
+        if (_isLoaded)
+        {
+            return;
+        }
+
+        PendingConnection = new PendingConnectionViewModel(this);
+
+        if (_data is graphGraphResource ggr)
+        {
+            RenderNodes(ggr.Graph.Chunk.NotNull().Nodes);
+        }
+        else if (_data is scnSceneResource ssr)
+        {
+            RenderNodes(ssr.SceneGraph.Chunk.NotNull().Graph);
+        }
+
+        _isLoaded = true;
+    }
    
     public GeometryGraph RenderNodes(CArray<CHandle<scnSceneGraphNode>> nodes)
     {

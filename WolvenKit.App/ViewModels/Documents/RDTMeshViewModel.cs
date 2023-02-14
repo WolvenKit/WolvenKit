@@ -27,7 +27,6 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
-using IMaterial = WolvenKit.RED4.Types.IMaterial;
 using Material = WolvenKit.App.Models.Material;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -43,14 +42,46 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     private const double s_cameraUpDirectionFactor = 0.7;
     private const int s_cameraAnimationTime = 400;
 
+    private bool _isLoaded;
+
     #region ctor
 
     public RDTMeshViewModel(RedDocumentViewModel parent, string header) : base(parent, header)
     {
+        Parent = parent;
+    }
+
+    // TODO refactor this into inherited viewmodels
+
+    public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file, MeshViewHeaders.MeshPreview)
+    {
+        _data = data;
+    }
+
+    public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file, MeshViewHeaders.SectorPreview)
+    {
+        _data = data;
+    }
+
+    public RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file) : this(file, MeshViewHeaders.AllSectorPreview)
+    {
+        _data = data;
+    }
+
+    public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file, MeshViewHeaders.EntityPreview)
+    {
+        _data = ent;
+    }
+
+    public void Load()
+    {
+        if (_isLoaded)
+        {
+            return;
+        }
+
         try
         {
-            Parent = parent;
-
             foreach (var res in Parent.Cr2wFile.EmbeddedFiles)
             {
                 if (!Parent.Files.ContainsKey(res.FileName))
@@ -70,62 +101,52 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 FarPlaneDistance = 1E+8,
                 LookDirection = new Vector3D(1f, -1f, -1f)
             };
-
-
         }
         catch (Exception ex)
         {
             Parent.GetLoggerService().Error(ex);
         }
 
-    }
+        if (_data is CMesh)
+        {
+            RenderMesh();
+        }
 
-    // TODO refactor this into inherited viewmodels
+        if (_data is worldStreamingSector)
+        {
+            PanelVisibility.ShowSelectionPanel = true;
+            var app = new Appearance(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_"));
 
-    public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file, MeshViewHeaders.MeshPreview)
-    {
-        _data = data;
+            Appearances.Add(app);
+            SelectedAppearance = app;
 
-        RenderMesh();
-    }
+            RenderSectorSolo();
+        }
 
-    public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file, MeshViewHeaders.SectorPreview)
-    {
-        PanelVisibility.ShowSelectionPanel = true;
-        _data = data;
-        var app = new Appearance(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_"));
+        if (_data is worldStreamingBlock)
+        {
+            PanelVisibility.ShowSearchPanel = true;
 
-        Appearances.Add(app);
-        SelectedAppearance = app;
+            RenderBlockSolo();
+        }
 
-        RenderSectorSolo();
-    }
+        if (_data is entEntityTemplate)
+        {
+            PanelVisibility.ShowExportEntity = true;
 
-    public RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file) : this(file, MeshViewHeaders.AllSectorPreview)
-    {
-        _data = data;
+            RenderEntitySolo();
+        }
 
-        PanelVisibility.ShowSearchPanel = true;
-
-        RenderBlockSolo();
-    }
-
-    public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file, MeshViewHeaders.EntityPreview)
-    {
-        _data = ent;
-
-        PanelVisibility.ShowExportEntity = true;
-
-        RenderEntitySolo();
+        _isLoaded = true;
     }
 
     #endregion
 
     #region properties
 
-    public EffectsManager? EffectsManager { get; }
+    public EffectsManager? EffectsManager { get; private set; }
 
-    public HelixToolkit.Wpf.SharpDX.Camera? Camera { get; }
+    public HelixToolkit.Wpf.SharpDX.Camera? Camera { get; private set; }
 
     public SceneNodeGroupModel3D GroupModel { get; set; } = new SceneNodeGroupModel3D();
 
