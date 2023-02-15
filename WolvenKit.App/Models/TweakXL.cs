@@ -259,7 +259,14 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                 emitter.Emit(new Scalar(property));
             }
 
-            emitter.Emit(new Scalar(tweakDBID.GetResolvedText().NotNull()));
+            if (tweakDBID.IsResolvable)
+            {
+                emitter.Emit(new Scalar(tweakDBID.GetResolvedText().NotNull()));
+            }
+            else
+            {
+                emitter.Emit(new Scalar($"<TDBID:{(tweakDBID & 0xFFFFFFFF):X8}:{tweakDBID.Length:X2}>"));
+            }
         }
     }
     private void WriteREDRaRef(IEmitter emitter, IRedResourceAsyncReference raRef, string property = "")

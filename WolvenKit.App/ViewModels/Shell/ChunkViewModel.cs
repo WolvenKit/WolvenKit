@@ -2111,7 +2111,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             if (epi is not null)
             {
                 //IsDefault = IsDefault(Parent.ResolvedPropertyType, epi, Data);
-                IsDefault = IsDefault(Parent.ResolvedPropertyType.NotNull(), epi, ResolvedData);
+                IsDefault = epi.IsDefault(ResolvedData);
             }
         }
     }

@@ -64,7 +64,7 @@ public class TweakDB
             ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
 
             var value = record.GetProperty(propertyInfo.RedName);
-            if (!typeInfo.SerializeDefault && RedReflection.IsDefault(record.GetType(), propertyInfo, value))
+            if (!typeInfo.SerializeDefault && propertyInfo.IsDefault(value))
             {
                 continue;
             }

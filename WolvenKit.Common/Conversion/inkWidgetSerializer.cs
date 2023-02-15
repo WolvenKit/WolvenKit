@@ -66,7 +66,7 @@ namespace WolvenKit.Common.Conversion
                 var name = !string.IsNullOrEmpty(pi.RedName) ? pi.RedName : pi.Name;
                 var propertyValue = ((RedBaseClass)value).GetProperty(name);
 
-                if (!RedReflection.IsDefault(value.GetType(), pi, propertyValue))
+                if (!pi.IsDefault(propertyValue))
                 {
                     var propertyName = pi.RedName;
                     switch (propertyName)

@@ -7,12 +7,18 @@ public class ExtendedTypeInfo
     private readonly Dictionary<string, int> _nameIndex = new();
     private readonly Dictionary<string, int> _redNameIndex = new();
 
-    public ExtendedTypeInfo() => IsDynamicType = true;
+    public ExtendedTypeInfo()
+    {
+        IsDynamicType = true;
+
+        Type = typeof(DynamicBaseClass);
+    }
 
     public ExtendedTypeInfo(Type type)
     {
         IsDynamicType = false;
 
+        Type = type;
         BaseType = type.BaseType;
 
         var attrs = type.GetCustomAttributes(false);
@@ -29,7 +35,7 @@ public class ExtendedTypeInfo
         var cusProps = new List<ExtendedPropertyInfo>();
         foreach (var propertyInfo in type.GetProperties())
         {
-            var extendedInfo = new ExtendedPropertyInfo(type, propertyInfo);
+            var extendedInfo = new ExtendedPropertyInfo(this, propertyInfo);
 
             if (typeof(IRedAppendix).IsAssignableFrom(type) && propertyInfo.Name == "Appendix")
             {
@@ -79,6 +85,7 @@ public class ExtendedTypeInfo
         }
     }
 
+    public Type Type { get; }
     public Type? BaseType { get; }
     public bool SerializeDefault { get; }
     public int ChildLevel { get; }
@@ -218,7 +225,7 @@ public class ExtendedTypeInfo
             }
         }
 
-        var propertyInfo = new ExtendedPropertyInfo(varName, typeName);
+        var propertyInfo = new ExtendedPropertyInfo(this, varName, typeName);
 
         DynamicPropertyInfos.Add(propertyInfo);
 

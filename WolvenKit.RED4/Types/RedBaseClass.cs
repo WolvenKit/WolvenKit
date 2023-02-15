@@ -20,9 +20,19 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
                 continue;
             }
 
-            var propTypeInfo = RedReflection.GetTypeInfo(propertyInfo.Type);
             if (propertyInfo.Type.IsValueType)
             {
+                if (propertyInfo.Type.IsAssignableTo(typeof(IRedEnum)))
+                {
+                    var innerType = propertyInfo.Type.GetGenericArguments()[0];
+                    var innerTypeInfo = RedReflection.GetEnumTypeInfo(innerType);
+                    if (innerTypeInfo.DefaultValue != null)
+                    {
+                        InternalSetPropertyValue(propertyInfo.RedName, CEnum.Parse(innerType, innerTypeInfo.DefaultValue));
+                        continue;
+                    }
+                }
+
                 if (propertyInfo.Flags.Equals(Flags.Empty))
                 {
                     if (System.Activator.CreateInstance(propertyInfo.Type) is not IRedType result)

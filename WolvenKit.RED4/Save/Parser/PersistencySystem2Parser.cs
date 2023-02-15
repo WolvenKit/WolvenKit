@@ -157,7 +157,7 @@ public class PersistencySystem2Writer : Red4Writer
             ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
 
             var value = instance.GetProperty(propertyInfo.RedName);
-            if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(instance.GetType(), propertyInfo, value))
+            if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && propertyInfo.IsDefault(value))
             {
                 continue;
             }
