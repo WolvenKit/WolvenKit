@@ -26,6 +26,7 @@ public interface ISettingsDto
     public string? TreeViewIgnoredExtensions { get; set; }
     public bool ShowAdvancedOptions { get; set; }
     public bool ShowCNameAsHex { get; set; }
+    public bool ShowResourcePathAsHex { get; set; }
     public bool ShowNodeRefAsHex { get; set; }
     public bool ShowTweakDBIDAsHex { get; set; }
     public bool ShowReferenceGraph { get; set; }

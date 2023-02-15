@@ -9,8 +9,10 @@ using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common.Services;
 using WolvenKit.Views.Dialogs.Windows;
 using WolvenKit.Views.Exporters;
 using WolvenKit.Views.Importers;
@@ -152,6 +154,16 @@ namespace WolvenKit.Views.Shell
         protected override void OnClosing(CancelEventArgs e)
         {
             dockingAdapter.SaveLayout();
+            var projectManager = Locator.Current.GetService<IProjectManager>();
+            if (projectManager is ProjectManager pm)
+            {
+                pm.Save();
+            }
+            var hashService = Locator.Current.GetService<IHashService>();
+            if (hashService is HashService hs)
+            {
+                hs.SaveUserHashes();
+            }
             Application.Current.Shutdown();
         }
 

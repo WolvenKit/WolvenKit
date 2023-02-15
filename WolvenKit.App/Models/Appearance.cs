@@ -29,7 +29,7 @@ public class Appearance
     public string Name { get; set; }
 
     public List<LoadableModel> Models { get; set; } = new();
-    public CName Resource { get; set; }
+    public ResourcePath Resource { get; set; }
     public List<INode> Nodes { get; set; } = new();
     public SmartElement3DCollection ModelGroup { get; set; } = new();
     public List<LoadableModel> BindableModels { get; set; } = new();

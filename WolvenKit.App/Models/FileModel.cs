@@ -5,11 +5,14 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData.Aggregation;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models;
 
@@ -190,14 +193,22 @@ public class FileModel : ObservableObject
         {
             if (fullname.StartsWith(project.ModDirectory))
             {
-                var tmpName = Path.GetRelativePath(project.ModDirectory, fullname);
-                if (tmpName != ".")
+                var relpath = Path.GetRelativePath(project.ModDirectory, fullname);
+
+                if (relpath != ".")
                 {
-                    return ulong.TryParse(tmpName, out var hash) ? hash : FNV1A64HashAlgorithm.HashString(tmpName);
+                    var regex = new Regex("^(\\d+)\\.");
+                    var match = regex.Match(relpath);
+                    if (match.Success)
+                    {
+                        return ulong.TryParse(match.Groups[1].Value, out var hash) ? hash : FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(relpath));
+
+                    }
+                    return FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(relpath));
                 }
             }
 
-            return FNV1A64HashAlgorithm.HashString(fullname);
+            return FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(fullname));
         }
     }
 

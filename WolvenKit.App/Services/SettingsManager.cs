@@ -46,6 +46,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(TreeViewIgnoredExtensions),
             nameof(ShowAdvancedOptions),
             nameof(ShowCNameAsHex),
+            nameof(ShowResourcePathAsHex),
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
             nameof(ShowReferenceGraph)
@@ -211,6 +212,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Show CName hashes as hex")]
     [ObservableProperty]
     private bool _showCNameAsHex;
+
+    [Category("Display")]
+    [Display(Name = "Show ResourcePath hashes as hex")]
+    [ObservableProperty]
+    private bool _showResourcePathAsHex;
 
     [Category("Display")]
     [Display(Name = "Show NodeRef hashes as hex")]

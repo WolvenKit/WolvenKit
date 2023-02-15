@@ -29,7 +29,7 @@ namespace WolvenKit.Common.Services
 
         public (Dictionary<ulong, localizationPersistenceOnScreenEntry>,
             Dictionary<string, localizationPersistenceOnScreenEntry>)
-            Load(CName depotPath)
+            Load(ResourcePath depotPath)
         {
             var primary = new Dictionary<ulong, localizationPersistenceOnScreenEntry>();
             var secondary = new Dictionary<string, localizationPersistenceOnScreenEntry>();

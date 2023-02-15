@@ -229,7 +229,7 @@ public partial class RedPackageReader : Red4Reader
             throw new TodoException();
         }
 
-        var depotPath = (CName)0;
+        var depotPath = ResourcePath.Empty;
         var flags = InternalEnums.EImportFlags.Default;
 
         var index = _reader.ReadInt16();
@@ -255,7 +255,7 @@ public partial class RedPackageReader : Red4Reader
             throw new TodoException();
         }
 
-        var depotPath = (CName)0;
+        var depotPath = ResourcePath.Empty;
         var flags = InternalEnums.EImportFlags.Default;
 
         var index = _reader.ReadInt16();

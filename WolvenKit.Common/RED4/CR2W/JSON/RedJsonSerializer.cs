@@ -53,6 +53,7 @@ public static class RedJsonSerializer
                 new LocalizationStringConverter(),
                 new CLegacySingleChannelCurveConverterFactory(),
                 new MultiChannelCurveConverterFactory(),
+                new ResourcePathConverter(),
                 new NodeRefConverter(),
                 new TweakDBIDConverter(),
                 new CByteArrayConverter(),

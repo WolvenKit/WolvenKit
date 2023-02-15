@@ -633,7 +633,7 @@ public class Red4Writer : IDisposable
 
     public virtual void Write(IRedResourceReference instance)
     {
-        if (instance.DepotPath == CName.Empty)
+        if (instance.DepotPath == ResourcePath.Empty)
         {
             _writer.Write((ushort)0);
             return;
@@ -649,7 +649,7 @@ public class Red4Writer : IDisposable
 
     public virtual void Write(IRedResourceAsyncReference instance)
     {
-        if (instance.DepotPath == CName.Empty)
+        if (instance.DepotPath == ResourcePath.Empty)
         {
             _writer.Write((ushort)0);
             return;

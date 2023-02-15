@@ -5,13 +5,12 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models;
 
-public partial class CNameWrapper : ObservableObject, Nodify.INode<ReferenceSocket>
+public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSocket>
 {
     //public CName CName => Socket.File;
 
@@ -40,20 +39,20 @@ public partial class CNameWrapper : ObservableObject, Nodify.INode<ReferenceSock
 
     public RDTDataViewModel DataViewModel { get; set; }
 
-    public CNameWrapper(RDTDataViewModel vm, ReferenceSocket socket)
+    public ResourcePathWrapper(RDTDataViewModel vm, ReferenceSocket socket)
     {
         DataViewModel = vm;
         _socket = socket;
     }
 
-    private bool CanOpenRef() => !CName.IsNullOrEmpty(Socket.File) && DataViewModel.Parent.RelativePath != Socket.File;
+    private bool CanOpenRef() => !ResourcePath.IsNullOrEmpty(Socket.File) && DataViewModel.Parent.RelativePath != Socket.File;
     [RelayCommand(CanExecute = nameof(CanOpenRef))]
     private void OpenRef()
     {
         IocHelper.GetService<AppViewModel>().OpenFileFromDepotPath(Socket.File.ToString().NotNull());
     }
 
-    private bool CanLoadRef() => Socket.File != CName.Empty;
+    private bool CanLoadRef() => Socket.File != ResourcePath.Empty;
     [RelayCommand(CanExecute = nameof(CanLoadRef))]
     private void LoadRef()
     {

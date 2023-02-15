@@ -16,9 +16,9 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool GetStreamFromCName(CName cname, [NotNullWhen(true)] out Stream? stream)
+        public bool GetStreamFromResourcePath(ResourcePath resourcePath, [NotNullWhen(true)] out Stream? stream)
         {
-            var file = _archiveManager.Lookup(cname.GetRedHash());
+            var file = _archiveManager.Lookup(resourcePath.GetRedHash());
             if (file.HasValue && file.Value is FileEntry fe)
             {
                 stream = new MemoryStream();
@@ -32,9 +32,9 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        public bool GetFileFromCName(CName cname, [NotNullWhen(true)] out CR2WFile? cr2w)
+        public bool GetFileFromResourcePath(ResourcePath resourcePath, [NotNullWhen(true)] out CR2WFile? cr2w)
         {
-            if (GetStreamFromCName(cname, out var stream) && _parserService.TryReadRed4File(stream, out cr2w))
+            if (GetStreamFromResourcePath(resourcePath, out var stream) && _parserService.TryReadRed4File(stream, out cr2w))
             {
                 return true;
             }
@@ -74,7 +74,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (component is entAnimatedComponent eac)
                 {
-                    if (GetFileFromCName(eac.Rig.DepotPath, out var rigFile) && rigFile.RootChunk is animRig rig)
+                    if (GetFileFromResourcePath(eac.Rig.DepotPath, out var rigFile) && rigFile.RootChunk is animRig rig)
                     {
                         NotResolvableException.ThrowIfNotResolvable(eac.Name);
 
@@ -94,7 +94,7 @@ namespace WolvenKit.Modkit.RED4
                             continue;
                         }
 
-                        if (!GetFileFromCName(aase.AnimSet.DepotPath, out animsFile))
+                        if (!GetFileFromResourcePath(aase.AnimSet.DepotPath, out animsFile))
                         {
                             continue;
                         }
@@ -143,7 +143,7 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
-                if (!GetFileFromCName(app.AppearanceResource.DepotPath, out var appFile))
+                if (!GetFileFromResourcePath(app.AppearanceResource.DepotPath, out var appFile))
                 {
                     continue;
                 }
@@ -164,7 +164,7 @@ namespace WolvenKit.Modkit.RED4
 
                     var root = ModelRoot.CreateModel();
 
-                    if (animsFile is not null && GetFileFromCName(anims.Rig.DepotPath, out var rigFile))
+                    if (animsFile is not null && GetFileFromResourcePath(anims.Rig.DepotPath, out var rigFile))
                     {
                         GetAnimation(animsFile, rigFile, ref root, true);
                     }
@@ -218,7 +218,7 @@ namespace WolvenKit.Modkit.RED4
                             }
                             nodes.Add(mc.Name!, node);
 
-                            if (!GetFileFromCName(mc.Mesh.DepotPath, out var meshFile))
+                            if (!GetFileFromResourcePath(mc.Mesh.DepotPath, out var meshFile))
                             {
                                 continue;
                             }
@@ -238,7 +238,7 @@ namespace WolvenKit.Modkit.RED4
                         {
                             NotResolvableException.ThrowIfNotResolvable(mc.Name);
 
-                            if (!GetFileFromCName(mc.Mesh.DepotPath, out var meshFile))
+                            if (!GetFileFromResourcePath(mc.Mesh.DepotPath, out var meshFile))
                             {
                                 continue;
                             }

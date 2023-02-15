@@ -7,7 +7,7 @@ public partial class ReferenceSocket : ObservableObject, INodeSocket<INode>
 {
     public INode? Node { get; set; }
 
-    [ObservableProperty] private CName _file;
+    [ObservableProperty] private ResourcePath _file;
 
     [ObservableProperty] private string _property = "";
 
@@ -17,7 +17,7 @@ public partial class ReferenceSocket : ObservableObject, INodeSocket<INode>
 
     [ObservableProperty] private string _type = "";
 
-    public ReferenceSocket(CName file, string property = "", string type = "")
+    public ReferenceSocket(ResourcePath file, string property = "", string type = "")
     {
         _file = file;
         _property = property;

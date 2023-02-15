@@ -342,7 +342,7 @@ public class ResourceReferenceConverter : JsonConverter<IRedRef>, ICustomRedConv
             throw new JsonException();
         }
 
-        CName? depotPath = null;
+        ResourcePath? depotPath = null;
         InternalEnums.EImportFlags? flags = null;
 
         var result = (IRedRef)RedTypeManager.CreateRedType(typeToConvert);
@@ -368,11 +368,11 @@ public class ResourceReferenceConverter : JsonConverter<IRedRef>, ICustomRedConv
             {
                 case "DepotPath":
                 {
-                    var converter = options.GetConverter(typeof(CName));
+                    var converter = options.GetConverter(typeof(ResourcePath));
                     if (converter is ICustomRedConverter conv)
                     {
                         reader.Read();
-                        depotPath = (CName)conv.ReadRedType(ref reader, typeof(CName), options)!;
+                        depotPath = (ResourcePath)conv.ReadRedType(ref reader, typeof(ResourcePath), options)!;
                     }
                     else
                     {

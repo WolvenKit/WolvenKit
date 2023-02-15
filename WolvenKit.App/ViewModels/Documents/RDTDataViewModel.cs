@@ -20,7 +20,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 {
     protected IRedType _data;
 
-    private List<CName> _nodePaths = new();
+    private List<ResourcePath> _nodePaths = new();
 
     private List<ChunkViewModel> _chunks = new();
 
@@ -35,7 +35,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             SelectedChunks.Add(Chunks[0]);
         }
 
-        Nodes.Add(new CNameWrapper(this, new ReferenceSocket(Chunks[0].RelativePath)));
+        Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath)));
         _nodePaths.Add(Chunks[0].RelativePath);
     }
 
@@ -118,9 +118,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             if (!_nodePaths.Contains(reference.Destination.File))
             {
-                if (reference.Destination.File != CName.Empty)
+                if (reference.Destination.File != ResourcePath.Empty)
                 {
-                    Nodes.Add(new CNameWrapper(this, reference.Destination));
+                    Nodes.Add(new ResourcePathWrapper(this, reference.Destination));
                     _nodePaths.Add(reference.Destination.File);
                 }
             }
