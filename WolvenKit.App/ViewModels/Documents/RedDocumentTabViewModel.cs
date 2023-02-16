@@ -1,39 +1,16 @@
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using WolvenKit.App.Controllers;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
-using WolvenKit.App.Services;
-using WolvenKit.Common.Services;
-using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.Modkit.RED4;
-using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
 public abstract partial class RedDocumentTabViewModel : ObservableObject
 {
-    protected readonly ISettingsManager _settingsManager;
-    protected readonly IGameControllerFactory _gameController;
-    protected readonly ILoggerService _loggerService;
-    protected readonly Red4ParserService _parser;
-    protected readonly ModTools _modTools;
-    protected readonly GeometryCacheService _geometryCacheService;
-
     protected RedDocumentTabViewModel(RedDocumentViewModel parent, string header)
     {
-        _settingsManager = IocHelper.GetService<ISettingsManager>();
-        _gameController = IocHelper.GetService<IGameControllerFactory>();
-        _loggerService = IocHelper.GetService<ILoggerService>();
-        _parser = IocHelper.GetService<Red4ParserService>();
-        _modTools = IocHelper.GetService<ModTools>();
-        _geometryCacheService = IocHelper.GetService<GeometryCacheService>();
-
         _parent = parent;
         FilePath = parent.FilePath;
         Header = header;

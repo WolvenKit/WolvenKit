@@ -34,9 +34,6 @@ namespace WolvenKit
         // Constructor #2
         public AppImpl()
         {
-            // init ioc helpers
-            IocHelper.GetFunc = t => Locator.Current.GetService(t);
-
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
             Init();
