@@ -63,42 +63,40 @@ namespace WolvenKit
                 .ConfigureServices((hostContext, services) =>
                 {
                     // services
-                    services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
-                    services.AddSingleton<IHashService, HashService>();
-                    services.AddSingleton<MySink>();
-                    services.AddSingleton<ILoggerService, SerilogWrapper>(); // can this be transient?
-                    services.AddSingleton<ExtendedScriptService>();
+                    services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());    
+                    services.AddSingleton<IHashService, HashService>();                         // can this be transient?
+                    services.AddSingleton<MySink>();                                            // can this be transient?
+                    services.AddSingleton<ILoggerService, SerilogWrapper>();                    // can this be transient?
+                    services.AddSingleton<ExtendedScriptService>();                             
                     services.AddSingleton<ITweakDBService, TweakDBService>();
+                    
 
                     services.AddTransient<INotificationService, NotificationService>();
                     services.AddTransient<IProgressService<double>, ProgressService<double>>();
                     services.AddTransient<Red4ParserService>();
                     services.AddTransient<IArchiveManager, ArchiveManager>();
+                    services.AddTransient<ILocKeyService, LocKeyService>();                         // can this be transient?
                     services.AddTransient<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
                     services.AddTransient<IProjectManager, ProjectManager>();
                     services.AddTransient<IWatcherService, WatcherService>();
                     services.AddTransient<GeometryCacheService>();
-                    services.AddTransient<ILocKeyService, LocKeyService>(); // singleton?
                     services.AddTransient<MeshTools>();
                     services.AddTransient<IModTools, ModTools>();
                     services.AddTransient<MockGameController>();
                     services.AddTransient<RED4Controller>();
                     services.AddTransient<IGameControllerFactory, GameControllerFactory>();
-                    services.AddTransient<IPluginService, PluginService>();
+                    services.AddSingleton<IPluginService, PluginService>();
                     
 
                     // factories
                     services.AddTransient<IPageViewModelFactory, PageViewModelFactory>();
                     services.AddTransient<IDialogViewModelFactory, DialogViewModelFactory>();
                     services.AddTransient<IDocumentTabViewmodelFactory, DocumentTabViewmodelFactory>();
-                    // IDocumentTabViewmodelFactory
-                    services.AddTransient<IChunkViewmodelFactory, ChunkViewmodelFactory>();
-                    // IChunkViewmodelFactory
-                    services.AddTransient<IPaneViewModelFactory, PaneViewModelFactory>();
-                    //IDocumentTabViewmodelFactory, IPaneViewModelFactory, IChunkViewmodelFactory
-                    services.AddTransient<IDocumentViewmodelFactory, DocumentViewmodelFactory>();       
+                    services.AddTransient<IChunkViewmodelFactory, ChunkViewmodelFactory>();             // IDocumentTabViewmodelFactory
+                    services.AddTransient<IPaneViewModelFactory, PaneViewModelFactory>();               // IChunkViewmodelFactory
+                    services.AddTransient<IDocumentViewmodelFactory, DocumentViewmodelFactory>();       //IDocumentTabViewmodelFactory, IPaneViewModelFactory, IChunkViewmodelFactory
 
-                    
+
 
                     // register views
                     #region shell
