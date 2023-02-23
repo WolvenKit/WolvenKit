@@ -217,6 +217,6 @@ public partial class RedPackageReader : IBufferReader
 
 public class PackageImport : IRedImport
 {
-    public CName DepotPath { get; set; }
+    public ResourcePath DepotPath { get; set; }
     public InternalEnums.EImportFlags Flags { get; set; }
 }

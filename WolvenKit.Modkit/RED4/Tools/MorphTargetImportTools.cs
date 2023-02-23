@@ -30,7 +30,7 @@ namespace WolvenKit.Modkit.RED4
 
             RawArmature? newRig = null;
             {
-                var hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath.ToString().NotNull());
+                var hash = blob.BaseMesh.DepotPath.GetRedHash(); //FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath.ToString().NotNull());
                 var meshStream = new MemoryStream();
                 foreach (var ar in args.Archives)
                 {

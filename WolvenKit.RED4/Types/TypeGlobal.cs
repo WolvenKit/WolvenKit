@@ -43,9 +43,9 @@ public static class TypeGlobal
 
             if (e1.PropertyName == "SsimpleBanerData.content" &&
                 e1.ExpectedType == typeof(redResourceReferenceScriptToken) && 
-                e1.ActualType == typeof(CName))
+                e1.ActualType == typeof(ResourcePath))
             {
-                var orgStr = (CName)e1.Value!;
+                var orgStr = (ResourcePath)e1.Value!;
 
                 e1.Value = new redResourceReferenceScriptToken
                 {

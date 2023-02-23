@@ -75,6 +75,16 @@ jobs:
       ##########################################
       # CONSOLE
 
+       # tag main commit
+      - name: Create Tag
+        id: tag_version
+        uses: rfuzzo/github-tag-action@7b0316b3fb8aa236fdc20bee0614ea6ef99f4bf1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: false
+          custom_tag: ${{ env.VERSION_APP }}
+          tag_prefix: ""
+
       # CLI commit checks
       - run: git fetch --tags
       - name: Get CLI commits
@@ -124,15 +134,7 @@ jobs:
       ##########################################
       # RELEASE
 
-      # tag main commit
-      - name: Create Tag
-        id: tag_version
-        uses: rfuzzo/github-tag-action@7b0316b3fb8aa236fdc20bee0614ea6ef99f4bf1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          default_bump: false
-          custom_tag: ${{ env.VERSION_APP }}
-          tag_prefix: ""
+     
 
       - name: Release dispatch
         uses: softprops/action-gh-release@v1

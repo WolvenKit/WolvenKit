@@ -14,7 +14,7 @@ public class LoadableModel : IBindable, INode
     public int AppearanceIndex { get; set; }
     public string? AppearanceName { get; set; }
     public CR2WFile? MeshFile { get; set; }
-    public CName DepotPath { get; set; }
+    public ResourcePath DepotPath { get; set; }
     public List<SubmeshComponent> Meshes { get; set; } = new();
     public string? FilePath { get; set; }
     public Model3D? OriginalModel { get; set; }

@@ -13,7 +13,7 @@ public class Sector
 
     public string Name { get; set; }
 
-    public CName DepotPath { get; set; }
+    public ResourcePath DepotPath { get; set; }
     public bool IsLoaded { get; set; }
     public Element3D Text { get; set; }
     public Element3D? Element { get; set; }

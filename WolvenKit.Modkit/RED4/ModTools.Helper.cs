@@ -33,7 +33,7 @@ public partial class ModTools
         }
     }
 
-    private FindFileResult TryFindFile(List<ICyberGameArchive> archives, CName path, out FindFileEntry? result, bool excludeCustomArchives = false)
+    private FindFileResult TryFindFile(List<ICyberGameArchive> archives, ResourcePath path, out FindFileEntry? result, bool excludeCustomArchives = false)
     {
         var status = InternalTryFindFile(archives, path, out result, excludeCustomArchives);
 

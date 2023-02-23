@@ -116,7 +116,7 @@ namespace WolvenKit.Views.Editors
             else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
                 var value = (IRedRef)RedType;
-                if (value.DepotPath != CName.Empty)
+                if (value.DepotPath != ResourcePath.Empty)
                 {
                     return value.DepotPath;
                 }

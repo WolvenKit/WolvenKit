@@ -268,7 +268,7 @@
                         </nodify:Node.FooterTemplate>
                     </nodify:Node>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type models:CNameWrapper}">
+                <DataTemplate DataType="{x:Type models:ResourcePathWrapper}">
                     <nodify:Node
                         Footer="{Binding}"
                         Header="{Binding}"

@@ -157,15 +157,21 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 Version = obj.Version,
             };
 
-            var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
-            if (File.Exists(projectHashesFile) && _hashService is HashService hashService)
+            if (_hashService is HashService hashService)
             {
-                var paths = await File.ReadAllLinesAsync(projectHashesFile);
-                foreach (var p in paths)
+                hashService.ClearProjectHashes();
+
+                var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
+                if (File.Exists(projectHashesFile))
                 {
-                    hashService.AddProjectPath(p);
+                    var paths = await File.ReadAllLinesAsync(projectHashesFile);
+                    foreach (var p in paths)
+                    {
+                        hashService.AddProjectPath(p);
+                    }
                 }
             }
+
 
             // fix legacy folders
             MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "tweaks")), result);
@@ -249,7 +255,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         return true;
     }
 
-    private bool Save()
+    public bool Save()
     {
         if (ActiveProject is null)
         {
