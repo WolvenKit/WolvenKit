@@ -21,6 +21,11 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             this.WhenActivated(disposables =>
             {
+                WizardControl.Finish += (sender, args) =>
+                {
+                    ViewModel.ExecuteFinish();
+                };
+
                 this.Bind(ViewModel,
                     vm => vm.CP77ExePath,
                     v => v.cp77ExeTxtb.Text)

@@ -208,5 +208,12 @@ public partial class FirstSetupViewModel : DialogWindowViewModel
         }
     }
 
+    public void ExecuteFinish()
+    {
+        _settingsManager.CP77ExecutablePath = CP77ExePath;
+        _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
+        _settingsManager.Bounce();
+    }
+
     #endregion Methods
 }
