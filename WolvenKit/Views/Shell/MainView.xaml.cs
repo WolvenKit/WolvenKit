@@ -159,6 +159,10 @@ namespace WolvenKit.Views.Shell
             {
                 pm.Save();
             }
+            if (Locator.Current.GetService<IWatcherService>() is WatcherService ws)
+            {
+                ws.ForceStopTimer();
+            }
             var hashService = Locator.Current.GetService<IHashService>();
             if (hashService is HashService hs)
             {

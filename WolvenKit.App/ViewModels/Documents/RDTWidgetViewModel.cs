@@ -4,9 +4,7 @@ using System.Drawing.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -14,6 +12,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using Application = System.Windows.Application;
 
@@ -264,13 +263,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
             return;
         }
 
-        var qa = await ImageDecoder.RenderToBitmapImageDds(ddsstream, decompressedFormat);
-        if (qa is null)
-        {
-            return;
-        }
-
-        var image = new TransformedBitmap(qa, new ScaleTransform(1, -1));
+        var image = RedImage.LoadFromDDSMemory(ddsstream.ToByteArray(), decompressedFormat);
 
         foreach (var part in slot.Parts)
         {
@@ -279,12 +272,12 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
             var key = "ImageSource/" + path + "#" + part.PartName;
             if (!Application.Current.Resources.Contains(key))
             {
-                var Left = part.ClippingRectInUVCoords.Left * xbm.Width;
-                var Top = part.ClippingRectInUVCoords.Top * xbm.Height;
-                var Width = part.ClippingRectInUVCoords.Right * xbm.Width - Left;
-                var Height = part.ClippingRectInUVCoords.Bottom * xbm.Height - Top;
-                var partImage = new CroppedBitmap(image, new Int32Rect((int)Math.Round(Left), (int)Math.Round(Top), (int)Math.Round(Width), (int)Math.Round(Height)));
-                partImage.Freeze();
+                var x = Math.Round(part.ClippingRectInUVCoords.Left * image.Metadata.Width);
+                var y = Math.Round(part.ClippingRectInUVCoords.Top * image.Metadata.Height);
+                var width = Math.Round(part.ClippingRectInUVCoords.Right * image.Metadata.Width) - x;
+                var height = Math.Round(part.ClippingRectInUVCoords.Bottom * image.Metadata.Height) - y;
+
+                var partImage = await Task.Run(() => ImageDecoder.CreateBitmapImage(image.Crop((int)x, (int)y, (int)width, (int)height)));
 
                 Application.Current.Resources.Add(key, partImage);
             }
