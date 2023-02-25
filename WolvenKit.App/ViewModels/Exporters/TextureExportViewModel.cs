@@ -50,6 +50,7 @@ public partial class TextureExportViewModel : ExportViewModel
     private IGameControllerFactory _gameController;
     private IArchiveManager _archiveManager;
     private IPluginService _pluginService;
+    private IHashService _hashService;
     private IModTools _modTools;
     private readonly Red4ParserService _parserService;
 
@@ -62,6 +63,7 @@ public partial class TextureExportViewModel : ExportViewModel
         INotificationService notificationService,
         IArchiveManager archiveManager,
         IPluginService pluginService,
+        IHashService hashService,
         IModTools modTools,
         Red4ParserService red4ParserService,
         IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
@@ -74,6 +76,7 @@ public partial class TextureExportViewModel : ExportViewModel
         _notificationService = notificationService;
         _archiveManager = archiveManager;
         _pluginService = pluginService;
+        _hashService = hashService;
         _modTools = modTools;
         _parserService = red4ParserService;
         _progressService = progressService;
@@ -196,7 +199,7 @@ public partial class TextureExportViewModel : ExportViewModel
                     meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
                 }
 
-                meshExportArgs.Archives.Insert(0, new FileSystemArchive(proj.ModDirectory));
+                meshExportArgs.Archives.Insert(0, proj.AsArchive());
 
                 meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
             }

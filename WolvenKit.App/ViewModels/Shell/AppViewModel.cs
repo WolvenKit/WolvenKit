@@ -565,7 +565,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             var newProjectname = project.ProjectName.NotNull().Trim();
             var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectname, newProjectname + ".cpmodproj");
-            Cp77Project np = new(projectLocation, newProjectname)
+            Cp77Project np = new(projectLocation, newProjectname, _hashService)
             {
                 Author = project.Author,
                 Email = project.Email,
