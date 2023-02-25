@@ -144,9 +144,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     #region properties
 
-    public EffectsManager? EffectsManager { get; private set; }
+    private EffectsManager? _effectsManager;
+    private HelixToolkit.Wpf.SharpDX.Camera? _camera;
 
-    public HelixToolkit.Wpf.SharpDX.Camera? Camera { get; private set; }
+    public EffectsManager? EffectsManager
+    {
+        get => _effectsManager;
+        private set => SetProperty(ref _effectsManager, value);
+    }
+
+    public HelixToolkit.Wpf.SharpDX.Camera? Camera
+    {
+        get => _camera;
+        private set => SetProperty(ref _camera, value);
+    }
 
     public SceneNodeGroupModel3D GroupModel { get; set; } = new SceneNodeGroupModel3D();
 
