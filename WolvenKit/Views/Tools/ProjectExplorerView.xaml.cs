@@ -331,21 +331,27 @@ namespace WolvenKit.Views.Tools
             if (tabControl != null && o is FileModel fm)
             {
                 includeFile = true;
-                if (tabControl.SelectedIndex == 0)
+                switch (tabControl.SelectedIndex)
                 {
-                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).FileDirectory);
+                    case 0:
+                        includeFile = fm.FullName.StartsWith(fm.Project.FileDirectory);
+                        break;
+                    case 1:
+                        includeFile = fm.FullName.StartsWith(fm.Project.ModDirectory);
+                        break;
+                    case 2:
+                        includeFile = fm.FullName.ToLower().StartsWith(fm.Project.RawDirectory.ToLower());
+                        break;
+                    case 3:
+                        includeFile = fm.FullName.StartsWith(fm.Project.ResourcesDirectory);
+                        break;
+                    default:
+                        break;
                 }
-                else if (tabControl.SelectedIndex == 1)
+
+                if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && !fm.Name.Contains(_currentFolderQuery))
                 {
-                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).ModDirectory);
-                }
-                else if (tabControl.SelectedIndex == 2)
-                {
-                    includeFile &= fm.FullName.ToLower().StartsWith((fm.Project as Cp77Project).RawDirectory.ToLower());
-                }
-                else if (tabControl.SelectedIndex == 3)
-                {
-                    includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).ResourcesDirectory);
+                    includeFile = false;
                 }
             }
             return includeFile;
@@ -406,8 +412,6 @@ namespace WolvenKit.Views.Tools
 
         private string _currentFolderQuery = "";
 
-        private bool FilterNodes(object o) => o is FileModel data && data.Name.Contains(_currentFolderQuery);
-
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
             // expand all
@@ -415,7 +419,6 @@ namespace WolvenKit.Views.Tools
             _currentFolderQuery = e.Info;
 
             // filter programmatially
-            TreeGrid.View.Filter = FilterNodes;
             TreeGrid.View.RefreshFilter();
         }
 
