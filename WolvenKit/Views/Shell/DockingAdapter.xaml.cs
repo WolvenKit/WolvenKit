@@ -83,6 +83,11 @@ namespace WolvenKit.Views.Shell
         {
             if (_useAppdataStorage)
             {
+                if (_viewModel is null)
+                {
+                    return;
+                }
+
                 var xmlPath = Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml");
                 var writer = XmlWriter.Create(xmlPath);
 

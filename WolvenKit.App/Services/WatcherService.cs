@@ -46,6 +46,8 @@ public class WatcherService : ObservableObject, IWatcherService
         _timer = new Timer(OnTimer);
     }
 
+    public void ForceStopTimer() => _timer.Change(-1, -1);
+
     // HACK remove after e3 -S. Eberoth
     private async void OnTimer(object? state)
     {

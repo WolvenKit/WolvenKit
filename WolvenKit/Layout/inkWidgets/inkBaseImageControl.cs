@@ -17,7 +17,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public inkIImageWidget IImageWidget => Widget as inkIImageWidget;
 
         public System.Drawing.Size OriginalImageSize { get; set; }
-        protected ImageSource OriginalImageSource;
+        protected BitmapSource OriginalImageSource;
         protected RectF nsRect;
         protected WolvenKit.RED4.Types.Rect Rect = new();
 
@@ -75,7 +75,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             //TextureAtlas = IImageWidget.TextureAtlas.DepotPath;
             TexturePart = IImageWidget.TexturePart;
 
-            OriginalImageSource = (ImageSource)Application.Current.TryFindResource("ImageSource/" + TextureAtlas + "#" + TexturePart);
+            OriginalImageSource = (BitmapSource)Application.Current.TryFindResource("ImageSource/" + TextureAtlas + "#" + TexturePart);
 
             if (OriginalImageSource == null)
             {
@@ -86,7 +86,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 _ = WidgetView.ViewModel.LoadInkAtlasAsync(TextureAtlas);
 
-                OriginalImageSource = (ImageSource)Application.Current.TryFindResource("ImageSource/" + TextureAtlas + "#" + TexturePart);
+                OriginalImageSource = (BitmapSource)Application.Current.TryFindResource("ImageSource/" + TextureAtlas + "#" + TexturePart);
 
                 if (OriginalImageSource == null)
                 {
@@ -94,7 +94,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 }
             }
 
-            OriginalImageSize = new System.Drawing.Size((int)Math.Round(OriginalImageSource.Width), (int)Math.Round(OriginalImageSource.Height));
+            OriginalImageSize = new System.Drawing.Size(OriginalImageSource.PixelWidth, OriginalImageSource.PixelHeight);
 
             //DrawImage(new SizeF(Width, Height));
 
@@ -442,7 +442,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         protected override SizeF MeasureCore(SizeF availableSize)
         {
             return Widget.FitToContent && OriginalImageSource != null
-                ? MeasureForDimensions(new SizeF(OriginalImageSource.Width, OriginalImageSource.Height), availableSize)
+                ? MeasureForDimensions(new SizeF(OriginalImageSource.PixelWidth, OriginalImageSource.PixelHeight), availableSize)
                 : MeasureForDimensions(new SizeF(Width, Height), availableSize);
             //return base.MeasureCore(availableSize);
         }

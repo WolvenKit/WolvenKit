@@ -226,7 +226,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     parentData = cVariant.Value;
                 }
-                else if (parentData is RedBaseClass rbc)
+                
+                if (parentData is RedBaseClass rbc)
                 {
                     //if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
                     //{
