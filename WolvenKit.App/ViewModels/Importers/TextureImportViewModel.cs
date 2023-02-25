@@ -48,6 +48,7 @@ public partial class TextureImportViewModel : ImportViewModel
     private IGameControllerFactory _gameController;
     private IArchiveManager _archiveManager;
     private IPluginService _pluginService;
+    private IHashService _hashService;
     private IModTools _modTools;
 
 
@@ -60,6 +61,7 @@ public partial class TextureImportViewModel : ImportViewModel
         INotificationService notificationService,
         IArchiveManager archiveManager,
         IPluginService pluginService,
+        IHashService hashService,
         IModTools modTools,
         IProgressService<double> progressService,
         Red4ParserService parserService) : base(archiveManager, notificationService, settingsManager, "Import Tool", "Import Tool")
@@ -72,6 +74,7 @@ public partial class TextureImportViewModel : ImportViewModel
         _notificationService = notificationService;
         _archiveManager = archiveManager;
         _pluginService = pluginService;
+        _hashService = hashService;
         _modTools = modTools;
         _progressService = progressService;
         _parserService = parserService;
@@ -246,7 +249,7 @@ public partial class TextureImportViewModel : ImportViewModel
         if (item.Properties is GltfImportArgs gltfImportArgs)
         {
             gltfImportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-            gltfImportArgs.Archives.Insert(0, new FileSystemArchive(proj.ModDirectory));
+            gltfImportArgs.Archives.Insert(0, proj.AsArchive());
         }
 
         if (item.Properties is ReImportArgs reImportArgs)

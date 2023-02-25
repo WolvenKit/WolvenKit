@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.App.Models.ProjectManagement.Project;
 
 public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
 {
+    private readonly IHashService _hashService;
 
-    public Cp77Project(string location, string name)
+    public Cp77Project(string location, string name, IHashService hashService)
     {
         Location = location;
         Name = name;
+
+        _hashService= hashService;
     }
 
     public string Name { get; set; }
@@ -35,6 +40,7 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
 
     public GameType GameType => GameType.Cyberpunk2077;
+
 
 
     public List<string> Files
@@ -289,11 +295,16 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         _ = ResourcesDirectory;
     }
 
+    // Conversions
+
+    public ICyberGameArchive AsArchive() => new FileSystemArchive(Name, ModDirectory, _hashService);
+
+
     #region implements ICloneable
 
     public object Clone()
     {
-        Cp77Project clone = new(Location, Name)
+        Cp77Project clone = new(Location, Name, _hashService)
         {
             Author = Author,
             Email = Email,

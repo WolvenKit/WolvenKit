@@ -398,6 +398,7 @@ namespace WolvenKit.Modkit.RED4
             var ext = args.ImportFormat ==
                 GltfImportAsFormat.MeshWithRig ? $".mesh" : $".{args.ImportFormat.ToString().ToLower()}";
 
+            // GltfImportAsFormat ToString to match ext
 
             if (args.SelectBase)
             {
