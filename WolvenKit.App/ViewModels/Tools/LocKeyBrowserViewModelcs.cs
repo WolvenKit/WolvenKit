@@ -37,7 +37,7 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
     private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
-    private readonly LocKeyService _locKeyService;
+    private readonly ILocKeyService _locKeyService;
     private readonly IArchiveManager _archiveManager;
 
     public string Extension { get; set; } = "json";
@@ -50,7 +50,7 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
         IModTools modTools,
         IGameControllerFactory gameController,
         IArchiveManager archive,
-        LocKeyService locKeyService) : base(ToolTitle)
+        ILocKeyService locKeyService) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;

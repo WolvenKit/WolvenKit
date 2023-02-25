@@ -25,7 +25,7 @@ public partial class HomePageViewModel : ObservableObject
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
 
-    public HomePageViewModel(ISettingsManager settingsManager, IPluginService pluginService, AppViewModel appViewModel)
+    public HomePageViewModel(AppViewModel appViewModel, ISettingsManager settingsManager, IPluginService pluginService)
     {
         _settingsManager = settingsManager;
         _pluginService = pluginService;

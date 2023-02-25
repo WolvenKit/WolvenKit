@@ -12,6 +12,8 @@ using CommunityToolkit.Mvvm.Input;
 using Discord.Rest;
 using Microsoft.Win32;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -20,7 +22,8 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
 {
     private readonly inkTextureAtlas _atlas;
 
-    public RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, CBitmapTexture xbm, RedDocumentViewModel file) : base(xbm, file)
+    public RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, CBitmapTexture xbm, RedDocumentViewModel file, ILoggerService loggerService, Red4ParserService parserService) 
+        : base(xbm, file, loggerService, parserService)
     {
         _atlas = atlas;
         Header = "Part Mapping";

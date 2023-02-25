@@ -21,7 +21,7 @@ namespace WolvenKit.Common.Services
 
         private bool _isLoading;
 
-        public bool IsLoaded;
+        public bool IsLoaded { get; set; }
         public event EventHandler? Loaded;
 
         public TweakDBService()

@@ -64,6 +64,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #region constructors
 
     public ProjectExplorerViewModel(
+        AppViewModel appViewModel,
         IProjectManager projectManager,
         ILoggerService loggerService,
         IWatcherService watcherService,
@@ -71,8 +72,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IModTools modTools,
         IGameControllerFactory gameController,
         IPluginService pluginService,
-        ISettingsManager settingsManager,
-        AppViewModel appViewModel ) : base(ToolTitle)
+        ISettingsManager settingsManager) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
