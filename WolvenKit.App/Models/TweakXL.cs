@@ -193,10 +193,10 @@ public class TweakXLAppend : TweakXL
 
 public class TweakXLYamlTypeConverter : IYamlTypeConverter
 {
-    private readonly LocKeyService _locKeyService;
-    private readonly TweakDBService _tweakDBService;
+    private readonly ILocKeyService _locKeyService;
+    private readonly ITweakDBService _tweakDBService;
 
-    public TweakXLYamlTypeConverter(LocKeyService locKeyService, TweakDBService tweakDBService)
+    public TweakXLYamlTypeConverter(ILocKeyService locKeyService, ITweakDBService tweakDBService)
     {
         _locKeyService = locKeyService;
         _tweakDBService = tweakDBService;
@@ -465,7 +465,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
     }
 
     // eventually ITweakXLItem
-    public IRedType ReadScalar(Scalar s, TweakDBService tdbs, Type? type = null)
+    public IRedType ReadScalar(Scalar s, ITweakDBService tdbs, Type? type = null)
     {
         // TODO get parent type & property name, look-up type if ambiguous?
         // TODO parse type strings

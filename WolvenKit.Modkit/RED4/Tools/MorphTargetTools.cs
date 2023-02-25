@@ -125,6 +125,17 @@ namespace WolvenKit.Modkit.RED4
             var rendMorphBlob = (rendRenderMorphTargetMeshBlob)morphBlob.Blob.Chunk.NotNull();
 
             uint NumTargets = rendMorphBlob.Header.NumTargets;
+            ArgumentNullException.ThrowIfNull(NumTargets, nameof(NumTargets));
+
+            if (NumTargets < 1)
+            {
+                var helpMessage =
+                    morphBlob.Targets.Count > 0
+                        ? $"There are {morphBlob.Targets.Count} targets, but `blob.header.numTargets` is 0. This was probably done intentionally to disable morphing, but you MAY be able to make this a valid .morphtarget by setting `numTargets` to the actual number of targets."
+                        : $"`numTargets` is 0 and there are no `targets` defined, this doesn't look like a valid .morphtarget";
+
+                throw new ArgumentOutOfRangeException("blob.header.numTargets", rendMorphBlob.Header.NumTargets, helpMessage);
+            }
 
             var NumVertexDiffsInEachChunk = new uint[NumTargets, subMeshC];
             uint NumDiffs = rendMorphBlob.Header.NumDiffs;

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using Microsoft.ClearScript;
+using WolvenKit.App.Factories;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.Common;
@@ -22,11 +23,20 @@ public class WKitUIScripting : WKitScripting
 {
     private readonly IProjectManager _projectManager;
     private readonly IWatcherService _watcherService;
+    private readonly IPaneViewModelFactory _paneViewModelFactory;
 
-    public WKitUIScripting(ILoggerService loggerService, IProjectManager projectManager, IArchiveManager archiveManager, Red4ParserService parserService, IWatcherService watcherService) : base(loggerService, archiveManager, parserService)
+    public WKitUIScripting(
+        IPaneViewModelFactory paneViewModelFactory,
+        ILoggerService loggerService, 
+        IProjectManager projectManager, 
+        IArchiveManager archiveManager, 
+        Red4ParserService parserService, 
+        IWatcherService watcherService) 
+        : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
         _watcherService = watcherService;
+        _paneViewModelFactory = paneViewModelFactory;
     }
 
     public void SuspendFileWatcher(bool suspend)
@@ -168,7 +178,7 @@ public class WKitUIScripting : WKitScripting
         }
 
         // get the export view model and clear the items
-        var expVM = IocHelper.GetService<TextureExportViewModel>();
+        var expVM = _paneViewModelFactory.TextureExportViewModel();
         foreach (var item in expVM.Items)
         {
             item.IsChecked = false;

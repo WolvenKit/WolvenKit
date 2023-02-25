@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 
@@ -42,11 +43,11 @@ public class FileSystemArchive : ICyberGameArchive
         await fs.CopyToAsync(stream);
     }
 
-    public FileSystemArchive(string modDirectory)
+    public FileSystemArchive(string modName, string modDirectory, IHashService hashService)
     {
-        ArchiveAbsolutePath = ""; // TODO ???
-        ArchiveRelativePath = ""; // TODO ???
-        Name = ""; // TODO ???
+        ArchiveAbsolutePath = $"<virtual FileSystemArchive>";
+        ArchiveRelativePath = $"<virtual FileSystemArchive>";
+        Name = $"<{modName}>";
 
         if (string.IsNullOrEmpty(modDirectory) || !Directory.Exists(modDirectory))
         {
@@ -58,9 +59,9 @@ public class FileSystemArchive : ICyberGameArchive
             var hash = FNV1A64HashAlgorithm.HashString(filePath[(modDirectory.Length + 1)..]);
 
             _filePaths.Add(hash, filePath);
-            Files.Add(hash, new FileEntry
+            Files.Add(hash, new FileEntry(hashService)
             {
-                //Archive = this, // TODO ???
+                Archive = this,
                 NameHash64 = hash
             });
         }

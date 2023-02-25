@@ -83,6 +83,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #region ctor
 
     public AssetBrowserViewModel(
+        AppViewModel appViewModel,
         IProjectManager projectManager,
         INotificationService notificationService,
         IGameControllerFactory gameController,
@@ -91,8 +92,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         IProgressService<double> progressService,
         ILoggerService loggerService,
         IPluginService pluginService,
-        IWatcherService watcherService,
-        AppViewModel appViewModel) : base(ToolTitle)
+        IWatcherService watcherService) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -251,10 +251,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand]
     private async Task OpenWolvenKitSettings()
     {
-        var homepageViewModel = IocHelper.GetService<HomePageViewModel>();
-
-        homepageViewModel.SelectedIndex = 1;
-        await _appViewModel.SetActiveOverlay(homepageViewModel);
+        await _appViewModel.ShowHomePage(EHomePage.Settings);
     }
 
     [RelayCommand]
@@ -276,10 +273,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
                 {
-                    var homepage = IocHelper.GetService<HomePageViewModel>();
-
-                    homepage.NavigateTo(EHomePage.Plugins);
-                    await _appViewModel.SetActiveOverlay(homepage);
+                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
                     break;
                 }
 
@@ -343,10 +337,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
                 {
-                    var homepage = IocHelper.GetService<HomePageViewModel>();
-
-                    homepage.NavigateTo(EHomePage.Plugins);
-                    await _appViewModel.SetActiveOverlay(homepage);
+                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
                     break;
                 }
 

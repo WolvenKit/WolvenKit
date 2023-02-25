@@ -16,16 +16,21 @@ using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
+using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
+using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using Material = WolvenKit.App.Models.Material;
 
@@ -33,6 +38,13 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RDTMeshViewModel : RedDocumentTabViewModel
 {
+    private readonly ISettingsManager _settingsManager;
+    private readonly IGameControllerFactory _gameController;
+    private readonly ILoggerService _loggerService;
+    private readonly Red4ParserService _parserService;
+    private readonly IModTools _modTools;
+    private readonly GeometryCacheService _geometryCacheService;
+
     protected readonly RedBaseClass? _data;
 
     private readonly Dictionary<string, LoadableModel> _modelList = new();
@@ -46,29 +58,70 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     #region ctor
 
-    public RDTMeshViewModel(RedDocumentViewModel parent, string header) : base(parent, header)
+    public RDTMeshViewModel(RedDocumentViewModel parent, string header,
+        ISettingsManager settingsManager,
+        IGameControllerFactory gameController,
+        ILoggerService loggerService,
+        Red4ParserService parserService,
+        IModTools modTools,
+        GeometryCacheService geometryCacheService) : base(parent, header)
     {
+        _loggerService = loggerService;
+        _parserService = parserService;
+        _settingsManager = settingsManager;
+        _gameController = gameController;
+        _modTools = modTools;
+        _geometryCacheService = geometryCacheService;
+
         Parent = parent;
     }
 
     // TODO refactor this into inherited viewmodels
 
-    public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file, MeshViewHeaders.MeshPreview)
+    public RDTMeshViewModel(CMesh data, RedDocumentViewModel file,
+        ISettingsManager settingsManager,
+        IGameControllerFactory gameController,
+        ILoggerService loggerService,
+        Red4ParserService parserService,
+        IModTools modTools,
+        GeometryCacheService geometryCacheService) 
+        : this(file, MeshViewHeaders.MeshPreview, settingsManager, gameController, loggerService, parserService, modTools, geometryCacheService)
     {
         _data = data;
     }
 
-    public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file, MeshViewHeaders.SectorPreview)
+    public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file,
+        ISettingsManager settingsManager,
+        IGameControllerFactory gameController,
+        ILoggerService loggerService,
+        Red4ParserService parserService,
+        IModTools modTools,
+        GeometryCacheService geometryCacheService) 
+        : this(file, MeshViewHeaders.SectorPreview, settingsManager, gameController, loggerService, parserService, modTools, geometryCacheService)
     {
         _data = data;
     }
 
-    public RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file) : this(file, MeshViewHeaders.AllSectorPreview)
+    public RDTMeshViewModel(worldStreamingBlock data, RedDocumentViewModel file,
+        ISettingsManager settingsManager,
+        IGameControllerFactory gameController,
+        ILoggerService loggerService,
+        Red4ParserService parserService,
+        IModTools modTools,
+        GeometryCacheService geometryCacheService) 
+        : this(file, MeshViewHeaders.AllSectorPreview, settingsManager, gameController, loggerService, parserService, modTools, geometryCacheService)
     {
         _data = data;
     }
 
-    public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file, MeshViewHeaders.EntityPreview)
+    public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file,
+        ISettingsManager settingsManager,
+        IGameControllerFactory gameController,
+        ILoggerService loggerService,
+        Red4ParserService parserService,
+        IModTools modTools,
+        GeometryCacheService geometryCacheService) 
+        : this(file, MeshViewHeaders.EntityPreview, settingsManager, gameController, loggerService, parserService, modTools, geometryCacheService)
     {
         _data = ent;
     }

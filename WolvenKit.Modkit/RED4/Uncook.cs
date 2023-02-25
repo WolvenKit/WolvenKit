@@ -697,7 +697,7 @@ namespace WolvenKit.Modkit.RED4
         }
         public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.ReadRed4File(meshStream);
+            var cr2w = _parserService.ReadRed4File(meshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -715,7 +715,7 @@ namespace WolvenKit.Modkit.RED4
 
             var meshRig = MeshTools.GetOrphanRig(cMesh);
 
-            var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
+            var Rig = RIG.ProcessRig(_parserService.ReadRed4File(rigStream));
 
             MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshRig);
 
@@ -758,7 +758,7 @@ namespace WolvenKit.Modkit.RED4
             var Rigs = new List<RawArmature>();
             foreach (var rigStream in rigStreamS)
             {
-                var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
+                var Rig = RIG.ProcessRig(_parserService.ReadRed4File(rigStream));
 
                 Rigs.Add(Rig.NotNull());
 
@@ -771,7 +771,7 @@ namespace WolvenKit.Modkit.RED4
             var matData = new List<MatData>();
             foreach (var meshStream in meshStreamS.Keys)
             {
-                var cr2w = _red4ParserService.ReadRed4File(meshStream);
+                var cr2w = _parserService.ReadRed4File(meshStream);
                 if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
                 {
                     continue;
@@ -832,7 +832,7 @@ namespace WolvenKit.Modkit.RED4
             var archives = meshExportArgs.Archives;
             var eUncookExtension = meshExportArgs.MaterialUncookExtension;
 
-            var cr2w = _red4ParserService.ReadRed4File(meshStream);
+            var cr2w = _parserService.ReadRed4File(meshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {

@@ -4,6 +4,8 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Interfaces
 {
@@ -61,6 +63,8 @@ namespace WolvenKit.Common.Interfaces
 
         public bool ConvertFromAndWrite(FileInfo fileInfo, DirectoryInfo outputDirInfo);
         public string ConvertToText(ETextConvertFormat format, string infile, bool skipHeader);
+
+        public bool ExportEntity(CR2WFile entFile, CName appearance, FileInfo outfile);
     }
 
 }

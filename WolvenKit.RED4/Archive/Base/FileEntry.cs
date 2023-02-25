@@ -43,7 +43,7 @@ public class FileEntry : ICyberGameFile
 
     #region Properties
 
-    public Archive Archive { get; set; }
+    public ICyberGameArchive Archive { get; set; }
 
     public ulong NameHash64 { get; set; }
     public DateTime Timestamp { get; set; }
