@@ -63,8 +63,8 @@ public partial class TextureImportViewModel : ImportViewModel
         IPluginService pluginService,
         IHashService hashService,
         IModTools modTools,
-        IProgressService<double> progressService,
-        Red4ParserService parserService) : base(archiveManager, notificationService, settingsManager, "Import Tool", "Import Tool")
+        Red4ParserService parserService,
+        IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Import Tool", "Import Tool")
     {
         _gameController = gameController;
         _settingsManager = settingsManager;

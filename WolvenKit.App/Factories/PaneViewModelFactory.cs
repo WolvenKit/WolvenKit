@@ -35,6 +35,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly Red4ParserService _parserService;
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
+    private readonly IHashService _hashService;
 
     public PaneViewModelFactory(
         IProjectManager projectManager,
@@ -51,7 +52,8 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         MeshTools meshTools,
         Red4ParserService parserService,
         ITweakDBService tweakDbService,
-        ILocKeyService locKeyService
+        ILocKeyService locKeyService,
+        IHashService hashService
         )
     {
         _projectManager = projectManager;
@@ -69,6 +71,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _parserService = parserService;
         _tweakDbService = tweakDbService;
         _locKeyService = locKeyService;
+        _hashService = hashService;
     }
 
     public T GetToolViewModel<T>() where T : IDockElement
@@ -99,7 +102,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     public TweakBrowserViewModel TweakBrowserViewModel(AppViewModel appViewModel) 
         => new(appViewModel, _chunkViewmodelFactory, _settingsManager, _notificationService, _projectManager, _loggerService, _tweakDbService, _locKeyService);
     public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _watcherService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);
-
-    public TextureImportViewModel TextureImportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _modTools, _progressService, _parserService);
-    public TextureExportViewModel TextureExportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _modTools, _parserService, _progressService);
+    
+    public TextureImportViewModel TextureImportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _hashService, _modTools, _parserService, _progressService);
+    public TextureExportViewModel TextureExportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _hashService, _modTools, _parserService, _progressService);
 }
