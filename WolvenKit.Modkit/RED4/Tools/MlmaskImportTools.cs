@@ -64,23 +64,17 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     throw new FileNotFoundException($"Line{{lineIdx}}: \"{f}\" Make sure the file path is valid and exists (paths are specified line by line in ascending layer order in masklist)");
                 }
 
-                var euncook = Enum.Parse<EUncookExtension>(Path.GetExtension(f).ToLower().TrimStart('.'));
-
-                var image = euncook switch
+                var image = RedImage.LoadFromFile(f);
+                if (image == null)
                 {
-                    EUncookExtension.dds => RedImage.LoadFromDDSFile(f),
-                    EUncookExtension.tga => RedImage.LoadFromTGAFile(f),
-                    EUncookExtension.bmp => RedImage.LoadFromBMPFile(f),
-                    EUncookExtension.jpg => RedImage.LoadFromJPGFile(f),
-                    EUncookExtension.png => RedImage.LoadFromPNGFile(f),
-                    EUncookExtension.tiff => RedImage.LoadFromTIFFFile(f),
-                    _ => throw new ArgumentOutOfRangeException(),
-                };
+                    _logger.Error($"\"{f}\" could not be loaded!");
+                    continue;
+                }
+
                 if (image.Metadata.Format != DXGI_FORMAT.DXGI_FORMAT_R8_UNORM)
                 {
                     image.Convert(DXGI_FORMAT.DXGI_FORMAT_R8_UNORM);
                 }
-
 
                 // Bitset arithmetic to check that both width and height is a power of 2
                 if (

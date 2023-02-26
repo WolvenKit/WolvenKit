@@ -22,11 +22,29 @@ public static class ImageDecoder
         return bitmapImage;
     }
 
-    public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, Common.DDS.DXGI_FORMAT format) =>
-        Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
+    public static Task<BitmapImage?> RenderToBitmapImageDds(Stream stream, Common.DDS.DXGI_FORMAT format) =>
+        Task.Run(() =>
+        {
+            var image = RedImage.LoadFromDDSMemory(stream.ToByteArray(), format);
+            if (image == null)
+            {
+                return null;
+            }
 
-    public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, Enums.ETextureRawFormat format) =>
-        Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
+            return CreateBitmapImage(image);
+        });
+
+    public static Task<BitmapImage?> RenderToBitmapImageDds(Stream stream, Enums.ETextureRawFormat format) =>
+        Task.Run(() =>
+        {
+            var image = RedImage.LoadFromDDSMemory(stream.ToByteArray(), format);
+            if (image == null)
+            {
+                return null;
+            }
+
+            return CreateBitmapImage(image);
+        });
 
     /// <summary>
     /// Decodes image from file to BitMapSource
@@ -36,60 +54,13 @@ public static class ImageDecoder
     public static Task<BitmapImage?> RenderToBitmapImage(string file) =>
         Task.Run(() =>
         {
-            try
+            var image = RedImage.LoadFromFile(file);
+            if (image != null)
             {
-                var ext = Path.GetExtension(file).ToUpperInvariant();
-
-                RedImage image;
-                switch (ext)
-                {
-                    case ".JPG":
-                    case ".JPEG":
-                    case ".JPE":
-                    {
-                        image = RedImage.LoadFromJPGFile(file);
-                        break;
-                    }
-                    case ".PNG":
-                    {
-                        image = RedImage.LoadFromPNGFile(file);
-                        break;
-                    }
-                    case ".BMP":
-                    {
-                        image = RedImage.LoadFromBMPFile(file);
-                        break;
-                    }
-
-                    case ".TIF":
-                    case ".TIFF":
-                    {
-                        image = RedImage.LoadFromTIFFFile(file);
-                        break;
-                    }
-
-                    case ".DDS":
-                    {
-                        image = RedImage.LoadFromDDSFile(file);
-                        break;
-                    }
-
-                    case ".TGA": // TODO some tga files are created upside down https://github.com/Ruben2776/PicView/issues/22
-                    {
-                        image = RedImage.LoadFromTGAFile(file);
-                        break;
-                    }
-
-                    default:
-                        throw new NotImplementedException();
-                }
-
                 return CreateBitmapImage(image);
             }
-            catch
-            {
-                return null;
-            }
+
+            return null;
         });
 }
 

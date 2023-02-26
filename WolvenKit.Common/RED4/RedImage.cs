@@ -7,6 +7,7 @@ using SharpDX.Direct3D11;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
@@ -41,6 +42,8 @@ public class TexMetadataWrapper
 
 public class RedImage : IDisposable
 {
+    public static ILoggerService? LoggerService { private get; set; }
+
     private static readonly SharpDX.Direct3D11.Device? s_device;
 
     private ScratchImage _scratchImage;
@@ -124,22 +127,70 @@ public class RedImage : IDisposable
 
     #region LoadFromFileFormat
 
-    public static RedImage LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer, DXGI_FORMAT.UNKNOWN);
-
-    public static RedImage LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format) => LoadFromDDSMemory(buffer, (DXGI_FORMAT)format);
-
-    public static RedImage LoadFromDDSMemory(byte[] buffer, Common.DDS.DXGI_FORMAT format) => LoadFromDDSMemory(buffer, (DXGI_FORMAT)format);
-
-    internal static RedImage LoadFromDDSMemory(byte[] buffer, DXGI_FORMAT format)
+    public static RedImage? LoadFromFile(string filePath)
     {
-        var scratchImage = TexHelper.Instance.LoadFromDDSMemory(buffer, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
-
-        if (TexHelper.Instance.IsCompressed(metadata.Format))
+        var fileName = Path.GetFileName(filePath);
+        var extension = Path.GetExtension(filePath);
+        if (string.IsNullOrEmpty(extension))
         {
-            scratchImage = scratchImage.Decompress(format);
+            LoggerService?.Error($"[RedImage] \"{fileName}\" has no extension!");
+            return null;
         }
 
-        return new RedImage(scratchImage);
+        try
+        {
+            switch (extension.ToUpper())
+            {
+                case ".JPG" or ".JPEG" or ".JPE":
+                    return LoadFromJPGFile(filePath);
+                case ".TIF" or ".TIFF":
+                    return LoadFromTIFFFile(filePath);
+                case ".PNG":
+                    return LoadFromPNGFile(filePath);
+                case ".BMP":
+                    return LoadFromBMPFile(filePath);
+                case ".TGA":
+                    return LoadFromTGAFile(filePath);
+                case ".DDS":
+                    return LoadFromDDSFile(filePath);
+                default:
+                {
+                    LoggerService?.Error($"[RedImage] \"{fileName}\" has an unsupported extension!");
+                    return null;
+                }
+            }
+        }
+        catch (Exception)
+        {
+            LoggerService?.Error($"[RedImage] \"{fileName}\" contains invalid data!");
+            return null;
+        }
+    }
+
+    public static RedImage? LoadFromDDSMemory(byte[] buffer) => LoadFromDDSMemory(buffer, DXGI_FORMAT.UNKNOWN);
+
+    public static RedImage? LoadFromDDSMemory(byte[] buffer, Enums.ETextureRawFormat format) => LoadFromDDSMemory(buffer, (DXGI_FORMAT)format);
+
+    public static RedImage? LoadFromDDSMemory(byte[] buffer, Common.DDS.DXGI_FORMAT format) => LoadFromDDSMemory(buffer, (DXGI_FORMAT)format);
+
+    internal static RedImage? LoadFromDDSMemory(byte[] buffer, DXGI_FORMAT format)
+    {
+        try
+        {
+            var scratchImage = TexHelper.Instance.LoadFromDDSMemory(buffer, DDS_FLAGS.FORCE_DX10_EXT, out var metadata);
+
+            if (TexHelper.Instance.IsCompressed(metadata.Format))
+            {
+                scratchImage = scratchImage.Decompress(format);
+            }
+
+            return new RedImage(scratchImage);
+        }
+        catch (Exception)
+        {
+            LoggerService?.Error($"[RedImage] Buffer contains invalid data!");
+            return null;
+        }
     }
 
     // load from files

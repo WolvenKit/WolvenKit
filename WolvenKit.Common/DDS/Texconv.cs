@@ -169,6 +169,10 @@ namespace WolvenKit.Common.DDS
                 var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
 
                 image = RedImage.LoadFromDDSMemory(rentedBuffer, Enums.ETextureRawFormat.TRF_HDRFloat); // forcing best?
+                if (image == null)
+                {
+                    throw new ArgumentException($"Could not load image file");
+                }
 
                 switch (filetype)
                 {
@@ -236,6 +240,10 @@ namespace WolvenKit.Common.DDS
                 }
 
                 image = RedImage.LoadFromDDSMemory(rentedBuffer);
+                if (image == null)
+                {
+                    throw new ArgumentException("Could not load dds file");
+                }
 
                 var filetype = ToSaveFormat(textureType);
 

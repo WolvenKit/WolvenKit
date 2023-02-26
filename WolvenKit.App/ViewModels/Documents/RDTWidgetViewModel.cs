@@ -264,6 +264,10 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
         }
 
         var image = RedImage.LoadFromDDSMemory(ddsstream.ToByteArray(), decompressedFormat);
+        if (image == null)
+        {
+            return;
+        }
 
         foreach (var part in slot.Parts)
         {
