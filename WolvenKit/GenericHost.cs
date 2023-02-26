@@ -72,13 +72,13 @@ namespace WolvenKit
                     
 
                     services.AddTransient<INotificationService, NotificationService>();
-                    services.AddTransient<IProgressService<double>, ProgressService<double>>();
+                    services.AddSingleton<IProgressService<double>, ProgressService<double>>();
                     services.AddTransient<Red4ParserService>();
                     services.AddTransient<IArchiveManager, ArchiveManager>();
                     services.AddTransient<ILocKeyService, LocKeyService>();                         // can this be transient?
                     services.AddTransient<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
-                    services.AddTransient<IProjectManager, ProjectManager>();
-                    services.AddTransient<IWatcherService, WatcherService>();
+                    services.AddSingleton<IProjectManager, ProjectManager>();
+                    services.AddSingleton<IWatcherService, WatcherService>();
                     services.AddTransient<GeometryCacheService>();
                     services.AddTransient<MeshTools>();
                     services.AddTransient<IModTools, ModTools>();
@@ -101,8 +101,8 @@ namespace WolvenKit
                     // register views
                     #region shell
 
-                    services.AddTransient<AppViewModel>();
-                    services.AddTransient<IViewFor<AppViewModel>, MainView>();
+                    services.AddSingleton<AppViewModel>();
+                    services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
                     services.AddTransient<RibbonViewModel>();
                     services.AddTransient<IViewFor<RibbonViewModel>, RibbonView>();
