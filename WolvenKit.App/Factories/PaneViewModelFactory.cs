@@ -37,6 +37,8 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly ILocKeyService _locKeyService;
     private readonly IHashService _hashService;
 
+    private readonly PropertiesViewModel _propertiesViewModel;
+
     public PaneViewModelFactory(
         IProjectManager projectManager,
         ILoggerService loggerService,
@@ -53,7 +55,8 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         Red4ParserService parserService,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        IHashService hashService
+        IHashService hashService,
+        PropertiesViewModel propertiesViewModel
         )
     {
         _projectManager = projectManager;
@@ -72,10 +75,12 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _tweakDbService = tweakDbService;
         _locKeyService = locKeyService;
         _hashService = hashService;
+        _propertiesViewModel = propertiesViewModel;
     }
 
     public T GetToolViewModel<T>() where T : IDockElement
     {
+        // TODO: Why all LogViewModel()???
         return typeof(T) switch
         {
             Type t when t == typeof(LogViewModel) => (T)(LogViewModel() as IDockElement),
@@ -96,7 +101,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     public ProjectExplorerViewModel ProjectExplorerViewModel(AppViewModel appViewModel)
         => new(appViewModel, _projectManager, _loggerService, _watcherService, _progressService, _modTools, _gameController, _pluginService, _settingsManager);
     public PropertiesViewModel PropertiesViewModel()
-        => new(_projectManager, _loggerService, _settingsManager, _meshTools, _modTools, _parserService);
+        => _propertiesViewModel;
     public AssetBrowserViewModel AssetBrowserViewModel(AppViewModel appViewModel)
         => new(appViewModel, _projectManager, _notificationService, _gameController, _archiveManager, _settingsManager, _progressService, _loggerService, _pluginService, _watcherService);
     public TweakBrowserViewModel TweakBrowserViewModel(AppViewModel appViewModel) 
