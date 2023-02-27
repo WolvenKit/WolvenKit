@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Windows.Forms.VisualStyles;
 using Microsoft.ClearScript;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Services;
@@ -114,7 +115,7 @@ public class WKitUIScripting : WKitScripting
         }
     }
 
-    public virtual object? LoadFromProject(string path, string type)
+    public virtual object? LoadGameFileFromProject(string path, string type)
     {
         if (_projectManager.ActiveProject == null)
         {
@@ -146,6 +147,48 @@ public class WKitUIScripting : WKitScripting
                     var dto = new RedFileDto(cr2wFile!);
                     return RedJsonSerializer.Serialize(dto);
                 }
+
+                _loggerService.Error($"Unsupported load type \"{type}\"");
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    public virtual object? LoadRawJsonFromProject(string path, string type)
+    {
+        if (_projectManager.ActiveProject == null)
+        {
+            _loggerService.Error("No project loaded");
+            return null;
+        }
+
+        foreach (var file in Directory.EnumerateFiles(_projectManager.ActiveProject.RawDirectory, "*.*", SearchOption.AllDirectories))
+        {
+            var relPath = Path.GetRelativePath(_projectManager.ActiveProject.RawDirectory, file);
+            if (relPath == path)
+            {
+                var json = File.ReadAllText(file);
+                
+                if (type == "json")
+                {
+                    return json;
+                }
+
+                if (type == "cr2w")
+                {
+                    var ser = RedJsonSerializer.Deserialize<RedFileDto>(json);
+                    if (ser == null)
+                    {
+                        _loggerService.Error($"Could not parse \"{file}\"");
+                        return null;
+                    }
+                    return ser.Data;
+                }
+
+                _loggerService.Error($"Unsupported load type \"{type}\"");
+                return null;
             }
         }
 
