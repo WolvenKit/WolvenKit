@@ -78,25 +78,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _propertiesViewModel = propertiesViewModel;
     }
 
-    public T GetToolViewModel<T>() where T : IDockElement
-    {
-        // TODO: Why all LogViewModel()???
-        return typeof(T) switch
-        {
-            Type t when t == typeof(LogViewModel) => (T)(LogViewModel() as IDockElement),
-            Type t when t == typeof(ProjectExplorerViewModel) => (T)(LogViewModel() as IDockElement),
-            Type t when t == typeof(PropertiesViewModel) => (T)(LogViewModel() as IDockElement),
-            Type t when t == typeof(AssetBrowserViewModel) => (T)(LogViewModel() as IDockElement),
-            Type t when t == typeof(TweakBrowserViewModel) => (T)(LogViewModel() as IDockElement),
-            Type t when t == typeof(LocKeyBrowserViewModel) => (T)(LogViewModel() as IDockElement),
-
-            Type t when t == typeof(TextureImportViewModel) => (T)(LogViewModel() as IDockElement),
-            Type t when t == typeof(TextureExportViewModel) => (T)(LogViewModel() as IDockElement),
-
-            _ => throw new NotImplementedException(),
-        };
-    }
-
     public LogViewModel LogViewModel() => new(_loggerService);
     public ProjectExplorerViewModel ProjectExplorerViewModel(AppViewModel appViewModel)
         => new(appViewModel, _projectManager, _loggerService, _watcherService, _progressService, _modTools, _gameController, _pluginService, _settingsManager);

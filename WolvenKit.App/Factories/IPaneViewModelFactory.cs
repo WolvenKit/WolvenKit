@@ -16,6 +16,4 @@ public interface IPaneViewModelFactory
     public LocKeyBrowserViewModel LocKeyBrowserViewModel();
     public TextureImportViewModel TextureImportViewModel();
     public TextureExportViewModel TextureExportViewModel();
-
-    public T GetToolViewModel<T>() where T : IDockElement;
 }

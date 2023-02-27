@@ -29,7 +29,9 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.HomePage;
+using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
@@ -1049,7 +1051,21 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         else
         {
-            var newvm = _paneViewModelFactory.GetToolViewModel<T>();
+            var newvm = typeof(T) switch
+            {
+                Type t when t == typeof(LogViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+                Type t when t == typeof(ProjectExplorerViewModel) => (T)(_paneViewModelFactory.ProjectExplorerViewModel(this) as IDockElement),
+                Type t when t == typeof(PropertiesViewModel) => (T)(_paneViewModelFactory.PropertiesViewModel() as IDockElement),
+                Type t when t == typeof(AssetBrowserViewModel) => (T)(_paneViewModelFactory.AssetBrowserViewModel(this) as IDockElement),
+                Type t when t == typeof(TweakBrowserViewModel) => (T)(_paneViewModelFactory.TweakBrowserViewModel(this) as IDockElement),
+                Type t when t == typeof(LocKeyBrowserViewModel) => (T)(_paneViewModelFactory.LocKeyBrowserViewModel() as IDockElement),
+
+                Type t when t == typeof(TextureImportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+                Type t when t == typeof(TextureExportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+
+                _ => throw new NotImplementedException(),
+            };
+
             DockedViews.Add(newvm);
             return newvm;
         }
