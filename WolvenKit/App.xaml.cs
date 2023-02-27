@@ -16,6 +16,7 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit
@@ -94,6 +95,8 @@ namespace WolvenKit
 
             loggerService.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
+
+            RedImage.LoggerService = loggerService;
 
             // Some things can only be initialized after base.OnStartup(e);
             base.OnStartup(e);

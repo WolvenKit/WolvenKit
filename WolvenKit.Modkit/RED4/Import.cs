@@ -358,17 +358,12 @@ namespace WolvenKit.Modkit.RED4
                 };
             }
 
-            // load and, if needed, decompress file
-            var image = Enum.Parse<EUncookExtension>(rawRelative.Extension) switch
+            var image = RedImage.LoadFromFile(infilePath);
+            if (image == null)
             {
-                EUncookExtension.dds => RedImage.LoadFromDDSFile(infilePath),
-                EUncookExtension.tga => RedImage.LoadFromTGAFile(infilePath),
-                EUncookExtension.bmp => RedImage.LoadFromBMPFile(infilePath),
-                EUncookExtension.jpg => RedImage.LoadFromJPGFile(infilePath),
-                EUncookExtension.png => RedImage.LoadFromPNGFile(infilePath),
-                EUncookExtension.tiff => RedImage.LoadFromTIFFFile(infilePath),
-                _ => throw new ArgumentOutOfRangeException(),
-            };
+                _loggerService.Error($"\"{infilePath}\" could not be loaded!");
+                return false;
+            }
 
             // create resource
             var bitmap = image.SaveToXBM(args);

@@ -72,13 +72,13 @@ namespace WolvenKit
                     
 
                     services.AddTransient<INotificationService, NotificationService>();
-                    services.AddTransient<IProgressService<double>, ProgressService<double>>();
+                    services.AddSingleton<IProgressService<double>, ProgressService<double>>();
                     services.AddTransient<Red4ParserService>();
-                    services.AddTransient<IArchiveManager, ArchiveManager>();
+                    services.AddSingleton<IArchiveManager, ArchiveManager>();
                     services.AddTransient<ILocKeyService, LocKeyService>();                         // can this be transient?
                     services.AddTransient<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
-                    services.AddTransient<IProjectManager, ProjectManager>();
-                    services.AddTransient<IWatcherService, WatcherService>();
+                    services.AddSingleton<IProjectManager, ProjectManager>();
+                    services.AddSingleton<IWatcherService, WatcherService>();
                     services.AddTransient<GeometryCacheService>();
                     services.AddTransient<MeshTools>();
                     services.AddTransient<IModTools, ModTools>();
@@ -101,7 +101,7 @@ namespace WolvenKit
                     // register views
                     #region shell
 
-                    services.AddTransient<AppViewModel>();
+                    services.AddSingleton<AppViewModel>();
                     services.AddTransient<IViewFor<AppViewModel>, MainView>();
 
                     services.AddTransient<RibbonViewModel>();
@@ -169,7 +169,7 @@ namespace WolvenKit
                     services.AddTransient<ProjectExplorerViewModel>();
                     services.AddTransient<IViewFor<ProjectExplorerViewModel>, ProjectExplorerView>();
 
-                    services.AddTransient<PropertiesViewModel>();
+                    services.AddSingleton<PropertiesViewModel>();
                     services.AddTransient<IViewFor<PropertiesViewModel>, PropertiesView>();
 
                     services.AddTransient<TweakBrowserViewModel>();

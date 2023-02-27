@@ -8,6 +8,7 @@ using WolvenKit.App.Factories;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.Common;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -16,6 +17,8 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.JSON;
+using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
 
@@ -109,6 +112,44 @@ public class WKitUIScripting : WKitScripting
             File.Delete(diskPathInfo.FullName);
             _loggerService.Error(ex);
         }
+    }
+
+    public virtual object? LoadFromProject(string path, string type)
+    {
+        if (_projectManager.ActiveProject == null)
+        {
+            _loggerService.Error("No project loaded");
+            return null;
+        }
+
+        foreach (var file in Directory.EnumerateFiles(_projectManager.ActiveProject.ModDirectory, "*.*", SearchOption.AllDirectories))
+        {
+            var relPath = Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, file);
+            if (relPath == path)
+            {
+                using var fs = File.Open(file, FileMode.Open);
+                using var cr = new CR2WReader(fs);
+
+                if (cr.ReadFile(out var cr2wFile) != EFileReadErrorCodes.NoError)
+                {
+                    _loggerService.Error($"\"{relPath}\" is not a CR2W file");
+                    return null;
+                }
+
+                if (type == "cr2w")
+                {
+                    return cr2wFile;
+                }
+
+                if (type == "json")
+                {
+                    var dto = new RedFileDto(cr2wFile!);
+                    return RedJsonSerializer.Serialize(dto);
+                }
+            }
+        }
+
+        return null;
     }
 
     private T ParseExportSettings<T>(ScriptObject scriptSettingsObject) where T : ExportArgs, new()

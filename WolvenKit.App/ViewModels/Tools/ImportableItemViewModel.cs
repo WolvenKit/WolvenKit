@@ -103,27 +103,14 @@ public class ImportableItemViewModel : ImportExportItemViewModel
 
         // get the format again, cos CDPR
         // load and, if needed, decompress file
-        var image = rawFileFormat switch
+        var image = RedImage.LoadFromFile(fileName);
+        if (image != null)
         {
-            ERawFileFormat.dds => RedImage.LoadFromDDSFile(fileName),
-            ERawFileFormat.tga => RedImage.LoadFromTGAFile(fileName),
-            ERawFileFormat.bmp => RedImage.LoadFromBMPFile(fileName),
-            ERawFileFormat.jpg => RedImage.LoadFromJPGFile(fileName),
-            ERawFileFormat.png => RedImage.LoadFromPNGFile(fileName),
-            ERawFileFormat.tiff => RedImage.LoadFromTIFFFile(fileName),
-            ERawFileFormat.fbx => throw new NotImplementedException(),
-            ERawFileFormat.gltf => throw new NotImplementedException(),
-            ERawFileFormat.glb => throw new NotImplementedException(),
-            ERawFileFormat.ttf => throw new NotImplementedException(),
-            ERawFileFormat.wav => throw new NotImplementedException(),
-            ERawFileFormat.masklist => throw new NotImplementedException(),
-            ERawFileFormat.csv => throw new NotImplementedException(),
-            ERawFileFormat.re => throw new NotImplementedException(),
-            _ => throw new ArgumentOutOfRangeException(),
-        };
-        var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
-        xbmArgs.RawFormat = rawFormat;
-        xbmArgs.Compression = compression;   // todo if this is already set use the previous one
+            var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
+            xbmArgs.RawFormat = rawFormat;
+            xbmArgs.Compression = compression;   // todo if this is already set use the previous one
+        }
+
         return xbmArgs;
     }
 

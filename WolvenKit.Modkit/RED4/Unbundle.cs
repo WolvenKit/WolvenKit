@@ -70,6 +70,8 @@ namespace WolvenKit.Modkit.RED4
                 _hashService.Contains(item.Key);
             }
 
+            var archive = ar as Archive;
+            archive?.SetBulkExtract(true);
 
             Parallel.ForEach(finalMatchesList, info =>
             {
@@ -87,6 +89,8 @@ namespace WolvenKit.Modkit.RED4
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             });
+
+            archive?.SetBulkExtract(false);
 
             _progressService.Completed();
 
@@ -141,6 +145,9 @@ namespace WolvenKit.Modkit.RED4
             //Thread.Sleep(1000);
             var progress = 0;
 
+            var archive = ar as Archive;
+            archive?.SetBulkExtract(true);
+
             var bag = new ConcurrentBag<object>();
             foreach (var info in finalMatchesList)
             {
@@ -149,6 +156,8 @@ namespace WolvenKit.Modkit.RED4
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             };
+
+            archive?.SetBulkExtract(false);
 
             _progressService.Completed();
             var count = bag.Count;

@@ -383,16 +383,12 @@ public partial class PropertiesViewModel : ToolViewModel
 
     public void SetupRawImage(string fileName, EUncookExtension ext)
     {
-        var image = ext switch
+        var image = RedImage.LoadFromFile(fileName);
+        if (image == null)
         {
-            EUncookExtension.dds => RedImage.LoadFromDDSFile(fileName),
-            EUncookExtension.tga => RedImage.LoadFromTGAFile(fileName),
-            EUncookExtension.bmp => RedImage.LoadFromBMPFile(fileName),
-            EUncookExtension.jpg => RedImage.LoadFromJPGFile(fileName),
-            EUncookExtension.png => RedImage.LoadFromPNGFile(fileName),
-            EUncookExtension.tiff => RedImage.LoadFromTIFFFile(fileName),
-            _ => throw new ArgumentOutOfRangeException(nameof(ext), ext, null),
-        };
+            _loggerService.Error($"\"{fileName}\" could not be loaded!");
+            return;
+        }
 
         if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
         {

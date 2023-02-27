@@ -197,9 +197,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     #region properties
 
-    public EffectsManager? EffectsManager { get; private set; }
+    private EffectsManager? _effectsManager;
+    private HelixToolkit.Wpf.SharpDX.Camera? _camera;
 
-    public HelixToolkit.Wpf.SharpDX.Camera? Camera { get; private set; }
+    public EffectsManager? EffectsManager
+    {
+        get => _effectsManager;
+        private set => SetProperty(ref _effectsManager, value);
+    }
+
+    public HelixToolkit.Wpf.SharpDX.Camera? Camera
+    {
+        get => _camera;
+        private set => SetProperty(ref _camera, value);
+    }
 
     public SceneNodeGroupModel3D GroupModel { get; set; } = new SceneNodeGroupModel3D();
 
@@ -1430,6 +1441,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
 
             var firstStream = await ImageDecoder.RenderToBitmapImageDds(streams[0], Enums.ETextureRawFormat.TRF_Grayscale);
+            if (firstStream == null)
+            {
+                _loggerService.Error("Could not load MultilayerMask");
+                return;
+            }
 
             var destBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
             var rmBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
@@ -1466,6 +1482,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
 
                 var tmp = i == 0 ? firstStream : await ImageDecoder.RenderToBitmapImageDds(streams[i], Enums.ETextureRawFormat.TRF_Grayscale);
+                if (tmp == null)
+                {
+                    _loggerService.Error("Could not load Multilayer_Layer");
+                    continue;
+                }
+
                 var mask = new TransformedBitmap(tmp, new ScaleTransform(1, 1));
 
                 Bitmap maskBitmap;
@@ -1553,6 +1575,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat);
 
                     var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
+                    if (normal == null)
+                    {
+                        _loggerService.Error($"Could not load NormalTexture \"{mllt.NormalTexture.DepotPath}\"");
+                        goto SkipNormals;
+                    }
 
                     Bitmap normalLayer;
                     using (var outStream = new MemoryStream())
@@ -1746,6 +1773,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat);
 
             var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
+            if (normal == null)
+            {
+                _loggerService.Error($"Could not load NormalTexture \"{crrn.DepotPath}\"");
+                goto SkipNormals;
+            }
 
             stream.Dispose();
 
@@ -1802,6 +1834,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat);
 
             var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
+            if (normal == null)
+            {
+                _loggerService.Error($"Could not load NormalTexture \"{crrn2.DepotPath}\"");
+                goto SkipNormals;
+            }
 
             stream.Dispose();
 
