@@ -192,7 +192,8 @@ public class ArchiveWriter
                 //register imports
                 foreach (var cr2WImportWrapper in reader.ImportsList)
                 {
-                    if (cr2WImportWrapper.Flags != Types.InternalEnums.EImportFlags.Soft)
+                    // maybe only .Default, not sure as nothing else is used
+                    if (cr2WImportWrapper.Flags is not InternalEnums.EImportFlags.Soft and not InternalEnums.EImportFlags.Embedded)
                     {
                         importsHashSet.Add(cr2WImportWrapper.DepotPath);
                     }
