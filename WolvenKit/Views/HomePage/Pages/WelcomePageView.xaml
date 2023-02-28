@@ -157,7 +157,7 @@
 
                                         <Button
                                             Padding="10,5"
-                                            Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorer}"
+                                            Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorerCommand}"
                                             CommandParameter="{Binding ProjectPath}"
                                             Style="{StaticResource ButtonCustom}"
                                             ToolTip="Find in Explorer">
