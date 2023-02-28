@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -193,6 +194,41 @@ public class WKitUIScripting : WKitScripting
         }
 
         return null;
+    }
+
+    public List<string> GetProjectFiles(string folderType)
+    {
+        var result = new List<string>();
+
+        if (_projectManager.ActiveProject == null)
+        {
+            _loggerService.Error("No project loaded");
+            return result;
+        }
+
+        string baseFolder;
+
+        switch (folderType)
+        {
+            case "archive":
+                baseFolder = _projectManager.ActiveProject.ModDirectory;
+                break;
+
+            case "raw":
+                baseFolder = _projectManager.ActiveProject.RawDirectory;
+                break;
+
+            default:
+                _loggerService.Error($"Unsupported folder type \"{folderType}\"");
+                return result;
+        }
+
+        foreach (var file in Directory.GetFiles(baseFolder, "*.*", SearchOption.AllDirectories))
+        {
+            result.Add(Path.GetRelativePath(baseFolder, file));
+        }
+
+        return result;
     }
 
     private T ParseExportSettings<T>(ScriptObject scriptSettingsObject) where T : ExportArgs, new()
