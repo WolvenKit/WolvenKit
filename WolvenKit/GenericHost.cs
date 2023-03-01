@@ -166,7 +166,7 @@ namespace WolvenKit
                     services.AddTransient<LogViewModel>();
                     services.AddTransient<IViewFor<LogViewModel>, LogView>();
 
-                    services.AddTransient<ProjectExplorerViewModel>();
+                    services.AddSingleton<ProjectExplorerViewModel>();
                     services.AddTransient<IViewFor<ProjectExplorerViewModel>, ProjectExplorerView>();
 
                     services.AddSingleton<PropertiesViewModel>();
