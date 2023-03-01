@@ -55,7 +55,7 @@ namespace WolvenKit.Common
     public enum ETextConvertFormat
     {
         json,
-        xml
+        //xml
     }
 
     public enum EVanillaArchives

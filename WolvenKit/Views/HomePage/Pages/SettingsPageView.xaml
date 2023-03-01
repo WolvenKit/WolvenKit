@@ -37,7 +37,7 @@
         <syncfusion:PropertyGrid
             x:Name="SettingsPropertygrid"
             Grid.Row="0"
-            Margin="0,85,0,0"
+            Margin="20,85,20,20"
             AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
             BorderThickness="0"
             ButtonPanelVisibility="Collapsed"

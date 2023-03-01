@@ -120,12 +120,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void OnNext(IChangeSet<FileModel, ulong> obj)
     {
-        Application.Current.Dispatcher.Invoke(() =>
+        Application.Current.Dispatcher.Invoke(new Action(delegate ()
         {
             BeforeDataSourceUpdate?.Invoke(this, EventArgs.Empty);
             BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
             AfterDataSourceUpdate?.Invoke(this, EventArgs.Empty);
-        }, DispatcherPriority.ContextIdle);
+        }), DispatcherPriority.ContextIdle);
     }
 
 
@@ -170,14 +170,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(Bk2ImportCommand))]
     [NotifyCanExecuteChangedFor(nameof(Bk2ExportCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertFromCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     private FileModel? _selectedItem;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertFromCommand))]
     private ObservableCollection<object>? _selectedItems = new();
 
     [ObservableProperty] private bool _isFlatModeEnabled;
@@ -505,41 +505,46 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         process?.WaitForInputIdle();
     }
 
-    private bool CanConvertTo() => SelectedItem != null && !IsInRawFolder(SelectedItem) && ActiveProject is not null;
+    private bool CanConvertTo() => SelectedItems != null && ActiveProject is not null;
     [RelayCommand(CanExecute = nameof(CanConvertTo))]
     private async Task ConvertToAsync()
     {
-        if (SelectedItem.NotNull().IsDirectory)
+        _watcherService.IsSuspended = true;
+        
+        var progress = 0;
+        _progressService.Report(0);
+
+        List<string> files = new();
+
+        // get all files
+        foreach (var item in SelectedItems.NotNull().OfType<FileModel>().Where(x => !IsInRawFolder(x)))
         {
-            _watcherService.IsSuspended = true;
-
-            var progress = 0;
-            _progressService.Report(0);
-
-            var files = Directory.GetFiles(SelectedItem.FullName, "*", SearchOption.AllDirectories).ToList();
-            foreach (var file in files)
+            if (item.IsDirectory)
             {
-                await ConvertToTask(file);
-
-                progress++;
-                _progressService.Report(progress / (float)files.Count);
+                files.AddRange(Directory.GetFiles(item.FullName, "*", SearchOption.AllDirectories));
             }
-
-            _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(ActiveProject.NotNull());
-
-            _progressService.Completed();
+            else
+            {
+                files.Add(item.FullName);
+            }
         }
-        else
+
+        // convert files
+        foreach (var file in files)
         {
-            _progressService.IsIndeterminate = true;
-            var inpath = SelectedItem.FullName;
-            await ConvertToTask(inpath);
-            _progressService.IsIndeterminate = false;
+            await ConvertToJsonAsync(file);
+
+            progress++;
+            _progressService.Report(progress / (float)files.Count);
         }
+
+        _watcherService.IsSuspended = false;
+        await _watcherService.RefreshAsync(ActiveProject.NotNull());
+
+        _progressService.Completed();
     }
 
-    private async Task ConvertToTask(string file)
+    private async Task ConvertToJsonAsync(string file)
     {
         if (!File.Exists(file))
         {
@@ -557,46 +562,51 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             Directory.CreateDirectory(outDirectoryPath);
 
-            await Task.Run(() => _modTools.ConvertToAndWrite(ETextConvertFormat.json, file, new DirectoryInfo(outDirectoryPath)));
+            await _modTools.ConvertToJsonAndWriteAsync(file, new DirectoryInfo(outDirectoryPath));
         }
     }
 
 
-    private bool CanConvertFromJson() => SelectedItem != null && IsInRawFolder(SelectedItem) && ActiveProject is not null;
+    private bool CanConvertFromJson() => SelectedItems != null && ActiveProject is not null;
     [RelayCommand(CanExecute = nameof(CanConvertFromJson))]
     private async Task ConvertFromAsync()
     {
-        if (SelectedItem.NotNull().IsDirectory)
+        _watcherService.IsSuspended = true;
+
+        var progress = 0;
+        _progressService.Report(0);
+
+        List<string> files = new();
+
+        // get all files
+        foreach (var item in SelectedItems.NotNull().OfType<FileModel>().Where(x => IsInRawFolder(x)))
         {
-            _watcherService.IsSuspended = true;
-
-            var progress = 0;
-            _progressService.Report(0);
-
-            var files = Directory.GetFiles(SelectedItem.FullName, "*.json", SearchOption.AllDirectories).Where(name => !name.EndsWith(".Material.json")).ToList();
-            foreach (var file in files)
+            if (item.IsDirectory)
             {
-                await ConvertFromTask(file);
-
-                progress++;
-                _progressService.Report(progress / (float)files.Count);
+                files.AddRange(Directory.GetFiles(item.FullName, "*.json", SearchOption.AllDirectories).Where(name => !name.EndsWith(".Material.json")));
             }
-
-            _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(ActiveProject.NotNull());
-
-            _progressService.Completed();
+            else
+            {
+                files.Add(item.FullName);
+            }
         }
-        else
+
+        // convert files
+        foreach (var file in files)
         {
-            _progressService.IsIndeterminate = true;
-            var inpath = SelectedItem.FullName;
-            await ConvertFromTask(inpath);
-            _progressService.IsIndeterminate = false;
+            await ConvertFromJsonAsync(file);
+
+            progress++;
+            _progressService.Report(progress / (float)files.Count);
         }
+
+        _watcherService.IsSuspended = false;
+        await _watcherService.RefreshAsync(ActiveProject.NotNull());
+
+        _progressService.Completed();
     }
 
-    private async Task ConvertFromTask(string file)
+    private async Task ConvertFromJsonAsync(string file)
     {
         if (!File.Exists(file))
         {
@@ -614,7 +624,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             Directory.CreateDirectory(outDirectoryPath);
 
-            await Task.Run(() => _modTools.ConvertFromAndWrite(new FileInfo(file), new DirectoryInfo(outDirectoryPath)));
+            await _modTools.ConvertFromJsonAndWriteAsync(new FileInfo(file), new DirectoryInfo(outDirectoryPath));
         }
 
     }

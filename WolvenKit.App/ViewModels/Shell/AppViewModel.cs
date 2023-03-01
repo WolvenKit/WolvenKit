@@ -147,10 +147,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void AddDockedPanes()
     {
-        // only add existing docked views
-        if (File.Exists(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt")))
+        var fileExists = File.Exists(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt"));
+        List<string> savedPanes = new();
+
+        if (fileExists)
         {
-            var savedPanes = File.ReadLines(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt"));
+            savedPanes = File.ReadLines(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt")).ToList();
+        }
+
+        // only add existing docked views
+        if (fileExists && savedPanes.Any())
+        {
             foreach (var paneString in savedPanes)
             {
                 if (Enum.TryParse<EDockedViews>(paneString, out var pane))

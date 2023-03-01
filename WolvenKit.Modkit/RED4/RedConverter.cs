@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.RED4.Archive.CR2W;
@@ -13,15 +14,15 @@ namespace WolvenKit.Modkit.RED4
     public partial class ModTools
     {
         /// <summary>
-        /// Converts a W2RC stream to text
+        /// Converts a W2RC file to json
         /// </summary>
         /// <param name="format"></param>
-        /// <param name="instream"></param>
+        /// <param name="infile"></param>
+        /// <param name="skipHeader"></param>
         /// <returns></returns>
         /// <exception cref="InvalidParsingException"></exception>
         /// <exception cref="SerializationException"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public string ConvertToText(ETextConvertFormat format, string infile, bool skipHeader = false)
+        public async Task<string> ConvertToJsonAsync(string infile, bool skipHeader = false)
         {
             using var instream = new FileStream(infile, FileMode.Open, FileAccess.Read);
 
@@ -33,16 +34,47 @@ namespace WolvenKit.Modkit.RED4
             cr2w.MetaData.FileName = infile;
 
             var dto = new RedFileDto(cr2w);
-            var json = RedJsonSerializer.Serialize(dto, skipHeader);
 
-            return string.IsNullOrEmpty(json)
-                ? throw new SerializationException()
-                : format switch
-                {
-                    ETextConvertFormat.json => json,
-                    ETextConvertFormat.xml => throw new NotSupportedException(nameof(format)),
-                    _ => throw new ArgumentOutOfRangeException(nameof(format), format, null),
-                };
+            // serialize
+            using var stream = new MemoryStream();
+            await RedJsonSerializer.SerializeAsync(stream, dto, skipHeader);
+
+            // convert to text
+            stream.Seek(0, SeekOrigin.Begin);
+            using var reader = new StreamReader(stream);
+            var json = reader.ReadToEnd();
+
+            if (string.IsNullOrEmpty(json))
+            {
+                throw new SerializationException();
+            }
+            return json;
+        }
+
+        /// <summary>
+        /// Converts a W2RC file to UTF-8 encoded JSON text and write it to the <see cref="System.IO.Stream"/>.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="format"></param>
+        /// <param name="stream"></param>
+        /// <param name="skipHeader"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidParsingException"></exception>
+        public async Task ConvertToJsonAsync(Stream stream, string infile, bool skipHeader = false)
+        {
+            using var instream = new FileStream(infile, FileMode.Open, FileAccess.Read);
+
+            if (!_parserService.TryReadRed4File(instream, out var cr2w))
+            {
+                throw new InvalidParsingException("ConvertToText");
+            }
+
+            cr2w.MetaData.FileName = infile;
+
+            var dto = new RedFileDto(cr2w);
+
+            // serialize
+            await RedJsonSerializer.SerializeAsync(stream, dto, skipHeader);
         }
 
         /// <summary>
@@ -53,16 +85,15 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outputDirInfo"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public bool ConvertToAndWrite(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo)
+        public async Task<bool> ConvertToJsonAndWriteAsync(string infile, DirectoryInfo outputDirInfo)
         {
             try
             {
-                var text = ConvertToText(format, infile);
-                var outpath = Path.Combine(outputDirInfo.FullName, $"{Path.GetFileName(infile)}.{format}");
+                var outpath = Path.Combine(outputDirInfo.FullName, $"{Path.GetFileName(infile)}.json");
+                using var fileStream = File.OpenWrite(outpath);
+                await ConvertToJsonAsync(fileStream, infile);
 
-                File.WriteAllText(outpath, text);
-
-                _loggerService.Success($"Exported {infile} to {outpath}");
+                _loggerService.Success($"Converted {infile} to {outpath}");
 
                 return true;
             }
@@ -101,7 +132,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="fileInfo"></param>
         /// <param name="outputDirInfo"></param>
         /// <exception cref="SerializationException"></exception>
-        public bool ConvertFromAndWrite(FileInfo fileInfo, DirectoryInfo outputDirInfo)
+        public async Task<bool> ConvertFromJsonAndWriteAsync(FileInfo fileInfo, DirectoryInfo outputDirInfo)
         {
             var convertExtension = Path.GetExtension(fileInfo.Name).TrimStart('.').ToLower();
             if (!Enum.TryParse<ETextConvertFormat>(convertExtension, out var textConvertFormat))
@@ -109,7 +140,7 @@ namespace WolvenKit.Modkit.RED4
                 throw new SerializationException();
             }
 
-            var text = File.ReadAllText(fileInfo.FullName);
+            var text = await File.ReadAllTextAsync(fileInfo.FullName);
 
             // get extension from filename //TODO pass?
             var filenameWithoutConvertExtension = fileInfo.Name[..^convertExtension.Length /*+ 1*/];
