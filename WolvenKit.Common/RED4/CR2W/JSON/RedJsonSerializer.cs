@@ -1,12 +1,14 @@
 #nullable enable
 using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using System.Text.Unicode;
+using System.Threading.Tasks;
 using Semver;
 using WolvenKit.Common.Conversion;
 using WolvenKit.RED4.Types;
@@ -100,6 +102,12 @@ public static class RedJsonSerializer
 
     public static JsonSerializerOptions Options { get; }
 
+    /// <summary>
+    /// Serializes a ??? to json
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="skipHeader"></param>
+    /// <returns></returns>
     public static string Serialize(object value, bool skipHeader = false)
     {
         s_bufferResolver.Begin();
@@ -121,6 +129,42 @@ public static class RedJsonSerializer
         CleanUp();
 
         return result;
+    }
+
+    /// <summary>
+    /// Converts the provided value to UTF-8 encoded JSON text and write it to the <see cref="System.IO.Stream"/>.
+    /// </summary>
+    /// <typeparam name="TValue">The type of the value to serialize.</typeparam>
+    /// <returns>A task that represents the asynchronous write operation.</returns>
+    /// <param name="utf8Json">The UTF-8 <see cref="System.IO.Stream"/> to write to.</param>
+    /// <param name="value">The value to convert.</param>
+    /// <param name="skipHeader">Options to control the conversion behavior.</param>
+    /// <exception cref="ArgumentNullException">
+    /// <paramref name="utf8Json"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="NotSupportedException">
+    /// There is no compatible <see cref="System.Text.Json.Serialization.JsonConverter"/>
+    /// for <typeparamref name="TValue"/> or its serializable members.
+    /// </exception>
+    public static async Task SerializeAsync(Stream utf8Json, object value, bool skipHeader = false)
+    {
+        s_bufferResolver.Begin();
+        s_classResolver.Begin();
+
+        if (skipHeader)
+        {
+            foreach (var c in Options.Converters)
+            {
+                if (c is RedFileDtoConverter red)
+                {
+                    red.SetSkipHeader(skipHeader);
+                }
+            }
+        }
+
+        await JsonSerializer.SerializeAsync(utf8Json, value, Options);
+
+        CleanUp();
     }
 
 

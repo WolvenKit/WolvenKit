@@ -59,12 +59,15 @@ namespace WolvenKit.Common.Interfaces
             ECookedFileFormat[]? forcebuffers = null,
             bool serialize = false);
 
-        public bool ConvertToAndWrite(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo);
 
-        public bool ConvertFromAndWrite(FileInfo fileInfo, DirectoryInfo outputDirInfo);
-        public string ConvertToText(ETextConvertFormat format, string infile, bool skipHeader);
+        public Task<string> ConvertToJsonAsync(string infile, bool skipHeader = false);
+        public Task ConvertToJsonAsync(Stream stream, string infile, bool skipHeader = false);
+        public Task<bool> ConvertToJsonAndWriteAsync(string infile, DirectoryInfo outputDirInfo);
+
+        public Task<bool> ConvertFromJsonAndWriteAsync(FileInfo fileInfo, DirectoryInfo outputDirInfo);
 
         public bool ExportEntity(CR2WFile entFile, CName appearance, FileInfo outfile);
+        
     }
 
 }
