@@ -207,7 +207,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 if (Parent.Data is IRedArray arr)
                 {
-                    var index = int.Parse(Name);
+                    // use PropertyName for now, since Name doesn't always work
+                    var index = int.Parse(PropertyName);
                     if (index != -1)
                     {
                         arr[index] = Data;
@@ -1962,7 +1963,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 if (ary[i] is IRedType t)
                 {
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, "Element", _appViewModel, this, isreadonly));
+                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, i.ToString(), _appViewModel, this, isreadonly));
                 }
             }
         }

@@ -59,7 +59,10 @@ namespace WolvenKit.Common.Model
         {
             RootNode = new RedFileSystemModel(TypeName.ToString());
 
-            var allFiles = Archives.Items.SelectMany(x => x.Files);
+            var allFiles = Archives.Items
+                .SelectMany(x => x.Files)
+                .GroupBy(x => x.Key)
+                .Select(x => x.First());
 
             Parallel.ForEach(allFiles, (file) =>
             {
