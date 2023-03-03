@@ -247,9 +247,12 @@ namespace WolvenKit.Views.Shell
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PART_DockingManager_WindowClosing(object sender, WindowClosingEventArgs e)
+        private async void PART_DockingManager_WindowClosing(object sender, WindowClosingEventArgs e)
         {
-
+            if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
+            {
+                e.Cancel = !await TryCloseDocument(vm);
+            }
         }
 
         private void PART_DockingManager_Loaded(object sender, RoutedEventArgs e)

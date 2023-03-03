@@ -30,7 +30,7 @@
             NextVisibility="Collapsed"
             PageType="Exterior">
 
-            <Grid >
+            <Grid>
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -51,7 +51,10 @@
                     SelectionMode="Extended">
 
                     <syncfusion:SfDataGrid.Columns>
-                        <syncfusion:GridTextColumn HeaderText="Available" MappingName="Name" />
+                        <syncfusion:GridTextColumn
+                            FilterRowCondition="Contains"
+                            HeaderText="Available"
+                            MappingName="Name" />
                     </syncfusion:SfDataGrid.Columns>
 
                 </syncfusion:SfDataGrid>
@@ -85,7 +88,10 @@
                     SelectionMode="Extended">
 
                     <syncfusion:SfDataGrid.Columns>
-                        <syncfusion:GridTextColumn HeaderText="Available" MappingName="Name" />
+                        <syncfusion:GridTextColumn
+                            FilterRowCondition="Contains"
+                            HeaderText="Available"
+                            MappingName="Name" />
                     </syncfusion:SfDataGrid.Columns>
 
                 </syncfusion:SfDataGrid>

@@ -234,8 +234,9 @@
                 AutoGenerateColumns="False"
                 BorderThickness="0,1,0,1"
                 ColumnSizer="Auto"
-                SelectionMode="Extended"
-                SelectionChanged="ImportGrid_SelectionChanged">
+                FilterRowPosition="FixedTop"
+                SelectionChanged="ImportGrid_SelectionChanged"
+                SelectionMode="Extended">
 
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridCheckBoxColumn
@@ -253,11 +254,14 @@
                     </syncfusion:GridCheckBoxColumn>
                     <syncfusion:GridTextColumn
                         ColumnSizer="Star"
+                        FilterRowCondition="Contains"
                         HeaderText="Name"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Name" />
                     <syncfusion:GridTextColumn
+                        AllowFiltering="False"
                         ColumnSizer="AutoLastColumnFill"
+                        FilterRowCondition="Contains"
                         HeaderText="Import Task"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Properties" />
@@ -270,9 +274,7 @@
 
             <!--  Special Import / Export Options  -->
             <!--  CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"  -->
-            <Grid
-                Grid.Column="2"
-                Background="{DynamicResource ContentBackgroundAlt2}">
+            <Grid Grid.Column="2" Background="{DynamicResource ContentBackgroundAlt2}">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

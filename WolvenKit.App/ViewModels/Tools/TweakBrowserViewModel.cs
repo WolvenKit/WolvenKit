@@ -105,15 +105,12 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
             case nameof(SelectedRecordEntry):
             {
+                SelectedRecord.Clear();
                 if (SelectedRecordEntry != null && _tweakDB.IsLoaded)
                 {
-                    SelectedRecord.Clear();
                     var vm = _chunkViewmodelFactory.ChunkViewModel(TweakDBService.GetRecord(SelectedRecordEntry.Item).NotNull(), SelectedRecordEntry.DisplayName, _appViewModel, null, true);
                     vm.IsExpanded = true;
-                }
-                else
-                {
-                    SelectedRecord.Clear();
+                    SelectedRecord.Add(vm);
                 }
                 OnPropertyChanged(nameof(SelectedRecord));
                 break;
