@@ -1161,7 +1161,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Tab.SelectedChunk = Parent;
             if (Parent.Data is IRedArray ary)
             {
-                ary.Remove(Data);
+                ary.RemoveAt(int.Parse(Name));
             }
             else if (Parent.Data is IRedLegacySingleChannelCurve curve)
             {
@@ -1236,29 +1236,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
                 else
                 {
-                    var (start, end) = (indices.Min(), indices.Max());
-
-                    var fullselection = Parent.DisplayProperties
-                        .Where(_ => Enumerable.Range(start, end - start + 1).Contains(int.Parse(_.Name)))
-                        .Where(x => x.Data is not null)
-                        .Select(_ => _.Data.NotNull())
-                        .ToList();
-
-                    DeleteFullSelection(fullselection, dict);
+                    DeleteFullSelection(indices, dict);
                 }
             }
             else if (Parent.Data is IRedArray db4)
             {
-                var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
-                var (start, end) = (indices.Min(), indices.Max());
-
-                var fullselection = Parent.DisplayProperties
-                    .Where(_ => Enumerable.Range(start, end - start + 1).Contains(int.Parse(_.Name)))
-                    .Where(x => x.Data is not null)
-                    .Select(_ => _.Data.NotNull())
-                    .ToList();
-
-                DeleteFullSelection(fullselection, db4);
+                DeleteFullSelection(ts.Select(_ => int.Parse(_.Name)).ToList(), db4);
             }
             else if (Parent.Data is null)
             {
@@ -2774,6 +2757,25 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    private void DeleteFullSelection(List<int> l, IRedArray a)
+    {
+        var sortedList = l.OrderByDescending(x => x).ToList();
+
+        foreach (var i in sortedList)
+        {
+            try
+            {
+                a.RemoveAt(i);
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error(ex);
+            }
+        }
+
+        Tab?.Parent.SetIsDirty(true);
+        Parent?.RecalculateProperties();
+    }
 
     private void DeleteFullSelection(List<IRedType> l, IRedArray a)
     {
