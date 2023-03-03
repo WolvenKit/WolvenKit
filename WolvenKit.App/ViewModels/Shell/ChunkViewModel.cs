@@ -1527,7 +1527,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private bool CanPasteSelection() => (IsArray || IsInArray) && Parent is not null && RedDocumentTabViewModel.CopiedChunks.Count > 0 && (ArraySelfOrParent?.InnerType.IsAssignableFrom(RedDocumentTabViewModel.CopiedChunks.First().GetType()) ?? true);   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    private void ExecutePasteSelection()
+    private void PasteSelection()
     {
         ArgumentNullException.ThrowIfNull(Parent);
 
