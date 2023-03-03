@@ -1485,11 +1485,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                             .ToList();
 
             var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
-            var (start, end) = (indices.Min(), indices.Max());
 
             var fullselection = Parent.DisplayProperties
-                .Where(_ => Enumerable.Range(start, end - start + 1).Contains(int.Parse(_.Name)))
-                .Where(x => x.Data is not null)
+                .Where(_ => indices.Contains(int.Parse(_.Name)))
                 .Select(_ => _.Data.NotNull())
                 .ToList();
 
