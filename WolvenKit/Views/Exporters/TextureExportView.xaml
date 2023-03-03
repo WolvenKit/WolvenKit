@@ -239,6 +239,7 @@
                     <syncfusion:GridTextColumn
                         AllowFiltering="True"
                         ColumnSizer="Star"
+                        FilterRowCondition="Contains"
                         HeaderText="Name"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Name" />
@@ -247,6 +248,7 @@
                         AllowFiltering="False"
                         AllowSorting="False"
                         ColumnSizer="AutoLastColumnFill"
+                        FilterRowCondition="Contains"
                         HeaderText="Export Task"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Properties" />
