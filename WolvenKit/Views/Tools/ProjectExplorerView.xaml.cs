@@ -496,6 +496,12 @@ namespace WolvenKit.Views.Tools
                                 files.Add(sourceFile.FullName);
                             }
                         }
+                        // 1146: addresses "prevent self-drag-and-drop" 
+                        if (files.Count > 0 && files[0] == targetDirectory)
+                        {
+                            return;
+                        }
+                            
                         await ProcessFileAction(files, targetDirectory, false);
                     }
                 }
