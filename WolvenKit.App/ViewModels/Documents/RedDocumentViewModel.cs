@@ -159,7 +159,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             }
             else if (file is not null && Cr2wFile != null)
             {
-                using var writer = new CR2WWriter(fs);
+                using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
                 writer.WriteFile(Cr2wFile);
             }
         }
