@@ -307,6 +307,11 @@ namespace WolvenKit.Modkit.RED4
                     break;
                 }
 
+                if (diff.TargetDiffsDataSize[0] == 0)
+                {
+                    continue;
+                }
+
                 TargetDiffsDataOffset.Add(diff.TargetDiffsDataOffset[0]);
                 TargetDiffsDataSize.Add(diff.TargetDiffsDataSize[0]);
                 TargetDiffsMipLevelCounts.Add(diff.TargetDiffsMipLevelCounts[0]);
