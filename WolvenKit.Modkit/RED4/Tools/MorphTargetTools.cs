@@ -28,6 +28,7 @@ namespace WolvenKit.Modkit.RED4
             var cr2w = _parserService.ReadRed4File(targetStream);
             if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh morphBlob || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
+                _loggerService.Error("Morphtarget: does not look like a valid morphtarget");
                 return false;
             }
 

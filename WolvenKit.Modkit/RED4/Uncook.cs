@@ -445,7 +445,14 @@ namespace WolvenKit.Modkit.RED4
                     // (i.e. -o argument) can be used to provide the correct absolute pathname.
                     var modFolderPath = settings.Get<MorphTargetExportArgs>().ModFolderPath;
                     modFolderPath ??= rawOutDir.FullName;
-                    return ExportMorphTargets(cr2wStream, outfile, settings.Get<MorphTargetExportArgs>().Archives, modFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+
+                    // We're tacking on an extra file ext because ***SharpGLTF*** cuts off the ext
+                    // when actually writing to disk way down the line. This way it'll save the
+                    // actual type extension we want it to...
+                    var typePreservingOutfile = new FileInfo($"{outfile.FullName}.dummyextguardthatwillberemoved");
+
+                    return ExportMorphTargets(cr2wStream, typePreservingOutfile, settings.Get<MorphTargetExportArgs>().Archives, modFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+                
                 case ECookedFileFormat.anims:
                     try
                     {
@@ -868,6 +875,7 @@ namespace WolvenKit.Modkit.RED4
                     var entry = meshargs.Rig?.FirstOrDefault();
                     if (entry is null)
                     {
+                        _loggerService.Error("WithRig: No rig specified, add one to the export");
                         return false;
                     }
 
@@ -883,6 +891,7 @@ namespace WolvenKit.Modkit.RED4
                     var rigs = meshargs.MultiMeshRigs;
                     if (!meshes.Any() || !rigs.Any())
                     {
+                        _loggerService.Error("WithRig: No rig specified, add one to the export");
                         return false;
                     }
 
