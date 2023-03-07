@@ -6,6 +6,9 @@ namespace WolvenKit.App.Services;
 
 public class SettingsDto : ISettingsDto
 {
+    private const int _CurrentSettingsVersion = 2;
+
+
     // Deserialize
     public SettingsDto()
     {
@@ -35,7 +38,7 @@ public class SettingsDto : ISettingsDto
         ShowReferenceGraph = settings.ShowReferenceGraph;
         LaunchProfiles = settings.LaunchProfiles;
 
-        if (settings.SettingsVersion != 2)
+        if (settings.SettingsVersion != _CurrentSettingsVersion)
         {
             MigrateFromV1ToV2();
         }
@@ -67,7 +70,7 @@ public class SettingsDto : ISettingsDto
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
-        if (SettingsVersion != 2)
+        if (SettingsVersion != _CurrentSettingsVersion)
         {
             MigrateFromV1ToV2();
         }
