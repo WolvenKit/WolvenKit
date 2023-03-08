@@ -1,13 +1,14 @@
+using System;
 using System.Collections.Generic;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 
 namespace WolvenKit.App.Services;
 
+
 public class SettingsDto : ISettingsDto
 {
-    private const int _CurrentSettingsVersion = 2;
-
+    private const int _CurrentSettingsVersion = 3;
 
     // Deserialize
     public SettingsDto()
@@ -37,10 +38,12 @@ public class SettingsDto : ISettingsDto
         ShowTweakDBIDAsHex = settings.ShowTweakDBIDAsHex;
         ShowReferenceGraph = settings.ShowReferenceGraph;
         LaunchProfiles = settings.LaunchProfiles;
+        // V3
+        ExperimentalEnableNewMeshExport = settings.ExperimentalEnableNewMeshExport;
 
         if (settings.SettingsVersion != _CurrentSettingsVersion)
         {
-            MigrateFromV1ToV2();
+            MigrateToCurrentVersion();
         }
     }
 
@@ -67,12 +70,17 @@ public class SettingsDto : ISettingsDto
     public bool ShowTweakDBIDAsHex { get; set; }
     public bool ShowReferenceGraph { get; set; }
     public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
+    // V3
+    public bool ExperimentalEnableNewMeshExport { get; set; }
+
+
+    // Management functions
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
         if (SettingsVersion != _CurrentSettingsVersion)
         {
-            MigrateFromV1ToV2();
+            MigrateToCurrentVersion();
         }
 
         settingsManager.SettingsVersion = SettingsVersion;
@@ -98,6 +106,8 @@ public class SettingsDto : ISettingsDto
         settingsManager.ShowTweakDBIDAsHex = ShowTweakDBIDAsHex;
         settingsManager.ShowReferenceGraph = ShowReferenceGraph;
         settingsManager.LaunchProfiles = LaunchProfiles;
+        // V3
+        settingsManager.ExperimentalEnableNewMeshExport = ExperimentalEnableNewMeshExport;
 
         return settingsManager;
     }
@@ -111,16 +121,45 @@ public class SettingsDto : ISettingsDto
         return ReconfigureSettingsManager(config);
     }
 
+    //
+    // Version migrations
+    //
+
     // Rather than create all kinds of new interfaces etc.,
     // always maintain the DTO as the current, and apply
     // all migrations in order for a controlled upgrade.
+
     private void MigrateFromV1ToV2()
     {
-        if (!string.IsNullOrWhiteSpace(CP77ExecutablePath))
-        {
-            CP77LaunchCommand = CP77ExecutablePath;
-        }
+        if (SettingsVersion < 2) {
+            if (!string.IsNullOrWhiteSpace(CP77ExecutablePath))
+            {
+                CP77LaunchCommand = CP77ExecutablePath;
+            }
 
-        SettingsVersion = 2;
+            SettingsVersion = 2;
+        }
     }
+
+    private void MigrateFromV2ToV3()
+    {
+        if (SettingsVersion < 3) {
+
+            ExperimentalEnableNewMeshExport = true;
+
+            SettingsVersion = 3;
+        }
+    }
+
+    private void MigrateToCurrentVersion()
+    {
+        MigrateFromV1ToV2();
+        MigrateFromV2ToV3();
+
+        if (SettingsVersion != _CurrentSettingsVersion)
+        {
+            throw new InvalidOperationException($"Settings: migration problem, current version is {_CurrentSettingsVersion}, but migration ended up at {SettingsVersion}.");
+        }
+    }
+
 }

@@ -49,7 +49,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowResourcePathAsHex),
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
-            nameof(ShowReferenceGraph)
+            nameof(ShowReferenceGraph),
+            // V3
+            nameof(ExperimentalEnableNewMeshExport)
             )
           .Subscribe(_ =>
           {
@@ -236,6 +238,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     [Browsable(false)]
     private Dictionary<string, LaunchProfile>? _launchProfiles;
+
+    // Settings V3
+    [Category("Experimental")]
+    [ObservableProperty]
+    [Display(Name = "Experimental: Enable New Mesh Export")]
+    private bool _experimentalEnableNewMeshExport;
 
     #endregion properties
 
