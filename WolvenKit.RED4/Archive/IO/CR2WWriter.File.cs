@@ -6,6 +6,7 @@ using WolvenKit.Core.CRC;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO.PreProcessor;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -19,6 +20,7 @@ public partial class CR2WWriter
 
     static CR2WWriter()
     {
+        s_preProcessors.Add(typeof(CMesh), typeof(CMeshPreProcessor));
         s_preProcessors.Add(typeof(entEntityTemplate), typeof(entEntityTemplatePreProcessor));
     }
 
@@ -587,7 +589,7 @@ public partial class CR2WWriter
 
                 if (s_preProcessors.TryGetValue(chunk.GetType(), out var processor))
                 {
-                    if (System.Activator.CreateInstance(processor) is IPreProcessor instance)
+                    if (System.Activator.CreateInstance(processor, LoggerService) is IPreProcessor instance)
                     {
                         instance.Process(chunk);
                     }
