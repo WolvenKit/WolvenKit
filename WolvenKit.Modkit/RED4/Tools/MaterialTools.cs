@@ -26,6 +26,8 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
+        // Unused?
+        /*
         public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, MeshExportArgs meshArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             var archives = meshArgs.Archives;
@@ -74,6 +76,7 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
+        */
         private void GetMaterialEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<ICyberGameArchive> archives)
         {
             if (cr2w.RootChunk is not CMesh cmesh)
@@ -286,7 +289,7 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private MatData SetupMaterial(CR2WFile cr2w, Stream meshStream, List<ICyberGameArchive> archives, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private MatData SetupMaterial(CR2WFile cr2w, Stream meshStream, List<ICyberGameArchive> archives, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds, bool experimentUseNewMeshExporter = false)
         {
             var primaryDependencies = new List<string>();
 
@@ -308,6 +311,11 @@ namespace WolvenKit.Modkit.RED4
                     new XbmExportArgs() { UncookExtension = eUncookExtension },
                     new MlmaskExportArgs() { UncookExtension = eUncookExtension }
                 );
+
+            if (experimentUseNewMeshExporter)
+            {
+                _loggerService.Info($"SetupMaterial: skipping all .mi or .mt material entries");
+            }
 
             for (var i = 0; i < primaryDependencies.Count; i++)
             {
@@ -379,8 +387,13 @@ namespace WolvenKit.Modkit.RED4
                     case ".gradient":
                         ExtractGradient(path);
                         break;
+
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        if (!experimentUseNewMeshExporter)
+                        {
+                            throw new ArgumentOutOfRangeException();
+                        }
+                        break;
                 }
 
                 void ExtractXBM(string path)

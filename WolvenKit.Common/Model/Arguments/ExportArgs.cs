@@ -184,6 +184,15 @@ namespace WolvenKit.Common.Model.Arguments
     public class MeshExportArgs : ExportArgs
     {
         /// <summary>
+        /// Experimental New Mesh Exporter Logic.
+        /// </summary>
+        [Category("Experimental")]
+        [Display(Name = "Use New Mesh Exporter")]
+        [Description("Use New Mesh Exporter Logic. Turn off if you run into issues.")]
+        [WkitScriptAccess("ExperimentalNewMeshExporter")]
+        public bool ExperimentUseNewMeshExporter { get; set; } = false; // TODO: Remove this when the new exporter is stable.
+
+        /// <summary>
         /// Export type for the selected Mesh.
         /// </summary>
         [Category("Export Type")]

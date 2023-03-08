@@ -201,6 +201,7 @@ public partial class TextureExportViewModel : ExportViewModel
 
                 meshExportArgs.Archives.Insert(0, proj.AsArchive());
 
+                // Should check for depo here instead of dtl
                 meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
             }
             if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
