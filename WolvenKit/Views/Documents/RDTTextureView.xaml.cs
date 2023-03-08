@@ -7,9 +7,11 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
@@ -17,6 +19,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
+using Path = System.IO.Path;
 
 namespace WolvenKit.Views.Documents
 {
@@ -208,6 +211,27 @@ namespace WolvenKit.Views.Documents
             pan.Y = 0;
             end.X = 0;
             end.Y = 0;
+
+        }
+
+        public void SaveImage(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "PNG Image|*.png",
+                Title = "Save an Image As",
+                FileName = Path.GetFileNameWithoutExtension(ViewModel.FilePath)+"_embedded.png"
+            };
+            saveFileDialog1.ShowDialog();
+
+            if (saveFileDialog1.FileName != "" && ViewModel.Image is not null)
+            {
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(ViewModel.Image as BitmapSource));
+
+                using var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create);
+                encoder.Save(fileStream);                
+            }
         }
 
         public void ResetZoomPan(object sender, RoutedEventArgs e)
@@ -222,6 +246,11 @@ namespace WolvenKit.Views.Documents
             pan.Y = 0;
             end.X = 0;
             end.Y = 0;
+            var temp_filename = Path.Combine(ISettingsManager.GetTemp_OBJPath(), "embedded_preview.png");
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(ViewModel.Image as BitmapSource));
+            using var fileStream = new FileStream(temp_filename, FileMode.Create);
+            encoder.Save(fileStream);
         }
     }
 }
