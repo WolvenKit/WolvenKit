@@ -2,7 +2,6 @@ using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
-using YamlDotNet.Core.Tokens;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
