@@ -17,11 +17,11 @@ Please use the GitHub Issue tracker.
 
 ### Frontend
 
-WolvenKit uses **WPF** as framework for its GUI and we are using the **MVVM** pattern with ReactiveUI.
+WolvenKit uses **WPF** as framework for its GUI and we are using the **MVVM** pattern.
 
 * `WolvenKit.csproj` is the WPF UI (it contains the Views)
-* `WolvenKit.APP.csproj` is the platform-independent MVVM component (it contains the ViewModels)
-* Prioritize constructor-injection with our DI (Splat)
+* `WolvenKit.App.csproj` is the platform-independent MVVM component (it contains the ViewModels)
+* Prioritize constructor-injection with our DI 
 
 WolvenKit is supposed to be an IDE-like app for developing mods - its UI should **prioritize function over form**. Visual Studio 2022 is considered the model.
 
@@ -33,17 +33,24 @@ The solution comes with an **editorconfig** file to use.
 
 The `main` branch is the development branch. Releases are created by **tag**, hotfixes to releases are supposed to be branched-out from the tag. Branches should be created from a GitHub issue and should be focused, small and reviewable.
 
+Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) when writing commit messages. Examples: 
+
+Commit message with description and breaking change footer
+```
+feat: allow provided config object to extend other configs
+
+BREAKING CHANGE: `extends` key in config file is now used for extending other config files
+```
+
+Commit message with no body
+```
+docs: correct spelling of CHANGELOG
+```
+
+
 ## General programming guidelines
 
 We recommend to read through, and follow as closely as possible the Aviva C# Coding guidelines: [https://csharpcodingguidelines.com/](https://csharpcodingguidelines.com)
-
-Due to practical reasons this won't be strictly enforced, however you should follow at least the following guidelines from Aviva 1.3:
-
-* The Principle of Least Surprise (or Astonishment): you should choose a solution that everyone can understand, and that keeps them on the right track.
-* Keep It Simple Stupid (a.k.a. KISS): the simplest solution is more than sufficient.
-* You Ain't Gonna Need It (a.k.a. YAGNI): create a solution for the problem at hand, not for the ones you think may happen later on. Can you predict the future?
-* Don't Repeat Yourself (a.k.a. DRY): avoid duplication within a component, a source control repository or a bounded context, without forgeting the Rule of Three heuristc. [https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)/](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming))
-* The four principles of object-oriented programming: encapsulation, abstraction, inheritance and polymorphism.
 
 ### As well as
 
@@ -69,17 +76,17 @@ Due to practical reasons this won't be strictly enforced, however you should fol
 * Follow the general .NET naming conventions: [https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/general-naming-conventions](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/general-naming-conventions)
 * Put braces on their own lines:
 
-    ~~~~csharp
-    public void F()
-    {
-        // code
-    }
-    ~~~~
+```csharp
+public void F()
+{
+    // code
+}
+```
 
-    Instead of using the K&R style:
+Instead of using the K&R style:
 
-    ~~~~csharp
-    public void F() {
-        // code
-    }
-    ~~~~
+```csharp
+public void F() {
+    // code
+}
+```
