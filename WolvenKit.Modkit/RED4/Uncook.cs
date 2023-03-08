@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -429,7 +430,16 @@ namespace WolvenKit.Modkit.RED4
                 case ECookedFileFormat.mesh:
                     try
                     {
-                        return HandleMesh(cr2wStream, outfile, settings.Get<MeshExportArgs>());
+                        if (settings.Get<MeshExportArgs>().ExperimentUseNewMeshExporter)
+                        {
+                            _loggerService.Info("Using new mesh exporter.");
+                            return HandleMeshesAndRigs(cr2wStream, outfile, settings.Get<MeshExportArgs>());
+                        }
+                        else
+                        {
+                            _loggerService.Info("Using classic mesh exporter.");
+                            return HandleMesh(cr2wStream, outfile, settings.Get<MeshExportArgs>());
+                        }
                     }
                     catch (Exception e)
                     {
@@ -445,7 +455,14 @@ namespace WolvenKit.Modkit.RED4
                     // (i.e. -o argument) can be used to provide the correct absolute pathname.
                     var modFolderPath = settings.Get<MorphTargetExportArgs>().ModFolderPath;
                     modFolderPath ??= rawOutDir.FullName;
-                    return ExportMorphTargets(cr2wStream, outfile, settings.Get<MorphTargetExportArgs>().Archives, modFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+
+                    // We're tacking on an extra file ext because ***SharpGLTF*** cuts off the ext
+                    // when actually writing to disk way down the line. This way it'll save the
+                    // actual type extension we want it to...
+                    var typePreservingOutfile = new FileInfo($"{outfile.FullName}.dummyextguardthatwillberemoved");
+
+                    return ExportMorphTargets(cr2wStream, typePreservingOutfile, settings.Get<MorphTargetExportArgs>().Archives, modFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+                
                 case ECookedFileFormat.anims:
                     try
                     {
@@ -753,6 +770,8 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
+
+
         public bool ExportMultiMeshWithRig(Dictionary<Stream, string> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             var Rigs = new List<RawArmature>();
@@ -868,6 +887,7 @@ namespace WolvenKit.Modkit.RED4
                     var entry = meshargs.Rig?.FirstOrDefault();
                     if (entry is null)
                     {
+                        _loggerService.Error("WithRig: No rig specified, add one to the export");
                         return false;
                     }
 
@@ -883,6 +903,7 @@ namespace WolvenKit.Modkit.RED4
                     var rigs = meshargs.MultiMeshRigs;
                     if (!meshes.Any() || !rigs.Any())
                     {
+                        _loggerService.Error($"MultiMesh: need at least 1 extra mesh ({meshes.Count}) or rig ({rigs.Count})");
                         return false;
                     }
 
@@ -913,6 +934,151 @@ namespace WolvenKit.Modkit.RED4
                     return false;
             }
         }
+
+#region NewMeshExporter
+
+        // Unified Mesh exporter
+
+        public bool ExportMeshesAndRigs(Dictionary<Stream, string> meshStreamS, List<Stream> rigStreamS, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
+        {
+            if (meshExportArgs.withMaterials && meshExportArgs.MaterialRepo is null)
+            {
+                _loggerService.Error("Materials requested but Depot path is not set: choose a Depot location within Settings for generating materials.");
+                return false;
+            }
+
+            var rigsCombinedToExport = _ProcessRigs(rigStreamS);
+            var (meshesToExport, materialDataToExport) = _ProcessMeshesAndMaterials(meshStreamS, rigsCombinedToExport);
+
+            var modelsAndRigsCombinedToExport = MeshTools.RawMeshesToGLTF(meshesToExport, rigsCombinedToExport, withMaterials: meshExportArgs.withMaterials);
+
+            SaveMaterials(outfile, materialDataToExport);
+            _SaveMeshes(outfile, modelsAndRigsCombinedToExport);
+
+            _loggerService.Info($"Mesh export completed, {meshesToExport.Count} meshes, {materialDataToExport.Count} materials, {rigsCombinedToExport?.Names?.Length ?? 0} rigs");
+            return true;
+
+
+            // Helpers
+
+            [return: NotNull] RawArmature _ProcessRigs(List<Stream> rigStreamS)
+            {
+                var Rigs = new List<RawArmature>();
+                foreach (var rigStream in rigStreamS)
+                {
+                    var Rig = RIG.ProcessRig(_parserService.ReadRed4File(rigStream));
+
+                    Rigs.Add(Rig.NotNull());
+
+                    rigStream.Dispose();
+                    rigStream.Close();
+                }
+                return RIG.CombineRigs(Rigs);
+            }
+
+            (List<RawMeshContainer>, List<MatData>) _ProcessMeshesAndMaterials(Dictionary<Stream, string> meshStreamS, RawArmature rigsCombined)
+            {
+                var expMeshes = new List<RawMeshContainer>();
+                var matData = new List<MatData>();
+                foreach (var (meshStream, streamName) in meshStreamS)
+                {
+                    var cr2w = _parserService.ReadRed4File(meshStream);
+                    if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+                    {
+                        _loggerService.Error($"Mesh stream does not look valid: {streamName}");
+                        continue;
+                    }
+
+                    using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
+
+                    var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
+
+                    var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter);
+                    MeshTools.UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
+
+                    MeshTools.WriteGarmentParametersToMesh(ref Meshes, cMesh, meshExportArgs.ExportGarmentSupport);
+
+                    var meshRig = MeshTools.GetOrphanRig(cMesh);
+
+                    MeshTools.UpdateMeshJoints(ref Meshes, rigsCombined, meshRig, meshStreamS[meshStream]);
+
+                    if (meshExportArgs.withMaterials && meshExportArgs.MaterialRepo is not null)
+                    {
+                        matData.Add(SetupMaterial(cr2w, meshStream, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension, meshExportArgs.ExperimentUseNewMeshExporter));
+                    }
+
+                    expMeshes.AddRange(Meshes);
+
+                    meshStream.Dispose();
+                    meshStream.Close();
+                }
+
+                return (expMeshes, matData);
+            }
+
+            void _SaveMeshes(FileInfo file, ModelRoot modelsAndRigs)
+            {
+                var typeExtPreservingFilename = $"{file.FullName}.thisextwillberemoved";
+
+                if (meshExportArgs.isGLBinary)
+                {
+                    modelsAndRigs.SaveGLB(typeExtPreservingFilename, new WriteSettings(vmode));
+                }
+                else
+                {
+                    modelsAndRigs.SaveGLTF(typeExtPreservingFilename, new WriteSettings(vmode));
+                }
+            }
+        }
+
+        // Not sure if this really needs to be two separate functions
+        // but it keeps the line count a bit shorter at least..
+        private bool HandleMeshesAndRigs(Stream cr2wStream, FileInfo cr2wFileName, MeshExportArgs meshargs)
+        {
+            var meshStreams = meshargs.meshExportType switch {
+                MeshExportType.Multimesh => _FilesToStreams(meshargs.MultiMeshMeshes),
+                MeshExportType.WithRig => new Dictionary<Stream, string> { { cr2wStream, cr2wFileName.Name } },
+                MeshExportType.MeshOnly => new Dictionary<Stream, string> { { cr2wStream, cr2wFileName.Name } },
+                _ => throw new ArgumentOutOfRangeException(nameof(meshargs.meshExportType), meshargs.meshExportType, "This isn't a mesh to export")
+            };
+
+            var rigStreams = meshargs.meshExportType switch
+            {
+                MeshExportType.Multimesh => _FilesToStreams(meshargs.MultiMeshRigs).Keys.ToList(),
+                MeshExportType.WithRig => _FilesToStreams(meshargs.Rig.GetRange(0, 1)).Keys.ToList(),
+                MeshExportType.MeshOnly => new(),
+                _ => throw new ArgumentOutOfRangeException(nameof(meshargs.meshExportType), meshargs.meshExportType, "This isn't a mesh to export")
+            };
+
+            if (!meshStreams.Any())
+            {
+                _loggerService.Warning($"Export: no meshes found! Exporting just a rig is probably not supported but let's give it a try");
+            }
+            else if (!rigStreams.Any() && meshargs.meshExportType != MeshExportType.MeshOnly)
+            {
+                _loggerService.Warning($"Export: no rigs found, WithRig and Multimesh might require one! So if this fails, that might be why..");
+            }
+            else if (!meshStreams.Any() && !rigStreams.Any())
+            {
+                _loggerService.Warning($"Export: neither meshes nor rigs found! This I can't work with");
+                return false;
+            }
+
+            return ExportMeshesAndRigs(meshStreams, rigStreams, cr2wFileName, meshargs);
+
+
+            Dictionary<Stream, string> _FilesToStreams(List<FileEntry> files) =>
+                files.Select(
+                      delegate (FileEntry entry)
+                      {
+                          var ar = entry.Archive;
+                          var ms = new MemoryStream();
+                          ar?.CopyFileToStream(ms, entry.NameHash64, false);
+                          return new KeyValuePair<Stream, string>(ms, entry.FileName);
+                      }).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+
+#endregion NewMeshExporter
 
         private static void UncookWem(string infile, string outfile)
         {
