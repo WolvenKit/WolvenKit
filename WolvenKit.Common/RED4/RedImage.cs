@@ -595,7 +595,7 @@ public class RedImage : IDisposable
         //{
         //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
         //}
-        if (metadata.Format != (DXGI_FORMAT)outImageFormat)
+        if (settings.Compression == ETextureCompression.TCM_None && metadata.Format != (DXGI_FORMAT)outImageFormat)
         {
             tmpImage = true;
 

@@ -111,9 +111,30 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _tweakDBService = tweakDBService;
         _parser = parserService;
 
+        _progressService.PropertyChanged += ProgressService_PropertyChanged;
+
         UpdateTitle();
 
         ShowFirstTimeSetup();
+    }
+
+    private void ProgressService_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(IProgressService<double>.Status))
+        {
+            TaskStatus = _progressService.Status;
+            switch (TaskStatus)
+            {
+                case EStatus.Running:
+                    Status = EAppStatus.Busy;
+                    break;
+                case EStatus.Ready:
+                    Status = EAppStatus.Ready;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     #region init
@@ -268,12 +289,34 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     #region commands
 
-    [RelayCommand] private async Task PackMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true });
-    [RelayCommand] private async Task PackRedMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true, IsRedmod = true });
-    [RelayCommand] private async Task PackInstallMod() => await LaunchAsync(new LaunchProfile() { Install = true });
-    [RelayCommand] private async Task PackInstallRedMod() => await LaunchAsync(new LaunchProfile() { Install = true, IsRedmod = true });
-    [RelayCommand] private async Task PackInstallRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true });
-    [RelayCommand] private async Task PackInstallRedModRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true });
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(PackModCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PackRedModCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PackInstallModCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PackInstallRedModCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PackInstallModCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PackInstallRunCommand))]
+    [NotifyCanExecuteChangedFor(nameof(PackInstallRedModRunCommand))]
+    private EStatus _taskStatus;
+    private bool CanStartTask() => TaskStatus == EStatus.Ready;
+
+    [RelayCommand(CanExecute = nameof(CanStartTask))]
+    private async Task PackMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true });
+
+    [RelayCommand(CanExecute = nameof(CanStartTask))]
+    private async Task PackRedMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true, IsRedmod = true });
+
+    [RelayCommand(CanExecute = nameof(CanStartTask))]
+    private async Task PackInstallMod() => await LaunchAsync(new LaunchProfile() { Install = true });
+
+    [RelayCommand(CanExecute = nameof(CanStartTask))]
+    private async Task PackInstallRedMod() => await LaunchAsync(new LaunchProfile() { Install = true, IsRedmod = true });
+
+    [RelayCommand(CanExecute = nameof(CanStartTask))]
+    private async Task PackInstallRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true });
+
+    [RelayCommand(CanExecute = nameof(CanStartTask))]
+    private async Task PackInstallRedModRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true });
 
     [RelayCommand]
     private async Task CheckForUpdates(bool checkForCheckForUpdates)
