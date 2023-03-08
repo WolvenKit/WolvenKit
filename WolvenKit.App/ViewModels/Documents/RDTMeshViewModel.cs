@@ -1447,13 +1447,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 return;
             }
 
-            var destBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
-            var rmBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
-            var normalBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
+            var destBitmap = new Bitmap((int)firstStream.PixelWidth, (int)firstStream.PixelHeight);
+            var rmBitmap = new Bitmap((int)firstStream.PixelWidth, (int)firstStream.PixelHeight);
+            var normalBitmap = new Bitmap((int)firstStream.PixelWidth, (int)firstStream.PixelHeight);
             using (var gfx_n = Graphics.FromImage(normalBitmap))
             using (var brush = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 255)))
             {
-                gfx_n.FillRectangle(brush, 0, 0, (int)firstStream.Width, (int)firstStream.Height);
+                gfx_n.FillRectangle(brush, 0, 0, (int)firstStream.PixelWidth, (int)firstStream.PixelHeight);
             }
 
             var gfx = Graphics.FromImage(destBitmap);
