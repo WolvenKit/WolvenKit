@@ -264,7 +264,7 @@
                         FilterRowCondition="Contains"
                         HeaderText="Import Task"
                         HorizontalHeaderContentAlignment="Left"
-                        MappingName="Properties" />
+                        MappingName="PropertiesDisplay" />
                 </syncfusion:SfDataGrid.Columns>
 
             </syncfusion:SfDataGrid>

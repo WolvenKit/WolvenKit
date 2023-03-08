@@ -48,12 +48,13 @@ namespace WolvenKit.Common.Model.Arguments
     /// <summary>
     /// XBM Import Arguments
     /// </summary>
-    public class XbmImportArgs : ImportArgs
+    public partial class XbmImportArgs : ImportArgs
     {
+        private GpuWrapApieTextureGroup _textureGroup = GpuWrapApieTextureGroup.TEXG_Generic_Color;
+
         [Category("General Import Settings")]
         [Description("Select the texture group of the imported item")]
-        public GpuWrapApieTextureGroup TextureGroup { get; set; } = GpuWrapApieTextureGroup.TEXG_Generic_Color;
-
+        public GpuWrapApieTextureGroup TextureGroup { get => _textureGroup; set => SetProperty(ref _textureGroup, value); }
         [Category("General Import Settings")]
         [Description("If true, the file will be handled as a SRGB file")]
         public bool IsGamma { get; set; } = false;
@@ -81,7 +82,7 @@ namespace WolvenKit.Common.Model.Arguments
 
         [Category("Image Import Settings")]
         [Description("PremultiplyAlpha")]
-        public bool PremultiplyAlpha { get; set; } = true;
+        public bool PremultiplyAlpha { get; set; } = false;
 
         public XbmImportArgs()
         {
@@ -101,6 +102,8 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class GltfImportArgs : ImportArgs
     {
+        private GltfImportAsFormat _importFormat = GltfImportAsFormat.Mesh;
+
         /// <summary>
         /// Should a Material.Json be imported?
         /// </summary>
@@ -130,8 +133,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Import Settings")]
         [Display(Name = "Target File Format")]
-        public GltfImportAsFormat ImportFormat { get; set; } = GltfImportAsFormat.Mesh;
-
+        public GltfImportAsFormat ImportFormat { get => _importFormat; set => SetProperty(ref _importFormat, value); }
 
         /// <summary>
         /// Fills empty sub meshes with dummy data
@@ -195,6 +197,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Browsable(false)]
         public List<ICyberGameArchive> Archives { get; set; } = new();
+
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
@@ -225,49 +228,31 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class ReImportArgs : ImportArgs
     {
+        private string _animset = "";
+        private string _animationToRename = "";
+
         [Browsable(false)]
         public string RedMod { get; set; } = "";
+
         [Browsable(false)]
         public string Depot { get; set; } = "";
+
         [Browsable(false)]
         public string Input { get; set; } = "";
+
         [Browsable(false)]
-        public string Animset { get; set; } = "";
+        public string Animset { get => _animset; set => SetProperty(ref _animset, value); }
         [Browsable(false)]
-        public string AnimationToRename { get; set; } = "";
+        public string AnimationToRename { get => _animationToRename; set => SetProperty(ref _animationToRename, value); }
         [Category("Import Settings")]
         [Display(Name = "Outfile")]
         [Description("resource .animset file name to write (resource path must start with base//)")]
         public string Output { get; set; } = "";
+
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => $"{Path.GetFileName(Animset)} - {AnimationToRename}";
     }
-
-    // Formats used in the v1.52 game files
-    //public enum SupportedCompressionFormats
-    //{
-    //    TCM_None, // = 0,
-    //    TCM_DXTNoAlpha, // = 1,
-    //    TCM_DXTAlpha, // = 2,
-    //    // TCM_RGBE, // = 3,
-    //    TCM_Normalmap, // = 4,
-    //    TCM_Normals_DEPRECATED, // = 5,
-    //    TCM_NormalsHigh_DEPRECATED, // = 6,
-    //    // TCM_NormalsGloss_DEPRECATED, // = 7,
-    //    // TCM_TileMap, // = 8,
-    //    TCM_DXTAlphaLinear, // = 9,
-    //    TCM_QualityR, // = 10,
-    //    TCM_QualityRG, // = 11,
-    //    TCM_QualityColor, // = 12,
-    //    TCM_HalfHDR_Unsigned, // = 13,
-    //    // TCM_HalfHDR_Signed, // = 14,
-    //    // TCM_Max, // = 15,
-    //    // TCM_Normals, // = 5,
-    //    // TCM_NormalsHigh, // = 6,
-    //    // TCM_NormalsGloss, // = 7,
-    //    // TCM_HalfHDR, // = 13
-    //}
 }

@@ -2,6 +2,7 @@ using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
+using YamlDotNet.Core.Tokens;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -14,8 +15,16 @@ public abstract partial class ImportExportItemViewModel : ObservableObject, ISel
     {
         BaseFile = baseFile;
         _properties = properties;
+
+        _propertiesDisplay = _properties.ToString();
+
+        Properties.PropertyChanged += Properties_PropertyChanged;
     }
 
+    private void Properties_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        PropertiesDisplay = Properties.ToString();
+    }
 
     public string BaseFile { get; set; }
 
@@ -23,9 +32,8 @@ public abstract partial class ImportExportItemViewModel : ObservableObject, ISel
 
     [ObservableProperty] private bool _isChecked;
 
-    public string? ExportTaskIdentifier => Properties.ToString();
+    [ObservableProperty] private string? _propertiesDisplay;
+
     public string Extension => Path.GetExtension(BaseFile).TrimStart('.');
     public string Name => Path.GetFileName(BaseFile);
-
-
 }

@@ -251,7 +251,7 @@
                         FilterRowCondition="Contains"
                         HeaderText="Export Task"
                         HorizontalHeaderContentAlignment="Left"
-                        MappingName="Properties" />
+                        MappingName="PropertiesDisplay" />
 
                 </syncfusion:SfDataGrid.Columns>
 

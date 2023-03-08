@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
@@ -57,9 +58,16 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         if (IsRawTexture(rawFileFormat))
         {
             // first get settings from game
-            xbmArgs = LoadXbmSettingsFromGame(fileName, archiveManager, projectManager, parserService);
-            // if not, get defaults from filename
-            xbmArgs ??= LoadXbmDefaultSettings(fileName);
+            if(TryLoadXbmSettingsFromGame(fileName, archiveManager, projectManager, parserService, out var args))
+            {
+                xbmArgs = args;
+            }
+            else
+            {
+                // if not, get defaults from filename
+                xbmArgs = LoadXbmDefaultSettings(fileName);
+            }
+            
         }
 
         return rawFileFormat switch
@@ -108,18 +116,20 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         {
             var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
             xbmArgs.RawFormat = rawFormat;
-            xbmArgs.Compression = compression;   // todo if this is already set use the previous one
+            xbmArgs.Compression = compression;      // todo if this is already set use the previous one
+            //xbmArgs.PremultiplyAlpha              // todo ???
         }
 
         return xbmArgs;
     }
 
-    public static XbmImportArgs LoadXbmSettingsFromGame(string fileName, IArchiveManager archiveManager, IProjectManager projectManager, Red4ParserService parserService)
+    public static bool TryLoadXbmSettingsFromGame(string fileName, IArchiveManager archiveManager, IProjectManager projectManager, Red4ParserService parserService, [NotNullWhen(true)] out XbmImportArgs? args )
     {
+        args = null;
         var activeProject = projectManager.ActiveProject;
         if (activeProject == null)
         {
-            return new XbmImportArgs();
+            return false;
         }
 
         var extension = Path.GetExtension(fileName).TrimStart('.');
@@ -144,10 +154,10 @@ public class ImportableItemViewModel : ImportExportItemViewModel
                 {
                     if (bitmapTexture.Setup is not { } setup || bitmapTexture.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
                     {
-                        return new XbmImportArgs();
+                        return false;
                     }
 
-                    return new XbmImportArgs()
+                    args = new XbmImportArgs()
                     {
                         TextureGroup = setup.Group,
                         IsGamma = setup.IsGamma,
@@ -156,11 +166,12 @@ public class ImportableItemViewModel : ImportExportItemViewModel
                         GenerateMipMaps = blob.Header.TextureInfo.MipCount > 1,
                         IsStreamable = setup.IsStreamable,
                     };
+                    return true;
                 }
             }
         }
 
-        return new XbmImportArgs();
+        return false;
     }
 
     private static bool IsRawTexture(ERawFileFormat fmt) => fmt is ERawFileFormat.tga or ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.dds or ERawFileFormat.tiff;

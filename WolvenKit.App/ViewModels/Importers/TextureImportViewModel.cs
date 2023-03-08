@@ -123,8 +123,17 @@ public partial class TextureImportViewModel : ImportViewModel
             }
 
             // import settings from vanilla
-            item.Properties = ImportableItemViewModel.LoadXbmSettingsFromGame(item.BaseFile, _archiveManager, _projectManager, _parserService);
-            _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed game file");
+            if (ImportableItemViewModel.TryLoadXbmSettingsFromGame(item.BaseFile, _archiveManager, _projectManager, _parserService, out var args))
+            {
+                item.Properties = args;
+                _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed game file");
+            }
+            else
+            {
+                // fall back to default settings
+                item.Properties = ImportableItemViewModel.LoadXbmDefaultSettings(item.BaseFile);
+                _loggerService?.Warning($"Could not load settings for \"{item.Name}\" from game");
+            }
         }
     }
 
@@ -291,10 +300,16 @@ public partial class TextureImportViewModel : ImportViewModel
 
         var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
             .Where(CanImport)
-            .Select(x => new ImportableItemViewModel(x, _archiveManager, _projectManager, _parserService));
+            ;
+
+        // do not refresh if the files are the same
+        if(Enumerable.SequenceEqual( Items.Select(x => x.BaseFile), files))
+        {
+            return;
+        }
 
         Items.Clear();
-        Items = new(files);
+        Items = new(files.Select(x => new ImportableItemViewModel(x, _archiveManager, _projectManager, _parserService)));
 
         ProcessAllCommand.NotifyCanExecuteChanged();
     }
