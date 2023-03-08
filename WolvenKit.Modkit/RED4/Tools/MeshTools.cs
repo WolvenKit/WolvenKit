@@ -1021,7 +1021,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             model.Extras = SharpGLTF.IO.JsonContent.Serialize(new { ExperimentalMergedMeshes = mergeMeshes });
 
             Skin? skin = null;
-            if (rig != null)
+            if (rig != null && rig.BoneCount > 0)
             {
                 skin = model.CreateSkin();
                 skin.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
