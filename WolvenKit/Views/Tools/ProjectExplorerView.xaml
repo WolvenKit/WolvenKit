@@ -64,7 +64,7 @@
                     x:Name="ConvertToJsonMenuItem"
                     Command="{Binding ConvertToCommand}"
                     Header="Convert to JSON"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    Visibility="{Binding Path=ConvertToIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>
                             <iconPacks:PackIconCodicons
@@ -81,7 +81,7 @@
                     x:Name="ConvertFromJsonMenuItem"
                     Command="{Binding ConvertFromCommand}"
                     Header="Convert from JSON"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    Visibility="{Binding Path=ConvertFromIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>
                             <iconPacks:PackIconCodicons

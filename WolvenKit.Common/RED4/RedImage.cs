@@ -465,10 +465,10 @@ public class RedImage : IDisposable
 
     public CBitmapTexture SaveToXBM(XbmImportArgs args)
     {
-        //if (args.Compression == ETextureCompression.TCM_DXTAlpha) //todo
-        //{
-        //    settings.PremultiplyAlpha = true;
-        //}
+        if (args.Compression == ETextureCompression.TCM_DXTAlpha)
+        {
+            args.PremultiplyAlpha = true;
+        }
 
         var settings = new RedImageTransformSettings(args.TextureGroup, args.IsGamma, args.VFlip, args.RawFormat, args.Compression, args.GenerateMipMaps, args.PremultiplyAlpha, args.IsStreamable);
 
@@ -516,6 +516,67 @@ public class RedImage : IDisposable
         public byte AlphaToCoverageThreshold { get; } = 0; // unused
     }
 
+    private static bool HasAlpha(DXGI_FORMAT format)
+    {
+#pragma warning disable IDE0010 // Add missing cases
+        switch (format)
+        {
+            case DXGI_FORMAT.R32G32B32A32_TYPELESS:
+            case DXGI_FORMAT.R32G32B32A32_FLOAT:
+            case DXGI_FORMAT.R32G32B32A32_UINT:
+            case DXGI_FORMAT.R32G32B32A32_SINT:
+            case DXGI_FORMAT.R16G16B16A16_TYPELESS:
+            case DXGI_FORMAT.R16G16B16A16_FLOAT:
+            case DXGI_FORMAT.R16G16B16A16_UNORM:
+            case DXGI_FORMAT.R16G16B16A16_UINT:
+            case DXGI_FORMAT.R16G16B16A16_SNORM:
+            case DXGI_FORMAT.R16G16B16A16_SINT:
+            case DXGI_FORMAT.R10G10B10A2_TYPELESS:
+            case DXGI_FORMAT.R10G10B10A2_UNORM:
+            case DXGI_FORMAT.R10G10B10A2_UINT:
+            case DXGI_FORMAT.R8G8B8A8_TYPELESS:
+            case DXGI_FORMAT.R8G8B8A8_UNORM:
+            case DXGI_FORMAT.R8G8B8A8_UNORM_SRGB:
+            case DXGI_FORMAT.R8G8B8A8_UINT:
+            case DXGI_FORMAT.R8G8B8A8_SNORM:
+            case DXGI_FORMAT.R8G8B8A8_SINT:
+            case DXGI_FORMAT.A8_UNORM:
+            case DXGI_FORMAT.BC1_TYPELESS:
+            case DXGI_FORMAT.BC1_UNORM:
+            case DXGI_FORMAT.BC1_UNORM_SRGB:
+            case DXGI_FORMAT.BC2_TYPELESS:
+            case DXGI_FORMAT.BC2_UNORM:
+            case DXGI_FORMAT.BC2_UNORM_SRGB:
+            case DXGI_FORMAT.BC3_TYPELESS:
+            case DXGI_FORMAT.BC3_UNORM:
+            case DXGI_FORMAT.BC3_UNORM_SRGB:
+            case DXGI_FORMAT.B5G5R5A1_UNORM:
+            case DXGI_FORMAT.B8G8R8A8_UNORM:
+            case DXGI_FORMAT.R10G10B10_XR_BIAS_A2_UNORM:
+            case DXGI_FORMAT.B8G8R8A8_TYPELESS:
+            case DXGI_FORMAT.B8G8R8A8_UNORM_SRGB:
+            case DXGI_FORMAT.BC7_TYPELESS:
+            case DXGI_FORMAT.BC7_UNORM:
+            case DXGI_FORMAT.BC7_UNORM_SRGB:
+            case DXGI_FORMAT.AYUV:
+            case DXGI_FORMAT.Y410:
+            case DXGI_FORMAT.Y416:
+            case DXGI_FORMAT.AI44:
+            case DXGI_FORMAT.IA44:
+            case DXGI_FORMAT.A8P8:
+            case DXGI_FORMAT.B4G4R4A4_UNORM:
+            //case XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT:
+            //case XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT:
+            //case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
+                return true;
+            
+            default:
+                return false;
+        }
+#pragma warning restore IDE0010 // Add missing cases
+    }
+
+
     private (STextureGroupSetup, rendRenderTextureBlobPC) GetSetupAndBlob(RedImageTransformSettings settings)
     {
         var setup = new STextureGroupSetup();
@@ -524,6 +585,23 @@ public class RedImage : IDisposable
         var tmpImage = false;
         var img = InternalScratchImage;
         var metadata = _metadata;
+
+        var outImageFormat = CommonFunctions.GetDXGIFormat(settings.Compression, settings.RawFormat, settings.IsGamma);
+        //if (!TexHelper.Instance.IsCompressed(outImageFormat))
+        //{
+        //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
+        //}
+        //if (TexHelper.Instance.IsSRGB(metadata.Format) != TexHelper.Instance.IsSRGB((DXGI_FORMAT)outImageFormat))
+        //{
+        //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
+        //}
+        if (metadata.Format != (DXGI_FORMAT)outImageFormat)
+        {
+            tmpImage = true;
+
+            img = img.Convert((DXGI_FORMAT)outImageFormat, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
+            metadata = img.GetMetadata();
+        }
 
         // gamma adjustments
         if (settings.IsGamma && !TexHelper.Instance.IsSRGB(metadata.Format))
@@ -537,8 +615,7 @@ public class RedImage : IDisposable
                 metadata = img.GetMetadata();
             }
         }
-
-        if (!settings.IsGamma && TexHelper.Instance.IsSRGB(metadata.Format))
+        else if (!settings.IsGamma && TexHelper.Instance.IsSRGB(metadata.Format))
         {
             var linearFormat = TexHelper.Instance.MakeLinear(metadata.Format);
             if (metadata.Format != linearFormat)
@@ -559,7 +636,7 @@ public class RedImage : IDisposable
             metadata = img.GetMetadata();
         }
 
-        if (settings.PremultiplyAlpha)
+        if (settings.PremultiplyAlpha && HasAlpha(metadata.Format))
         {
             tmpImage = true;
 
@@ -584,16 +661,6 @@ public class RedImage : IDisposable
         }
 
         // compress
-        var outImageFormat = CommonFunctions.GetDXGIFormat(settings.Compression, settings.RawFormat, settings.IsGamma);
-        //if (!TexHelper.Instance.IsCompressed(outImageFormat))
-        //{
-        //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
-        //}
-        //if (TexHelper.Instance.IsSRGB(metadata.Format) != TexHelper.Instance.IsSRGB((DXGI_FORMAT)outImageFormat))
-        //{
-        //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
-        //}
-
         tmpImage = true;
         if (settings.Compression != ETextureCompression.TCM_None)
         {
@@ -606,7 +673,6 @@ public class RedImage : IDisposable
                 img = img.Compress((DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.PARALLEL, 0.5F);
             }
         }
-        
 
         metadata = img.GetMetadata();
 

@@ -115,6 +115,30 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (value is not null)
         {
             _mainViewModel.SelectFileCommand.SafeExecute(value);
+                
+            // toggle context menu buttons
+            if (SelectedItems is not null)
+            {
+                var selected = SelectedItems.OfType<FileModel>().ToList();
+                // if all are in raw folder, then enable convertFrom
+                if (selected.All(x => IsInRawFolder(x)))
+                {
+                    ConvertToIsEnabled = false;
+                    ConvertFromIsEnabled = true;
+                }
+                // if all are in archive folder, then enable convertTo
+                else if (selected.All(x => IsInArchiveFolder(x)))
+                {
+                    ConvertToIsEnabled = true;
+                    ConvertFromIsEnabled = false;
+                }
+                // else disable both
+                else
+                {
+                    ConvertToIsEnabled = false;
+                    ConvertFromIsEnabled = false;
+                }
+            }
         }
     }
 
@@ -183,6 +207,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [ObservableProperty] private bool _isFlatModeEnabled;
 
     [ObservableProperty] private int _selectedTabIndex;
+
+    [ObservableProperty] private bool _convertToIsEnabled;
+    [ObservableProperty] private bool _convertFromIsEnabled;
 
     public FileModel? LastSelected => _watcherService.LastSelect;
 
@@ -460,6 +487,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region red4
 
+    private bool IsInArchiveFolder(FileModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.ModDirectory);
     private bool IsInRawFolder(FileModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.RawDirectory);
 
     private bool CanBk2Import() => SelectedItem != null && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("avi") && ActiveProject is not null;

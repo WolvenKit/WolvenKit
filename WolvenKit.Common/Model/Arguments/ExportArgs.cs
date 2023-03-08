@@ -36,15 +36,17 @@ namespace WolvenKit.Common.Model.Arguments
 
     public class OpusExportArgs : ExportArgs
     {
+        private bool _useMod;
+        private List<uint> _selectedForExport = new();
+
         [Category("Export Settings")]
         [Display(Name = "Use Modified OpusInfo")]
         [Description("If selected modified OpusInfo and paks within the Mod Project are used. If unchecked the original OpusInfo and paks will be exported.")]
         [WkitScriptAccess()]
-        public bool UseMod { get; set; }
+        public bool UseMod { get => _useMod; set => SetProperty(ref _useMod, value); }
 
         [Category("Export Settings")]
-        public List<uint> SelectedForExport { get; set; } = new();
-
+        public List<uint> SelectedForExport { get => _selectedForExport; set => SetProperty(ref _selectedForExport, value); }
         [Browsable(false)]
         public string? ModFolderPath { get; set; }
 
@@ -63,6 +65,8 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class MorphTargetExportArgs : ExportArgs
     {
+        private bool _isBinary = true;
+
         /// <summary>
         /// Binary Export Bool, Decides between GLB and GLTF
         /// </summary>
@@ -70,8 +74,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Is Binary")]
         [Description("If selected the mesh will be exported as GLB, if unchecked as GLTF")]
         [WkitScriptAccess("Binary")]
-        public bool IsBinary { get; set; } = true;
-
+        public bool IsBinary { get => _isBinary; set => SetProperty(ref _isBinary, value); }
         /// <summary>
         /// List of Archives for Morphtarget Export.
         /// </summary>
@@ -106,14 +109,15 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class MlmaskExportArgs : ExportArgs
     {
+        private EUncookExtension _uncookExtension = EUncookExtension.png;
+
         /// <summary>
         /// MlMask Uncook Format
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "MLmask Export Type")]
         [WkitScriptAccess("ImageFormat")]
-        public EUncookExtension UncookExtension { get; set; } = EUncookExtension.png;
-
+        public EUncookExtension UncookExtension { get => _uncookExtension; set => SetProperty(ref _uncookExtension, value); }
         [Browsable(false)]
         [WkitScriptAccess()]
         public bool AsList { get; set; } = true;
@@ -135,21 +139,23 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class XbmExportArgs : ExportArgs
     {
+        private EUncookExtension _uncookExtension = EUncookExtension.png;
+        private bool _flip;
+
         /// <summary>
         ///  Uncook Format for XBM.
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "XBM Export Type")]
         [WkitScriptAccess("ImageType")]
-        public EUncookExtension UncookExtension { get; set; } = EUncookExtension.png;
-
+        public EUncookExtension UncookExtension { get => _uncookExtension; set => SetProperty(ref _uncookExtension, value); }
         /// <summary>
         /// Flip Image argument
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Flip Image")]
         [WkitScriptAccess()]
-        public bool Flip { get; set; }
+        public bool Flip { get => _flip; set => SetProperty(ref _flip, value); }
 
         /// <summary>
         /// String Override to display info in datagrid.
@@ -183,6 +189,10 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class MeshExportArgs : ExportArgs
     {
+        private MeshExportType _meshExportType = MeshExportType.MeshOnly;
+        private bool _lodFilter = true;
+        private bool _isGLBinary = true;
+
         /// <summary>
         /// Experimental New Mesh Exporter Logic.
         /// </summary>
@@ -199,7 +209,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Mesh Export Type")]
         [Description("Select between mesh export options. By default materials but no rig are included.")]
         [WkitScriptAccess("ExportType")]
-        public MeshExportType meshExportType { get; set; } = MeshExportType.MeshOnly;
+        public MeshExportType meshExportType { get => _meshExportType; set => SetProperty(ref _meshExportType, value); }
 
         /// <summary>
         /// If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.
@@ -208,7 +218,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "LOD Filter")]
         [Description("If selected LOD meshes will not be included. May cause complications with clipping decals.")]
         [WkitScriptAccess()]
-        public bool LodFilter { get; set; } = true;
+        public bool LodFilter { get => _lodFilter; set => SetProperty(ref _lodFilter, value); }
 
         /// <summary>
         /// Binary Export Bool, Decides between GLB and GLTF
@@ -217,7 +227,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Is Binary")]
         [Description("If selected mesh exports will be in binary form as GLB rather than glTF format. (Recommended)")]
         [WkitScriptAccess("Binary")]
-        public bool isGLBinary { get; set; } = true;
+        public bool isGLBinary { get => _isGLBinary; set => SetProperty(ref _isGLBinary, value); }
 
         /// <summary>
         /// Binary Export Bool, Decides if we should export materials
@@ -306,6 +316,8 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class WemExportArgs : ExportArgs
     {
+        private WemExportTypes _wemExportType = WemExportTypes.Mp3;
+
         /// <summary>
         /// Wem Export type
         /// </summary>
@@ -313,8 +325,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Wem Export Type")]
         [Description("Select audio output format")]
         [WkitScriptAccess("ExportType")]
-        public WemExportTypes wemExportType { get; set; } = WemExportTypes.Mp3;
-
+        public WemExportTypes wemExportType { get => _wemExportType; set => SetProperty(ref _wemExportType, value); }
         [Browsable(false)]
         public string? FileName { get; set; }
 
@@ -327,6 +338,8 @@ namespace WolvenKit.Common.Model.Arguments
 
     public class AnimationExportArgs : ExportArgs
     {
+        private bool _isBinary = true;
+
         /// <summary>
         /// Binary Export Bool, Decides between GLB and GLTF
         /// </summary>
@@ -334,8 +347,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Is Binary")]
         [Description("If selected the anims will be exported as GLB, if unchecked as GLTF")]
         [WkitScriptAccess("Binary")]
-        public bool IsBinary { get; set; } = true;
-
+        public bool IsBinary { get => _isBinary; set => SetProperty(ref _isBinary, value); }
         /// <summary>
         /// Root Motion Export Bool
         /// </summary>
