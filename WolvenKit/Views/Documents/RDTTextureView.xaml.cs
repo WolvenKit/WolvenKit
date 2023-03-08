@@ -246,11 +246,7 @@ namespace WolvenKit.Views.Documents
             pan.Y = 0;
             end.X = 0;
             end.Y = 0;
-            var temp_filename = Path.Combine(ISettingsManager.GetTemp_OBJPath(), "embedded_preview.png");
-            BitmapEncoder encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(ViewModel.Image as BitmapSource));
-            using var fileStream = new FileStream(temp_filename, FileMode.Create);
-            encoder.Save(fileStream);
+            
         }
     }
 }
