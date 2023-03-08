@@ -3,8 +3,6 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO.PreProcessor;
 
-
-
 public class CMeshPreProcessor : IPreProcessor
 {
     private readonly ILoggerService? _loggerService;
@@ -23,15 +21,15 @@ public class CMeshPreProcessor : IPreProcessor
         // make sure that the mesh is using either localMaterials or preloadLocalMaterials
         if (mesh.ExternalMaterials.Count > 0 && mesh.PreloadExternalMaterials.Count > 0)
         {
-            _loggerService.Warning($"Your mesh is trying to use both externalMaterials and preloadExternalMaterials. " +
-                                   $"To avoid unspecified behaviour, use only one of the lists.");
+            _loggerService.Warning("Your mesh is trying to use both externalMaterials and preloadExternalMaterials. " +
+                                   "To avoid unspecified behaviour, use only one of the lists.");
         }
 
         // make sure that the mesh is using either localMaterialBuffer.materials or preloadLocalMaterialInstances
-        if (mesh.LocalMaterialBuffer is { Materials: { } } && mesh.LocalMaterialBuffer.Materials.Count > 0 && mesh.PreloadLocalMaterialInstances.Count > 0)
+        if (mesh.LocalMaterialBuffer is { Materials.Count: > 0 } && mesh.PreloadLocalMaterialInstances.Count > 0)
         {
-            _loggerService.Warning($"Your mesh is trying to use both localMaterialBuffer.materials and preloadLocalMaterialInstances. " +
-                                   $"To avoid unspecified behaviour, use only one of the lists.");
+            _loggerService.Warning("Your mesh is trying to use both localMaterialBuffer.materials and preloadLocalMaterialInstances. " +
+                                 "To avoid unspecified behaviour, use only one of the lists.");
         }
 
         var sumOfLocal = mesh.LocalMaterialInstances.Count + mesh.PreloadLocalMaterialInstances.Count;
@@ -42,7 +40,6 @@ public class CMeshPreProcessor : IPreProcessor
         var sumOfExternal = mesh.ExternalMaterials.Count + mesh.PreloadExternalMaterials.Count;
 
         var localIndexList = new Dictionary<ushort, int>();
-
         var materialNames = new List<string>();
 
         for (var i = 0; i < mesh.MaterialEntries.Count; i++)
@@ -59,7 +56,7 @@ public class CMeshPreProcessor : IPreProcessor
                 if (materialEntry.Index >= sumOfLocal)
                 {
                     _loggerService.Warning($"materialEntries[{i}] ({materialEntry.Name}) is trying to access a local material with the index " +
-                                           $"{materialEntry.Index}, but there are only {sumOfExternal -1} entries.");
+                                           $"{materialEntry.Index}, but there are only {sumOfLocal} entries.");
                 }
 
                 if (localIndexList.ContainsKey(materialEntry.Index))
@@ -71,87 +68,76 @@ public class CMeshPreProcessor : IPreProcessor
             }
             else
             {
-                
                 if (materialEntry.Index >= sumOfExternal)
                 {
                     _loggerService.Warning($"materialEntries[{i}] ({materialEntry.Name}) is trying to access an external material with the index " +
-                                           $"{materialEntry.Index}, but there are only {sumOfExternal -1} entries.");
+                                           $"{materialEntry.Index}, but there are only {sumOfExternal} entries.");
                 }
             }
         }
 
-        var materialIdx = 0; 
-        
         if (mesh.LocalMaterialBuffer is { Materials: { } localMaterials })
         {
-            foreach (var material in localMaterials)
+            for (var i = 0; i < localMaterials.Count; i++)
             {
-                if (material == null)
+                if (localMaterials[i] is not { } material)
                 {
                     continue;
-                } 
-                
-                var materialName = "unknown";
-                var matDefinition = mesh.MaterialEntries[materialIdx];
-                if (null != matDefinition)
-                {
-                    materialName = $"({matDefinition.Name})";
                 }
 
-                
+                var materialName = "unknown";
+                var matDefinition = mesh.MaterialEntries[i];
+                if (null != matDefinition)
+                {
+                    materialName = $"{matDefinition.Name}";
+                }
+
                 CheckMaterialProperties((CMaterialInstance)material, materialName);
-                materialIdx += 1;
             }
         }
-        
-        materialIdx = 0;
-        foreach (var handle in mesh.PreloadLocalMaterialInstances)
+
+        for (var i = 0; i < mesh.PreloadLocalMaterialInstances.Count; i++)
         {
-            if (handle is not { Chunk: { } material })
+            if (mesh.PreloadLocalMaterialInstances[i] is not { Chunk: { } material })
             {
                 continue;
             }
+
             var materialName = "unknown";
-            var matDefinition = mesh.MaterialEntries[materialIdx];
+            var matDefinition = mesh.MaterialEntries[i];
             if (null != matDefinition)
             {
                 materialName = $"{matDefinition.Name}";
             }
 
             CheckMaterialProperties((CMaterialInstance)material, materialName);
-            materialIdx += 1;
         }
 
-        // TODO: Set this to the real value, but I don't know how
-        var numSubmeshes = 0;
-        
-        CheckAppearances(mesh.Appearances);
-        
-        
-        // 
-        void CheckAppearances(CArray<CHandle<meshMeshAppearance>> meshAppearances)
+        var numSubMeshes = 0;
+        if (mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob blob)
         {
-            foreach (var appearanceDefinition in meshAppearances)
+            numSubMeshes = blob.Header.RenderChunkInfos.Count;
+        }
+
+        foreach (var appearanceDefinition in mesh.Appearances)
+        {
+            if (appearanceDefinition is not { Chunk: { } appearance })
             {
-                if (appearanceDefinition is not { Chunk: { } appearance })
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                if (numSubmeshes >= appearance.ChunkMaterials.Count)
-                {
-                    _loggerService.Warning($"Appearance {appearance.Name} has only {appearance.ChunkMaterials.Count} of {numSubmeshes} submesh " +
-                                           $"appearances assigned. Meshes without appearances will render as invisible.");
-                }
+            if (numSubMeshes > appearance.ChunkMaterials.Count)
+            {
+                _loggerService.Warning($"Appearance {appearance.Name} has only {appearance.ChunkMaterials.Count} of {numSubMeshes} submesh " +
+                                       "appearances assigned. Meshes without appearances will render as invisible.");
+            }
 
-                foreach (var chunkName in appearance.ChunkMaterials)
+            foreach (var chunkName in appearance.ChunkMaterials)
+            {
+                if (chunkName.GetResolvedText() is {} assignedMaterialName && !materialNames.Contains(assignedMaterialName))
                 {
-                    var assignedMaterialName = chunkName.GetString();
-                    if (null != assignedMaterialName && !materialNames.Contains(assignedMaterialName))
-                    {
-                        _loggerService.Warning($"Appearance {appearance.Name}: Chunk material {assignedMaterialName} doesn't exist, " +
-                                               $"submesh will render as invisible.");
-                    }
+                    _loggerService.Warning($"Appearance {appearance.Name}: Chunk material {assignedMaterialName} doesn't exist, " +
+                                           "submesh will render as invisible.");
                 }
             }
         }
@@ -172,35 +158,37 @@ public class CMeshPreProcessor : IPreProcessor
             //}
             // and then check for keys/values in the list, but it's honestly beyond me right now.
 
-            var index = 0;
-            foreach (var entry in material.Values)
+            for (var i = 0; i < material.Values.Count; i++)
             {
+                var entry = material.Values[i];
                 if (entry == null)
                 {
-                    index += 1;
                     continue;
                 }
 
-                // make sure it's not null so we can check if it's invalid. Can probably be done better.
-                // TODO: Properly resolve this - I don't know how. We want to check if the DepotPath value is set and
-                // ends with an invalid file extension. 
-                var value = entry.Value.ToString() ?? "";
+                if (entry.Key.GetResolvedText() is not { } key)
+                {
+                    continue;
+                }
 
-                // Compiler didn't like me putting this directly into the switch statement.
-                var key = entry.Key.ToString();
-                
-                switch(key)
+                if (entry.Value is not IRedRef resource || resource.DepotPath.GetResolvedText() is not { } path)
+                {
+                    continue;
+                }
+
+                switch (key)
                 {
                     case "MultilayerSetup":
-                        if (value != "" && !value.EndsWith(".mlsetup"))
+                        if (!path.EndsWith(".mlsetup"))
                         {
-                            _loggerService.Warning($"{materialName}.values[{index}]: Multilayersetup doesn't end in .mlsetup. This might cause crashes.");
+                            _loggerService.Warning($"{materialName}.values[{i}]: Multilayersetup doesn't end in .mlsetup. This might cause crashes.");
                         }
                         break;
+
                     case "MultilayerMask":
-                        if (value != "" && !value.EndsWith(".mlkasm"))
+                        if (!path.EndsWith(".mlkasm"))
                         {
-                            _loggerService.Warning($"{materialName}.values[{index}]: MultilayerMask doesn't end in .mlmask. This might cause crashes.");
+                            _loggerService.Warning($"{materialName}.values[{i}]: MultilayerMask doesn't end in .mlmask. This might cause crashes.");
                         }
                         break;
                     case "BaseColor":
@@ -208,13 +196,12 @@ public class CMeshPreProcessor : IPreProcessor
                     case "Roughness":
                     case "Normal":
                     case "GlobalNormal":
-                        if (value != "" && !value.EndsWith(".xbm"))
+                        if (!path.EndsWith(".xbm"))
                         {
-                            _loggerService.Warning($"{materialName}.values[{index}]: {key} doesn't end in .xbm. This might cause crashes.");
+                            _loggerService.Warning($"{materialName}.values[{i}]: {key} doesn't end in .xbm. This might cause crashes.");
                         }
                         break;
                 }
-                index += 1;
             }
         }
     }
