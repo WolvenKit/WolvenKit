@@ -257,6 +257,8 @@ public partial class TextureExportViewModel : ExportViewModel
             return;
         }
 
+        _progressService.IsIndeterminate = true;
+
         Items.Clear();
         foreach (var filePath in files)
         {
@@ -268,6 +270,7 @@ public partial class TextureExportViewModel : ExportViewModel
         }
 
         ProcessAllCommand.NotifyCanExecuteChanged();
+        _progressService.IsIndeterminate = false;
     }
 
     private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);

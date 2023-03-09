@@ -308,6 +308,8 @@ public partial class TextureImportViewModel : ImportViewModel
             return;
         }
 
+        _progressService.IsIndeterminate = true;
+
         Items.Clear();
         foreach (var filePath in files)
         {
@@ -319,6 +321,7 @@ public partial class TextureImportViewModel : ImportViewModel
         }
 
         ProcessAllCommand.NotifyCanExecuteChanged();
+        _progressService.IsIndeterminate = false;
     }
 
     

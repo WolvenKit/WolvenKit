@@ -616,11 +616,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (project == null)
         {
-            CloseDialogCommand.Execute(null);
+            CloseDialog();
             return;
         }
-        CloseModalCommand.Execute(null);
-        await Task.Run(() => NewProjectTask(project));
+        CloseModal();
+        await NewProjectTask(project);
+        UpdateTitle();
     }
 
     private async Task NewProjectTask(ProjectWizardViewModel project)
@@ -647,22 +648,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             // If the assets can't be found, stop here and notify the user in the log
             if (!File.Exists(_settingsManager.CP77ExecutablePath))
             {
-                UpdateTitle();
                 _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
             }
             else
             {
-                await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
-                {
-                    UpdateTitle();
-                    _notificationService.Success("Project " + project.ProjectName + " loaded!");
-                }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                await _gameControllerFactory.GetController().HandleStartup();
+                _notificationService.Success("Project " + project.ProjectName + " loaded!");
             }
         }
         catch (Exception ex)
         {
-            _loggerService.Error(ex.Message);
             _loggerService.Error("Failed to create a new project!");
+            _loggerService.Error(ex);
+            
         }
 
     }
