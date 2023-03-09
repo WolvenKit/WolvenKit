@@ -125,6 +125,7 @@ namespace WolvenKit.Views.Shell
 
         private void LoadLayout()
         {
+            var logger = Locator.Current.GetService<ILoggerService>();
             try
             {
                 if (_useAppdataStorage)
@@ -138,7 +139,9 @@ namespace WolvenKit.Views.Shell
 
                     var reader = XmlReader.Create(xmlPath);
 
+                    logger.Info($"Trying to load project layout from {xmlPath}...");
                     var isSuccessful = PART_DockingManager.LoadDockState(reader);
+                    logger.Debug($"...Project layout load returned {isSuccessful}");
 
                     reader.Close();
 
@@ -147,35 +150,38 @@ namespace WolvenKit.Views.Shell
                         LoadLayoutDefault();
                         return;
                     }
-
-                    Locator.Current.GetService<ILoggerService>().Info($"Loaded layout from {xmlPath}: {isSuccessful}");
                 }
                 else
                 {
+                    logger.Info($"Trying to load project layout from default path ...");
                     var isSuccessful = PART_DockingManager.LoadDockState();
-                    Trace.WriteLine(isSuccessful);
+                    logger.Debug($"...Project layout load returned {isSuccessful}");
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Trace.WriteLine(ex.Message);
+                logger.Error($"Project layout load error: {e.Message}");
                 LoadLayoutDefault();
             }
         }
 
         public void LoadLayoutDefault()
         {
+            var logger = Locator.Current.GetService<ILoggerService>();
+
             try
             {
                 var reader = XmlReader.Create("DockStatesDefault.xml");
+
+                logger.Info($"Trying to load project layout from {Path.GetFullPath("DockStatesDefault.xml")}...");
                 var isSuccessful = PART_DockingManager.LoadDockState(reader);
-                Trace.WriteLine(isSuccessful);
+                logger.Debug($"...Project layout load returned {isSuccessful}");
+
                 reader.Close();
-                Locator.Current.GetService<ILoggerService>().Info($"Loaded default layout");
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Trace.WriteLine(ex.Message);
+                logger.Error($"Project layout load error: {e.Message}");
             }
         }
 
@@ -472,18 +478,11 @@ namespace WolvenKit.Views.Shell
 
             try
             {
-                // need to also handle if files have been modified (probably elsewhere, though)
-                if (!_hadLoadedProject && ItemsSource is ObservableCollection<IDockElement> oc)
-                {
-                    _hadLoadedProject = true;
-                }
                 var layoutPath = Path.Combine(_viewModel.ActiveProject.ProjectDirectory, "layout.xml");
                 if (File.Exists(layoutPath))
                 {
                     logger.Info($"Trying to load project layout from {layoutPath}...");
-
                     var loadedProjectLayout = PART_DockingManager.LoadDockState(layoutPath);
-
                     logger.Debug($"...Project layout load returned {loadedProjectLayout}");
 
                     // If we get here I guess
