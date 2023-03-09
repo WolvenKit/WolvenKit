@@ -474,22 +474,23 @@ namespace WolvenKit.Views.Shell
                 if (!_hadLoadedProject && ItemsSource is ObservableCollection<IDockElement> oc)
                 {
                     _hadLoadedProject = true;
-                    //oc.Clear();
                 }
                 var layoutPath = Path.Combine(_viewModel.ActiveProject.ProjectDirectory, "layout.xml");
                 if (File.Exists(layoutPath))
                 {
-                    var reader = XmlReader.Create(layoutPath);
-                    var Debugging_A = PART_DockingManager.LoadDockState(reader);
-                    Trace.WriteLine(Debugging_A);
-                    reader.Close();
+                    Locator.Current.GetService<ILoggerService>().Info($"Trying to load project layout from {layoutPath}...");
+
+                    var loadedProjectLayout = PART_DockingManager.LoadDockState(layoutPath);
+                    
+                    Locator.Current.GetService<ILoggerService>().Info($"...Project layout load returned {loadedProjectLayout}, who knows what that means? Did it work?");
+
+                    // If we get here I guess
                     _usingProjectLayout = true;
-                    //PART_DockingManager.SetCurrentValue(DockingManager.PersistStateProperty, false);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                //viewModel.Log(e.Message);
+                Locator.Current.GetService<ILoggerService>().Error($"Project layout load error: {e.Message}");
                 throw;
             }
         }
