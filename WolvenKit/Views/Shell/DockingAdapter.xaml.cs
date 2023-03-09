@@ -468,6 +468,8 @@ namespace WolvenKit.Views.Shell
                 return;
             }
 
+            var logger = Locator.Current.GetService<ILoggerService>();
+
             try
             {
                 // need to also handle if files have been modified (probably elsewhere, though)
@@ -478,11 +480,11 @@ namespace WolvenKit.Views.Shell
                 var layoutPath = Path.Combine(_viewModel.ActiveProject.ProjectDirectory, "layout.xml");
                 if (File.Exists(layoutPath))
                 {
-                    Locator.Current.GetService<ILoggerService>().Info($"Trying to load project layout from {layoutPath}...");
+                    logger.Info($"Trying to load project layout from {layoutPath}...");
 
                     var loadedProjectLayout = PART_DockingManager.LoadDockState(layoutPath);
-                    
-                    Locator.Current.GetService<ILoggerService>().Info($"...Project layout load returned {loadedProjectLayout}, who knows what that means? Did it work?");
+
+                    logger.Debug($"...Project layout load returned {loadedProjectLayout}");
 
                     // If we get here I guess
                     _usingProjectLayout = true;
@@ -490,7 +492,7 @@ namespace WolvenKit.Views.Shell
             }
             catch (Exception e)
             {
-                Locator.Current.GetService<ILoggerService>().Error($"Project layout load error: {e.Message}");
+                logger.Error($"Project layout load error: {e.Message}");
                 throw;
             }
         }
