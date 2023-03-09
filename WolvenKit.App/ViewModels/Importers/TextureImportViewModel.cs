@@ -51,7 +51,6 @@ public partial class TextureImportViewModel : ImportViewModel
     private IHashService _hashService;
     private IModTools _modTools;
 
-
     public TextureImportViewModel(
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
@@ -79,17 +78,20 @@ public partial class TextureImportViewModel : ImportViewModel
         _progressService = progressService;
         _parserService = parserService;
 
-        LoadFiles();
-
         PropertyChanged += TextureExportViewModel_PropertyChanged;
     }
-    private void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+
+    private async void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IsActive))
         {
             if (IsActive)
             {
-                LoadFiles();
+                if (_refreshtask is null || (_refreshtask is not null && _refreshtask.IsCompleted))
+                {
+                    _refreshtask = LoadFilesAsync();
+                    await _refreshtask;
+                }
             }
         }
     }
@@ -291,16 +293,14 @@ public partial class TextureImportViewModel : ImportViewModel
         return false;
     }
 
-    protected override void LoadFiles()
+    protected override async Task LoadFilesAsync()
     {
         if (_projectManager.ActiveProject is null)
         {
             return;
         }
 
-        var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
-            .Where(CanImport)
-            ;
+        var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories).Where(CanImport);
 
         // do not refresh if the files are the same
         if(Enumerable.SequenceEqual( Items.Select(x => x.BaseFile), files))
@@ -309,10 +309,19 @@ public partial class TextureImportViewModel : ImportViewModel
         }
 
         Items.Clear();
-        Items = new(files.Select(x => new ImportableItemViewModel(x, _archiveManager, _projectManager, _parserService)));
+        foreach (var filePath in files)
+        {
+            if (!Items.Any(x => x.BaseFile.Equals(filePath)))
+            {
+                var vm = await Task.Run(() => new ImportableItemViewModel(filePath, _archiveManager, _projectManager, _parserService));
+                Items.Add(vm);
+            }
+        }
 
         ProcessAllCommand.NotifyCanExecuteChanged();
     }
+
+    
 
     private static bool CanImport(string x) => Enum.TryParse<ERawFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
 

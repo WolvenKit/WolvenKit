@@ -319,7 +319,7 @@ namespace WolvenKit.Views.Shell
             // set active property
             if (e.OldValue is ContentControl oldValue)
             {
-                if (oldValue.Content is IDockElement dockElement)
+                if (oldValue.Content is IDockElement dockElement && dockElement.IsActive)
                 {
                     dockElement.IsActive = false;
                 }
@@ -327,7 +327,7 @@ namespace WolvenKit.Views.Shell
 
             if (e.NewValue is ContentControl content)
             {
-                if (content.Content is IDockElement dockElement)
+                if (content.Content is IDockElement dockElement && !dockElement.IsActive)
                 {
                     dockElement.IsActive = true;
                 }
