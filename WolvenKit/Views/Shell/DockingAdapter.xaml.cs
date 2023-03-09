@@ -138,9 +138,9 @@ namespace WolvenKit.Views.Shell
 
                     var reader = XmlReader.Create(xmlPath);
 
-                    logger.Info($"Trying to load project layout from {xmlPath}...");
+                    logger.Info($"Trying to load layout from {xmlPath}...");
                     var isSuccessful = PART_DockingManager.LoadDockState(reader);
-                    logger.Debug($"...Project layout load returned {isSuccessful}");
+                    logger.Debug($"... Layout load returned {isSuccessful}");
 
                     reader.Close();
 
@@ -152,14 +152,14 @@ namespace WolvenKit.Views.Shell
                 }
                 else
                 {
-                    logger.Info($"Trying to load project layout from default path ...");
+                    logger.Info($"Trying to load layout from default path ...");
                     var isSuccessful = PART_DockingManager.LoadDockState();
-                    logger.Debug($"...Project layout load returned {isSuccessful}");
+                    logger.Debug($"...Layout load returned {isSuccessful}");
                 }
             }
             catch (Exception e)
             {
-                logger.Error($"Project layout load error: {e.Message}");
+                logger.Error($"Layout load error: {e.Message}");
                 LoadLayoutDefault();
             }
         }
@@ -172,15 +172,15 @@ namespace WolvenKit.Views.Shell
             {
                 var reader = XmlReader.Create("DockStatesDefault.xml");
 
-                logger.Info($"Trying to load project layout from {Path.GetFullPath("DockStatesDefault.xml")}...");
+                logger.Info($"Trying to load default layout from {Path.GetFullPath("DockStatesDefault.xml")}...");
                 var isSuccessful = PART_DockingManager.LoadDockState(reader);
-                logger.Debug($"...Project layout load returned {isSuccessful}");
+                logger.Debug($"...Default layout load returned {isSuccessful}");
 
                 reader.Close();
             }
             catch (Exception e)
             {
-                logger.Error($"Project layout load error: {e.Message}");
+                logger.Error($"Default layout load error: {e.Message}");
             }
         }
 
