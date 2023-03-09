@@ -14,16 +14,10 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public class ImportableItemViewModel : ImportExportItemViewModel
 {
-    private readonly IArchiveManager _archiveManager;
-    private readonly IProjectManager _projectManager;
-    private readonly Red4ParserService _parserService;
-
     public ImportableItemViewModel(string fileName, IArchiveManager archiveManager, IProjectManager projectManager, Red4ParserService parserService) 
         : base(fileName, DecideImportOptions(fileName, archiveManager, projectManager, parserService))
     {
-        _archiveManager = archiveManager;
-        _projectManager = projectManager;
-        _parserService = parserService;
+
         Properties.PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
         {
             OnPropertyChanged(nameof(Properties));

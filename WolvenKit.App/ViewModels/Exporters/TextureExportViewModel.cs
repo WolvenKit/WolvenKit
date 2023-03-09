@@ -81,25 +81,23 @@ public partial class TextureExportViewModel : ExportViewModel
         _parserService = red4ParserService;
         _progressService = progressService;
 
-        LoadFiles();
-
         PropertyChanged += TextureExportViewModel_PropertyChanged;
     }
 
     
 
-    private void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private async void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        switch (e.PropertyName)
+        if (e.PropertyName == nameof(IsActive))
         {
-            case nameof(IsActive):
-                if (IsActive)
+            if (IsActive)
+            {
+                if (_refreshtask is null || (_refreshtask is not null && _refreshtask.IsCompleted))
                 {
-                    LoadFiles();
+                    _refreshtask = LoadFilesAsync();
+                    await _refreshtask;
                 }
-                break;
-            default:
-                break;
+            }
         }
     }
 
@@ -244,19 +242,30 @@ public partial class TextureExportViewModel : ExportViewModel
         return false;
     }
 
-    protected override void LoadFiles()
+    protected override async Task LoadFilesAsync()
     {
         if (_projectManager.ActiveProject is null)
         {
             return;
         }
 
-        var files = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories)
-            .Where(CanExport)
-            .Select(x => new ExportableItemViewModel(x));
+        var files = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories).Where(CanExport);
+
+        // do not refresh if the files are the same
+        if (Enumerable.SequenceEqual(Items.Select(x => x.BaseFile), files))
+        {
+            return;
+        }
 
         Items.Clear();
-        Items = new(files);
+        foreach (var filePath in files)
+        {
+            if (!Items.Any(x => x.BaseFile.Equals(filePath)))
+            {
+                var vm = await Task.Run(() => new ExportableItemViewModel(filePath));
+                Items.Add(vm);
+            }
+        }
 
         ProcessAllCommand.NotifyCanExecuteChanged();
     }
@@ -400,4 +409,5 @@ public partial class TextureExportViewModel : ExportViewModel
             }
         }
     }
+
 }
