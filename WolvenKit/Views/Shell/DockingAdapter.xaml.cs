@@ -42,7 +42,6 @@ namespace WolvenKit.Views.Shell
         private bool _stateChanged;
 
         private bool _usingProjectLayout = false;
-        private bool _hadLoadedProject = false;
         private readonly bool _debuggingLayouts = false;
         private readonly bool _useAppdataStorage = true;
 
