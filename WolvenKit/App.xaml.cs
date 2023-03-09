@@ -83,17 +83,17 @@ namespace WolvenKit
             loggerService.Info($"Version: {settings.GetVersionNumber()}");
             await Initializations.InitializeWebview2(loggerService);
 
-            loggerService.Info("Initializing red database");
+            loggerService.Debug("Initializing red database");
             Initializations.InitializeThemeHelper();
 
             Initializations.InitializeSyntaxHighlighting();
 
             // main app viewmodel
-            loggerService.Info("Initializing Shell");
+            loggerService.Debug("Initializing Shell");
             Initializations.InitializeShell(settings);
 
 
-            loggerService.Info("Initializing Discord RPC API");
+            loggerService.Debug("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
             RedImage.LoggerService = loggerService;
