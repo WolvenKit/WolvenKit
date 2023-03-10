@@ -47,6 +47,7 @@
                 x:Key="TreeGridContextMenu"
                 FontSize="11"
                 Style="{DynamicResource WPFContextMenuStyle}">
+                
                 <MenuItem
                     Margin="0"
                     Header="Actions"
@@ -94,7 +95,6 @@
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
-
                 <MenuItem
                     x:Name="BKImport"
                     Command="{Binding Bk2ImportCommand}"
@@ -154,6 +154,7 @@
                             Kind="ContentPaste" />
                     </MenuItem.Icon>
                 </MenuItem>
+                
                 <Separator />
 
                 <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />

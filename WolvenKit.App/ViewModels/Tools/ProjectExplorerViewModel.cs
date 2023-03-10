@@ -61,8 +61,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #endregion fields
 
-    #region constructors
-
     public ProjectExplorerViewModel(
         AppViewModel appViewModel,
         IProjectManager projectManager,
@@ -95,11 +93,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .BindToObservableList(out _observableList)
             .Subscribe(OnNext);
 
-        _projectManager.ActiveProjectChanged += _projectManager_ActiveProjectChanged;
-
+        _projectManager.ActiveProjectChanged += ProjectManager_ActiveProjectChanged;
     }
 
-    private void _projectManager_ActiveProjectChanged(object? sender, ActiveProjectChangedEventArgs e)
+    private void ProjectManager_ActiveProjectChanged(object? sender, ActiveProjectChangedEventArgs e)
     {
         if (e.Project is not null)
         {
@@ -117,7 +114,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _mainViewModel.SelectFileCommand.SafeExecute(value);
                 
             // toggle context menu buttons
-            if (SelectedItems is not null)
+            if (SelectedItems is not null && SelectedItems.Any())
             {
                 var selected = SelectedItems.OfType<FileModel>().ToList();
                 // if all are in raw folder, then enable convertFrom
@@ -128,6 +125,26 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 }
                 // if all are in archive folder, then enable convertTo
                 else if (selected.All(x => IsInArchiveFolder(x)))
+                {
+                    ConvertToIsEnabled = true;
+                    ConvertFromIsEnabled = false;
+                }
+                // else disable both
+                else
+                {
+                    ConvertToIsEnabled = false;
+                    ConvertFromIsEnabled = false;
+                }
+            }
+            else if (value is not null)
+            {
+                if (IsInRawFolder(value))
+                {
+                    ConvertToIsEnabled = false;
+                    ConvertFromIsEnabled = true;
+                }
+                // if all are in archive folder, then enable convertTo
+                else if (IsInArchiveFolder(value))
                 {
                     ConvertToIsEnabled = true;
                     ConvertFromIsEnabled = false;
@@ -151,9 +168,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             AfterDataSourceUpdate?.Invoke(this, EventArgs.Empty);
         }), DispatcherPriority.ContextIdle);
     }
-
-
-    #endregion constructors
 
     #region properties
 
