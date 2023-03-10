@@ -5,12 +5,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
     d:DesignHeight="100"
     d:DesignWidth="400"
     mc:Ignorable="d">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVector4Editor}}}">
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
             <ColumnDefinition />
@@ -21,42 +22,43 @@
             <ColumnDefinition Width="20" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        
         <TextBlock
             Grid.Column="0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="X" />
-        <TextBox
+        <syncfusion:DoubleTextBox 
             Grid.Column="1"
-            PreviewTextInput="NumberValidationTextBox"
-            Text="{Binding XText}" />
+            NumberDecimalDigits="4"
+            Value="{Binding XValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
             Grid.Column="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="Y" />
-        <TextBox
+        <syncfusion:DoubleTextBox 
             Grid.Column="3"
-            PreviewTextInput="NumberValidationTextBox"
-            Text="{Binding YText}" />
+            NumberDecimalDigits="4"
+            Value="{Binding YValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
             Grid.Column="4"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="Z" />
-        <TextBox
+        <syncfusion:DoubleTextBox 
             Grid.Column="5"
-            PreviewTextInput="NumberValidationTextBox"
-            Text="{Binding ZText}" />
+            NumberDecimalDigits="4"
+            Value="{Binding ZValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
             Grid.Column="6"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="W" />
-        <TextBox
+        <syncfusion:DoubleTextBox 
             Grid.Column="7"
-            PreviewTextInput="NumberValidationTextBox"
-            Text="{Binding WText}" />
+            NumberDecimalDigits="4"
+            Value="{Binding WValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
     </Grid>
 </UserControl>

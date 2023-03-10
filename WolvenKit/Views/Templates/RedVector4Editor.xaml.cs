@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -20,6 +19,7 @@ namespace WolvenKit.Views.Editors
             get => (CFloat)GetValue(XProperty);
             set => SetValue(XProperty, value);
         }
+        /// <summary>Identifies the <see cref="X"/> dependency property.</summary>
         public static readonly DependencyProperty XProperty = DependencyProperty.Register(
             nameof(X), typeof(CFloat), typeof(RedVector4Editor), new PropertyMetadata(default(CFloat)));
 
@@ -28,6 +28,7 @@ namespace WolvenKit.Views.Editors
             get => (CFloat)GetValue(YProperty);
             set => SetValue(YProperty, value);
         }
+        /// <summary>Identifies the <see cref="Y"/> dependency property.</summary>
         public static readonly DependencyProperty YProperty = DependencyProperty.Register(
             nameof(Y), typeof(CFloat), typeof(RedVector4Editor), new PropertyMetadata(default(CFloat)));
 
@@ -36,6 +37,7 @@ namespace WolvenKit.Views.Editors
             get => (CFloat)GetValue(ZProperty);
             set => SetValue(ZProperty, value);
         }
+        /// <summary>Identifies the <see cref="Z"/> dependency property.</summary>
         public static readonly DependencyProperty ZProperty = DependencyProperty.Register(
             nameof(Z), typeof(CFloat), typeof(RedVector4Editor), new PropertyMetadata(default(CFloat)));
 
@@ -44,49 +46,33 @@ namespace WolvenKit.Views.Editors
             get => (CFloat)GetValue(WProperty);
             set => SetValue(WProperty, value);
         }
+        /// <summary>Identifies the <see cref="W"/> dependency property.</summary>
         public static readonly DependencyProperty WProperty = DependencyProperty.Register(
             nameof(W), typeof(CFloat), typeof(RedVector4Editor), new PropertyMetadata(default(CFloat)));
 
-
-        public string XText
+        // Bound to the editor
+        public double XValue
         {
-            get => GetValueFromXValue();
-            set => SetXValue(value);
+            get => (double)X;
+            set => SetValue(XProperty, (CFloat)value);
         }
 
-        public string YText
+        public double YValue
         {
-            get => GetValueFromYValue();
-            set => SetYValue(value);
+            get => (double)Y;
+            set => SetValue(YProperty, (CFloat)value);
         }
 
-        public string ZText
+        public double ZValue
         {
-            get => GetValueFromZValue();
-            set => SetZValue(value);
+            get => (double)Z;
+            set => SetValue(ZProperty, (CFloat)value);
         }
 
-        public string WText
+        public double WValue
         {
-            get => GetValueFromWValue();
-            set => SetWValue(value);
+            get => (double)W;
+            set => SetValue(WProperty, (CFloat)value);
         }
-
-        private void SetXValue(string value) => SetCurrentValue(XProperty, (CFloat)float.Parse(value));
-        private void SetYValue(string value) => SetCurrentValue(YProperty, (CFloat)float.Parse(value));
-        private void SetZValue(string value) => SetCurrentValue(ZProperty, (CFloat)float.Parse(value));
-        private void SetWValue(string value) => SetCurrentValue(WProperty, (CFloat)float.Parse(value));
-
-        private string GetValueFromXValue() => ((float)X).ToString("G9");
-        private string GetValueFromYValue() => ((float)Y).ToString("G9");
-        private string GetValueFromZValue() => ((float)Z).ToString("G9");
-        private string GetValueFromWValue() => ((float)W).ToString("G9");
-
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            var tb = (TextBox)e.Source;
-            e.Handled = !float.TryParse(tb.Text.Insert(tb.CaretIndex, e.Text), out _);
-        }
-
     }
 }

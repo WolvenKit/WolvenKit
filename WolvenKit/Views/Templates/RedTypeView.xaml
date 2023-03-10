@@ -104,7 +104,7 @@
                 </Button>
             </DataTemplate>
             <DataTemplate x:Key="DeleteButton">
-                <StackPanel Orientation="Horizontal" Visibility="{Binding IsDeletable, Converter={StaticResource Boolean2VisibilityConverter}}">
+                <StackPanel Orientation="Horizontal" Visibility="{Binding IsDeletable, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <ToggleButton
                         x:Name="DeleteButton"
                         Margin="0,0,0,0"
@@ -181,7 +181,7 @@
                 </StackPanel>
             </DataTemplate>
             <DataTemplate x:Key="DeleteAllButton">
-                <StackPanel Orientation="Horizontal" Visibility="{Binding IsEnabled, ElementName=RealDeleteButton, Converter={StaticResource Boolean2VisibilityConverter}}">
+                <StackPanel Orientation="Horizontal" Visibility="{Binding IsEnabled, ElementName=RealDeleteButton, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <ToggleButton
                         x:Name="DeleteButton"
                         Margin="0,0,0,0"

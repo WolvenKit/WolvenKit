@@ -65,7 +65,7 @@
                     x:Name="ConvertToJsonMenuItem"
                     Command="{Binding ConvertToCommand}"
                     Header="Convert to JSON"
-                    Visibility="{Binding Path=ConvertToIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    Visibility="{Binding Path=ConvertToIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>
                             <iconPacks:PackIconCodicons
@@ -82,7 +82,7 @@
                     x:Name="ConvertFromJsonMenuItem"
                     Command="{Binding ConvertFromCommand}"
                     Header="Convert from JSON"
-                    Visibility="{Binding Path=ConvertFromIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    Visibility="{Binding Path=ConvertFromIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>
                             <iconPacks:PackIconCodicons
@@ -99,12 +99,12 @@
                     x:Name="BKImport"
                     Command="{Binding Bk2ImportCommand}"
                     Header="Import Avi to BK2"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <MenuItem
                     x:Name="BKExport"
                     Command="{Binding Bk2ExportCommand}"
                     Header="Export BK2 to Avi"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <Separator />
 
@@ -161,7 +161,7 @@
                 <MenuItem
                     Command="{Binding OpenInAssetBrowserCommand}"
                     Header="Open in Asset Browser"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Width="13"
@@ -174,7 +174,7 @@
                 <MenuItem
                     Command="{Binding ReimportFileCommand}"
                     Header="Replace with original"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
                             Width="13"
@@ -742,7 +742,7 @@
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.VirtualizationMode="Recycling"
-            Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource Boolean2VisibilityConverter}}">
+            Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
 
             <syncfusion:SfTreeGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">

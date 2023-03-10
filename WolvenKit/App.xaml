@@ -156,7 +156,7 @@
                 BasedOn="{StaticResource {x:Type Button}}"
                 TargetType="Button">
                 <Setter Property="MinWidth" Value="88" />
-                <Setter Property="Visibility" Value="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <Setter Property="Visibility" Value="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <Setter Property="Margin" Value="5,0" />
                 <Setter Property="Background" Value="Transparent" />
             </Style>

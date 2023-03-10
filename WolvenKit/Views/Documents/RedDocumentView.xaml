@@ -102,11 +102,11 @@
                                     Foreground="Gray"
                                     IsEnabled="False"
                                     Text="{Binding Path=PlacementTarget.Tag.FilePath, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 <MenuItem
                                     Command="{Binding PlacementTarget.Tag.RenameEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                     Header="Rename Embedded File"
-                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconCodicons
                                             Width="13"
@@ -120,7 +120,7 @@
                                 <MenuItem
                                     Command="{Binding PlacementTarget.Tag.DeleteEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                     Header="Delete Embedded File"
-                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconCodicons
                                             Width="13"

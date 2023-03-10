@@ -454,7 +454,7 @@
             x:Name="NoProjectBorder"
             Grid.RowSpan="3"
             Background="{StaticResource ContentBackgroundAlt2}"
-            Visibility="{Binding Path=ShouldShowLoadButton, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+            Visibility="{Binding Path=ShouldShowLoadButton, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
                 <StackPanel VerticalAlignment="Center">
                     <Button HorizontalAlignment="Center" Command="{Binding LoadAssetBrowserCommand}">
@@ -471,7 +471,7 @@
             x:Name="NoExecutableBorder"
             Grid.RowSpan="3"
             Background="{StaticResource ContentBackgroundAlt2}"
-            Visibility="{Binding Path=ShouldShowExecutablePathWarning, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+            Visibility="{Binding Path=ShouldShowExecutablePathWarning, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock
