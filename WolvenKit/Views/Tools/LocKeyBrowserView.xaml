@@ -51,11 +51,13 @@
 
             <syncfusion:SfDataGrid.Columns>
 
-                <syncfusion:GridTextColumn
-                    FilterRowCondition="Contains"
+                <syncfusion:GridNumericColumn
+                    FilterRowCondition="Equals"
+                    FilterRowEditorType="Numeric"
                     HeaderText="PrimaryKey"
                     ImmediateUpdateColumnFilter="True"
-                    MappingName="PrimaryKey" />
+                    MappingName="PrimaryKey"
+                    NumberDecimalDigits="0" />
                 <syncfusion:GridTextColumn
                     FilterRowCondition="Contains"
                     HeaderText="SecondaryKey"
