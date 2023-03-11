@@ -186,7 +186,7 @@ public class CMeshPreProcessor : IPreProcessor
                         break;
 
                     case "MultilayerMask":
-                        if (!path.EndsWith(".mlkasm"))
+                        if (!path.EndsWith(".mlmask"))
                         {
                             _loggerService.Warning($"{materialName}.values[{i}]: MultilayerMask doesn't end in .mlmask. This might cause crashes.");
                         }
