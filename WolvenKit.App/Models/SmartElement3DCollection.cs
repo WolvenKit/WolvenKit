@@ -29,4 +29,15 @@ public class SmartElement3DCollection : ObservableElement3DCollection
 
         AddRange(range);
     }
+
+    public void RemoveSelf()
+    {
+        foreach (var element in this)
+        {
+            if (element is GroupModel3D groupModel)
+            {
+                groupModel.SceneNode.RemoveSelf();
+            }
+        }
+    }
 }
