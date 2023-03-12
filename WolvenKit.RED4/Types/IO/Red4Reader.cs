@@ -360,7 +360,7 @@ public partial class Red4Reader : IErrorHandler, IDisposable
 
         for (var i = 0; i < elementCount; i++)
         {
-            result[i] = Read(redTypeInfos.Skip(1).ToList());
+            result.Add(Read(redTypeInfos.Skip(1).ToList()));
         }
 
         return result;
@@ -374,7 +374,19 @@ public partial class Red4Reader : IErrorHandler, IDisposable
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
-        if (Activator.CreateInstance(type, redTypeInfos[0].ArrayCount) is not IRedArrayFixedSize result)
+        
+        // TODO [CArrayFixedSize]: Find a better way to do this (just for `worldStaticCollisionShapeCategories_CollisionNode`)
+        object[] args;
+        if (redTypeInfos[1].BaseRedType == BaseRedType.NativeArray)
+        {
+            args = new object[] { redTypeInfos[0].ArrayCount, redTypeInfos[1].ArrayCount };
+        }
+        else
+        {
+            args = new object[] { redTypeInfos[0].ArrayCount };
+        }
+
+        if (Activator.CreateInstance(type, args) is not IRedArrayFixedSize result)
         {
             throw new Exception();
         }

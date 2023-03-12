@@ -42,7 +42,8 @@ public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>>, IRedCloneable w
     public RedBaseClass GetValue() => Chunk;
     public void SetValue(RedBaseClass cls) => Chunk = (T)cls;
 
-    public CHandle(T chunk) => Chunk = chunk;
+    public CHandle() {}
+    public CHandle(T? chunk) => Chunk = chunk;
 
 
     public static implicit operator CHandle<T>(T value) => new(value);

@@ -11,10 +11,8 @@ public class CWeakHandle<T> : IRedWeakHandle<T>, IEquatable<CWeakHandle<T>> wher
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public Type InnerType => typeof(T);
 
-    public CWeakHandle(T chunk)
-    {
-        Chunk = chunk;
-    }
+    public CWeakHandle() {}
+    public CWeakHandle(T? chunk) => Chunk = chunk;
 
     public RedBaseClass GetValue() => Chunk;
     public void SetValue(RedBaseClass cls) => Chunk = (T)cls;
