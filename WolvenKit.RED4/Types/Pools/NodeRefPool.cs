@@ -1,13 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using System.Text;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.RED4.Types;
 
 public static class NodeRefPool
 {
-    public static ILoggerService? Logger;
+    //public static ILoggerService? Logger;
 
     private static readonly ConcurrentDictionary<string, ulong> s_pool = new();
     private static readonly ConcurrentDictionary<ulong, string> s_poolReverse = new();
