@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Conversion;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
@@ -181,7 +182,7 @@ namespace WolvenKit.Modkit.RED4
                         {
                             NotResolvableException.ThrowIfNotResolvable(mc.Name);
 
-                            var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
+                            var transform = (entHardTransformBinding)mc.ParentTransform.GetValue().NotNull();
 
                             NotResolvableException.ThrowIfNotResolvable(transform.BindName);
                             NotResolvableException.ThrowIfNotResolvable(transform.SlotName);
@@ -245,7 +246,7 @@ namespace WolvenKit.Modkit.RED4
 
                             Node? node = null;
 
-                            var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
+                            var transform = (entHardTransformBinding)mc.ParentTransform.GetValue().NotNull();
 
                             NotResolvableException.ThrowIfNotResolvable(transform.BindName);
 

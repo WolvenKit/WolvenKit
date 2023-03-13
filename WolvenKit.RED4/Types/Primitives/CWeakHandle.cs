@@ -14,8 +14,12 @@ public class CWeakHandle<T> : IRedWeakHandle<T>, IEquatable<CWeakHandle<T>> wher
     public CWeakHandle() {}
     public CWeakHandle(T? chunk) => Chunk = chunk;
 
-    public RedBaseClass GetValue() => Chunk;
-    public void SetValue(RedBaseClass cls) => Chunk = (T)cls;
+    public RedBaseClass? GetValue() => Chunk;
+    public void SetValue(RedBaseClass? cls) => Chunk = (T?)cls;
+
+
+    public static implicit operator CWeakHandle<T>(T value) => new(value);
+    public static implicit operator T?(CWeakHandle<T> value) => value.Chunk;
 
 
     public bool Equals(CWeakHandle<T>? other)

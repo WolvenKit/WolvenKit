@@ -39,8 +39,8 @@ public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>>, IRedCloneable w
 
 
 
-    public RedBaseClass GetValue() => Chunk;
-    public void SetValue(RedBaseClass cls) => Chunk = (T)cls;
+    public RedBaseClass? GetValue() => Chunk;
+    public void SetValue(RedBaseClass? cls) => Chunk = (T?)cls;
 
     public CHandle() {}
     public CHandle(T? chunk) => Chunk = chunk;

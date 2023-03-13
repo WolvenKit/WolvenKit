@@ -350,7 +350,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var data = Data;
             if (Data is IRedBaseHandle handle)
             {
-                data = handle.GetValue();
+                data = handle.GetValue().NotNull();
             }
             else if (Data is CVariant v)
             {
@@ -450,7 +450,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (Data is IRedBaseHandle handle)
             {
-                return handle.GetValue().GetType() ?? handle.InnerType;
+                return handle.GetValue()?.GetType() ?? handle.InnerType;
             }
             if (Data is CVariant v)
             {
@@ -1355,7 +1355,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             if (Data is IRedBaseHandle destinationHandle)
             {
-                return destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().GetType());
+                return destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().NotNull().GetType());
             }
         }
         return false;
@@ -1372,7 +1372,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (Data is IRedBaseHandle destinationHandle)
             {
-                if (destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().GetType()))
+                if (destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().NotNull().GetType()))
                 {
                     destinationHandle.SetValue(sourceHandle.GetValue());
                     RecalculateProperties(destinationHandle);

@@ -7,8 +7,8 @@ public interface IRedBaseHandle : IRedType
     /// </summary>
     public Type InnerType { get; }
 
-    public RedBaseClass GetValue();
-    public void SetValue(RedBaseClass cls);
+    public RedBaseClass? GetValue();
+    public void SetValue(RedBaseClass? cls);
 }
 
 public interface IRedBaseHandle<T> : IRedBaseHandle where T : RedBaseClass

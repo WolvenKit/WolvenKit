@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion
@@ -38,12 +39,12 @@ namespace WolvenKit.Common.Conversion
 
             if (widget is inkCompoundWidget compoundWidget)
             {
-                var imc = (inkMultiChildren)compoundWidget.Children.GetValue();
+                var imc = (inkMultiChildren)compoundWidget.Children.GetValue().NotNull();
                 foreach (var childHandle in imc.Children)
                 {
                     ArgumentNullException.ThrowIfNull(childHandle);
 
-                    var child = (inkWidget)childHandle.GetValue();
+                    var child = (inkWidget)childHandle.GetValue().NotNull();
                     WriteWidget(writer, child);
                 }
             }
@@ -82,7 +83,7 @@ namespace WolvenKit.Common.Conversion
                     switch (propertyValue)
                     {
                         case IRedBaseHandle handle:
-                            var resolvedValue = handle.GetValue();
+                            var resolvedValue = handle.GetValue().NotNull();
                             if (resolvedValue is inkWidget widget)
                             {
                                 writer.WriteAttributeString(property + propertyName + "Path", widget.GetPath());
@@ -156,7 +157,7 @@ namespace WolvenKit.Common.Conversion
                         {
                             ArgumentNullException.ThrowIfNull(handle);
 
-                            var effect = handle.GetValue();
+                            var effect = handle.GetValue().NotNull();
 
                             writer.WriteStartElement(effect.GetType().Name);
                             WriteWidgetAttributes(writer, effect);
@@ -171,7 +172,7 @@ namespace WolvenKit.Common.Conversion
                         {
                             ArgumentNullException.ThrowIfNull(handle);
 
-                            var controller = handle.GetValue();
+                            var controller = handle.GetValue().NotNull();
 
                             writer.WriteStartElement(controller.GetType().Name);
                             WriteWidgetAttributes(writer, controller);
@@ -186,7 +187,7 @@ namespace WolvenKit.Common.Conversion
                         {
                             ArgumentNullException.ThrowIfNull(handle);
 
-                            var item = handle.GetValue();
+                            var item = handle.GetValue().NotNull();
 
                             writer.WriteStartElement(item.GetType().Name);
                             WriteWidgetAttributes(writer, item);

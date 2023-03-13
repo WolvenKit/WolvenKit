@@ -1271,7 +1271,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             
             var inst = localList != null && localList.Files.Count > me.Index
                 ? (CMaterialInstance)localList.Files[me.Index].RootChunk
-                : (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].NotNull().GetValue();
+                : (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].NotNull().GetValue().NotNull();
 
             if (inst == null)
             {
@@ -3104,7 +3104,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 {
                     ArgumentNullException.ThrowIfNull(handle);
 
-                    var appDef = (appearanceAppearanceDefinition)handle.GetValue();
+                    var appDef = (appearanceAppearanceDefinition)handle.GetValue().NotNull();
 
                     if (appDef.Name != app.AppearanceName || appDef.CompiledData.Data is not RedPackage appPkg)
                     {
