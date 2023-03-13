@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
@@ -78,17 +77,14 @@ public partial class FirstSetupViewModel : DialogWindowViewModel
     [RelayCommand]
     private void OpenCP77GamePath()
     {
-        var dlg = new CommonOpenFileDialog
+        var dlg = new OpenFileDialog
         {
-            AllowNonFileSystemItems = false,
+            Title = "Select Cyberpunk 2077 executable",
             Multiselect = false,
-            IsFolderPicker = false,
-            Title = "Select Cyberpunk 2077 executable."
+            Filter = "Cyberpunk2077.exe|*.exe"
         };
 
-        dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk2077.exe", "*.exe"));
-
-        if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+        if (dlg.ShowDialog() != true)
         {
             return;
         }
@@ -105,20 +101,18 @@ public partial class FirstSetupViewModel : DialogWindowViewModel
     [RelayCommand]
     private void OpenDepotPath()
     {
-        var dlg = new CommonOpenFileDialog
+        var dlg = new FolderPicker
         {
-            AllowNonFileSystemItems = false,
-            Multiselect = false,
-            IsFolderPicker = true,
-            Title = "Select Material Depot folder"
+            Title = "Select Material Depot folder",
+            ForceFileSystem = true
         };
 
-        if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+        if (dlg.ShowDialog() != true)
         {
             return;
         }
 
-        var result = dlg.FileName;
+        var result = dlg.ResultPath;
         if (string.IsNullOrEmpty(result))
         {
             return;

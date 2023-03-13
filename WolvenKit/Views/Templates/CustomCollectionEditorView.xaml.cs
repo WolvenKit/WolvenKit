@@ -3,12 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
-using WolvenKit.Common.Model.Arguments;
-using WolvenKit.RED4.Archive;
-using WolvenKit.Views.Exporters;
 
 namespace WolvenKit.Controls
 {
