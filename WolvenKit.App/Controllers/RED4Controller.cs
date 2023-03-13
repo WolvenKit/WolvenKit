@@ -371,21 +371,22 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error("Cannot pack project (no project/not cyberpunk project)!");
             return false;
         }
+
         if (!options.IsRedmod && Directory.EnumerateFiles(cp77Proj.SoundDirectory).Any())
         {
             _loggerService.Warning("This project contains custom sound files but is packed as legacy mod!");
             _notificationService.Warning($"This project contains custom sound files and needs to be packed as a REDmod!");
 
-            _progressService.IsIndeterminate = false;
-            return false;
+            //_progressService.IsIndeterminate = false;
+            //return false;
         }
-        if (!options.IsRedmod && Directory.GetFiles(cp77Proj.ResourcesDirectory).Select(x => IsScript(x)).Any())
+        if (!options.IsRedmod && Directory.EnumerateFiles(cp77Proj.ResourcesDirectory).Any(x => IsScript(x)))
         {
             _loggerService.Warning("This project contains script files but is packed as legacy mod!");
             _notificationService.Warning($"This project contains script files and needs to be packed as a REDmod!");
 
-            _progressService.IsIndeterminate = false;
-            return false;
+            //_progressService.IsIndeterminate = false;
+            //return false;
         }
 
         // cleanup
