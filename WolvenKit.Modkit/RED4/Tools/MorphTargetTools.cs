@@ -126,7 +126,6 @@ namespace WolvenKit.Modkit.RED4
             var rendMorphBlob = (rendRenderMorphTargetMeshBlob)morphBlob.Blob.Chunk.NotNull();
 
             uint NumTargets = rendMorphBlob.Header.NumTargets;
-            ArgumentNullException.ThrowIfNull(NumTargets, nameof(NumTargets));
 
             if (NumTargets < 1)
             {
@@ -151,7 +150,6 @@ namespace WolvenKit.Modkit.RED4
                 for (var e = 0; e < subMeshC; e++)
                 {
                     var diff = rendMorphBlob.Header.NumVertexDiffsInEachChunk[i];
-                    ArgumentNullException.ThrowIfNull(diff);
 
                     NumVertexDiffsInEachChunk[i, e] = diff[e];
                     NumVertexDiffsMappingInEachChunk[i, e] = diff[e];
@@ -162,11 +160,9 @@ namespace WolvenKit.Modkit.RED4
 
 
                 var o = rendMorphBlob.Header.TargetPositionDiffOffset[i];
-                ArgumentNullException.ThrowIfNull(o);
                 TargetPositionDiffOffset[i] = new Vec4(o.X, o.Y, o.Z, o.W);
 
                 var s = rendMorphBlob.Header.TargetPositionDiffScale[i];
-                ArgumentNullException.ThrowIfNull(s);
                 TargetPositionDiffScale[i] = new Vec4(s.X, s.Y, s.Z, s.W);
             }
 
@@ -178,7 +174,6 @@ namespace WolvenKit.Modkit.RED4
             for (var i = 0; i < NumTargets; i++)
             {
                 var target = morphBlob.Targets[i];
-                ArgumentNullException.ThrowIfNull(target);
 
                 Names[i] = string.Format("{0}_{1}", target.Name, target.RegionName);
                 RegionNames[i] = target.RegionName.ToString().NotNull();
@@ -301,7 +296,6 @@ namespace WolvenKit.Modkit.RED4
             for (var i = 0; i < Count; i++)
             {
                 var diff = blob.Header.TargetTextureDiffsData[i];
-                ArgumentNullException.ThrowIfNull(diff);
 
                 if (diff.TargetDiffsDataSize.Count == 0)
                 {

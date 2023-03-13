@@ -16,8 +16,6 @@ public class appearanceAppearanceDefinitionWriter : RedPackageWriter
         buffer.Chunks = new List<RedBaseClass>();
         foreach (var component in appearanceDefinition.Components)
         {
-            ArgumentNullException.ThrowIfNull(component);
-
             buffer.Chunks.Add(component);
         }
         base.WritePackage(buffer);

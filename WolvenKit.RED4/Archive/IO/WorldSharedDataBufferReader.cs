@@ -16,8 +16,6 @@ public partial class WorldSharedDataBufferReader : Red4Reader, IBufferReader
         {
             foreach (var handle in sec.Nodes)
             {
-                ArgumentNullException.ThrowIfNull(handle);
-
                 var value = handle.GetValue();
                 if (value is worldInstancedMeshNode node1
                     && node1.WorldTransformsBuffer.SharedDataBuffer.GetValue() is worldSharedDataBuffer sdb1

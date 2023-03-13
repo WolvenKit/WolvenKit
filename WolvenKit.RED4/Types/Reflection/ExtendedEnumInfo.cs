@@ -11,8 +11,8 @@ public class ExtendedEnumInfo
 
         if (!IsBitfield)
         {
-            var val = (Enum)System.Activator.CreateInstance(Type);
-            if (val!.ToString() != "0")
+            var val = (Enum)System.Activator.CreateInstance(Type)!;
+            if (val.ToString() != "0")
             {
                 DefaultValue = val.ToString();
             }

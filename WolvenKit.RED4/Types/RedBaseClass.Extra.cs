@@ -153,7 +153,7 @@ public partial class RedBaseClass
             {
                 if (handle.GetValue() != null)
                 {
-                    queue.Enqueue((handle.GetValue(), propPath));
+                    queue.Enqueue((handle.GetValue()!, propPath));
                 }
             }
         }

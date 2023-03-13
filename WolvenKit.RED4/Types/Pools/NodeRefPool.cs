@@ -25,6 +25,11 @@ public static class NodeRefPool
 
     public static ulong AddOrGetHash(string value)
     {
+        if (string.IsNullOrEmpty(value))
+        {
+            return 0;
+        }
+
         ulong hash;
         if (value[0] == '$')
         {

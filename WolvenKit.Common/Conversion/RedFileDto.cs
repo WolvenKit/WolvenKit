@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -35,7 +36,7 @@ public class RedFileDto
         {
             if (value is IRedBaseHandle handle)
             {
-                var subCls = handle.GetValue();
+                var subCls = handle.GetValue().NotNull();
                 if (!Contains(subCls))
                 {
                     list.Add(subCls);
@@ -49,7 +50,7 @@ public class RedFileDto
             {
                 if (value is IRedBaseHandle handle)
                 {
-                    var subCls = handle.GetValue();
+                    var subCls = handle.GetValue().NotNull();
                     if (!Contains(subCls))
                     {
                         list.Add(subCls);

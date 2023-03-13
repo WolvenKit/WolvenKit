@@ -5,12 +5,12 @@ namespace WolvenKit.RED4.Types;
 
 public static class CHandle
 {
-    public static IRedBaseHandle Parse(Type handleType, RedBaseClass value)
+    public static IRedBaseHandle Parse(Type handleType, RedBaseClass? value)
     {
         var method = typeof(CHandle).GetMethod(nameof(Parse), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(RedBaseClass) }, null);
         if (method == null)
         {
-            throw new MissingMethodException(nameof(CBitField), nameof(Parse));
+            throw new MissingMethodException(nameof(CHandle), nameof(Parse));
         }
 
         var generic = method.MakeGenericMethod(handleType);
@@ -22,9 +22,9 @@ public static class CHandle
         return result;
     }
 
-    public static CHandle<T> Parse<T>(RedBaseClass value) where T : RedBaseClass
+    public static CHandle<T> Parse<T>(RedBaseClass? value) where T : RedBaseClass
     {
-        return new CHandle<T>((T)value);
+        return new CHandle<T>((T?)value);
     }
 }
 
@@ -39,10 +39,11 @@ public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>>, IRedCloneable w
 
 
 
-    public RedBaseClass GetValue() => Chunk;
-    public void SetValue(RedBaseClass cls) => Chunk = (T)cls;
+    public RedBaseClass? GetValue() => Chunk;
+    public void SetValue(RedBaseClass? cls) => Chunk = (T?)cls;
 
-    public CHandle(T chunk) => Chunk = chunk;
+    public CHandle() {}
+    public CHandle(T? chunk) => Chunk = chunk;
 
 
     public static implicit operator CHandle<T>(T value) => new(value);
@@ -91,13 +92,14 @@ public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>>, IRedCloneable w
 
     public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(Chunk);
 
-    public object ShallowCopy()
-    {
-        return MemberwiseClone();
-    }
+    public object ShallowCopy() => MemberwiseClone();
 
     public object DeepCopy()
     {
-        return CHandle.Parse(InnerType, (RedBaseClass)Chunk.DeepCopy());
+        if (Chunk != null)
+        {
+            return new CHandle<T>((T)Chunk.DeepCopy());
+        }
+        return new CHandle<T>();
     }
 }

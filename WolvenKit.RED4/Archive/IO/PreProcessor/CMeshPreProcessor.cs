@@ -45,7 +45,6 @@ public class CMeshPreProcessor : IPreProcessor
         for (var i = 0; i < mesh.MaterialEntries.Count; i++)
         {
             var materialEntry = mesh.MaterialEntries[i];
-            ArgumentNullException.ThrowIfNull(materialEntry);
 
             // Put all material names into a list - we'll use it to verify the appearances later
             var name = materialEntry.Name.ToString() ?? "";

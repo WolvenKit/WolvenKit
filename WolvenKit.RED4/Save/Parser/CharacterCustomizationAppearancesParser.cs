@@ -142,8 +142,6 @@ public class CharacterCustomizationAppearancesParser : INodeParser
             writer.Write(data.Preset.PerspectiveInfo.Count);
             foreach (var perspectiveInfo in data.Preset.PerspectiveInfo)
             {
-                ArgumentNullException.ThrowIfNull(perspectiveInfo);
-
                 WritePerspectiveInfo(writer, perspectiveInfo);
             }
 
@@ -160,8 +158,6 @@ public class CharacterCustomizationAppearancesParser : INodeParser
         writer.Write(groupArray.Count);
         foreach (var customizationGroup in groupArray)
         {
-            ArgumentNullException.ThrowIfNull(customizationGroup);
-
             WriteCustomizationGroup(writer, customizationGroup);
         }
     }
@@ -173,16 +169,12 @@ public class CharacterCustomizationAppearancesParser : INodeParser
         writer.Write(customizationGroup.Customization.Count);
         foreach (var appearance in customizationGroup.Customization)
         {
-            ArgumentNullException.ThrowIfNull(appearance);
-
             WriteCustomizationAppearance(writer, appearance);
         }
 
         writer.Write(customizationGroup.Morphs.Count);
         foreach (var morph in customizationGroup.Morphs)
         {
-            ArgumentNullException.ThrowIfNull(morph);
-
             WriteCustomizationMorph(writer, morph);
         }
     }

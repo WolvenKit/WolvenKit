@@ -39,8 +39,6 @@ namespace WolvenKit.Modkit.RED4
             var animDataBuffers = new List<MemoryStream>();
             foreach (var chk in anims.AnimationDataChunks)
             {
-                ArgumentNullException.ThrowIfNull(chk);
-
                 var ms = new MemoryStream();
                 ms.Write(chk.Buffer.Buffer.GetBytes());
 
@@ -313,8 +311,6 @@ namespace WolvenKit.Modkit.RED4
             var animDataBuffers = new List<MemoryStream>();
             foreach (var chk in anims.AnimationDataChunks)
             {
-                ArgumentNullException.ThrowIfNull(chk);
-
                 var ms = new MemoryStream();
                 ms.Write(chk.Buffer.Buffer.GetBytes());
 
@@ -336,7 +332,6 @@ namespace WolvenKit.Modkit.RED4
             {
                 var anim = anims.Animations[i];
 
-                ArgumentNullException.ThrowIfNull(anim);
                 ArgumentNullException.ThrowIfNull(anim.Chunk);
                 ArgumentNullException.ThrowIfNull(anim.Chunk.Animation.Chunk);
 

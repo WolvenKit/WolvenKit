@@ -122,8 +122,6 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             foreach (var fs in ffr.FontStyles)
             {
-                ArgumentNullException.ThrowIfNull(fs);
-                
                 var key = "FontCollection/" + path + "#" + fs.StyleName;
                 if (!Application.Current.Resources.Contains(key))
                 {
@@ -167,8 +165,6 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             foreach (var style in sr.Styles)
             {
-                ArgumentNullException.ThrowIfNull(style);
-
                 if (!StyleStates.Contains(style.State.ToString().NotNull()))
                 {
                     StyleStates.Add(style.State.ToString().NotNull());
@@ -176,8 +172,6 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
                 foreach (var prop in style.Properties)
                 {
-                    ArgumentNullException.ThrowIfNull(prop);
-
                     var key = "CVariant/Default/" + prop.PropertyPath + "#" + style.State;
                     if (!Application.Current.Resources.Contains(key))
                     {
@@ -193,8 +187,6 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             foreach (var theme in sr.Themes)
             {
-                ArgumentNullException.ThrowIfNull(theme);
-
                 var themeFile = Parent.GetFileFromDepotPath(theme.StyleResource.DepotPath);
                 if (themeFile == null || themeFile.RootChunk is not inkStyleResource isr)
                 {
@@ -203,8 +195,6 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
                 foreach (var style in isr.Styles)
                 {
-                    ArgumentNullException.ThrowIfNull(style);
-
                     if (!StyleStates.Contains(style.State.ToString().NotNull()))
                     {
                         StyleStates.Add(style.State.ToString().NotNull());
@@ -212,8 +202,6 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
                     foreach (var prop in style.Properties)
                     {
-                        ArgumentNullException.ThrowIfNull(prop);
-
                         var key = "CVariant/" + theme.ThemeID + "/" + prop.PropertyPath + "#" + style.State;
                         if (!Application.Current.Resources.Contains(key))
                         {
@@ -271,8 +259,6 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
         foreach (var part in slot.Parts)
         {
-            ArgumentNullException.ThrowIfNull(part);
-
             var key = "ImageSource/" + path + "#" + part.PartName;
             if (!Application.Current.Resources.Contains(key))
             {
@@ -289,8 +275,6 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
         foreach (var slice in slot.Slices)
         {
-            ArgumentNullException.ThrowIfNull(slice);
-
             var key = "RectF/" + path + "#" + slice.PartName;
             if (!Application.Current.Resources.Contains(key))
             {

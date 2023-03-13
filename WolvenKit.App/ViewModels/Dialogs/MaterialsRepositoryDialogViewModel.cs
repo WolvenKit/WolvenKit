@@ -250,8 +250,6 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
                     {
                         try
                         {
-                            ArgumentNullException.ThrowIfNull(exportArgs); // TODO WHY???
-
                             exportArgs.Get<MlmaskExportArgs>().AsList = false;
                             await _modTools.UncookSingleAsync(entry.GetArchive<ICyberGameArchive>(), entry.Key, materialRepoDir, exportArgs);
 

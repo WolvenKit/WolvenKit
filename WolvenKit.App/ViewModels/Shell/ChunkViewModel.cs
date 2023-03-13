@@ -230,12 +230,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 
                 if (parentData is RedBaseClass rbc)
                 {
-                    //if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
-                    //{
-                    rbc.SetProperty(PropertyName, Data);
+                    if (Data is RedDummy)
+                    {
+                        rbc.ResetProperty(PropertyName);
+                    }
+                    else
+                    {
+                        rbc.SetProperty(PropertyName, Data);
+                    }
+                    
                     Tab.Parent.SetIsDirty(true);
                     Parent.NotifyChain("Data");
-                    //}
                 }
                 else
                 {
@@ -244,7 +249,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     {
                         if (pi.CanWrite)
                         {
-                            pi.SetValue(parentData, Data);
+                            pi.SetValue(parentData, Data is RedDummy ? null : Data);
                         }
                         else
                         {
@@ -333,9 +338,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowExportNodeData => Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
 
-    public bool ShouldShowCopyPasteHandle => Data is IRedBaseHandle;
+    public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
 
     public bool ShouldShowArrayOps => IsInArray || IsArray;
+
+    public bool ShouldShowClassOperations => PropertyType.IsAssignableTo(typeof(RedBaseClass));
 
     public IRedArray? ArraySelfOrParent => Parent?.ResolvedData is IRedArray ira ? ira : ResolvedData as IRedArray;
 
@@ -350,7 +357,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var data = Data;
             if (Data is IRedBaseHandle handle)
             {
-                data = handle.GetValue();
+                data = handle.GetValue().NotNull();
             }
             else if (Data is CVariant v)
             {
@@ -450,7 +457,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (Data is IRedBaseHandle handle)
             {
-                return handle.GetValue().GetType() ?? handle.InnerType;
+                return handle.GetValue()?.GetType() ?? handle.InnerType;
             }
             if (Data is CVariant v)
             {
@@ -1353,10 +1360,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return false;
             }
 
-            if (Data is IRedBaseHandle destinationHandle)
-            {
-                return destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().GetType());
-            }
+            return PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
         }
         return false;
     }   // TODO RelayCommand check notify
@@ -1372,14 +1376,42 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (Data is IRedBaseHandle destinationHandle)
             {
-                if (destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().GetType()))
+                if (destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().NotNull().GetType()))
                 {
                     destinationHandle.SetValue(sourceHandle.GetValue());
                     RecalculateProperties(destinationHandle);
                     RedDocumentTabViewModel.CopiedChunk = null;
                 }
             }
+            else if (Data is RedDummy)
+            {
+                if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
+                {
+                    Data = CHandle.Parse(sourceHandle.InnerType, sourceHandle.GetValue());
+                    RecalculateProperties(Data);
+                    RedDocumentTabViewModel.CopiedChunk = null;
+                }
+                else if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
+                {
+                    Data = CWeakHandle.Parse(sourceHandle.InnerType, sourceHandle.GetValue());
+                    RecalculateProperties(Data);
+                    RedDocumentTabViewModel.CopiedChunk = null;
+                }
+            }
         }
+    }
+
+    private bool CanResetObject() => Parent != null;
+    [RelayCommand(CanExecute = nameof(CanResetObject))]
+    private void ResetObject()
+    {
+        if (Parent == null)
+        {
+            return;
+        }
+
+        Data = new RedDummy();
+        RecalculateProperties(Data);
     }
 
     private bool CanCopyChunk() => IsInArray;   // TODO RelayCommand check notify

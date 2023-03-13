@@ -101,8 +101,6 @@ namespace WolvenKit.Common.Services
 
                     foreach (var als in algcb.Entries)
                     {
-                        ArgumentNullException.ThrowIfNull(als);
-
                         if (pgc.SectorGeometries == null || pgc.SectorGeometries.Count <= totalEntryIndex || pgc.SectorGeometries[totalEntryIndex] == null)
                         {
                             throw new ArgumentNullException();

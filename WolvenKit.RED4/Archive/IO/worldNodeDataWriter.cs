@@ -15,8 +15,6 @@ public class worldNodeDataWriter : Red4Writer
     {
         foreach (var t in ssb)
         {
-            ArgumentNullException.ThrowIfNull(t);
-
             _writer.Write(t.Position.X);
             _writer.Write(t.Position.Y);
             _writer.Write(t.Position.Z);

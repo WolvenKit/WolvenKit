@@ -1,7 +1,7 @@
 namespace WolvenKit.RED4.Types;
 
 [RED("array")]
-public class CArray<T> : CArrayBase<T?> where T : IRedType
+public class CArray<T> : CArrayBase<T> where T : IRedType
 {
     public CArray() : base()
     {
