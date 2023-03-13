@@ -38,18 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Microsoft.WindowsAPICodePack.dll" />
-    <None Remove="Microsoft.WindowsAPICodePack.Shell.dll" />
     <None Remove="Resources\WolvenKitFileDefinitions.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Microsoft.WindowsAPICodePack.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Microsoft.WindowsAPICodePack.Shell.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -74,15 +63,6 @@
 	<PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
     <PackageReference Include="AutomaticGraphLayout" />
     <PackageReference Include="Nodify" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.WindowsAPICodePack">
-      <HintPath>Microsoft.WindowsAPICodePack.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.Shell">
-      <HintPath>Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

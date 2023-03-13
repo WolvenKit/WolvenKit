@@ -5,14 +5,10 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using SharpDX.DirectWrite;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Interaction;
-using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
@@ -25,7 +21,6 @@ using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
