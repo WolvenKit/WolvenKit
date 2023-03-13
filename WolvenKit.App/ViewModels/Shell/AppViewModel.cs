@@ -122,18 +122,21 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         if (e.PropertyName == nameof(IProgressService<double>.Status))
         {
-            TaskStatus = _progressService.Status;
-            switch (TaskStatus)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                case EStatus.Running:
-                    Status = EAppStatus.Busy;
-                    break;
-                case EStatus.Ready:
-                    Status = EAppStatus.Ready;
-                    break;
-                default:
-                    break;
-            }
+                TaskStatus = _progressService.Status;
+                switch (TaskStatus)
+                {
+                    case EStatus.Running:
+                        Status = EAppStatus.Busy;
+                        break;
+                    case EStatus.Ready:
+                        Status = EAppStatus.Ready;
+                        break;
+                    default:
+                        break;
+                }
+            }, DispatcherPriority.ContextIdle);
         }
     }
 
