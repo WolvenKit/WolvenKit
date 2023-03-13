@@ -410,9 +410,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand]
     private async Task AddSelectedAsync()
     {
+        // TODO: Remove if someone can tell me, why the visibility arg in xaml doesn't work -.-
         if (!ProjectLoaded)
         {
-
+            return;
         }
 
         _watcherService.IsSuspended = true;
