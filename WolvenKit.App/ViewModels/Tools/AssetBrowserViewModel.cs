@@ -114,9 +114,14 @@ public partial class AssetBrowserViewModel : ToolViewModel
             .Bind(out _boundRootNodes)
             .Subscribe(OnNext);
 
-        _archiveManager.PropertyChanged += ArchiveManager_PropertyChanged;
-        _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
         _settings.PropertyChanged += Settings_PropertyChanged;
+        if (!_archiveManager.IsManagerLoaded)
+        {
+            _archiveManager.PropertyChanged += ArchiveManager_PropertyChanged;
+        }
+        _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
+
+        CheckView();
     }
 
     private void OnNext(IChangeSet<RedFileSystemModel> obj)
@@ -129,19 +134,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private void CheckView()
     {
-        var execPath = _settings.CP77ExecutablePath;
-        if (string.IsNullOrEmpty(execPath) || !File.Exists(execPath))
-        {
-            ArchiveDirNotFound = true;
-        }
-        else
-        {
-            DirectoryInfo execDirInfo = new(Path.GetDirectoryName(execPath).NotNull());
-            ArchiveDirNotFound = execDirInfo.Parent is not null && execDirInfo.Parent.Parent is not null && execDirInfo.Parent.Parent.GetDirectories("archive").Length == 0;
-        }
+        ArchiveDirNotFound = _settings.CP77ExecutablePath == null;
+        LoadVisibility = _archiveManager.IsManagerLoaded ? Visibility.Collapsed : Visibility.Visible;
 
         ShouldShowExecutablePathWarning = ArchiveDirNotFound;
-        ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
+        ShouldShowLoadButton = !_manuallyLoading && !_archiveManager.IsManagerLoaded && !_archiveManager.IsManagerLoading;
     }
 
     // if the game exe path changes
@@ -159,8 +156,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
         if (e.PropertyName == nameof(IProjectManager.IsProjectLoaded))
         {
             ProjectLoaded = _projectManager.IsProjectLoaded;
-            
-            CheckView();
         }
     }
 
@@ -169,19 +164,13 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (e.PropertyName == nameof(IArchiveManager.IsManagerLoaded))
         {
-            var loaded = _archiveManager.IsManagerLoaded;
-
-            LoadVisibility = loaded ? Visibility.Collapsed : Visibility.Visible;
-            
-            if (loaded)
-            {
-                _notificationService.Success($"Asset Browser is initialized");
-                NoProjectBorderVisibility = Visibility.Collapsed;
-            }
-
             CheckView();
+
+            _archiveManager.PropertyChanged -= ArchiveManager_PropertyChanged;
         }
     }
+
+    
 
     #endregion ctor
 
@@ -198,9 +187,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     [ObservableProperty]
     private Visibility _loadVisibility = Visibility.Visible;
-
-    [ObservableProperty]
-    private Visibility _noProjectBorderVisibility = Visibility.Visible;
 
     [ObservableProperty]
     private bool _shouldShowLoadButton;
@@ -424,6 +410,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand]
     private async Task AddSelectedAsync()
     {
+        if (!ProjectLoaded)
+        {
+
+        }
+
         _watcherService.IsSuspended = true;
 
         // get all selected files
@@ -545,6 +536,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand]
     private async Task OpenFileSystemItem()
     {
+        if (!ProjectLoaded)
+        {
+            OpenFileOnly();
+            return;
+        }
+
         switch (RightSelectedItem)
         {
             case RedFileViewModel fileVm:

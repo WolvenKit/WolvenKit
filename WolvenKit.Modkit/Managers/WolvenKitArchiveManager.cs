@@ -32,6 +32,7 @@ namespace WolvenKit.Common.Model
 
         public IEnumerable<string>? Extensions { get; set; }
 
+        public abstract bool IsManagerLoading { get; set; }
         public abstract bool IsManagerLoaded { get; set; }
 
         public bool IsModBrowserActive { get; set; }

@@ -276,7 +276,10 @@
 
                             <syncfusion:SfDataGrid.RecordContextMenu>
                                 <ContextMenu>
-                                    <MenuItem x:Name="AddSelected" Header="Add selected items to project">
+                                    <MenuItem
+                                        x:Name="AddSelected"
+                                        Header="Add selected items to project"
+                                        Visibility="{Binding Path=ProjectLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconVaadinIcons
                                                 Padding="2"

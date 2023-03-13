@@ -28,6 +28,7 @@ namespace WolvenKit.Common
         //IEnumerable<IGameFile> FileList { get; }
         EArchiveType TypeName { get; }
 
+        public bool IsManagerLoading { get; }
         public bool IsManagerLoaded { get; }
         bool IsModBrowserActive { get; set; }
 
