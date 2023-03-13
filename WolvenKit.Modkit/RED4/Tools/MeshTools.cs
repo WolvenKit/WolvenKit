@@ -233,7 +233,6 @@ namespace WolvenKit.Modkit.RED4.Tools
             for (var i = 0; i < meshesInfo.meshCount; i++)
             {
                 var info = rendmeshblob.Header.RenderChunkInfos[i];
-                ArgumentNullException.ThrowIfNull(info);
 
                 meshesInfo.vertCounts[i] = info.NumVertices;
                 meshesInfo.indCounts[i] = info.NumIndices;
@@ -292,7 +291,6 @@ namespace WolvenKit.Modkit.RED4.Tools
             for (var i = 0; i < meshesInfo.meshCount; i++)
             {
                 var info = rendmeshblob.Header.RenderChunkInfos[i];
-                ArgumentNullException.ThrowIfNull(info);
 
                 count = info.ChunkVertices.VertexLayout.Elements.Count;
                 counter = 0;
@@ -313,7 +311,6 @@ namespace WolvenKit.Modkit.RED4.Tools
             for (var i = 0; i < meshesInfo.meshCount; i++)
             {
                 var info = rendmeshblob.Header.RenderChunkInfos[i];
-                ArgumentNullException.ThrowIfNull(info);
 
                 meshesInfo.garmentSupportExists[i] = false;
                 count = info.ChunkVertices.VertexLayout.Elements.Count;
@@ -336,11 +333,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 if (cMesh != null)
                 {
-                    if (!cMesh.Parameters.Select(x =>
-                    {
-                        ArgumentNullException.ThrowIfNull(x);
-                        return x.Chunk;
-                    }).OfType<meshMeshParamGarmentSupport>().Any())
+                    if (!cMesh.Parameters.Select(x => x.Chunk).OfType<meshMeshParamGarmentSupport>().Any())
                     {
                         meshesInfo.garmentSupportExists[i] = false;
                     }
@@ -1103,11 +1096,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                     var Rig = new RawArmature
                     {
                         BoneCount = boneCount,
-                        LocalPosn = rendmeshblob.Header.BonePositions.Select(p =>
-                        {
-                            ArgumentNullException.ThrowIfNull(p);
-                            return new Vec3(p.X, p.Z, -p.Y);
-                        }).ToArray(),
+                        LocalPosn = rendmeshblob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
                         LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
                         LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
                         Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
@@ -1202,11 +1191,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, CR2WFile cr2w)
         {
-            var clothBLob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x =>
-            {
-                ArgumentNullException.ThrowIfNull(x);
-                return x.Chunk is meshMeshParamCloth;
-            });
+            var clothBLob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth);
             if (clothBLob != null)
             {
                 var blob = (meshMeshParamCloth)clothBLob.Chunk.NotNull();
@@ -1219,7 +1204,6 @@ namespace WolvenKit.Modkit.RED4.Tools
                     ArgumentNullException.ThrowIfNull(mesh.indices, nameof(mesh));
                     ArgumentNullException.ThrowIfNull(mesh.normals, nameof(mesh));
                     ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
-                    ArgumentNullException.ThrowIfNull(chunk, nameof(chunk));
 
                     if (chunk.SkinIndices is { Buffer.MemSize: > 0 } && chunk.SkinWeights is { Buffer.MemSize: > 0 })
                     {
@@ -1325,8 +1309,6 @@ namespace WolvenKit.Modkit.RED4.Tools
                     ArgumentNullException.ThrowIfNull(mesh.colors1, nameof(mesh));
                     ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
                     ArgumentNullException.ThrowIfNull(mesh.boneindices, nameof(mesh));
-                    ArgumentNullException.ThrowIfNull(chunk, nameof(chunk));
-
 
                     if (chunk.Simulation.Count > 0 && mesh.colors1.Length != mesh.positions.Length)
                     {
@@ -1437,11 +1419,7 @@ namespace WolvenKit.Modkit.RED4.Tools
         /// <param name="cMesh"></param>
         public static void WriteGarmentParametersToMesh(ref List<RawMeshContainer> meshes, CMesh cMesh, bool exportGarmentSupport = false)
         {
-            var garmentBlob = cMesh.Parameters.FirstOrDefault(x =>
-            {
-                ArgumentNullException.ThrowIfNull(x);
-                return x.Chunk is garmentMeshParamGarment;
-            });
+            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
             if (garmentBlob != null && exportGarmentSupport)
             {
                 var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk.NotNull();
@@ -1452,7 +1430,6 @@ namespace WolvenKit.Modkit.RED4.Tools
                     var chunk = garmentBlobChunk.Chunks[i];
 
                     ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
-                    ArgumentNullException.ThrowIfNull(chunk, nameof(chunk));
 
                     if (chunk.GarmentFlags is { Buffer.MemSize: > 0 })
                     {

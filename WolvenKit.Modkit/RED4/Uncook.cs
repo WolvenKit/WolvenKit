@@ -662,35 +662,30 @@ namespace WolvenKit.Modkit.RED4
             {
                 var xbmFile = _archiveManager.Lookup(texturePath);
 
-                if (xbmFile == null)
+                if (!xbmFile.HasValue)
                 {
-                    _loggerService.Error(string.Format("File: {0} was not found in any archive.", texturePath));
+                    _loggerService.Error($"File: {texturePath} was not found in any archive.");
                     return;
                 }
 
-                if (xbmFile.HasValue)
+                Directory.CreateDirectory(outDir);
+
+                using var ms = new MemoryStream();
+                xbmFile.Value.Extract(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+
+                if (_parserService.TryReadRed4File(ms, out var file))
                 {
-                    Directory.CreateDirectory(outDir);
-
-                    using var ms = new MemoryStream();
-                    xbmFile.Value.Extract(ms);
-                    ms.Seek(0, SeekOrigin.Begin);
-
-                    if (_parserService.TryReadRed4File(ms, out var file))
+                    var img = RedImage.FromRedFile(file);
+                    foreach (var part in parts)
                     {
-                        var img = RedImage.FromRedFile(file);
-                        foreach (var part in parts)
-                        {
-                            ArgumentNullException.ThrowIfNull(part);
+                        var x = Math.Round(part.ClippingRectInUVCoords.Left * img.Metadata.Width);
+                        var y = Math.Round(part.ClippingRectInUVCoords.Top * img.Metadata.Height);
+                        var width = Math.Round(part.ClippingRectInUVCoords.Right * img.Metadata.Width) - x;
+                        var height = Math.Round(part.ClippingRectInUVCoords.Bottom * img.Metadata.Height) - y;
 
-                            var x = Math.Round(part.ClippingRectInUVCoords.Left * img.Metadata.Width);
-                            var y = Math.Round(part.ClippingRectInUVCoords.Top * img.Metadata.Height);
-                            var width = Math.Round(part.ClippingRectInUVCoords.Right * img.Metadata.Width) - x;
-                            var height = Math.Round(part.ClippingRectInUVCoords.Bottom * img.Metadata.Height) - y;
-
-                            var croppedImg = img.Crop((int)x, (int)y, (int)width, (int)height);
-                            croppedImg.SaveToPNG(Path.Combine(outDir, $"{part.PartName}.png"));
-                        }
+                        var croppedImg = img.Crop((int)x, (int)y, (int)width, (int)height);
+                        croppedImg.SaveToPNG(Path.Combine(outDir, $"{part.PartName}.png"));
                     }
                 }
             }

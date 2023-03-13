@@ -115,7 +115,6 @@ namespace WolvenKit.Modkit.RED4
                     slots[esc.Name!] = new Dictionary<string, string>();
                     foreach (var slot in esc.Slots)
                     {
-                        ArgumentNullException.ThrowIfNull(slot);
                         NotResolvableException.ThrowIfNotResolvable(slot.SlotName);
                         NotResolvableException.ThrowIfNotResolvable(slot.BoneName);
 
@@ -137,8 +136,6 @@ namespace WolvenKit.Modkit.RED4
 
             foreach (var app in eet.Appearances)
             {
-                ArgumentNullException.ThrowIfNull(app);
-
                 if (app.AppearanceName != appearance && appearance != "default")
                 {
                     continue;
@@ -156,8 +153,6 @@ namespace WolvenKit.Modkit.RED4
 
                 foreach (var appApp in aar.Appearances)
                 {
-                    ArgumentNullException.ThrowIfNull(appApp);
-
                     if (appApp.GetValue() is not appearanceAppearanceDefinition aad || (aad.Name != appearance && appearance != "default") || aad.CompiledData.Data is not RedPackage appPkg)
                     {
                         continue;

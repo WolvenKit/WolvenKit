@@ -26,8 +26,6 @@ public class CollisionWriter : Red4Writer
 
         foreach (var actor in collisionBuffer.Actors)
         {
-            ArgumentNullException.ThrowIfNull(actor);
-
             _writer.Write(actor.Position.X.Bits);
             _writer.Write(actor.Position.Y.Bits);
             _writer.Write(actor.Position.Z.Bits);

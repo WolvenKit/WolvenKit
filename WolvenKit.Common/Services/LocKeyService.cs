@@ -47,8 +47,6 @@ namespace WolvenKit.Common.Services
                     {
                         foreach (var entry in os.Entries)
                         {
-                            ArgumentNullException.ThrowIfNull(entry);
-
                             primary[entry.PrimaryKey] = entry;
                             secondary[entry.SecondaryKey] = entry;
                         }

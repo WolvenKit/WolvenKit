@@ -37,7 +37,6 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
 
         foreach (var socket in node.Sockets)
         {
-            ArgumentNullException.ThrowIfNull(socket);
             var svm = new SocketViewModel(socket.Chunk.NotNull());
 
             bool isInput;
@@ -208,7 +207,6 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
             Header = "Spawn Manager";
             foreach (var action in qsmnd.Actions)
             {
-                ArgumentNullException.ThrowIfNull(action);
                 Header += " - " + action.Type.Chunk.NotNull().Action.ToEnumString();
             }
         }

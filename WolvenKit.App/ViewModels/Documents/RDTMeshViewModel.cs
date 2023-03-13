@@ -306,8 +306,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         
         foreach (var me in data.MaterialEntries)
         {
-            ArgumentNullException.ThrowIfNull(me);
-
             var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), data);
             if (!me.IsLocalInstance)
             {
@@ -347,7 +345,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             foreach (var pair in inst.Values)
             {
-                ArgumentNullException.ThrowIfNull(pair);
                 var k = pair.Key.ToString().NotNull();
                 material.Values[k] = pair.Value;
             }
@@ -358,8 +355,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var appIndex = 0;
         foreach (var handle in data.Appearances)
         {
-            ArgumentNullException.ThrowIfNull(handle);
-
             var app = handle.GetValue();
             if (app is meshMeshAppearance mmapp)
             {
@@ -584,8 +579,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var me in mesh.MaterialEntries)
                 {
-                    ArgumentNullException.ThrowIfNull(me);
-
                     var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
                     if (!me.IsLocalInstance)
                     {
@@ -623,7 +616,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     foreach (var pair in inst.Values)
                     {
-                        ArgumentNullException.ThrowIfNull(pair);
                         var k = pair.Key.ToString().NotNull();
                         material.Values[k] = pair.Value;
                     }
@@ -633,8 +625,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 var apps = new List<string>();
                 foreach (var handle in mesh.Appearances)
                 {
-                    ArgumentNullException.ThrowIfNull(handle);
-
                     var app = handle.GetValue();
                     if (app is meshMeshAppearance mmapp)
                     {
@@ -653,8 +643,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var handle in mesh.Appearances)
                 {
-                    ArgumentNullException.ThrowIfNull(handle);
-
                     var app = handle.GetValue();
                     if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
                     {
@@ -1000,8 +988,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     float xMax = 0, xMin = 0, yMin = 0, yMax = 0;
                     foreach (var chunk in mmpt.ChunkBoundingBoxes)
                     {
-                        ArgumentNullException.ThrowIfNull(chunk);
-
                         xMax = Math.Max(xMax, chunk.Max.X);
                         yMax = Math.Max(yMax, chunk.Max.Y);
                         xMin = Math.Min(xMin, chunk.Min.X);
@@ -1257,8 +1243,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         foreach (var me in mesh.MaterialEntries)
         {
-            ArgumentNullException.ThrowIfNull(me);
-
             var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
             if (!me.IsLocalInstance)
             {
@@ -1287,7 +1271,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             foreach (var pair in inst.Values)
             {
-                ArgumentNullException.ThrowIfNull(pair);
                 var k = pair.Key.ToString().NotNull();
 
                 if (!material.Values.ContainsKey(k))
@@ -1375,7 +1358,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 foreach (var pair in cmi.Values)
                 {
-                    ArgumentNullException.ThrowIfNull(pair);
                     var k = pair.Key.ToString().NotNull();
 
                     if (!dictionary.ContainsKey(k))
@@ -1463,7 +1445,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var i = 0;
             foreach (var layer in mls.Layers)
             {
-                ArgumentNullException.ThrowIfNull(layer);
                 if (i >= streams.Count)
                 {
                     break;
@@ -1614,8 +1595,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     foreach (var strength in mllt.Overrides.NormalStrength)
                     {
-                        ArgumentNullException.ThrowIfNull(strength);
-
                         if (strength.N == layer.NormalStrength)
                         {
                             for (var y = 0; y < maskBitmap.Height; y++)
@@ -2214,7 +2193,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var actor in cb.Actors)
                 {
-                    ArgumentNullException.ThrowIfNull(actor);
                     var actorGroup = new MeshComponent()
                     {
                         WorldNodeIndex = $"{handleIndex}",
@@ -2223,8 +2201,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     foreach (var shape in actor.Shapes)
                     {
-                        ArgumentNullException.ThrowIfNull(shape);
-
                         HelixToolkit.SharpDX.Core.MeshGeometry3D? geometry = null;
 
                         if (shape is CollisionShapeSimple simpleShape && simpleShape.ShapeType == Enums.physicsShapeType.Box)
@@ -2362,8 +2338,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                                 foreach (var face in mce.Faces)
                                 {
-                                    ArgumentNullException.ThrowIfNull(face);
-
                                     var points = new List<SharpDX.Vector3>();
                                     foreach (var point in face)
                                     {
@@ -2437,8 +2411,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var tile in wntr.TilesData)
                 {
-                    ArgumentNullException.ThrowIfNull(tile);
-
                     if (tile.TilesBuffer.Data is not TilesBuffer tb)
                     {
                         continue;
@@ -2448,7 +2420,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     foreach (var v in tb.Vertices)
                     {
-                        ArgumentNullException.ThrowIfNull(v);
                         positions.Add(new SharpDX.Vector3(v.X, v.Y, -v.Z));
                     }
 
@@ -2456,8 +2427,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     foreach (var f in tb.FaceInfo)
                     {
-                        ArgumentNullException.ThrowIfNull(f);
-
                         if (f.NumIndices == 3)
                         {
                             mb.AddTriangle(positions[f.Indices[0]], positions[f.Indices[2]], positions[f.Indices[1]]);
@@ -2570,8 +2539,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var point in shape.Points)
                 {
-                    ArgumentNullException.ThrowIfNull(point);
-
                     center.X += point.X / shape.Points.Count;
                     center.Y += point.Z / shape.Points.Count;
                     center.Z += -point.Y / shape.Points.Count;
@@ -2817,8 +2784,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         foreach (var desc in data.Descriptors)
         {
-            ArgumentNullException.ThrowIfNull(desc);
-
             if (!SearchActive || SearchPoint.X < desc.StreamingBox.Max.X && SearchPoint.X > desc.StreamingBox.Min.X &&
                 SearchPoint.Y < desc.StreamingBox.Max.Y && SearchPoint.Y > desc.StreamingBox.Min.Y &&
                 SearchPoint.Z < desc.StreamingBox.Max.Z && SearchPoint.Z > desc.StreamingBox.Min.Z)
@@ -3002,7 +2967,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     var slots = new Dictionary<string, string>();
                     foreach (var slot in slotset.Slots)
                     {
-                        ArgumentNullException.ThrowIfNull(slot);
                         var name = slot.SlotName.ToString().NotNull();
 
                         if (!slots.ContainsKey(name))

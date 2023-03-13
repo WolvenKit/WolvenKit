@@ -25,8 +25,6 @@ public class CR2WListWriter : IDisposable
             list.Files = new();
             foreach (var material in meshMeshMaterialBuffer.Materials)
             {
-                ArgumentNullException.ThrowIfNull(material);
-
                 var file = new CR2WFile()
                 {
                     RootChunk = material

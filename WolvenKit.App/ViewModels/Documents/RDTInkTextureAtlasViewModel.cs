@@ -99,7 +99,6 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
         var slot = _atlas.Slots[0].NotNull();
         foreach (var part in slot.Parts)
         {
-            ArgumentNullException.ThrowIfNull(part);
             OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, slot.Texture.DepotPath.ToString().NotNull(), Parent.RelativePath, (BitmapSource)Image));
         }
 

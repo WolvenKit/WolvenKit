@@ -42,8 +42,6 @@ namespace WolvenKit.Common.Conversion
                 var imc = (inkMultiChildren)compoundWidget.Children.GetValue().NotNull();
                 foreach (var childHandle in imc.Children)
                 {
-                    ArgumentNullException.ThrowIfNull(childHandle);
-
                     var child = (inkWidget)childHandle.GetValue().NotNull();
                     WriteWidget(writer, child);
                 }
@@ -108,8 +106,6 @@ namespace WolvenKit.Common.Conversion
                             //writer.WriteStartElement("bindings");
                             foreach (var ipb in ary)
                             {
-                                ArgumentNullException.ThrowIfNull(ipb);
-
                                 //writer.WriteStartElement("propertyBinding");
                                 writer.WriteAttributeString(ipb.PropertyName + ".binding", ipb.StylePath);
                                 //writer.WriteEndElement();
@@ -155,8 +151,6 @@ namespace WolvenKit.Common.Conversion
                         writer.WriteStartElement("effects");
                         foreach (var handle in effects)
                         {
-                            ArgumentNullException.ThrowIfNull(handle);
-
                             var effect = handle.GetValue().NotNull();
 
                             writer.WriteStartElement(effect.GetType().Name);
@@ -170,8 +164,6 @@ namespace WolvenKit.Common.Conversion
                         writer.WriteStartElement("secondaryControllers");
                         foreach (var handle in controllers)
                         {
-                            ArgumentNullException.ThrowIfNull(handle);
-
                             var controller = handle.GetValue().NotNull();
 
                             writer.WriteStartElement(controller.GetType().Name);
@@ -185,8 +177,6 @@ namespace WolvenKit.Common.Conversion
                         writer.WriteStartElement("userData");
                         foreach (var handle in ary)
                         {
-                            ArgumentNullException.ThrowIfNull(handle);
-
                             var item = handle.GetValue().NotNull();
 
                             writer.WriteStartElement(item.GetType().Name);
