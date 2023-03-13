@@ -92,13 +92,14 @@ public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>>, IRedCloneable w
 
     public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(Chunk);
 
-    public object ShallowCopy()
-    {
-        return MemberwiseClone();
-    }
+    public object ShallowCopy() => MemberwiseClone();
 
     public object DeepCopy()
     {
-        return CHandle.Parse(InnerType, (RedBaseClass)Chunk.DeepCopy());
+        if (Chunk != null)
+        {
+            return new CHandle<T>((T)Chunk.DeepCopy());
+        }
+        return new CHandle<T>();
     }
 }

@@ -42,7 +42,7 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
         _internalList = new List<T>(new T[size]);
     }
 
-    protected CArrayBase(List<T?> list)
+    protected CArrayBase(List<T> list)
     {
         _internalList = list;
     }
@@ -119,7 +119,7 @@ public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyO
 
     public int Count => _internalList.Count;
     public bool IsFixedSize => ((IList)_internalList).IsFixedSize;
-    public bool IsReadOnly { get; set; }
+    public bool IsReadOnly { get; protected init; }
     public bool IsSynchronized => ((ICollection)_internalList).IsSynchronized;
     public object SyncRoot => ((ICollection)_internalList).IsSynchronized;
 

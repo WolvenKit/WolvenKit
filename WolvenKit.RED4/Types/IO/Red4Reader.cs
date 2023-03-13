@@ -438,7 +438,7 @@ public partial class Red4Reader : IErrorHandler, IDisposable
             _chunks[pointer].IsUsed = true;
         }
 
-        return new CHandle<T>((T)instance);
+        return new CHandle<T>((T?)instance);
     }
 
     public virtual IRedWeakHandle ReadCWeakHandle(List<RedTypeInfo> redTypeInfos, uint size)
@@ -816,6 +816,7 @@ public partial class Red4Reader : IErrorHandler, IDisposable
                 {
                     case SpecialRedType.MultiChannelCurve:
                         return ReadMultiChannelCurve(redTypeInfos, size);
+                    case SpecialRedType.Mixed:
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
