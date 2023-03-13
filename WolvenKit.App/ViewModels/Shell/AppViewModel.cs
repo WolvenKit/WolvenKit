@@ -161,22 +161,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (!TryLoadingArguments())
         {
             ShowHomePageSync();
-        }
-
-        LoadDefaultViews();
+        }    
 
         CheckForUpdatesCommand.SafeExecute(true);
     }
-
-    private void LoadDefaultViews() =>
-        DockedViews = new ObservableCollection<IDockElement> {
-            _paneViewModelFactory.LogViewModel(),
-            _paneViewModelFactory.ProjectExplorerViewModel(this),
-            _paneViewModelFactory.PropertiesViewModel(),
-            _paneViewModelFactory.AssetBrowserViewModel(this),
-            _paneViewModelFactory.TweakBrowserViewModel(this),
-            _paneViewModelFactory.LocKeyBrowserViewModel()
-        };
 
     public bool AddDockedPane(string paneString)
     {
