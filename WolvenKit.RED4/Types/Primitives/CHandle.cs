@@ -5,12 +5,12 @@ namespace WolvenKit.RED4.Types;
 
 public static class CHandle
 {
-    public static IRedBaseHandle Parse(Type handleType, RedBaseClass value)
+    public static IRedBaseHandle Parse(Type handleType, RedBaseClass? value)
     {
         var method = typeof(CHandle).GetMethod(nameof(Parse), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(RedBaseClass) }, null);
         if (method == null)
         {
-            throw new MissingMethodException(nameof(CBitField), nameof(Parse));
+            throw new MissingMethodException(nameof(CHandle), nameof(Parse));
         }
 
         var generic = method.MakeGenericMethod(handleType);
@@ -22,9 +22,9 @@ public static class CHandle
         return result;
     }
 
-    public static CHandle<T> Parse<T>(RedBaseClass value) where T : RedBaseClass
+    public static CHandle<T> Parse<T>(RedBaseClass? value) where T : RedBaseClass
     {
-        return new CHandle<T>((T)value);
+        return new CHandle<T>((T?)value);
     }
 }
 

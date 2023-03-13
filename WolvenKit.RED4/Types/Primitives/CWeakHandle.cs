@@ -1,6 +1,32 @@
 using System.Diagnostics;
+using System.Reflection;
 
 namespace WolvenKit.RED4.Types;
+
+public static class CWeakHandle
+{
+    public static IRedBaseHandle Parse(Type handleType, RedBaseClass? value)
+    {
+        var method = typeof(CWeakHandle).GetMethod(nameof(Parse), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(RedBaseClass) }, null);
+        if (method == null)
+        {
+            throw new MissingMethodException(nameof(CWeakHandle), nameof(Parse));
+        }
+
+        var generic = method.MakeGenericMethod(handleType);
+        if (generic.Invoke(null, new object[] { value }) is not IRedBaseHandle result)
+        {
+            throw new Exception();
+        }
+
+        return result;
+    }
+
+    public static CWeakHandle<T> Parse<T>(RedBaseClass? value) where T : RedBaseClass
+    {
+        return new CWeakHandle<T>((T?)value);
+    }
+}
 
 [RED("whandle")]
 public class CWeakHandle<T> : IRedWeakHandle<T>, IEquatable<CWeakHandle<T>> where T : RedBaseClass

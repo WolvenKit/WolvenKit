@@ -230,12 +230,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 
                 if (parentData is RedBaseClass rbc)
                 {
-                    //if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
-                    //{
-                    rbc.SetProperty(PropertyName, Data);
+                    rbc.SetProperty(PropertyName, Data is RedDummy ? null : Data);
                     Tab.Parent.SetIsDirty(true);
                     Parent.NotifyChain("Data");
-                    //}
                 }
                 else
                 {
@@ -244,7 +241,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     {
                         if (pi.CanWrite)
                         {
-                            pi.SetValue(parentData, Data);
+                            pi.SetValue(parentData, Data is RedDummy ? null : Data);
                         }
                         else
                         {
@@ -333,7 +330,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowExportNodeData => Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
 
-    public bool ShouldShowCopyPasteHandle => Data is IRedBaseHandle;
+    public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
 
     public bool ShouldShowArrayOps => IsInArray || IsArray;
 
@@ -1353,10 +1350,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return false;
             }
 
-            if (Data is IRedBaseHandle destinationHandle)
-            {
-                return destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().NotNull().GetType());
-            }
+            return PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
         }
         return false;
     }   // TODO RelayCommand check notify
@@ -1379,7 +1373,37 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     RedDocumentTabViewModel.CopiedChunk = null;
                 }
             }
+            else if (Data is RedDummy)
+            {
+                if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
+                {
+                    Data = CHandle.Parse(sourceHandle.InnerType, sourceHandle.GetValue());
+                    RecalculateProperties(Data);
+                    RedDocumentTabViewModel.CopiedChunk = null;
+                }
+                else if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
+                {
+                    Data = CWeakHandle.Parse(sourceHandle.InnerType, sourceHandle.GetValue());
+                    RecalculateProperties(Data);
+                    RedDocumentTabViewModel.CopiedChunk = null;
+                }
+            }
         }
+    }
+
+    private bool CanResetHandle() => Data is IRedBaseHandle handle && handle.GetValue() != null;
+    [RelayCommand(CanExecute = nameof(CanResetHandle))]
+    private void ResetHandle()
+    {
+        if (Data is not IRedBaseHandle handle)
+        {
+            return;
+        }
+
+        handle.SetValue(null);
+
+        Data = new RedDummy();
+        RecalculateProperties(Data);
     }
 
     private bool CanCopyChunk() => IsInArray;   // TODO RelayCommand check notify
