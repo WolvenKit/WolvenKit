@@ -161,85 +161,58 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (!TryLoadingArguments())
         {
             ShowHomePageSync();
-        }
-
-        AddDockedPanes();       
+        }    
 
         CheckForUpdatesCommand.SafeExecute(true);
     }
 
-    private void AddDockedPanes()
+    public bool AddDockedPane(string paneString)
     {
-        var fileExists = File.Exists(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt"));
-        List<string> savedPanes = new();
-
-        if (fileExists)
+        if (Enum.TryParse<EDockedViews>(paneString, out var pane))
         {
-            savedPanes = File.ReadLines(Path.Combine(ISettingsManager.GetAppData(), "DockPanes.txt")).ToList();
-        }
-
-        // only add existing docked views
-        if (fileExists && savedPanes.Any())
-        {
-            foreach (var paneString in savedPanes)
+            switch (pane)
             {
-                if (Enum.TryParse<EDockedViews>(paneString, out var pane))
+                case EDockedViews.LogViewModel:
+                    DockedViews.Add(_paneViewModelFactory.LogViewModel());
+                    return true;
+                case EDockedViews.ProjectExplorerViewModel:
+                    DockedViews.Add(_paneViewModelFactory.ProjectExplorerViewModel(this));
+                    return true;
+                case EDockedViews.PropertiesViewModel:
+                    DockedViews.Add(_paneViewModelFactory.PropertiesViewModel());
+                    return true;
+                case EDockedViews.AssetBrowserViewModel:
+                    DockedViews.Add(_paneViewModelFactory.AssetBrowserViewModel(this));
+                    return true;
+                case EDockedViews.TweakBrowserViewModel:
+                    DockedViews.Add(_paneViewModelFactory.TweakBrowserViewModel(this));
+                    return true;
+                case EDockedViews.LocKeyBrowserViewModel:
+                    DockedViews.Add(_paneViewModelFactory.LocKeyBrowserViewModel());
+                    return true;
+                case EDockedViews.TextureImportViewModel:
                 {
-                    switch (pane)
-                    {
-                        case EDockedViews.LogViewModel:
-                            DockedViews.Add(_paneViewModelFactory.LogViewModel());
-                            break;
-                        case EDockedViews.ProjectExplorerViewModel:
-                            DockedViews.Add(_paneViewModelFactory.ProjectExplorerViewModel(this));
-                            break;
-                        case EDockedViews.PropertiesViewModel:
-                            DockedViews.Add(_paneViewModelFactory.PropertiesViewModel());
-                            break;
-                        case EDockedViews.AssetBrowserViewModel:
-                            DockedViews.Add(_paneViewModelFactory.AssetBrowserViewModel(this));
-                            break;
-                        case EDockedViews.TweakBrowserViewModel:
-                            DockedViews.Add(_paneViewModelFactory.TweakBrowserViewModel(this));
-                            break;
-                        case EDockedViews.LocKeyBrowserViewModel:
-                            DockedViews.Add(_paneViewModelFactory.LocKeyBrowserViewModel());
-                            break;
-                        case EDockedViews.TextureImportViewModel:
-                        {
-                            var vm = _paneViewModelFactory.TextureImportViewModel();
-                            vm.State = DockState.Dock;
-                            vm.SideInDockedMode = DockSide.Right;
-                            DockedViews.Add(vm);
-                            break;
-                        }
-                        case EDockedViews.TextureExportViewModel:
-                        {
-                            var vm = _paneViewModelFactory.TextureExportViewModel();
-                            vm.State = DockState.Dock;
-                            vm.SideInDockedMode = DockSide.Right;
-                            DockedViews.Add(vm);
-                            break;
-                        }
-                        default:
-                            break;
-                    }
+                    var vm = _paneViewModelFactory.TextureImportViewModel();
+                    vm.State = DockState.Dock;
+                    vm.SideInDockedMode = DockSide.Right;
+                    DockedViews.Add(vm);
+                    return true;
                 }
+                case EDockedViews.TextureExportViewModel:
+                {
+                    var vm = _paneViewModelFactory.TextureExportViewModel();
+                    vm.State = DockState.Dock;
+                    vm.SideInDockedMode = DockSide.Right;
+                    DockedViews.Add(vm);
+                    return true;
+                }
+                default:
+                    break;
             }
         }
-        else
-        {
-            DockedViews = new ObservableCollection<IDockElement> {
-                _paneViewModelFactory.LogViewModel(),
-                _paneViewModelFactory.ProjectExplorerViewModel(this),
-                _paneViewModelFactory.PropertiesViewModel(),
-                _paneViewModelFactory.AssetBrowserViewModel(this),
-                _paneViewModelFactory.TweakBrowserViewModel(this),
-                _paneViewModelFactory.LocKeyBrowserViewModel()
-            };
-        }
-    }
 
+        return false;
+    }
 
     private bool TryLoadingArguments()
     {
