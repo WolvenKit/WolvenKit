@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using Microsoft.WindowsAPICodePack.Dialogs;
+using Microsoft.Win32;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
@@ -162,16 +162,14 @@ public partial class WelcomePageViewModel : PageViewModel
         }
         else
         {
-            var dlg = new CommonOpenFileDialog
+            var dlg = new OpenFileDialog
             {
-                AllowNonFileSystemItems = false,
                 Multiselect = false,
-                IsFolderPicker = false,
-                Title = "Locate the WolvenKit project"
+                Title = "Locate the WolvenKit project",
+                Filter = "Cyberpunk 2077 Project|*.cpmodproj"
             };
-            dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
 
-            if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+            if (dlg.ShowDialog() != true)
             {
                 return "";
             }

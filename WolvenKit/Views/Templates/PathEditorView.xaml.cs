@@ -1,5 +1,7 @@
+using System.Text;
 using System.Windows;
-using Microsoft.WindowsAPICodePack.Dialogs;
+using Microsoft.Win32;
+using WolvenKit.App.Helpers;
 
 namespace WolvenKit.Controls
 {
@@ -85,29 +87,52 @@ namespace WolvenKit.Controls
                     break;
             }
 
-            var dlg = new CommonOpenFileDialog
+            string[] results;
+            if (_isFolderPicker)
             {
-                AllowNonFileSystemItems = true,
-                Multiselect = _multiselect,
-                IsFolderPicker = _isFolderPicker,
-
-                Title = title
-            };
-
-            if (_filters is not null)
-            {
-                foreach (var item in _filters)
+                var dlg = new FolderPicker
                 {
-                    dlg.Filters.Add(new CommonFileDialogFilter(item.Name, item.Patterns));
+                    Title = title,
+                    ForceFileSystem = false
+                };
+
+                if (dlg.ShowDialog() != true)
+                { 
+                    return;
                 }
+
+                results = new string[] { dlg.ResultPath };
             }
 
-            if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+            else
             {
-                return;
+                var filter = "";
+                if (_filters is not null)
+                {
+                    var stringBuilder = new StringBuilder();
+
+                    foreach (var item in _filters)
+                    {
+                        stringBuilder.Append($"{item.Name}|{item.Patterns}|");
+                    }
+                    stringBuilder = stringBuilder.Remove(stringBuilder.Length - 1, 1);
+                    filter = stringBuilder.ToString();
+                }
+                var dlg = new OpenFileDialog
+                {
+                    Title = title,
+                    Multiselect = _multiselect,
+                    Filter = filter
+                };
+                
+                if (dlg.ShowDialog() != true)
+                {
+                    return;
+                }
+
+                results = dlg.FileNames;
             }
 
-            var results = dlg.FileNames;
             if (results == null)
             {
                 return;

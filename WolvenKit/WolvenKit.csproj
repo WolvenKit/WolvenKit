@@ -1804,15 +1804,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.WindowsAPICodePack">
-      <HintPath>..\WolvenKit.App\Microsoft.WindowsAPICodePack.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.Shell">
-      <HintPath>..\WolvenKit.App\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <SplashScreen Include="SplashScreen1.png" />
   </ItemGroup>
 

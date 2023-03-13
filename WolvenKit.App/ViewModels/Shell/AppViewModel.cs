@@ -15,7 +15,6 @@ using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using Semver;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -122,18 +121,21 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         if (e.PropertyName == nameof(IProgressService<double>.Status))
         {
-            TaskStatus = _progressService.Status;
-            switch (TaskStatus)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                case EStatus.Running:
-                    Status = EAppStatus.Busy;
-                    break;
-                case EStatus.Ready:
-                    Status = EAppStatus.Ready;
-                    break;
-                default:
-                    break;
-            }
+                TaskStatus = _progressService.Status;
+                switch (TaskStatus)
+                {
+                    case EStatus.Running:
+                        Status = EAppStatus.Busy;
+                        break;
+                    case EStatus.Ready:
+                        Status = EAppStatus.Ready;
+                        break;
+                    default:
+                        break;
+                }
+            }, DispatcherPriority.ContextIdle);
         }
     }
 
@@ -538,16 +540,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 // open an existing project
                 else
                 {
-                    CommonOpenFileDialog dlg = new()
+                    var dlg = new OpenFileDialog
                     {
-                        AllowNonFileSystemItems = false,
                         Multiselect = false,
-                        IsFolderPicker = false,
-                        Title = "Locate the WolvenKit project"
+                        Title = "Locate the WolvenKit project",
+                        Filter = "Cyberpunk 2077 Project|*.cpmodproj"
                     };
-                    dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
 
-                    if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
+                    if (dlg.ShowDialog() != true)
                     {
                         return;
                     }

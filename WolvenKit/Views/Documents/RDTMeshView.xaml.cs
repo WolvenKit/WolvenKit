@@ -34,11 +34,12 @@ namespace WolvenKit.Views.Documents
                     hxViewport.MouseDown3D += vm.MouseDown3D;
                 }
 
+                ViewModel.SelectedAppearance?.ModelGroup.RemoveSelf();
+
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.SelectedAppearance.ModelGroup,
                         view => view.hxContentVisual.ItemsSource)
                     .DisposeWith(disposables);
-            
             });
         }
 
