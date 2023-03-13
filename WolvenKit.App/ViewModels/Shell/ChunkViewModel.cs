@@ -230,7 +230,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 
                 if (parentData is RedBaseClass rbc)
                 {
-                    rbc.SetProperty(PropertyName, Data is RedDummy ? null : Data);
+                    if (Data is RedDummy)
+                    {
+                        rbc.ResetProperty(PropertyName);
+                    }
+                    else
+                    {
+                        rbc.SetProperty(PropertyName, Data);
+                    }
+                    
                     Tab.Parent.SetIsDirty(true);
                     Parent.NotifyChain("Data");
                 }
@@ -333,6 +341,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
 
     public bool ShouldShowArrayOps => IsInArray || IsArray;
+
+    public bool ShouldShowClassOperations => PropertyType.IsAssignableTo(typeof(RedBaseClass));
 
     public IRedArray? ArraySelfOrParent => Parent?.ResolvedData is IRedArray ira ? ira : ResolvedData as IRedArray;
 
@@ -1391,16 +1401,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanResetHandle() => Data is IRedBaseHandle handle && handle.GetValue() != null;
-    [RelayCommand(CanExecute = nameof(CanResetHandle))]
-    private void ResetHandle()
+    private bool CanResetObject() => Parent != null;
+    [RelayCommand(CanExecute = nameof(CanResetObject))]
+    private void ResetObject()
     {
-        if (Data is not IRedBaseHandle handle)
+        if (Parent == null)
         {
             return;
         }
-
-        handle.SetValue(null);
 
         Data = new RedDummy();
         RecalculateProperties(Data);

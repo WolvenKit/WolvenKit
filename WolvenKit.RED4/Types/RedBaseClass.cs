@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Types;
@@ -172,7 +173,7 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
         if (propertyInfo != null)
         {
             ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
-            SetProperty(propertyInfo.RedName, (IRedType?)RedReflection.GetDefaultValue(propertyInfo.Type));
+            SetProperty(propertyInfo.RedName, (IRedType?)RedReflection.GetClassDefaultValue(propertyInfo.ContainingTypeInfo.Type, propertyInfo));
             return true;
         }
 

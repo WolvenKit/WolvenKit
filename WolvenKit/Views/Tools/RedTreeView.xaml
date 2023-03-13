@@ -447,22 +447,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ResetHandleCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Reset Handle"
-                    IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowHandleOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Delete" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.PasteChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Into Array/Buffer"
                     IsCheckable="False"
@@ -622,6 +606,21 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Kind="Refresh" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ResetObjectCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Reset Object"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Delete" />
                     </MenuItem.Icon>
                 </MenuItem>
             </ContextMenu>
