@@ -279,7 +279,7 @@
                                     <MenuItem
                                         x:Name="AddSelected"
                                         Header="Add selected items to project"
-                                        Visibility="{Binding Path=ProjectLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        Visibility="{Binding Path=DataGrid.DataContext.ProjectLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconVaadinIcons
                                                 Padding="2"
@@ -288,7 +288,7 @@
                                                 Kind="ArrowCircleLeft" />
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <Separator />
+                                    <Separator Visibility="{Binding Path=DataGrid.DataContext.ProjectLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     <MenuItem x:Name="OpenFileOnly" Header="Open without adding to project">
                                         <MenuItem.Icon>
                                             <iconPacks:PackIconVaadinIcons
