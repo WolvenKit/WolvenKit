@@ -104,7 +104,7 @@ public partial class ModsViewModel : PageViewModel
         }
     }
 
-    private void ProgressService_ProgressChanged(object? sender, double e) => Progress = e * 100;
+    private void ProgressService_ProgressChanged(object? sender, double e) => Step = (int)(e * 5 - 1);
 
     private void Settings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -117,12 +117,13 @@ public partial class ModsViewModel : PageViewModel
         }
     }
 
+    [ObservableProperty] private bool _showLog = false;
 
     [ObservableProperty] private string _logText;
 
     [ObservableProperty] private string _confirmText;
 
-    [ObservableProperty] private double _progress;
+    [ObservableProperty] private int _step;
 
     [ObservableProperty] private bool _loadOrderChanged;
 
@@ -149,6 +150,12 @@ public partial class ModsViewModel : PageViewModel
     {
         IsFinished = false;
         IsProcessing = false;
+    }
+
+    [RelayCommand]
+    private void ToggleLog()
+    {
+        ShowLog = !ShowLog;
     }
 
     [RelayCommand]
@@ -294,7 +301,7 @@ public partial class ModsViewModel : PageViewModel
             _logger.Info($"WorkDir: {redmodPath}");
             _logger.Info($"Running commandlet: {args}");
 
-            _progressService.Report(0.1);
+            _progressService.Report(0.0);
 
             var workingDir = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin");
             var result = await ProcessUtil.RunRedmodAsync(redmodPath, args, workingDir, progress: _progressService);
@@ -304,27 +311,8 @@ public partial class ModsViewModel : PageViewModel
 
             IsFinished = true;
             ConfirmText = result 
-                ? $"Deployed {enabledMods.Count} enabled mods with RedMod." 
-                : "RedMod deploy failed. Please check the log for details.";
-
-            //if (!result)
-            //{
-            //    await Interactions.ShowMessageBoxAsync(
-            //        "RedMod deploy failed. Please check the log for details.",
-            //        "RedMod",
-            //        WMessageBoxButtons.Ok,
-            //        WMessageBoxImage.Error);
-            //}
-            //else
-            //{
-            //    await Interactions.ShowMessageBoxAsync(
-            //        $"Deployed {enabledMods.Count} enabled mods with RedMod.",
-            //        "RedMod deploy",
-            //        WMessageBoxButtons.Ok,
-            //        WMessageBoxImage.Exclamation);
-
-            //    SetLoadOrderChanged(false);
-            //}
+                ? $"Sucessfully deployed {enabledMods.Count} mods with REDmod." 
+                : "REDmod deploy failed. Please check the log for details.";
 
             return result;
         }
