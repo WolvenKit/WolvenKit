@@ -119,6 +119,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         {
             _archiveManager.PropertyChanged += ArchiveManager_PropertyChanged;
         }
+
+        ProjectLoaded = _projectManager.IsProjectLoaded;
         _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
 
         CheckView();
