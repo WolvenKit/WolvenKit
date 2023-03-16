@@ -35,12 +35,12 @@ namespace WolvenKit.Views.Tools
         {
             InitializeComponent();
 
-            ViewModel = Locator.Current.GetService<AssetBrowserViewModel>();
-            DataContext = ViewModel;
-
-
             this.WhenActivated(disposables =>
             {
+                if (DataContext is AssetBrowserViewModel vm)
+                {
+                    SetCurrentValue(ViewModelProperty, vm);
+                }
 
                 //ViewModel.ExpandAllCommand.Subscribe(x => ExpandAllNodes());
                 //ViewModel.CollapseAllCommand.Subscribe(x => CollapseAllNodes());

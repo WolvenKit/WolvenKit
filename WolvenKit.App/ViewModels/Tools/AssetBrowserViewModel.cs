@@ -164,10 +164,13 @@ public partial class AssetBrowserViewModel : ToolViewModel
     // if the archive manager is loaded
     private void ArchiveManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IArchiveManager.IsManagerLoaded))
+        if (e.PropertyName is nameof(IArchiveManager.IsManagerLoading) or nameof(IArchiveManager.IsManagerLoaded))
         {
             CheckView();
+        }
 
+        if (e.PropertyName is nameof(IArchiveManager.IsManagerLoaded))
+        {
             _archiveManager.PropertyChanged -= ArchiveManager_PropertyChanged;
         }
     }
