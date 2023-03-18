@@ -1840,7 +1840,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             for (var i = 0; i < arr.Count; i++)
             {
-                if (!Equals(arr[i], Data))
+                if (!ReferenceEquals(arr[i], Data))
                 {
                     continue;
                 }
