@@ -8,6 +8,7 @@ env:
   FINALOUT: ./publish
   NAME: WolvenKit
   MREPO: ${{github.repository}}
+  packageId: REDModding.WolvenKit.Nightly
 
 jobs:
   check_date:
@@ -137,6 +138,7 @@ jobs:
      
 
       - name: Release dispatch
+        id: release_dispatch
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.VERSION_APP }}
@@ -147,3 +149,9 @@ jobs:
           repository: WolvenKit/WolvenKit-nightly-releases
           token: ${{ secrets.RELEASE_TOKEN }}
           body: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
+          
+      - name: winget
+        run: |
+          iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
+          $installerUrl = ${{ fromJSON(steps.release_dispatch.outputs.assets)[1].browser_download_url }}
+          .\wingetcreate.exe update ${env:packageId} -s -v ${{ env.VERSION_APP }} -u "$installerUrl|x64" -t ${{ secrets.RELEASE_TOKEN }}
