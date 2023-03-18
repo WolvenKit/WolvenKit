@@ -4,10 +4,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DynamicData.Aggregation;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -24,18 +22,18 @@ public class FileModel : ObservableObject
 
     public const string s_rawdir = "wkitrawdir";
 
-    public FileModel(string path, Cp77Project project)
+    public FileModel(FileSystemInfo fileSystemInfo, Cp77Project project)
     {
-        FullName = path;
         Project = project;
-        string parentfullname;
+        FullName = fileSystemInfo.FullName;
+        Name = fileSystemInfo.Name;
 
-        if (Directory.Exists(path))
+        string parentFullName;
+
+        if (fileSystemInfo is DirectoryInfo directoryInfo)
         {
             IsDirectory = true;
-            var di = new DirectoryInfo(path);
-            parentfullname = di.Parent.NotNull().FullName;
-            Name = di.Name;
+            parentFullName = directoryInfo.Parent.NotNull().FullName;
             _extension = ECustomImageKeys.OpenDirImageKey.ToString();
             if (FullName.StartsWith(project.ResourcesDirectory))
             {
@@ -50,21 +48,19 @@ public class FileModel : ObservableObject
                 _extension = Constants.RawDirectoryTop;
             }
         }
-        else if (File.Exists(path))
+        else if (fileSystemInfo is FileInfo fileInfo)
         {
             IsDirectory = false;
-            var fi = new FileInfo(path);
-            parentfullname = fi.Directory.NotNull().FullName;
-            Name = fi.Name;
-            _extension = fi.Extension;
+            parentFullName = fileInfo.Directory.NotNull().FullName;
+            _extension = fileInfo.Extension;
         }
         else
         {
-            throw new FileNotFoundException();
+            throw new NotSupportedException();
         }
 
         Hash = GenerateKey(FullName, project);
-        ParentHash = GenerateKey(parentfullname, project);
+        ParentHash = GenerateKey(parentFullName, project);
         RelativePath = GetRelativeName(FullName, project);
     }
 
@@ -92,9 +88,9 @@ public class FileModel : ObservableObject
     [Browsable(false)] public bool IsExpanded { get; set; }
 
     [Browsable(false)]
-    public bool IsConvertable => !IsDirectory
-                                                   && !string.IsNullOrEmpty(GetExtension())
-                                                   && Enum.GetNames(typeof(EConvertableFileFormat)).Contains(GetExtension());
+    public bool IsConvertable => !IsDirectory 
+                                 && !string.IsNullOrEmpty(GetExtension())
+                                 && Enum.GetNames(typeof(EConvertableFileFormat)).Contains(GetExtension());
     [Browsable(false)]
     public bool IsImportable
     {
@@ -212,4 +208,13 @@ public class FileModel : ObservableObject
         }
     }
 
+    public static FileModel Create(string path, Cp77Project project)
+    {
+        var attr = File.GetAttributes(path);
+        if (attr.HasFlag(FileAttributes.Directory))
+        {
+            return new FileModel(new DirectoryInfo(path), project);
+        }
+        return new FileModel(new FileInfo(path), project);
+    }
 }

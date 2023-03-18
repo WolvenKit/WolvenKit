@@ -242,7 +242,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         // open files
         if (Enum.TryParse<ERedExtension>(Path.GetExtension(filePath)[1..], out var _))
         {
-            _ = OpenFileAsync(new FileModel(filePath, ActiveProject.NotNull())); // TODO
+            _ = OpenFileAsync(FileModel.Create(filePath, ActiveProject.NotNull())); // TODO
             return true;
         }
 
