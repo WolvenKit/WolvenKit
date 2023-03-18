@@ -16,6 +16,7 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Helpers;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Exporters;
@@ -27,6 +28,8 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
     public TextureImportView()
     {
         InitializeComponent();
+
+        ImportGrid.FilterRowCellRenderers.Add("TextBoxExt", new GridFilterRowTextBoxRendererExt());
 
         this.WhenActivated(disposables =>
         {

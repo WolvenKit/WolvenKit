@@ -253,8 +253,10 @@
                         </syncfusion:GridCheckBoxColumn.HeaderTemplate>
                     </syncfusion:GridCheckBoxColumn>
                     <syncfusion:GridTextColumn
+                        AllowFiltering="True"
                         ColumnSizer="Star"
                         FilterRowCondition="Contains"
+                        FilterRowEditorType="TextBoxExt"
                         HeaderText="Name"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Name" />

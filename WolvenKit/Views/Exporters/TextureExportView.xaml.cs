@@ -1,10 +1,12 @@
 ﻿using System.Reactive.Disposables;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.Grid.Cells;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Exporters;
 
@@ -16,6 +18,8 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
     public TextureExportView()
     {
         InitializeComponent();
+
+        ExportGrid.FilterRowCellRenderers.Add("TextBoxExt", new GridFilterRowTextBoxRendererExt());
 
         this.WhenActivated(disposables =>
         {
