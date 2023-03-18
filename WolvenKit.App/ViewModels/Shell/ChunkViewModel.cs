@@ -1836,36 +1836,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Descriptor = $"{q.I}, {q.J}, {q.K}, {q.R}";
         }
-        if (Data is CMaterialInstance && Parent is not null && Tab is not null && Tab.Parent.Cr2wFile.RootChunk is CMesh mesh)
+        if (ResolvedData is CMaterialInstance && Parent is { Data: IRedArray arr } && GetRootModel().Data is CMesh mesh)
         {
-            if (mesh.LocalMaterialBuffer.RawData?.Data is CR2WList list)
+            for (var i = 0; i < arr.Count; i++)
             {
-                for (var i = 0; i < list.Files.Count; i++)
+                if (!Equals(arr[i], Data))
                 {
-                    if (list.Files[i].RootChunk == Data)
-                    {
-                        var entry = mesh.MaterialEntries.FirstOrDefault(x => x is not null && x.IsLocalInstance && x.Index == i);
-                        if (entry != null)
-                        {
-                            Descriptor = entry.Name;
-                        }
-                        break;
-                    }
+                    continue;
                 }
-            }
-        }
-        else if (ResolvedData is CMaterialInstance && Parent is not null && Tab is not null && Tab.Parent.Cr2wFile.RootChunk is CMesh mesh2)
-        {
-            for (var i = 0; i < mesh2.PreloadLocalMaterialInstances.Count; i++)
-            {
-                if (mesh2.PreloadLocalMaterialInstances[i] == Data)
+
+                var entry = mesh.MaterialEntries.FirstOrDefault(x => x is not null && x.IsLocalInstance && x.Index == i);
+                if (entry != null)
                 {
-                    if (mesh2.MaterialEntries.Count > i)
-                    {
-                        Descriptor = mesh2.MaterialEntries[i].NotNull().Name;
-                    }
-                    break;
+                    Descriptor = entry.Name;
                 }
+                break;
             }
         }
         else if (ResolvedData is not null)
