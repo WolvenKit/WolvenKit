@@ -167,6 +167,18 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
         throw new PropertyNotFoundException();
     }
 
+    public IRedType? GetPropertyDefaultValue(string name)
+    {
+        var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), name);
+        if (propertyInfo == null)
+        {
+            return null;
+        }
+
+        ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+        return (IRedType?)RedReflection.GetClassDefaultValue(propertyInfo.ContainingTypeInfo.Type, propertyInfo);
+    }
+
     public bool ResetProperty(string name)
     {
         var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), name);

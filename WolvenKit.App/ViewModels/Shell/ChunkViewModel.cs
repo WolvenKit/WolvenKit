@@ -773,6 +773,25 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    public IRedType? ParentData
+    {
+        get
+        {
+            var parentData = Parent?.Data;
+
+            if (parentData is IRedBaseHandle handle)
+            {
+                parentData = handle.GetValue();
+            }
+            else if (parentData is CVariant cVariant)
+            {
+                parentData = cVariant.Value;
+            }
+
+            return parentData;
+        }
+    }
+
     #endregion Properties
 
     #region commands
@@ -1410,7 +1429,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        Data = new RedDummy();
+        IRedType data = new RedDummy();
+        if (ParentData is RedBaseClass redBaseClass)
+        {
+            var defaultValue = redBaseClass.GetPropertyDefaultValue(PropertyName);
+            if (defaultValue != null)
+            {
+                data = defaultValue;
+            }
+        }
+
+        Data = data;
         RecalculateProperties(Data);
     }
 
