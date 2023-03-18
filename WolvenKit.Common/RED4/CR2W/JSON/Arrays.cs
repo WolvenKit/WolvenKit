@@ -288,8 +288,7 @@ public class CStaticConverter : JsonConverter<IRedArray>, ICustomRedConverter
                     {
                         throw new JsonException();
                     }
-
-                    var counter = 0;
+                    
                     while (reader.Read())
                     {
                         if (reader.TokenType == JsonTokenType.EndArray)
@@ -300,11 +299,11 @@ public class CStaticConverter : JsonConverter<IRedArray>, ICustomRedConverter
                         var converter = options.GetConverter(arr.InnerType);
                         if (converter is ICustomRedConverter conv)
                         {
-                            arr[counter++] = conv.ReadRedType(ref reader, arr.InnerType, options);
+                            arr.Add(conv.ReadRedType(ref reader, arr.InnerType, options));
                         }
                         else
                         {
-                            arr[counter++] = JsonSerializer.Deserialize(ref reader, arr.InnerType, options);
+                            arr.Add(JsonSerializer.Deserialize(ref reader, arr.InnerType, options));
                         }
                     }
 
