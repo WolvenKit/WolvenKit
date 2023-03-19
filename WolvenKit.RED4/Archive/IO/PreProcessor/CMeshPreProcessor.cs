@@ -1,4 +1,5 @@
 ﻿using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO.PreProcessor;
@@ -17,6 +18,20 @@ public class CMeshPreProcessor : IPreProcessor
         }
 
         var mesh = (CMesh)cls;
+
+        // Need to create LocalMaterialBuffer.RawData else the materials won't get written
+        if (mesh.LocalMaterialBuffer.Materials is { Count: > 0 } &&
+            mesh.LocalMaterialBuffer.RawData?.Buffer.Data == null)
+        {
+            mesh.LocalMaterialBuffer.RawData = new DataBuffer
+            {
+                Buffer =
+                {
+                    Data = new CR2WList(), 
+                    Parent = mesh.LocalMaterialBuffer
+                }
+            };
+        }
 
         // make sure that the mesh is using either localMaterials or preloadLocalMaterials
         if (mesh.ExternalMaterials.Count > 0 && mesh.PreloadExternalMaterials.Count > 0)
@@ -85,10 +100,11 @@ public class CMeshPreProcessor : IPreProcessor
                 }
 
                 var materialName = "unknown";
-                var matDefinition = mesh.MaterialEntries[i];
-                if (null != matDefinition)
+
+                // Add a warning here???
+                if (i < mesh.MaterialEntries.Count && mesh.MaterialEntries[i] == null)
                 {
-                    materialName = $"{matDefinition.Name}";
+                    materialName = $"{mesh.MaterialEntries[i].Name}";
                 }
 
                 CheckMaterialProperties((CMaterialInstance)material, materialName);
@@ -103,17 +119,19 @@ public class CMeshPreProcessor : IPreProcessor
             }
 
             var materialName = "unknown";
-            var matDefinition = mesh.MaterialEntries[i];
-            if (null != matDefinition)
+
+            // Add a warning here???
+            if (i < mesh.MaterialEntries.Count && mesh.MaterialEntries[i] == null)
             {
-                materialName = $"{matDefinition.Name}";
+                materialName = $"{mesh.MaterialEntries[i].Name}";
             }
 
             CheckMaterialProperties((CMaterialInstance)material, materialName);
         }
 
         var numSubMeshes = 0;
-        if (mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob blob)
+        // Create RenderResourceBlob if it doesn't exists?
+        if (mesh.RenderResourceBlob?.Chunk is rendRenderMeshBlob blob)
         {
             numSubMeshes = blob.Header.RenderChunkInfos.Count;
         }
