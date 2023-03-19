@@ -1454,24 +1454,37 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    private bool CanPasteChunk()
+    private bool CanPasteChunks()
     {
-        if (RedDocumentTabViewModel.CopiedChunk is null)
+        if (RedDocumentTabViewModel.CopiedChunk is null && RedDocumentTabViewModel.CopiedChunks.Count == 0)
         {
             return false;
         }
 
-        if (Parent is not null && Parent.ResolvedData is IRedArray destinationParentArray)
+        IRedArray? destArray = null;
+        if (ResolvedData is IRedArray arr1)
         {
-            return destinationParentArray.InnerType.IsAssignableFrom(RedDocumentTabViewModel.CopiedChunk.GetType());
+            destArray = arr1;
         }
-        else if (ResolvedData is IRedArray destinationArray)
+        else if (Parent is { ResolvedData: IRedArray arr2 })
         {
-            return destinationArray.InnerType.IsAssignableFrom(RedDocumentTabViewModel.CopiedChunk.GetType());
+            destArray = arr2;
         }
-        return false;
-    }   // TODO RelayCommand check notify
-    [RelayCommand(CanExecute = nameof(CanPasteChunk))]
+
+        if (destArray == null)
+        {
+            return false;
+        }
+
+        if (RedDocumentTabViewModel.CopiedChunk != null)
+        {
+            return CheckTypeCompatibility(destArray.InnerType, RedDocumentTabViewModel.CopiedChunk.GetType()) != TypeCompability.None;
+        }
+
+        return RedDocumentTabViewModel.CopiedChunks.All(chunk => CheckTypeCompatibility(destArray.InnerType, chunk.GetType()) != TypeCompability.None);
+    } // TODO RelayCommand check notify
+
+    [RelayCommand(CanExecute = nameof(CanPasteChunks))]
     private void PasteChunk()
     {
         try
@@ -1584,8 +1597,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         //Tab.SelectedChunk = Parent;
     }
 
-    private bool CanPasteSelection() => (IsArray || IsInArray) && Parent is not null && RedDocumentTabViewModel.CopiedChunks.Count > 0 && (ArraySelfOrParent?.InnerType.IsAssignableFrom(RedDocumentTabViewModel.CopiedChunks.First().GetType()) ?? true);   // TODO RelayCommand check notify
-    [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+    [RelayCommand(CanExecute = nameof(CanPasteChunks))]
     private void PasteSelection()
     {
         ArgumentNullException.ThrowIfNull(Parent);
@@ -2391,17 +2403,83 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    private TypeCompability CheckTypeCompatibility(Type destType, Type srcType)
+    {
+        if (destType.IsAssignableFrom(srcType))
+        {
+            return TypeCompability.Assignable;
+        }
+
+        if (destType.IsAssignableTo(typeof(IRedBaseHandle)) &&
+            destType.GetGenericArguments()[0].IsAssignableFrom(srcType))
+        {
+            return TypeCompability.ClassToHandle;
+        }
+
+        if (srcType.IsAssignableTo(typeof(IRedBaseHandle)) &&
+            srcType.GetGenericArguments()[0].IsAssignableTo(destType))
+        {
+            return TypeCompability.HandleToClass;
+        }
+
+        return TypeCompability.None;
+    }
+
     public bool InsertChild(int index, IRedType item)
     {
         try
         {
-            if (ResolvedData is IRedArray ira && ira.InnerType.IsInstanceOfType(item))
+            if (ResolvedData is IRedArray ira)
             {
-                InsertArrayItem(ira, index, item);
+                var comp = CheckTypeCompatibility(ira.InnerType, item.GetType());
+                switch (comp)
+                {
+                    case TypeCompability.None:
+                        return false;
+                    case TypeCompability.Assignable:
+                        InsertArrayItem(ira, index, item);
+                        break;
+                    case TypeCompability.HandleToClass:
+                    {
+                        InsertArrayItem(ira, index, ((IRedBaseHandle)item).GetValue().NotNull());
+                        break;
+                    }
+                    case TypeCompability.ClassToHandle:
+                    {
+                        var handle = (IRedBaseHandle)System.Activator.CreateInstance(ira.InnerType)!;
+                        handle.SetValue((RedBaseClass?)item);
+                        InsertArrayItem(ira, index, handle);
+                        break;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
-            else if (Data is IRedArray ira2 && ira2.InnerType.IsInstanceOfType(item)) // Not sure why, but seems to be important^^
+            else if (Data is IRedArray ira2) // Not sure why, but seems to be important^^
             {
-                InsertArrayItem(ira2, index, item);
+                var comp = CheckTypeCompatibility(ira2.InnerType, item.GetType());
+                switch (comp)
+                {
+                    case TypeCompability.None:
+                        return false;
+                    case TypeCompability.Assignable:
+                        InsertArrayItem(ira2, index, item);
+                        break;
+                    case TypeCompability.HandleToClass:
+                    {
+                        InsertArrayItem(ira2, index, ((IRedBaseHandle)item).GetValue().NotNull());
+                        break;
+                    }
+                    case TypeCompability.ClassToHandle:
+                    {
+                        var handle = (IRedBaseHandle)System.Activator.CreateInstance(ira2.InnerType)!;
+                        handle.SetValue((RedBaseClass?)item);
+                        InsertArrayItem(ira2, index, handle);
+                        break;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
             else if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
             {
@@ -3592,5 +3670,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     #endregion
 
-
+    private enum TypeCompability
+    {
+        None,
+        Assignable,
+        HandleToClass,
+        ClassToHandle
+    }
 }
