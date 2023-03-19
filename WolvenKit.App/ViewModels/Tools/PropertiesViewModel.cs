@@ -295,11 +295,6 @@ public partial class PropertiesViewModel : ToolViewModel
     {
         var extension = Path.GetExtension(filename).TrimStart('.');
 
-        if (Enum.IsDefined(typeof(EConvertableOutput), extension))
-        {
-
-        }
-
         if (Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
         {
             IsAudioPreviewVisible = true;

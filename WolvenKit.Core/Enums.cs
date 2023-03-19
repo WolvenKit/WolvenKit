@@ -152,7 +152,7 @@ namespace WolvenKit.Common
         tga = 3,
         tiff = 4,
         dds = 5,
-        fbx,
+        //fbx,
         gltf,
         glb,
         ttf,

@@ -64,7 +64,7 @@ namespace WolvenKit.Modkit.RED4
             return extAsEnum switch
             {
                 ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.tiff or ERawFileFormat.tga or ERawFileFormat.dds => HandleTextures(rawRelative, outDir, args),
-                ERawFileFormat.fbx or ERawFileFormat.gltf or ERawFileFormat.glb => ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>()),
+                ERawFileFormat.gltf or ERawFileFormat.glb => ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>()),
                 ERawFileFormat.masklist => ImportMlmask(rawRelative, outDir),
                 ERawFileFormat.ttf => ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>()),
                 ERawFileFormat.wav => ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>()),
@@ -525,7 +525,7 @@ namespace WolvenKit.Modkit.RED4
         private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
             rawextension switch
             {
-                ERawFileFormat.fbx => ECookedFileFormat.mesh,
+                //ERawFileFormat.fbx => ECookedFileFormat.mesh,
                 ERawFileFormat.gltf => ECookedFileFormat.mesh,
                 ERawFileFormat.glb => ECookedFileFormat.mesh,
                 ERawFileFormat.ttf => ECookedFileFormat.fnt,

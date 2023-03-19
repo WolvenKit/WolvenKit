@@ -81,7 +81,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
             ERawFileFormat.masklist => new MlmaskImportArgs(),
             ERawFileFormat.re => new ReImportArgs(),
 
-            ERawFileFormat.fbx => new CommonImportArgs(),
+            //ERawFileFormat.fbx => new CommonImportArgs(),
             ERawFileFormat.csv => new CommonImportArgs(),
             _ => throw new ArgumentOutOfRangeException()
         };
