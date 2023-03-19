@@ -926,7 +926,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (PropertyType.IsAssignableTo(typeof(IRedArray)))
         {
-            if (Data == null)
+            if (Data is RedDummy)
             {
                 var typeInfo = GetTypeInfo(Parent.ResolvedData);
                 var propertyInfo = typeInfo.GetPropertyInfoByName(Name).NotNull();
