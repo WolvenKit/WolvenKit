@@ -1853,6 +1853,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 break;
             }
         }
+        else if (ResolvedData is localizationPersistenceOnScreenEntry localizationPersistenceOnScreenEntry)
+        {
+            var desc = $"[{localizationPersistenceOnScreenEntry.PrimaryKey}]";
+            if (!string.IsNullOrEmpty(localizationPersistenceOnScreenEntry.SecondaryKey))
+            {
+                desc += $" {localizationPersistenceOnScreenEntry.SecondaryKey}";
+            }
+            Descriptor = desc;
+        }
         else if (ResolvedData is not null)
         {
             if (Data is IBrowsableDictionary ibd)
