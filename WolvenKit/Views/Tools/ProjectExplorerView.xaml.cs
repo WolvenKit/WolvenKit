@@ -161,14 +161,14 @@ namespace WolvenKit.Views.Tools
 
         private void OnBeforeDataSourceUpdate(object sender, EventArgs e)
         {
-            if (TreeGrid?.View == null || TreeGrid.View.Nodes.Count == 0)
+            if (TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0)
             {
                 return;
             }
 
             _selectedNodeState = ((FileModel)TreeGrid.SelectedItem)?.FullName;
             _nodeState = new Dictionary<string, bool>();
-            foreach (var node in TreeGrid.View.Nodes)
+            foreach (var node in TreeGrid.View.Nodes.RootNodes)
             {
                 if (((FileModel)node.Item).IsDirectory)
                 {
@@ -197,13 +197,13 @@ namespace WolvenKit.Views.Tools
 
         private void OnAfterDataSourceUpdate(object sender, EventArgs e)
         {
-            if (TreeGrid?.View == null || TreeGrid.View.Nodes.Count == 0 || _nodeState == null)
+            if (TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0 || _nodeState == null)
             {
                 return;
             }
 
             TreeGrid.CollapseAllNodes();
-            foreach (var node in TreeGrid.View.Nodes)
+            foreach (var node in TreeGrid.View.Nodes.RootNodes)
             {
                 if (((FileModel)node.Item).IsDirectory)
                 {
