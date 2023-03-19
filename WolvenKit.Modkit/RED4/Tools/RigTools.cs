@@ -82,13 +82,17 @@ namespace WolvenKit.Modkit.RED4.RigFile
             {
                 var rig = rigs[i];
 
-                ArgumentNullException.ThrowIfNull(rig.AposeLSTrans);
-                ArgumentNullException.ThrowIfNull(rig.AposeLSScale);
-                ArgumentNullException.ThrowIfNull(rig.AposeLSRot);
                 ArgumentNullException.ThrowIfNull(rig.LocalPosn);
                 ArgumentNullException.ThrowIfNull(rig.LocalScale);
                 ArgumentNullException.ThrowIfNull(rig.LocalRot);
                 ArgumentNullException.ThrowIfNull(rig.Names);
+
+                if (rig.AposeLSExits)
+                {
+                    ArgumentNullException.ThrowIfNull(rig.AposeLSTrans);
+                    ArgumentNullException.ThrowIfNull(rig.AposeLSScale);
+                    ArgumentNullException.ThrowIfNull(rig.AposeLSRot);
+                }
 
                 for (var e = 0; e < rigs[i].BoneCount; e++)
                 {
@@ -106,9 +110,9 @@ namespace WolvenKit.Modkit.RED4.RigFile
                         Names.Add(rig.Names[e]);
                         if (rigs[i].AposeLSExits)
                         {
-                            LocalPosn.Add(rig.AposeLSTrans[e]);
-                            LocalScale.Add(rig.AposeLSScale[e]);
-                            LocalRot.Add(rig.AposeLSRot[e]);
+                            LocalPosn.Add(rig.AposeLSTrans![e]);
+                            LocalScale.Add(rig.AposeLSScale![e]);
+                            LocalRot.Add(rig.AposeLSRot![e]);
                         }
                         else
                         {
