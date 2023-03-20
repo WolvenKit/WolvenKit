@@ -7,14 +7,10 @@ namespace WolvenKit.App.Factories;
 public class PageViewModelFactory : IPageViewModelFactory
 {
     private readonly ISettingsManager _settingsManager;
-    private readonly IPluginService _pluginService;
 
-    public PageViewModelFactory(
-        ISettingsManager settingsManager, 
-        IPluginService pluginService)
+    public PageViewModelFactory(ISettingsManager settingsManager)
     {
         _settingsManager = settingsManager;
-        _pluginService = pluginService;
     }
-    public HomePageViewModel HomePageViewModel(AppViewModel appViewModel) => new(appViewModel, _settingsManager, _pluginService);
+    public HomePageViewModel HomePageViewModel(AppViewModel appViewModel) => new(appViewModel, _settingsManager);
 }

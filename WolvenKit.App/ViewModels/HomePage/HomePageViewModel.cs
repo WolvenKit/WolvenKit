@@ -21,15 +21,13 @@ public enum EHomePage
 
 public partial class HomePageViewModel : ObservableObject
 {
-    private readonly ISettingsManager _settingsManager;
-    private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
+    private readonly ISettingsManager _settingsManager;
 
-    public HomePageViewModel(AppViewModel appViewModel, ISettingsManager settingsManager, IPluginService pluginService)
+    public HomePageViewModel(AppViewModel appViewModel, ISettingsManager settingsManager)
     {
-        _settingsManager = settingsManager;
-        _pluginService = pluginService;
         _appViewModel = appViewModel;
+        _settingsManager = settingsManager;
         
         CurrentWindowState = WindowState.Normal;
     }
