@@ -4,11 +4,166 @@
 WolvenKit 8.9.0 - 2023/03/20
 -----------------
 
+    Feature/material-export by @Syrrr in #1094
+    Enable TweakXL Subdirectories by @dragonzkiller in #1108
+    Refactor/cleanup by @rfuzzo in #1109
+    Include Garment Support for Custom Garments by @engres01 in #1110
+    Issue 1114 - allow non 1:1 mlmasks. by @kwekmaster in #1115
+    Project cleanup by @seberoth in #1117
+    fix: Apply meshes uext arg to uncook command by @seberoth in #1124
+    feature: Added new paths by @seberoth in #1125
+    Some new dumpers by @seberoth in #1128
+    Oodle fixes by @seberoth in #1129
+    Refactor/cleanup red4 wip by @rfuzzo in #1132
+    Moved AvalonEdit to WolvenKit by @seberoth in #1134
+    Texture Import fixes by @rfuzzo in #1140
+    Mesh preview robustness by @manavortex in #1141
+    fix: lockey exceptions, tweak files not openeing by @rfuzzo in #1139
+    Some fixes by @seberoth in #1145
+    use naudio implementation from naudio github by @rfuzzo in #1147
+    Fix/packing bugs by @rfuzzo in #1149
+    Make handles nullable again by @seberoth in #1150
+    ✨ a[rchive]:<string> Refinement Matches on Archive Path by @effs in #1151
+    General fixes by @seberoth in #1155, #1160, #1168, #1176, #1180, #1184, #1203, #1211, #1219
+    Implement ResourcePath type by @dragonzkiller in #1156
+    ⚓ Import/Export Bimsnes by @effs in #1170
+    wopss: document factories by @rfuzzo in #1161
+    Feat/convert json by @rfuzzo in #1181
+    1146: prevent adding folders to themselves by accident by @manavortex in #1192
+    ♻️ Experimental Unified Mesh Exporter by @effs in #1197
+    📛 Export/Import Type Tagged .morphtarget GLTF by @effs in #1196
+    mesh validation implementation, WIP by @manavortex in #1195
+    Fix/patch fixes by @rfuzzo in #1201
+    Add a save image item to the right click menu on the image preview. by @Simarilius-uk in #1202
+    Fix: Simplify Project UI Layout Loading, Which May Avoid File Lock? by @effs in #1204
+    feat: made import and export tool load files async by @rfuzzo in #1205
+    Garment Support fixes by @engres01 in #1214
+    fixed a typo by @manavortex in #1215
+    fix: Mesh preview not updating after switching tabs by @seberoth in #1216
+    fix: Move AppViewModel TaskStatus to update on main thread by @dragonzkiller in #1218
+    Remove WindowsAPICodePack by @dragonzkiller in #1217
+    feat: Display REDmod deploy progress steps by @dragonzkiller in #1221
+    DockingManager improvements by @seberoth in #1220
+    Add the selected mesh to the export list for multimesh by @Simarilius-uk in #1235
 
 Features
 
+    added regionName to output targetName (a0109bc)
+    Add more missing names, thanks again @psiberx (618a59d)
+    Readded missing GroupTags (75ebed9)
+    Updated RTTI to 1.61_DLSS3 (84b3424)
+    Added method to scripting to load project files as cr2w/json (d99c7d5)
+    Make PE search tab aware & stay filtered after file changes (7634e20)
+    Allow loading raw json file via scripting (2a10660)
+    Get project file list via scripting (0f98cbe)
+    make json conversions async and multiple-file conversions in PE (d5bb1f1), closes #1143
+    Added filter row to Import. Changed all filter rows to use "Contains" as default. Fixes #1172 (e6fc421)
+    Added some basic validation to CMesh saving (b4257d4)
+    made import and export tool load files async (f190e71), closes #1106
+    make build tasks dependent on app status (ff6b38e), closes #1050
+    Added JSON buffer support to SerializationDeferredDataBuffer and SharedDataBuffer (0054910)
 
 Bug Fixes
+
+    remove old installer (82013be)
+    fixed a bug where opening documents would crash (a3de7db)
+    fixed a bug where deleting directories would not update the Project explorer (02fe29c)
+    fixed a bug with adding files in asset browser (a2b5967)
+    Apply meshes uext arg to uncook command (4fed618)
+    change scriptservice injection (226925e)
+    "Fixed" Project explorer refresh time... (868c280)
+    don't compress images when compression is "none" (c630d0e), closes #1135
+    don't throw but notify when an entity can't be exported (6ae311e), closes #1144
+    fixed a bug where redmod deploy would timeout in the UI (803a994)
+    fixed a bug where the PE was blocking during json conversions (32cc3e1)
+    fixed a bug where the sound modding tool would crash on load (74299e4)
+    Fixed CHandle/CWeakHandle reading (6b82df7)
+    Fixed CurvePoint creation while reading CR2W files (b316c95)
+    Fixed json import/export (68ec1f8)
+    Fixed mesh preview showing "NO DATA" as header (fe5b5ee)
+    Fixed null ref in mesh preview. Fixes #1127 (4a0b44a)
+    Fixed throwing ArgumentNullException when null is allowed. Fixes #1112 (45ea95b)
+    lockey exceptions, tweak files not openeing (05bbfe3), closes #1136
+    Make handles nullable again (7475f22)
+    make launch options and commands not null (c52dd1c)
+    missing icons in AB and PE (c22faa8)
+    refresh export and import views on window activate (91329ac), closes #1103
+    various packing bugs (e044f43)
+    Fixed bug while uncooking mlmasks (2f1eff9)
+    fixed exception when a archive file couldn't be found. Fixes #1153 (98a0c19)
+    Fixed export of CMaterialParameterStructBuffer. Fixes #1152 (ec72dab)
+    Fixed FileWatcher looking for tmp files (167b48e)
+    Exception while rendering streamingsectors (b401653)
+    fixed a ci issue where the nightly console would not get published (dc10035)
+    Partially fixed CEnums which have a default value != 0 (6ed8ea6)
+    Write unresolvable tweakdbids as hash (f9a6084)
+    Exception while closing WolvenKit (1790d89)
+    Some issues while launching for the first time (feb8151)
+    Values not saving for anything below handles/variants (6cfbdf8)
+    Wrong inkwidget preview (c968367)
+    Better RedImage error handling (7057a6e)
+    Closing archive handle to early while unbundling. Should fix #1169 (6656cfd)
+    File info not loading (da49b50)
+    fix logviewmodel proliferation (fa225b1)
+    Merging error? (39d61e2)
+    Mesh preview not rendering properly on first load (a10768e)
+    Minor factory fixes (add1dba)
+    "Find in Explorer" wasn't working for projects (cbf622f)
+    Array editing always changing index 0 (885173f)
+    Only show highest priority file in the AssetBrowser (503cfbb)
+    Copying non continues selections resulted in a wrong result. (fe12bd2)
+    Floating windows weren't removed from active documents on close. Fixes #1183 (0d83259)
+    Made array deletions index based. Fixes #1182 (1d94b96)
+    Paste selection not working. Fixes #1178 (4a85358)
+    Tweak record not showing (90ba1fc)
+    add more logging, move some logging to debug (9971913)
+    Avoid exporting empty images while morphtarget export (f5480e8)
+    fixed a critical bug where creating new projects would crash (4cf0d33)
+    fixed context menu bugs (609adf5), closes #1188
+    fixed recent projects not updating (45f8b72), closes #1200
+    incorrect texture conversions on no compression (957b03c), closes #1164
+    Simplify Project UI Layout Loading, Which May Avoid File Lock? (17c94ec)
+    some small UI bugs (0668406)
+    Wrong texture scaling in mesh previews (c692c75)
+    correct logger messages (c9a7a20)
+    fixed convertToJson change on used (03bc621)
+    vector editor loose value on lost focus (6aacaa3)
+    write mod info json for redmods (4398d3a)
+    Disabled unused graph viewer for scene files (8222eea)
+    Made LocKeyBrwoser primaryKey column a NumbericColumn (0ff6e5a)
+    NodeRef hash calculation for nodeRefs with aliases (ce239c9)
+    just warn and do not fail mod launch if script files are found in a redmod (994b86c)
+    Mesh preview not updating after switching tabs (a47fd6d)
+    Don't divide by 0... Fixes #1119 (d32ae9a)
+    Handle methods returning non-nullable values (c895ec0)
+    Small fix for empty NodeRefs (4cdaab5)
+    Some minor fixes (a21e936)
+    Fix AB loading, better approach (b1b5dd3)
+    Hide Add selected item while no project is loaded (6f33988)
+    AB getting wrong ViewModel (8dfc8a5)
+    Made AB tree view refresh async (a47fd21)
+    Set ProjectLoaded while opening the AB (12c7dbe)
+
+Code Refactoring
+
+    Made WolvenKit.RED4 nullable (2e9c284)
+    Merged RED4 projects (b82c08b)
+    [GUI] Load oodle dll from settings path (50fcf35)
+    Moved AvalonEdit to WolvenKit (0eb6389)
+    Moved property default value check to ExtendedPropertyInfo (c3298fe)
+    Small change to archive writing (58df737)
+    Some CMeshPreProcessor optimizations (f5db9bd)
+    Removed some null checks (868b4f3)
+    Removed custom DockPanes.txt (1b3e03a)
+    Changed FileModel to use FileSystemInfo instead of string path (e0232c0)
+
+Performance Improvements
+
+    Prepare render data only after a preview tab is selected (115658d)
+
+Documentation
+
+    update CONTRIBUTING.md (15b81cb)
 
 
 WolvenKit 8.8.1
