@@ -47,14 +47,20 @@ namespace WolvenKit.Views.Tools
 
             tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
-            ViewModel = Locator.Current.GetService<ProjectExplorerViewModel>();
-            DataContext = ViewModel;
-
-            ViewModel.BeforeDataSourceUpdate += OnBeforeDataSourceUpdate;
-            ViewModel.AfterDataSourceUpdate += OnAfterDataSourceUpdate;
+            
 
             this.WhenActivated(disposables =>
             {
+                if (DataContext is ProjectExplorerViewModel vm)
+                {
+                    SetCurrentValue(ViewModelProperty, vm);
+                }
+
+                AddKeyUpEvent();
+
+                ViewModel.BeforeDataSourceUpdate += OnBeforeDataSourceUpdate;
+                ViewModel.AfterDataSourceUpdate += OnAfterDataSourceUpdate;
+
                 Interactions.DeleteFiles = input =>
                 {
                     var count = input.Count();
@@ -140,8 +146,6 @@ namespace WolvenKit.Views.Tools
                     viewModel => viewModel.RefreshCommand,
                     view => view.RefreshButton);
             });
-
-            AddKeyUpEvent();
         }
 
         private void AddKeyUpEvent()

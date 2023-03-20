@@ -153,7 +153,6 @@ public partial class TextureExportViewModel : ExportViewModel
         IsProcessing = false;
 
         _watcherService.IsSuspended = false;
-        await _watcherService.RefreshAsync(_projectManager.ActiveProject);
         _progressService.IsIndeterminate = false;
 
         if (sucessful > 0)

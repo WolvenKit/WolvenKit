@@ -250,7 +250,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanRefresh() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanRefresh))]
-    private Task Refresh() => _watcherService.RefreshAsync(ActiveProject.NotNull());
+    private void Refresh() => _watcherService.QueueRefresh();
 
     /// <summary>
     /// Opens the currently selected folder in the tab
@@ -318,7 +318,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
 
             _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(ActiveProject.NotNull());
 
             _progressService.Completed();
         }
@@ -581,7 +580,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         _watcherService.IsSuspended = false;
-        await _watcherService.RefreshAsync(ActiveProject.NotNull());
 
         _progressService.Completed();
     }
@@ -643,7 +641,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         _watcherService.IsSuspended = false;
-        await _watcherService.RefreshAsync(ActiveProject.NotNull());
 
         _progressService.Completed();
     }

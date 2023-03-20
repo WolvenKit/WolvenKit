@@ -47,10 +47,6 @@ public class WKitUIScripting : WKitScripting
         if (_watcherService != null && _watcherService.IsSuspended != suspend)
         {
             _watcherService.IsSuspended = suspend;
-            if (!suspend)
-            {
-                _watcherService.RefreshAsync(_projectManager.ActiveProject);
-            }
         }
     }
 

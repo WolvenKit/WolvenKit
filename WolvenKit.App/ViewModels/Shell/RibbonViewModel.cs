@@ -73,7 +73,6 @@ public partial class RibbonViewModel : ObservableObject
             _watcherService.IsSuspended = true;
             await _gameControllerFactory.GetController().LaunchProject(launchProfile);
             _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(MainViewModel.ActiveProject);
         }
         else
         {
