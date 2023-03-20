@@ -8,7 +8,7 @@ env:
   FINALOUT: ./publish
   NAME: WolvenKit
   MREPO: ${{github.repository}}
-  packageId: REDModding.WolvenKit.Nightly
+  WINGET_ID: REDModding.WolvenKit.Nightly
 
 jobs:
   check_date:
@@ -154,4 +154,4 @@ jobs:
         run: |
           iwr https://aka.ms/wingetcreate/latest -OutFile wingetcreate.exe
           $installerUrl = ${{ fromJSON(steps.release_dispatch.outputs.assets)[1].browser_download_url }}
-          .\wingetcreate.exe update ${env:packageId} -s -v ${{ env.VERSION_APP }} -u "$installerUrl|x64" -t ${{ secrets.RELEASE_TOKEN }}
+          .\wingetcreate.exe update ${env:WINGET_ID} -s -v ${{ env.VERSION_APP }} -u "$installerUrl|x64" -t ${{ secrets.RELEASE_TOKEN }}
