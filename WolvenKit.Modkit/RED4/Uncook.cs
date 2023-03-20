@@ -895,6 +895,7 @@ namespace WolvenKit.Modkit.RED4
                 case MeshExportType.Multimesh:
                 {
                     var meshes = meshargs.MultiMeshMeshes;
+                   
                     var rigs = meshargs.MultiMeshRigs;
                     if (!meshes.Any() || !rigs.Any())
                     {
@@ -922,6 +923,10 @@ namespace WolvenKit.Modkit.RED4
                                   return new KeyValuePair<Stream, string>(ms, entry.FileName);
                               }).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
+                    if (!meshstreams.ContainsKey(cr2wStream))
+                    {
+                        meshstreams.Add(cr2wStream, cr2wFileName.Name);
+                    }
 
                     return ExportMultiMeshWithRig(meshstreams, rigstreams, cr2wFileName, meshargs);
                 }
@@ -1045,6 +1050,11 @@ namespace WolvenKit.Modkit.RED4
                 _ => throw new ArgumentOutOfRangeException(nameof(meshargs.meshExportType), meshargs.meshExportType, "This isn't a mesh to export")
             };
 
+            if (!meshStreams.ContainsKey(cr2wStream))
+            {
+                meshStreams.Add(cr2wStream, cr2wFileName.Name);
+            }
+
             if (!meshStreams.Any())
             {
                 _loggerService.Warning($"Export: no meshes found! Exporting just a rig is probably not supported but let's give it a try");
@@ -1060,9 +1070,8 @@ namespace WolvenKit.Modkit.RED4
             }
 
             return ExportMeshesAndRigs(meshStreams, rigStreams, cr2wFileName, meshargs);
-
-
-            Dictionary<Stream, string> _FilesToStreams(List<FileEntry> files) =>
+            
+            Dictionary<Stream, string> _FilesToStreams(List<FileEntry> files) =>            
                 files.Select(
                       delegate (FileEntry entry)
                       {
@@ -1071,6 +1080,7 @@ namespace WolvenKit.Modkit.RED4
                           ar?.CopyFileToStream(ms, entry.NameHash64, false);
                           return new KeyValuePair<Stream, string>(ms, entry.FileName);
                       }).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            
         }
 
 #endregion NewMeshExporter
