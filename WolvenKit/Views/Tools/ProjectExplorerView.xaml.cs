@@ -389,10 +389,16 @@ namespace WolvenKit.Views.Tools
         {
             if (TreeGrid != null && TreeGrid.View != null)
             {
-                TreeGrid.View.Filter = IsFileIn;
-                TreeGridFlat.View.Filter = IsFileInFlat;
-                TreeGrid.View.RefreshFilter();
-                TreeGridFlat.View.RefreshFilter();
+                if (ViewModel.IsFlatModeEnabled)
+                {
+                    TreeGridFlat.View.Filter = IsFileInFlat;
+                    TreeGridFlat.View.RefreshFilter();
+                }
+                else
+                {
+                    TreeGrid.View.Filter = IsFileIn;
+                    TreeGrid.View.RefreshFilter();
+                }
             }
         }
 
@@ -440,12 +446,20 @@ namespace WolvenKit.Views.Tools
 
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
-            // expand all
-            TreeGrid.ExpandAllNodes();
             _currentFolderQuery = e.Info;
 
-            // filter programmatially
-            TreeGrid.View.RefreshFilter();
+            if (ViewModel.IsFlatModeEnabled)
+            {
+                TreeGridFlat.View.RefreshFilter();
+            }
+            else
+            {
+                // expand all
+                TreeGrid.ExpandAllNodes();
+                
+                // filter programmatially
+                TreeGrid.View.RefreshFilter();
+            }
         }
 
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)
