@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <VersionPrefix>1.61.0</VersionPrefix>
+    <VersionPrefix>1.61.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
