@@ -8,7 +8,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using DynamicData;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common;
