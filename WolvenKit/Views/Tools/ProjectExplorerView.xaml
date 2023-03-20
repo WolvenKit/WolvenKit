@@ -12,6 +12,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
+    x:Name="uc"
     d:DataContext="{d:DesignInstance Type=tools:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
@@ -47,7 +48,7 @@
                 x:Key="TreeGridContextMenu"
                 FontSize="11"
                 Style="{DynamicResource WPFContextMenuStyle}">
-                
+
                 <MenuItem
                     Margin="0"
                     Header="Actions"
@@ -154,7 +155,7 @@
                             Kind="ContentPaste" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
+
                 <Separator />
 
                 <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
@@ -669,6 +670,7 @@
             FilterLevel="Extended"
             HeaderRowHeight="3"
             IsReadOnly="True"
+            ItemsSource="{Binding ElementName=uc, Path=TreeItemSource, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
             ParentPropertyName="Hash"
             PreviewMouseDown="TreeGrid_MouseDown"
@@ -731,6 +733,7 @@
             FilterLevel="Extended"
             HeaderRowHeight="28"
             IsReadOnly="True"
+            ItemsSource="{Binding ElementName=uc, Path=FlatItemSource, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
             ParentPropertyName="Hash"
             PreviewMouseDown="TreeGrid_MouseDown"

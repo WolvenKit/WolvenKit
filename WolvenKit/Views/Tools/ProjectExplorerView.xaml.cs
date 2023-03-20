@@ -31,6 +31,26 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class ProjectExplorerView : ReactiveUserControl<ProjectExplorerViewModel>
     {
+        public static readonly DependencyProperty TreeItemSourceProperty =
+            DependencyProperty.Register(nameof(TreeItemSource), typeof(ObservableCollection<FileModel>),
+                typeof(ProjectExplorerView), new PropertyMetadata(null));
+
+        public ObservableCollection<FileModel> TreeItemSource
+        {
+            get => (ObservableCollection<FileModel>)GetValue(TreeItemSourceProperty);
+            set => SetValue(TreeItemSourceProperty, value);
+        }
+
+        public static readonly DependencyProperty FlatItemSourceProperty =
+            DependencyProperty.Register(nameof(FlatItemSource), typeof(ObservableCollection<FileModel>),
+                typeof(ProjectExplorerView), new PropertyMetadata(null));
+
+        public ObservableCollection<FileModel> FlatItemSource
+        {
+            get => (ObservableCollection<FileModel>)GetValue(FlatItemSourceProperty);
+            set => SetValue(FlatItemSourceProperty, value);
+        }
+
         #region Constructors
 
         public ProjectExplorerView()
@@ -57,9 +77,6 @@ namespace WolvenKit.Views.Tools
                 }
 
                 AddKeyUpEvent();
-
-                ViewModel.BeforeDataSourceUpdate += OnBeforeDataSourceUpdate;
-                ViewModel.AfterDataSourceUpdate += OnAfterDataSourceUpdate;
 
                 Interactions.DeleteFiles = input =>
                 {
@@ -128,16 +145,6 @@ namespace WolvenKit.Views.Tools
                     .Subscribe(_ => OnCellDoubleTapped(_.Sender, _.EventArgs as TreeGridCellDoubleTappedEventArgs))
                     .DisposeWith(disposables);
 
-                this.OneWayBind(ViewModel,
-                        viewModel => viewModel.BindGrid1,
-                        view => view.TreeGrid.ItemsSource)
-                    .DisposeWith(disposables);
-
-                this.OneWayBind(ViewModel,
-                        viewModel => viewModel.BindGrid1,
-                        view => view.TreeGridFlat.ItemsSource)
-                    .DisposeWith(disposables);
-
 
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.OpenRootFolderCommand,
@@ -145,6 +152,21 @@ namespace WolvenKit.Views.Tools
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.RefreshCommand,
                     view => view.RefreshButton);
+
+                this.WhenAnyValue(x => x.ViewModel.BindGrid1, x => x.ViewModel.IsFlatModeEnabled)
+                    .Subscribe((_) =>
+                    {
+                        if (ViewModel.IsFlatModeEnabled)
+                        {
+                            SetCurrentValue(FlatItemSourceProperty, ViewModel.BindGrid1);
+                        }
+                        else
+                        {
+                            BeforeDataSourceUpdate();
+                            SetCurrentValue(TreeItemSourceProperty, ViewModel.BindGrid1);
+                            AfterDataSourceUpdate();
+                        }
+                    });
             });
         }
 
@@ -163,7 +185,7 @@ namespace WolvenKit.Views.Tools
         private Dictionary<string, bool> _nodeState;
         private string _selectedNodeState;
 
-        private void OnBeforeDataSourceUpdate(object sender, EventArgs e)
+        private void BeforeDataSourceUpdate()
         {
             if (TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0)
             {
@@ -199,7 +221,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void OnAfterDataSourceUpdate(object sender, EventArgs e)
+        private void AfterDataSourceUpdate()
         {
             if (TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0 || _nodeState == null)
             {

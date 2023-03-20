@@ -161,11 +161,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void OnNext(IChangeSet<FileModel, ulong> obj)
     {
-        Application.Current.Dispatcher.Invoke(new Action(delegate ()
+        Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
         {
-            BeforeDataSourceUpdate?.Invoke(this, EventArgs.Empty);
             BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
-            AfterDataSourceUpdate?.Invoke(this, EventArgs.Empty);
         }), DispatcherPriority.ContextIdle);
     }
 
@@ -737,11 +735,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #region Methods
 
     public AppViewModel GetAppViewModel() => _mainViewModel;
-
-    public event EventHandler? BeforeDataSourceUpdate;
-    public event EventHandler? AfterDataSourceUpdate;
-
-    
 
     /// <summary>
     /// Initialize Avalondock specific defaults that are specific to this tool window.
