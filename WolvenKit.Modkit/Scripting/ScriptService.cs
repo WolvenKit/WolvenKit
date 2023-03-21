@@ -45,9 +45,13 @@ public partial class ScriptService : ObservableObject
         {
             await Task.Run(() => _mainEngine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code));
         }
-        catch (Exception ex)
+        catch (ScriptEngineException ex1)
         {
-            _loggerService?.Error(ex);
+            _loggerService?.Error(ex1.ErrorDetails);
+        }
+        catch (Exception ex2)
+        {
+            _loggerService?.Error(ex2);
         }
 
         if (_mainEngine != null)
