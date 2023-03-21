@@ -20,8 +20,8 @@
     <PackageVersion Include="MahApps.Metro" Version="2.4.9" />
     <PackageVersion Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageVersion Include="Microsoft.Build.Framework" Version="17.4.0" />
-    <PackageVersion Include="Microsoft.ClearScript.V8" Version="7.3.7" />
-    <PackageVersion Include="Microsoft.ClearScript.V8.Native.win-x64" Version="7.3.7" />
+    <PackageVersion Include="Microsoft.ClearScript.V8" Version="7.4.0" />
+    <PackageVersion Include="Microsoft.ClearScript.V8.Native.win-x64" Version="7.4.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.2" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
@@ -87,6 +87,6 @@
     <PackageVersion Include="CommunityToolkit.WinUI" Version="7.1.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.2.230118.102" />
-	<PackageVersion Include="NVorbis" Version="0.10.5" />
+    <PackageVersion Include="NVorbis" Version="0.10.5" />
   </ItemGroup>
 </Project>
