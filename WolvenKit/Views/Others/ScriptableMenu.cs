@@ -46,11 +46,26 @@ public class ScriptableMenu : Menu, IScriptableControl
     {
         foreach (var scriptEntry in scriptEntries)
         {
-            var menuItem = new MenuItem { Header = scriptEntry.Name };
-            menuItem.Click += (_, _) => scriptEntry.Execute();
+            var menuItem = CreateTree(scriptEntry);
 
             Items.Add(menuItem);
             _scriptedElements.Add(menuItem);
+        }
+
+        MenuItem CreateTree(ScriptEntry scriptEntry)
+        {
+            var menuItem = new MenuItem { Header = scriptEntry.Name };
+            if (scriptEntry.HasFunction)
+            {
+                menuItem.Click += (_, _) => scriptEntry.Execute();
+            }
+
+            foreach (var child in scriptEntry.Children)
+            {
+                menuItem.Items.Add(CreateTree(child));
+            }
+
+            return menuItem;
         }
     }
 

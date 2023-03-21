@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,9 +16,16 @@ public class ExtendedScriptService : ScriptService
     private readonly Dictionary<string, List<ScriptEntry>> _uiScripts = new();
     private readonly Dictionary<string, IScriptableControl> _uiControls = new();
 
+    private readonly Dictionary<string, object> _hostObjects = new();
+
     private V8ScriptEngine? _uiEngine;
 
-    public ExtendedScriptService(ILoggerService loggerService) : base(loggerService) => RefreshUIScripts();
+    public ExtendedScriptService(ILoggerService loggerService) : base(loggerService)
+    {
+        _hostObjects.Add("ui", new UIHelper(this));
+
+        RefreshUIScripts();
+    }
 
     public void RegisterControl(IScriptableControl scriptableControl)
     {
@@ -76,7 +84,7 @@ public class ExtendedScriptService : ScriptService
     {
         UnloadScripts();
 
-        _uiEngine = GetUIScriptEngine();
+        _uiEngine = base.GetScriptEngine(_hostObjects);
 
         foreach (var file in Directory.GetFiles(ISettingsManager.GetWScriptDir(), "*.wscript"))
         {
@@ -92,25 +100,13 @@ public class ExtendedScriptService : ScriptService
             {
                 _uiEngine.Execute(code);
             }
-            catch (Exception e)
+            catch (ScriptEngineException ex1)
             {
-                _loggerService.Error(e);
+                _loggerService?.Error(ex1.ErrorDetails);
             }
-        }
-
-        if (_uiEngine.Script is ScriptObject so)
-        {
-            var item = so.GetProperty("items");
-            if (item is List<ScriptEntry> entries)
+            catch (Exception ex2)
             {
-                foreach (var scriptEntry in entries)
-                {
-                    if (!_uiScripts.ContainsKey(scriptEntry.Target))
-                    {
-                        _uiScripts.Add(scriptEntry.Target, new List<ScriptEntry>());
-                    }
-                    _uiScripts[scriptEntry.Target].Add(scriptEntry);
-                }
+                _loggerService?.Error(ex2);
             }
         }
 
@@ -123,32 +119,55 @@ public class ExtendedScriptService : ScriptService
         }
     }
 
-    protected virtual V8ScriptEngine GetUIScriptEngine(Dictionary<string, object>? hostObjects = null, string? searchPath = null)
+    public class UIHelper
     {
-        var engine = base.GetScriptEngine(hostObjects, searchPath);
+        private readonly ExtendedScriptService _extendedScriptService;
 
-        engine.AddHostObject("host", new HostFunctions());
-        engine.AddHostType("ScriptEntry", typeof(ScriptEntry));
-        engine.AddHostObject("items", new List<ScriptEntry>());
+        public UIHelper(ExtendedScriptService extendedScriptService) => _extendedScriptService = extendedScriptService;
 
-        return engine;
+        public ScriptEntry AddMenuItem(string target, string name) => AddMenuItem(target, name, null, null);
+
+        public ScriptEntry AddMenuItem(string target, string name, ScriptObject onClick) => AddMenuItem(target, name, onClick, null);
+
+        public ScriptEntry AddMenuItem(string target, string name, ScriptObject? onClick, params object?[]? args)
+        {
+            var scriptEntry = new ScriptEntry(name, onClick, args);
+        
+            if (!_extendedScriptService._uiScripts.ContainsKey(target))
+            {
+                _extendedScriptService._uiScripts.Add(target, new List<ScriptEntry>());
+            }
+            _extendedScriptService._uiScripts[target].Add(scriptEntry);
+
+            return scriptEntry;
+        }
+
+        public ScriptEntry AddMenuItem(ScriptEntry target, string name, ScriptObject? onClick = null, params object?[]? args)
+        {
+            var scriptEntry = new ScriptEntry(name, onClick, args);
+            target.Children.Add(scriptEntry);
+            return scriptEntry;
+        }
     }
 }
 
 public class ScriptEntry
 {
-    private readonly ScriptObject _function;
+    private readonly ScriptObject? _function;
+    private readonly object?[]? _args;
 
-    public string Target { get; }
     public string Name { get; }
+    public List<ScriptEntry> Children { get; set; } = new();
 
+    public bool HasFunction => _function != null;
 
-    public ScriptEntry(string target, string name, ScriptObject function)
+    public ScriptEntry(string name, ScriptObject? function, params object?[]? args)
     {
-        Target = target;
         Name = name;
+
         _function = function;
+        _args = args;
     }
 
-    public async void Execute() => await Task.Run(() => _function.Invoke(false));
+    public async void Execute() => await Task.Run(() => _function?.Invoke(false, _args));
 }
