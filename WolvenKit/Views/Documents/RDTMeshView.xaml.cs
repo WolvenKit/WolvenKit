@@ -34,7 +34,10 @@ namespace WolvenKit.Views.Documents
                     hxViewport.MouseDown3D += vm.MouseDown3D;
                 }
 
-                ViewModel.SelectedAppearance?.ModelGroup.RemoveSelf();
+                if (!ReferenceEquals(hxContentVisual.DataContext, DataContext))
+                {
+                    ViewModel.SelectedAppearance?.ModelGroup.RemoveSelf();
+                }
 
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.SelectedAppearance.ModelGroup,

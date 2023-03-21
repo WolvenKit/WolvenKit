@@ -1038,7 +1038,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (rRef.DepotPath.IsResolvable)
                 {
-                    return rRef.DepotPath.GetResolvedText();
+                    return rRef.DepotPath.GetResolvedText()!;
                 }
 
                 return (ulong)rRef.DepotPath;
@@ -1465,7 +1465,7 @@ namespace WolvenKit.Modkit.RED4
                                         var convValue = GetMaterialParameterValue(refer.GetType(), value);
                                         if (valueDict.ContainsKey(refer.ParameterName.ToString().NotNull()) && !Equals(valueDict[refer.ParameterName.ToString().NotNull()], convValue))
                                         {
-                                            chunk.Values.Add(new CKeyValuePair(refer.ParameterName.ToString().NotNull(), convValue));
+                                            chunk.Values.Add(new CKeyValuePair(refer.ParameterName.ToString().NotNull(), convValue.NotNull()));
                                         }
                                     }
                                 }
