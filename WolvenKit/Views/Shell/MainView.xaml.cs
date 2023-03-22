@@ -151,13 +151,19 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        protected override async void OnClosing(CancelEventArgs e)
         {
+            if (!await dockingAdapter.CloseAll())
+            {
+                e.Cancel = true;
+                return;
+            }
+
             dockingAdapter.SaveLayout();
             var projectManager = Locator.Current.GetService<IProjectManager>();
             if (projectManager is ProjectManager pm)
             {
-                pm.Save();
+                await pm.SaveAsync();
             }
             if (Locator.Current.GetService<IWatcherService>() is WatcherService ws)
             {

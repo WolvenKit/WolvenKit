@@ -1229,10 +1229,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private bool CanImportWorldNodeData() => Data is worldNodeData && PropertyCount > 0;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]
-    private Task ImportWorldNodeDataTask() => ImportWorldNodeDataTask(true);
+    private Task ImportWorldNodeDataAsync() => ImportWorldNodeDataTask(true);
 
     [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]   // TODO RelayCommand check notify
-    private Task ImportWorldNodeDataWithoutCoordsTask() => ImportWorldNodeDataTask(false);
+    private Task ImportWorldNodeDataWithoutCoordsAsync() => ImportWorldNodeDataTask(false);
 
     private bool CanDeleteSelection() => IsInArray && Tab is not null && Parent is not null;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
@@ -3124,13 +3124,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         var document = _appViewModel.ActiveDocument;
 
-        if (Tab is not null && document is not null)
+        if (document is RedDocumentViewModel vm && Tab is not null)
         {
             Tab.Parent.TabItemViewModels.Clear();
             await Task.Delay(1);
-            throw new NotImplementedException();
 
-            //await document.OpenFileAsync(Tab.File.FilePath);
+            vm.PopulateItems();
         }
     }
 
