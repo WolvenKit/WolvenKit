@@ -189,7 +189,6 @@ public partial class TextureImportViewModel : ImportViewModel
         IsProcessing = false;
 
         _watcherService.IsSuspended = false;
-        await _watcherService.RefreshAsync(_projectManager.ActiveProject);
         _progressService.IsIndeterminate = false;
 
         if (sucessful > 0)

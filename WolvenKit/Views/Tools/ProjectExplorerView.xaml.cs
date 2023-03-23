@@ -31,6 +31,26 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class ProjectExplorerView : ReactiveUserControl<ProjectExplorerViewModel>
     {
+        public static readonly DependencyProperty TreeItemSourceProperty =
+            DependencyProperty.Register(nameof(TreeItemSource), typeof(ObservableCollection<FileModel>),
+                typeof(ProjectExplorerView), new PropertyMetadata(null));
+
+        public ObservableCollection<FileModel> TreeItemSource
+        {
+            get => (ObservableCollection<FileModel>)GetValue(TreeItemSourceProperty);
+            set => SetValue(TreeItemSourceProperty, value);
+        }
+
+        public static readonly DependencyProperty FlatItemSourceProperty =
+            DependencyProperty.Register(nameof(FlatItemSource), typeof(ObservableCollection<FileModel>),
+                typeof(ProjectExplorerView), new PropertyMetadata(null));
+
+        public ObservableCollection<FileModel> FlatItemSource
+        {
+            get => (ObservableCollection<FileModel>)GetValue(FlatItemSourceProperty);
+            set => SetValue(FlatItemSourceProperty, value);
+        }
+
         #region Constructors
 
         public ProjectExplorerView()
@@ -47,14 +67,17 @@ namespace WolvenKit.Views.Tools
 
             tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
-            ViewModel = Locator.Current.GetService<ProjectExplorerViewModel>();
-            DataContext = ViewModel;
-
-            ViewModel.BeforeDataSourceUpdate += OnBeforeDataSourceUpdate;
-            ViewModel.AfterDataSourceUpdate += OnAfterDataSourceUpdate;
+            
 
             this.WhenActivated(disposables =>
             {
+                if (DataContext is ProjectExplorerViewModel vm)
+                {
+                    SetCurrentValue(ViewModelProperty, vm);
+                }
+
+                AddKeyUpEvent();
+
                 Interactions.DeleteFiles = input =>
                 {
                     var count = input.Count();
@@ -122,16 +145,6 @@ namespace WolvenKit.Views.Tools
                     .Subscribe(_ => OnCellDoubleTapped(_.Sender, _.EventArgs as TreeGridCellDoubleTappedEventArgs))
                     .DisposeWith(disposables);
 
-                this.OneWayBind(ViewModel,
-                        viewModel => viewModel.BindGrid1,
-                        view => view.TreeGrid.ItemsSource)
-                    .DisposeWith(disposables);
-
-                this.OneWayBind(ViewModel,
-                        viewModel => viewModel.BindGrid1,
-                        view => view.TreeGridFlat.ItemsSource)
-                    .DisposeWith(disposables);
-
 
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.OpenRootFolderCommand,
@@ -139,9 +152,22 @@ namespace WolvenKit.Views.Tools
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.RefreshCommand,
                     view => view.RefreshButton);
-            });
 
-            AddKeyUpEvent();
+                this.WhenAnyValue(x => x.ViewModel.BindGrid1, x => x.ViewModel.IsFlatModeEnabled)
+                    .Subscribe((_) =>
+                    {
+                        if (ViewModel.IsFlatModeEnabled)
+                        {
+                            SetCurrentValue(FlatItemSourceProperty, ViewModel.BindGrid1);
+                        }
+                        else
+                        {
+                            BeforeDataSourceUpdate();
+                            SetCurrentValue(TreeItemSourceProperty, ViewModel.BindGrid1);
+                            AfterDataSourceUpdate();
+                        }
+                    });
+            });
         }
 
         private void AddKeyUpEvent()
@@ -159,16 +185,16 @@ namespace WolvenKit.Views.Tools
         private Dictionary<string, bool> _nodeState;
         private string _selectedNodeState;
 
-        private void OnBeforeDataSourceUpdate(object sender, EventArgs e)
+        private void BeforeDataSourceUpdate()
         {
-            if (TreeGrid?.View == null || TreeGrid.View.Nodes.Count == 0)
+            if (TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0)
             {
                 return;
             }
 
             _selectedNodeState = ((FileModel)TreeGrid.SelectedItem)?.FullName;
             _nodeState = new Dictionary<string, bool>();
-            foreach (var node in TreeGrid.View.Nodes)
+            foreach (var node in TreeGrid.View.Nodes.RootNodes)
             {
                 if (((FileModel)node.Item).IsDirectory)
                 {
@@ -195,15 +221,15 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void OnAfterDataSourceUpdate(object sender, EventArgs e)
+        private void AfterDataSourceUpdate()
         {
-            if (TreeGrid?.View == null || TreeGrid.View.Nodes.Count == 0 || _nodeState == null)
+            if (TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0 || _nodeState == null)
             {
                 return;
             }
 
             TreeGrid.CollapseAllNodes();
-            foreach (var node in TreeGrid.View.Nodes)
+            foreach (var node in TreeGrid.View.Nodes.RootNodes)
             {
                 if (((FileModel)node.Item).IsDirectory)
                 {
@@ -363,10 +389,16 @@ namespace WolvenKit.Views.Tools
         {
             if (TreeGrid != null && TreeGrid.View != null)
             {
-                TreeGrid.View.Filter = IsFileIn;
-                TreeGridFlat.View.Filter = IsFileInFlat;
-                TreeGrid.View.RefreshFilter();
-                TreeGridFlat.View.RefreshFilter();
+                if (ViewModel.IsFlatModeEnabled)
+                {
+                    TreeGridFlat.View.Filter = IsFileInFlat;
+                    TreeGridFlat.View.RefreshFilter();
+                }
+                else
+                {
+                    TreeGrid.View.Filter = IsFileIn;
+                    TreeGrid.View.RefreshFilter();
+                }
             }
         }
 
@@ -414,12 +446,20 @@ namespace WolvenKit.Views.Tools
 
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
-            // expand all
-            TreeGrid.ExpandAllNodes();
             _currentFolderQuery = e.Info;
 
-            // filter programmatially
-            TreeGrid.View.RefreshFilter();
+            if (ViewModel.IsFlatModeEnabled)
+            {
+                TreeGridFlat.View.RefreshFilter();
+            }
+            else
+            {
+                // expand all
+                TreeGrid.ExpandAllNodes();
+                
+                // filter programmatially
+                TreeGrid.View.RefreshFilter();
+            }
         }
 
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)

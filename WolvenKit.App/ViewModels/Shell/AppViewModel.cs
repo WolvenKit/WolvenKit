@@ -121,7 +121,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         if (e.PropertyName == nameof(IProgressService<double>.Status))
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            Application.Current.Dispatcher.BeginInvoke(() =>
             {
                 TaskStatus = _progressService.Status;
                 switch (TaskStatus)
@@ -825,7 +825,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (result) =>
         {
             _watcherService.IsSuspended = false;
-            await _watcherService.RefreshAsync(ActiveProject);
             if (file.FullPath is not null)
             {
                 await RequestFileOpen(file.FullPath);
@@ -1017,7 +1016,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _watcherService.IsSuspended = true;
         await _gameControllerFactory.GetController().LaunchProject(profile);
         _watcherService.IsSuspended = false;
-        await _watcherService.RefreshAsync(ActiveProject);
+        _watcherService.QueueRefresh();
     }
 
     [RelayCommand]
@@ -1444,7 +1443,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 ActiveDocument?.SaveCommand.SafeExecute();
             }
             _watcherService.IsSuspended = false;
-            _ = _watcherService.RefreshAsync(ActiveProject);
+            _watcherService.QueueRefresh();
         }
         else
         {

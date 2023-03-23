@@ -208,7 +208,7 @@
                 </TabItem.Content>
             </TabItem>
 
-            <TabItem Name="PluginsPageTab" Selector.Selected="PluginsPageTab_Selected">
+            <TabItem Name="PluginsPageTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons

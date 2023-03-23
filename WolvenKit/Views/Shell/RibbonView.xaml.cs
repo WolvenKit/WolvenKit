@@ -54,6 +54,7 @@ namespace WolvenKit.Views.Shell
 
 
                 // pack
+                // pack redmod
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.PackRedModCommand,
                         view => view.ToolbarPackProjectButton)
@@ -62,6 +63,17 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel.MainViewModel.PackInstallRedModCommand,
                         view => view.ToolbarPackInstallRedmodButton)
                     .DisposeWith(disposables);
+                // pack legacy mod
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.MainViewModel.PackModCommand,
+                        view => view.ToolbarPackProjectOldButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.MainViewModel.PackInstallModCommand,
+                        view => view.ToolbarPackInstallOldButton)
+                    .DisposeWith(disposables);
+
+                // hotreload
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.HotInstallModCommand,
                         view => view.ToolbarHotInstallButton)

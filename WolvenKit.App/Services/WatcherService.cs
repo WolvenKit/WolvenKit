@@ -56,14 +56,14 @@ public class WatcherService : ObservableObject, IWatcherService
         await RefreshAsync(_projectManager.ActiveProject);
     }
 
-    private async void ProjectManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void ProjectManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName ==  nameof(IProjectManager.IsProjectLoaded))
         {
             if (_projectManager.IsProjectLoaded)
             {
                 WatchLocation(_projectManager.ActiveProject.NotNull().ProjectDirectory);
-                await RefreshAsync(_projectManager.ActiveProject);
+                QueueRefresh();
             }
             else
             {
@@ -104,8 +104,22 @@ public class WatcherService : ObservableObject, IWatcherService
         //_files.Clear();
     }
 
-    public bool IsSuspended { get; set; }
+    private bool _isSuspended;
 
+    public bool IsSuspended
+    {
+        get => _isSuspended;
+        set
+        {
+            _isSuspended = value;
+            if (!_isSuspended)
+            {
+                QueueRefresh();
+            }
+        }
+    }
+
+    public void QueueRefresh() => _timer.Change(s_waitTime, -1);
 
     /// <summary>
     /// initial refresh
@@ -120,28 +134,24 @@ public class WatcherService : ObservableObject, IWatcherService
         await Task.Run(() => DetectProjectFiles(proj));
     }
 
+    private bool _isRefreshing;
+
     private void DetectProjectFiles(Cp77Project proj)
     {
+        if (_isRefreshing)
+        {
+            return;
+        }
+        _isRefreshing = true;
+
         var allFiles = new DirectoryInfo(proj.ProjectDirectory).GetFileSystemInfos("*", SearchOption.AllDirectories);
 
         _files.Edit(innerList =>
         {
-            innerList.Clear();
-            innerList.AddOrUpdate(allFiles.Select(_ => new FileModel(_, proj)));
+            innerList.Load(allFiles.Select(_ => new FileModel(_, proj)));
         });
-    }
 
-    private IEnumerable<ulong> GetChildrenKeysRecursive(ulong key)
-    {
-        var x = new List<ulong>();
-        var lookup = _files.Items.ToLookup(x => x.ParentHash);
-
-        foreach (var fileModel in lookup[key])
-        {
-            x.Add(fileModel.Hash);
-            x.AddRange(GetChildrenKeysRecursive(fileModel.Hash));
-        }
-        return x;
+        _isRefreshing = false;
     }
 
     public FileModel? GetFileModelFromHash(ulong hash)

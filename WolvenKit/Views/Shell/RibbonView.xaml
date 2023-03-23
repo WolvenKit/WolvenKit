@@ -177,6 +177,7 @@
             IsLocked="True">
 
             <ToolBar Background="Transparent">
+				
                 <Button x:Name="ToolbarNewButton" ToolTip="New File">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
@@ -197,7 +198,8 @@
                         <TextBlock Padding="5,0,0,0" Text="New File" />
                     </StackPanel>
                 </Button>
-                <Button x:Name="ToolbarSaveButton" ToolTip="Save File">
+               
+				<Button x:Name="ToolbarSaveButton" ToolTip="Save File">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial
                             Padding="0,1,0,1"
@@ -207,7 +209,8 @@
                         <TextBlock Padding="5,0,0,0" Text="Save" />
                     </StackPanel>
                 </Button>
-                <Button x:Name="ToolbarSaveAsButton" ToolTip="Save File">
+               
+				<Button x:Name="ToolbarSaveAsButton" ToolTip="Save File">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial
                             Padding="0,1,0,1"
@@ -217,7 +220,8 @@
                         <TextBlock Padding="5,0,0,0" Text="Save As" />
                     </StackPanel>
                 </Button>
-                <Button x:Name="ToolbarSaveAllButton" ToolTip="Save All Files">
+                
+				<Button x:Name="ToolbarSaveAllButton" ToolTip="Save All Files">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial
                             Padding="0,1,0,1"
@@ -229,8 +233,9 @@
                 </Button>
 
                 <Separator Margin="3" />
-
-                <Button x:Name="ToolbarPackProjectButton" ToolTip="Pack mod &amp; create mod package">
+				
+                <!-- Pack as REDmod-->
+                <Button x:Name="ToolbarPackProjectButton" ToolTip="Pack as REDmod &amp; create mod package">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -243,7 +248,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="ToolbarPackInstallRedmodButton" ToolTip="Pack mod &amp; install to game">
+                <Button x:Name="ToolbarPackInstallRedmodButton" ToolTip="Pack as REDmod &amp; install to game">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -264,7 +269,44 @@
                     </StackPanel>
                 </Button>
 
-                <Separator />
+				<Separator />
+
+				<!-- Pack as LegacyMod-->
+				<Button x:Name="ToolbarPackProjectOldButton" ToolTip="Pack mod &amp; create mod package">
+					<StackPanel Orientation="Horizontal">
+						<Grid>
+							<iconPacks:PackIconForkAwesome
+                                Padding="0,0,2,2"
+                                Foreground="{StaticResource WolvenKitPurple}"
+                                Kind="Archive"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+						</Grid>
+						<TextBlock Padding="5,0,0,0" Text="Pack Mod" />
+					</StackPanel>
+				</Button>
+
+				<Button x:Name="ToolbarPackInstallOldButton" ToolTip="Pack mod &amp; install to game">
+					<StackPanel Orientation="Horizontal">
+						<Grid>
+							<iconPacks:PackIconForkAwesome
+                                Padding="0,0,2,2"
+                                Foreground="{StaticResource WolvenKitPurple}"
+                                Kind="Archive"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+							<iconPacks:PackIconForkAwesome
+                                Padding="7,7,-2,-2"
+                                Kind="ArrowRight"
+                                Style="{StaticResource WolvenKitToolBarButtonIconEraser}" />
+							<iconPacks:PackIconCodicons
+                                Padding="9,8,-1,-1"
+                                Kind="ArrowRight"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+						</Grid>
+						<TextBlock Padding="5,0,0,0" Text="Install Mod" />
+					</StackPanel>
+				</Button>
+
+				<Separator  Margin="3" />
 
                 <Menu x:Name="LaunchMenu">
                     <MenuItem x:Name="LaunchMenuMainItem">

@@ -500,7 +500,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _loggerService.Success($"Added {finalFilesToAdd.Count} files to the project.");
 
         _watcherService.IsSuspended = false;
-        await _watcherService.RefreshAsync(_projectManager.ActiveProject);
     }
     private void GetFilesRecursive(RedFileSystemModel directory, List<IGameFile> files)
     {
@@ -550,7 +549,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 await _gameController.GetController().AddFileToModModal(fileVm.GetGameFile());
 
                 _watcherService.IsSuspended = false;
-                await _watcherService.RefreshAsync(_projectManager.ActiveProject);
+                _watcherService.QueueRefresh();
                 break;
             case RedDirectoryViewModel dirVm:
                 MoveToFolder(dirVm);

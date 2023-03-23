@@ -293,18 +293,8 @@
             <MenuItem
                 Margin="1,0"
                 Padding="12,0"
-                Header="Edit">
-                <MenuItem
-                    x:Name="ToolbarSettingsButton"
-                    Margin="2,1"
-                    Header="Settings">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Margin="6,0"
-                            Kind="Settings"
-                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                    </MenuItem.Icon>
-                </MenuItem>
+                Header="Project">
+               
                 <MenuItem
                     x:Name="ToolbarProjectSettingsButton"
                     Margin="2,1"
@@ -316,19 +306,7 @@
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <Separator />
-                <MenuItem
-                    x:Name="ToolbarOpenLogsButton"
-                    Margin="2,1"
-                    Header="Open Logs Folder">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Margin="6,0"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="FolderOpened"
-                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                    </MenuItem.Icon>
-                </MenuItem>
+                
             </MenuItem>
 
             <!--  Build  -->
@@ -586,6 +564,7 @@
                 Margin="1,0"
                 Padding="12,0"
                 Header="Tools">
+				
                 <MenuItem
                     Margin="2,1"
                     Click="GenerateMaterialRepoButton_Click"
@@ -649,6 +628,20 @@
                             Kind="Export" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+				<Separator />
+
+				<MenuItem
+				   x:Name="ToolbarSettingsButton"
+				   Margin="2,1"
+				   Header="Settings">
+					<MenuItem.Icon>
+						<iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Kind="Settings"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+					</MenuItem.Icon>
+				</MenuItem>
             </MenuItem>
 
             <!--  Game  -->
@@ -787,8 +780,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <Separator Margin="2,4" />
-
                 <MenuItem
                     x:Name="MenuItemAboutWolvenKitLink"
                     Margin="2,1"
@@ -801,6 +792,21 @@
                             Kind="LinkExternal" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+				<Separator Margin="2,4" />
+
+				<MenuItem
+                    x:Name="ToolbarOpenLogsButton"
+                    Margin="2,1"
+                    Header="Open Logs Folder">
+					<MenuItem.Icon>
+						<iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="FolderOpened"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+					</MenuItem.Icon>
+				</MenuItem>
 
             </MenuItem>
 
