@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 using HandyControl.Controls;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.Services
@@ -152,7 +153,7 @@ namespace WolvenKit.Services
                 ENotificationType.Fatal => () => Growl.FatalGlobal(message),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
+            DispatcherHelper.RunOnMainThread(action, DispatcherPriority.Background);
         }
 
         private static void ShowNotificationInApp(string message, ENotificationType type)
@@ -166,7 +167,7 @@ namespace WolvenKit.Services
                 ENotificationType.Fatal => () => Growl.Fatal(message),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
+            DispatcherHelper.RunOnMainThread(action, DispatcherPriority.Background);
         }
 
         #endregion

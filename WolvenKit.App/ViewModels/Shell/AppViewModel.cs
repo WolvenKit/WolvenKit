@@ -121,7 +121,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         if (e.PropertyName == nameof(IProgressService<double>.Status))
         {
-            Application.Current.Dispatcher.BeginInvoke(() =>
+            DispatcherHelper.RunOnMainThread(() =>
             {
                 TaskStatus = _progressService.Status;
                 switch (TaskStatus)
@@ -1261,7 +1261,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void OnAfterOverlayRendered()
     {
-        Application.Current.Dispatcher.Invoke(() =>
+        DispatcherHelper.RunOnMainThread(() =>
         {
             IsOverlayShown = true;
             ShouldOverlayShow = true;
@@ -1269,7 +1269,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
     private void OnAfterDialogRendered()
     {
-        Application.Current.Dispatcher.Invoke(() =>
+        DispatcherHelper.RunOnMainThread(() =>
         {
             IsDialogShown = true;
             ShouldDialogShow = true;
