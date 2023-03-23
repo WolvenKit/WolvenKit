@@ -121,7 +121,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         if (e.PropertyName == nameof(IProgressService<double>.Status))
         {
-            Application.Current.Dispatcher.Invoke(() =>
+            Application.Current.Dispatcher.BeginInvoke(() =>
             {
                 TaskStatus = _progressService.Status;
                 switch (TaskStatus)
