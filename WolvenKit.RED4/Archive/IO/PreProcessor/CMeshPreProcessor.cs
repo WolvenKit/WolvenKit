@@ -73,7 +73,7 @@ public class CMeshPreProcessor : IPreProcessor
                                            $"{materialEntry.Index}, but there are only {sumOfLocal} entries.");
                 }
 
-                if (usedLocalIndices.Add(materialEntry.Index))
+                if (!usedLocalIndices.Add(materialEntry.Index))
                 {
                     _loggerService.Warning($"materialEntries[{i}] ({materialEntry.Name}) is overwriting an already-defined " +
                                            $"material index: {materialEntry.Index}. Your material assignments might not work as expected.");
