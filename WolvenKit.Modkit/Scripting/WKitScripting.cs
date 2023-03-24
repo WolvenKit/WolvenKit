@@ -14,6 +14,9 @@ using WolvenKit.RED4.CR2W.JSON;
 
 namespace WolvenKit.Modkit.Scripting;
 
+/// <summary>
+/// TODO
+/// </summary>
 public class WKitScripting
 {
     protected readonly ILoggerService _loggerService;
@@ -27,6 +30,11 @@ public class WKitScripting
         _redParserService = parserService;
     }
 
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
     [Description("GetFileFromBase")]
     public virtual IGameFile? GetFileFromBase(string path)
     {
@@ -38,7 +46,10 @@ public class WKitScripting
         return null;
     }
 
-    // Note to myself: Don't use IEnumerable<T>
+    /// <summary>
+    /// Note to myself: Don't use IEnumerable<T>
+    /// </summary>
+    /// <returns></returns>
     public virtual IEnumerable GetArchiveFiles()
     {
         foreach (var archive in _archiveManager.Archives.Items)
@@ -50,6 +61,11 @@ public class WKitScripting
         }
     }
 
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <param name="hash"></param>
+    /// <returns></returns>
     public virtual IGameFile? GetFileFromBase(ulong hash)
     {
         var file = _archiveManager.Lookup(hash);
@@ -60,6 +76,12 @@ public class WKitScripting
         return null;
     }
 
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <param name="gameFile"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     [Description("GameFileToJson")]
     public virtual string? GameFileToJson(IGameFile gameFile)
     {
@@ -81,7 +103,18 @@ public class WKitScripting
         return null;
     }
 
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <param name="json"></param>
+    /// <returns></returns>
     public virtual CR2WFile? JsonToCR2W(string json) => RedJsonSerializer.Deserialize<RedFileDto>(json)?.Data;
 
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="extension"></param>
+    /// <returns></returns>
     public virtual string ChangeExtension(string path, string extension) => Path.ChangeExtension(path, extension);
 }
