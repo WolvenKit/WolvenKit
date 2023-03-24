@@ -54,7 +54,7 @@ public class CMeshPreProcessor : IPreProcessor
         }
         var sumOfExternal = mesh.ExternalMaterials.Count + mesh.PreloadExternalMaterials.Count;
 
-        var localIndexList = new Dictionary<ushort, int>();
+        var usedLocalIndices = new HashSet<ushort>();
         var materialNames = new List<string>();
 
         for (var i = 0; i < mesh.MaterialEntries.Count; i++)
@@ -73,12 +73,11 @@ public class CMeshPreProcessor : IPreProcessor
                                            $"{materialEntry.Index}, but there are only {sumOfLocal} entries.");
                 }
 
-                if (localIndexList.ContainsKey(materialEntry.Index))
+                if (usedLocalIndices.Add(materialEntry.Index))
                 {
                     _loggerService.Warning($"materialEntries[{i}] ({materialEntry.Name}) is overwriting an already-defined " +
                                            $"material index: {materialEntry.Index}. Your material assignments might not work as expected.");
                 }
-                localIndexList.Add(materialEntry.Index, i);
             }
             else
             {
