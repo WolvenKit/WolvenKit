@@ -13,7 +13,7 @@ jobs:
       - name: setup files
         run: |
           ls
-          mkdir --verbose /doxygen_in
+          mkdir --verbose doxygen_in
           cp --verbose WolvenKit.Modkit/Scripting/WKitScripting.cs /doxygen_in/
           cp --verbose WolvenKit.App/Helpers/WKitUIScripting.cs /doxygen_in/
 
