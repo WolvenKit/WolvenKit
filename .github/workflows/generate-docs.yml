@@ -12,9 +12,9 @@ jobs:
 
       - name: setup files
         run: |
-          mkdir .\docs\in
-          Copy-Item -Path .\WolvenKit.Modkit\Scripting\WKitScripting.cs -Destination .\docs\in
-          Copy-Item -Path .\WolvenKit.App\Helpers\WKitUIScripting.cs -Destination .\docs\in
+          mkdir docs/in
+          cp --verbose WolvenKit.Modkit/Scripting/WKitScripting.cs /docs/in/
+          cp --verbose WolvenKit.App/Helpers/WKitUIScripting.cs /docs/in/
 
       - uses: DenverCoder1/doxygen-github-pages-action@v1.2.0
         with:
