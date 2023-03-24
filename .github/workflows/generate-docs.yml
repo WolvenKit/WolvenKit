@@ -12,7 +12,8 @@ jobs:
 
       - name: setup files
         run: |
-          mkdir --verbose /docs/in
+          ls
+          mkdir --verbose -p /docs/in
           cp --verbose WolvenKit.Modkit/Scripting/WKitScripting.cs /docs/in/
           cp --verbose WolvenKit.App/Helpers/WKitUIScripting.cs /docs/in/
 
