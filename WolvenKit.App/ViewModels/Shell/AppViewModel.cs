@@ -931,10 +931,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             try
             {
                 await using MemoryStream stream = new();
-                file.Extract(stream);
+                await file.ExtractAsync(stream);
                 if (OpenStream(stream, file.FileName, out var redfile))
                 {
-                    RedDocumentViewModel fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this);
+                    var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this);
                     if (!DockedViews.Contains(fileViewModel))
                     {
                         DockedViews.Add(fileViewModel);
@@ -955,8 +955,53 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+    public bool OpenFileFromProject(ResourcePath path)
+    {
+        if (path == 0)
+        {
+            return false;
+        }
+
+        if (_projectManager.ActiveProject is not { } proj)
+        {
+            return false;
+        }
+
+        var projArchive = proj.AsArchive();
+        foreach (var (hash, file) in projArchive.Files)
+        {
+            if (path != hash)
+            {
+                continue;
+            }
+
+            using MemoryStream stream = new();
+            file.Extract(stream);
+
+            if (OpenStream(stream, file.FileName, out var redfile))
+            {
+                var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this);
+                if (!DockedViews.Contains(fileViewModel))
+                {
+                    DockedViews.Add(fileViewModel);
+                }
+
+                ActiveDocument = fileViewModel;
+                UpdateTitle();
+
+            }
+        }
+
+        return false;
+    }
+
     public void OpenFileFromDepotPath(ResourcePath path)
     {
+        if (OpenFileFromProject(path))
+        {
+            return;
+        }
+
         // it should be resolved by this point, but check just in case
         if (!_hashService.Contains(path) && !ResourcePath.IsNullOrEmpty(path))
         {
