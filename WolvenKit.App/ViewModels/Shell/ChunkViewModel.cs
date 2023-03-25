@@ -12,6 +12,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.Win32;
@@ -1607,10 +1608,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
             }
 
+            var index = Parent.GetIndexOf(this) + 1;
             for (var i = 0; i < RedDocumentTabViewModel.CopiedChunks.Count; i++)
             {
                 var e = RedDocumentTabViewModel.CopiedChunks[i];
-                var index = Parent!.GetIndexOf(this) + i + 1;
 
                 if (ResolvedData is IRedBufferPointer db)
                 {
@@ -1636,7 +1637,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
                 if (PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
-                    if (InsertChild(index, e))
+                    if (InsertChild(-1, e))
                     {
                         //RDTDataViewModel.CopiedChunk = null;
                     }
@@ -1649,13 +1650,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
                 }
                 
-                if (Parent != null && Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
+                if (Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
-                    if (InsertChild(-1, e))
+                    if (Parent.InsertChild(index, e))
                     {
                         //RDTDataViewModel.CopiedChunk = null;
                     }
                 }
+
+                index++;
             }
         }
         catch (Exception ex) { _loggerService.Error(ex); }
@@ -2228,52 +2231,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public int GetIndexOf(ChunkViewModel child)
     {
-        if (ResolvedData is IList ary)
+        for (var i = 0; i < Properties.Count; i++)
         {
-            var index = 0;
-            foreach (var item in ary)
+            if (ReferenceEquals(Properties[i], child))
             {
-                if (child.Data is not null && item.GetHashCode() == child.Data.GetHashCode())
-                {
-                    if (!_propertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
-                    {
-                        return index;
-                    }
-                }
-                index++;
+                return i;
             }
         }
-        else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is RedPackage pkg)
-        {
-            var index = 0;
-            foreach (var item in pkg.Chunks)
-            {
-                if (child.Data is not null && item.GetHashCode() == child.Data.GetHashCode())
-                {
-                    if (!_propertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
-                    {
-                        return index;
-                    }
-                }
-                index++;
-            }
-        }
-        else if (ResolvedData is IRedBufferPointer rbp2 && rbp2.GetValue().Data is CR2WList cl)
-        {
-            var index = 0;
-            foreach (var file in cl.Files)
-            {
-                if (child.Data is not null && file.RootChunk.GetHashCode() == child.Data.GetHashCode())
-                {
-                    if (!_propertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
-                    {
-                        return index;
-                    }
-                }
-                index++;
-            }
-        }
-        return 0;
+
+        return -1;
     }
 
     public void MoveChild(int index, ChunkViewModel item)
@@ -2960,11 +2926,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent?.RecalculateProperties();
     }
 
-    private void AddToCopiedChunks(object elem)
+    private void AddToCopiedChunks(IRedType elem)
     {
         try
         {
-            if (elem is IRedCloneable irc)
+            if (elem.GetType().IsValueType)
+            {
+                RedDocumentTabViewModel.CopiedChunks.Add(elem);
+            }
+            else if (elem is IRedCloneable irc)
             {
                 RedDocumentTabViewModel.CopiedChunks.Add((IRedType)irc.DeepCopy());
             }
