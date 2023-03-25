@@ -2315,7 +2315,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
                 InsertChild(index, item.Data);
                 Tab?.Parent.SetIsDirty(true);
-                RecalculateProperties();
+                //RecalculateProperties();
                 if (sourceList.GetHashCode() != destList.GetHashCode())
                 {
                     oldParent.RecalculateProperties();
