@@ -317,7 +317,7 @@ public class RED4Controller : ObservableObject, IGameController
     {
         return Path.GetExtension(fileName) switch
         {
-            ".yaml" or ".yml" or ".xl" or ".script" or ".ws" or ".tweak" => true,
+            ".yaml" or ".yml" or ".xl" or ".reds" or ".script" or ".ws" or ".tweak" => true,
             _ => false,
         };
     }
@@ -329,19 +329,11 @@ public class RED4Controller : ObservableObject, IGameController
             _ => false,
         };
     }
-    private static bool IsScript(string fileName)
+    private static bool IsCDPRScript(string fileName)
     {
         return Path.GetExtension(fileName) switch
         {
             ".script" or ".ws" => true,
-            _ => false,
-        };
-    }
-    private static bool IsTweak(string fileName)
-    {
-        return Path.GetExtension(fileName) switch
-        {
-            ".tweak" => true,
             _ => false,
         };
     }
@@ -352,8 +344,8 @@ public class RED4Controller : ObservableObject, IGameController
         .Where(name => !IsSpecialExtension(name))
         .Where(x => Path.GetFileName(x) != "info.json")
         ;
-    private static IEnumerable<string> GetScriptFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsScript(name));
-    private static IEnumerable<string> GetTweakFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsScript(name));
+    private static IEnumerable<string> GetScriptFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name));
+    private static IEnumerable<string> GetTweakFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.tweak", SearchOption.AllDirectories);
 
     /// <summary>
     /// Pack mod with options
@@ -380,7 +372,7 @@ public class RED4Controller : ObservableObject, IGameController
             //_progressService.IsIndeterminate = false;
             //return false;
         }
-        if (!options.IsRedmod && Directory.EnumerateFiles(cp77Proj.ResourcesDirectory).Any(x => IsScript(x)))
+        if (!options.IsRedmod && Directory.EnumerateFiles(cp77Proj.ResourcesDirectory).Any(x => IsCDPRScript(x)))
         {
             _loggerService.Warning("This project contains script files but is packed as legacy mod!");
             _notificationService.Warning($"This project contains script files and needs to be packed as a REDmod!");
