@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using Microsoft.ClearScript;
+using SharpDX;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
@@ -477,5 +478,34 @@ public class WKitUIScripting : WKitScripting
         {
             expVM.ProcessSelectedCommand.Execute(Unit.Default);
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="hash"></param>
+    /// <returns></returns>
+    public override bool FileExists(ulong hash)
+    {
+        if (hash == 0)
+        {
+            return false;
+        }
+
+        if (_projectManager.ActiveProject == null)
+        {
+            return false;
+        }
+
+        var projectArchive = _projectManager.ActiveProject.AsArchive();
+        foreach (var (fileHash, _) in projectArchive.Files)
+        {
+            if (fileHash == hash)
+            {
+                return true;
+            }
+        }
+
+        return base.FileExists(hash);
     }
 }

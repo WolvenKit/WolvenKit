@@ -117,4 +117,34 @@ public class WKitScripting
     /// <param name="extension"></param>
     /// <returns></returns>
     public virtual string ChangeExtension(string path, string extension) => Path.ChangeExtension(path, extension);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public virtual bool FileExists(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return false;
+        }
+
+        return FileExists(FNV1A64HashAlgorithm.HashString(path));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="hash"></param>
+    /// <returns></returns>
+    public virtual bool FileExists(ulong hash)
+    {
+        if (hash == 0)
+        {
+            return false;
+        }
+        
+        return _archiveManager.Lookup(hash).HasValue;
+    }
 }
