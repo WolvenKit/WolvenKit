@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.Text.Json;
 
 namespace WolvenKit.RED4.CR2W.JSON;

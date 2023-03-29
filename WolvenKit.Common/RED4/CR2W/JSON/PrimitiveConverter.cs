@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
@@ -9,7 +8,6 @@ using System.Text.Json.Serialization;
 using Semver;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;

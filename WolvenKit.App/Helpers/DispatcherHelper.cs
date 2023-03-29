@@ -7,11 +7,11 @@ namespace WolvenKit.App.Helpers;
 //Assembly: HandyControl, Version=3.2.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b
 public static class DispatcherHelper
 {
-    public static void RunOnMainThread(Action action) => Application.Current.RunOnUIThread(action);
+    public static void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) => Application.Current.RunOnUIThread(action, priority);
 
-    public static void RunOnUIThread(this DispatcherObject d, Action action)
+    public static void RunOnUIThread(this DispatcherObject d, Action action, DispatcherPriority priority = DispatcherPriority.Normal)
     {
-        var dispatcher = d?.Dispatcher;
+        var dispatcher = d.Dispatcher;
         if (dispatcher == null)
         {
             return;
@@ -23,7 +23,15 @@ public static class DispatcherHelper
         }
         else
         {
-            dispatcher.BeginInvoke(action, Array.Empty<object>());
+            try
+            {
+                dispatcher.InvokeAsync(action, priority);
+            }
+            catch (Exception)
+            {
+                // TODO: Add logger here?
+                throw;
+            }
         }
     }
 }

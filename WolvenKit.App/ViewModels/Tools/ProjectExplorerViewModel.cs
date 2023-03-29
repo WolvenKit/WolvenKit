@@ -100,7 +100,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (e.Project is not null)
         {
-            Application.Current.Dispatcher.Invoke( () => 
+            DispatcherHelper.RunOnMainThread( () => 
             {
                 ActiveProject = e.Project;
             }, DispatcherPriority.ContextIdle);
@@ -161,10 +161,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void OnNext(IChangeSet<FileModel, ulong> obj)
     {
-        Application.Current.Dispatcher.BeginInvoke(new Action(delegate ()
+        DispatcherHelper.RunOnMainThread(() =>
         {
             BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
-        }), DispatcherPriority.ContextIdle);
+        }, DispatcherPriority.ContextIdle);
     }
 
     #region properties

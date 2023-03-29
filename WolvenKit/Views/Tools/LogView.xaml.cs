@@ -9,6 +9,7 @@ using ReactiveUI;
 using Serilog.Events;
 using Splat;
 using WolvenKit.App;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 
@@ -107,7 +108,7 @@ namespace WolvenKit.Views.Tools
             paragraph.Inlines.Add(run);
             LogRichTextBox.Document.Blocks.Add(paragraph);
 
-            Dispatcher.InvokeAsync(() => LogRichTextBox.ScrollToEnd(), DispatcherPriority.Background);
+            DispatcherHelper.RunOnMainThread(() => LogRichTextBox.ScrollToEnd(), DispatcherPriority.Background);
         }
 
         private static Logtype ToLogtype(LogEventLevel level)
