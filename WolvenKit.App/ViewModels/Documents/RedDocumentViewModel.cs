@@ -42,6 +42,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     private readonly Red4ParserService _parserService;
     private readonly IWatcherService _watcherService;
     private readonly IArchiveManager _archiveManager;
+    private readonly ExtendedScriptService _scriptService;
 
     private readonly AppViewModel _appViewModel;
 
@@ -57,7 +58,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
         IOptions<Globals> globals,
         Red4ParserService parserService,
         IWatcherService watcherService,
-        IArchiveManager archiveManager) : base(path)
+        IArchiveManager archiveManager,
+        ExtendedScriptService scriptService) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
         _chunkViewmodelFactory = chunkViewmodelFactory;
@@ -67,6 +69,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _parserService = parserService;
         _watcherService = watcherService;
         _archiveManager = archiveManager;
+        _scriptService = scriptService;
 
         _appViewModel = appViewModel;
         _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -159,6 +162,16 @@ public partial class RedDocumentViewModel : DocumentViewModel
             }
             else if (file is not null && Cr2wFile != null)
             {
+                if (!_scriptService.OnSaveHook(Path.GetExtension(FilePath), Cr2wFile))
+                {
+                    _loggerService.Error($"Error while processing onSave script");
+
+                    fs.Dispose();
+                    File.Delete(tmpPath);
+
+                    return;
+                }
+
                 using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
                 writer.WriteFile(Cr2wFile);
             }

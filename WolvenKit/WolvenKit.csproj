@@ -197,6 +197,9 @@
     <Content Include="Resources\Scripts\Logger.wscript">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Scripts\onSave_mesh.wscript">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Wolvenkit.Installer.Package.appinstaller">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1769,6 +1772,7 @@
     <None Remove="Resources\Media\testc.kark" />
     <None Remove="Resources\Media\testconv.kark" />
     <None Remove="Resources\Scripts\Logger.wscript" />
+    <None Remove="Resources\Scripts\onSave_mesh.wscript" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysBack512.png" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysDown512.png" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysFront512.png" />

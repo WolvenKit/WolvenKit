@@ -5,9 +5,13 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.ClearScript;
+using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.CR2W.JSON;
 
 namespace WolvenKit.App.Services;
 
@@ -22,9 +26,27 @@ public class ExtendedScriptService : ScriptService
 
     public ExtendedScriptService(ILoggerService loggerService) : base(loggerService)
     {
+        DeployShippedFiles();
+
         _hostObjects.Add("ui", new UIHelper(this));
 
         RefreshUIScripts();
+    }
+
+    private void DeployShippedFiles()
+    {
+        var dir = ISettingsManager.GetWScriptDir();
+
+        CheckFile("Logger");
+        CheckFile("onSave_mesh");
+
+        void CheckFile(string fileName)
+        {
+            if (!File.Exists($"{dir}/{fileName}.wscript"))
+            {
+                File.Copy(@$"Resources\Scripts\{fileName}.wscript", $"{dir}/{fileName}.wscript");
+            }
+        }
     }
 
     public void RegisterControl(IScriptableControl scriptableControl)
@@ -78,6 +100,54 @@ public class ExtendedScriptService : ScriptService
             _uiEngine.Dispose();
             _uiEngine = null;
         }
+    }
+
+    public bool OnSaveHook(string ext, CR2WFile cr2wFile)
+    {
+        if (string.IsNullOrEmpty(ext))
+        {
+            throw new ArgumentNullException(nameof(ext));
+        }
+
+        if (ext[0] == '.')
+        {
+            ext = ext.Substring(1);
+        }
+
+        var scriptFilePath = Path.Combine(ISettingsManager.GetWScriptDir(), $"onSave_{ext}.wscript");
+        if (File.Exists(scriptFilePath))
+        {
+            var code = File.ReadAllText(scriptFilePath);
+
+            var dto = new RedFileDto(cr2wFile);
+            var json = RedJsonSerializer.Serialize(dto);
+
+            return TestExecute(code, json);
+        }
+
+        return true;
+    }
+
+    private bool TestExecute(string code, string json)
+    {
+        var engine = base.GetScriptEngine(null, ISettingsManager.GetWScriptDir());
+        engine.Script.file = json;
+        engine.Script.success = false;
+
+        try
+        {
+            engine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code);
+        }
+        catch (ScriptEngineException ex1)
+        {
+            _loggerService?.Error(ex1.ErrorDetails);
+        }
+        catch (Exception ex2)
+        {
+            _loggerService?.Error(ex2);
+        }
+
+        return engine.Script.success;
     }
 
     public void RefreshUIScripts()
