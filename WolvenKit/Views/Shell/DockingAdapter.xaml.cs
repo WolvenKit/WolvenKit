@@ -261,7 +261,7 @@ namespace WolvenKit.Views.Shell
         {
             if (vm.IsDirty)
             {
-                if (await Interactions.ShowMessageBoxAsync("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
+                if (await Interactions.ShowMessageBoxAsync($"\"{vm.Header.TrimEnd('*')}\" has unsaved changes - are you sure you want to close this file?", "Confirm", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
                 {
                     return false;
                 }
@@ -426,6 +426,24 @@ namespace WolvenKit.Views.Shell
                     e.Cancel = !await TryCloseDocument(vm);
                 }
             }
+        }
+
+        public async Task<bool> CloseAll()
+        {
+            var allClosed = true;
+
+            for (var i = _viewModel.DockedViews.Count - 1; i >= 0; i--)
+            {
+                if (_viewModel.DockedViews[i] is DocumentViewModel doc)
+                {
+                    if (!await TryCloseDocument(doc))
+                    {
+                        allClosed = false;
+                    }
+                }
+            }
+
+            return allClosed;
         }
 
         private async void PART_DockingManager_OnCloseOtherTabs(object sender, CloseTabEventArgs e)

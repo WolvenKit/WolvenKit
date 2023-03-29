@@ -43,13 +43,13 @@ public static class TypeGlobal
 
             if (e1.PropertyName == "SsimpleBanerData.content" &&
                 e1.ExpectedType == typeof(redResourceReferenceScriptToken) && 
-                e1.ActualType == typeof(ResourcePath))
+                e1.ActualType == typeof(CName))
             {
-                var orgStr = (ResourcePath)e1.Value!;
+                var orgStr = (CName)e1.Value!;
 
                 e1.Value = new redResourceReferenceScriptToken
                 {
-                    Resource = new CResourceAsyncReference<CResource>(orgStr)
+                    Resource = new CResourceAsyncReference<CResource>((ulong)orgStr)
                 };
 
                 Logger?.Warning($"Invalid in wolven rtti for \"{e1.PropertyName}\": [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");

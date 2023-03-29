@@ -128,7 +128,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private void OnNext(IChangeSet<RedFileSystemModel> obj)
     {
-        Application.Current.Dispatcher.BeginInvoke(() =>
+        DispatcherHelper.RunOnMainThread(() =>
         {
             LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
         }, DispatcherPriority.ContextIdle);

@@ -1,11 +1,9 @@
-#nullable enable
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.JSON;
