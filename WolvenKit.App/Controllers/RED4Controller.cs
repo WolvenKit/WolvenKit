@@ -32,7 +32,7 @@ public class RED4Controller : ObservableObject, IGameController
 {
     #region fields
 
-    public const string GameVersion = "1.6.0";
+    public const string GameVersion = "1.6.1";
 
     private readonly ILoggerService _loggerService;
     private readonly INotificationService _notificationService;
@@ -317,7 +317,7 @@ public class RED4Controller : ObservableObject, IGameController
     {
         return Path.GetExtension(fileName) switch
         {
-            ".yaml" or ".yml" or ".xl" or ".reds" or ".script" or ".ws" or ".tweak" => true,
+            ".yaml" or ".yml" or ".xl" or ".script" or ".ws" or ".tweak" => true,
             _ => false,
         };
     }
