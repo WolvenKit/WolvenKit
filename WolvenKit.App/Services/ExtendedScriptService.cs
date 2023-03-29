@@ -39,6 +39,7 @@ public class ExtendedScriptService : ScriptService
 
         CheckFile("Logger");
         CheckFile("onSave_mesh");
+        CheckFile("ui_example");
 
         void CheckFile(string fileName)
         {
