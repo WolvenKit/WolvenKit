@@ -309,7 +309,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), data);
             if (!me.IsLocalInstance)
             {
-                materials.Add(name, new Material(name));
+                materials.TryAdd(name, new Material(name));
                 continue;
             }
             CMaterialInstance? inst = null;
