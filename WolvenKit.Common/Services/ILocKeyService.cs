@@ -1,15 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Services
 {
-    public interface ILocKeyService
+    public interface ILocKeyService : INotifyPropertyChanged
     {
-        public string Language { get; set; }
+        public EGameLanguage Language { get; set; }
 
         IEnumerable<localizationPersistenceOnScreenEntry> GetEntries();
         localizationPersistenceOnScreenEntry? GetEntry(ulong key);

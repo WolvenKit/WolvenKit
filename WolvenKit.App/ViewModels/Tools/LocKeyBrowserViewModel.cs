@@ -59,6 +59,7 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
         _progressService = progressService;
         _gameController = gameController;
         _archiveManager = archive;
+        _locKeyService = locKeyService;
 
         _archiveManager.PropertyChanged += ArchiveManager_PropertyChanged;
         if (_archiveManager.IsManagerLoaded)
@@ -66,12 +67,20 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
             SetupLocKeys();
         }
 
-        _locKeyService = locKeyService;
+        _locKeyService.PropertyChanged += LocKeyService_OnPropertyChanged;
     }
 
     private void ArchiveManager_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IArchiveManager.IsManagerLoaded))
+        {
+            SetupLocKeys();
+        }
+    }
+
+    private void LocKeyService_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ILocKeyService.Language))
         {
             SetupLocKeys();
         }

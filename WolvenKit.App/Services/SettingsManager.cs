@@ -49,7 +49,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowResourcePathAsHex),
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
-            nameof(ShowReferenceGraph)
+            nameof(ShowReferenceGraph),
+            nameof(GameLanguage)
             )
           .Subscribe(_ =>
           {
@@ -232,6 +233,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Show reference graph")]
     [ObservableProperty]
     private bool _showReferenceGraph;
+
+    [Category("Display")] 
+    [Display(Name = "Game language used for LocKeys")] 
+    [ObservableProperty]
+    private EGameLanguage _gameLanguage;
 
     [ObservableProperty]
     [Browsable(false)]
