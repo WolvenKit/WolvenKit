@@ -360,7 +360,7 @@
                         Height="24"
                         Margin="4"
                         HorizontalAlignment="Stretch"
-                        Command="{Binding ExportEntity}"
+                        Command="{Binding ExportEntityCommand}"
                         Content="Export Appearance with Rig (experimental)"
                         Visibility="{Binding PanelVisibility.ShowExportEntity, Converter={StaticResource VisibilityConverter}}" />
                 </Grid>
