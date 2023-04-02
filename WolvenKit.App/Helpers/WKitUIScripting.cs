@@ -47,9 +47,9 @@ public class WKitUIScripting : WKitScripting
     }
 
     /// <summary>
-    /// TODO
+    /// Turn on/off updates to the project tree, useful for when making lots of changes to the project structure.
     /// </summary>
-    /// <param name="suspend"></param>
+    /// <param name="suspend">bool for if updates are suspended</param>
     public void SuspendFileWatcher(bool suspend)
     {
         if (_watcherService != null && _watcherService.IsSuspended != suspend)
@@ -59,10 +59,10 @@ public class WKitUIScripting : WKitScripting
     }
 
     /// <summary>
-    /// TODO
+    /// Add the specified cr2w file to the project from the game archives.
     /// </summary>
     /// <param name="path"></param>
-    /// <param name="cr2w"></param>
+    /// <param name="cr2w"> File to be saved</param>
     public virtual void SaveToProject(string path, CR2WFile cr2w)
     {
         if (_projectManager.ActiveProject is null)
@@ -78,10 +78,10 @@ public class WKitUIScripting : WKitScripting
     }
 
     /// <summary>
-    /// TODO
+    /// Add the specified gameFile file to the project from the game archives.
     /// </summary>
     /// <param name="path"></param>
-    /// <param name="gameFile"></param>
+    /// <param name="gameFile"> File to be saved</param>
     public virtual void SaveToProject(string path, IGameFile gameFile)
     {
         if (_projectManager.ActiveProject is null)
@@ -96,7 +96,7 @@ public class WKitUIScripting : WKitScripting
     }
 
     /// <summary>
-    /// TODO
+    /// Save the specified file to the project raw folders, in either json or CR2W
     /// </summary>
     /// <param name="path"></param>
     /// <param name="content"></param>
@@ -134,7 +134,7 @@ public class WKitUIScripting : WKitScripting
     }
 
     /// <summary>
-    /// TODO
+    /// Loads the specified game file from the project files rather than game archives.
     /// </summary>
     /// <param name="path"></param>
     /// <param name="type"></param>
@@ -181,7 +181,7 @@ public class WKitUIScripting : WKitScripting
     }
 
     /// <summary>
-    /// TODO
+    /// Loads the specified json file from the project raw files rather than game archives.
     /// </summary>
     /// <param name="path"></param>
     /// <param name="type"></param>
@@ -226,9 +226,9 @@ public class WKitUIScripting : WKitScripting
     }
 
     /// <summary>
-    /// TODO
+    /// Retrieves a list of files from the project
     /// </summary>
-    /// <param name="folderType"></param>
+    /// <param name="folderType">string parameter folderType = "archive" or "raw"</param>
     /// <returns></returns>
     public List<string> GetProjectFiles(string folderType)
     {
@@ -305,7 +305,7 @@ public class WKitUIScripting : WKitScripting
     }
 
     /// <summary>
-    /// TODO
+    /// Exports a list of files as you would with the export tool.
     /// </summary>
     /// <param name="exportList"></param>
     /// <param name="exportSettings"></param>
@@ -481,9 +481,9 @@ public class WKitUIScripting : WKitScripting
     }
 
     /// <summary>
-    /// 
+    /// Check if file exists in either the game archives or the project
     /// </summary>
-    /// <param name="hash"></param>
+    /// <param name="hash">hash value to be checked</param>
     /// <returns></returns>
     public override bool FileExists(ulong hash)
     {
