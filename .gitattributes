@@ -1,3 +1,6 @@
+# Declare wscript files to use the javascript highlighter
+*.wscript linguist-language=JavaScript
+
 # Declare files to normalize crlf, in case people don't have core.autocrlf set.
 *.conf			text eol=crlf
 *.config		text eol=crlf
@@ -15,6 +18,8 @@
 *.sln			text eol=crlf
 *.txt			text eol=crlf
 *.xml			text eol=crlf
+*.wscript text eol=crlf
+*.yaml    text eol=crlf
 *.yml			text eol=crlf
 # Explicitly declare files you do not want to be treated as text
 *.bmp binary
