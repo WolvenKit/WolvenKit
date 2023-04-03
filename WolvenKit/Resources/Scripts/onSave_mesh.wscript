@@ -35,8 +35,6 @@ function CheckMaterialProperties(material, materialName) {
 			    	break;
 			}
 		});
-		
-		//Logger.Debug(tmp);
 	}
 }
 
@@ -45,18 +43,18 @@ function main(mesh) {
 		Logger.Warning("Your mesh is trying to use both externalMaterials and preloadExternalMaterials. To avoid unspecified behaviour, use only one of the lists.");
 	}
 	
-	if (mesh.localMaterialBuffer.materials !== "undefined" && mesh.localMaterialBuffer.materials.length > 0 && mesh.preloadLocalMaterialInstances.length > 0) {
+	if (mesh.localMaterialBuffer.materials !== null && mesh.localMaterialBuffer.materials.length > 0 && mesh.preloadLocalMaterialInstances.length > 0) {
 		Logger.Warning("Your mesh is trying to use both localMaterialBuffer.materials and preloadLocalMaterialInstances. To avoid unspecified behaviour, use only one of the lists.");
 	}
 	
 	var sumOfLocal = mesh.localMaterialInstances.length + mesh.preloadLocalMaterialInstances.length;
-    if (mesh.localMaterialBuffer.materials !== "undefined")
+    if (mesh.localMaterialBuffer.materials !== null)
     {
         sumOfLocal += mesh.localMaterialBuffer.materials.length;
     }
     var sumOfExternal = mesh.externalMaterials.length + mesh.preloadExternalMaterials.length;
     
-    var materialNames = [];
+    var materialNames = {};
     var localIndexList = [];
     
     for(var i = 0; i < mesh.materialEntries.length; i++) {
@@ -64,7 +62,11 @@ function main(mesh) {
     	
     	// Put all material names into a list - we'll use it to verify the appearances later
     	var name = materialEntry.name.toString() ?? "";
-    	materialNames.push(name);
+    	if (name in materialNames) {
+    		Logger.Warning(`materialEntries[${i}] (${name}) is already defined in materialEntries[${materialNames[name]}]`);
+    	} else {
+    		materialNames[name] = i;
+    	}
     	
     	if (materialEntry.isLocalInstance) {
     		if (materialEntry.index >= sumOfLocal)
@@ -85,7 +87,7 @@ function main(mesh) {
     	}
     }
     
-    if (mesh.localMaterialBuffer.materials !== "undefined")
+    if (mesh.localMaterialBuffer.materials !== null)
     {
         for (var i = 0; i < mesh.localMaterialBuffer.materials.length; i++)
         {
@@ -133,7 +135,7 @@ function main(mesh) {
     	}
     	
     	for (var j = 0; j < appearance.chunkMaterials.length; j++) {
-    		if (!materialNames.includes(appearance.chunkMaterials[i])) {
+    		if (!(appearance.chunkMaterials[i] in materialNames)) {
     			Logger.Warning(`Appearance ${appearance.name}: Chunk material ${appearance.chunkMaterials[j]} doesn't exist, submesh will render as invisible.`);
     		}
     	}
