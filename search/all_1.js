@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['exportfiles_1',['ExportFiles',['../classWKitUIScripting.html#a50924dcdc37c1c5976eb7a1b13c57678',1,'WKitUIScripting']]]
+  ['changeextension_1',['ChangeExtension',['../classWKitScripting.html#a83749773878cde1cbcf3c85794ad8ba8',1,'WKitScripting']]]
 ];

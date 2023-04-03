@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['changeextension_0',['ChangeExtension',['../classWKitScripting.html#a83749773878cde1cbcf3c85794ad8ba8',1,'WKitScripting']]]
+  ['addmenuitem_0',['AddMenuItem',['../classExtendedScriptService_1_1WScriptUIHelper.html#a466611ff902ae492535bacf76812449f',1,'ExtendedScriptService.WScriptUIHelper.AddMenuItem(string target, string name)'],['../classExtendedScriptService_1_1WScriptUIHelper.html#a7aa4b5ad435fbd3015d0493e0154a7e3',1,'ExtendedScriptService.WScriptUIHelper.AddMenuItem(string target, string name, ScriptObject onClick)'],['../classExtendedScriptService_1_1WScriptUIHelper.html#a9ee26a7b6494af5fea3085fb7ea2a4c9',1,'ExtendedScriptService.WScriptUIHelper.AddMenuItem(string target, string name, ScriptObject? onClick, params object?[]? args)'],['../classExtendedScriptService_1_1WScriptUIHelper.html#a022d3172656e470d7ff1e75336cd4b8b',1,'ExtendedScriptService.WScriptUIHelper.AddMenuItem(ScriptEntry target, string name, ScriptObject? onClick=null, params object?[]? args)']]]
 ];
