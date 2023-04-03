@@ -76,7 +76,7 @@ function main(mesh) {
             
             if (localIndexList.includes(materialEntry.index))
             {
-                _loggerService.Warning(`materialEntries[${i}] (${materialEntry.name}) is overwriting an already-defined material index: ${materialEntry.index}. Your material assignments might not work as expected.`);
+                Logger.Warning(`materialEntries[${i}] (${materialEntry.name}) is overwriting an already-defined material index: ${materialEntry.index}. Your material assignments might not work as expected.`);
             }
             localIndexList.push(materialEntry.index);
     	} else {
