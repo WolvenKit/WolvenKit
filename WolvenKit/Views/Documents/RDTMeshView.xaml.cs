@@ -1,6 +1,7 @@
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.ViewModels.Documents;
@@ -44,6 +45,20 @@ namespace WolvenKit.Views.Documents
                         view => view.hxContentVisual.ItemsSource)
                     .DisposeWith(disposables);
             });
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
+            ViewModel.CtrlKeyPressed = true;
+        }
+
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+
+            ViewModel.CtrlKeyPressed = false;
         }
 
         private void HxViewport_MouseDown3D(object sender, RoutedEventArgs e) => throw new System.NotImplementedException();

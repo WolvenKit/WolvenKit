@@ -237,6 +237,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private Appearance? _selectedAppearance;
 
+    public bool CtrlKeyPressed { get; set; }
+
     #endregion
 
     #region commands
@@ -1300,6 +1302,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             return;
         }
         IsLoadingMaterials = true;
+        if (CtrlKeyPressed)
+        {
+            foreach (var (_, material) in SelectedAppearance.RawMaterials)
+            {
+                ClearMaterial(material);
+            }
+        }
+
         Parallel.ForEachAsync(from entry in SelectedAppearance.RawMaterials orderby entry.Key ascending select entry, (material, cancellationToken) => LoadMaterial(material.Value)).ContinueWith((result) =>
         {
             Parent.GetLoggerService().NotNull().Info($"All materials loaded!");
@@ -1319,6 +1329,44 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         //{
         //    IsLoadingMaterials = false;
         //});
+    }
+
+    private void ClearMaterial(Material? material)
+    {
+        if (material == null)
+        {
+            return;
+        }
+
+        var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
+        if (File.Exists(filename_b))
+        {
+            File.Delete(filename_b);
+        }
+
+        var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
+        if (File.Exists(filename_bn))
+        {
+            File.Delete(filename_bn);
+        }
+
+        var filename_rm = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_rm.png");
+        if (File.Exists(filename_rm))
+        {
+            File.Delete(filename_rm);
+        }
+
+        var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
+        if (File.Exists(filename_d))
+        {
+            File.Delete(filename_d);
+        }
+
+        var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
+        if (File.Exists(filename_n))
+        {
+            File.Delete(filename_n);
+        }
     }
 
     public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
