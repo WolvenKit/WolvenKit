@@ -33,7 +33,7 @@ public class CMeshPreProcessor : IPreProcessor
             };
         }
 
-        // make sure that the mesh is using either localMaterials or preloadLocalMaterials
+        /*// make sure that the mesh is using either localMaterials or preloadLocalMaterials
         if (mesh.ExternalMaterials.Count > 0 && mesh.PreloadExternalMaterials.Count > 0)
         {
             _loggerService.Warning("Your mesh is trying to use both externalMaterials and preloadExternalMaterials. " +
@@ -222,6 +222,6 @@ public class CMeshPreProcessor : IPreProcessor
                         break;
                 }
             }
-        }
+        }*/
     }
 }
