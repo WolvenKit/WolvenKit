@@ -49,7 +49,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowResourcePathAsHex),
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
-            nameof(ShowReferenceGraph)
+            nameof(ShowReferenceGraph),
+            nameof(GameLanguage)
             )
           .Subscribe(_ =>
           {
@@ -128,113 +129,98 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     #region properties
 
-    [Category("General")]
-    [Display(Name = "Settings Version")]
+    [Display(Name = "Settings Version", GroupName = "General")]
     [ObservableProperty]
-    [Browsable(false)]
+    [property: Browsable(false)]
     private int _settingsVersion;
 
-    [Category("General")]
-    [Display(Name = "Do not check for updates")]
+    [Display(Name = "Do not check for updates", GroupName = "General")]
     [ObservableProperty]
     private bool _skipUpdateCheck;
 
-    [Category("General")]
-    [Display(Name = "Update Channel")]
+    [Display(Name = "Update Channel", GroupName = "General")]
     [ObservableProperty]
     private EUpdateChannel _updateChannel;  // deprecated
 
-    [Category("General")]
-    [Display(Name = "Show Guided Tour")]
+    [Display(Name = "Show Guided Tour", GroupName = "General")]
     [ObservableProperty]
     private bool _showGuidedTour = true;
 
-    [Category("General")]
-    [Display(Name = "Theme Accent")]
+    [Display(Name = "Theme Accent", GroupName = "General")]
     [ObservableProperty]
     private string? _themeAccentString;
 
-    [Category("Cyberpunk")]
-    [Display(Name = "Game Executable Path (.exe)")]
+    [Display(Name = "Game Executable Path (.exe)", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _cP77ExecutablePath;
 
     // This should be conditionally updated by CP77ExecutablePath, but not implemented..
-    [Category("Cyberpunk")]
-    [Display(Name = "Launch Command (executable or other command (e.g. steam:// uri)")]
+    [Display(Name = "Launch Command (executable or other command (e.g. steam:// uri)", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _cP77LaunchCommand;
 
-    [Category("Cyberpunk")]
-    [Display(Name = "Launch Options or Command-Line Parameters To Launch Command")]
+    [Display(Name = "Launch Options or Command-Line Parameters To Launch Command", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _cP77LaunchOptions;
 
-    [Category("Cyberpunk")]
-    [Display(Name = "Show File Preview")]
+    [Display(Name = "Show File Preview", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private bool _showFilePreview = true;
 
-    [Browsable(false)]
     [ObservableProperty]
+    [property: Browsable(false)]
     private string? _reddbHash;
 
-    [Browsable(false)]
     [ObservableProperty]
+    [property: Browsable(false)]
     private string? _installerHash;
 
-    [Category("Cyberpunk")]
-    [Display(Name = "Depot Path")]
+    [Display(Name = "Depot Path", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _materialRepositoryPath;
 
-    [Category("File Editor")]
-    [Display(Name = "Group Large Collections")]
+    [Display(Name = "Group Large Collections", GroupName = "File Editor")]
     [ObservableProperty]
     private bool _treeViewGroups;
 
-    [Category("File Editor")]
-    [Display(Name = "Group Size")]
+    [Display(Name = "Group Size", GroupName = "File Editor")]
     [ObservableProperty]
     private uint _treeViewGroupSize = 100;
 
-    [Category("File Editor")]
-    [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)")]
+    [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)", GroupName = "File Editor")]
     [ObservableProperty]
     private string? _treeViewIgnoredExtensions = "";
 
-    [Category("Import / Export")]
-    [Display(Name = "Show advanced Options")]
+    [Display(Name = "Show advanced Options", GroupName = "Import / Export")]
     [ObservableProperty]
     private bool _showAdvancedOptions;
 
-    [Category("Display")]
-    [Display(Name = "Show CName hashes as hex")]
+    [Display(Name = "Show CName hashes as hex", GroupName = "Display")]
     [ObservableProperty]
     private bool _showCNameAsHex;
 
-    [Category("Display")]
-    [Display(Name = "Show ResourcePath hashes as hex")]
+    [Display(Name = "Show ResourcePath hashes as hex", GroupName = "Display")]
     [ObservableProperty]
     private bool _showResourcePathAsHex;
 
-    [Category("Display")]
-    [Display(Name = "Show NodeRef hashes as hex")]
+    [Display(Name = "Show NodeRef hashes as hex", GroupName = "Display")]
     [ObservableProperty]
     private bool _showNodeRefAsHex;
 
-    [Category("Display")]
-    [Display(Name = "Show TweakDBID hashes as hex")]
+    [Display(Name = "Show TweakDBID hashes as hex", GroupName = "Display")]
     [ObservableProperty]
     private bool _showTweakDBIDAsHex;
 
-    [Category("Display")]
-    [Display(Name = "Show reference graph")]
+    [Display(Name = "Show reference graph", GroupName = "Display")]
     [ObservableProperty]
     private bool _showReferenceGraph;
 
+    [Display(Name = "Game language used for LocKeys", GroupName = "Display")] 
     [ObservableProperty]
-    [Browsable(false)]
+    private EGameLanguage _gameLanguage;
+
+    [ObservableProperty]
+    [property: Browsable(false)]
     private Dictionary<string, LaunchProfile>? _launchProfiles;
 
     #endregion properties

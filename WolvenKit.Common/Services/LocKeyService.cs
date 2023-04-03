@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W;
@@ -9,15 +10,16 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Services
 {
-    public class LocKeyService : ILocKeyService
+    public partial class LocKeyService : ObservableObject, ILocKeyService
     {
-        private readonly Dictionary<string, Dictionary<ulong, localizationPersistenceOnScreenEntry>> _primaryKeys = new();
-        private readonly Dictionary<string, Dictionary<string, localizationPersistenceOnScreenEntry>> _secondaryKeys = new();
+        private readonly Dictionary<EGameLanguage, Dictionary<ulong, localizationPersistenceOnScreenEntry>> _primaryKeys = new();
+        private readonly Dictionary<EGameLanguage, Dictionary<string, localizationPersistenceOnScreenEntry>> _secondaryKeys = new();
 
         private readonly Red4ParserService _parser;
         private readonly IArchiveManager _archive;
 
-        public string Language { get; set; } = "en-us";
+        [ObservableProperty] 
+        private EGameLanguage _language = EGameLanguage.en_us;
 
         public LocKeyService(Red4ParserService parser, IArchiveManager archive)
         {
@@ -25,16 +27,16 @@ namespace WolvenKit.Common.Services
             _archive = archive;
         }
 
-        public void LoadCurrentLanguage() => (_primaryKeys[Language], _secondaryKeys[Language]) = Load("base\\localization\\en-us\\onscreens\\onscreens_final.json");
+        public bool LoadCurrentLanguage() => LoadLanguage(Language);
 
-        public (Dictionary<ulong, localizationPersistenceOnScreenEntry>,
-            Dictionary<string, localizationPersistenceOnScreenEntry>)
-            Load(ResourcePath depotPath)
+        public bool LoadLanguage(EGameLanguage language)
         {
-            var primary = new Dictionary<ulong, localizationPersistenceOnScreenEntry>();
-            var secondary = new Dictionary<string, localizationPersistenceOnScreenEntry>();
+            var gameLanguageCode = Language.ToString().Replace('_', '-');
+
+            ResourcePath depotPath = $@"base\localization\{gameLanguageCode}\onscreens\onscreens_final.json";
+
             var file = _archive.Lookup(depotPath.GetRedHash());
-            if (file.HasValue && file.Value is IGameFile fe)
+            if (file is { HasValue: true, Value: { } fe })
             {
                 using var stream = new MemoryStream();
                 fe.Extract(stream);
@@ -45,40 +47,47 @@ namespace WolvenKit.Common.Services
                 {
                     if (json.Root.Chunk is localizationPersistenceOnScreenEntries os)
                     {
+                        _primaryKeys[language] = new Dictionary<ulong, localizationPersistenceOnScreenEntry>();
+                        _secondaryKeys[language] = new Dictionary<string, localizationPersistenceOnScreenEntry>();
+
                         foreach (var entry in os.Entries)
                         {
-                            primary[entry.PrimaryKey] = entry;
-                            secondary[entry.SecondaryKey] = entry;
+                            _primaryKeys[language][entry.PrimaryKey] = entry;
+                            _secondaryKeys[language][entry.SecondaryKey] = entry;
                         }
+
+                        return true;
                     }
                 }
             }
-            return (primary, secondary);
+            return false;
         }
+
+        private bool IsLoaded() => _primaryKeys.ContainsKey(Language) || LoadCurrentLanguage();
 
         public List<string> GetSecondaryKeys()
         {
-            if (!_secondaryKeys.ContainsKey(Language))
+            if (!IsLoaded())
             {
-                LoadCurrentLanguage();
+                return new List<string>();
             }
             return _secondaryKeys[Language].Keys.ToList();
         }
 
         public IEnumerable<localizationPersistenceOnScreenEntry> GetEntries()
         {
-            if (!_secondaryKeys.ContainsKey(Language))
+            if (!IsLoaded())
             {
-                LoadCurrentLanguage();
+                return new List<localizationPersistenceOnScreenEntry>();
             }
             return _secondaryKeys[Language].Values;
         }
 
         public localizationPersistenceOnScreenEntry? GetEntry(ulong key)
         {
-            if (!_primaryKeys.ContainsKey(Language))
+            if (!IsLoaded())
             {
-                LoadCurrentLanguage();
+                return null;
             }
 
             if (_primaryKeys.TryGetValue(Language, out var outerdict))
@@ -93,9 +102,9 @@ namespace WolvenKit.Common.Services
 
         public localizationPersistenceOnScreenEntry? GetEntry(string key)
         {
-            if (!_secondaryKeys.ContainsKey(Language))
+            if (!IsLoaded())
             {
-                LoadCurrentLanguage();
+                return null;
             }
 
             if (_secondaryKeys.TryGetValue(Language, out var outerdict))

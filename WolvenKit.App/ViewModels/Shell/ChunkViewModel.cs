@@ -2753,6 +2753,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IsDeleteReady = false;
         Tab?.Parent.SetIsDirty(true);
         RecalculateProperties();
+
+        DeleteAllCommand.NotifyCanExecuteChanged();
     }
 
     private Task<bool> ImportWorldNodeDataTask(bool updatecoords)

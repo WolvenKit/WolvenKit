@@ -6,11 +6,9 @@ using System.Text;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -1356,24 +1354,22 @@ namespace WolvenKit.Modkit.RED4
 
                 if (name.Contains("LOD"))
                 {
-                    try
+                    var idx = name.IndexOf("LOD_");
+                    if (idx < name.Length - 1)
                     {
-                        var idx = name.IndexOf("LOD_");
-                        if (idx < name.Length - 1)
+                        if (!uint.TryParse(name.AsSpan(idx + 4, 1), out LOD))
                         {
-                            LOD = Convert.ToUInt32(name.Substring(idx + 4, 1));
-                            LOD = args.ReplaceLod && LOD == 0 ? 8 : LOD;
-
-                            LODs.Add(LOD);
+                            throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
                         }
-                    }
-                    catch
-                    {
-                        throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
-                    }
-                    if (LOD is not 1 and not 2 and not 4 and not 8)
-                    {
-                        throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
+
+                        LOD = args.ReplaceLod && LOD == 0 ? 8 : LOD;
+
+                        if (LOD is not 1 and not 2 and not 4 and not 8)
+                        {
+                            throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
+                        }
+
+                        LODs.Add(LOD);
                     }
                 }
                 else
@@ -1402,8 +1398,17 @@ namespace WolvenKit.Modkit.RED4
                     var idx = mesh.name.IndexOf("LOD_");
                     if (idx < mesh.name.Length - 1)
                     {
-                        var LOD = Convert.ToUInt32(mesh.name.Substring(idx + 4, 1));
+                        if (!uint.TryParse(mesh.name.AsSpan(idx + 4, 1), out var LOD))
+                        {
+                            throw new Exception("Invalid Geometry/sub mesh name: " + mesh.name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
+                        }
+                        
                         LOD = args.ReplaceLod && LOD == 0 ? 8 : LOD;
+
+                        if (LOD is not 1 and not 2 and not 4 and not 8)
+                        {
+                            throw new Exception("Invalid Geometry/sub mesh name: " + mesh.name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
+                        }
 
                         LODLvl[i] = LOD;
                     }
