@@ -339,6 +339,8 @@ public class WKitUIScripting : WKitScripting
 
         // get the export view model and clear the items
         var expVM = _paneViewModelFactory.TextureExportViewModel();
+        expVM.RefreshCommand.Execute(null);
+
         foreach (var item in expVM.Items)
         {
             item.IsChecked = false;
