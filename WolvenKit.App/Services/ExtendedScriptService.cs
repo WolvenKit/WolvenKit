@@ -15,7 +15,7 @@ using WolvenKit.RED4.CR2W.JSON;
 
 namespace WolvenKit.App.Services;
 
-public class ExtendedScriptService : ScriptService
+public partial class ExtendedScriptService : ScriptService
 {
     private readonly Dictionary<string, List<ScriptEntry>> _uiScripts = new();
     private readonly Dictionary<string, IScriptableControl> _uiControls = new();
@@ -28,7 +28,7 @@ public class ExtendedScriptService : ScriptService
     {
         DeployShippedFiles();
 
-        _hostObjects.Add("ui", new UIHelper(this));
+        _hostObjects.Add("ui", new WScriptUIHelper(this));
 
         RefreshUIScripts();
     }
@@ -187,37 +187,6 @@ public class ExtendedScriptService : ScriptService
             {
                 scriptableControl.AddScriptedElements(lst);
             }
-        }
-    }
-
-    public class UIHelper
-    {
-        private readonly ExtendedScriptService _extendedScriptService;
-
-        public UIHelper(ExtendedScriptService extendedScriptService) => _extendedScriptService = extendedScriptService;
-
-        public ScriptEntry AddMenuItem(string target, string name) => AddMenuItem(target, name, null, null);
-
-        public ScriptEntry AddMenuItem(string target, string name, ScriptObject onClick) => AddMenuItem(target, name, onClick, null);
-
-        public ScriptEntry AddMenuItem(string target, string name, ScriptObject? onClick, params object?[]? args)
-        {
-            var scriptEntry = new ScriptEntry(name, onClick, args);
-        
-            if (!_extendedScriptService._uiScripts.ContainsKey(target))
-            {
-                _extendedScriptService._uiScripts.Add(target, new List<ScriptEntry>());
-            }
-            _extendedScriptService._uiScripts[target].Add(scriptEntry);
-
-            return scriptEntry;
-        }
-
-        public ScriptEntry AddMenuItem(ScriptEntry target, string name, ScriptObject? onClick = null, params object?[]? args)
-        {
-            var scriptEntry = new ScriptEntry(name, onClick, args);
-            target.Children.Add(scriptEntry);
-            return scriptEntry;
         }
     }
 }

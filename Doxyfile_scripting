@@ -123,7 +123,8 @@ WARN_LOGFILE           =
 # Configuration options related to the input files
 #---------------------------------------------------------------------------
 INPUT                  = WolvenKit.Modkit/Scripting/WKitScripting.cs \
-                         WolvenKit.App/Helpers/WKitUIScripting.cs
+                         WolvenKit.App/Helpers/WKitUIScripting.cs \
+                         WolvenKit.App/Services/ExtendedScriptService.UIHelper.cs
 INPUT_ENCODING         = UTF-8
 INPUT_FILE_ENCODING    =
 FILE_PATTERNS          = *.cs
