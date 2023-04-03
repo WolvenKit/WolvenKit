@@ -128,11 +128,6 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
             Directory.CreateDirectory(dir);
         }
 
-        if (!File.Exists(dir + "/Logger.wscript"))
-        {
-            File.Copy(@"Resources\Scripts\Logger.wscript", dir + "/Logger.wscript");
-        }
-
         return dir;
     }
 

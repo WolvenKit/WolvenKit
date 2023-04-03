@@ -49,7 +49,7 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         
     }
     public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel) 
-        => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals, _parserService, _watcherService, _archiveManager);
+        => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals, _parserService, _watcherService, _archiveManager, _scriptService);
 
     public WScriptDocumentViewModel WScriptDocumentViewModel(string path) 
         => new(path, _projectManager, _loggerService, _parserService, _watcherService, _archiveManager, _scriptService, _paneViewModelFactory);

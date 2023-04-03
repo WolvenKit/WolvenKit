@@ -1,23 +1,54 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.ClearScript;
+using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.CR2W.JSON;
 
 namespace WolvenKit.App.Services;
 
-public class ExtendedScriptService : ScriptService
+public partial class ExtendedScriptService : ScriptService
 {
     private readonly Dictionary<string, List<ScriptEntry>> _uiScripts = new();
     private readonly Dictionary<string, IScriptableControl> _uiControls = new();
 
+    private readonly Dictionary<string, object> _hostObjects = new();
+
     private V8ScriptEngine? _uiEngine;
 
-    public ExtendedScriptService(ILoggerService loggerService) : base(loggerService) => RefreshUIScripts();
+    public ExtendedScriptService(ILoggerService loggerService) : base(loggerService)
+    {
+        DeployShippedFiles();
+
+        _hostObjects.Add("ui", new WScriptUIHelper(this));
+
+        RefreshUIScripts();
+    }
+
+    private void DeployShippedFiles()
+    {
+        var dir = ISettingsManager.GetWScriptDir();
+
+        CheckFile("Logger");
+        CheckFile("onSave_mesh");
+        CheckFile("ui_example");
+
+        void CheckFile(string fileName)
+        {
+            if (!File.Exists($"{dir}/{fileName}.wscript"))
+            {
+                File.Copy(@$"Resources\Scripts\{fileName}.wscript", $"{dir}/{fileName}.wscript");
+            }
+        }
+    }
 
     public void RegisterControl(IScriptableControl scriptableControl)
     {
@@ -72,11 +103,59 @@ public class ExtendedScriptService : ScriptService
         }
     }
 
+    public bool OnSaveHook(string ext, CR2WFile cr2wFile)
+    {
+        if (string.IsNullOrEmpty(ext))
+        {
+            throw new ArgumentNullException(nameof(ext));
+        }
+
+        if (ext[0] == '.')
+        {
+            ext = ext.Substring(1);
+        }
+
+        var scriptFilePath = Path.Combine(ISettingsManager.GetWScriptDir(), $"onSave_{ext}.wscript");
+        if (File.Exists(scriptFilePath))
+        {
+            var code = File.ReadAllText(scriptFilePath);
+
+            var dto = new RedFileDto(cr2wFile);
+            var json = RedJsonSerializer.Serialize(dto);
+
+            return TestExecute(code, json);
+        }
+
+        return true;
+    }
+
+    private bool TestExecute(string code, string json)
+    {
+        var engine = base.GetScriptEngine(null, ISettingsManager.GetWScriptDir());
+        engine.Script.file = json;
+        engine.Script.success = false;
+
+        try
+        {
+            engine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code);
+        }
+        catch (ScriptEngineException ex1)
+        {
+            _loggerService?.Error(ex1.ErrorDetails);
+        }
+        catch (Exception ex2)
+        {
+            _loggerService?.Error(ex2);
+        }
+
+        return engine.Script.success;
+    }
+
     public void RefreshUIScripts()
     {
         UnloadScripts();
 
-        _uiEngine = GetUIScriptEngine();
+        _uiEngine = base.GetScriptEngine(_hostObjects);
 
         foreach (var file in Directory.GetFiles(ISettingsManager.GetWScriptDir(), "*.wscript"))
         {
@@ -92,25 +171,13 @@ public class ExtendedScriptService : ScriptService
             {
                 _uiEngine.Execute(code);
             }
-            catch (Exception e)
+            catch (ScriptEngineException ex1)
             {
-                _loggerService.Error(e);
+                _loggerService?.Error(ex1.ErrorDetails);
             }
-        }
-
-        if (_uiEngine.Script is ScriptObject so)
-        {
-            var item = so.GetProperty("items");
-            if (item is List<ScriptEntry> entries)
+            catch (Exception ex2)
             {
-                foreach (var scriptEntry in entries)
-                {
-                    if (!_uiScripts.ContainsKey(scriptEntry.Target))
-                    {
-                        _uiScripts.Add(scriptEntry.Target, new List<ScriptEntry>());
-                    }
-                    _uiScripts[scriptEntry.Target].Add(scriptEntry);
-                }
+                _loggerService?.Error(ex2);
             }
         }
 
@@ -122,33 +189,25 @@ public class ExtendedScriptService : ScriptService
             }
         }
     }
-
-    protected virtual V8ScriptEngine GetUIScriptEngine(Dictionary<string, object>? hostObjects = null, string? searchPath = null)
-    {
-        var engine = base.GetScriptEngine(hostObjects, searchPath);
-
-        engine.AddHostObject("host", new HostFunctions());
-        engine.AddHostType("ScriptEntry", typeof(ScriptEntry));
-        engine.AddHostObject("items", new List<ScriptEntry>());
-
-        return engine;
-    }
 }
 
 public class ScriptEntry
 {
-    private readonly ScriptObject _function;
+    private readonly ScriptObject? _function;
+    private readonly object?[]? _args;
 
-    public string Target { get; }
     public string Name { get; }
+    public List<ScriptEntry> Children { get; set; } = new();
 
+    public bool HasFunction => _function != null;
 
-    public ScriptEntry(string target, string name, ScriptObject function)
+    public ScriptEntry(string name, ScriptObject? function, params object?[]? args)
     {
-        Target = target;
         Name = name;
+
         _function = function;
+        _args = args;
     }
 
-    public async void Execute() => await Task.Run(() => _function.Invoke(false));
+    public async void Execute() => await Task.Run(() => _function?.Invoke(false, _args));
 }

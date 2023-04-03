@@ -5,6 +5,7 @@
 	<Color name="Digits" foreground="#FF00C0FF" exampleText="3.14" />
 	<Color name="Comment" foreground="#FF55FF00" exampleText="// comment" />
 	<Color name="String" foreground="#FFFFCF00" exampleText="var text = &quot;Hello, World!&quot;;" />
+	<Color name="StringInterpolation" foreground="White" exampleText="var text = `Hello, ${name}!`;"/>
 	<Color name="Character" foreground="#FFFFCF00" exampleText="var char = 'a';" />
 	<Color name="Regex" foreground="#FF00A0FF" exampleText="/abc/m" />
 	<Color name="JavaScriptKeyWords" foreground="#FF00A0FF" exampleText="return myVariable;" />
@@ -121,6 +122,13 @@
 			<End>"</End>
 			<RuleSet>
 				<Span begin="\\" end="." />
+			</RuleSet>
+		</Span>
+		<Span color="String">
+			<Begin>`</Begin>
+			<End>`</End>
+			<RuleSet>
+				<Span color="StringInterpolation" begin="\${" end="}" />
 			</RuleSet>
 		</Span>
 		<Span color="Character">
