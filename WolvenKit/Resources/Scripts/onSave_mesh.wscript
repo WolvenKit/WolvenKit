@@ -135,7 +135,7 @@ function main(mesh) {
     	}
     	
     	for (var j = 0; j < appearance.chunkMaterials.length; j++) {
-    		if (!(appearance.chunkMaterials[i] in materialNames)) {
+    		if (!(appearance.chunkMaterials[j] in materialNames)) {
     			Logger.Warning(`Appearance ${appearance.name}: Chunk material ${appearance.chunkMaterials[j]} doesn't exist, submesh will render as invisible.`);
     		}
     	}
