@@ -284,4 +284,26 @@ namespace WolvenKit.Common
         HashedPath = 0x8,
         Inplace = 0x10,     // done
     };
+
+    public enum EGameLanguage
+    {
+        ar_ar,
+        cz_cz,
+        de_de,
+        en_us,
+        es_es,
+        es_mx,
+        fr_fr,
+        hu_hu,
+        it_it,
+        jp_jp,
+        kr_kr,
+        pl_pl,
+        pt_br,
+        ru_ru,
+        th_th,
+        tr_tr,
+        zh_cn,
+        zh_tw
+    }
 }

@@ -353,14 +353,14 @@
                         Command="{Binding LoadMaterialsCommand}"
                         Content="Generate Materials for Appearance (experimental)"
                         IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
-                        ToolTip="May take a while - watch log for completion" />
+                        ToolTip="May take a while - watch log for completion (Hold Ctrl to clear cache)" />
                     <Button
                         Grid.Row="1"
                         Grid.Column="1"
                         Height="24"
                         Margin="4"
                         HorizontalAlignment="Stretch"
-                        Command="{Binding ExportEntity}"
+                        Command="{Binding ExportEntityCommand}"
                         Content="Export Appearance with Rig (experimental)"
                         Visibility="{Binding PanelVisibility.ShowExportEntity, Converter={StaticResource VisibilityConverter}}" />
                 </Grid>

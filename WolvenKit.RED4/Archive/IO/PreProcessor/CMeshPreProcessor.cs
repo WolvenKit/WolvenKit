@@ -55,7 +55,7 @@ public class CMeshPreProcessor : IPreProcessor
         var sumOfExternal = mesh.ExternalMaterials.Count + mesh.PreloadExternalMaterials.Count;
 
         var usedLocalIndices = new HashSet<ushort>();
-        var materialNames = new List<string>();
+        var materialNames = new Dictionary<string, int>();
 
         for (var i = 0; i < mesh.MaterialEntries.Count; i++)
         {
@@ -63,7 +63,10 @@ public class CMeshPreProcessor : IPreProcessor
 
             // Put all material names into a list - we'll use it to verify the appearances later
             var name = materialEntry.Name.ToString() ?? "";
-            materialNames.Add(name);
+            if (!materialNames.TryAdd(name, i))
+            {
+                _loggerService.Warning($"materialEntries[{i}] ({materialEntry.Name}) is already defined in materialEntries[{materialNames[name]}]");
+            }
             
             if (materialEntry.IsLocalInstance)
             {
@@ -150,7 +153,7 @@ public class CMeshPreProcessor : IPreProcessor
 
             foreach (var chunkName in appearance.ChunkMaterials)
             {
-                if (chunkName.GetResolvedText() is {} assignedMaterialName && !materialNames.Contains(assignedMaterialName))
+                if (chunkName.GetResolvedText() is {} assignedMaterialName && !materialNames.ContainsKey(assignedMaterialName))
                 {
                     _loggerService.Warning($"Appearance {appearance.Name}: Chunk material {assignedMaterialName} doesn't exist, " +
                                            "submesh will render as invisible.");

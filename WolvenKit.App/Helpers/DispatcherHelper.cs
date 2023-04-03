@@ -11,8 +11,7 @@ public static class DispatcherHelper
 
     public static void RunOnUIThread(this DispatcherObject d, Action action, DispatcherPriority priority = DispatcherPriority.Normal)
     {
-        var dispatcher = d.Dispatcher;
-        if (dispatcher == null)
+        if (d is not { Dispatcher: { } dispatcher})
         {
             return;
         }
