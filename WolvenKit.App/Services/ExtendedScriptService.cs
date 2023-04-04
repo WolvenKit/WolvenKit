@@ -118,22 +118,22 @@ public partial class ExtendedScriptService : ScriptService
         var scriptFilePath = Path.Combine(ISettingsManager.GetWScriptDir(), $"onSave_{ext}.wscript");
         if (File.Exists(scriptFilePath))
         {
-            var code = File.ReadAllText(scriptFilePath);
-
             var dto = new RedFileDto(cr2wFile);
             var json = RedJsonSerializer.Serialize(dto);
 
-            return TestExecute(code, json);
+            return TestExecute(scriptFilePath, json);
         }
 
         return true;
     }
 
-    private bool TestExecute(string code, string json)
+    private bool TestExecute(string file, string json)
     {
         var engine = base.GetScriptEngine(null, ISettingsManager.GetWScriptDir());
         engine.Script.file = json;
         engine.Script.success = false;
+
+        var code = File.ReadAllText(file);
 
         try
         {
@@ -141,7 +141,7 @@ public partial class ExtendedScriptService : ScriptService
         }
         catch (ScriptEngineException ex1)
         {
-            _loggerService?.Error(ex1.ErrorDetails);
+            _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {file}");
         }
         catch (Exception ex2)
         {
@@ -173,7 +173,7 @@ public partial class ExtendedScriptService : ScriptService
             }
             catch (ScriptEngineException ex1)
             {
-                _loggerService?.Error(ex1.ErrorDetails);
+                _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {file}");
             }
             catch (Exception ex2)
             {
