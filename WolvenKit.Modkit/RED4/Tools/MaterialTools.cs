@@ -145,9 +145,21 @@ namespace WolvenKit.Modkit.RED4
                 if (findStatus == FindFileResult.NoError)
                 {
                     ArgumentNullException.ThrowIfNull(result, nameof(result));
-                    var instance = (result.File.RootChunk as CMaterialInstance).NotNull();
+                    if (result.File.RootChunk is CMaterialInstance mi)
+                    {
+                        ExternalMaterial.Add(mi);
+                    }
+                    else
+                    {
+                        // The external materials can also directly reference MaterialTemplates. To keep it easier for the exporter we can expose these as material instances
+                        var fakeMaterialInstance = new CMaterialInstance
+                        {
+                            BaseMaterial = new CResourceReference<IMaterial>(path),
+                            Values = new CArray<CKeyValuePair>()
+                        };
 
-                    ExternalMaterial.Add(instance);
+                        ExternalMaterial.Add(fakeMaterialInstance);
+                    }
 
                     foreach (var import in result.Imports)
                     {
@@ -1239,6 +1251,11 @@ namespace WolvenKit.Modkit.RED4
             var baseMaterials = new List<CMaterialInstance>();
 
             var path = cMaterialInstance.BaseMaterial.DepotPath;
+            if (path == ResourcePath.Empty)
+            {
+                return (null, resultDict);
+            }
+
             while (!Path.GetExtension(path).Contains("mt"))
             {
                 if (path == ResourcePath.Empty)

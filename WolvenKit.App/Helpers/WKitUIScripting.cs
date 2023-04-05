@@ -310,26 +310,30 @@ public class WKitUIScripting : WKitScripting
     /// <param name="exportSettings"></param>
     /// <exception cref="Exception"></exception>
     /// <exception cref="ArgumentNullException"></exception>
-    public void ExportFiles(dynamic exportList, dynamic? exportSettings = null)
+    public async void ExportFiles(dynamic exportList, dynamic? exportSettings = null)
     {
+        List<string> internalExportList;
+
         // dynamic type checking
         // TODO: mix in hashes (V8 doesn't have a ulong equivalent though)
         switch (exportList)
         {
             case IList list:
+                internalExportList = new List<string>();
                 foreach (var item in list)
                 {
-                    if (item is not string)
+                    if (item is not string str)
                     {
                         throw new Exception($"Unexpected datatype found for {nameof(exportList)}. Expected string or string[].");
                     }
+                    internalExportList.Add(str);
                 }
                 break;
             case string exportString:
-                exportList = new string[] { exportString };
+                internalExportList = new List<string> { exportString };
                 break;
             case FileEntry fileEntry:
-                exportList = new string[] { fileEntry.FileName };
+                internalExportList = new List<string> { fileEntry.FileName };
                 break;
             case null:
                 throw new ArgumentNullException(nameof(exportList));
@@ -339,7 +343,7 @@ public class WKitUIScripting : WKitScripting
 
         // get the export view model and clear the items
         var expVM = _paneViewModelFactory.TextureExportViewModel();
-        expVM.RefreshCommand.Execute(null);
+        await expVM.RefreshCommand.ExecuteAsync(null);
 
         foreach (var item in expVM.Items)
         {
@@ -428,9 +432,9 @@ public class WKitUIScripting : WKitScripting
         }
 
         // loop over each item to export and export the item
-        foreach (var exportItem in exportList)
+        foreach (var exportItem in internalExportList)
         {
-            if (exportItem is string exportPath)
+            if (exportItem is { } exportPath)
             {
                 if (exportPath.Length == 0)
                 {
@@ -477,7 +481,7 @@ public class WKitUIScripting : WKitScripting
         // export all the checked items if we have any
         if (expVM.Items.Any(_ => _.IsChecked))
         {
-            expVM.ProcessSelectedCommand.Execute(Unit.Default);
+            await expVM.ProcessSelectedCommand.ExecuteAsync(Unit.Default);
         }
     }
 
