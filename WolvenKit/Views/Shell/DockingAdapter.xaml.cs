@@ -430,6 +430,11 @@ namespace WolvenKit.Views.Shell
 
         public async Task<bool> CloseAll()
         {
+            if (_viewModel == null)
+            {
+                return true;
+            }
+
             var allClosed = true;
 
             for (var i = _viewModel.DockedViews.Count - 1; i >= 0; i--)
