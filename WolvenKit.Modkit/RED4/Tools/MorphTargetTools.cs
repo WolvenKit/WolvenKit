@@ -214,7 +214,7 @@ namespace WolvenKit.Modkit.RED4
                 var diffsCount = numVertexDiffsInEachChunk[subMeshIndex];
                 var storedMapsCount = numVertexDiffsMappingInEachChunk[subMeshIndex];
 
-                // -.-
+                // I *think* this will only ever be >, but just in case
                 var unevenDivisionOffset =
                     storedMapsCount * 2 == diffsCount
                         ? 0
@@ -227,19 +227,13 @@ namespace WolvenKit.Modkit.RED4
                 var positionDeltas = new TargetVec3[diffsCount];
                 var normalDeltas = new Vec3[diffsCount];
                 var tangentDeltas = new Vec3[diffsCount];
+                var vertexMapping = new ushort[actualMapsCount];
 
-                if (subMeshIndex == 0)
-                {
-                    diffsbuffer.Position = targetStartsInVertexDiffs * 12;
-                }
-                else
-                {
-                    diffsbuffer.Position = targetStartsInVertexDiffs * 12;
+                diffsbuffer.Position = targetStartsInVertexDiffs * 12;
 
-                    for (var eye = 0; eye < subMeshIndex; eye++)
-                    {
-                        diffsbuffer.Position += numVertexDiffsInEachChunk[eye] * 12;
-                    }
+                for (var preceding = 0; preceding < subMeshIndex; preceding++)
+                {
+                    diffsbuffer.Position += numVertexDiffsInEachChunk[preceding] * 12;
                 }
 
                 for (var diffIndex = 0; diffIndex < diffsCount; diffIndex++)
@@ -260,18 +254,12 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
 
-                var vertexMapping = new ushort[diffsCount];
-
-                // Initial position for target's mappings
                 mappingbuffer.Position = targetStartsInVertexDiffsMapping * mappingStartOffsetSizeMultiplier;
 
-                // Skip previous data
-                if (subMeshIndex > 0)
+                for (var preceding = 0; preceding < subMeshIndex; preceding++)
                 {
-                   for (var preceding = 0; preceding < subMeshIndex; preceding++)
-                    {
-                        mappingbuffer.Position += numVertexDiffsMappingInEachChunk[preceding] * mappingByteSize * 2;
-                    }
+                    // Skip previous data as aligned, NOT actual maps count
+                    mappingbuffer.Position += numVertexDiffsMappingInEachChunk[preceding] * mappingByteSize * 2;
                 }
 
                 for (var mapIdx = 0; mapIdx < actualMapsCount; mapIdx++)
@@ -410,7 +398,7 @@ namespace WolvenKit.Modkit.RED4
                 for (var i = 0; i < mesh.texCoords0.Length; i++)
                 {
                     bw.Write(mesh.texCoords0[i].X);
-                    bw.Write(mesh.texCoords0[i].Y);
+                    bw.Write((mesh.texCoords0[i].Y * -1) + 1); // Flip UV Y like mesh export does
                 }
                 for (var i = 0; i < mesh.texCoords1.Length; i++)
                 {

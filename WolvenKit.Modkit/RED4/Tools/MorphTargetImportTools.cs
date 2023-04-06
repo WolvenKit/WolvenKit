@@ -61,9 +61,11 @@ namespace WolvenKit.Modkit.RED4
 
                     // Mesh logic automatically construes morphtargets as
                     // garmentSupport. We don't want that. Can't be both.
+                    /*
                     rawMesh.garmentMorph = Array.Empty<Vec3>();
                     rawMesh.garmentSupportCap = Array.Empty<Vec4>();
                     rawMesh.garmentSupportWeight = Array.Empty<Vec4>();
+                    */
 
                     RawMeshes.Add(rawMesh);
                 }
@@ -259,29 +261,11 @@ namespace WolvenKit.Modkit.RED4
             return count;
         }
 
+        // Inverse, export transform is (mostly) in `ContainRawTarget()`
         private void ConvertAndSetTargetsData(CR2WFile cr2w, uint morphTargetCount, uint subMeshCount, ModelRoot model, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer)
         {
-            // Write buffer positions for all the morph targets
-            for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
-            {
-                blob.Header.TargetStartsInVertexDiffs[targetIndex] = (uint)targetIndex;
-                blob.Header.TargetStartsInVertexDiffsMapping[targetIndex] = (uint)targetIndex;
-
-                for (var i = 0; i < targetIndex; i++)
-                {
-                    // This can result in the same target start position for zeroed submeshes.
-                    // Presumably that's intended and handled on load using the diff counts.
-                    var vertexCount = GetNonzeroVertexPositionDiffCount(model, i);
-                    blob.Header.TargetStartsInVertexDiffs[targetIndex] += vertexCount - 1;
-                    blob.Header.TargetStartsInVertexDiffsMapping[targetIndex] += vertexCount - 1;
-                }
-            }
-
             var diffsWriter = new BinaryWriter(diffsBuffer);
             var mappingsWriter = new BinaryWriter(mappingsBuffer);
-
-            uint allTargetsTotalAppliedDiffCount = 0;
-            uint allTargets_Half_MappingCount = 0;        // Fun story
 
             for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
             {
@@ -309,7 +293,7 @@ namespace WolvenKit.Modkit.RED4
                     var normalDeltas = morphTarget["NORMAL"].AsVector3Array();
                     var tangentDeltas = morphTarget["TANGENT"].AsVector3Array();
 
-                    var mappings = new List<ushort>();
+                    var mappingsInSubmesh = new List<ushort>();
                     uint actionableDiffCountInSubmesh = 0;
                     var ignoredDiffsWithOnlyNormalOrTangent = 0;
 
@@ -335,11 +319,9 @@ namespace WolvenKit.Modkit.RED4
                             continue;
                         }
 
-                        mappings.Add((ushort)diffIndex);
+                        mappingsInSubmesh.Add((ushort)diffIndex);
 
                         actionableDiffCountInSubmesh += 1;
-
-                        // Inverse transform is in `ContainRawTargets()`
 
                         // GLTF's RHCS Y up -> Red4 LHCS Z up
                         var zUpPositionDelta = new TargetVec3(positionDelta.X, -positionDelta.Z, positionDelta.Y);
@@ -365,37 +347,63 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                     // 2 bytes per mapping
-                    foreach (var mapping in mappings)
+                    foreach (var mapping in mappingsInSubmesh)
                     {
                         mappingsWriter.Write(mapping);
                     }
 
-                    // ...And 2 bytes of padding per mapping, after the mappings
-                    foreach (var mapping in mappings)
+                    var oddDiffCountNeedsMappingsPadding = mappingsInSubmesh.Count % 2 != 0;
+
+                    if (oddDiffCountNeedsMappingsPadding)
                     {
                         mappingsWriter.Write((ushort)0);
                     }
 
-                    // So for some reason this is stored as half and the mappings calculated
-                    // with a 4-byte unit instead of the actual 2 bytes + 2 bytes padding
-                    var halfOfTotalMappingsInSubmesh = (uint)mappings.Count / 2;
+                    // Fun story
+                    var mappingCountHalvedRoundedUpForRE4 =
+                        oddDiffCountNeedsMappingsPadding
+                            ? (uint)(mappingsInSubmesh.Count / 2) + 1
+                            : (uint)(mappingsInSubmesh.Count / 2);
 
-                    blob.Header.NumVertexDiffsInEachChunk[targetIndex].NotNull()[subMeshIndex] = actionableDiffCountInSubmesh;
-                    blob.Header.NumVertexDiffsMappingInEachChunk[targetIndex].NotNull()[subMeshIndex] = halfOfTotalMappingsInSubmesh;
-
-                    allTargetsTotalAppliedDiffCount += actionableDiffCountInSubmesh;
-                    allTargets_Half_MappingCount += halfOfTotalMappingsInSubmesh;
-
+                    blob.Header.NumVertexDiffsInEachChunk[targetIndex][subMeshIndex] = actionableDiffCountInSubmesh;
+                    blob.Header.NumVertexDiffsMappingInEachChunk[targetIndex][subMeshIndex] = mappingCountHalvedRoundedUpForRE4;
 
                     _loggerService.Debug($"Target {targetIndex} submesh {subMeshIndex} ({positionDeltas.Count} vertices): {actionableDiffCountInSubmesh} diffs applied ({ignoredDiffsWithOnlyNormalOrTangent} normal/tangent only diffs skipped).");
                 }
             }
 
-            // Set blob-level stuff computed from the import.
-            // These should really rather be return values or immutable
+            // Set rest of blob-level stuff computed from the import.
+            // (This should really be immutable or returned but here we are.)
+
             blob.Header.NumTargets = morphTargetCount;
-            blob.Header.NumDiffs = allTargetsTotalAppliedDiffCount;
-            blob.Header.NumDiffsMapping = allTargets_Half_MappingCount;
+
+            blob.Header.NumDiffs = 0;
+            blob.Header.NumDiffsMapping = 0;
+
+            // Reduce into totals and subtotals... f# where art thou
+            for (var targetIndex = (int)morphTargetCount - 1; targetIndex >= 0; targetIndex--)
+            {
+                blob.Header.TargetStartsInVertexDiffs[targetIndex] = 0;
+                blob.Header.TargetStartsInVertexDiffsMapping[targetIndex] = 0;
+
+                uint diffCountInTarget = 0;
+                uint mappingCountInTarget = 0;
+
+                for (var subMeshIndex = 0; subMeshIndex < subMeshCount; subMeshIndex++)
+                {
+                    diffCountInTarget += blob.Header.NumVertexDiffsInEachChunk[targetIndex][subMeshIndex];
+                    mappingCountInTarget += blob.Header.NumVertexDiffsMappingInEachChunk[targetIndex][subMeshIndex];
+                }
+
+                blob.Header.NumDiffs += diffCountInTarget;
+                blob.Header.NumDiffsMapping += mappingCountInTarget;
+
+                for (var higherTargetIndex = targetIndex + 1; higherTargetIndex < morphTargetCount; higherTargetIndex++)
+                {
+                    blob.Header.TargetStartsInVertexDiffs[higherTargetIndex] += diffCountInTarget;
+                    blob.Header.TargetStartsInVertexDiffsMapping[higherTargetIndex] += mappingCountInTarget;
+                }
+            }
 
             return;
         }
