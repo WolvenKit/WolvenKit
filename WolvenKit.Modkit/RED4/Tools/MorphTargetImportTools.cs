@@ -57,7 +57,15 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (node.Mesh != null)
                 {
-                    RawMeshes.Add(GltfMeshToRawContainer(node));
+                    var rawMesh = GltfMeshToRawContainer(node);
+
+                    // Mesh logic automatically construes morphtargets as
+                    // garmentSupport. We don't want that. Can't be both.
+                    rawMesh.garmentMorph = Array.Empty<Vec3>();
+                    rawMesh.garmentSupportCap = Array.Empty<Vec4>();
+                    rawMesh.garmentSupportWeight = Array.Empty<Vec4>();
+
+                    RawMeshes.Add(rawMesh);
                 }
                 else if (args.FillEmpty)
                 {
@@ -65,10 +73,10 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            // Conversion also switches us to RHCSZup for the
-            // base mesh - the morphtargets remain LHCSYup for now
             RawMeshes = RawMeshes.OrderBy(o => o.name).ToList();
 
+            // Conversion also switches us to RHCSZup for the
+            // base mesh - the morphtargets remain LHCSYup for now
             var baseMax = new Vec3(float.MinValue, float.MinValue, float.MinValue);
             var baseMin = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
 
@@ -273,6 +281,7 @@ namespace WolvenKit.Modkit.RED4
             var mappingsWriter = new BinaryWriter(mappingsBuffer);
 
             uint allTargetsTotalAppliedDiffCount = 0;
+            uint allTargets_Half_MappingCount = 0;        // Fun story
 
             for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
             {
@@ -349,29 +358,36 @@ namespace WolvenKit.Modkit.RED4
                         var normalAs10BitShiftedInt = Converters.Vec4ToU32(zUpNormalDelta);
                         var tangentAs10BitShiftedInt = Converters.Vec4ToU32(zUpTangentDelta);
 
+                        // 4 + 4 + 4 bytes per diff, no padding
                         diffsWriter.Write(positionAs10BitUnsignedInt);
                         diffsWriter.Write(normalAs10BitShiftedInt);
                         diffsWriter.Write(tangentAs10BitShiftedInt);
                     }
 
-                    // Write mappings
+                    // 2 bytes per mapping
                     foreach (var mapping in mappings)
                     {
                         mappingsWriter.Write(mapping);
                     }
 
-                    // Padding?
+                    // ...And 2 bytes of padding per mapping, after the mappings
                     foreach (var mapping in mappings)
                     {
                         mappingsWriter.Write((ushort)0);
                     }
 
+                    // So for some reason this is stored as half and the mappings calculated
+                    // with a 4-byte unit instead of the actual 2 bytes + 2 bytes padding
+                    var halfOfTotalMappingsInSubmesh = (uint)mappings.Count / 2;
+
                     blob.Header.NumVertexDiffsInEachChunk[targetIndex].NotNull()[subMeshIndex] = actionableDiffCountInSubmesh;
-                    blob.Header.NumVertexDiffsMappingInEachChunk[targetIndex].NotNull()[subMeshIndex] = actionableDiffCountInSubmesh;
+                    blob.Header.NumVertexDiffsMappingInEachChunk[targetIndex].NotNull()[subMeshIndex] = halfOfTotalMappingsInSubmesh;
 
                     allTargetsTotalAppliedDiffCount += actionableDiffCountInSubmesh;
+                    allTargets_Half_MappingCount += halfOfTotalMappingsInSubmesh;
 
-                    _loggerService.Debug($"Submesh {subMeshIndex} target {targetIndex} ({positionDeltas.Count} vertices): {actionableDiffCountInSubmesh} diffs applied ({ignoredDiffsWithOnlyNormalOrTangent} normal/tangent only diffs skipped).");
+
+                    _loggerService.Debug($"Target {targetIndex} submesh {subMeshIndex} ({positionDeltas.Count} vertices): {actionableDiffCountInSubmesh} diffs applied ({ignoredDiffsWithOnlyNormalOrTangent} normal/tangent only diffs skipped).");
                 }
             }
 
@@ -379,7 +395,7 @@ namespace WolvenKit.Modkit.RED4
             // These should really rather be return values or immutable
             blob.Header.NumTargets = morphTargetCount;
             blob.Header.NumDiffs = allTargetsTotalAppliedDiffCount;
-            blob.Header.NumDiffsMapping = blob.Header.NumDiffs;
+            blob.Header.NumDiffsMapping = allTargets_Half_MappingCount;
 
             return;
         }
