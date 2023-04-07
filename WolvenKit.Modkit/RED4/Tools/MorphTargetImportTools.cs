@@ -320,11 +320,12 @@ namespace WolvenKit.Modkit.RED4
                         // problems... may need to encode those specially, somehow?
                         if (!hasPositionDelta)
                         {
-                            if (hasNormalDelta || hasTangentDelta)
+                            if (!hasNormalDelta && !hasTangentDelta)
                             {
-                                ignoredDiffsWithOnlyNormalOrTangent += 1;
+                                continue;
                             }
-                            continue;
+
+                            diffsWithOnlyNormalOrTangentCount += 1;   // Dunno if this is actually relevant info?
                         }
 
                         mappingsInSubmesh.Add((ushort)diffIndex);
@@ -376,7 +377,7 @@ namespace WolvenKit.Modkit.RED4
                     blob.Header.NumVertexDiffsInEachChunk[targetIndex][subMeshIndex] = actionableDiffCountInSubmesh;
                     blob.Header.NumVertexDiffsMappingInEachChunk[targetIndex][subMeshIndex] = mappingCountHalvedRoundedUpForRE4;
 
-                    _loggerService.Debug($"Target {targetIndex} submesh {subMeshIndex} ({positionDeltas.Count} vertices): {actionableDiffCountInSubmesh} diffs applied ({ignoredDiffsWithOnlyNormalOrTangent} normal/tangent only diffs skipped).");
+                    _loggerService.Debug($"Target {targetIndex} submesh {subMeshIndex} ({positionDeltas.Count} vertices): {actionableDiffCountInSubmesh} diffs applied (of which {diffsWithOnlyNormalOrTangentCount} diffs with only normal/tangent, no position)");
                 }
             }
 
