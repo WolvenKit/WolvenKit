@@ -59,14 +59,6 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var rawMesh = GltfMeshToRawContainer(node);
 
-                    // Mesh logic automatically construes morphtargets as
-                    // garmentSupport. We don't want that. Can't be both.
-                    /*
-                    rawMesh.garmentMorph = Array.Empty<Vec3>();
-                    rawMesh.garmentSupportCap = Array.Empty<Vec4>();
-                    rawMesh.garmentSupportWeight = Array.Empty<Vec4>();
-                    */
-
                     RawMeshes.Add(rawMesh);
                 }
                 else if (args.FillEmpty)
@@ -84,8 +76,6 @@ namespace WolvenKit.Modkit.RED4
 
             // The /2 is because this one is stored in a signed int16... *sigh*
             var baseQuantOffset = new Vec4((maxBound.X + minBound.X) / 2f, (maxBound.Y + minBound.Y) / 2f, (maxBound.Z + minBound.Z) / 2f, 0f);
-            // Hardcoded from pwa
-            //var baseQuantScale = new Vec4(0.237320215f, 0.144603401f, 0.884930849f, 0f);
             var baseQuantScale = new Vec4((maxBound.X - minBound.X) / 2f, (maxBound.Y - minBound.Y) / 2f, (maxBound.Z - minBound.Z) / 2f, 0f);
 
             RawArmature? oldRig = null;
