@@ -361,12 +361,6 @@ namespace WolvenKit.Modkit.RED4
                             ? (uint)(mappingsInSubmesh.Count / 2) + 1
                             : (uint)(mappingsInSubmesh.Count / 2);
 
-                    if (mappingCountHalvedRoundedUpForRE4 * 2 != actionableDiffCountInSubmesh)
-                    {
-                        // Should not happen but better to exit if it does...
-                        throw new Exception($"Mapping count doesn't align correctly with diff count! {mappingCountHalvedRoundedUpForRE4} * 2 != {actionableDiffCountInSubmesh}");
-                    }
-
                     blob.Header.NumVertexDiffsInEachChunk[targetIndex][subMeshIndex] = actionableDiffCountInSubmesh;
                     blob.Header.NumVertexDiffsMappingInEachChunk[targetIndex][subMeshIndex] = mappingCountHalvedRoundedUpForRE4;
 
