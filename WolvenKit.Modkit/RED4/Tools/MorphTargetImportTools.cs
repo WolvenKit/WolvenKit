@@ -157,9 +157,8 @@ namespace WolvenKit.Modkit.RED4
                 renderblob.Header.TargetPositionDiffScale[i] = new Vec4(1f, 1f, 1f, 0);
             }
 
-            var positionDeltaBounds = new (Vec3, Vec3)[subMeshesCount];
             // Do the thing
-            ConvertAndSetTargetsData(cr2w, (uint)morphTargetCount, (uint)subMeshesCount, positionDeltaBounds, model, renderblob, diffsBuffer, mappingsBuffer);
+            ConvertAndSetTargetsData(cr2w, (uint)morphTargetCount, (uint)subMeshesCount, model, renderblob, diffsBuffer, mappingsBuffer);
 
             // Well most of the thing, this part of the thing is here instead
             renderblob.DiffsBuffer.Buffer.SetBytes(diffsBuffer.ToArray());
@@ -223,7 +222,7 @@ namespace WolvenKit.Modkit.RED4
 
             var morphTargetCount = model.LogicalMeshes[0].Primitives[0].MorphTargetsCount;
 
-            // Need to flip to RHCS Zup here (...and again later)
+            // Need to flip to LHCS Zup here (...and again later)
             for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
             {
                 var positionDeltas = model.LogicalMeshes[subMeshIndex].Primitives[0].GetMorphTargetAccessors(targetIndex)["POSITION"].AsVector3Array();
@@ -241,6 +240,7 @@ namespace WolvenKit.Modkit.RED4
         }
 
         // Quantization reduces vertex data to the range of values in the model.
+        // ...But the algorithm isn't always the same.
         private (Vec4 scale, Vec4 offset) CalculateQuantizationForTargetInZUp(ModelRoot model, int morphTargetId)
         {
             var logicalMesh = model.LogicalMeshes[0].Primitives[0];
@@ -270,7 +270,7 @@ namespace WolvenKit.Modkit.RED4
         }
 
         // Inverse, export transform is (mostly) in `ContainRawTarget()`
-        private void ConvertAndSetTargetsData(CR2WFile cr2w, uint morphTargetCount, uint subMeshCount, (Vec3, Vec3)[] positionDeltaBounds, ModelRoot model, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer)
+        private void ConvertAndSetTargetsData(CR2WFile cr2w, uint morphTargetCount, uint subMeshCount, ModelRoot model, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer)
         {
             var diffsWriter = new BinaryWriter(diffsBuffer);
             var mappingsWriter = new BinaryWriter(mappingsBuffer);
@@ -303,7 +303,7 @@ namespace WolvenKit.Modkit.RED4
 
                     var mappingsInSubmesh = new List<ushort>();
                     uint actionableDiffCountInSubmesh = 0;
-                    var ignoredDiffsWithOnlyNormalOrTangent = 0;
+                    var diffsWithOnlyNormalOrTangentCount = 0;
 
                     for (var diffIndex = 0; diffIndex < positionDeltas.Count; diffIndex++)
                     {
