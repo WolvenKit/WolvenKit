@@ -82,7 +82,7 @@ namespace WolvenKit.Modkit.RED4
                     temp_NumVertexDiffsInEachChunk[e] = targetsInfo.NumVertexDiffsInEachChunk[i, e];
                     temp_NumVertexDiffsMappingInEachChunk[e] = targetsInfo.NumVertexDiffsMappingInEachChunk[i, e];
                 }
-                expTargets.Add(ContainRawTargets(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
+                expTargets.Add(ContainRawTarget(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
             }
 
             var textureStreams = ContainTextureStreams(blob, texbuffer);
@@ -199,7 +199,7 @@ namespace WolvenKit.Modkit.RED4
             return targetsInfo;
         }
 
-        private static RawTargetContainer[] ContainRawTargets(MemoryStream diffsbuffer, MemoryStream mappingbuffer, uint[] numVertexDiffsInEachChunk, uint[] numVertexDiffsMappingInEachChunk, uint targetStartsInVertexDiffs, uint targetStartsInVertexDiffsMapping, Vec4 targetPositionDiffOffset, Vec4 targetPositionDiffScale, int subMeshC)
+        private static RawTargetContainer[] ContainRawTarget(MemoryStream diffsbuffer, MemoryStream mappingbuffer, uint[] numVertexDiffsInEachChunk, uint[] numVertexDiffsMappingInEachChunk, uint targetStartsInVertexDiffs, uint targetStartsInVertexDiffsMapping, Vec4 targetPositionDiffOffset, Vec4 targetPositionDiffScale, int subMeshC)
         {
             var rawtarget = new RawTargetContainer[subMeshC];
 
