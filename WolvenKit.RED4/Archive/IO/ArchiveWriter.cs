@@ -75,11 +75,11 @@ public class ArchiveWriter
             .ToList();
 
         var customPaths = (from fileInfo in fileInfos
-                           select fileInfo.FullName[(infolder.FullName.Length + 1)..]
-                           into relpath
-                           let hash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(relpath))
+                           select ResourcePath.SanitizePath(fileInfo.FullName[(infolder.FullName.Length + 1)..])
+                           into relPath
+                           let hash = FNV1A64HashAlgorithm.HashString(relPath)
                            where !_hashService.Contains(hash)
-                           select relpath).ToList();
+                           select relPath).ToList();
 
 
         var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
