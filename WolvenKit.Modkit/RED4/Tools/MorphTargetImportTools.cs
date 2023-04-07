@@ -210,36 +210,34 @@ namespace WolvenKit.Modkit.RED4
             return (max, min);
         }
 
-        private void SetTargets(CR2WFile cr2w, ModelRoot model, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer)
+        // Quantization reduces vertex data to the range of values in the model.
+        // ...But the algorithm isn't always the same.
+        private (Vec4 scale, Vec4 offset) CalculateQuantizationForTargetInZUp(ModelRoot model, int morphTargetId)
         {
+            var logicalMesh = model.LogicalMeshes[0].Primitives[0];
+            var morphTarget = logicalMesh.GetMorphTargetAccessors(morphTargetId);
+            var morphPositionDeltas = morphTarget["POSITION"].AsVector3Array();
 
-            // Validate that all submeshes contain the same number of morph targets
-            var morphTargetCount = model.LogicalMeshes[0].Primitives[0].MorphTargetsCount;
-            if (model.LogicalMeshes.Any(l => l.Primitives[0].MorphTargetsCount != morphTargetCount))
+            var max = new Vec3(morphPositionDeltas[0].X, -morphPositionDeltas[0].Z, morphPositionDeltas[0].Y);
+            var min = new Vec3(morphPositionDeltas[0].X, -morphPositionDeltas[0].Z, morphPositionDeltas[0].Y);
+
+            for (var i = 0; i < model.LogicalMeshes.Count; i++)
             {
-                throw new Exception("All submeshes must have the same number of morph targets.");
-            }
+                morphPositionDeltas = model.LogicalMeshes[i].Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array();
 
-            if (morphTargetCount == 0)
-            {
-                throw new Exception("Mesh contains no morph targets to import.");
-            }
+                max.X = Math.Max(max.X, morphPositionDeltas.Max(l => l.X));
+                max.Y = Math.Max(max.Y, morphPositionDeltas.Max(l => -l.Z));
+                max.Z = Math.Max(max.Z, morphPositionDeltas.Max(l => l.Y));
 
-            // Set global headers for blob
-            blob.Header.NumTargets = (uint)morphTargetCount;
-
-            // Write buffer positions for all the morph targets
-            for (var morphTarget = 0; morphTarget < morphTargetCount; morphTarget++)
-            {
-                blob.Header.TargetStartsInVertexDiffs[morphTarget] = (uint)morphTarget;
-                blob.Header.TargetStartsInVertexDiffsMapping[morphTarget] = (uint)morphTarget;
-
-                for (var i = 0; i < morphTarget; i++)
-                {
-                    var vertexCount = GetVertexCountInMorphTarget(model, i);
-                    blob.Header.TargetStartsInVertexDiffs[morphTarget] += vertexCount - 1;
-                    blob.Header.TargetStartsInVertexDiffsMapping[morphTarget] += vertexCount - 1;
+                min.X = Math.Min(min.X, morphPositionDeltas.Min(l => l.X));
+                min.Y = Math.Min(min.Y, morphPositionDeltas.Min(l => -l.Z));
+                min.Z = Math.Min(min.Z, morphPositionDeltas.Min(l => l.Y));
                 }
+
+            var quantScale = new Vec4(max.X - min.X, max.Y - min.Y, max.Z - min.Z, 0);
+            var quantOffset = new Vec4(min.X, min.Y, min.Z, 0);
+
+            return (quantScale, quantOffset);
             }
 
             var diffsWriter = new BinaryWriter(diffsBuffer);
