@@ -98,11 +98,26 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // Should we really be ignoring the morphtarget dimensions here?
+            //targetRoot.BoundingBox.Max = new Vector4 { X = 0.23732093f, Y = 0.130813986f, Z = 1.65285742f, W = 1f };
+            //targetRoot.BoundingBox.Min = new Vector4 { X = -0.237320989f, Y = -0.180782944f, Z = -0.117004514f, W = 1f };
+
             targetRoot.BoundingBox.Min = new Vector4 { X = baseMin.X, Y = baseMin.Y, Z = baseMin.Z, W = 1f };
             targetRoot.BoundingBox.Max = new Vector4 { X = baseMax.X, Y = baseMax.Y, Z = baseMax.Z, W = 1f };
 
-            var baseQuantScale = new Vec4((baseMax.X - baseMin.X) / 2, (baseMax.Y - baseMin.Y) / 2, (baseMax.Z - baseMin.Z) / 2, 0);
-            var baseQuantOffset = new Vec4((baseMax.X + baseMin.X) / 2, (baseMax.Y + baseMin.Y) / 2, (baseMax.Z + baseMin.Z) / 2, 1);
+            // So this is a bit weird. The offset can use
+            // Maybe it can't go outside the bounding box? 
+            var baseQuantOffset = new Vec4((baseMax.X + baseMin.X) / 2, (baseMax.Y + baseMin.Y) / 2, (baseMax.Z + baseMin.Z) / 2, 0);
+
+            var baseQuantScale = new Vec4(0.237320215f, 0.144603401f, 0.884930849f, 0f);
+        
+
+            //var baseQuantOffset = new Vec4(0f, -0.0346356034f, 0.767926455f, 1f);
+
+            //var baseQuantScale = new Vec4((baseMax.X - baseMin.X) / 2, (baseMax.Y - baseMin.Y) / 2, (baseMax.Z - baseMin.Z) / 2, 0);
+        
+
+            //var baseQuantScale = new Vec4((baseMax.X - baseMin.X), (baseMax.Y - baseMin.Y), (baseMax.Z - baseMin.Z), 0);
+            //var baseQuantOffset = new Vec4(baseMin.X, baseMin.Y, baseMin.Z, 1f);
 
             RawArmature? oldRig = null;
             if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
@@ -169,7 +184,7 @@ namespace WolvenKit.Modkit.RED4
                 renderblob.Header.TargetStartsInVertexDiffs[i] = 0;
                 renderblob.Header.TargetStartsInVertexDiffsMapping[i] = 0;
 
-                renderblob.Header.TargetPositionDiffOffset[i] = new Vec4(0f, 0f, 0f, 1);
+                renderblob.Header.TargetPositionDiffOffset[i] = new Vec4(0f, 0f, 0f, 0);
                 renderblob.Header.TargetPositionDiffScale[i] = new Vec4(1f, 1f, 1f, 0);
             }
 
@@ -190,8 +205,7 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        // Quantization reduces vertex data to the range of values in the model, with some loss
-        // of precision in the ^-05 digits. That plus the offset and scale allow reconstruction.
+        // Quantization reduces vertex data to the range of values in the model.
         private (Vec4 scale, Vec4 offset) CalculateQuantizationForTargetInZUp(ModelRoot model, int morphTargetId)
         {
             var logicalMesh = model.LogicalMeshes[0].Primitives[0];
@@ -244,7 +258,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var quantScale = new Vec4(max.X - min.X, max.Y - min.Y, max.Z - min.Z, 0);
-            var quantOffset = new Vec4(min.X, min.Y, min.Z, 1);
+            var quantOffset = new Vec4(min.X, min.Y, min.Z, 0);
 
             return (quantScale, quantOffset);
 
@@ -325,8 +339,8 @@ namespace WolvenKit.Modkit.RED4
 
                         // GLTF's RHCS Y up -> Red4 LHCS Z up
                         var zUpPositionDelta = new TargetVec3(positionDelta.X, -positionDelta.Z, positionDelta.Y);
-                        var zUpNormalDelta = new Vec4(normalDelta.X, -normalDelta.Z, normalDelta.Y, 1f);
-                        var zUpTangentDelta = new Vec4(tangentDelta.X, -tangentDelta.Z, tangentDelta.Y, 1f);
+                        var zUpNormalDelta = new Vec4(normalDelta.X, -normalDelta.Z, normalDelta.Y, 0f);
+                        var zUpTangentDelta = new Vec4(tangentDelta.X, -tangentDelta.Z, tangentDelta.Y, 0f);
 
                         // Quant already converted earlier
                         var zUpQuantizedPositionDelta =
