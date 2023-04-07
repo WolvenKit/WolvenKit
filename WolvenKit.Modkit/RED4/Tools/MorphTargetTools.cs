@@ -400,7 +400,7 @@ namespace WolvenKit.Modkit.RED4
                 for (var i = 0; i < mesh.texCoords0.Length; i++)
                 {
                     bw.Write(mesh.texCoords0[i].X);
-                    bw.Write(mesh.texCoords0[i].Y);
+                    bw.Write((mesh.texCoords0[i].Y * -1) + 1); // Flip UV Y like mesh export does
                 }
                 for (var i = 0; i < mesh.texCoords1.Length; i++)
                 {
