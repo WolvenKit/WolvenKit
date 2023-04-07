@@ -23,14 +23,14 @@ namespace WolvenKit.Modkit.RED4
         public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, GltfImportArgs args/*, Stream outStream = null*/)
         {
             var cr2w = _parserService.ReadRed4File(intargetStream);
-            if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh blob || blob.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderblob || renderblob.BaseBlob.Chunk is not rendRenderMeshBlob)
+            if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh targetRoot || targetRoot.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderblob || renderblob.BaseBlob.Chunk is not rendRenderMeshBlob)
             {
                 return false;
             }
 
             RawArmature? newRig = null;
             {
-                var hash = blob.BaseMesh.DepotPath.GetRedHash(); //FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath.ToString().NotNull());
+                var hash = targetRoot.BaseMesh.DepotPath.GetRedHash(); //FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath.ToString().NotNull());
                 var meshStream = new MemoryStream();
                 foreach (var ar in args.Archives)
                 {
@@ -50,51 +50,37 @@ namespace WolvenKit.Modkit.RED4
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
             VerifyGLTF(model, args);
 
-            var Meshes = new List<RawMeshContainer>();
+            var RawMeshes = new List<RawMeshContainer>();
+
             foreach (var node in model.LogicalNodes)
             {
                 if (node.Mesh != null)
                 {
-                    Meshes.Add(GltfMeshToRawContainer(node));
-                }
-                else if (args.FillEmpty)
-                {
-                    Meshes.Add(CreateEmptyMesh(node.Name));
-                }
-            }
-            Meshes = Meshes.OrderBy(o => o.name).ToList();
+                    var rawMesh = GltfMeshToRawContainer(node);
 
             var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
             var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
 
-            foreach (var p in Meshes)
+                    RawMeshes.Add(rawMesh);
+                }
+                else if (args.FillEmpty)
             {
-                ArgumentNullException.ThrowIfNull(p.positions);
-                foreach (var q in p.positions.ToList())
-                {
-                    max.X = Math.Max(q.X, max.X);
-                    max.Y = Math.Max(q.Y, max.Y);
-                    max.Z = Math.Max(q.Z, max.Z);
+                    RawMeshes.Add(CreateEmptyMesh(node.Name));
                 }
             }
 
-            foreach (var p in Meshes)
-            {
-                ArgumentNullException.ThrowIfNull(p.positions);
-                foreach (var q in p.positions.ToList())
-                {
-                    min.X = Math.Min(q.X, min.X);
-                    min.Y = Math.Min(q.Y, min.Y);
-                    min.Z = Math.Min(q.Z, min.Z);
-                }
-            }
+            RawMeshes = RawMeshes.OrderBy(o => o.name).ToList();
 
-            blob.BoundingBox.Min = new Vector4 { X = min.X, Y = min.Y, Z = min.Z, W = 1f };
-            blob.BoundingBox.Max = new Vector4 { X = max.X, Y = max.Y, Z = max.Z, W = 1f };
+            var (maxBound, minBound) = CalculateModelBoundsWithMorphs(RawMeshes, model);
 
-            var QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
-            var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
+            targetRoot.BoundingBox.Max = new Vector4 { X = maxBound.X, Y = maxBound.Y, Z = maxBound.Z, W = 1f };
+            targetRoot.BoundingBox.Min = new Vector4 { X = minBound.X, Y = minBound.Y, Z = minBound.Z, W = 1f };
 
+            // The /2 is because this one is stored in a signed int16... *sigh*
+            var baseQuantOffset = new Vec4((maxBound.X + minBound.X) / 2f, (maxBound.Y + minBound.Y) / 2f, (maxBound.Z + minBound.Z) / 2f, 0f);
+            // Hardcoded from pwa
+            //var baseQuantScale = new Vec4(0.237320215f, 0.144603401f, 0.884930849f, 0f);
+            var baseQuantScale = new Vec4((maxBound.X - minBound.X) / 2f, (maxBound.Y - minBound.Y) / 2f, (maxBound.Z - minBound.Z) / 2f, 0f);
 
             RawArmature? oldRig = null;
             if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
@@ -106,15 +92,15 @@ namespace WolvenKit.Modkit.RED4
                 };
             }
 
-            MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
+            MeshTools.UpdateMeshJoints(ref RawMeshes, newRig, oldRig);
 
-            var expMeshes = Meshes.Select(_ => RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
+            var red4Meshes = RawMeshes.Select(_ => RawMeshToRE4Mesh(_, baseQuantScale, baseQuantOffset)).ToList();
 
             var meshBuffer = new MemoryStream();
-            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer, args);
+            var meshesInfo = BufferWriter(red4Meshes, ref meshBuffer, args);
 
-            meshesInfo.quantScale = QuantScale;
-            meshesInfo.quantTrans = QuantTrans;
+            meshesInfo.quantScale = baseQuantScale;
+            meshesInfo.quantTrans = baseQuantOffset;
 
             var diffsBuffer = new MemoryStream();
             var mappingsBuffer = new MemoryStream();
@@ -159,73 +145,69 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        private (Vec4 scale, Vec4 offset) CalculateTargetQuant(ModelRoot model, int morphTargetId)
+        private (Vec3, Vec3) CalculateModelBoundsWithMorphs(List<RawMeshContainer> rawMeshes, ModelRoot model)
         {
-            var logicalMesh = model.LogicalMeshes[0].Primitives[0];
-            var morphTarget = logicalMesh.GetMorphTargetAccessors(morphTargetId);
-            var morphVertices = morphTarget["POSITION"].AsVector3Array();
+            var modelMax = new Vec3(float.MinValue, float.MinValue, float.MinValue);
+            var modelMin = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
 
-            var max = new Vec3(morphVertices[0].X, -morphVertices[0].Z, morphVertices[0].Y);
-            var min = new Vec3(morphVertices[0].X, -morphVertices[0].Z, morphVertices[0].Y);
-
-            for (var i = 0; i < model.LogicalMeshes.Count; i++)
+            for (var subMeshIndex = 0; subMeshIndex < rawMeshes.Count; subMeshIndex++)
             {
-                morphVertices = model.LogicalMeshes[i].Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array();
-                var maxX = morphVertices.Max(l => l.X);
-                var maxY = morphVertices.Max(l => -l.Z);
-                var maxZ = morphVertices.Max(l => l.Y);
+                var (smMorphMax, smMorphMin) = GetZupPositionDeltaBoundsForSubMesh(model, subMeshIndex);
 
-                if (maxX > max.X)
+                var subMeshMax = new Vec3(float.MinValue, float.MinValue, float.MinValue);
+                var subMeshMin = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
+
+                var subMeshPositions = rawMeshes[subMeshIndex].positions;
+                ArgumentNullException.ThrowIfNull(subMeshPositions);
+
+                foreach (var position in subMeshPositions)
                 {
-                    max.X = maxX;
+                    subMeshMax.X = Math.Max(position.X, subMeshMax.X);
+                    subMeshMax.Y = Math.Max(position.Y, subMeshMax.Y);
+                    subMeshMax.Z = Math.Max(position.Z, subMeshMax.Z);
+
+                    subMeshMin.X = Math.Min(position.X, subMeshMin.X);
+                    subMeshMin.Y = Math.Min(position.Y, subMeshMin.Y);
+                    subMeshMin.Z = Math.Min(position.Z, subMeshMin.Z);
                 }
 
-                if (maxY > max.Y)
-                {
-                    max.Y = maxY;
+                modelMax.X = Math.Max(modelMax.X, Math.Max(subMeshMax.X, (subMeshMax.X + smMorphMax.X)));
+                modelMax.Y = Math.Max(modelMax.Y, Math.Max(subMeshMax.Y, (subMeshMax.Y + smMorphMax.Y)));
+                modelMax.Z = Math.Max(modelMax.Z, Math.Max(subMeshMax.Z, (subMeshMax.Z + smMorphMax.Z)));
+
+                modelMin.X = Math.Min(modelMin.X, Math.Min(subMeshMin.X, (subMeshMin.X + smMorphMin.X)));
+                modelMin.Y = Math.Min(modelMin.Y, Math.Min(subMeshMin.Y, (subMeshMin.Y + smMorphMin.Y)));
+                modelMin.Z = Math.Min(modelMin.Z, Math.Min(subMeshMin.Z, (subMeshMin.Z + smMorphMin.Z)));
                 }
 
-                if (maxZ > max.Z)
-                {
-                    max.Z = maxZ;
+            return (modelMax, modelMin);
                 }
 
-                var minX = morphVertices.Min(l => l.X);
-                var minY = morphVertices.Min(l => -l.Z);
-                var minZ = morphVertices.Min(l => l.Y);
-
-                if (minX < min.X)
+        // Is this info already in the GLTF? Yes
+        // Can I somehow get the POSITION.min/.max values with SharpGLTF? Also y-- no. Definitely no.
+        // Are we therefore looping through all the vertices for like the 15th time? We sure are!
+        private (Vec3, Vec3) GetZupPositionDeltaBoundsForSubMesh(ModelRoot model, int subMeshIndex)
                 {
-                    min.X = minX;
-                }
+            var max = Vec3.Zero;
+            var min = Vec3.Zero;
 
-                if (minY < min.Y)
-                {
-                    min.Y = minY;
-                }
+            var morphTargetCount = model.LogicalMeshes[0].Primitives[0].MorphTargetsCount;
 
-                if (minZ < min.Z)
-                {
-                    min.Z = minZ;
-                }
+            // Need to flip to LHCS Zup here (...and again later)
+            for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
+            {
+                var positionDeltas = model.LogicalMeshes[subMeshIndex].Primitives[0].GetMorphTargetAccessors(targetIndex)["POSITION"].AsVector3Array();
+
+                max.X = Math.Max(max.X, positionDeltas.Max(l => l.X));
+                max.Y = Math.Max(max.Y, positionDeltas.Max(l => -l.Z));
+                max.Z = Math.Max(max.Z, positionDeltas.Max(l => l.Y));
+
+                min.X = Math.Min(min.X, positionDeltas.Min(l => l.X));
+                min.Y = Math.Min(min.Y, positionDeltas.Min(l => -l.Z));
+                min.Z = Math.Min(min.Z, positionDeltas.Min(l => l.Y));
             }
 
-            var quantScale = new Vec4(max.X - min.X, max.Y - min.Y, max.Z - min.Z, 0);
-            var quantOffset = new Vec4(min.X, min.Y, min.Z, 1);
-
-            return (quantScale, quantOffset);
-
-        }
-
-        private uint GetVertexCountInMorphTarget(ModelRoot model, int morphTargetId)
-        {
-            uint count = 0;
-            for (var i = 0; i < model.LogicalMeshes.Count; i++)
-            {
-                count += (uint)model.LogicalMeshes[i].Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array().Where(l => l.X != 0 && l.Y != 0 && l.Z != 0).Count();
-            }
-
-            return count;
+            return (max, min);
         }
 
         private void SetTargets(CR2WFile cr2w, ModelRoot model, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer)
