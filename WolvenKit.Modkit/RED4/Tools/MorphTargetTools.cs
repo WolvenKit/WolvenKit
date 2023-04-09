@@ -255,21 +255,18 @@ namespace WolvenKit.Modkit.RED4
 
                 for (var diffIndex = 0; diffIndex < diffsCount; diffIndex++)
                 {
-                    if (diffsbr.BaseStream.Position < (diffsbr.BaseStream.Length - 3))
-                    {
-                        var positionDelta = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
-                        var normalDelta = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                        var tangentDelta = Converters.TenBitShifted(diffsbr.ReadUInt32());
+                    var positionDelta = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
+                    var normalDelta = Converters.TenBitShifted(diffsbr.ReadUInt32());
+                    var tangentDelta = Converters.TenBitShifted(diffsbr.ReadUInt32());
 
-                        var dequantizedPositionDeltaX = (positionDelta.X * targetPositionDiffScale.X) + targetPositionDiffOffset.X;
-                        var dequantizedPositionDeltaY = (positionDelta.Y * targetPositionDiffScale.Y) + targetPositionDiffOffset.Y;
-                        var dequantizedPositionDeltaZ = (positionDelta.Z * targetPositionDiffScale.Z) + targetPositionDiffOffset.Z;
+                    var dequantizedPositionDeltaX = (positionDelta.X * targetPositionDiffScale.X) + targetPositionDiffOffset.X;
+                    var dequantizedPositionDeltaY = (positionDelta.Y * targetPositionDiffScale.Y) + targetPositionDiffOffset.Y;
+                    var dequantizedPositionDeltaZ = (positionDelta.Z * targetPositionDiffScale.Z) + targetPositionDiffOffset.Z;
 
-                        // LHCS Zup to RHCS Yup
-                        positionDeltas[diffIndex] = new TargetVec3(dequantizedPositionDeltaX, dequantizedPositionDeltaZ, -dequantizedPositionDeltaY);
-                        normalDeltas[diffIndex] = new Vec3(normalDelta.X, normalDelta.Z, -normalDelta.Y);
-                        tangentDeltas[diffIndex] = new Vec3(tangentDelta.X, tangentDelta.Z, -tangentDelta.Y);
-                    }
+                    // LHCS Zup to RHCS Yup
+                    positionDeltas[diffIndex] = new TargetVec3(dequantizedPositionDeltaX, dequantizedPositionDeltaZ, -dequantizedPositionDeltaY);
+                    normalDeltas[diffIndex] = new Vec3(normalDelta.X, normalDelta.Z, -normalDelta.Y);
+                    tangentDeltas[diffIndex] = new Vec3(tangentDelta.X, tangentDelta.Z, -tangentDelta.Y);
                 }
 
                 for (var mapIdx = 0; mapIdx < actualMapsCount; mapIdx++)
