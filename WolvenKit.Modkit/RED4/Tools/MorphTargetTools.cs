@@ -199,10 +199,14 @@ namespace WolvenKit.Modkit.RED4
             return targetsInfo;
         }
 
-        private static RawTargetContainer[] ContainRawTarget(MemoryStream diffsbuffer, MemoryStream mappingbuffer, uint[] numVertexDiffsInEachChunk, uint[] numVertexDiffsMappingInEachChunk, uint targetStartsInVertexDiffs, uint targetStartsInVertexDiffsMapping, Vec4 targetPositionDiffOffset, Vec4 targetPositionDiffScale, int subMeshC)
+        private RawTargetContainer[] ContainRawTarget(MemoryStream diffsbuffer, MemoryStream mappingbuffer, uint[] numVertexDiffsInEachChunk, uint[] numVertexDiffsMappingInEachChunk, uint targetStartsInVertexDiffs, uint targetStartsInVertexDiffsMapping, Vec4 targetPositionDiffOffset, Vec4 targetPositionDiffScale, int subMeshC)
         {
-            var mappingByteSize = 2;
-            var mappingStartOffsetSizeMultiplier = mappingByteSize * 2; // num stored as half for some reason
+            var diffByteWidth = 12;
+            var mappingByteWidth = 2;
+            var mappingCountAlignedMultiplier = 2; // Count is stored as half actual, and we align to even rounded up
+
+            var baseDiffsStartPositionForTarget = targetStartsInVertexDiffs * diffByteWidth;
+            var baseMappingsStartPositionForTarget = targetStartsInVertexDiffsMapping * mappingCountAlignedMultiplier * mappingByteWidth;
 
             var rawtarget = new RawTargetContainer[subMeshC];
 
@@ -238,37 +242,34 @@ namespace WolvenKit.Modkit.RED4
                 var tangentDeltas = new Vec3[diffsCount];
                 var vertexMapping = new ushort[actualMapsCount];
 
-                diffsbuffer.Position = targetStartsInVertexDiffs * 12;
+                diffsbuffer.Position = baseDiffsStartPositionForTarget;
+                mappingbuffer.Position = baseMappingsStartPositionForTarget;
 
                 for (var preceding = 0; preceding < subMeshIndex; preceding++)
                 {
-                    diffsbuffer.Position += numVertexDiffsInEachChunk[preceding] * 12;
+                    diffsbuffer.Position += numVertexDiffsInEachChunk[preceding] * diffByteWidth;
+
+                    // Skip previous data as aligned, NOT actual maps count
+                    mappingbuffer.Position += numVertexDiffsMappingInEachChunk[preceding] * mappingCountAlignedMultiplier * mappingByteWidth;
                 }
 
                 for (var diffIndex = 0; diffIndex < diffsCount; diffIndex++)
                 {
                     if (diffsbr.BaseStream.Position < (diffsbr.BaseStream.Length - 3))
                     {
-                        var v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
+                        var positionDelta = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
+                        var normalDelta = Converters.TenBitShifted(diffsbr.ReadUInt32());
+                        var tangentDelta = Converters.TenBitShifted(diffsbr.ReadUInt32());
 
-                        var x = (v.X * targetPositionDiffScale.X) + targetPositionDiffOffset.X;
-                        var y = (v.Y * targetPositionDiffScale.Y) + targetPositionDiffOffset.Y;
-                        var z = (v.Z * targetPositionDiffScale.Z) + targetPositionDiffOffset.Z;
+                        var dequantizedPositionDeltaX = (positionDelta.X * targetPositionDiffScale.X) + targetPositionDiffOffset.X;
+                        var dequantizedPositionDeltaY = (positionDelta.Y * targetPositionDiffScale.Y) + targetPositionDiffOffset.Y;
+                        var dequantizedPositionDeltaZ = (positionDelta.Z * targetPositionDiffScale.Z) + targetPositionDiffOffset.Z;
 
-                        positionDeltas[diffIndex] = new TargetVec3(x, z, -y);
-                        var n = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                        normalDeltas[diffIndex] = new Vec3(n.X, n.Z, -n.Y);
-                        var t = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                        tangentDeltas[diffIndex] = new Vec3(t.X, t.Z, -t.Y);
+                        // LHCS Zup to RHCS Yup
+                        positionDeltas[diffIndex] = new TargetVec3(dequantizedPositionDeltaX, dequantizedPositionDeltaZ, -dequantizedPositionDeltaY);
+                        normalDeltas[diffIndex] = new Vec3(normalDelta.X, normalDelta.Z, -normalDelta.Y);
+                        tangentDeltas[diffIndex] = new Vec3(tangentDelta.X, tangentDelta.Z, -tangentDelta.Y);
                     }
-                }
-
-                mappingbuffer.Position = targetStartsInVertexDiffsMapping * mappingStartOffsetSizeMultiplier;
-
-                for (var preceding = 0; preceding < subMeshIndex; preceding++)
-                {
-                    // Skip previous data as aligned, NOT actual maps count
-                    mappingbuffer.Position += numVertexDiffsMappingInEachChunk[preceding] * mappingByteSize * 2;
                 }
 
                 for (var mapIdx = 0; mapIdx < actualMapsCount; mapIdx++)

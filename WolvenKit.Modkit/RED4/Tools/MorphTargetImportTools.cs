@@ -205,7 +205,7 @@ namespace WolvenKit.Modkit.RED4
         // Is this info already in the GLTF? Yes
         // Can I somehow get the POSITION.min/.max values with SharpGLTF? Also y-- no. Definitely no.
         // Are we therefore looping through all the vertices for like the 15th time? We sure are!
-        private (Vec3, Vec3) GetZupPositionDeltaBoundsForSubMesh(ModelRoot model, int subMeshIndex)
+        private (Vec3 max, Vec3 min) GetZupPositionDeltaBoundsForSubMesh(ModelRoot model, int subMeshIndex)
         {
             var max = Vec3.Zero;
             var min = Vec3.Zero;
