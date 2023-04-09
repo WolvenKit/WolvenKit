@@ -8,7 +8,6 @@ using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
@@ -19,7 +18,12 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class RedTreeView : UserControl
     {
-        public RedTreeView() => InitializeComponent();
+        public RedTreeView()
+        {
+            InitializeComponent();
+
+            TreeView.ApplyTemplate();
+        }
 
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(RedTreeView));
