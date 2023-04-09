@@ -214,15 +214,24 @@ namespace WolvenKit.Modkit.RED4
                 var diffsCount = numVertexDiffsInEachChunk[subMeshIndex];
                 var storedMapsCount = numVertexDiffsMappingInEachChunk[subMeshIndex];
 
-                // I *think* this will only ever be >, but just in case
-                var unevenDivisionOffset =
-                    storedMapsCount * 2 == diffsCount
-                        ? 0
-                        : storedMapsCount * 2 < diffsCount
-                            ? +1
-                            : -1;
+                if (storedMapsCount == 0 && diffsCount != 0)
+                {
+                    _loggerService.Warning($"Submesh {subMeshIndex} will be exported with 0 diffs: numVertexDiffsMappingInEachChunk[{subMeshIndex}] == 0, so we ignore the numVertexDiffsInEachChunk[{subMeshIndex}] == {diffsCount} (it's probably a bookkeeping error.)");
 
-                var actualMapsCount = (storedMapsCount * 2) + unevenDivisionOffset;
+                    // Normal export handles this case, so let's use that to avoid
+                    // missing any logic that should be applied for a valid 0 diff
+                    // both here and in following chunks
+                    numVertexDiffsInEachChunk[subMeshIndex] = diffsCount = 0;
+                }
+
+                var unevenDivisionOffset = diffsCount % 2;
+
+                var actualMapsCount = (storedMapsCount * 2) - unevenDivisionOffset;
+
+                if (actualMapsCount != diffsCount)
+                {
+                    throw new ArgumentOutOfRangeException($"Submesh {subMeshIndex} mapping count {actualMapsCount} doesn't match diff count {diffsCount}! Can't export this.");
+                }
 
                 var positionDeltas = new TargetVec3[diffsCount];
                 var normalDeltas = new Vec3[diffsCount];
