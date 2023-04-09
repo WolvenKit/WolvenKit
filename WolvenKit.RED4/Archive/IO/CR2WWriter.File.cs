@@ -20,6 +20,7 @@ public partial class CR2WWriter
 
     static CR2WWriter()
     {
+        s_preProcessors.Add(typeof(appearanceAppearanceDefinition), typeof(appearanceAppearanceDefinitionPreProcessor));
         s_preProcessors.Add(typeof(CMesh), typeof(CMeshPreProcessor));
         s_preProcessors.Add(typeof(entEntityTemplate), typeof(entEntityTemplatePreProcessor));
     }

@@ -12,11 +12,6 @@ public class CMeshPreProcessor : IPreProcessor
 
     public void Process(RedBaseClass cls)
     {
-        if (_loggerService == null)
-        {
-            return;
-        }
-
         var mesh = (CMesh)cls;
 
         // Need to create LocalMaterialBuffer.RawData else the materials won't get written
@@ -33,7 +28,12 @@ public class CMeshPreProcessor : IPreProcessor
             };
         }
 
-        /*// make sure that the mesh is using either localMaterials or preloadLocalMaterials
+        /*if (_loggerService == null)
+        {
+            return;
+        }
+
+        // make sure that the mesh is using either localMaterials or preloadLocalMaterials
         if (mesh.ExternalMaterials.Count > 0 && mesh.PreloadExternalMaterials.Count > 0)
         {
             _loggerService.Warning("Your mesh is trying to use both externalMaterials and preloadExternalMaterials. " +
