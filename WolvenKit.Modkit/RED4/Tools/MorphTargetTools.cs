@@ -82,7 +82,7 @@ namespace WolvenKit.Modkit.RED4
                     temp_NumVertexDiffsInEachChunk[e] = targetsInfo.NumVertexDiffsInEachChunk[i, e];
                     temp_NumVertexDiffsMappingInEachChunk[e] = targetsInfo.NumVertexDiffsMappingInEachChunk[i, e];
                 }
-                expTargets.Add(ContainRawTargets(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
+                expTargets.Add(ContainRawTarget(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
             }
 
             var textureStreams = ContainTextureStreams(blob, texbuffer);
@@ -147,17 +147,17 @@ namespace WolvenKit.Modkit.RED4
             var TargetPositionDiffScale = new Vec4[NumTargets];
             for (var i = 0; i < NumTargets; i++)
             {
+                var diffs = rendMorphBlob.Header.NumVertexDiffsInEachChunk[i];
+                var maps = rendMorphBlob.Header.NumVertexDiffsMappingInEachChunk[i];
+
                 for (var e = 0; e < subMeshC; e++)
                 {
-                    var diff = rendMorphBlob.Header.NumVertexDiffsInEachChunk[i];
-
-                    NumVertexDiffsInEachChunk[i, e] = diff[e];
-                    NumVertexDiffsMappingInEachChunk[i, e] = diff[e];
+                    NumVertexDiffsInEachChunk[i, e] = diffs[e];
+                    NumVertexDiffsMappingInEachChunk[i, e] = maps[e];
                 }
 
                 TargetStartsInVertexDiffs[i] = rendMorphBlob.Header.TargetStartsInVertexDiffs[i];
                 TargetStartsInVertexDiffsMapping[i] = rendMorphBlob.Header.TargetStartsInVertexDiffsMapping[i];
-
 
                 var o = rendMorphBlob.Header.TargetPositionDiffOffset[i];
                 TargetPositionDiffOffset[i] = new Vec4(o.X, o.Y, o.Z, o.W);
@@ -199,81 +199,86 @@ namespace WolvenKit.Modkit.RED4
             return targetsInfo;
         }
 
-        private static RawTargetContainer[] ContainRawTargets(MemoryStream diffsbuffer, MemoryStream mappingbuffer, uint[] numVertexDiffsInEachChunk, uint[] numVertexDiffsMappingInEachChunk, uint targetStartsInVertexDiffs, uint targetStartsInVertexDiffsMapping, Vec4 targetPositionDiffOffset, Vec4 targetPositionDiffScale, int subMeshC)
+        private RawTargetContainer[] ContainRawTarget(MemoryStream diffsbuffer, MemoryStream mappingbuffer, uint[] numVertexDiffsInEachChunk, uint[] numVertexDiffsMappingInEachChunk, uint targetStartsInVertexDiffs, uint targetStartsInVertexDiffsMapping, Vec4 targetPositionDiffOffset, Vec4 targetPositionDiffScale, int subMeshC)
         {
+            var diffByteWidth = 12;
+            var mappingByteWidth = 2;
+            var mappingCountAlignedMultiplier = 2; // Count is stored as half actual, and we align to even rounded up
+
+            var baseDiffsStartPositionForTarget = targetStartsInVertexDiffs * diffByteWidth;
+            var baseMappingsStartPositionForTarget = targetStartsInVertexDiffsMapping * mappingCountAlignedMultiplier * mappingByteWidth;
+
             var rawtarget = new RawTargetContainer[subMeshC];
 
             var diffsbr = new BinaryReader(diffsbuffer);
             var mappingbr = new BinaryReader(mappingbuffer);
 
-            for (var i = 0; i < subMeshC; i++)
+            for (var subMeshIndex = 0; subMeshIndex < subMeshC; subMeshIndex++)
             {
-                var diffsCount = numVertexDiffsInEachChunk[i];
-                var vertexDelta = new TargetVec3[diffsCount];
-                var normalDelta = new Vec3[diffsCount];
-                var tangentDelta = new Vec3[diffsCount];
+                var diffsCount = numVertexDiffsInEachChunk[subMeshIndex];
+                var storedMapsCount = numVertexDiffsMappingInEachChunk[subMeshIndex];
 
-                if (i == 0)
+                if (storedMapsCount == 0 && diffsCount != 0)
                 {
-                    diffsbuffer.Position = targetStartsInVertexDiffs * 12;
-                }
-                else
-                {
-                    diffsbuffer.Position = targetStartsInVertexDiffs * 12;
+                    _loggerService.Warning($"Submesh {subMeshIndex} will be exported with 0 diffs: numVertexDiffsMappingInEachChunk[{subMeshIndex}] == 0, so we ignore the numVertexDiffsInEachChunk[{subMeshIndex}] == {diffsCount} (it's probably a bookkeeping error.)");
 
-                    for (var eye = 0; eye < i; eye++)
-                    {
-                        diffsbuffer.Position += numVertexDiffsInEachChunk[eye] * 12;
-                    }
+                    // Normal export handles this case, so let's use that to avoid
+                    // missing any logic that should be applied for a valid 0 diff
+                    // both here and in following chunks
+                    numVertexDiffsInEachChunk[subMeshIndex] = diffsCount = 0;
                 }
 
-                for (var e = 0; e < diffsCount; e++)
+                var unevenDivisionOffset = diffsCount % 2;
+
+                var actualMapsCount = (storedMapsCount * 2) - unevenDivisionOffset;
+
+                if (actualMapsCount != diffsCount)
                 {
-                    if (diffsbr.BaseStream.Position < (diffsbr.BaseStream.Length - 3))
-                    {
-                        var v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
-
-                        var x = (v.X * targetPositionDiffScale.X) + targetPositionDiffOffset.X;
-                        var y = (v.Y * targetPositionDiffScale.Y) + targetPositionDiffOffset.Y;
-                        var z = (v.Z * targetPositionDiffScale.Z) + targetPositionDiffOffset.Z;
-
-                        vertexDelta[e] = new TargetVec3(x, z, -y);
-                        var n = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                        normalDelta[e] = new Vec3(n.X, n.Z, -n.Y);
-                        var t = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                        tangentDelta[e] = new Vec3(t.X, t.Z, -t.Y);
-                    }
+                    throw new ArgumentOutOfRangeException($"Submesh {subMeshIndex} mapping count {actualMapsCount} doesn't match diff count {diffsCount}! Can't export this.");
                 }
 
-                var vertexMapping = new ushort[diffsCount];
+                var positionDeltas = new TargetVec3[diffsCount];
+                var normalDeltas = new Vec3[diffsCount];
+                var tangentDeltas = new Vec3[diffsCount];
+                var vertexMapping = new ushort[actualMapsCount];
 
-                if (i == 0)
-                {
-                    mappingbuffer.Position = targetStartsInVertexDiffsMapping * 4;
-                }
-                else
-                {
-                    mappingbuffer.Position = targetStartsInVertexDiffsMapping * 4;
+                diffsbuffer.Position = baseDiffsStartPositionForTarget;
+                mappingbuffer.Position = baseMappingsStartPositionForTarget;
 
-                    for (var eye = 0; eye < i; eye++)
-                    {
-                        mappingbuffer.Position += numVertexDiffsMappingInEachChunk[eye] * 4;
-                    }
-                }
-
-                for (var e = 0; e < diffsCount; e++)
+                for (var preceding = 0; preceding < subMeshIndex; preceding++)
                 {
-                    if (mappingbr.BaseStream.Position < (mappingbr.BaseStream.Length - 1))
-                    {
-                        vertexMapping[e] = mappingbr.ReadUInt16();
-                    }
+                    diffsbuffer.Position += numVertexDiffsInEachChunk[preceding] * diffByteWidth;
+
+                    // Skip previous data as aligned, NOT actual maps count
+                    mappingbuffer.Position += numVertexDiffsMappingInEachChunk[preceding] * mappingCountAlignedMultiplier * mappingByteWidth;
                 }
 
-                rawtarget[i] = new RawTargetContainer()
+                for (var diffIndex = 0; diffIndex < diffsCount; diffIndex++)
                 {
-                    vertexDelta = vertexDelta,
-                    normalDelta = normalDelta,
-                    tangentDelta = tangentDelta,
+                    var positionDelta = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
+                    var normalDelta = Converters.TenBitShifted(diffsbr.ReadUInt32());
+                    var tangentDelta = Converters.TenBitShifted(diffsbr.ReadUInt32());
+
+                    var dequantizedPositionDeltaX = (positionDelta.X * targetPositionDiffScale.X) + targetPositionDiffOffset.X;
+                    var dequantizedPositionDeltaY = (positionDelta.Y * targetPositionDiffScale.Y) + targetPositionDiffOffset.Y;
+                    var dequantizedPositionDeltaZ = (positionDelta.Z * targetPositionDiffScale.Z) + targetPositionDiffOffset.Z;
+
+                    // LHCS Zup to RHCS Yup
+                    positionDeltas[diffIndex] = new TargetVec3(dequantizedPositionDeltaX, dequantizedPositionDeltaZ, -dequantizedPositionDeltaY);
+                    normalDeltas[diffIndex] = new Vec3(normalDelta.X, normalDelta.Z, -normalDelta.Y);
+                    tangentDeltas[diffIndex] = new Vec3(tangentDelta.X, tangentDelta.Z, -tangentDelta.Y);
+                }
+
+                for (var mapIdx = 0; mapIdx < actualMapsCount; mapIdx++)
+                {
+                    vertexMapping[mapIdx] = mappingbr.ReadUInt16();
+                }
+
+                rawtarget[subMeshIndex] = new RawTargetContainer()
+                {
+                    vertexDelta = positionDeltas,
+                    normalDelta = normalDeltas,
+                    tangentDelta = tangentDeltas,
                     vertexMapping = vertexMapping,
                     diffsCount = diffsCount
                 };
@@ -400,7 +405,7 @@ namespace WolvenKit.Modkit.RED4
                 for (var i = 0; i < mesh.texCoords0.Length; i++)
                 {
                     bw.Write(mesh.texCoords0[i].X);
-                    bw.Write(mesh.texCoords0[i].Y);
+                    bw.Write((mesh.texCoords0[i].Y * -1) + 1); // Flip UV Y like mesh export does
                 }
                 for (var i = 0; i < mesh.texCoords1.Length; i++)
                 {
