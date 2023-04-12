@@ -53,6 +53,46 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("rtxdiOverrideGlobalRayOffset")] 
+		public CBool RtxdiOverrideGlobalRayOffset
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("rtxdiRayOffsetMin")] 
+		public CFloat RtxdiRayOffsetMin
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("rtxdiRayOffsetMax")] 
+		public CFloat RtxdiRayOffsetMax
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("rtxdiRayScale")] 
+		public CFloat RtxdiRayScale
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("rtxdiEnableLight")] 
+		public CBool RtxdiEnableLight
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("EV")] 
 		public CFloat EV
 		{
@@ -60,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(16)] 
 		[RED("temperature")] 
 		public CFloat Temperature
 		{
@@ -68,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(17)] 
 		[RED("lightChannel")] 
 		public CBitField<rendLightChannel> LightChannel
 		{
@@ -76,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<rendLightChannel>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(18)] 
 		[RED("sceneDiffuse")] 
 		public CBool SceneDiffuse
 		{
@@ -84,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(19)] 
 		[RED("sceneSpecularScale")] 
 		public CUInt8 SceneSpecularScale
 		{
@@ -92,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(20)] 
 		[RED("directional")] 
 		public CBool Directional
 		{
@@ -100,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(21)] 
 		[RED("roughnessBias")] 
 		public CInt8 RoughnessBias
 		{
@@ -108,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt8>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(22)] 
 		[RED("scaleGI")] 
 		public CUInt8 ScaleGI
 		{
@@ -116,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(23)] 
 		[RED("scaleEnvProbes")] 
 		public CUInt8 ScaleEnvProbes
 		{
@@ -124,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(24)] 
 		[RED("useInTransparents")] 
 		public CBool UseInTransparents
 		{
@@ -132,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(25)] 
 		[RED("scaleVolFog")] 
 		public CUInt8 ScaleVolFog
 		{
@@ -140,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(26)] 
 		[RED("useInParticles")] 
 		public CBool UseInParticles
 		{
@@ -148,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(27)] 
 		[RED("attenuation")] 
 		public CEnum<rendLightAttenuation> Attenuation
 		{
@@ -156,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<rendLightAttenuation>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(28)] 
 		[RED("clampAttenuation")] 
 		public CBool ClampAttenuation
 		{
@@ -164,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(29)] 
 		[RED("group")] 
 		public CEnum<rendLightGroup> Group
 		{
@@ -172,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<rendLightGroup>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(30)] 
 		[RED("areaShape")] 
 		public CEnum<EAreaLightShape> AreaShape
 		{
@@ -180,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAreaLightShape>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(31)] 
 		[RED("areaTwoSided")] 
 		public CBool AreaTwoSided
 		{
@@ -188,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(32)] 
 		[RED("spotCapsule")] 
 		public CBool SpotCapsule
 		{
@@ -196,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(33)] 
 		[RED("sourceRadius")] 
 		public CFloat SourceRadius
 		{
@@ -204,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(34)] 
 		[RED("capsuleLength")] 
 		public CFloat CapsuleLength
 		{
@@ -212,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(35)] 
 		[RED("areaRectSideA")] 
 		public CFloat AreaRectSideA
 		{
@@ -220,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(36)] 
 		[RED("areaRectSideB")] 
 		public CFloat AreaRectSideB
 		{
@@ -228,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(37)] 
 		[RED("innerAngle")] 
 		public CFloat InnerAngle
 		{
@@ -236,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(38)] 
 		[RED("outerAngle")] 
 		public CFloat OuterAngle
 		{
@@ -244,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(39)] 
 		[RED("softness")] 
 		public CFloat Softness
 		{
@@ -252,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(40)] 
 		[RED("enableLocalShadows")] 
 		public CBool EnableLocalShadows
 		{
@@ -260,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(41)] 
 		[RED("enableLocalShadowsForceStaticsOnly")] 
 		public CBool EnableLocalShadowsForceStaticsOnly
 		{
@@ -268,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(42)] 
 		[RED("contactShadows")] 
 		public CEnum<rendContactShadowReciever> ContactShadows
 		{
@@ -276,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<rendContactShadowReciever>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(43)] 
 		[RED("shadowAngle")] 
 		public CFloat ShadowAngle
 		{
@@ -284,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(44)] 
 		[RED("shadowRadius")] 
 		public CFloat ShadowRadius
 		{
@@ -292,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(45)] 
 		[RED("shadowFadeDistance")] 
 		public CFloat ShadowFadeDistance
 		{
@@ -300,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(46)] 
 		[RED("shadowFadeRange")] 
 		public CFloat ShadowFadeRange
 		{
@@ -308,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(47)] 
 		[RED("shadowSoftnessMode")] 
 		public CEnum<ELightShadowSoftnessMode> ShadowSoftnessMode
 		{
@@ -316,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ELightShadowSoftnessMode>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(48)] 
 		[RED("rayTracingLightSourceRadius")] 
 		public CFloat RayTracingLightSourceRadius
 		{
@@ -324,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(49)] 
 		[RED("rayTracingContactShadowRange")] 
 		public CFloat RayTracingContactShadowRange
 		{
@@ -332,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(50)] 
 		[RED("iesProfile")] 
 		public CResourceAsyncReference<CIESDataResource> IesProfile
 		{
@@ -340,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CIESDataResource>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(51)] 
 		[RED("flicker")] 
 		public rendSLightFlickering Flicker
 		{
@@ -348,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<rendSLightFlickering>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(52)] 
 		[RED("envColorGroup")] 
 		public CEnum<EEnvColorGroup> EnvColorGroup
 		{
@@ -356,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EEnvColorGroup>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(53)] 
 		[RED("colorGroupSaturation")] 
 		public CUInt8 ColorGroupSaturation
 		{
@@ -364,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(54)] 
 		[RED("portalAngleCutoff")] 
 		public CUInt8 PortalAngleCutoff
 		{
@@ -372,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(55)] 
 		[RED("allowDistantLight")] 
 		public CBool AllowDistantLight
 		{
@@ -380,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(56)] 
 		[RED("autoHideDistance")] 
 		public CFloat AutoHideDistance
 		{
@@ -394,6 +434,8 @@ namespace WolvenKit.RED4.Types
 			Radius = 5.000000F;
 			Intensity = 100.000000F;
 			RayTracingIntensityScale = 1.000000F;
+			RtxdiRayScale = 0.850000F;
+			RtxdiEnableLight = true;
 			Temperature = -1.000000F;
 			SceneDiffuse = true;
 			SceneSpecularScale = 100;

@@ -93,6 +93,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("textureQualityPresetLocalizedName")] 
+		public CName TextureQualityPresetLocalizedName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("renderWidth")] 
 		public CUInt32 RenderWidth
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("renderHeight")] 
 		public CUInt32 RenderHeight
 		{
@@ -108,15 +116,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(13)] 
-		[RED("windowed")] 
-		public CBool Windowed
+		[Ordinal(14)] 
+		[RED("windowMode")] 
+		public CUInt8 WindowMode
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("verticalSync")] 
 		public CBool VerticalSync
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("averageFps")] 
 		public CFloat AverageFps
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("minFps")] 
 		public CFloat MinFps
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("maxFps")] 
 		public CFloat MaxFps
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("time")] 
 		public CFloat Time
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("frameNumber")] 
 		public CUInt32 FrameNumber
 		{
@@ -164,7 +172,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
+		[RED("DLAAEnabled")] 
+		public CBool DLAAEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("DLAASharpness")] 
+		public CFloat DLAASharpness
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(23)] 
 		[RED("DLSSEnabled")] 
 		public CBool DLSSEnabled
 		{
@@ -172,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("DLSSQuality")] 
 		public CInt32 DLSSQuality
 		{
@@ -180,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("DLSSSharpness")] 
 		public CFloat DLSSSharpness
 		{
@@ -188,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("DLSSFrameGenEnabled")] 
 		public CBool DLSSFrameGenEnabled
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("FSR2Enabled")] 
 		public CBool FSR2Enabled
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("FSR2Quality")] 
 		public CInt32 FSR2Quality
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("FSR2Sharpness")] 
 		public CFloat FSR2Sharpness
 		{
@@ -220,7 +244,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
+		[RED("XeSSEnabled")] 
+		public CBool XeSSEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("XeSSQuality")] 
+		public CInt32 XeSSQuality
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("XeSSSharpness")] 
+		public CFloat XeSSSharpness
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(33)] 
 		[RED("DRSEnabled")] 
 		public CBool DRSEnabled
 		{
@@ -228,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(34)] 
 		[RED("DRSTargetFPS")] 
 		public CUInt32 DRSTargetFPS
 		{
@@ -236,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(35)] 
 		[RED("DRSMinimalResolutionPercentage")] 
 		public CUInt32 DRSMinimalResolutionPercentage
 		{
@@ -244,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(36)] 
 		[RED("DRSMaximalResolutionPercentage")] 
 		public CUInt32 DRSMaximalResolutionPercentage
 		{
@@ -252,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(37)] 
 		[RED("CASSharpeningEnabled")] 
 		public CBool CASSharpeningEnabled
 		{
@@ -260,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(38)] 
 		[RED("FSREnabled")] 
 		public CBool FSREnabled
 		{
@@ -268,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(39)] 
 		[RED("FSRQuality")] 
 		public CInt32 FSRQuality
 		{
@@ -276,8 +324,57 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(40)] 
+		[RED("rayTracingEnabled")] 
+		public CBool RayTracingEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("rayTracedReflections")] 
+		public CBool RayTracedReflections
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(42)] 
+		[RED("rayTracedSunShadows")] 
+		public CBool RayTracedSunShadows
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(43)] 
+		[RED("rayTracedLocalShadows")] 
+		public CBool RayTracedLocalShadows
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(44)] 
+		[RED("rayTracedLightingQuality")] 
+		public CInt32 RayTracedLightingQuality
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("rayTracedPathTracingEnabled")] 
+		public CBool RayTracedPathTracingEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public worldBenchmarkSummary()
 		{
+			WindowMode = 1;
 			DRSTargetFPS = 30;
 			DRSMinimalResolutionPercentage = 100;
 			DRSMaximalResolutionPercentage = 100;

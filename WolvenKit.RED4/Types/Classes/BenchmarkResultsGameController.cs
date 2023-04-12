@@ -5,22 +5,38 @@ namespace WolvenKit.RED4.Types
 	public partial class BenchmarkResultsGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
-		[RED("button")] 
-		public inkWidgetReference Button
+		[RED("exitButton")] 
+		public inkWidgetReference ExitButton
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
-		[RED("entriesListContainer")] 
-		public inkCompoundWidgetReference EntriesListContainer
+		[RED("settingButton")] 
+		public inkWidgetReference SettingButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("leftEntriesListContainer")] 
+		public inkCompoundWidgetReference LeftEntriesListContainer
 		{
 			get => GetPropertyValue<inkCompoundWidgetReference>();
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
+		[RED("rightEntriesListContainer")] 
+		public inkCompoundWidgetReference RightEntriesListContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("lineEntryName")] 
 		public CName LineEntryName
 		{
@@ -28,7 +44,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
+		[RED("highlightLineEntryName")] 
+		public CName HighlightLineEntryName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("sectionEntryName")] 
 		public CName SectionEntryName
 		{
@@ -36,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("benchmarkSummary")] 
 		public CHandle<worldBenchmarkSummary> BenchmarkSummary
 		{
@@ -44,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<worldBenchmarkSummary>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("exitRequestToken")] 
 		public CHandle<inkGameNotificationToken> ExitRequestToken
 		{
@@ -52,10 +76,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("settingsAcive")] 
+		public CBool SettingsAcive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public BenchmarkResultsGameController()
 		{
-			Button = new();
-			EntriesListContainer = new();
+			ExitButton = new();
+			SettingButton = new();
+			LeftEntriesListContainer = new();
+			RightEntriesListContainer = new();
+			LineEntryName = "data";
+			HighlightLineEntryName = "highlight_data";
+			SectionEntryName = "category";
 
 			PostConstruct();
 		}

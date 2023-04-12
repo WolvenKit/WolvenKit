@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("opacityMicromaps")] 
+		public CArray<CUInt8> OpacityMicromaps
+		{
+			get => GetPropertyValue<CArray<CUInt8>>();
+			set => SetPropertyValue<CArray<CUInt8>>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("customData")] 
 		public CArray<CUInt8> CustomData
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("customDataElemStride")] 
 		public CUInt32 CustomDataElemStride
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("topologyData")] 
 		public CArray<CUInt8> TopologyData
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("topologyDataStride")] 
 		public CUInt32 TopologyDataStride
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("topologyMetadata")] 
 		public CArray<CUInt8> TopologyMetadata
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt8>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("topologyMetadataStride")] 
 		public CUInt32 TopologyMetadataStride
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("topology")] 
 		public CArray<rendTopologyData> Topology
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<rendTopologyData>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("quantizationScale")] 
 		public Vector4 QuantizationScale
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("quantizationOffset")] 
 		public Vector4 QuantizationOffset
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("vertexBufferSize")] 
 		public CUInt32 VertexBufferSize
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("indexBufferSize")] 
 		public CUInt32 IndexBufferSize
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("indexBufferOffset")] 
 		public CUInt32 IndexBufferOffset
 		{
@@ -163,6 +171,7 @@ namespace WolvenKit.RED4.Types
 			RenderChunks = new();
 			RenderChunkInfos = new();
 			SpeedTreeWind = new();
+			OpacityMicromaps = new();
 			CustomData = new();
 			TopologyData = new();
 			TopologyMetadata = new();
