@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameLightComponent : entLightComponent
 	{
-		[Ordinal(56)] 
+		[Ordinal(61)] 
 		[RED("emissiveOnly")] 
 		public CBool EmissiveOnly
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("materialZone")] 
 		public CEnum<gameEMaterialZone> MaterialZone
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameEMaterialZone>>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
 		[RED("meshBrokenAppearance")] 
 		public CName MeshBrokenAppearance
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(64)] 
 		[RED("onStrength")] 
 		public CFloat OnStrength
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(65)] 
 		[RED("turnOnByDefault")] 
 		public CBool TurnOnByDefault
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(66)] 
 		[RED("turnOnTime")] 
 		public CFloat TurnOnTime
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(67)] 
 		[RED("turnOnCurve")] 
 		public CName TurnOnCurve
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(68)] 
 		[RED("turnOffTime")] 
 		public CFloat TurnOffTime
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(69)] 
 		[RED("turnOffCurve")] 
 		public CName TurnOffCurve
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(70)] 
 		[RED("loopTime")] 
 		public CFloat LoopTime
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(71)] 
 		[RED("loopCurve")] 
 		public CName LoopCurve
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(72)] 
 		[RED("isDestructible")] 
 		public CBool IsDestructible
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(73)] 
 		[RED("colliderName")] 
 		public CName ColliderName
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(74)] 
 		[RED("colliderTag")] 
 		public CName ColliderTag
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(75)] 
 		[RED("destructionEffect")] 
 		public CResourceAsyncReference<worldEffect> DestructionEffect
 		{

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldStaticCollisionShapeCategories_CollisionNode()
 		{
-			Arr = new(5, 6);
+			Arr = new(5);
 
 			PostConstruct();
 		}

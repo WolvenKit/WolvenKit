@@ -269,6 +269,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(36)] 
+		[RED("isBenchmarkSettings")] 
+		public CBool IsBenchmarkSettings
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(37)] 
 		[RED("selectorCtrl")] 
 		public CWeakHandle<inkListController> SelectorCtrl
 		{
@@ -276,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("languageMenuIndex")] 
 		public CInt32 LanguageMenuIndex
 		{

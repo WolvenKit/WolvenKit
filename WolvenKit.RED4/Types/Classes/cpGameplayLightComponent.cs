@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class cpGameplayLightComponent : entLightComponent
 	{
-		[Ordinal(56)] 
+		[Ordinal(61)] 
 		[RED("reactToTime")] 
 		public CBool ReactToTime
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("begin")] 
 		public GameTime Begin
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<GameTime>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
 		[RED("end")] 
 		public GameTime End
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<GameTime>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(64)] 
 		[RED("probability")] 
 		public CFloat Probability
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(65)] 
 		[RED("delayRange")] 
 		public GameTime DelayRange
 		{
