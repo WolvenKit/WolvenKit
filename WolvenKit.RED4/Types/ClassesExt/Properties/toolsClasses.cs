@@ -392,10 +392,7 @@ public class houdiniVehicleDestructionMeshEntry : RedBaseClass
     public houdiniVehicleDestructionMeshEntry()
     {
         // TODO: Check this
-        Position = new(3);
-        Position[0] = 0F;
-        Position[1] = 0F;
-        Position[2] = 1F;
+        Position = new(3) { 0, 0, 1 };
     }
 }
 
