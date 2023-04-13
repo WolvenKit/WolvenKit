@@ -358,7 +358,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var data = Data;
             if (Data is IRedBaseHandle handle)
             {
-                data = handle.GetValue().NotNull();
+                data = handle.GetValue() ?? (IRedType)new RedDummy();
             }
             else if (Data is CVariant v)
             {
