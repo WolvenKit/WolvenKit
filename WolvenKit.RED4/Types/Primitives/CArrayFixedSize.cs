@@ -12,6 +12,24 @@ public class CArrayFixedSize<T> : CArrayBase<T>, IRedArrayFixedSize<T> where T :
         }
     }
 
+    public CArrayFixedSize(Flags flags) : base(flags.Current)
+    {
+        IsReadOnly = true;
+
+        var hasNext = flags.MoveNext();
+        for (var i = 0; i < Count; i++)
+        {
+            if (hasNext)
+            {
+                this[i] = (T)RedTypeManager.CreateRedType(typeof(T), flags.Clone());
+            }
+            else
+            {
+                this[i] = (T)RedTypeManager.CreateRedType(typeof(T));
+            }
+        }
+    }
+
     // TODO [CArrayFixedSize]: Find a better way to do this (just for `worldStaticCollisionShapeCategories_CollisionNode`)
     public CArrayFixedSize(int size1, int size2) : base(size1)
     {
@@ -19,7 +37,7 @@ public class CArrayFixedSize<T> : CArrayBase<T>, IRedArrayFixedSize<T> where T :
 
         for (var i = 0; i < size1; i++)
         {
-            this[i] = (T)System.Activator.CreateInstance(typeof(T), size2)!;
+            this[i] = (T)RedTypeManager.CreateRedType(typeof(T), size2);
         }
     }
 

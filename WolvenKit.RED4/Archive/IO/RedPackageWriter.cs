@@ -78,7 +78,7 @@ public partial class RedPackageWriter : Red4Writer
             }
             else
             {
-                redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags.Clone());
+                redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags);
             }
 
             BaseStream.Position = descStartPosition + (nonDefaultProperties.IndexOf(propertyInfo) * 8);

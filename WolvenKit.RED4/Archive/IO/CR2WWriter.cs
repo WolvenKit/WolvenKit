@@ -46,7 +46,7 @@ public partial class CR2WWriter : Red4Writer
                     continue;
                 }
 
-                redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags.Clone());
+                redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags);
             }
             else
             {

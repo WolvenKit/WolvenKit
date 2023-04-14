@@ -6,10 +6,8 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.JSON;
 
-public class ParseableBufferConverter : JsonConverter<IParseableBuffer>, ICustomRedConverter
+public class ParseableBufferConverter : CustomRedConverter<IParseableBuffer>
 {
-    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override IParseableBuffer? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (typeToConvert == typeof(worldNodeDataBuffer))

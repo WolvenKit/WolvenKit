@@ -8,28 +8,22 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.JSON;
 
-public class CDateTimeConverter : JsonConverter<CDateTime>, ICustomRedConverter
+public class CDateTimeConverter : CustomRedConverter<CDateTime>
 {
-    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override CDateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetUInt64();
 
     public override void Write(Utf8JsonWriter writer, CDateTime value, JsonSerializerOptions options) => writer.WriteNumberValue(value);
 }
 
-public class CGuidConverter : JsonConverter<CGuid>, ICustomRedConverter
+public class CGuidConverter : CustomRedConverter<CGuid>
 {
-    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override CGuid Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetBytesFromBase64();
 
     public override void Write(Utf8JsonWriter writer, CGuid value, JsonSerializerOptions options) => writer.WriteBase64StringValue((byte[])value);
 }
 
-public class CNameConverter : JsonConverter<CName>, ICustomRedConverter
+public class CNameConverter : CustomRedConverter<CName>
 {
-    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override CName Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -65,19 +59,15 @@ public class CNameConverter : JsonConverter<CName>, ICustomRedConverter
     }
 }
 
-public class CRUIDConverter : JsonConverter<CRUID>, ICustomRedConverter
+public class CRUIDConverter : CustomRedConverter<CRUID>
 {
-    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override CRUID Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetUInt64();
 
     public override void Write(Utf8JsonWriter writer, CRUID value, JsonSerializerOptions options) => writer.WriteNumberValue(value);
 }
 
-public class CStringConverter : JsonConverter<CString>, ICustomRedConverter
+public class CStringConverter : CustomRedConverter<CString>
 {
-    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override CString Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -91,10 +81,8 @@ public class CStringConverter : JsonConverter<CString>, ICustomRedConverter
     public override void Write(Utf8JsonWriter writer, CString value, JsonSerializerOptions options) => writer.WriteStringValue(value);
 }
 
-public class CVariantConverter : JsonConverter<CVariant>, ICustomRedConverter
+public class CVariantConverter : CustomRedConverter<CVariant>
 {
-    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override CVariant? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -236,14 +224,11 @@ public class BufferConverterFactory : JsonConverterFactory
     }
 }
 
-public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverter
+public class DataBufferConverter : CustomRedConverter<DataBuffer>
 {
     private readonly ReferenceResolver<RedBuffer> _referenceResolver;
 
     public DataBufferConverter(ReferenceResolver<RedBuffer> referenceResolver) => _referenceResolver = referenceResolver;
-
-
-    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
     public override DataBuffer? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -262,14 +247,11 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
     public override void Write(Utf8JsonWriter writer, DataBuffer value, JsonSerializerOptions options) => BufferHelper.Write(writer, value, options, _referenceResolver);
 }
 
-public class SerializationDeferredDataBufferConverter : JsonConverter<SerializationDeferredDataBuffer>, ICustomRedConverter
+public class SerializationDeferredDataBufferConverter : CustomRedConverter<SerializationDeferredDataBuffer>
 {
     private readonly ReferenceResolver<RedBuffer> _referenceResolver;
 
     public SerializationDeferredDataBufferConverter(ReferenceResolver<RedBuffer> referenceResolver) => _referenceResolver = referenceResolver;
-
-
-    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
     public override SerializationDeferredDataBuffer? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -288,10 +270,8 @@ public class SerializationDeferredDataBufferConverter : JsonConverter<Serializat
     public override void Write(Utf8JsonWriter writer, SerializationDeferredDataBuffer value, JsonSerializerOptions options) => BufferHelper.Write(writer, value, options, _referenceResolver);
 }
 
-public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICustomRedConverter
+public class SharedDataBufferConverter : CustomRedConverter<SharedDataBuffer>
 {
-    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override SharedDataBuffer? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         IRedBufferWrapper? result = new SharedDataBuffer();
@@ -758,10 +738,8 @@ internal static class BufferHelper
 
 #endregion BufferConverter
 
-public class LocalizationStringConverter : JsonConverter<LocalizationString>, ICustomRedConverter
+public class LocalizationStringConverter : CustomRedConverter<LocalizationString>
 {
-    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override LocalizationString? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -854,10 +832,8 @@ public class CLegacySingleChannelCurveConverterFactory : JsonConverterFactory
     }
 }
 
-public class CLegacySingleChannelCurveConverter : JsonConverter<IRedLegacySingleChannelCurve>, ICustomRedConverter
+public class CLegacySingleChannelCurveConverter : CustomRedConverter<IRedLegacySingleChannelCurve>
 {
-    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override IRedLegacySingleChannelCurve? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -1082,10 +1058,8 @@ public class MultiChannelCurveConverterFactory : JsonConverterFactory
     }
 }
 
-public class MultiChannelCurveConverter : JsonConverter<IRedMultiChannelCurve>, ICustomRedConverter
+public class MultiChannelCurveConverter : CustomRedConverter<IRedMultiChannelCurve>
 {
-    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override IRedMultiChannelCurve? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -1219,10 +1193,8 @@ public class MultiChannelCurveConverter : JsonConverter<IRedMultiChannelCurve>, 
 
 #endregion MultiChannelCurveConverter
 
-public class ResourcePathConverter : JsonConverter<ResourcePath>, ICustomRedConverter
+public class ResourcePathConverter : CustomRedConverter<ResourcePath>
 {
-    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override ResourcePath Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -1258,10 +1230,8 @@ public class ResourcePathConverter : JsonConverter<ResourcePath>, ICustomRedConv
     }
 }
 
-public class NodeRefConverter : JsonConverter<NodeRef>, ICustomRedConverter
+public class NodeRefConverter : CustomRedConverter<NodeRef>
 {
-    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override NodeRef Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -1297,10 +1267,8 @@ public class NodeRefConverter : JsonConverter<NodeRef>, ICustomRedConverter
     }
 }
 
-public class TweakDBIDConverter : JsonConverter<TweakDBID>, ICustomRedConverter
+public class TweakDBIDConverter : CustomRedConverter<TweakDBID>
 {
-    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override TweakDBID Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)

@@ -29,10 +29,8 @@ public class EnumConverterFactory : JsonConverterFactory
     }
 }
 
-public class CBitFieldConverter : JsonConverter<IRedBitField>, ICustomRedConverter
+public class CBitFieldConverter : CustomRedConverter<IRedBitField>
 {
-    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override IRedBitField Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
@@ -53,10 +51,8 @@ public class CBitFieldConverter : JsonConverter<IRedBitField>, ICustomRedConvert
     public override void Write(Utf8JsonWriter writer, IRedBitField value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToBitFieldString());
 }
 
-public class CEnumConverter : JsonConverter<IRedEnum>, ICustomRedConverter
+public class CEnumConverter : CustomRedConverter<IRedEnum>
 {
-    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
-
     public override IRedEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
