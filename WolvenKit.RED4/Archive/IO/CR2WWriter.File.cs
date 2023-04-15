@@ -394,6 +394,18 @@ public partial class CR2WWriter
 
             buffer.SetBytes(newData);
         }
+
+        if (buffer.Data is CR2WWrapper wrapper)
+        {
+            using var ms = new MemoryStream();
+            using var wrapperWriter = new CR2WWrapperWriter(ms) { LoggerService = LoggerService };
+
+            wrapperWriter.Write(wrapper);
+
+            var newData = ms.ToArray();
+
+            buffer.SetBytes(newData);
+        }
     }
 
     private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)

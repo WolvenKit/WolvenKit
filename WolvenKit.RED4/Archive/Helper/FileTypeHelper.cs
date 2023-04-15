@@ -8,6 +8,8 @@ namespace WolvenKit.RED4.Archive;
 // ReSharper disable InconsistentNaming
 public enum ERedExtension
 {
+    unknown,
+
     acousticdata,
     actionanimdb,
     aiarch,
@@ -149,6 +151,20 @@ public enum ERedExtension
 }
 // ReSharper restore InconsistentNaming
 // ReSharper restore IdentifierTypo
+
+public static class ERedExtensionHelper
+{
+    public static ERedExtension FromString(string? path)
+    {
+        var extStr = Path.GetExtension(path);
+        if (string.IsNullOrEmpty(extStr))
+        {
+            return ERedExtension.unknown;
+        }
+
+        return Enum.Parse<ERedExtension>(extStr[1..]);
+    }
+}
 
 public class FileTypeHelper
 {

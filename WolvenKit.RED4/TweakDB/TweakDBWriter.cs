@@ -158,7 +158,7 @@ public class TweakDBWriter : Red4Writer
 
             BaseWriter.WriteLengthPrefixedString(propertyInfo.RedName);
 
-            var redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags.Clone());
+            var redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags);
             BaseWriter.WriteLengthPrefixedString(redTypeName);
 
             var currOffset = BaseStream.Position;

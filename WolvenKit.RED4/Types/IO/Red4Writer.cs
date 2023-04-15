@@ -317,6 +317,7 @@ public class Red4Writer : IDisposable
     {
         GenerateBufferBytes(val.Buffer);
 
+        _writer.Write(val.Buffer.GetBytes().Length);
         _writer.Write(val.Buffer.GetBytes());
     }
 

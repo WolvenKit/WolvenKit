@@ -1,5 +1,6 @@
 using System.Text;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
@@ -167,59 +168,33 @@ public partial class CR2WReader : Red4Reader
             }
         }
 
-        PostProcess();
+        PostProcess(value);
 
         return true;
 
-        void PostProcess()
+        void PostProcess(IRedType? internalValue)
         {
-            if (value is IRedBufferPointer buf)
+            if (internalValue is IRedBufferPointer buf)
             {
                 buf.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varName}");
                 buf.GetValue().Parent = cls;
             }
 
-            if (value is IRedArray arr)
+            if (internalValue is SharedDataBuffer shared)
             {
-                if (typeof(IRedBufferPointer).IsAssignableFrom(arr.InnerType))
+                shared.Buffer.ParentTypes.Add($"{cls.GetType().Name}.{varName}");
+                shared.Buffer.Parent = cls;
+
+                ParseBuffer(shared.Buffer);
+            }
+
+            if (internalValue is IRedArray arr)
+            {
+                foreach (IRedType entry in arr)
                 {
-                    foreach (IRedBufferPointer entry in arr)
-                    {
-                        entry.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varName}");
-                        entry.GetValue().Parent = cls;
-                    }
+                    PostProcess(entry);
                 }
             }
         }
-    }
-
-    public override SharedDataBuffer ReadSharedDataBuffer(uint size)
-    {
-        var innerSize = BaseReader.ReadUInt32();
-        if (size != innerSize + 4)
-        {
-            throw new TodoException("ReadSharedDataBuffer");
-        }
-
-        var result = base.ReadSharedDataBuffer(innerSize);
-
-        if (_parseBuffer)
-        {
-            using var ms = new MemoryStream(result.Buffer.GetBytes());
-            using var br = new BinaryReader(ms, Encoding.Default, true);
-
-            using var cr2wReader = new CR2WReader(br);
-            cr2wReader.ParsingError += HandleParsingError;
-
-            var readResult = cr2wReader.ReadFile(out var c, true);
-            if (readResult == EFileReadErrorCodes.NoCr2w)
-            {
-                throw new TodoException("ReadSharedDataBuffer");
-            }
-
-            result.File = c;
-        }
-
-        return result;
     }
 }

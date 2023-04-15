@@ -603,10 +603,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     {
                         count += p42.Chunks.Count;
                     }
-                    if (sdb.File is CR2WFile)
-                    {
-                        count += 1;
-                    }
                     if (sdb.Data is not null)
                     {
                         count += 1;  // needs refinement?
@@ -2106,15 +2102,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p42.Chunks[i], p42.Chunks[i].GetType().Name, _appViewModel, this, isreadonly));
                 }
-            }
-            if (sdb.File is CR2WFile cr2)
-            {
-                //var chunks = cr2.Chunks;
-                //for (int i = 0; i < chunks.Count; i++)
-                //{
-                //    properties.Add(i, _chunkViewmodelFactory.ChunkViewModel(i, chunks[i], this));
-                //}
-                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(cr2.RootChunk, cr2.RootChunk.GetType().Name, _appViewModel, this, isreadonly));
             }
             if (sdb.Data is IParseableBuffer ipb)
             {

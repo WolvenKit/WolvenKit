@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types;
 
 public class ExtendedPropertyInfo
 {
-    private Flags _flags;
+    private Flags _flags = Flags.Empty;
     internal bool _isDefaultSet;
 
     public ExtendedPropertyInfo(ExtendedTypeInfo containingType, string name, string type)
@@ -37,9 +37,9 @@ public class ExtendedPropertyInfo
         }
 
         var propName = $"{ContainingTypeInfo.Type.Name}.{Name}";
-        if (Patches.AttributePatches.ContainsKey(propName))
+        if (Patches.AttributePatches.TryGetValue(propName, out var patches))
         {
-            foreach (var attribute in Patches.AttributePatches[propName])
+            foreach (var attribute in patches)
             {
                 ProcessAttribute(attribute);
             }
@@ -55,7 +55,7 @@ public class ExtendedPropertyInfo
     public string Name { get; }
     public string? RedName { get; private set; }
     public string RedType { get; }
-    public Flags Flags => _flags != null ? _flags.Clone() : Flags.Empty;
+    public Flags Flags => _flags.Clone();
     public bool IsIgnored { get; internal set; }
 
     public bool IsDynamic { get; }

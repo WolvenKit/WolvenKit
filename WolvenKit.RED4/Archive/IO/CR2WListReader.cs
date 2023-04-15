@@ -3,7 +3,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO;
 
-public class CR2WListReader : IBufferReader, IErrorHandler
+public class CR2WListReader : IBufferReader, IDataCollector, IErrorHandler
 {
     private MemoryStream _ms;
 

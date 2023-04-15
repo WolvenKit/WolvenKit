@@ -1,5 +1,6 @@
 using System.Text;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
@@ -46,7 +47,7 @@ public partial class CR2WWriter : Red4Writer
                     continue;
                 }
 
-                redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags.Clone());
+                redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags);
             }
             else
             {
@@ -74,27 +75,6 @@ public partial class CR2WWriter : Red4Writer
         if (cls is IRedAppendix app)
         {
             app.Write(this);
-        }
-    }
-
-    public override void Write(SharedDataBuffer val)
-    {
-        if (val.File != null)
-        {
-            using var ms = new MemoryStream();
-            using var cr2wWriter = new CR2WWriter(ms) { IsRoot = false, LoggerService = LoggerService };
-
-            cr2wWriter.WriteFile((CR2WFile)val.File);
-
-            ms.Seek(0, SeekOrigin.Begin);
-
-            var buffer = ms.ToArray();
-            BaseWriter.Write(buffer.Length);
-            BaseWriter.Write(buffer);
-        }
-        else
-        {
-            base.Write(val);
         }
     }
 }

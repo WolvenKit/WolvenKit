@@ -27,6 +27,11 @@ public static class CEnum
     {
         if (!TryParse(value, out T? result))
         {
+            if (value == "0")
+            {
+                return default(T);
+            }
+
             throw new Exception();
         }
         return result;
