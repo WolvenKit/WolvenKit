@@ -14,7 +14,10 @@ public class SharedDataBuffer : IRedBufferWrapper, IRedPrimitive, IEquatable<Sha
         set => Buffer.Data = value;
     }
 
-    public Red4File? File { get; set; }
+    public SharedDataBuffer()
+    {
+        Buffer = new RedBuffer();
+    }
 
     public bool Equals(SharedDataBuffer? other)
     {

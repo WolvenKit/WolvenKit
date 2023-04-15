@@ -19,6 +19,7 @@ public partial class CR2WReader
     {
         s_bufferReaders.Add("appearanceAppearanceDefinition.compiledData", typeof(appearanceAppearanceDefinitionReader));
         s_bufferReaders.Add("entEntityTemplate.compiledData", typeof(entEntityTemplateReader));
+        s_bufferReaders.Add("inkWidgetLibraryItem.package", typeof(CR2WWrapperReader));
         s_bufferReaders.Add("inkWidgetLibraryItem.packageData", typeof(RedPackageReader));
         s_bufferReaders.Add("entEntityInstanceData.buffer", typeof(RedPackageReader));
         s_bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(RedPackageReader));
@@ -285,10 +286,10 @@ public partial class CR2WReader
         }
 
         var parentType = buffer.ParentTypes.First();
-        if (s_bufferReaders.ContainsKey(parentType))
+        if (s_bufferReaders.TryGetValue(parentType, out var bufferReader))
         {
             var ms = new MemoryStream(buffer.GetBytes());
-            if (System.Activator.CreateInstance(s_bufferReaders[parentType], ms) is not IBufferReader reader)
+            if (System.Activator.CreateInstance(bufferReader, ms) is not IBufferReader reader)
             {
                 return;
             }
@@ -298,9 +299,9 @@ public partial class CR2WReader
                 err.ParsingError += HandleParsingError;
             }
 
-            if (reader is Red4Reader red4Reader)
+            if (reader is IDataCollector collector)
             {
-                red4Reader.CollectData = CollectData;
+                collector.CollectData = CollectData;
             }
 
             if (reader is RedPackageReader pReader)
@@ -321,23 +322,12 @@ public partial class CR2WReader
                 }
             }
 
-            if (reader is CR2WListReader lReader)
-            {
-                lReader.CollectData = CollectData;
-            }
-
             reader.ReadBuffer(buffer);
 
-            if (reader is CR2WListReader { CollectData: true } lReader2)
+            if (reader is IDataCollector { CollectData: true } collector2)
             {
                 DataCollection.Buffers ??= new List<DataCollection>();
-                DataCollection.Buffers.Add(lReader2.DataCollection);
-            }
-
-            if (reader is Red4Reader { CollectData: true } red4Reader2)
-            {
-                DataCollection.Buffers ??= new List<DataCollection>();
-                DataCollection.Buffers.Add(red4Reader2.DataCollection);
+                DataCollection.Buffers.Add(collector2.DataCollection);
             }
         }
     }

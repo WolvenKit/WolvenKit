@@ -318,8 +318,8 @@ public class SharedDataBufferConverter : CustomRedConverter<SharedDataBuffer>
                 var converter = options.GetConverter(typeof(RedFileDto));
                 if (converter is ICustomRedConverter conv)
                 {
-                    var obj = conv.ReadRedType(ref reader, typeof(RedFileDto), options);
-                    val.File = ((RedFileDto?)obj)?.Data;
+                    var obj = conv.ReadRedType(ref reader, typeof(RedFileDto), options)!;
+                    val.Buffer.Data = new CR2WWrapper { File = ((RedFileDto)obj).Data! };
                 }
                 else
                 {
@@ -721,7 +721,7 @@ internal static class BufferHelper
     {
         writer.WriteNumber("Flags", value.Buffer.Flags);
 
-        if (value.Buffer.Data is CookedInstanceTransformsBuffer or CR2WList or RedPackage or worldNodeDataBuffer or WorldTransformsBuffer or CollisionBuffer)
+        if (value.Buffer.Data is CookedInstanceTransformsBuffer or CR2WList or RedPackage or worldNodeDataBuffer or WorldTransformsBuffer or CollisionBuffer or CR2WWrapper)
         {
             writer.WriteString("Type", value.Buffer.Data.GetType().AssemblyQualifiedName);
 

@@ -8,7 +8,7 @@ using Activator = System.Activator;
 
 namespace WolvenKit.RED4.IO;
 
-public partial class Red4Reader : IErrorHandler, IDisposable
+public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
 {
     protected readonly BinaryReader _reader;
 
@@ -250,7 +250,13 @@ public partial class Red4Reader : IErrorHandler, IDisposable
 
     public virtual SharedDataBuffer ReadSharedDataBuffer(uint size)
     {
-        return new SharedDataBuffer { Buffer = RedBuffer.CreateBuffer(0, _reader.ReadBytes((int)size)) };
+        var innerSize = BaseReader.ReadUInt32();
+        if (size != innerSize + 4)
+        {
+            throw new TodoException("ReadSharedDataBuffer");
+        }
+
+        return new SharedDataBuffer { Buffer = RedBuffer.CreateBuffer(0, _reader.ReadBytes((int)innerSize)) };
     }
 
     public virtual CVariant ReadCVariant()
