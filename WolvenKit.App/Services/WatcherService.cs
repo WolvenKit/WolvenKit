@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -179,6 +180,22 @@ public class WatcherService : ObservableObject, IWatcherService
             return;
         }
 
+        switch (e.ChangeType)
+        {
+            case WatcherChangeTypes.Created:
+                break;
+            case WatcherChangeTypes.Deleted:
+                break;
+            case WatcherChangeTypes.Changed:
+                return;
+            case WatcherChangeTypes.Renamed:
+                break;
+            case WatcherChangeTypes.All:
+                return;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
         _timer.Change(s_waitTime, -1);
 
         /*switch (e.ChangeType)
@@ -238,6 +255,22 @@ public class WatcherService : ObservableObject, IWatcherService
         if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension.ToUpper()))
         {
             return;
+        }
+
+        switch (e.ChangeType)
+        {
+            case WatcherChangeTypes.Created:
+                break;
+            case WatcherChangeTypes.Deleted:
+                break;
+            case WatcherChangeTypes.Changed:
+                return;
+            case WatcherChangeTypes.Renamed:
+                break;
+            case WatcherChangeTypes.All:
+                return;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
 
         _timer.Change(s_waitTime, -1);
