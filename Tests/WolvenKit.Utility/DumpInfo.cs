@@ -331,13 +331,13 @@ namespace WolvenKit.Utility
 
                 if (factOnly)
                 {
-                    var ext = Path.GetExtension(dc.FileName);
-                    if (dc.FileName == dc.Hash.ToString())
+                    var ext = ERedExtensionHelper.FromString(dc.FileName);
+                    if (ext == ERedExtension.unknown)
                     {
-                        ext = hashService.GetGuessedExtension(dc.Hash);
+                        ext = ERedExtensionHelper.FromString(hashService.GetGuessedExtension(dc.Hash));
                     }
 
-                    if (ext == ".questphase" || ext == ".scene")
+                    if (ext is ERedExtension.questphase or ERedExtension.scene)
                     {
                         DumpFileInfo(dc, lst);
                     }
