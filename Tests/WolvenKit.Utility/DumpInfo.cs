@@ -321,6 +321,7 @@ namespace WolvenKit.Utility
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "infodump");
 
             var dict = new ConcurrentDictionary<string, List<string>>();
+            var dict2 = new ConcurrentDictionary<string, byte>();
 
             Parallel.ForEach(Directory.EnumerateFiles(resultDir, "*.json", SearchOption.AllDirectories), filePath =>
             {
@@ -336,23 +337,34 @@ namespace WolvenKit.Utility
                         ext = hashService.GetGuessedExtension(dc.Hash);
                     }
 
-                    if (ext == ".questphase")
+                    if (ext == ".questphase" || ext == ".scene")
                     {
                         DumpFileInfo(dc, lst);
+                    }
+
+                    if (lst.Count > 0)
+                    {
+                        var orderedLst = new List<string>(lst);
+                        orderedLst.Sort();
+
+                        dict.TryAdd(dc.FileName, orderedLst);
                     }
                 }
                 else
                 {
                     DumpFileInfo(dc, lst);
+                    foreach (var str in lst)
+                    {
+                        if (str == null)
+                        {
+                            continue;
+                        }
+
+                        dict2.TryAdd(str, 0);
+                    }
                 }
 
-                if (lst.Count > 0)
-                {
-                    var orderedLst = new List<string>(lst);
-                    orderedLst.Sort();
-
-                    dict.TryAdd(dc.FileName, orderedLst);
-                }
+                
             });
 
             if (factOnly)
@@ -362,7 +374,7 @@ namespace WolvenKit.Utility
             }
             else
             {
-                var nList = dict.Values.SelectMany(x => x).ToList();
+                var nList = dict2.Keys.ToList();
                 nList.Sort();
 
                 File.WriteAllLines(Path.Join(resultDir, "merged.txt"), nList);
