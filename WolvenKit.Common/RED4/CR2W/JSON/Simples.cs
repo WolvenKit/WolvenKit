@@ -104,6 +104,11 @@ public class CVariantConverter : CustomRedConverter<CVariant>
             {
                 if (result == null)
                 {
+                    if (type is { IsGenericType: true } && (type.GetGenericTypeDefinition() == typeof(CHandle<>) || type.GetGenericTypeDefinition() == typeof(CWeakHandle<>)))
+                    {
+                        return new CVariant { Value = RedTypeManager.CreateRedType(type) };
+                    }
+
                     throw new JsonException();
                 }
 
