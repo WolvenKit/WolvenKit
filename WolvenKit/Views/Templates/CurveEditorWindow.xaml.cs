@@ -551,8 +551,6 @@ namespace WolvenKit.Views.Editors
 
                         var values = _model.GetCurvePoints()
                             .Select(x => x.GetValue())
-                            .OfType<Tuple<IRedType, IRedType>>()
-                            .Select(x => x.Item1)
                             .OfType<HDRColor>()
                             .ToList();
 
@@ -561,7 +559,7 @@ namespace WolvenKit.Views.Editors
                         for (var i = 0; i < values.Count; i++)
                         {
                             var item = values[i];
-                            item.Alpha = (CFloat)alpha[i].Item2;
+                            item.Alpha = (CFloat)(float)alpha[i].Item2;
                             vec.Add(new Tuple<double, IRedType>(alpha[i].Item1, item));
                         }
 

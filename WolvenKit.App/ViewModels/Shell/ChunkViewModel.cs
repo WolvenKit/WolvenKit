@@ -988,7 +988,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
         {
-            Data ??= RedTypeManager.CreateRedType(PropertyType);
+            if (!CreateArray())
+            {
+                throw new Exception("Error while accessing or creating the array!");
+            }
 
             var curve = (IRedLegacySingleChannelCurve)Data;
 
@@ -2381,7 +2384,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         ArgumentNullException.ThrowIfNull(Parent);
 
-        if (PropertyType.IsAssignableTo(typeof(IRedArray)))
+        if (PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
         {
             if (Data is RedDummy)
             {
