@@ -2206,9 +2206,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private void CalculateIsDefault()
     {
-        IsDefault = Data == null;
+        IsDefault = Data is RedDummy;
 
-        if (Parent is not null && Data is not IRedBaseHandle)
+        if (Parent is not null && Data is not RedDummy)
         {
             var epi = GetPropertyByRedName(Parent.ResolvedPropertyType, PropertyName);
             if (epi is not null)
