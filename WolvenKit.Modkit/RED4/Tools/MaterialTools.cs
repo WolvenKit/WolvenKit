@@ -1396,18 +1396,23 @@ namespace WolvenKit.Modkit.RED4
 
             var matData = RedJsonSerializer.Deserialize<MatData>(_matData).NotNull();
 
-            var materialbuffer = new MemoryStream();
-            var offsets = new List<uint>();
-            var sizes = new List<uint>();
-            var names = new List<string>();
-
             ArgumentNullException.ThrowIfNull(matData.Materials);
-
 
             if (matData.Materials.Count < 1)
             {
                 return false;
             }
+
+            var blob = (CMesh)cr2w.RootChunk;
+            blob.MaterialEntries.Clear();
+            blob.LocalMaterialBuffer = new meshMeshMaterialBuffer
+            {
+                Materials = new CArray<IMaterial>()
+            };
+            blob.PreloadLocalMaterialInstances.Clear();
+            blob.PreloadExternalMaterials.Clear();
+            blob.ExternalMaterials.Clear();
+            blob.LocalMaterialInstances.Clear();
 
             var mts = new Dictionary<string, CMaterialTemplate>();
             for (var i = 0; i < matData.Materials.Count; i++)
@@ -1417,165 +1422,103 @@ namespace WolvenKit.Modkit.RED4
                 ArgumentNullException.ThrowIfNull(mat.Name);
                 ArgumentNullException.ThrowIfNull(mat.MaterialTemplate);
 
-                names.Add(mat.Name);
-                var mi = new CR2WFile();
-                {
-                    var chunk = new CMaterialInstance
-                    {
-                        CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
-                        EnableMask = true,
-                        ResourceVersion = 4,
-                        BaseMaterial = new CResourceReference<IMaterial>(mat.BaseMaterial.NotNull()),
-                        Values = new CArray<CKeyValuePair>()
-                    };
-
-                    CMaterialTemplate? mt = null;
-                    if (mts.ContainsKey(mat.MaterialTemplate))
-                    {
-                        mt = mts[mat.MaterialTemplate];
-                    }
-                    else
-                    {
-                        var hash = FNV1A64HashAlgorithm.HashString(mat.MaterialTemplate);
-                        foreach (var ar in archives)
-                        {
-                            if (ar.Files.TryGetValue(hash, out var gameFile))
-                            {
-                                var ms = new MemoryStream();
-                                gameFile.Extract(ms);
-                                ms.Seek(0, SeekOrigin.Begin);
-
-                                if (_parserService.TryReadRed4File(ms, out var f) && f.RootChunk is CMaterialTemplate _mt)
-                                {
-                                    mt = _mt;
-                                    mts.Add(mat.MaterialTemplate, mt);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    var fakeMaterialInstance = new CMaterialInstance()
-                    {
-                        BaseMaterial = new CResourceReference<IMaterial>(mat.BaseMaterial),
-                        Values = new CArray<CKeyValuePair>()
-                    };
-                    var (materialTemplate, valueDict) = GetMaterialChain(fakeMaterialInstance, archives, ref mts);
-
-                    if (mt != null)
-                    {
-                        var list = matData.Materials[i].Data;
-                        if (list is not null)
-                        {
-                            foreach (var (key, value) in list)
-                            {
-                                var found = false;
-                                var param = mt.Parameters[2].NotNull();
-                                for (var k = 0; k < param.Count; k++)
-                                {
-                                    var refer = param[k].NotNull().Chunk.NotNull();
-
-                                    if (refer.ParameterName == key)
-                                    {
-                                        found = true;
-
-                                        var convValue = GetMaterialParameterValue(refer.GetType(), value);
-                                        if (valueDict.ContainsKey(refer.ParameterName.ToString().NotNull()) && !Equals(valueDict[refer.ParameterName.ToString().NotNull()], convValue))
-                                        {
-                                            chunk.Values.Add(new CKeyValuePair(refer.ParameterName.ToString().NotNull(), convValue.NotNull()));
-                                        }
-                                    }
-                                }
-
-                                if (!found && value != null)
-                                {
-                                    var wrapper = ((JsonElement)value).Deserialize<MaterialValueWrapper>().NotNull();
-                                    var (type, _) = RedReflection.GetCSTypeFromRedType(wrapper.Type.NotNull());
-
-                                    if (wrapper.Value is JsonElement e)
-                                    {
-                                        var nValue = RedJsonSerializer.Deserialize(type, e);
-                                        if (nValue is IRedType rt)
-                                        {
-                                            chunk.Values.Add(new CKeyValuePair(key, rt));
-                                        }
-                                        else
-                                        {
-                                            throw new ArgumentException();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    mi.RootChunk = chunk;
-                }
-
-                offsets.Add((uint)materialbuffer.Position);
-
-                using var m = new MemoryStream();
-                using var writer = new CR2WWriter(m) { LoggerService = _loggerService };
-                writer.WriteFile(mi);
-
-                materialbuffer.Write(m.ToArray(), 0, (int)m.Length);
-                sizes.Add((uint)m.Length);
-            }
-
-            var blob = (CMesh)cr2w.RootChunk;
-
-            // remove existing data
-            while (blob.MaterialEntries.Count != 0)
-            {
-                blob.MaterialEntries.Remove(blob.MaterialEntries[^1]);
-            }
-            while (blob.LocalMaterialBuffer.RawDataHeaders.Count != 0)
-            {
-                blob.LocalMaterialBuffer.RawDataHeaders.Remove(blob.LocalMaterialBuffer.RawDataHeaders[^1]);
-            }
-            while (blob.PreloadLocalMaterialInstances.Count != 0)
-            {
-                blob.PreloadLocalMaterialInstances.Remove(blob.PreloadLocalMaterialInstances[^1]);
-            }
-            while (blob.PreloadExternalMaterials.Count != 0)
-            {
-                blob.PreloadExternalMaterials.Remove(blob.PreloadExternalMaterials[^1]);
-            }
-            while (blob.ExternalMaterials.Count != 0)
-            {
-                blob.ExternalMaterials.Remove(blob.ExternalMaterials[^1]);
-            }
-            while (blob.LocalMaterialInstances.Count != 0)
-            {
-                blob.LocalMaterialInstances.Remove(blob.LocalMaterialInstances[^1]);
-            }
-
-            for (var i = 0; i < names.Count; i++)
-            {
                 blob.MaterialEntries.Add(new CMeshMaterialEntry
                 {
                     IsLocalInstance = true,
-                    Name = names[i],
+                    Name = mat.Name,
                     Index = (ushort)i
                 });
 
-                blob.LocalMaterialBuffer.RawDataHeaders.Add(new meshLocalMaterialHeader
+                var chunk = new CMaterialInstance
                 {
-                    Offset = offsets[i],
-                    Size = sizes[i]
-                });
-            }
+                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+                    EnableMask = true,
+                    ResourceVersion = 4,
+                    BaseMaterial = new CResourceReference<IMaterial>(mat.BaseMaterial.NotNull()),
+                    Values = new CArray<CKeyValuePair>()
+                };
 
-            if (blob.LocalMaterialBuffer.RawData == null)
-            {
-                blob.LocalMaterialBuffer.RawData = new WolvenKit.RED4.Types.DataBuffer(materialbuffer.ToArray());
-            }
-            else
-            {
-                // Forcing the data to null, so it doesn't generate a new byte array on write
-                // TODO: Should be handled better
-                blob.LocalMaterialBuffer.RawData.Buffer.Data = null;
-                blob.LocalMaterialBuffer.RawData.Buffer.SetBytes(materialbuffer.ToArray());
+                CMaterialTemplate? mt = null;
+                if (mts.ContainsKey(mat.MaterialTemplate))
+                {
+                    mt = mts[mat.MaterialTemplate];
+                }
+                else
+                {
+                    var hash = FNV1A64HashAlgorithm.HashString(mat.MaterialTemplate);
+                    foreach (var ar in archives)
+                    {
+                        if (ar.Files.TryGetValue(hash, out var gameFile))
+                        {
+                            var ms = new MemoryStream();
+                            gameFile.Extract(ms);
+                            ms.Seek(0, SeekOrigin.Begin);
+
+                            if (_parserService.TryReadRed4File(ms, out var f) && f.RootChunk is CMaterialTemplate _mt)
+                            {
+                                mt = _mt;
+                                mts.Add(mat.MaterialTemplate, mt);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                var fakeMaterialInstance = new CMaterialInstance()
+                {
+                    BaseMaterial = new CResourceReference<IMaterial>(mat.BaseMaterial),
+                    Values = new CArray<CKeyValuePair>()
+                };
+                var (materialTemplate, valueDict) = GetMaterialChain(fakeMaterialInstance, archives, ref mts);
+
+                if (mt != null)
+                {
+                    var list = matData.Materials[i].Data;
+                    if (list is not null)
+                    {
+                        foreach (var (key, value) in list)
+                        {
+                            var found = false;
+                            var param = mt.Parameters[2].NotNull();
+                            for (var k = 0; k < param.Count; k++)
+                            {
+                                var refer = param[k].NotNull().Chunk.NotNull();
+
+                                if (refer.ParameterName == key)
+                                {
+                                    found = true;
+
+                                    var convValue = GetMaterialParameterValue(refer.GetType(), value);
+                                    if (valueDict.ContainsKey(refer.ParameterName.ToString().NotNull()) && !Equals(valueDict[refer.ParameterName.ToString().NotNull()], convValue))
+                                    {
+                                        chunk.Values.Add(new CKeyValuePair(refer.ParameterName.ToString().NotNull(), convValue.NotNull()));
+                                    }
+                                }
+                            }
+
+                            if (!found && value != null)
+                            {
+                                var wrapper = ((JsonElement)value).Deserialize<MaterialValueWrapper>().NotNull();
+                                var (type, _) = RedReflection.GetCSTypeFromRedType(wrapper.Type.NotNull());
+
+                                if (wrapper.Value is JsonElement e)
+                                {
+                                    var nValue = RedJsonSerializer.Deserialize(type, e);
+                                    if (nValue is IRedType rt)
+                                    {
+                                        chunk.Values.Add(new CKeyValuePair(key, rt));
+                                    }
+                                    else
+                                    {
+                                        throw new ArgumentException();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                blob.LocalMaterialBuffer.Materials.Add(chunk);
             }
 
             return true;
