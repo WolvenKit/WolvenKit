@@ -96,7 +96,7 @@ namespace WolvenKit
                     services.AddTransient<IPaneViewModelFactory, PaneViewModelFactory>();               // IChunkViewmodelFactory
                     services.AddTransient<IDocumentViewmodelFactory, DocumentViewmodelFactory>();       //IDocumentTabViewmodelFactory, IPaneViewModelFactory, IChunkViewmodelFactory
 
-
+                    services.AddTransient<WKitUIScripting>();
 
                     // register views
                     #region shell

@@ -5,7 +5,6 @@ using System.IO;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
@@ -124,14 +123,14 @@ public class WKitScripting
     /// </summary>
     /// <param name="path">file path to check</param>
     /// <returns></returns>
-    public virtual bool FileExists(string path)
+    public virtual bool FileExistsInArchive(string path)
     {
         if (string.IsNullOrEmpty(path))
         {
             return false;
         }
 
-        return FileExists(FNV1A64HashAlgorithm.HashString(path));
+        return FileExistsInArchive(FNV1A64HashAlgorithm.HashString(path));
     }
 
     /// <summary>
@@ -139,7 +138,7 @@ public class WKitScripting
     /// </summary>
     /// <param name="hash">hash value to be checked</param>
     /// <returns></returns>
-    public virtual bool FileExists(ulong hash)
+    public virtual bool FileExistsInArchive(ulong hash)
     {
         if (hash == 0)
         {

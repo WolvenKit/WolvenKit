@@ -7,6 +7,7 @@ using System.Windows;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
@@ -22,10 +23,14 @@ public partial class ExtendedScriptService : ScriptService
 
     private readonly Dictionary<string, object> _hostObjects = new();
 
+    private readonly WKitUIScripting _wkit;
+
     private V8ScriptEngine? _uiEngine;
 
-    public ExtendedScriptService(ILoggerService loggerService) : base(loggerService)
+    public ExtendedScriptService(ILoggerService loggerService, WKitUIScripting wkit) : base(loggerService)
     {
+        _wkit = wkit;
+
         DeployShippedFiles();
 
         _hostObjects.Add("ui", new WScriptUIHelper(this));
@@ -129,7 +134,7 @@ public partial class ExtendedScriptService : ScriptService
 
     private bool TestExecute(string file, string json)
     {
-        var engine = base.GetScriptEngine(null, ISettingsManager.GetWScriptDir());
+        var engine = base.GetScriptEngine(new Dictionary<string, object> { { "wkit", _wkit } }, ISettingsManager.GetWScriptDir());
         engine.Script.file = json;
         engine.Script.success = false;
 

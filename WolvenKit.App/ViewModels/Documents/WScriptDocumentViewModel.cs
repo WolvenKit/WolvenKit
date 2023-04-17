@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -113,6 +113,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         {
             CompletionData.Add(name, new List<(string name, string? desc)>());
 
+            var methods = new Dictionary<string, string?>();
             foreach (var methodInfo in instance.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public))
             {
                 if (methodInfo.DeclaringType == typeof(object))
@@ -120,15 +121,13 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
                     continue;
                 }
 
-                var descAttr = methodInfo.GetCustomAttribute<DescriptionAttribute>();
-                if (descAttr != null)
-                {
-                    CompletionData[name].Add((methodInfo.Name, descAttr.Description));
-                }
-                else
-                {
-                    CompletionData[name].Add((methodInfo.Name, null));
-                }
+                methods.TryAdd(methodInfo.Name, methodInfo.GetCustomAttribute<DescriptionAttribute>()?.Description);
+            }
+            methods = methods.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+
+            foreach (var (methodName, desc) in methods)
+            {
+                CompletionData[name].Add((methodName, desc));
             }
         }
     }

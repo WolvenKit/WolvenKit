@@ -9,6 +9,7 @@ using WolvenKit.App.Factories;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -486,18 +487,26 @@ public class WKitUIScripting : WKitScripting
     }
 
     /// <summary>
-    /// Check if file exists in either the game archives or the project
+    /// Check if file exists in the project
     /// </summary>
     /// <param name="path">file path to check</param>
     /// <returns></returns>
-    public override bool FileExists(string path) => base.FileExists(path);
+    public virtual bool FileExistsInProject(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return false;
+        }
+
+        return FileExistsInProject(FNV1A64HashAlgorithm.HashString(path));
+    }
 
     /// <summary>
-    /// Check if file exists in either the game archives or the project
+    /// Check if file exists in the project
     /// </summary>
     /// <param name="hash">hash value to be checked</param>
     /// <returns></returns>
-    public override bool FileExists(ulong hash)
+    public virtual bool FileExistsInProject(ulong hash)
     {
         if (hash == 0)
         {
@@ -518,6 +527,41 @@ public class WKitUIScripting : WKitScripting
             }
         }
 
-        return base.FileExists(hash);
+        return false;
+    }
+
+    /// <summary>
+    /// Check if file exists in either the game archives or the project
+    /// </summary>
+    /// <param name="path">file path to check</param>
+    /// <returns></returns>
+    public virtual bool FileExists(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return false;
+        }
+
+        return FileExists(FNV1A64HashAlgorithm.HashString(path));
+    }
+
+    /// <summary>
+    /// Check if file exists in either the game archives or the project
+    /// </summary>
+    /// <param name="hash">hash value to be checked</param>
+    /// <returns></returns>
+    public virtual bool FileExists(ulong hash)
+    {
+        if (FileExistsInProject(hash))
+        {
+            return true;
+        }
+
+        if (FileExistsInArchive(hash))
+        {
+            return true;
+        }
+
+        return false;
     }
 }
