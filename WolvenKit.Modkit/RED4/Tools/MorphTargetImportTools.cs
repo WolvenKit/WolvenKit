@@ -164,39 +164,28 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        private (Vec3, Vec3) CalculateModelBoundsWithMorphs(List<RawMeshContainer> rawMeshes, ModelRoot model)
+        private (Vec3 maxBounds, Vec3 minBounds) CalculateModelBoundsWithMorphs(List<RawMeshContainer> rawMeshes, ModelRoot model)
         {
             var modelMax = new Vec3(float.MinValue, float.MinValue, float.MinValue);
             var modelMin = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
 
             for (var subMeshIndex = 0; subMeshIndex < rawMeshes.Count; subMeshIndex++)
             {
-                var (smMorphMax, smMorphMin) = GetZupPositionDeltaBoundsForSubMesh(model, subMeshIndex);
-
-                var subMeshMax = new Vec3(float.MinValue, float.MinValue, float.MinValue);
-                var subMeshMin = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
+                var (smMorphDeltaMax, smMorphDeltaMin) = GetZupPositionDeltaBoundsForSubMesh(model, subMeshIndex);
 
                 var subMeshPositions = rawMeshes[subMeshIndex].positions;
                 ArgumentNullException.ThrowIfNull(subMeshPositions);
 
                 foreach (var position in subMeshPositions)
                 {
-                    subMeshMax.X = Math.Max(position.X, subMeshMax.X);
-                    subMeshMax.Y = Math.Max(position.Y, subMeshMax.Y);
-                    subMeshMax.Z = Math.Max(position.Z, subMeshMax.Z);
+                    modelMax.X = Math.Max(modelMax.X, position.X + smMorphDeltaMax.X);
+                    modelMax.Y = Math.Max(modelMax.Y, position.Y + smMorphDeltaMax.Y);
+                    modelMax.Z = Math.Max(modelMax.Z, position.Z + smMorphDeltaMax.Z);
 
-                    subMeshMin.X = Math.Min(position.X, subMeshMin.X);
-                    subMeshMin.Y = Math.Min(position.Y, subMeshMin.Y);
-                    subMeshMin.Z = Math.Min(position.Z, subMeshMin.Z);
+                    modelMin.X = Math.Min(modelMin.X, position.X + smMorphDeltaMin.X);
+                    modelMin.Y = Math.Min(modelMin.Y, position.Y + smMorphDeltaMin.Y);
+                    modelMin.Z = Math.Min(modelMin.Z, position.Z + smMorphDeltaMin.Z);
                 }
-
-                modelMax.X = Math.Max(modelMax.X, Math.Max(subMeshMax.X, (subMeshMax.X + smMorphMax.X)));
-                modelMax.Y = Math.Max(modelMax.Y, Math.Max(subMeshMax.Y, (subMeshMax.Y + smMorphMax.Y)));
-                modelMax.Z = Math.Max(modelMax.Z, Math.Max(subMeshMax.Z, (subMeshMax.Z + smMorphMax.Z)));
-
-                modelMin.X = Math.Min(modelMin.X, Math.Min(subMeshMin.X, (subMeshMin.X + smMorphMin.X)));
-                modelMin.Y = Math.Min(modelMin.Y, Math.Min(subMeshMin.Y, (subMeshMin.Y + smMorphMin.Y)));
-                modelMin.Z = Math.Min(modelMin.Z, Math.Min(subMeshMin.Z, (subMeshMin.Z + smMorphMin.Z)));
             }
 
             return (modelMax, modelMin);
@@ -205,28 +194,35 @@ namespace WolvenKit.Modkit.RED4
         // Is this info already in the GLTF? Yes
         // Can I somehow get the POSITION.min/.max values with SharpGLTF? Also y-- no. Definitely no.
         // Are we therefore looping through all the vertices for like the 15th time? We sure are!
-        private (Vec3 max, Vec3 min) GetZupPositionDeltaBoundsForSubMesh(ModelRoot model, int subMeshIndex)
+        private (Vec3 cumulativeMax, Vec3 cumulativeMin) GetZupPositionDeltaBoundsForSubMesh(ModelRoot model, int subMeshIndex)
         {
-            var max = Vec3.Zero;
-            var min = Vec3.Zero;
-
             var morphTargetCount = model.LogicalMeshes[0].Primitives[0].MorphTargetsCount;
+
+            var maxDeltasPerTarget = new Vec3[morphTargetCount];
+            var minDeltasPerTarget = new Vec3[morphTargetCount];
 
             // Need to flip to LHCS Zup here (...and again later)
             for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
             {
                 var positionDeltas = model.LogicalMeshes[subMeshIndex].Primitives[0].GetMorphTargetAccessors(targetIndex)["POSITION"].AsVector3Array();
 
-                max.X = Math.Max(max.X, positionDeltas.Max(l => l.X));
-                max.Y = Math.Max(max.Y, positionDeltas.Max(l => -l.Z));
-                max.Z = Math.Max(max.Z, positionDeltas.Max(l => l.Y));
-
-                min.X = Math.Min(min.X, positionDeltas.Min(l => l.X));
-                min.Y = Math.Min(min.Y, positionDeltas.Min(l => -l.Z));
-                min.Z = Math.Min(min.Z, positionDeltas.Min(l => l.Y));
+                maxDeltasPerTarget[targetIndex] = new Vec3( positionDeltas.Max(l => l.X), positionDeltas.Max(l => -l.Z), positionDeltas.Max(l => l.Y));
+                minDeltasPerTarget[targetIndex] = new Vec3( positionDeltas.Min(l => l.X), positionDeltas.Min(l => -l.Z), positionDeltas.Min(l => l.Y));
             }
 
-            return (max, min);
+            var cumulativeMax = new Vec3(
+                maxDeltasPerTarget.Select(v => v.X > 0 ? v.X : 0).Sum(),
+                maxDeltasPerTarget.Select(v => v.Y > 0 ? v.Y : 0).Sum(),
+                maxDeltasPerTarget.Select(v => v.Z > 0 ? v.Z : 0).Sum()
+            );
+
+            var cumulativeMin = new Vec3(
+                minDeltasPerTarget.Select(v => v.X < 0 ? v.X : 0).Sum(),
+                minDeltasPerTarget.Select(v => v.Y < 0 ? v.Y : 0).Sum(),
+                minDeltasPerTarget.Select(v => v.Z < 0 ? v.Z : 0).Sum()
+            );
+
+            return (cumulativeMax, cumulativeMin);
         }
 
         // Quantization reduces vertex data to the range of values in the model.
