@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Reactive;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -6,6 +7,7 @@ using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
@@ -30,10 +32,18 @@ public partial class RibbonViewModel : ObservableObject
         _watcherService = watcherService;
 
         MainViewModel = appViewModel;
+        MainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
 
         _launchProfileText = "Launch Profiles";
     }
 
+    private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(MainViewModel.TaskStatus))
+        {
+            LaunchProfileCommand.NotifyCanExecuteChanged();
+        }
+    }
 
 
     public AppViewModel MainViewModel { get; }
@@ -63,7 +73,9 @@ public partial class RibbonViewModel : ObservableObject
         MainViewModel.SaveAllCommand.SafeExecute();
     }
 
-    [RelayCommand]
+    private bool CanStartTask() => MainViewModel.TaskStatus == EStatus.Ready;
+
+    [RelayCommand(CanExecute = nameof(CanStartTask))]
     private async Task LaunchProfileAsync()
     {
         _settingsManager.LaunchProfiles ??= new();
