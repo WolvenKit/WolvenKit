@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Archive.IO;
 
 public class ArchiveWriter
 {
-    public ILoggerService LoggerService { get; set; }
+    private readonly ILoggerService _loggerService;
 
     #region Fields
 
@@ -42,12 +42,13 @@ public class ArchiveWriter
 
     #endregion
 
-    public ArchiveWriter(IHashService hashService)
+    public ArchiveWriter(IHashService hashService, ILoggerService loggerService)
     {
         _hashService = hashService;
+        _loggerService = loggerService;
     }
 
-    public Archive WriteArchive(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
+    public Archive? WriteArchive(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
     {
         if (!infolder.Exists)
         {
@@ -59,9 +60,9 @@ public class ArchiveWriter
             return null;
         }
 
-        if (LoggerService != null && !CompressionSettings.Get().UseOodle)
+        if (!CompressionSettings.Get().UseOodle)
         {
-            LoggerService.Warning("Oodle couldn't be loaded. Using Kraken.dll instead could cause errors.");
+            _loggerService.Warning("Oodle couldn't be loaded. Using Kraken.dll instead could cause errors.");
         }
 
         // get files
@@ -120,6 +121,19 @@ public class ArchiveWriter
         var progress = 0;
         foreach (var fileInfo in fileInfos)
         {
+            if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()) && fileInfo.Length > uint.MaxValue)
+            {
+                _loggerService.Error($"{fileInfo.FullName} is too large. Maximum size for uncompressed files is {uint.MaxValue} bytes.");
+                return null;
+            }
+
+            // TODO: This is due to max byte[] size (MS also uses byte[]) is int.MaxValue - 56 and we need it for compression
+            if (!s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()) && fileInfo.Length > int.MaxValue - 57)
+            {
+                _loggerService.Error($"{fileInfo.FullName} is too large. Maximum size for compressed files is {int.MaxValue - 57} bytes.");
+                return null;
+            }
+
             var relpath = fileInfo.FullName[(infolder.FullName.Length + 1)..];
             var sanitizedPath = ResourcePath.SanitizePath(relpath);
 
@@ -208,23 +222,26 @@ public class ArchiveWriter
             else
             {
                 fileStream.Seek(0, SeekOrigin.Begin);
-                var cr2winbuffer = fileStream.ToByteArray();
-                var offset = (ulong)bw.BaseStream.Position;
-                var size = (uint)cr2winbuffer.Length;
 
                 if (s_alignedFiles.Contains(fileInfo.Extension.ToLower()))
                 {
                     bw.PadUntilPage();
-                    offset = (ulong)bw.BaseStream.Position;
                 }
+
+                var offset = (ulong)bw.BaseStream.Position;
 
                 if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()))
                 {
-                    bw.Write(cr2winbuffer);
+                    fileStream.CopyTo(fs);
+                    var size = (uint)fileStream.Length;
+
                     ar.Index.FileSegments.Add(new FileSegment(offset, size, size));
                 }
                 else
                 {
+                    var cr2winbuffer = fileStream.ToByteArray();
+                    var size = (uint)cr2winbuffer.Length;
+
                     // kraken the file and write
                     var (zsize, _) = CompressAndWrite(bw, cr2winbuffer);
                     ar.Index.FileSegments.Add(new FileSegment(offset, zsize, size));
@@ -235,9 +252,7 @@ public class ArchiveWriter
 
             // save table data
             using var sha1 = SHA1.Create();
-            var sha1hash =
-                sha1.ComputeHash(fileBinaryReader.BaseStream
-                    .ToByteArray()); //TODO: this is only correct for files with no buffer
+            var sha1hash = sha1.ComputeHash(fileStream); //TODO: this is only correct for files with no buffer
             var item = new FileEntry(
                 _hashService,
                 hash,

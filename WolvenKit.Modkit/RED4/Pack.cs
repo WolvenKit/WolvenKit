@@ -38,12 +38,20 @@ namespace WolvenKit.Modkit.RED4
 
             if (!outpath.Exists)
             {
-                _loggerService.Error($"Could not pack archive from {infolder}");
+                _loggerService.Error($"Could not pack archive to {outpath}");
                 throw new PackException();
             }
 
-            ArchiveWriter writer = new(_hashService){ LoggerService = _loggerService };
-            return writer.WriteArchive(infolder, outpath, modname);
+            ArchiveWriter writer = new(_hashService, _loggerService);
+            
+            var archive = writer.WriteArchive(infolder, outpath, modname);
+            if (archive == null)
+            {
+                _loggerService.Error($"Could not pack archive");
+                throw new PackException();
+            }
+
+            return archive;
         }
     }
 }
