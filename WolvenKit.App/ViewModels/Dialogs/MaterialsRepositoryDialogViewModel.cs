@@ -317,6 +317,8 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
         var depotPath = new DirectoryInfo(_settingsManager.MaterialRepositoryPath);
         if (depotPath.Exists)
         {
+            await _gameControllerFactory.GetRed4Controller().HandleStartup();
+
             await Task.Run(() =>
             {
                 var archives = _archiveManager.Archives.KeyValues.Select(x => x.Value).ToList();
