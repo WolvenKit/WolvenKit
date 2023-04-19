@@ -991,6 +991,11 @@ namespace WolvenKit.Modkit.RED4
                 };
             }
 
+            if (materialParameterType == typeof(CMaterialParameterDynamicTexture))
+            {
+                return ReadPath<ITexture>();
+            }
+
             throw new NotImplementedException(materialParameterType.Name);
 
             CResourceReference<T> ReadPath<T>() where T : CResource
@@ -1137,6 +1142,11 @@ namespace WolvenKit.Modkit.RED4
                 return GetSerializableValue(vec.Vector);
             }
 
+            if (materialParameter is CMaterialParameterDynamicTexture dyn)
+            {
+                return GetSerializableValue(dyn.Texture);
+            }
+
             throw new NotImplementedException(materialParameter.GetType().Name);
         }
 
@@ -1216,6 +1226,11 @@ namespace WolvenKit.Modkit.RED4
             if (materialParameter is CMaterialParameterVector vec)
             {
                 return vec.Vector;
+            }
+
+            if (materialParameter is CMaterialParameterDynamicTexture dyn)
+            {
+                return dyn.Texture;
             }
 
             throw new NotImplementedException(materialParameter.GetType().Name);
