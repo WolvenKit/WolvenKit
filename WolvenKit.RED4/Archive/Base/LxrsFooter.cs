@@ -11,16 +11,11 @@ public class LxrsFooter
 
     public const uint s_magic = 0x4C585253; //1397905484;
     private const uint s_version = 1;
+    
+    public List<string> FileInfos { init; get; }
+    private readonly Encoding _iso8859 = Encoding.GetEncoding("ISO-8859-1");
 
-
-    private readonly List<string> _fileInfos;
-
-    public LxrsFooter(List<string> fileInfos)
-    {
-        _fileInfos = fileInfos;
-    }
-
-    public List<string> FileInfos => _fileInfos;
+    public LxrsFooter(List<string> fileInfos) => FileInfos = fileInfos;
 
     public void Write(BinaryWriter bw)
     {
@@ -31,18 +26,20 @@ public class LxrsFooter
         using var tempBw = new BinaryWriter(ms);
         foreach (var s in FileInfos)
         {
-            tempBw.WriteNullTerminatedString(s, Encoding.GetEncoding("ISO-8859-1"));
+            tempBw.WriteNullTerminatedString(s, _iso8859);
         }
 
-        var inbuffer = ms.ToByteArray();
+        var inBuffer = ms.ToByteArray();
 
         IEnumerable<byte> outBuffer = new List<byte>();
-        var r = Oodle.Compress(inbuffer, ref outBuffer, false);
+        var r = Oodle.Compress(inBuffer, ref outBuffer, false);
 
-        bw.Write(inbuffer.Length);      //size
-        bw.Write(outBuffer.Count());    //zsize
-        bw.Write(FileInfos.Count());    //count
-        bw.Write(outBuffer.ToArray());
+        bw.Write(inBuffer.Length);  // size
+        // avoid possible multiple enumerations
+        var outArray = outBuffer as byte[] ?? outBuffer.ToArray();
+        bw.Write(outArray.Length);  // zsize
+        bw.Write(FileInfos.Count);  // count
+        bw.Write(outArray);
     }
 
     public void Read(BinaryReader br)
@@ -58,34 +55,33 @@ public class LxrsFooter
         var zsize = br.ReadInt32();
         var count = br.ReadInt32();
 
-        var inbuffer = br.ReadBytes(zsize);
+        var inBuffer = br.ReadBytes(zsize);
+        byte[] buffer;
 
         if (size > zsize)
         {
             // buffer is compressed
-            var outBuffer = new byte[size];
-            var r = Oodle.Decompress(inbuffer, outBuffer);
-            using var ms = new MemoryStream(outBuffer);
-            using var tempbr = new BinaryReader(ms);
-            for (var i = 0; i < count; i++)
-            {
-                FileInfos.Add(tempbr.ReadNullTerminatedString(Encoding.GetEncoding("ISO-8859-1")));
-            }
+            buffer = new byte[size];
+            // TODO: handle result accordingly if r != size
+            var r = Oodle.Decompress(inBuffer, buffer);
         }
         else if (size < zsize)
         {
             // error
             // extract as .bin file
+            return;
         }
         else
         {
             // no compression
-            using var ms = new MemoryStream(inbuffer);
-            using var tempbr = new BinaryReader(ms);
-            for (var i = 0; i < count; i++)
-            {
-                FileInfos.Add(tempbr.ReadNullTerminatedString(Encoding.GetEncoding("ISO-8859-1")));
-            }
+            buffer = inBuffer;
+        }
+        
+        using var ms = new MemoryStream(buffer);
+        using var tempBr = new BinaryReader(ms);
+        for (var i = 0; i < count; i++)
+        {
+            FileInfos.Add(tempBr.ReadNullTerminatedString(_iso8859));
         }
     }
 }
