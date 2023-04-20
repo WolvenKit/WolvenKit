@@ -74,7 +74,7 @@ If you want to build the app from source yourself:
 4. Build the projects.
 
 ## Contributing
-- Join the [Cyberpunk 2077 Modding Server](discord.gg/Epkq79kd96) for active development
+- Join the [Cyberpunk 2077 Modding Server](https://discord.gg/Epkq79kd96) for active development
 
 Do you want to contribute? Community feedback and contributions are highly appreciated!
 It's a good idea to create an issue when implementing a feature so people don't work on the same feature/issue in an asynchronous manner.
