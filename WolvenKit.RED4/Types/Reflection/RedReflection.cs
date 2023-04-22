@@ -131,7 +131,7 @@ public static class RedReflection
     public static string GetEnumRedName(Type type) => s_redEnumCache.FirstOrDefault(t => t.Value.Type == type).Key;
 
     public static ExtendedEnumInfo GetEnumTypeInfo(Type type) =>
-        s_redEnumCache.FirstOrDefault(t => t.Value.Type == type).Value;
+        s_redEnumCache.TryGetValue(type.Name, out var info) ? info : throw new NotSupportedException(type.Name);
 
     public static (Type type, Flags flags) GetCSTypeFromRedType(string redTypeName)
     {
