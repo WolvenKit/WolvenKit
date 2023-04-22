@@ -87,6 +87,50 @@ public class InventoryHelper
         public static bool operator !=(gameItemIdWrapper? left, gameItemIdWrapper? right) => !Equals(left, right);
     }
 
+    public class ModHeaderThing : IEquatable<ModHeaderThing>
+    {
+        public TweakDBID LootItemId { get; set; }
+        public uint Unknown2 { get; set; }
+        public float Unknown3 { get; set; }
+
+        public bool Equals(ModHeaderThing? other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return LootItemId.Equals(other.LootItemId) && Unknown2 == other.Unknown2 && Unknown3.Equals(other.Unknown3);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((ModHeaderThing)obj);
+        }
+
+        public override int GetHashCode() => HashCode.Combine(LootItemId, Unknown2, Unknown3);
+    }
+
     public class ItemData : INodeData
     {
         public gameItemIdWrapper Header { get; set; }
@@ -107,9 +151,7 @@ public class InventoryHelper
 
     public class ModableItemData : IItemData
     {
-        public TweakDBID TdbId1 { get; set; }
-        public uint Unknown2 { get; set; }
-        public float Unknown3 { get; set; }
+        public ModHeaderThing ModHeaderThing { get; set; }
         public ItemModData RootNode { get; set; }
     }
 
@@ -120,9 +162,7 @@ public class InventoryHelper
         public TweakDBID AttachmentSlotTdbId { get; set; }
         public List<ItemModData> Children { get; set; } = new();
         public uint Unknown2 { get; set; }
-        public TweakDBID TdbId2 { get; set; }
-        public uint Unknown3 { get; set; }
-        public float Unknown4 { get; set; }
+        public ModHeaderThing ModHeaderThing { get; set; }
     }
 
     public class ModableItemWithQuantityData : ModableItemData
@@ -220,11 +260,8 @@ public class InventoryHelper
         var result = new ModableItemWithQuantityData();
 
         result.Quantity = reader.ReadUInt32();
-        var modItem = ReadModableItemData(reader);
-        result.TdbId1 = modItem.TdbId1;
-        result.Unknown2 = modItem.Unknown2;
-        result.Unknown3 = modItem.Unknown3;
-        result.RootNode = modItem.RootNode;
+        result.ModHeaderThing = ReadModHeaderThing(reader);
+        result.RootNode = ReadKind2DataNode(reader);
 
         return result;
     }
@@ -232,19 +269,35 @@ public class InventoryHelper
     private static void WriteModableItemWithQuantityData(BinaryWriter writer, ModableItemWithQuantityData modq)
     {
         writer.Write(modq.Quantity);
-        writer.Write((ulong)modq.TdbId1);
-        writer.Write(modq.Unknown2);
-        writer.Write(modq.Unknown3);
+        writer.Write((ulong)modq.ModHeaderThing.LootItemId);
+        writer.Write(modq.ModHeaderThing.Unknown2);
+        writer.Write(modq.ModHeaderThing.Unknown3);
         WriteKind2DataNode(writer, modq.RootNode);
+    }
+
+    public static ModHeaderThing ReadModHeaderThing(BinaryReader reader)
+    {
+        var result = new ModHeaderThing();
+
+        result.LootItemId = reader.ReadUInt64();
+        result.Unknown2 = reader.ReadUInt32();
+        result.Unknown3 = reader.ReadSingle();
+
+        return result;
+    }
+
+    public static void WriteModHeaderThing(BinaryWriter writer, ModHeaderThing modHeaderThing)
+    {
+        writer.Write((ulong)modHeaderThing.LootItemId);
+        writer.Write(modHeaderThing.Unknown2);
+        writer.Write(modHeaderThing.Unknown3);
     }
 
     public static ModableItemData ReadModableItemData(BinaryReader reader)
     {
         var result = new ModableItemData();
 
-        result.TdbId1 = reader.ReadUInt64();
-        result.Unknown2 = reader.ReadUInt32();
-        result.Unknown3 = reader.ReadSingle();
+        result.ModHeaderThing = ReadModHeaderThing(reader);
         result.RootNode = ReadKind2DataNode(reader);
 
         return result;
@@ -252,9 +305,7 @@ public class InventoryHelper
 
     private static void WriteModableItemData(BinaryWriter writer, ModableItemData mod)
     {
-        writer.Write((ulong)mod.TdbId1);
-        writer.Write(mod.Unknown2);
-        writer.Write(mod.Unknown3);
+        WriteModHeaderThing(writer, mod.ModHeaderThing);
         WriteKind2DataNode(writer, mod.RootNode);
     }
 
@@ -272,9 +323,9 @@ public class InventoryHelper
         }
 
         result.Unknown2 = reader.ReadUInt32();
-        result.TdbId2 = reader.ReadUInt64();
-        result.Unknown3 = reader.ReadUInt32();
-        result.Unknown4 = reader.ReadSingle();
+
+        // Always the same as in the parent ModableItem
+        result.ModHeaderThing = ReadModHeaderThing(reader);
 
         return result;
     }
@@ -290,9 +341,7 @@ public class InventoryHelper
             WriteKind2DataNode(writer, child);
         }
         writer.Write(mod.Unknown2);
-        writer.Write((ulong)mod.TdbId2);
-        writer.Write(mod.Unknown3);
-        writer.Write(mod.Unknown4);
+        WriteModHeaderThing(writer, mod.ModHeaderThing);
     }
 
     public static ulong GetItemIdHash(TweakDBID tweakDbId, uint seed, ushort unk1 = 0)
