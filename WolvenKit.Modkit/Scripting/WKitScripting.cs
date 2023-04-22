@@ -19,8 +19,8 @@ namespace WolvenKit.Modkit.Scripting;
 public class WKitScripting
 {
     protected readonly ILoggerService _loggerService;
-    protected IArchiveManager _archiveManager;
-    protected Red4ParserService _redParserService;
+    protected readonly IArchiveManager _archiveManager;
+    protected readonly Red4ParserService _redParserService;
 
     public WKitScripting(ILoggerService loggerService, IArchiveManager archiveManager, Red4ParserService parserService)
     {
@@ -38,11 +38,7 @@ public class WKitScripting
     public virtual IGameFile? GetFileFromBase(string path)
     {
         var file = _archiveManager.Lookup(FNV1A64HashAlgorithm.HashString(path));
-        if (file.HasValue)
-        {
-            return file.Value;
-        }
-        return null;
+        return file.HasValue ? file.Value : null;
     }
 
     /// <summary>
@@ -69,11 +65,7 @@ public class WKitScripting
     public virtual IGameFile? GetFileFromBase(ulong hash)
     {
         var file = _archiveManager.Lookup(hash);
-        if (file.HasValue)
-        {
-            return file.Value;
-        }
-        return null;
+        return file.HasValue ? file.Value : null;
     }
 
     /// <summary>
@@ -123,28 +115,12 @@ public class WKitScripting
     /// </summary>
     /// <param name="path">file path to check</param>
     /// <returns></returns>
-    public virtual bool FileExistsInArchive(string path)
-    {
-        if (string.IsNullOrEmpty(path))
-        {
-            return false;
-        }
-
-        return FileExistsInArchive(FNV1A64HashAlgorithm.HashString(path));
-    }
+    public virtual bool FileExistsInArchive(string path) => !string.IsNullOrEmpty(path) && FileExistsInArchive(FNV1A64HashAlgorithm.HashString(path));
 
     /// <summary>
     /// Check if file exists in the game archives
     /// </summary>
     /// <param name="hash">hash value to be checked</param>
     /// <returns></returns>
-    public virtual bool FileExistsInArchive(ulong hash)
-    {
-        if (hash == 0)
-        {
-            return false;
-        }
-        
-        return _archiveManager.Lookup(hash).HasValue;
-    }
+    public virtual bool FileExistsInArchive(ulong hash) => hash != 0 && _archiveManager.Lookup(hash).HasValue;
 }

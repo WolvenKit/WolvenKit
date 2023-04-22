@@ -34,8 +34,7 @@ public partial class ScriptService : ObservableObject
 
         IsRunning = true;
 
-        var sw = new Stopwatch();
-        sw.Start();
+        var sw = Stopwatch.StartNew();
 
         DocumentLoader.Default.DiscardCachedDocuments();
 
