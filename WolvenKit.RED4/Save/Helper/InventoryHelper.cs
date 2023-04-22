@@ -91,7 +91,9 @@ public class InventoryHelper
     {
         public TweakDBID LootItemId { get; set; }
         public uint Unknown2 { get; set; }
-        public float Unknown3 { get; set; }
+
+        // Not sure yet, which level this is, but...
+        public float Level { get; set; }
 
         public bool Equals(ModHeaderThing? other)
         {
@@ -105,7 +107,7 @@ public class InventoryHelper
                 return true;
             }
 
-            return LootItemId.Equals(other.LootItemId) && Unknown2 == other.Unknown2 && Unknown3.Equals(other.Unknown3);
+            return LootItemId.Equals(other.LootItemId) && Unknown2 == other.Unknown2 && Level.Equals(other.Level);
         }
 
         public override bool Equals(object? obj)
@@ -128,7 +130,7 @@ public class InventoryHelper
             return Equals((ModHeaderThing)obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(LootItemId, Unknown2, Unknown3);
+        public override int GetHashCode() => HashCode.Combine(LootItemId, Unknown2, Level);
     }
 
     public class ItemData : INodeData
@@ -271,7 +273,7 @@ public class InventoryHelper
         writer.Write(modq.Quantity);
         writer.Write((ulong)modq.ModHeaderThing.LootItemId);
         writer.Write(modq.ModHeaderThing.Unknown2);
-        writer.Write(modq.ModHeaderThing.Unknown3);
+        writer.Write(modq.ModHeaderThing.Level);
         WriteKind2DataNode(writer, modq.RootNode);
     }
 
@@ -281,7 +283,7 @@ public class InventoryHelper
 
         result.LootItemId = reader.ReadUInt64();
         result.Unknown2 = reader.ReadUInt32();
-        result.Unknown3 = reader.ReadSingle();
+        result.Level = reader.ReadSingle();
 
         return result;
     }
@@ -290,7 +292,7 @@ public class InventoryHelper
     {
         writer.Write((ulong)modHeaderThing.LootItemId);
         writer.Write(modHeaderThing.Unknown2);
-        writer.Write(modHeaderThing.Unknown3);
+        writer.Write(modHeaderThing.Level);
     }
 
     public static ModableItemData ReadModableItemData(BinaryReader reader)
