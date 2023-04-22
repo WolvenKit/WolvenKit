@@ -14,20 +14,21 @@ namespace WolvenKit.Modkit.RED4
         /// <summary>
         /// Exports (Uncooks) a physical REDengine file into its raw file
         /// </summary>
-        /// <param name="cr2wfile"></param>
+        /// <param name="cr2wFile"></param>
         /// <param name="args"></param>
         /// <param name="basedir"></param>
-        /// <param name="rawoutdir"></param>
-        public bool Export(FileInfo cr2wfile, GlobalExportArgs args, DirectoryInfo basedir,
-            DirectoryInfo? rawoutdir = null, ECookedFileFormat[]? forcebuffers = null)
+        /// <param name="rawOutDir"></param>
+        /// <param name="forceBuffers"></param>
+        public bool Export(FileInfo cr2wFile, GlobalExportArgs args, DirectoryInfo basedir,
+            DirectoryInfo? rawOutDir = null, ECookedFileFormat[]? forceBuffers = null)
         {
             try
             {
-                if (cr2wfile is null or { Exists: false })
+                if (cr2wFile is null or { Exists: false })
                 {
                     return false;
                 }
-                if (cr2wfile.Directory is { Exists: false })
+                if (cr2wFile.Directory is { Exists: false })
                 {
                     return false;
                 }
@@ -35,32 +36,32 @@ namespace WolvenKit.Modkit.RED4
                 // if no basedir is supplied use the file directory
                 if (basedir is not { Exists: true })
                 {
-                    basedir = cr2wfile.Directory.NotNull();
+                    basedir = cr2wFile.Directory.NotNull();
                 }
-                if (rawoutdir is not { Exists: true })
+                if (rawOutDir is not { Exists: true })
                 {
-                    rawoutdir = cr2wfile.Directory.NotNull();
+                    rawOutDir = cr2wFile.Directory.NotNull();
                 }
 
-                if (!cr2wfile.FullName.Contains(basedir.FullName))
+                if (!cr2wFile.FullName.Contains(basedir.FullName))
                 {
                     return false;
                 }
 
-                var ext = Path.GetExtension(cr2wfile.FullName).TrimStart('.');
+                var ext = Path.GetExtension(cr2wFile.FullName).TrimStart('.');
 
                 // read file
-                using var fs = new FileStream(cr2wfile.FullName, FileMode.Open, FileAccess.Read);
+                using var fs = new FileStream(cr2wFile.FullName, FileMode.Open, FileAccess.Read);
                 using var br = new BinaryReader(fs);
 
-                args.Get<WemExportArgs>().FileName = cr2wfile.FullName;
+                args.Get<WemExportArgs>().FileName = cr2wFile.FullName;
 
-                var relpath = cr2wfile.FullName.RelativePath(basedir);
-                return UncookBuffers(fs, relpath, args, rawoutdir, forcebuffers);
+                var relPath = cr2wFile.FullName.RelativePath(basedir);
+                return UncookBuffers(fs, relPath, args, rawOutDir, forceBuffers);
             }
             catch(System.Exception e)
             {
-                _loggerService.Error($"Failed to export {cr2wfile.Name}: {e.Message}");
+                _loggerService.Error($"Failed to export {cr2wFile?.Name}: {e.Message}");
                 _loggerService.Debug(e.ToString());
                 return false;
             }
