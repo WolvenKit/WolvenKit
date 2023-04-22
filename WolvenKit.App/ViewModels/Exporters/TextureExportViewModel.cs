@@ -203,6 +203,7 @@ public partial class TextureExportViewModel : ExportViewModel
                     morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                 }
                 morphTargetExportArgs.ModFolderPath = proj.ModDirectory;
+                morphTargetExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
             }
             if (item.Properties is OpusExportArgs opusExportArgs)
             {

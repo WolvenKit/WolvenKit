@@ -461,7 +461,7 @@ namespace WolvenKit.Modkit.RED4
                     // actual type extension we want it to...
                     var typePreservingOutfile = new FileInfo($"{outfile.FullName}.dummyextguardthatwillberemoved");
 
-                    return ExportMorphTargets(cr2wStream, typePreservingOutfile, settings.Get<MorphTargetExportArgs>().Archives, modFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+                    return ExportMorphTargets(cr2wStream, typePreservingOutfile, settings.Get<MorphTargetExportArgs>(), modFolderPath);
                 
                 case ECookedFileFormat.anims:
                     try

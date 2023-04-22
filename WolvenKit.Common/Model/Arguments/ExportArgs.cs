@@ -66,6 +66,7 @@ namespace WolvenKit.Common.Model.Arguments
     public class MorphTargetExportArgs : ExportArgs
     {
         private bool _isBinary = true;
+        private EUncookExtension _uncookExtension = EUncookExtension.png;
 
         /// <summary>
         /// Binary Export Bool, Decides between GLB and GLTF
@@ -75,6 +76,15 @@ namespace WolvenKit.Common.Model.Arguments
         [Description("If selected the mesh will be exported as GLB, if unchecked as GLTF")]
         [WkitScriptAccess("Binary")]
         public bool IsBinary { get => _isBinary; set => SetProperty(ref _isBinary, value); }
+
+        /// <summary>
+        /// Morphtarget Uncook Format for embeded textures
+        /// </summary>
+        [Category("Export Settings")]
+        [Display(Name = "MorphTarget Textures Export Type")]
+        [WkitScriptAccess("ImageFormat")]
+        public EUncookExtension UncookExtension { get => _uncookExtension; set => SetProperty(ref _uncookExtension, value); }
+
         /// <summary>
         /// List of Archives for Morphtarget Export.
         /// </summary>
@@ -85,6 +95,11 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Browsable(false)]
         public string? ArchiveDepot { get; set; }
+        /// <summary>
+        /// Material Repository path for Morphtarget Textures.
+        /// </summary>
+        [Browsable(false)]
+        public string? MaterialRepo { get; set; }
 
         [Browsable(false)]
         public string? ModFolderPath { get; set; }

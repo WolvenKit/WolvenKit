@@ -5,8 +5,10 @@ using System.Linq;
 using Microsoft.Extensions.DependencyModel;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -23,7 +25,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<ICyberGameArchive> archives, string modFolder, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
+        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, MorphTargetExportArgs morphTargetExportArgs, string modFolder, ValidationMode vMode = ValidationMode.TryFix)
         {
             var cr2w = _parserService.ReadRed4File(targetStream);
             if (cr2w is not { RootChunk: MorphTargetMesh morphBlob } || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendBlob)
@@ -34,9 +36,9 @@ namespace WolvenKit.Modkit.RED4
 
             RawArmature? rig = null;
 
-            var hash = morphBlob.BaseMesh.DepotPath.GetRedHash(); //FNV1A64HashAlgorithm.HashString(morphBlob.BaseMesh.DepotPath.ToString().NotNull());
+            var hash = morphBlob.BaseMesh.DepotPath.GetRedHash();
             var meshStream = new MemoryStream();
-            foreach (var ar in archives)
+            foreach (var ar in morphTargetExportArgs.Archives)
             {
                 if (ar.Files.TryGetValue(hash, out var gameFile))
                 {
@@ -93,13 +95,21 @@ namespace WolvenKit.Modkit.RED4
                 return true;
             }
 
-            if (isGLBinary)
+            if (morphTargetExportArgs.IsBinary)
             {
                 model.SaveGLB(outfile.FullName, new WriteSettings(vMode));
             }
             else
             {
                 model.SaveGLTF(outfile.FullName, new WriteSettings(vMode));
+            }
+
+            if (morphTargetExportArgs.MaterialRepo is null)
+            {
+                _loggerService.Error("Materials requested but Depot path is not set: choose a Depot location within Settings for generating materials.");
+                targetStream.Dispose();
+                targetStream.Close();
+                return false;
             }
 
             var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_textures");
@@ -111,7 +121,14 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < textureStreams.Count; i++)
             {
-                File.WriteAllBytes(Path.Combine(dir.FullName, $"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
+                textureStreams[i].Position = 0;
+                byte[] outBytes;
+                if (morphTargetExportArgs.UncookExtension != EUncookExtension.dds)
+                    outBytes = Texconv.ConvertFromDds(textureStreams[i], morphTargetExportArgs.UncookExtension);
+                else
+                    outBytes = textureStreams[i].ToArray();
+
+                File.WriteAllBytes(Path.Combine(dir.FullName, $"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.{morphTargetExportArgs.UncookExtension}"), outBytes);
             }
 
             targetStream.Dispose();

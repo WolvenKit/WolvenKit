@@ -144,6 +144,7 @@ public partial class ConsoleFunctions
             exportArgs.Get<MlmaskExportArgs>().UncookExtension = options.uext.Value;
             exportArgs.Get<MeshExportArgs>().MaterialUncookExtension = options.uext.Value;
         }
+
         if (options.meshExportType != null)
         {
             exportArgs.Get<MeshExportArgs>().meshExportType = options.meshExportType.Value;
@@ -160,6 +161,8 @@ public partial class ConsoleFunctions
         {
             exportArgs.Get<MeshExportArgs>().LodFilter = true;
         }
+
+        exportArgs.Get<MorphTargetExportArgs>().MaterialRepo = exportArgs.Get<MeshExportArgs>().MaterialRepo;
 
         var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;
         if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
