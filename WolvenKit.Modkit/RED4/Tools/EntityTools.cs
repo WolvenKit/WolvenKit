@@ -20,7 +20,7 @@ namespace WolvenKit.Modkit.RED4
         public bool GetStreamFromResourcePath(ResourcePath resourcePath, [NotNullWhen(true)] out Stream? stream)
         {
             var file = _archiveManager.Lookup(resourcePath.GetRedHash());
-            if (file.HasValue && file.Value is FileEntry fe)
+            if (file is { HasValue: true, Value: FileEntry fe })
             {
                 stream = new MemoryStream();
                 fe.Extract(stream);
@@ -44,15 +44,8 @@ namespace WolvenKit.Modkit.RED4
             return false;
         }
 
-        public bool ExportEntity(Stream entStream, CName appearance, FileInfo outfile)
-        {
-            if (_parserService.TryReadRed4File(entStream, out var cr2w))
-            {
-                return ExportEntity(cr2w, appearance, outfile);
-            }
-
-            return false;
-        }
+        public bool ExportEntity(Stream entStream, CName appearance, FileInfo outfile) 
+            => _parserService.TryReadRed4File(entStream, out var cr2w) && ExportEntity(cr2w, appearance, outfile);
 
         public bool ExportEntity(CR2WFile entFile, CName appearance, FileInfo outfile)
         {
@@ -106,7 +99,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     NotResolvableException.ThrowIfNotResolvable(esc.Name);
 
-                    if (esc.ParentTransform != null && esc.ParentTransform.GetValue() is entHardTransformBinding ehtb)
+                    if (esc.ParentTransform?.GetValue() is entHardTransformBinding ehtb)
                     {
                         NotResolvableException.ThrowIfNotResolvable(ehtb.BindName);
 
@@ -160,7 +153,7 @@ namespace WolvenKit.Modkit.RED4
 
                     var root = ModelRoot.CreateModel();
 
-                    if (animsFile is not null && GetFileFromResourcePath(anims.Rig.DepotPath, out var rigFile))
+                    if (GetFileFromResourcePath(anims.Rig.DepotPath, out var rigFile))
                     {
                         GetAnimation(animsFile, rigFile, ref root, true);
                     }

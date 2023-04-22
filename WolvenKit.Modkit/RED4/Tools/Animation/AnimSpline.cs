@@ -25,7 +25,7 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
             blob.ReadBuffer();
 
-            //boneidx time value
+            // boneidx time value
             var positions = new Dictionary<ushort, Dictionary<float, Vec3>>();
             var rotations = new Dictionary<ushort, Dictionary<float, Quat>>();
             var scales = new Dictionary<ushort, Dictionary<float, Vec3>>();
