@@ -21,10 +21,12 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, GltfImportArgs args/*, Stream outStream = null*/)
+        public bool ImportMorphTargets(FileInfo inGltfFile, Stream inTargetStream, GltfImportArgs args/*, Stream outStream = null*/)
         {
-            var cr2w = _parserService.ReadRed4File(intargetStream);
-            if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh targetRoot || targetRoot.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderblob || renderblob.BaseBlob.Chunk is not rendRenderMeshBlob)
+            var cr2w = _parserService.ReadRed4File(inTargetStream);
+            if (cr2w is not { RootChunk: MorphTargetMesh targetRoot } 
+                || targetRoot.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderBlob 
+                || renderBlob.BaseBlob.Chunk is not rendRenderMeshBlob)
             {
                 return false;
             }
@@ -42,7 +44,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
                 var meshCr2w = _parserService.ReadRed4File(meshStream);
-                if (meshCr2w != null && meshCr2w.RootChunk is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob rendBlob)
+                if (meshCr2w is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } mesh })
                 {
                     newRig = MeshTools.GetOrphanRig(mesh);
                 }
@@ -51,7 +53,7 @@ namespace WolvenKit.Modkit.RED4
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
             VerifyGLTF(model, args);
 
-            var RawMeshes = new List<RawMeshContainer>();
+            var rawMeshes = new List<RawMeshContainer>();
 
             foreach (var node in model.LogicalNodes)
             {
@@ -59,17 +61,17 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var rawMesh = GltfMeshToRawContainer(node);
 
-                    RawMeshes.Add(rawMesh);
+                    rawMeshes.Add(rawMesh);
                 }
                 else if (args.FillEmpty)
                 {
-                    RawMeshes.Add(CreateEmptyMesh(node.Name));
+                    rawMeshes.Add(CreateEmptyMesh(node.Name));
                 }
             }
 
-            RawMeshes = RawMeshes.OrderBy(o => o.name).ToList();
+            rawMeshes = rawMeshes.OrderBy(o => o.name).ToList();
 
-            var (maxBound, minBound) = CalculateModelBoundsWithMorphs(RawMeshes, model);
+            var (maxBound, minBound) = CalculateModelBoundsWithMorphs(rawMeshes, model);
 
             targetRoot.BoundingBox.Max = new Vector4 { X = maxBound.X, Y = maxBound.Y, Z = maxBound.Z, W = 1f };
             targetRoot.BoundingBox.Min = new Vector4 { X = minBound.X, Y = minBound.Y, Z = minBound.Z, W = 1f };
@@ -88,9 +90,9 @@ namespace WolvenKit.Modkit.RED4
                 };
             }
 
-            MeshTools.UpdateMeshJoints(ref RawMeshes, newRig, oldRig);
+            MeshTools.UpdateMeshJoints(ref rawMeshes, newRig, oldRig);
 
-            var red4Meshes = RawMeshes.Select(_ => RawMeshToRE4Mesh(_, baseQuantScale, baseQuantOffset)).ToList();
+            var red4Meshes = rawMeshes.Select(_ => RawMeshToRE4Mesh(_, baseQuantScale, baseQuantOffset)).ToList();
 
             var meshBuffer = new MemoryStream();
             var meshesInfo = BufferWriter(red4Meshes, ref meshBuffer, args);
@@ -98,14 +100,13 @@ namespace WolvenKit.Modkit.RED4
             meshesInfo.quantScale = baseQuantScale;
             meshesInfo.quantTrans = baseQuantOffset;
 
-            // ^ This basically finishes up the mesh setup. Morphtargets are
+            // ^ This basically finishes up the mesh setup. MorphTargets are
             // effectively injected at this point, and the mesh written out
             // at the end. The mesh processing needs to be unified so that
             // it's not duplicated here and in MeshImportTools.
 
             var diffsBuffer = new MemoryStream();
             var mappingsBuffer = new MemoryStream();
-            var texbuffer = new MemoryStream();
 
             // Reset some more data - why is this not a new data structure, again?
             // Resetting up here because this is mutable data so there's no telling
@@ -126,40 +127,44 @@ namespace WolvenKit.Modkit.RED4
                 throw new Exception("Mesh contains no morph targets to import.");
             }
 
-            renderblob.Header.NumDiffs = 0;
-            renderblob.Header.NumDiffsMapping = 0;
-            renderblob.Header.NumVertexDiffsInEachChunk = new(morphTargetCount);
-            renderblob.Header.NumVertexDiffsMappingInEachChunk = new(morphTargetCount);
-            renderblob.Header.TargetStartsInVertexDiffs = new(morphTargetCount);
-            renderblob.Header.TargetStartsInVertexDiffsMapping = new(morphTargetCount);
-            renderblob.Header.TargetPositionDiffOffset = new(morphTargetCount);
-            renderblob.Header.TargetPositionDiffScale = new(morphTargetCount);
+            renderBlob.Header.NumDiffs = 0;
+            renderBlob.Header.NumDiffsMapping = 0;
+            renderBlob.Header.NumVertexDiffsInEachChunk = new CArray<CArray<CUInt32>>(morphTargetCount);
+            renderBlob.Header.NumVertexDiffsMappingInEachChunk = new CArray<CArray<CUInt32>>(morphTargetCount);
+            renderBlob.Header.TargetStartsInVertexDiffs = new CArray<CUInt32>(morphTargetCount);
+            renderBlob.Header.TargetStartsInVertexDiffsMapping = new CArray<CUInt32>(morphTargetCount);
+            renderBlob.Header.TargetPositionDiffOffset = new CArray<Vector4>(morphTargetCount);
+            renderBlob.Header.TargetPositionDiffScale = new CArray<Vector4>(morphTargetCount);
 
             for (var i = 0; i < morphTargetCount; i++)
             {
-                renderblob.Header.NumVertexDiffsInEachChunk[i] = new(subMeshesCount);
-                renderblob.Header.NumVertexDiffsMappingInEachChunk[i] = new(subMeshesCount);
+                renderBlob.Header.NumVertexDiffsInEachChunk[i] = new CArray<CUInt32>(subMeshesCount);
+                renderBlob.Header.NumVertexDiffsMappingInEachChunk[i] = new CArray<CUInt32>(subMeshesCount);
 
-                renderblob.Header.TargetStartsInVertexDiffs[i] = 0;
-                renderblob.Header.TargetStartsInVertexDiffsMapping[i] = 0;
+                renderBlob.Header.TargetStartsInVertexDiffs[i] = 0;
+                renderBlob.Header.TargetStartsInVertexDiffsMapping[i] = 0;
 
-                renderblob.Header.TargetPositionDiffOffset[i] = new Vec4(0f, 0f, 0f, 0);
-                renderblob.Header.TargetPositionDiffScale[i] = new Vec4(1f, 1f, 1f, 0);
+                renderBlob.Header.TargetPositionDiffOffset[i] = new Vec4(0f, 0f, 0f, 0);
+                renderBlob.Header.TargetPositionDiffScale[i] = new Vec4(1f, 1f, 1f, 0);
             }
 
             // Do the thing
-            ConvertAndSetTargetsData(cr2w, (uint)morphTargetCount, (uint)subMeshesCount, model, renderblob, diffsBuffer, mappingsBuffer);
+            
+            // fix possible overflow in unchecked context
+            var morphTargetCountUInt = morphTargetCount >= 0 ? (uint)morphTargetCount : throw new InvalidOperationException("Morph target count cannot be negative.");
+            var subMeshesCountUInt = subMeshesCount >= 0 ? (uint)subMeshesCount : throw new InvalidOperationException("Sub-mesh count cannot be negative.");
+            ConvertAndSetTargetsData(cr2w, morphTargetCountUInt, subMeshesCountUInt, model, renderBlob, diffsBuffer, mappingsBuffer);
 
             // Well most of the thing, this part of the thing is here instead
-            renderblob.DiffsBuffer.Buffer.SetBytes(diffsBuffer.ToArray());
-            renderblob.MappingBuffer.Buffer.SetBytes(mappingsBuffer.ToArray());
+            renderBlob.DiffsBuffer.Buffer.SetBytes(diffsBuffer.ToArray());
+            renderBlob.MappingBuffer.Buffer.SetBytes(mappingsBuffer.ToArray());
 
             // Fill out the rest (render data mostly)
             var ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
 
             ms.Seek(0, SeekOrigin.Begin);
-            intargetStream.SetLength(0);
-            ms.CopyTo(intargetStream);
+            inTargetStream.SetLength(0);
+            ms.CopyTo(inTargetStream);
  
             return true;
         }
@@ -236,9 +241,9 @@ namespace WolvenKit.Modkit.RED4
             var max = new Vec3(morphPositionDeltas[0].X, -morphPositionDeltas[0].Z, morphPositionDeltas[0].Y);
             var min = new Vec3(morphPositionDeltas[0].X, -morphPositionDeltas[0].Z, morphPositionDeltas[0].Y);
 
-            for (var i = 0; i < model.LogicalMeshes.Count; i++)
+            foreach (var mesh in model.LogicalMeshes)
             {
-                morphPositionDeltas = model.LogicalMeshes[i].Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array();
+                morphPositionDeltas = mesh.Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array();
 
                 max.X = Math.Max(max.X, morphPositionDeltas.Max(l => l.X));
                 max.Y = Math.Max(max.Y, morphPositionDeltas.Max(l => -l.Z));

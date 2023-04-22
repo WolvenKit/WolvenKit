@@ -91,17 +91,17 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // write texture to file
-            DirectoryInfo? subdir = null;
+            DirectoryInfo? subDir = null;
             if (args.AsList)
             {
-                subdir = new DirectoryInfo(Path.ChangeExtension(outfile.FullName, null) + "_layers");
-                if (!subdir.Exists)
+                subDir = new DirectoryInfo(Path.ChangeExtension(outfile.FullName, null) + "_layers");
+                if (!subDir.Exists)
                 {
-                    Directory.CreateDirectory(subdir.FullName);
+                    Directory.CreateDirectory(subDir.FullName);
                 }
             }
 
-            if ((args.AsList && subdir is null) || (!args.AsList && outfile.Directory is null))
+            if ((args.AsList && subDir is null) || (!args.AsList && outfile.Directory is null))
             {
                 _loggerService.Error("directory was null");
                 return false;
@@ -113,7 +113,7 @@ namespace WolvenKit.Modkit.RED4
             foreach (var img in GetRedImages(blob))
             {
                 var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{cnt++}";
-                var newPath = Path.Combine(args.AsList ? subdir!.FullName : outfile.Directory!.FullName, $"{mFilename}.{args.UncookExtension}");
+                var newPath = Path.Combine(args.AsList ? subDir!.FullName : outfile.Directory!.FullName, $"{mFilename}.{args.UncookExtension}");
 
                 var buffer = args.UncookExtension switch
                 {
@@ -130,15 +130,15 @@ namespace WolvenKit.Modkit.RED4
                 File.WriteAllBytes(newPath, buffer);
                 if (args.AsList)
                 {
-                    masks.Add($"{subdir!.Name}/{mFilename}.{args.UncookExtension}");
+                    masks.Add($"{subDir!.Name}/{mFilename}.{args.UncookExtension}");
                 }
             }
 
             if (args.AsList)
             {
                 // write metadata
-                var masklist = Path.ChangeExtension(outfile.FullName, "masklist");
-                File.WriteAllLines(masklist, masks.ToArray());
+                var maskList = Path.ChangeExtension(outfile.FullName, "masklist");
+                File.WriteAllLines(maskList, masks.ToArray());
             }
 
             return true;

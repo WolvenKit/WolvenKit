@@ -117,10 +117,8 @@ namespace WolvenKit.Modkit.RED4.Opus
                             Info.WriteOpusFromPak(ms, _rawFolder, i);
                             return true;
                         }
-                        else
-                        {
-                            return false;
-                        }
+
+                        return false;
                     }
                     if (Info.OpusCount == i + 1)
                     {
@@ -145,35 +143,30 @@ namespace WolvenKit.Modkit.RED4.Opus
                 return false;
             }
 
-            var foundids = new List<uint>();
-            foreach (var wav in wavFiles)
-            {
-                var id = Convert.ToUInt32(Path.GetFileNameWithoutExtension(wav));
-                foundids.Add(id);
-            }
+            var foundIds = wavFiles.Select(wav => Convert.ToUInt32(Path.GetFileNameWithoutExtension(wav))).ToList();
 
-            var validids = new List<uint>();
-            for (var i = 0; i < foundids.Count; i++)
+            var validIds = new List<uint>();
+            foreach (var id in foundIds)
             {
                 for (var e = 0; e < Info.OpusCount; e++)
                 {
-                    if (Info.OpusHashes[e] == foundids[i])
+                    if (Info.OpusHashes[e] == id)
                     {
-                        validids.Add(foundids[i]);
+                        validIds.Add(id);
                         break;
                     }
                 }
             }
-            if (validids.Count < 1)
+            if (validIds.Count < 1)
             {
                 return false;
             }
 
             var modStreams = new Stream[Info.PackIndices[Info.OpusCount - 1] + 1];
 
-            for (var i = 0; i < validids.Count; i++)
+            foreach (var id in validIds)
             {
-                var name = Path.Combine(_rawFolder.FullName, Convert.ToString(validids[i]) + ".opus");
+                var name = Path.Combine(_rawFolder.FullName, Convert.ToString(id) + ".opus");
                 var proc = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusenc.exe"))
                 {
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
@@ -187,7 +180,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                     p?.WaitForExit();
                 }
 
-                var procnew = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusdec.exe"))
+                var procNew = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusdec.exe"))
                 {
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
                     Arguments = $" \"{name}\" \"{name.Replace("opus", "wav")}\"",
@@ -195,12 +188,12 @@ namespace WolvenKit.Modkit.RED4.Opus
                     RedirectStandardOutput = true,
                     CreateNoWindow = true,
                 };
-                using (var p = Process.Start(procnew))
+                using (var p = Process.Start(procNew))
                 {
                     p?.WaitForExit();
                 }
 
-                var procn = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusenc.exe"))
+                var procN = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusenc.exe"))
                 {
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
                     Arguments = $" \"{name.Replace("opus", "wav")}\" \"{name}\" --serial 42 --quiet --padding 0 --vbr --comp 10 --framesize 20 ",
@@ -208,7 +201,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                     RedirectStandardOutput = true,
                     CreateNoWindow = true,
                 };
-                using (var p = Process.Start(procn))
+                using (var p = Process.Start(procN))
                 {
                     p?.WaitForExit();
                 }
@@ -217,9 +210,10 @@ namespace WolvenKit.Modkit.RED4.Opus
                 {
                     for (var e = 0; e < Info.OpusCount; e++)
                     {
-                        if (validids[i] == Info.OpusHashes[e])
+                        if (id == Info.OpusHashes[e])
                         {
                             int pakIdx = Info.PackIndices[e];
+                            // TODO: expression is always false according to nullable ref types' annotations
                             if (modStreams[pakIdx] == null)
                             {
                                 var pakName = "base\\sound\\soundbanks\\sfx_container_" + pakIdx + ".opuspak";
@@ -234,15 +228,16 @@ namespace WolvenKit.Modkit.RED4.Opus
                                     ModTools.ExtractSingleToStream(_soundBanks, containerHash, modStreams[pakIdx]);
                                 }
                             }
-                            Info.WriteOpusToPak(new MemoryStream(File.ReadAllBytes(name)), ref modStreams[pakIdx], validids[i], new MemoryStream(File.ReadAllBytes(name.Replace("opus", "wav"))));
+                            Info.WriteOpusToPak(new MemoryStream(File.ReadAllBytes(name)), ref modStreams[pakIdx], id, new MemoryStream(File.ReadAllBytes(name.Replace("opus", "wav"))));
                         }
                     }
                 }
             }
 
-            var writeinfo = false;
+            var writeInfo = false;
             for (var i = 0; i < modStreams.Length; i++)
             {
+                // TODO: expression is always true according to nullable ref types' annotations
                 if (modStreams[i] != null)
                 {
                     var pakName = "base\\sound\\soundbanks\\sfx_container_" + i + ".opuspak";
@@ -251,10 +246,10 @@ namespace WolvenKit.Modkit.RED4.Opus
                     var bytes = new byte[temp.Length];
                     temp.Read(bytes, 0, Convert.ToInt32(temp.Length));
                     File.WriteAllBytes(Path.Combine(_modFolder.FullName, pakName), bytes);
-                    writeinfo = true;
+                    writeInfo = true;
                 }
             }
-            if (writeinfo)
+            if (writeInfo)
             {
                 Info.WriteOpusInfo(new DirectoryInfo(Path.Combine(_modFolder.FullName, "base\\sound\\soundbanks")));
 
