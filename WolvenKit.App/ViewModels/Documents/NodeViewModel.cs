@@ -37,7 +37,13 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
 
         foreach (var socket in node.Sockets)
         {
-            var svm = new SocketViewModel(socket.Chunk.NotNull());
+            ArgumentNullException.ThrowIfNull(socket.Chunk);
+
+            if (!Graph.SocketLookup.TryGetValue(socket.Chunk.GetHashCode(), out var svm))
+            {
+                svm = new SocketViewModel(socket.Chunk.NotNull());
+                Graph.SocketLookup.Add(socket.Chunk.GetHashCode(), svm);
+            }
 
             bool isInput;
             if (socket.Chunk is questSocketDefinition qsd)
@@ -61,7 +67,6 @@ public partial class NodeViewModel : ObservableObject, INode<SocketViewModel>
             {
                 Outputs.Add(svm);
             }
-            Graph.SocketLookup.Add(socket.Chunk.GetHashCode(), svm);
         }
 
         ((ObservableCollection<SocketViewModel>)Inputs).CollectionChanged += (sender, e) =>
