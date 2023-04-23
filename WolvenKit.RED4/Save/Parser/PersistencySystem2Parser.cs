@@ -57,10 +57,10 @@ public class PersistencySystem2Reader : Red4Reader
                 break;
             }
 
-            var propertyInfo = ClassHashHelper.GetPropertyInfo(instance.GetType(), propNameHash);
+            var propertyInfo = SaveHashHelper.GetPropertyInfo(instance.GetType(), propNameHash);
             ArgumentNullException.ThrowIfNull(propertyInfo?.RedName);
 
-            var redTypeHash = ClassHashHelper.GetRedTypeHash(propertyInfo);
+            var redTypeHash = SaveHashHelper.GetRedTypeHash(propertyInfo);
             var propTypeHash = BaseReader.ReadUInt64();
 
             if (redTypeHash != propTypeHash)
@@ -121,7 +121,7 @@ public class PersistencySystem2Reader : Red4Reader
     public override IRedHandle ReadCHandle(List<RedTypeInfo> redTypeInfos, uint size)
     {
         var type = RedReflection.GetFullType(redTypeInfos);
-        var clsType = ClassHashHelper.GetTypeFromHash(BaseReader.ReadUInt64())!;
+        var clsType = SaveHashHelper.GetTypeFromHash(BaseReader.ReadUInt64())!;
 
         var instance = ReadClass(clsType, (uint)Remaining);
         if (Activator.CreateInstance(type, instance) is not IRedHandle result)
@@ -163,7 +163,7 @@ public class PersistencySystem2Writer : Red4Writer
             }
 
             BaseWriter.Write(FNV1A64HashAlgorithm.HashString(propertyInfo.RedName));
-            BaseWriter.Write(ClassHashHelper.GetRedTypeHash(propertyInfo));
+            BaseWriter.Write(SaveHashHelper.GetRedTypeHash(propertyInfo));
 
             Write(value);
         }
@@ -216,7 +216,7 @@ public class PersistencySystem2Writer : Red4Writer
     {
         var value = instance.GetValue();
 
-        BaseWriter.Write(ClassHashHelper.GetHashFromType(value.GetType()));
+        BaseWriter.Write(SaveHashHelper.GetHashFromType(value.GetType()));
         WriteClass(value);
     }
 }
@@ -250,7 +250,7 @@ public class PersistencySystem2Parser : INodeParser
                 Type? type = null;
                 if (classHash != 0)
                 {
-                    type = ClassHashHelper.GetTypeFromHash(classHash)!;
+                    type = SaveHashHelper.GetTypeFromHash(classHash)!;
                 }
 
                 var startPos = reader.BaseStream.Position;
@@ -319,7 +319,7 @@ public class PersistencySystem2Parser : INodeParser
                 }
                 else
                 {
-                    writer.Write(ClassHashHelper.GetHashFromType(entry.Data.GetType()));
+                    writer.Write(SaveHashHelper.GetHashFromType(entry.Data.GetType()));
 
                     using var subMemory = new MemoryStream();
                     using var subWriter = new PersistencySystem2Writer(subMemory);

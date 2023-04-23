@@ -3,8 +3,11 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
 
-public class ClassHashHelper
+public class SaveHashHelper
 {
+    private static readonly Dictionary<ulong, Enums.gamedataStatType> s_gamedataStatTypeHashes = new();
+    private static readonly Dictionary<Enums.gamedataStatType, ulong> s_gamedataStatTypeHashesReverse = new();
+
     private static readonly Dictionary<ulong, Type> s_classHashes = new();
     private static Dictionary<Type, ulong> s_classHashesReverse = new();
 
@@ -65,4 +68,36 @@ public class ClassHashHelper
 
     public static ulong GetRedTypeHash(ExtendedPropertyInfo propertyInfo) =>
         FNV1A64HashAlgorithm.HashString(RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags));
+
+    public static Enums.gamedataStatType GetStatType(ulong hash)
+    {
+        if (s_gamedataStatTypeHashes.Count == 0)
+        {
+            foreach (var option in Enum.GetValues<Enums.gamedataStatType>())
+            {
+                var tmpHash = FNV1A64HashAlgorithm.HashString(option.ToString());
+
+                s_gamedataStatTypeHashes.Add(tmpHash, option);
+                s_gamedataStatTypeHashesReverse.Add(option, tmpHash);
+            }
+        }
+
+        return s_gamedataStatTypeHashes.TryGetValue(hash, out var result) ? result : throw new ArgumentOutOfRangeException();
+    }
+
+    public static ulong GetStatHash(Enums.gamedataStatType value)
+    {
+        if (s_gamedataStatTypeHashes.Count == 0)
+        {
+            foreach (var option in Enum.GetValues<Enums.gamedataStatType>())
+            {
+                var tmpHash = FNV1A64HashAlgorithm.HashString(option.ToString());
+
+                s_gamedataStatTypeHashes.Add(tmpHash, option);
+                s_gamedataStatTypeHashesReverse.Add(option, tmpHash);
+            }
+        }
+
+        return s_gamedataStatTypeHashesReverse.TryGetValue(value, out var result) ? result : throw new ArgumentOutOfRangeException();
+    }
 }

@@ -104,6 +104,21 @@ public partial class RedPackageWriter : Red4Writer
         }
     }
 
+    protected override void GenerateBufferBytes(RedBuffer buffer)
+    {
+        if (buffer.Data is ModifiersBuffer modifiersBuffer)
+        {
+            using var ms = new MemoryStream();
+            using var modifiersBufferWriter = new ModifiersBufferWriter(ms);
+
+            modifiersBufferWriter.WriteBuffer(modifiersBuffer);
+
+            var newData = ms.ToArray();
+
+            buffer.SetBytes(newData);
+        }
+    }
+
     public override void Write(IRedEnum instance)
     {
         var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());

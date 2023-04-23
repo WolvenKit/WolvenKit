@@ -138,6 +138,8 @@ public partial class CR2WReader : Red4Reader
             cls.SetProperty(prop.RedName, value);
         }
 
+        PostProcess(value);
+
         if (CollectData)
         {
             if (prop.Name.Contains("Fact") && !prop.Name.Contains("Factor"))
@@ -167,8 +169,6 @@ public partial class CR2WReader : Red4Reader
                 }
             }
         }
-
-        PostProcess(value);
 
         return true;
 
