@@ -108,7 +108,7 @@ public partial class ExtendedScriptService : ScriptService
         }
     }
 
-    public bool OnSaveHook(string ext, CR2WFile cr2wFile)
+    public bool OnSaveHook(string ext, ref CR2WFile cr2wFile)
     {
         if (string.IsNullOrEmpty(ext))
         {
@@ -126,13 +126,26 @@ public partial class ExtendedScriptService : ScriptService
             var dto = new RedFileDto(cr2wFile);
             var json = RedJsonSerializer.Serialize(dto);
 
-            return TestExecute(scriptFilePath, json);
+            if (TestExecute(scriptFilePath, ref json))
+            {
+                if (!RedJsonSerializer.TryDeserialize(json, out RedFileDto? newDto) || newDto?.Data == null)
+                {
+                    _loggerService.Error("Couldn't deserialize return value");
+                    return false;
+                }
+
+                cr2wFile = newDto.Data;
+
+                return true;
+            }
+
+            return false;
         }
 
         return true;
     }
 
-    private bool TestExecute(string file, string json)
+    private bool TestExecute(string file, ref string json)
     {
         var engine = base.GetScriptEngine(new Dictionary<string, object> { { "wkit", _wkit } }, ISettingsManager.GetWScriptDir());
         engine.Script.file = json;
@@ -143,6 +156,7 @@ public partial class ExtendedScriptService : ScriptService
         try
         {
             engine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code);
+            json = engine.Script.file;
         }
         catch (ScriptEngineException ex1)
         {

@@ -162,7 +162,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
             }
             else if (file is not null && Cr2wFile != null)
             {
-                if (!_scriptService.OnSaveHook(Path.GetExtension(FilePath), Cr2wFile))
+                var cr2w = Cr2wFile;
+                if (!_scriptService.OnSaveHook(Path.GetExtension(FilePath), ref cr2w))
                 {
                     _loggerService.Error($"Error while processing onSave script");
 
@@ -173,7 +174,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 }
 
                 using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
-                writer.WriteFile(Cr2wFile);
+                writer.WriteFile(cr2w);
             }
         }
         catch (Exception e)
