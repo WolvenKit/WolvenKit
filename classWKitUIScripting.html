@@ -104,15 +104,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af4ea8a2d0f2897043448bd53346ca02a"><td class="memItemLeft" align="right" valign="top">List&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitUIScripting.html#af4ea8a2d0f2897043448bd53346ca02a">GetProjectFiles</a> (string folderType)</td></tr>
 <tr class="memdesc:af4ea8a2d0f2897043448bd53346ca02a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a list of files from the project  <a href="classWKitUIScripting.html#af4ea8a2d0f2897043448bd53346ca02a">More...</a><br /></td></tr>
 <tr class="separator:af4ea8a2d0f2897043448bd53346ca02a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50924dcdc37c1c5976eb7a1b13c57678"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitUIScripting.html#a50924dcdc37c1c5976eb7a1b13c57678">ExportFiles</a> (dynamic exportList, dynamic? exportSettings=null)</td></tr>
-<tr class="memdesc:a50924dcdc37c1c5976eb7a1b13c57678"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exports a list of files as you would with the export tool.  <a href="classWKitUIScripting.html#a50924dcdc37c1c5976eb7a1b13c57678">More...</a><br /></td></tr>
-<tr class="separator:a50924dcdc37c1c5976eb7a1b13c57678"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64e4f18613d38d060ae5da9f9f6240e5"><td class="memItemLeft" align="right" valign="top">override bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitUIScripting.html#a64e4f18613d38d060ae5da9f9f6240e5">FileExists</a> (string path)</td></tr>
-<tr class="memdesc:a64e4f18613d38d060ae5da9f9f6240e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in either the game archives or the project  <a href="classWKitUIScripting.html#a64e4f18613d38d060ae5da9f9f6240e5">More...</a><br /></td></tr>
-<tr class="separator:a64e4f18613d38d060ae5da9f9f6240e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a213467e55d43da0c989d8182b96f7f1c"><td class="memItemLeft" align="right" valign="top">override bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitUIScripting.html#a213467e55d43da0c989d8182b96f7f1c">FileExists</a> (ulong hash)</td></tr>
-<tr class="memdesc:a213467e55d43da0c989d8182b96f7f1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in either the game archives or the project  <a href="classWKitUIScripting.html#a213467e55d43da0c989d8182b96f7f1c">More...</a><br /></td></tr>
-<tr class="separator:a213467e55d43da0c989d8182b96f7f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6bf7eec04382c9eb45838c5afc92713"><td class="memItemLeft" align="right" valign="top">async void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitUIScripting.html#af6bf7eec04382c9eb45838c5afc92713">ExportFiles</a> (dynamic exportList, dynamic? exportSettings=null)</td></tr>
+<tr class="memdesc:af6bf7eec04382c9eb45838c5afc92713"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exports a list of files as you would with the export tool.  <a href="classWKitUIScripting.html#af6bf7eec04382c9eb45838c5afc92713">More...</a><br /></td></tr>
+<tr class="separator:af6bf7eec04382c9eb45838c5afc92713"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74b43caf815ca9f836176b2da89cf6a3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitUIScripting.html#a74b43caf815ca9f836176b2da89cf6a3">FileExistsInProject</a> (string path)</td></tr>
+<tr class="memdesc:a74b43caf815ca9f836176b2da89cf6a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in the project  <a href="classWKitUIScripting.html#a74b43caf815ca9f836176b2da89cf6a3">More...</a><br /></td></tr>
+<tr class="separator:a74b43caf815ca9f836176b2da89cf6a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5448130c8ff1cd06dd09ccb2c03dffdc"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitUIScripting.html#a5448130c8ff1cd06dd09ccb2c03dffdc">FileExistsInProject</a> (ulong hash)</td></tr>
+<tr class="memdesc:a5448130c8ff1cd06dd09ccb2c03dffdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in the project  <a href="classWKitUIScripting.html#a5448130c8ff1cd06dd09ccb2c03dffdc">More...</a><br /></td></tr>
+<tr class="separator:a5448130c8ff1cd06dd09ccb2c03dffdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f9b87beecc9de3c556932e2ecdf79e4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitUIScripting.html#a5f9b87beecc9de3c556932e2ecdf79e4">FileExists</a> (string path)</td></tr>
+<tr class="memdesc:a5f9b87beecc9de3c556932e2ecdf79e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in either the game archives or the project  <a href="classWKitUIScripting.html#a5f9b87beecc9de3c556932e2ecdf79e4">More...</a><br /></td></tr>
+<tr class="separator:a5f9b87beecc9de3c556932e2ecdf79e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6903c1d491dc7c00cd4cae6d60c0d517"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitUIScripting.html#a6903c1d491dc7c00cd4cae6d60c0d517">FileExists</a> (ulong hash)</td></tr>
+<tr class="memdesc:a6903c1d491dc7c00cd4cae6d60c0d517"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in either the game archives or the project  <a href="classWKitUIScripting.html#a6903c1d491dc7c00cd4cae6d60c0d517">More...</a><br /></td></tr>
+<tr class="separator:a6903c1d491dc7c00cd4cae6d60c0d517"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classWKitScripting"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classWKitScripting')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classWKitScripting.html">WKitScripting</a></td></tr>
 <tr class="memitem:ad5134ed413ba272565a5d91a66b8cd33 inherit pub_methods_classWKitScripting"><td class="memItemLeft" align="right" valign="top">virtual ? IGameFile&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitScripting.html#ad5134ed413ba272565a5d91a66b8cd33">GetFileFromBase</a> (string path)</td></tr>
 <tr class="memdesc:ad5134ed413ba272565a5d91a66b8cd33 inherit pub_methods_classWKitScripting"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a file from the base archives using either a file path or hash  <a href="classWKitScripting.html#ad5134ed413ba272565a5d91a66b8cd33">More...</a><br /></td></tr>
@@ -132,18 +138,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a83749773878cde1cbcf3c85794ad8ba8 inherit pub_methods_classWKitScripting"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitScripting.html#a83749773878cde1cbcf3c85794ad8ba8">ChangeExtension</a> (string path, string extension)</td></tr>
 <tr class="memdesc:a83749773878cde1cbcf3c85794ad8ba8 inherit pub_methods_classWKitScripting"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the extension of the provided string path  <a href="classWKitScripting.html#a83749773878cde1cbcf3c85794ad8ba8">More...</a><br /></td></tr>
 <tr class="separator:a83749773878cde1cbcf3c85794ad8ba8 inherit pub_methods_classWKitScripting"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa61ed74f18535a503600e09cecd1292f inherit pub_methods_classWKitScripting"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitScripting.html#aa61ed74f18535a503600e09cecd1292f">FileExistsInArchive</a> (string path)</td></tr>
+<tr class="memdesc:aa61ed74f18535a503600e09cecd1292f inherit pub_methods_classWKitScripting"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in the game archives  <a href="classWKitScripting.html#aa61ed74f18535a503600e09cecd1292f">More...</a><br /></td></tr>
+<tr class="separator:aa61ed74f18535a503600e09cecd1292f inherit pub_methods_classWKitScripting"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a215f42c54af6122e7f8a3863896f0ebb inherit pub_methods_classWKitScripting"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWKitScripting.html#a215f42c54af6122e7f8a3863896f0ebb">FileExistsInArchive</a> (ulong hash)</td></tr>
+<tr class="memdesc:a215f42c54af6122e7f8a3863896f0ebb inherit pub_methods_classWKitScripting"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in the game archives  <a href="classWKitScripting.html#a215f42c54af6122e7f8a3863896f0ebb">More...</a><br /></td></tr>
+<tr class="separator:a215f42c54af6122e7f8a3863896f0ebb inherit pub_methods_classWKitScripting"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>TODO </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a50924dcdc37c1c5976eb7a1b13c57678"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50924dcdc37c1c5976eb7a1b13c57678">&#9670;&nbsp;</a></span>ExportFiles()</h2>
+<a id="af6bf7eec04382c9eb45838c5afc92713"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6bf7eec04382c9eb45838c5afc92713">&#9670;&nbsp;</a></span>ExportFiles()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void WKitUIScripting.ExportFiles </td>
+          <td class="memname">async void WKitUIScripting.ExportFiles </td>
           <td>(</td>
           <td class="paramtype">dynamic&#160;</td>
           <td class="paramname"><em>exportList</em>, </td>
@@ -180,8 +192,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a64e4f18613d38d060ae5da9f9f6240e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64e4f18613d38d060ae5da9f9f6240e5">&#9670;&nbsp;</a></span>FileExists() <span class="overload">[1/2]</span></h2>
+<a id="a5f9b87beecc9de3c556932e2ecdf79e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f9b87beecc9de3c556932e2ecdf79e4">&#9670;&nbsp;</a></span>FileExists() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -190,7 +202,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">override bool WKitUIScripting.FileExists </td>
+          <td class="memname">virtual bool WKitUIScripting.FileExists </td>
           <td>(</td>
           <td class="paramtype">string&#160;</td>
           <td class="paramname"><em>path</em></td><td>)</td>
@@ -213,12 +225,10 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p>Reimplemented from <a class="el" href="classWKitScripting.html#aa713fb55daecce749ce73b9d875c5a92">WKitScripting</a>.</p>
-
 </div>
 </div>
-<a id="a213467e55d43da0c989d8182b96f7f1c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a213467e55d43da0c989d8182b96f7f1c">&#9670;&nbsp;</a></span>FileExists() <span class="overload">[2/2]</span></h2>
+<a id="a6903c1d491dc7c00cd4cae6d60c0d517"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6903c1d491dc7c00cd4cae6d60c0d517">&#9670;&nbsp;</a></span>FileExists() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -227,7 +237,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">override bool WKitUIScripting.FileExists </td>
+          <td class="memname">virtual bool WKitUIScripting.FileExists </td>
           <td>(</td>
           <td class="paramtype">ulong&#160;</td>
           <td class="paramname"><em>hash</em></td><td>)</td>
@@ -250,7 +260,75 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p>Reimplemented from <a class="el" href="classWKitScripting.html#a2f6a822b7b76ca1a75d61bda0ee40a2b">WKitScripting</a>.</p>
+</div>
+</div>
+<a id="a74b43caf815ca9f836176b2da89cf6a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74b43caf815ca9f836176b2da89cf6a3">&#9670;&nbsp;</a></span>FileExistsInProject() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool WKitUIScripting.FileExistsInProject </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if file exists in the project </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>file path to check</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a5448130c8ff1cd06dd09ccb2c03dffdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5448130c8ff1cd06dd09ccb2c03dffdc">&#9670;&nbsp;</a></span>FileExistsInProject() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool WKitUIScripting.FileExistsInProject </td>
+          <td>(</td>
+          <td class="paramtype">ulong&#160;</td>
+          <td class="paramname"><em>hash</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if file exists in the project </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hash</td><td>hash value to be checked</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 </div>
 </div>
