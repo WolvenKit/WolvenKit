@@ -36,8 +36,6 @@ public partial class ScriptService : ObservableObject
 
         var sw = Stopwatch.StartNew();
 
-        DocumentLoader.Default.DiscardCachedDocuments();
-
         _mainEngine = GetScriptEngine(hostObjects, searchPath);
 
         try
@@ -95,6 +93,8 @@ public partial class ScriptService : ObservableObject
             engine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
             engine.DocumentSettings.SearchPath = searchPath;
         }
+
+        engine.DocumentSettings.Loader.DiscardCachedDocuments();
 
         return engine;
     }

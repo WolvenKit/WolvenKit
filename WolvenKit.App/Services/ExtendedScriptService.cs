@@ -21,20 +21,17 @@ public partial class ExtendedScriptService : ScriptService
     private readonly Dictionary<string, List<ScriptEntry>> _uiScripts = new();
     private readonly Dictionary<string, IScriptableControl> _uiControls = new();
 
-    private readonly Dictionary<string, object> _hostObjects = new();
-
     private readonly WKitUIScripting _wkit;
+    private readonly WScriptUIHelper _ui;
 
     private V8ScriptEngine? _uiEngine;
 
     public ExtendedScriptService(ILoggerService loggerService, WKitUIScripting wkit) : base(loggerService)
     {
         _wkit = wkit;
+        _ui = new WScriptUIHelper(this);
 
         DeployShippedFiles();
-
-        _hostObjects.Add("ui", new WScriptUIHelper(this));
-
         RefreshUIScripts();
     }
 
@@ -174,7 +171,7 @@ public partial class ExtendedScriptService : ScriptService
     {
         UnloadScripts();
 
-        _uiEngine = base.GetScriptEngine(_hostObjects);
+        _uiEngine = base.GetScriptEngine(new Dictionary<string, object> { { "ui", _ui }, { "wkit", _wkit } }, ISettingsManager.GetWScriptDir());
 
         foreach (var file in Directory.GetFiles(ISettingsManager.GetWScriptDir(), "*.wscript"))
         {
