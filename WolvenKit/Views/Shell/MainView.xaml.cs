@@ -40,6 +40,8 @@ namespace WolvenKit.Views.Shell
 
             this.WhenActivated(disposables =>
             {
+                Disposable.Create(dockingAdapter.SaveLayout).DisposeWith(disposables);
+
                 Interactions.ShowConfirmation = input =>
                 {
                     return ShowConfirmation(input);

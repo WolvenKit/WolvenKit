@@ -82,6 +82,11 @@ namespace WolvenKit.Views.Shell
 
         public void SaveLayout()
         {
+            if (ItemsSource == null)
+            {
+                return;
+            }
+
             if (DataContext is AppViewModel { ActiveProject: { } project })
             {
                 SaveLayout(Path.Combine(project.ProjectDirectory, "layout.xml"));
