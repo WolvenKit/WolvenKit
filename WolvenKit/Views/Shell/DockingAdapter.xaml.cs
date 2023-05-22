@@ -205,28 +205,33 @@ namespace WolvenKit.Views.Shell
             catch (Exception e)
             {
                 logger.Error($"Layout load error: {e.Message}");
-                LoadLayoutDefault();
+                LoadLayoutDefault(true);
             }
         }
 
-        public void LoadLayoutDefault()
+        public void LoadLayoutDefault(bool wasCalledFromException = false)
         {
-            var logger = Locator.Current.GetService<ILoggerService>();
-
+            
+            // If user wants to use app settings, load from DefaultLayout.xml.
+            if (_useAppdataStorage && !wasCalledFromException)
+            {
+                LoadLayout();
+                return;
+            }
+            
+            var logger = Locator.Current.GetService<ILoggerService>();; 
             try
             {
-                var reader = XmlReader.Create("DockStatesDefault.xml");
-
-                logger.Info($"Trying to load default layout from {Path.GetFullPath("DockStatesDefault.xml")}...");
-                var isSuccessful = LoadLayout("DockStatesDefault.xml");
+                var settingsFilePath = Path.GetFullPath("DockStatesDefault.xml");
+                using var reader = XmlReader.Create(settingsFilePath);
+                var isSuccessful = LoadLayout(settingsFilePath);
                 logger.Debug($"...Default layout load returned {isSuccessful}");
-
-                reader.Close();
             }
             catch (Exception e)
             {
                 logger.Error($"Default layout load error: {e.Message}");
             }
+
         }
 
         public DataTemplate FindDataTemplate(Type type, FrameworkElement element)
