@@ -1,6 +1,8 @@
+using System.ComponentModel;
+
 namespace WolvenKit.App.Models.Docking;
 
-public interface IDockElement
+public interface IDockElement : INotifyPropertyChanged
 {
     public string Header { get; set; }
 

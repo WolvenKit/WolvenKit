@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -115,6 +116,64 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         UpdateTitle();
 
         ShowFirstTimeSetup();
+
+        DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
+    }
+
+    private void DockedViews_OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.OldItems != null)
+        {
+            foreach (var item in e.OldItems)
+            {
+                if (item is not IDockElement dockElement)
+                {
+                    continue;
+                }
+
+                dockElement.PropertyChanged -= DockedView_OnPropertyChanged;
+                DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+            }
+        }
+
+        if (e.NewItems != null)
+        {
+            foreach (var item in e.NewItems)
+            {
+                if (item is not IDockElement dockElement)
+                {
+                    continue;
+                }
+
+                DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+                dockElement.PropertyChanged += DockedView_OnPropertyChanged;
+            }
+        }
+    }
+
+    public class DockedViewVisibleChangedEventArgs
+    {
+        public DockedViewVisibleChangedEventArgs(IDockElement element)
+        {
+            Element = element;
+        }
+
+        public IDockElement Element { get; }
+    }
+
+    public event EventHandler<DockedViewVisibleChangedEventArgs>? DockedViewVisibleChanged;
+
+    private void DockedView_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "IsVisible")
+        {
+            if (sender is not IDockElement dockElement)
+            {
+                return;
+            }
+
+            DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+        }
     }
 
     private void ProgressService_PropertyChanged(object? sender, PropertyChangedEventArgs e)

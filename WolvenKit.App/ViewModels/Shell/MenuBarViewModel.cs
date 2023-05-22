@@ -1,3 +1,4 @@
+using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
@@ -8,6 +9,8 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class MenuBarViewModel : ObservableObject
 {
+    private bool _automaticUpdate;
+
     public ISettingsManager SettingsManager { get; }
     public AppViewModel MainViewModel { get; }
 
@@ -15,44 +18,41 @@ public partial class MenuBarViewModel : ObservableObject
     {
         MainViewModel = appViewModel;
         SettingsManager = settingsManager;
-
-        MainViewModel.PropertyChanged += MainViewModel_PropertyChanged;
+        
+        MainViewModel.DockedViewVisibleChanged += MainViewModel_OnDockedViewVisibleChanged;
     }
 
-    private void MainViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void MainViewModel_OnDockedViewVisibleChanged(object? sender, AppViewModel.DockedViewVisibleChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(AppViewModel.DockedViews))
+        _automaticUpdate = true;
+
+        switch (e.Element)
         {
-            // hack lazy checkbox setting
-            foreach (var pane in MainViewModel.DockedViews)
-            {
-                switch (pane)
-                {
-                    case ProjectExplorerViewModel:
-                        ProjectExplorerCheckbox = pane.IsVisible;
-                        break;
-                    case AssetBrowserViewModel:
-                        AssetBrowserCheckbox = pane.IsVisible;
-                        break;
-                    case PropertiesViewModel:
-                        PropertiesCheckbox = pane.IsVisible;
-                        break;
-                    case LogViewModel:
-                        LogCheckbox = pane.IsVisible;
-                        break;
-                    case TweakBrowserViewModel:
-                        TweakBrowserCheckbox = pane.IsVisible;
-                        break;
-                    case LocKeyBrowserViewModel:
-                        LocKeyBrowserCheckbox = pane.IsVisible;
-                        break;
-                    default:
-                        break;
-                }
-            }
+            case ProjectExplorerViewModel:
+                ProjectExplorerCheckbox = e.Element.IsVisible;
+                break;
+            case AssetBrowserViewModel:
+                AssetBrowserCheckbox = e.Element.IsVisible;
+                break;
+            case PropertiesViewModel:
+                PropertiesCheckbox = e.Element.IsVisible;
+                break;
+            case LogViewModel:
+                LogCheckbox = e.Element.IsVisible;
+                break;
+            case TweakBrowserViewModel:
+                TweakBrowserCheckbox = e.Element.IsVisible;
+                break;
+            case LocKeyBrowserViewModel:
+                LocKeyBrowserCheckbox = e.Element.IsVisible;
+                break;
+            default:
+                break;
         }
+
+        _automaticUpdate = false;
     }
-    
+
     [RelayCommand]
     private void OpenGameFolder() => Commonfunctions.ShowFolderInExplorer(SettingsManager.GetRED4GameRootDir());
 
@@ -60,6 +60,11 @@ public partial class MenuBarViewModel : ObservableObject
     private bool _projectExplorerCheckbox;
     partial void OnProjectExplorerCheckboxChanged(bool value)
     {
+        if (_automaticUpdate)
+        {
+            return;
+        }
+
         MainViewModel.GetToolViewModel<ProjectExplorerViewModel>().IsVisible = value;
     }
 
@@ -67,6 +72,11 @@ public partial class MenuBarViewModel : ObservableObject
     private bool _assetBrowserCheckbox;
     partial void OnAssetBrowserCheckboxChanged(bool value)
     {
+        if (_automaticUpdate)
+        {
+            return;
+        }
+
         MainViewModel.GetToolViewModel<AssetBrowserViewModel>().IsVisible = value;
     }
     
@@ -74,6 +84,11 @@ public partial class MenuBarViewModel : ObservableObject
     private bool _propertiesCheckbox;
     partial void OnPropertiesCheckboxChanged(bool value)
     {
+        if (_automaticUpdate)
+        {
+            return;
+        }
+
         MainViewModel.GetToolViewModel<PropertiesViewModel>().IsVisible = value;
     }
 
@@ -81,6 +96,11 @@ public partial class MenuBarViewModel : ObservableObject
     private bool _logCheckbox;
     partial void OnLogCheckboxChanged(bool value)
     {
+        if (_automaticUpdate)
+        {
+            return;
+        }
+
         MainViewModel.GetToolViewModel<LogViewModel>().IsVisible = value;
     }
 
@@ -88,6 +108,11 @@ public partial class MenuBarViewModel : ObservableObject
     private bool _tweakBrowserCheckbox;
     partial void OnTweakBrowserCheckboxChanged(bool value)
     {
+        if (_automaticUpdate)
+        {
+            return;
+        }
+
         MainViewModel.GetToolViewModel<TweakBrowserViewModel>().IsVisible = value;
     }
 
@@ -95,6 +120,11 @@ public partial class MenuBarViewModel : ObservableObject
     private bool _locKeyBrowserCheckbox;
     partial void OnLocKeyBrowserCheckboxChanged(bool value)
     {
+        if (_automaticUpdate)
+        {
+            return;
+        }
+
         MainViewModel.GetToolViewModel<LocKeyBrowserViewModel>().IsVisible = value;
     }
 }
