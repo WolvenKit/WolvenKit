@@ -96,11 +96,27 @@ namespace WolvenKit.Views.Shell
 
         private void SaveLayout(string filePath)
         {
-            var writer = XmlWriter.Create(filePath);
+            var tmpPath = Path.ChangeExtension(filePath, ".tmp");
+            if (File.Exists(tmpPath))
+            {
+                File.Delete(tmpPath);
+            }
+
+            var writer = XmlWriter.Create(tmpPath);
             PART_DockingManager.SaveDockState(writer);
             writer.Close();
 
-            _logger.Info($"Saved current layout to {filePath}");
+            var size = (new FileInfo(tmpPath)).Length;
+            if (size < 1000)
+            {
+                File.Delete(tmpPath);
+                _logger.Info($"Failed to save layout to {filePath}");
+            }
+            else
+            {
+                File.Move(tmpPath, filePath, true);
+                _logger.Info($"Saved current layout to {filePath}");
+            }
         }
 
         private void LoadLayoutFromProject()
