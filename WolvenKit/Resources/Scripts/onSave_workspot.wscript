@@ -50,10 +50,15 @@ function main(workspot) {
 	return true;
 };
 
-const fileContent = JSON.parse(file);
-success = main(fileContent["Data"]["RootChunk"]);
 
 try {
+  const fileContent = JSON.parse(file);
+  success = main(fileContent["Data"]["RootChunk"]);
+  try {
+    file = JSON.stringify(fileContent);
+  } catch (err) {
+    Logger.Warning("Failed to write file");
+  }
 } catch (err) {
     Logger.Warning("failed to validate file");
     Logger.Warning(err);
