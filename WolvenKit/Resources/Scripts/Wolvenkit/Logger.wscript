@@ -1,10 +1,16 @@
 // Logger.wscript
 function ConvertObject(obj) {
-    if (typeof obj === "object") {
-        return JSON.stringify(obj, null, 4);
-    } else if (typeof obj === "string") {
+    if (null === obj) { // typeof null will be object -.- 
+        return "null";
+    }
+    if (undefined === obj) {
+        return "undefined";
+    }
+     if (typeof obj === "string") {
         return obj;
-    } else {
+    } else if (typeof obj === "object") {
+       return JSON.stringify(obj, null, 4);
+   } else {
         return obj.ToString();
     }
 }

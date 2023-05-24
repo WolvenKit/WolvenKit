@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.ClearScript;
@@ -35,22 +36,49 @@ public partial class ExtendedScriptService : ScriptService
         RefreshUIScripts();
     }
 
+    
     private void DeployShippedFiles()
     {
-        var dir = ISettingsManager.GetWScriptDir();
-
-        CheckFile("Logger");
-        CheckFile("onSave_mesh");
-        CheckFile("ui_example");
-
-        void CheckFile(string fileName)
+        
+        void CopyFilesRecursively(string sourcePath, string targetPath)
         {
-            if (!File.Exists($"{dir}/{fileName}.wscript"))
+            if (!File.Exists(targetPath))
             {
-                File.Copy(@$"Resources\Scripts\{fileName}.wscript", $"{dir}/{fileName}.wscript");
+                Directory.CreateDirectory(targetPath);
+            }
+            
+            //Now Create all of the directories
+            foreach (var dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
+            {
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
+            }
+
+            //Copy all the files & Replaces any files with the same name
+            foreach (var newPath in Directory.GetFiles(sourcePath, "*.*",SearchOption.AllDirectories))
+            {
+                File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
             }
         }
+        
+        var scriptDir = ISettingsManager.GetWScriptDir();
+
+        var defaultFiles = Directory.GetFiles(@"Resources\Scripts");
+        // Overwrite the defaults inside the root directory only if they don't exist
+        // we don't want the user to lose any changes
+        foreach (var filePath in defaultFiles)
+        {
+            var fileName = Path.GetFileName(filePath);
+
+            if (!File.Exists($"{scriptDir}/{fileName}") 
+                && (fileName.EndsWith("example.wscript") || fileName.StartsWith("onSave")))
+            {
+                File.Copy(filePath, $"{scriptDir}/{fileName}");
+            }
+        }
+
+        CopyFilesRecursively(@"Resources\Scripts\Wolvenkit", $"{scriptDir}/Wolvenkit");
     }
+    
 
     public void RegisterControl(IScriptableControl scriptableControl)
     {
