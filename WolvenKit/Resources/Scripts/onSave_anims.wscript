@@ -20,18 +20,20 @@ const printAnimationNames = false;
 const checkForDuplicates = true;
 
 /*
- * Set this to a list of strings to automatically name animations
+ * Set this to "false" to disable check for duplicate anims
  */
-const targtAnimNames = [];
+const targetAnimNames = [];
+
+
 
 function main(animAnimSet) {
-    FileValidation.validateAnimationFile(animAnimSet);
+    FileValidation.validateAnimationFile(animAnimSet, checkForDuplicates, printAnimationNames, targetAnimNames);
     return true;
 }
 
 
-const fileContent = JSON.parse(file);
 try {
+    const fileContent = JSON.parse(file);
     success = main(fileContent["Data"]["RootChunk"]);
 } catch (err) {
     Logger.Warning("failed to validate file");

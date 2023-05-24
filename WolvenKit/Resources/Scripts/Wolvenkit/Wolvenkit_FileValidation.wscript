@@ -31,8 +31,12 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
     // all known animation names (without duplicates)
     const animNames = [];
 
-    function animFile_SetAnimNames(animAnimSet) {
-        if (targtAnimNames.length === 0) { return; }
+    // pass from file
+    let _printAnimationNames = false;
+
+
+    function animFile_SetAnimNames(animAnimSet, targetAnimNames = []) {
+        if (targetAnimNames.length === 0) { return; }
         
         const numMissingAnims = targetAnimNames.length - animAnimSet.animations.length;
         if (numMissingAnims > 0) {
@@ -41,13 +45,13 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
                 animAnimSet.animations.push(JSON.parse(JSON.stringify(lastElement)));
             }
         }
-        
+
         // cut off extras
         animAnimSet.animations.length = targetAnimNames.length;
-        
+
         // set names
         for (let index = 0; index < animAnimSet.animations.length; index++) {
-            const animName = targtAnimNames.pop();
+            const animName = targetAnimNames.pop();
             animAnimSet.animations[index].Data.animation.Data.name = animName;
         }
         
@@ -70,13 +74,16 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             Logger.Info(`        [ ${usedIndices.join(', ')} ]: ${animName}`);
         });
     }
-    
-    export function validateAnimationFile(animAnimSet) {
+
+    export function validateAnimationFile(animAnimSet, checkForDuplicates, printAnimationNames, targetAnimNames) {
 
         if (animAnimSet["Data"] && animAnimSet["Data"]["RootChunk"]) {
             return validateAnimationFile(animAnimSet["Data"]["RootChunk"]);
         }
-        animFile_SetAnimNames(animAnimSet);
+
+        _printAnimationNames = printAnimationNames;
+
+        animFile_SetAnimNames(animAnimSet, targetAnimNames);
         
         // collect names
         for (let index = 0; index < animAnimSet.animations.length; index++) {
@@ -90,7 +97,7 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             animFile_CheckForDuplicateNames();
         }
 
-        if (printAnimationNames) {
+        if (_printAnimationNames) {
             Logger.Info(`Animations in current file:\n\t${animNames.join('\n\t')}`)
         }
     }

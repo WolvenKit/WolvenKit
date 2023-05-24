@@ -42,6 +42,11 @@ public partial class ExtendedScriptService : ScriptService
         
         void CopyFilesRecursively(string sourcePath, string targetPath)
         {
+            // Copy those only once per new installation
+            if (!File.Exists(sourcePath))
+            {
+                return;
+            }
             if (!File.Exists(targetPath))
             {
                 Directory.CreateDirectory(targetPath);
@@ -58,6 +63,8 @@ public partial class ExtendedScriptService : ScriptService
             {
                 File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
             }
+            // Don't copy again until next install
+            Directory.Delete(sourcePath, true);
         }
         
         var scriptDir = ISettingsManager.GetWScriptDir();
