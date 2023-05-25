@@ -1,11 +1,11 @@
 import * as FileValidation from 'Wolvenkit/Wolvenkit_FileValidation.wscript';
 import * as Logger from 'Wolvenkit/Logger.wscript';
 
-
-function main(mesh) {
-	FileValidation.validateMeshFile(mesh);
+function main(csvData) {
+	FileValidation.validateCsvFile(csvData);
 	return true;
 };
+
 
 try {
 	const fileContent = JSON.parse(file);

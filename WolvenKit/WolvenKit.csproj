@@ -194,13 +194,10 @@
     <Content Include="Resources\Media\t5.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Scripts\Logger.wscript">
+    <Content Include="Resources\Scripts\*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Scripts\onSave_mesh.wscript">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Scripts\ui_example.wscript">
+    <Content Include="Resources\Scripts\Wolvenkit\*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Wolvenkit.Installer.Package.appinstaller">
@@ -1774,9 +1771,8 @@
     <None Remove="Resources\Media\test.kark" />
     <None Remove="Resources\Media\testc.kark" />
     <None Remove="Resources\Media\testconv.kark" />
-    <None Remove="Resources\Scripts\Logger.wscript" />
-    <None Remove="Resources\Scripts\onSave_mesh.wscript" />
-    <None Remove="Resources\Scripts\ui_example.wscript" />
+    <None Remove="Resources\Scripts\Wolvenkit\*" />
+    <None Remove="Resources\Scripts\*" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysBack512.png" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysDown512.png" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysFront512.png" />
