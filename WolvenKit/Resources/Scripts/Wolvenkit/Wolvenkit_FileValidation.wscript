@@ -652,11 +652,14 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
         */
         function workspotFile_CollectAnims(filePath) {
             const fileContent = JSON.parse(wkit.LoadGameFileFromProject(filePath, 'json'));
-            
+            if (!fileContent) {
+                Logger.Warning(`Failed to collect animations from ${filePath}`);
+                return;
+            }
+
             const fileName = /[^\\]*$/.exec(filePath)[0];
             
             animNamesByFile[fileName] = [];
-            
             const animations = fileContent.Data.RootChunk.animations || [];
             for (var i = 0; i < animations.length; i++) {
                 
@@ -814,9 +817,13 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             for(var i = 0; i < finalAnimsets.length; i++) {
                 workspotFile_CheckFinalAnimSet(i, finalAnimsets[i]);
             }
-            
+
             for(var i = 0; i < usedAnimFiles.length; i++) {
-                workspotFile_CollectAnims(usedAnimFiles[i]);
+                if (wkit.FileExists(usedAnimFiles[i])) {
+                    workspotFile_CollectAnims(usedAnimFiles[i]);
+                } else {
+                    Logger.Warn(`${usedAnimFiles[i]} not found in project or game files`);
+                }
             }
             
             // grab all used animation names - make sure they're unique
@@ -846,7 +853,7 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             }
             
             const unusedAnimNamesFromFiles = allAnimNamesFromAnimFiles.filter((name) => !workspotAnimSetNames.includes(name));
-            
+
             // Drop all items from the file name table that are defined in the workspot, so we can print the unused ones below
             Object.keys(animNamesByFile).forEach((fileName) => {
                 animNamesByFile[fileName] = animNamesByFile[fileName].filter((name) => !workspotAnimSetNames.includes(name));
@@ -867,6 +874,7 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
                 Logger.Info(`Items from .workspot not found in .anim files:`);
                 Logger.Info(unusedAnimSetNames.map((name) => `${workEntryIndicesByAnimName[name]}: ${name}`));
             }
+            return rootEntry;
         }
         //#endregion
 
