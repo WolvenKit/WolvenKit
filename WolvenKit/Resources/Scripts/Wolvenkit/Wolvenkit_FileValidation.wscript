@@ -209,13 +209,13 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
         appFile_collectComponentsFromEntPath(valueDepotPath, validateRecursively);
     }
 
-    function appFile_validateAppearance(app, index, validateRecursively) {
+    function appFile_validateAppearance(appearance, index, validateRecursively) {
         // check override
-        if (app.Data.cookedDataPathOverride.DepotPath) {
+        if (appearance.Data.cookedDataPathOverride.DepotPath) {
             Logger.Warning(`appearance definition ${index} has a cooked data override. Consider deleting it.`);
         }
 
-        let appearanceName = app.Data.name;
+        let appearanceName = appearance.Data.name;
 
         if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) { 
             return;
@@ -227,16 +227,16 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
         }
 
         if (alreadyDefinedAppearanceNames.includes(appearanceName)) {
-            Logger.Warning(`An appearance with the name ${appearance.name} is already defined`);
+            Logger.Warning(`An appearance with the name ${appearanceName} is already defined`);
         }
 
-        for(let i = 0; i < app.Data.components.length; i++) {
-            entFile_validateComponent(app.Data.components[i], i, appearanceName, validateRecursively);
+        for(let i = 0; i < appearance.Data.components.length; i++) {
+            entFile_validateComponent(appearance.Data.components[i], i, appearanceName, validateRecursively);
         }
 
         // check these before the overrides, because we're parsing the linked files
-        for(let i = 0; i < app.Data.partsValues.length; i++) {
-            appFile_validatePartsValue(app.Data.partsValues[i], i, appearanceName, validateRecursively);
+        for(let i = 0; i < appearance.Data.partsValues.length; i++) {
+            appFile_validatePartsValue(appearance.Data.partsValues[i], i, appearanceName, validateRecursively);
         }
 
         Object.values(componentNameCollisions)
@@ -252,8 +252,8 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             });
         }
 
-        for(let i = 0; i < app.Data.partsOverrides.length; i++) {
-            appFile_validatePartsOverride(app.Data.partsOverrides[i], i, appearanceName);
+        for(let i = 0; i < appearance.Data.partsOverrides.length; i++) {
+            appFile_validatePartsOverride(appearance.Data.partsOverrides[i], i, appearanceName);
         }
     }
 
