@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Windows;
 using Microsoft.ClearScript;
 using WolvenKit.App.Factories;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
@@ -563,5 +565,23 @@ public class WKitUIScripting : WKitScripting
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Displays a message box
+    /// </summary>
+    /// <param name="text">A <see cref="T:System.String" /> that specifies the text to display.</param>
+    /// <param name="caption">A <see cref="T:System.String" /> that specifies the title bar caption to display.</param>
+    /// <param name="image">A <see cref="T:WolvenKit.App.Interaction.WMessageBoxImage" /> value that specifies the icon to display.</param>
+    /// <param name="buttons">A <see cref="T:WolvenKit.App.Interaction.WMessageBoxButtons" /> value that specifies which buttons to display.</param>
+    /// <returns>A <see cref="T:WolvenKit.App.Interaction.WMessageBoxResult" /> value that specifies the result the message box button that was clicked by the user returned.</returns>
+    public virtual WMessageBoxResult ShowMessageBox(string text, string caption, WMessageBoxImage image, WMessageBoxButtons buttons)
+    {
+        var response = WMessageBoxResult.None;
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            response = Interactions.ShowConfirmation((text, caption, image, buttons));
+        });
+        return response;
     }
 }

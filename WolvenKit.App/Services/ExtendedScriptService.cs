@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
@@ -179,7 +179,7 @@ public partial class ExtendedScriptService : ScriptService
 
     private bool TestExecute(string file, ref string json)
     {
-        var engine = base.GetScriptEngine(new Dictionary<string, object> { { "wkit", _wkit } }, ISettingsManager.GetWScriptDir());
+        var engine = GetScriptEngine(new Dictionary<string, object> { { "wkit", _wkit } }, ISettingsManager.GetWScriptDir());
         engine.Script.file = json;
         engine.Script.success = false;
 
@@ -206,7 +206,7 @@ public partial class ExtendedScriptService : ScriptService
     {
         UnloadScripts();
 
-        _uiEngine = base.GetScriptEngine(new Dictionary<string, object> { { "ui", _ui }, { "wkit", _wkit } }, ISettingsManager.GetWScriptDir());
+        _uiEngine = GetScriptEngine(new Dictionary<string, object> { { "ui", _ui }, { "wkit", _wkit } }, ISettingsManager.GetWScriptDir());
 
         foreach (var file in Directory.GetFiles(ISettingsManager.GetWScriptDir(), "*.wscript"))
         {
@@ -239,6 +239,17 @@ public partial class ExtendedScriptService : ScriptService
                 scriptableControl.AddScriptedElements(lst);
             }
         }
+    }
+
+    protected override V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, string? searchPath = null)
+    {
+        var engine = base.GetScriptEngine(hostObjects, searchPath);
+
+        engine.AddHostType(typeof(WMessageBoxImage));
+        engine.AddHostType(typeof(WMessageBoxButtons));
+        engine.AddHostType(typeof(WMessageBoxResult));
+
+        return engine;
     }
 }
 
