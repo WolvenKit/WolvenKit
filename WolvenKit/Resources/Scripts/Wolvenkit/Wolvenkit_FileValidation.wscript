@@ -151,7 +151,9 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             return;
         }
 
-        if (alreadyVerifiedFileNames.includes(depotPath)) { return; }
+        if (alreadyVerifiedFileNames.includes(depotPath)) { 
+            return; 
+        }
 
         alreadyVerifiedFileNames.push(depotPath);
 
@@ -215,7 +217,9 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
 
         let appearanceName = app.Data.name;
 
-        if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) { return; }
+        if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) { 
+            return;
+        }
 
         if (!appearanceName) {
             Logger.Warning(`appearance definition #${index} has no name yet`);
