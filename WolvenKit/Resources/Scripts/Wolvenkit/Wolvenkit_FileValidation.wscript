@@ -208,14 +208,15 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
     }
 
     function appFile_validateAppearance(app, index, validateRecursively) {
-        if (appearance.name.length === 0 || /^[^A-Za-z0-9]+$/.test(appearance.name)) { return; }
-
         // check override
         if (app.Data.cookedDataPathOverride.DepotPath) {
             Logger.Warning(`appearance definition ${index} has a cooked data override. Consider deleting it.`);
         }
 
         let appearanceName = app.Data.name;
+
+        if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) { return; }
+
         if (!appearanceName) {
             Logger.Warning(`appearance definition #${index} has no name yet`);
             appearanceName = `appearances[${index}]`
