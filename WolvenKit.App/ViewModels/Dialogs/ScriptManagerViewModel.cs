@@ -122,13 +122,44 @@ public partial class ScriptManagerViewModel : DialogViewModel
         }
     }
 
-    public void OpenFile(ScriptFile scriptFile)
+    public async Task OpenFile(ScriptFile scriptFile)
     {
         if (!File.Exists(scriptFile.Path))
         {
             return;
         }
-        _appViewModel.RequestFileOpen(scriptFile.Path);
+
+        var localFilePath = scriptFile.Path;
+        if (scriptFile.ScriptSource == ScriptSource.System)
+        {
+            var response = await Interactions.ShowMessageBoxAsync(
+                "Trying to open a system file. Should a local copy be created?",
+                "Open system file",
+                WMessageBoxButtons.YesNo);
+
+            if (response == WMessageBoxResult.No)
+            {
+                return;
+            }
+
+            localFilePath = Path.Combine(ISettingsManager.GetWScriptDir(), scriptFile.Name);
+            if (File.Exists(localFilePath))
+            {
+                response = await Interactions.ShowMessageBoxAsync(
+                    "A copy of this file already exists. Overwrite it?",
+                    "Overwrite file",
+                    WMessageBoxButtons.YesNo);
+
+                if (response == WMessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
+            File.Copy(scriptFile.Path, localFilePath, true);
+        }
+
+        await _appViewModel.RequestFileOpen(localFilePath);
         _appViewModel.CloseModalCommand.Execute(null);
     }
 

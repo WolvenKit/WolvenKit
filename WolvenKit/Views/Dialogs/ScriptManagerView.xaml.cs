@@ -66,7 +66,7 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
         return false;
     }
 
-    private void ScriptsTreeGrid_OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs e)
+    private async void ScriptsTreeGrid_OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs e)
     {
         if (ViewModel == null)
         {
@@ -83,7 +83,7 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
             return;
         }
 
-        ViewModel.OpenFile(scriptFile);
+        await ViewModel.OpenFile(scriptFile);
     }
 
     private async void Run_OnClick(object sender, RoutedEventArgs e)
