@@ -254,6 +254,9 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
     }
 
     export function validateAppFile(app, validateRecursively) {
+        // invalid app file - not found
+        if (!app) { return; }
+
         // empty array with name collisions
         componentOverrideCollisions.length = 0;
         alreadyVerifiedFileNames.length = 0;
@@ -319,11 +322,16 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
         const appearanceNamesByAppFile = {};
         
         function getAppearanceNamesInAppFile(depotPath) {
+            if (!wkit.FileExists(depotPath)) {
+                return [];
+            }
             if (!appearanceNamesByAppFile[depotPath]) {
                 const fileContent = wkit.LoadGameFileFromProject(depotPath, 'json');
                 const appFile = JSON.parse(fileContent);
-                const appNames = appFile.Data.RootChunk.appearances.map((app) => app.Data.name) || [];
-                appearanceNamesByAppFile[depotPath] = appNames;
+                if (null !== appFile) {
+                    const appNames = appFile.Data.RootChunk.appearances.map((app) => app.Data.name) || [];
+                    appearanceNamesByAppFile[depotPath] = appNames;
+                }
             }
             return appearanceNamesByAppFile[depotPath];
         }
@@ -359,7 +367,7 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
                 return;
             }
 
-            const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearance.name);
+            const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearance.name) || [];
             if (!namesInAppFile.includes(appearance.appearanceName)) {
                 Logger.Warning(`${appearance.name}: Should have appearance ${appearance.appearanceName}, but file ${appFilePath} only defines [${namesInAppFile.join(', ')}]`);
             }
@@ -367,7 +375,11 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             if (isRootEntity) {
                 const fileContent = wkit.LoadGameFileFromProject(appFilePath, 'json');
                 const appFile = JSON.parse(fileContent);
-                validateAppFile(appFile, true);
+                if (null === appFile) {
+                    Logger.Warning(`File ${appFilePath} is supposed to exist, but couldn't be parsed.`)
+                } else {
+                    validateAppFile(appFile, true);
+                }
             }
         }
 
