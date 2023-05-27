@@ -44,7 +44,7 @@ public partial class ExtendedScriptService : ScriptService
         RefreshUIScripts();
     }
 
-    public async Task ExecuteAsync(string code, string? searchPath = null) => await ExecuteAsync(code, DefaultHostObject, searchPath);
+    public async Task ExecuteAsync(string code) => await ExecuteAsync(code, DefaultHostObject);
 
     private void DeployShippedFiles()
     {
@@ -203,7 +203,7 @@ public partial class ExtendedScriptService : ScriptService
 
     private bool TestExecute(string file, ref string json)
     {
-        var engine = GetScriptEngine(DefaultHostObject, ISettingsManager.GetWScriptDir());
+        var engine = GetScriptEngine(DefaultHostObject);
         engine.Script.file = json;
         engine.Script.success = false;
 
@@ -230,7 +230,7 @@ public partial class ExtendedScriptService : ScriptService
     {
         UnloadScripts();
 
-        _uiEngine = GetScriptEngine(new Dictionary<string, object> { { "ui", _ui }, { "wkit", _wkit } }, ISettingsManager.GetWScriptDir());
+        _uiEngine = GetScriptEngine(new Dictionary<string, object> { { "ui", _ui }, { "wkit", _wkit } });
 
         var loadedFiles = new List<string>();
 
@@ -298,9 +298,11 @@ public partial class ExtendedScriptService : ScriptService
         }
     }
 
-    protected override V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, string? searchPath = null)
+    protected override V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
     {
-        var engine = base.GetScriptEngine(hostObjects, searchPath);
+        searchPaths ??= new List<string> { ISettingsManager.GetWScriptDir(), Path.GetFullPath(@"Resources\Scripts") };
+
+        var engine = base.GetScriptEngine(hostObjects, searchPaths);
 
         engine.AddHostType(typeof(WMessageBoxImage));
         engine.AddHostType(typeof(WMessageBoxButtons));

@@ -172,7 +172,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
 
         var code = File.ReadAllText(scriptFile.Path);
 
-        await _scriptService.ExecuteAsync(code, ISettingsManager.GetWScriptDir());
+        await _scriptService.ExecuteAsync(code);
     }
 
     public async Task DeleteFile(ScriptFile scriptFile)

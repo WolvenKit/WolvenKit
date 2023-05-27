@@ -24,7 +24,7 @@ public partial class ScriptService : ObservableObject
 
     public ScriptService(ILoggerService loggerService) => _loggerService = loggerService;
 
-    public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, string? searchPath = null)
+    public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
     {
         if (_mainEngine != null)
         {
@@ -36,7 +36,7 @@ public partial class ScriptService : ObservableObject
 
         var sw = Stopwatch.StartNew();
 
-        _mainEngine = GetScriptEngine(hostObjects, searchPath);
+        _mainEngine = GetScriptEngine(hostObjects, searchPaths);
 
         try
         {
@@ -75,7 +75,7 @@ public partial class ScriptService : ObservableObject
         IsRunning = false;
     }
 
-    protected virtual V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, string? searchPath = null)
+    protected virtual V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
     {
         var engine = new V8ScriptEngine();
 
@@ -88,10 +88,10 @@ public partial class ScriptService : ObservableObject
             }
         }
 
-        if (!string.IsNullOrEmpty(searchPath))
+        if (searchPaths != null)
         {
             engine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
-            engine.DocumentSettings.SearchPath = searchPath;
+            engine.DocumentSettings.SearchPath = string.Join(';', searchPaths);
         }
 
         engine.DocumentSettings.Loader.DiscardCachedDocuments();
