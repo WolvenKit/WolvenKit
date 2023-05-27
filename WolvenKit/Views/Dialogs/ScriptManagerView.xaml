@@ -8,6 +8,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DataContext="{d:DesignInstance Type=dialogs:ScriptManagerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -18,12 +19,15 @@
     <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!--  Header  -->
         <DockPanel Grid.Row="0">
+            <TextBlock FontSize="24" Text="Script Manager" />
             <Button
                 x:Name="CloseButton"
                 Margin="0,0,0,10"
@@ -36,48 +40,81 @@
             </Button>
         </DockPanel>
 
-        <ListView
-            x:Name="ScriptsListView"
-            Grid.Row="1"
-            MinHeight="450"
-            Background="{StaticResource ContentBackgroundAlt2}">
-            <ListView.Resources>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_OnDoubleClick" />
-                </Style>
-            </ListView.Resources>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock
-                        Margin="2,0,0,0"
-                        VerticalAlignment="Center"
-                        Text="{Binding}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <!--  Separator  -->
+        <Separator Grid.Row="1" />
 
-        <Border
-            Grid.Row="2"
-            Width="250"
-            Margin="5">
+        <!--  Main grid  -->
+        <Grid Grid.Row="2">
+            <TabControl x:Name="ScriptTypeTabControl" SelectionChanged="TabControl_OnSelectionChanged">
+                <TabItem Header="General" />
+                <TabItem Header="OnSave" />
+                <TabItem Header="UI" />
+            </TabControl>
+        </Grid>
+
+        <syncfusion:SfTreeGrid
+            x:Name="ScriptsTreeGrid"
+            Grid.Row="3"
+            MinHeight="450"
+            AutoExpandMode="AllNodesExpanded"
+            AutoGenerateColumns="False"
+            CellDoubleTapped="ScriptsTreeGrid_OnCellDoubleTapped"
+            ChildPropertyName="Files"
+            ItemsSource="{Binding Scripts}"
+            ItemsSourceChanged="ScriptsTreeGrid_OnItemsSourceChanged"
+            NavigationMode="Row">
+            <syncfusion:SfTreeGrid.Columns>
+                <syncfusion:TreeGridTextColumn HeaderText="Name" MappingName="Name" />
+                <syncfusion:TreeGridTemplateColumn AllowSorting="False" HeaderText="Action">
+                    <syncfusion:TreeGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox
+                                    Margin="5,0,5,0"
+                                    IsChecked="{Binding Enabled}"
+                                    ToolTip="Enabled"
+                                    Visibility="{Binding CanEnable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                <Button
+                                    Margin="5,0,5,0"
+                                    Click="Run_OnClick"
+                                    ToolTip="Run"
+                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <iconPacks:PackIconMaterial
+                                        Margin="6,0"
+                                        Padding="0,1,0,1"
+                                        Foreground="Green"
+                                        Kind="Play" />
+                                </Button>
+                                <Button
+                                    Margin="5,0,5,0"
+                                    Click="Delete_OnClick"
+                                    ToolTip="Delete"
+                                    Visibility="{Binding CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <iconPacks:PackIconMaterial
+                                        Margin="6,0"
+                                        Padding="0,1,0,1"
+                                        Foreground="Red"
+                                        Kind="Delete" />
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </syncfusion:TreeGridTemplateColumn.CellTemplate>
+                </syncfusion:TreeGridTemplateColumn>
+            </syncfusion:SfTreeGrid.Columns>
+        </syncfusion:SfTreeGrid>
+
+        <DockPanel Grid.Row="4">
             <hc:TextBox
                 x:Name="FileNameTextBox"
+                Width="250"
                 hc:InfoElement.Title="Name: "
                 hc:InfoElement.TitlePlacement="Left"
                 FlowDirection="LeftToRight" />
-        </Border>
-
-        <DockPanel Grid.Row="3" Width="250">
             <Button
-                x:Name="AddButton"
-                Width="100"
-                Content="Add" />
-            <Button
-                x:Name="DeleteButton"
-                Width="100"
+                Width="70"
                 HorizontalAlignment="Right"
-                Content="Delete" />
+                Click="Add_OnClick"
+                Content="Add" />
         </DockPanel>
-
     </Grid>
 </reactiveUi:ReactiveUserControl>

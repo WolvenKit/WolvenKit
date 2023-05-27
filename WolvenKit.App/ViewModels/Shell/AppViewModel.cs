@@ -69,6 +69,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IHashService _hashService;
     private readonly ITweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
+    private readonly ExtendedScriptService _scriptService;
 
     /// <summary>
     /// Class constructor
@@ -90,7 +91,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IArchiveManager archiveManager,
         IHashService hashService,
         ITweakDBService tweakDBService,
-        Red4ParserService parserService
+        Red4ParserService parserService,
+        ExtendedScriptService scriptService
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -110,6 +112,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _hashService = hashService;
         _tweakDBService = tweakDBService;
         _parser = parserService;
+        _scriptService = scriptService;
 
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
 
@@ -838,7 +841,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task ShowScriptManager()
     {
         CloseModalCommand.Execute(null);
-        await SetActiveDialog(new ScriptManagerViewModel(this));
+        await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, _settingsManager));
     }
 
     private bool CanShowPlugin() => !IsDialogShown;
@@ -1502,7 +1505,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// <param name="saveAsDialogRequested"></param>
     public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
     {
-        if (_projectManager.ActiveProject is null)
+        if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null)
         {
             return;
         }
@@ -1513,7 +1516,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 RedDocumentViewModel red =>
                     saveAsDialogRequested ||
                     red.FilePath == null ||
-                    !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath)))
+                    !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject!.ModDirectory, red.RelativePath)))
                 ,
                 WScriptDocumentViewModel wScript =>
                     saveAsDialogRequested ||
@@ -1527,7 +1530,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             SaveFileDialog dlg = new();
             if (fileToSave.FilePath == null && fileToSave is RedDocumentViewModel red)
             {
-                var directory = Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath)).NotNull();
+                var directory = Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject!.ModDirectory, red.RelativePath)).NotNull();
                 if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);

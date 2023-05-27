@@ -223,6 +223,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [property: Browsable(false)]
     private Dictionary<string, LaunchProfile>? _launchProfiles;
 
+    [ObservableProperty]
+    [property: Browsable(false)]
+    private Dictionary<string, bool>? _scriptStatus;
+
     #endregion properties
 
     #region methods

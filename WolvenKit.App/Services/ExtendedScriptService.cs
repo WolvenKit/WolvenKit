@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.ClearScript;
@@ -14,6 +15,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WolvenKit.App.Services;
 
@@ -24,19 +26,26 @@ public partial class ExtendedScriptService : ScriptService
 
     private readonly WKitUIScripting _wkit;
     private readonly WScriptUIHelper _ui;
+    private readonly ISettingsManager _settingsManager;
 
     private V8ScriptEngine? _uiEngine;
 
-    public ExtendedScriptService(ILoggerService loggerService, WKitUIScripting wkit) : base(loggerService)
+    public Dictionary<string, object> DefaultHostObject { get; }
+
+    public ExtendedScriptService(ILoggerService loggerService, WKitUIScripting wkit, ISettingsManager settingsManager) : base(loggerService)
     {
         _wkit = wkit;
         _ui = new WScriptUIHelper(this);
+        _settingsManager = settingsManager;
+
+        DefaultHostObject = new() { { "wkit", _wkit } };
 
         DeployShippedFiles();
         RefreshUIScripts();
     }
 
-    
+    public async Task ExecuteAsync(string code, string? searchPath = null) => await ExecuteAsync(code, DefaultHostObject, searchPath);
+
     private void DeployShippedFiles()
     {
         
@@ -152,26 +161,41 @@ public partial class ExtendedScriptService : ScriptService
             ext = ext.Substring(1);
         }
 
-        var scriptFilePath = Path.Combine(ISettingsManager.GetWScriptDir(), $"onSave_{ext}.wscript");
-        if (File.Exists(scriptFilePath))
+        var paths = new List<string>
         {
-            var dto = new RedFileDto(cr2wFile);
-            var json = RedJsonSerializer.Serialize(dto);
+            Path.Combine(ISettingsManager.GetWScriptDir(), $"onSave_{ext}.wscript"),
+            Path.Combine(@"Resources\Scripts", $"onSave_{ext}.wscript")
+        };
 
-            if (TestExecute(scriptFilePath, ref json))
+        _settingsManager.ScriptStatus ??= new();
+
+        foreach (var scriptFilePath in paths)
+        {
+            if (File.Exists(scriptFilePath))
             {
-                if (!RedJsonSerializer.TryDeserialize(json, out RedFileDto? newDto) || newDto?.Data == null)
+                if (_settingsManager.ScriptStatus.TryGetValue(scriptFilePath, out var enabled) && !enabled)
                 {
-                    _loggerService.Error("Couldn't deserialize return value");
-                    return false;
+                    continue;
                 }
 
-                cr2wFile = newDto.Data;
+                var dto = new RedFileDto(cr2wFile);
+                var json = RedJsonSerializer.Serialize(dto);
 
-                return true;
+                if (TestExecute(scriptFilePath, ref json))
+                {
+                    if (!RedJsonSerializer.TryDeserialize(json, out RedFileDto? newDto) || newDto?.Data == null)
+                    {
+                        _loggerService.Error("Couldn't deserialize return value");
+                        return false;
+                    }
+
+                    cr2wFile = newDto.Data;
+
+                    return true;
+                }
+
+                return false;
             }
-
-            return false;
         }
 
         return true;
@@ -179,7 +203,7 @@ public partial class ExtendedScriptService : ScriptService
 
     private bool TestExecute(string file, ref string json)
     {
-        var engine = GetScriptEngine(new Dictionary<string, object> { { "wkit", _wkit } }, ISettingsManager.GetWScriptDir());
+        var engine = GetScriptEngine(DefaultHostObject, ISettingsManager.GetWScriptDir());
         engine.Script.file = json;
         engine.Script.success = false;
 
@@ -208,15 +232,18 @@ public partial class ExtendedScriptService : ScriptService
 
         _uiEngine = GetScriptEngine(new Dictionary<string, object> { { "ui", _ui }, { "wkit", _wkit } }, ISettingsManager.GetWScriptDir());
 
-        foreach (var file in Directory.GetFiles(ISettingsManager.GetWScriptDir(), "*.wscript"))
+        var loadedFiles = new List<string>();
+
+        _settingsManager.ScriptStatus ??= new();
+
+        foreach (var scriptFilePath in Directory.GetFiles(ISettingsManager.GetWScriptDir(), "ui_*.wscript"))
         {
-            var fileName = Path.GetFileName(file);
-            if (!fileName.StartsWith("ui_"))
+            if (_settingsManager.ScriptStatus.TryGetValue(scriptFilePath, out var enabled) && !enabled)
             {
                 continue;
             }
 
-            var code = File.ReadAllText(file);
+            var code = File.ReadAllText(scriptFilePath);
 
             try
             {
@@ -224,7 +251,37 @@ public partial class ExtendedScriptService : ScriptService
             }
             catch (ScriptEngineException ex1)
             {
-                _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {file}");
+                _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {scriptFilePath}");
+            }
+            catch (Exception ex2)
+            {
+                _loggerService?.Error(ex2);
+            }
+
+            loadedFiles.Add(Path.GetFileName(scriptFilePath));
+        }
+
+        foreach (var scriptFilePath in Directory.GetFiles(@"Resources\Scripts", "ui_*.wscript"))
+        {
+            if (loadedFiles.Contains(Path.GetFileName(scriptFilePath)))
+            {
+                continue;
+            }
+
+            if (_settingsManager.ScriptStatus.TryGetValue(scriptFilePath, out var enabled) && !enabled)
+            {
+                continue;
+            }
+
+            var code = File.ReadAllText(scriptFilePath);
+
+            try
+            {
+                _uiEngine.Execute(code);
+            }
+            catch (ScriptEngineException ex1)
+            {
+                _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {scriptFilePath}");
             }
             catch (Exception ex2)
             {
