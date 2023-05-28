@@ -5,9 +5,12 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Octokit;
 using ReactiveUI;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.ViewModels.Dialogs;
+using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 
 namespace WolvenKit.Views.Dialogs;
 /// <summary>
@@ -134,4 +137,19 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
             2 => ScriptType.Ui,
             _ => throw new ArgumentOutOfRangeException(nameof(TabControl.SelectedIndex))
         };
+
+    private void ScriptsTreeGrid_OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+    {
+        var version = "";
+        var author = "";
+
+        if (e.AddedItems.Count > 0 && e.AddedItems[0] is TreeGridRowInfo { RowData: ScriptFile scriptFile })
+        {
+            version = scriptFile.Version;
+            author = scriptFile.Author;
+        }
+
+        VersionLabel.SetCurrentValue(ContentProperty, version);
+        AuthorLabel.SetCurrentValue(ContentProperty, author);
+    }
 }

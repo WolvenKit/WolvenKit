@@ -1,4 +1,5 @@
 // @version 1.0
+// @author manavortex
 
 import * as FileValidation from 'Wolvenkit/Wolvenkit_FileValidation.wscript';
 import * as Logger from 'Wolvenkit/Logger.wscript';

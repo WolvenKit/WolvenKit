@@ -44,72 +44,119 @@
         <Separator Grid.Row="1" />
 
         <!--  Main grid  -->
-        <Grid Grid.Row="2">
-            <TabControl x:Name="ScriptTypeTabControl" SelectionChanged="TabControl_OnSelectionChanged">
-                <TabItem Header="General" />
-                <TabItem Header="OnSave" />
-                <TabItem Header="UI" />
-            </TabControl>
-        </Grid>
+        <TabControl
+            x:Name="ScriptTypeTabControl"
+            Grid.Row="2"
+            SelectionChanged="TabControl_OnSelectionChanged">
+            <TabItem Header="General" />
+            <TabItem Header="OnSave" />
+            <TabItem Header="UI" />
+        </TabControl>
 
-        <syncfusion:SfTreeGrid
-            x:Name="ScriptsTreeGrid"
-            Grid.Row="3"
-            MinHeight="450"
-            AutoExpandMode="AllNodesExpanded"
-            AutoGenerateColumns="False"
-            CellDoubleTapped="ScriptsTreeGrid_OnCellDoubleTapped"
-            ChildPropertyName="Files"
-            ColumnSizer="Auto"
-            ItemsSource="{Binding Scripts}"
-            ItemsSourceChanged="ScriptsTreeGrid_OnItemsSourceChanged"
-            NavigationMode="Row">
-            <syncfusion:SfTreeGrid.Columns>
-                <syncfusion:TreeGridTextColumn
-                    ColumnSizer="FillColumn"
-                    HeaderText="Name"
-                    MappingName="Name" />
-                <syncfusion:TreeGridTextColumn
-                    HeaderText="Version"
-                    MappingName="Version"
-                    TextAlignment="Center" />
-                <syncfusion:TreeGridTemplateColumn AllowSorting="False" HeaderText="Action">
-                    <syncfusion:TreeGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox
-                                    Margin="5,0,5,0"
-                                    IsChecked="{Binding Enabled}"
-                                    ToolTip="Enabled"
-                                    Visibility="{Binding CanEnable, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                <Button
-                                    Margin="5,0,5,0"
-                                    Click="Run_OnClick"
-                                    ToolTip="Run"
-                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <iconPacks:PackIconMaterial
-                                        Margin="6,0"
-                                        Padding="0,1,0,1"
-                                        Foreground="Green"
-                                        Kind="Play" />
-                                </Button>
-                                <Button
-                                    Margin="5,0,5,0"
-                                    Click="Delete_OnClick"
-                                    ToolTip="Delete"
-                                    Visibility="{Binding CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <iconPacks:PackIconMaterial
-                                        Margin="6,0"
-                                        Padding="0,1,0,1"
-                                        Foreground="Red"
-                                        Kind="Delete" />
-                                </Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </syncfusion:TreeGridTemplateColumn.CellTemplate>
-                </syncfusion:TreeGridTemplateColumn>
-            </syncfusion:SfTreeGrid.Columns>
-        </syncfusion:SfTreeGrid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <syncfusion:SfTreeGrid
+                x:Name="ScriptsTreeGrid"
+                Grid.Column="0"
+                MinHeight="450"
+                AutoExpandMode="AllNodesExpanded"
+                AutoGenerateColumns="False"
+                CellDoubleTapped="ScriptsTreeGrid_OnCellDoubleTapped"
+                ChildPropertyName="Files"
+                ColumnSizer="Auto"
+                ItemsSource="{Binding Scripts}"
+                ItemsSourceChanged="ScriptsTreeGrid_OnItemsSourceChanged"
+                NavigationMode="Row"
+                SelectionChanged="ScriptsTreeGrid_OnSelectionChanged">
+                <syncfusion:SfTreeGrid.Columns>
+                    <syncfusion:TreeGridTextColumn
+                        ColumnSizer="FillColumn"
+                        HeaderText="Name"
+                        MappingName="Name" />
+                    <syncfusion:TreeGridTextColumn
+                        HeaderText="Version"
+                        MappingName="Version"
+                        TextAlignment="Center" />
+                    <syncfusion:TreeGridTemplateColumn AllowSorting="False" HeaderText="Action">
+                        <syncfusion:TreeGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox
+                                        Margin="5,0,5,0"
+                                        IsChecked="{Binding Enabled}"
+                                        ToolTip="Enabled"
+                                        Visibility="{Binding CanEnable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <Button
+                                        Margin="5,0,5,0"
+                                        Click="Run_OnClick"
+                                        ToolTip="Run"
+                                        Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <iconPacks:PackIconMaterial
+                                            Margin="6,0"
+                                            Padding="0,1,0,1"
+                                            Foreground="Green"
+                                            Kind="Play" />
+                                    </Button>
+                                    <Button
+                                        Margin="5,0,5,0"
+                                        Click="Delete_OnClick"
+                                        ToolTip="Delete"
+                                        Visibility="{Binding CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <iconPacks:PackIconMaterial
+                                            Margin="6,0"
+                                            Padding="0,1,0,1"
+                                            Foreground="Red"
+                                            Kind="Delete" />
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </syncfusion:TreeGridTemplateColumn.CellTemplate>
+                    </syncfusion:TreeGridTemplateColumn>
+                </syncfusion:SfTreeGrid.Columns>
+            </syncfusion:SfTreeGrid>
+
+            <Border
+                Grid.Column="1"
+                BorderBrush="#373737"
+                BorderThickness="1">
+                <Grid
+                    MinWidth="250"
+                    Background="{StaticResource ContentBackground}"
+                    IsSharedSizeScope="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" SharedSizeGroup="Label" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Content="Version: " />
+                    <Label
+                        x:Name="VersionLabel"
+                        Grid.Row="0"
+                        Grid.Column="1" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Content="Author: " />
+                    <Label
+                        x:Name="AuthorLabel"
+                        Grid.Row="1"
+                        Grid.Column="1" />
+                </Grid>
+            </Border>
+        </Grid>
 
         <DockPanel Grid.Row="4">
             <hc:TextBox
@@ -120,7 +167,7 @@
                 FlowDirection="LeftToRight" />
             <Button
                 Width="70"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Left"
                 Click="Add_OnClick"
                 Content="Add" />
         </DockPanel>

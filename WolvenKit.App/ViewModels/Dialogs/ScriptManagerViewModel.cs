@@ -14,12 +14,13 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class ScriptManagerViewModel : DialogViewModel
 {
+    private const string s_scriptExtension = ".wscript";
+
     private readonly AppViewModel _appViewModel;
     private readonly ExtendedScriptService _scriptService;
     private readonly ISettingsManager _settingsManager;
 
-    private const string ScriptExtension = ".wscript";
-
+    
     public ScriptManagerViewModel(AppViewModel appViewModel, ExtendedScriptService scriptService, ISettingsManager settingsManager)
     {
         _appViewModel = appViewModel;
@@ -31,6 +32,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
 
     public ObservableCollection<ScriptEntry> Scripts { get; } = new();
 
+
     public void AddScript(string fileName, ScriptType type)
     {
         if (string.IsNullOrEmpty(fileName))
@@ -38,9 +40,9 @@ public partial class ScriptManagerViewModel : DialogViewModel
             return;
         }
 
-        if (!fileName.EndsWith(ScriptExtension))
+        if (!fileName.EndsWith(s_scriptExtension))
         {
-            fileName += ScriptExtension;
+            fileName += s_scriptExtension;
         }
 
         var scriptPath = Path.Combine(ISettingsManager.GetWScriptDir(), fileName);
@@ -89,7 +91,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
             var onSaveScriptDir = new ScriptDirectory(scriptSource, ScriptType.OnSave, _settingsManager);
             var uiScriptDir = new ScriptDirectory(scriptSource, ScriptType.Ui, _settingsManager);
 
-            foreach (var file in Directory.GetFiles(path, $"*{ScriptExtension}"))
+            foreach (var file in Directory.GetFiles(path, $"*{s_scriptExtension}"))
             {
                 var fileName = Path.GetFileName(file);
                 files.Add(file);
@@ -243,7 +245,8 @@ public class ScriptFile : ScriptEntry
 {
     private readonly ISettingsManager _settingsManager;
 
-    public string? Version { get; set; }
+    public string? Version { get; private set; }
+    public string? Author { get; private set; }
 
     public override bool CanExecute => ScriptType == ScriptType.General;
     public override bool CanDelete => ScriptSource == ScriptSource.User;
@@ -279,6 +282,11 @@ public class ScriptFile : ScriptEntry
             if (comment.StartsWith("@version "))
             {
                 Version = comment.Substring("@version ".Length);
+            }
+
+            if (comment.StartsWith("@author "))
+            {
+                Author = comment.Substring("@author ".Length);
             }
         }
     }
