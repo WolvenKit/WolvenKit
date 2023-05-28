@@ -5,10 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
-using DynamicData.Binding;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
@@ -199,7 +196,7 @@ public abstract class ScriptEntry : INotifyPropertyChanged
 {
     protected bool _enabled;
 
-    public string Name { get; }
+    public string Name { get; protected set; }
     public string Path { get; }
     public ScriptType ScriptType { get; }
     public ScriptSource ScriptSource { get; }
@@ -246,6 +243,8 @@ public class ScriptFile : ScriptEntry
 {
     private readonly ISettingsManager _settingsManager;
 
+    public string? Version { get; set; }
+
     public override bool CanExecute => ScriptType == ScriptType.General;
     public override bool CanDelete => ScriptSource == ScriptSource.User;
 
@@ -253,9 +252,34 @@ public class ScriptFile : ScriptEntry
     {
         _settingsManager = settingsManager;
 
+        if (Name.EndsWith(".wscript"))
+        {
+            Name = Name.Substring(0, Name.Length - 8);
+        }
+
         if (!_settingsManager.ScriptStatus!.TryGetValue(Path, out _enabled))
         {
             _enabled = true;
+        }
+
+        GetInfo();
+    }
+
+    private void GetInfo()
+    {
+        foreach (var line in File.ReadAllLines(Path))
+        {
+            if (!line.StartsWith("// "))
+            {
+                break;
+            }
+
+            var comment = line.Substring(3);
+
+            if (comment.StartsWith("@version "))
+            {
+                Version = comment.Substring("@version ".Length);
+            }
         }
     }
 

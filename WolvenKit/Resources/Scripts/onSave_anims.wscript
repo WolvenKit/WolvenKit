@@ -1,3 +1,5 @@
+// @version 1.0
+
 import * as Logger from 'Wolvenkit/Logger.wscript';
 import * as FileValidation from 'Wolvenkit/Wolvenkit_FileValidation.wscript';
 

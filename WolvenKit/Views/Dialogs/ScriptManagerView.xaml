@@ -60,11 +60,19 @@
             AutoGenerateColumns="False"
             CellDoubleTapped="ScriptsTreeGrid_OnCellDoubleTapped"
             ChildPropertyName="Files"
+            ColumnSizer="Auto"
             ItemsSource="{Binding Scripts}"
             ItemsSourceChanged="ScriptsTreeGrid_OnItemsSourceChanged"
             NavigationMode="Row">
             <syncfusion:SfTreeGrid.Columns>
-                <syncfusion:TreeGridTextColumn HeaderText="Name" MappingName="Name" />
+                <syncfusion:TreeGridTextColumn
+                    ColumnSizer="FillColumn"
+                    HeaderText="Name"
+                    MappingName="Name" />
+                <syncfusion:TreeGridTextColumn
+                    HeaderText="Version"
+                    MappingName="Version"
+                    TextAlignment="Center" />
                 <syncfusion:TreeGridTemplateColumn AllowSorting="False" HeaderText="Action">
                     <syncfusion:TreeGridTemplateColumn.CellTemplate>
                         <DataTemplate>
