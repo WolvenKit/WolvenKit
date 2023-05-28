@@ -50,6 +50,7 @@ public class ArchiveWriter
 
     public Archive? WriteArchive(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
     {
+        infolder = new DirectoryInfo(Path.GetFullPath(infolder.FullName).TrimEnd('\\'));
         if (!infolder.Exists)
         {
             return null;
