@@ -11,8 +11,9 @@ import * as FileValidation from 'Wolvenkit/Wolvenkit_FileValidation.wscript';
 
 /*
  * Set this to "false" to stop this script from fixing the index order for you.
+ * currently deactivated because JS truncates uint64 and fucks up everything for everyone 
  */
-const fixIndexOrder = true;
+const fixIndexOrder = false;
 
 /*
  * Set this to "false" to suppress the warning "Items from .anim files not found in .workspot:"
@@ -46,18 +47,20 @@ const checkLoadingHandles = true;
 
 
 function main(workspot) {
-  FileValidation.validateWorkspotFile(workspot, fixIndexOrder, showUnusedAnimsInFiles, showUndefinedWorkspotAnims, checkIdleAnimNames, checkIdDuplication, checkFilepaths, checkLoadingHandles);
-	return true;
+    FileValidation.validateWorkspotFile(workspot, false, showUnusedAnimsInFiles, showUndefinedWorkspotAnims, checkIdleAnimNames, checkIdDuplication, checkFilepaths, checkLoadingHandles);
+    return true;
 };
 
 
 try {
   const fileContent = JSON.parse(file);
   success = main(fileContent["Data"]["RootChunk"]);
-  try {
-    file = JSON.stringify(fileContent);
-  } catch (err) {
-    Logger.Warning("Failed to write file");
+  if (fixIndexOrder) { // currently deactivated      
+      try {
+        file = JSON.stringify(fileContent);
+      } catch (err) {
+        Logger.Warning("Failed to write file");
+      }
   }
 } catch (err) {
     Logger.Warning("failed to validate file");
