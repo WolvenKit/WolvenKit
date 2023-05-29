@@ -389,13 +389,6 @@ namespace WolvenKit.Modkit.RED4
                     case ".gradient":
                         ExtractGradient(path);
                         break;
-
-                    default:
-                        if (!experimentUseNewMeshExporter)
-                        {
-                            throw new ArgumentOutOfRangeException();
-                        }
-                        break;
                 }
 
                 // params must be renamed from path to avoid overwriting of outer variable
@@ -679,8 +672,6 @@ namespace WolvenKit.Modkit.RED4
 
                     case ".gradient":
                         ExtractGradient(path);
-                        break;
-                    default:
                         break;
                 }
 
