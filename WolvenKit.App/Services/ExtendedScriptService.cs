@@ -156,7 +156,7 @@ public partial class ExtendedScriptService : ScriptService
         if (File.Exists(scriptFilePath))
         {
             var dto = new RedFileDto(cr2wFile);
-            var json = RedJsonSerializer.Serialize(dto);
+            var json = RedJsonSerializer.Serialize(dto, new RedJsonSerializerOptions { LongAsString = true });
 
             if (TestExecute(scriptFilePath, ref json))
             {

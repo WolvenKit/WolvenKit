@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Semver;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Extensions;
@@ -1111,7 +1112,7 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
             throw new JsonException();
         }
 
-        Dictionary<int, CRUID>? cruidDict = null;
+        var cruidDict = new Dictionary<int, CRUID>();
 
         var result = new RedPackage();
         while (reader.Read())
@@ -1181,8 +1182,24 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
                     {
                         throw new JsonException();
                     }
+                    reader.Read();
 
-                    cruidDict = JsonSerializer.Deserialize<Dictionary<int, CRUID>>(ref reader, options);
+                    while (reader.TokenType != JsonTokenType.EndObject)
+                    {
+                        if (reader.TokenType != JsonTokenType.PropertyName)
+                        {
+                            throw new JsonException();
+                        }
+
+                        var key = int.Parse(reader.GetString()!);
+                        reader.Read();
+
+                        var value = reader.GetCustomUInt64();
+
+                        cruidDict.Add(key, value);
+                    }
+                    reader.Read();
+
                     break;
                 }
 
@@ -1201,7 +1218,7 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
                             break;
                         }
 
-                        result.RootCruids.Add(reader.GetUInt64());
+                        result.RootCruids.Add(reader.GetCustomUInt64());
                     }
 
                     break;
@@ -1255,7 +1272,9 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
         writer.WriteNumber("Sections", value.Sections);
         writer.WriteNumber("CruidIndex", value.CruidIndex);
 
-        var cruidToChunkDict = new Dictionary<int, CRUID>();
+        writer.WritePropertyName("CruidDict");
+
+        writer.WriteStartObject();
         foreach (var (chunk, cruid) in value.ChunkDictionary)
         {
             var index = -1;
@@ -1272,10 +1291,10 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
                 throw new JsonException();
             }
 
-            cruidToChunkDict.Add(index, cruid);
+            writer.WritePropertyName(index.ToString());
+            writer.WriteCustomNumberValue(cruid);
         }
-        writer.WritePropertyName("CruidDict");
-        JsonSerializer.Serialize(writer, cruidToChunkDict, options);
+        writer.WriteEndObject();
 
         writer.WritePropertyName("Chunks");
         writer.WriteStartArray();

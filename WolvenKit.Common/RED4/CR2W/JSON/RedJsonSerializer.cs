@@ -17,6 +17,7 @@ public static class RedJsonSerializer
     private static readonly ReferenceResolver<RedBaseClass> s_classResolver;
 
     private static readonly ConcurrentDictionary<int, JsonHeader> s_threadedStorage = new();
+    private static readonly ConcurrentDictionary<int, RedJsonSerializerOptions> s_threadedOptionStorage = new();
 
     static RedJsonSerializer()
     {
@@ -98,27 +99,24 @@ public static class RedJsonSerializer
 
     public static JsonSerializerOptions Options { get; }
 
+    public static RedJsonSerializerOptions RedOptions
+    {
+        get => s_threadedOptionStorage[Environment.CurrentManagedThreadId];
+        private set => s_threadedOptionStorage[Environment.CurrentManagedThreadId] = value;
+    }
+
     /// <summary>
     /// Serializes a ??? to json
     /// </summary>
     /// <param name="value"></param>
     /// <param name="skipHeader"></param>
     /// <returns></returns>
-    public static string Serialize(object value, bool skipHeader = false)
+    public static string Serialize(object value, RedJsonSerializerOptions? redOptions = null)
     {
+        RedOptions = redOptions ?? new RedJsonSerializerOptions();
+
         s_bufferResolver.Begin();
         s_classResolver.Begin();
-
-        if (skipHeader)
-        {
-            foreach (var c in Options.Converters)
-            {
-                if (c is RedFileDtoConverter red)
-                {
-                    red.SetSkipHeader(skipHeader);
-                }
-            }
-        }
 
         var result = JsonSerializer.Serialize(value, Options);
 
@@ -142,21 +140,12 @@ public static class RedJsonSerializer
     /// There is no compatible <see cref="System.Text.Json.Serialization.JsonConverter"/>
     /// for <typeparamref name="TValue"/> or its serializable members.
     /// </exception>
-    public static async Task SerializeAsync(Stream utf8Json, object value, bool skipHeader = false)
+    public static async Task SerializeAsync(Stream utf8Json, object value, RedJsonSerializerOptions? redOptions = null)
     {
+        RedOptions = redOptions ?? new RedJsonSerializerOptions();
+
         s_bufferResolver.Begin();
         s_classResolver.Begin();
-
-        if (skipHeader)
-        {
-            foreach (var c in Options.Converters)
-            {
-                if (c is RedFileDtoConverter red)
-                {
-                    red.SetSkipHeader(skipHeader);
-                }
-            }
-        }
 
         await JsonSerializer.SerializeAsync(utf8Json, value, Options);
 
@@ -164,8 +153,10 @@ public static class RedJsonSerializer
     }
 
 
-    public static bool TryDeserialize<T>(string json, out T? result)
+    public static bool TryDeserialize<T>(string json, out T? result, RedJsonSerializerOptions? redOptions = null)
     {
+        RedOptions = redOptions ?? new RedJsonSerializerOptions();
+
         try
         {
             result = Deserialize<T>(json);
@@ -178,8 +169,10 @@ public static class RedJsonSerializer
         }
     }
 
-    public static T? Deserialize<T>(string json)
+    public static T? Deserialize<T>(string json, RedJsonSerializerOptions? redOptions = null)
     {
+        RedOptions = redOptions ?? new RedJsonSerializerOptions();
+
         s_bufferResolver.Begin();
         s_classResolver.Begin();
 
@@ -195,8 +188,10 @@ public static class RedJsonSerializer
         }
     }
 
-    public static object? Deserialize(Type type, JsonElement element)
+    public static object? Deserialize(Type type, JsonElement element, RedJsonSerializerOptions? redOptions = null)
     {
+        RedOptions = redOptions ?? new RedJsonSerializerOptions();
+
         s_bufferResolver.Begin();
         s_classResolver.Begin();
 

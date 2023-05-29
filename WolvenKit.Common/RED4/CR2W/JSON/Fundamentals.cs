@@ -93,9 +93,9 @@ public class CInt32Converter : CustomRedConverter<CInt32>
 
 public class CInt64Converter : CustomRedConverter<CInt64>
 {
-    public override CInt64 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetInt64();
+    public override CInt64 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetCustomInt64();
 
-    public override void Write(Utf8JsonWriter writer, CInt64 value, JsonSerializerOptions options) => writer.WriteNumberValue(value);
+    public override void Write(Utf8JsonWriter writer, CInt64 value, JsonSerializerOptions options) => writer.WriteCustomNumberValue(value);
 }
 
 public class CUInt8Converter : CustomRedConverter<CUInt8>
@@ -121,9 +121,9 @@ public class CUInt32Converter : CustomRedConverter<CUInt32>
 
 public class CUInt64Converter : CustomRedConverter<CUInt64>
 {
-    public override CUInt64 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetUInt64();
+    public override CUInt64 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetCustomUInt64();
 
-    public override void Write(Utf8JsonWriter writer, CUInt64 value, JsonSerializerOptions options) => writer.WriteNumberValue(value);
+    public override void Write(Utf8JsonWriter writer, CUInt64 value, JsonSerializerOptions options) => writer.WriteCustomNumberValue(value);
 }
 
 

@@ -500,7 +500,12 @@ public class WKitUIScripting : WKitScripting
             return false;
         }
 
-        return FileExistsInProject(FNV1A64HashAlgorithm.HashString(path));
+        if (!ulong.TryParse(path, out var hash))
+        {
+            hash = FNV1A64HashAlgorithm.HashString(path);
+        }
+
+        return FileExistsInProject(hash);
     }
 
     /// <summary>
@@ -544,7 +549,12 @@ public class WKitUIScripting : WKitScripting
             return false;
         }
 
-        return FileExists(FNV1A64HashAlgorithm.HashString(path));
+        if (!ulong.TryParse(path, out var hash))
+        {
+            hash = FNV1A64HashAlgorithm.HashString(path);
+        }
+
+        return FileExists(hash);
     }
 
     /// <summary>
