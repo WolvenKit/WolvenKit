@@ -10,24 +10,33 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
 ** ***************************************************** */
 
 /*
- * Set this to "true" to disable recursive verification of app files
- * (e.g. to check the meshes)
+ * Set this to "true" to enable recursive verification in app files
+ * (e.g. to check the appearance names against meshes)
  */
-const validateRecursively = false;
+const validateRecursively = true;
+
+/*
+ * Set this to "false" to disable warnings about unresolved depot paths
+ * e.g. "component: unknown resource in depot path"
+ */
+const showUnresolvedDepotPathWarnings = true;
+
+/* 
+ * ******************************************************
+ */
 
 function main(app) {
 	if (app.appearances.length === 0) {
 		return true;
 	}
-	FileValidation.validateAppFile(app, validateRecursively);
+	FileValidation.validateAppFile(app, validateRecursively, showUnresolvedDepotPathWarnings);
 	return true;
-};
-
+}
 
 try {
 	const fileContent = JSON.parse(file);
-    success = main(fileContent["Data"]["RootChunk"]);
+	success = main(fileContent["Data"]["RootChunk"]);
 } catch (err) {
-    Logger.Warning("failed to validate file");
-    success = true;
+	Logger.Warning("failed to validate file");
+	success = true;
 }

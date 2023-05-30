@@ -1,5 +1,6 @@
 import * as Logger from 'Wolvenkit/Logger.wscript';
 import * as FileValidation from 'Wolvenkit/Wolvenkit_FileValidation.wscript';
+import {isDataChangedForWriting} from "Wolvenkit/Wolvenkit_FileValidation.wscript";
 
 /* ******************************************************
 *      _                         _   _
@@ -45,17 +46,18 @@ const checkFilepaths = true;
  */
 const checkLoadingHandles = true;
 
-
+/* 
+ * ******************************************************
+ */
 function main(workspot) {
     FileValidation.validateWorkspotFile(workspot, false, showUnusedAnimsInFiles, showUndefinedWorkspotAnims, checkIdleAnimNames, checkIdDuplication, checkFilepaths, checkLoadingHandles);
     return true;
-};
-
+}
 
 try {
   const fileContent = JSON.parse(file);
   success = main(fileContent["Data"]["RootChunk"]);
-  if (fixIndexOrder) { // currently deactivated      
+  if (fixIndexOrder && FileValidation.isDataChangedForWriting()) { // currently deactivated      
       try {
         file = JSON.stringify(fileContent);
       } catch (err) {

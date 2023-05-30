@@ -10,15 +10,26 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
 ** ***************************************************** */
 
 /*
- * Set this to "true" to disable recursive verification of root entity files
- * (e.g. if you have a great many of them)
+ * Set this to "false" to disable recursive verification of linked .app files and meshes
+ * (e.g. if this is taking too long for your liking)
  */
-const skipRootEntityCheck = false;
+const validateRecursively = true;
+
+/*
+ * Set this to "false" to disable warnings about unresolved depot paths
+ * e.g. "component: unknown resource in depot path"
+ */
+const showUnresolvedDepotPathWarnings = true;
+
+/* 
+ * ******************************************************
+ */
 
 function main(ent) {
-	FileValidation.validateEntFile(ent, skipRootEntityCheck);
+	FileValidation.validateEntFile(ent, showUnresolvedDepotPathWarnings, validateRecursively);
 	return true;
-};
+}
+
 
 try {
     const fileContent = JSON.parse(file);
