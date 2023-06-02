@@ -10,9 +10,11 @@ namespace WolvenKit.RED4.CR2W.JSON;
 
 public class CDateTimeConverter : CustomRedConverter<CDateTime>
 {
-    public override CDateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetCustomUInt64();
+    public override CDateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+        JsonSerializer.Deserialize<ulong>(ref reader, options);
 
-    public override void Write(Utf8JsonWriter writer, CDateTime value, JsonSerializerOptions options) => writer.WriteCustomNumberValue(value);
+    public override void Write(Utf8JsonWriter writer, CDateTime value, JsonSerializerOptions options) =>
+        JsonSerializer.Serialize(writer, (ulong)value, options);
 }
 
 public class CGuidConverter : CustomRedConverter<CGuid>
@@ -60,20 +62,22 @@ public class CNameConverter : CustomRedConverter<CName>
         var resolved = value.GetResolvedText();
         if (!string.IsNullOrEmpty(resolved) && resolved != "None")
         {
-            writer.WriteStringValue(resolved);
+            JsonSerializer.Serialize(writer, resolved, options);
         }
         else
         {
-            writer.WriteCustomNumberValue(value);
+            JsonSerializer.Serialize(writer, (ulong)value, options);
         }
     }
 }
 
 public class CRUIDConverter : CustomRedConverter<CRUID>
 {
-    public override CRUID Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetCustomUInt64();
+    public override CRUID Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+        JsonSerializer.Deserialize<ulong>(ref reader, options);
 
-    public override void Write(Utf8JsonWriter writer, CRUID value, JsonSerializerOptions options) => writer.WriteCustomNumberValue(value);
+    public override void Write(Utf8JsonWriter writer, CRUID value, JsonSerializerOptions options) =>
+        JsonSerializer.Serialize(writer, (ulong)value, options);
 }
 
 public class CStringConverter : CustomRedConverter<CString>
@@ -791,7 +795,7 @@ public class LocalizationStringConverter : CustomRedConverter<LocalizationString
                         throw new JsonException();
                     }
 
-                    result.Unk1 = reader.GetCustomUInt64();
+                    result.Unk1 = JsonSerializer.Deserialize<ulong>(ref reader, options);
                     break;
                 }
 
@@ -822,7 +826,7 @@ public class LocalizationStringConverter : CustomRedConverter<LocalizationString
         writer.WriteStartObject();
 
         writer.WritePropertyName("unk1");
-        writer.WriteCustomNumberValue(value.Unk1);
+        JsonSerializer.Serialize(writer, value.Unk1, options);
 
         writer.WriteString("value", value.Value);
 
@@ -1252,7 +1256,7 @@ public class ResourcePathConverter : CustomRedConverter<ResourcePath>
         }
         else
         {
-            writer.WriteCustomNumberValue(value);
+            JsonSerializer.Serialize(writer, (ulong)value, options);
         }
     }
 }
@@ -1299,7 +1303,7 @@ public class NodeRefConverter : CustomRedConverter<NodeRef>
         }
         else
         {
-            writer.WriteCustomNumberValue(value);
+            JsonSerializer.Serialize(writer, (ulong)value, options);
         }
     }
 }
@@ -1345,7 +1349,7 @@ public class TweakDBIDConverter : CustomRedConverter<TweakDBID>
         }
         else
         {
-            writer.WriteCustomNumberValue(value);
+            JsonSerializer.Serialize(writer, (ulong)value, options);
         }
     }
 }

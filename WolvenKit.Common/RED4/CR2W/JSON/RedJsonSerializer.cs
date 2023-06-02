@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using System.Text.Unicode;
 using System.Threading.Tasks;
 using Semver;
@@ -26,6 +28,13 @@ public static class RedJsonSerializer
 
         Options = new()
         {
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver
+            {
+                Modifiers =
+                {
+                    NumberHandlingResolver
+                }
+            },
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
             WriteIndented = true,
             MaxDepth = 2048,
@@ -70,6 +79,14 @@ public static class RedJsonSerializer
                 new CollisionShapeConverter()
             }
         };
+    }
+
+    private static void NumberHandlingResolver(JsonTypeInfo obj)
+    {
+        if (obj.Type == typeof(long) || obj.Type == typeof(ulong))
+        {
+            obj.NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString;
+        }
     }
 
     internal static void SetHeader(JsonHeader header) =>

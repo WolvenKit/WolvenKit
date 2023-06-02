@@ -1112,7 +1112,7 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
             throw new JsonException();
         }
 
-        var cruidDict = new Dictionary<int, CRUID>();
+        Dictionary<int, CRUID>? cruidDict = null;
 
         var result = new RedPackage();
         while (reader.Read())
@@ -1182,24 +1182,8 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
                     {
                         throw new JsonException();
                     }
-                    reader.Read();
 
-                    while (reader.TokenType != JsonTokenType.EndObject)
-                    {
-                        if (reader.TokenType != JsonTokenType.PropertyName)
-                        {
-                            throw new JsonException();
-                        }
-
-                        var key = int.Parse(reader.GetString()!);
-                        reader.Read();
-
-                        var value = reader.GetCustomUInt64();
-
-                        cruidDict.Add(key, value);
-                    }
-                    reader.Read();
-
+                    cruidDict = JsonSerializer.Deserialize<Dictionary<int, CRUID>>(ref reader, options);
                     break;
                 }
 
@@ -1218,7 +1202,7 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
                             break;
                         }
 
-                        result.RootCruids.Add(reader.GetCustomUInt64());
+                        result.RootCruids.Add(JsonSerializer.Deserialize<CRUID>(ref reader, options));
                     }
 
                     break;
@@ -1272,9 +1256,7 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
         writer.WriteNumber("Sections", value.Sections);
         writer.WriteNumber("CruidIndex", value.CruidIndex);
 
-        writer.WritePropertyName("CruidDict");
-
-        writer.WriteStartObject();
+        var cruidToChunkDict = new Dictionary<int, CRUID>();
         foreach (var (chunk, cruid) in value.ChunkDictionary)
         {
             var index = -1;
@@ -1291,10 +1273,10 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
                 throw new JsonException();
             }
 
-            writer.WritePropertyName(index.ToString());
-            writer.WriteCustomNumberValue(cruid);
+            cruidToChunkDict.Add(index, cruid);
         }
-        writer.WriteEndObject();
+        writer.WritePropertyName("CruidDict");
+        JsonSerializer.Serialize(writer, cruidToChunkDict, options);
 
         writer.WritePropertyName("Chunks");
         writer.WriteStartArray();
