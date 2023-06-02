@@ -30,18 +30,6 @@ public class WKitScripting
     }
 
     /// <summary>
-    /// Loads a file from the base archives using either a file path or hash
-    /// </summary>
-    /// <param name="path">The path of the file to retrieve</param>
-    /// <returns></returns>
-    [Description("GetFileFromBase")]
-    public virtual IGameFile? GetFileFromBase(string path)
-    {
-        var file = _archiveManager.Lookup(FNV1A64HashAlgorithm.HashString(path));
-        return file.HasValue ? file.Value : null;
-    }
-
-    /// <summary>
     /// Gets a list of the files available in the game archives
     /// Note to myself: Don't use IEnumerable<T>
     /// </summary>
@@ -55,6 +43,27 @@ public class WKitScripting
                 yield return file as FileEntry;
             }
         }
+    }
+
+    /// <summary>
+    /// Loads a file from the base archives using either a file path or hash
+    /// </summary>
+    /// <param name="path">The path of the file to retrieve</param>
+    /// <returns></returns>
+    [Description("GetFileFromBase")]
+    public virtual IGameFile? GetFileFromBase(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return null;
+        }
+
+        if (!ulong.TryParse(path, out var hash))
+        {
+            hash = FNV1A64HashAlgorithm.HashString(path);
+        }
+
+        return GetFileFromBase(hash);
     }
 
     /// <summary>
@@ -115,7 +124,20 @@ public class WKitScripting
     /// </summary>
     /// <param name="path">file path to check</param>
     /// <returns></returns>
-    public virtual bool FileExistsInArchive(string path) => !string.IsNullOrEmpty(path) && FileExistsInArchive(FNV1A64HashAlgorithm.HashString(path));
+    public virtual bool FileExistsInArchive(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return false;
+        }
+
+        if (!ulong.TryParse(path, out var hash))
+        {
+            hash = FNV1A64HashAlgorithm.HashString(path);
+        }
+
+        return FileExistsInArchive(hash);
+    }
 
     /// <summary>
     /// Check if file exists in the game archives

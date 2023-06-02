@@ -37,7 +37,7 @@ namespace WolvenKit.Modkit.RED4
 
             // serialize
             using var stream = new MemoryStream();
-            await RedJsonSerializer.SerializeAsync(stream, dto, skipHeader);
+            await RedJsonSerializer.SerializeAsync(stream, dto, new RedJsonSerializerOptions {SkipHeader = skipHeader});
 
             // convert to text
             stream.Seek(0, SeekOrigin.Begin);
@@ -74,7 +74,7 @@ namespace WolvenKit.Modkit.RED4
             var dto = new RedFileDto(cr2w);
 
             // serialize
-            await RedJsonSerializer.SerializeAsync(stream, dto, skipHeader);
+            await RedJsonSerializer.SerializeAsync(stream, dto, new RedJsonSerializerOptions { SkipHeader = skipHeader });
         }
 
         /// <summary>
