@@ -52,11 +52,11 @@ public partial class ExtendedScriptService : ScriptService
         void CopyFilesRecursively(string sourcePath, string targetPath)
         {
             // Copy those only once per new installation
-            if (!File.Exists(sourcePath))
+            if (!Directory.Exists(sourcePath))
             {
                 return;
             }
-            if (!File.Exists(targetPath))
+            if (!Directory.Exists(targetPath))
             {
                 Directory.CreateDirectory(targetPath);
             }

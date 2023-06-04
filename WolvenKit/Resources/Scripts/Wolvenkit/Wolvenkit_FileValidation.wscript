@@ -153,7 +153,9 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             return;
         }
 
-        if (alreadyVerifiedFileNames.includes(depotPath)) { return; }
+        if (alreadyVerifiedFileNames.includes(depotPath)) { 
+            return; 
+        }
 
         alreadyVerifiedFileNames.push(depotPath);
 
@@ -209,31 +211,34 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
         appFile_collectComponentsFromEntPath(valueDepotPath, validateRecursively);
     }
 
-    function appFile_validateAppearance(app, index, validateRecursively) {
-        if (appearance.name.length === 0 || /^[^A-Za-z0-9]+$/.test(appearance.name)) { return; }
-
+    function appFile_validateAppearance(appearance, index, validateRecursively) {
         // check override
-        if (app.Data.cookedDataPathOverride.DepotPath) {
+        if (appearance.Data.cookedDataPathOverride.DepotPath) {
             Logger.Warning(`appearance definition ${index} has a cooked data override. Consider deleting it.`);
         }
 
-        let appearanceName = app.Data.name;
+        let appearanceName = appearance.Data.name;
+
+        if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) { 
+            return;
+        }
+
         if (!appearanceName) {
             Logger.Warning(`appearance definition #${index} has no name yet`);
             appearanceName = `appearances[${index}]`
         }
 
         if (alreadyDefinedAppearanceNames.includes(appearanceName)) {
-            Logger.Warning(`An appearance with the name ${appearance.name} is already defined`);
+            Logger.Warning(`An appearance with the name ${appearanceName} is already defined`);
         }
 
-        for(let i = 0; i < app.Data.components.length; i++) {
-            entFile_validateComponent(app.Data.components[i], i, appearanceName, validateRecursively);
+        for(let i = 0; i < appearance.Data.components.length; i++) {
+            entFile_validateComponent(appearance.Data.components[i], i, appearanceName, validateRecursively);
         }
 
         // check these before the overrides, because we're parsing the linked files
-        for(let i = 0; i < app.Data.partsValues.length; i++) {
-            appFile_validatePartsValue(app.Data.partsValues[i], i, appearanceName, validateRecursively);
+        for(let i = 0; i < appearance.Data.partsValues.length; i++) {
+            appFile_validatePartsValue(appearance.Data.partsValues[i], i, appearanceName, validateRecursively);
         }
 
         Object.values(componentNameCollisions)
@@ -249,12 +254,15 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             });
         }
 
-        for(let i = 0; i < app.Data.partsOverrides.length; i++) {
-            appFile_validatePartsOverride(app.Data.partsOverrides[i], i, appearanceName);
+        for(let i = 0; i < appearance.Data.partsOverrides.length; i++) {
+            appFile_validatePartsOverride(appearance.Data.partsOverrides[i], i, appearanceName);
         }
     }
 
     export function validateAppFile(app, validateRecursively) {
+        // invalid app file - not found
+        if (!app) { return; }
+
         // empty array with name collisions
         componentOverrideCollisions.length = 0;
         alreadyVerifiedFileNames.length = 0;
@@ -320,11 +328,16 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
         const appearanceNamesByAppFile = {};
         
         function getAppearanceNamesInAppFile(depotPath) {
+            if (!wkit.FileExists(depotPath)) {
+                return [];
+            }
             if (!appearanceNamesByAppFile[depotPath]) {
                 const fileContent = wkit.LoadGameFileFromProject(depotPath, 'json');
                 const appFile = JSON.parse(fileContent);
-                const appNames = appFile.Data.RootChunk.appearances.map((app) => app.Data.name) || [];
-                appearanceNamesByAppFile[depotPath] = appNames;
+                if (null !== appFile) {
+                    const appNames = appFile.Data.RootChunk.appearances.map((app) => app.Data.name) || [];
+                    appearanceNamesByAppFile[depotPath] = appNames;
+                }
             }
             return appearanceNamesByAppFile[depotPath];
         }
@@ -360,7 +373,7 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
                 return;
             }
 
-            const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearance.name);
+            const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearance.name) || [];
             if (!namesInAppFile.includes(appearance.appearanceName)) {
                 Logger.Warning(`${appearance.name}: Should have appearance ${appearance.appearanceName}, but file ${appFilePath} only defines [${namesInAppFile.join(', ')}]`);
             }
@@ -368,7 +381,11 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             if (isRootEntity) {
                 const fileContent = wkit.LoadGameFileFromProject(appFilePath, 'json');
                 const appFile = JSON.parse(fileContent);
-                validateAppFile(appFile, true);
+                if (null === appFile) {
+                    Logger.Warning(`File ${appFilePath} is supposed to exist, but couldn't be parsed.`)
+                } else {
+                    validateAppFile(appFile, true);
+                }
             }
         }
 
