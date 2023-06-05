@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents.DocumentStructures;
 using System.Xml;
 using ReactiveUI;
 using Splat;
@@ -195,6 +196,21 @@ namespace WolvenKit.Views.Shell
                 {
                     _logger.Error($"{layoutSource} layout can't be deserialized");
                     return false;
+                }
+
+                var newDockedWindows = dockingParamsList.Select(dockingParam => dockingParam.Name).ToList();
+                for (var i = PART_DockingManager.Children.Count - 1; i >= 0; i--)
+                {
+                    if (PART_DockingManager.Children[i] is not ContentControl contentControl || contentControl.Content is not IDockElement dockElement)
+                    {
+                        throw new Exception($"Can't unload {PART_DockingManager.Children[i].Name}");
+                    }
+
+                    if (!newDockedWindows.Contains(contentControl.Name))
+                    {
+                        appViewModel.DockedViews.Remove(dockElement);
+                        PART_DockingManager.Children.Remove(contentControl);
+                    }
                 }
 
                 foreach (var dockingParam in dockingParamsList)
@@ -567,6 +583,8 @@ namespace WolvenKit.Views.Shell
                                 control.Name = dockElement.GetType().Name;
                             }
 
+                            DockingManager.SetCanSerialize(control, dockElement.CanSerialize);
+
                             PART_DockingManager.Children.Add(control);
                         }
                     }
@@ -643,6 +661,8 @@ namespace WolvenKit.Views.Shell
                         {
                             control.Name = element.GetType().Name;
                         }
+
+                        DockingManager.SetCanSerialize(control, element.CanSerialize);
 
                         PART_DockingManager.Children.Add(control);
                     }

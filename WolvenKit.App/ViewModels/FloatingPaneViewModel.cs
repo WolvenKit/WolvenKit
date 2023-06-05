@@ -5,6 +5,7 @@ public abstract class FloatingPaneViewModel : PaneViewModel
 {
     protected FloatingPaneViewModel(string header, string contentId) : base(header, contentId)
     {
+        CanSerialize = true;
     }
 
     public virtual double Width { get; set; } = 1200;
