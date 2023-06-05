@@ -60,7 +60,9 @@ namespace WolvenKit.Modkit.RED4
                 if (node.Mesh != null)
                 {
                     var rawMesh = GltfMeshToRawContainer(node);
-
+                    // This should probably be fixed in the mesh import code,
+                    // but that stuff needs to be rewritten anyway so surgical for now
+                    rawMesh.garmentMorph = Array.Empty<Vec3>();
                     rawMeshes.Add(rawMesh);
                 }
                 else if (args.FillEmpty)
