@@ -790,7 +790,7 @@ public class LocalizationStringConverter : CustomRedConverter<LocalizationString
                 case "unk1":
                 {
                     reader.Read();
-                    if (reader.TokenType != JsonTokenType.Number)
+                    if (reader.TokenType != JsonTokenType.String && reader.TokenType != JsonTokenType.Number)
                     {
                         throw new JsonException();
                     }
