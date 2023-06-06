@@ -27,6 +27,8 @@ public abstract partial class PaneViewModel : ObservableObject, IDockElement
 
     [ObservableProperty] private bool _isActive;
 
+    [ObservableProperty] private bool _canSerialize;
+
     /// <summary>
     /// Gets/sets whether this tool window is visible or not.
     /// </summary>

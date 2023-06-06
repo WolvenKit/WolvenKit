@@ -12,5 +12,7 @@ public interface IDockElement : INotifyPropertyChanged
 
     public bool IsActive { get; set; }
 
+    public bool CanSerialize { get; set; }
+
     bool IsVisible { get; set; }
 }

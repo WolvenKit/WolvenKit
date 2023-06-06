@@ -12,15 +12,8 @@ namespace WolvenKit.RED4.CR2W.JSON;
 public class RedFileDtoConverter : CustomRedConverter<RedFileDto>
 {
     private readonly ReferenceResolver<RedBaseClass> _referenceResolver;
-    private bool _skipHeader;
 
-    public RedFileDtoConverter(ReferenceResolver<RedBaseClass> referenceResolver, bool skipHeader = false)
-    {
-        _referenceResolver = referenceResolver;
-        _skipHeader = skipHeader;
-    }
-
-    public void SetSkipHeader(bool skipHeader) => _skipHeader = skipHeader;
+    public RedFileDtoConverter(ReferenceResolver<RedBaseClass> referenceResolver) => _referenceResolver = referenceResolver;
 
     public override RedFileDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -317,7 +310,7 @@ public class RedFileDtoConverter : CustomRedConverter<RedFileDto>
 
         writer.WriteStartObject();
 
-        if (!_skipHeader)
+        if (!RedJsonSerializer.RedOptions.SkipHeader)
         {
             writer.WritePropertyName("Header");
             JsonSerializer.Serialize(writer, value.Header, options);

@@ -10,9 +10,11 @@ namespace WolvenKit.RED4.CR2W.JSON;
 
 public class CDateTimeConverter : CustomRedConverter<CDateTime>
 {
-    public override CDateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetUInt64();
+    public override CDateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+        JsonSerializer.Deserialize<ulong>(ref reader, options);
 
-    public override void Write(Utf8JsonWriter writer, CDateTime value, JsonSerializerOptions options) => writer.WriteNumberValue(value);
+    public override void Write(Utf8JsonWriter writer, CDateTime value, JsonSerializerOptions options) =>
+        JsonSerializer.Serialize(writer, (ulong)value, options);
 }
 
 public class CGuidConverter : CustomRedConverter<CGuid>
@@ -31,18 +33,28 @@ public class CNameConverter : CustomRedConverter<CName>
             return (CName)RedTypeManager.CreateRedType(typeToConvert);
         }
 
-        if (reader.TokenType == JsonTokenType.String)
-        {
-            return reader.GetString().NotNull();
-        }
-        else if (reader.TokenType == JsonTokenType.Number)
+        if (reader.TokenType == JsonTokenType.Number)
         {
             return reader.GetUInt64();
         }
-        else
+
+        if (reader.TokenType == JsonTokenType.String)
         {
-            throw new JsonException();
+            var str = reader.GetString();
+            if (str == null)
+            {
+                throw new JsonException();
+            }
+
+            if (ulong.TryParse(str, out var value))
+            {
+                return value;
+            }
+
+            return str;
         }
+
+        throw new JsonException();
     }
 
     public override void Write(Utf8JsonWriter writer, CName value, JsonSerializerOptions options)
@@ -50,20 +62,22 @@ public class CNameConverter : CustomRedConverter<CName>
         var resolved = value.GetResolvedText();
         if (!string.IsNullOrEmpty(resolved) && resolved != "None")
         {
-            writer.WriteStringValue(resolved);
+            JsonSerializer.Serialize(writer, resolved, options);
         }
         else
         {
-            writer.WriteNumberValue(value);
+            JsonSerializer.Serialize(writer, (ulong)value, options);
         }
     }
 }
 
 public class CRUIDConverter : CustomRedConverter<CRUID>
 {
-    public override CRUID Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetUInt64();
+    public override CRUID Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+        JsonSerializer.Deserialize<ulong>(ref reader, options);
 
-    public override void Write(Utf8JsonWriter writer, CRUID value, JsonSerializerOptions options) => writer.WriteNumberValue(value);
+    public override void Write(Utf8JsonWriter writer, CRUID value, JsonSerializerOptions options) =>
+        JsonSerializer.Serialize(writer, (ulong)value, options);
 }
 
 public class CStringConverter : CustomRedConverter<CString>
@@ -776,12 +790,12 @@ public class LocalizationStringConverter : CustomRedConverter<LocalizationString
                 case "unk1":
                 {
                     reader.Read();
-                    if (reader.TokenType != JsonTokenType.Number)
+                    if (reader.TokenType != JsonTokenType.String && reader.TokenType != JsonTokenType.Number)
                     {
                         throw new JsonException();
                     }
 
-                    result.Unk1 = reader.GetUInt64();
+                    result.Unk1 = JsonSerializer.Deserialize<ulong>(ref reader, options);
                     break;
                 }
 
@@ -811,7 +825,9 @@ public class LocalizationStringConverter : CustomRedConverter<LocalizationString
     {
         writer.WriteStartObject();
 
-        writer.WriteNumber("unk1", value.Unk1);
+        writer.WritePropertyName("unk1");
+        JsonSerializer.Serialize(writer, value.Unk1, options);
+
         writer.WriteString("value", value.Value);
 
         writer.WriteEndObject();
@@ -1207,18 +1223,28 @@ public class ResourcePathConverter : CustomRedConverter<ResourcePath>
             return (ResourcePath)RedTypeManager.CreateRedType(typeToConvert);
         }
 
-        if (reader.TokenType == JsonTokenType.String)
-        {
-            return reader.GetString().NotNull();
-        }
-        else if (reader.TokenType == JsonTokenType.Number)
+        if (reader.TokenType == JsonTokenType.Number)
         {
             return reader.GetUInt64();
         }
-        else
+
+        if (reader.TokenType == JsonTokenType.String)
         {
-            throw new JsonException();
+            var str = reader.GetString();
+            if (str == null)
+            {
+                throw new JsonException();
+            }
+
+            if (ulong.TryParse(str, out var value))
+            {
+                return value;
+            }
+
+            return str;
         }
+
+        throw new JsonException();
     }
 
     public override void Write(Utf8JsonWriter writer, ResourcePath value, JsonSerializerOptions options)
@@ -1230,7 +1256,7 @@ public class ResourcePathConverter : CustomRedConverter<ResourcePath>
         }
         else
         {
-            writer.WriteNumberValue(value);
+            JsonSerializer.Serialize(writer, (ulong)value, options);
         }
     }
 }
@@ -1244,18 +1270,28 @@ public class NodeRefConverter : CustomRedConverter<NodeRef>
             return (NodeRef)RedTypeManager.CreateRedType(typeToConvert);
         }
 
-        if (reader.TokenType == JsonTokenType.String)
-        {
-            return reader.GetString().NotNull();
-        }
-        else if (reader.TokenType == JsonTokenType.Number)
+        if (reader.TokenType == JsonTokenType.Number)
         {
             return reader.GetUInt64();
         }
-        else
+
+        if (reader.TokenType == JsonTokenType.String)
         {
-            throw new JsonException();
+            var str = reader.GetString();
+            if (str == null)
+            {
+                throw new JsonException();
+            }
+
+            if (ulong.TryParse(str, out var value))
+            {
+                return value;
+            }
+
+            return str;
         }
+
+        throw new JsonException();
     }
 
     public override void Write(Utf8JsonWriter writer, NodeRef value, JsonSerializerOptions options)
@@ -1267,7 +1303,7 @@ public class NodeRefConverter : CustomRedConverter<NodeRef>
         }
         else
         {
-            writer.WriteNumberValue(value);
+            JsonSerializer.Serialize(writer, (ulong)value, options);
         }
     }
 }
@@ -1278,21 +1314,31 @@ public class TweakDBIDConverter : CustomRedConverter<TweakDBID>
     {
         if (reader.TokenType == JsonTokenType.Null)
         {
-            return (TweakDBID)RedTypeManager.CreateRedType(typeToConvert);
+            return (TweakDBID)RedTypeManager.CreateRedType(typeof(TweakDBID));
+        }
+
+        if (reader.TokenType == JsonTokenType.Number)
+        {
+            return reader.GetUInt64();
         }
 
         if (reader.TokenType == JsonTokenType.String)
         {
-            return reader.GetString().NotNull();
+            var str = reader.GetString();
+            if (str == null)
+            {
+                throw new JsonException();
+            }
+
+            if (ulong.TryParse(str, out var value))
+            {
+                return value;
+            }
+
+            return str;
         }
-        else if (reader.TokenType == JsonTokenType.Number)
-        {
-            return reader.GetUInt64();
-        }
-        else
-        {
-            throw new JsonException();
-        }
+
+        throw new JsonException();
     }
 
     public override void Write(Utf8JsonWriter writer, TweakDBID value, JsonSerializerOptions options)
@@ -1303,7 +1349,7 @@ public class TweakDBIDConverter : CustomRedConverter<TweakDBID>
         }
         else
         {
-            writer.WriteNumberValue(value);
+            JsonSerializer.Serialize(writer, (ulong)value, options);
         }
     }
 }
