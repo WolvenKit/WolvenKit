@@ -197,9 +197,6 @@
     <Content Include="Resources\Scripts\*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Scripts\Wolvenkit\*">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\Wolvenkit.Installer.Package.appinstaller">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1771,7 +1768,6 @@
     <None Remove="Resources\Media\test.kark" />
     <None Remove="Resources\Media\testc.kark" />
     <None Remove="Resources\Media\testconv.kark" />
-    <None Remove="Resources\Scripts\Wolvenkit\*" />
     <None Remove="Resources\Scripts\*" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysBack512.png" />
     <None Remove="Resources\SkyboxTextures\CloudyLightRaysDown512.png" />

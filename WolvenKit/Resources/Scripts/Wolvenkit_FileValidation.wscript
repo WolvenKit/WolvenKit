@@ -1,6 +1,6 @@
 // @version 1.0
 
-import * as Logger from 'Wolvenkit/Logger.wscript';
+import * as Logger from 'Logger.wscript';
 
 /*
 *     .___                      __           .__                                     __  .__    .__           _____.__.__
@@ -77,15 +77,15 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
         });
     }
 
-    export function validateAnimationFile(animAnimSet, checkForDuplicates, printAnimationNames, targetAnimNames) {
+    export function validateAnimationFile(animAnimSet, settings) {
 
         if (animAnimSet["Data"] && animAnimSet["Data"]["RootChunk"]) {
             return validateAnimationFile(animAnimSet["Data"]["RootChunk"]);
         }
 
-        _printAnimationNames = printAnimationNames;
+        _printAnimationNames = settings.printAnimationNames;
 
-        animFile_SetAnimNames(animAnimSet, targetAnimNames);
+        animFile_SetAnimNames(animAnimSet, settings.targetAnimNames);
         
         // collect names
         for (let index = 0; index < animAnimSet.animations.length; index++) {
@@ -95,7 +95,7 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             animNamesByIndex[index] = animName;
         }
         
-        if (checkForDuplicates) {
+        if (settings.checkForDuplicates) {
             animFile_CheckForDuplicateNames();
         }
 
@@ -259,7 +259,7 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
         }
     }
 
-    export function validateAppFile(app, validateRecursively) {
+    export function validateAppFile(app, settings) {
         // invalid app file - not found
         if (!app) { return; }
 
@@ -269,10 +269,10 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
         meshesByComponentName = {};
 
         if (app["Data"] && app["Data"]["RootChunk"]) {
-            return validateAppFile(app["Data"]["RootChunk"], validateRecursively);
+            return validateAppFile(app["Data"]["RootChunk"], settings.validateRecursively);
         }
         for(let i = 0; i < app.appearances.length; i++) {
-            appFile_validateAppearance(app.appearances[i], i, validateRecursively);
+            appFile_validateAppearance(app.appearances[i], i, settings.validateRecursively);
         }
     }
 
@@ -393,9 +393,9 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
        /**
         *
         * @param {*} ent The entity file as read from WKit
-        * @param {*} skipRootEntityCheck Flag that allows
+        * @param {*} validateRecursively Flag that allows
         */
-       export function validateEntFile(ent, skipRootEntityCheck) {
+       export function validateEntFile(ent, settings) {
 
             if (ent["Data"] && ent["Data"]["RootChunk"]) {
                 return validateEntFile(ent["Data"]["RootChunk"]);
@@ -408,7 +408,7 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
 
             for (let i = 0; i < ent.appearances.length; i++) {
                 const appearance = ent.appearances[i];
-                entFile_validateAppearance(appearance, i, !skipRootEntityCheck);
+                entFile_validateAppearance(appearance, i, settings.validateRecursively);
             }
             
             for (let i = 0; i < ent.inplaceResources.length; i++) {
@@ -815,19 +815,19 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             return rootEntry;
         }
         
-        export function validateWorkspotFile(workspot, fixIndexOrder, showUnusedAnimsInFiles, showUndefinedWorkspotAnims, checkIdleAnimNames, checkIdDuplication, checkFilepaths, checkLoadingHandles) {
+        export function validateWorkspotFile(workspot, settings) {
 
             if (workspot["Data"] && workspot["Data"]["RootChunk"]) {
-                return validateWorkspotFileAppFile(workspot["Data"]["RootChunk"], fixIndexOrder, showUnusedAnimsInFiles, showUndefinedWorkspotAnims, checkIdleAnimNames, checkIdDuplication, checkFilepaths, checkLoadingHandles);
+                return validateWorkspotFileAppFile(workspot["Data"]["RootChunk"], settings.fixIndexOrder, settings.showUnusedAnimsInFiles, settings.showUndefinedWorkspotAnims, settings.checkIdleAnimNames, settings.checkIdDuplication, settings.checkFilepaths, settings.checkLoadingHandles);
             }
 
             let rootEntry = workspot;
-            _showUndefinedWorkspotAnims = showUndefinedWorkspotAnims;
-            _showUnusedAnimsInFiles = showUnusedAnimsInFiles;
-            _checkIdleAnimNames = checkIdleAnimNames;
-            _checkIdDuplication = checkIdDuplication;
-            _checkFilepaths = checkFilepaths;
-            _checkLoadingHandles = checkLoadingHandles;
+            _showUndefinedWorkspotAnims = settings.showUndefinedWorkspotAnims;
+            _showUnusedAnimsInFiles = settings.showUnusedAnimsInFiles;
+            _checkIdleAnimNames = settings.checkIdleAnimNames;
+            _checkIdDuplication = settings.checkIdDuplication;
+            _checkFilepaths = settings.checkFilepaths;
+            _checkLoadingHandles = settings.checkLoadingHandles;
 
             const workspotTree = workspot.workspotTree;
             
@@ -854,7 +854,7 @@ import * as Logger from 'Wolvenkit/Logger.wscript';
             
             alreadyUsedIndices.length = 0;
             
-            if (fixIndexOrder) {
+            if (settings.fixIndexOrder) {
                 rootEntry = workspotFile_SetIndexOrder(workspotTree.Data.rootEntry);
             }
 

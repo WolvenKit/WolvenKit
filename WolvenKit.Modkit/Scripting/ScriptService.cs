@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.IO;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.Scripting;
 
 public partial class ScriptService : ObservableObject
 {
+    public const string ScriptExtension = "wscript";
+
     protected readonly ILoggerService _loggerService;
 
     private V8ScriptEngine? _mainEngine;
@@ -99,4 +99,25 @@ public partial class ScriptService : ObservableObject
         return engine;
     }
 
+    public virtual IList<ScriptFile> GetScripts(string path)
+    {
+        var result = new List<ScriptFile>();
+
+        if (string.IsNullOrEmpty(path))
+        {
+            return result;
+        }
+
+        if (!Directory.Exists(path))
+        {
+            return result;
+        }
+
+        foreach (var file in Directory.GetFiles(path, $"*.{ScriptExtension}", SearchOption.AllDirectories))
+        {
+            result.Add(new ScriptFile(file));
+        }
+
+        return result;
+    }
 }

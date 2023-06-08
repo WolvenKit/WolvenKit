@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Octokit;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Modkit.Scripting;
+using ScriptFile = WolvenKit.App.ViewModels.Dialogs.ScriptFile;
 using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 
 namespace WolvenKit.Views.Dialogs;
@@ -133,7 +132,7 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
         ScriptTypeTabControl.SelectedIndex switch
         {
             0 => ScriptType.General,
-            1 => ScriptType.OnSave,
+            1 => ScriptType.Hook,
             2 => ScriptType.Ui,
             _ => throw new ArgumentOutOfRangeException(nameof(TabControl.SelectedIndex))
         };

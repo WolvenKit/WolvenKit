@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -9,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -64,7 +66,6 @@ public partial class ScriptManagerViewModel : DialogViewModel
     [RelayCommand]
     private void Cancel() => _appViewModel.CloseModalCommand.Execute(null);
 
-
     public void GetScriptFiles()
     {
         _settingsManager.ScriptStatus ??= new();
@@ -72,7 +73,6 @@ public partial class ScriptManagerViewModel : DialogViewModel
         Scripts.Clear();
 
         var files = new List<string>();
-
         ScanDir(ScriptSource.System, @"Resources\Scripts");
         ScanDir(ScriptSource.User, ISettingsManager.GetWScriptDir());
 
@@ -88,35 +88,31 @@ public partial class ScriptManagerViewModel : DialogViewModel
         void ScanDir(ScriptSource scriptSource, string path)
         {
             var generalScriptDir = new ScriptDirectory(scriptSource, ScriptType.General, _settingsManager);
-            var onSaveScriptDir = new ScriptDirectory(scriptSource, ScriptType.OnSave, _settingsManager);
+            var hookScriptDir = new ScriptDirectory(scriptSource, ScriptType.Hook, _settingsManager);
             var uiScriptDir = new ScriptDirectory(scriptSource, ScriptType.Ui, _settingsManager);
 
-            foreach (var file in Directory.GetFiles(path, $"*{s_scriptExtension}"))
+            foreach (var systemScript in _scriptService.GetScripts(path))
             {
-                var fileName = Path.GetFileName(file);
-                files.Add(file);
+                files.Add(systemScript.Path);
 
-                if (!_settingsManager.ScriptStatus.TryGetValue(fileName, out var enabled))
+                switch (systemScript.Type)
                 {
-                    enabled = true;
-                }
-
-                if (fileName.StartsWith("ui_"))
-                {
-                    uiScriptDir.Files.Add(new ScriptFile(fileName, file, ScriptType.Ui, scriptSource, _settingsManager));
-                }
-                else if (fileName.StartsWith("onSave_"))
-                {
-                    onSaveScriptDir.Files.Add(new ScriptFile(fileName, file, ScriptType.OnSave, scriptSource, _settingsManager));
-                }
-                else
-                {
-                    generalScriptDir.Files.Add(new ScriptFile(fileName, file, ScriptType.General, scriptSource, _settingsManager));
+                    case ScriptType.General:
+                        generalScriptDir.Files.Add(new ScriptFile(_settingsManager, scriptSource, systemScript));
+                        break;
+                    case ScriptType.Hook:
+                        hookScriptDir.Files.Add(new ScriptFile(_settingsManager, scriptSource, systemScript));
+                        break;
+                    case ScriptType.Ui:
+                        uiScriptDir.Files.Add(new ScriptFile(_settingsManager, scriptSource, systemScript));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
 
             Scripts.Add(generalScriptDir);
-            Scripts.Add(onSaveScriptDir);
+            Scripts.Add(hookScriptDir);
             Scripts.Add(uiScriptDir);
         }
     }
@@ -141,7 +137,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
                 return;
             }
 
-            localFilePath = Path.Combine(ISettingsManager.GetWScriptDir(), scriptFile.Name);
+            localFilePath = Path.Combine(ISettingsManager.GetWScriptDir(), Path.GetFileName(scriptFile.Path));
             if (File.Exists(localFilePath))
             {
                 response = await Interactions.ShowMessageBoxAsync(
@@ -244,50 +240,22 @@ public abstract class ScriptEntry : INotifyPropertyChanged
 public class ScriptFile : ScriptEntry
 {
     private readonly ISettingsManager _settingsManager;
+    private readonly Modkit.Scripting.ScriptFile _scriptFile;
 
-    public string? Version { get; private set; }
-    public string? Author { get; private set; }
+    public string? Version => _scriptFile.Version;
+    public string? Author => _scriptFile.Author;
 
     public override bool CanExecute => ScriptType == ScriptType.General;
     public override bool CanDelete => ScriptSource == ScriptSource.User;
 
-    public ScriptFile(string name, string path, ScriptType scriptType, ScriptSource scriptSource, ISettingsManager settingsManager) : base(name, path, scriptType, scriptSource)
+    public ScriptFile(ISettingsManager settingsManager, ScriptSource source, Modkit.Scripting.ScriptFile scriptFile) : base(scriptFile.Name, scriptFile.Path, scriptFile.Type, source)
     {
+        _scriptFile = scriptFile;
         _settingsManager = settingsManager;
-
-        if (Name.EndsWith(".wscript"))
-        {
-            Name = Name.Substring(0, Name.Length - 8);
-        }
 
         if (!_settingsManager.ScriptStatus!.TryGetValue(Path, out _enabled))
         {
             _enabled = true;
-        }
-
-        GetInfo();
-    }
-
-    private void GetInfo()
-    {
-        foreach (var line in File.ReadAllLines(Path))
-        {
-            if (!line.StartsWith("// "))
-            {
-                break;
-            }
-
-            var comment = line.Substring(3);
-
-            if (comment.StartsWith("@version "))
-            {
-                Version = comment.Substring("@version ".Length);
-            }
-
-            if (comment.StartsWith("@author "))
-            {
-                Author = comment.Substring("@author ".Length);
-            }
         }
     }
 
@@ -333,13 +301,6 @@ public class ScriptDirectory : ScriptEntry
     }
 
     #endregion
-}
-
-public enum ScriptType
-{
-    General,
-    OnSave,
-    Ui
 }
 
 public enum ScriptSource

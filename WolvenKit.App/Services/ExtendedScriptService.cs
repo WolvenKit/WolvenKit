@@ -1,10 +1,8 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
@@ -15,12 +13,15 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
-using static System.Net.Mime.MediaTypeNames;
+using WolvenKit.RED4.Types;
+using ScriptFile = WolvenKit.Modkit.Scripting.ScriptFile;
 
 namespace WolvenKit.App.Services;
 
 public partial class ExtendedScriptService : ScriptService
 {
+    private const string NoHook = "NO_HOOK";
+
     private readonly Dictionary<string, List<ScriptEntry>> _uiScripts = new();
     private readonly Dictionary<string, IScriptableControl> _uiControls = new();
 
@@ -40,61 +41,10 @@ public partial class ExtendedScriptService : ScriptService
 
         DefaultHostObject = new() { { "wkit", _wkit } };
 
-        DeployShippedFiles();
         RefreshUIScripts();
     }
 
     public async Task ExecuteAsync(string code) => await ExecuteAsync(code, DefaultHostObject);
-
-    private void DeployShippedFiles()
-    {
-        
-        void CopyFilesRecursively(string sourcePath, string targetPath)
-        {
-            // Copy those only once per new installation
-            if (!Directory.Exists(sourcePath))
-            {
-                return;
-            }
-            if (!Directory.Exists(targetPath))
-            {
-                Directory.CreateDirectory(targetPath);
-            }
-            
-            //Now Create all of the directories
-            foreach (var dirPath in Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories))
-            {
-                Directory.CreateDirectory(dirPath.Replace(sourcePath, targetPath));
-            }
-
-            //Copy all the files & Replaces any files with the same name
-            foreach (var newPath in Directory.GetFiles(sourcePath, "*.*",SearchOption.AllDirectories))
-            {
-                File.Copy(newPath, newPath.Replace(sourcePath, targetPath), true);
-            }
-            // Don't copy again until next install
-            Directory.Delete(sourcePath, true);
-        }
-        
-        var scriptDir = ISettingsManager.GetWScriptDir();
-
-        var defaultFiles = Directory.GetFiles(@"Resources\Scripts");
-        // Overwrite the defaults inside the root directory only if they don't exist
-        // we don't want the user to lose any changes
-        foreach (var filePath in defaultFiles)
-        {
-            var fileName = Path.GetFileName(filePath);
-
-            if (!File.Exists($"{scriptDir}/{fileName}") 
-                && (fileName.EndsWith("example.wscript") || fileName.StartsWith("onSave")))
-            {
-                File.Copy(filePath, $"{scriptDir}/{fileName}");
-            }
-        }
-
-        CopyFilesRecursively(@"Resources\Scripts\Wolvenkit", $"{scriptDir}/Wolvenkit");
-    }
-    
 
     public void RegisterControl(IScriptableControl scriptableControl)
     {
@@ -123,14 +73,19 @@ public partial class ExtendedScriptService : ScriptService
         _uiControls.Remove(scriptableControl.ScriptingName);
     }
 
-    public List<ScriptEntry> GetScripts(UIElement caller, string name)
+    public IList<ScriptFile> GetScripts()
     {
-        if (_uiScripts.TryGetValue(name, out var lst))
+        var result = GetScripts(ISettingsManager.GetWScriptDir());
+
+        foreach (var scriptFile in GetScripts(@"Resources\Scripts"))
         {
-            return lst;
+            if (result.All(x => x.Name != scriptFile.Name))
+            {
+                result.Add(scriptFile);
+            }
         }
 
-        return new List<ScriptEntry>();
+        return result;
     }
 
     private void UnloadScripts()
@@ -149,81 +104,141 @@ public partial class ExtendedScriptService : ScriptService
         }
     }
 
-    public bool OnSaveHook(string ext, ref CR2WFile cr2wFile)
+    public bool OnSaveHook(string extStr, ref CR2WFile cr2wFile)
     {
-        if (string.IsNullOrEmpty(ext))
+        if (string.IsNullOrEmpty(extStr))
         {
-            throw new ArgumentNullException(nameof(ext));
+            throw new ArgumentNullException(nameof(extStr));
         }
 
-        if (ext[0] == '.')
+        if (extStr[0] == '.')
         {
-            ext = ext.Substring(1);
+            extStr = extStr.Substring(1);
         }
-
-        var paths = new List<string>
-        {
-            Path.Combine(ISettingsManager.GetWScriptDir(), $"onSave_{ext}.wscript"),
-            Path.Combine(@"Resources\Scripts", $"onSave_{ext}.wscript")
-        };
 
         _settingsManager.ScriptStatus ??= new();
 
-        foreach (var scriptFilePath in paths)
+        ScriptFile? script = null;
+        foreach (var scriptFile in GetScripts())
         {
-            if (File.Exists(scriptFilePath))
+            if (scriptFile.Type != ScriptType.Hook)
             {
-                if (_settingsManager.ScriptStatus.TryGetValue(scriptFilePath, out var enabled) && !enabled)
-                {
-                    continue;
-                }
-
-                var dto = new RedFileDto(cr2wFile);
-                var json = RedJsonSerializer.Serialize(dto);
-
-                if (TestExecute(scriptFilePath, ref json))
-                {
-                    if (!RedJsonSerializer.TryDeserialize(json, out RedFileDto? newDto) || newDto?.Data == null)
-                    {
-                        _loggerService.Error("Couldn't deserialize return value");
-                        return false;
-                    }
-
-                    cr2wFile = newDto.Data;
-
-                    return true;
-                }
-
-                return false;
+                continue;
             }
+
+            if (scriptFile.HookExtension != "global"/* && scriptFile.HookExtension != extStr*/)
+            {
+                continue;
+            }
+
+            if (_settingsManager.ScriptStatus.TryGetValue(scriptFile.Path, out var enabled) && !enabled)
+            {
+                continue;
+            }
+
+            script = scriptFile;
+            break;
+        }
+
+        if (script != null)
+        {
+            var dto = new RedFileDto(cr2wFile);
+
+            var (success, json) = OnSaveExecute(script.Path, extStr, RedJsonSerializer.Serialize(dto));
+            if (success == Enums.EBOOL.UNINITIALZED)
+            {
+                return true;
+            }
+
+            if (success == Enums.EBOOL.TRUE)
+            {
+                if (!RedJsonSerializer.TryDeserialize(json, out RedFileDto? newDto) || newDto?.Data == null)
+                {
+                    _loggerService.Error("Couldn't deserialize return value");
+                    return false;
+                }
+
+                cr2wFile = newDto.Data;
+
+                return true;
+            }
+
+            return false;
         }
 
         return true;
     }
 
-    private bool TestExecute(string file, ref string json)
+    private (Enums.EBOOL, string) OnSaveExecute(string scriptFilePath, string extStr, string json)
+    {
+        var result = HookExecute(scriptFilePath, "onSave", scriptObj => scriptObj.onSave(extStr, json));
+
+        if ((bool)result[NoHook])
+        {
+            return (Enums.EBOOL.UNINITIALZED, "");
+        }
+
+        if (!result.TryGetValue("success", out var successObj) || successObj is not bool success)
+        {
+            _loggerService.Error($"onSave: Missing \"success\" (bool) return value");
+            return (Enums.EBOOL.UNINITIALZED, "");
+        }
+
+        if (!result.TryGetValue("file", out var fileObj) || fileObj is not string file)
+        {
+            _loggerService.Error($"onSave: Missing \"file\" (string) return value");
+            return (Enums.EBOOL.UNINITIALZED, "");
+        }
+
+
+        if (success)
+        {
+            return (Enums.EBOOL.TRUE, file);
+        }
+
+        return (Enums.EBOOL.FALSE, "");
+    }
+
+    private Dictionary<string, object> HookExecute(string scriptFilePath, string function, Func<dynamic, dynamic?> action)
     {
         var engine = GetScriptEngine(DefaultHostObject);
-        engine.Script.file = json;
-        engine.Script.success = false;
 
-        var code = File.ReadAllText(file);
+        var code = File.ReadAllText(scriptFilePath);
 
+        var result = new Dictionary<string, object>
+        {
+            { NoHook, false }
+        };
         try
         {
             engine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code);
-            json = engine.Script.file;
+
+            var found = ((ScriptObject)engine.Script).PropertyNames.Any(propertyName => propertyName == function);
+            if (!found)
+            {
+                result[NoHook] = true;
+                return result;
+            }
+
+            var tmp = action(engine.Script);
+            if (tmp != null)
+            {
+                foreach (var propertyName in tmp.PropertyNames)
+                {
+                    result.Add(propertyName, tmp[propertyName]);
+                }
+            }
         }
         catch (ScriptEngineException ex1)
         {
-            _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {file}");
+            _loggerService.Error($"{ex1.ErrorDetails}\r\nin {scriptFilePath}");
         }
         catch (Exception ex2)
         {
-            _loggerService?.Error(ex2);
+            _loggerService.Error(ex2);
         }
 
-        return engine.Script.success;
+        return result;
     }
 
     public void RefreshUIScripts()
