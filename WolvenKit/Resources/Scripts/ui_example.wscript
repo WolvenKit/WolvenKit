@@ -37,7 +37,7 @@ function onCatFactClick(target) {
     }
 }
 
-async function onReloadClick() {
+function onReloadClick() {
 	let activeDocument = wkit.GetActiveDocument();
 	if (activeDocument === null) {
 		return;
@@ -50,7 +50,7 @@ async function onReloadClick() {
 		}
 	}
 	
-	await activeDocument.Close();
+	activeDocument.Close();
 	wkit.OpenDocument(activeDocument.FilePath);
 }
 
