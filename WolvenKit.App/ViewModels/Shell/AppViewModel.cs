@@ -114,6 +114,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _parser = parserService;
         _scriptService = scriptService;
 
+        _scriptService.SetAppViewModel(this);
+
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
 
         UpdateTitle();
@@ -1740,6 +1742,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             }
         }
     }
+
+    public void CloseFile(IDocumentViewModel documentViewModel) => DockedViews.Remove(documentViewModel);
 
     public void SetStatusReady()
     {

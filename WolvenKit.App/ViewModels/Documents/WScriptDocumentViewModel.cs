@@ -7,13 +7,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using WolvenKit.App.Factories;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
-using WolvenKit.Common;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
-using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Documents;
 

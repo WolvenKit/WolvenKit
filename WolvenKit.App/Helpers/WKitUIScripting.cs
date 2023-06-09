@@ -6,9 +6,12 @@ using System.Linq;
 using System.Reactive;
 using System.Windows;
 using Microsoft.ClearScript;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
@@ -33,6 +36,8 @@ public class WKitUIScripting : WKitScripting
     private readonly IProjectManager _projectManager;
     private readonly IWatcherService _watcherService;
     private readonly IPaneViewModelFactory _paneViewModelFactory;
+
+    public AppViewModel? AppViewModel;
 
     public WKitUIScripting(
         IPaneViewModelFactory paneViewModelFactory,
@@ -594,4 +599,140 @@ public class WKitUIScripting : WKitScripting
         });
         return response;
     }
+
+    /// <summary>
+    /// Gets the current active document from the docking manager
+    /// </summary>
+    /// <returns></returns>
+    public virtual DocumentWrapper? GetActiveDocument()
+    {
+        if (AppViewModel?.ActiveDocument == null)
+        {
+            return null;
+        }
+
+        return new DocumentWrapper(AppViewModel.ActiveDocument, AppViewModel);
+    }
+
+    /// <summary>
+    /// Gets all documents from the docking manager
+    /// </summary>
+    /// <returns></returns>
+    public virtual IList<DocumentWrapper>? GetDocuments()
+    {
+        if (AppViewModel == null)
+        {
+            return null;
+        }
+
+        var result = new List<DocumentWrapper>();
+        foreach (var dockElement in AppViewModel.DockedViews)
+        {
+            if (dockElement is IDocumentViewModel documentViewModel)
+            {
+                result.Add(new DocumentWrapper(documentViewModel, AppViewModel));
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Opens a file
+    /// </summary>
+    /// <param name="path">Path to the file</param>
+    /// <returns>Returns true if the file was opened, otherwise it returns false</returns>
+    public virtual bool OpenDocument(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return false;
+        }
+
+        if (AppViewModel == null)
+        {
+            return false;
+        }
+
+        if (File.Exists(path))
+        {
+            AppViewModel.RequestFileOpen(path);
+            return true;
+        }
+
+        var hash = FNV1A64HashAlgorithm.HashString(path);
+        var archiveFile = _archiveManager.Lookup(hash);
+        if (archiveFile.HasValue)
+        {
+            DispatcherHelper.RunOnMainThread(() => AppViewModel.OpenRedFileCommand.SafeExecute(archiveFile.Value));
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Opens an archive game file
+    /// </summary>
+    /// <param name="gameFile">The game file to open</param>
+    public virtual void OpenDocument(IGameFile gameFile)
+    {
+        if (AppViewModel == null)
+        {
+            return;
+        }
+
+        DispatcherHelper.RunOnMainThread(() => AppViewModel.OpenRedFileCommand.SafeExecute(gameFile));
+    }
+}
+
+public class DocumentWrapper
+{
+    private readonly IDocumentViewModel _documentViewModel;
+    private readonly AppViewModel _appViewModel;
+
+    public DocumentWrapper(IDocumentViewModel documentViewModel, AppViewModel appViewModel)
+    {
+        _documentViewModel = documentViewModel;
+        _appViewModel = appViewModel;
+
+        FilePath = _documentViewModel.FilePath;
+        FileName = Path.GetFileName(FilePath);
+        Extension = Path.GetExtension(FilePath).Replace(".", "");
+        
+        if (documentViewModel is DocumentViewModel doc)
+        {
+            IsDirty = doc.IsDirty;
+        }
+    }
+
+    public string FilePath { get; }
+    public string FileName { get; }
+    public string Extension { get; }
+
+    public bool IsDirty { get; set; }
+
+    public object? GetGameFile(string type)
+    {
+        if (_documentViewModel is not RedDocumentViewModel red)
+        {
+            return null;
+        }
+
+        if (type == "cr2w")
+        {
+            return red.Cr2wFile;
+        }
+
+        if (type == "json")
+        {
+            var dto = new RedFileDto(red.Cr2wFile);
+            return RedJsonSerializer.Serialize(dto);
+        }
+
+        throw new NotSupportedException($"Unknown type \"{type}\"");
+    }
+
+    public void Save() => _documentViewModel.SaveCommand.SafeExecute();
+    public void Close() => Application.Current.Dispatcher.Invoke(() => _appViewModel.CloseFile(_documentViewModel));
 }

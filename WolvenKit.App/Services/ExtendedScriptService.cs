@@ -8,6 +8,7 @@ using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
@@ -45,6 +46,8 @@ public partial class ExtendedScriptService : ScriptService
     }
 
     public async Task ExecuteAsync(string code) => await ExecuteAsync(code, DefaultHostObject);
+
+    public void SetAppViewModel(AppViewModel appViewModel) => _wkit.AppViewModel = appViewModel;
 
     public void RegisterControl(IScriptableControl scriptableControl)
     {
@@ -262,7 +265,7 @@ public partial class ExtendedScriptService : ScriptService
 
             try
             {
-                _uiEngine.Execute(code);
+                _uiEngine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code);
             }
             catch (ScriptEngineException ex1)
             {
@@ -292,7 +295,7 @@ public partial class ExtendedScriptService : ScriptService
 
             try
             {
-                _uiEngine.Execute(code);
+                _uiEngine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code);
             }
             catch (ScriptEngineException ex1)
             {
