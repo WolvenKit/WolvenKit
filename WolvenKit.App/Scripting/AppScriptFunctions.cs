@@ -276,40 +276,14 @@ public class AppScriptFunctions : ScriptFunctions
 
     private T ParseExportSettings<T>(ScriptObject scriptSettingsObject) where T : ExportArgs, new()
     {
-        // find all of the matching scriptable properties the script provided
         var exportArgs = new T();
-        var s = exportArgs.GetType().GetProperties()
-            .Where(x =>
-            {
-                var includeProp = Attribute.IsDefined(x, typeof(WkitScriptAccess));
-                if (includeProp)
-                {
-                    if (Attribute.GetCustomAttribute(x, typeof(WkitScriptAccess)) is WkitScriptAccess scriptAccess)
-                    {
-                        includeProp &= scriptSettingsObject.PropertyNames.Contains(scriptAccess.ScriptName);
-                    }
-                }
-
-                return includeProp;
-            });
-
-        foreach (var prop in s)
+        foreach (var prop in exportArgs.GetType().GetProperties())
         {
-            // now set their value
-            if (Attribute.GetCustomAttribute(prop, typeof(WkitScriptAccess)) is WkitScriptAccess scriptAccess)
+            if (Attribute.GetCustomAttribute(prop, typeof(WkitScriptAccess)) is WkitScriptAccess scriptAccess && scriptSettingsObject.PropertyNames.Contains(scriptAccess.ScriptName))
             {
-                if (prop.PropertyType.IsEnum)
-                {
-                    Enum.TryParse(prop.PropertyType, scriptSettingsObject[scriptAccess.ScriptName].ToString(), out var val);
-                    prop.SetValue(exportArgs, val);
-                }
-                else
-                {
-                    prop.SetValue(exportArgs, scriptSettingsObject[scriptAccess.ScriptName]);
-                }
+                prop.SetValue(exportArgs, scriptSettingsObject[scriptAccess.ScriptName]);
             }
         }
-
         return exportArgs;
     }
 
@@ -379,8 +353,9 @@ public class AppScriptFunctions : ScriptFunctions
     /// Exports a list of files as you would with the export tool.
     /// </summary>
     /// <param name="fileList"></param>
+    /// <param name="defaultSettings"></param>
     /// <param name="blocking"></param>
-    public void ExportFiles(IList fileList, bool blocking = false)
+    public void ExportFiles(IList fileList, ScriptObject? defaultSettings = null, bool blocking = false)
     {
         if (_projectManager.ActiveProject is not { } proj)
         {
@@ -395,7 +370,7 @@ public class AppScriptFunctions : ScriptFunctions
             {
                 if (settingsPair is [string filePath1])
                 {
-                    AddFile(filePath1);
+                    AddFile(filePath1, defaultSettings);
                     continue;
                 }
 
@@ -408,7 +383,7 @@ public class AppScriptFunctions : ScriptFunctions
 
             if (entry is string fileStr)
             {
-                AddFile(fileStr);
+                AddFile(fileStr, defaultSettings);
                 continue;
             }
 
