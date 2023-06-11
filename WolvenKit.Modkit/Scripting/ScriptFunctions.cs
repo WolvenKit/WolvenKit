@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.ComponentModel;
 using System.IO;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
@@ -16,13 +15,13 @@ namespace WolvenKit.Modkit.Scripting;
 /// <summary>
 /// TODO
 /// </summary>
-public class WKitScripting
+public class ScriptFunctions
 {
     protected readonly ILoggerService _loggerService;
     protected readonly IArchiveManager _archiveManager;
     protected readonly Red4ParserService _redParserService;
 
-    public WKitScripting(ILoggerService loggerService, IArchiveManager archiveManager, Red4ParserService parserService)
+    public ScriptFunctions(ILoggerService loggerService, IArchiveManager archiveManager, Red4ParserService parserService)
     {
         _loggerService = loggerService;
         _archiveManager = archiveManager;

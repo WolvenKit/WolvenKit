@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Modkit.Scripting;
 
@@ -19,11 +18,11 @@ public partial class ScriptManagerViewModel : DialogViewModel
     private const string s_scriptExtension = ".wscript";
 
     private readonly AppViewModel _appViewModel;
-    private readonly ExtendedScriptService _scriptService;
+    private readonly AppScriptService _scriptService;
     private readonly ISettingsManager _settingsManager;
 
     
-    public ScriptManagerViewModel(AppViewModel appViewModel, ExtendedScriptService scriptService, ISettingsManager settingsManager)
+    public ScriptManagerViewModel(AppViewModel appViewModel, AppScriptService scriptService, ISettingsManager settingsManager)
     {
         _appViewModel = appViewModel;
         _scriptService = scriptService;
@@ -32,7 +31,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
         GetScriptFiles();
     }
 
-    public ObservableCollection<ScriptEntry> Scripts { get; } = new();
+    public ObservableCollection<ScriptViewModel> Scripts { get; } = new();
 
 
     public void AddScript(string fileName, ScriptType type)
@@ -87,9 +86,9 @@ public partial class ScriptManagerViewModel : DialogViewModel
 
         void ScanDir(ScriptSource scriptSource, string path)
         {
-            var generalScriptDir = new ScriptDirectory(scriptSource, ScriptType.General, _settingsManager);
-            var hookScriptDir = new ScriptDirectory(scriptSource, ScriptType.Hook, _settingsManager);
-            var uiScriptDir = new ScriptDirectory(scriptSource, ScriptType.Ui, _settingsManager);
+            var generalScriptDir = new ScriptDirectoryViewModel(scriptSource, ScriptType.General, _settingsManager);
+            var hookScriptDir = new ScriptDirectoryViewModel(scriptSource, ScriptType.Hook, _settingsManager);
+            var uiScriptDir = new ScriptDirectoryViewModel(scriptSource, ScriptType.Ui, _settingsManager);
 
             foreach (var systemScript in _scriptService.GetScripts(path))
             {
@@ -98,13 +97,13 @@ public partial class ScriptManagerViewModel : DialogViewModel
                 switch (systemScript.Type)
                 {
                     case ScriptType.General:
-                        generalScriptDir.Files.Add(new ScriptFile(_settingsManager, scriptSource, systemScript));
+                        generalScriptDir.Files.Add(new ScriptFileViewModel(_settingsManager, scriptSource, systemScript));
                         break;
                     case ScriptType.Hook:
-                        hookScriptDir.Files.Add(new ScriptFile(_settingsManager, scriptSource, systemScript));
+                        hookScriptDir.Files.Add(new ScriptFileViewModel(_settingsManager, scriptSource, systemScript));
                         break;
                     case ScriptType.Ui:
-                        uiScriptDir.Files.Add(new ScriptFile(_settingsManager, scriptSource, systemScript));
+                        uiScriptDir.Files.Add(new ScriptFileViewModel(_settingsManager, scriptSource, systemScript));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -117,7 +116,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
         }
     }
 
-    public async Task OpenFile(ScriptFile scriptFile)
+    public async Task OpenFile(ScriptFileViewModel scriptFile)
     {
         if (!File.Exists(scriptFile.Path))
         {
@@ -125,7 +124,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
         }
 
         var localFilePath = scriptFile.Path;
-        if (scriptFile.ScriptSource == ScriptSource.System)
+        if (scriptFile.Source == ScriptSource.System)
         {
             var response = await Interactions.ShowMessageBoxAsync(
                 "Trying to open a system file. Should a local copy be created?",
@@ -188,123 +187,4 @@ public partial class ScriptManagerViewModel : DialogViewModel
             GetScriptFiles();
         }
     }
-}
-
-public abstract class ScriptEntry : INotifyPropertyChanged
-{
-    protected bool _enabled;
-
-    public string Name { get; protected set; }
-    public string Path { get; }
-    public ScriptType ScriptType { get; }
-    public ScriptSource ScriptSource { get; }
-
-    public bool Enabled
-    {
-        get => _enabled;
-        set => SetField(ref _enabled, value);
-    }
-
-    public bool CanEnable => ScriptType != ScriptType.General;
-    public abstract bool CanExecute { get; }
-    public abstract bool CanDelete { get; }
-
-    public ScriptEntry(string name, string path, ScriptType scriptType, ScriptSource scriptSource)
-    {
-        Name = name;
-        Path = path;
-        ScriptType = scriptType;
-        ScriptSource = scriptSource;
-    }
-
-    #region INotifyPropertyChanged
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value))
-        {
-            return false;
-        }
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
-    }
-
-    #endregion
-}
-
-public class ScriptFile : ScriptEntry
-{
-    private readonly ISettingsManager _settingsManager;
-    private readonly Modkit.Scripting.ScriptFile _scriptFile;
-
-    public string? Version => _scriptFile.Version;
-    public string? Author => _scriptFile.Author;
-
-    public override bool CanExecute => ScriptType == ScriptType.General;
-    public override bool CanDelete => ScriptSource == ScriptSource.User;
-
-    public ScriptFile(ISettingsManager settingsManager, ScriptSource source, Modkit.Scripting.ScriptFile scriptFile) : base(scriptFile.Name, scriptFile.Path, scriptFile.Type, source)
-    {
-        _scriptFile = scriptFile;
-        _settingsManager = settingsManager;
-
-        if (!_settingsManager.ScriptStatus!.TryGetValue(Path, out _enabled))
-        {
-            _enabled = true;
-        }
-    }
-
-    protected override void OnPropertyChanged(string? propertyName = null)
-    {
-        base.OnPropertyChanged(propertyName);
-
-        if (propertyName == nameof(Enabled))
-        {
-            if (!_settingsManager.ScriptStatus!.TryAdd(Path, Enabled))
-            {
-                _settingsManager.ScriptStatus[Path] = Enabled;
-            }
-            _settingsManager.Save();
-        }
-    }
-}
-
-public class ScriptDirectory : ScriptEntry
-{
-    public ObservableCollection<ScriptEntry> Files { get; } = new();
-
-    public override bool CanExecute => false;
-    public override bool CanDelete => false;
-
-    public ScriptDirectory(ScriptSource scriptSource, ScriptType scriptType, ISettingsManager settingsManager) : base(scriptSource.ToString(), "", scriptType, scriptSource)
-    {
-    }
-
-    #region INotifyPropertyChanged
-
-    protected override void OnPropertyChanged(string? propertyName = null)
-    {
-        base.OnPropertyChanged(propertyName);
-
-        if (propertyName == nameof(Enabled))
-        {
-            foreach (var scriptFile in Files)
-            {
-                scriptFile.Enabled = Enabled;
-            }
-        }
-    }
-
-    #endregion
-}
-
-public enum ScriptSource
-{
-    System,
-    User
 }

@@ -14,9 +14,9 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class WScriptDocumentViewModel : DocumentViewModel
 {
-    private readonly ExtendedScriptService _scriptService;
+    private readonly AppScriptService _scriptService;
 
-    public WScriptDocumentViewModel(string path, ExtendedScriptService scriptService) : base(path)
+    public WScriptDocumentViewModel(string path, AppScriptService scriptService) : base(path)
     {
         _scriptService = scriptService;
 

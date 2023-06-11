@@ -6,7 +6,6 @@ using System.Text.Json;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
-using WolvenKit.App.Scripting;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Model.Arguments;
@@ -17,7 +16,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Services;
 
-public partial class ExtendedScriptService
+public partial class AppScriptService
 {
     private const string NoHook = "NO_HOOK";
 

@@ -69,7 +69,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IHashService _hashService;
     private readonly ITweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
-    private readonly ExtendedScriptService _scriptService;
+    private readonly AppScriptService _scriptService;
 
     /// <summary>
     /// Class constructor
@@ -92,7 +92,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
-        ExtendedScriptService scriptService
+        AppScriptService scriptService
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;

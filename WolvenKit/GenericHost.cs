@@ -11,7 +11,6 @@ using WolvenKit.App.Controllers;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement;
-using WolvenKit.App.Scripting;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
@@ -73,7 +72,7 @@ namespace WolvenKit
 
                     // scripting
                     services.AddSingleton<IHookService, AppHookService>();
-                    services.AddSingleton<ExtendedScriptService>();
+                    services.AddSingleton<AppScriptService>();
                     services.AddTransient<ImportExportHelper>();
 
                     services.AddTransient<INotificationService, NotificationService>();

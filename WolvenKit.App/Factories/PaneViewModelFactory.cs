@@ -32,12 +32,9 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly ISettingsManager _settingsManager;
     private readonly INotificationService _notificationService;
     private readonly IArchiveManager _archiveManager;
-    private readonly MeshTools _meshTools;
     private readonly Red4ParserService _parserService;
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
-    private readonly IHashService _hashService;
-    private readonly ExtendedScriptService _extendedScriptService;
     private readonly ImportExportHelper _importExportHelper;
 
     private readonly PropertiesViewModel _propertiesViewModel;
@@ -54,13 +51,10 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         INotificationService notificationService,
         IArchiveManager archiveManager,
         IChunkViewmodelFactory chunkViewmodelFactory,
-        MeshTools meshTools,
         Red4ParserService parserService,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        IHashService hashService,
         PropertiesViewModel propertiesViewModel,
-        ExtendedScriptService extendedScriptService,
         ImportExportHelper importExportHelper
         )
     {
@@ -75,13 +69,10 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _notificationService = notificationService;
         _archiveManager = archiveManager;
         _chunkViewmodelFactory = chunkViewmodelFactory;
-        _meshTools = meshTools;
         _parserService = parserService;
         _tweakDbService = tweakDbService;
         _locKeyService = locKeyService;
-        _hashService = hashService;
         _propertiesViewModel = propertiesViewModel;
-        _extendedScriptService = extendedScriptService;
         _importExportHelper = importExportHelper;
     }
 

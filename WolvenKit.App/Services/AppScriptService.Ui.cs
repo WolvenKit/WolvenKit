@@ -5,16 +5,27 @@ using Microsoft.ClearScript;
 using System.IO;
 using Microsoft.ClearScript.V8;
 using System.Threading.Tasks;
+using WolvenKit.App.Scripting;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Services;
 
-public partial class ExtendedScriptService
+public partial class AppScriptService
 {
-    private readonly Dictionary<string, List<ScriptEntry>> _uiScripts = new();
+    private readonly Dictionary<string, List<ScriptFunctionWrapper>> _uiScripts = new();
     private readonly Dictionary<string, IScriptableControl> _uiControls = new();
 
-    private readonly WScriptUIHelper _ui;
+    private readonly UiScriptFunctions _ui;
     private V8ScriptEngine? _uiEngine;
+
+    public void AddScriptEntry(string target, ScriptFunctionWrapper scriptFunctionWrapper)
+    {
+        if (!_uiScripts.ContainsKey(target))
+        {
+            _uiScripts.Add(target, new List<ScriptFunctionWrapper>());
+        }
+        _uiScripts[target].Add(scriptFunctionWrapper);
+    }
 
     public void RegisterControl(IScriptableControl scriptableControl)
     {
@@ -130,25 +141,4 @@ public partial class ExtendedScriptService
             }
         }
     }
-}
-
-public class ScriptEntry
-{
-    private readonly ScriptObject? _function;
-    private readonly object?[]? _args;
-
-    public string Name { get; }
-    public List<ScriptEntry> Children { get; set; } = new();
-
-    public bool HasFunction => _function != null;
-
-    public ScriptEntry(string name, ScriptObject? function, params object?[]? args)
-    {
-        Name = name;
-
-        _function = function;
-        _args = args;
-    }
-
-    public async void Execute() => await Task.Run(() => _function?.Invoke(false, _args));
 }

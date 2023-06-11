@@ -39,3 +39,9 @@ public enum EDockedViews
     TextureImportViewModel,
     TextureExportViewModel
 }
+
+public enum ScriptSource
+{
+    System,
+    User
+}

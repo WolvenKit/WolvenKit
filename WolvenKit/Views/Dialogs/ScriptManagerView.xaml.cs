@@ -7,8 +7,8 @@ using ReactiveUI;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.Modkit.Scripting;
-using ScriptFile = WolvenKit.App.ViewModels.Dialogs.ScriptFile;
 using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
 
 namespace WolvenKit.Views.Dialogs;
@@ -55,12 +55,12 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
 
     private bool IsScriptType(object o)
     {
-        if (o is ScriptDirectory scriptDirectory && scriptDirectory.ScriptType == GetSelectedTab())
+        if (o is ScriptDirectoryViewModel scriptDirectory && scriptDirectory.Type == GetSelectedTabType())
         {
             return true;
         }
 
-        if (o is ScriptFile scriptFile && scriptFile.ScriptType == GetSelectedTab())
+        if (o is ScriptFileViewModel scriptFile && scriptFile.Type == GetSelectedTabType())
         {
             return true;
         }
@@ -80,7 +80,7 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
             return;
         }
 
-        if (e.Node.Item is not ScriptFile scriptFile)
+        if (e.Node.Item is not ScriptFileViewModel scriptFile)
         {
             return;
         }
@@ -125,10 +125,10 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
             return;
         }
 
-        ViewModel.AddScript(FileNameTextBox.Text, GetSelectedTab());
+        ViewModel.AddScript(FileNameTextBox.Text, GetSelectedTabType());
     }
 
-    private ScriptType GetSelectedTab() =>
+    private ScriptType GetSelectedTabType() =>
         ScriptTypeTabControl.SelectedIndex switch
         {
             0 => ScriptType.General,

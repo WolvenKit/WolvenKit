@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using WolvenKit.App.Scripting;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
@@ -23,7 +22,7 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
     private readonly Red4ParserService _parserService;
     private readonly IWatcherService _watcherService;
     private readonly IArchiveManager _archiveManager;
-    private readonly ExtendedScriptService _scriptService;
+    private readonly AppScriptService _scriptService;
     private readonly IHookService _hookService;
     
 
@@ -37,7 +36,7 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         Red4ParserService parserService,
         IWatcherService watcherService,
         IArchiveManager archiveManager,
-        ExtendedScriptService scriptService,
+        AppScriptService scriptService,
         IHookService hookService)
     {
         _tabViewmodelFactory = tabViewmodelFactory;

@@ -16,16 +16,16 @@ using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.Services;
 
-public partial class ExtendedScriptService : ScriptService
+public partial class AppScriptService : ScriptService
 {
-    private readonly WKitUIScripting _wkit;
+    private readonly AppScriptFunctions _wkit;
     
     private readonly ISettingsManager _settingsManager;
     private readonly IHookService _hookService;
 
     public Dictionary<string, object> DefaultHostObject { get; }
 
-    public ExtendedScriptService(
+    public AppScriptService(
         ISettingsManager settingsManager,
         ILoggerService loggerService, 
         IProjectManager projectManager, 
@@ -39,8 +39,8 @@ public partial class ExtendedScriptService : ScriptService
         _settingsManager = settingsManager;
         _hookService = hookService;
 
-        _wkit = new WKitUIScripting(this, _loggerService, projectManager, archiveManager, red4ParserService, watcherService, modTools, importExportHelper);
-        _ui = new WScriptUIHelper(this);
+        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, watcherService, modTools, importExportHelper);
+        _ui = new UiScriptFunctions(this);
         
         DefaultHostObject = new() { { "wkit", _wkit } };
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.ClearScript;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
@@ -24,14 +25,13 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
-namespace WolvenKit.App.Helpers;
+namespace WolvenKit.App.Scripting;
 
 /// <summary>
 /// TODO
 /// </summary>
-public class WKitUIScripting : WKitScripting
+public class AppScriptFunctions : ScriptFunctions
 {
-    private readonly ExtendedScriptService _extendedScriptService;
     private readonly IProjectManager _projectManager;
     private readonly IWatcherService _watcherService;
     private readonly IModTools _modTools;
@@ -39,18 +39,16 @@ public class WKitUIScripting : WKitScripting
 
     public AppViewModel? AppViewModel;
 
-    public WKitUIScripting(
-        ExtendedScriptService extendedScriptService,
-        ILoggerService loggerService, 
-        IProjectManager projectManager, 
-        IArchiveManager archiveManager, 
-        Red4ParserService parserService, 
+    public AppScriptFunctions(
+        ILoggerService loggerService,
+        IProjectManager projectManager,
+        IArchiveManager archiveManager,
+        Red4ParserService parserService,
         IWatcherService watcherService,
         IModTools modTools,
-        ImportExportHelper importExportHelper) 
+        ImportExportHelper importExportHelper)
         : base(loggerService, archiveManager, parserService)
     {
-        _extendedScriptService = extendedScriptService;
         _projectManager = projectManager;
         _watcherService = watcherService;
         _modTools = modTools;
@@ -211,7 +209,7 @@ public class WKitUIScripting : WKitScripting
             if (relPath == path)
             {
                 var json = File.ReadAllText(file);
-                
+
                 if (type == "json")
                 {
                     return json;
@@ -377,7 +375,12 @@ public class WKitUIScripting : WKitScripting
         return result;
     }
 
-    public void ExportFile(object obj, bool blocking = false)
+    /// <summary>
+    /// Exports a list of files as you would with the export tool.
+    /// </summary>
+    /// <param name="fileList"></param>
+    /// <param name="blocking"></param>
+    public void ExportFiles(IList fileList, bool blocking = false)
     {
         if (_projectManager.ActiveProject is not { } proj)
         {
@@ -385,30 +388,48 @@ public class WKitUIScripting : WKitScripting
             return;
         }
 
-        if (obj is IList settingsPair)
+        var fileDict = new Dictionary<FileInfo, GlobalExportArgs>();
+        foreach (var entry in fileList)
         {
-            if (settingsPair is [string filePath1])
+            if (entry is IList settingsPair)
             {
-                InternalExport(filePath1);
-                return;
+                if (settingsPair is [string filePath1])
+                {
+                    AddFile(filePath1);
+                    continue;
+                }
+
+                if (settingsPair is [string filePath2, ScriptObject settings])
+                {
+                    AddFile(filePath2, settings);
+                    continue;
+                }
             }
 
-            if (settingsPair is [string filePath2, ScriptObject settings])
+            if (entry is string fileStr)
             {
-                InternalExport(filePath2, settings);
-                return;
+                AddFile(fileStr);
+                continue;
             }
+
+            _loggerService.Warning($"\"{entry}\" is not a valid entry");
         }
 
-        if (obj is string fileStr)
+        Parallel.ForEach(fileDict, (kvp) =>
         {
-            InternalExport(fileStr);
-            return;
-        }
+            var action = new Action(() => _modTools.Export(kvp.Key, kvp.Value, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
 
-        _loggerService.Warning($"\"{obj}\" is not a valid entry");
+            if (blocking)
+            {
+                action();
+            }
+            else
+            {
+                Task.Run(action);
+            }
+        });
 
-        void InternalExport(string filePath, ScriptObject? settings = null)
+        void AddFile(string filePath, ScriptObject? settings = null)
         {
             var fileInfo = new FileInfo(Path.Combine(proj.ModDirectory, filePath));
             if (!fileInfo.Exists)
@@ -424,38 +445,10 @@ public class WKitUIScripting : WKitScripting
             }
 
             var globalExport = settings != null ? GetGlobalExportArgs(settings) : new GlobalExportArgs();
-
             _importExportHelper.Finalize(globalExport);
 
-            var action = new Func<bool>(() => _modTools.Export(fileInfo, globalExport, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
-            if (blocking)
-            { 
-                action();
-            }
-            else
-            { 
-                Task.Run(action);
-            }
+            fileDict.Add(fileInfo, globalExport);
         }
-    }
-
-    /// <summary>
-    /// Exports a list of files as you would with the export tool.
-    /// </summary>
-    /// <param name="fileList"></param>
-    /// <param name="blocking"></param>
-    public void ExportFiles(IList fileList, bool blocking = false)
-    {
-        if (_projectManager.ActiveProject is not {} proj)
-        {
-            _loggerService.Error("No project loaded");
-            return;
-        }
-
-        Parallel.ForEach(fileList.Cast<object>(), (obj) =>
-        {
-            ExportFile(obj, blocking);
-        });
     }
 
     public virtual object? GetFileFromProject(string path, OpenAs openAs)
@@ -612,33 +605,33 @@ public class WKitUIScripting : WKitScripting
     /// Gets the current active document from the docking manager
     /// </summary>
     /// <returns></returns>
-    public virtual DocumentWrapper? GetActiveDocument()
+    public virtual ScriptDocumentWrapper? GetActiveDocument()
     {
         if (AppViewModel?.ActiveDocument == null)
         {
             return null;
         }
 
-        return new DocumentWrapper(AppViewModel.ActiveDocument, AppViewModel);
+        return new ScriptDocumentWrapper(AppViewModel.ActiveDocument, AppViewModel);
     }
 
     /// <summary>
     /// Gets all documents from the docking manager
     /// </summary>
     /// <returns></returns>
-    public virtual IList<DocumentWrapper>? GetDocuments()
+    public virtual IList<ScriptDocumentWrapper>? GetDocuments()
     {
         if (AppViewModel == null)
         {
             return null;
         }
 
-        var result = new List<DocumentWrapper>();
+        var result = new List<ScriptDocumentWrapper>();
         foreach (var dockElement in AppViewModel.DockedViews)
         {
             if (dockElement is IDocumentViewModel documentViewModel)
             {
-                result.Add(new DocumentWrapper(documentViewModel, AppViewModel));
+                result.Add(new ScriptDocumentWrapper(documentViewModel, AppViewModel));
             }
         }
 
@@ -692,55 +685,4 @@ public class WKitUIScripting : WKitScripting
 
         DispatcherHelper.RunOnMainThread(() => AppViewModel.OpenRedFileCommand.SafeExecute(gameFile));
     }
-}
-
-public class DocumentWrapper
-{
-    private readonly IDocumentViewModel _documentViewModel;
-    private readonly AppViewModel _appViewModel;
-
-    public DocumentWrapper(IDocumentViewModel documentViewModel, AppViewModel appViewModel)
-    {
-        _documentViewModel = documentViewModel;
-        _appViewModel = appViewModel;
-
-        FilePath = _documentViewModel.FilePath;
-        FileName = Path.GetFileName(FilePath);
-        Extension = Path.GetExtension(FilePath).Replace(".", "");
-        
-        if (documentViewModel is DocumentViewModel doc)
-        {
-            IsDirty = doc.IsDirty;
-        }
-    }
-
-    public string FilePath { get; }
-    public string FileName { get; }
-    public string Extension { get; }
-
-    public bool IsDirty { get; set; }
-
-    public object? GetGameFile(string type)
-    {
-        if (_documentViewModel is not RedDocumentViewModel red)
-        {
-            return null;
-        }
-
-        if (type == "cr2w")
-        {
-            return red.Cr2wFile;
-        }
-
-        if (type == "json")
-        {
-            var dto = new RedFileDto(red.Cr2wFile);
-            return RedJsonSerializer.Serialize(dto);
-        }
-
-        throw new NotSupportedException($"Unknown type \"{type}\"");
-    }
-
-    public void Save() => _documentViewModel.SaveCommand.SafeExecute();
-    public void Close() => Application.Current.Dispatcher.Invoke(() => _appViewModel.CloseFile(_documentViewModel));
 }

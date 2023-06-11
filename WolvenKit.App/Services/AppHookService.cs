@@ -1,7 +1,7 @@
 ﻿using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive.CR2W;
 
-namespace WolvenKit.App.Scripting;
+namespace WolvenKit.App.Services;
 
 public class AppHookService : HookService
 {

@@ -3,7 +3,6 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.Modkit.RED4
 {
