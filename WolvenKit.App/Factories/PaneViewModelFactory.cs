@@ -1,5 +1,6 @@
 ﻿using System;
 using WolvenKit.App.Controllers;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -36,6 +37,8 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
     private readonly IHashService _hashService;
+    private readonly ExtendedScriptService _extendedScriptService;
+    private readonly ImportExportHelper _importExportHelper;
 
     private readonly PropertiesViewModel _propertiesViewModel;
 
@@ -56,7 +59,9 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         IHashService hashService,
-        PropertiesViewModel propertiesViewModel
+        PropertiesViewModel propertiesViewModel,
+        ExtendedScriptService extendedScriptService,
+        ImportExportHelper importExportHelper
         )
     {
         _projectManager = projectManager;
@@ -76,6 +81,8 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _locKeyService = locKeyService;
         _hashService = hashService;
         _propertiesViewModel = propertiesViewModel;
+        _extendedScriptService = extendedScriptService;
+        _importExportHelper = importExportHelper;
     }
 
     public LogViewModel LogViewModel() => new(_loggerService);
@@ -89,6 +96,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         => new(appViewModel, _chunkViewmodelFactory, _settingsManager, _notificationService, _projectManager, _loggerService, _tweakDbService, _locKeyService);
     public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _watcherService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);
     
-    public TextureImportViewModel TextureImportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _hashService, _modTools, _parserService, _progressService);
-    public TextureExportViewModel TextureExportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _hashService, _modTools, _parserService, _progressService);
+    public TextureImportViewModel TextureImportViewModel() => new(_archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _modTools, _progressService, _gameController,_parserService, _importExportHelper);
+    public TextureExportViewModel TextureExportViewModel() => new(_archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _modTools, _progressService, _importExportHelper);
 }

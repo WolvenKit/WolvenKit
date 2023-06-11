@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WolvenKit.Common.Model.Arguments
 {
@@ -23,6 +24,7 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(OpusExportArgs), new OpusExportArgs() },
             { typeof(EntityExportArgs), new EntityExportArgs() },
             { typeof(InkAtlasExportArgs), new InkAtlasExportArgs() },
+            { typeof(FntExportArgs), new FntExportArgs() },
         };
 
         /// <summary>
@@ -62,7 +64,9 @@ namespace WolvenKit.Common.Model.Arguments
             }
             throw new ArgumentException();
         }
+
+        public ExportArgs Get(Type type) => _argsList[type];
+
+        public IList<Type> GetTypes() => _argsList.Keys.ToList();
     }
-
-
 }

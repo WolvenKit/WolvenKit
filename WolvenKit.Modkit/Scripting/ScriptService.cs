@@ -79,6 +79,7 @@ public partial class ScriptService : ObservableObject
     {
         var engine = new V8ScriptEngine();
 
+        engine.AddHostType(typeof(OpenAs));
         engine.AddHostObject("logger", _loggerService);
         if (hostObjects != null)
         {

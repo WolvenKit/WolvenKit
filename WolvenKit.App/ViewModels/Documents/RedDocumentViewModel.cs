@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using WolvenKit.App.Factories;
+using WolvenKit.App.Scripting;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
@@ -16,6 +17,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -42,7 +44,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     private readonly Red4ParserService _parserService;
     private readonly IWatcherService _watcherService;
     private readonly IArchiveManager _archiveManager;
-    private readonly ExtendedScriptService _scriptService;
+    private readonly IHookService _hookService;
 
     private readonly AppViewModel _appViewModel;
 
@@ -59,7 +61,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         Red4ParserService parserService,
         IWatcherService watcherService,
         IArchiveManager archiveManager,
-        ExtendedScriptService scriptService) : base(path)
+        IHookService hookService) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
         _chunkViewmodelFactory = chunkViewmodelFactory;
@@ -69,7 +71,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _parserService = parserService;
         _watcherService = watcherService;
         _archiveManager = archiveManager;
-        _scriptService = scriptService;
+        _hookService = hookService;
 
         _appViewModel = appViewModel;
         _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -163,7 +165,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             else if (file is not null && Cr2wFile != null)
             {
                 var cr2w = Cr2wFile;
-                if (!_scriptService.OnSaveHook(Path.GetExtension(FilePath), ref cr2w))
+                if (_hookService is AppHookService appHookService && !appHookService.OnSave(Path.GetExtension(FilePath), ref cr2w))
                 {
                     _loggerService.Error($"Error while processing onSave script");
 

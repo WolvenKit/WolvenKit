@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.ClearScript;
 using WolvenKit.App.Extensions;
-using WolvenKit.App.Factories;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
@@ -15,11 +14,10 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
@@ -33,24 +31,30 @@ namespace WolvenKit.App.Helpers;
 /// </summary>
 public class WKitUIScripting : WKitScripting
 {
+    private readonly ExtendedScriptService _extendedScriptService;
     private readonly IProjectManager _projectManager;
     private readonly IWatcherService _watcherService;
-    private readonly IPaneViewModelFactory _paneViewModelFactory;
+    private readonly IModTools _modTools;
+    private readonly ImportExportHelper _importExportHelper;
 
     public AppViewModel? AppViewModel;
 
     public WKitUIScripting(
-        IPaneViewModelFactory paneViewModelFactory,
+        ExtendedScriptService extendedScriptService,
         ILoggerService loggerService, 
         IProjectManager projectManager, 
         IArchiveManager archiveManager, 
         Red4ParserService parserService, 
-        IWatcherService watcherService) 
+        IWatcherService watcherService,
+        IModTools modTools,
+        ImportExportHelper importExportHelper) 
         : base(loggerService, archiveManager, parserService)
     {
+        _extendedScriptService = extendedScriptService;
         _projectManager = projectManager;
         _watcherService = watcherService;
-        _paneViewModelFactory = paneViewModelFactory;
+        _modTools = modTools;
+        _importExportHelper = importExportHelper;
     }
 
     /// <summary>
@@ -311,198 +315,154 @@ public class WKitUIScripting : WKitScripting
         return exportArgs;
     }
 
-    /// <summary>
-    /// Exports a list of files as you would with the export tool.
-    /// </summary>
-    /// <param name="exportList"></param>
-    /// <param name="exportSettings"></param>
-    /// <exception cref="Exception"></exception>
-    /// <exception cref="ArgumentNullException"></exception>
-    public async void ExportFiles(dynamic exportList, dynamic? exportSettings = null)
+    private GlobalExportArgs GetGlobalExportArgs(ScriptObject settings)
     {
-        List<string> internalExportList;
+        var result = new GlobalExportArgs();
 
-        // dynamic type checking
-        // TODO: mix in hashes (V8 doesn't have a ulong equivalent though)
-        switch (exportList)
+        if (settings["Common"] is ScriptObject commonSettings)
         {
-            case IList list:
-                internalExportList = new List<string>();
-                foreach (var item in list)
-                {
-                    if (item is not string str)
-                    {
-                        throw new Exception($"Unexpected datatype found for {nameof(exportList)}. Expected string or string[].");
-                    }
-                    internalExportList.Add(str);
-                }
-                break;
-            case string exportString:
-                internalExportList = new List<string> { exportString };
-                break;
-            case FileEntry fileEntry:
-                internalExportList = new List<string> { fileEntry.FileName };
-                break;
-            case null:
-                throw new ArgumentNullException(nameof(exportList));
-            default:
-                throw new Exception($"Unexpected datatype found for {nameof(exportList)}. Expected string or string[].");
+            result.Register(ParseExportSettings<CommonExportArgs>(commonSettings));
         }
 
-        // get the export view model and clear the items
-        var expVM = _paneViewModelFactory.TextureExportViewModel();
-        await expVM.RefreshCommand.ExecuteAsync(null);
-
-        foreach (var item in expVM.Items)
+        if (settings["MorphTarget"] is ScriptObject morphTargetSettings)
         {
-            item.IsChecked = false;
+            result.Register(ParseExportSettings<MorphTargetExportArgs>(morphTargetSettings));
         }
 
-        // handle any settings if we have them
-        // TODO: clean this up a bit to auto handle all export types instead of manually checking
-        switch (exportSettings)
+        if (settings["MlMask"] is ScriptObject mlMaskSettings)
         {
-            case ScriptObject settings:
-                if (settings["Mesh"] is ScriptObject meshSettings)
-                {
-                    var exportArgs = ParseExportSettings<MeshExportArgs>(meshSettings);
-
-                    // set the export settings for meshes in the vm
-                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(MeshExportArgs)))
-                    {
-                        x.Properties = exportArgs;
-                    }
-                }
-                if (settings["Xbm"] is ScriptObject xbmSettings)
-                {
-                    var exportArgs = ParseExportSettings<XbmExportArgs>(xbmSettings);
-
-                    // set the export settings for images in the vm
-                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(XbmExportArgs)))
-                    {
-                        x.Properties = exportArgs;
-                    }
-                }
-                if (settings["Opus"] is ScriptObject opusSettings)
-                {
-                    var exportArgs = ParseExportSettings<OpusExportArgs>(opusSettings);
-
-                    // set the export settings for opus files in the vm
-                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(OpusExportArgs)))
-                    {
-                        x.Properties = exportArgs;
-                    }
-                }
-                if (settings["Wem"] is ScriptObject wemSettings)
-                {
-                    var exportArgs = ParseExportSettings<WemExportArgs>(wemSettings);
-
-                    // set the export settings for wems in the vm
-                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(WemExportArgs)))
-                    {
-                        x.Properties = exportArgs;
-                    }
-                }
-                if (settings["MorphTarget"] is ScriptObject morphTargetSettings)
-                {
-                    var exportArgs = ParseExportSettings<MorphTargetExportArgs>(morphTargetSettings);
-
-                    // set the export settings for morphtargets in the vm
-                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(MorphTargetExportArgs)))
-                    {
-                        x.Properties = exportArgs;
-                    }
-                }
-                if (settings["MlMask"] is ScriptObject mlMaskSettings)
-                {
-                    var exportArgs = ParseExportSettings<MlmaskExportArgs>(mlMaskSettings);
-
-                    // set the export settings for mlmasks in the vm
-                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(MlmaskExportArgs)))
-                    {
-                        x.Properties = exportArgs;
-                    }
-                }
-                if (settings["Animation"] is ScriptObject animationSettings)
-                {
-                    var exportArgs = ParseExportSettings<AnimationExportArgs>(animationSettings);
-
-                    // set the export settings for animations in the vm
-                    foreach (var x in expVM.Items.Where(_ => _.Properties.GetType() == typeof(AnimationExportArgs)))
-                    {
-                        x.Properties = exportArgs;
-                    }
-                }
-                break;
-            default:
-                _loggerService.Warning("Unknown type found for ExportFiles settings. The settings used in the Export Tool will be used.");
-                break;
+            result.Register(ParseExportSettings<MlmaskExportArgs>(mlMaskSettings));
         }
 
-        // loop over each item to export and export the item
-        foreach (var exportItem in internalExportList)
+        if (settings["Xbm"] is ScriptObject xbmSettings)
         {
-            if (exportItem is { } exportPath)
+            result.Register(ParseExportSettings<XbmExportArgs>(xbmSettings));
+        }
+
+        if (settings["Mesh"] is ScriptObject meshSettings)
+        {
+            result.Register(ParseExportSettings<MeshExportArgs>(meshSettings));
+        }
+
+        if (settings["Animation"] is ScriptObject animationSettings)
+        {
+            result.Register(ParseExportSettings<AnimationExportArgs>(animationSettings));
+        }
+
+        if (settings["Wem"] is ScriptObject wemSettings)
+        {
+            result.Register(ParseExportSettings<WemExportArgs>(wemSettings));
+        }
+
+        if (settings["Opus"] is ScriptObject opusSettings)
+        {
+            result.Register(ParseExportSettings<OpusExportArgs>(opusSettings));
+        }
+
+        if (settings["Entity"] is ScriptObject entitySettings)
+        {
+            result.Register(ParseExportSettings<EntityExportArgs>(entitySettings));
+        }
+
+        if (settings["InkAtlas"] is ScriptObject inkAtlasSettings)
+        {
+            result.Register(ParseExportSettings<InkAtlasExportArgs>(inkAtlasSettings));
+        }
+
+        if (settings["Fnt"] is ScriptObject fntSettings)
+        {
+            result.Register(ParseExportSettings<FntExportArgs>(fntSettings));
+        }
+
+        return result;
+    }
+
+    public void ExportFile(object obj, bool blocking = false)
+    {
+        if (_projectManager.ActiveProject is not { } proj)
+        {
+            _loggerService.Error("No project loaded");
+            return;
+        }
+
+        if (obj is IList settingsPair)
+        {
+            if (settingsPair is [string filePath1])
             {
-                if (exportPath.Length == 0)
-                {
-                    continue;
-                }
+                InternalExport(filePath1);
+                return;
+            }
 
-                // check extension is exportable
-                var uncookExts = Enum.GetNames(typeof(ECookedFileFormat));
-                var ext = Path.GetExtension(exportPath).Replace(".", "");
-                if (!uncookExts.Any(_ => _.Equals(ext, StringComparison.InvariantCultureIgnoreCase)))
-                {
-                    _loggerService.Warning($"{exportPath} does not contain a valid export extension. Skipping.");
-                    continue;
-                }
-
-                // we possibly have a relative path, so convert it to the project path
-                if (!Path.IsPathFullyQualified(exportPath))
-                {
-                    if (_projectManager.IsProjectLoaded)
-                    {
-                        exportPath = Path.Combine(_projectManager.ActiveProject.NotNull().ModDirectory, exportPath);
-                    }
-                    else
-                    {
-                        _loggerService.Warning($"{exportPath} is a relative path and therefore cannot be resolved with an unloaded project. Skipping.");
-                        continue;
-                    }
-                }
-
-                if (!Path.Exists(exportPath))
-                {
-                    _loggerService.Warning($"{exportPath} could not be found. Skipping.");
-                    continue;
-                }
-
-                // Set the item to be checked
-                foreach (var item in expVM.Items.Where(_ => _.BaseFile.EndsWith(exportPath, StringComparison.InvariantCultureIgnoreCase)))
-                {
-                    item.IsChecked = true;
-                }
+            if (settingsPair is [string filePath2, ScriptObject settings])
+            {
+                InternalExport(filePath2, settings);
+                return;
             }
         }
 
-        // export all the checked items if we have any
-        if (expVM.Items.Any(_ => _.IsChecked))
+        if (obj is string fileStr)
         {
-            await expVM.ProcessSelectedCommand.ExecuteAsync(Unit.Default);
+            InternalExport(fileStr);
+            return;
+        }
+
+        _loggerService.Warning($"\"{obj}\" is not a valid entry");
+
+        void InternalExport(string filePath, ScriptObject? settings = null)
+        {
+            var fileInfo = new FileInfo(Path.Combine(proj.ModDirectory, filePath));
+            if (!fileInfo.Exists)
+            {
+                _loggerService.Warning($"\"{filePath}\" doesn't exists in the project. Skipping");
+                return;
+            }
+
+            if (!Enum.TryParse<ECookedFileFormat>(Path.GetExtension(filePath).TrimStart('.'), out var ext))
+            {
+                _loggerService.Warning($"Exporting \"{ext}\" files isn't supported. Skipping");
+                return;
+            }
+
+            var globalExport = settings != null ? GetGlobalExportArgs(settings) : new GlobalExportArgs();
+
+            _importExportHelper.Finalize(globalExport);
+
+            var action = new Func<bool>(() => _modTools.Export(fileInfo, globalExport, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
+            if (blocking)
+            { 
+                action();
+            }
+            else
+            { 
+                Task.Run(action);
+            }
         }
     }
 
     /// <summary>
-    /// Check if file exists in the project
+    /// Exports a list of files as you would with the export tool.
     /// </summary>
-    /// <param name="path">file path to check</param>
-    /// <returns></returns>
-    public virtual bool FileExistsInProject(string path)
+    /// <param name="fileList"></param>
+    /// <param name="blocking"></param>
+    public void ExportFiles(IList fileList, bool blocking = false)
+    {
+        if (_projectManager.ActiveProject is not {} proj)
+        {
+            _loggerService.Error("No project loaded");
+            return;
+        }
+
+        Parallel.ForEach(fileList.Cast<object>(), (obj) =>
+        {
+            ExportFile(obj, blocking);
+        });
+    }
+
+    public virtual object? GetFileFromProject(string path, OpenAs openAs)
     {
         if (string.IsNullOrEmpty(path))
         {
-            return false;
+            return null;
         }
 
         if (!ulong.TryParse(path, out var hash))
@@ -510,37 +470,85 @@ public class WKitUIScripting : WKitScripting
             hash = FNV1A64HashAlgorithm.HashString(path);
         }
 
-        return FileExistsInProject(hash);
+        return GetFileFromProject(hash, openAs);
     }
+
+    public virtual object? GetFileFromProject(ulong hash, OpenAs openAs)
+    {
+        if (hash == 0)
+        {
+            return null;
+        }
+
+        if (_projectManager.ActiveProject == null)
+        {
+            return null;
+        }
+
+        IGameFile? targetFile = null;
+        var projectArchive = _projectManager.ActiveProject.AsArchive();
+        foreach (var (fileHash, file) in projectArchive.Files)
+        {
+            if (fileHash == hash)
+            {
+                targetFile = file;
+                break;
+            }
+        }
+
+        if (targetFile == null)
+        {
+            return null;
+        }
+
+        return ConvertGameFile(targetFile, openAs);
+    }
+
+    public virtual object? GetFile(string path, OpenAs openAs)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return null;
+        }
+
+        if (!ulong.TryParse(path, out var hash))
+        {
+            hash = FNV1A64HashAlgorithm.HashString(path);
+        }
+
+        return GetFile(hash, openAs);
+    }
+
+    public virtual object? GetFile(ulong hash, OpenAs openAs)
+    {
+        var file = GetFileFromProject(hash, openAs);
+        if (file != null)
+        {
+            return file;
+        }
+
+        file = GetFileFromArchive(hash, openAs);
+        if (file != null)
+        {
+            return file;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Check if file exists in the project
+    /// </summary>
+    /// <param name="path">file path to check</param>
+    /// <returns></returns>
+    public virtual bool FileExistsInProject(string path) => GetFileFromProject(path, OpenAs.GameFile) != null;
 
     /// <summary>
     /// Check if file exists in the project
     /// </summary>
     /// <param name="hash">hash value to be checked</param>
     /// <returns></returns>
-    public virtual bool FileExistsInProject(ulong hash)
-    {
-        if (hash == 0)
-        {
-            return false;
-        }
-
-        if (_projectManager.ActiveProject == null)
-        {
-            return false;
-        }
-
-        var projectArchive = _projectManager.ActiveProject.AsArchive();
-        foreach (var (fileHash, _) in projectArchive.Files)
-        {
-            if (fileHash == hash)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    public virtual bool FileExistsInProject(ulong hash) => GetFileFromProject(hash, OpenAs.GameFile) != null;
 
     /// <summary>
     /// Check if file exists in either the game archives or the project

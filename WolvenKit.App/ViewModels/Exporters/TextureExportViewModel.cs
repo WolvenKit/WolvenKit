@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
 using WolvenKit.App.Controllers;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
@@ -20,7 +19,6 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
@@ -36,45 +34,30 @@ public abstract partial class ExportViewModel : ImportExportViewModel
 
 public partial class TextureExportViewModel : ExportViewModel
 {
-    private ILoggerService _loggerService;
-    private INotificationService _notificationService;
-    private ISettingsManager _settingsManager;
-    private IWatcherService _watcherService;
-    private IProgressService<double> _progressService;
-    private IProjectManager _projectManager;
-    private IGameControllerFactory _gameController;
-    private IArchiveManager _archiveManager;
-    private IPluginService _pluginService;
-    private IHashService _hashService;
-    private IModTools _modTools;
-    private readonly Red4ParserService _parserService;
+    private readonly ILoggerService _loggerService;
+    private readonly IWatcherService _watcherService;
+    private readonly IProgressService<double> _progressService;
+    private readonly IProjectManager _projectManager;
+    private readonly IModTools _modTools;
+    private readonly ImportExportHelper _importExportHelper;
 
     public TextureExportViewModel(
-        IGameControllerFactory gameController,
-        ISettingsManager settingsManager,
-        IWatcherService watcherService,
-        ILoggerService loggerService,
-        IProjectManager projectManager,
-        INotificationService notificationService,
         IArchiveManager archiveManager,
-        IPluginService pluginService,
-        IHashService hashService,
+        INotificationService notificationService,
+        ISettingsManager settingsManager,
+        ILoggerService loggerService,
+        IWatcherService watcherService,
+        IProjectManager projectManager,
         IModTools modTools,
-        Red4ParserService red4ParserService,
-        IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
+        IProgressService<double> progressService,
+        ImportExportHelper importExportHelper) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
     {
-        _gameController = gameController;
-        _settingsManager = settingsManager;
-        _watcherService = watcherService;
         _loggerService = loggerService;
+        _watcherService = watcherService;
         _projectManager = projectManager;
-        _notificationService = notificationService;
-        _archiveManager = archiveManager;
-        _pluginService = pluginService;
-        _hashService = hashService;
         _modTools = modTools;
-        _parserService = red4ParserService;
         _progressService = progressService;
+        _importExportHelper = importExportHelper;
 
         PropertyChanged += TextureExportViewModel_PropertyChanged;
     }
@@ -183,53 +166,17 @@ public partial class TextureExportViewModel : ExportViewModel
         var fi = new FileInfo(item.BaseFile);
         if (fi.Exists)
         {
-            if (item.Properties is MeshExportArgs meshExportArgs)
-            {
-                meshExportArgs.Archives.Clear();
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
-                }
-
-                meshExportArgs.Archives.Insert(0, proj.AsArchive());
-
-                // Should check for depo here instead of dtl
-                meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
-            }
-            if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-                morphTargetExportArgs.ModFolderPath = proj.ModDirectory;
-            }
-            if (item.Properties is OpusExportArgs opusExportArgs)
-            {
-                opusExportArgs.RawFolderPath = proj.RawDirectory;
-                opusExportArgs.ModFolderPath = proj.ModDirectory;
-            }
-            if (item.Properties is EntityExportArgs entExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    entExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-            }
-            if (item.Properties is AnimationExportArgs animationExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-            }
-
             if (item.Properties is not ExportArgs e)
             {
                 throw new NotImplementedException();
             }
 
             var settings = new GlobalExportArgs().Register(e);
+            if (!_importExportHelper.Finalize(settings))
+            {
+                return false;
+            }
+
             return _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
         }
 

@@ -3,6 +3,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -57,6 +58,8 @@ namespace WolvenKit.Modkit.RED4
                 args.Get<WemExportArgs>().FileName = cr2wFile.FullName;
 
                 var relPath = cr2wFile.FullName.RelativePath(basedir);
+
+                _hookService.OnExport();
                 return UncookBuffers(fs, relPath, args, rawOutDir, forceBuffers);
             }
             catch(System.Exception e)
