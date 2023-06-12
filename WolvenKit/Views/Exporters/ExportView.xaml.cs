@@ -11,11 +11,11 @@ using WolvenKit.Helpers;
 namespace WolvenKit.Views.Exporters;
 
 /// <summary>
-/// Interaction logic for TextureExportView.xaml
+/// Interaction logic for ExportView.xaml
 /// </summary>
-public partial class TextureExportView : ReactiveUserControl<ExportViewModel>
+public partial class ExportView : ReactiveUserControl<ExportViewModel>
 {
-    public TextureExportView()
+    public ExportView()
     {
         InitializeComponent();
 

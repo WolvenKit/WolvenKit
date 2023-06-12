@@ -151,10 +151,10 @@ namespace WolvenKit
                     // Importers
 
                     services.AddTransient<ImportViewModel>();
-                    services.AddTransient<IViewFor<ImportViewModel>, TextureImportView>();
+                    services.AddTransient<IViewFor<ImportViewModel>, ImportView>();
 
                     services.AddTransient<ExportViewModel>();
-                    services.AddTransient<IViewFor<ExportViewModel>, TextureExportView>();
+                    services.AddTransient<IViewFor<ExportViewModel>, ExportView>();
 
                     #endregion
 

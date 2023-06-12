@@ -23,9 +23,9 @@ using WolvenKit.Views.Exporters;
 
 namespace WolvenKit.Views.Importers;
 
-public partial class TextureImportView : ReactiveUserControl<ImportViewModel>
+public partial class ImportView : ReactiveUserControl<ImportViewModel>
 {
-    public TextureImportView()
+    public ImportView()
     {
         InitializeComponent();
 

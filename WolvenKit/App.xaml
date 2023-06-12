@@ -46,12 +46,12 @@
                     </DataTemplate>-->
                     <DataTemplate DataType="{x:Type importvms:ImportViewModel}">
                         <Grid>
-                            <importers:TextureImportView />
+                            <importers:ImportView />
                         </Grid>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type exportvms:ExportViewModel}">
                         <Grid>
-                            <exporters:TextureExportView />
+                            <exporters:ExportView />
                         </Grid>
                     </DataTemplate>
 
