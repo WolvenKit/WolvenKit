@@ -23,7 +23,7 @@ using WolvenKit.Views.Exporters;
 
 namespace WolvenKit.Views.Importers;
 
-public partial class TextureImportView : ReactiveUserControl<TextureImportViewModel>
+public partial class TextureImportView : ReactiveUserControl<ImportViewModel>
 {
     public TextureImportView()
     {
@@ -33,7 +33,7 @@ public partial class TextureImportView : ReactiveUserControl<TextureImportViewMo
 
         this.WhenActivated(disposables =>
         {
-            if (DataContext is TextureImportViewModel viewModel)
+            if (DataContext is ImportViewModel viewModel)
             {
                 SetCurrentValue(ViewModelProperty, viewModel);
             }

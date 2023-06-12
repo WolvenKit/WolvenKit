@@ -11,8 +11,8 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:vm="clr-namespace:WolvenKit.App.ViewModels.Exporters;assembly=WolvenKit.App"
-    d:DataContext="{d:DesignInstance Type=vm:TextureExportViewModel}"
-    x:TypeArguments="vm:TextureExportViewModel"
+    d:DataContext="{d:DesignInstance Type=vm:=ExportViewModel}"
+    x:TypeArguments="vm:ExportViewModel"
     mc:Ignorable="d">
 
     <Grid Background="{DynamicResource ContentBackgroundAlt2}">

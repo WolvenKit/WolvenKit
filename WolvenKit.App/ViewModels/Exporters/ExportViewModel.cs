@@ -24,17 +24,7 @@ using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
-public record class CallbackArguments(ImportExportArgs Arg, string PropertyName);
-
-public abstract partial class ExportViewModel : ImportExportViewModel
-{
-    protected ExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
-        : base(archiveManager, notificationService, settingsManager, header, contentId)
-    {
-    }
-}
-
-public partial class TextureExportViewModel : ExportViewModel
+public partial class ExportViewModel : AbstractExportViewModel
 {
     private ILoggerService _loggerService;
     private INotificationService _notificationService;
@@ -49,7 +39,7 @@ public partial class TextureExportViewModel : ExportViewModel
     private IModTools _modTools;
     private readonly Red4ParserService _parserService;
 
-    public TextureExportViewModel(
+    public ExportViewModel(
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
         IWatcherService watcherService,
@@ -76,12 +66,12 @@ public partial class TextureExportViewModel : ExportViewModel
         _parserService = red4ParserService;
         _progressService = progressService;
 
-        PropertyChanged += TextureExportViewModel_PropertyChanged;
+        PropertyChanged += ExportViewModel_PropertyChanged;
     }
 
     
 
-    private async void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private async void ExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IsActive))
         {

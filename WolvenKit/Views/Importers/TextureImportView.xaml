@@ -10,7 +10,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:vm="clr-namespace:WolvenKit.App.ViewModels.Importers;assembly=WolvenKit.App"
-    x:TypeArguments="vm:TextureImportViewModel">
+    x:TypeArguments="vm:ImportViewModel">
 
     <Grid Background="{DynamicResource ContentBackgroundAlt2}">
 
