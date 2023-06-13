@@ -12,12 +12,16 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Helpers;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
@@ -26,17 +30,17 @@ namespace WolvenKit.App.ViewModels.Exporters;
 
 public partial class ExportViewModel : AbstractExportViewModel
 {
-    private ILoggerService _loggerService;
-    private INotificationService _notificationService;
-    private ISettingsManager _settingsManager;
-    private IWatcherService _watcherService;
-    private IProgressService<double> _progressService;
-    private IProjectManager _projectManager;
-    private IGameControllerFactory _gameController;
-    private IArchiveManager _archiveManager;
-    private IPluginService _pluginService;
-    private IHashService _hashService;
-    private IModTools _modTools;
+    private readonly ILoggerService _loggerService;
+    private readonly INotificationService _notificationService;
+    private readonly ISettingsManager _settingsManager;
+    private readonly IWatcherService _watcherService;
+    private readonly IProgressService<double> _progressService;
+    private readonly IProjectManager _projectManager;
+    private readonly IGameControllerFactory _gameController;
+    private readonly IArchiveManager _archiveManager;
+    private readonly IPluginService _pluginService;
+    private readonly IHashService _hashService;
+    private readonly IModTools _modTools;
     private readonly Red4ParserService _parserService;
 
     public ExportViewModel(
@@ -69,7 +73,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         PropertyChanged += ExportViewModel_PropertyChanged;
     }
 
-    
+
 
     private async void ExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -127,7 +131,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         total = toBeExported.Count;
         foreach (var item in toBeExported)
         {
-            if (await Task.Run(() => ExportSingle(item)))
+            if (await ExportSingleAsync(item))
             {
                 sucessful++;
             }
@@ -162,7 +166,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         _progressService.Completed();
     }
 
-    private bool ExportSingle(ExportableItemViewModel item)
+    private async Task<bool> ExportSingleAsync(ExportableItemViewModel item)
     {
         var proj = _projectManager.ActiveProject;
         if (proj == null)
@@ -175,6 +179,11 @@ public partial class ExportViewModel : AbstractExportViewModel
         {
             if (item.Properties is MeshExportArgs meshExportArgs)
             {
+                if (meshExportArgs.ExportFbx)
+                {
+                    return await ExportWithRedmodAsync(new DirectoryInfo(proj.ModDirectory), fi, new DirectoryInfo(proj.RawDirectory));
+                }
+
                 meshExportArgs.Archives.Clear();
                 if (_gameController.GetController() is RED4Controller cp77Controller)
                 {
@@ -220,7 +229,33 @@ public partial class ExportViewModel : AbstractExportViewModel
             }
 
             var settings = new GlobalExportArgs().Register(e);
-            return _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
+            return await Task.Run(() => _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
+        }
+
+        return false;
+    }
+
+    private async Task<bool> ExportWithRedmodAsync(DirectoryInfo depot, FileInfo inputFile, DirectoryInfo outDirectory)
+    {
+        var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        if (File.Exists(redModPath))
+        {
+            var redrelative = new RedRelativePath(depot, inputFile.GetRelativePath(depot));
+            var outputPath = new RedRelativePath(depot, inputFile.GetRelativePath(depot)).ChangeBaseDir(outDirectory).ChangeExtension(EConvertableOutput.fbx.ToString());
+
+            var outDir = new FileInfo(outputPath.FullPath).Directory;
+            Directory.CreateDirectory(outDir.NotNull().FullName);
+
+            var args = RedMod.GetExportArgs(depot.FullName, redrelative.RelativePath, outputPath.FullPath);
+            var workingDir = Path.GetDirectoryName(redModPath);
+
+            _loggerService.Info($"WorkDir: {workingDir}");
+            _loggerService.Info($"Running commandlet: {args}");
+            return await ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
+        }
+        else
+        {
+            _loggerService.Error("redMod.exe not found");
         }
 
         return false;

@@ -197,6 +197,15 @@ namespace WolvenKit.Common.Model.Arguments
         /// Experimental New Mesh Exporter Logic.
         /// </summary>
         [Category("Experimental")]
+        [Display(Name = "Export FBX")]
+        [Description("Use REDmod to export to FBX.")]
+        [WkitScriptAccess("ExportFbx")]
+        public bool ExportFbx { get; set; } = false; 
+
+        /// <summary>
+        /// Experimental New Mesh Exporter Logic.
+        /// </summary>
+        [Category("Experimental")]
         [Display(Name = "Use New Mesh Exporter")]
         [Description("Use New Mesh Exporter Logic. Turn off if you run into issues.")]
         [WkitScriptAccess("ExperimentalNewMeshExporter")]

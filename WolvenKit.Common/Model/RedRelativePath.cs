@@ -40,6 +40,11 @@ namespace WolvenKit.Common.Model
             return this;
         }
 
+        /// <summary>
+        ///  Changes the extension of the relative path to the new extension
+        /// </summary>
+        /// <param name="newExt"></param>
+        /// <returns></returns>
         public RedRelativePath ChangeExtension(string newExt)
         {
             RelativePath = Path.ChangeExtension(RelativePath, newExt);

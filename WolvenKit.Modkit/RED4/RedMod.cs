@@ -1,3 +1,4 @@
+using System.IO;
 using WolvenKit.Common.Model.Arguments;
 
 namespace WolvenKit.Modkit.RED4
@@ -23,5 +24,15 @@ namespace WolvenKit.Modkit.RED4
 
         public static string GetReImportArgs(this ReImportArgs a) => GetReImportArgs(a.Depot, a.Input, a.Animset, a.Output, a.AnimationToRename);
 
+        public static string GetExportArgs(string depot, string input, string output = "")
+        {
+            var args = $"resource-export -depot=\"{depot}\" -input=\"{input}\"";
+            if (!string.IsNullOrEmpty(output))
+            {
+                args += $" -output={output}";
+            }
+
+            return args;
+        }
     }
 }
