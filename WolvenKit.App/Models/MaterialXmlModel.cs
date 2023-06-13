@@ -1,243 +1,167 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace WolvenKit.App.Models;
 
 // NOTE: Generated code may require at least .NET Framework 4.5 or .NET Core/Standard 2.0.
 /// <remarks/>
-[System.SerializableAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-[System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false, ElementName = "mesh")]
+[Serializable()]
+[DesignerCategory("code")]
+[XmlType(AnonymousType = true)]
+[XmlRoot(Namespace = "", IsNullable = false, ElementName = "mesh")]
 public partial class MaterialXmlModel
 {
 
-    private meshMesh_data? mesh_dataField;
+    private MeshMesh_data? _mesh_dataField;
 
-    private meshMaterial[]? materialsField;
+    private MeshMaterial[]? _materialsField;
 
     /// <remarks/>
-    public meshMesh_data? mesh_data
+    [XmlElement("mesh_data")]
+    public MeshMesh_data? Mesh_data
     {
-        get
-        {
-            return mesh_dataField;
-        }
-        set
-        {
-            mesh_dataField = value;
-        }
+        get => _mesh_dataField;
+        set => _mesh_dataField = value;
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlArrayItemAttribute("material", IsNullable = false)]
-    public meshMaterial[]? materials
+    [XmlArrayItem(typeof(MeshMaterial), IsNullable = false, ElementName = "material")]
+    [XmlArray("materials")]
+    public MeshMaterial[]? Materials
     {
-        get
-        {
-            return materialsField;
-        }
-        set
-        {
-            materialsField = value;
-        }
+        get => _materialsField;
+        set => _materialsField = value;
     }
 }
 
 /// <remarks/>
-[System.SerializableAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-public partial class meshMesh_data
+[Serializable()]
+[DesignerCategory("code")]
+[XmlType(AnonymousType = true)]
+public partial class MeshMesh_data
 {
 
-    private meshMesh_dataLODs? lODsField;
+    private MeshMesh_dataLODs? _lODsField;
 
-    private decimal autohideDistanceField;
+    private decimal _autohideDistanceField;
 
     /// <remarks/>
-    public meshMesh_dataLODs? LODs
+    [XmlElement("LODs")]
+    public MeshMesh_dataLODs? LODs
     {
-        get
-        {
-            return lODsField;
-        }
-        set
-        {
-            lODsField = value;
-        }
+        get => _lODsField; set => _lODsField = value;
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public decimal autohideDistance
+    [XmlAttribute(AttributeName = "autohideDistance")]
+    public decimal AutohideDistance
     {
-        get
-        {
-            return autohideDistanceField;
-        }
-        set
-        {
-            autohideDistanceField = value;
-        }
+        get => _autohideDistanceField; set => _autohideDistanceField = value;
     }
 }
 
 /// <remarks/>
-[System.SerializableAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-public partial class meshMesh_dataLODs
+[Serializable()]
+[DesignerCategory("code")]
+[XmlType(AnonymousType = true)]
+public partial class MeshMesh_dataLODs
 {
 
-    private meshMesh_dataLODsLOD_info? lOD_infoField;
+    private MeshMesh_dataLODsLOD_info? _lOD_infoField;
 
     /// <remarks/>
-    public meshMesh_dataLODsLOD_info? LOD_info
+    [XmlElement("LOD_info")]
+    public MeshMesh_dataLODsLOD_info? LOD_info
     {
-        get
-        {
-            return lOD_infoField;
-        }
-        set
-        {
-            lOD_infoField = value;
-        }
+        get => _lOD_infoField; set => _lOD_infoField = value;
     }
 }
 
 /// <remarks/>
-[System.SerializableAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-public partial class meshMesh_dataLODsLOD_info
+[Serializable()]
+[DesignerCategory("code")]
+[XmlType(AnonymousType = true)]
+public partial class MeshMesh_dataLODsLOD_info
 {
 
-    private decimal distanceField;
+    private decimal _distanceField;
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public decimal distance
+    [XmlAttribute(AttributeName = "distance")]
+    public decimal Distance
     {
-        get
-        {
-            return distanceField;
-        }
-        set
-        {
-            distanceField = value;
-        }
+        get => _distanceField; set => _distanceField = value;
     }
 }
 
 /// <remarks/>
-[System.SerializableAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-public partial class meshMaterial
+[Serializable()]
+[DesignerCategory("code")]
+[XmlType(AnonymousType = true)]
+public partial class MeshMaterial
 {
 
-    private meshMaterialParam[]? paramField;
+    private MeshMaterialParam[]? _paramField;
 
-    private string? nameField;
+    private string? _nameField;
 
-    private bool localField;
+    private bool _localField;
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("param")]
-    public meshMaterialParam[]? param
+    [XmlElement("param")]
+    public MeshMaterialParam[]? Param
     {
-        get
-        {
-            return paramField;
-        }
-        set
-        {
-            paramField = value;
-        }
+        get => _paramField; set => _paramField = value;
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string? name
+    [XmlAttribute(AttributeName = "name")]
+    public string? Name
     {
-        get
-        {
-            return nameField;
-        }
-        set
-        {
-            nameField = value;
-        }
+        get => _nameField; set => _nameField = value;
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public bool local
+    [XmlAttribute(AttributeName = "local")]
+    public bool Local
     {
-        get
-        {
-            return localField;
-        }
-        set
-        {
-            localField = value;
-        }
+        get => _localField; set => _localField = value;
     }
 }
 
 /// <remarks/>
-[System.SerializableAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-public partial class meshMaterialParam
+[Serializable()]
+[DesignerCategory("code")]
+[XmlType(AnonymousType = true)]
+public partial class MeshMaterialParam
 {
 
-    private string? nameField;
+    private string? _nameField;
 
-    private string? typeField;
+    private string? _typeField;
 
-    private string? valueField;
+    private string? _valueField;
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string? name
+    [XmlAttribute(AttributeName = "name")]
+    public string? Name
     {
-        get
-        {
-            return nameField;
-        }
-        set
-        {
-            nameField = value;
-        }
+        get => _nameField; set => _nameField = value;
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string? type
+    [XmlAttribute(AttributeName = "type")]
+    public string? Type
     {
-        get
-        {
-            return typeField;
-        }
-        set
-        {
-            typeField = value;
-        }
+        get => _typeField; set => _typeField = value;
     }
 
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string? value
+    [XmlAttribute(AttributeName = "value")]
+    public string? Value
     {
-        get
-        {
-            return valueField;
-        }
-        set
-        {
-            valueField = value;
-        }
+        get => _valueField; set => _valueField = value;
     }
 }
 

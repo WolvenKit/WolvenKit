@@ -309,17 +309,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             if (serializer.Deserialize(reader) is MaterialXmlModel model)
             {
                 var materials = new List<string>();
-                if (model.materials is not null)
+                if (model.Materials is not null)
                 {
-                    foreach (var material in model.materials)
+                    foreach (var material in model.Materials)
                     {
-                        if (material.param is not null)
+                        if (material.Param is not null)
                         {
-                            foreach (var param in material.param)
+                            foreach (var param in material.Param)
                             {
-                                if (!string.IsNullOrEmpty(param.value) && !string.IsNullOrEmpty(param.type) && param.type.StartsWith("rRef:"))
+                                if (!string.IsNullOrEmpty(param.Value) && !string.IsNullOrEmpty(param.Type) && param.Type.StartsWith("rRef:"))
                                 {
-                                    var path = param.value;
+                                    var path = param.Value;
                                     if (!materials.Contains(path))
                                     {
                                         materials.Add(path);

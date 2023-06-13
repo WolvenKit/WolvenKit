@@ -199,7 +199,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Experimental")]
         [Display(Name = "Choose Exporter")]
         [Description("Choose the exporter type. Use default if you run into issues.")]
-        [WkitScriptAccess("ExperimentalNewMeshExporter")]
+        [WkitScriptAccess("MeshExporter")]
         public MeshExporterType MeshExporter { get; set; }
 
         /// <summary>
