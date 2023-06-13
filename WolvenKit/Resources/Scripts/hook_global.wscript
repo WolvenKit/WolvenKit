@@ -1,5 +1,6 @@
 import * as Logger from 'Logger.wscript';
 import * as FileValidation from 'Wolvenkit_FileValidation.wscript';
+import {isDataChangedForWriting} from 'Wolvenkit_FileValidation.wscript';
 import Settings from 'hook_settings.wscript';
 
 globalThis.onSave = function(ext, file) {
@@ -26,7 +27,13 @@ globalThis.onSave = function(ext, file) {
 			break;
 		case "workspot":
 			FileValidation.validateWorkspotFile(fileContent["Data"]["RootChunk"], Settings.Workspot);
-			file = JSON.stringify(fileContent);
+			if (Settings.Workspot.fixIndexOrder && FileValidation.isDataChangedForWriting()) { // currently deactivated      
+				try {
+					file = JSON.stringify(fileContent);
+				} catch (err) {
+					Logger.Warning("Failed to write file");
+				}
+			}
 			break;
 	}
 

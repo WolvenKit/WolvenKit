@@ -166,7 +166,7 @@ import * as Logger from 'Logger.wscript';
         try {
             // fileExists has been checked in validatePartsOverride
             const entity = JSON.parse(fileContent);
-            const components = entity && entity.Data && entity.Data.RootChunk ? entity.Data.RootChunk.components : [] || [];
+            const components = entity && entity.Data && entity.Data.RootChunk ? entity.Data.RootChunk.components || [] : [];
             for (let i = 0; i < components.length; i++) {
                 entFile_validateComponent(components[i], i, validateRecursively)
             }
@@ -178,8 +178,12 @@ import * as Logger from 'Logger.wscript';
     function appFile_validatePartsOverride(override, index, appearanceName) {
         const overrideDepotPath = override.partResource.DepotPath;
         
-        if (overrideDepotPath && !wkit.FileExists(overrideDepotPath)) {
+        if (overrideDepotPath) {
+          if (!overrideDepotPath.endsWith(".ent")) {
+            Logger.Warning(`${appearanceName}.partsOverrides[${index}]: ${overrideDepotPath} is not an entity file!`);
+          } else if (!wkit.FileExists(overrideDepotPath)) {
             Logger.Warning(`${appearanceName}.partsOverrides[${index}]: ${overrideDepotPath} not found in project or game files`);
+          }
         }
         
         for(let i = 0; i < override.componentsOverrides.length; i++) {
@@ -213,7 +217,7 @@ import * as Logger from 'Logger.wscript';
 
     function appFile_validateAppearance(appearance, index, validateRecursively) {
         // check override
-        if (appearance.Data.cookedDataPathOverride.DepotPath) {
+        if (appearance.Data.cookedDataPathOverride.DepotPath && appearance.Data.cookedDataPathOverride.DepotPath !== "0") {
             Logger.Warning(`appearance definition ${index} has a cooked data override. Consider deleting it.`);
         }
 

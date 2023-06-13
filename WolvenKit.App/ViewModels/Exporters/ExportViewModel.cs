@@ -11,37 +11,32 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Helpers;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
-public record class CallbackArguments(ImportExportArgs Arg, string PropertyName);
-
-public abstract partial class ExportViewModel : ImportExportViewModel
-{
-    protected ExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
-        : base(archiveManager, notificationService, settingsManager, header, contentId)
-    {
-    }
-}
-
-public partial class TextureExportViewModel : ExportViewModel
+public partial class ExportViewModel : AbstractExportViewModel
 {
     private readonly ILoggerService _loggerService;
     private readonly IWatcherService _watcherService;
-    private readonly IProgressService<double> _progressService;
     private readonly IProjectManager _projectManager;
     private readonly IModTools _modTools;
+    private readonly IProgressService<double> _progressService;
     private readonly ImportExportHelper _importExportHelper;
 
-    public TextureExportViewModel(
+    public ExportViewModel(
         IArchiveManager archiveManager,
         INotificationService notificationService,
         ISettingsManager settingsManager,
@@ -59,12 +54,12 @@ public partial class TextureExportViewModel : ExportViewModel
         _progressService = progressService;
         _importExportHelper = importExportHelper;
 
-        PropertyChanged += TextureExportViewModel_PropertyChanged;
+        PropertyChanged += ExportViewModel_PropertyChanged;
     }
 
-    
 
-    private async void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+
+    private async void ExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IsActive))
         {
@@ -81,7 +76,7 @@ public partial class TextureExportViewModel : ExportViewModel
 
     #region Commands
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // notify in TextureImportView.xaml.cs
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // notify in ImportView.xaml.cs
     private void ImportSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -120,7 +115,7 @@ public partial class TextureExportViewModel : ExportViewModel
         total = toBeExported.Count;
         foreach (var item in toBeExported)
         {
-            if (await Task.Run(() => ExportSingle(item)))
+            if (await ExportSingleAsync(item))
             {
                 sucessful++;
             }
@@ -155,7 +150,7 @@ public partial class TextureExportViewModel : ExportViewModel
         _progressService.Completed();
     }
 
-    private bool ExportSingle(ExportableItemViewModel item)
+    private async Task<bool> ExportSingleAsync(ExportableItemViewModel item)
     {
         var proj = _projectManager.ActiveProject;
         if (proj == null)
@@ -164,20 +159,61 @@ public partial class TextureExportViewModel : ExportViewModel
         }
 
         var fi = new FileInfo(item.BaseFile);
-        if (fi.Exists)
+        if (!fi.Exists)
         {
-            if (item.Properties is not ExportArgs e)
-            {
-                throw new NotImplementedException();
-            }
+            return false;
+        }
 
-            var settings = new GlobalExportArgs().Register(e);
-            if (!_importExportHelper.Finalize(settings))
-            {
-                return false;
-            }
+        if (item.Properties is not ExportArgs e)
+        {
+            throw new NotImplementedException();
+        }
 
-            return _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
+        if (item.Properties is MeshExportArgs meshExportArgs)
+        {
+            if (meshExportArgs.MeshExporter == MeshExporterType.REDmod)
+            {
+                return await ExportWithRedmodAsync(new DirectoryInfo(proj.ModDirectory), fi, new DirectoryInfo(proj.RawDirectory));
+            }
+        }
+
+        var settings = new GlobalExportArgs().Register(e);
+        if (!_importExportHelper.Finalize(settings))
+        {
+            return false;
+        }
+
+        return await Task.Run(() => _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
+    }
+
+    /// <summary>
+    ///  Exports a file from the depot to the outDir with REDmod
+    /// </summary>
+    /// <param name="depot"></param>
+    /// <param name="inputFile"></param>
+    /// <param name="outDirectory"></param>
+    /// <returns></returns>
+    private async Task<bool> ExportWithRedmodAsync(DirectoryInfo depot, FileInfo inputFile, DirectoryInfo outDirectory)
+    {
+        var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        if (File.Exists(redModPath))
+        {
+            var redrelative = new RedRelativePath(depot, inputFile.GetRelativePath(depot));
+            var outputPath = new RedRelativePath(outDirectory, inputFile.GetRelativePath(depot)).ChangeExtension(EConvertableOutput.fbx.ToString());
+
+            var outDir = new FileInfo(outputPath.FullPath).Directory;
+            Directory.CreateDirectory(outDir.NotNull().FullName);
+
+            var args = RedMod.GetExportArgs(depot, redrelative.RelativePath, new FileInfo(outputPath.FullPath));
+            var workingDir = Path.GetDirectoryName(redModPath);
+
+            _loggerService.Info($"WorkDir: {workingDir}");
+            _loggerService.Info($"Running commandlet: {args}");
+            return await ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
+        }
+        else
+        {
+            _loggerService.Error("redMod.exe not found");
         }
 
         return false;

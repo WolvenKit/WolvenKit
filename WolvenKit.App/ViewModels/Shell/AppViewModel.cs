@@ -254,17 +254,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 case EDockedViews.LocKeyBrowserViewModel:
                     DockedViews.Add(_paneViewModelFactory.LocKeyBrowserViewModel());
                     return true;
-                case EDockedViews.TextureImportViewModel:
+                case EDockedViews.ImportViewModel:
                 {
-                    var vm = _paneViewModelFactory.TextureImportViewModel();
+                    var vm = _paneViewModelFactory.ImportViewModel();
                     vm.State = DockState.Dock;
                     vm.SideInDockedMode = DockSide.Right;
                     DockedViews.Add(vm);
                     return true;
                 }
-                case EDockedViews.TextureExportViewModel:
+                case EDockedViews.ExportViewModel:
                 {
-                    var vm = _paneViewModelFactory.TextureExportViewModel();
+                    var vm = _paneViewModelFactory.ExportViewModel();
                     vm.State = DockState.Dock;
                     vm.SideInDockedMode = DockSide.Right;
                     DockedViews.Add(vm);
@@ -1140,7 +1140,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void ShowTextureImporter()
     {
-        var vm = _paneViewModelFactory.TextureImportViewModel();
+        var vm = _paneViewModelFactory.ImportViewModel();
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }
@@ -1148,7 +1148,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void ShowTextureExporter()
     {
-        var vm = _paneViewModelFactory.TextureExportViewModel();
+        var vm = _paneViewModelFactory.ExportViewModel();
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }
@@ -1189,8 +1189,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 Type t when t == typeof(TweakBrowserViewModel) => (T)(_paneViewModelFactory.TweakBrowserViewModel(this) as IDockElement),
                 Type t when t == typeof(LocKeyBrowserViewModel) => (T)(_paneViewModelFactory.LocKeyBrowserViewModel() as IDockElement),
 
-                Type t when t == typeof(TextureImportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
-                Type t when t == typeof(TextureExportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+                Type t when t == typeof(ImportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+                Type t when t == typeof(ExportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
 
                 _ => throw new NotImplementedException(),
             };
