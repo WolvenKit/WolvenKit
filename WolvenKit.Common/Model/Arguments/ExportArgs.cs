@@ -194,22 +194,13 @@ namespace WolvenKit.Common.Model.Arguments
         private bool _isGLBinary = true;
 
         /// <summary>
-        /// Experimental New Mesh Exporter Logic.
+        /// Choose exporter
         /// </summary>
         [Category("Experimental")]
-        [Display(Name = "Export FBX")]
-        [Description("Use REDmod to export to FBX.")]
-        [WkitScriptAccess("ExportFbx")]
-        public bool ExportFbx { get; set; } = false; 
-
-        /// <summary>
-        /// Experimental New Mesh Exporter Logic.
-        /// </summary>
-        [Category("Experimental")]
-        [Display(Name = "Use New Mesh Exporter")]
-        [Description("Use New Mesh Exporter Logic. Turn off if you run into issues.")]
+        [Display(Name = "Choose Exporter")]
+        [Description("Choose the exporter type. Use default if you run into issues.")]
         [WkitScriptAccess("ExperimentalNewMeshExporter")]
-        public bool ExperimentUseNewMeshExporter { get; set; } = false; // TODO: Remove this when the new exporter is stable.
+        public MeshExporterType MeshExporter { get; set; }
 
         /// <summary>
         /// Export type for the selected Mesh.
@@ -402,4 +393,14 @@ namespace WolvenKit.Common.Model.Arguments
         Multimesh
     }
 
+
+    /// <summary>
+    /// Mesh Exporters
+    /// </summary>
+    public enum MeshExporterType
+    {
+        Default,
+        Experimental,
+        REDmod
+    }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
@@ -289,6 +290,58 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
     private void CopyRelPath() => Clipboard.SetDataObject(FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject.NotNull()));
+
+    /// <summary>
+    /// Reimports the game file to replace the current one
+    /// </summary>
+    private bool CanAddDependencies() => ActiveProject != null && SelectedItem != null && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("xml");
+    [RelayCommand(CanExecute = nameof(CanAddDependencies))]
+    private async Task AddDependencies()
+    {
+        if (!SelectedItem.NotNull().IsDirectory)
+        {
+            // parse xml
+            var filename = SelectedItem.FullName;
+            var serializer = new XmlSerializer(typeof(MaterialXmlModel));
+
+            using Stream reader = new FileStream(filename, FileMode.Open);
+            // Call the Deserialize method to restore the object's state.
+            if (serializer.Deserialize(reader) is MaterialXmlModel model)
+            {
+                var materials = new List<string>();
+                if (model.materials is not null)
+                {
+                    foreach (var material in model.materials)
+                    {
+                        if (material.param is not null)
+                        {
+                            foreach (var param in material.param)
+                            {
+                                if (!string.IsNullOrEmpty(param.value) && !string.IsNullOrEmpty(param.type) && param.type.StartsWith("rRef:"))
+                                {
+                                    var path = param.value;
+                                    if (!materials.Contains(path))
+                                    {
+                                        materials.Add(path);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // add from AB
+                foreach (var material in materials)
+                {
+                    var relPath = FileModel.GetRelativeName(material, ActiveProject.NotNull());
+                    var hash = FNV1A64HashAlgorithm.HashString(relPath);
+                    await Task.Run(() => _gameController.GetController().AddToMod(hash));
+                }
+            }
+        }
+
+        await Task.CompletedTask;
+    }
 
     /// <summary>
     /// Reimports the game file to replace the current one

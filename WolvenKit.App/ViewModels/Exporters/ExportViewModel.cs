@@ -175,78 +175,89 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
         var fi = new FileInfo(item.BaseFile);
-        if (fi.Exists)
+        if (!fi.Exists)
         {
-            if (item.Properties is MeshExportArgs meshExportArgs)
-            {
-                if (meshExportArgs.ExportFbx)
-                {
-                    return await ExportWithRedmodAsync(new DirectoryInfo(proj.ModDirectory), fi, new DirectoryInfo(proj.RawDirectory));
-                }
-
-                meshExportArgs.Archives.Clear();
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
-                }
-
-                meshExportArgs.Archives.Insert(0, proj.AsArchive());
-
-                // Should check for depo here instead of dtl
-                meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
-            }
-            if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-                morphTargetExportArgs.ModFolderPath = proj.ModDirectory;
-            }
-            if (item.Properties is OpusExportArgs opusExportArgs)
-            {
-                opusExportArgs.RawFolderPath = proj.RawDirectory;
-                opusExportArgs.ModFolderPath = proj.ModDirectory;
-            }
-            if (item.Properties is EntityExportArgs entExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    entExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-            }
-            if (item.Properties is AnimationExportArgs animationExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-            }
-
-            if (item.Properties is not ExportArgs e)
-            {
-                throw new NotImplementedException();
-            }
-
-            var settings = new GlobalExportArgs().Register(e);
-            return await Task.Run(() => _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
+            return false;
         }
 
-        return false;
+        if (item.Properties is MeshExportArgs meshExportArgs)
+        {
+            if (meshExportArgs.MeshExporter == MeshExporterType.REDmod)
+            {
+                return await ExportWithRedmodAsync(new DirectoryInfo(proj.ModDirectory), fi, new DirectoryInfo(proj.RawDirectory));
+            }
+
+            meshExportArgs.Archives.Clear();
+            if (_gameController.GetController() is RED4Controller cp77Controller)
+            {
+                meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
+            }
+
+            meshExportArgs.Archives.Insert(0, proj.AsArchive());
+
+            // Should check for depo here instead of dtl
+            meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
+        }
+
+        if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
+        {
+            if (_gameController.GetController() is RED4Controller cp77Controller)
+            {
+                morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+            }
+            morphTargetExportArgs.ModFolderPath = proj.ModDirectory;
+        }
+
+        if (item.Properties is OpusExportArgs opusExportArgs)
+        {
+            opusExportArgs.RawFolderPath = proj.RawDirectory;
+            opusExportArgs.ModFolderPath = proj.ModDirectory;
+        }
+
+        if (item.Properties is EntityExportArgs entExportArgs)
+        {
+            if (_gameController.GetController() is RED4Controller cp77Controller)
+            {
+                entExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+            }
+        }
+
+        if (item.Properties is AnimationExportArgs animationExportArgs)
+        {
+            if (_gameController.GetController() is RED4Controller cp77Controller)
+            {
+                animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+            }
+        }
+
+        if (item.Properties is not ExportArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        var settings = new GlobalExportArgs().Register(e);
+        return await Task.Run(() => _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
     }
 
+    /// <summary>
+    ///  Exports a file from the depot to the outDir with REDmod
+    /// </summary>
+    /// <param name="depot"></param>
+    /// <param name="inputFile"></param>
+    /// <param name="outDirectory"></param>
+    /// <returns></returns>
     private async Task<bool> ExportWithRedmodAsync(DirectoryInfo depot, FileInfo inputFile, DirectoryInfo outDirectory)
     {
         var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
         if (File.Exists(redModPath))
         {
             var redrelative = new RedRelativePath(depot, inputFile.GetRelativePath(depot));
-            var outputPath = new RedRelativePath(depot, inputFile.GetRelativePath(depot)).ChangeBaseDir(outDirectory).ChangeExtension(EConvertableOutput.fbx.ToString());
+            var outputPath = new RedRelativePath(outDirectory, inputFile.GetRelativePath(depot)).ChangeExtension(EConvertableOutput.fbx.ToString());
 
             var outDir = new FileInfo(outputPath.FullPath).Directory;
             Directory.CreateDirectory(outDir.NotNull().FullName);
 
-            var args = RedMod.GetExportArgs(depot.FullName, redrelative.RelativePath, outputPath.FullPath);
+            var args = RedMod.GetExportArgs(depot, redrelative.RelativePath, new FileInfo(outputPath.FullPath));
             var workingDir = Path.GetDirectoryName(redModPath);
 
             _loggerService.Info($"WorkDir: {workingDir}");

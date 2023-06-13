@@ -50,8 +50,6 @@ namespace WolvenKit.Modkit.RED4
 
             #endregion
 
-            //var rawRelative = new RedRelativePath(inDir, rawFile.GetRelativePath(inDir));
-
             // check if the file can be directly imported
             // if not, rebuild buffers
             if (!Enum.TryParse(rawRelative.Extension, true, out ERawFileFormat extAsEnum))
@@ -65,6 +63,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.tiff or ERawFileFormat.tga or ERawFileFormat.dds => HandleTextures(rawRelative, outDir, args),
                 ERawFileFormat.gltf or ERawFileFormat.glb => ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>()),
+                ERawFileFormat.fbx => ImportFbx(rawRelative, outDir, args.Get<CommonImportArgs>()),
                 ERawFileFormat.masklist => ImportMlmask(rawRelative, outDir),
                 ERawFileFormat.ttf => ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>()),
                 ERawFileFormat.wav => ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>()),
@@ -72,6 +71,12 @@ namespace WolvenKit.Modkit.RED4
                 ERawFileFormat.re => await ImportAnims(rawRelative, outDir, args.Get<ReImportArgs>()),
                 _ => throw new ArgumentOutOfRangeException(),
             };
+        }
+
+        private bool ImportFbx(RedRelativePath rawRelative, DirectoryInfo outDir, CommonImportArgs commonImportArgs)
+        {
+            _loggerService.Warning($"Use WolvenKit or REDmod to import fbx.");
+            return false;
         }
 
         private Task<bool> ImportAnims(RedRelativePath rawRelative, DirectoryInfo outDir, ReImportArgs importArgs)
@@ -139,7 +144,7 @@ namespace WolvenKit.Modkit.RED4
 
         private bool ImportWav(RedRelativePath rawRelative, DirectoryInfo outDir, OpusImportArgs opusImportArgs)
         {
-            _loggerService.Success($"Use WolvenKit to import opus.");
+            _loggerService.Warning($"Use WolvenKit to import opus.");
             return false;
         }
 

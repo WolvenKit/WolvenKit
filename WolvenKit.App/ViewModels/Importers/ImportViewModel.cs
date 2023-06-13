@@ -20,8 +20,11 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Helpers;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
@@ -159,7 +162,7 @@ public partial class ImportViewModel : AbstractImportViewModel
         total = toBeImported.Count;
         foreach (var item in toBeImported)
         {
-            if (await Task.Run(() => ImportSingleTask(item)))
+            if (await ImportSingleAsync(item))
             {
                 sucessful++;
             }
@@ -223,7 +226,7 @@ public partial class ImportViewModel : AbstractImportViewModel
         return Task.FromResult(false);
     }
 
-    private async Task<bool> ImportSingleTask(ImportableItemViewModel item)
+    private async Task<bool> ImportSingleAsync(ImportableItemViewModel item)
     {
         if (_gameController.GetController() is not RED4Controller)
         {
@@ -246,6 +249,13 @@ public partial class ImportViewModel : AbstractImportViewModel
         if (item.Properties is not ImportArgs prop)
         {
             throw new ArgumentException("incorrect type, expected ImportArgs", nameof(item));
+        }
+
+        // fbx import with redmod
+        if (item.Properties is CommonImportArgs && item.Extension == ERawFileFormat.fbx.ToString())
+        {
+            var inputRelative = new RedRelativePath(new DirectoryInfo(proj.RawDirectory), fi.GetRelativePath(new DirectoryInfo(proj.RawDirectory)));
+            return await ImportWithRedmodAsync(new DirectoryInfo(proj.ModDirectory), inputRelative);
         }
 
         if (item.Properties is GltfImportArgs gltfImportArgs)
@@ -279,6 +289,39 @@ public partial class ImportViewModel : AbstractImportViewModel
         {
             _loggerService.Error($"Could not import {item.Name}");
             _loggerService.Error(e);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Imports a file to the depot
+    /// </summary>
+    /// <param name="depot"></param>
+    /// <param name="inputFile"></param>
+    /// <returns></returns>
+    private async Task<bool> ImportWithRedmodAsync(DirectoryInfo depot, RedRelativePath inputRelative)
+    {
+        var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        if (File.Exists(redModPath))
+        {
+            // import to the depot
+            var inputPath = new FileInfo(inputRelative.FullPath);
+            var outputPath = inputRelative.ChangeBaseDir(depot).ChangeExtension(ERedExtension.mesh.ToString());
+
+            var outDir = new FileInfo(outputPath.FullPath).Directory;
+            Directory.CreateDirectory(outDir.NotNull().FullName);
+
+            var args = RedMod.GetImportArgs(depot, inputPath, outputPath.RelativePath);
+            var workingDir = Path.GetDirectoryName(redModPath);
+
+            _loggerService.Info($"WorkDir: {workingDir}");
+            _loggerService.Info($"Running commandlet: {args}");
+            return await ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
+        }
+        else
+        {
+            _loggerService.Error("redMod.exe not found");
         }
 
         return false;
