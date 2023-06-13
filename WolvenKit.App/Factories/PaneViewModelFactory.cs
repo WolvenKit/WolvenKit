@@ -89,6 +89,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         => new(appViewModel, _chunkViewmodelFactory, _settingsManager, _notificationService, _projectManager, _loggerService, _tweakDbService, _locKeyService);
     public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _watcherService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);
     
-    public TextureImportViewModel TextureImportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _hashService, _modTools, _parserService, _progressService);
-    public TextureExportViewModel TextureExportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _hashService, _modTools, _parserService, _progressService);
+    public ImportViewModel ImportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _hashService, _modTools, _parserService, _progressService);
+    public ExportViewModel ExportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _hashService, _modTools, _parserService, _progressService);
 }

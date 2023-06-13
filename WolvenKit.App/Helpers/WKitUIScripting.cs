@@ -345,7 +345,7 @@ public class WKitUIScripting : WKitScripting
         }
 
         // get the export view model and clear the items
-        var expVM = _paneViewModelFactory.TextureExportViewModel();
+        var expVM = _paneViewModelFactory.ExportViewModel();
         await expVM.RefreshCommand.ExecuteAsync(null);
 
         foreach (var item in expVM.Items)

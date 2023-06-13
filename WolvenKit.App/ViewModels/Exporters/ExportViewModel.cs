@@ -12,44 +12,38 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Helpers;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
-public record class CallbackArguments(ImportExportArgs Arg, string PropertyName);
-
-public abstract partial class ExportViewModel : ImportExportViewModel
+public partial class ExportViewModel : AbstractExportViewModel
 {
-    protected ExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
-        : base(archiveManager, notificationService, settingsManager, header, contentId)
-    {
-    }
-}
-
-public partial class TextureExportViewModel : ExportViewModel
-{
-    private ILoggerService _loggerService;
-    private INotificationService _notificationService;
-    private ISettingsManager _settingsManager;
-    private IWatcherService _watcherService;
-    private IProgressService<double> _progressService;
-    private IProjectManager _projectManager;
-    private IGameControllerFactory _gameController;
-    private IArchiveManager _archiveManager;
-    private IPluginService _pluginService;
-    private IHashService _hashService;
-    private IModTools _modTools;
+    private readonly ILoggerService _loggerService;
+    private readonly INotificationService _notificationService;
+    private readonly ISettingsManager _settingsManager;
+    private readonly IWatcherService _watcherService;
+    private readonly IProgressService<double> _progressService;
+    private readonly IProjectManager _projectManager;
+    private readonly IGameControllerFactory _gameController;
+    private readonly IArchiveManager _archiveManager;
+    private readonly IPluginService _pluginService;
+    private readonly IHashService _hashService;
+    private readonly IModTools _modTools;
     private readonly Red4ParserService _parserService;
 
-    public TextureExportViewModel(
+    public ExportViewModel(
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
         IWatcherService watcherService,
@@ -76,12 +70,12 @@ public partial class TextureExportViewModel : ExportViewModel
         _parserService = red4ParserService;
         _progressService = progressService;
 
-        PropertyChanged += TextureExportViewModel_PropertyChanged;
+        PropertyChanged += ExportViewModel_PropertyChanged;
     }
 
-    
 
-    private async void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+
+    private async void ExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IsActive))
         {
@@ -98,7 +92,7 @@ public partial class TextureExportViewModel : ExportViewModel
 
     #region Commands
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // notify in TextureImportView.xaml.cs
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // notify in ImportView.xaml.cs
     private void ImportSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -137,7 +131,7 @@ public partial class TextureExportViewModel : ExportViewModel
         total = toBeExported.Count;
         foreach (var item in toBeExported)
         {
-            if (await Task.Run(() => ExportSingle(item)))
+            if (await ExportSingleAsync(item))
             {
                 sucessful++;
             }
@@ -172,7 +166,7 @@ public partial class TextureExportViewModel : ExportViewModel
         _progressService.Completed();
     }
 
-    private bool ExportSingle(ExportableItemViewModel item)
+    private async Task<bool> ExportSingleAsync(ExportableItemViewModel item)
     {
         var proj = _projectManager.ActiveProject;
         if (proj == null)
@@ -181,56 +175,98 @@ public partial class TextureExportViewModel : ExportViewModel
         }
 
         var fi = new FileInfo(item.BaseFile);
-        if (fi.Exists)
+        if (!fi.Exists)
         {
-            if (item.Properties is MeshExportArgs meshExportArgs)
-            {
-                meshExportArgs.Archives.Clear();
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
-                }
+            return false;
+        }
 
-                meshExportArgs.Archives.Insert(0, proj.AsArchive());
-
-                // Should check for depo here instead of dtl
-                meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
-            }
-            if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
+        if (item.Properties is MeshExportArgs meshExportArgs)
+        {
+            if (meshExportArgs.MeshExporter == MeshExporterType.REDmod)
             {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-                morphTargetExportArgs.ModFolderPath = proj.ModDirectory;
-            }
-            if (item.Properties is OpusExportArgs opusExportArgs)
-            {
-                opusExportArgs.RawFolderPath = proj.RawDirectory;
-                opusExportArgs.ModFolderPath = proj.ModDirectory;
-            }
-            if (item.Properties is EntityExportArgs entExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    entExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-            }
-            if (item.Properties is AnimationExportArgs animationExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
+                return await ExportWithRedmodAsync(new DirectoryInfo(proj.ModDirectory), fi, new DirectoryInfo(proj.RawDirectory));
             }
 
-            if (item.Properties is not ExportArgs e)
+            meshExportArgs.Archives.Clear();
+            if (_gameController.GetController() is RED4Controller cp77Controller)
             {
-                throw new NotImplementedException();
+                meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
             }
 
-            var settings = new GlobalExportArgs().Register(e);
-            return _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
+            meshExportArgs.Archives.Insert(0, proj.AsArchive());
+
+            // Should check for depo here instead of dtl
+            meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
+        }
+
+        if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
+        {
+            if (_gameController.GetController() is RED4Controller cp77Controller)
+            {
+                morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+            }
+            morphTargetExportArgs.ModFolderPath = proj.ModDirectory;
+        }
+
+        if (item.Properties is OpusExportArgs opusExportArgs)
+        {
+            opusExportArgs.RawFolderPath = proj.RawDirectory;
+            opusExportArgs.ModFolderPath = proj.ModDirectory;
+        }
+
+        if (item.Properties is EntityExportArgs entExportArgs)
+        {
+            if (_gameController.GetController() is RED4Controller cp77Controller)
+            {
+                entExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+            }
+        }
+
+        if (item.Properties is AnimationExportArgs animationExportArgs)
+        {
+            if (_gameController.GetController() is RED4Controller cp77Controller)
+            {
+                animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+            }
+        }
+
+        if (item.Properties is not ExportArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        var settings = new GlobalExportArgs().Register(e);
+        return await Task.Run(() => _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
+    }
+
+    /// <summary>
+    ///  Exports a file from the depot to the outDir with REDmod
+    /// </summary>
+    /// <param name="depot"></param>
+    /// <param name="inputFile"></param>
+    /// <param name="outDirectory"></param>
+    /// <returns></returns>
+    private async Task<bool> ExportWithRedmodAsync(DirectoryInfo depot, FileInfo inputFile, DirectoryInfo outDirectory)
+    {
+        var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        if (File.Exists(redModPath))
+        {
+            var redrelative = new RedRelativePath(depot, inputFile.GetRelativePath(depot));
+            var outputPath = new RedRelativePath(outDirectory, inputFile.GetRelativePath(depot)).ChangeExtension(EConvertableOutput.fbx.ToString());
+
+            var outDir = new FileInfo(outputPath.FullPath).Directory;
+            Directory.CreateDirectory(outDir.NotNull().FullName);
+
+            var args = RedMod.GetExportArgs(depot, redrelative.RelativePath, new FileInfo(outputPath.FullPath));
+            var workingDir = Path.GetDirectoryName(redModPath);
+
+            _loggerService.Info($"WorkDir: {workingDir}");
+            _loggerService.Info($"Running commandlet: {args}");
+            return await ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
+        }
+        else
+        {
+            _loggerService.Error("redMod.exe not found");
         }
 
         return false;
