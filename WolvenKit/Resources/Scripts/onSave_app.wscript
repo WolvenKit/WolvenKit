@@ -29,7 +29,7 @@ function main(app) {
 	if (app.appearances.length === 0) {
 		return true;
 	}
-	FileValidation.validateAppFile(app, validateRecursively, showUnresolvedDepotPathWarnings);
+	FileValidation.validateAppFile(app, validateRecursively/*, showUnresolvedDepotPathWarnings*/);
 	return true;
 }
 

@@ -26,7 +26,7 @@ const showUnresolvedDepotPathWarnings = true;
  */
 
 function main(ent) {
-	FileValidation.validateEntFile(ent, showUnresolvedDepotPathWarnings, validateRecursively);
+	FileValidation.validateEntFile(ent/*, showUnresolvedDepotPathWarnings*/, validateRecursively);
 	return true;
 }
 
