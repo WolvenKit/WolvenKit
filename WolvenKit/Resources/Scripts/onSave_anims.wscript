@@ -24,13 +24,14 @@ const checkForDuplicates = true;
  */
 const targetAnimNames = [];
 
-
+/* 
+ * ******************************************************
+ */
 
 function main(animAnimSet) {
     FileValidation.validateAnimationFile(animAnimSet, checkForDuplicates, printAnimationNames, targetAnimNames);
     return true;
 }
-
 
 try {
     const fileContent = JSON.parse(file);
