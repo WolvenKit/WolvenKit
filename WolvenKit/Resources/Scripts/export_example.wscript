@@ -1,3 +1,5 @@
+// @version 1.0
+
 import * as Logger from 'Logger.wscript';
 
 const settings = {
