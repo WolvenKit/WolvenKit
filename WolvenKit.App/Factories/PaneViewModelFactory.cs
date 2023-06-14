@@ -87,6 +87,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         => new(appViewModel, _chunkViewmodelFactory, _settingsManager, _notificationService, _projectManager, _loggerService, _tweakDbService, _locKeyService);
     public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _watcherService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);
     
-    public ImportViewModel ImportViewModel() => new(_archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _modTools, _progressService, _gameController, _parserService, _importExportHelper);
+    public ImportViewModel ImportViewModel() => new(_archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _progressService, _gameController, _parserService, _importExportHelper);
     public ExportViewModel ExportViewModel() => new(_archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _progressService, _importExportHelper);
 }

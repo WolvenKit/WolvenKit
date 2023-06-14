@@ -18,11 +18,8 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Helpers;
-using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
@@ -34,7 +31,6 @@ public partial class ImportViewModel : AbstractImportViewModel
     private readonly ILoggerService _loggerService;
     private readonly IWatcherService _watcherService;
     private readonly IProjectManager _projectManager;
-    private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
     private readonly Red4ParserService _parserService;
@@ -47,7 +43,6 @@ public partial class ImportViewModel : AbstractImportViewModel
         ILoggerService loggerService,
         IWatcherService watcherService,
         IProjectManager projectManager,
-        IModTools modTools,
         IProgressService<double> progressService,
         IGameControllerFactory gameController,
         Red4ParserService parserService,
@@ -56,7 +51,6 @@ public partial class ImportViewModel : AbstractImportViewModel
         _loggerService = loggerService;
         _watcherService = watcherService;
         _projectManager = projectManager;
-        _modTools = modTools;
         _progressService = progressService;
         _gameController = gameController;
         _parserService = parserService;

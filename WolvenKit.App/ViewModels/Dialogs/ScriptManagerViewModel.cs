@@ -157,7 +157,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
         _appViewModel.CloseModalCommand.Execute(null);
     }
 
-    public async Task RunFile(ScriptFile scriptFile)
+    public async Task RunFile(ScriptFileViewModel scriptFile)
     {
         if (!File.Exists(scriptFile.Path))
         {
@@ -169,7 +169,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
         await _scriptService.ExecuteAsync(code);
     }
 
-    public async Task DeleteFile(ScriptFile scriptFile)
+    public async Task DeleteFile(ScriptFileViewModel scriptFile)
     {
         if (!File.Exists(scriptFile.Path))
         {

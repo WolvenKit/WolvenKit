@@ -95,7 +95,7 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
             return;
         }
 
-        if (sender is not Button { DataContext: ScriptFile scriptFile })
+        if (sender is not Button { DataContext: ScriptFileViewModel scriptFile })
         {
             return;
         }
@@ -110,7 +110,7 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
             return;
         }
 
-        if (sender is not Button { DataContext: ScriptFile scriptFile })
+        if (sender is not Button { DataContext: ScriptFileViewModel scriptFile })
         {
             return;
         }
@@ -142,7 +142,7 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
         var version = "";
         var author = "";
 
-        if (e.AddedItems.Count > 0 && e.AddedItems[0] is TreeGridRowInfo { RowData: ScriptFile scriptFile })
+        if (e.AddedItems.Count > 0 && e.AddedItems[0] is TreeGridRowInfo { RowData: ScriptFileViewModel scriptFile })
         {
             version = scriptFile.Version;
             author = scriptFile.Author;
