@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
-using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
@@ -23,6 +22,7 @@ using WolvenKit.Helpers;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Exporters;
@@ -32,7 +32,6 @@ public partial class ExportViewModel : AbstractExportViewModel
     private readonly ILoggerService _loggerService;
     private readonly IWatcherService _watcherService;
     private readonly IProjectManager _projectManager;
-    private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
     private readonly ImportExportHelper _importExportHelper;
 
@@ -43,14 +42,12 @@ public partial class ExportViewModel : AbstractExportViewModel
         ILoggerService loggerService,
         IWatcherService watcherService,
         IProjectManager projectManager,
-        IModTools modTools,
         IProgressService<double> progressService,
         ImportExportHelper importExportHelper) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
     {
         _loggerService = loggerService;
         _watcherService = watcherService;
         _projectManager = projectManager;
-        _modTools = modTools;
         _progressService = progressService;
         _importExportHelper = importExportHelper;
 
@@ -169,54 +166,13 @@ public partial class ExportViewModel : AbstractExportViewModel
             throw new NotImplementedException();
         }
 
-        if (item.Properties is MeshExportArgs meshExportArgs)
-        {
-            if (meshExportArgs.MeshExporter == MeshExporterType.REDmod)
-            {
-                return await ExportWithRedmodAsync(new DirectoryInfo(proj.ModDirectory), fi, new DirectoryInfo(proj.RawDirectory));
-            }
-        }
-
         var settings = new GlobalExportArgs().Register(e);
         if (!_importExportHelper.Finalize(settings))
         {
             return false;
         }
 
-        return await Task.Run(() => _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
-    }
-
-    /// <summary>
-    ///  Exports a file from the depot to the outDir with REDmod
-    /// </summary>
-    /// <param name="depot"></param>
-    /// <param name="inputFile"></param>
-    /// <param name="outDirectory"></param>
-    /// <returns></returns>
-    private async Task<bool> ExportWithRedmodAsync(DirectoryInfo depot, FileInfo inputFile, DirectoryInfo outDirectory)
-    {
-        var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
-        if (File.Exists(redModPath))
-        {
-            var redrelative = new RedRelativePath(depot, inputFile.GetRelativePath(depot));
-            var outputPath = new RedRelativePath(outDirectory, inputFile.GetRelativePath(depot)).ChangeExtension(EConvertableOutput.fbx.ToString());
-
-            var outDir = new FileInfo(outputPath.FullPath).Directory;
-            Directory.CreateDirectory(outDir.NotNull().FullName);
-
-            var args = RedMod.GetExportArgs(depot, redrelative.RelativePath, new FileInfo(outputPath.FullPath));
-            var workingDir = Path.GetDirectoryName(redModPath);
-
-            _loggerService.Info($"WorkDir: {workingDir}");
-            _loggerService.Info($"Running commandlet: {args}");
-            return await ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
-        }
-        else
-        {
-            _loggerService.Error("redMod.exe not found");
-        }
-
-        return false;
+        return await _importExportHelper.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
     }
 
     protected override async Task LoadFilesAsync()

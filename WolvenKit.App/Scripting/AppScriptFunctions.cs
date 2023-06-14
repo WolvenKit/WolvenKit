@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.ClearScript;
+using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
@@ -36,6 +37,7 @@ public class AppScriptFunctions : ScriptFunctions
     private readonly IWatcherService _watcherService;
     private readonly IModTools _modTools;
     private readonly ImportExportHelper _importExportHelper;
+    private readonly IGameControllerFactory _gameController;
 
     public AppViewModel? AppViewModel;
 
@@ -46,13 +48,15 @@ public class AppScriptFunctions : ScriptFunctions
         Red4ParserService parserService,
         IWatcherService watcherService,
         IModTools modTools,
-        ImportExportHelper importExportHelper)
+        ImportExportHelper importExportHelper,
+        IGameControllerFactory gameController)
         : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
         _watcherService = watcherService;
         _modTools = modTools;
         _importExportHelper = importExportHelper;
+        _gameController = gameController;
     }
 
     /// <summary>
@@ -355,7 +359,7 @@ public class AppScriptFunctions : ScriptFunctions
     /// <param name="fileList"></param>
     /// <param name="defaultSettings"></param>
     /// <param name="blocking"></param>
-    public void ExportFiles(IList fileList, ScriptObject? defaultSettings = null, bool blocking = false)
+    public void ExportFiles(IList fileList, ScriptObject? defaultSettings = null)
     {
         if (_projectManager.ActiveProject is not { } proj)
         {
@@ -392,15 +396,13 @@ public class AppScriptFunctions : ScriptFunctions
 
         Parallel.ForEach(fileDict, (kvp) =>
         {
-            var action = new Action(() => _modTools.Export(kvp.Key, kvp.Value, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
-
-            if (blocking)
+            if (kvp.Value.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod)
             {
-                action();
+                Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory)));
             }
             else
             {
-                Task.Run(action);
+                Task.Run(() => _importExportHelper.Export(kvp.Key, kvp.Value, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
             }
         });
 
@@ -574,6 +576,25 @@ public class AppScriptFunctions : ScriptFunctions
             response = Interactions.ShowConfirmation((text, caption, image, buttons));
         });
         return response;
+    }
+
+    /// <summary>
+    /// Extracts a file from the base archive and adds it to the project
+    /// </summary>
+    /// <param name="path">Path of the game file</param>
+    public virtual void Extract(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return;
+        }
+
+        if (!ulong.TryParse(path, out var hash))
+        {
+            hash = FNV1A64HashAlgorithm.HashString(path);
+        }
+
+        _gameController.GetController().AddToMod(hash);
     }
 
     /// <summary>

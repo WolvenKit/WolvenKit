@@ -58,7 +58,6 @@ namespace WolvenKit.Modkit.RED4
 
                 var relPath = cr2wFile.FullName.RelativePath(basedir);
 
-                _hookService.OnExport();
                 return UncookBuffers(fs, relPath, args, rawOutDir, forceBuffers);
             }
             catch(System.Exception e)

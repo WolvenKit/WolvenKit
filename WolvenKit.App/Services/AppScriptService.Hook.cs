@@ -5,9 +5,8 @@ using System.Linq;
 using System.Text.Json;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
-using Microsoft.ClearScript.V8;
-using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive.CR2W;
@@ -22,7 +21,8 @@ public partial class AppScriptService
 
     private void RegisterHooks()
     {
-        // _hookService.RegisterOnExport(OnExportHook);
+        _hookService.RegisterOnExport(OnExportHook);
+        _hookService.RegisterOnPreImport(OnPreImportHook);
         if (_hookService is AppHookService appHookService)
         {
             appHookService.RegisterOnSave(OnSaveHook);
@@ -124,71 +124,84 @@ public partial class AppScriptService
         return (Enums.EBOOL.FALSE, "");
     }
 
-    private object? OnExportHook(Stream cr2WStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[]? forcebuffers)
+    private void OnExportHook(ref FileInfo fileInfo, ref GlobalExportArgs args)
     {
         foreach (var scriptFile in GetScripts())
         {
             if (scriptFile.HookExtension == "global")
             {
-                //OnExportExecute(scriptFile.Path, filePath, args);
+                var (status, newArgs) = OnExportExecute(scriptFile.Path, fileInfo, args);
+                if (status == Enums.EBOOL.TRUE)
+                {
+                    args = newArgs!;
+                }
             }
         }
-
-        return null;
     }
 
-    private void OnExportExecute(string scriptFilePath, string exportFilePath, GlobalExportArgs args)
+    private (Enums.EBOOL, GlobalExportArgs?) OnExportExecute(string scriptFilePath, FileInfo fileInfo, GlobalExportArgs args)
     {
-        var result = HookExecute(scriptFilePath, "onExport", scriptObj => scriptObj.onExport(exportFilePath, SerializeExportArgs(args)));
+        var jsonArgs = JsonSerializer.Serialize(args, new JsonSerializerOptions { Converters = { new ImportExportArgsConverter() } });
+        var result = HookExecute(scriptFilePath, "onExport", scriptObj => scriptObj.onExport(fileInfo.FullName, jsonArgs));
+
+        if ((bool)result[NoHook])
+        {
+            return (Enums.EBOOL.UNINITIALZED, null);
+        }
+
+        if (!result.TryGetValue("settings", out var settingsObj) || settingsObj is not string settings)
+        {
+            _loggerService.Error($"onSave: Missing \"settings\" (string) return value");
+            return (Enums.EBOOL.UNINITIALZED, null);
+        }
+
+        var newSettings = JsonSerializer.Deserialize<GlobalExportArgs>(settings, new JsonSerializerOptions { Converters = { new ImportExportArgsConverter() } });
+        if (newSettings != null)
+        {
+            args = newSettings;
+        }
+
+        return (Enums.EBOOL.TRUE, args);
     }
 
-    public void OnPreImportHook(string filePath, GlobalImportArgs args)
+    public void OnPreImportHook(ref RedRelativePath rawRelative, ref GlobalImportArgs args, ref DirectoryInfo? outDir)
     {
         foreach (var scriptFile in GetScripts())
         {
             if (scriptFile.HookExtension == "global")
             {
-                OnPreImportExecute(scriptFile.Path, filePath, args);
+                var (status, newArgs) = OnPreImportExecute(scriptFile.Path, rawRelative, args, outDir);
+                if (status == Enums.EBOOL.TRUE)
+                {
+                    args = newArgs!;
+                }
             }
         }
     }
 
-    private void OnPreImportExecute(string scriptFilePath, string exportFilePath, GlobalImportArgs args)
+    private (Enums.EBOOL, GlobalImportArgs?) OnPreImportExecute(string scriptFilePath, RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir)
     {
-        var dict = new Dictionary<string, ImportArgs>();
-        foreach (var type in args.GetTypes())
+        var jsonArgs = JsonSerializer.Serialize(args, new JsonSerializerOptions { Converters = { new ImportExportArgsConverter() } });
+        var result = HookExecute(scriptFilePath, "onPreImport", scriptObj => scriptObj.onPreImport(rawRelative, jsonArgs));
+
+        if ((bool)result[NoHook])
         {
-            dict.Add(type.Name[..^10], args.Get(type));
+            return (Enums.EBOOL.UNINITIALZED, null);
         }
-        var tmp = JsonSerializer.Serialize(dict, new JsonSerializerOptions { Converters = { new ImportExportArgsConverter() } });
 
-        var result = HookExecute(scriptFilePath, "onPreImport", scriptObj => scriptObj.onPreImport(exportFilePath, tmp));
-    }
-
-    public void OnPostImportHook(string filePath, GlobalImportArgs args)
-    {
-        foreach (var scriptFile in GetScripts())
+        if (!result.TryGetValue("settings", out var settingsObj) || settingsObj is not string settings)
         {
-            if (scriptFile.HookExtension == "global")
-            {
-                OnPostImportExecute(scriptFile.Path, filePath, args);
-            }
+            _loggerService.Error($"onSave: Missing \"settings\" (string) return value");
+            return (Enums.EBOOL.UNINITIALZED, null);
         }
-    }
 
-    private void OnPostImportExecute(string scriptFilePath, string exportFilePath, GlobalImportArgs args)
-    {
-        var result = HookExecute(scriptFilePath, "onPostImport", scriptObj => scriptObj.onPostImport(exportFilePath, args));
-    }
-
-    private string SerializeExportArgs(GlobalExportArgs args)
-    {
-        var dict = new Dictionary<string, ImportExportArgs>();
-        foreach (var type in args.GetTypes())
+        var newSettings = JsonSerializer.Deserialize<GlobalImportArgs>(settings, new JsonSerializerOptions { Converters = { new ImportExportArgsConverter() } });
+        if (newSettings != null)
         {
-            dict.Add(type.Name[..^10], args.Get(type));
+            args = newSettings;
         }
-        return JsonSerializer.Serialize(dict, new JsonSerializerOptions { Converters = { new ImportExportArgsConverter() } });
+
+        return (Enums.EBOOL.TRUE, args);
     }
 
     private Dictionary<string, object> HookExecute(string scriptFilePath, string function, Func<dynamic, dynamic?> action)

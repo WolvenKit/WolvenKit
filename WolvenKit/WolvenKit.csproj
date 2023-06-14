@@ -116,6 +116,7 @@
     <Page Remove="Resources\Styles\Custom\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Resources\Scripts\export_example.cs" />
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />
   </ItemGroup>
   <ItemGroup>

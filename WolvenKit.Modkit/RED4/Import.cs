@@ -57,7 +57,6 @@ namespace WolvenKit.Modkit.RED4
                 return RebuildBuffer(rawRelative, outDir);
             }
 
-
             // import files
             return extAsEnum switch
             {

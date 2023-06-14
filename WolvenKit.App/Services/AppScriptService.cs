@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.ClearScript.V8;
+using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Scripting;
@@ -34,12 +35,13 @@ public partial class AppScriptService : ScriptService
         IWatcherService watcherService,
         IModTools modTools,
         ImportExportHelper importExportHelper,
-        IHookService hookService) : base(loggerService)
+        IHookService hookService,
+        IGameControllerFactory gameController) : base(loggerService)
     {
         _settingsManager = settingsManager;
         _hookService = hookService;
 
-        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, watcherService, modTools, importExportHelper);
+        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, watcherService, modTools, importExportHelper, gameController);
         _ui = new UiScriptFunctions(this);
         
         DefaultHostObject = new() { { "wkit", _wkit } };
@@ -74,6 +76,7 @@ public partial class AppScriptService : ScriptService
         var engine = base.GetScriptEngine(hostObjects, searchPaths);
 
         engine.AddHostType(typeof(EUncookExtension));
+        engine.AddHostType(typeof(MeshExporterType));
         engine.AddHostType(typeof(MeshExportType));
         engine.AddHostType(typeof(WemExportTypes));
 
