@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
@@ -158,7 +159,7 @@ public partial class AppScriptService
         var newSettings = JsonSerializer.Deserialize<GlobalExportArgs>(settings, new JsonSerializerOptions { Converters = { new ImportExportArgsConverter() } });
         if (newSettings != null)
         {
-            args = newSettings;
+            MergeSettings(args, newSettings);
         }
 
         return (Enums.EBOOL.TRUE, args);
@@ -198,10 +199,34 @@ public partial class AppScriptService
         var newSettings = JsonSerializer.Deserialize<GlobalImportArgs>(settings, new JsonSerializerOptions { Converters = { new ImportExportArgsConverter() } });
         if (newSettings != null)
         {
-            args = newSettings;
+            MergeSettings(args, newSettings);
         }
 
         return (Enums.EBOOL.TRUE, args);
+    }
+
+    private void MergeSettings(AbstractGlobalArgs oldSettings, AbstractGlobalArgs newSettings)
+    {
+        if (newSettings.GetType() != oldSettings.GetType())
+        {
+            throw new Exception();
+        }
+
+        foreach (var type in oldSettings.GetTypes())
+        {
+            var newTypeSettings = newSettings.Get(type);
+            var oldTypeSettings = oldSettings.Get(type);
+
+            foreach (var propertyInfo in oldTypeSettings.GetType().GetProperties())
+            {
+                if (propertyInfo.GetCustomAttribute<WkitScriptAccess>() == null)
+                {
+                    continue;
+                }
+
+                propertyInfo.SetValue(oldTypeSettings, propertyInfo.GetValue(newTypeSettings));
+            }
+        }
     }
 
     private Dictionary<string, object> HookExecute(string scriptFilePath, string function, Func<dynamic, dynamic?> action)
