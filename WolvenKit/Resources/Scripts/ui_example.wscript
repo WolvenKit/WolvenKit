@@ -1,4 +1,10 @@
-function onClick(target) {
+// @version 1.0
+
+import * as Logger from 'Logger.wscript';
+import * as FileValidation from 'Wolvenkit_FileValidation.wscript';
+import Settings from 'hook_settings.wscript';
+
+function onCatFactClick(target) {
 	var CatFacts = [
         "A house cat’s genome is 95.6 percent tiger, and they share many behaviors with their jungle ancestors, says Layla Morgan Wilde, a cat behavior expert and the founder of Cat Wisdom 101. These behaviors include scent marking by scratching, prey play, prey stalking, pouncing, chinning, and urine marking.",
         "Cats are believed to be the only mammals who don’t taste sweetness.",
@@ -26,11 +32,46 @@ function onClick(target) {
     
     if (target === 'cat') {
     	var number = Math.floor(Math.random() * CatFacts.length);
-    	logger.Info(CatFacts[number]);
+    	Logger.Info(CatFacts[number]);
     } else {
-    	logger.Info('No facts for you :(');
+    	Logger.Info('No facts for you :(');
     }
 }
 
+function onReloadClick() {
+	let activeDocument = wkit.GetActiveDocument();
+	if (activeDocument === null) {
+		return;
+	}
+	
+	if (activeDocument.IsDirty) {
+		var response = wkit.ShowMessageBox(`"${activeDocument.FileName}" has unsaved changes - are you sure you want to close this file?`, "Confirm", WMessageBoxImage.Question, WMessageBoxButtons.YesNo);
+		if (response === WMessageBoxResult.No) {
+			return;
+		}
+	}
+	
+	activeDocument.Close();
+	wkit.OpenDocument(activeDocument.FilePath);
+}
+
+function onValidateClick() {
+	let activeDocument = wkit.GetActiveDocument();
+	if (activeDocument === null) {
+		return;
+	}
+	
+	switch(activeDocument.Extension) {
+		case "mesh":
+			const fileContent = JSON.parse(activeDocument.GetGameFile("json"));
+			FileValidation.validateMeshFile(fileContent["Data"]["RootChunk"]);
+			break;
+	}
+}
+
+var scriptedMenu = ui.AddMenuItem('MenuBarMain', 'Scripts');
+ui.AddMenuItem(scriptedMenu, 'Reload', onReloadClick);
+ui.AddMenuItem(scriptedMenu, 'Validate', onValidateClick);
+
 var secretMenu = ui.AddMenuItem('MenuBarMain', '');
-ui.AddMenuItem(secretMenu, 'Cat Facts!', onClick, 'cat');
+ui.AddMenuItem(secretMenu, 'Cat Facts!', onCatFactClick, 'cat');

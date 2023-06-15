@@ -4,6 +4,7 @@ using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 
@@ -21,7 +22,8 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
     private readonly Red4ParserService _parserService;
     private readonly IWatcherService _watcherService;
     private readonly IArchiveManager _archiveManager;
-    private readonly ExtendedScriptService _scriptService;
+    private readonly AppScriptService _scriptService;
+    private readonly IHookService _hookService;
     
 
     public DocumentViewmodelFactory(
@@ -34,7 +36,8 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         Red4ParserService parserService,
         IWatcherService watcherService,
         IArchiveManager archiveManager,
-        ExtendedScriptService scriptService)
+        AppScriptService scriptService,
+        IHookService hookService)
     {
         _tabViewmodelFactory = tabViewmodelFactory;
         _paneViewModelFactory = paneViewModelFactory;
@@ -46,13 +49,13 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         _watcherService = watcherService;
         _archiveManager = archiveManager;
         _scriptService = scriptService;
+        _hookService = hookService;
         
     }
     public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel) 
-        => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals, _parserService, _watcherService, _archiveManager, _scriptService);
+        => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals, _parserService, _watcherService, _archiveManager, _hookService);
 
-    public WScriptDocumentViewModel WScriptDocumentViewModel(string path) 
-        => new(path, _projectManager, _loggerService, _parserService, _watcherService, _archiveManager, _scriptService, _paneViewModelFactory);
+    public WScriptDocumentViewModel WScriptDocumentViewModel(string path) => new(path, _scriptService);
 
     public TweakXLDocumentViewModel TweakXLDocumentViewModel(string path) => new(path);
 }

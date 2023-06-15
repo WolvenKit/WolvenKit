@@ -58,9 +58,5 @@
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>
-    
-  <ItemGroup>
-    <Folder Include="Scripting\" />
-  </ItemGroup>
 
 </Project>

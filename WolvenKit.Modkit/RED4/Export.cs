@@ -57,6 +57,7 @@ namespace WolvenKit.Modkit.RED4
                 args.Get<WemExportArgs>().FileName = cr2wFile.FullName;
 
                 var relPath = cr2wFile.FullName.RelativePath(basedir);
+
                 return UncookBuffers(fs, relPath, args, rawOutDir, forceBuffers);
             }
             catch(System.Exception e)

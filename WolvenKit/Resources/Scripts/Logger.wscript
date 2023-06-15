@@ -1,4 +1,6 @@
+// @version 1.0
 // Logger.wscript
+
 function ConvertObject(obj) {
     if (null === obj) { // typeof null will be object -.- 
         return "null";

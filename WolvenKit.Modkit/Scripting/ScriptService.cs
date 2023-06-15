@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
+using System.IO;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.Scripting;
 
 public partial class ScriptService : ObservableObject
 {
+    public const string ScriptExtension = "wscript";
+
     protected readonly ILoggerService _loggerService;
 
     private V8ScriptEngine? _mainEngine;
@@ -24,7 +24,7 @@ public partial class ScriptService : ObservableObject
 
     public ScriptService(ILoggerService loggerService) => _loggerService = loggerService;
 
-    public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, string? searchPath = null)
+    public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
     {
         if (_mainEngine != null)
         {
@@ -36,7 +36,7 @@ public partial class ScriptService : ObservableObject
 
         var sw = Stopwatch.StartNew();
 
-        _mainEngine = GetScriptEngine(hostObjects, searchPath);
+        _mainEngine = GetScriptEngine(hostObjects, searchPaths);
 
         try
         {
@@ -75,10 +75,11 @@ public partial class ScriptService : ObservableObject
         IsRunning = false;
     }
 
-    protected virtual V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, string? searchPath = null)
+    protected virtual V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
     {
         var engine = new V8ScriptEngine();
 
+        engine.AddHostType(typeof(OpenAs));
         engine.AddHostObject("logger", _loggerService);
         if (hostObjects != null)
         {
@@ -88,10 +89,10 @@ public partial class ScriptService : ObservableObject
             }
         }
 
-        if (!string.IsNullOrEmpty(searchPath))
+        if (searchPaths != null)
         {
             engine.DocumentSettings.AccessFlags = DocumentAccessFlags.EnableFileLoading;
-            engine.DocumentSettings.SearchPath = searchPath;
+            engine.DocumentSettings.SearchPath = string.Join(';', searchPaths);
         }
 
         engine.DocumentSettings.Loader.DiscardCachedDocuments();
@@ -99,4 +100,25 @@ public partial class ScriptService : ObservableObject
         return engine;
     }
 
+    public virtual IList<ScriptFile> GetScripts(string path)
+    {
+        var result = new List<ScriptFile>();
+
+        if (string.IsNullOrEmpty(path))
+        {
+            return result;
+        }
+
+        if (!Directory.Exists(path))
+        {
+            return result;
+        }
+
+        foreach (var file in Directory.GetFiles(path, $"*.{ScriptExtension}", SearchOption.AllDirectories))
+        {
+            result.Add(new ScriptFile(file));
+        }
+
+        return result;
+    }
 }

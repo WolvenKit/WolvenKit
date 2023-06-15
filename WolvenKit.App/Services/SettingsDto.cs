@@ -36,6 +36,7 @@ public class SettingsDto : ISettingsDto
         ShowReferenceGraph = settings.ShowReferenceGraph;
         GameLanguage = settings.GameLanguage;
         LaunchProfiles = settings.LaunchProfiles;
+        ScriptStatus = settings.ScriptStatus;
         
         if (settings.SettingsVersion < 2)
         {
@@ -67,6 +68,7 @@ public class SettingsDto : ISettingsDto
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; } = EGameLanguage.en_us;
     public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
+    public Dictionary<string, bool>? ScriptStatus { get; set; }
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -98,6 +100,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ShowTweakDBIDAsHex = ShowTweakDBIDAsHex;
         settingsManager.ShowReferenceGraph = ShowReferenceGraph;
         settingsManager.LaunchProfiles = LaunchProfiles;
+        settingsManager.ScriptStatus = ScriptStatus;
         settingsManager.GameLanguage = GameLanguage;
 
         return settingsManager;

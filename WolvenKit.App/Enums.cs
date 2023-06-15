@@ -39,3 +39,9 @@ public enum EDockedViews
     ImportViewModel,
     ExportViewModel
 }
+
+public enum ScriptSource
+{
+    System,
+    User
+}

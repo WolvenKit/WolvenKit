@@ -8,6 +8,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DataContext="{d:DesignInstance Type=dialogs:ScriptManagerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -18,12 +19,15 @@
     <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!--  Header  -->
         <DockPanel Grid.Row="0">
+            <TextBlock FontSize="24" Text="Script Manager" />
             <Button
                 x:Name="CloseButton"
                 Margin="0,0,0,10"
@@ -36,48 +40,136 @@
             </Button>
         </DockPanel>
 
-        <ListView
-            x:Name="ScriptsListView"
-            Grid.Row="1"
-            MinHeight="450"
-            Background="{StaticResource ContentBackgroundAlt2}">
-            <ListView.Resources>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_OnDoubleClick" />
-                </Style>
-            </ListView.Resources>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock
-                        Margin="2,0,0,0"
-                        VerticalAlignment="Center"
-                        Text="{Binding}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <!--  Separator  -->
+        <Separator Grid.Row="1" />
 
-        <Border
+        <!--  Main grid  -->
+        <TabControl
+            x:Name="ScriptTypeTabControl"
             Grid.Row="2"
-            Width="250"
-            Margin="5">
+            SelectionChanged="TabControl_OnSelectionChanged">
+            <TabItem Header="General" />
+            <TabItem Header="Hook" />
+            <TabItem Header="UI" />
+        </TabControl>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <syncfusion:SfTreeGrid
+                x:Name="ScriptsTreeGrid"
+                Grid.Column="0"
+                MinHeight="450"
+                AutoExpandMode="AllNodesExpanded"
+                AutoGenerateColumns="False"
+                CellDoubleTapped="ScriptsTreeGrid_OnCellDoubleTapped"
+                ChildPropertyName="Files"
+                ColumnSizer="Auto"
+                ItemsSource="{Binding Scripts}"
+                ItemsSourceChanged="ScriptsTreeGrid_OnItemsSourceChanged"
+                NavigationMode="Row"
+                SelectionChanged="ScriptsTreeGrid_OnSelectionChanged">
+                <syncfusion:SfTreeGrid.Columns>
+                    <syncfusion:TreeGridTextColumn
+                        ColumnSizer="FillColumn"
+                        HeaderText="Name"
+                        MappingName="Name" />
+                    <syncfusion:TreeGridTextColumn
+                        HeaderText="Version"
+                        MappingName="Version"
+                        TextAlignment="Center" />
+                    <syncfusion:TreeGridTemplateColumn AllowSorting="False" HeaderText="Action">
+                        <syncfusion:TreeGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox
+                                        Margin="5,0,5,0"
+                                        IsChecked="{Binding Enabled}"
+                                        ToolTip="Enabled"
+                                        Visibility="{Binding CanEnable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    <Button
+                                        Margin="5,0,5,0"
+                                        Click="Run_OnClick"
+                                        ToolTip="Run"
+                                        Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <iconPacks:PackIconMaterial
+                                            Margin="6,0"
+                                            Padding="0,1,0,1"
+                                            Foreground="Green"
+                                            Kind="Play" />
+                                    </Button>
+                                    <Button
+                                        Margin="5,0,5,0"
+                                        Click="Delete_OnClick"
+                                        ToolTip="Delete"
+                                        Visibility="{Binding CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <iconPacks:PackIconMaterial
+                                            Margin="6,0"
+                                            Padding="0,1,0,1"
+                                            Foreground="Red"
+                                            Kind="Delete" />
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </syncfusion:TreeGridTemplateColumn.CellTemplate>
+                    </syncfusion:TreeGridTemplateColumn>
+                </syncfusion:SfTreeGrid.Columns>
+            </syncfusion:SfTreeGrid>
+
+            <Border
+                Grid.Column="1"
+                BorderBrush="#373737"
+                BorderThickness="1">
+                <Grid
+                    MinWidth="250"
+                    Background="{StaticResource ContentBackground}"
+                    IsSharedSizeScope="True">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" SharedSizeGroup="Label" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Content="Version: " />
+                    <Label
+                        x:Name="VersionLabel"
+                        Grid.Row="0"
+                        Grid.Column="1" />
+
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Content="Author: " />
+                    <Label
+                        x:Name="AuthorLabel"
+                        Grid.Row="1"
+                        Grid.Column="1" />
+                </Grid>
+            </Border>
+        </Grid>
+
+        <DockPanel Grid.Row="4">
             <hc:TextBox
                 x:Name="FileNameTextBox"
+                Width="250"
                 hc:InfoElement.Title="Name: "
                 hc:InfoElement.TitlePlacement="Left"
                 FlowDirection="LeftToRight" />
-        </Border>
-
-        <DockPanel Grid.Row="3" Width="250">
             <Button
-                x:Name="AddButton"
-                Width="100"
+                Width="70"
+                HorizontalAlignment="Left"
+                Click="Add_OnClick"
                 Content="Add" />
-            <Button
-                x:Name="DeleteButton"
-                Width="100"
-                HorizontalAlignment="Right"
-                Content="Delete" />
         </DockPanel>
-
     </Grid>
 </reactiveUi:ReactiveUserControl>
