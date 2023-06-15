@@ -46,7 +46,7 @@ const Settings = {
 		 * Set this to "false" to stop this script from fixing the index order for you.
 		 * currently deactivated because JS truncates uint64 and fucks up everything for everyone 
 		 */
-		fixIndexOrder: true,
+		fixIndexOrder: false,
 		
 		/*
 		 * Set this to "false" to suppress the warning "Items from .anim files not found in .workspot:"

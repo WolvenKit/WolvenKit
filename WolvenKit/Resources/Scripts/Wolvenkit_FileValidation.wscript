@@ -1,6 +1,3 @@
-// @version 1.0
-// @author manavortex
-
 import * as Logger from 'Logger.wscript';
 
 /*
@@ -78,15 +75,15 @@ import * as Logger from 'Logger.wscript';
         });
     }
 
-    export function validateAnimationFile(animAnimSet, settings) {
+    export function validateAnimationFile(animAnimSet, checkForDuplicates, printAnimationNames, targetAnimNames) {
 
         if (animAnimSet["Data"] && animAnimSet["Data"]["RootChunk"]) {
             return validateAnimationFile(animAnimSet["Data"]["RootChunk"]);
         }
 
-        _printAnimationNames = settings.printAnimationNames;
+        _printAnimationNames = printAnimationNames;
 
-        animFile_SetAnimNames(animAnimSet, settings.targetAnimNames);
+        animFile_SetAnimNames(animAnimSet, targetAnimNames);
         
         // collect names
         for (let index = 0; index < animAnimSet.animations.length; index++) {
@@ -96,7 +93,7 @@ import * as Logger from 'Logger.wscript';
             animNamesByIndex[index] = animName;
         }
         
-        if (settings.checkForDuplicates) {
+        if (checkForDuplicates) {
             animFile_CheckForDuplicateNames();
         }
 
@@ -264,7 +261,7 @@ import * as Logger from 'Logger.wscript';
         }
     }
 
-    export function validateAppFile(app, settings) {
+    export function validateAppFile(app, validateRecursively) {
         // invalid app file - not found
         if (!app) { return; }
 
@@ -274,10 +271,10 @@ import * as Logger from 'Logger.wscript';
         meshesByComponentName = {};
 
         if (app["Data"] && app["Data"]["RootChunk"]) {
-            return validateAppFile(app["Data"]["RootChunk"], settings.validateRecursively);
+            return validateAppFile(app["Data"]["RootChunk"], validateRecursively);
         }
         for(let i = 0; i < app.appearances.length; i++) {
-            appFile_validateAppearance(app.appearances[i], i, settings.validateRecursively);
+            appFile_validateAppearance(app.appearances[i], i, validateRecursively);
         }
     }
 
@@ -400,7 +397,7 @@ import * as Logger from 'Logger.wscript';
         * @param {*} ent The entity file as read from WKit
         * @param {*} validateRecursively Flag that allows
         */
-       export function validateEntFile(ent, settings) {
+       export function validateEntFile(ent, validateRecursively) {
 
             if (ent["Data"] && ent["Data"]["RootChunk"]) {
                 return validateEntFile(ent["Data"]["RootChunk"]);
@@ -413,7 +410,7 @@ import * as Logger from 'Logger.wscript';
 
             for (let i = 0; i < ent.appearances.length; i++) {
                 const appearance = ent.appearances[i];
-                entFile_validateAppearance(appearance, i, settings.validateRecursively);
+                entFile_validateAppearance(appearance, i, validateRecursively);
             }
             
             for (let i = 0; i < ent.inplaceResources.length; i++) {
@@ -820,19 +817,19 @@ import * as Logger from 'Logger.wscript';
             return rootEntry;
         }
         
-        export function validateWorkspotFile(workspot, settings) {
+        export function validateWorkspotFile(workspot, fixIndexOrder, showUnusedAnimsInFiles, showUndefinedWorkspotAnims, checkIdleAnimNames, checkIdDuplication, checkFilepaths, checkLoadingHandles) {
 
             if (workspot["Data"] && workspot["Data"]["RootChunk"]) {
-                return validateWorkspotFileAppFile(workspot["Data"]["RootChunk"], settings.fixIndexOrder, settings.showUnusedAnimsInFiles, settings.showUndefinedWorkspotAnims, settings.checkIdleAnimNames, settings.checkIdDuplication, settings.checkFilepaths, settings.checkLoadingHandles);
+                return validateWorkspotFileAppFile(workspot["Data"]["RootChunk"], fixIndexOrder, showUnusedAnimsInFiles, showUndefinedWorkspotAnims, checkIdleAnimNames, checkIdDuplication, checkFilepaths, checkLoadingHandles);
             }
 
             let rootEntry = workspot;
-            _showUndefinedWorkspotAnims = settings.showUndefinedWorkspotAnims;
-            _showUnusedAnimsInFiles = settings.showUnusedAnimsInFiles;
-            _checkIdleAnimNames = settings.checkIdleAnimNames;
-            _checkIdDuplication = settings.checkIdDuplication;
-            _checkFilepaths = settings.checkFilepaths;
-            _checkLoadingHandles = settings.checkLoadingHandles;
+            _showUndefinedWorkspotAnims = showUndefinedWorkspotAnims;
+            _showUnusedAnimsInFiles = showUnusedAnimsInFiles;
+            _checkIdleAnimNames = checkIdleAnimNames;
+            _checkIdDuplication = checkIdDuplication;
+            _checkFilepaths = checkFilepaths;
+            _checkLoadingHandles = checkLoadingHandles;
 
             const workspotTree = workspot.workspotTree;
             
@@ -859,7 +856,7 @@ import * as Logger from 'Logger.wscript';
             
             alreadyUsedIndices.length = 0;
             
-            if (settings.fixIndexOrder) {
+            if (fixIndexOrder) {
                 rootEntry = workspotFile_SetIndexOrder(workspotTree.Data.rootEntry);
             }
 
