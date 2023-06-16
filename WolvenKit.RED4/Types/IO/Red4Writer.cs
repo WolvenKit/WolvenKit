@@ -13,7 +13,7 @@ public class Red4Writer : IDisposable
 
     public ICacheList<CName> StringCacheList = new CacheList<CName>(new CNameComparer());
     public ICacheList<ImportEntry> ImportCacheList = new CacheList<ImportEntry>(new ImportComparer());
-    public ICacheList<RedBuffer> BufferCacheList = new CacheList<RedBuffer>(ReferenceEqualityComparer.Instance);
+    public ICacheList<RedBuffer> BufferCacheList = new CacheList<RedBuffer>(new RedBufferComparer());
 
     public int CurrentChunk { get; private set; }
     public bool IsRoot = true;
@@ -943,5 +943,16 @@ public class Red4Writer : IDisposable
         public bool Equals(ImportEntry? x, ImportEntry? y) => string.Equals(x?.DepotPath, y?.DepotPath);
 
         public int GetHashCode(ImportEntry obj) => obj.DepotPath.GetHashCode();
+    }
+
+    protected class RedBufferComparer : IEqualityComparer<RedBuffer>
+    {
+        public bool Equals(RedBuffer? x, RedBuffer? y)
+        {
+            return object.Equals(x, y);
+        }
+
+        // ignore hashcode, return first content match
+        public int GetHashCode(RedBuffer obj) => 0;
     }
 }

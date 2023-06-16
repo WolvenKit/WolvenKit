@@ -156,20 +156,22 @@ public partial class CR2WReader
                 continue;
             }
 
-            foreach (var pointers in BufferQueue[i])
+            foreach (var pointer in BufferQueue[i])
             {
-                foreach (var parentType in pointers.GetValue().ParentTypes)
-                {
-                    buffer.ParentTypes.Add(parentType);
-                }
-                buffer.Parent = pointers.GetValue().Parent;
+                var clone = buffer.Clone();
 
-                pointers.SetValue(buffer);
+                foreach (var parentType in pointer.GetValue().ParentTypes)
+                {
+                    clone.ParentTypes.Add(parentType);
+                }
+                clone.Parent = pointer.GetValue().Parent;
+
+                pointer.SetValue(clone);
+
+                ParseBuffer(clone);
             }
 
             BufferQueue.Remove(i);
-
-            ParseBuffer(buffer);
         }
 
         if (BufferQueue.Count > 0)
