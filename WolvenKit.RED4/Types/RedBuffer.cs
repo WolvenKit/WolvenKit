@@ -69,7 +69,7 @@ public class RedBuffer : IEquatable<RedBuffer>
 
     private ReadOnlySpan<byte> GetSpan() => new(_bytes);
 
-    public RedBuffer Clone() => new() { Flags = Flags, _bytes = _bytes };
+    public RedBuffer Clone() => new() { Flags = Flags, _bytes = _bytes, RootChunk = RootChunk };
 
 
     public bool Equals(RedBuffer? other)
