@@ -285,7 +285,14 @@ public class AppScriptFunctions : ScriptFunctions
         {
             if (Attribute.GetCustomAttribute(prop, typeof(WkitScriptAccess)) is WkitScriptAccess scriptAccess && scriptSettingsObject.PropertyNames.Contains(scriptAccess.ScriptName))
             {
-                prop.SetValue(exportArgs, scriptSettingsObject[scriptAccess.ScriptName]);
+                if (prop.PropertyType.IsEnum)
+                {
+                    prop.SetValue(exportArgs, Enum.Parse(prop.PropertyType, (string)scriptSettingsObject[scriptAccess.ScriptName]));
+                }
+                else
+                {
+                    prop.SetValue(exportArgs, scriptSettingsObject[scriptAccess.ScriptName]);
+                }
             }
         }
         return exportArgs;
