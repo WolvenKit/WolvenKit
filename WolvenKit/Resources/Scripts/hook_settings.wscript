@@ -28,6 +28,13 @@ const Settings = {
 		 */
 		showUnresolvedDepotPathWarnings: true
 	},
+	Csv: {
+		/*
+		 * Set this to "false" to disable the attempted resolution of resource paths
+		 * e.g. "component: unknown resource in depot path"
+		 */
+		checkProjectResourcePaths: true
+	},
 	Ent: {
 		/*
 		 * Set this to "false" to disable recursive verification of linked .app files and meshes
@@ -39,8 +46,9 @@ const Settings = {
 		 * Set this to "false" to disable warnings about unresolved depot paths
 		 * e.g. "component: unknown resource in depot path"
 		 */
-		 showUnresolvedDepotPathWarnings: true
+		showUnresolvedDepotPathWarnings: true
 	},
+	Mesh: {},
 	Workspot: {
 		/*
 		 * Set this to "false" to stop this script from fixing the index order for you.

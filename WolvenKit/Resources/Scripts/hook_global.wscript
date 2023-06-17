@@ -10,40 +10,24 @@ globalThis.onSave = function(ext, file) {
 	let success = true;
 	switch(ext) {
 		case "anims":
-			FileValidation.validateAnimationFile(
-				fileContent["Data"]["RootChunk"], 
-				Settings.Anims.checkForDuplicates,
-				Settings.Anims.printAnimationNames,
-				Settings.Anims.targetAnimNames);
+			FileValidation.validateAnimationFile(fileContent["Data"]["RootChunk"], Settings.Anims);
 			break;
 		case "app":
 			if (fileContent["Data"]["RootChunk"].appearances.length > 0) {
-				FileValidation.validateAppFile(
-					fileContent["Data"]["RootChunk"], 
-					Settings.App.validateRecursively);
+				FileValidation.validateAppFile(fileContent["Data"]["RootChunk"], Settings.App);
 			}
 			break;
 		case "csv":
-			FileValidation.validateCsvFile(fileContent["Data"]["RootChunk"]);
+			FileValidation.validateCsvFile(fileContent["Data"]["RootChunk"], Settings.Csv);
 			break;
 		case "ent":
-			FileValidation.validateEntFile(
-				fileContent["Data"]["RootChunk"],
-				Settings.Ent.validateRecursively);
+			FileValidation.validateEntFile(fileContent["Data"]["RootChunk"], Settings.Ent);
 			break;
 		case "mesh":
-			FileValidation.validateMeshFile(fileContent["Data"]["RootChunk"]);
+			FileValidation.validateMeshFile(fileContent["Data"]["RootChunk"], Settings.Mesh);
 			break;
 		case "workspot":
-			FileValidation.validateWorkspotFile(
-				fileContent["Data"]["RootChunk"], 
-				Settings.Workspot.fixIndexOrder,
-				Settings.Workspot.showUnusedAnimsInFiles,
-				Settings.Workspot.showUndefinedWorkspotAnims,
-				Settings.Workspot.checkIdleAnimNames,
-				Settings.Workspot.checkIdDuplication,
-				Settings.Workspot.checkFilepaths,
-				Settings.Workspot.checkLoadingHandles);
+			FileValidation.validateWorkspotFile(fileContent["Data"]["RootChunk"], Settings.Workspot);
 			file = JSON.stringify(fileContent);
 			break;
 	}
