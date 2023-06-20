@@ -20,6 +20,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<PlayerDevelopmentData>>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("playerDevelopmentUpdated")] 
+		public CBool PlayerDevelopmentUpdated
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("progressionBuildUpdated")] 
+		public CBool ProgressionBuildUpdated
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PlayerDevelopmentSystem()
 		{
 			PlayerData = new();

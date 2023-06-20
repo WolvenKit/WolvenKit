@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("expansionBanner")] 
+		public inkCompoundWidgetReference ExpansionBanner
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("onlineSystem")] 
 		public CWeakHandle<gameIOnlineSystem> OnlineSystem
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIOnlineSystem>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("requestHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("continueGameTooltipController")] 
 		public CWeakHandle<ContinueGameTooltip> ContinueGameTooltipController
 		{
@@ -60,7 +68,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ContinueGameTooltip>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
+		[RED("expansionBannerController")] 
+		public CWeakHandle<ExpansionBannerController> ExpansionBannerController
+		{
+			get => GetPropertyValue<CWeakHandle<ExpansionBannerController>>();
+			set => SetPropertyValue<CWeakHandle<ExpansionBannerController>>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("dataSyncStatus")] 
 		public CEnum<servicesCloudSavesQueryStatus> DataSyncStatus
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<servicesCloudSavesQueryStatus>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("savesCount")] 
 		public CInt32 SavesCount
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("savesReady")] 
 		public CBool SavesReady
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("isOffline")] 
 		public CBool IsOffline
 		{
@@ -92,9 +108,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("isModded")] 
 		public CBool IsModded
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("mainMenuShownFirstTime")] 
+		public CBool MainMenuShownFirstTime
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -105,6 +129,7 @@ namespace WolvenKit.RED4.Types
 			ButtonHintsManagerRef = new();
 			GogButtonWidgetRef = new();
 			ContinuetooltipContainer = new();
+			ExpansionBanner = new();
 
 			PostConstruct();
 		}

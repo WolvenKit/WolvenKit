@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questInjectLoot_NodeTypeParams_OperationData : RedBaseClass
+	public partial class questInjectLoot_NodeTypeParams_OperationData : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("operationType")] 
