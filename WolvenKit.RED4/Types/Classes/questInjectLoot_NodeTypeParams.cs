@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questInjectLoot_NodeTypeParams : RedBaseClass
+	public partial class questInjectLoot_NodeTypeParams : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("objectRef")] 
@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("lootOperations")] 
+		public CArray<CHandle<questInjectLoot_NodeTypeParams_OperationData>> LootOperations
+		{
+			get => GetPropertyValue<CArray<CHandle<questInjectLoot_NodeTypeParams_OperationData>>>();
+			set => SetPropertyValue<CArray<CHandle<questInjectLoot_NodeTypeParams_OperationData>>>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("operations")] 
 		public CArray<questInjectLoot_NodeTypeParams_OperationData> Operations
 		{
@@ -22,6 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questInjectLoot_NodeTypeParams()
 		{
+			LootOperations = new();
 			Operations = new();
 
 			PostConstruct();

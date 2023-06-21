@@ -6,10 +6,10 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(0)] 
 		[RED("params")] 
-		public CArray<questInjectLoot_NodeTypeParams> Params
+		public CArray<CHandle<questInjectLoot_NodeTypeParams>> Params
 		{
-			get => GetPropertyValue<CArray<questInjectLoot_NodeTypeParams>>();
-			set => SetPropertyValue<CArray<questInjectLoot_NodeTypeParams>>(value);
+			get => GetPropertyValue<CArray<CHandle<questInjectLoot_NodeTypeParams>>>();
+			set => SetPropertyValue<CArray<CHandle<questInjectLoot_NodeTypeParams>>>(value);
 		}
 
 		public questInjectLoot_NodeType()
