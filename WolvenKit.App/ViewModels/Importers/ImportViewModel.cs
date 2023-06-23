@@ -235,7 +235,7 @@ public partial class ImportViewModel : AbstractImportViewModel
         }
 
         var settings = new GlobalImportArgs().Register(prop);
-        if (!_importExportHelper.Finalize(settings))
+        if (!_importExportHelper.Finalize(prop, settings))
         {
             return false;
         }

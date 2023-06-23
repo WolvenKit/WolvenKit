@@ -136,9 +136,15 @@ public class ImportExportHelper
         return true;
     }
 
-    public bool Finalize(GlobalImportArgs args) =>
-        Finalize(args.Get<GltfImportArgs>()) &&
-        Finalize(args.Get<ReImportArgs>());
+    public bool Finalize(ImportArgs mainArgs, GlobalImportArgs args)
+    {
+        if (mainArgs is ReImportArgs && !Finalize(args.Get<ReImportArgs>()))
+        {
+            return false;
+        }
+
+        return Finalize(args.Get<GltfImportArgs>());
+    }
 
     public bool Finalize(GltfImportArgs args)
     {
