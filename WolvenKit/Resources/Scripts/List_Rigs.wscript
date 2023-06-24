@@ -4,35 +4,33 @@
 import * as Logger from 'Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
 
-
-function* GetPaths(jsonData) {
+function  * GetPaths(jsonData) {
     for (let [key, value] of Object.entries(jsonData || {})) {
         if (value instanceof TypeHelper.ResourcePath && !value.isEmpty()) {
             yield value.value;
         }
 
         if (typeof value === "object") {
-            yield* GetPaths(value)
+            yield * GetPaths(value);
         }
     }
 }
 
 function ExtractFile(fileName) {
-    var file = wkit.GetFileFromBase(fileName)
+    var file = wkit.GetFileFromBase(fileName);
     if (file === null) {
-        Logger.Error(fileName + " could not be found")
-        return
+        Logger.Error(fileName + " could not be found");
+        return;
     }
-        
+
     if (file.Extension === ".rig") {
-    	 logger.Info(fileName)
+        logger.Info(fileName);
     }
- 
-    
-    var json = JSON.parse(wkit.GameFileToJson(file))
+
+    var json = JSON.parse(wkit.GameFileToJson(file));
     for (let path of GetPaths(json["Data"]["RootChunk"])) {
-        ExtractFile(path)
+        ExtractFile(path);
     }
 }
 
-ExtractFile("base\\characters\\entities\\main_npc\\evelyn.ent")
+ExtractFile("base\\characters\\entities\\main_npc\\evelyn.ent");
