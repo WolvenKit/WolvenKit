@@ -20,6 +20,12 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
     public string? GetResolvedText() => CNamePool.ResolveHash(_hash);
     public bool IsResolvable => CNamePool.ResolveHash(_hash) != null;
 
+    public bool TryGetResolvedText([NotNullWhen(true)] out string? result)
+    {
+        result = CNamePool.ResolveHash(_hash);
+        return result != null;
+    }
+
     public ulong GetRedHash() => _hash;
     public uint GetShortRedHash() => (uint)((_hash >> 32) ^ (uint)_hash);
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.Common.Conversion;
@@ -27,6 +28,16 @@ public class CGuidConverter : CustomRedConverter<CGuid>
 public class CNameConverter : CustomRedConverter<CName>
 {
     public override CName Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (RedJsonSerializer.IsOlderThen("0.0.7"))
+        {
+            return ReadV1(ref reader, typeToConvert, options);
+        }
+
+        return ReadV2(ref reader, typeToConvert, options);
+    }
+
+    public CName ReadV1(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
         {
@@ -57,17 +68,54 @@ public class CNameConverter : CustomRedConverter<CName>
         throw new JsonException();
     }
 
+    public CName ReadV2(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType != JsonTokenType.StartObject)
+        {
+            throw new JsonException();
+        }
+
+        var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options);
+        if (dict == null || dict.Count != 3)
+        {
+            throw new JsonException();
+        }
+
+        if (dict["$type"] != nameof(CName))
+        {
+            throw new JsonException();
+        }
+
+        switch (dict["$storage"])
+        {
+            case "string":
+                return dict["$value"];
+
+            case "uint64":
+                return ulong.Parse(dict["$value"]);
+
+            default:
+                throw new JsonException();
+        }
+    }
+
     public override void Write(Utf8JsonWriter writer, CName value, JsonSerializerOptions options)
     {
-        var resolved = value.GetResolvedText();
-        if (!string.IsNullOrEmpty(resolved) && resolved != "None")
+        writer.WriteStartObject();
+
+        writer.WriteString("$type", "CName");
+        if (value.TryGetResolvedText(out var str))
         {
-            JsonSerializer.Serialize(writer, resolved, options);
+            writer.WriteString("$storage", "string");
+            writer.WriteString("$value", str);
         }
         else
         {
-            JsonSerializer.Serialize(writer, (ulong)value, options);
+            writer.WriteString("$storage", "uint64");
+            writer.WriteString("$value", ((ulong)value).ToString());
         }
+        
+        writer.WriteEndObject();
     }
 }
 
@@ -1218,6 +1266,16 @@ public class ResourcePathConverter : CustomRedConverter<ResourcePath>
 {
     public override ResourcePath Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
+        if (RedJsonSerializer.IsOlderThen("0.0.7"))
+        {
+            return ReadV1(ref reader, typeToConvert, options);
+        }
+
+        return ReadV2(ref reader, typeToConvert, options);
+    }
+
+    public ResourcePath ReadV1(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
         if (reader.TokenType == JsonTokenType.Null)
         {
             return (ResourcePath)RedTypeManager.CreateRedType(typeToConvert);
@@ -1247,23 +1305,70 @@ public class ResourcePathConverter : CustomRedConverter<ResourcePath>
         throw new JsonException();
     }
 
+    public ResourcePath ReadV2(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType != JsonTokenType.StartObject)
+        {
+            throw new JsonException();
+        }
+
+        var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options);
+        if (dict == null || dict.Count != 3)
+        {
+            throw new JsonException();
+        }
+
+        if (dict["$type"] != nameof(ResourcePath))
+        {
+            throw new JsonException();
+        }
+
+        switch (dict["$storage"])
+        {
+            case "string":
+                return dict["$value"];
+
+            case "uint64":
+                return ulong.Parse(dict["$value"]);
+
+            default:
+                throw new JsonException();
+        }
+    }
+
     public override void Write(Utf8JsonWriter writer, ResourcePath value, JsonSerializerOptions options)
     {
-        var resolved = value.GetResolvedText();
-        if (!string.IsNullOrEmpty(resolved))
+        writer.WriteStartObject();
+
+        writer.WriteString("$type", "ResourcePath");
+        if (value.TryGetResolvedText(out var str))
         {
-            writer.WriteStringValue(resolved);
+            writer.WriteString("$storage", "string");
+            writer.WriteString("$value", str);
         }
         else
         {
-            JsonSerializer.Serialize(writer, (ulong)value, options);
+            writer.WriteString("$storage", "uint64");
+            writer.WriteString("$value", ((ulong)value).ToString());
         }
+
+        writer.WriteEndObject();
     }
 }
 
 public class NodeRefConverter : CustomRedConverter<NodeRef>
 {
     public override NodeRef Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (RedJsonSerializer.IsOlderThen("0.0.7"))
+        {
+            return ReadV1(ref reader, typeToConvert, options);
+        }
+
+        return ReadV2(ref reader, typeToConvert, options);
+    }
+
+    public NodeRef ReadV1(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
         {
@@ -1294,23 +1399,70 @@ public class NodeRefConverter : CustomRedConverter<NodeRef>
         throw new JsonException();
     }
 
+    public NodeRef ReadV2(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType != JsonTokenType.StartObject)
+        {
+            throw new JsonException();
+        }
+
+        var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options);
+        if (dict == null || dict.Count != 3)
+        {
+            throw new JsonException();
+        }
+
+        if (dict["$type"] != nameof(NodeRef))
+        {
+            throw new JsonException();
+        }
+
+        switch (dict["$storage"])
+        {
+            case "string":
+                return dict["$value"];
+
+            case "uint64":
+                return ulong.Parse(dict["$value"]);
+
+            default:
+                throw new JsonException();
+        }
+    }
+
     public override void Write(Utf8JsonWriter writer, NodeRef value, JsonSerializerOptions options)
     {
-        var resolved = value.GetResolvedText();
-        if (!string.IsNullOrEmpty(resolved))
+        writer.WriteStartObject();
+
+        writer.WriteString("$type", "NodeRef");
+        if (value.TryGetResolvedText(out var str))
         {
-            writer.WriteStringValue(resolved);
+            writer.WriteString("$storage", "string");
+            writer.WriteString("$value", str);
         }
         else
         {
-            JsonSerializer.Serialize(writer, (ulong)value, options);
+            writer.WriteString("$storage", "uint64");
+            writer.WriteString("$value", ((ulong)value).ToString());
         }
+
+        writer.WriteEndObject();
     }
 }
 
 public class TweakDBIDConverter : CustomRedConverter<TweakDBID>
 {
     public override TweakDBID Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (RedJsonSerializer.IsOlderThen("0.0.7"))
+        {
+            return ReadV1(ref reader, typeToConvert, options);
+        }
+
+        return ReadV2(ref reader, typeToConvert, options);
+    }
+
+    public TweakDBID ReadV1(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
         {
@@ -1341,15 +1493,53 @@ public class TweakDBIDConverter : CustomRedConverter<TweakDBID>
         throw new JsonException();
     }
 
+    public TweakDBID ReadV2(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType != JsonTokenType.StartObject)
+        {
+            throw new JsonException();
+        }
+
+        var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(ref reader, options);
+        if (dict == null || dict.Count != 3)
+        {
+            throw new JsonException();
+        }
+
+        if (dict["$type"] != nameof(TweakDBID))
+        {
+            throw new JsonException();
+        }
+
+        switch (dict["$storage"])
+        {
+            case "string":
+                return dict["$value"];
+
+            case "uint64":
+                return ulong.Parse(dict["$value"]);
+
+            default:
+                throw new JsonException();
+        }
+    }
+
     public override void Write(Utf8JsonWriter writer, TweakDBID value, JsonSerializerOptions options)
     {
-        if (((string)value!) != null)
+        writer.WriteStartObject();
+
+        writer.WriteString("$type", "TweakDBID");
+        if (value.TryGetResolvedText(out var str))
         {
-            writer.WriteStringValue(value);
+            writer.WriteString("$storage", "string");
+            writer.WriteString("$value", str);
         }
         else
         {
-            JsonSerializer.Serialize(writer, (ulong)value, options);
+            writer.WriteString("$storage", "uint64");
+            writer.WriteString("$value", ((ulong)value).ToString());
         }
+
+        writer.WriteEndObject();
     }
 }

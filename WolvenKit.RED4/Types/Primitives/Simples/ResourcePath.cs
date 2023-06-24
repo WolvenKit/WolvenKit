@@ -21,6 +21,12 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
     public string? GetResolvedText() => ResourcePathPool.ResolveHash(_hash);
     public bool IsResolvable => ResourcePathPool.ResolveHash(_hash) != null;
 
+    public bool TryGetResolvedText([NotNullWhen(true)]out string? result)
+    {
+        result = ResourcePathPool.ResolveHash(_hash);
+        return result != null;
+    }
+
     public ulong GetRedHash() => _hash;
     public uint GetShortRedHash() => (uint)((_hash >> 32) ^ (uint)_hash);
 
