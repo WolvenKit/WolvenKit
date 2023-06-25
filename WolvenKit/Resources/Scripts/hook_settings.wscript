@@ -46,7 +46,13 @@ const Settings = {
          * Set this to "false" to disable warnings about unresolved depot paths
          * e.g. "component: unknown resource in depot path"
          */
-        showUnresolvedDepotPathWarnings: true
+        showUnresolvedDepotPathWarnings: true,
+
+        /*
+         * Set this to "false" to disable warnings about duplicate component names,
+         * e.g. "] The following components are defined more than once: [ pants_black ]"
+         */
+        checkComponentNameDuplication: true,
     },
     Mesh: {},
     Workspot: {
