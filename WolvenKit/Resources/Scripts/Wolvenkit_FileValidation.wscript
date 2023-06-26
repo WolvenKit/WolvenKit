@@ -14,13 +14,22 @@ import * as TypeHelper from 'TypeHelper.wscript';
  * the Wolvenkit_ prefix from the path, and edit the importing files.
  */
 
+/**
+ * Workaround for CName heisenbug that happened on my machine. It might happen on your machine as well!
+ * Best leave it in for now.
+ */
 function stringifyPotentialCName(cnameOrString) {
     return ((typeof cnameOrString === 'string') ? cnameOrString : cnameOrString.value);
 }
 
 export let isDataChangedForWriting = false;
 
-const PLACEHOLDER_NAME_REGEX = /^[^A-Za-z0-9]+$/;
+/**
+ * Matches placeholders such as 
+ * ----------------
+ * ================
+ */
+const PLACEHOLDER_NAME_REGEX = /^[^A-Za-z0-9-_]+$/;
 
 //#region animFile
 
