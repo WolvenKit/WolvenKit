@@ -2,10 +2,11 @@
 
 import * as Logger from 'Logger.wscript';
 import * as FileValidation from 'Wolvenkit_FileValidation.wscript';
+import * as TypeHelper from 'TypeHelper.wscript';
 import Settings from 'hook_settings.wscript';
 
 globalThis.onSave = function (ext, file) {
-    const fileContent = JSON.parse(file);
+    const fileContent = TypeHelper.JsonParse(file);
 
     let success = true;
     switch (ext) {
@@ -28,7 +29,7 @@ globalThis.onSave = function (ext, file) {
         break;
     case "workspot":
         FileValidation.validateWorkspotFile(fileContent["Data"]["RootChunk"], Settings.Workspot);
-        file = JSON.stringify(fileContent);
+        file = TypeHelper.JsonStringify(fileContent);
         break;
     }
 
@@ -39,18 +40,17 @@ globalThis.onSave = function (ext, file) {
 }
 
 globalThis.onExport = function (path, settings) {
-    const json = JSON.parse(settings);
-    // Logger.Info(json);
+    const json = TypeHelper.JsonParse(settings);
     return {
-        settings: JSON.stringify(json)
+        settings: TypeHelper.JsonStringify(json)
     }
 }
 
 globalThis.onPreImport = function (path, settings) {
-    const json = JSON.parse(settings);
+    const json = TypeHelper.JsonParse(settings);
     // Logger.Info(json);
     return {
-        settings: JSON.stringify(json)
+        settings: TypeHelper.JsonStringify(json)
     }
 }
 
