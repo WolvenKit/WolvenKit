@@ -78,7 +78,7 @@ export function validateAnimationFile(animAnimSet, _animAnimSettings) {
     // collect names
     for (let index = 0; index < animAnimSet.animations.length; index++) {
         const animName = animAnimSet.animations[index].Data.animation.Data.name;
-        animNames.push(animname.value);
+        animNames.push(stringifyPotentialCName(animName));
         // have a key-value map for error messages
         animNamesByIndex[index] = animName;
     }
@@ -211,7 +211,7 @@ function appFile_validateAppearance(appearance, index, validateRecursively) {
         Logger.Warning(`appearance definition ${index} has a cooked data override. Consider deleting it.`);
     }
 
-    let appearanceName = ((typeof appearance.Data.name === 'string') ? appearance.Data.name : appearance.Data.name.value);
+    let appearanceName = stringifyPotentialCName(appearance.Data.name);
 
     if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) {
         return;
