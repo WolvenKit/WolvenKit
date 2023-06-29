@@ -696,14 +696,17 @@ function workspotFile_CollectAnims(filePath) {
 
     const fileName = /[^\\]*$/.exec(filePath)[0];
 
-    animNamesByFile[fileName] = [];
+    const animNames = [];
     const animations = fileContent.Data.RootChunk.animations || [];
     for (let i = 0; i < animations.length; i++) {
-        let currentAnimName = animations[i].Data.animation.Data.name.value;
-        if (!animNamesByFile[fileName].includes(currentAnimname.value)) {
-            animNamesByFile[fileName].push(currentAnimname.value);
+        let currentAnimName = stringifyPotentialCName(animations[i].Data.animation.Data.name);
+        if (!animNames.includes(currentAnimName)) {
+            animNames.push(currentAnimName);
         }
     }
+
+    animNamesByFile[fileName] = animNames
+
 }
 
 /**
@@ -719,7 +722,7 @@ function workspotFile_CheckFinalAnimSet(idx, animSet) {
         return;
     }
 
-    const rigDepotPathValue = animSet.rig && animSet.rig.DepotPath ? animSet.rig.DepotPath.value : '';    
+    const rigDepotPathValue = animSet.rig && animSet.rig.DepotPath ? stringifyPotentialCName(animSet.rig.DepotPath) : '';    
     
     if (!rigDepotPathValue || !rigDepotPathValue.endsWith('.rig')) {
         Logger.Warning(`finalAnimsets[${idx}]: invalid rig "${rigDepotPathValue}"`);
@@ -737,13 +740,13 @@ function workspotFile_CheckFinalAnimSet(idx, animSet) {
     const animations = animSet.animations.cinematics || [];
     for (let i = 0; i < animations.length; i++) {
         const nestedAnim = animations[i];
-        const filePath = nestedAnim.animSet.DepotPath.value;
+        const filePath = stringifyPotentialCName(nestedAnim.animSet.DepotPath);
         if (workspotSettings.checkFilepaths && filePath && !wkit.FileExists(filePath)) {
             Logger.Warning(`finalAnimSet[${idx}]animations[${i}]: "${filePath}" not found in game or project files`);
         } else if (filePath && !usedAnimFiles.includes(filePath)) {
             usedAnimFiles.push(filePath);
         }
-        if (workspotSettings.checkLoadingHandles && !loadingHandles.find((h) => h.DepotPath.value === filePath)) {
+        if (workspotSettings.checkLoadingHandles && !loadingHandles.find((h) => stringifyPotentialCName(h.DepotPath) === filePath)) {
             Logger.Warning(`finalAnimSet[${idx}]animations[${i}]: "${filePath}" not found in loadingHandles`);
         }
     }
@@ -767,7 +770,7 @@ function workspotFile_CheckAnimSet(idx, animSet) {
         animSetId = animSet.Data.id.id
     }
 
-    const idleName = animSet.Data.idleAnim.value;
+    const idleName = stringifyPotentialCName(animSet.Data.idleAnim);
     const childItemNames = [];
 
     // TODO: FileValidation block can go after file writing has been implemented
@@ -794,12 +797,12 @@ function workspotFile_CheckAnimSet(idx, animSet) {
             Logger.Warning(`animSet[${idx}].list[${i}]: id ${animSetId} already used by ${alreadyUsedIndices[animSetId]}`);
         }
 
-        childItemNames.push(childItem.Data.animName.value);
+        childItemNames.push(stringifyPotentialCName(childItem.Data.animName));
         alreadyUsedIndices[animSetId] = `list[${idx}].list[${i}]`;
     }
 
     // warn user if name of idle animation doesn't match
-    if (workspotSettings.checkIdleAnimNames && !childItemNames.includes(idlename.value)) {
+    if (workspotSettings.checkIdleAnimNames && !childItemNames.includes(idleName)) {
         Logger.Info(`animSet[${idx}]: idle animation "${idleName}" not matching any of the defined animations [ ${childItemNames.join(",")} ]`);
     }
 }
@@ -889,7 +892,7 @@ export function validateWorkspotFile(workspot, _workspotSettings) {
 
     // Collect names of animations defined in files:
     let workspotAnimSetNames = rootEntry.Data.list
-        .map((a) => a.Data.list.map((childItem) => childItem.Data.animName.value))
+        .map((a) => a.Data.list.map((childItem) => stringifyPotentialCName(childItem.Data.animName)))
         .reduce((acc, val) => acc.concat(val));
 
     // check for invalid indices. setAnimIds doesn't write back to file yet…?
@@ -913,7 +916,7 @@ export function validateWorkspotFile(workspot, _workspotSettings) {
             }
         });
     }
-
+    
     const unusedAnimSetNames = workspotAnimSetNames.filter((name) => !allAnimNamesFromAnimFiles.includes(name));
     if (workspotSettings.showUndefinedWorkspotAnims && unusedAnimSetNames.length > 0) {
         Logger.Info(`Items from .workspot not found in .anim files:`);
