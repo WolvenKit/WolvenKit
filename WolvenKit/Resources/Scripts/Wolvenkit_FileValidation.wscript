@@ -581,8 +581,7 @@ export function validateMeshFile(mesh, _meshSettings) {
             if (i < mesh.materialEntries.length && mesh.materialEntries[i] == "undefined") {
                 materialName = mesh.materialEntries[i].name;
             }
-
-            meshFile_CheckMaterialProperties(material, materialname.value);
+            meshFile_CheckMaterialProperties(material, stringifyPotentialCName(materialName));
         }
     }
 
