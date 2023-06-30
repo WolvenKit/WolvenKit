@@ -537,7 +537,7 @@ function checkMeshMaterialIndices(mesh) {
     for (let i = 0; i < mesh.materialEntries.length; i++) {
         let materialEntry = mesh.materialEntries[i];
         // Put all material names into a list - we'll use it to verify the appearances later
-        let name = materialEntry.name.value ?? "";
+        let name = stringifyPotentialCName(materialEntry.name);
         
         if (name in materialNames) {
             Logger.Warning(`materialEntries[${i}] (${name}) is already defined in materialEntries[${materialNames[name]}]`);
@@ -606,13 +606,15 @@ export function validateMeshFile(mesh, _meshSettings) {
 
     for (let i = 0; i < mesh.appearances.length; i++) {
         let appearance = mesh.appearances[i].Data;
+        const appearanceName = stringifyPotentialCName(appearance.name);
         if (numSubMeshes > appearance.chunkMaterials.length) {
             Logger.Warning(`Appearance ${appearanceName} has only ${appearance.chunkMaterials.length} of ${numSubMeshes} submesh appearances assigned. Meshes without appearances will render as invisible.`);
         }
 
         for (let j = 0; j < appearance.chunkMaterials.length; j++) {
-            if (!(appearance.chunkMaterials[j].value in materialNames)) {
-                Logger.Warning(`Appearance ${appearanceName}: Chunk material ${appearance.chunkMaterials[j].value} doesn't exist, submesh ${j} will render as invisible.`);
+            const chunkMaterialName = stringifyPotentialCName(appearance.chunkMaterials[j]); 
+            if (!(chunkMaterialName in materialNames)) {
+                Logger.Warning(`Appearance ${appearanceName}: Chunk material ${chunkMaterialName} doesn't exist, submesh ${j} will render as invisible.`);
             }
         }
     }
