@@ -29,7 +29,7 @@ export let isDataChangedForWriting = false;
  * ----------------
  * ================
  */
-const PLACEHOLDER_NAME_REGEX = /^[^A-Za-z0-9-_]+$/;
+const PLACEHOLDER_NAME_REGEX = /^[^A-Za-z0-9]*$/;
 
 //#region animFile
 
@@ -347,7 +347,7 @@ function getAppearanceNamesInAppFile(_depotPath) {
     const depotPath = stringifyPotentialCName(_depotPath);
     
     if (!wkit.FileExists(depotPath)) {
-        return [];
+        appearanceNamesByAppFile[depotPath] = [];
     }
     if (!appearanceNamesByAppFile[depotPath]) {
         const fileContent = wkit.LoadGameFileFromProject(depotPath, 'json');
@@ -373,6 +373,7 @@ const alreadyDefinedAppearanceNames = [];
 function entFile_validateAppearance(appearance, index, isRootEntity) {
 
     const appearanceName = stringifyPotentialCName(appearance.name) || '';
+    const appearanceNameInAppFile = stringifyPotentialCName(appearance.appearanceName) || '';
     
     // ignore separator appearances such as
     // =============================
@@ -399,8 +400,9 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
     }
 
     const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearanceName) || [];
-    if (!namesInAppFile.includes(appearanceName)) {
-        Logger.Warning(`.ent file: Can't find appearance ${appearanceName} in .app file ${appFilePath} (only defines [ ${namesInAppFile.join(', ')} ])`);
+    
+    if (!namesInAppFile.includes(appearanceNameInAppFile)) {
+        Logger.Warning(`.ent file: Can't find appearance ${appearanceNameInAppFile} in .app file ${appFilePath} (only defines [ ${namesInAppFile.join(', ')} ])`);
     }
 
     if (isRootEntity) {
