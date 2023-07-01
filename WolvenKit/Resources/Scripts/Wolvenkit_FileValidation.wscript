@@ -123,6 +123,11 @@ const componentOverrideCollisions = [];
  */
 const meshPathsFromComponents = [];
 
+/**
+ * For ent files: Don't run file validation twice
+ */
+const alreadyVerifiedAppFiles = [];
+
 function component_collectAppearancesFromMesh(componentMeshPath) {
     if (!componentMeshPath || !wkit.FileExists(componentMeshPath)) return; 
     if (undefined === appearanceNamesByMeshFile[componentMeshPath] ) {
@@ -293,7 +298,7 @@ function appFile_validateAppearance(appearance, index, validateRecursively) {
     }
 }
 
-export function validateAppFile(app, validateRecursively) {
+export function validateAppFile(app, validateRecursively, calledFromEntFileValidation) {
     // invalid app file - not found
     if (!app) {
         return;
@@ -304,10 +309,15 @@ export function validateAppFile(app, validateRecursively) {
     // empty array with name collisions
     componentOverrideCollisions.length = 0;
     alreadyDefinedAppearanceNames.length = 0;
+    
+    if (!calledFromEntFileValidation) {
+        alreadyVerifiedAppFiles.length = 0;
+    }
+    
     meshesByComponentName = {};
 
     if (app["Data"] && app["Data"]["RootChunk"]) {
-        return validateAppFile(app["Data"]["RootChunk"], validateRecursively);
+        return validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
     }
     for (let i = 0; i < app.appearances.length; i++) {
         const appearance = app.appearances[i];
@@ -426,7 +436,7 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
     alreadyDefinedAppearanceNames.push(appearanceName);
 
     const appFilePath = stringifyPotentialCName(appearance.appearanceResource.DepotPath);
-
+    
     if (!appFilePath) {
         Logger.Warning(`${appearanceName}: No app file defined`);
         return;
@@ -443,13 +453,19 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
         Logger.Warning(`.ent file: Can't find appearance ${appearanceNameInAppFile} in .app file ${appFilePath} (only defines [ ${namesInAppFile.join(', ')} ])`);
     }
 
+    if (alreadyVerifiedAppFiles.includes(appFilePath)) {
+        return;
+    }
+
+    alreadyVerifiedAppFiles.push(appFilePath);
+
     if (isRootEntity) {
         const fileContent = wkit.LoadGameFileFromProject(appFilePath, 'json');
         const appFile = TypeHelper.JsonParse(fileContent);
         if (null === appFile) {
             Logger.Warning(`File ${appFilePath} is supposed to exist, but couldn't be parsed.`);
         } else {
-            validateAppFile(appFile, true);
+            validateAppFile(appFile, true, true);
         }
     }
 }
@@ -485,6 +501,8 @@ export function validateEntFile(ent, _entSettings) {
     const _isDataChangedForWriting = isDataChangedForWriting;
 
     alreadyDefinedAppearanceNames.length = 0;
+    alreadyVerifiedAppFiles.length = 0;
+    
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
         entFile_validateAppearance(appearance, i, !entSettings.skipRootEntityCheck);
