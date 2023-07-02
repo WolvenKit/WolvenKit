@@ -5,6 +5,10 @@
 import * as Logger from 'Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
 
+const fileTemplate = '{"Header":{"WKitJsonVersion":"0.0.7","DataType":"CR2W"},"Data":{"Version":195,"BuildVersion":0,"RootChunk":{},"EmbeddedFiles":[]}}';
+const jsonExtensions = [".app", ".ent", ".mesh", ".rig"];
+const exportExtensions = [".anims", ".mesh"];
+
 // Rather than a manual list does it for all ents in the project.
 
 var ents = [];
@@ -51,7 +55,7 @@ for (var ent in ents) {
 // now find the mesh files
 for (var ent in ents) {
     Logger.Info(ents[ent]);
-    ParseFile(ents[ent]);
+    ParseFile(ents[ent], null);
 }
 
 // save all our files to the project and export JSONs
@@ -108,52 +112,88 @@ function  * GetPaths(jsonData) {
     }
 }
 
+function convertEmbedded(embeddedFile) {
+    let data = TypeHelper.JsonParse(fileTemplate);
+    data["Data"]["RootChunk"] = embeddedFile["Content"];
+    let jsonString = TypeHelper.JsonStringify(data);
+
+    let cr2w = wkit.JsonToCR2W(jsonString);
+    wkit.SaveToProject(embeddedFile["FileName"], cr2w);
+}
+
 // Parse a CR2W file
-function ParseFile(fileName) {
+function ParseFile(fileName, parentFile) {
     // check if we've already worked with this file and that it's actually a string
-    if (parsedFiles.has(fileName) || typeof fileName !== "string") {
+    if (parsedFiles.has(fileName)) {
         return;
     }
     parsedFiles.add(fileName);
-    var ext = fileName.split('.').pop();
-    if (ext === 'mesh' || ext === 'app' || ext === 'ent' || ext === 'anims') {
-        // try to get the file
-        var file = wkit.GetFileFromBase(fileName);
-        if (file === null) {
-            Logger.Error(fileName + " could not be found");
+
+    let extension = 'unkown';
+    if (typeof (fileName) === 'string') {
+        extension = "." + fileName.split('.').pop();
+    }
+
+    if (extension !== 'unkown') {
+        if (!(jsonExtensions.includes(extension) || exportExtensions.includes(extension))) {
             return;
         }
 
-        // handle the file types we want
-        if (file.Extension === ".mesh") {
-            projectSet.add(fileName);
-            exportSet.add(fileName);
-            // meshes need json'ing too for the bits with
-            jsonSet.add(fileName);
-        }
-        if (file.Extension === ".ent") {
-            projectSet.add(fileName);
-            jsonSet.add(fileName);
-        }
-        if (file.Extension === ".app") {
-            projectSet.add(fileName);
-            jsonSet.add(fileName);
-        }
-        if (file.Extension === ".anims") {
-            projectSet.add(fileName);
-            exportSet.add(fileName);
-        }
-        if (file.Extension === ".rig") {
-            projectSet.add(fileName);
-            jsonSet.add(fileName);
-        }
+        if (parentFile != null && parentFile["Data"]["EmbeddedFiles"].length > 0) {
+            for (let embeddedFile of parentFile["Data"]["EmbeddedFiles"]) {
+                if (embeddedFile["FileName"] === fileName) {
+                    convertEmbedded(embeddedFile);
 
-        // now check if there are referenced files and parse them
-        if (file.Extension === ".app" || file.Extension === ".ent" || file.Extension === ".mesh" || file.Extension === ".anims") {
-            var json = JSON.parse(wkit.GameFileToJson(file));
-            for (let path of GetPaths(json["Data"]["RootChunk"])) {
-                ParseFile(path);
+                    if (jsonExtensions.includes(extension)) {
+                        jsonSet.add(fileName);
+                    }
+
+                    if (exportExtensions.includes(extension)) {
+                        exportSet.add(fileName);
+                    }
+
+                    return;
+                }
             }
+        }
+    }
+
+    if (typeof (fileName) === 'bigint') {
+        fileName = fileName.toString();
+    }
+
+    if (typeof (fileName) !== 'string') {
+        Logger.Error('Unknown path type');
+        return;
+    }
+
+    // try to get the file
+    var file = wkit.GetFileFromBase(fileName);
+    if (file === null) {
+        Logger.Error(fileName + " could not be found");
+        return;
+    }
+
+    extension = file.Extension;
+
+    if (!(jsonExtensions.includes(extension) || exportExtensions.includes(extension))) {
+        return;
+    }
+
+    projectSet.add(fileName);
+
+    if (jsonExtensions.includes(extension)) {
+        jsonSet.add(fileName);
+    }
+
+    if (exportExtensions.includes(extension)) {
+        exportSet.add(fileName);
+    }
+
+    if (extension === ".app" || extension === ".ent" || extension === ".mesh" || extension === ".anims") {
+        var json = TypeHelper.JsonParse(wkit.GameFileToJson(file));
+        for (let path of GetPaths(json["Data"]["RootChunk"])) {
+            ParseFile(path, json);
         }
     }
 }
@@ -161,7 +201,7 @@ function ParseFile(fileName) {
 // Parse a ent file for rigs
 function FindEntRigs(fileName) {
     var file = wkit.GetFileFromBase(fileName);
-    var json = JSON.parse(wkit.GameFileToJson(file));
+    var json = TypeHelper.JsonParse(wkit.GameFileToJson(file));
     //find the rigs in the base ent components (normally root and deformations)
     for (let comp of json["Data"]["RootChunk"]["components"]) {
         if (!("rig" in comp) == 0) {
@@ -175,7 +215,7 @@ function FindEntRigs(fileName) {
         var appfileName = app["appearanceResource"]["DepotPath"];
         //Logger.Info(appfileName);
         var appfile = wkit.GetFileFromBase(appfileName);
-        var appjson = JSON.parse(wkit.GameFileToJson(appfile));
+        var appjson = TypeHelper.JsonParse(wkit.GameFileToJson(appfile));
         for (let appApp of appjson["Data"]["RootChunk"]["appearances"]) {
             for (let appcomp of appApp["Data"]["components"]) {
                 if (!("rig" in appcomp) == 0) {
@@ -191,7 +231,7 @@ function FindEntRigs(fileName) {
 // Parse a ent file for rigs
 function FindEntAnims(fileName) {
     var file = wkit.GetFileFromBase(fileName);
-    var json = JSON.parse(wkit.GameFileToJson(file));
+    var json = TypeHelper.JsonParse(wkit.GameFileToJson(file));
     //find the anims in the ent resolved dependencies
     for (let dep of json["Data"]["RootChunk"]["resolvedDependencies"]) {
         Logger.Info(dep["DepotPath"]);
