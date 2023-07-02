@@ -28,8 +28,6 @@ public class ImportExportHelper
     private readonly IModTools _modTools;
     private readonly IHookService _hookService;
 
-    private readonly string _redModPath;
-
     public ImportExportHelper(
         ILoggerService loggerService,
         IProjectManager projectManager, 
@@ -48,8 +46,6 @@ public class ImportExportHelper
         _pluginService = pluginService;
         _modTools = modTools;
         _hookService = hookService;
-
-        _redModPath = Path.Combine(settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
     }
 
     #region FinalizeArgs
@@ -193,7 +189,8 @@ public class ImportExportHelper
     /// <returns></returns>
     public async Task<bool> Export(DirectoryInfo depot, FileInfo inputFile, DirectoryInfo outDirectory)
     {
-        if (!File.Exists(_redModPath))
+        var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        if (!File.Exists(redModPath))
         {
             _loggerService.Error("redMod.exe not found");
             return false;
@@ -206,7 +203,7 @@ public class ImportExportHelper
         Directory.CreateDirectory(outDir.NotNull().FullName);
 
         var args = RedMod.GetExportArgs(depot, redRelative.RelativePath, new FileInfo(outputPath.FullPath));
-        return await ExecuteAsync(args);
+        return await ExecuteAsync(redModPath, args);
     }
 
     /// <summary>
@@ -217,7 +214,8 @@ public class ImportExportHelper
     /// <returns></returns>
     public async Task<bool> Import(DirectoryInfo depot, RedRelativePath inputRelative)
     {
-        if (!File.Exists(_redModPath))
+        var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        if (!File.Exists(redModPath))
         {
             _loggerService.Error("redMod.exe not found");
             return false;
@@ -230,16 +228,16 @@ public class ImportExportHelper
         Directory.CreateDirectory(outDir.NotNull().FullName);
 
         var args = RedMod.GetImportArgs(depot, inputPath, outputPath.RelativePath);
-        return await ExecuteAsync(args);
+        return await ExecuteAsync(redModPath, args);
     }
 
-    private async Task<bool> ExecuteAsync(string args)
+    private async Task<bool> ExecuteAsync(string redModPath, string args)
     {
-        var workingDir = Path.GetDirectoryName(_redModPath);
+        var workingDir = Path.GetDirectoryName(redModPath);
 
         _loggerService.Info($"WorkDir: {workingDir}");
         _loggerService.Info($"Running commandlet: {args}");
-        return await ProcessUtil.RunProcessAsync(_redModPath, args, workingDir);
+        return await ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
     }
 
     #endregion RedMod
