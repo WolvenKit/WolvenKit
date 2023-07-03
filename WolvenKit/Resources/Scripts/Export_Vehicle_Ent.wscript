@@ -44,7 +44,7 @@ for (var ent in ents) {
     Logger.Info('');
     for (const [key, value] of rigs) {
         Logger.Info(`${key} = ${value}`);
-        if (value.includes("base_rig") != true) {
+        if (!value.includes("base_rig")) {
             projectSet.add(value);
             jsonSet.add(value);
         }
@@ -72,8 +72,8 @@ for (const fileName of projectSet) {
     if ((include_fx == false) && (fileName.includes("fx"))) {
         continue;
     }
-    var file = wkit.GetFileFromBase(fileName)
-        wkit.SaveToProject(fileName, file);
+    var file = wkit.GetFileFromBase(fileName);
+    wkit.SaveToProject(fileName, file);
 
     if (jsonSet.has(fileName)) {
         var path = "";
@@ -207,21 +207,21 @@ function FindEntRigs(fileName) {
         if (!("rig" in comp) == 0) {
             //Logger.Info(comp["name"]);
             //Logger.Info(comp["rig"]["DepotPath"]);
-            rigs.set(comp["name"], comp["rig"]["DepotPath"]);
+            rigs.set(comp["name"].toString(), comp["rig"]["DepotPath"].toString());
         }
     }
     // find any rigs referenced in the appearances (head and dangle)
     for (let app of json["Data"]["RootChunk"]["appearances"]) {
         var appfileName = app["appearanceResource"]["DepotPath"];
         //Logger.Info(appfileName);
-        var appfile = wkit.GetFileFromBase(appfileName);
+        var appfile = wkit.GetFileFromBase(appfileName.toString());
         var appjson = TypeHelper.JsonParse(wkit.GameFileToJson(appfile));
         for (let appApp of appjson["Data"]["RootChunk"]["appearances"]) {
             for (let appcomp of appApp["Data"]["components"]) {
                 if (!("rig" in appcomp) == 0) {
                     //Logger.Info(appcomp["name"]);
                     //Logger.Info(appcomp["rig"]["DepotPath"]);
-                    rigs.set(appcomp["name"], appcomp["rig"]["DepotPath"]);
+                    rigs.set(appcomp["name"].toString(), appcomp["rig"]["DepotPath"].toString());
                 }
             }
         }
@@ -234,9 +234,9 @@ function FindEntAnims(fileName) {
     var json = TypeHelper.JsonParse(wkit.GameFileToJson(file));
     //find the anims in the ent resolved dependencies
     for (let dep of json["Data"]["RootChunk"]["resolvedDependencies"]) {
-        Logger.Info(dep["DepotPath"]);
-        projectSet.add(dep["DepotPath"]);
-        exportSet.add(dep["DepotPath"]);
+        Logger.Info(dep["DepotPath"].toString());
+        projectSet.add(dep["DepotPath"].toString());
+        exportSet.add(dep["DepotPath"].toString());
     }
 }
 
