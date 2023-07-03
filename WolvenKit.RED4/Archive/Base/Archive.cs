@@ -98,19 +98,6 @@ public class Archive : ICyberGameArchive, IDisposable
         return b;
     }
 
-    public void CopyFileToStreamWithoutBuffers(Stream stream, ulong hash)
-    {
-        if (!Files.TryGetValue(hash, out var file) || file is not FileEntry archiveItem)
-        {
-            return;
-        }
-
-        var startIndex = (int)archiveItem.SegmentsStart;
-
-        // decompress main file
-        CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true);
-    }
-
     /// <summary>
     ///
     /// </summary>
@@ -127,6 +114,11 @@ public class Archive : ICyberGameArchive, IDisposable
         var startIndex = (int)archiveItem.SegmentsStart;
         var nextIndex = (int)archiveItem.SegmentsEnd;
 
+        if (!_bulkExtract)
+        {
+            _handleCount++;
+        }
+
         // decompress main file
         CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true);
 
@@ -135,6 +127,15 @@ public class Archive : ICyberGameArchive, IDisposable
         {
             var offsetEntry = Index.FileSegments[j];
             CopyFileSegmentToStream(stream, offsetEntry, decompressBuffers);
+        }
+
+        if (!_bulkExtract)
+        {
+            _handleCount--;
+            if (_handleCount == 0)
+            {
+                ReleaseFileHandle();
+            }
         }
     }
 
@@ -154,6 +155,11 @@ public class Archive : ICyberGameArchive, IDisposable
         var startIndex = (int)archiveItem.SegmentsStart;
         var nextIndex = (int)archiveItem.SegmentsEnd;
 
+        if (!_bulkExtract)
+        {
+            _handleCount++;
+        }
+
         // decompress main file
         await CopyFileSegmentToStreamAsync(stream, Index.FileSegments[startIndex], true);
 
@@ -162,6 +168,15 @@ public class Archive : ICyberGameArchive, IDisposable
         {
             var offsetEntry = Index.FileSegments[j];
             await CopyFileSegmentToStreamAsync(stream, offsetEntry, decompressBuffers);
+        }
+
+        if (!_bulkExtract)
+        {
+            _handleCount--;
+            if (_handleCount == 0)
+            {
+                ReleaseFileHandle();
+            }
         }
     }
 
@@ -176,11 +191,6 @@ public class Archive : ICyberGameArchive, IDisposable
     {
         var zSize = offsetEntry.ZSize;
 
-        if (!_bulkExtract)
-        {
-            _handleCount++;
-        }
-
         using var vs = GetViewStream(offsetEntry.Offset, zSize);
         if (!decompress)
         {
@@ -192,15 +202,6 @@ public class Archive : ICyberGameArchive, IDisposable
             vs.DecompressAndCopySegment(outStream, zSize, size);
         }
         vs.Dispose();
-
-        if (!_bulkExtract)
-        {
-            _handleCount--;
-            if (_handleCount == 0)
-            {
-                ReleaseFileHandle();
-            }
-        }
     }
 
     /// <summary>
@@ -213,11 +214,6 @@ public class Archive : ICyberGameArchive, IDisposable
     {
         var zSize = offsetEntry.ZSize;
 
-        if (!_bulkExtract)
-        {
-            _handleCount++;
-        }
-
         await using var vs = GetViewStream(offsetEntry.Offset, zSize);
         if (!decompress)
         {
@@ -229,15 +225,6 @@ public class Archive : ICyberGameArchive, IDisposable
             await vs.DecompressAndCopySegmentAsync(outStream, zSize, size);
         }
         await vs.DisposeAsync();
-
-        if (!_bulkExtract)
-        {
-            _handleCount--;
-            if (_handleCount == 0)
-            {
-                ReleaseFileHandle();
-            }
-        }
     }
 
     #region IDisposable
