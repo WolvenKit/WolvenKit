@@ -90,7 +90,7 @@ public class FileEntry : ICyberGameFile
 
     public void Extract(Stream output, bool decompressBuffers)
     {
-        if (Archive is not ICyberGameArchive ar)
+        if (Archive is not { } ar)
         {
             throw new InvalidParsingException($"{Archive.ArchiveAbsolutePath} is not a cyberpunk77 archive.");
         }
@@ -98,9 +98,9 @@ public class FileEntry : ICyberGameFile
         ar.CopyFileToStream(output, NameHash64, decompressBuffers);
     }
 
-    public async Task ExtractAsync(Stream output, bool decompressBuffers = false)
+    public async Task ExtractAsync(Stream output, bool decompressBuffers)
     {
-        if (Archive is not ICyberGameArchive ar)
+        if (Archive is not { } ar)
         {
             throw new InvalidParsingException($"{Archive.ArchiveAbsolutePath} is not a cyberpunk77 archive.");
         }

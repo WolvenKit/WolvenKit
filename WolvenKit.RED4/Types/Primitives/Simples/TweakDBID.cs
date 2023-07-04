@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WolvenKit.RED4.Types;
 
@@ -19,6 +20,11 @@ public readonly struct TweakDBID : IRedPrimitive<ulong>, IEquatable<TweakDBID>
     public string? GetResolvedText() => TweakDBIDPool.ResolveHash(_hash);
     public bool IsResolvable => TweakDBIDPool.ResolveHash(_hash) != null;
 
+    public bool TryGetResolvedText([NotNullWhen(true)] out string? result)
+    {
+        result = TweakDBIDPool.ResolveHash(_hash);
+        return result != null;
+    }
 
     public static implicit operator TweakDBID(string value) => new(TweakDBIDPool.AddOrGetHash(value));
     public static implicit operator string?(TweakDBID value) => value.GetResolvedText();

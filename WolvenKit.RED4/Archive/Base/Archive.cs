@@ -50,7 +50,7 @@ public class Archive : ICyberGameArchive, IDisposable
 
     public MemoryMappedViewStream GetViewStream(ulong offset, uint size)
     {
-        _mmf = MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
+        _mmf ??= MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
         return _mmf.CreateViewStream((long)offset, size, MemoryMappedFileAccess.Read);
     }
 
@@ -63,20 +63,16 @@ public class Archive : ICyberGameArchive, IDisposable
         }
     }
 
-    public void SetBulkExtract(bool enable)
+    public void ExtractFile(IGameFile gameFile, Stream output)
     {
-        _bulkExtract = enable;
+        _mmf ??= MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
+        CopyFileToStream(output, gameFile.Key, false, _mmf);
+    }
 
-        if (enable && _mmf == null)
-        {
-            _mmf = MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
-        }
-
-        if (!enable && _mmf != null)
-        {
-            _mmf.Dispose();
-            _mmf = null;
-        }
+    public Task ExtractFileAsync(IGameFile gameFile, Stream output)
+    {
+        _mmf ??= MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
+        return CopyFileToStreamAsync(output, gameFile.Key, false, _mmf);
     }
 
     /// <summary>
@@ -98,17 +94,16 @@ public class Archive : ICyberGameArchive, IDisposable
         return b;
     }
 
-    public void CopyFileToStreamWithoutBuffers(Stream stream, ulong hash)
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="hash"></param>
+    /// <param name="decompressBuffers"></param>
+    public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers)
     {
-        if (!Files.TryGetValue(hash, out var file) || file is not FileEntry archiveItem)
-        {
-            return;
-        }
-
-        var startIndex = (int)archiveItem.SegmentsStart;
-
-        // decompress main file
-        CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true);
+        using var mmf = MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
+        CopyFileToStream(stream, hash, decompressBuffers, mmf);
     }
 
     /// <summary>
@@ -117,7 +112,7 @@ public class Archive : ICyberGameArchive, IDisposable
     /// <param name="stream"></param>
     /// <param name="hash"></param>
     /// <param name="decompressBuffers"></param>
-    public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers)
+    public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers, MemoryMappedFile mmf)
     {
         if (!Files.TryGetValue(hash, out var file) || file is not FileEntry archiveItem)
         {
@@ -128,13 +123,13 @@ public class Archive : ICyberGameArchive, IDisposable
         var nextIndex = (int)archiveItem.SegmentsEnd;
 
         // decompress main file
-        CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true);
+        CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true, mmf);
 
         //var bufferSegments = new List<FileSegment>();
         for (var j = startIndex + 1; j < nextIndex; j++)
         {
             var offsetEntry = Index.FileSegments[j];
-            CopyFileSegmentToStream(stream, offsetEntry, decompressBuffers);
+            CopyFileSegmentToStream(stream, offsetEntry, decompressBuffers, mmf);
         }
     }
 
@@ -146,6 +141,19 @@ public class Archive : ICyberGameArchive, IDisposable
     /// <param name="decompressBuffers"></param>
     public async Task CopyFileToStreamAsync(Stream stream, ulong hash, bool decompressBuffers)
     {
+        using var mmf = MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
+        await CopyFileToStreamAsync(stream, hash, decompressBuffers, mmf);
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="hash"></param>
+    /// <param name="decompressBuffers"></param>
+    /// <param name="mmf"></param>
+    public async Task CopyFileToStreamAsync(Stream stream, ulong hash, bool decompressBuffers, MemoryMappedFile mmf)
+    {
         if (!Files.TryGetValue(hash, out var file) || file is not FileEntry archiveItem)
         {
             return;
@@ -155,13 +163,13 @@ public class Archive : ICyberGameArchive, IDisposable
         var nextIndex = (int)archiveItem.SegmentsEnd;
 
         // decompress main file
-        await CopyFileSegmentToStreamAsync(stream, Index.FileSegments[startIndex], true);
+        await CopyFileSegmentToStreamAsync(stream, Index.FileSegments[startIndex], true, mmf);
 
         //var bufferSegments = new List<FileSegment>();
         for (var j = startIndex + 1; j < nextIndex; j++)
         {
             var offsetEntry = Index.FileSegments[j];
-            await CopyFileSegmentToStreamAsync(stream, offsetEntry, decompressBuffers);
+            await CopyFileSegmentToStreamAsync(stream, offsetEntry, decompressBuffers, mmf);
         }
     }
 
@@ -172,16 +180,11 @@ public class Archive : ICyberGameArchive, IDisposable
     /// <param name="outStream"></param>
     /// <param name="offsetEntry"></param>
     /// <param name="decompress"></param>
-    private void CopyFileSegmentToStream(Stream outStream, FileSegment offsetEntry, bool decompress)
+    private void CopyFileSegmentToStream(Stream outStream, FileSegment offsetEntry, bool decompress, MemoryMappedFile mmf)
     {
         var zSize = offsetEntry.ZSize;
 
-        if (!_bulkExtract)
-        {
-            _handleCount++;
-        }
-
-        using var vs = GetViewStream(offsetEntry.Offset, zSize);
+        using var vs = mmf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
         if (!decompress)
         {
             vs.CopyTo(outStream);
@@ -192,15 +195,6 @@ public class Archive : ICyberGameArchive, IDisposable
             vs.DecompressAndCopySegment(outStream, zSize, size);
         }
         vs.Dispose();
-
-        if (!_bulkExtract)
-        {
-            _handleCount--;
-            if (_handleCount == 0)
-            {
-                ReleaseFileHandle();
-            }
-        }
     }
 
     /// <summary>
@@ -209,16 +203,11 @@ public class Archive : ICyberGameArchive, IDisposable
     /// <param name="outStream"></param>
     /// <param name="offsetEntry"></param>
     /// <param name="decompress"></param>
-    private async Task CopyFileSegmentToStreamAsync(Stream outStream, FileSegment offsetEntry, bool decompress)
+    private async Task CopyFileSegmentToStreamAsync(Stream outStream, FileSegment offsetEntry, bool decompress, MemoryMappedFile mmf)
     {
         var zSize = offsetEntry.ZSize;
 
-        if (!_bulkExtract)
-        {
-            _handleCount++;
-        }
-
-        await using var vs = GetViewStream(offsetEntry.Offset, zSize);
+        await using var vs = mmf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
         if (!decompress)
         {
             await vs.CopyToAsync(outStream);
@@ -229,15 +218,6 @@ public class Archive : ICyberGameArchive, IDisposable
             await vs.DecompressAndCopySegmentAsync(outStream, zSize, size);
         }
         await vs.DisposeAsync();
-
-        if (!_bulkExtract)
-        {
-            _handleCount--;
-            if (_handleCount == 0)
-            {
-                ReleaseFileHandle();
-            }
-        }
     }
 
     #region IDisposable

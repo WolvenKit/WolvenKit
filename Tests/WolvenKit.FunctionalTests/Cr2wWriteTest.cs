@@ -524,8 +524,6 @@ namespace WolvenKit.FunctionalTests
                     continue;
                 }
 
-                ar.SetBulkExtract(true);
-
 #if IS_PARALLEL
                 Parallel.ForEach(fileList, tmpFile =>
 #else
@@ -540,7 +538,7 @@ namespace WolvenKit.FunctionalTests
                     try
                     {
                         using var originalStream = new MemoryStream();
-                        ar.CopyFileToStream(originalStream, file.NameHash64, false);
+                        ar.ExtractFile(file, originalStream);
                         originalStream.Seek(0, SeekOrigin.Begin);
 
                         using var originalReader = new CR2WReader(originalStream, Encoding.UTF8, true);
@@ -666,7 +664,7 @@ namespace WolvenKit.FunctionalTests
                 }
 #endif
 
-                ar.SetBulkExtract(false);
+                ar.ReleaseFileHandle();
             }
             return results;
         }

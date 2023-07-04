@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Types;
@@ -16,6 +17,12 @@ public readonly struct NodeRef : IRedString, IRedPrimitive<NodeRef>, IEquatable<
 
     public string? GetResolvedText() => NodeRefPool.ResolveHash(_hash);
     public bool IsResolvable => NodeRefPool.ResolveHash(_hash) != null;
+
+    public bool TryGetResolvedText([NotNullWhen(true)] out string? result)
+    {
+        result = NodeRefPool.ResolveHash(_hash);
+        return result != null;
+    }
 
     public static implicit operator NodeRef(string value) => new(NodeRefPool.AddOrGetHash(value));
     public static implicit operator string?(NodeRef value) => value.GetResolvedText();

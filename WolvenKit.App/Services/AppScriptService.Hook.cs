@@ -30,13 +30,14 @@ public partial class AppScriptService
         }
     }
 
-    private bool OnSaveHook(string extStr, ref CR2WFile cr2wFile)
+    private bool OnSaveHook(string filePath, ref CR2WFile cr2wFile)
     {
-        if (string.IsNullOrEmpty(extStr))
+        if (string.IsNullOrEmpty(filePath))
         {
-            throw new ArgumentNullException(nameof(extStr));
+            throw new ArgumentNullException(nameof(filePath));
         }
 
+        var extStr = Path.GetExtension(filePath);
         if (extStr[0] == '.')
         {
             extStr = extStr.Substring(1);
@@ -69,6 +70,7 @@ public partial class AppScriptService
         if (script != null)
         {
             var dto = new RedFileDto(cr2wFile);
+            dto.Header.ArchiveFileName = filePath;
 
             var (success, json) = OnSaveExecute(script.Path, extStr, RedJsonSerializer.Serialize(dto));
             if (success == Enums.EBOOL.UNINITIALZED)

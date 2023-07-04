@@ -418,10 +418,8 @@ namespace WolvenKit.Modkit.RED4
 
                 oldRig = MeshTools.GetOrphanRig(meshBlob);
 
-
-                var ar = originalRig.Archive;
                 using var msr = new MemoryStream();
-                ar?.CopyFileToStream(msr, originalRig.NameHash64, false);
+                originalRig.Extract(msr);
                 newRig = RIG.ProcessRig(_parserService.ReadRed4File(msr));
             }
             else

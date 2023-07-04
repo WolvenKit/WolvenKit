@@ -1,27 +1,43 @@
 import * as Logger from 'Logger.wscript';
+import * as TypeHelper from 'TypeHelper.wscript';
 
 /*
-*     .___                      __           .__                                     __  .__    .__           _____.__.__
-*   __| _/____     ____   _____/  |_    ____ |  |__ _____    ____    ____   ____   _/  |_|  |__ |__| ______ _/ ____\__|  |   ____  
-*  / __ |/  _ \   /    \ /  _ \   __\ _/ ___\|  |  \\__  \  /    \  / ___\_/ __ \  \   __\  |  \|  |/  ___/ \   __\|  |  | _/ __ \ 
-* / /_/ (  <_> ) |   |  (  <_> )  |   \  \___|   Y  \/ __ \|   |  \/ /_/  >  ___/   |  | |   Y  \  |\___ \   |  |  |  |  |_\  ___/ 
-* \____ |\____/  |___|  /\____/|__|    \___  >___|  (____  /___|  /\___  / \___  >  |__| |___|  /__/____  >  |__|  |__|____/\___  >
-*      \/             \/                   \/     \/     \/     \//_____/      \/             \/        \/                      \/
-*
-* It will be overwritten by Wolvenkit whenever there is a new version and you will LOSE YOUR CHANGES.
-* If you want your custom version, create a copy of this file, remove
-* the Wolvenkit_ prefix from the path, and edit the importing files.
-*/
+ *     .___                      __           .__                                     __  .__    .__           _____.__.__
+ *   __| _/____     ____   _____/  |_    ____ |  |__ _____    ____    ____   ____   _/  |_|  |__ |__| ______ _/ ____\__|  |   ____
+ *  / __ |/  _ \   /    \ /  _ \   __\ _/ ___\|  |  \\__  \  /    \  / ___\_/ __ \  \   __\  |  \|  |/  ___/ \   __\|  |  | _/ __ \
+ * / /_/ (  <_> ) |   |  (  <_> )  |   \  \___|   Y  \/ __ \|   |  \/ /_/  >  ___/   |  | |   Y  \  |\___ \   |  |  |  |  |_\  ___/
+ * \____ |\____/  |___|  /\____/|__|    \___  >___|  (____  /___|  /\___  / \___  >  |__| |___|  /__/____  >  |__|  |__|____/\___  >
+ *      \/             \/                   \/     \/     \/     \//_____/      \/             \/        \/                      \/
+ *
+ * It will be overwritten by Wolvenkit whenever there is a new version and you will LOSE YOUR CHANGES.
+ * If you want your custom version, create a copy of this file, remove
+ * the Wolvenkit_ prefix from the path, and edit the importing files.
+ */
+
+/**
+ * Workaround for CName heisenbug that happened on my machine. It might happen on your machine as well!
+ * Best leave it in for now.
+ */
+function stringifyPotentialCName(cnameOrString) {
+    return ((typeof cnameOrString === 'string') ? cnameOrString : cnameOrString.value);
+}
 
 export let isDataChangedForWriting = false;
+
+/**
+ * Matches placeholders such as 
+ * ----------------
+ * ================
+ */
+const PLACEHOLDER_NAME_REGEX = /^[^A-Za-z0-9]*$/;
 
 //#region animFile
 
 /*
-* ===============================================================================================================
-*  anim file
-* ===============================================================================================================
-*/
+ * ===============================================================================================================
+ *  anim file
+ * ===============================================================================================================
+ */
 
 /* ****************************************************** */
 
@@ -38,19 +54,20 @@ function animFile_CheckForDuplicateNames() {
     animNames.forEach(a => map.set(a, (map.get(a) || 0) + 1));
     const duplicateNames = animNames.filter(a => map.get(a) > 1);
 
-    if (duplicateNames.length === 0) { return; }
+    if (duplicateNames.length === 0) {
+        return;
+    }
 
     Logger.Info(`Duplicate animations found (you can ignore these):`);
     duplicateNames.forEach((animName) => {
         const usedIndices = Object.keys(animNamesByIndex)
-            .filter((key) => animNamesByIndex[key] === animName)
+            .filter((key) => animNamesByIndex[key] === animName.value)
             .map((idx) => `${idx}`.padStart(2, '0'));
         Logger.Info(`        [ ${usedIndices.join(', ')} ]: ${animName}`);
     });
 }
 
 export function validateAnimationFile(animAnimSet, _animAnimSettings) {
-
     animAnimSettings = _animAnimSettings;
     isDataChangedForWriting = false;
 
@@ -61,7 +78,7 @@ export function validateAnimationFile(animAnimSet, _animAnimSettings) {
     // collect names
     for (let index = 0; index < animAnimSet.animations.length; index++) {
         const animName = animAnimSet.animations[index].Data.animation.Data.name;
-        animNames.push(animName);
+        animNames.push(stringifyPotentialCName(animName));
         // have a key-value map for error messages
         animNamesByIndex[index] = animName;
     }
@@ -71,7 +88,7 @@ export function validateAnimationFile(animAnimSet, _animAnimSettings) {
     }
 
     if (animAnimSettings.printAnimationNames) {
-        Logger.Info(`Animations in current file:\n\t${animNames.join('\n\t')}`)
+        Logger.Info(`Animations in current file:\n\t${animNames.join('\n\t')}`);
     }
 }
 
@@ -80,74 +97,92 @@ export function validateAnimationFile(animAnimSet, _animAnimSettings) {
 //#region appFile
 
 // map: { 'path/to/file.mesh': ['default', 'red', 'black'] };
-const appearanceNamesByMeshFile = {}
+const appearanceNamesByMeshFile = {};
 
 // map: { 'myComponent4711': 'path/to/file.mesh' };
-let meshesByComponentName = {}
+let meshesByComponentName = {};
+
+// map: { 'base/mana/mesh_entity.ent': ['path/to/file.mesh', 'path_to_other_file.mesh'] };
+let meshesByEntityPath = {};
 
 /* map: {
-*	'path/to/file.mesh':  'myComponent4711',
-*	'path/to/file2.mesh': 'myComponent4711',
-* };
-*/
-const componentNameCollisions = {}
+ *	'path/to/file.mesh':  'myComponent4711',
+ *	'path/to/file2.mesh': 'myComponent4711',
+ * };
+ */
+const componentNameCollisions = {};
 
 // [ myComponent4711, black_shirt ]
-const overriddenComponents = []
+const overriddenComponents = [];
 
 const componentOverrideCollisions = [];
 
-const alreadyVerifiedFileNames = [];
+/**
+ * List of mesh paths from .app appearance's components. 
+ * Will be used to check against meshesByEntityPath[entityDepotPath] for duplications.
+ */
+const meshPathsFromComponents = [];
 
-function component_collectAppearancesFromMesh(depotPath) {
-    if (!depotPath || !wkit.FileExists(depotPath) || !!appearanceNamesByMeshFile[depotPath] ) {
-        return;
-    }
-    const fileContent = wkit.LoadGameFileFromProject(depotPath, 'json');
-    try {
-        const mesh = JSON.parse(fileContent);
-        if (!mesh || !mesh.Data || !mesh.Data.RootChunk || !mesh.Data.RootChunk.appearances) {
-            return;
+/**
+ * For ent files: Don't run file validation twice
+ */
+const alreadyVerifiedAppFiles = [];
+
+function component_collectAppearancesFromMesh(componentMeshPath) {
+    if (!componentMeshPath || !wkit.FileExists(componentMeshPath)) return; 
+    if (undefined === appearanceNamesByMeshFile[componentMeshPath] ) {
+        try {
+            const fileContent = wkit.LoadGameFileFromProject(componentMeshPath, 'json');            
+            const mesh = TypeHelper.JsonParse(fileContent);
+            if (!mesh || !mesh.Data || !mesh.Data.RootChunk || !mesh.Data.RootChunk.appearances) {
+                return;
+            }
+            appearanceNamesByMeshFile[componentMeshPath] = mesh.Data.RootChunk.appearances
+                .map((appearance) => stringifyPotentialCName(appearance.Data.name));              
+        } catch (err) {
+            Logger.Warning(`Couldn't parse ${componentMeshPath}`);
+            appearanceNamesByMeshFile[componentMeshPath] = null;
         }
-        const appearanceNames = mesh.Data.RootChunk.appearances.map((appearance) => appearance.Data.name);
-        appearanceNamesByMeshFile[depotPath] = appearanceNames;
-    } catch (err) {
-        Logger.Warning(`Couldn't parse ${depotPath}`);
     }
+    return appearanceNamesByMeshFile[componentMeshPath] || [];
 }
 
-
-function  appFile_collectComponentsFromEntPath(depotPath, validateRecursively) {
-
-    if (!wkit.FileExists(depotPath)) {
-        Logger.Warn(`Trying to check file path ${depotPath}, but it doesn't exist in game or project files`);
+function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursively) {
+    if (!wkit.FileExists(entityDepotPath)) {
+        Logger.Warn(`Trying to check on partsValue '${entityDepotPath}', but it doesn't exist in game or project files`);
         return;
     }
 
-    if (alreadyVerifiedFileNames.includes(depotPath)) {
+    // We're collecting all mesh paths. If we have never touched this file before, the entry will be nil.
+    if (undefined !== meshesByEntityPath[entityDepotPath]) {
         return;
     }
-
-    alreadyVerifiedFileNames.push(depotPath);
-
-    const fileContent = wkit.LoadGameFileFromProject(depotPath, 'json');
-    const parts = depotPath.split('\\');
-    const meshFileName = parts[parts.length - 1];
-
+    
+    const meshesInEntityFile = [];
     try {
+        const fileContent = wkit.LoadGameFileFromProject(entityDepotPath, 'json');
+        
         // fileExists has been checked in validatePartsOverride
-        const entity = JSON.parse(fileContent);
+        const entity = TypeHelper.JsonParse(fileContent);
         const components = entity && entity.Data && entity.Data.RootChunk ? entity.Data.RootChunk.components || [] : [];
         for (let i = 0; i < components.length; i++) {
-            entFile_validateComponent(components[i], i, validateRecursively)
-        }
+            const component = components[i];
+            entFile_validateComponent(component, i, validateRecursively);
+            const meshPath = component.mesh ? stringifyPotentialCName(component.mesh.DepotPath) : '';
+            if (meshPath && !meshesInEntityFile.includes(meshPath)) {
+                meshesInEntityFile.push(meshPath);
+            }
+        }        
     } catch (err) {
         throw err;
     }
+    
+    meshesByEntityPath[entityDepotPath] = meshesInEntityFile;
+
 }
 
 function appFile_validatePartsOverride(override, index, appearanceName) {
-    const overrideDepotPath = override.partResource.DepotPath;
+    const overrideDepotPath = override.partResource.DepotPath.value;
 
     if (overrideDepotPath && "0" !== overrideDepotPath) {
         if (!overrideDepotPath.endsWith(".ent")) {
@@ -157,66 +192,81 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
         }
     }
 
-    for(let i = 0; i < override.componentsOverrides.length; i++) {
+    for (let i = 0; i < override.componentsOverrides.length; i++) {
         const componentOverride = override.componentsOverrides[i];
-        const componentName = componentOverride.componentName || '';
+        const componentName = componentOverride.componentName.value || '';
         overriddenComponents.push(componentName);
 
         const meshPath = componentName && meshesByComponentName[componentName] ? meshesByComponentName[componentName] : '';
         if (meshPath) {
-            const appearanceNames = appearanceNamesByMeshFile[meshPath] || [];
-            if (appearanceNames.length > 1 && !appearanceNames.includes(componentOverride.meshAppearance) && !componentOverrideCollisions.includes(componentOverride.meshAppearance)) {
-                Logger.Warning(`${appearanceName}.partsOverrides[${index}]: ${componentOverride.meshAppearance} was not found in ${meshPath}`);
+            const appearanceNames = component_collectAppearancesFromMesh(meshPath);
+            const meshAppearanceName = stringifyPotentialCName(componentOverride.meshAppearance);
+            if (appearanceNames && appearanceNames.length > 1 && !appearanceNames.includes(meshAppearanceName) && !componentOverrideCollisions.includes(meshAppearanceName)) {
+                Logger.Warning(`${appearanceName}.partsOverrides[${index}]: Appearance ${meshAppearanceName} not found in '${meshPath}'`);
             }
         }
     }
 }
 
-function appFile_validatePartsValue(value, index, appearanceName, validateRecursively) {
-    // Logger.Info(value);
-    const valueDepotPath = value.resource.DepotPath;
-    if (!valueDepotPath) {
+function appFile_validatePartsValue(partsValueEntityDepotPath, index, appearanceName, validateRecursively) {
+    if (!partsValueEntityDepotPath) {
         Logger.Warning(`${appearanceName}.partsValues[${index}]: No .ent file in depot path`);
         return;
     }
-    if (!wkit.FileExists(valueDepotPath)) {
-        Logger.Warning(`${appearanceName}.partsValues[${index}]: linked resource ${valueDepotPath} not found in project or game files`);
+    if (!wkit.FileExists(partsValueEntityDepotPath)) {
+        Logger.Warning(`${appearanceName}.partsValues[${index}]: linked resource ${partsValueEntityDepotPath} not found in project or game files`);
         return;
     }
-    appFile_collectComponentsFromEntPath(valueDepotPath, validateRecursively);
+    appFile_collectComponentsFromEntPath(partsValueEntityDepotPath, validateRecursively);      
 }
 
-function appFile_validateAppearance(appearance, index, validateRecursively) {
-    // check override
-    if (appearance.Data.cookedDataPathOverride.DepotPath && appearance.Data.cookedDataPathOverride.DepotPath !== "0") {
-        Logger.Warning(`appearance definition ${index} has a cooked data override. Consider deleting it.`);
-    }
+function appFile_validateAppearance(appearance, index, validateRecursively) {    
+    let appearanceName = stringifyPotentialCName(appearance.Data.name);
 
-    let appearanceName = appearance.Data.name;
-
-    if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) {
-        return;
-    }
-
+    if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) return;
+ 
     if (!appearanceName) {
         Logger.Warning(`appearance definition #${index} has no name yet`);
-        appearanceName = `appearances[${index}]`
+        appearanceName = `appearances[${index}]`;
     }
+
+    // check override
+    const potentialOverrideDepotPath = appearance.Data.cookedDataPathOverride
+        ? stringifyPotentialCName(appearance.Data.cookedDataPathOverride.DepotPath)
+        : '';
+    
+    if (potentialOverrideDepotPath && potentialOverrideDepotPath !== "0") {
+        Logger.Warning(`${appearanceName} has a cooked data override. Consider deleting it.`);
+    }    
 
     if (alreadyDefinedAppearanceNames.includes(appearanceName)) {
-        Logger.Warning(`An appearance with the name ${appearanceName} is already defined`);
+        Logger.Warning(`An appearance with the name ${appearanceName} is already defined in .app file`);
+    } else {
+        alreadyDefinedAppearanceNames.push(appearanceName);
     }
 
+    // we'll collect all mesh paths that are linked in entity paths
+    meshPathsFromComponents.length = 0;
+    
     // might be null
     const components = appearance.Data.components || [];
-
-    for(let i = 0; i < components.length; i++) {
-        entFile_validateComponent(components[i], i, appearanceName, validateRecursively);
+    
+    for (let i = 0; i < components.length; i++) {
+        const component = components[i];
+        entFile_validateComponent(component, i, appearanceName, validateRecursively);
+        if (component.mesh) {            
+            meshPathsFromComponents.push(stringifyPotentialCName(component.mesh.DepotPath));
+        }
     }
 
+    const meshPathsFromEntityFiles = [];
+    
     // check these before the overrides, because we're parsing the linked files
-    for(let i = 0; i < appearance.Data.partsValues.length; i++) {
-        appFile_validatePartsValue(appearance.Data.partsValues[i], i, appearanceName, validateRecursively);
+    for (let i = 0; i < appearance.Data.partsValues.length; i++) {
+        const partsValue = appearance.Data.partsValues[i];
+        const depotPath = stringifyPotentialCName(partsValue.resource.DepotPath);
+        appFile_validatePartsValue(depotPath, i, appearanceName, validateRecursively);
+        (meshesByEntityPath[depotPath] || []).forEach((path) => meshPathsFromEntityFiles.push(path));
     }
 
     Object.values(componentNameCollisions)
@@ -225,98 +275,135 @@ function appFile_validateAppearance(appearance, index, validateRecursively) {
         .forEach((name) => componentOverrideCollisions.push(name));
 
     if (componentOverrideCollisions && componentOverrideCollisions.length > 0) {
-        Logger.Warning("Inside partsValues, validation found components of the same name pointing at different meshes.")
+        Logger.Warning("Inside partsValues, validation found components of the same name pointing at different meshes.");
         Logger.Warning("Name collisions may lead to partsOverrides behaving erratically. FileValidation affects the following meshes/component names:");
         Object.keys(componentNameCollisions).forEach((meshPath) => {
             Logger.Warning(`${componentNameCollisions[meshPath]}: ${meshPath}`);
         });
     }
 
-    for(let i = 0; i < appearance.Data.partsOverrides.length; i++) {
+    const duplicateMeshes = meshPathsFromComponents
+        .filter((path, i, array) => !!path && array.indexOf(path) === i) // only unique
+        .filter((path) => meshPathsFromEntityFiles.includes(path))
+        
+    if (duplicateMeshes.length > 0) {
+        Logger.Warning(`${appearanceName}: You are adding meshes via partsValues (entity file) AND components. To avoid visual glitches and broken appearances, use only one!`);
+        duplicateMeshes.forEach((path) => {
+            Logger.Warning(`\t\t${path}`);
+        })
+    } 
+    
+    for (let i = 0; i < appearance.Data.partsOverrides.length; i++) {
         appFile_validatePartsOverride(appearance.Data.partsOverrides[i], i, appearanceName);
     }
 }
 
-export function validateAppFile(app, validateRecursively) {
+export function validateAppFile(app, validateRecursively, calledFromEntFileValidation) {
     // invalid app file - not found
-    if (!app) { return; }
+    if (!app) {
+        return;
+    }
 
     isDataChangedForWriting = false;
 
     // empty array with name collisions
     componentOverrideCollisions.length = 0;
-    alreadyVerifiedFileNames.length = 0;
+    alreadyDefinedAppearanceNames.length = 0;
+    
+    if (!calledFromEntFileValidation) {
+        alreadyVerifiedAppFiles.length = 0;
+    }
+    
     meshesByComponentName = {};
 
     if (app["Data"] && app["Data"]["RootChunk"]) {
-        return validateAppFile(app["Data"]["RootChunk"], validateRecursively);
+        return validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
     }
-    for(let i = 0; i < app.appearances.length; i++) {
-        appFile_validateAppearance(app.appearances[i], i, validateRecursively);
+    for (let i = 0; i < app.appearances.length; i++) {
+        const appearance = app.appearances[i];
+        appFile_validateAppearance(appearance, i, validateRecursively);
     }
 }
-
 
 //#endregion
 
 
 //#region entFile
 
-let entSettings = {}
+let entSettings = {};
 
 /**
  * @param depotPath the depot path to analyse
  * @param info info string for the user
  */
-function checkDepotPath(depotPath, info) {
-    if (!depotPath) {
+function checkDepotPath(depotPath, info) {    
+    const _depotPathString = stringifyPotentialCName(depotPath) || '';
+    if (!_depotPathString) {
         Logger.Warning(`${info}: DepotPath not set`);
+        return;
     }
-    if (!wkit.FileExists(depotPath)) {
-        Logger.Warning(`${info}: ${depotPath} not found in project or game files`);
+    if (!wkit.FileExists(_depotPathString)) {
+        Logger.Warning(`${info}: ${_depotPathString} not found in project or game files`);
     }
 }
 
 // For different component types, check DepotPath property
 function entFile_validateComponent(component, _index, validateRecursively) {
+    const componentName = stringifyPotentialCName(component.name) ?? '';
     // flag for mesh validation, in case this is called recursively from app file
     let hasMesh = false;
     switch (component.$type || '') {
         case 'entGarmentSkinnedMeshComponent':
         case 'entSkinnedMeshComponent':
-            checkDepotPath(component.mesh.DepotPath, component.name);
+            checkDepotPath(component.mesh.DepotPath, componentName);
             hasMesh = true;
             break;
         case 'workWorkspotResourceComponent':
-            checkDepotPath(component.workspotResource.DepotPath, component.name);
+            checkDepotPath(component.workspotResource.DepotPath, componentName);
             break;
-        default: break;
+        default:
+            break;
     }
 
-    if (!validateRecursively || !hasMesh) { return; }
-
+    if (!validateRecursively || !hasMesh) {
+        return;
+    }
+    
+    const componentMeshPath = stringifyPotentialCName(component.mesh.DepotPath);
+    
     // check for component name uniqueness
-    if (meshesByComponentName[component.name] && meshesByComponentName[component.name] !== component.mesh.DepotPath) {
-        componentNameCollisions[component.mesh.DepotPath] = component.name;
-        componentNameCollisions[meshesByComponentName[component.name]] = component.name;
+    if (meshesByComponentName[componentName] && meshesByComponentName[componentName] !== componentMeshPath) {
+        componentNameCollisions[componentMeshPath] = componentName;
+        componentNameCollisions[meshesByComponentName[componentName]] = componentName;
     }
-    meshesByComponentName[component.name] = component.mesh.DepotPath;
-    component_collectAppearancesFromMesh(component.mesh.DepotPath);
+    
+    meshesByComponentName[componentName] = componentMeshPath;
+    const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);
+    
+    if (meshAppearances && meshAppearances.length > 0 && !meshAppearances.includes(stringifyPotentialCName(component.meshAppearance))) {
+        Logger.Warning(`ent component[${_index}] (${componentName}): Appearance ${component.meshAppearance} not found in '${componentMeshPath}', ([ ${
+            meshAppearances.join(", ")            
+        } ])`);
+    }
 
 }
 
 // Map: app file depot path name to defined appearances
 const appearanceNamesByAppFile = {};
 
-function getAppearanceNamesInAppFile(depotPath) {
+function getAppearanceNamesInAppFile(_depotPath) {
+    const depotPath = stringifyPotentialCName(_depotPath);
+    
     if (!wkit.FileExists(depotPath)) {
-        return [];
+        appearanceNamesByAppFile[depotPath] = [];
     }
     if (!appearanceNamesByAppFile[depotPath]) {
         const fileContent = wkit.LoadGameFileFromProject(depotPath, 'json');
-        const appFile = JSON.parse(fileContent);
+        const appFile = TypeHelper.JsonParse(fileContent);
         if (null !== appFile) {
-            const appNames = appFile.Data.RootChunk.appearances.map((app) => app.Data.name) || [];
+            const appNames = (appFile.Data.RootChunk.appearances || [])
+                .map((app) => stringifyPotentialCName(app.Data.name))
+                .filter((name) => !PLACEHOLDER_NAME_REGEX.test(name));
             appearanceNamesByAppFile[depotPath] = appNames;
         }
     }
@@ -324,7 +411,7 @@ function getAppearanceNamesInAppFile(depotPath) {
 }
 
 // check for name duplications
-const  alreadyDefinedAppearanceNames = [];
+const alreadyDefinedAppearanceNames = [];
 
 /**
  * @param appearance the appearance object
@@ -332,44 +419,56 @@ const  alreadyDefinedAppearanceNames = [];
  * @param isRootEntity should we recursively validate the linked files?
  */
 function entFile_validateAppearance(appearance, index, isRootEntity) {
+
+    const appearanceName = stringifyPotentialCName(appearance.name) || '';
+    const appearanceNameInAppFile = stringifyPotentialCName(appearance.appearanceName) || '';
+    
     // ignore separator appearances such as
     // =============================
     // -----------------------------
-    if (appearance.name.length === 0 || /^[^A-Za-z0-9]+$/.test(appearance.name)) { return; }
-
-    if (alreadyDefinedAppearanceNames.includes(appearance.name)) {
-        Logger.Warning(`An appearance with the name ${appearance.name} is already defined`);
+    if (appearanceName.length === 0 || PLACEHOLDER_NAME_REGEX.test(appearanceName)) {
+        return;
     }
-    alreadyDefinedAppearanceNames.push(appearance.name);
 
-    const appFilePath = appearance.appearanceResource.DepotPath;
+    if (alreadyDefinedAppearanceNames.includes(appearanceName)) {
+        Logger.Warning(`An appearance with the name ${appearanceName} is already defined`);
+    }
+    alreadyDefinedAppearanceNames.push(appearanceName);
 
+    const appFilePath = stringifyPotentialCName(appearance.appearanceResource.DepotPath);
+    
     if (!appFilePath) {
-        Logger.Warning(`${appearance.name}: No app file defined`);
+        Logger.Warning(`${appearanceName}: No app file defined`);
         return;
     }
 
     if (!wkit.FileExists(appFilePath)) {
-        Logger.Warning(`${appearance.name}: app file '${appFilePath}' not found in project or game files`);
+        Logger.Warning(`${appearanceName}: app file '${appFilePath}' not found in project or game files`);
         return;
     }
 
-    const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearance.name) || [];
-    if (!namesInAppFile.includes(appearance.appearanceName)) {
-        Logger.Warning(`${appearance.name}: Should have appearance ${appearance.appearanceName}, but file ${appFilePath} only defines [${namesInAppFile.join(', ')}]`);
+    const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearanceName) || [];
+    
+    if (!namesInAppFile.includes(appearanceNameInAppFile)) {
+        Logger.Warning(`.ent file: Can't find appearance ${appearanceNameInAppFile} in .app file ${appFilePath} (only defines [ ${namesInAppFile.join(', ')} ])`);
     }
+
+    if (alreadyVerifiedAppFiles.includes(appFilePath)) {
+        return;
+    }
+
+    alreadyVerifiedAppFiles.push(appFilePath);
 
     if (isRootEntity) {
         const fileContent = wkit.LoadGameFileFromProject(appFilePath, 'json');
-        const appFile = JSON.parse(fileContent);
+        const appFile = TypeHelper.JsonParse(fileContent);
         if (null === appFile) {
-            Logger.Warning(`File ${appFilePath} is supposed to exist, but couldn't be parsed.`)
+            Logger.Warning(`File ${appFilePath} is supposed to exist, but couldn't be parsed.`);
         } else {
-            validateAppFile(appFile, true);
+            validateAppFile(appFile, true, true);
         }
     }
 }
-
 
 /**
  *
@@ -384,14 +483,26 @@ export function validateEntFile(ent, _entSettings) {
         return validateEntFile(ent["Data"]["RootChunk"]);
     }
 
+    const allComponentNames = [];
+    const duplicateComponentNames = [];
+    
     for (let i = 0; i < ent.components.length; i++) {
         const component = ent.components[i];
-        entFile_validateComponent(component, i, false);
+        const componentName = stringifyPotentialCName(component.name);
+        entFile_validateComponent(component, i, _entSettings.validateRecursively);
+        (allComponentNames.includes(componentName) ? duplicateComponentNames : allComponentNames).push(componentName);
+    }
+    
+    if (_entSettings.checkComponentNameDuplication && duplicateComponentNames.length > 0) {
+        Logger.Warning(`The following components are defined more than once: [ ${ duplicateComponentNames.join(', ') } ]`)
     }
 
     // will be set to false in app file validation
     const _isDataChangedForWriting = isDataChangedForWriting;
 
+    alreadyDefinedAppearanceNames.length = 0;
+    alreadyVerifiedAppFiles.length = 0;
+    
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
         entFile_validateAppearance(appearance, i, !entSettings.skipRootEntityCheck);
@@ -407,20 +518,19 @@ export function validateEntFile(ent, _entSettings) {
     isDataChangedForWriting = _isDataChangedForWriting;
 };
 
-
 //#endregion
 
 
 //#region meshFile
 /*
-* ===============================================================================================================
-*  mesh file
-* ===============================================================================================================
-*/
+ * ===============================================================================================================
+ *  mesh file
+ * ===============================================================================================================
+ */
 
 let meshSettings = {};
 
-// scan materials, save for the next function 
+// scan materials, save for the next function
 let materialNames = {};
 let localIndexList = [];
 
@@ -432,20 +542,20 @@ function meshFile_CheckMaterialProperties(material, materialName) {
             continue;
         }
 
-        Object.entries(tmp).forEach(([key, value]) => {
+        Object.entries(tmp).forEach(([key, definedMaterial]) => {
             if (key === "$type") {
                 return;
             }
 
-            switch(key) {
+            switch (key) {
                 case "MultilayerSetup":
-                    if (!value["DepotPath"].endsWith(".mlsetup")) {
-                        Logger.Warning(`${materialName}.values[${i}]: ${value["DepotPath"]} doesn't end in .mlsetup. FileValidation might cause crashes.`);
+                    if (definedMaterial.DepotPath.value && !definedMaterial.DepotPath.value.endsWith(".mlsetup")) {
+                        Logger.Warning(`${materialName}.values[${i}]: ${definedMaterial.DepotPath.value} doesn't end in .mlsetup. FileValidation might cause crashes.`);
                     }
                     break;
                 case "MultilayerMask":
-                    if (!value["DepotPath"].endsWith(".mlmask")) {
-                        Logger.Warning(`${materialName}.values[${i}]: ${value["DepotPath"]} doesn't end in .mlmask. FileValidation might cause crashes.`);
+                    if (definedMaterial.DepotPath.value && !definedMaterial.DepotPath.value.endsWith(".mlmask")) {
+                        Logger.Warning(`${materialName}.values[${i}]: ${definedMaterial.DepotPath.value} doesn't end in .mlmask. FileValidation might cause crashes.`);
                     }
                     break;
                 case "BaseColor":
@@ -453,8 +563,8 @@ function meshFile_CheckMaterialProperties(material, materialName) {
                 case "Roughness":
                 case "Normal":
                 case "GlobalNormal":
-                    if (!value["DepotPath"].endsWith(".xbm")) {
-                        Logger.Warning(`${materialName}.values[${i}]: ${value["DepotPath"]} doesn't end in .xbm. FileValidation might cause crashes.`);
+                    if (definedMaterial.DepotPath.value && !definedMaterial.DepotPath.value.endsWith(".xbm")) {
+                        Logger.Warning(`${materialName}.values[${i}]: ${definedMaterial.DepotPath.value} doesn't end in .xbm. FileValidation might cause crashes.`);
                     }
                     break;
             }
@@ -469,13 +579,12 @@ function checkMeshMaterialIndices(mesh) {
     }
 
     if (mesh.localMaterialBuffer.materials !== null && mesh.localMaterialBuffer.materials.length > 0
-        && mesh.preloadLocalMaterialInstances.length > 0) {
+         && mesh.preloadLocalMaterialInstances.length > 0) {
         Logger.Warning("Your mesh is trying to use both localMaterialBuffer.materials and preloadLocalMaterialInstances. To avoid unspecified behaviour, use only one of the lists. Material validation will abort.");
     }
 
     let sumOfLocal = mesh.localMaterialInstances.length + mesh.preloadLocalMaterialInstances.length;
-    if (mesh.localMaterialBuffer.materials !== null)
-    {
+    if (mesh.localMaterialBuffer.materials !== null) {
         sumOfLocal += mesh.localMaterialBuffer.materials.length;
     }
     let sumOfExternal = mesh.externalMaterials.length + mesh.preloadExternalMaterials.length;
@@ -483,11 +592,11 @@ function checkMeshMaterialIndices(mesh) {
     materialNames = {};
     localIndexList = [];
 
-    for(let i = 0; i < mesh.materialEntries.length; i++) {
+    for (let i = 0; i < mesh.materialEntries.length; i++) {
         let materialEntry = mesh.materialEntries[i];
-
         // Put all material names into a list - we'll use it to verify the appearances later
-        let name = materialEntry.name.toString() ?? "";
+        let name = stringifyPotentialCName(materialEntry.name);
+        
         if (name in materialNames) {
             Logger.Warning(`materialEntries[${i}] (${name}) is already defined in materialEntries[${materialNames[name]}]`);
         } else {
@@ -495,19 +604,16 @@ function checkMeshMaterialIndices(mesh) {
         }
 
         if (materialEntry.isLocalInstance) {
-            if (materialEntry.index >= sumOfLocal)
-            {
-                Logger.Warning(`materialEntries[${i}] (${materialEntry.name}) is trying to access a local material with the index ${materialEntry.index}, but there are only ${sumOfLocal} entries. (Array starts counting at 0)`);
+            if (materialEntry.index >= sumOfLocal) {
+                Logger.Warning(`materialEntries[${i}] (${name}) is trying to access a local material with the index ${materialEntry.index}, but there are only ${sumOfLocal} entries. (Array starts counting at 0)`);
             }
-            if (localIndexList.includes(materialEntry.index))
-            {
-                Logger.Warning(`materialEntries[${i}] (${materialEntry.name}) is overwriting an already-defined material index: ${materialEntry.index}. Your material assignments might not work as expected.`);
+            if (localIndexList.includes(materialEntry.index)) {
+                Logger.Warning(`materialEntries[${i}] (${name}) is overwriting an already-defined material index: ${materialEntry.index}. Your material assignments might not work as expected.`);
             }
             localIndexList.push(materialEntry.index);
         } else {
-            if (materialEntry.index >= sumOfExternal)
-            {
-                Logger.Warning(`materialEntries[${i}] (${materialEntry.name}) is trying to access an external material with the index ${materialEntry.index}, but there are only ${sumOfExternal} entries.`);
+            if (materialEntry.index >= sumOfExternal) {
+                Logger.Warning(`materialEntries[${i}] (${name}) is trying to access an external material with the index ${materialEntry.index}, but there are only ${sumOfExternal} entries.`);
             }
         }
     }
@@ -523,56 +629,50 @@ export function validateMeshFile(mesh, _meshSettings) {
 
     checkMeshMaterialIndices(mesh);
 
-    if (mesh.localMaterialBuffer.materials !== null)
-    {
-        for (let i = 0; i < mesh.localMaterialBuffer.materials.length; i++)
-        {
+    if (mesh.localMaterialBuffer.materials !== null) {
+        for (let i = 0; i < mesh.localMaterialBuffer.materials.length; i++) {
             let material = mesh.localMaterialBuffer.materials[i];
 
             let materialName = "unknown";
 
             // Add a warning here???
-            if (i < mesh.materialEntries.length && mesh.materialEntries[i] == "undefined")
-            {
+            if (i < mesh.materialEntries.length && mesh.materialEntries[i] == "undefined") {
                 materialName = mesh.materialEntries[i].name;
             }
-
-            meshFile_CheckMaterialProperties(material, materialName);
+            meshFile_CheckMaterialProperties(material, stringifyPotentialCName(materialName));
         }
     }
 
-    for (let i = 0; i < mesh.preloadLocalMaterialInstances.length; i++)
-    {
+    for (let i = 0; i < mesh.preloadLocalMaterialInstances.length; i++) {
         let material = mesh.preloadLocalMaterialInstances[i];
 
         let materialName = "unknown";
 
         // Add a warning here???
-        if (i < mesh.materialEntries.length && mesh.materialEntries[i] == "undefined")
-        {
+        if (i < mesh.materialEntries.length && mesh.materialEntries[i] === "undefined") {
             materialName = mesh.materialEntries[i].name;
         }
 
-        meshFile_CheckMaterialProperties(material.Data, materialName);
+        meshFile_CheckMaterialProperties(material.Data, materialName.value);
     }
 
     let numSubMeshes = 0;
     // Create RenderResourceBlob if it doesn't exists?
-    if (mesh.renderResourceBlob !== "undefined")
-    {
+    if (mesh.renderResourceBlob !== "undefined") {
         numSubMeshes = mesh.renderResourceBlob.Data.header.renderChunkInfos.length;
     }
 
     for (let i = 0; i < mesh.appearances.length; i++) {
         let appearance = mesh.appearances[i].Data;
-
+        const appearanceName = stringifyPotentialCName(appearance.name);
         if (numSubMeshes > appearance.chunkMaterials.length) {
-            Logger.Warning(`Appearance ${appearance.name} has only ${appearance.chunkMaterials.length} of ${numSubMeshes} submesh appearances assigned. Meshes without appearances will render as invisible.`);
+            Logger.Warning(`Appearance ${appearanceName} has only ${appearance.chunkMaterials.length} of ${numSubMeshes} submesh appearances assigned. Meshes without appearances will render as invisible.`);
         }
 
         for (let j = 0; j < appearance.chunkMaterials.length; j++) {
-            if (!(appearance.chunkMaterials[j] in materialNames)) {
-                Logger.Warning(`Appearance ${appearance.name}: Chunk material ${appearance.chunkMaterials[j]} doesn't exist, submesh ${j} will render as invisible.`);
+            const chunkMaterialName = stringifyPotentialCName(appearance.chunkMaterials[j]); 
+            if (!(chunkMaterialName in materialNames)) {
+                Logger.Warning(`Appearance ${appearanceName}: Chunk material ${chunkMaterialName} doesn't exist, submesh ${j} will render as invisible.`);
             }
         }
     }
@@ -580,17 +680,16 @@ export function validateMeshFile(mesh, _meshSettings) {
     return true;
 };
 
-
 //#endregion
 
 
 //#region csvFile
 
 /*
-* ===============================================================================================================
-*  csv file
-* ===============================================================================================================
-*/
+ * ===============================================================================================================
+ *  csv file
+ * ===============================================================================================================
+ */
 
 export function validateCsvFile(csvData, csvSettings) {
     // Nothing to do here, abort
@@ -613,33 +712,32 @@ export function validateCsvFile(csvData, csvSettings) {
     }
 }
 
-
 //#endregion
 
 
 //#region workspotFIle
 
 /*
-* ===============================================================================================================
-*  workspot file
-* ===============================================================================================================
-*/
+ * ===============================================================================================================
+ *  workspot file
+ * ===============================================================================================================
+ */
 
 let workspotSettings = {};
 
 /* ****************************************************** */
 
 // "Index" numbers must be unique: FileValidation stores already used indices. Can go after file writing has been implemented.
-let  alreadyUsedIndices = {};
+let alreadyUsedIndices = {};
 
 // Animation names grouped by files
-let  animNamesByFile = {};
+let animNamesByFile = {};
 
 // We'll collect all animation names here after collectAnims, so we can check for workspot <==> anims definitions
-let  allAnimNamesFromAnimFiles = [];
+let allAnimNamesFromAnimFiles = [];
 
 // Map work entry child names to index of parents
-let  workEntryIndicesByAnimName = {};
+let workEntryIndicesByAnimName = {};
 
 // Files to read animation names from, will be set in checkFinalAnimSet
 let usedAnimFiles = [];
@@ -649,7 +747,7 @@ let usedAnimFiles = [];
  * @param {string} filePath - The path to the file
  */
 function workspotFile_CollectAnims(filePath) {
-    const fileContent = JSON.parse(wkit.LoadGameFileFromProject(filePath, 'json'));
+    const fileContent = TypeHelper.JsonParse(wkit.LoadGameFileFromProject(filePath, 'json'));
     if (!fileContent) {
         Logger.Warning(`Failed to collect animations from ${filePath}`);
         return;
@@ -657,15 +755,17 @@ function workspotFile_CollectAnims(filePath) {
 
     const fileName = /[^\\]*$/.exec(filePath)[0];
 
-    animNamesByFile[fileName] = [];
+    const animNames = [];
     const animations = fileContent.Data.RootChunk.animations || [];
     for (let i = 0; i < animations.length; i++) {
-
-        let currentAnimName = animations[i].Data.animation.Data.name;
-        if (!animNamesByFile[fileName].includes(currentAnimName)) {
-            animNamesByFile[fileName].push(currentAnimName);
+        let currentAnimName = stringifyPotentialCName(animations[i].Data.animation.Data.name);
+        if (!animNames.includes(currentAnimName)) {
+            animNames.push(currentAnimName);
         }
     }
+
+    animNamesByFile[fileName] = animNames
+
 }
 
 /**
@@ -677,32 +777,36 @@ function workspotFile_CollectAnims(filePath) {
  * @param {object} animSet - The object to analyse
  */
 function workspotFile_CheckFinalAnimSet(idx, animSet) {
-    if (!animSet) { return; }
-
-    const rig = animSet.rig ? animSet.rig.DepotPath : '';
-
-    if (!rig || !rig.endsWith('.rig')) {
-        Logger.Warning(`finalAnimsets[${idx}]: invalid rig "${rig}"`);
-    } else if (workspotSettings.checkFilepaths && !wkit.FileExists(rig)) {
-        Logger.Warning(`finalAnimsets[${idx}]: File "${rig}" not found in game or project files`);
+    if (!animSet) {
+        return;
     }
 
-    if (!animSet.animations) return;
+    const rigDepotPathValue = animSet.rig && animSet.rig.DepotPath ? stringifyPotentialCName(animSet.rig.DepotPath) : '';    
+    
+    if (!rigDepotPathValue || !rigDepotPathValue.endsWith('.rig')) {
+        Logger.Warning(`finalAnimsets[${idx}]: invalid rig "${rigDepotPathValue}"`);
+    } else if (workspotSettings.checkFilepaths && !wkit.FileExists(rigDepotPathValue)) {
+        Logger.Warning(`finalAnimsets[${idx}]: File "${rigDepotPathValue}" not found in game or project files`);
+    }
+
+    if (!animSet.animations) {
+		return;
+	}
 
     // Check that all animSets in the .animations are also hooked up in the loadingHandles
     const loadingHandles = animSet.loadingHandles || [];
 
     const animations = animSet.animations.cinematics || [];
-    for(let i = 0; i < animations.length; i++) {
+    for (let i = 0; i < animations.length; i++) {
         const nestedAnim = animations[i];
-        const file = nestedAnim.animSet.DepotPath;
-        if (workspotSettings.checkFilepaths && !wkit.FileExists(file)) {
-            Logger.Warning(`finalAnimSet[${idx}]animations[${i}]: "${file}" not found in game or project files`);
-        } else if (!usedAnimFiles.includes(file)) {
-            usedAnimFiles.push(file);
+        const filePath = stringifyPotentialCName(nestedAnim.animSet.DepotPath);
+        if (workspotSettings.checkFilepaths && filePath && !wkit.FileExists(filePath)) {
+            Logger.Warning(`finalAnimSet[${idx}]animations[${i}]: "${filePath}" not found in game or project files`);
+        } else if (filePath && !usedAnimFiles.includes(filePath)) {
+            usedAnimFiles.push(filePath);
         }
-        if (workspotSettings.checkLoadingHandles && !loadingHandles.find((h) => h.DepotPath === file)) {
-            Logger.Warning(`finalAnimSet[${idx}]animations[${i}]: "${file}" not found in loadingHandles`);
+        if (workspotSettings.checkLoadingHandles && !loadingHandles.find((h) => stringifyPotentialCName(h.DepotPath) === filePath)) {
+            Logger.Warning(`finalAnimSet[${idx}]animations[${i}]: "${filePath}" not found in loadingHandles`);
         }
     }
 }
@@ -716,14 +820,16 @@ function workspotFile_CheckFinalAnimSet(idx, animSet) {
  * @param {object} animSet - The object to analyse
  */
 function workspotFile_CheckAnimSet(idx, animSet) {
-    if (!animSet || !animSet.Data) { return; }
+    if (!animSet || !animSet.Data) {
+        return;
+    }
     let animSetId;
 
     if (animSet.Data.id) {
         animSetId = animSet.Data.id.id
     }
 
-    const idleName = animSet.Data.idleAnim;
+    const idleName = stringifyPotentialCName(animSet.Data.idleAnim);
     const childItemNames = [];
 
     // TODO: FileValidation block can go after file writing has been implemented
@@ -734,12 +840,14 @@ function workspotFile_CheckAnimSet(idx, animSet) {
         alreadyUsedIndices[animSetId] = `list[${idx}]`;
     }
 
-    if ((animSet.Data.list || []).length === 0) return;
+    if ((animSet.Data.list || []).length === 0) {
+		return;
+	}
 
-    for(let i = 0; i < animSet.Data.list.length; i++) {
+    for (let i = 0; i < animSet.Data.list.length; i++) {
         const childItem = animSet.Data.list[i];
-
-        workEntryIndicesByAnimName[childItem.Data.animName] = idx;
+        const childItemName = childItem.Data.animName.value || '';
+        workEntryIndicesByAnimName[childItemName] = idx;
 
         animSetId = childItem.Data.id.id;
 
@@ -748,7 +856,7 @@ function workspotFile_CheckAnimSet(idx, animSet) {
             Logger.Warning(`animSet[${idx}].list[${i}]: id ${animSetId} already used by ${alreadyUsedIndices[animSetId]}`);
         }
 
-        childItemNames.push(childItem.Data.animName);
+        childItemNames.push(stringifyPotentialCName(childItem.Data.animName));
         alreadyUsedIndices[animSetId] = `list[${idx}].list[${i}]`;
     }
 
@@ -777,7 +885,7 @@ function workspotFile_SetIndexOrder(rootEntry) {
         }
 
         animSet.Data.id.id = currentId;
-        for(let j = 0; j < animSet.Data.list.length; j++) {
+        for (let j = 0; j < animSet.Data.list.length; j++) {
             const childItem = animSet.Data.list[j];
             currentId += 1;
             if (childItem.Data.id.id != currentId) {
@@ -810,11 +918,11 @@ export function validateWorkspotFile(workspot, _workspotSettings) {
 
     const finalAnimsets = workspotTree.Data.finalAnimsets || [];
 
-    for(let i = 0; i < finalAnimsets.length; i++) {
+    for (let i = 0; i < finalAnimsets.length; i++) {
         workspotFile_CheckFinalAnimSet(i, finalAnimsets[i]);
     }
 
-    for(let i = 0; i < usedAnimFiles.length; i++) {
+    for (let i = 0; i < usedAnimFiles.length; i++) {
         if (wkit.FileExists(usedAnimFiles[i])) {
             workspotFile_CollectAnims(usedAnimFiles[i]);
         } else {
@@ -841,14 +949,13 @@ export function validateWorkspotFile(workspot, _workspotSettings) {
         alreadyUsedIndices[rootEntry.Data.id.id] = "rootEntry";
     }
 
-
     // Collect names of animations defined in files:
     let workspotAnimSetNames = rootEntry.Data.list
-        .map((a) => a.Data.list.map((childItem) => childItem.Data.animName))
+        .map((a) => a.Data.list.map((childItem) => stringifyPotentialCName(childItem.Data.animName)))
         .reduce((acc, val) => acc.concat(val));
 
     // check for invalid indices. setAnimIds doesn't write back to file yet…?
-    for(let i = 0; i < rootEntry.Data.list.length; i++) {
+    for (let i = 0; i < rootEntry.Data.list.length; i++) {
         workspotFile_CheckAnimSet(i, rootEntry.Data.list[i]);
     }
 
@@ -864,11 +971,11 @@ export function validateWorkspotFile(workspot, _workspotSettings) {
         Object.keys(animNamesByFile).forEach((fileName) => {
             const unusedAnimsInFile = animNamesByFile[fileName].filter((val) => unusedAnimNamesFromFiles.find((animName) => animName === val));
             if (unusedAnimsInFile.length > 0) {
-                Logger.Info(`${fileName}: [\n\t${unusedAnimsInFile.join(",\n\t")}\t\n]`)
+                Logger.Info(`${fileName}: [\n\t${unusedAnimsInFile.join(",\n\t")}\t\n]`);
             }
         });
     }
-
+    
     const unusedAnimSetNames = workspotAnimSetNames.filter((name) => !allAnimNamesFromAnimFiles.includes(name));
     if (workspotSettings.showUndefinedWorkspotAnims && unusedAnimSetNames.length > 0) {
         Logger.Info(`Items from .workspot not found in .anim files:`);
@@ -877,4 +984,3 @@ export function validateWorkspotFile(workspot, _workspotSettings) {
     return rootEntry;
 }
 //#endregion
-

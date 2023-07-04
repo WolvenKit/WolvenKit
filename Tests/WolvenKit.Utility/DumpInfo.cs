@@ -469,8 +469,6 @@ namespace WolvenKit.Utility
                 var dirPath = Path.Combine(resultDir, archive.Name);
                 Directory.CreateDirectory(dirPath);
 
-                archive.SetBulkExtract(true);
-
                 Parallel.ForEach(archive.Files, pair =>
                 {
                     if (pair.Value is not FileEntry fileEntry)
@@ -487,7 +485,7 @@ namespace WolvenKit.Utility
                     try
                     {
                         using var ms = new MemoryStream();
-                        archive.CopyFileToStream(ms, fileEntry.NameHash64, false);
+                        archive.ExtractFile(fileEntry, ms);
                         ms.Seek(0, SeekOrigin.Begin);
 
                         using var reader = new CR2WReader(ms);
@@ -513,7 +511,7 @@ namespace WolvenKit.Utility
                     }
                 });
 
-                archive.SetBulkExtract(false);
+                archive.ReleaseFileHandle();
             }
 
             var lst = failedFiles.Keys.ToList();

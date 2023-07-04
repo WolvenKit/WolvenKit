@@ -886,9 +886,8 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    var ar = entry.Archive;
                     using var ms = new MemoryStream();
-                    ar?.CopyFileToStream(ms, entry.NameHash64, false);
+                    entry.Extract(ms);
 
                     return ExportMeshWithRig(cr2wStream, ms, cr2wFileName, meshargs);
                 }
@@ -906,9 +905,8 @@ namespace WolvenKit.Modkit.RED4
                     var rigstreams = rigs.Select(
                             delegate (FileEntry entry)
                             {
-                                var ar = entry.Archive;
                                 var ms = new MemoryStream();
-                                ar?.CopyFileToStream(ms, entry.NameHash64, false);
+                                entry.Extract(ms);
                                 return (Stream)ms;
                             })
                         .ToList();
@@ -917,9 +915,8 @@ namespace WolvenKit.Modkit.RED4
                     var meshstreams = meshes.Select(
                               delegate (FileEntry entry)
                               {
-                                  var ar = entry.Archive;
                                   var ms = new MemoryStream();
-                                  ar?.CopyFileToStream(ms, entry.NameHash64, false);
+                                  entry.Extract(ms);
                                   return new KeyValuePair<Stream, string>(ms, entry.FileName);
                               }).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
@@ -1075,9 +1072,8 @@ namespace WolvenKit.Modkit.RED4
                 files.Select(
                       delegate (FileEntry entry)
                       {
-                          var ar = entry.Archive;
                           var ms = new MemoryStream();
-                          ar?.CopyFileToStream(ms, entry.NameHash64, false);
+                          entry.Extract(ms);
                           return new KeyValuePair<Stream, string>(ms, entry.FileName);
                       }).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             
