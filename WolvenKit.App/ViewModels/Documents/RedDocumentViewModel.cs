@@ -164,7 +164,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             else if (file is not null && Cr2wFile != null)
             {
                 var cr2w = Cr2wFile;
-                if (_hookService is AppHookService appHookService && !appHookService.OnSave(Path.GetExtension(FilePath), ref cr2w))
+                if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
                 {
                     _loggerService.Error($"Error while processing onSave script");
 
