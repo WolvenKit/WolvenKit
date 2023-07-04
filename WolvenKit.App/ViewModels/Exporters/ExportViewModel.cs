@@ -2,86 +2,61 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
-using WolvenKit.App.Controllers;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Helpers;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
-public record class CallbackArguments(ImportExportArgs Arg, string PropertyName);
-
-public abstract partial class ExportViewModel : ImportExportViewModel
+public partial class ExportViewModel : AbstractExportViewModel
 {
-    protected ExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
-        : base(archiveManager, notificationService, settingsManager, header, contentId)
-    {
-    }
-}
+    private readonly ILoggerService _loggerService;
+    private readonly IWatcherService _watcherService;
+    private readonly IProjectManager _projectManager;
+    private readonly IProgressService<double> _progressService;
+    private readonly ImportExportHelper _importExportHelper;
 
-public partial class TextureExportViewModel : ExportViewModel
-{
-    private ILoggerService _loggerService;
-    private INotificationService _notificationService;
-    private ISettingsManager _settingsManager;
-    private IWatcherService _watcherService;
-    private IProgressService<double> _progressService;
-    private IProjectManager _projectManager;
-    private IGameControllerFactory _gameController;
-    private IArchiveManager _archiveManager;
-    private IPluginService _pluginService;
-    private IHashService _hashService;
-    private IModTools _modTools;
-    private readonly Red4ParserService _parserService;
-
-    public TextureExportViewModel(
-        IGameControllerFactory gameController,
-        ISettingsManager settingsManager,
-        IWatcherService watcherService,
-        ILoggerService loggerService,
-        IProjectManager projectManager,
-        INotificationService notificationService,
+    public ExportViewModel(
         IArchiveManager archiveManager,
-        IPluginService pluginService,
-        IHashService hashService,
-        IModTools modTools,
-        Red4ParserService red4ParserService,
-        IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
+        INotificationService notificationService,
+        ISettingsManager settingsManager,
+        ILoggerService loggerService,
+        IWatcherService watcherService,
+        IProjectManager projectManager,
+        IProgressService<double> progressService,
+        ImportExportHelper importExportHelper) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
     {
-        _gameController = gameController;
-        _settingsManager = settingsManager;
-        _watcherService = watcherService;
         _loggerService = loggerService;
+        _watcherService = watcherService;
         _projectManager = projectManager;
-        _notificationService = notificationService;
-        _archiveManager = archiveManager;
-        _pluginService = pluginService;
-        _hashService = hashService;
-        _modTools = modTools;
-        _parserService = red4ParserService;
         _progressService = progressService;
+        _importExportHelper = importExportHelper;
 
-        PropertyChanged += TextureExportViewModel_PropertyChanged;
+        PropertyChanged += ExportViewModel_PropertyChanged;
     }
 
-    
 
-    private async void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+
+    private async void ExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IsActive))
         {
@@ -98,7 +73,7 @@ public partial class TextureExportViewModel : ExportViewModel
 
     #region Commands
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // notify in TextureImportView.xaml.cs
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // notify in ImportView.xaml.cs
     private void ImportSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -137,7 +112,7 @@ public partial class TextureExportViewModel : ExportViewModel
         total = toBeExported.Count;
         foreach (var item in toBeExported)
         {
-            if (await Task.Run(() => ExportSingle(item)))
+            if (await ExportSingleAsync(item))
             {
                 sucessful++;
             }
@@ -172,7 +147,7 @@ public partial class TextureExportViewModel : ExportViewModel
         _progressService.Completed();
     }
 
-    private bool ExportSingle(ExportableItemViewModel item)
+    private async Task<bool> ExportSingleAsync(ExportableItemViewModel item)
     {
         var proj = _projectManager.ActiveProject;
         if (proj == null)
@@ -181,59 +156,23 @@ public partial class TextureExportViewModel : ExportViewModel
         }
 
         var fi = new FileInfo(item.BaseFile);
-        if (fi.Exists)
+        if (!fi.Exists)
         {
-            if (item.Properties is MeshExportArgs meshExportArgs)
-            {
-                meshExportArgs.Archives.Clear();
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
-                }
-
-                meshExportArgs.Archives.Insert(0, proj.AsArchive());
-
-                // Should check for depo here instead of dtl
-                meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
-            }
-            if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-                morphTargetExportArgs.ModFolderPath = proj.ModDirectory;
-            }
-            if (item.Properties is OpusExportArgs opusExportArgs)
-            {
-                opusExportArgs.RawFolderPath = proj.RawDirectory;
-                opusExportArgs.ModFolderPath = proj.ModDirectory;
-            }
-            if (item.Properties is EntityExportArgs entExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    entExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-            }
-            if (item.Properties is AnimationExportArgs animationExportArgs)
-            {
-                if (_gameController.GetController() is RED4Controller cp77Controller)
-                {
-                    animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-            }
-
-            if (item.Properties is not ExportArgs e)
-            {
-                throw new NotImplementedException();
-            }
-
-            var settings = new GlobalExportArgs().Register(e);
-            return _modTools.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
+            return false;
         }
 
-        return false;
+        if (item.Properties is not ExportArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        var settings = new GlobalExportArgs().Register(e);
+        if (!_importExportHelper.Finalize(settings))
+        {
+            return false;
+        }
+
+        return await _importExportHelper.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
     }
 
     protected override async Task LoadFilesAsync()

@@ -107,13 +107,13 @@ namespace WolvenKit.Modkit.RED4.Opus
             }
         }
 
-        public void WriteOpusFromPak(Stream opuspak, DirectoryInfo outdir, uint index)
+        public void WriteOpusFromPak(Stream opuspak, DirectoryInfo outDir, uint index)
         {
             var br = new BinaryReader(opuspak);
             opuspak.Position = OpusOffsets[index] + RiffOpusOffsets[index];
             var bytes = br.ReadBytes(Convert.ToInt32(OpusStreamLengths[index] - RiffOpusOffsets[index]));
             var name = OpusHashes[index] + ".opus";
-            var path = Path.Combine(outdir.FullName, name);
+            var path = Path.Combine(outDir.FullName, name);
             File.WriteAllBytes(path, bytes);
 
             var proc = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusdec.exe"))
@@ -153,29 +153,29 @@ namespace WolvenKit.Modkit.RED4.Opus
             var ms = new MemoryStream();
             var bw = new BinaryWriter(ms);
             ms.Position = 0;
-            for (var i = 0; i < indices.Count; i++)
+            foreach (var i in indices)
             {
                 var temp = Convert.ToUInt32(ms.Position);
-                if (hash == OpusHashes[indices[i]])
+                if (hash == OpusHashes[i])
                 {
-                    pak.Position = OpusOffsets[indices[i]] + 8;
-                    var bytes = br.ReadBytes(RiffOpusOffsets[indices[i]] - 12);
-                    bw.Write(new byte[] { 0x52, 0x49, 0x46, 0x46 }); //RIFF
-                    bw.Write(Convert.ToUInt32(wav.Length - 44 + RiffOpusOffsets[indices[i]] - 8));
+                    pak.Position = OpusOffsets[i] + 8;
+                    var bytes = br.ReadBytes(RiffOpusOffsets[i] - 12);
+                    bw.Write("RIFF"u8.ToArray()); //RIFF
+                    bw.Write(Convert.ToUInt32(wav.Length - 44 + RiffOpusOffsets[i] - 8));
                     bw.Write(bytes);
                     bw.Write(Convert.ToUInt32(wav.Length - 44));
                     bw.Write(opus.ToArray());
 
-                    WavStreamLengths[indices[i]] = Convert.ToUInt32(wav.Length - 44 + RiffOpusOffsets[indices[i]]);
-                    OpusStreamLengths[indices[i]] = Convert.ToUInt32(opus.Length + RiffOpusOffsets[indices[i]]);
-                    OpusOffsets[indices[i]] = Convert.ToUInt32(temp);
+                    WavStreamLengths[i] = Convert.ToUInt32(wav.Length - 44 + RiffOpusOffsets[i]);
+                    OpusStreamLengths[i] = Convert.ToUInt32(opus.Length + RiffOpusOffsets[i]);
+                    OpusOffsets[i] = Convert.ToUInt32(temp);
                 }
                 else
                 {
-                    pak.Position = OpusOffsets[indices[i]];
-                    var bytes = br.ReadBytes(Convert.ToInt32(OpusStreamLengths[indices[i]]));
+                    pak.Position = OpusOffsets[i];
+                    var bytes = br.ReadBytes(Convert.ToInt32(OpusStreamLengths[i]));
                     bw.Write(bytes);
-                    OpusOffsets[indices[i]] = Convert.ToUInt32(temp);
+                    OpusOffsets[i] = Convert.ToUInt32(temp);
                 }
             }
 
@@ -216,16 +216,15 @@ namespace WolvenKit.Modkit.RED4.Opus
                 bw.Write(WavStreamLengths[i]);
             }
 
-            for (var i = 0; i < GroupObjs.Count; i++)
+            foreach (var g in GroupObjs)
             {
-                bw.Write(GroupObjs[i].Hash);
-                bw.Write(GroupObjs[i].MemberCount);
-                for (var e = 0; e < GroupObjs[i].MemberCount; e++)
+                bw.Write(g.Hash);
+                bw.Write(g.MemberCount);
+                for (var e = 0; e < g.MemberCount; e++)
                 {
-                    var obj = GroupObjs[i];
-                    if (obj?.MemberHashes is not null)
+                    if (g.MemberHashes is not null)
                     {
-                        bw.Write(obj.MemberHashes[e]);
+                        bw.Write(g.MemberHashes[e]);
                     }
                 }
             }

@@ -32,4 +32,5 @@ public interface ISettingsDto
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; }
     public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
+    public Dictionary<string, bool>? ScriptStatus { get; set; }
 }

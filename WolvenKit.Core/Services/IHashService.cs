@@ -4,7 +4,7 @@ namespace WolvenKit.Common.Services
 {
     public interface IHashService
     {
-        bool Contains(ulong key);
+        bool Contains(ulong key, bool checkUserHashes = true);
 
         string? Get(ulong key);
 

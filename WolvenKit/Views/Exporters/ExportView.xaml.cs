@@ -11,11 +11,11 @@ using WolvenKit.Helpers;
 namespace WolvenKit.Views.Exporters;
 
 /// <summary>
-/// Interaction logic for TextureExportView.xaml
+/// Interaction logic for ExportView.xaml
 /// </summary>
-public partial class TextureExportView : ReactiveUserControl<TextureExportViewModel>
+public partial class ExportView : ReactiveUserControl<ExportViewModel>
 {
-    public TextureExportView()
+    public ExportView()
     {
         InitializeComponent();
 
@@ -23,7 +23,7 @@ public partial class TextureExportView : ReactiveUserControl<TextureExportViewMo
 
         this.WhenActivated(disposables =>
         {
-            if (DataContext is TextureExportViewModel viewModel)
+            if (DataContext is ExportViewModel viewModel)
             {
                 SetCurrentValue(ViewModelProperty, viewModel);
             }

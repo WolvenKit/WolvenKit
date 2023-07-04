@@ -50,6 +50,7 @@ public class ArchiveWriter
 
     public Archive? WriteArchive(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
     {
+        infolder = new DirectoryInfo(Path.GetFullPath(infolder.FullName).TrimEnd('\\'));
         if (!infolder.Exists)
         {
             return null;
@@ -79,7 +80,7 @@ public class ArchiveWriter
                            select ResourcePath.SanitizePath(fileInfo.FullName[(infolder.FullName.Length + 1)..])
                            into relPath
                            let hash = FNV1A64HashAlgorithm.HashString(relPath)
-                           where !_hashService.Contains(hash)
+                           where !_hashService.Contains(hash, false)
                            select relPath).ToList();
 
 

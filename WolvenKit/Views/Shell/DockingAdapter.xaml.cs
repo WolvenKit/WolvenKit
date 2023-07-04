@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -19,13 +17,11 @@ using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.Docking;
-using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Layout;
 using DockState = WolvenKit.App.Models.Docking.DockState;
@@ -39,16 +35,18 @@ namespace WolvenKit.Views.Shell
     /// </summary>
     public partial class DockingAdapter : UserControl
     {
+        private ILoggerService _logger;
+
         private AppViewModel _viewModel;
         private Window _mainWindow;
         private bool _stateChanged;
 
-        private bool _usingProjectLayout = false;
         private readonly bool _debuggingLayouts = false;
-        private readonly bool _useAppdataStorage = true;
 
         public DockingAdapter()
         {
+            _logger = Locator.Current.GetService<ILoggerService>();
+
             InitializeComponent();
             G_Dock = this;
 
@@ -82,55 +80,138 @@ namespace WolvenKit.Views.Shell
 
         public void SaveLayout()
         {
+            if (ItemsSource == null)
+            {
+                return;
+            }
+
             if (DataContext is AppViewModel { ActiveProject: { } project })
             {
                 SaveLayout(Path.Combine(project.ProjectDirectory, "layout.xml"));
-            } 
-            else if (_useAppdataStorage)
-            {
-                SaveLayout(Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml"));
             }
             else
             {
-                PART_DockingManager.SaveDockState();
+                SaveLayout(Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml"));
             }
         }
 
         private void SaveLayout(string filePath)
         {
-            var writer = XmlWriter.Create(filePath);
+            var tmpPath = Path.ChangeExtension(filePath, ".tmp");
+            if (File.Exists(tmpPath))
+            {
+                File.Delete(tmpPath);
+            }
+
+            var writer = XmlWriter.Create(tmpPath);
             PART_DockingManager.SaveDockState(writer);
             writer.Close();
 
-            Locator.Current.GetService<ILoggerService>().Info($"Saved current layout to {filePath}");
+            var size = (new FileInfo(tmpPath)).Length;
+            if (size < 1000)
+            {
+                File.Delete(tmpPath);
+                _logger.Info($"Failed to save layout to {filePath}");
+            }
+            else
+            {
+                File.Move(tmpPath, filePath, true);
+                _logger.Info($"Saved current layout to {filePath}");
+            }
         }
 
-        private bool LoadLayout(string filePath)
+        private void LoadLayoutFromProject()
         {
+            if (_viewModel?.ActiveProject is null)
+            {
+                return;
+            }
+
+            var projectLayout = Path.Combine(_viewModel.ActiveProject.ProjectDirectory, "layout.xml");
+            if (!File.Exists(projectLayout))
+            {
+                return;
+            }
+
+            if (!LoadLayout(projectLayout, "project"))
+            {
+                _logger.Error("Error while loading the project layout. Restoring default layout");
+                LoadDefaultLayout();
+            }
+        }
+
+        public void LoadDefaultLayout()
+        {
+            if (DataContext is AppViewModel { ActiveProject: { } project })
+            {
+                File.Delete(Path.Combine(project.ProjectDirectory, "layout.xml"));
+            }
+
+            var appDataLayoutPath = Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml");
+
+            if (LoadLayout(appDataLayoutPath, "default"))
+            {
+                return;
+            }
+
+            var systemLayoutPath = Path.GetFullPath("DockStatesDefault.xml");
+
+            File.Copy(systemLayoutPath, appDataLayoutPath, true);
+
+            if (!LoadLayout(appDataLayoutPath, "default"))
+            {
+                _logger.Error("Can't load system layout. Please re-download WolvenKit");
+            }
+        }
+
+        private bool LoadLayout(string filePath, string layoutSource = "")
+        {
+            _logger.Info($"Trying to load {layoutSource} layout from {filePath}...");
+
             if (DataContext is not AppViewModel appViewModel)
             {
-                return false;
+                throw new Exception();
             }
 
             if (!File.Exists(filePath))
             {
+                _logger.Debug($"No {layoutSource} layout found");
                 return false;
             }
 
-            var logger = Locator.Current.GetService<ILoggerService>();
-
-            var reader = XmlReader.Create(filePath);
-
-            var defaultXmlSerializer = DockingManager.CreateDefaultXmlSerializer(typeof (List<DockingParams>));
-            if (!defaultXmlSerializer.CanDeserialize(reader))
-            {
-                return false;
-            }
-
+            XmlReader reader = null;
             try
             {
-                var dockingParamsList = (List<DockingParams>)defaultXmlSerializer.Deserialize(reader);
-                ArgumentNullException.ThrowIfNull(dockingParamsList);
+                reader = XmlReader.Create(filePath);
+
+                var defaultXmlSerializer = DockingManager.CreateDefaultXmlSerializer(typeof(List<DockingParams>));
+                if (!defaultXmlSerializer.CanDeserialize(reader))
+                {
+                    _logger.Error($"{layoutSource} layout can't be deserialized");
+                    return false;
+                }
+
+                var dockingParamsList = defaultXmlSerializer.Deserialize(reader) as List<DockingParams>;
+                if (dockingParamsList == null)
+                {
+                    _logger.Error($"{layoutSource} layout can't be deserialized");
+                    return false;
+                }
+
+                var newDockedWindows = dockingParamsList.Select(dockingParam => dockingParam.Name).ToList();
+                for (var i = PART_DockingManager.Children.Count - 1; i >= 0; i--)
+                {
+                    if (PART_DockingManager.Children[i] is not ContentControl contentControl || contentControl.Content is not IDockElement dockElement)
+                    {
+                        throw new Exception($"Can't unload {PART_DockingManager.Children[i].Name}");
+                    }
+
+                    if (!newDockedWindows.Contains(contentControl.Name))
+                    {
+                        appViewModel.DockedViews.Remove(dockElement);
+                        PART_DockingManager.Children.Remove(contentControl);
+                    }
+                }
 
                 foreach (var dockingParam in dockingParamsList)
                 {
@@ -147,7 +228,7 @@ namespace WolvenKit.Views.Shell
                     {
                         if (!appViewModel.AddDockedPane(dockingParam.Name))
                         {
-                            logger.Warning($"ViewModel for \"{dockingParam.Name}\" could not be found!");
+                            _logger.Warning($"ViewModel for \"{dockingParam.Name}\" could not be found!");
                         }
                     }
                 }
@@ -163,70 +244,12 @@ namespace WolvenKit.Views.Shell
             }
             catch (Exception e)
             {
-                logger.Error(e);
+                _logger.Error(e);
             }
             
-            reader.Close();
+            reader?.Close();
 
             return false;
-        }
-
-        private void LoadLayout()
-        {
-            var logger = Locator.Current.GetService<ILoggerService>();
-            try
-            {
-                if (_useAppdataStorage)
-                {
-                    var xmlPath = Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml");
-                    if (!File.Exists(xmlPath))
-                    {
-                        LoadLayoutDefault();
-                        return;
-                    }
-
-                    logger.Info($"Trying to load layout from {xmlPath}...");
-                    var isSuccessful = LoadLayout(xmlPath);
-                    logger.Debug($"... Layout load returned {isSuccessful}");
-
-                    if (!isSuccessful)
-                    {
-                        LoadLayoutDefault();
-                        return;
-                    }
-                }
-                else
-                {
-                    logger.Info($"Trying to load layout from default path ...");
-                    var isSuccessful = PART_DockingManager.LoadDockState();
-                    logger.Debug($"...Layout load returned {isSuccessful}");
-                }
-            }
-            catch (Exception e)
-            {
-                logger.Error($"Layout load error: {e.Message}");
-                LoadLayoutDefault();
-            }
-        }
-
-        public void LoadLayoutDefault()
-        {
-            var logger = Locator.Current.GetService<ILoggerService>();
-
-            try
-            {
-                var reader = XmlReader.Create("DockStatesDefault.xml");
-
-                logger.Info($"Trying to load default layout from {Path.GetFullPath("DockStatesDefault.xml")}...");
-                var isSuccessful = LoadLayout("DockStatesDefault.xml");
-                logger.Debug($"...Default layout load returned {isSuccessful}");
-
-                reader.Close();
-            }
-            catch (Exception e)
-            {
-                logger.Error($"Default layout load error: {e.Message}");
-            }
         }
 
         public DataTemplate FindDataTemplate(Type type, FrameworkElement element)
@@ -309,17 +332,7 @@ namespace WolvenKit.Views.Shell
         {
             ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(DocumentContainer.AddTabDocumentAtLastProperty, true);
 
-            // Add setting to persist State or not ? ( Load Default Docking on Startup : Yes/No )
-            // if (XSETTINGX){ SetLayoutToDefault();}else{
-            var settings = Locator.Current.GetService<ISettingsManager>();
-            if (settings != null && !settings.IsHealthy())
-            {
-                LoadLayoutDefault();
-            }
-            else
-            {
-                LoadLayout();
-            }
+            LoadDefaultLayout();
 
             if (_debuggingLayouts)
             {
@@ -339,8 +352,6 @@ namespace WolvenKit.Views.Shell
             }
 
             _viewModel ??= DataContext as AppViewModel;
-
-            SizeChanged += Window_SizeChanged;
         }
 
         private void PART_DockingManagerOnDockStateChanging(FrameworkElement sender, DockStateChangingEventArgs e)
@@ -397,7 +408,7 @@ namespace WolvenKit.Views.Shell
 
                 if (content.Content != null)
                 {
-                    DiscordHelper.SetDiscordRPCStatus(content.Content as string, Locator.Current.GetService<ILoggerService>().NotNull());
+                    DiscordHelper.SetDiscordRPCStatus(content.Content as string, _logger);
                 }
 
                 //if (((IDockElement)content.Content).State == DockState.Document)
@@ -473,14 +484,6 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (!_usingProjectLayout)
-            {
-                SaveLayout();
-            }
-        }
-
         private void OnMainWindowDeactivated(object sender, EventArgs e)
         {
             if (_stateChanged)
@@ -534,34 +537,7 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        public void OnActiveProjectChanged()
-        {
-            if (_viewModel is null || _viewModel.ActiveProject is null)
-            {
-                return;
-            }
-
-            var logger = Locator.Current.GetService<ILoggerService>();
-
-            try
-            {
-                var layoutPath = Path.Combine(_viewModel.ActiveProject.ProjectDirectory, "layout.xml");
-                if (File.Exists(layoutPath))
-                {
-                    logger.Info($"Trying to load project layout from {layoutPath}...");
-                    var loadedProjectLayout = LoadLayout(layoutPath);
-                    logger.Debug($"...Project layout load returned {loadedProjectLayout}");
-
-                    // If we get here I guess
-                    _usingProjectLayout = true;
-                }
-            }
-            catch (Exception e)
-            {
-                logger.Error($"Project layout load error: {e.Message}");
-                throw;
-            }
-        }
+        public void OnActiveProjectChanged() => LoadLayoutFromProject();
 
         /// <summary>
         /// This happens on the very first tool window assignments
@@ -606,6 +582,8 @@ namespace WolvenKit.Views.Shell
                             {
                                 control.Name = dockElement.GetType().Name;
                             }
+
+                            DockingManager.SetCanSerialize(control, dockElement.CanSerialize);
 
                             PART_DockingManager.Children.Add(control);
                         }
@@ -683,6 +661,8 @@ namespace WolvenKit.Views.Shell
                         {
                             control.Name = element.GetType().Name;
                         }
+
+                        DockingManager.SetCanSerialize(control, element.CanSerialize);
 
                         PART_DockingManager.Children.Add(control);
                     }

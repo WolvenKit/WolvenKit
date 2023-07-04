@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -68,6 +69,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IHashService _hashService;
     private readonly ITweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
+    private readonly AppScriptService _scriptService;
 
     /// <summary>
     /// Class constructor
@@ -89,7 +91,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IArchiveManager archiveManager,
         IHashService hashService,
         ITweakDBService tweakDBService,
-        Red4ParserService parserService
+        Red4ParserService parserService,
+        AppScriptService scriptService
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -109,12 +112,73 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _hashService = hashService;
         _tweakDBService = tweakDBService;
         _parser = parserService;
+        _scriptService = scriptService;
+
+        _scriptService.SetAppViewModel(this);
 
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
 
         UpdateTitle();
 
         ShowFirstTimeSetup();
+
+        DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
+    }
+
+    private void DockedViews_OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.OldItems != null)
+        {
+            foreach (var item in e.OldItems)
+            {
+                if (item is not IDockElement dockElement)
+                {
+                    continue;
+                }
+
+                dockElement.PropertyChanged -= DockedView_OnPropertyChanged;
+                DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+            }
+        }
+
+        if (e.NewItems != null)
+        {
+            foreach (var item in e.NewItems)
+            {
+                if (item is not IDockElement dockElement)
+                {
+                    continue;
+                }
+
+                DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+                dockElement.PropertyChanged += DockedView_OnPropertyChanged;
+            }
+        }
+    }
+
+    public class DockedViewVisibleChangedEventArgs
+    {
+        public DockedViewVisibleChangedEventArgs(IDockElement element)
+        {
+            Element = element;
+        }
+
+        public IDockElement Element { get; }
+    }
+
+    public event EventHandler<DockedViewVisibleChangedEventArgs>? DockedViewVisibleChanged;
+
+    private void DockedView_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "IsVisible")
+        {
+            if (sender is not IDockElement dockElement)
+            {
+                return;
+            }
+
+            DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+        }
     }
 
     private void ProgressService_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -190,17 +254,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 case EDockedViews.LocKeyBrowserViewModel:
                     DockedViews.Add(_paneViewModelFactory.LocKeyBrowserViewModel());
                     return true;
-                case EDockedViews.TextureImportViewModel:
+                case EDockedViews.ImportViewModel:
                 {
-                    var vm = _paneViewModelFactory.TextureImportViewModel();
+                    var vm = _paneViewModelFactory.ImportViewModel();
                     vm.State = DockState.Dock;
                     vm.SideInDockedMode = DockSide.Right;
                     DockedViews.Add(vm);
                     return true;
                 }
-                case EDockedViews.TextureExportViewModel:
+                case EDockedViews.ExportViewModel:
                 {
-                    var vm = _paneViewModelFactory.TextureExportViewModel();
+                    var vm = _paneViewModelFactory.ExportViewModel();
                     vm.State = DockState.Dock;
                     vm.SideInDockedMode = DockSide.Right;
                     DockedViews.Add(vm);
@@ -779,7 +843,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task ShowScriptManager()
     {
         CloseModalCommand.Execute(null);
-        await SetActiveDialog(new ScriptManagerViewModel(this));
+        await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, _settingsManager));
     }
 
     private bool CanShowPlugin() => !IsDialogShown;
@@ -1076,7 +1140,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void ShowTextureImporter()
     {
-        var vm = _paneViewModelFactory.TextureImportViewModel();
+        var vm = _paneViewModelFactory.ImportViewModel();
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }
@@ -1084,7 +1148,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void ShowTextureExporter()
     {
-        var vm = _paneViewModelFactory.TextureExportViewModel();
+        var vm = _paneViewModelFactory.ExportViewModel();
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }
@@ -1125,8 +1189,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 Type t when t == typeof(TweakBrowserViewModel) => (T)(_paneViewModelFactory.TweakBrowserViewModel(this) as IDockElement),
                 Type t when t == typeof(LocKeyBrowserViewModel) => (T)(_paneViewModelFactory.LocKeyBrowserViewModel() as IDockElement),
 
-                Type t when t == typeof(TextureImportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
-                Type t when t == typeof(TextureExportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+                Type t when t == typeof(ImportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+                Type t when t == typeof(ExportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
 
                 _ => throw new NotImplementedException(),
             };
@@ -1443,7 +1507,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// <param name="saveAsDialogRequested"></param>
     public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
     {
-        if (_projectManager.ActiveProject is null)
+        if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null)
         {
             return;
         }
@@ -1454,7 +1518,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 RedDocumentViewModel red =>
                     saveAsDialogRequested ||
                     red.FilePath == null ||
-                    !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath)))
+                    !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject!.ModDirectory, red.RelativePath)))
                 ,
                 WScriptDocumentViewModel wScript =>
                     saveAsDialogRequested ||
@@ -1468,7 +1532,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             SaveFileDialog dlg = new();
             if (fileToSave.FilePath == null && fileToSave is RedDocumentViewModel red)
             {
-                var directory = Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath)).NotNull();
+                var directory = Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject!.ModDirectory, red.RelativePath)).NotNull();
                 if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
@@ -1678,6 +1742,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             }
         }
     }
+
+    public void CloseFile(IDocumentViewModel documentViewModel) => DockedViews.Remove(documentViewModel);
 
     public void SetStatusReady()
     {

@@ -26,6 +26,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
@@ -67,9 +68,12 @@ namespace WolvenKit
                     services.AddSingleton<IHashService, HashService>();                         // can this be transient?
                     services.AddSingleton<MySink>();                                            // can this be transient?
                     services.AddSingleton<ILoggerService, SerilogWrapper>();                    // can this be transient?
-                    services.AddSingleton<ExtendedScriptService>();                             
                     services.AddSingleton<ITweakDBService, TweakDBService>();
-                    
+
+                    // scripting
+                    services.AddSingleton<IHookService, AppHookService>();
+                    services.AddSingleton<AppScriptService>();
+                    services.AddTransient<ImportExportHelper>();
 
                     services.AddTransient<INotificationService, NotificationService>();
                     services.AddSingleton<IProgressService<double>, ProgressService<double>>();
@@ -86,7 +90,6 @@ namespace WolvenKit
                     services.AddTransient<RED4Controller>();
                     services.AddTransient<IGameControllerFactory, GameControllerFactory>();
                     services.AddSingleton<IPluginService, PluginService>();
-                    
 
                     // factories
                     services.AddTransient<IPageViewModelFactory, PageViewModelFactory>();
@@ -95,8 +98,6 @@ namespace WolvenKit
                     services.AddTransient<IChunkViewmodelFactory, ChunkViewmodelFactory>();             // IDocumentTabViewmodelFactory
                     services.AddTransient<IPaneViewModelFactory, PaneViewModelFactory>();               // IChunkViewmodelFactory
                     services.AddTransient<IDocumentViewmodelFactory, DocumentViewmodelFactory>();       //IDocumentTabViewmodelFactory, IPaneViewModelFactory, IChunkViewmodelFactory
-
-                    services.AddTransient<WKitUIScripting>();
 
                     // register views
                     #region shell
@@ -150,11 +151,11 @@ namespace WolvenKit
 
                     // Importers
 
-                    services.AddTransient<TextureImportViewModel>();
-                    services.AddTransient<IViewFor<TextureImportViewModel>, TextureImportView>();
+                    services.AddTransient<ImportViewModel>();
+                    services.AddTransient<IViewFor<ImportViewModel>, ImportView>();
 
-                    services.AddTransient<TextureExportViewModel>();
-                    services.AddTransient<IViewFor<TextureExportViewModel>, TextureExportView>();
+                    services.AddTransient<ExportViewModel>();
+                    services.AddTransient<IViewFor<ExportViewModel>, ExportView>();
 
                     #endregion
 

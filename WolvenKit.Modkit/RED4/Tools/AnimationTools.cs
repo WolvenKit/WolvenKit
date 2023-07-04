@@ -22,16 +22,12 @@ namespace WolvenKit.Modkit.RED4
         public bool ExportAnim(Stream animStream, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
         {
             var animsFile = _parserService.ReadRed4File(animStream);
-            if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
-            {
-                return false;
-            }
-            return ExportAnim(animsFile, archives, outfile, isGLBinary, incRootMotion);
+            return animsFile is { RootChunk: animAnimSet anims } && ExportAnim(animsFile, archives, outfile, isGLBinary, incRootMotion);
         }
 
         public bool ExportAnim(CR2WFile animsFile, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
+            if (animsFile.RootChunk is not animAnimSet anims)
             {
                 return false;
             }
@@ -83,7 +79,7 @@ namespace WolvenKit.Modkit.RED4
         public bool ImportAnims(FileInfo gltfFile, Stream animStream, List<ICyberGameArchive> archives)
         {
             var animsFile = _parserService.ReadRed4File(animStream);
-            if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
+            if (animsFile is not { RootChunk: animAnimSet anims })
             {
                 return false;
             }
@@ -109,8 +105,8 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var Rig = RIG.ProcessRig(rigFile);
-            if (Rig is null || Rig.BoneCount < 1)
+            var rig = RIG.ProcessRig(rigFile);
+            if (rig is null || rig.BoneCount < 1)
             {
                 return false;
             }
@@ -137,7 +133,7 @@ namespace WolvenKit.Modkit.RED4
 
                 foreach (var chan in srcAnim.Channels)
                 {
-                    var idx = Array.IndexOf(Rig.Names.NotNull(), chan.TargetNode.Name);
+                    var idx = Array.IndexOf(rig.Names.NotNull(), chan.TargetNode.Name);
                     if (idx < 0)
                     {
                         throw new Exception($"Invalid Joint Transform, Joint: {chan.TargetNode.Name} not present in the src/original Rig");
@@ -177,7 +173,7 @@ namespace WolvenKit.Modkit.RED4
                     NumFrames = Convert.ToUInt32(srcAnim.Duration * 30.1846575),
                     NumExtraJoints = 0,
                     NumExtraTracks = 0,
-                    NumJoints = Convert.ToUInt16(Rig.BoneCount),
+                    NumJoints = Convert.ToUInt16(rig.BoneCount),
                     NumTracks = 0,
                     NumAnimKeys = 0,
                     NumAnimKeysRaw = 0,
@@ -298,12 +294,12 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
 
-            static float NormalizeTime(float time, float scene_length) => (0 == time * scene_length) ? 0 : time / scene_length;
+            static float NormalizeTime(float time, float sceneLength) => (0 == time * sceneLength) ? 0 : time / sceneLength;
         }
         public static bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, ref ModelRoot model, bool includeRig = true, bool incRootMotion = true)
         {
 
-            if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
+            if (animsFile.RootChunk is not animAnimSet anims)
             {
                 return false;
             }
@@ -328,10 +324,8 @@ namespace WolvenKit.Modkit.RED4
                 skin.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
             }
 
-            for (var i = 0; i < anims.Animations.Count; i++)
+            foreach (var anim in anims.Animations)
             {
-                var anim = anims.Animations[i];
-
                 ArgumentNullException.ThrowIfNull(anim.Chunk);
                 ArgumentNullException.ThrowIfNull(anim.Chunk.Animation.Chunk);
 
@@ -340,26 +334,26 @@ namespace WolvenKit.Modkit.RED4
                 if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd animBuffSimd)
                 {
 
-                    MemoryStream defferedBuffer;
+                    MemoryStream deferredBuffer;
                     if (animBuffSimd.InplaceCompressedBuffer != null)
                     {
-                        defferedBuffer = new MemoryStream(animBuffSimd.InplaceCompressedBuffer.Buffer.GetBytes());
+                        deferredBuffer = new MemoryStream(animBuffSimd.InplaceCompressedBuffer.Buffer.GetBytes());
                     }
-                    else if ((animBuffSimd.DataAddress != null) && animBuffSimd.DataAddress.UnkIndex != uint.MaxValue)
+                    else if (animBuffSimd.DataAddress != null && animBuffSimd.DataAddress.UnkIndex != uint.MaxValue)
                     {
                         var dataAddr = animBuffSimd.DataAddress;
                         var bytes = new byte[dataAddr.ZeInBytes];
                         animDataBuffers[(int)(uint)dataAddr.UnkIndex].Seek(dataAddr.FsetInBytes, SeekOrigin.Begin);
-                        animDataBuffers[(int)(uint)dataAddr.UnkIndex].Read(bytes, 0, (int)(uint)dataAddr.ZeInBytes);
-                        defferedBuffer = new MemoryStream(bytes);
+                        // bytesRead can be smaller then the bytes requested
+                        var bytesRead = animDataBuffers[(int)(uint)dataAddr.UnkIndex].Read(bytes, 0, (int)(uint)dataAddr.ZeInBytes);
+                        deferredBuffer = new MemoryStream(bytes);
                     }
                     else
                     {
-                        defferedBuffer = new MemoryStream(animBuffSimd.DefferedBuffer.Buffer.GetBytes());
+                        deferredBuffer = new MemoryStream(animBuffSimd.DefferedBuffer.Buffer.GetBytes());
                     }
-                    defferedBuffer.Seek(0, SeekOrigin.Begin);
-                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name!, defferedBuffer, animAnimDes, incRootMotion);
-
+                    deferredBuffer.Seek(0, SeekOrigin.Begin);
+                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name!, deferredBuffer, animAnimDes, incRootMotion);
                 }
                 else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
                 {

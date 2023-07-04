@@ -44,7 +44,7 @@ namespace WolvenKit.Modkit.RED4.Animation
             {
                 floatsDecompressed[i] = (1f / mask * floatsPacked[i] * 2) - 1f;
             }
-            var Rotations = new Quat[blob.NumFrames, blob.NumJoints];
+            var rotations = new Quat[blob.NumFrames, blob.NumJoints];
             for (uint i = 0; i < blob.NumFrames; i++)
             {
                 for (uint e = 0; e < blob.NumJoints; e += 4)
@@ -66,18 +66,18 @@ namespace WolvenKit.Modkit.RED4.Animation
                         q = Quat.Normalize(q);
                         if (e + eye < blob.NumJoints)
                         {
-                            Rotations[i, e + eye] = new Quat(q.X, q.Z, -q.Y, q.W);
+                            rotations[i, e + eye] = new Quat(q.X, q.Z, -q.Y, q.W);
                         }
                     }
                 }
             }
-            var EvalAlignedPositions = new float[blob.NumFrames * blob.NumTranslationsToEvalAlignedToSimd * 3];
+            var evalAlignedPositions = new float[blob.NumFrames * blob.NumTranslationsToEvalAlignedToSimd * 3];
             defferedBuffer.Position = rotCompressedBuffSize;
             for (uint i = 0; i < blob.NumFrames * blob.NumTranslationsToEvalAlignedToSimd * 3; i++)
             {
-                EvalAlignedPositions[i] = br.ReadSingle();
+                evalAlignedPositions[i] = br.ReadSingle();
             }
-            var Scales = new Vec3[blob.NumFrames, blob.NumJoints];
+            var scales = new Vec3[blob.NumFrames, blob.NumJoints];
             if (blob.IsScaleConstant)
             {
                 var scalesRaw = new float[4];
@@ -95,7 +95,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                             Y = scalesRaw[1],
                             Z = scalesRaw[2]
                         };
-                        Scales[i, e] = v;
+                        scales[i, e] = v;
                     }
                 }
             }
@@ -118,7 +118,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                                 Y = scalesRaw[(i * jointsCountAligned * 3) + (e * 3) + 4 + eye],
                                 Z = scalesRaw[(i * jointsCountAligned * 3) + (e * 3) + 8 + eye]
                             };
-                            Scales[i, e + eye] = v;
+                            scales[i, e + eye] = v;
                         }
                     }
                 }
@@ -156,7 +156,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                 evalIndices[e] = br.ReadInt16();
             }
 
-            var Positions = new Vec3[blob.NumFrames, blob.NumJoints];
+            var positions = new Vec3[blob.NumFrames, blob.NumJoints];
             for (uint i = 0; i < blob.NumFrames; i++)
             {
                 for (uint e = 0; e < blob.NumTranslationsToEvalAlignedToSimd; e += 4)
@@ -165,14 +165,14 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         var v = new Vec3
                         {
-                            X = EvalAlignedPositions[(i * blob.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + eye],
-                            Y = EvalAlignedPositions[(i * blob.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + 4 + eye],
-                            Z = EvalAlignedPositions[(i * blob.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + 8 + eye]
+                            X = evalAlignedPositions[(i * blob.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + eye],
+                            Y = evalAlignedPositions[(i * blob.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + 4 + eye],
+                            Z = evalAlignedPositions[(i * blob.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + 8 + eye]
                         };
 
                         if (evalIndices[e + eye] > -1)
                         {
-                            Positions[i, evalIndices[e + eye]] = new Vec3(v.X, v.Z, -v.Y);
+                            positions[i, evalIndices[e + eye]] = new Vec3(v.X, v.Z, -v.Y);
                         }
                     }
                 }
@@ -185,7 +185,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                         Z = positionToCopy[e].Z
                     };
 
-                    Positions[i, copyIndices[e]] = new Vec3(v.X, v.Z, -v.Y);
+                    positions[i, copyIndices[e]] = new Vec3(v.X, v.Z, -v.Y);
                 }
             }
 
@@ -206,9 +206,9 @@ namespace WolvenKit.Modkit.RED4.Animation
                 var diff = blob.Duration / (blob.NumFrames - 1);
                 for (var i = 0; i < blob.NumFrames; i++)
                 {
-                    pos.Add(i * diff, Positions[i, e]);
-                    rot.Add(i * diff, Rotations[i, e]);
-                    sca.Add(i * diff, Scales[i, e]);
+                    pos.Add(i * diff, positions[i, e]);
+                    rot.Add(i * diff, rotations[i, e]);
+                    sca.Add(i * diff, scales[i, e]);
                 }
                 a.CreateRotationChannel(node, rot);
                 a.CreateTranslationChannel(node, pos);

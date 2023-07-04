@@ -145,8 +145,6 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
             {
                 var ar = (Archive)_archiveManager.Archives.Lookup(archiveGroup.Key).Value;
 
-                ar.SetBulkExtract(true);
-
                 if (UseNewParallelism)
                 {
                     async Task UnbundleAsync(IGameFile entry)
@@ -160,7 +158,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
                             if (dirInfo.Exists) // CreateDirectory sometimes is false even on success.
                             {
                                 using var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write);
-                                await entry.ExtractAsync(fs);
+                                await ar.ExtractFileAsync(entry, fs);
                             }
                             Interlocked.Increment(ref progress);
                             _progress.Report(progress / (float)fileCount);
@@ -190,7 +188,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
                                 if (dirInfo.Exists) // CreateDirectory sometimes is false even on success.
                                 {
                                     using var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write);
-                                    entry.Extract(fs);
+                                    ar.ExtractFile(entry, fs);
                                 }
                                 Interlocked.Increment(ref progress);
                                 _progress.Report(progress / (float)filesList.Count);
@@ -204,7 +202,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
                     );
                 }
 
-                ar.SetBulkExtract(false);
+                ar.ReleaseFileHandle();
             }
 
             // Temporary measure. As memory optimizations get made with streams
@@ -241,8 +239,6 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
             foreach (var archiveGroup in filesList.GroupBy(x => x.GetArchive<Archive>().ArchiveAbsolutePath))
             {
                 var ar = (Archive)_archiveManager.Archives.Lookup(archiveGroup.Key).Value;
-
-                ar.SetBulkExtract(true);
 
                 if (UseNewParallelism)
                 {
@@ -289,7 +285,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
                     );
                 }
 
-                ar.SetBulkExtract(false);
+                ar.ReleaseFileHandle();
             }
 
             // Temporary measure. As memory optimizations get made with streams

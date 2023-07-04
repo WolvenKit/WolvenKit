@@ -185,6 +185,19 @@
                             Kind="Refresh" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem
+                    Command="{Binding AddDependenciesCommand}"
+                    Header="Add dependencies"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconForkAwesome
+                            Width="13"
+                            Height="13"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="ArrowCircleDown" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <Separator />
 

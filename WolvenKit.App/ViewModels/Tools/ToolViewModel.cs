@@ -13,6 +13,7 @@ public abstract class ToolViewModel : PaneViewModel
     public ToolViewModel(string name) : base(name, name)
     {
         State = DockState.Dock;
+        CanSerialize = true;
 
         Name = name;
 

@@ -71,7 +71,6 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var archive = ar as Archive;
-            archive?.SetBulkExtract(true);
 
             Parallel.ForEach(finalMatchesList, info =>
             {
@@ -90,7 +89,7 @@ namespace WolvenKit.Modkit.RED4
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             });
 
-            archive?.SetBulkExtract(false);
+            archive?.ReleaseFileHandle();
 
             _progressService.Completed();
 
@@ -145,9 +144,6 @@ namespace WolvenKit.Modkit.RED4
             //Thread.Sleep(1000);
             var progress = 0;
 
-            var archive = ar as Archive;
-            archive?.SetBulkExtract(true);
-
             var bag = new ConcurrentBag<object>();
             foreach (var info in finalMatchesList)
             {
@@ -157,7 +153,8 @@ namespace WolvenKit.Modkit.RED4
                 _progressService.Report(progress / (float)finalMatchesList.Count);
             };
 
-            archive?.SetBulkExtract(false);
+            var archive = ar as Archive;
+            archive?.ReleaseFileHandle();
 
             _progressService.Completed();
             var count = bag.Count;

@@ -132,6 +132,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(19)] 
+		[RED("emptySlotController")] 
+		public CWeakHandle<LoadListItem> EmptySlotController
+		{
+			get => GetPropertyValue<CWeakHandle<LoadListItem>>();
+			set => SetPropertyValue<CWeakHandle<LoadListItem>>(value);
+		}
+
 		public SaveGameMenuGameController()
 		{
 			List = new();

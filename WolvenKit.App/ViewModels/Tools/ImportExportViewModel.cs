@@ -16,9 +16,9 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 {
-    private readonly IArchiveManager _archiveManager;
-    private readonly INotificationService _notificationService;
-    private readonly ISettingsManager _settingsManager;
+    protected readonly IArchiveManager _archiveManager;
+    protected readonly INotificationService _notificationService;
+    protected readonly ISettingsManager _settingsManager;
 
     protected (JsonObject, Type) _currentSettings;
     protected readonly JsonSerializerOptions _jsonSerializerSettings;

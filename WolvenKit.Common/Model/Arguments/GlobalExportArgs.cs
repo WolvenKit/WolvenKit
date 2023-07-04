@@ -1,68 +1,30 @@
-using System;
-using System.Collections.Generic;
-
 namespace WolvenKit.Common.Model.Arguments
 {
     /// <summary>
     /// Global Export Arguments
     /// </summary>
-    public class GlobalExportArgs
+    public class GlobalExportArgs : AbstractGlobalArgs
     {
-        /// <summary>
-        /// Export Argument Dictionary.
-        /// </summary>
-        private readonly Dictionary<Type, ExportArgs> _argsList = new()
+        public GlobalExportArgs()
         {
-            { typeof(CommonExportArgs), new CommonExportArgs() },
-            { typeof(MorphTargetExportArgs), new MorphTargetExportArgs() },
-            { typeof(MlmaskExportArgs), new MlmaskExportArgs() },
-            { typeof(XbmExportArgs), new XbmExportArgs() },
-            { typeof(MeshExportArgs), new MeshExportArgs() },
-            { typeof(AnimationExportArgs), new AnimationExportArgs() },
-            { typeof(WemExportArgs), new WemExportArgs() },
-            { typeof(OpusExportArgs), new OpusExportArgs() },
-            { typeof(EntityExportArgs), new EntityExportArgs() },
-            { typeof(InkAtlasExportArgs), new InkAtlasExportArgs() },
-        };
+            _argsList.Add(typeof(CommonExportArgs), new CommonExportArgs());
+            _argsList.Add(typeof(MorphTargetExportArgs), new MorphTargetExportArgs());
+            _argsList.Add(typeof(MlmaskExportArgs), new MlmaskExportArgs());
+            _argsList.Add(typeof(XbmExportArgs), new XbmExportArgs());
+            _argsList.Add(typeof(MeshExportArgs), new MeshExportArgs());
+            _argsList.Add(typeof(AnimationExportArgs), new AnimationExportArgs());
+            _argsList.Add(typeof(WemExportArgs), new WemExportArgs());
+            _argsList.Add(typeof(OpusExportArgs), new OpusExportArgs());
+            _argsList.Add(typeof(EntityExportArgs), new EntityExportArgs());
+            _argsList.Add(typeof(InkAtlasExportArgs), new InkAtlasExportArgs());
+            _argsList.Add(typeof(FntExportArgs), new FntExportArgs());
+        }
 
         /// <summary>
         /// Register Export Arguments.
         /// </summary>
         /// <param name="exportArgs"></param>
         /// <returns></returns>
-        public GlobalExportArgs Register(params ExportArgs[] exportArgs)
-        {
-            foreach (var arg in exportArgs)
-            {
-                var type = arg.GetType();
-                if (_argsList.ContainsKey(type))
-                {
-                    _argsList[type] = arg;
-                }
-                else
-                {
-                    _argsList.Add(type, arg);
-                }
-            }
-
-            return this;
-        }
-
-        /// <summary>
-        /// Get Argument.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public T Get<T>() where T : ExportArgs
-        {
-            var arg = _argsList[typeof(T)];
-            if (arg is T t)
-            {
-                return t;
-            }
-            throw new ArgumentException();
-        }
+        public GlobalExportArgs Register(params ExportArgs[] exportArgs) => (GlobalExportArgs)base.Register(exportArgs);
     }
-
-
 }

@@ -1,6 +1,8 @@
+using System.ComponentModel;
+
 namespace WolvenKit.App.Models.Docking;
 
-public interface IDockElement
+public interface IDockElement : INotifyPropertyChanged
 {
     public string Header { get; set; }
 
@@ -9,6 +11,8 @@ public interface IDockElement
     public DockSide SideInDockedMode { get; set; }
 
     public bool IsActive { get; set; }
+
+    public bool CanSerialize { get; set; }
 
     bool IsVisible { get; set; }
 }

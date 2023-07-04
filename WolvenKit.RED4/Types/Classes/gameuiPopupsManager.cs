@@ -212,6 +212,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
+		[Ordinal(28)] 
+		[RED("expansionToken")] 
+		public CHandle<inkGameNotificationToken> ExpansionToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
 		public gameuiPopupsManager()
 		{
 			BracketsContainer = new();

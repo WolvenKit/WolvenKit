@@ -1,64 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WolvenKit.Common.Model.Arguments
 {
     /// <summary>
-    /// Global Export Arguments
+    /// Global Import Arguments
     /// </summary>
-    public class GlobalImportArgs
+    public class GlobalImportArgs : AbstractGlobalArgs
     {
-        /// <summary>
-        /// Export Argument Dictionary.
-        /// </summary>
-        private readonly Dictionary<Type, ImportArgs> _argsList = new()
+        public GlobalImportArgs()
         {
-            { typeof(CommonImportArgs), new CommonImportArgs() },
-            { typeof(XbmImportArgs), new XbmImportArgs() },
-            { typeof(GltfImportArgs), new GltfImportArgs() },
-            { typeof(OpusImportArgs), new OpusImportArgs() },
-            { typeof(MlmaskImportArgs), new MlmaskImportArgs() },
-            { typeof(ReImportArgs), new ReImportArgs() },
-        };
+            _argsList.Add(typeof(CommonImportArgs), new CommonImportArgs());
+            _argsList.Add(typeof(XbmImportArgs), new XbmImportArgs());
+            _argsList.Add(typeof(GltfImportArgs), new GltfImportArgs());
+            _argsList.Add(typeof(OpusImportArgs), new OpusImportArgs());
+            _argsList.Add(typeof(MlmaskImportArgs), new MlmaskImportArgs());
+            _argsList.Add(typeof(ReImportArgs), new ReImportArgs());
+        }
 
         /// <summary>
         /// Register Export Arguments.
         /// </summary>
         /// <param name="exportArgs"></param>
         /// <returns></returns>
-        public GlobalImportArgs Register(params ImportArgs[] exportArgs)
-        {
-            foreach (var arg in exportArgs)
-            {
-                var type = arg.GetType();
-                if (_argsList.ContainsKey(type))
-                {
-                    _argsList[type] = arg;
-                }
-                else
-                {
-                    _argsList.Add(type, arg);
-                }
-            }
-
-            return this;
-        }
-
-        /// <summary>
-        /// Get Argument.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public T Get<T>() where T : ImportArgs
-        {
-            var arg = _argsList[typeof(T)];
-            if (arg is T t)
-            {
-                return t;
-            }
-            throw new ArgumentException();
-        }
+        public GlobalImportArgs Register(params ImportArgs[] exportArgs) => (GlobalImportArgs)base.Register(exportArgs);
     }
-
-
 }

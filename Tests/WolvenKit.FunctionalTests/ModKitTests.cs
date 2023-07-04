@@ -86,12 +86,9 @@ namespace WolvenKit.FunctionalTests
                     continue;
                 }
 
-                var ar = fileEntry.Archive;
-                ArgumentNullException.ThrowIfNull(ar);
                 using var cr2wstream = new MemoryStream();
-                ar.CopyFileToStream(cr2wstream, fileEntry.NameHash64, false);
+                await fileEntry.ExtractAsync(cr2wstream);
                 var originalBytes = cr2wstream.ToByteArray();
-
 
                 // uncook
                 if (fileEntry.Archive is not Archive a)

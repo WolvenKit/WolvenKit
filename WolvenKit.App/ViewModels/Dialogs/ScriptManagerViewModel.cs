@@ -1,81 +1,59 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using CommunityToolkit.Mvvm.ComponentModel;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class ScriptManagerViewModel : DialogViewModel
 {
+    private const string s_scriptExtension = ".wscript";
+
     private readonly AppViewModel _appViewModel;
+    private readonly AppScriptService _scriptService;
+    private readonly ISettingsManager _settingsManager;
 
-    private const string ScriptExtension = ".wscript";
-
-    public ScriptManagerViewModel(AppViewModel appViewModel)
+    
+    public ScriptManagerViewModel(AppViewModel appViewModel, AppScriptService scriptService, ISettingsManager settingsManager)
     {
         _appViewModel = appViewModel;
+        _scriptService = scriptService;
+        _settingsManager = settingsManager;
 
         GetScriptFiles();
     }
 
-    public ObservableCollection<string> Scripts { get; } = new();
-    
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(DeleteScriptCommand))] 
-    private string? _selectedItem;
-    
-    [ObservableProperty]
-    private string? _fileName;
+    public ObservableCollection<ScriptViewModel> Scripts { get; } = new();
 
 
-
-    [RelayCommand]
-    private void AddScript()
+    public void AddScript(string fileName, ScriptType type)
     {
-        if (string.IsNullOrEmpty(FileName))
+        if (string.IsNullOrEmpty(fileName))
         {
             return;
         }
 
-        if (!FileName.EndsWith(ScriptExtension))
+        if (!fileName.EndsWith(s_scriptExtension))
         {
-            FileName += ScriptExtension;
+            fileName += s_scriptExtension;
         }
 
-        if (Scripts.Any(scriptEntry => scriptEntry == FileName))
-        {
-            return;
-        }
-
-        File.Create(Path.Combine(ISettingsManager.GetWScriptDir(), FileName)).Close();
-        Scripts.Add(FileName);
-    }
-
-    public bool CanDeleteScript() => SelectedItem != null;
-    [RelayCommand(CanExecute = nameof(CanDeleteScript))]
-    private async void DeleteScript()
-    {
-        if (SelectedItem is null)
+        var scriptPath = Path.Combine(ISettingsManager.GetWScriptDir(), fileName);
+        if (File.Exists(scriptPath))
         {
             return;
         }
 
-        var response = await Interactions.ShowMessageBoxAsync(
-            $"Are you sure you want to delete \"{SelectedItem}\"?",
-            "Add file",
-            WMessageBoxButtons.YesNo);
-
-        if (response == WMessageBoxResult.Yes)
-        {
-            File.Delete(Path.Combine(ISettingsManager.GetWScriptDir(), SelectedItem));
-            Scripts.Remove(SelectedItem);
-            SelectedItem = null;
-        }
+        File.Create(scriptPath).Close();
+        GetScriptFiles();
     }
 
     [RelayCommand]
@@ -87,23 +65,126 @@ public partial class ScriptManagerViewModel : DialogViewModel
     [RelayCommand]
     private void Cancel() => _appViewModel.CloseModalCommand.Execute(null);
 
-
-
     public void GetScriptFiles()
     {
-        foreach (var file in Directory.GetFiles(ISettingsManager.GetWScriptDir(), $"*{ScriptExtension}"))
+        _settingsManager.ScriptStatus ??= new();
+
+        Scripts.Clear();
+
+        var files = new List<string>();
+        ScanDir(ScriptSource.System, @"Resources\Scripts");
+        ScanDir(ScriptSource.User, ISettingsManager.GetWScriptDir());
+
+        var keys = _settingsManager.ScriptStatus.Keys.ToList();
+        foreach (var statusKey in keys)
         {
-            Scripts.Add(Path.GetFileName(file));
+            if (!files.Contains(statusKey))
+            {
+                _settingsManager.ScriptStatus.Remove(statusKey);
+            }
+        }
+
+        void ScanDir(ScriptSource scriptSource, string path)
+        {
+            var generalScriptDir = new ScriptDirectoryViewModel(scriptSource, ScriptType.General, _settingsManager);
+            var hookScriptDir = new ScriptDirectoryViewModel(scriptSource, ScriptType.Hook, _settingsManager);
+            var uiScriptDir = new ScriptDirectoryViewModel(scriptSource, ScriptType.Ui, _settingsManager);
+
+            foreach (var systemScript in _scriptService.GetScripts(path))
+            {
+                files.Add(systemScript.Path);
+
+                switch (systemScript.Type)
+                {
+                    case ScriptType.General:
+                        generalScriptDir.Files.Add(new ScriptFileViewModel(_settingsManager, scriptSource, systemScript));
+                        break;
+                    case ScriptType.Hook:
+                        hookScriptDir.Files.Add(new ScriptFileViewModel(_settingsManager, scriptSource, systemScript));
+                        break;
+                    case ScriptType.Ui:
+                        uiScriptDir.Files.Add(new ScriptFileViewModel(_settingsManager, scriptSource, systemScript));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            Scripts.Add(generalScriptDir);
+            Scripts.Add(hookScriptDir);
+            Scripts.Add(uiScriptDir);
         }
     }
 
-    public void OpenFile()
+    public async Task OpenFile(ScriptFileViewModel scriptFile)
     {
-        if (SelectedItem is null)
+        if (!File.Exists(scriptFile.Path))
         {
             return;
         }
-        _appViewModel.RequestFileOpen(Path.Combine(ISettingsManager.GetWScriptDir(), SelectedItem));
+
+        var localFilePath = scriptFile.Path;
+        if (scriptFile.Source == ScriptSource.System)
+        {
+            var response = await Interactions.ShowMessageBoxAsync(
+                "Trying to open a system file. Should a local copy be created?",
+                "Open system file",
+                WMessageBoxButtons.YesNo);
+
+            if (response == WMessageBoxResult.No)
+            {
+                return;
+            }
+
+            localFilePath = Path.Combine(ISettingsManager.GetWScriptDir(), Path.GetFileName(scriptFile.Path));
+            if (File.Exists(localFilePath))
+            {
+                response = await Interactions.ShowMessageBoxAsync(
+                    "A copy of this file already exists. Overwrite it?",
+                    "Overwrite file",
+                    WMessageBoxButtons.YesNo);
+
+                if (response == WMessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
+            File.Copy(scriptFile.Path, localFilePath, true);
+        }
+
+        await _appViewModel.RequestFileOpen(localFilePath);
         _appViewModel.CloseModalCommand.Execute(null);
+    }
+
+    public async Task RunFile(ScriptFileViewModel scriptFile)
+    {
+        if (!File.Exists(scriptFile.Path))
+        {
+            return;
+        }
+
+        var code = File.ReadAllText(scriptFile.Path);
+
+        await _scriptService.ExecuteAsync(code);
+    }
+
+    public async Task DeleteFile(ScriptFileViewModel scriptFile)
+    {
+        if (!File.Exists(scriptFile.Path))
+        {
+            return;
+        }
+
+        var response = await Interactions.ShowMessageBoxAsync(
+            $"Are you sure you want to delete \"{scriptFile.Name}\"?",
+            "Add file",
+            WMessageBoxButtons.YesNo);
+
+        if (response == WMessageBoxResult.Yes)
+        {
+            File.Delete(scriptFile.Path);
+            GetScriptFiles();
+        }
     }
 }

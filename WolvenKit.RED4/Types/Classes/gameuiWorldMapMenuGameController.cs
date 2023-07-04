@@ -397,6 +397,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(65)] 
+		[RED("previousHoveredDistrict")] 
+		public CEnum<gamedataDistrict> PreviousHoveredDistrict
+		{
+			get => GetPropertyValue<CEnum<gamedataDistrict>>();
+			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
+		}
+
+		[Ordinal(66)] 
+		[RED("currentHoveredDistrict")] 
+		public CEnum<gamedataDistrict> CurrentHoveredDistrict
+		{
+			get => GetPropertyValue<CEnum<gamedataDistrict>>();
+			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
+		}
+
+		[Ordinal(67)] 
+		[RED("showedSubdistrictGangs")] 
+		public CBool ShowedSubdistrictGangs
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(68)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -404,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(69)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
@@ -412,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(70)] 
 		[RED("mappinSystem")] 
 		public CWeakHandle<gamemappinsMappinSystem> MappinSystem
 		{
@@ -420,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamemappinsMappinSystem>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(71)] 
 		[RED("mapBlackboard")] 
 		public CWeakHandle<gameIBlackboard> MapBlackboard
 		{
@@ -428,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(72)] 
 		[RED("mapDefinition")] 
 		public CHandle<UI_MapDef> MapDefinition
 		{
@@ -436,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_MapDef>>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(73)] 
 		[RED("trackedObjective")] 
 		public CWeakHandle<gameJournalQuestObjectiveBase> TrackedObjective
 		{
@@ -444,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuestObjectiveBase>>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(74)] 
 		[RED("trackedQuest")] 
 		public CWeakHandle<gameJournalQuest> TrackedQuest
 		{
@@ -452,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(75)] 
 		[RED("mappinsPositions")] 
 		public CArray<Vector3> MappinsPositions
 		{
@@ -460,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<Vector3>>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(76)] 
 		[RED("lastRightAxisYAmount")] 
 		public CFloat LastRightAxisYAmount
 		{
@@ -468,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(77)] 
 		[RED("justOpenedQuestJournal")] 
 		public CBool JustOpenedQuestJournal
 		{
@@ -476,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(78)] 
 		[RED("initPosition")] 
 		public Vector3 InitPosition
 		{
@@ -484,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(79)] 
 		[RED("currentQuickFilterIndex")] 
 		public CInt32 CurrentQuickFilterIndex
 		{
@@ -492,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(80)] 
 		[RED("currentCustomFilterIndex")] 
 		public CInt32 CurrentCustomFilterIndex
 		{
@@ -500,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(81)] 
 		[RED("spawnedCustomFilterIndex")] 
 		public CInt32 SpawnedCustomFilterIndex
 		{
@@ -508,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(82)] 
 		[RED("quickFilterLeftArrow")] 
 		public CWeakHandle<inkButtonController> QuickFilterLeftArrow
 		{
@@ -516,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(83)] 
 		[RED("quickFilterRightArrow")] 
 		public CWeakHandle<inkButtonController> QuickFilterRightArrow
 		{
@@ -524,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(84)] 
 		[RED("gangsAsyncSpawnRequests")] 
 		public CArray<CWeakHandle<inkAsyncSpawnRequest>> GangsAsyncSpawnRequests
 		{
@@ -532,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(85)] 
 		[RED("customFiltersList")] 
 		public CArray<CWeakHandle<WorldMapFiltersListItem>> CustomFiltersList
 		{
@@ -540,7 +564,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<WorldMapFiltersListItem>>>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(86)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -548,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(87)] 
 		[RED("entityAttached")] 
 		public CBool EntityAttached
 		{
@@ -556,7 +580,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(88)] 
 		[RED("readyToZoom")] 
 		public CBool ReadyToZoom
 		{

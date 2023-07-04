@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
 using WolvenKit.App.Controllers;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
-using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
@@ -28,60 +26,40 @@ using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Importers;
 
-public abstract partial class ImportViewModel : ImportExportViewModel
+public partial class ImportViewModel : AbstractImportViewModel
 {
-    protected ImportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
-        : base(archiveManager, notificationService, settingsManager, header, contentId)
-    {
-    }
-}
-
-public partial class TextureImportViewModel : ImportViewModel
-{
-    private ILoggerService _loggerService;
-    private INotificationService _notificationService;
-    private ISettingsManager _settingsManager;
-    private IWatcherService _watcherService;
-    private IProgressService<double> _progressService;
+    private readonly ILoggerService _loggerService;
+    private readonly IWatcherService _watcherService;
+    private readonly IProjectManager _projectManager;
+    private readonly IProgressService<double> _progressService;
+    private readonly IGameControllerFactory _gameController;
     private readonly Red4ParserService _parserService;
-    private IProjectManager _projectManager;
-    private IGameControllerFactory _gameController;
-    private IArchiveManager _archiveManager;
-    private IPluginService _pluginService;
-    private IHashService _hashService;
-    private IModTools _modTools;
+    private readonly ImportExportHelper _importExportHelper;
 
-    public TextureImportViewModel(
-        IGameControllerFactory gameController,
+    public ImportViewModel(
+        IArchiveManager archiveManager, 
+        INotificationService notificationService, 
         ISettingsManager settingsManager,
-        IWatcherService watcherService,
         ILoggerService loggerService,
+        IWatcherService watcherService,
         IProjectManager projectManager,
-        INotificationService notificationService,
-        IArchiveManager archiveManager,
-        IPluginService pluginService,
-        IHashService hashService,
-        IModTools modTools,
+        IProgressService<double> progressService,
+        IGameControllerFactory gameController,
         Red4ParserService parserService,
-        IProgressService<double> progressService) : base(archiveManager, notificationService, settingsManager, "Import Tool", "Import Tool")
+        ImportExportHelper importExportHelper) : base(archiveManager, notificationService, settingsManager, "Import Tool", "Import Tool")
     {
-        _gameController = gameController;
-        _settingsManager = settingsManager;
-        _watcherService = watcherService;
         _loggerService = loggerService;
+        _watcherService = watcherService;
         _projectManager = projectManager;
-        _notificationService = notificationService;
-        _archiveManager = archiveManager;
-        _pluginService = pluginService;
-        _hashService = hashService;
-        _modTools = modTools;
         _progressService = progressService;
+        _gameController = gameController;
         _parserService = parserService;
+        _importExportHelper = importExportHelper;
 
-        PropertyChanged += TextureExportViewModel_PropertyChanged;
+        PropertyChanged += ExportViewModel_PropertyChanged;
     }
 
-    private async void TextureExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private async void ExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IsActive))
         {
@@ -98,7 +76,7 @@ public partial class TextureImportViewModel : ImportViewModel
 
     #region Commands
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // notify in TextureImportView.xaml.cs
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // notify in ImportView.xaml.cs
     private void DefaultSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -114,7 +92,7 @@ public partial class TextureImportViewModel : ImportViewModel
         }
     }
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // notify in TextureImportView.xaml.cs
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // notify in ImportView.xaml.cs
     private void ImportSettings()
     {
         foreach (var item in Items.Where(x => x.IsChecked))
@@ -167,7 +145,7 @@ public partial class TextureImportViewModel : ImportViewModel
         total = toBeImported.Count;
         foreach (var item in toBeImported)
         {
-            if (await Task.Run(() => ImportSingleTask(item)))
+            if (await ImportSingleAsync(item))
             {
                 sucessful++;
             }
@@ -231,7 +209,7 @@ public partial class TextureImportViewModel : ImportViewModel
         return Task.FromResult(false);
     }
 
-    private async Task<bool> ImportSingleTask(ImportableItemViewModel item)
+    private async Task<bool> ImportSingleAsync(ImportableItemViewModel item)
     {
         if (_gameController.GetController() is not RED4Controller)
         {
@@ -256,32 +234,18 @@ public partial class TextureImportViewModel : ImportViewModel
             throw new ArgumentException("incorrect type, expected ImportArgs", nameof(item));
         }
 
-        if (item.Properties is GltfImportArgs gltfImportArgs)
-        {
-            gltfImportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-            gltfImportArgs.Archives.Insert(0, proj.AsArchive());
-        }
-
-        if (item.Properties is ReImportArgs reImportArgs)
-        {
-            if (!_pluginService.IsInstalled(EPlugin.redmod))
-            {
-                _loggerService.Error("Redmod plugin needs to be installed to import animations");
-                return false;
-            }
-
-            reImportArgs.Depot = proj.ModDirectory;
-            reImportArgs.RedMod = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
-        }
-
-
         var settings = new GlobalImportArgs().Register(prop);
+        if (!_importExportHelper.Finalize(prop, settings))
+        {
+            return false;
+        }
+
         var rawDir = new DirectoryInfo(proj.RawDirectory);
         var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
 
         try
         {
-            return await _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
+            return await _importExportHelper.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
         }
         catch (Exception e)
         {

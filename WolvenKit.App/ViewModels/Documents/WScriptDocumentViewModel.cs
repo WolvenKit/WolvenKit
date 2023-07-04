@@ -7,49 +7,21 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using WolvenKit.App.Factories;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
-using WolvenKit.Common;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
-using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class WScriptDocumentViewModel : DocumentViewModel
 {
-    private readonly IProjectManager _projectManager;
-    private readonly ILoggerService _loggerService;
-    private readonly Red4ParserService _parserService;
-    private readonly IWatcherService _watcherService;
-    private readonly IArchiveManager _archiveManager;
-    private readonly ExtendedScriptService _scriptService;
-    private readonly IPaneViewModelFactory _paneViewModelFactory;
+    private readonly AppScriptService _scriptService;
 
-    private readonly Dictionary<string, object> _hostObjects;
-
-    public WScriptDocumentViewModel(string path,
-        IProjectManager projectManager,
-        ILoggerService loggerService,
-        Red4ParserService parserService,
-        IWatcherService watcherService,
-        IArchiveManager archiveManager,
-        ExtendedScriptService scriptService,
-        IPaneViewModelFactory paneViewModelFactory
-        ) : base(path)
+    public WScriptDocumentViewModel(string path, AppScriptService scriptService) : base(path)
     {
-        _projectManager = projectManager;
-        _loggerService = loggerService;
-        _parserService = parserService;
-        _watcherService = watcherService;
-        _archiveManager = archiveManager;
         _scriptService = scriptService;
-        _paneViewModelFactory = paneViewModelFactory;
 
         Extension = "wscript";
 
-        _hostObjects = new() { { "wkit", new WKitUIScripting(_paneViewModelFactory, _loggerService, _projectManager, _archiveManager, _parserService, _watcherService) } };
         GenerateCompletionData();
 
         LoadDocument(path);
@@ -93,7 +65,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
     private bool CanRun() => !_scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanRun))]
-    private async void Run() => await _scriptService.ExecuteAsync(Text, _hostObjects, ISettingsManager.GetWScriptDir());
+    private async void Run() => await _scriptService.ExecuteAsync(Text);
 
     private bool CanStop() => _scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanStop))]
@@ -109,7 +81,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     {
         CompletionData.Clear();
 
-        foreach (var (name, instance) in _hostObjects)
+        foreach (var (name, instance) in _scriptService.DefaultHostObject)
         {
             CompletionData.Add(name, new List<(string name, string? desc)>());
 

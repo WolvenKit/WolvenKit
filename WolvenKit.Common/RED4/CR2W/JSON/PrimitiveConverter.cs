@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Semver;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Extensions;
@@ -1201,7 +1202,7 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
                             break;
                         }
 
-                        result.RootCruids.Add(reader.GetUInt64());
+                        result.RootCruids.Add(JsonSerializer.Deserialize<CRUID>(ref reader, options));
                     }
 
                     break;

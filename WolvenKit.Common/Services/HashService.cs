@@ -61,13 +61,13 @@ namespace WolvenKit.Common.Services
 
         public IEnumerable<ulong> GetMissingHashes() => _missing.Keys;
 
-        public bool Contains(ulong key)
+        public bool Contains(ulong key, bool checkUserHashes = true)
         {
             if (_hashes.ContainsKey(key))
             {
                 return true;
             }
-            if (_userHashes.ContainsKey(key))
+            if (checkUserHashes && _userHashes.ContainsKey(key))
             {
                 return true;
             }

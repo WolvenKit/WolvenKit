@@ -1,5 +1,6 @@
 ﻿using System;
 using WolvenKit.App.Controllers;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -31,11 +32,10 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly ISettingsManager _settingsManager;
     private readonly INotificationService _notificationService;
     private readonly IArchiveManager _archiveManager;
-    private readonly MeshTools _meshTools;
     private readonly Red4ParserService _parserService;
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
-    private readonly IHashService _hashService;
+    private readonly ImportExportHelper _importExportHelper;
 
     private readonly PropertiesViewModel _propertiesViewModel;
 
@@ -51,12 +51,11 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         INotificationService notificationService,
         IArchiveManager archiveManager,
         IChunkViewmodelFactory chunkViewmodelFactory,
-        MeshTools meshTools,
         Red4ParserService parserService,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        IHashService hashService,
-        PropertiesViewModel propertiesViewModel
+        PropertiesViewModel propertiesViewModel,
+        ImportExportHelper importExportHelper
         )
     {
         _projectManager = projectManager;
@@ -70,12 +69,11 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _notificationService = notificationService;
         _archiveManager = archiveManager;
         _chunkViewmodelFactory = chunkViewmodelFactory;
-        _meshTools = meshTools;
         _parserService = parserService;
         _tweakDbService = tweakDbService;
         _locKeyService = locKeyService;
-        _hashService = hashService;
         _propertiesViewModel = propertiesViewModel;
+        _importExportHelper = importExportHelper;
     }
 
     public LogViewModel LogViewModel() => new(_loggerService);
@@ -89,6 +87,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         => new(appViewModel, _chunkViewmodelFactory, _settingsManager, _notificationService, _projectManager, _loggerService, _tweakDbService, _locKeyService);
     public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _watcherService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);
     
-    public TextureImportViewModel TextureImportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _hashService, _modTools, _parserService, _progressService);
-    public TextureExportViewModel TextureExportViewModel() => new(_gameController, _settingsManager, _watcherService, _loggerService, _projectManager, _notificationService, _archiveManager, _pluginService, _hashService, _modTools, _parserService, _progressService);
+    public ImportViewModel ImportViewModel() => new(_archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _progressService, _gameController, _parserService, _importExportHelper);
+    public ExportViewModel ExportViewModel() => new(_archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _progressService, _importExportHelper);
 }
