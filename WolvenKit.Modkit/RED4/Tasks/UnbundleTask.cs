@@ -108,8 +108,6 @@ public partial class ConsoleFunctions
                     .ToList().Select(_ => ulong.TryParse(_, out var res) ? res : 0);
                 _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
 
-                ar.SetBulkExtract(true);
-
                 foreach (var hashNum in hashlist)
                 {
                     var r = ModTools.ExtractSingle(ar, hashNum, outDir, DEBUG_decompress);
@@ -124,7 +122,7 @@ public partial class ConsoleFunctions
                     }
                 }
 
-                ar.SetBulkExtract(false);
+                ar.ReleaseFileHandle();
 
                 _loggerService.Success($"Bulk extraction from hashlist file completed.");
             }
