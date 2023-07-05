@@ -45,6 +45,7 @@ public class ScriptFunctions
     }
 
     /// <summary>
+    /// DEPRECATED: Please use GetFileFromArchive(path, OpenAs.GameFile)
     /// Loads a file from the base archives using either a file path or hash
     /// </summary>
     /// <param name="path">The path of the file to retrieve</param>
@@ -53,6 +54,7 @@ public class ScriptFunctions
     public virtual IGameFile? GetFileFromBase(string path) => (IGameFile?)GetFileFromArchive(path, OpenAs.GameFile);
 
     /// <summary>
+    /// DEPRECATED: Please use GetFileFromArchive(hash, OpenAs.GameFile)
     /// Loads a file from the base archives using either a file path or hash
     /// </summary>
     /// <param name="hash">The hash of the file to retrieve</param>
@@ -79,7 +81,7 @@ public class ScriptFunctions
     /// <summary>
     /// Changes the extension of the provided string path
     /// </summary>
-    /// <param name="path"></param>
+    /// <param name="path">The path of the file to change</param>
     /// <param name="extension"></param>
     /// <returns></returns>
     public virtual string ChangeExtension(string path, string extension) => Path.ChangeExtension(path, extension);
@@ -115,6 +117,12 @@ public class ScriptFunctions
         throw new ArgumentOutOfRangeException(nameof(openAs));
     }
 
+    /// <summary>
+    /// Loads a file from the base archives using either a file path or hash
+    /// </summary>
+    /// <param name="path">The path of the file to retrieve</param>
+    /// <param name="openAs">The output format (OpenAs.GameFile, OpenAs.CR2W or OpenAs.Json)</param>
+    /// <returns></returns>
     public virtual object? GetFileFromArchive(string path, OpenAs openAs)
     {
         if (string.IsNullOrEmpty(path))
@@ -130,6 +138,12 @@ public class ScriptFunctions
         return GetFileFromArchive(hash, openAs);
     }
 
+    /// <summary>
+    /// Loads a file from the base archives using either a file path or hash
+    /// </summary>
+    /// <param name="hash">The hash of the file to retrieve</param>
+    /// <param name="openAs">The output format (OpenAs.GameFile, OpenAs.CR2W or OpenAs.Json)</param>
+    /// <returns></returns>
     public virtual object? GetFileFromArchive(ulong hash, OpenAs openAs)
     {
         if (hash == 0)

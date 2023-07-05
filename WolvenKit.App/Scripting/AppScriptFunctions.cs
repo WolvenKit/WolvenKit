@@ -435,6 +435,12 @@ public class AppScriptFunctions : ScriptFunctions
         }
     }
 
+    /// <summary>
+    /// Loads a file from the project using either a file path or hash
+    /// </summary>
+    /// <param name="path">The path of the file to retrieve</param>
+    /// <param name="openAs">The output format (OpenAs.GameFile, OpenAs.CR2W or OpenAs.Json)</param>
+    /// <returns></returns>
     public virtual object? GetFileFromProject(string path, OpenAs openAs)
     {
         if (string.IsNullOrEmpty(path))
@@ -450,6 +456,12 @@ public class AppScriptFunctions : ScriptFunctions
         return GetFileFromProject(hash, openAs);
     }
 
+    /// <summary>
+    /// Loads a file from the project using either a file path or hash
+    /// </summary>
+    /// <param name="hash">The hash of the file to retrieve</param>
+    /// <param name="openAs">The output format (OpenAs.GameFile, OpenAs.CR2W or OpenAs.Json)</param>
+    /// <returns></returns>
     public virtual object? GetFileFromProject(ulong hash, OpenAs openAs)
     {
         if (hash == 0)
@@ -481,6 +493,12 @@ public class AppScriptFunctions : ScriptFunctions
         return ConvertGameFile(targetFile, openAs);
     }
 
+    /// <summary>
+    /// Loads a file from the project or archive (in this order) using either a file path or hash
+    /// </summary>
+    /// <param name="path">The path of the file to retrieve</param>
+    /// <param name="openAs">The output format (OpenAs.GameFile, OpenAs.CR2W or OpenAs.Json)</param>
+    /// <returns></returns>
     public virtual object? GetFile(string path, OpenAs openAs)
     {
         if (string.IsNullOrEmpty(path))
@@ -496,6 +514,12 @@ public class AppScriptFunctions : ScriptFunctions
         return GetFile(hash, openAs);
     }
 
+    /// <summary>
+    /// Loads a file from the project or archive (in this order) using either a file path or hash
+    /// </summary>
+    /// <param name="hash">The hash of the file to retrieve</param>
+    /// <param name="openAs">The output format (OpenAs.GameFile, OpenAs.CR2W or OpenAs.Json)</param>
+    /// <returns></returns>
     public virtual object? GetFile(ulong hash, OpenAs openAs)
     {
         var file = GetFileFromProject(hash, openAs);
@@ -642,7 +666,7 @@ public class AppScriptFunctions : ScriptFunctions
     }
 
     /// <summary>
-    /// Opens a file
+    /// Opens a file in WolvenKit
     /// </summary>
     /// <param name="path">Path to the file</param>
     /// <returns>Returns true if the file was opened, otherwise it returns false</returns>
