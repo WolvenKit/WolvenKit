@@ -124,7 +124,8 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = WolvenKit.Modkit/Scripting/ScriptFunctions.cs \
                          WolvenKit.App/Scripting/AppScriptFunctions.cs \
-                         WolvenKit.App/Scripting/UiScriptFunctions.cs
+                         WolvenKit.App/Scripting/UiScriptFunctions.cs \
+                         WolvenKit.App/Scripting/ScriptDocumentWrapper.cs
 INPUT_ENCODING         = UTF-8
 INPUT_FILE_ENCODING    =
 FILE_PATTERNS          = *.cs
