@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['changeextension_1',['ChangeExtension',['../classWKitScripting.html#a83749773878cde1cbcf3c85794ad8ba8',1,'WKitScripting']]]
+  ['changeextension_2',['ChangeExtension',['../classScriptFunctions.html#a03619b1fc60f5d18e2a527bf5a5a7490',1,'ScriptFunctions']]]
 ];

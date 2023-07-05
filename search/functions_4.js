@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['gamefiletojson_31',['GameFileToJson',['../classWKitScripting.html#a58ada31da1b25fb3cf368cd02067ae7a',1,'WKitScripting']]],
-  ['getarchivefiles_32',['GetArchiveFiles',['../classWKitScripting.html#ab86e9bae0505957bfd5322d15f3fbb06',1,'WKitScripting']]],
-  ['getfilefrombase_33',['GetFileFromBase',['../classWKitScripting.html#ad5134ed413ba272565a5d91a66b8cd33',1,'WKitScripting.GetFileFromBase(string path)'],['../classWKitScripting.html#a4940c2972c35a6d412631f58690b6ab7',1,'WKitScripting.GetFileFromBase(ulong hash)']]],
-  ['getprojectfiles_34',['GetProjectFiles',['../classWKitUIScripting.html#af4ea8a2d0f2897043448bd53346ca02a',1,'WKitUIScripting']]]
+  ['gamefiletojson_34',['GameFileToJson',['../classScriptFunctions.html#ae3c8ffadc02b814e2bd7057113acfef9',1,'ScriptFunctions']]],
+  ['getactivedocument_35',['GetActiveDocument',['../classAppScriptFunctions.html#a892142b1e09df5189538326f80c1f699',1,'AppScriptFunctions']]],
+  ['getarchivefiles_36',['GetArchiveFiles',['../classScriptFunctions.html#a0baf0f2c0fe2a1cad481b1ce125c25f5',1,'ScriptFunctions']]],
+  ['getdocuments_37',['GetDocuments',['../classAppScriptFunctions.html#a9e2870ca838b9c1eada8ecf7da29e6ab',1,'AppScriptFunctions']]],
+  ['getfilefrombase_38',['GetFileFromBase',['../classScriptFunctions.html#ad37f15bd86acdc57a22067083fe86bd0',1,'ScriptFunctions.GetFileFromBase(string path)'],['../classScriptFunctions.html#a65c53ed07f6f9853871af5e09025cce5',1,'ScriptFunctions.GetFileFromBase(ulong hash)']]],
+  ['getprojectfiles_39',['GetProjectFiles',['../classAppScriptFunctions.html#a0cb0e05725e010f9e14576cacd2f2581',1,'AppScriptFunctions']]]
 ];

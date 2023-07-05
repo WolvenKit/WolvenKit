@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['loadgamefilefromproject_36',['LoadGameFileFromProject',['../classWKitUIScripting.html#a84907e5f2982e2880274a237aac0a56c',1,'WKitUIScripting']]],
-  ['loadrawjsonfromproject_37',['LoadRawJsonFromProject',['../classWKitUIScripting.html#a51fa2b286a758253a59539f850e7360f',1,'WKitUIScripting']]]
+  ['loadgamefilefromproject_41',['LoadGameFileFromProject',['../classAppScriptFunctions.html#a80d02289d49fcddb43a6ac26c392523b',1,'AppScriptFunctions']]],
+  ['loadrawjsonfromproject_42',['LoadRawJsonFromProject',['../classAppScriptFunctions.html#a2c8c114690df9c9cbe6564ca44be0956',1,'AppScriptFunctions']]]
 ];

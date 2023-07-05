@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['fileexists_4',['FileExists',['../classWKitUIScripting.html#a5f9b87beecc9de3c556932e2ecdf79e4',1,'WKitUIScripting.FileExists(string path)'],['../classWKitUIScripting.html#a6903c1d491dc7c00cd4cae6d60c0d517',1,'WKitUIScripting.FileExists(ulong hash)']]],
-  ['fileexistsinarchive_5',['FileExistsInArchive',['../classWKitScripting.html#aa61ed74f18535a503600e09cecd1292f',1,'WKitScripting.FileExistsInArchive(string path)'],['../classWKitScripting.html#a215f42c54af6122e7f8a3863896f0ebb',1,'WKitScripting.FileExistsInArchive(ulong hash)']]],
-  ['fileexistsinproject_6',['FileExistsInProject',['../classWKitUIScripting.html#a74b43caf815ca9f836176b2da89cf6a3',1,'WKitUIScripting.FileExistsInProject(string path)'],['../classWKitUIScripting.html#a5448130c8ff1cd06dd09ccb2c03dffdc',1,'WKitUIScripting.FileExistsInProject(ulong hash)']]]
+  ['fileexists_5',['FileExists',['../classAppScriptFunctions.html#a2976101c0b0d02d78d3e5f787d6c291a',1,'AppScriptFunctions.FileExists(string path)'],['../classAppScriptFunctions.html#a2b35cb0d33084482eee3dd8d18454821',1,'AppScriptFunctions.FileExists(ulong hash)']]],
+  ['fileexistsinarchive_6',['FileExistsInArchive',['../classScriptFunctions.html#aea859252a887d2a39a578a0c2740078c',1,'ScriptFunctions.FileExistsInArchive(string path)'],['../classScriptFunctions.html#ab9d6232b408dd9d78355971a8f1fb05e',1,'ScriptFunctions.FileExistsInArchive(ulong hash)']]],
+  ['fileexistsinproject_7',['FileExistsInProject',['../classAppScriptFunctions.html#ad56b14bf42fa4981231a056a43233ac7',1,'AppScriptFunctions.FileExistsInProject(string path)'],['../classAppScriptFunctions.html#a2db612f78e8d6f408f3d6bc51d81d01a',1,'AppScriptFunctions.FileExistsInProject(ulong hash)']]]
 ];
