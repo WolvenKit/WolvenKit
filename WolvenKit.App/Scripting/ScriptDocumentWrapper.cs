@@ -9,6 +9,9 @@ using WolvenKit.RED4.CR2W.JSON;
 
 namespace WolvenKit.App.Scripting;
 
+/// <summary>
+/// TODO
+/// </summary>
 public class ScriptDocumentWrapper
 {
     private readonly IDocumentViewModel _documentViewModel;
@@ -35,6 +38,12 @@ public class ScriptDocumentWrapper
 
     public bool IsDirty { get; set; }
 
+    /// <summary>
+    /// Gets the game file
+    /// </summary>
+    /// <param name="type">The output type of the game file ("cr2w" or "json")</param>
+    /// <returns></returns>
+    /// <exception cref="NotSupportedException"></exception>
     public object? GetGameFile(string type)
     {
         if (_documentViewModel is not RedDocumentViewModel red)
@@ -56,6 +65,13 @@ public class ScriptDocumentWrapper
         throw new NotSupportedException($"Unknown type \"{type}\"");
     }
 
+    /// <summary>
+    /// Saves the document
+    /// </summary>
     public void Save() => _documentViewModel.SaveCommand.SafeExecute();
+
+    /// <summary>
+    /// Closes the document without saving
+    /// </summary>
     public void Close() => Application.Current.Dispatcher.Invoke(() => _appViewModel.CloseFile(_documentViewModel));
 }
