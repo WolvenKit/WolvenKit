@@ -128,6 +128,8 @@ const meshPathsFromComponents = [];
  */
 const alreadyVerifiedAppFiles = [];
 
+let appFileSettings = {};
+
 function component_collectAppearancesFromMesh(componentMeshPath) {
     if (!componentMeshPath || !wkit.FileExists(componentMeshPath)) return; 
     if (undefined === appearanceNamesByMeshFile[componentMeshPath] ) {
@@ -220,7 +222,7 @@ function appFile_validatePartsValue(partsValueEntityDepotPath, index, appearance
     appFile_collectComponentsFromEntPath(partsValueEntityDepotPath, validateRecursively);      
 }
 
-function appFile_validateAppearance(appearance, index, validateRecursively) {    
+function appFile_validateAppearance(appearance, index, validateRecursively, validateComponentCollision) {    
     let appearanceName = stringifyPotentialCName(appearance.Data.name);
 
     if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) return;
@@ -269,19 +271,21 @@ function appFile_validateAppearance(appearance, index, validateRecursively) {
         (meshesByEntityPath[depotPath] || []).forEach((path) => meshPathsFromEntityFiles.push(path));
     }
 
-    Object.values(componentNameCollisions)
-        .filter((name) => overriddenComponents.includes(name))
-        .filter((name) => !componentOverrideCollisions.includes(name))
-        .forEach((name) => componentOverrideCollisions.push(name));
+    if (appFileSettings?.checkPotentialOverrideCollisions) {
+        Object.values(componentNameCollisions)
+            .filter((name) => overriddenComponents.includes(name))
+            .filter((name) => !componentOverrideCollisions.includes(name))
+            .forEach((name) => componentOverrideCollisions.push(name));
 
-    if (componentOverrideCollisions && componentOverrideCollisions.length > 0) {
-        Logger.Warning("Inside partsValues, validation found components of the same name pointing at different meshes.");
-        Logger.Warning("Name collisions may lead to partsOverrides behaving erratically. FileValidation affects the following meshes/component names:");
-        Object.keys(componentNameCollisions).forEach((meshPath) => {
-            Logger.Warning(`${componentNameCollisions[meshPath]}: ${meshPath}`);
-        });
+        if ( componentOverrideCollisions && componentOverrideCollisions.length > 0) {
+            Logger.Warning("Inside partsValues, validation found components of the same name pointing at different meshes.");
+            Logger.Warning("Name collisions may lead to partsOverrides behaving erratically. FileValidation affects the following meshes/component names:");
+            Object.keys(componentNameCollisions).forEach((meshPath) => {
+                Logger.Warning(`${componentNameCollisions[meshPath]}: ${meshPath}`);
+            });
+        }
     }
-
+    
     const duplicateMeshes = meshPathsFromComponents
         .filter((path, i, array) => !!path && array.indexOf(path) === i) // only unique
         .filter((path) => meshPathsFromEntityFiles.includes(path))
@@ -298,31 +302,46 @@ function appFile_validateAppearance(appearance, index, validateRecursively) {
     }
 }
 
-export function validateAppFile(app, validateRecursively, calledFromEntFileValidation) {
+export function validateAppFile(app, _appFileSettings) {
+    // invalid app file - not found
+    if (!app) {
+        return;
+    }
+    
+    appFileSettings = _appFileSettings;
+
+    isDataChangedForWriting = false;
+    alreadyVerifiedAppFiles.length = 0;
+
+    _validateAppFile(app, _appFileSettings?.validateRecursively, false);
+
+}
+
+function _validateAppFile(app, validateRecursively, calledFromEntFileValidation) {
     // invalid app file - not found
     if (!app) {
         return;
     }
 
-    isDataChangedForWriting = false;
-
     // empty array with name collisions
     componentOverrideCollisions.length = 0;
     alreadyDefinedAppearanceNames.length = 0;
-    
-    if (!calledFromEntFileValidation) {
-        alreadyVerifiedAppFiles.length = 0;
-    }
-    
+
     meshesByComponentName = {};
 
+    const validateCollisions = calledFromEntFileValidation 
+        ? entSettings.checkComponentNameDuplication
+        : appFileSettings.checkComponentNameDuplication;
+
     if (app["Data"] && app["Data"]["RootChunk"]) {
-        return validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
+        return _validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
     }
     for (let i = 0; i < app.appearances.length; i++) {
         const appearance = app.appearances[i];
-        appFile_validateAppearance(appearance, i, validateRecursively);
+        appFile_validateAppearance(appearance, i, validateRecursively, validateCollisions);
     }
+
+
 }
 
 //#endregion

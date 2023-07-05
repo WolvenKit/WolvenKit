@@ -26,7 +26,17 @@ const Settings = {
          * Set this to "false" to disable warnings about unresolved depot paths
          * e.g. "component: unknown resource in depot path"
          */
-        showUnresolvedDepotPathWarnings: true
+        showUnresolvedDepotPathWarnings: true,
+        /*
+         * Set this to "false" to disable warnings about duplicate component names,
+         * e.g. "] The following components are defined more than once: [ pants_black ]"
+         */
+        checkComponentNameDuplication: true,
+        /*
+         * Set this to "false" to disable warnings about components with the same name, but different meshes, 
+         * e.g. if you're loading different variants from the same app file depending on a tag.
+         */
+        checkPotentialOverrideCollisions: false,
     },
     Csv: {
         /*
@@ -52,7 +62,7 @@ const Settings = {
          * Set this to "false" to disable warnings about duplicate component names,
          * e.g. "] The following components are defined more than once: [ pants_black ]"
          */
-        checkComponentNameDuplication: true,
+        checkComponentNameDuplication: false,
     },
     Mesh: {},
     Workspot: {
