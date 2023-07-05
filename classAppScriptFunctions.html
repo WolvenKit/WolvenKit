@@ -107,6 +107,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a37f8400624ce33b87184e9cfd43b5490"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a37f8400624ce33b87184e9cfd43b5490">ExportFiles</a> (IList fileList, ScriptObject? defaultSettings=null)</td></tr>
 <tr class="memdesc:a37f8400624ce33b87184e9cfd43b5490"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exports a list of files as you would with the export tool.  <a href="classAppScriptFunctions.html#a37f8400624ce33b87184e9cfd43b5490">More...</a><br /></td></tr>
 <tr class="separator:a37f8400624ce33b87184e9cfd43b5490"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a076fcaa6b98f5e335aafc7f88d8f2dbd"><td class="memItemLeft" align="right" valign="top">virtual ? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a076fcaa6b98f5e335aafc7f88d8f2dbd">GetFileFromProject</a> (string path, OpenAs openAs)</td></tr>
+<tr class="memdesc:a076fcaa6b98f5e335aafc7f88d8f2dbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a file from the project using either a file path or hash  <a href="classAppScriptFunctions.html#a076fcaa6b98f5e335aafc7f88d8f2dbd">More...</a><br /></td></tr>
+<tr class="separator:a076fcaa6b98f5e335aafc7f88d8f2dbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5deb2bf8649a0ca243ce0d51cf4f4f7d"><td class="memItemLeft" align="right" valign="top">virtual ? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a5deb2bf8649a0ca243ce0d51cf4f4f7d">GetFileFromProject</a> (ulong hash, OpenAs openAs)</td></tr>
+<tr class="memdesc:a5deb2bf8649a0ca243ce0d51cf4f4f7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a file from the project using either a file path or hash  <a href="classAppScriptFunctions.html#a5deb2bf8649a0ca243ce0d51cf4f4f7d">More...</a><br /></td></tr>
+<tr class="separator:a5deb2bf8649a0ca243ce0d51cf4f4f7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac94390cf7faa0d4af8d8b8738b9227ce"><td class="memItemLeft" align="right" valign="top">virtual ? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#ac94390cf7faa0d4af8d8b8738b9227ce">GetFile</a> (string path, OpenAs openAs)</td></tr>
+<tr class="memdesc:ac94390cf7faa0d4af8d8b8738b9227ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a file from the project or archive (in this order) using either a file path or hash  <a href="classAppScriptFunctions.html#ac94390cf7faa0d4af8d8b8738b9227ce">More...</a><br /></td></tr>
+<tr class="separator:ac94390cf7faa0d4af8d8b8738b9227ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b67bcfef871faae21f64f423aeec337"><td class="memItemLeft" align="right" valign="top">virtual ? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a5b67bcfef871faae21f64f423aeec337">GetFile</a> (ulong hash, OpenAs openAs)</td></tr>
+<tr class="memdesc:a5b67bcfef871faae21f64f423aeec337"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a file from the project or archive (in this order) using either a file path or hash  <a href="classAppScriptFunctions.html#a5b67bcfef871faae21f64f423aeec337">More...</a><br /></td></tr>
+<tr class="separator:a5b67bcfef871faae21f64f423aeec337"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad56b14bf42fa4981231a056a43233ac7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#ad56b14bf42fa4981231a056a43233ac7">FileExistsInProject</a> (string path)</td></tr>
 <tr class="memdesc:ad56b14bf42fa4981231a056a43233ac7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in the project  <a href="classAppScriptFunctions.html#ad56b14bf42fa4981231a056a43233ac7">More...</a><br /></td></tr>
 <tr class="separator:ad56b14bf42fa4981231a056a43233ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,7 +144,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a9e2870ca838b9c1eada8ecf7da29e6ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets all documents from the docking manager  <a href="classAppScriptFunctions.html#a9e2870ca838b9c1eada8ecf7da29e6ab">More...</a><br /></td></tr>
 <tr class="separator:a9e2870ca838b9c1eada8ecf7da29e6ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24f669973d03a7451348013b94b80e2e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a24f669973d03a7451348013b94b80e2e">OpenDocument</a> (string path)</td></tr>
-<tr class="memdesc:a24f669973d03a7451348013b94b80e2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a file  <a href="classAppScriptFunctions.html#a24f669973d03a7451348013b94b80e2e">More...</a><br /></td></tr>
+<tr class="memdesc:a24f669973d03a7451348013b94b80e2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens a file in WolvenKit  <a href="classAppScriptFunctions.html#a24f669973d03a7451348013b94b80e2e">More...</a><br /></td></tr>
 <tr class="separator:a24f669973d03a7451348013b94b80e2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5943d53f39a302111a156f2a472f7e62"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a5943d53f39a302111a156f2a472f7e62">OpenDocument</a> (IGameFile gameFile)</td></tr>
 <tr class="memdesc:a5943d53f39a302111a156f2a472f7e62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens an archive game file  <a href="classAppScriptFunctions.html#a5943d53f39a302111a156f2a472f7e62">More...</a><br /></td></tr>
@@ -142,10 +154,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a0baf0f2c0fe2a1cad481b1ce125c25f5 inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a list of the files available in the game archives Note to myself: Don't use IEnumerable&lt;T&gt;  <a href="classScriptFunctions.html#a0baf0f2c0fe2a1cad481b1ce125c25f5">More...</a><br /></td></tr>
 <tr class="separator:a0baf0f2c0fe2a1cad481b1ce125c25f5 inherit pub_methods_classScriptFunctions"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad37f15bd86acdc57a22067083fe86bd0 inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual ? IGameFile&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#ad37f15bd86acdc57a22067083fe86bd0">GetFileFromBase</a> (string path)</td></tr>
-<tr class="memdesc:ad37f15bd86acdc57a22067083fe86bd0 inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a file from the base archives using either a file path or hash  <a href="classScriptFunctions.html#ad37f15bd86acdc57a22067083fe86bd0">More...</a><br /></td></tr>
+<tr class="memdesc:ad37f15bd86acdc57a22067083fe86bd0 inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">DEPRECATED: Please use GetFileFromArchive(path, OpenAs.GameFile) Loads a file from the base archives using either a file path or hash  <a href="classScriptFunctions.html#ad37f15bd86acdc57a22067083fe86bd0">More...</a><br /></td></tr>
 <tr class="separator:ad37f15bd86acdc57a22067083fe86bd0 inherit pub_methods_classScriptFunctions"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65c53ed07f6f9853871af5e09025cce5 inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual ? IGameFile&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#a65c53ed07f6f9853871af5e09025cce5">GetFileFromBase</a> (ulong hash)</td></tr>
-<tr class="memdesc:a65c53ed07f6f9853871af5e09025cce5 inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a file from the base archives using either a file path or hash  <a href="classScriptFunctions.html#a65c53ed07f6f9853871af5e09025cce5">More...</a><br /></td></tr>
+<tr class="memdesc:a65c53ed07f6f9853871af5e09025cce5 inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">DEPRECATED: Please use GetFileFromArchive(hash, OpenAs.GameFile) Loads a file from the base archives using either a file path or hash  <a href="classScriptFunctions.html#a65c53ed07f6f9853871af5e09025cce5">More...</a><br /></td></tr>
 <tr class="separator:a65c53ed07f6f9853871af5e09025cce5 inherit pub_methods_classScriptFunctions"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3c8ffadc02b814e2bd7057113acfef9 inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual ? string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#ae3c8ffadc02b814e2bd7057113acfef9">GameFileToJson</a> (IGameFile gameFile)</td></tr>
 <tr class="memdesc:ae3c8ffadc02b814e2bd7057113acfef9 inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a json representation of the specifed game file.  <a href="classScriptFunctions.html#ae3c8ffadc02b814e2bd7057113acfef9">More...</a><br /></td></tr>
@@ -156,6 +168,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a03619b1fc60f5d18e2a527bf5a5a7490 inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#a03619b1fc60f5d18e2a527bf5a5a7490">ChangeExtension</a> (string path, string extension)</td></tr>
 <tr class="memdesc:a03619b1fc60f5d18e2a527bf5a5a7490 inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes the extension of the provided string path  <a href="classScriptFunctions.html#a03619b1fc60f5d18e2a527bf5a5a7490">More...</a><br /></td></tr>
 <tr class="separator:a03619b1fc60f5d18e2a527bf5a5a7490 inherit pub_methods_classScriptFunctions"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a951ea13d89e57e2f3f7d3931499591df inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual ? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#a951ea13d89e57e2f3f7d3931499591df">GetFileFromArchive</a> (string path, OpenAs openAs)</td></tr>
+<tr class="memdesc:a951ea13d89e57e2f3f7d3931499591df inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a file from the base archives using either a file path or hash  <a href="classScriptFunctions.html#a951ea13d89e57e2f3f7d3931499591df">More...</a><br /></td></tr>
+<tr class="separator:a951ea13d89e57e2f3f7d3931499591df inherit pub_methods_classScriptFunctions"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8caa44ca89e91d6f6fff2ec4f0212a0d inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual ? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#a8caa44ca89e91d6f6fff2ec4f0212a0d">GetFileFromArchive</a> (ulong hash, OpenAs openAs)</td></tr>
+<tr class="memdesc:a8caa44ca89e91d6f6fff2ec4f0212a0d inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a file from the base archives using either a file path or hash  <a href="classScriptFunctions.html#a8caa44ca89e91d6f6fff2ec4f0212a0d">More...</a><br /></td></tr>
+<tr class="separator:a8caa44ca89e91d6f6fff2ec4f0212a0d inherit pub_methods_classScriptFunctions"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea859252a887d2a39a578a0c2740078c inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#aea859252a887d2a39a578a0c2740078c">FileExistsInArchive</a> (string path)</td></tr>
 <tr class="memdesc:aea859252a887d2a39a578a0c2740078c inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in the game archives  <a href="classScriptFunctions.html#aea859252a887d2a39a578a0c2740078c">More...</a><br /></td></tr>
 <tr class="separator:aea859252a887d2a39a578a0c2740078c inherit pub_methods_classScriptFunctions"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -434,6 +452,190 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ac94390cf7faa0d4af8d8b8738b9227ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac94390cf7faa0d4af8d8b8738b9227ce">&#9670;&nbsp;</a></span>GetFile() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual ? object AppScriptFunctions.GetFile </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OpenAs&#160;</td>
+          <td class="paramname"><em>openAs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads a file from the project or archive (in this order) using either a file path or hash </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The path of the file to retrieve</td></tr>
+    <tr><td class="paramname">openAs</td><td>The output format (OpenAs.GameFile, OpenAs.CR2W or OpenAs.Json)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a5b67bcfef871faae21f64f423aeec337"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b67bcfef871faae21f64f423aeec337">&#9670;&nbsp;</a></span>GetFile() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual ? object AppScriptFunctions.GetFile </td>
+          <td>(</td>
+          <td class="paramtype">ulong&#160;</td>
+          <td class="paramname"><em>hash</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OpenAs&#160;</td>
+          <td class="paramname"><em>openAs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads a file from the project or archive (in this order) using either a file path or hash </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hash</td><td>The hash of the file to retrieve</td></tr>
+    <tr><td class="paramname">openAs</td><td>The output format (OpenAs.GameFile, OpenAs.CR2W or OpenAs.Json)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a076fcaa6b98f5e335aafc7f88d8f2dbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a076fcaa6b98f5e335aafc7f88d8f2dbd">&#9670;&nbsp;</a></span>GetFileFromProject() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual ? object AppScriptFunctions.GetFileFromProject </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OpenAs&#160;</td>
+          <td class="paramname"><em>openAs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads a file from the project using either a file path or hash </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The path of the file to retrieve</td></tr>
+    <tr><td class="paramname">openAs</td><td>The output format (OpenAs.GameFile, OpenAs.CR2W or OpenAs.Json)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a5deb2bf8649a0ca243ce0d51cf4f4f7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5deb2bf8649a0ca243ce0d51cf4f4f7d">&#9670;&nbsp;</a></span>GetFileFromProject() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual ? object AppScriptFunctions.GetFileFromProject </td>
+          <td>(</td>
+          <td class="paramtype">ulong&#160;</td>
+          <td class="paramname"><em>hash</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OpenAs&#160;</td>
+          <td class="paramname"><em>openAs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads a file from the project using either a file path or hash </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hash</td><td>The hash of the file to retrieve</td></tr>
+    <tr><td class="paramname">openAs</td><td>The output format (OpenAs.GameFile, OpenAs.CR2W or OpenAs.Json)</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
 <a id="a0cb0e05725e010f9e14576cacd2f2581"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0cb0e05725e010f9e14576cacd2f2581">&#9670;&nbsp;</a></span>GetProjectFiles()</h2>
 
@@ -611,7 +813,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Opens a file </p>
+<p>Opens a file in WolvenKit </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">path</td><td>Path to the file</td></tr>
