@@ -31,9 +31,9 @@ namespace WolvenKit.RED4.Types
 		public questTeleportVehicleNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			EntityReference = new() { Names = new() };
-			Params = new() { DestinationOffset = new() };
+			Id = ushort.MaxValue;
+			EntityReference = new gameEntityReference { Names = new() };
+			Params = new questTeleportPuppetParams { DestinationOffset = new Vector3() };
 			ResetVelocities = true;
 
 			PostConstruct();

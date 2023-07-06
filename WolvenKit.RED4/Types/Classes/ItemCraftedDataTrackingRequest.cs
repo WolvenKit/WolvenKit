@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ItemCraftedDataTrackingRequest()
 		{
-			TargetItem = new();
+			TargetItem = new gameItemID();
 
 			PostConstruct();
 		}

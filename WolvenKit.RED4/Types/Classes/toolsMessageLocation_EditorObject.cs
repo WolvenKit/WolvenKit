@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public toolsMessageLocation_EditorObject()
 		{
-			Path = new() { Elements = new() };
+			Path = new toolsEditorObjectIDPath { Elements = new() };
 
 			PostConstruct();
 		}

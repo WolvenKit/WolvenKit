@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnVarVsVarComparison_FactConditionType()
 		{
-			Params = new();
+			Params = new scnVarVsVarComparison_FactConditionTypeParams();
 
 			PostConstruct();
 		}

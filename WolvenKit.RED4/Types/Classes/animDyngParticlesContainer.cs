@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public animDyngParticlesContainer()
 		{
-			ExternalForceWS = new();
-			ExternalForceWsLink = new();
+			ExternalForceWS = new Vector3();
+			ExternalForceWsLink = new animVectorLink();
 			Particles = new();
 			GravityWS = 9.810000F;
 

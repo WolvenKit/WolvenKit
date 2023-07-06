@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public entReplicatedLookAtRemove()
 		{
-			Ref = new() { Id = -1 };
+			Ref = new animLookAtRef { Id = -1 };
 			OutTransitionSpeed = 60.000000F;
 
 			PostConstruct();

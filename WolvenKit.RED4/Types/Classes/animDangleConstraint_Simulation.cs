@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animDangleConstraint_Simulation : ISerializable
+	public abstract partial class animDangleConstraint_Simulation : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("collisionRoundedShapes")] 

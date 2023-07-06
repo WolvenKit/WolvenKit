@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerRequirementItemLogicController()
 		{
-			RequirementNameText = new();
-			RequirementLevelText = new();
-			RequirementIcon = new();
+			RequirementNameText = new inkTextWidgetReference();
+			RequirementLevelText = new inkTextWidgetReference();
+			RequirementIcon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

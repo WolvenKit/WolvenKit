@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMinimapRemotePlayerMappinController()
 		{
-			RootWidget = new();
-			ShapeWidget = new();
-			DataWidget = new();
+			RootWidget = new inkWidgetReference();
+			ShapeWidget = new inkWidgetReference();
+			DataWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public SelfRemovalEvents()
 		{
-			StateMachineInstanceData = new();
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
 
 			PostConstruct();
 		}

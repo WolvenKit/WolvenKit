@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIStreamingMonitorSystem : gameIGameSystem
+	public abstract partial class gameIStreamingMonitorSystem : gameIGameSystem
 	{
 		public gameIStreamingMonitorSystem()
 		{

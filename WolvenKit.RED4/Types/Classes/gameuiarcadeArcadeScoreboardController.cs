@@ -62,11 +62,11 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiarcadeArcadeScoreboardController()
 		{
-			EndingPanel = new();
-			PlayerCurrentScore = new();
-			PlayerHighestScore = new();
-			PlayerHighestScoreAlert = new();
-			PressToPlayAgainText = new();
+			EndingPanel = new inkWidgetReference();
+			PlayerCurrentScore = new inkTextWidgetReference();
+			PlayerHighestScore = new inkTextWidgetReference();
+			PlayerHighestScoreAlert = new inkTextWidgetReference();
+			PressToPlayAgainText = new inkWidgetReference();
 			ScoreboardNameList = new();
 			ScoreboardScoreList = new();
 

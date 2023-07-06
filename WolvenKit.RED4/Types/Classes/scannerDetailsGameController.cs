@@ -230,16 +230,16 @@ namespace WolvenKit.RED4.Types
 
 		public scannerDetailsGameController()
 		{
-			ScannerCountainer = new();
-			QuickhackContainer = new();
-			CluesContainer = new();
-			Bg = new();
-			ToggleDescirptionHackPart = new();
-			ToggleDescriptionScanIcon = new();
-			FitToContentBackground = new();
-			KiroshiLogo = new();
-			GameInstance = new();
-			LastScannedObject = new();
+			ScannerCountainer = new inkCompoundWidgetReference();
+			QuickhackContainer = new inkCompoundWidgetReference();
+			CluesContainer = new inkCompoundWidgetReference();
+			Bg = new inkWidgetReference();
+			ToggleDescirptionHackPart = new inkWidgetReference();
+			ToggleDescriptionScanIcon = new inkWidgetReference();
+			FitToContentBackground = new inkWidgetReference();
+			KiroshiLogo = new inkWidgetReference();
+			GameInstance = new ScriptGameInstance();
+			LastScannedObject = new entEntityID();
 			IsDescriptionVisible = true;
 			AsyncSpawnRequests = new();
 

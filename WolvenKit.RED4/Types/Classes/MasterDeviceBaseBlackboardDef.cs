@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public MasterDeviceBaseBlackboardDef()
 		{
-			ThumbnailWidgetsData = new();
+			ThumbnailWidgetsData = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

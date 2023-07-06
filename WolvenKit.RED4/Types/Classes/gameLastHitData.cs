@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameLastHitData()
 		{
-			TargetEntityId = new();
+			TargetEntityId = new entEntityID();
 			HitShapes = new();
 
 			PostConstruct();

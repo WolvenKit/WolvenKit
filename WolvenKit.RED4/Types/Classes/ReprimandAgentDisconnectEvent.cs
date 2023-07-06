@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ReprimandAgentDisconnectEvent()
 		{
-			AgentID = new();
+			AgentID = new entEntityID();
 
 			PostConstruct();
 		}

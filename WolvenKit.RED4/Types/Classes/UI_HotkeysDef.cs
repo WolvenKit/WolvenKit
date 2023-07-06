@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HotkeysDef()
 		{
-			ModifiedHotkey = new();
+			ModifiedHotkey = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

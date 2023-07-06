@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public grsHeistState()
 		{
-			Time = new();
+			Time = new netTime();
 			PlayersInfo = new(0);
 
 			PostConstruct();

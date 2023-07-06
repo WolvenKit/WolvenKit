@@ -121,7 +121,7 @@ namespace WolvenKit.RED4.Types
 			ActionWidgetsData = new();
 			DeviceWidgetsData = new();
 			BreadcrumbStack = new();
-			ActiveBreadcrumb = new();
+			ActiveBreadcrumb = new SBreadcrumbElementData();
 
 			PostConstruct();
 		}

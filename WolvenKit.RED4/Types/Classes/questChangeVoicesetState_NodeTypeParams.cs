@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public questChangeVoicesetState_NodeTypeParams()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 			InputsToBlock = new();
 
 			PostConstruct();

@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public CarRadioGameController()
 		{
-			RadioStationName = new();
-			SongName = new();
+			RadioStationName = new inkTextWidgetReference();
+			SongName = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

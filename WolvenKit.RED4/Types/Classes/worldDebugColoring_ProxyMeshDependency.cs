@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_ProxyMeshDependency()
 		{
-			AutoColor = new();
-			DiscardColor = new();
+			AutoColor = new CColor();
+			DiscardColor = new CColor();
 
 			PostConstruct();
 		}

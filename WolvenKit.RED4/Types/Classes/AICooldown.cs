@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AICooldown : AITimeCondition
+	public abstract partial class AICooldown : AITimeCondition
 	{
 		[Ordinal(0)] 
 		[RED("cooldown")] 

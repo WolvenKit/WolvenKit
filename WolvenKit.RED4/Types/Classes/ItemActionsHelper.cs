@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ItemActionsHelper : IScriptable
+	public abstract partial class ItemActionsHelper : IScriptable
 	{
 		public ItemActionsHelper()
 		{

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class QuestSecuritySystemInput : redEvent
+	public abstract partial class QuestSecuritySystemInput : redEvent
 	{
 		[Ordinal(0)] 
 		[RED("notificationScope")] 

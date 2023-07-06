@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public QuestListHeaderController()
 		{
-			Title = new();
-			Arrow = new();
-			Root = new();
+			Title = new inkTextWidgetReference();
+			Arrow = new inkWidgetReference();
+			Root = new inkWidgetReference();
 
 			PostConstruct();
 		}

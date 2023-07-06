@@ -70,9 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public CharacterCreationBackstorySelectionMenu()
 		{
-			Nomad = new();
-			StreetRat = new();
-			Corpo = new();
+			Nomad = new inkWidgetReference();
+			StreetRat = new inkWidgetReference();
+			Corpo = new inkWidgetReference();
 
 			PostConstruct();
 		}

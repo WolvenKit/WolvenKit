@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public InspectionTriggerEvent()
 		{
-			InspectedObjID = new();
+			InspectedObjID = new entEntityID();
 
 			PostConstruct();
 		}

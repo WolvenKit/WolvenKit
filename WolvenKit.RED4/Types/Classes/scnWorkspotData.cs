@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnWorkspotData : ISerializable
+	public abstract partial class scnWorkspotData : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("dataId")] 

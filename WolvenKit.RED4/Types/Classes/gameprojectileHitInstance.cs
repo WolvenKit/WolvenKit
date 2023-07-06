@@ -102,13 +102,13 @@ namespace WolvenKit.RED4.Types
 
 		public gameprojectileHitInstance()
 		{
-			TraceResult = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Normal = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
-			Position = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F };
-			ProjectilePosition = new();
-			ProjectileSourcePosition = new();
-			Forward = new();
-			Velocity = new();
-			HitRepresentationResult = new() { HitShapes = new() };
+			TraceResult = new physicsTraceResult { Position = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Normal = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
+			Position = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue };
+			ProjectilePosition = new Vector4();
+			ProjectileSourcePosition = new Vector4();
+			Forward = new Vector4();
+			Velocity = new Vector4();
+			HitRepresentationResult = new gameQueryResult { HitShapes = new() };
 
 			PostConstruct();
 		}

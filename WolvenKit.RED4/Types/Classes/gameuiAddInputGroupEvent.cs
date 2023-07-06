@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiAddInputGroupEvent()
 		{
-			Data = new();
+			Data = new gameuiInputHintGroupData();
 
 			PostConstruct();
 		}

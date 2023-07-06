@@ -102,9 +102,9 @@ namespace WolvenKit.RED4.Types
 
 		public MessengerDialogViewController()
 		{
-			MessagesList = new();
-			ChoicesList = new();
-			ReplayFluff = new();
+			MessagesList = new inkCompoundWidgetReference();
+			ChoicesList = new inkCompoundWidgetReference();
+			ReplayFluff = new inkCompoundWidgetReference();
 			ReplyOptions = new();
 			Messages = new();
 

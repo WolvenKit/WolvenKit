@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameDelaySystemScriptableSysRequestStruct : gameDelaySystemDelayStruct
+	public abstract partial class gameDelaySystemScriptableSysRequestStruct : gameDelaySystemDelayStruct
 	{
 		public gameDelaySystemScriptableSysRequestStruct()
 		{

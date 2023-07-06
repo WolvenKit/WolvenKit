@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public LinkedStatusEffect()
 		{
 			NetrunnerIDs = new();
-			TargetID = new();
+			TargetID = new entEntityID();
 			StatusEffectList = new();
 
 			PostConstruct();

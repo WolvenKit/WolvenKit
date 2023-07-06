@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ControllerTypeName = "RadioController";
 			Stations = new();
-			ShortGlitchDelayID = new();
+			ShortGlitchDelayID = new gameDelayID();
 
 			PostConstruct();
 		}

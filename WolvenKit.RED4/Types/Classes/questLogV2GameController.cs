@@ -222,23 +222,23 @@ namespace WolvenKit.RED4.Types
 
 		public questLogV2GameController()
 		{
-			QuestDetailsRef = new();
-			QuestDetailsHeader = new();
-			OptinalObjectivesGroupRef = new();
-			CompletedObjectivesGroupRef = new();
-			QuestListRef = new();
-			ObjectivesListRef = new();
-			OptinalObjectivesListRef = new();
-			CompletedObjectivesListRef = new();
-			QuestTitleRef = new();
-			QuestDescriptionRef = new();
-			RecommendedLevel = new();
-			RewardsList = new();
-			CodexLinksList = new();
-			CodexEntryParent = new();
-			CodexButtonRef = new();
-			ButtonHintsManagerRef = new();
-			CodexLibraryPath = new();
+			QuestDetailsRef = new inkWidgetReference();
+			QuestDetailsHeader = new inkWidgetReference();
+			OptinalObjectivesGroupRef = new inkWidgetReference();
+			CompletedObjectivesGroupRef = new inkWidgetReference();
+			QuestListRef = new inkCompoundWidgetReference();
+			ObjectivesListRef = new inkCompoundWidgetReference();
+			OptinalObjectivesListRef = new inkCompoundWidgetReference();
+			CompletedObjectivesListRef = new inkCompoundWidgetReference();
+			QuestTitleRef = new inkTextWidgetReference();
+			QuestDescriptionRef = new inkTextWidgetReference();
+			RecommendedLevel = new inkTextWidgetReference();
+			RewardsList = new inkCompoundWidgetReference();
+			CodexLinksList = new inkCompoundWidgetReference();
+			CodexEntryParent = new inkCompoundWidgetReference();
+			CodexButtonRef = new inkCompoundWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			CodexLibraryPath = new redResourceReferenceScriptToken();
 			ObjectiveItems = new();
 			QuestLists = new();
 

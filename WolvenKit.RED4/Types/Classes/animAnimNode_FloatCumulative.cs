@@ -102,16 +102,16 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FloatCumulative()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			Clamp = true;
 			Normalize180 = true;
-			InputNode = new();
-			MinValue = new();
-			MaxValue = new();
-			ResetSpeed = new();
-			Override = new();
-			CurValue = new();
-			Normalize180Input = new();
+			InputNode = new animFloatLink();
+			MinValue = new animFloatLink();
+			MaxValue = new animFloatLink();
+			ResetSpeed = new animFloatLink();
+			Override = new animBoolLink();
+			CurValue = new animFloatLink();
+			Normalize180Input = new animBoolLink();
 
 			PostConstruct();
 		}

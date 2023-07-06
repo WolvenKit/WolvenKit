@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public ShardCollectedNotification()
 		{
-			ShardTitle = new();
+			ShardTitle = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

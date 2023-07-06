@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public ModifyOverlappedSecurityAreas()
 		{
-			ZoneID = new();
+			ZoneID = new gamePersistentID();
 
 			PostConstruct();
 		}

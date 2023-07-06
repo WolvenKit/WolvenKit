@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public NPCKillDataTrackingRequest()
 		{
-			DamageEntry = new();
+			DamageEntry = new DamageHistoryEntry();
 
 			PostConstruct();
 		}

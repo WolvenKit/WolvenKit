@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public StimParams()
 		{
-			ReactionOutput = new();
-			StimData = new();
+			ReactionOutput = new ReactionOutput();
+			StimData = new StimEventData();
 
 			PostConstruct();
 		}

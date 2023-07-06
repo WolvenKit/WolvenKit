@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameDamageSystem()
 		{
-			PreviewTarget = new();
-			PreviewRWLockTemp = new();
+			PreviewTarget = new previewTargetStruct();
+			PreviewRWLockTemp = new ScriptReentrantRWLock();
 
 			PostConstruct();
 		}

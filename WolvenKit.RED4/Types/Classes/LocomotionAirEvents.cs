@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LocomotionAirEvents : LocomotionEventsTransition
+	public abstract partial class LocomotionAirEvents : LocomotionEventsTransition
 	{
 		[Ordinal(6)] 
 		[RED("maxSuperheroFallHeight")] 

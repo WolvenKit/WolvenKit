@@ -126,9 +126,9 @@ namespace WolvenKit.RED4.Types
 
 		public inkSplashScreenLoadingScreenLogicController()
 		{
-			IntroMessageBink = new() { Binks = new() };
-			VideoPlayer = new();
-			SkipButtonPanel = new();
+			IntroMessageBink = new inkLocalizedBink { Binks = new() };
+			VideoPlayer = new inkVideoWidgetReference();
+			SkipButtonPanel = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

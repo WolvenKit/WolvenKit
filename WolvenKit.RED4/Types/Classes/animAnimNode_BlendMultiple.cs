@@ -86,11 +86,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_BlendMultiple()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			InputValues = new();
 			SortedInputValues = new();
 			MaxWeight = 1.000000F;
-			WeightNode = new();
+			WeightNode = new animFloatLink();
 			InputNodes = new();
 
 			PostConstruct();

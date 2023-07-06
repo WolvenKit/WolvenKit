@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questToggleStealthMappinVisibility_NodeSubType()
 		{
-			EntityReference = new() { Names = new() };
+			EntityReference = new gameEntityReference { Names = new() };
 			Show = true;
 
 			PostConstruct();

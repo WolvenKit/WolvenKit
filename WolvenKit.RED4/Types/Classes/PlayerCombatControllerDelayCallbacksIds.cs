@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerCombatControllerDelayCallbacksIds()
 		{
-			Crouch = new();
+			Crouch = new gameDelayID();
 
 			PostConstruct();
 		}

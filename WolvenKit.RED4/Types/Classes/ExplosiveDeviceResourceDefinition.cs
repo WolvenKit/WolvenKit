@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public ExplosiveDeviceResourceDefinition()
 		{
-			VfxResource = new();
+			VfxResource = new gameFxResource();
 			VfxEventNamesOnExplosion = new();
 			VfxResourceOnFirstHit = new();
 

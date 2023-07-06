@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public sampleUILoadingBarController()
 		{
-			MinSize = new();
-			MaxSize = new();
-			CurrentSize = new();
+			MinSize = new Vector2();
+			MaxSize = new Vector2();
+			CurrentSize = new Vector2();
 
 			PostConstruct();
 		}

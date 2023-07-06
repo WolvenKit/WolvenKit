@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemBloom()
 		{
 			TimeDuration = 1.000000F;
-			SceneColorScale = new();
-			BloomColorScale = new();
+			SceneColorScale = new effectEffectParameterEvaluatorFloat();
+			BloomColorScale = new effectEffectParameterEvaluatorFloat();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public StoreMiniGameProgramEvent()
 		{
-			Program = new();
+			Program = new gameuiMinigameProgramData();
 
 			PostConstruct();
 		}

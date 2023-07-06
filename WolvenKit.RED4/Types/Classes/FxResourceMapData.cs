@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public FxResourceMapData()
 		{
-			Resource = new();
+			Resource = new gameFxResource();
 
 			PostConstruct();
 		}

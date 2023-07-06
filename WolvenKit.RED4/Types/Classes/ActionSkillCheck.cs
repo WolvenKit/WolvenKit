@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ActionSkillCheck : ActionBool
+	public abstract partial class ActionSkillCheck : ActionBool
 	{
 		[Ordinal(25)] 
 		[RED("skillCheck")] 

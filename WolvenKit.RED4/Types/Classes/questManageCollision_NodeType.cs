@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questManageCollision_NodeType()
 		{
-			Params = new() { new() };
+			Params = new() { new questManageCollision_NodeTypeParams() };
 
 			PostConstruct();
 		}

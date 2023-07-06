@@ -78,8 +78,8 @@ namespace WolvenKit.RED4.Types
 
 		public grsHeistPlayerGameInfo()
 		{
-			PeerID = new() { Value = 255 };
-			SpawnTime = new();
+			PeerID = new netPeerID { Value = 255 };
+			SpawnTime = new netTime();
 
 			PostConstruct();
 		}

@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Equip = true;
 			WeaponID = 71614763877;
-			SlotID = 118070326407;
+			SlotID = "AttachmentSlots.WeaponRight";
 
 			PostConstruct();
 		}

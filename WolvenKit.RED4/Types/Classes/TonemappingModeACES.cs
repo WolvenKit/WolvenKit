@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public TonemappingModeACES()
 		{
-			Params = new() { MinStops = -7.000000F, MaxStops = 9.000000F, MidGrayScale = 1.000000F, SurroundGamma = 1.000000F, ToneCurveSaturation = 1.000000F, AdjustWhitePoint = true, DimSurround = true };
+			Params = new STonemappingACESParams { MinStops = -7.000000F, MaxStops = 9.000000F, MidGrayScale = 1.000000F, SurroundGamma = 1.000000F, ToneCurveSaturation = 1.000000F, AdjustWhitePoint = true, DimSurround = true };
 
 			PostConstruct();
 		}

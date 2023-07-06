@@ -118,15 +118,15 @@ namespace WolvenKit.RED4.Types
 
 		public ShardNotificationController()
 		{
-			TitleRef = new();
-			ShortTextRef = new();
-			LongTextRef = new();
-			ShortTextHolderRef = new();
-			LongTextHolderRef = new();
-			ButtonHintsManagerRef = new();
-			ButtonHintsManagerParentRef = new();
-			ButtonHintsSecondaryManagerRef = new();
-			ButtonHintsSecondaryManagerParentRef = new();
+			TitleRef = new inkTextWidgetReference();
+			ShortTextRef = new inkTextWidgetReference();
+			LongTextRef = new inkTextWidgetReference();
+			ShortTextHolderRef = new inkWidgetReference();
+			LongTextHolderRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			ButtonHintsManagerParentRef = new inkWidgetReference();
+			ButtonHintsSecondaryManagerRef = new inkWidgetReference();
+			ButtonHintsSecondaryManagerParentRef = new inkWidgetReference();
 			LongTextTrashold = 1000;
 
 			PostConstruct();

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public gameuiarcadeBoundingCircle()
 		{
-			BoundingShape = new();
+			BoundingShape = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -87,7 +87,7 @@ namespace WolvenKit.RED4.Types
 		public entDynamicActorRepellingComponent()
 		{
 			Name = "Component";
-			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
 			Magnitude = 5.000000F;
 			BendIntensity = 1.000000F;
 			Radius = 1.000000F;

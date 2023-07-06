@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameMuppetComponent : entIComponent
+	public abstract partial class gameMuppetComponent : entIComponent
 	{
 		public gameMuppetComponent()
 		{

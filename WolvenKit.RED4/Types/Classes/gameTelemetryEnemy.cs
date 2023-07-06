@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameTelemetryEnemy()
 		{
-			EnemyEntityID = new();
+			EnemyEntityID = new entEntityID();
 			Archetype = Enums.gamedataArchetypeType.Invalid;
 			Level = -1;
 

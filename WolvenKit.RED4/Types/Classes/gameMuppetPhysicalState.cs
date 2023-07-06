@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameMuppetPhysicalState()
 		{
-			Position = new();
-			Velocity = new();
+			Position = new Vector4();
+			Velocity = new Vector4();
 			IsOnGround = true;
-			GroundNormal = new() { Z = 1.000000F };
+			GroundNormal = new Vector4 { Z = 1.000000F };
 
 			PostConstruct();
 		}

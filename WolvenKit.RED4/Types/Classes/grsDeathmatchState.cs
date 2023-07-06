@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public grsDeathmatchState()
 		{
-			Time = new();
-			SessionLength = new();
+			Time = new netTime();
+			SessionLength = new netTime();
 			PlayersInfo = new(0);
 
 			PostConstruct();

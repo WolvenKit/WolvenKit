@@ -110,13 +110,13 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationBodyMorphColorOption()
 		{
-			OptionLabel = new();
-			ColorPickerBtn = new();
-			SelectorNextBtn = new();
-			SelectorPrevBtn = new();
-			SelectorTexture = new();
-			ArrowsTexture = new();
-			OptionSwitchHint = new();
+			OptionLabel = new inkTextWidgetReference();
+			ColorPickerBtn = new inkWidgetReference();
+			SelectorNextBtn = new inkWidgetReference();
+			SelectorPrevBtn = new inkWidgetReference();
+			SelectorTexture = new inkImageWidgetReference();
+			ArrowsTexture = new inkImageWidgetReference();
+			OptionSwitchHint = new inkWidgetReference();
 			CurrColorIndex = -1;
 
 			PostConstruct();

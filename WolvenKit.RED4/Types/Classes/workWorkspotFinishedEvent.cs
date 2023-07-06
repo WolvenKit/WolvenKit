@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public workWorkspotFinishedEvent()
 		{
-			NodeId = new();
+			NodeId = new worldGlobalNodeID();
 			Tags = new();
 
 			PostConstruct();

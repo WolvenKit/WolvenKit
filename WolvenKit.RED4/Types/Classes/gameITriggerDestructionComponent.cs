@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameITriggerDestructionComponent : entIComponent
+	public abstract partial class gameITriggerDestructionComponent : entIComponent
 	{
 		[Ordinal(3)] 
 		[RED("startActive")] 

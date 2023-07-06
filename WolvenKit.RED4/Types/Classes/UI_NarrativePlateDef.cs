@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UI_NarrativePlateDef()
 		{
-			PlateData = new();
+			PlateData = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

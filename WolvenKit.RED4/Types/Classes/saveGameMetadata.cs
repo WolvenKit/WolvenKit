@@ -334,7 +334,7 @@ namespace WolvenKit.RED4.Types
 
 		public saveGameMetadata()
 		{
-			PlayerPosition = new();
+			PlayerPosition = new Vector3();
 			PlayTime = 0.000000;
 			PlaythroughTime = 0.000000;
 

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public PickupPhoneRequest()
 		{
-			CallInformation = new();
+			CallInformation = new questPhoneCallInformation();
 
 			PostConstruct();
 		}

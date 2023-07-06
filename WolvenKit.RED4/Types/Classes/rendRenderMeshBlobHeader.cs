@@ -176,8 +176,8 @@ namespace WolvenKit.RED4.Types
 			TopologyData = new();
 			TopologyMetadata = new();
 			Topology = new();
-			QuantizationScale = new();
-			QuantizationOffset = new();
+			QuantizationScale = new Vector4();
+			QuantizationOffset = new Vector4();
 
 			PostConstruct();
 		}

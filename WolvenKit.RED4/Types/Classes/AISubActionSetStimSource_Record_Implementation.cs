@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISubActionSetStimSource_Record_Implementation : IScriptable
+	public abstract partial class AISubActionSetStimSource_Record_Implementation : IScriptable
 	{
 		public AISubActionSetStimSource_Record_Implementation()
 		{

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkSpawningProcessor : ISerializable
+	public abstract partial class inkSpawningProcessor : ISerializable
 	{
 		public inkSpawningProcessor()
 		{

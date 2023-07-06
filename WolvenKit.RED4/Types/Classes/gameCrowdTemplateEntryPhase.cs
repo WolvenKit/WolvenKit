@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameCrowdTemplateEntryPhase()
 		{
-			TimePeriods = new() { new() { Density_52 = 0.500000F, Density_56 = "Zero", WorkspotsUsage = 0.500000F, CharactersData = new(), ReducedCharactersData = new(), UseDensityPreset = true } };
+			TimePeriods = new() { new gameCrowdPhaseTimePeriod { Density_52 = 0.500000F, Density_56 = "Zero", WorkspotsUsage = 0.500000F, CharactersData = new(), ReducedCharactersData = new(), UseDensityPreset = true } };
 			CharactersData = new();
 			Legacy = true;
 			LegacyDensityInTimePeriods = true;

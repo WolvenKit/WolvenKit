@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldCollisionAreaNode()
 		{
-			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			NavigationSetting = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIFSMTransitionDefinition()
 		{
-			Destination = 65535;
+			Destination = ushort.MaxValue;
 
 			PostConstruct();
 		}

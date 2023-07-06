@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 
 		public Transform()
 		{
-			Position = new();
-			Orientation = new() { R = 1.000000F };
+			Position = new Vector4();
+			Orientation = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

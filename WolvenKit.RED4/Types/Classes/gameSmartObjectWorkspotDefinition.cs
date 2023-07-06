@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameSmartObjectWorkspotDefinition()
 		{
+			WorkspotTemplate = new CResourceReference<workWorkspotResource>(@"base\gameplay\workspots\cover_workspot.workspot");
+
 			PostConstruct();
 		}
 

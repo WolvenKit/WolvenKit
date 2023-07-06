@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public inkDrawArea()
 		{
-			Size = new();
+			Size = new Vector2();
 			Scale = 1.000000F;
-			RelativePosition = new();
-			AbsolutePosition = new();
+			RelativePosition = new Vector2();
+			AbsolutePosition = new Vector2();
 
 			PostConstruct();
 		}

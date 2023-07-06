@@ -39,8 +39,8 @@ namespace WolvenKit.RED4.Types
 		public physicsPhysicalJointPin()
 		{
 			FeatureIndex = -1;
-			LocalPosition = new();
-			LocalRotation = new() { R = 1.000000F };
+			LocalPosition = new Vector3();
+			LocalRotation = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

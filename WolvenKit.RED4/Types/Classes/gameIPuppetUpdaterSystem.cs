@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIPuppetUpdaterSystem : gameIGameSystem
+	public abstract partial class gameIPuppetUpdaterSystem : gameIGameSystem
 	{
 		public gameIPuppetUpdaterSystem()
 		{

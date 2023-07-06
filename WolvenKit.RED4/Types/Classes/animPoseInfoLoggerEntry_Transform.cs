@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animPoseInfoLoggerEntry_Transform()
 		{
-			Transform = new();
+			Transform = new animTransformIndex();
 
 			PostConstruct();
 		}

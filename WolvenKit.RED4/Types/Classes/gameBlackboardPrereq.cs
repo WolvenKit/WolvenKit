@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameBlackboardPrereq()
 		{
-			BlackboardValue = new() { SerializableID = new(), PropertyPath = new() };
+			BlackboardValue = new gameBlackboardPropertyBindingDefinition { SerializableID = new gameBlackboardSerializableID(), PropertyPath = new() };
 
 			PostConstruct();
 		}

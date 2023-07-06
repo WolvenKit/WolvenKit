@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questForceModule_NodeType()
 		{
-			Params = new() { new() };
+			Params = new() { new questForceVMModule_NodeTypeParams() };
 
 			PostConstruct();
 		}

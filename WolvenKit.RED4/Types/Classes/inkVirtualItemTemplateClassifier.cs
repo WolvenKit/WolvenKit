@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkVirtualItemTemplateClassifier : RedBaseClass
+	public abstract partial class inkVirtualItemTemplateClassifier : RedBaseClass
 	{
 		public inkVirtualItemTemplateClassifier()
 		{

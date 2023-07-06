@@ -100,8 +100,8 @@ namespace WolvenKit.RED4.Types
 			MaxRotationSpeed = 360.000000F;
 			MinRotationSpeed = 180.000000F;
 			DiffForMaxRotation = 120.000000F;
-			TargetPosition = new();
-			TargetOffset = new();
+			TargetPosition = new Vector4();
+			TargetOffset = new Vector4();
 			Accuracy = 1.000000F;
 
 			PostConstruct();

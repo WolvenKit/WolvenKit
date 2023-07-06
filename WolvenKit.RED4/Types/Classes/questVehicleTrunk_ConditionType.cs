@@ -63,8 +63,8 @@ namespace WolvenKit.RED4.Types
 		public questVehicleTrunk_ConditionType()
 		{
 			PlayerVehicle = true;
-			VehicleRef = new() { Names = new() };
-			ObjectRef = new() { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 			IsInside = true;
 
 			PostConstruct();

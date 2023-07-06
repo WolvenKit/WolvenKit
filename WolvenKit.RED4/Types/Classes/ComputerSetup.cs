@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.Types
 			FilesStructure = new();
 			NewsFeed = new();
 			NewsFeedInterval = 5.000000F;
-			InternetSubnet = new();
+			InternetSubnet = new SInternetData();
 
 			PostConstruct();
 		}

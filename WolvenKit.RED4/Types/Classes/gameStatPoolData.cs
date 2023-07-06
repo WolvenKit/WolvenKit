@@ -118,7 +118,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameStatPoolData()
 		{
-			OwnerID = new() { IdType = Enums.gameStatIDType.Invalid };
+			OwnerID = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
 			Type = Enums.gamedataStatPoolType.Invalid;
 			Modifiers = new(2);
 			AlternativeModifierRecords = new(2);

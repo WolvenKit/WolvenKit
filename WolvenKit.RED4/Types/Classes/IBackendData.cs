@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IBackendData : ISerializable
+	public abstract partial class IBackendData : ISerializable
 	{
 		public IBackendData()
 		{

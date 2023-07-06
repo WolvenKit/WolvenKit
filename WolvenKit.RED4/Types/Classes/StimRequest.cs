@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public StimRequest()
 		{
-			RequestID = new();
+			RequestID = new StimRequestID();
 
 			PostConstruct();
 		}

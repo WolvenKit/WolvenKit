@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkCallbackBase : RedBaseClass
+	public abstract partial class inkCallbackBase : RedBaseClass
 	{
 		[Ordinal(0)] 
 		[RED("callbackName")] 

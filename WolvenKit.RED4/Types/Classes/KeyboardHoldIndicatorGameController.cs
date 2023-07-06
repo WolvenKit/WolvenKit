@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public KeyboardHoldIndicatorGameController()
 		{
-			Progress = new();
+			Progress = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

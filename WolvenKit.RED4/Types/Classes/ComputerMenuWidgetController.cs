@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerMenuWidgetController()
 		{
-			ThumbnailsListWidget = new();
-			ContentWidget = new();
+			ThumbnailsListWidget = new inkWidgetReference();
+			ContentWidget = new inkWidgetReference();
 			FileWidgetsData = new();
 			FileThumbnailWidgetsData = new();
 

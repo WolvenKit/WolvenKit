@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public questTeleport_NodeType()
 		{
-			EntityReference = new() { Names = new() };
-			Params = new() { DestinationOffset = new() };
+			EntityReference = new gameEntityReference { Names = new() };
+			Params = new questTeleportPuppetParams { DestinationOffset = new Vector3() };
 
 			PostConstruct();
 		}

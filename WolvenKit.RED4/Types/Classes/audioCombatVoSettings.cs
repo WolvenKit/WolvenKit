@@ -94,10 +94,10 @@ namespace WolvenKit.RED4.Types
 
 		public audioCombatVoSettings()
 		{
-			GeneralGruntSettings = new() { VariationsCount = 1, ContextualVoiceGruntSettings = new() { PainShort = new(), Effort = new() }, GruntVariations = new() { CachedVariations = new() } };
-			VoTriggerLimits = new() { Probability = 1.000000F };
-			BarkTriggerLimits = new() { Probability = 1.000000F };
-			GruntTriggerLimits = new() { Probability = 1.000000F };
+			GeneralGruntSettings = new audioGeneralVoiceGruntSettings { VariationsCount = 1, ContextualVoiceGruntSettings = new audioContextualVoiceGruntSettings { PainShort = new audioContextualVoiceGrunt(), Effort = new audioContextualVoiceGrunt() }, GruntVariations = new audioVoiceGruntVariations { CachedVariations = new() } };
+			VoTriggerLimits = new audioVoiceTriggerLimits { Probability = 1.000000F };
+			BarkTriggerLimits = new audioVoiceTriggerLimits { Probability = 1.000000F };
+			GruntTriggerLimits = new audioVoiceTriggerLimits { Probability = 1.000000F };
 			MinDamageToInterruptVoWithPainShort = 9.000000F;
 			MinDamageToInterruptVoWithPainLong = 30.000000F;
 

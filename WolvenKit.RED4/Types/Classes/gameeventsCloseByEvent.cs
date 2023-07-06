@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameeventsCloseByEvent()
 		{
-			Position = new();
-			Forward = new();
+			Position = new Vector4();
+			Forward = new Vector4();
 
 			PostConstruct();
 		}

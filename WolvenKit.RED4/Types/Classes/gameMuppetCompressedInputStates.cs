@@ -39,8 +39,8 @@ namespace WolvenKit.RED4.Types
 		public gameMuppetCompressedInputStates()
 		{
 			CompressedInputStates = new();
-			FirstFrameId = 4294967295;
-			ReplicationTime = new();
+			FirstFrameId = uint.MaxValue;
+			ReplicationTime = new netTime();
 
 			PostConstruct();
 		}

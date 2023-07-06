@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IDynamicTextureGenerator : ISerializable
+	public abstract partial class IDynamicTextureGenerator : ISerializable
 	{
 		public IDynamicTextureGenerator()
 		{

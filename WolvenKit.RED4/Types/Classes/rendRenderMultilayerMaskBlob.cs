@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class rendRenderMultilayerMaskBlob : IRenderResourceBlob
+	public abstract partial class rendRenderMultilayerMaskBlob : IRenderResourceBlob
 	{
 		[Ordinal(0)] 
 		[RED("header")] 

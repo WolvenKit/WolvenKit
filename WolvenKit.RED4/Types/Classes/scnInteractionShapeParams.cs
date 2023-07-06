@@ -71,8 +71,8 @@ namespace WolvenKit.RED4.Types
 		public scnInteractionShapeParams()
 		{
 			Preset = Enums.scnChoiceNodeNsSizePreset.normal;
-			Offset = new();
-			Rotation = new() { R = 1.000000F };
+			Offset = new Vector3();
+			Rotation = new Quaternion { R = 1.000000F };
 			ActivationBaseLength = 1.000000F;
 			ActivationHeight = 3.000000F;
 

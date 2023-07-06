@@ -62,12 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_LookAt()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			Transform = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			Transform = new animTransformIndex();
 			LimitAngle = 90.000000F;
-			TargetNode = new();
-			WeightNode = new();
+			TargetNode = new animVectorLink();
+			WeightNode = new animFloatLink();
 
 			PostConstruct();
 		}

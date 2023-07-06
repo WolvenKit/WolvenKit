@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamecameraISettingManager : gameIGameSystem
+	public abstract partial class gamecameraISettingManager : gameIGameSystem
 	{
 		public gamecameraISettingManager()
 		{

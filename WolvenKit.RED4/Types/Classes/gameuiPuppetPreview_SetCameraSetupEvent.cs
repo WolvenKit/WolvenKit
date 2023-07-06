@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiPuppetPreview_SetCameraSetupEvent()
 		{
-			SetupIndex = 4294967295;
+			SetupIndex = uint.MaxValue;
 
 			PostConstruct();
 		}

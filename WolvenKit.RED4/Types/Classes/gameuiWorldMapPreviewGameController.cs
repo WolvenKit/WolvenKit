@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiWorldMapPreviewGameController()
 		{
-			Canvas = new();
+			Canvas = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

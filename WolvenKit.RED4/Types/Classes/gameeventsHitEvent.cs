@@ -102,9 +102,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameeventsHitEvent()
 		{
-			HitPosition = new();
-			HitDirection = new();
-			HitRepresentationResult = new() { HitShapes = new() };
+			HitPosition = new Vector4();
+			HitDirection = new Vector4();
+			HitRepresentationResult = new gameQueryResult { HitShapes = new() };
 
 			PostConstruct();
 		}

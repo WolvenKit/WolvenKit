@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamePlayerClimbInfo()
 		{
-			ObstacleEnd = new();
+			ObstacleEnd = new Vector4();
 
 			PostConstruct();
 		}

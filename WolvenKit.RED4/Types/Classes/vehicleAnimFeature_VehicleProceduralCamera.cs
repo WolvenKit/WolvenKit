@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleAnimFeature_VehicleProceduralCamera()
 		{
-			CameraTranslationVS = new();
-			CameraOrientationVS = new() { R = 1.000000F };
+			CameraTranslationVS = new Vector4();
+			CameraOrientationVS = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

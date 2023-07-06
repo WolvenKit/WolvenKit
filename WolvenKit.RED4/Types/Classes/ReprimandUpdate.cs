@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public ReprimandUpdate()
 		{
-			Target = new();
-			TargetPos = new();
+			Target = new entEntityID();
+			TargetPos = new Vector4();
 
 			PostConstruct();
 		}

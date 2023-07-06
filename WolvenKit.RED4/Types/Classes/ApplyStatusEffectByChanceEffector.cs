@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyStatusEffectByChanceEffector()
 		{
-			TargetEntityID = new();
+			TargetEntityID = new entEntityID();
 
 			PostConstruct();
 		}

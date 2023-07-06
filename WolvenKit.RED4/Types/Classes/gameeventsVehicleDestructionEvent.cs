@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameeventsVehicleDestructionEvent()
 		{
-			HitPosition = new();
-			HitDirection = new();
+			HitPosition = new Vector4();
+			HitDirection = new Vector4();
 
 			PostConstruct();
 		}

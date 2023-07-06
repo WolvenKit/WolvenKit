@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public SDocumentThumbnailWidgetPackage()
 		{
-			DocumentAdress = new() { FolderID = -1, DocumentID = -1 };
-			QuestInfo = new();
+			DocumentAdress = new SDocumentAdress { FolderID = -1, DocumentID = -1 };
+			QuestInfo = new gamedeviceQuestInfo();
 
 			PostConstruct();
 		}

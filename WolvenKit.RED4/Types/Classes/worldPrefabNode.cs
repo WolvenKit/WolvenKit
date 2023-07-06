@@ -144,7 +144,7 @@ namespace WolvenKit.RED4.Types
 		{
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			OccluderAutoHideDistanceScale = 255;
-			ProxyScale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			ProxyScale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 
 			PostConstruct();
 		}

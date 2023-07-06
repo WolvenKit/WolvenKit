@@ -78,16 +78,16 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_EyesLookAt()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			TargetALink = new();
-			WeightALink = new();
-			TargetBLink = new();
-			WeightBLink = new();
-			TransitionWeightLink = new();
-			LeftEye = new();
-			RightEye = new();
-			Head = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			TargetALink = new animVectorLink();
+			WeightALink = new animFloatLink();
+			TargetBLink = new animVectorLink();
+			WeightBLink = new animFloatLink();
+			TransitionWeightLink = new animFloatLink();
+			LeftEye = new animTransformIndex();
+			RightEye = new animTransformIndex();
+			Head = new animTransformIndex();
 			ForwardDirection = Enums.animAxis.NegativeY;
 
 			PostConstruct();

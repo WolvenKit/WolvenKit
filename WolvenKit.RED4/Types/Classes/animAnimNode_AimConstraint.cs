@@ -86,15 +86,15 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_AimConstraint()
 		{
-			Id = 4294967295;
-			InputLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
 			TargetTransforms = new();
-			TargetTransform = new();
-			TransformIndex = new();
-			ForwardAxisLS = new() { X = 1.000000F };
-			UpAxisLS = new() { Y = 1.000000F };
+			TargetTransform = new animTransformIndex();
+			TransformIndex = new animTransformIndex();
+			ForwardAxisLS = new Vector3 { X = 1.000000F };
+			UpAxisLS = new Vector3 { Y = 1.000000F };
 			Weight = 1.000000F;
-			WeightFloatTrack = new();
+			WeightFloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldIMarker : ISerializable
+	public abstract partial class worldIMarker : ISerializable
 	{
 		public worldIMarker()
 		{

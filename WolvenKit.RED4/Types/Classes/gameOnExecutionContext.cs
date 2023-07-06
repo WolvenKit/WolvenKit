@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameOnExecutionContext : RedBaseClass
+	public abstract partial class gameOnExecutionContext : RedBaseClass
 	{
 		public gameOnExecutionContext()
 		{

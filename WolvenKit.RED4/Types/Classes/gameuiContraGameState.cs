@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Types
 			OpertyMaxScore = "m_maxScore";
 			OpertyCurrentLives = "m_currentLives";
 			OpertyCurrentScore = "m_currentScore";
-			PropertyChanged_ = new();
+			PropertyChanged_ = new gameuiGameStatePropertyChangedCallback();
 
 			PostConstruct();
 		}

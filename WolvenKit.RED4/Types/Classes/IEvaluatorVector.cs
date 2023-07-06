@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IEvaluatorVector : IEvaluator
+	public abstract partial class IEvaluatorVector : IEvaluator
 	{
 		[Ordinal(0)] 
 		[RED("freeAxes")] 

@@ -206,13 +206,13 @@ namespace WolvenKit.RED4.Types
 
 		public LoadGameMenuGameController()
 		{
-			List = new();
-			NoSavedGamesLabel = new();
-			ButtonHintsManagerRef = new();
-			GogButtonWidgetRef = new();
-			GogContainer = new();
-			LaodingSpinner = new();
-			Scrollbar = new();
+			List = new inkCompoundWidgetReference();
+			NoSavedGamesLabel = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			GogButtonWidgetRef = new inkWidgetReference();
+			GogContainer = new inkWidgetReference();
+			LaodingSpinner = new inkWidgetReference();
+			Scrollbar = new inkWidgetReference();
 			Saves = new();
 
 			PostConstruct();

@@ -136,14 +136,14 @@ namespace WolvenKit.RED4.Types
 		{
 			CellRes = 128;
 			CellSize = 256;
-			Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
-			Position = new();
-			ExtraOffset = new();
+			Scale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			Position = new Vector3();
+			ExtraOffset = new Vector2();
 			ImportHeightMaps = true;
 			ImportColorMaps = true;
 			ImportControlMaps = true;
 			OverwriteTransformsOfExistingNodes = true;
-			DstPrefabNodePath = new() { Elements = new() };
+			DstPrefabNodePath = new toolsEditorObjectIDPath { Elements = new() };
 
 			PostConstruct();
 		}

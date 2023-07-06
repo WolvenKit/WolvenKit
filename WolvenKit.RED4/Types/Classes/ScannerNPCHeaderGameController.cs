@@ -86,9 +86,9 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerNPCHeaderGameController()
 		{
-			NameText = new();
-			SkullIndicator = new();
-			ArchetypeIcon = new();
+			NameText = new inkTextWidgetReference();
+			SkullIndicator = new inkWidgetReference();
+			ArchetypeIcon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

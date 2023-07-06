@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 		public inkanimTranslationInterpolator()
 		{
 			InterpolationDirection = Enums.inkanimInterpolationDirection.FromTo;
-			StartValue = new();
-			EndValue = new();
+			StartValue = new Vector2();
+			EndValue = new Vector2();
 
 			PostConstruct();
 		}

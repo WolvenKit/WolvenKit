@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AbstractLandDecisions : LocomotionGroundDecisions
+	public abstract partial class AbstractLandDecisions : LocomotionGroundDecisions
 	{
 		public AbstractLandDecisions()
 		{

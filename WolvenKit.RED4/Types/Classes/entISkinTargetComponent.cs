@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entISkinTargetComponent : entIVisualComponent
+	public abstract partial class entISkinTargetComponent : entIVisualComponent
 	{
 		[Ordinal(8)] 
 		[RED("skinning")] 

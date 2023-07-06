@@ -62,12 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public PerksPointsDisplayController()
 		{
-			Desc1Text = new();
-			Value1Text = new();
-			Icon1 = new();
-			Desc2Text = new();
-			Value2Text = new();
-			Icon2 = new();
+			Desc1Text = new inkTextWidgetReference();
+			Value1Text = new inkTextWidgetReference();
+			Icon1 = new inkImageWidgetReference();
+			Desc2Text = new inkTextWidgetReference();
+			Value2Text = new inkTextWidgetReference();
+			Icon2 = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

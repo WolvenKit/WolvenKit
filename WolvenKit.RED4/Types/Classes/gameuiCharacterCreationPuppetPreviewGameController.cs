@@ -70,9 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiCharacterCreationPuppetPreviewGameController()
 		{
-			Root = new();
-			Image = new();
-			AnimLib = new() { WidgetLibrary = new() };
+			Root = new inkCompoundWidgetReference();
+			Image = new inkImageWidgetReference();
+			AnimLib = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
 
 			PostConstruct();
 		}

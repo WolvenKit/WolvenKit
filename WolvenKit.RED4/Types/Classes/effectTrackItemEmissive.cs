@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemEmissive()
 		{
 			TimeDuration = 1.000000F;
-			Brigtness = new();
+			Brigtness = new effectEffectParameterEvaluatorFloat();
 
 			PostConstruct();
 		}

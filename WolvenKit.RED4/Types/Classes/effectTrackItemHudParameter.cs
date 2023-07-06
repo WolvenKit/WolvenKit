@@ -40,9 +40,9 @@ namespace WolvenKit.RED4.Types
 		{
 			TimeDuration = 1.000000F;
 			Scale = 1.000000F;
-			GlitchParameter = new();
+			GlitchParameter = new effectEffectParameterEvaluator();
 			Scale1 = 1.000000F;
-			GlitchParameter1 = new();
+			GlitchParameter1 = new effectEffectParameterEvaluator();
 
 			PostConstruct();
 		}

@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public sampleUIInteractionWidgetLogicController()
 		{
-			EnableStateColor = new();
-			DisableStateColor = new();
+			EnableStateColor = new CColor();
+			DisableStateColor = new CColor();
 
 			PostConstruct();
 		}

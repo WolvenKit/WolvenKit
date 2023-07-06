@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameGetActionsContext()
 		{
-			RequestorID = new();
+			RequestorID = new entEntityID();
 			ActionPrereqs = new();
 
 			PostConstruct();

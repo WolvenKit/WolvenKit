@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public gamePlayerSpawnParams()
 		{
-			SpawnPoint = new() { Position = new(), Orientation = new() { R = 1.000000F } };
-			SpawnTags = new() { Tags = new() };
+			SpawnPoint = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			SpawnTags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

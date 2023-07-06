@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UI_CompanionDef()
 		{
-			FlatHeadSpawned = new();
+			FlatHeadSpawned = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

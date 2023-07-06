@@ -86,16 +86,16 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipWeaponInfoModule()
 		{
-			Wrapper = new();
-			Arrow = new();
-			DpsText = new();
-			PerHitText = new();
-			AttacksPerSecondText = new();
-			NonLethal = new();
-			ScopeIndicator = new();
-			SilencerIndicator = new();
-			AmmoText = new();
-			AmmoWrapper = new();
+			Wrapper = new inkWidgetReference();
+			Arrow = new inkImageWidgetReference();
+			DpsText = new inkTextWidgetReference();
+			PerHitText = new inkTextWidgetReference();
+			AttacksPerSecondText = new inkTextWidgetReference();
+			NonLethal = new inkTextWidgetReference();
+			ScopeIndicator = new inkWidgetReference();
+			SilencerIndicator = new inkWidgetReference();
+			AmmoText = new inkTextWidgetReference();
+			AmmoWrapper = new inkWidgetReference();
 
 			PostConstruct();
 		}

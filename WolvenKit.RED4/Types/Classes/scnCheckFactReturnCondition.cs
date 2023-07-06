@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnCheckFactReturnCondition()
 		{
-			Params = new();
+			Params = new scnCheckFactReturnConditionParams();
 
 			PostConstruct();
 		}

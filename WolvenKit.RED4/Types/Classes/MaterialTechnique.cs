@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public MaterialTechnique()
 		{
 			Passes = new();
-			FeatureFlagsEnabledMask = new();
+			FeatureFlagsEnabledMask = new FeatureFlagsMask();
 
 			PostConstruct();
 		}

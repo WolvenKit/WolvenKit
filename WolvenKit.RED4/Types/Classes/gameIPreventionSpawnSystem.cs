@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIPreventionSpawnSystem : gameIGameSystem
+	public abstract partial class gameIPreventionSpawnSystem : gameIGameSystem
 	{
 		public gameIPreventionSpawnSystem()
 		{

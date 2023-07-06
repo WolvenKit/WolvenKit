@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entPhysicalTriggerComponent : entIPlacedComponent
+	public abstract partial class entPhysicalTriggerComponent : entIPlacedComponent
 	{
 		[Ordinal(5)] 
 		[RED("simulationType")] 

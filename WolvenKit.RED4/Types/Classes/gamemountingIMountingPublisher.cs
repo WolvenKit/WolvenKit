@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamemountingIMountingPublisher : gameIGameSystem
+	public abstract partial class gamemountingIMountingPublisher : gameIGameSystem
 	{
 		public gamemountingIMountingPublisher()
 		{

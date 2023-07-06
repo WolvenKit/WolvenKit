@@ -121,9 +121,9 @@ namespace WolvenKit.RED4.Types
 			Enabled = true;
 			ContextVisibility = Enums.worlduiContextVisibility.SceneDefault | Enums.worlduiContextVisibility.SceneTier1 | Enums.worlduiContextVisibility.SceneTier2 | Enums.worlduiContextVisibility.SceneTier3 | Enums.worlduiContextVisibility.SceneTier4 | Enums.worlduiContextVisibility.SceneTier5;
 			GameContextVisibility = Enums.gameuiContext.Default | Enums.gameuiContext.QuickHack | Enums.gameuiContext.Scanning | Enums.gameuiContext.BraindanceEditor | Enums.gameuiContext.BraindancePlayback | Enums.gameuiContext.VehicleMounted;
-			AnchorPoint = new();
-			Margins = new();
-			SlotParams = new() { UseSlotLayout = true, LayoutOverride = new() { Padding = new(), Margin = new(), AnchorPoint = new(), SizeCoefficient = 1.000000F } };
+			AnchorPoint = new Vector2();
+			Margins = new inkMargin();
+			SlotParams = new inkWidgetSlotAttachmentParams { UseSlotLayout = true, LayoutOverride = new inkWidgetLayout { Padding = new inkMargin(), Margin = new inkMargin(), AnchorPoint = new Vector2(), SizeCoefficient = 1.000000F } };
 
 			PostConstruct();
 		}

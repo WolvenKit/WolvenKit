@@ -102,8 +102,8 @@ namespace WolvenKit.RED4.Types
 
 		public WarningMessageGameController()
 		{
-			MainTextWidget = new();
-			SimpleMessage = new();
+			MainTextWidget = new inkTextWidgetReference();
+			SimpleMessage = new gameSimpleScreenMessage();
 
 			PostConstruct();
 		}

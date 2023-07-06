@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIbehaviorNestedTreeDefinition : AIbehaviorTreeNodeDefinition
+	public abstract partial class AIbehaviorNestedTreeDefinition : AIbehaviorTreeNodeDefinition
 	{
 		[Ordinal(0)] 
 		[RED("lateInitialization")] 

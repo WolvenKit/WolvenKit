@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public CComStaticSkeletonDataEntry()
 		{
-			LocationLS = new() { W = 1.000000F };
+			LocationLS = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

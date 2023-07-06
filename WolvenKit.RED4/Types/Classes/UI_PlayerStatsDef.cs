@@ -150,24 +150,24 @@ namespace WolvenKit.RED4.Types
 
 		public UI_PlayerStatsDef()
 		{
-			MaxHealth = new();
-			CurrentHealth = new();
-			PhysicalResistance = new();
-			ThermalResistance = new();
-			EnergyResistance = new();
-			ChemicalResistance = new();
-			Level = new();
-			CurrentXP = new();
-			StreetCredLevel = new();
-			StreetCredPoints = new();
-			Attributes = new();
-			DevelopmentPoints = new();
-			Proficiency = new();
-			Perks = new();
-			ModifiedPerkArea = new();
-			WeightMax = new();
-			CurrentInventoryWeight = new();
-			IsReplacer = new();
+			MaxHealth = new gamebbScriptID_Int32();
+			CurrentHealth = new gamebbScriptID_Int32();
+			PhysicalResistance = new gamebbScriptID_Int32();
+			ThermalResistance = new gamebbScriptID_Int32();
+			EnergyResistance = new gamebbScriptID_Int32();
+			ChemicalResistance = new gamebbScriptID_Int32();
+			Level = new gamebbScriptID_Int32();
+			CurrentXP = new gamebbScriptID_Int32();
+			StreetCredLevel = new gamebbScriptID_Int32();
+			StreetCredPoints = new gamebbScriptID_Int32();
+			Attributes = new gamebbScriptID_Variant();
+			DevelopmentPoints = new gamebbScriptID_Variant();
+			Proficiency = new gamebbScriptID_Variant();
+			Perks = new gamebbScriptID_Variant();
+			ModifiedPerkArea = new gamebbScriptID_Variant();
+			WeightMax = new gamebbScriptID_Int32();
+			CurrentInventoryWeight = new gamebbScriptID_Float();
+			IsReplacer = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

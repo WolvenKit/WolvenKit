@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldSaveSanitizationForbiddenAreaNode()
 		{
-			SafeSpotOffset = new();
+			SafeSpotOffset = new Vector4();
 
 			PostConstruct();
 		}

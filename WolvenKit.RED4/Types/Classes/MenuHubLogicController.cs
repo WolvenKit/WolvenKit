@@ -158,23 +158,23 @@ namespace WolvenKit.RED4.Types
 
 		public MenuHubLogicController()
 		{
-			MenuObject = new();
-			BtnCrafting = new();
-			BtnPerks = new();
-			BtnStats = new();
-			BtnInventory = new();
-			BtnBackpack = new();
-			BtnCyberware = new();
-			BtnMap = new();
-			BtnJournal = new();
-			BtnPhone = new();
-			BtnTarot = new();
-			BtnShard = new();
-			BtnCodex = new();
-			PanelInventory = new();
-			PanelJournal = new();
-			PanelCharacter = new();
-			TooltipsManagerRef = new();
+			MenuObject = new inkWidgetReference();
+			BtnCrafting = new inkWidgetReference();
+			BtnPerks = new inkWidgetReference();
+			BtnStats = new inkWidgetReference();
+			BtnInventory = new inkWidgetReference();
+			BtnBackpack = new inkWidgetReference();
+			BtnCyberware = new inkWidgetReference();
+			BtnMap = new inkWidgetReference();
+			BtnJournal = new inkWidgetReference();
+			BtnPhone = new inkWidgetReference();
+			BtnTarot = new inkWidgetReference();
+			BtnShard = new inkWidgetReference();
+			BtnCodex = new inkWidgetReference();
+			PanelInventory = new inkWidgetReference();
+			PanelJournal = new inkWidgetReference();
+			PanelCharacter = new inkWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
 
 			PostConstruct();
 		}

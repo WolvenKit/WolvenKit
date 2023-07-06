@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISubActionActivateStrongArmsFX_Record_Implementation : IScriptable
+	public abstract partial class AISubActionActivateStrongArmsFX_Record_Implementation : IScriptable
 	{
 		public AISubActionActivateStrongArmsFX_Record_Implementation()
 		{

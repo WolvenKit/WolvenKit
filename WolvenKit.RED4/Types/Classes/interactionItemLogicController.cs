@@ -182,23 +182,23 @@ namespace WolvenKit.RED4.Types
 
 		public interactionItemLogicController()
 		{
-			InputButtonContainer = new();
-			InputDisplayControllerRef = new();
-			QuickHackCostHolder = new();
-			QuickHackCost = new();
-			QuickHackIcon = new();
-			QuickHackHolder = new();
-			Label = new();
-			LabelFail = new();
-			SkillCheckPassBG = new();
-			SkillCheckFailBG = new();
-			QHIllegalIndicator = new();
-			SCIllegalIndicator = new();
-			AdditionalReqsNeeded = new();
-			SkillCheck = new();
-			SkillCheckNormalReqs = new();
-			SkillCheckIcon = new();
-			SkillCheckText = new();
+			InputButtonContainer = new inkCompoundWidgetReference();
+			InputDisplayControllerRef = new inkWidgetReference();
+			QuickHackCostHolder = new inkWidgetReference();
+			QuickHackCost = new inkTextWidgetReference();
+			QuickHackIcon = new inkImageWidgetReference();
+			QuickHackHolder = new inkCompoundWidgetReference();
+			Label = new inkTextWidgetReference();
+			LabelFail = new inkTextWidgetReference();
+			SkillCheckPassBG = new inkWidgetReference();
+			SkillCheckFailBG = new inkWidgetReference();
+			QHIllegalIndicator = new inkWidgetReference();
+			SCIllegalIndicator = new inkWidgetReference();
+			AdditionalReqsNeeded = new inkWidgetReference();
+			SkillCheck = new inkCompoundWidgetReference();
+			SkillCheckNormalReqs = new inkCompoundWidgetReference();
+			SkillCheckIcon = new inkImageWidgetReference();
+			SkillCheckText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

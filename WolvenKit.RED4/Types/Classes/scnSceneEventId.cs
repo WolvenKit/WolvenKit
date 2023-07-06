@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnSceneEventId()
 		{
-			Id = 18446744073709551615;
+			Id = long.MaxValue;
 
 			PostConstruct();
 		}

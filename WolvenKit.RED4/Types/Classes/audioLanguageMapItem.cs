@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public audioLanguageMapItem()
 		{
-			Language = new();
+			Language = new audioLanguage();
 
 			PostConstruct();
 		}

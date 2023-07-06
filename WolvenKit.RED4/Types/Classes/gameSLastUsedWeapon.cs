@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameSLastUsedWeapon()
 		{
-			LastUsedWeapon = new();
-			LastUsedRanged = new();
-			LastUsedMelee = new();
-			LastUsedHeavy = new();
+			LastUsedWeapon = new gameItemID();
+			LastUsedRanged = new gameItemID();
+			LastUsedMelee = new gameItemID();
+			LastUsedHeavy = new gameItemID();
 
 			PostConstruct();
 		}

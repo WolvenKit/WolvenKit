@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public gamedebugFailure()
 		{
-			Id = new();
-			Path = new();
+			Id = new gamedebugFailureId();
+			Path = new gameDebugPath();
 
 			PostConstruct();
 		}

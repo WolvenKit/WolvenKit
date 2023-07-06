@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIMultiplayerHeistNodeType : questINodeType
+	public abstract partial class questIMultiplayerHeistNodeType : questINodeType
 	{
 		public questIMultiplayerHeistNodeType()
 		{

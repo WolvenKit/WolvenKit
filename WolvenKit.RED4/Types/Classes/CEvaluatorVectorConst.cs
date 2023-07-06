@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			FreeAxes = Enums.EFreeVectorAxes.FVA_Three;
 			Spill = true;
-			Value = new();
+			Value = new Vector4();
 
 			PostConstruct();
 		}

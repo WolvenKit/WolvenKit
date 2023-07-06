@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldNavigationTileResource()
 		{
-			LocalBoundingBox = new() { Min = new(), Max = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
+			LocalBoundingBox = new Box { Min = new Vector4(), Max = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
 			TilesData = new();
 
 			PostConstruct();

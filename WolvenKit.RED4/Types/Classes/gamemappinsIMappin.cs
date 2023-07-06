@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamemappinsIMappin : gamemappinsIVisualObject
+	public abstract partial class gamemappinsIMappin : gamemappinsIVisualObject
 	{
 		public gamemappinsIMappin()
 		{

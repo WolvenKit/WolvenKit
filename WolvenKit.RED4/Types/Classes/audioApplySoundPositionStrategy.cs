@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class audioApplySoundPositionStrategy : RedBaseClass
+	public abstract partial class audioApplySoundPositionStrategy : RedBaseClass
 	{
 		public audioApplySoundPositionStrategy()
 		{

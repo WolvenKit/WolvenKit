@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IWorldWidgetComponent : WidgetBaseComponent
+	public abstract partial class IWorldWidgetComponent : WidgetBaseComponent
 	{
 		[Ordinal(5)] 
 		[RED("glitchValue")] 

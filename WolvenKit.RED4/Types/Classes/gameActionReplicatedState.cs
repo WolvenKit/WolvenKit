@@ -47,8 +47,8 @@ namespace WolvenKit.RED4.Types
 		public gameActionReplicatedState()
 		{
 			Type = 72;
-			StartTimeStamp = new() { MilliSecs = 18446744073709551615 };
-			StopTimeStamp = new() { MilliSecs = 18446744073709551615 };
+			StartTimeStamp = new netTime { MilliSecs = long.MaxValue };
+			StopTimeStamp = new netTime { MilliSecs = long.MaxValue };
 			UpdateBucket = 2;
 
 			PostConstruct();

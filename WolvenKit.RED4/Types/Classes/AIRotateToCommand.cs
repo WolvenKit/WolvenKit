@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIRotateToCommand()
 		{
-			Target = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() } };
+			Target = new AIPositionSpec { WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() } };
 
 			PostConstruct();
 		}

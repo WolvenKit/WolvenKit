@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public PuppetActionContext()
 		{
-			RequesterID = new();
+			RequesterID = new entEntityID();
 
 			PostConstruct();
 		}

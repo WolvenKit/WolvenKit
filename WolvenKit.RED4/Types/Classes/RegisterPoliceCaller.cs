@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public RegisterPoliceCaller()
 		{
-			CrimePosition = new();
+			CrimePosition = new Vector4();
 
 			PostConstruct();
 		}

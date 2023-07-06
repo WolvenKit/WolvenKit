@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public CheckFreeWorkspot()
 		{
-			GlobalRef = new();
+			GlobalRef = new worldGlobalNodeRef();
 
 			PostConstruct();
 		}

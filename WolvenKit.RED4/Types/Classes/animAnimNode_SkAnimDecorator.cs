@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SkAnimDecorator()
 		{
-			Fallback = new();
+			Fallback = new animPoseLink();
 
 			PostConstruct();
 		}

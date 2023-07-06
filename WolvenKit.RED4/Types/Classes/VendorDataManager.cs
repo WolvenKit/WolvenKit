@@ -89,7 +89,7 @@ namespace WolvenKit.RED4.Types
 			BuyingCart = new();
 			SellingCart = new();
 			VendingBlacklist = new();
-			OpenTime = new();
+			OpenTime = new GameTime();
 
 			PostConstruct();
 		}

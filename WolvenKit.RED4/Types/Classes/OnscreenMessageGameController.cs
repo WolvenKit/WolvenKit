@@ -102,8 +102,8 @@ namespace WolvenKit.RED4.Types
 
 		public OnscreenMessageGameController()
 		{
-			ScreenMessage = new();
-			MainTextWidget = new();
+			ScreenMessage = new gameSimpleScreenMessage();
+			MainTextWidget = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

@@ -86,14 +86,14 @@ namespace WolvenKit.RED4.Types
 
 		public CodexEntryViewController()
 		{
-			TitleText = new();
-			DescriptionText = new();
-			ImageWidget = new();
-			ImageWidgetFallback = new();
-			ImageWidgetWrapper = new();
-			ScrollWidget = new();
-			ContentWrapper = new();
-			NoEntrySelectedWidget = new();
+			TitleText = new inkTextWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			ImageWidget = new inkImageWidgetReference();
+			ImageWidgetFallback = new inkWidgetReference();
+			ImageWidgetWrapper = new inkWidgetReference();
+			ScrollWidget = new inkWidgetReference();
+			ContentWrapper = new inkWidgetReference();
+			NoEntrySelectedWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

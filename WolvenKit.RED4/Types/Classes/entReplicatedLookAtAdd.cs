@@ -39,8 +39,8 @@ namespace WolvenKit.RED4.Types
 		public entReplicatedLookAtAdd()
 		{
 			BodyPart = "Eyes";
-			Request = new() { TransitionSpeed = 60.000000F, OutTransitionSpeed = 60.000000F, FollowingSpeedFactorOverride = -1.000000F, Limits = new() { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F }, AdditionalParts = new(0) };
-			Ref = new() { Id = -1 };
+			Request = new animLookAtRequest { TransitionSpeed = 60.000000F, OutTransitionSpeed = 60.000000F, FollowingSpeedFactorOverride = -1.000000F, Limits = new animLookAtLimits { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F }, AdditionalParts = new(0) };
+			Ref = new animLookAtRef { Id = -1 };
 
 			PostConstruct();
 		}

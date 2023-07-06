@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldCompiledCommunityAreaNode()
 		{
-			SourceObjectId = new();
+			SourceObjectId = new entEntityID();
 
 			PostConstruct();
 		}

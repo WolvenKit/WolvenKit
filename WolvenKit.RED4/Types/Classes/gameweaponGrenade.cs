@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameweaponGrenade()
 		{
-			LastHitNormal = new();
+			LastHitNormal = new Vector4();
 
 			PostConstruct();
 		}

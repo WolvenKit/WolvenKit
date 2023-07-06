@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class effectTrackItemPlayData : ISerializable
+	public abstract partial class effectTrackItemPlayData : ISerializable
 	{
 		public effectTrackItemPlayData()
 		{

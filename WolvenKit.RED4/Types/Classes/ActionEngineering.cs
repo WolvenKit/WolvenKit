@@ -5,13 +5,13 @@ namespace WolvenKit.RED4.Types
 	{
 		public ActionEngineering()
 		{
-			RequesterID = new();
-			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
-			ActionWidgetPackage = new() { DependendActions = new() };
+			RequesterID = new entEntityID();
+			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
+			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
 			CanTriggerStim = true;
 			SkillCheckName = Enums.EDeviceChallengeSkill.Engineering;
 			LocalizedName = "LocKey#22276";
-			SkillcheckDescription = new() { AdditionalRequirements = new(), OwnerID = new() };
+			SkillcheckDescription = new UIInteractionSkillCheck { AdditionalRequirements = new(), OwnerID = new entEntityID() };
 
 			PostConstruct();
 		}

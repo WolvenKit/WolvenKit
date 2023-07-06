@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ImmediateNotificationListener : IScriptable
+	public abstract partial class ImmediateNotificationListener : IScriptable
 	{
 		public ImmediateNotificationListener()
 		{

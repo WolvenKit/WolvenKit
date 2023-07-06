@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectParameter_QuatEvaluator_ValueOrBlackboard()
 		{
-			BlackboardProperty = new() { SerializableID = new(), PropertyPath = new() };
-			Value = new() { R = 1.000000F };
+			BlackboardProperty = new gameBlackboardPropertyBindingDefinition { SerializableID = new gameBlackboardSerializableID(), PropertyPath = new() };
+			Value = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

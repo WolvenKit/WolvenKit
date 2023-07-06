@@ -353,9 +353,9 @@ namespace WolvenKit.RED4.Types
 			Inventory = new();
 			AreaTags = new();
 			RecipeItemList = new();
-			TooltipsLibrary = new();
+			TooltipsLibrary = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\tooltipslibrary.inkwidget") };
 			ItemTooltipName = "itemTooltip";
-			TooltipStylePath = new();
+			TooltipStylePath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\tooltip_menu.inkstyle") };
 			PaperDollList = new();
 			FaceTags = new();
 			HeadTags = new();

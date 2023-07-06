@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class GenericHotkeyController : gameuiHUDGameController
+	public abstract partial class GenericHotkeyController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
 		[RED("hotkeyBackground")] 

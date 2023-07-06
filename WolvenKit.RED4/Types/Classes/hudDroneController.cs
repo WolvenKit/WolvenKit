@@ -78,10 +78,10 @@ namespace WolvenKit.RED4.Types
 
 		public hudDroneController()
 		{
-			Date = new();
-			Timer = new();
-			CameraID = new();
-			CurrentTime = new();
+			Date = new inkTextWidgetReference();
+			Timer = new inkTextWidgetReference();
+			CameraID = new inkTextWidgetReference();
+			CurrentTime = new GameTime();
 
 			PostConstruct();
 		}

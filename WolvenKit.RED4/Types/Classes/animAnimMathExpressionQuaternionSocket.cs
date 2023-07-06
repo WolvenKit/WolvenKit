@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimMathExpressionQuaternionSocket()
 		{
-			Link = new();
+			Link = new animQuaternionLink();
 
 			PostConstruct();
 		}

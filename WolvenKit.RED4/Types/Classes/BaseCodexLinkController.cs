@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public BaseCodexLinkController()
 		{
-			LinkImage = new();
-			LinkLabel = new();
+			LinkImage = new inkImageWidgetReference();
+			LinkLabel = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

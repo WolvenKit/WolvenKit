@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 
 		public Box()
 		{
-			Min = new();
-			Max = new();
+			Min = new Vector4();
+			Max = new Vector4();
 
 			PostConstruct();
 		}

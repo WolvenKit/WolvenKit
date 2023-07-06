@@ -46,11 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_CriticalSpringDamp()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			SmoothTime = 1.000000F;
 			RangeMin = -180.000000F;
 			RangeMax = 180.000000F;
-			InputNode = new();
+			InputNode = new animFloatLink();
 
 			PostConstruct();
 		}

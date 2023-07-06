@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_CurveFloatValue()
 		{
-			Id = 4294967295;
-			Argument = new();
+			Id = uint.MaxValue;
+			Argument = new animFloatLink();
 
 			PostConstruct();
 		}

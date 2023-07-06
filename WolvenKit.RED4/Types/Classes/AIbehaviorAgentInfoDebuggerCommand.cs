@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorAgentInfoDebuggerCommand()
 		{
-			EntityId = new();
+			EntityId = new entEntityID();
 			Entries = new();
 
 			PostConstruct();

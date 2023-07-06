@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questShowDialogIndicator_NodeTypeParams()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 			Show = true;
 
 			PostConstruct();

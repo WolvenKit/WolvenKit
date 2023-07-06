@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_StateMachine()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			States = new();
 			Transitions = new();
 			ConditionalEntries = new();

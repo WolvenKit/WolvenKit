@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public DisassembleItemRequest()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

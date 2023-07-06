@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleLightComponent()
 		{
-			EmissiveColor = new();
+			EmissiveColor = new CColor();
 			LightType = Enums.vehicleELightType.Head;
 			HighBeamRadiusMultiplier = 2.000000F;
 			HighBeamConeMultiplier = 2.000000F;

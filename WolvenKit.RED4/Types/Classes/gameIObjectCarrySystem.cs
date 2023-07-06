@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIObjectCarrySystem : gameIGameSystem
+	public abstract partial class gameIObjectCarrySystem : gameIGameSystem
 	{
 		public gameIObjectCarrySystem()
 		{

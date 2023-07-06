@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISubActionForceDeath_Record_Implementation : IScriptable
+	public abstract partial class AISubActionForceDeath_Record_Implementation : IScriptable
 	{
 		public AISubActionForceDeath_Record_Implementation()
 		{

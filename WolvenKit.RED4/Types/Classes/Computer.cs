@@ -55,8 +55,8 @@ namespace WolvenKit.RED4.Types
 		public Computer()
 		{
 			ControllerTypeName = "ComputerController";
-			BannerUpdateID = new();
-			PlayerControlData = new();
+			BannerUpdateID = new gameDelayID();
+			PlayerControlData = new PlayerControlDeviceData();
 
 			PostConstruct();
 		}

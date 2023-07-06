@@ -201,7 +201,7 @@ namespace WolvenKit.RED4.Types
 			Name = "scanning";
 			ScannableData = new();
 			AutoGenerateBoundingSphere = true;
-			BoundingSphere = new() { CenterRadius2 = new() { W = -1.000000F } };
+			BoundingSphere = new Sphere { CenterRadius2 = new Vector4 { W = -1.000000F } };
 			CpoEnableMultiplePlayersScanningModifier = true;
 			Clues = new();
 			IsEntityVisible = true;

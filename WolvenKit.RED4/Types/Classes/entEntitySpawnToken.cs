@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entEntitySpawnToken : IScriptable
+	public abstract partial class entEntitySpawnToken : IScriptable
 	{
 		public entEntitySpawnToken()
 		{

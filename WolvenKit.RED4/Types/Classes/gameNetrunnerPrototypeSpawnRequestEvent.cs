@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameNetrunnerPrototypeSpawnRequestEvent()
 		{
-			WhereToSpawn = new();
-			Scale = new();
+			WhereToSpawn = new Vector3();
+			Scale = new Vector3();
 			ColorIndex = 255;
 
 			PostConstruct();

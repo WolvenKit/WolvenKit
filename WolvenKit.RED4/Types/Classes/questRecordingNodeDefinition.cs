@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public questRecordingNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 
 			PostConstruct();
 		}

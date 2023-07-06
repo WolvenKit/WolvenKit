@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIInventoryManager : gameIGameSystem
+	public abstract partial class gameIInventoryManager : gameIGameSystem
 	{
 		public gameIInventoryManager()
 		{

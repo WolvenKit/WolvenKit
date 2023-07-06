@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameMuppetInputActionMoveForward()
 		{
-			Direction = new();
+			Direction = new Vector2();
 
 			PostConstruct();
 		}

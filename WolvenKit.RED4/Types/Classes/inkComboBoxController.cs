@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public inkComboBoxController()
 		{
-			ComboBoxObjectRef = new();
-			ComboBoxVisibleChanged = new();
+			ComboBoxObjectRef = new inkWidgetReference();
+			ComboBoxVisibleChanged = new inkComboBoxVisibleChangedCallback();
 
 			PostConstruct();
 		}

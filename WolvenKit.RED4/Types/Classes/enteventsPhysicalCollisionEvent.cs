@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public enteventsPhysicalCollisionEvent()
 		{
-			WorldPosition = new();
-			WorldNormal = new() { Z = 1.000000F };
-			DeltaVelocity = new();
+			WorldPosition = new Vector4();
+			WorldNormal = new Vector4 { Z = 1.000000F };
+			DeltaVelocity = new Vector4();
 
 			PostConstruct();
 		}

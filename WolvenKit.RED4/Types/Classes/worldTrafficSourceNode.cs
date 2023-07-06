@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldTrafficSourceNode : worldSplineNode
+	public abstract partial class worldTrafficSourceNode : worldSplineNode
 	{
 		public worldTrafficSourceNode()
 		{

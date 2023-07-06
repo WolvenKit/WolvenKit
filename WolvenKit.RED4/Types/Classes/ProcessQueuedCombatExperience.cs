@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ProcessQueuedCombatExperience()
 		{
-			Entity = new();
+			Entity = new entEntityID();
 
 			PostConstruct();
 		}

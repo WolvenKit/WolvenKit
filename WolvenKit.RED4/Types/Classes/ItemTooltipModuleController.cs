@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipModuleController()
 		{
-			LineWidget = new();
+			LineWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

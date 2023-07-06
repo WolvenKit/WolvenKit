@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public questRenderFxManagerNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 
 			PostConstruct();
 		}

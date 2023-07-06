@@ -70,14 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipRecipeDataModule()
 		{
-			RandomQualityLabel = new();
-			RandomQualityWrapper = new();
-			StatsLabel = new();
-			StatsWrapper = new();
-			StatsContainer = new();
-			DamageTypesLabel = new();
-			DamageTypesWrapper = new();
-			DamageTypesContainer = new();
+			RandomQualityLabel = new inkTextWidgetReference();
+			RandomQualityWrapper = new inkWidgetReference();
+			StatsLabel = new inkTextWidgetReference();
+			StatsWrapper = new inkWidgetReference();
+			StatsContainer = new inkCompoundWidgetReference();
+			DamageTypesLabel = new inkTextWidgetReference();
+			DamageTypesWrapper = new inkWidgetReference();
+			DamageTypesContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

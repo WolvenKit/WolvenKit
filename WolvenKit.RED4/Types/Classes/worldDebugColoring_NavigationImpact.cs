@@ -70,14 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_NavigationImpact()
 		{
-			Walkable = new();
-			Ignored = new();
-			Blocking = new();
-			Road = new();
-			Crowd_walkable = new();
-			Staris_walkable = new();
-			Drones = new();
-			Everythign_else = new();
+			Walkable = new CColor();
+			Ignored = new CColor();
+			Blocking = new CColor();
+			Road = new CColor();
+			Crowd_walkable = new CColor();
+			Staris_walkable = new CColor();
+			Drones = new CColor();
+			Everythign_else = new CColor();
 
 			PostConstruct();
 		}

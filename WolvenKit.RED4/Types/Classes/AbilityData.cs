@@ -87,7 +87,7 @@ namespace WolvenKit.RED4.Types
 		public AbilityData()
 		{
 			Empty = true;
-			ID = new();
+			ID = new gameItemID();
 			EquipmentArea = Enums.gamedataEquipmentArea.Invalid;
 			AssignedIndex = -1;
 

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIFXManagerNodeType : questObjectNodeType
+	public abstract partial class questIFXManagerNodeType : questObjectNodeType
 	{
 		public questIFXManagerNodeType()
 		{

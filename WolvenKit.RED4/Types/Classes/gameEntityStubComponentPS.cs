@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameEntityStubComponentPS()
 		{
-			EntityLocalPosition = new();
-			EntityLocalRotation = new() { R = 1.000000F };
-			SpawnerId = new() { EntityId = new() };
+			EntityLocalPosition = new Vector3();
+			EntityLocalRotation = new Quaternion { R = 1.000000F };
+			SpawnerId = new gameCommunityID { EntityId = new entEntityID() };
 
 			PostConstruct();
 		}

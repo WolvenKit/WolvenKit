@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameSItemInfo()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

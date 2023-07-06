@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public SpawnOriginData()
 		{
-			Position = new();
-			Direction = new();
-			PlayerPosition = new();
+			Position = new Vector4();
+			Direction = new Vector4();
+			PlayerPosition = new Vector4();
 
 			PostConstruct();
 		}

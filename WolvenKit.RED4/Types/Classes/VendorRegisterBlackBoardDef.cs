@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public VendorRegisterBlackBoardDef()
 		{
-			Vendors = new();
+			Vendors = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

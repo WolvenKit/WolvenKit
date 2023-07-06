@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class PlayerStaminaHelpers : IScriptable
+	public abstract partial class PlayerStaminaHelpers : IScriptable
 	{
 		public PlayerStaminaHelpers()
 		{

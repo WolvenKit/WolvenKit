@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public navLocomotionPathPointUserDataEntry()
 		{
-			NextUserData = 4294967295;
+			NextUserData = uint.MaxValue;
 
 			PostConstruct();
 		}

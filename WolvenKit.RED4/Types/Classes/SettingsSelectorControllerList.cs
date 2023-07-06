@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public SettingsSelectorControllerList()
 		{
-			DotsContainer = new();
+			DotsContainer = new inkHorizontalPanelWidgetReference();
 
 			PostConstruct();
 		}

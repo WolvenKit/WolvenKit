@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 		public inkanimColorInterpolator()
 		{
 			InterpolationDirection = Enums.inkanimInterpolationDirection.FromTo;
-			StartValue = new();
-			EndValue = new();
+			StartValue = new HDRColor();
+			EndValue = new HDRColor();
 
 			PostConstruct();
 		}

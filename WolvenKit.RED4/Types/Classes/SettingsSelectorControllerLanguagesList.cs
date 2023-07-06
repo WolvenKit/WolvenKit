@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public SettingsSelectorControllerLanguagesList()
 		{
-			DownloadButton = new();
-			DescriptionText = new();
+			DownloadButton = new inkWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

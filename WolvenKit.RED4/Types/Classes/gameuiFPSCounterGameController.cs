@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiFPSCounterGameController()
 		{
-			CounterWidget = new();
+			CounterWidget = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

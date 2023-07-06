@@ -70,8 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public rendGridGeneratorData()
 		{
-			StartingPosition = new() { Z = 50.000000F };
-			Rotation = new();
+			StartingPosition = new Vector3 { Z = 50.000000F };
+			Rotation = new EulerAngles();
 			XStep = 88.900002F;
 			YStep = 50.000000F;
 			NumberOfXSteps = 10;

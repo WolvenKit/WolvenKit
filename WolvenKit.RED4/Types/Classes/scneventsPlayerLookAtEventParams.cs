@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsPlayerLookAtEventParams()
 		{
-			OffsetPos = new();
+			OffsetPos = new Vector3();
 			Duration = 0.250000F;
 			EaseIn = true;
 			EaseOut = true;

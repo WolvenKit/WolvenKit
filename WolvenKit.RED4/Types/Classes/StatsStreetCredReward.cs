@@ -70,11 +70,11 @@ namespace WolvenKit.RED4.Types
 
 		public StatsStreetCredReward()
 		{
-			PrevRewardsList = new();
-			CurrentRewardsList = new();
-			NextRewardsList = new();
-			ScrollSlider = new();
-			ScrollButtonHint = new();
+			PrevRewardsList = new inkCompoundWidgetReference();
+			CurrentRewardsList = new inkCompoundWidgetReference();
+			NextRewardsList = new inkCompoundWidgetReference();
+			ScrollSlider = new inkCompoundWidgetReference();
+			ScrollButtonHint = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

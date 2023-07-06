@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LibTreeINodeDefinition : ISerializable
+	public abstract partial class LibTreeINodeDefinition : ISerializable
 	{
 		public LibTreeINodeDefinition()
 		{

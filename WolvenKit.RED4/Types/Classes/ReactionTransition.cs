@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ReactionTransition : DefaultTransition
+	public abstract partial class ReactionTransition : DefaultTransition
 	{
 		public ReactionTransition()
 		{

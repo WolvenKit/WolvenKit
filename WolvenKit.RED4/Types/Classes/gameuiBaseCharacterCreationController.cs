@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiBaseCharacterCreationController()
 		{
-			NextPageHitArea = new();
+			NextPageHitArea = new inkWidgetReference();
 
 			PostConstruct();
 		}

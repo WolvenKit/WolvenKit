@@ -309,12 +309,12 @@ namespace WolvenKit.RED4.Types
 			BackLightingFactor = 0.500000F;
 			RenderObjectType = Enums.ERenderObjectType.ROT_Particle;
 			Lods = new();
-			Color = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
+			Color = new HDRColor { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
 			Size = 1.000000F;
 			Density = 1.000000F;
 			Falloff = 1.000000F;
 			NoiseScale = 1.000000F;
-			NoiseVelocity = new();
+			NoiseVelocity = new Vector3();
 
 			PostConstruct();
 		}

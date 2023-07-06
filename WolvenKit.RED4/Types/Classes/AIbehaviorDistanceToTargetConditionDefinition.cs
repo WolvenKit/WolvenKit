@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIbehaviorDistanceToTargetConditionDefinition : AIbehaviorConditionDefinition
+	public abstract partial class AIbehaviorDistanceToTargetConditionDefinition : AIbehaviorConditionDefinition
 	{
 		[Ordinal(1)] 
 		[RED("target")] 

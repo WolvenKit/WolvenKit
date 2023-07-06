@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIWeapon : IScriptable
+	public abstract partial class AIWeapon : IScriptable
 	{
 		public AIWeapon()
 		{

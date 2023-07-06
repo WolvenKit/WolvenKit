@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public TarotCardAddedNotification()
 		{
-			CardImage = new();
-			CardNameLabel = new();
+			CardImage = new inkImageWidgetReference();
+			CardNameLabel = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

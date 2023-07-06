@@ -94,16 +94,16 @@ namespace WolvenKit.RED4.Types
 
 		public audioMeleeWeaponConfiguration()
 		{
-			FastWhoosh = new() { Events = new() };
-			NormalWhoosh = new() { Events = new() };
-			SlowWhoosh = new() { Events = new() };
-			DetailSound = new() { Events = new() };
-			HandlingSound = new() { Events = new() };
-			EquipSound = new() { Events = new() };
-			UnequipSound = new() { Events = new() };
-			BlockSound = new() { Events = new() };
-			ParrySound = new() { Events = new() };
-			MeleeWeaponConfigurationsByRigTypeMap = new() { MapItems = new() };
+			FastWhoosh = new audioMeleeSound { Events = new() };
+			NormalWhoosh = new audioMeleeSound { Events = new() };
+			SlowWhoosh = new audioMeleeSound { Events = new() };
+			DetailSound = new audioMeleeSound { Events = new() };
+			HandlingSound = new audioMeleeSound { Events = new() };
+			EquipSound = new audioMeleeSound { Events = new() };
+			UnequipSound = new audioMeleeSound { Events = new() };
+			BlockSound = new audioMeleeSound { Events = new() };
+			ParrySound = new audioMeleeSound { Events = new() };
+			MeleeWeaponConfigurationsByRigTypeMap = new audioMeleeRigTypeMeleeWeaponConfigurationMap { MapItems = new() };
 
 			PostConstruct();
 		}

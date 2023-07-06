@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public physicsTraceResult()
 		{
-			Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
-			Normal = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			Position = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			Normal = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
 
 			PostConstruct();
 		}

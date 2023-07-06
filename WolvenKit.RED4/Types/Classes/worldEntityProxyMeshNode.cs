@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldEntityProxyMeshNode()
 		{
-			OwnerGlobalId = new();
+			OwnerGlobalId = new worldGlobalNodeID();
 
 			PostConstruct();
 		}

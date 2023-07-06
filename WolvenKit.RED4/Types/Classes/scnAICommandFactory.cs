@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnAICommandFactory : IScriptable
+	public abstract partial class scnAICommandFactory : IScriptable
 	{
 		public scnAICommandFactory()
 		{

@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceTakeControlDef()
 		{
-			DevicesChain = new();
-			ActiveDevice = new();
-			IsDeviceWorking = new();
-			ChainLocked = new();
+			DevicesChain = new gamebbScriptID_Variant();
+			ActiveDevice = new gamebbScriptID_EntityID();
+			IsDeviceWorking = new gamebbScriptID_Bool();
+			ChainLocked = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

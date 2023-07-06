@@ -94,16 +94,16 @@ namespace WolvenKit.RED4.Types
 
 		public StatsProgressController()
 		{
-			LabelRef = new();
-			CurrentXpRef = new();
-			MaxXpRef = new();
-			CurrentLevelRef = new();
-			CurrentPersentageRef = new();
-			XpWrapper = new();
-			MaxXpWrapper = new();
-			ProgressBarFill = new();
-			ProgressBar = new();
-			ProgressMarkerBar = new();
+			LabelRef = new inkTextWidgetReference();
+			CurrentXpRef = new inkTextWidgetReference();
+			MaxXpRef = new inkTextWidgetReference();
+			CurrentLevelRef = new inkTextWidgetReference();
+			CurrentPersentageRef = new inkTextWidgetReference();
+			XpWrapper = new inkWidgetReference();
+			MaxXpWrapper = new inkWidgetReference();
+			ProgressBarFill = new inkWidgetReference();
+			ProgressBar = new inkWidgetReference();
+			ProgressMarkerBar = new inkWidgetReference();
 
 			PostConstruct();
 		}

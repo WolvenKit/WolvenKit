@@ -25,8 +25,8 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Alpha by distance";
 			EditorGroup = "Material";
 			IsEnabled = true;
-			NearBlendDistance = new() { X = 7.000000F, Y = 5.000000F };
-			FarBlendDistance = new() { X = 27.000000F, Y = 20.000000F };
+			NearBlendDistance = new Vector2 { X = 7.000000F, Y = 5.000000F };
+			FarBlendDistance = new Vector2 { X = 27.000000F, Y = 20.000000F };
 
 			PostConstruct();
 		}

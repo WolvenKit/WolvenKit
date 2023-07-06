@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISubActionSecuritySystemNotification_Record_Implementation : IScriptable
+	public abstract partial class AISubActionSecuritySystemNotification_Record_Implementation : IScriptable
 	{
 		public AISubActionSecuritySystemNotification_Record_Implementation()
 		{

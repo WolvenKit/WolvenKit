@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameITimeState : ISerializable
+	public abstract partial class gameITimeState : ISerializable
 	{
 		public gameITimeState()
 		{

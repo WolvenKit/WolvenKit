@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameAmmoData()
 		{
-			Id = new();
+			Id = new gameItemID();
 			Available = -1;
 			Equipped = -1;
 

@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.Types
 		public PaperDollSlotController()
 		{
 			AreaTags = new();
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

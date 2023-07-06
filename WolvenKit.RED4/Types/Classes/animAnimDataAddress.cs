@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimDataAddress()
 		{
-			UnkIndex = 4294967295;
-			FsetInBytes = 4294967295;
-			ZeInBytes = 4294967295;
+			UnkIndex = uint.MaxValue;
+			FsetInBytes = uint.MaxValue;
+			ZeInBytes = uint.MaxValue;
 
 			PostConstruct();
 		}

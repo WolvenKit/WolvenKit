@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class mpPlayer : gamePlayer
+	public abstract partial class mpPlayer : gamePlayer
 	{
 		public mpPlayer()
 		{

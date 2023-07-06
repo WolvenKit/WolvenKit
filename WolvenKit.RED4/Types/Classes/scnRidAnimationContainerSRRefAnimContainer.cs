@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnRidAnimationContainerSRRefAnimContainer()
 		{
-			Animation = new() { Id = 4294967295 };
-			Context = new() { GenderMask = new() { Mask = 128 } };
+			Animation = new scnRidAnimationSRRefId { Id = uint.MaxValue };
+			Context = new scnRidAnimationContainerSRRefAnimContainerContext { GenderMask = new scnGenderMask { Mask = 128 } };
 
 			PostConstruct();
 		}

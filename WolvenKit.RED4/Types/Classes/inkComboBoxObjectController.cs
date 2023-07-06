@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public inkComboBoxObjectController()
 		{
-			ContentWidgetRef = new();
-			PlaceholderOffsetWidgetRef = new();
-			ColliderRef = new();
-			Offset = new();
+			ContentWidgetRef = new inkWidgetReference();
+			PlaceholderOffsetWidgetRef = new inkWidgetReference();
+			ColliderRef = new inkShapeWidgetReference();
+			Offset = new inkMargin();
 
 			PostConstruct();
 		}

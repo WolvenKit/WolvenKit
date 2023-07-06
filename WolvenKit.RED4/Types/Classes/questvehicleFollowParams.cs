@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			PushOtherVehiclesAside = true;
 			SecureTimeOut = 60.000000F;
-			TargetEntRef = new() { Names = new() };
+			TargetEntRef = new gameEntityReference { Names = new() };
 			DistanceMin = 1.000000F;
 			DistanceMax = 5.000000F;
 			UseTraffic = true;

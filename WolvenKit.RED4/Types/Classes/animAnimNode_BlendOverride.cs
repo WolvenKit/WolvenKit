@@ -102,10 +102,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_BlendOverride()
 		{
-			Id = 4294967295;
-			InputNode = new();
-			OverrideInputNode = new();
-			WeightNode = new();
+			Id = uint.MaxValue;
+			InputNode = new animPoseLink();
+			OverrideInputNode = new animPoseLink();
+			WeightNode = new animFloatLink();
 			Bones = new();
 			BlendAllTracks = true;
 			BlendTrackMode = Enums.animEBlendTracksMode.AGBT_Interpolate;

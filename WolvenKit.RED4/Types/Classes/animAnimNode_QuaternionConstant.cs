@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_QuaternionConstant()
 		{
-			Id = 4294967295;
-			Value = new() { R = 1.000000F };
+			Id = uint.MaxValue;
+			Value = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

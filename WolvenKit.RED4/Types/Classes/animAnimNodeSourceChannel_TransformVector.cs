@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNodeSourceChannel_TransformVector()
 		{
-			TransformIndex = new();
+			TransformIndex = new animTransformIndex();
 
 			PostConstruct();
 		}

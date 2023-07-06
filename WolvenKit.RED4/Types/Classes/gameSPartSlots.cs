@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameSPartSlots()
 		{
-			InstalledPart = new();
-			InnerItemData = new();
+			InstalledPart = new gameItemID();
+			InnerItemData = new gameInnerItemData();
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIAIBlackboardSerializableID()
 		{
-			Id = new();
+			Id = new gameBlackboardSerializableID();
 
 			PostConstruct();
 		}

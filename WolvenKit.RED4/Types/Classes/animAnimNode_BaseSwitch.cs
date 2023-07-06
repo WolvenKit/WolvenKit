@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_BaseSwitch()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			InputNodes = new();
 
 			PostConstruct();

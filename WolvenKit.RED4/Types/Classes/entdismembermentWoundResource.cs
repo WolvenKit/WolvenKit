@@ -111,7 +111,7 @@ namespace WolvenKit.RED4.Types
 		public entdismembermentWoundResource()
 		{
 			WoundType = Enums.entdismembermentWoundTypeE.CLEAN | Enums.entdismembermentWoundTypeE.COARSE;
-			CullObject = new() { Plane = new() { NormalDistance = new() { Z = 1.000000F, W = -0.000000F } }, Plane1 = new() { NormalDistance = new() { Z = 1.000000F, W = -0.000000F } }, CapsulePointA = new(), CapsulePointB = new(), CapsuleRadius = 0.100000F, NearestAnimIndex = -1, RagdollBodyIndex = 65535 };
+			CullObject = new entdismembermentCullObject { Plane = new Plane { NormalDistance = new Vector4 { Z = 1.000000F, W = -0.000000F } }, Plane1 = new Plane { NormalDistance = new Vector4 { Z = 1.000000F, W = -0.000000F } }, CapsulePointA = new Vector3(), CapsulePointB = new Vector3(), CapsuleRadius = 0.100000F, NearestAnimIndex = -1, RagdollBodyIndex = ushort.MaxValue };
 			GarmentMorphStrength = 1.000000F;
 			Resources = new();
 			Decals = new();

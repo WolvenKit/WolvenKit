@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class meshMeshParameter : ISerializable
+	public abstract partial class meshMeshParameter : ISerializable
 	{
 		public meshMeshParameter()
 		{

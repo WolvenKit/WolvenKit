@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_Movement()
 		{
-			MovementDirection = new() { Y = 1.000000F };
+			MovementDirection = new Vector4 { Y = 1.000000F };
 			TimeToChangeLocomotion = 1.000000F;
 
 			PostConstruct();

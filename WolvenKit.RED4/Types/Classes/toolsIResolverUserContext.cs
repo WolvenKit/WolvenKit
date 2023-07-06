@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class toolsIResolverUserContext : ISerializable
+	public abstract partial class toolsIResolverUserContext : ISerializable
 	{
 		public toolsIResolverUserContext()
 		{

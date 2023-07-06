@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameDrawItemRequest()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

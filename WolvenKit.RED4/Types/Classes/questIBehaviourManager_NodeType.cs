@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIBehaviourManager_NodeType : questIRetNodeType
+	public abstract partial class questIBehaviourManager_NodeType : questIRetNodeType
 	{
 		[Ordinal(0)] 
 		[RED("puppetRef")] 

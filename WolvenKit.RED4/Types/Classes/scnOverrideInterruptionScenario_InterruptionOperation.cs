@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnOverrideInterruptionScenario_InterruptionOperation()
 		{
-			ScenarioId = new() { Id = 4294967295 };
+			ScenarioId = new scnInterruptionScenarioId { Id = uint.MaxValue };
 			ScenarioOperations = new();
 
 			PostConstruct();

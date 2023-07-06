@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimsetWithOverridesTagCondition()
 		{
-			AnimsetTags = new() { Tags = new() };
+			AnimsetTags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

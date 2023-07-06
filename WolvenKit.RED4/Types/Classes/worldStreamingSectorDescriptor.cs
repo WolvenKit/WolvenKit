@@ -70,9 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldStreamingSectorDescriptor()
 		{
-			StreamingBox = new() { Min = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, Max = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F, W = -340282346638528859811704183484516925440.000000F } };
+			StreamingBox = new Box { Min = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, Max = new Vector4 { X = float.MinValue, Y = float.MinValue, Z = float.MinValue, W = float.MinValue } };
 			Variants = new();
-			BlockIndex = 4294967295;
+			BlockIndex = uint.MaxValue;
 			Category = Enums.worldStreamingSectorCategory.Unknown;
 
 			PostConstruct();

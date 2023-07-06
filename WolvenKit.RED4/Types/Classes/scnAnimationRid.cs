@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnAnimationRid()
 		{
-			Tag = new() { SerialNumber = new() { SerialNumber = 4294967295 } };
-			Offset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Tag = new scnRidTag { SerialNumber = new scnRidSerialNumber { SerialNumber = uint.MaxValue } };
+			Offset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			TrajectoryBoneIndex = -1;
 
 			PostConstruct();

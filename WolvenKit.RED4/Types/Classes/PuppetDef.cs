@@ -46,11 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public PuppetDef()
 		{
-			IsCrowd = new();
-			HideNameplate = new();
-			ForceFriendlyCarry = new();
-			ForcedCarryStyle = new();
-			HasCPOMissionData = new();
+			IsCrowd = new gamebbScriptID_Bool();
+			HideNameplate = new gamebbScriptID_Bool();
+			ForceFriendlyCarry = new gamebbScriptID_Bool();
+			ForcedCarryStyle = new gamebbScriptID_Int32();
+			HasCPOMissionData = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

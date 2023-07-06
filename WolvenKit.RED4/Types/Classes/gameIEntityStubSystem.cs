@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIEntityStubSystem : gameIGameSystem
+	public abstract partial class gameIEntityStubSystem : gameIGameSystem
 	{
 		public gameIEntityStubSystem()
 		{

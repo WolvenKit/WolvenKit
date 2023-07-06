@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 
 		public CutCone()
 		{
-			PositionAndRadius1 = new();
-			NormalAndRadius2 = new();
+			PositionAndRadius1 = new Vector4();
+			NormalAndRadius2 = new Vector4();
 
 			PostConstruct();
 		}

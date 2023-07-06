@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public animSimpleBounceTransformOutput()
 		{
-			TargetTransform = new();
-			ParentTransform = new();
+			TargetTransform = new animTransformIndex();
+			ParentTransform = new animTransformIndex();
 			Multiplier = 1.000000F;
 			ChannelEntries = new();
 

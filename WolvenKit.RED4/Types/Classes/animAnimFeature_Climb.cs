@@ -86,10 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_Climb()
 		{
-			VerticalPosition = new() { W = 1.000000F };
-			HorizontalPosition = new() { W = 1.000000F };
-			FrontEdgePosition = new() { W = 1.000000F };
-			FrontEdgeNormal = new();
+			VerticalPosition = new Vector4 { W = 1.000000F };
+			HorizontalPosition = new Vector4 { W = 1.000000F };
+			FrontEdgePosition = new Vector4 { W = 1.000000F };
+			FrontEdgeNormal = new Vector4();
 			ClimbType = -1;
 			State = -1;
 

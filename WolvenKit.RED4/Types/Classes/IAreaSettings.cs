@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IAreaSettings : ISerializable
+	public abstract partial class IAreaSettings : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("enable")] 

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public rendRenderMeshBlob()
 		{
-			Header = new() { BonePositions = new(), RenderLODs = new(), RenderChunks = new(), RenderChunkInfos = new(), SpeedTreeWind = new(), OpacityMicromaps = new(), CustomData = new(), TopologyData = new(), TopologyMetadata = new(), Topology = new(), QuantizationScale = new(), QuantizationOffset = new() };
+			Header = new rendRenderMeshBlobHeader { BonePositions = new(), RenderLODs = new(), RenderChunks = new(), RenderChunkInfos = new(), SpeedTreeWind = new(), OpacityMicromaps = new(), CustomData = new(), TopologyData = new(), TopologyMetadata = new(), Topology = new(), QuantizationScale = new Vector4(), QuantizationOffset = new Vector4() };
 
 			PostConstruct();
 		}

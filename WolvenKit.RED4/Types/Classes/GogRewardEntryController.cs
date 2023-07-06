@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public GogRewardEntryController()
 		{
-			NameWidget = new();
-			DescriptionWidget = new();
-			IconImage = new();
+			NameWidget = new inkWidgetReference();
+			DescriptionWidget = new inkWidgetReference();
+			IconImage = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

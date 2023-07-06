@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ItemRandomizedStatsController()
 		{
-			StatName = new();
+			StatName = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

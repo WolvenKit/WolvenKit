@@ -211,19 +211,19 @@ namespace WolvenKit.RED4.Types
 			ShouldScannerShowStatus = true;
 			ShouldScannerShowAttitude = true;
 			IsRecognizableBySenses = true;
-			TargetingBehaviour = new() { CanRotate = true, LostTargetLookAtTime = 2.000000F, LostTargetSearchTime = 10.000000F };
-			DetectionParameters = new() { CanDetectIntruders = true, TimeToActionAfterSpot = 2.000000F, MaxRotationAngle = 90.000000F, PitchAngle = -15.000000F, RotationSpeed = 5.000000F };
-			ScanGameEffectRef = new();
-			VisionConeEffectRef = new();
-			VisionConeFriendlyEffectRef = new();
-			IdleActiveRef = new();
-			IdleFriendlyRef = new();
-			NetrunnerID = new();
-			NetrunnerProxyID = new();
-			NetrunnerTargetID = new();
-			LinkedStatusEffect = new() { NetrunnerIDs = new(), TargetID = new(), StatusEffectList = new() };
-			QuestForcedTargetID = new();
-			QuestTargetToSpot = new();
+			TargetingBehaviour = new TargetingBehaviour { CanRotate = true, LostTargetLookAtTime = 2.000000F, LostTargetSearchTime = 10.000000F };
+			DetectionParameters = new DetectionParameters { CanDetectIntruders = true, TimeToActionAfterSpot = 2.000000F, MaxRotationAngle = 90.000000F, PitchAngle = -15.000000F, RotationSpeed = 5.000000F };
+			ScanGameEffectRef = new gameEffectRef();
+			VisionConeEffectRef = new gameEffectRef();
+			VisionConeFriendlyEffectRef = new gameEffectRef();
+			IdleActiveRef = new gameEffectRef();
+			IdleFriendlyRef = new gameEffectRef();
+			NetrunnerID = new entEntityID();
+			NetrunnerProxyID = new entEntityID();
+			NetrunnerTargetID = new entEntityID();
+			LinkedStatusEffect = new LinkedStatusEffect { NetrunnerIDs = new(), TargetID = new entEntityID(), StatusEffectList = new() };
+			QuestForcedTargetID = new entEntityID();
+			QuestTargetToSpot = new entEntityID();
 
 			PostConstruct();
 		}

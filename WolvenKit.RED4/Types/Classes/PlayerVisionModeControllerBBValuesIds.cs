@@ -78,15 +78,15 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerVisionModeControllerBBValuesIds()
 		{
-			Kerenzikov = new();
-			RestrictedScene = new();
-			Dead = new();
-			Takedown = new();
-			DeviceTakeover = new();
-			BraindanceFPP = new();
-			BraindanceActive = new();
-			VeryHardLanding = new();
-			IsBriefingActive = new();
+			Kerenzikov = new gamebbScriptID_Int32();
+			RestrictedScene = new gamebbScriptID_Int32();
+			Dead = new gamebbScriptID_Int32();
+			Takedown = new gamebbScriptID_Int32();
+			DeviceTakeover = new gamebbScriptID_EntityID();
+			BraindanceFPP = new gamebbScriptID_Bool();
+			BraindanceActive = new gamebbScriptID_Bool();
+			VeryHardLanding = new gamebbScriptID_Int32();
+			IsBriefingActive = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

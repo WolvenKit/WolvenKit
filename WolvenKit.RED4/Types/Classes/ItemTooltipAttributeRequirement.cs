@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipAttributeRequirement()
 		{
-			LabelRef = new();
+			LabelRef = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

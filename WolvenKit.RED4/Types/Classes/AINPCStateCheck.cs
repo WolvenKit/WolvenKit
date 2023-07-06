@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AINPCStateCheck : AIbehaviorconditionScript
+	public abstract partial class AINPCStateCheck : AIbehaviorconditionScript
 	{
 		public AINPCStateCheck()
 		{

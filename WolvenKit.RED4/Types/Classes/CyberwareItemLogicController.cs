@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public CyberwareItemLogicController()
 		{
-			SlotRoot = new();
+			SlotRoot = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

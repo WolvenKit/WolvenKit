@@ -526,9 +526,9 @@ namespace WolvenKit.RED4.Types
 
 		public DamageDigitLogicController()
 		{
-			CritWidget = new();
-			HeadshotWidget = new();
-			AnimStickTargetOffset = new();
+			CritWidget = new inkTextWidgetReference();
+			HeadshotWidget = new inkTextWidgetReference();
+			AnimStickTargetOffset = new Vector4();
 			AnimTimeFadeIn = 0.100000F;
 			AnimTimeFadeOut = 0.400000F;
 			AnimBothTimeFadeIn = 0.100000F;

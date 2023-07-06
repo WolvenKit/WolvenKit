@@ -54,12 +54,12 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_ExplorationAdjuster()
 		{
-			TargetPosition2 = new();
-			TargetDirection2 = new();
-			TotalTimeToAdjust2 = new();
-			TargetPosition3 = new();
-			TargetDirection3 = new();
-			TotalTimeToAdjust3 = new();
+			TargetPosition2 = new animVectorLink();
+			TargetDirection2 = new animVectorLink();
+			TotalTimeToAdjust2 = new animFloatLink();
+			TargetPosition3 = new animVectorLink();
+			TargetDirection3 = new animVectorLink();
+			TotalTimeToAdjust3 = new animFloatLink();
 
 			PostConstruct();
 		}

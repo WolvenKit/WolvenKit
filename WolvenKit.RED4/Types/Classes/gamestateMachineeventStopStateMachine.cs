@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamestateMachineeventStopStateMachine()
 		{
-			StateMachineIdentifier = new();
+			StateMachineIdentifier = new gamestateMachineStateMachineIdentifier();
 
 			PostConstruct();
 		}

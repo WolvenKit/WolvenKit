@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public AICTreeNodeDecisionDefinition()
 		{
 			Expressions = new();
-			Interruption = new() { Importance = Enums.AIEInterruptionImportance.Rush };
+			Interruption = new AIInterruptionSignal { Importance = Enums.AIEInterruptionImportance.Rush };
 
 			PostConstruct();
 		}

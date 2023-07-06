@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectObjectFilter_AxisRange()
 		{
-			Position = new();
-			Constraints = new();
+			Position = new gameEffectInputParameter_Vector();
+			Constraints = new gameEffectInputParameter_Vector();
 
 			PostConstruct();
 		}

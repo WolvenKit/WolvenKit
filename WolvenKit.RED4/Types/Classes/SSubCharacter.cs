@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public SSubCharacter()
 		{
-			PersistentID = new();
+			PersistentID = new gamePersistentID();
 
 			PostConstruct();
 		}

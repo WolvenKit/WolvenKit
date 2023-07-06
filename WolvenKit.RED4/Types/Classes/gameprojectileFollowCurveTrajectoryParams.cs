@@ -174,7 +174,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameprojectileFollowCurveTrajectoryParams()
 		{
-			TargetPosition = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F };
+			TargetPosition = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue };
 			StartVelocity = 6.000000F;
 			LinearTimeRatio = 0.900000F;
 			InterpolationTimeRatio = 0.700000F;
@@ -187,8 +187,8 @@ namespace WolvenKit.RED4.Types
 			AngleInterpolationDuration = 0.200000F;
 			SnapRadius = 0.200000F;
 			Accuracy = 0.100000F;
-			Offset = new();
-			OffsetInPlane = new();
+			Offset = new Vector4();
+			OffsetInPlane = new Vector3();
 			SendFollowEvent = true;
 
 			PostConstruct();

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public ItemAttachments()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerAbilityItemLogicController()
 		{
-			AbilityNameText = new();
-			AbilityIcon = new();
+			AbilityNameText = new inkTextWidgetReference();
+			AbilityIcon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

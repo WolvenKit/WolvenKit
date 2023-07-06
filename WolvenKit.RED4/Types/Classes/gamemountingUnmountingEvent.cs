@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamemountingUnmountingEvent()
 		{
-			Relationship = new() { SlotId = new() };
+			Relationship = new gamemountingMountingRelationship { SlotId = new gamemountingMountingSlotId() };
 
 			PostConstruct();
 		}

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIObjectScriptBase : IScriptable
+	public abstract partial class gameIObjectScriptBase : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("gameObject")] 

@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public effectSlotEntry()
 		{
-			RelativePosition = new();
-			RelativeRotation = new() { R = 1.000000F };
+			RelativePosition = new Vector3();
+			RelativeRotation = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

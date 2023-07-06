@@ -113,7 +113,7 @@ namespace WolvenKit.RED4.Types
 			Open = true;
 			CloseAtInput = true;
 			HideInMenu = true;
-			Margin = new();
+			Margin = new inkMargin();
 			Position = Enums.gamePopupPosition.Center;
 			CloseCurrentPopup = true;
 			VideoType = Enums.gameVideoType.Unknown;

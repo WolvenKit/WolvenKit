@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entIVelocityProvider : IScriptable
+	public abstract partial class entIVelocityProvider : IScriptable
 	{
 		public entIVelocityProvider()
 		{

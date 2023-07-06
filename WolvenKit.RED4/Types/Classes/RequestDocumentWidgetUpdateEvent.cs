@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public RequestDocumentWidgetUpdateEvent()
 		{
-			DocumentAdress = new() { FolderID = -1, DocumentID = -1 };
+			DocumentAdress = new SDocumentAdress { FolderID = -1, DocumentID = -1 };
 
 			PostConstruct();
 		}

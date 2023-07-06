@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gamePingEntry()
 		{
-			WorldPosition = new();
-			Time = new();
+			WorldPosition = new Vector4();
+			Time = new netTime();
 			PingType = Enums.gamedataPingType.Invalid;
 
 			PostConstruct();

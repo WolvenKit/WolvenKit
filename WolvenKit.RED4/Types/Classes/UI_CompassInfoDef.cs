@@ -46,11 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public UI_CompassInfoDef()
 		{
-			NorthOffset = new();
-			SouthOffset = new();
-			EastOffset = new();
-			WestOffset = new();
-			Pins = new();
+			NorthOffset = new gamebbScriptID_Float();
+			SouthOffset = new gamebbScriptID_Float();
+			EastOffset = new gamebbScriptID_Float();
+			WestOffset = new gamebbScriptID_Float();
+			Pins = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

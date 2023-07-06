@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameMovingPlatformTeleportTo()
 		{
-			RootEntityPosition = new();
+			RootEntityPosition = new Vector4();
 
 			PostConstruct();
 		}

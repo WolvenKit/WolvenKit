@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public CallActionWidgetController()
 		{
-			StatusText = new();
+			StatusText = new inkTextWidgetReference();
 			CallingAnimName = "calling_animation_maelstrom";
 			TalkingAnimName = "talking_animation_maelstrom";
 

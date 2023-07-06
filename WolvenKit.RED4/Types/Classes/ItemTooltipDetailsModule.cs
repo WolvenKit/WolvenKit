@@ -78,15 +78,15 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipDetailsModule()
 		{
-			StatsLine = new();
-			StatsWrapper = new();
-			StatsContainer = new();
-			DedicatedModsLine = new();
-			DedicatedModsWrapper = new();
-			DedicatedModsContainer = new();
-			ModsLine = new();
-			ModsWrapper = new();
-			ModsContainer = new();
+			StatsLine = new inkWidgetReference();
+			StatsWrapper = new inkWidgetReference();
+			StatsContainer = new inkCompoundWidgetReference();
+			DedicatedModsLine = new inkWidgetReference();
+			DedicatedModsWrapper = new inkWidgetReference();
+			DedicatedModsContainer = new inkCompoundWidgetReference();
+			ModsLine = new inkWidgetReference();
+			ModsWrapper = new inkWidgetReference();
+			ModsContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

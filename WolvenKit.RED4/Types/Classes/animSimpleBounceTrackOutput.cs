@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animSimpleBounceTrackOutput()
 		{
-			TargetTrack = new();
+			TargetTrack = new animNamedTrackIndex();
 			Multiplier = 1.000000F;
 
 			PostConstruct();

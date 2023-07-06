@@ -39,11 +39,11 @@ namespace WolvenKit.RED4.Types
 		public ActivatedDeviceControllerPS()
 		{
 			DeviceName = "ActivatedDevice";
-			TweakDBRecord = 118827637830;
+			TweakDBRecord = "Devices.ActivatedDeviceTrap";
 			TweakDBDescriptionRecord = 171165425479;
 			ShouldScannerShowRole = true;
-			AnimationSetup = new() { AnimationTime = 0.500000F };
-			ActivatedDeviceSetup = new() { ActionName = "LocKey#233", VfxResource = new(), ThumbnailIconRecord = 133181765352 };
+			AnimationSetup = new ActivatedDeviceAnimSetup { AnimationTime = 0.500000F };
+			ActivatedDeviceSetup = new ActivatedDeviceSetup { ActionName = "LocKey#233", VfxResource = new gameFxResource(), ThumbnailIconRecord = "DeviceIcons.GenenericDeviceIcon" };
 			IndustrialArmAnimationOverride = -1;
 
 			PostConstruct();

@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public PayActionWidgetController()
 		{
-			PriceContainer = new();
-			MoneyStatusContainer = new();
-			ProcessingStatusContainer = new();
+			PriceContainer = new inkWidgetReference();
+			MoneyStatusContainer = new inkWidgetReference();
+			ProcessingStatusContainer = new inkWidgetReference();
 			MoneyStatusAnimName = "no_money";
 			ProcessingAnimName = "pay";
 

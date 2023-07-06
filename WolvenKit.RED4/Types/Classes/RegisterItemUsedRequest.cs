@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public RegisterItemUsedRequest()
 		{
-			ItemUsed = new();
+			ItemUsed = new gameItemID();
 
 			PostConstruct();
 		}

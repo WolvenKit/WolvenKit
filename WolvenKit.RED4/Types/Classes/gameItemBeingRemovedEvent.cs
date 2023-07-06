@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameItemBeingRemovedEvent()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

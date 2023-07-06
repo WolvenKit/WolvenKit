@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entISourceBinding : entIBinding
+	public abstract partial class entISourceBinding : entIBinding
 	{
 		public entISourceBinding()
 		{

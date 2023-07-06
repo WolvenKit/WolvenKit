@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FrozenFrame()
 		{
-			Id = 4294967295;
-			InputLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
 			MaxFramesFrozen = 5;
 			TriggerEventName = "FreezeFrame";
 			ClearEventName = "UnfreezeFrame";

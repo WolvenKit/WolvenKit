@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_QuaternionWsToMs()
 		{
-			Id = 4294967295;
-			QuaternionWs = new();
+			Id = uint.MaxValue;
+			QuaternionWs = new animQuaternionLink();
 
 			PostConstruct();
 		}

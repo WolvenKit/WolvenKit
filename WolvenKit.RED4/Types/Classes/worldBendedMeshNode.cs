@@ -80,10 +80,10 @@ namespace WolvenKit.RED4.Types
 		{
 			MeshAppearance = "default";
 			DeformationData = new();
-			DeformedBox = new() { Min = new(), Max = new() };
+			DeformedBox = new Box { Min = new Vector4(), Max = new Vector4() };
 			CastShadows = true;
 			CastLocalShadows = true;
-			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			NavigationSetting = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
 
 			PostConstruct();
 		}

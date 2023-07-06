@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public RagdollDamagePollData()
 		{
-			WorldPosition = new() { X = new(), Y = new(), Z = new() };
-			WorldNormal = new();
+			WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			WorldNormal = new Vector4();
 
 			PostConstruct();
 		}

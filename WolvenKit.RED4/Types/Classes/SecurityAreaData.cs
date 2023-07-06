@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public SecurityAreaData()
 		{
-			Id = new();
+			Id = new gamePersistentID();
 
 			PostConstruct();
 		}

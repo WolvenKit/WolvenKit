@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questPlayVoiceset_NodeType()
 		{
-			Params = new() { new() };
+			Params = new() { new questPlayVoiceset_NodeTypeParams() };
 
 			PostConstruct();
 		}

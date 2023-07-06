@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LeftHandCyberwareActionAbstractDecisions : LeftHandCyberwareTransition
+	public abstract partial class LeftHandCyberwareActionAbstractDecisions : LeftHandCyberwareTransition
 	{
 		public LeftHandCyberwareActionAbstractDecisions()
 		{

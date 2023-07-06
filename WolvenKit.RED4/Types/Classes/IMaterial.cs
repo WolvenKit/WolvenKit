@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IMaterial : CResource
+	public abstract partial class IMaterial : CResource
 	{
 		public IMaterial()
 		{

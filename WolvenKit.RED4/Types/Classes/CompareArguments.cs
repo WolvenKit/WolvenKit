@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class CompareArguments : AIbehaviorconditionScript
+	public abstract partial class CompareArguments : AIbehaviorconditionScript
 	{
 		[Ordinal(0)] 
 		[RED("var1")] 

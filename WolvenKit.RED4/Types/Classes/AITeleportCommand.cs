@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public AITeleportCommand()
 		{
-			Position = new();
+			Position = new Vector4();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiRandomNewsFeedAnimator()
 		{
-			TextWidget = new();
+			TextWidget = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

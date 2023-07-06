@@ -94,9 +94,9 @@ namespace WolvenKit.RED4.Types
 
 		public gamestateMachineparameterTypeLadderDescription()
 		{
-			Position = new() { W = 1.000000F };
-			Normal = new() { Y = 1.000000F };
-			Up = new() { Z = 1.000000F };
+			Position = new Vector4 { W = 1.000000F };
+			Normal = new Vector4 { Y = 1.000000F };
+			Up = new Vector4 { Z = 1.000000F };
 			ExitStepTop = -1.000000F;
 			VerticalStepTop = -1.000000F;
 			ExitStepBottom = 0.600000F;

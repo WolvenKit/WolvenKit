@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldBlockoutPoint()
 		{
-			Position = new();
+			Position = new Vector2();
 			Edges = new();
 
 			PostConstruct();

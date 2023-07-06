@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameSSlotActiveItems()
 		{
-			RightHandItem = new();
-			LeftHandItem = new();
+			RightHandItem = new gameItemID();
+			LeftHandItem = new gameItemID();
 
 			PostConstruct();
 		}

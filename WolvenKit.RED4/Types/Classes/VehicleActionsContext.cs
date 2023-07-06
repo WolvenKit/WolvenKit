@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleActionsContext()
 		{
-			RequestorID = new();
+			RequestorID = new entEntityID();
 
 			PostConstruct();
 		}

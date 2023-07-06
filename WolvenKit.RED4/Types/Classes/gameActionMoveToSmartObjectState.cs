@@ -105,9 +105,9 @@ namespace WolvenKit.RED4.Types
 			UsePathfinding = true;
 			UseStart = true;
 			UseStop = true;
-			EntryDirection = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
-			EntryPointPos = new();
-			EntryPointDir = new();
+			EntryDirection = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			EntryPointPos = new Vector3();
+			EntryPointDir = new Vector4();
 
 			PostConstruct();
 		}

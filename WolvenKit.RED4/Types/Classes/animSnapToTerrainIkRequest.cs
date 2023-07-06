@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public animSnapToTerrainIkRequest()
 		{
-			FootTransformIndex = new();
-			PoleVectorRefTransformIndex = new();
-			EnableFootLockFloatTrack = new();
+			FootTransformIndex = new animTransformIndex();
+			PoleVectorRefTransformIndex = new animTransformIndex();
+			EnableFootLockFloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public questAudioCharacterManagerBreathing_NodeSubType()
 		{
-			CharacterEntries = new() { new() };
+			CharacterEntries = new() { new questIAudioCharacterManager_NodeSubTypeCharacterEntry() };
 
 			PostConstruct();
 		}

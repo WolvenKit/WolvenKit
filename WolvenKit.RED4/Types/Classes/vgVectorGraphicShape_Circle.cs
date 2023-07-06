@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public vgVectorGraphicShape_Circle()
 		{
-			CalTransform = new();
+			CalTransform = new CMatrix();
 
 			PostConstruct();
 		}

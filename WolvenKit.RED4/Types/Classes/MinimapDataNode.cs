@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public MinimapDataNode()
 		{
-			LocalBounds = new() { Min = new(), Max = new() };
+			LocalBounds = new Box { Min = new Vector4(), Max = new Vector4() };
 
 			PostConstruct();
 		}

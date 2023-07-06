@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public AnimationSystemForcedVisibilityEntityData()
 		{
-			EntityID = new();
+			EntityID = new entEntityID();
 			ForcedVisibilityInAnimSystemRequests = new();
 			DelayedForcedVisibilityInAnimSystemRequests = new();
 

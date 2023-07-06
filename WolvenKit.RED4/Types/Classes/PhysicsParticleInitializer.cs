@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class PhysicsParticleInitializer : ISerializable
+	public abstract partial class PhysicsParticleInitializer : ISerializable
 	{
 		public PhysicsParticleInitializer()
 		{

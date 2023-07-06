@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameSceneTierDataMotionConstrained : gameSceneTierData
+	public abstract partial class gameSceneTierDataMotionConstrained : gameSceneTierData
 	{
 		[Ordinal(3)] 
 		[RED("params")] 

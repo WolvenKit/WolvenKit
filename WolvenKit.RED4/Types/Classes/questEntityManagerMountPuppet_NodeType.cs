@@ -70,8 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerMountPuppet_NodeType()
 		{
-			ParentRef = new() { Names = new() };
-			ChildRef = new() { Names = new() };
+			ParentRef = new gameEntityReference { Names = new() };
+			ChildRef = new gameEntityReference { Names = new() };
 			Assign = true;
 			IsInstant = true;
 			ForcedCarryStyle = Enums.gamePSMBodyCarryingStyle.Friendly;

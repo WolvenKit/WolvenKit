@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ChangeHighLevelStateAbstract : AIbehaviortaskScript
+	public abstract partial class ChangeHighLevelStateAbstract : AIbehaviortaskScript
 	{
 		public ChangeHighLevelStateAbstract()
 		{

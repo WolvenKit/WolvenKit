@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class effectBaseItem : ISerializable
+	public abstract partial class effectBaseItem : ISerializable
 	{
 		public effectBaseItem()
 		{

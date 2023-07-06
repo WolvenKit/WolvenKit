@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public inkGridWidget()
 		{
-			ChildPadding = new();
-			ChildSizeStep = new();
+			ChildPadding = new inkMargin();
+			ChildSizeStep = new Vector2();
 
 			PostConstruct();
 		}

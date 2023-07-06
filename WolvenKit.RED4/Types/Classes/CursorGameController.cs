@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public CursorGameController()
 		{
-			Margin = new();
+			Margin = new inkMargin();
 			CursorType = "default";
 
 			PostConstruct();

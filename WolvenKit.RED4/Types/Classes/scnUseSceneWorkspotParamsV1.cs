@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnUseSceneWorkspotParamsV1()
 		{
-			WorkspotInstanceId = new() { Id = 4294967295 };
-			ItemOverride = new() { PropOverrides = new(), ItemOverrides = new() };
+			WorkspotInstanceId = new scnSceneWorkspotInstanceId { Id = uint.MaxValue };
+			ItemOverride = new workWorkspotItemOverride { PropOverrides = new(), ItemOverrides = new() };
 
 			PostConstruct();
 		}

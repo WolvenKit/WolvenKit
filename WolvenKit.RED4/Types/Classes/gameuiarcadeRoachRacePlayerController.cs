@@ -174,18 +174,18 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiarcadeRoachRacePlayerController()
 		{
-			Collider = new();
-			SingleJumpBoost = new();
-			DoubleJumpBoost = new();
-			Gravity = new();
+			Collider = new gameuiarcadeBoundingRect();
+			SingleJumpBoost = new Vector2();
+			DoubleJumpBoost = new Vector2();
+			Gravity = new Vector2();
 			TeleportLockoutTime = 0.500000F;
 			CarrotPowerupVelocityBoostModifier = 0.200000F;
-			RunningBoundingRectangleRelativeSize = new() { X = 1.000000F, Y = 1.000000F };
-			JumpingboundingRectangleRelativeSize = new() { X = 1.000000F, Y = 1.000000F };
-			PoweredupboundingRectangleRelativeSize = new() { X = 1.000000F, Y = 1.000000F };
+			RunningBoundingRectangleRelativeSize = new Vector2 { X = 1.000000F, Y = 1.000000F };
+			JumpingboundingRectangleRelativeSize = new Vector2 { X = 1.000000F, Y = 1.000000F };
+			PoweredupboundingRectangleRelativeSize = new Vector2 { X = 1.000000F, Y = 1.000000F };
 			InvincibilityTime = 3.000000F;
 			InvincibilityWarningTime = 0.500000F;
-			Image = new();
+			Image = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

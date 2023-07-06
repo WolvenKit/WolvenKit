@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public InitializeUserScreenGameController()
 		{
-			BackgroundVideo = new();
+			BackgroundVideo = new inkVideoWidgetReference();
 
 			PostConstruct();
 		}

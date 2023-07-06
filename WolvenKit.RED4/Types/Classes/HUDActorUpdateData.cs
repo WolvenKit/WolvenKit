@@ -134,7 +134,7 @@ namespace WolvenKit.RED4.Types
 
 		public HUDActorUpdateData()
 		{
-			ClueDataValue = new();
+			ClueDataValue = new HUDClueData();
 
 			PostConstruct();
 		}

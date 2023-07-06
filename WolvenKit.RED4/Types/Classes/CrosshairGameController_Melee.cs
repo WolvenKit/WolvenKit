@@ -102,8 +102,8 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Melee()
 		{
-			TargetColorChange = new();
-			WeaponID = new();
+			TargetColorChange = new inkWidgetReference();
+			WeaponID = new entEntityID();
 
 			PostConstruct();
 		}

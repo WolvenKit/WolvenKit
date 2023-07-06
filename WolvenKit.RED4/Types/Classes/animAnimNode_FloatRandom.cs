@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FloatRandom()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			Rand = true;
 			Cooldown = 1.000000F;
 			Max = 1.000000F;

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerVisuals_EntityAppearanceOperationBaseEntityAppearanceEntry()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

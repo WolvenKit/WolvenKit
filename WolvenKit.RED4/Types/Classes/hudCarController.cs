@@ -142,9 +142,9 @@ namespace WolvenKit.RED4.Types
 
 		public hudCarController()
 		{
-			SpeedValue = new();
+			SpeedValue = new inkTextWidgetReference();
 			RPMChunks = new();
-			CurrentTime = new();
+			CurrentTime = new GameTime();
 
 			PostConstruct();
 		}

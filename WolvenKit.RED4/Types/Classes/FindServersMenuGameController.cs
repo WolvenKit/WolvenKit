@@ -72,8 +72,8 @@ namespace WolvenKit.RED4.Types
 		{
 			NONE_CHOOSEN = -1;
 			CurentlyChoosenServer = -1;
-			C_onlineColor = new();
-			C_offlineColor = new();
+			C_onlineColor = new CColor();
+			C_offlineColor = new CColor();
 
 			PostConstruct();
 		}

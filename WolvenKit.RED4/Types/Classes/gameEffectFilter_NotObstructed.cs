@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectFilter_NotObstructed()
 		{
-			QueryPreset = new();
+			QueryPreset = new physicsQueryPreset();
 
 			PostConstruct();
 		}

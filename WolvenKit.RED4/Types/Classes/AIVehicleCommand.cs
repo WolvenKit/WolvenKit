@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIVehicleCommand : AICommand
+	public abstract partial class AIVehicleCommand : AICommand
 	{
 		[Ordinal(4)] 
 		[RED("useKinematic")] 
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIVehicleCommand()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 
 			PostConstruct();
 		}

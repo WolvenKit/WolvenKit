@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class naviINavmeshGenerationSystem : gameIGameSystem
+	public abstract partial class naviINavmeshGenerationSystem : gameIGameSystem
 	{
 		public naviINavmeshGenerationSystem()
 		{

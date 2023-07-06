@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationBodyMorphImageThumbnail()
 		{
-			Selector = new();
-			Equipped = new();
-			Bg = new();
+			Selector = new inkWidgetReference();
+			Equipped = new inkWidgetReference();
+			Bg = new inkWidgetReference();
 
 			PostConstruct();
 		}

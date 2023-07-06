@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkTextAnimationController : inkWidgetLogicController
+	public abstract partial class inkTextAnimationController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
 		[RED("playOnInitialize")] 

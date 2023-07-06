@@ -14,10 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public inkVirtualUniformListController()
 		{
-			ItemSelected = new();
-			ItemActivated = new();
-			AllElementsSpawned = new();
-			ItemTemplate = new() { WidgetLibrary = new() };
+			ItemSelected = new inkVirtualCompoundControllerCallback();
+			ItemActivated = new inkVirtualCompoundControllerCallback();
+			AllElementsSpawned = new inkEmptyCallback();
+			ItemTemplate = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
 
 			PostConstruct();
 		}

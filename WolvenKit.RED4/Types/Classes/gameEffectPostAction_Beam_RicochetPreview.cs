@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectPostAction_Beam_RicochetPreview()
 		{
-			Ricocheted = new();
-			FromMuzzle = new();
+			Ricocheted = new gameEffectPostAction_Beam_RicochetPreviewPreviewEffect();
+			FromMuzzle = new gameEffectPostAction_Beam_RicochetPreviewPreviewEffect();
 
 			PostConstruct();
 		}

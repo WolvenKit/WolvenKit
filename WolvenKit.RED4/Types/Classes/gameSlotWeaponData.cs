@@ -78,10 +78,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameSlotWeaponData()
 		{
-			WeaponID = new();
+			WeaponID = new gameItemID();
 			AmmoCurrent = -1;
 			MagazineCap = -1;
-			AmmoId = new();
+			AmmoId = new gameItemID();
 			TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid;
 			TriggerModeList = new();
 			Evolution = Enums.gamedataWeaponEvolution.Invalid;

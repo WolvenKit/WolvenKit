@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entRagdollActivationRequestEvent()
 		{
-			Data = new() { ActivateOnCollision = true, ApplyPowerPose = true, ApplyMomentum = true };
+			Data = new entragdollActivationRequestData { ActivateOnCollision = true, ApplyPowerPose = true, ApplyMomentum = true };
 
 			PostConstruct();
 		}

@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnAudioDurationEvent()
 		{
-			Id = new() { Id = 18446744073709551615 };
-			Performer = new() { Id = 4294967040 };
+			Id = new scnSceneEventId { Id = long.MaxValue };
+			Performer = new scnPerformerId { Id = 4294967040 };
 			PlaybackDirectionSupport = Enums.scnAudioPlaybackDirectionSupportFlag.Forward;
 
 			PostConstruct();

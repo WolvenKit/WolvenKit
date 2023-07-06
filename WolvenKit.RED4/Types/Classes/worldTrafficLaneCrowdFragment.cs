@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public worldTrafficLaneCrowdFragment()
 		{
 			DesiredSlotCountsPerTimePeriod = new(4);
-			CrowdCreationDataIndex = 4294967295;
+			CrowdCreationDataIndex = uint.MaxValue;
 
 			PostConstruct();
 		}

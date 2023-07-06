@@ -150,23 +150,23 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_Ik2()
 		{
-			Id = 4294967295;
-			FirstBone = new();
-			SecondBone = new();
-			EndBone = new();
+			Id = uint.MaxValue;
+			FirstBone = new animTransformIndex();
+			SecondBone = new animTransformIndex();
+			EndBone = new animTransformIndex();
 			HingeAxis = Enums.animAxis.Y;
 			MaxHingeAngleDegrees = 180.000000F;
 			FirstBoneIkGain = 1.000000F;
 			SecondBoneIkGain = 1.000000F;
 			EndBoneIkGain = 1.000000F;
 			EnforceEndPosition = true;
-			EndBoneOffsetPositionLS = new();
-			Bone = new();
-			FloatTrack = new();
-			InputPoseNode = new();
-			WeightNode = new();
-			EndTargetPositionNode = new();
-			EndTargetOrientationNode = new();
+			EndBoneOffsetPositionLS = new Vector4();
+			Bone = new animTransformIndex();
+			FloatTrack = new animNamedTrackIndex();
+			InputPoseNode = new animPoseLink();
+			WeightNode = new animFloatLink();
+			EndTargetPositionNode = new animVectorLink();
+			EndTargetOrientationNode = new animQuaternionLink();
 
 			PostConstruct();
 		}

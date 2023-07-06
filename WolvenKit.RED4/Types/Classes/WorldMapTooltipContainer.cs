@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public WorldMapTooltipContainer()
 		{
-			DefaultTooltip = new();
-			PoliceTooltip = new();
+			DefaultTooltip = new inkWidgetReference();
+			PoliceTooltip = new inkWidgetReference();
 			Tooltips = new(3);
 			CurrentVisibleIndex = -1;
 

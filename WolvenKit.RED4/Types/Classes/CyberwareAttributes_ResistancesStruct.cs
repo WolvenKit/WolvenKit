@@ -54,12 +54,12 @@ namespace WolvenKit.RED4.Types
 
 		public CyberwareAttributes_ResistancesStruct()
 		{
-			WidgetHealth = new();
-			WidgetPhysical = new();
-			WidgetThermal = new();
-			WidgetEMP = new();
-			WidgetChemical = new();
-			ResistanceTooltip = new();
+			WidgetHealth = new inkFlexWidgetReference();
+			WidgetPhysical = new inkFlexWidgetReference();
+			WidgetThermal = new inkFlexWidgetReference();
+			WidgetEMP = new inkFlexWidgetReference();
+			WidgetChemical = new inkFlexWidgetReference();
+			ResistanceTooltip = new inkFlexWidgetReference();
 
 			PostConstruct();
 		}

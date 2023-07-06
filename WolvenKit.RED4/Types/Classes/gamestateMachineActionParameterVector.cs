@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamestateMachineActionParameterVector()
 		{
-			Value = new();
+			Value = new Vector4();
 
 			PostConstruct();
 		}

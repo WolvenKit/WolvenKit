@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameTutorialOverlayData()
 		{
-			WidgetLibraryResource = new();
+			WidgetLibraryResource = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

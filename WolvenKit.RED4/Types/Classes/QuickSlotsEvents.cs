@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class QuickSlotsEvents : QuickSlotsTransition
+	public abstract partial class QuickSlotsEvents : QuickSlotsTransition
 	{
 		public QuickSlotsEvents()
 		{

@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public questUseWorkspotPlayerParams()
 		{
-			CameraSettings = new() { YawLeftLimit = 60.000000F, YawRightLimit = 60.000000F, PitchTopLimit = 60.000000F, PitchBottomLimit = 45.000000F, PitchSpeedMultiplier = 1.000000F, YawSpeedMultiplier = 1.000000F };
+			CameraSettings = new gameTier3CameraSettings { YawLeftLimit = 60.000000F, YawRightLimit = 60.000000F, PitchTopLimit = 60.000000F, PitchBottomLimit = 45.000000F, PitchSpeedMultiplier = 1.000000F, YawSpeedMultiplier = 1.000000F };
 			CameraUseTrajectorySpace = true;
 			VehicleProceduralCameraWeight = 1.000000F;
 			ParallaxWeight = 1.000000F;

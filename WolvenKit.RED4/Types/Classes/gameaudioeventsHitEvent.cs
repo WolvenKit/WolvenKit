@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.Types
 		public gameaudioeventsHitEvent()
 		{
 			AttackType = Enums.gamedataAttackType.Direct;
-			HitPosition = new();
+			HitPosition = new Vector4();
 
 			PostConstruct();
 		}

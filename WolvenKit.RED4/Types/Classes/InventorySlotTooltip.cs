@@ -270,29 +270,29 @@ namespace WolvenKit.RED4.Types
 
 		public InventorySlotTooltip()
 		{
-			ItemName = new();
-			ItemCategory = new();
-			ItemPrice = new();
-			DescriptionText = new();
-			LockedText = new();
-			RequiredLevelText = new();
-			AdditionalStatsTextRef = new();
-			EquippedHeader = new();
-			PrimaryStatsList = new();
-			ComparedStatsList = new();
-			AdditionalStatsList = new();
-			ItemPriceGroup = new();
-			DamageIndicator = new();
-			RequiredLevelGroup = new();
-			DamageIndicatorRef = new();
-			AttachmentsListVertRef = new();
-			AttachmentsCtrlHorRef = new();
-			SpecialAbilitiesListRef = new();
-			RarityBarRef = new();
+			ItemName = new inkTextWidgetReference();
+			ItemCategory = new inkTextWidgetReference();
+			ItemPrice = new inkTextWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			LockedText = new inkTextWidgetReference();
+			RequiredLevelText = new inkTextWidgetReference();
+			AdditionalStatsTextRef = new inkTextWidgetReference();
+			EquippedHeader = new inkWidgetReference();
+			PrimaryStatsList = new inkWidgetReference();
+			ComparedStatsList = new inkWidgetReference();
+			AdditionalStatsList = new inkWidgetReference();
+			ItemPriceGroup = new inkWidgetReference();
+			DamageIndicator = new inkWidgetReference();
+			RequiredLevelGroup = new inkWidgetReference();
+			DamageIndicatorRef = new inkWidgetReference();
+			AttachmentsListVertRef = new inkWidgetReference();
+			AttachmentsCtrlHorRef = new inkWidgetReference();
+			SpecialAbilitiesListRef = new inkWidgetReference();
+			RarityBarRef = new inkWidgetReference();
 			ElementsToSetRarityState = new();
 			RarityElementsRefs = new();
-			TooltipCycleIndicatorsContainer = new();
-			TooltipCycleHintContainer = new();
+			TooltipCycleIndicatorsContainer = new inkCompoundWidgetReference();
+			TooltipCycleHintContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

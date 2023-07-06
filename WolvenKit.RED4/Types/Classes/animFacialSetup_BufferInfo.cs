@@ -54,10 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public animFacialSetup_BufferInfo()
 		{
-			TracksMapping = new();
-			Face = new();
-			Eyes = new();
-			Tongue = new();
+			TracksMapping = new animFacialSetup_TracksMapping();
+			Face = new animFacialSetup_OneSermoBufferInfo();
+			Eyes = new animFacialSetup_OneSermoBufferInfo();
+			Tongue = new animFacialSetup_OneSermoBufferInfo();
 
 			PostConstruct();
 		}

@@ -54,14 +54,14 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FootStepScaling()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			HipsIndex = new();
-			LeftFootIKIndex = new();
-			RightFootIKIndex = new();
-			InputSpeed = new();
-			Weight = new();
-			Params = new() { HipsTilt = 25.000000F, HipsShift = 0.100000F, LegsPullFactorMin = 0.050000F, LegsPullFactorMax = 0.165000F, LegLengthAdjustment = 0.005000F, LegMaxStretchOffset = 0.050000F, LegMaxStretchAdjustment = 0.015000F };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			HipsIndex = new animTransformIndex();
+			LeftFootIKIndex = new animTransformIndex();
+			RightFootIKIndex = new animTransformIndex();
+			InputSpeed = new animFloatLink();
+			Weight = new animFloatLink();
+			Params = new animfssBodyOfflineParams { HipsTilt = 25.000000F, HipsShift = 0.100000F, LegsPullFactorMin = 0.050000F, LegsPullFactorMax = 0.165000F, LegLengthAdjustment = 0.005000F, LegMaxStretchOffset = 0.050000F, LegMaxStretchAdjustment = 0.015000F };
 
 			PostConstruct();
 		}

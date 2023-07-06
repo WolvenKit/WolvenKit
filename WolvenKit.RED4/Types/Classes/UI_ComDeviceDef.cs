@@ -86,16 +86,16 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ComDeviceDef()
 		{
-			ComDeviceSetStatusText = new();
-			OpenMessageRequest = new();
-			CloseMessageRequest = new();
-			ShowingMessage = new();
-			PhoneCallInformation = new();
-			PhoneStyle_PlacidePhone = new();
-			PhoneStyle_VideoCallInterupt = new();
-			PhoneStyle_Minimized = new();
-			IsDisplayingMessage = new();
-			ContactsActive = new();
+			ComDeviceSetStatusText = new gamebbScriptID_CName();
+			OpenMessageRequest = new gamebbScriptID_Uint32();
+			CloseMessageRequest = new gamebbScriptID_Int32();
+			ShowingMessage = new gamebbScriptID_Int32();
+			PhoneCallInformation = new gamebbScriptID_Variant();
+			PhoneStyle_PlacidePhone = new gamebbScriptID_Bool();
+			PhoneStyle_VideoCallInterupt = new gamebbScriptID_Bool();
+			PhoneStyle_Minimized = new gamebbScriptID_Bool();
+			IsDisplayingMessage = new gamebbScriptID_Bool();
+			ContactsActive = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

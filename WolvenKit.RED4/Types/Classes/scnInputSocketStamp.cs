@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnInputSocketStamp()
 		{
-			Name = 65535;
-			Ordinal = 65535;
+			Name = ushort.MaxValue;
+			Ordinal = ushort.MaxValue;
 
 			PostConstruct();
 		}

@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectTriggerEffectDesc()
 		{
-			Offset = new();
+			Offset = new Vector3();
 			PlayTillHour = 24;
 
 			PostConstruct();

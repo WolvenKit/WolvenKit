@@ -54,13 +54,13 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_EyesTracksLookAt()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			EyeTransform = new();
-			LeftTrack = new();
-			RightTrack = new();
-			UpTrack = new();
-			DownTrack = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			EyeTransform = new animTransformIndex();
+			LeftTrack = new animNamedTrackIndex();
+			RightTrack = new animNamedTrackIndex();
+			UpTrack = new animNamedTrackIndex();
+			DownTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

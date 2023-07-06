@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiQuestMappinController()
 		{
-			DistanceText = new();
-			DisplayName = new();
+			DistanceText = new inkTextWidgetReference();
+			DisplayName = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

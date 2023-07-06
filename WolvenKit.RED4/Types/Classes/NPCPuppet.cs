@@ -582,20 +582,20 @@ namespace WolvenKit.RED4.Types
 
 		public NPCPuppet()
 		{
-			HitEventLock = new();
-			RagdollImpactData = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() }, WorldNormal = new() { W = 1.000000F }, OtherProxyActorIndex = 1 };
-			RagdollDamageData = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() }, WorldNormal = new() };
-			RagdollInitialPosition = new();
+			HitEventLock = new ScriptReentrantRWLock();
+			RagdollImpactData = new entRagdollImpactPointData { WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, WorldNormal = new Vector4 { W = 1.000000F }, OtherProxyActorIndex = 1 };
+			RagdollDamageData = new RagdollDamagePollData { WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, WorldNormal = new Vector4() };
+			RagdollInitialPosition = new Vector4();
 			RagdolledEntities = new();
 			NpcMountedToPlayerComponents = new();
-			CachedPlayerID = new();
-			ResendStatusEffectSignalDelayID = new();
-			Bounty = new() { Transgressions = new() };
+			CachedPlayerID = new entEntityID();
+			ResendStatusEffectSignalDelayID = new gameDelayID();
+			Bounty = new Bounty { Transgressions = new() };
 			CachedVFXList = new();
 			CachedSFXList = new();
-			ThrowingGrenadeDelayEventID = new();
-			DelayNonStealthQuickHackVictimEventID = new();
-			SmartDespawnDelayID = new();
+			ThrowingGrenadeDelayEventID = new gameDelayID();
+			DelayNonStealthQuickHackVictimEventID = new gameDelayID();
+			SmartDespawnDelayID = new gameDelayID();
 
 			PostConstruct();
 		}

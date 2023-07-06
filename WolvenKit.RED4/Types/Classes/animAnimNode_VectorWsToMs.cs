@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_VectorWsToMs()
 		{
-			Id = 4294967295;
-			VectorWs = new();
+			Id = uint.MaxValue;
+			VectorWs = new animVectorLink();
 
 			PostConstruct();
 		}

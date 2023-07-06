@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public NarrativePlateLogicController()
 		{
-			TextWidget = new();
-			CaptionWidget = new();
-			Root = new();
+			TextWidget = new inkWidgetReference();
+			CaptionWidget = new inkWidgetReference();
+			Root = new inkWidgetReference();
 
 			PostConstruct();
 		}

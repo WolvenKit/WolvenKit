@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIPhoneManager : gameIGameSystem
+	public abstract partial class questIPhoneManager : gameIGameSystem
 	{
 		public questIPhoneManager()
 		{

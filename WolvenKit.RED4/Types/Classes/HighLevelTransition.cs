@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class HighLevelTransition : DefaultTransition
+	public abstract partial class HighLevelTransition : DefaultTransition
 	{
 		public HighLevelTransition()
 		{

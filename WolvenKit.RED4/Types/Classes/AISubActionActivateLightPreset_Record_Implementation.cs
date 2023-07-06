@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISubActionActivateLightPreset_Record_Implementation : IScriptable
+	public abstract partial class AISubActionActivateLightPreset_Record_Implementation : IScriptable
 	{
 		public AISubActionActivateLightPreset_Record_Implementation()
 		{

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public VenodrRequestQueueEntry()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

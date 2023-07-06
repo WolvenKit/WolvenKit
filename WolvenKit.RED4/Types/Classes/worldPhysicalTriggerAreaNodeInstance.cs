@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldPhysicalTriggerAreaNodeInstance : worldINodeInstance
+	public abstract partial class worldPhysicalTriggerAreaNodeInstance : worldINodeInstance
 	{
 		public worldPhysicalTriggerAreaNodeInstance()
 		{

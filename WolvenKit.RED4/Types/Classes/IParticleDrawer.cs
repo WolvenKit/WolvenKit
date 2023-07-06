@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IParticleDrawer : ISerializable
+	public abstract partial class IParticleDrawer : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("pivotOffset")] 

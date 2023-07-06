@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectObjectProvider_Sweep_Box()
 		{
-			QueryPreset = new();
+			QueryPreset = new physicsQueryPreset();
 
 			PostConstruct();
 		}

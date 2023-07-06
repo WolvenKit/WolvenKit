@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public MessangerItemRenderer()
 		{
-			Image = new();
-			Container = new();
-			FluffText = new();
+			Image = new inkImageWidgetReference();
+			Container = new inkWidgetReference();
+			FluffText = new inkTextWidgetReference();
 			StateMessage = "Default";
 			StatePlayerReply = "Player";
 

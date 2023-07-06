@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public entGarmentParameter()
 		{
 			ComponentsData = new();
-			CollarArea = new() { RadiusInCM = 32.000000F, RadiusForTriangleRemovalInCM = 16.000000F, Offset = new() };
+			CollarArea = new garmentCollarAreaParams { RadiusInCM = 32.000000F, RadiusForTriangleRemovalInCM = 16.000000F, Offset = new Vector3() };
 
 			PostConstruct();
 		}

@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			RotateParentToLookAtDangle = true;
 			SubstepTime = 0.010000F;
 			SolverIterations = 1;
-			ParticlesContainer = new() { ExternalForceWS = new(), ExternalForceWsLink = new(), Particles = new(), GravityWS = 9.810000F };
+			ParticlesContainer = new animDyngParticlesContainer { ExternalForceWS = new Vector3(), ExternalForceWsLink = new animVectorLink(), Particles = new(), GravityWS = 9.810000F };
 
 			PostConstruct();
 		}

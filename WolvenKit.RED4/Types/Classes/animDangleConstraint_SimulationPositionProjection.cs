@@ -53,9 +53,9 @@ namespace WolvenKit.RED4.Types
 			ParentRotationAltersTransformsOfDangleAndItsChildren = true;
 			ParentRotationAltersTransformsOfNonDanglesAndItsChildren = true;
 			DangleAltersTransformsOfItsChildren = true;
-			DangleBone = new();
-			CollisionCapsuleAxisLS = new() { X = 0.500000F };
-			DirectionReferenceBone = new();
+			DangleBone = new animTransformIndex();
+			CollisionCapsuleAxisLS = new Vector3 { X = 0.500000F };
+			DirectionReferenceBone = new animTransformIndex();
 			ProjectionType = Enums.animPositionProjectionType.ShortestPath;
 
 			PostConstruct();

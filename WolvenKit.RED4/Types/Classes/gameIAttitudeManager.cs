@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIAttitudeManager : gameIGameSystem
+	public abstract partial class gameIAttitudeManager : gameIGameSystem
 	{
 		public gameIAttitudeManager()
 		{

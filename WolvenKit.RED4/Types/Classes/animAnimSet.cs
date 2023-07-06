@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			FallbackDataAddressIndexes = new();
 			FallbackAnimFrameDescs = new();
 			FallbackAnimDescIndexes = new();
-			Tags = new() { Tags = new() };
+			Tags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

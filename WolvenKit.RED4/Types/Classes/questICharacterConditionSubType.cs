@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questICharacterConditionSubType : ISerializable
+	public abstract partial class questICharacterConditionSubType : ISerializable
 	{
 		public questICharacterConditionSubType()
 		{

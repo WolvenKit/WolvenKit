@@ -318,15 +318,15 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiQuadRacerLogicController()
 		{
-			SkyWidget = new();
+			SkyWidget = new inkWidgetReference();
 			Road = new();
 			SegmentDetails = 1;
 			CameraFov = 80.000000F;
 			CameraHeight = 1000.000000F;
-			TimeLeftText = new();
-			ScoreText = new();
-			SpeedText = new();
-			NotificationText = new();
+			TimeLeftText = new inkTextWidgetReference();
+			ScoreText = new inkTextWidgetReference();
+			SpeedText = new inkTextWidgetReference();
+			NotificationText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

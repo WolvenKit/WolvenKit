@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIStreetNameSignLogicController : inkWidgetLogicController
+	public abstract partial class inkIStreetNameSignLogicController : inkWidgetLogicController
 	{
 		public inkIStreetNameSignLogicController()
 		{

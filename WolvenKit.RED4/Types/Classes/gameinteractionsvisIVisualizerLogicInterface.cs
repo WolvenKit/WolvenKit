@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameinteractionsvisIVisualizerLogicInterface : ISerializable
+	public abstract partial class gameinteractionsvisIVisualizerLogicInterface : ISerializable
 	{
 		public gameinteractionsvisIVisualizerLogicInterface()
 		{

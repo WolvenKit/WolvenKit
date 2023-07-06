@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AICTreeExtendableNodeDefinition : AICTreeNodeDefinition
+	public abstract partial class AICTreeExtendableNodeDefinition : AICTreeNodeDefinition
 	{
 		[Ordinal(0)] 
 		[RED("optionalChild")] 

@@ -118,12 +118,12 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Basic()
 		{
-			LeftPart = new();
-			RightPart = new();
-			UpPart = new();
-			DownPart = new();
-			CenterPart = new();
-			BufferedSpread = new();
+			LeftPart = new inkImageWidgetReference();
+			RightPart = new inkImageWidgetReference();
+			UpPart = new inkImageWidgetReference();
+			DownPart = new inkImageWidgetReference();
+			CenterPart = new inkImageWidgetReference();
+			BufferedSpread = new Vector2();
 			HorizontalMinSpread = 20.000000F;
 			VerticalMinSpread = 20.000000F;
 			GameplaySpreadMultiplier = 1.000000F;

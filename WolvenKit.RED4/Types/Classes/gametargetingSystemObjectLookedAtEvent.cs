@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gametargetingSystemObjectLookedAtEvent()
 		{
-			OwnerID = new();
+			OwnerID = new entEntityID();
 
 			PostConstruct();
 		}

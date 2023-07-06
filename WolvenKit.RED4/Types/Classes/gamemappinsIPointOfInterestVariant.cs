@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamemappinsIPointOfInterestVariant : ISerializable
+	public abstract partial class gamemappinsIPointOfInterestVariant : ISerializable
 	{
 		public gamemappinsIPointOfInterestVariant()
 		{

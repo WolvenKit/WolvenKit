@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnPerformerSymbol()
 		{
-			PerformerId = new() { Id = 4294967040 };
-			EntityRef = new() { Names = new() };
+			PerformerId = new scnPerformerId { Id = 4294967040 };
+			EntityRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

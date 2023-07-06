@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameEffectNode : IScriptable
+	public abstract partial class gameEffectNode : IScriptable
 	{
 		public gameEffectNode()
 		{

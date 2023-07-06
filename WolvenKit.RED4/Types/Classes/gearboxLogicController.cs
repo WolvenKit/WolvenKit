@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public gearboxLogicController()
 		{
-			GearboxRImageWidget = new();
-			GearboxNImageWidget = new();
-			GearboxDImageWidget = new();
+			GearboxRImageWidget = new inkImageWidgetReference();
+			GearboxNImageWidget = new inkImageWidgetReference();
+			GearboxDImageWidget = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public IncomingCallGameController()
 		{
-			ContactNameWidget = new();
-			ButtonHint = new();
+			ContactNameWidget = new inkTextWidgetReference();
+			ButtonHint = new inkWidgetReference();
 
 			PostConstruct();
 		}

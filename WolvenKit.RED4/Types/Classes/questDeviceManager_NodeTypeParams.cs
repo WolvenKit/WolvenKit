@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public questDeviceManager_NodeTypeParams()
 		{
-			EntityRef = new() { Names = new() };
+			EntityRef = new gameEntityReference { Names = new() };
 			ActionProperties = new();
 
 			PostConstruct();

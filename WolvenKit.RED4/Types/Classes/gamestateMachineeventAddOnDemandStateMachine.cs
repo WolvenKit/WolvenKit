@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamestateMachineeventAddOnDemandStateMachine()
 		{
-			InstanceData = new();
+			InstanceData = new gamestateMachineStateMachineInstanceData();
 
 			PostConstruct();
 		}

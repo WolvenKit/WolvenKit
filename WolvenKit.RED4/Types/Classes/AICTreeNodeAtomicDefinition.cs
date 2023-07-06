@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AICTreeNodeAtomicDefinition : AICTreeNodeDefinition
+	public abstract partial class AICTreeNodeAtomicDefinition : AICTreeNodeDefinition
 	{
 		public AICTreeNodeAtomicDefinition()
 		{

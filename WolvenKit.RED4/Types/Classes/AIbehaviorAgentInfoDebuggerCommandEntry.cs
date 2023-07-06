@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorAgentInfoDebuggerCommandEntry()
 		{
-			CallStack = new() { ResourceHashes = new() };
+			CallStack = new AIbehaviorBehaviorInstanceCallStack { ResourceHashes = new() };
 
 			PostConstruct();
 		}

@@ -197,8 +197,8 @@ namespace WolvenKit.RED4.Types
 			AccumulateDamage = true;
 			ImpulseToDamage = 1.000000F;
 			InstanceTransforms = new();
-			CookedInstanceTransforms = new();
-			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			CookedInstanceTransforms = new worldTransformBuffer();
+			NavigationSetting = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
 			UseMeshNavmeshSettings = true;
 
 			PostConstruct();

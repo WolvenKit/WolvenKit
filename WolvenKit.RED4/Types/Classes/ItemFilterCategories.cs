@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ItemFilterCategories : IScriptable
+	public abstract partial class ItemFilterCategories : IScriptable
 	{
 		public ItemFilterCategories()
 		{

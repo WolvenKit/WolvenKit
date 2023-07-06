@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class TweakAIActionConditionAbstract : AIbehaviorconditionScript
+	public abstract partial class TweakAIActionConditionAbstract : AIbehaviorconditionScript
 	{
 		[Ordinal(0)] 
 		[RED("actionRecord")] 

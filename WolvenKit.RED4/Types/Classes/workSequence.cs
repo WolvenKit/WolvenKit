@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public workSequence()
 		{
-			Id = new() { Id = 4294967295 };
+			Id = new workWorkEntryId { Id = uint.MaxValue };
 			List = new();
 
 			PostConstruct();

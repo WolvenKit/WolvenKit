@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_TagValue()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 
 			PostConstruct();
 		}

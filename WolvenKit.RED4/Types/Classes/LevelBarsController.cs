@@ -54,11 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public LevelBarsController()
 		{
-			Bar0 = new();
-			Bar1 = new();
-			Bar2 = new();
-			Bar3 = new();
-			Bar4 = new();
+			Bar0 = new inkWidgetReference();
+			Bar1 = new inkWidgetReference();
+			Bar2 = new inkWidgetReference();
+			Bar3 = new inkWidgetReference();
+			Bar4 = new inkWidgetReference();
 			Bars = new(5);
 
 			PostConstruct();

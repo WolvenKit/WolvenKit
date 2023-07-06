@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public PreventionNotification()
 		{
-			BountyTitleText = new();
-			BountyAmountText = new();
+			BountyTitleText = new inkTextWidgetReference();
+			BountyAmountText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

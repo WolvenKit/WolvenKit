@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIInterruptionHandlerDefinition : LibTreeINodeDefinition
+	public abstract partial class AIInterruptionHandlerDefinition : LibTreeINodeDefinition
 	{
 		[Ordinal(0)] 
 		[RED("signal")] 

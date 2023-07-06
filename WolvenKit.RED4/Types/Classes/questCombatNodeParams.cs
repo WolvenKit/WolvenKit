@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questCombatNodeParams : questAICommandParams
+	public abstract partial class questCombatNodeParams : questAICommandParams
 	{
 		public questCombatNodeParams()
 		{

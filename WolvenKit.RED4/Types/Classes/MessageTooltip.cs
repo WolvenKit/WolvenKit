@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public MessageTooltip()
 		{
-			Title = new();
-			Description = new();
+			Title = new inkTextWidgetReference();
+			Description = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

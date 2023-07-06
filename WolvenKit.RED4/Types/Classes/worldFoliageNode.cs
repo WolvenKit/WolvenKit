@@ -86,11 +86,11 @@ namespace WolvenKit.RED4.Types
 
 		public worldFoliageNode()
 		{
-			FoliageLocalBounds = new() { Min = new(), Max = new() };
+			FoliageLocalBounds = new Box { Min = new Vector4(), Max = new Vector4() };
 			AutoHideDistanceScale = 1.000000F;
 			LodDistanceScale = 1.000000F;
 			StreamingDistance = -1.000000F;
-			PopulationSpanInfo = new();
+			PopulationSpanInfo = new worldFoliagePopulationSpanInfo();
 
 			PostConstruct();
 		}

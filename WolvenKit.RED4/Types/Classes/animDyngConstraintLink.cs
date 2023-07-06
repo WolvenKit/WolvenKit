@@ -54,11 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public animDyngConstraintLink()
 		{
-			Bone1 = new();
-			Bone2 = new();
+			Bone1 = new animTransformIndex();
+			Bone2 = new animTransformIndex();
 			LengthLowerBoundRatioPercentage = 100.000000F;
 			LengthUpperBoundRatioPercentage = 100.000000F;
-			LookAtAxis = new() { X = 1.000000F };
+			LookAtAxis = new Vector3 { X = 1.000000F };
 
 			PostConstruct();
 		}

@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public animImportFacialTransformNoScale()
 		{
-			Rotation = new() { R = 1.000000F };
-			Translation = new();
+			Rotation = new Quaternion { R = 1.000000F };
+			Translation = new Vector3();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questCharacterStatusEffectsListener : gameIStatusEffectListener
+	public abstract partial class questCharacterStatusEffectsListener : gameIStatusEffectListener
 	{
 		public questCharacterStatusEffectsListener()
 		{

@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public inkLayersResource()
 		{
-			LayerDefinitions = new() { MenuLayer = new(), MenuLayerMP = new(), HudLayer = new(), VideoLayer = new(), OffscreenLayer = new(), GameNotificationsLayer = new(), PhotoModeLayer = new(), DebugLayer = new() { Entries = new() } };
-			PreGameLayerDefinitions = new() { MenuLayer = new(), MenuLayerMP = new(), HudLayer = new(), VideoLayer = new(), OffscreenLayer = new(), GameNotificationsLayer = new(), PhotoModeLayer = new(), DebugLayer = new() { Entries = new() } };
-			PermanentLayerDefinitions = new() { LoadingLayer = new(), WatermarksLayer = new(), SysNotificationsLayer = new(), WaitingSignLayerDefinition = new() };
-			LayerDefinitionsSet = new() { LayersDefinitions = new(), LayersSystemConnections = new() };
+			LayerDefinitions = new inkLayerDefinitionCollection { MenuLayer = new inkMenuLayerDefinition(), MenuLayerMP = new inkMenuLayerDefinition(), HudLayer = new inkHUDLayerDefinition(), VideoLayer = new inkVideoLayerDefinition(), OffscreenLayer = new inkOffscreenLayerDefinition(), GameNotificationsLayer = new inkGameNotificationsLayerDefinition(), PhotoModeLayer = new inkPhotoModeLayerDefinition(), DebugLayer = new inkDebugLayerDefinition { Entries = new() } };
+			PreGameLayerDefinitions = new inkLayerDefinitionCollection { MenuLayer = new inkMenuLayerDefinition(), MenuLayerMP = new inkMenuLayerDefinition(), HudLayer = new inkHUDLayerDefinition(), VideoLayer = new inkVideoLayerDefinition(), OffscreenLayer = new inkOffscreenLayerDefinition(), GameNotificationsLayer = new inkGameNotificationsLayerDefinition(), PhotoModeLayer = new inkPhotoModeLayerDefinition(), DebugLayer = new inkDebugLayerDefinition { Entries = new() } };
+			PermanentLayerDefinitions = new inkPermanentLayerDefinitionCollection { LoadingLayer = new inkLoadingLayerDefinition(), WatermarksLayer = new inkWatermarksLayerDefinition(), SysNotificationsLayer = new inkSystemNotificationsLayerDefinition(), WaitingSignLayerDefinition = new inkWaitingSignLayerDefinition() };
+			LayerDefinitionsSet = new inkLayerDefinitionsSet { LayersDefinitions = new(), LayersSystemConnections = new() };
 
 			PostConstruct();
 		}

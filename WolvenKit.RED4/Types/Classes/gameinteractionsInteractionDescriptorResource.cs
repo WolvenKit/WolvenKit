@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsInteractionDescriptorResource()
 		{
-			Definition = new() { LayersDefinition = new() { null } };
+			Definition = new gameinteractionsCHotSpotDefinition { LayersDefinition = new() { null } };
 
 			PostConstruct();
 		}

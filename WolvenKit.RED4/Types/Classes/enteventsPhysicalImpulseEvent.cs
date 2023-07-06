@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public enteventsPhysicalImpulseEvent()
 		{
-			BodyIndex = 4294967295;
-			WorldImpulse = new();
-			WorldPosition = new();
+			BodyIndex = uint.MaxValue;
+			WorldImpulse = new Vector3();
+			WorldPosition = new Vector3();
 
 			PostConstruct();
 		}

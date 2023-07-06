@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class CombatGadgetTransitions : DefaultTransition
+	public abstract partial class CombatGadgetTransitions : DefaultTransition
 	{
 		public CombatGadgetTransitions()
 		{

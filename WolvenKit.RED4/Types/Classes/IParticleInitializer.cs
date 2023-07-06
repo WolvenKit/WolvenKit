@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IParticleInitializer : IParticleModule
+	public abstract partial class IParticleInitializer : IParticleModule
 	{
 		[Ordinal(3)] 
 		[RED("seed")] 

@@ -54,11 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public PreOrderPopupController()
 		{
-			PreOrderButtonRef = new();
-			PreOrderButtonText = new();
-			PreOrderButtonInputIcon = new();
-			PreOrderButtonSpinner = new();
-			ReleaseDateContainer = new();
+			PreOrderButtonRef = new inkWidgetReference();
+			PreOrderButtonText = new inkTextWidgetReference();
+			PreOrderButtonInputIcon = new inkWidgetReference();
+			PreOrderButtonSpinner = new inkWidgetReference();
+			ReleaseDateContainer = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public audioAmbientPaletteBrushDictionaryItem()
 		{
-			Value = new() { DistributionBucketSize = 10.000000F, VirtualHearingRadius = 10.000000F, HearingDistanceCooldown = 1.000000F, EventsPool = new() };
+			Value = new audioAmbientPaletteBrush { DistributionBucketSize = 10.000000F, VirtualHearingRadius = 10.000000F, HearingDistanceCooldown = 1.000000F, EventsPool = new() };
 
 			PostConstruct();
 		}

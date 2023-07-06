@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsSocket()
 		{
-			Id = new() { Id = 18446744073709551615 };
-			OsockStamp = new() { Name = 65535, Ordinal = 65535 };
+			Id = new scnSceneEventId { Id = long.MaxValue };
+			OsockStamp = new scnOutputSocketStamp { Name = ushort.MaxValue, Ordinal = ushort.MaxValue };
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIPrereq : IScriptable
+	public abstract partial class gameIPrereq : IScriptable
 	{
 		public gameIPrereq()
 		{

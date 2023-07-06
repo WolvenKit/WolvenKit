@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public AISpotPersistentData()
 		{
-			WorldPosition = new() { X = new(), Y = new(), Z = new() };
-			GlobalNodeId = new();
+			WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			GlobalNodeId = new worldGlobalNodeID();
 			IsEnabled = true;
 
 			PostConstruct();

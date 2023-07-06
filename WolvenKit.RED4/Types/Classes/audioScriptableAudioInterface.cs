@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class audioScriptableAudioInterface : IScriptable
+	public abstract partial class audioScriptableAudioInterface : IScriptable
 	{
 		public audioScriptableAudioInterface()
 		{

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public InvestigateController()
 		{
-			InvestigateData = new() { DistrationPoint = new(), AttackInstigatorPosition = new(), InvestigationSpots = new() };
+			InvestigateData = new senseStimInvestigateData { DistrationPoint = new Vector4(), AttackInstigatorPosition = new Vector4(), InvestigationSpots = new() };
 
 			PostConstruct();
 		}

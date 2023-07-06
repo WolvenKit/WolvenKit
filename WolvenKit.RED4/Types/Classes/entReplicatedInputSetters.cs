@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entReplicatedInputSetters()
 		{
-			ServerReplicatedTime = new();
+			ServerReplicatedTime = new netTime();
 
 			PostConstruct();
 		}

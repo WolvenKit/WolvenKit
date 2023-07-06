@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questVehicleSpeed_ConditionType()
 		{
-			VehicleRef = new() { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

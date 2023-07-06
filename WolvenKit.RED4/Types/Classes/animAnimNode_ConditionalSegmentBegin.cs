@@ -14,9 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_ConditionalSegmentBegin()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			Condition = new() { Lod = -1 };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			Condition = new animConditionalSegmentCondition { Lod = -1 };
 
 			PostConstruct();
 		}

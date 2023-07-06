@@ -54,12 +54,12 @@ namespace WolvenKit.RED4.Types
 
 		public LedColors_SensorDevice()
 		{
-			Off = new() { Color = new() };
-			Red = new() { Color = new() };
-			Green = new() { Color = new() };
-			Blue = new() { Color = new() };
-			Yellow = new() { Color = new() };
-			White = new() { Color = new() };
+			Off = new ScriptLightSettings { Color = new CColor() };
+			Red = new ScriptLightSettings { Color = new CColor() };
+			Green = new ScriptLightSettings { Color = new CColor() };
+			Blue = new ScriptLightSettings { Color = new CColor() };
+			Yellow = new ScriptLightSettings { Color = new CColor() };
+			White = new ScriptLightSettings { Color = new CColor() };
 
 			PostConstruct();
 		}

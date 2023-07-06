@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public scnFindEntityInEntityParams()
 		{
-			ActorId = new() { Id = 4294967295 };
-			PerformerId = new() { Id = 4294967040 };
-			OwnershipTransferOptions = new() { DettachFromSlot = true, RemoveFromInventory = true };
+			ActorId = new scnActorId { Id = uint.MaxValue };
+			PerformerId = new scnPerformerId { Id = 4294967040 };
+			OwnershipTransferOptions = new scnPropOwnershipTransferOptions { DettachFromSlot = true, RemoveFromInventory = true };
 
 			PostConstruct();
 		}

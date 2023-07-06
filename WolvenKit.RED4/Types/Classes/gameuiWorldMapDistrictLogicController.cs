@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiWorldMapDistrictLogicController()
 		{
-			OutlineWidget = new();
-			IconWidget = new();
+			OutlineWidget = new inkLinePatternWidgetReference();
+			IconWidget = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

@@ -41,8 +41,8 @@ namespace WolvenKit.RED4.Types
 			YawSpeed = 1.250000F;
 			YawDefault = -125.000000F;
 			RotationSpeed = 30.000000F;
-			Root = new();
-			Image = new();
+			Root = new inkWidgetReference();
+			Image = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

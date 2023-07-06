@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class DeviceSystemBaseControllerPS : MasterControllerPS
+	public abstract partial class DeviceSystemBaseControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
 		[RED("quickHacksEnabled")] 

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIbehaviorActionItemHandlingNodeDefinition : AIbehaviorActionTreeNodeDefinition
+	public abstract partial class AIbehaviorActionItemHandlingNodeDefinition : AIbehaviorActionTreeNodeDefinition
 	{
 		public AIbehaviorActionItemHandlingNodeDefinition()
 		{

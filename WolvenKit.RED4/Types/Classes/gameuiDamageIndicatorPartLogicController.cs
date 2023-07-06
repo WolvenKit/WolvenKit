@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.Types
 		public gameuiDamageIndicatorPartLogicController()
 		{
 			MaxDistanceForSharedIndicators = 4.000000F;
-			ArrowFrontWidget = new();
+			ArrowFrontWidget = new inkImageWidgetReference();
 			DamageThreshold = 100.000000F;
 
 			PostConstruct();

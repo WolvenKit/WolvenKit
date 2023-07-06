@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldMirrorNode()
 		{
-			CullingBoxExtents = new() { X = 20.000000F, Y = 20.000000F, Z = 20.000000F };
-			CullingBoxOffset = new();
+			CullingBoxExtents = new Vector3 { X = 20.000000F, Y = 20.000000F, Z = 20.000000F };
+			CullingBoxOffset = new Vector3();
 
 			PostConstruct();
 		}

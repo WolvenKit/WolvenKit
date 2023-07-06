@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class QuickSlotsHoldEvents : QuickSlotsEvents
+	public abstract partial class QuickSlotsHoldEvents : QuickSlotsEvents
 	{
 		[Ordinal(0)] 
 		[RED("holdDirection")] 

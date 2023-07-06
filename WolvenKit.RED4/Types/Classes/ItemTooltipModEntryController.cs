@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipModEntryController()
 		{
-			ModName = new();
+			ModName = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

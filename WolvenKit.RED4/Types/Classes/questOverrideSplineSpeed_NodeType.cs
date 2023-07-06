@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questOverrideSplineSpeed_NodeType()
 		{
-			VehicleRef = new() { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
 			Speed = -1.000000F;
 
 			PostConstruct();

@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnFindEntityInContextParams()
 		{
-			VoiceVagId = new();
+			VoiceVagId = new scnVoicetagId();
 
 			PostConstruct();
 		}

@@ -222,31 +222,31 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_ConeLimit()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			ConeTransform = new();
-			ConstrainedTransform = new();
-			ConeAxisLs = new() { Y = 1.000000F };
-			ConeAxisNormalizedLs = new() { Y = 1.000000F };
-			ConeOffsetMs = new();
-			ConeOffsetMsLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			ConeTransform = new animTransformIndex();
+			ConstrainedTransform = new animTransformIndex();
+			ConeAxisLs = new Vector3 { Y = 1.000000F };
+			ConeAxisNormalizedLs = new Vector3 { Y = 1.000000F };
+			ConeOffsetMs = new Vector3();
+			ConeOffsetMsLink = new animVectorLink();
 			Limit1 = 45.000000F;
-			Limit1Link = new();
-			Limit1FloatTrack = new();
+			Limit1Link = new animFloatLink();
+			Limit1FloatTrack = new animNamedTrackIndex();
 			ParaboloidRadius1 = 0.050000F;
 			Limit2 = 45.000000F;
-			Limit2Link = new();
-			Limit2FloatTrack = new();
+			Limit2Link = new animFloatLink();
+			Limit2FloatTrack = new animNamedTrackIndex();
 			ParaboloidRadius2 = 0.050000F;
 			Limit3 = 45.000000F;
-			Limit3Link = new();
-			Limit3FloatTrack = new();
+			Limit3Link = new animFloatLink();
+			Limit3FloatTrack = new animNamedTrackIndex();
 			ParaboloidRadius3 = 0.050000F;
 			Limit4 = 45.000000F;
-			Limit4Link = new();
-			Limit4FloatTrack = new();
+			Limit4Link = new animFloatLink();
+			Limit4FloatTrack = new animNamedTrackIndex();
 			ParaboloidRadius4 = 0.050000F;
-			ConeLimitReached = new();
+			ConeLimitReached = new animNamedTrackIndex();
 			ApplyDebugConeScalling = true;
 
 			PostConstruct();

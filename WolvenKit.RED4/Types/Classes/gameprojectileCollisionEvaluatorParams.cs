@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameprojectileCollisionEvaluatorParams()
 		{
-			Position = new();
+			Position = new Vector4();
 
 			PostConstruct();
 		}

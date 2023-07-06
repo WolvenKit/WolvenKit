@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.Types
 			Mails = new();
 			Files = new();
 			NewsFeedElements = new();
-			InternetData = new();
+			InternetData = new SInternetData();
 
 			PostConstruct();
 		}

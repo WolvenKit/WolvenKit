@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ActionBool : ScriptableDeviceAction
+	public abstract partial class ActionBool : ScriptableDeviceAction
 	{
 		public ActionBool()
 		{

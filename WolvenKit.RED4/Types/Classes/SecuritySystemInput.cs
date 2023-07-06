@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.Types
 
 		public SecuritySystemInput()
 		{
-			LastKnownPosition = new();
+			LastKnownPosition = new Vector4();
 			Id = -1;
 			CustomRecipientsList = new();
 

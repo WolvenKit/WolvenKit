@@ -193,11 +193,11 @@ namespace WolvenKit.RED4.Types
 			CurrentValue = 1.000000F;
 			PreviousValue = 1.000000F;
 			MaxCNBarFlashSize = 500.000000F;
-			FullBar = new();
-			ChangePBar = new();
-			ChangeNBar = new();
-			EmptyBar = new();
-			BarCap = new();
+			FullBar = new inkWidgetReference();
+			ChangePBar = new inkWidgetReference();
+			ChangeNBar = new inkWidgetReference();
+			EmptyBar = new inkWidgetReference();
+			BarCap = new inkWidgetReference();
 			AnimDuration = 2.000000F;
 
 			PostConstruct();

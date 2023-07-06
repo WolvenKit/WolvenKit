@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_OrientConstraint_WeightedTransform()
 		{
-			Transform = new();
+			Transform = new animTransformIndex();
 			Weight = 1.000000F;
 
 			PostConstruct();

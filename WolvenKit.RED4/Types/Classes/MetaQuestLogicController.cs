@@ -126,14 +126,14 @@ namespace WolvenKit.RED4.Types
 
 		public MetaQuestLogicController()
 		{
-			MetaQuestHint = new();
-			MetaQuestHintText = new();
-			MetaQuest1 = new();
-			MetaQuest2 = new();
-			MetaQuest3 = new();
-			MetaQuest1Value = new();
-			MetaQuest2Value = new();
-			MetaQuest3Value = new();
+			MetaQuestHint = new inkWidgetReference();
+			MetaQuestHintText = new inkTextWidgetReference();
+			MetaQuest1 = new inkWidgetReference();
+			MetaQuest2 = new inkWidgetReference();
+			MetaQuest3 = new inkWidgetReference();
+			MetaQuest1Value = new inkTextWidgetReference();
+			MetaQuest2Value = new inkTextWidgetReference();
+			MetaQuest3Value = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

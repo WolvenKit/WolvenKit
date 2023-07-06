@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public RemoveFromBlacklistEvent()
 		{
-			EntityIDToRemove = new();
+			EntityIDToRemove = new entEntityID();
 
 			PostConstruct();
 		}

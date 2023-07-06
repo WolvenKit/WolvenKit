@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animIPoseBlendMethod : ISerializable
+	public abstract partial class animIPoseBlendMethod : ISerializable
 	{
 		public animIPoseBlendMethod()
 		{

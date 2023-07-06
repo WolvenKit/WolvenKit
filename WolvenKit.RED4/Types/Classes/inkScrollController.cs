@@ -126,16 +126,16 @@ namespace WolvenKit.RED4.Types
 
 		public inkScrollController()
 		{
-			ScrollArea = new();
-			VerticalScrollBarRef = new();
-			NavigableCompoundWidget = new();
-			CompoundWidgetRef = new();
+			ScrollArea = new inkScrollAreaWidgetReference();
+			VerticalScrollBarRef = new inkWidgetReference();
+			NavigableCompoundWidget = new inkWidgetReference();
+			CompoundWidgetRef = new inkCompoundWidgetReference();
 			AutoHideVertical = true;
 			ScrollSpeedGamepad = 75.000000F;
 			ScrollSpeedMouse = 75.000000F;
 			ContentSmallerThanViewport = true;
-			ViewportSize = new();
-			ContentSize = new();
+			ViewportSize = new Vector2();
+			ContentSize = new Vector2();
 
 			PostConstruct();
 		}

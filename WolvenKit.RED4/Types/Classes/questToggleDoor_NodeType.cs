@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public questToggleDoor_NodeType()
 		{
-			VehicleRef = new() { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
 			DoorAction = Enums.vehicleEQuestVehicleDoorState.Invalid;
 			Door = Enums.vehicleEVehicleDoor.invalid;
 			ToOpen = true;

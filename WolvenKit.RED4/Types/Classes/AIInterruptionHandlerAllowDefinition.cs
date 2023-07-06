@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public AIInterruptionHandlerAllowDefinition()
 		{
-			Signal = new() { Importance = Enums.AIEInterruptionImportance.Casual };
+			Signal = new AIInterruptionSignal { Importance = Enums.AIEInterruptionImportance.Casual };
 
 			PostConstruct();
 		}

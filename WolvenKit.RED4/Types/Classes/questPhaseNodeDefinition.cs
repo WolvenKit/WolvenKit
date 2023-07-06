@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public questPhaseNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 			PhaseInstancePrefabs = new();
 
 			PostConstruct();

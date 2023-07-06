@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldTrafficLightDefinition()
 		{
-			GroupIdx = 4294967295;
+			GroupIdx = uint.MaxValue;
 			Timeline = new();
 
 			PostConstruct();

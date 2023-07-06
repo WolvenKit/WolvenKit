@@ -39,8 +39,8 @@ namespace WolvenKit.RED4.Types
 		public SStatusEffectOperationData()
 		{
 			Range = 1.000000F;
-			Offset = new();
-			Effect = new();
+			Offset = new Vector4();
+			Effect = new gameStatusEffectTDBPicker();
 
 			PostConstruct();
 		}

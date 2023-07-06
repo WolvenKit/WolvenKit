@@ -54,12 +54,12 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsAttachPropToPerformer()
 		{
-			Id = new() { Id = 18446744073709551615 };
-			PropId = new() { Id = 4294967295 };
-			PerformerId = new() { Id = 4294967040 };
+			Id = new scnSceneEventId { Id = long.MaxValue };
+			PropId = new scnPropId { Id = uint.MaxValue };
+			PerformerId = new scnPerformerId { Id = 4294967040 };
 			Slot = "(Root)";
-			CustomOffsetPos = new();
-			CustomOffsetRot = new() { R = 1.000000F };
+			CustomOffsetPos = new Vector3();
+			CustomOffsetRot = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

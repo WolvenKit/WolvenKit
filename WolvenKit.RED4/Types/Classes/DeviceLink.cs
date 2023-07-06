@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceLink()
 		{
-			PSID = new();
+			PSID = new gamePersistentID();
 
 			PostConstruct();
 		}

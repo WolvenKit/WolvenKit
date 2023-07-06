@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnIGameplayActionData : ISerializable
+	public abstract partial class scnIGameplayActionData : ISerializable
 	{
 		public scnIGameplayActionData()
 		{

@@ -374,8 +374,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMinimapStealthMappinController()
 		{
-			VisionConeWidget = new();
-			PulseWidget = new();
+			VisionConeWidget = new inkImageWidgetReference();
+			PulseWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

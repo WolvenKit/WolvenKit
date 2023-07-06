@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public PreventionVehicleStolenRequest()
 		{
-			RequesterPosition = new();
+			RequesterPosition = new Vector4();
 
 			PostConstruct();
 		}

@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public SettingsSelectorControllerRange()
 		{
-			ValueText = new();
-			LeftArrow = new();
-			RightArrow = new();
-			ProgressBar = new();
+			ValueText = new inkTextWidgetReference();
+			LeftArrow = new inkWidgetReference();
+			RightArrow = new inkWidgetReference();
+			ProgressBar = new inkWidgetReference();
 
 			PostConstruct();
 		}

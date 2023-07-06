@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipModController()
 		{
-			DotIndicator = new();
-			ModAbilitiesContainer = new();
+			DotIndicator = new inkWidgetReference();
+			ModAbilitiesContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

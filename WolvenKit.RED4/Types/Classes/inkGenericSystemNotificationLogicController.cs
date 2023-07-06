@@ -70,12 +70,12 @@ namespace WolvenKit.RED4.Types
 
 		public inkGenericSystemNotificationLogicController()
 		{
-			TitleTextWidget = new();
-			DescriptionTextWidget = new();
-			AdditionalDataTextWidget = new();
-			ConfirmButton = new();
-			CancelButton = new();
-			DataSetByToken = new();
+			TitleTextWidget = new inkTextWidgetReference();
+			DescriptionTextWidget = new inkTextWidgetReference();
+			AdditionalDataTextWidget = new inkTextWidgetReference();
+			ConfirmButton = new inkWidgetReference();
+			CancelButton = new inkWidgetReference();
+			DataSetByToken = new inkEmptyCallback();
 
 			PostConstruct();
 		}

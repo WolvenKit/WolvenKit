@@ -222,20 +222,20 @@ namespace WolvenKit.RED4.Types
 
 		public scnChoiceNode()
 		{
-			NodeId = new() { Id = 4294967295 };
+			NodeId = new scnNodeId { Id = uint.MaxValue };
 			OutputSockets = new();
 			LocalizedDisplayNameOverride = new() { Unk1 = 0, Value = "" };
 			Options = new();
 			Mode = Enums.scnChoiceNodeNsOperationMode.attachToScreen;
 			PersistentLineEvents = new();
-			CustomPersistentLine = new() { Id = 4294967040 };
-			AtaParams = new() { ActorId = new() { Id = 4294967295 } };
-			AtpParams = new() { PropId = new() { Id = 4294967295 }, VisualizerStyle = Enums.scnChoiceNodeNsVisualizerStyle.inWorld };
-			AtgoParams = new() { VisualizerStyle = Enums.scnChoiceNodeNsVisualizerStyle.inWorld };
-			AtsParams = new();
-			AtwParams = new() { EntityPosition = new(), EntityOrientation = new() { R = 1.000000F } };
+			CustomPersistentLine = new scnscreenplayItemId { Id = 4294967040 };
+			AtaParams = new scnChoiceNodeNsAttachToActorParams { ActorId = new scnActorId { Id = uint.MaxValue } };
+			AtpParams = new scnChoiceNodeNsAttachToPropParams { PropId = new scnPropId { Id = uint.MaxValue }, VisualizerStyle = Enums.scnChoiceNodeNsVisualizerStyle.inWorld };
+			AtgoParams = new scnChoiceNodeNsAttachToGameObjectParams { VisualizerStyle = Enums.scnChoiceNodeNsVisualizerStyle.inWorld };
+			AtsParams = new scnChoiceNodeNsAttachToScreenParams();
+			AtwParams = new scnChoiceNodeNsAttachToWorldParams { EntityPosition = new Vector3(), EntityOrientation = new Quaternion { R = 1.000000F } };
 			InterruptCapability = Enums.scnInterruptCapability.Interruptable;
-			InterruptionSpeakerOverride = new() { Id = 4294967295 };
+			InterruptionSpeakerOverride = new scnActorId { Id = uint.MaxValue };
 
 			PostConstruct();
 		}

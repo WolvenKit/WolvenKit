@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public gametargetingSystemHitInfo()
 		{
-			EntityId = new();
-			AimStartPosition = new();
-			ClosestHitPosition = new();
+			EntityId = new entEntityID();
+			AimStartPosition = new Vector4();
+			ClosestHitPosition = new Vector4();
 
 			PostConstruct();
 		}

@@ -54,10 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public SampleUIMeasurementController()
 		{
-			ValueText = new();
-			UnitText = new();
-			ValueIncreaseButton = new();
-			ValueDecreaseButton = new();
+			ValueText = new inkTextWidgetReference();
+			UnitText = new inkTextWidgetReference();
+			ValueIncreaseButton = new inkWidgetReference();
+			ValueDecreaseButton = new inkWidgetReference();
 
 			PostConstruct();
 		}

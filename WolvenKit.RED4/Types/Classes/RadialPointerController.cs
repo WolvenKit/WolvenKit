@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public RadialPointerController()
 		{
-			Pointer = new();
-			Feedback = new();
+			Pointer = new inkImageWidgetReference();
+			Feedback = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

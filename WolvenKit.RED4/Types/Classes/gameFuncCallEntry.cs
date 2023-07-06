@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameFuncCallEntry()
 		{
-			CallTime = new();
+			CallTime = new EngineTime();
 
 			PostConstruct();
 		}

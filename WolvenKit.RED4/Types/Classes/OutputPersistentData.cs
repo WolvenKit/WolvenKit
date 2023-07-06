@@ -86,10 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public OutputPersistentData()
 		{
-			LastKnownPosition = new();
-			ObjectOfInterest = new();
-			WhoBreached = new();
-			Reporter = new();
+			LastKnownPosition = new Vector4();
+			ObjectOfInterest = new entEntityID();
+			WhoBreached = new entEntityID();
+			Reporter = new gamePersistentID();
 
 			PostConstruct();
 		}

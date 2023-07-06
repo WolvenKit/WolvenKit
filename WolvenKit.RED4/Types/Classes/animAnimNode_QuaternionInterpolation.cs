@@ -38,11 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_QuaternionInterpolation()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			InterpolationType = Enums.animQuaternionInterpolationType.Spherical;
-			FirstInput = new();
-			SecondInput = new();
-			Weight = new();
+			FirstInput = new animQuaternionLink();
+			SecondInput = new animQuaternionLink();
+			Weight = new animFloatLink();
 
 			PostConstruct();
 		}

@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public InteractiveAdControllerPS()
 		{
 			DeviceName = "LocKey#197";
-			TweakDBRecord = 92183574454;
+			TweakDBRecord = "Devices.InteractiveAd";
 			TweakDBDescriptionRecord = 143211166331;
 
 			PostConstruct();

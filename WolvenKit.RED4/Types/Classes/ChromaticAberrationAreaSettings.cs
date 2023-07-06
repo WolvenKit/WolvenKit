@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public ChromaticAberrationAreaSettings()
 		{
 			Enable = true;
-			ChromaticAberrationSize = new() { X = 1.400000F, Y = 1.400000F };
+			ChromaticAberrationSize = new Vector2 { X = 1.400000F, Y = 1.400000F };
 			ChromaticAberrationExp = 0.800000F;
 
 			PostConstruct();

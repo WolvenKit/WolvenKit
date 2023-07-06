@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public AICTreeNodeSetSplineMovementTargetDefinition()
 		{
-			SplineNode = new();
-			MovementTarget = new() { Name = "MovementTarget" };
+			SplineNode = new LibTreeSharedVarReferenceName();
+			MovementTarget = new LibTreeSharedVarRegistrationName { Name = "MovementTarget" };
 
 			PostConstruct();
 		}

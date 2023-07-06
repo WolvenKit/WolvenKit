@@ -94,8 +94,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioNpcWeaponSettings()
 		{
-			WeaponHandlingSettings = new();
-			FireModeSounds = new();
+			WeaponHandlingSettings = new audioWeaponHandlingSettings();
+			FireModeSounds = new audioWeaponFireModeSounds();
 			VoiceSwitchCooldown = 3.000000F;
 
 			PostConstruct();

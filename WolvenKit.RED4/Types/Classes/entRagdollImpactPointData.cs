@@ -78,8 +78,8 @@ namespace WolvenKit.RED4.Types
 
 		public entRagdollImpactPointData()
 		{
-			WorldPosition = new() { X = new(), Y = new(), Z = new() };
-			WorldNormal = new() { W = 1.000000F };
+			WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			WorldNormal = new Vector4 { W = 1.000000F };
 			OtherProxyActorIndex = 1;
 
 			PostConstruct();

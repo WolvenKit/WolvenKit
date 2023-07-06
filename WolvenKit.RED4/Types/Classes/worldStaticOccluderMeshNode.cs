@@ -38,8 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldStaticOccluderMeshNode()
 		{
-			Color = new();
+			Color = new CColor();
 			AutohideDistanceScale = 255;
+			Mesh = new CResourceAsyncReference<CMesh>(@"engine\meshes\editor\box_occluder.w2mesh");
 
 			PostConstruct();
 		}

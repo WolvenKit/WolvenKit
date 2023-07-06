@@ -118,12 +118,12 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_RotateBone()
 		{
-			Id = 4294967295;
-			InputNode = new();
-			AngleNode = new();
-			MinValueNode = new();
-			MaxValueNode = new();
-			Bone = new();
+			Id = uint.MaxValue;
+			InputNode = new animPoseLink();
+			AngleNode = new animFloatLink();
+			MinValueNode = new animFloatLink();
+			MaxValueNode = new animFloatLink();
+			Bone = new animTransformIndex();
 			Axis = Enums.animETransformAxis.X_Axis;
 			Scale = 1.000000F;
 			MinAngle = -90.000000F;

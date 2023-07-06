@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.Types
 
 		public questAddRemoveItem_NodeTypeParams()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 			Quantity = 1;
 			ItemIDsToIgnoreOnRemove = new();
 			TagsToIgnoreOnRemove = new();

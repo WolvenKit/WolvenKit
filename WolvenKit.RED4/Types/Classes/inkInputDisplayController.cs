@@ -86,12 +86,12 @@ namespace WolvenKit.RED4.Types
 
 		public inkInputDisplayController()
 		{
-			IconRef = new();
-			NameRef = new();
-			CanvasRef = new();
-			HoldIndicatorContainerRef = new();
-			GamepadHoldIndicatorLibraryRef = new() { WidgetLibrary = new() };
-			KeyboardHoldIndicatorLibraryRef = new() { WidgetLibrary = new() };
+			IconRef = new inkWidgetReference();
+			NameRef = new inkWidgetReference();
+			CanvasRef = new inkWidgetReference();
+			HoldIndicatorContainerRef = new inkCompoundWidgetReference();
+			GamepadHoldIndicatorLibraryRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			KeyboardHoldIndicatorLibraryRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entIMoverComponent : entIComponent
+	public abstract partial class entIMoverComponent : entIComponent
 	{
 		public entIMoverComponent()
 		{

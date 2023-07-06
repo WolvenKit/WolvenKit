@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public TabButtonController()
 		{
-			Label = new();
-			Icon = new();
+			Label = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

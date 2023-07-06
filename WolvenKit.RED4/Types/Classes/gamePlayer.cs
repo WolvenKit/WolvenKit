@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamePlayer : RedBaseClass
+	public abstract partial class gamePlayer : RedBaseClass
 	{
 		[Ordinal(0)] 
 		[RED("peerID")] 

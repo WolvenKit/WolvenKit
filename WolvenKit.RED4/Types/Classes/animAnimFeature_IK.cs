@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_IK()
 		{
-			Point = new() { W = 1.000000F };
-			Normal = new() { Z = 1.000000F };
+			Point = new Vector4 { W = 1.000000F };
+			Normal = new Vector4 { Z = 1.000000F };
 			Weight = 1.000000F;
 
 			PostConstruct();

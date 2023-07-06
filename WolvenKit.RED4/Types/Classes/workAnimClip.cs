@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public workAnimClip()
 		{
-			Id = new() { Id = 4294967295 };
+			Id = new workWorkEntryId { Id = uint.MaxValue };
 			Flags = 2;
 			BlendOutTime = 0.500000F;
 

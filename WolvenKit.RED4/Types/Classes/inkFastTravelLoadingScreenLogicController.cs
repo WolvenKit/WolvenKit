@@ -86,10 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public inkFastTravelLoadingScreenLogicController()
 		{
-			MainBackgroundImage = new();
-			SupportBackgroundImage = new();
-			TooltipsWidget = new();
-			ProgressBarRoot = new();
+			MainBackgroundImage = new inkImageWidgetReference();
+			SupportBackgroundImage = new inkImageWidgetReference();
+			TooltipsWidget = new inkRichTextBoxWidgetReference();
+			ProgressBarRoot = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public PauseMenuButtonItem()
 		{
-			Fluff = new();
+			Fluff = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

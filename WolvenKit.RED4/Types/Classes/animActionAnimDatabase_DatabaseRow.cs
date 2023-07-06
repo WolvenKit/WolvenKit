@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public animActionAnimDatabase_DatabaseRow()
 		{
-			AnimationData = new();
+			AnimationData = new animActionAnimDatabase_AnimationData();
 
 			PostConstruct();
 		}

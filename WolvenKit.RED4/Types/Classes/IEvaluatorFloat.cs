@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IEvaluatorFloat : IEvaluator
+	public abstract partial class IEvaluatorFloat : IEvaluator
 	{
 		public IEvaluatorFloat()
 		{

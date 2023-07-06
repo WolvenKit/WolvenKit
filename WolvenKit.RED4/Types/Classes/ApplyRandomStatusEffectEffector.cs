@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyRandomStatusEffectEffector()
 		{
-			TargetEntityID = new();
+			TargetEntityID = new entEntityID();
 			Effects = new();
 
 			PostConstruct();

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questVehicleSpecificCommandParams : ISerializable
+	public abstract partial class questVehicleSpecificCommandParams : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("pushOtherVehiclesAside")] 

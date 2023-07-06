@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiIUIObjectsLoaderSystemListener : ISerializable
+	public abstract partial class gameuiIUIObjectsLoaderSystemListener : ISerializable
 	{
 		public gameuiIUIObjectsLoaderSystemListener()
 		{

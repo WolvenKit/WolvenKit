@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public NetRunnerListItem()
 		{
-			Highlight = new();
+			Highlight = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -230,8 +230,8 @@ namespace WolvenKit.RED4.Types
 
 		public TargetHitIndicatorGameController()
 		{
-			CurrentSway = new();
-			WeaponID = new() { IdType = Enums.gameStatIDType.Invalid };
+			CurrentSway = new Vector2();
+			WeaponID = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
 
 			PostConstruct();
 		}

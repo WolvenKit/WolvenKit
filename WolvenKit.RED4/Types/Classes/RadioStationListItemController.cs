@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public RadioStationListItemController()
 		{
-			Label = new();
-			TypeIcon = new();
+			Label = new inkTextWidgetReference();
+			TypeIcon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public SecurityGateForceUnlock()
 		{
-			EntranceAllowedFor = new();
+			EntranceAllowedFor = new entEntityID();
 
 			PostConstruct();
 		}

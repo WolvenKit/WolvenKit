@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			IsEnabled = true;
 			ToggleOperations = new();
-			Teleport = new();
+			Teleport = new STeleportOperationData();
 
 			PostConstruct();
 		}

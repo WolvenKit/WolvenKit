@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiNewsFeedDisplayController()
 		{
-			NewsTitleWidget = new();
-			RandomNewsContainer = new();
+			NewsTitleWidget = new inkTextWidgetReference();
+			RandomNewsContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

@@ -62,10 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameSItemStack()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 			Quantity = 1;
 			IsAvailable = true;
-			Requirement = new() { StatType = Enums.gamedataStatType.Invalid };
+			Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid };
 			DynamicTags = new();
 
 			PostConstruct();

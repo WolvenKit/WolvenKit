@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public DroppedThreatData()
 		{
-			Position = new();
+			Position = new Vector4();
 
 			PostConstruct();
 		}

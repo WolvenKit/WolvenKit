@@ -63,9 +63,9 @@ namespace WolvenKit.RED4.Types
 		public NetworkMinigameData()
 		{
 			GridData = new();
-			BasicAccess = new() { CommandLists = new(), Effects = new() };
+			BasicAccess = new ProgramData { CommandLists = new(), Effects = new() };
 			PlayerPrograms = new();
-			EnemyLockNetwork = new() { CommandLists = new(), Effects = new() };
+			EnemyLockNetwork = new ProgramData { CommandLists = new(), Effects = new() };
 			EnemyPrograms = new();
 
 			PostConstruct();

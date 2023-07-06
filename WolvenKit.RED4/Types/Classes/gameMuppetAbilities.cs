@@ -70,14 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public gameMuppetAbilities()
 		{
-			CanLook = new();
-			CanMove = new();
-			CanCrouch = new();
-			CanSprint = new();
-			CanSwitchWeapon = new();
-			CanHoldWeapon = new();
-			CanShoot = new();
-			CanAimDownSight = new();
+			CanLook = new gameMuppetAbility();
+			CanMove = new gameMuppetAbility();
+			CanCrouch = new gameMuppetAbility();
+			CanSprint = new gameMuppetAbility();
+			CanSwitchWeapon = new gameMuppetAbility();
+			CanHoldWeapon = new gameMuppetAbility();
+			CanShoot = new gameMuppetAbility();
+			CanAimDownSight = new gameMuppetAbility();
 
 			PostConstruct();
 		}

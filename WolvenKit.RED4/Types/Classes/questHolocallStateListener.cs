@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questHolocallStateListener : worldIQuestPrefabStateListener
+	public abstract partial class questHolocallStateListener : worldIQuestPrefabStateListener
 	{
 		public questHolocallStateListener()
 		{

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public audioVoiceTriggerLimitsMapItem()
 		{
-			Limits = new() { Probability = 1.000000F };
+			Limits = new audioVoiceTriggerLimits { Probability = 1.000000F };
 
 			PostConstruct();
 		}

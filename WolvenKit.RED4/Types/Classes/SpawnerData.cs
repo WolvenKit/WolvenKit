@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public SpawnerData()
 		{
-			SpawnerID = new();
+			SpawnerID = new entEntityID();
 			EntryNames = new();
 
 			PostConstruct();

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public rendRenderMultilayerMaskBlobProspero()
 		{
-			Header = new();
+			Header = new rendRenderMultilayerMaskBlobHeader();
 
 			PostConstruct();
 		}

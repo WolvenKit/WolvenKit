@@ -14,14 +14,14 @@ namespace WolvenKit.RED4.Types
 
 		public ActionDemolition()
 		{
-			RequesterID = new();
-			InteractionChoice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
-			ActionWidgetPackage = new() { DependendActions = new() };
+			RequesterID = new entEntityID();
+			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
+			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
 			CanTriggerStim = true;
 			SkillCheckName = Enums.EDeviceChallengeSkill.Athletics;
 			LocalizedName = "LocKey#22271";
-			SkillcheckDescription = new() { AdditionalRequirements = new(), OwnerID = new() };
-			SlotID = new();
+			SkillcheckDescription = new UIInteractionSkillCheck { AdditionalRequirements = new(), OwnerID = new entEntityID() };
+			SlotID = new gamemountingMountingSlotId();
 
 			PostConstruct();
 		}

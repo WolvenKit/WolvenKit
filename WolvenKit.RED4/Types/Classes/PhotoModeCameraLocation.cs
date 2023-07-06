@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModeCameraLocation()
 		{
-			TextWidget = new();
+			TextWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

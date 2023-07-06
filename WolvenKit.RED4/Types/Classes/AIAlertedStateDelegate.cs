@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIAlertedStateDelegate()
 		{
-			AttackInstigatorPosition = new();
+			AttackInstigatorPosition = new Vector4();
 
 			PostConstruct();
 		}

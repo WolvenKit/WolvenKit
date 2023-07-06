@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_VectorLatch()
 		{
-			Id = 4294967295;
-			Input = new();
+			Id = uint.MaxValue;
+			Input = new animVectorLink();
 
 			PostConstruct();
 		}

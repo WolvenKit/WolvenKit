@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UI_CrosshairDef()
 		{
-			EnemyNeutralized = new();
+			EnemyNeutralized = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

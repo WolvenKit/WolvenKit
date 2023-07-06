@@ -40,10 +40,10 @@ namespace WolvenKit.RED4.Types
 
 		public CMatrix()
 		{
-			X = new() { X = 1.000000F };
-			Y = new() { Y = 1.000000F };
-			Z = new() { Z = 1.000000F };
-			W = new() { W = 1.000000F };
+			X = new Vector4 { X = 1.000000F };
+			Y = new Vector4 { Y = 1.000000F };
+			Z = new Vector4 { Z = 1.000000F };
+			W = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

@@ -22,10 +22,10 @@ namespace WolvenKit.RED4.Types
 
 		public LibTreeDefTreeVariableVector()
 		{
-			Id = 65535;
+			Id = ushort.MaxValue;
 			ReadableName = "TreeVar";
 			ExportAsProperty = true;
-			DefaultValue = new();
+			DefaultValue = new Vector3();
 
 			PostConstruct();
 		}

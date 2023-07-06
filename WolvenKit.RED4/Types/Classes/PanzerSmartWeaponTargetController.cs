@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public PanzerSmartWeaponTargetController()
 		{
-			DistanceText = new();
+			DistanceText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

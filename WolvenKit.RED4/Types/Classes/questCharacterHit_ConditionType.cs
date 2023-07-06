@@ -70,8 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterHit_ConditionType()
 		{
-			AttackerRef = new() { Names = new() };
-			TargetRef = new() { Names = new() };
+			AttackerRef = new gameEntityReference { Names = new() };
+			TargetRef = new gameEntityReference { Names = new() };
 			IncludeHitTypes = new();
 			ExcludeHitTypes = new();
 			IncludeHitShapes = new();

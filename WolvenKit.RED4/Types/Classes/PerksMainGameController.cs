@@ -262,20 +262,20 @@ namespace WolvenKit.RED4.Types
 
 		public PerksMainGameController()
 		{
-			TooltipsManagerRef = new();
-			ButtonHintsManagerRef = new();
-			PlayerLevel = new();
+			TooltipsManagerRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			PlayerLevel = new inkTextWidgetReference();
 			CenterHiglightParts = new();
-			AttributeSelectorsContainer = new();
-			PerksScreen = new();
-			PointsDisplay = new();
-			JohnnyConnectorRef = new();
-			AttributeTooltipHolderRight = new();
-			AttributeTooltipHolderLeft = new();
-			RespecButtonContainer = new();
-			CantRespecNotificationContainer = new();
-			ResetPrice = new();
-			SpentPerks = new();
+			AttributeSelectorsContainer = new inkWidgetReference();
+			PerksScreen = new inkWidgetReference();
+			PointsDisplay = new inkWidgetReference();
+			JohnnyConnectorRef = new inkWidgetReference();
+			AttributeTooltipHolderRight = new inkWidgetReference();
+			AttributeTooltipHolderLeft = new inkWidgetReference();
+			RespecButtonContainer = new inkWidgetReference();
+			CantRespecNotificationContainer = new inkWidgetReference();
+			ResetPrice = new inkTextWidgetReference();
+			SpentPerks = new inkTextWidgetReference();
 			PerksMenuItemCreatedQueue = new();
 			AttributesControllersList = new();
 

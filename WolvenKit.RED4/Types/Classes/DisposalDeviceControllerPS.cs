@@ -63,14 +63,14 @@ namespace WolvenKit.RED4.Types
 		public DisposalDeviceControllerPS()
 		{
 			DeviceName = "LocKey#102";
-			TweakDBRecord = 95792479614;
-			TweakDBDescriptionRecord = 148853104190;
+			TweakDBRecord = "Devices.DisposalDevice";
+			TweakDBDescriptionRecord = "device_descriptions.DisposalDevice";
 			ShouldScannerShowStatus = false;
 			ShouldScannerShowNetwork = false;
 			ShouldScannerShowRole = true;
-			DisposalDeviceSetup = new() { NumberOfUses = 1, IsBodyRequired = true };
-			DistractionSetup = new() { StimuliRange = 10.000000F, ExplosionDefinition = new() };
-			ExplosionSetup = new() { StimuliRange = 10.000000F, ExplosionDefinition = new() };
+			DisposalDeviceSetup = new DisposalDeviceSetup { NumberOfUses = 1, IsBodyRequired = true };
+			DistractionSetup = new DistractionSetup { StimuliRange = 10.000000F, ExplosionDefinition = new() };
+			ExplosionSetup = new DistractionSetup { StimuliRange = 10.000000F, ExplosionDefinition = new() };
 
 			PostConstruct();
 		}

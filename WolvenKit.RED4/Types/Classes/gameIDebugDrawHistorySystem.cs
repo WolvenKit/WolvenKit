@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIDebugDrawHistorySystem : gameIGameSystem
+	public abstract partial class gameIDebugDrawHistorySystem : gameIGameSystem
 	{
 		public gameIDebugDrawHistorySystem()
 		{

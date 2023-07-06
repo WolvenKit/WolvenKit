@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalInternetText()
 		{
-			TintColor = new();
-			HoverTintColor = new();
+			TintColor = new CColor();
+			HoverTintColor = new CColor();
 			Text = new() { Unk1 = 0, Value = "" };
 
 			PostConstruct();

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public vgVectorGraphicDefinition()
 		{
-			Dimensions = new();
+			Dimensions = new Vector2();
 
 			PostConstruct();
 		}

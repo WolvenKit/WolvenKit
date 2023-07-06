@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public BlockStimProcessingCooldownEvent()
 		{
-			StimData = new() { SourceID = new(), DelayID = new() };
+			StimData = new StimIdentificationData { SourceID = new entEntityID(), DelayID = new gameDelayID() };
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkLayer : ISerializable
+	public abstract partial class inkLayer : ISerializable
 	{
 		public inkLayer()
 		{

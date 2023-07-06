@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameAttachmentSlotsScriptCallback()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

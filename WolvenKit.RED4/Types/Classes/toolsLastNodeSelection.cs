@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public toolsLastNodeSelection()
 		{
-			SelectedNodeIDPath = new() { Elements = new() };
+			SelectedNodeIDPath = new toolsEditorObjectIDPath { Elements = new() };
 
 			PostConstruct();
 		}

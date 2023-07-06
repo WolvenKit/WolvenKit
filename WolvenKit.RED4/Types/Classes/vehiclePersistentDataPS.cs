@@ -63,9 +63,9 @@ namespace WolvenKit.RED4.Types
 		public vehiclePersistentDataPS()
 		{
 			WheelRuntimeData = new(4);
-			QuestEnforcedTransform = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Orientation = new() { R = 1.000000F } };
-			Destruction = new() { GridValues = new(30), WindshieldPoints = new(), DetachedParts = new() };
-			Audio = new() { AcousticIsolationFactor = -340282346638528859811704183484516925440.000000F };
+			QuestEnforcedTransform = new Transform { Position = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Orientation = new Quaternion { R = 1.000000F } };
+			Destruction = new vehicleDestructionPSData { GridValues = new(30), WindshieldPoints = new(), DetachedParts = new() };
+			Audio = new vehicleAudioPSData { AcousticIsolationFactor = float.MinValue };
 
 			PostConstruct();
 		}

@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public DamageTypeIndicator()
 		{
-			DamageIconRef = new();
-			DamageTypeLabelRef = new();
+			DamageIconRef = new inkImageWidgetReference();
+			DamageTypeLabelRef = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkVideoSequenceController()
 		{
-			VideoWidget = new();
+			VideoWidget = new inkVideoWidgetReference();
 			VideoSequence = new();
 
 			PostConstruct();

@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public inkPermanentLayerDefinitionCollection()
 		{
-			LoadingLayer = new();
-			WatermarksLayer = new();
-			SysNotificationsLayer = new();
-			WaitingSignLayerDefinition = new();
+			LoadingLayer = new inkLoadingLayerDefinition();
+			WatermarksLayer = new inkWatermarksLayerDefinition();
+			SysNotificationsLayer = new inkSystemNotificationsLayerDefinition();
+			WaitingSignLayerDefinition = new inkWaitingSignLayerDefinition();
 
 			PostConstruct();
 		}

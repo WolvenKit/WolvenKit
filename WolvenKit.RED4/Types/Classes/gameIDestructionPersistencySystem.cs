@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIDestructionPersistencySystem : gameIGameSystem
+	public abstract partial class gameIDestructionPersistencySystem : gameIGameSystem
 	{
 		public gameIDestructionPersistencySystem()
 		{

@@ -86,9 +86,9 @@ namespace WolvenKit.RED4.Types
 
 		public MaterialPass()
 		{
-			DepthStencilMode = new() { FrontFace = new() };
-			RasterizerMode = new();
-			BlendMode = new() { NumTargets = 1, RenderTarget = new(8) };
+			DepthStencilMode = new PSODescDepthStencilModeDesc { FrontFace = new PSODescStencilFuncDesc() };
+			RasterizerMode = new PSODescRasterizerModeDesc();
+			BlendMode = new PSODescBlendModeDesc { NumTargets = 1, RenderTarget = new(8) };
 
 			PostConstruct();
 		}

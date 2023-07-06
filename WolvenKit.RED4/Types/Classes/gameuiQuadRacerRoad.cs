@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiQuadRacerRoad()
 		{
-			RoadQuad = new();
-			LeftBackground = new();
-			RightBackground = new();
+			RoadQuad = new inkQuadWidgetReference();
+			LeftBackground = new inkQuadWidgetReference();
+			RightBackground = new inkQuadWidgetReference();
 			GroundParts = new();
 			RoadParts = new();
 

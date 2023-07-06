@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public FilmGrainAreaSettings()
 		{
 			Enable = true;
-			GrainSize = new() { X = 0.500000F, Y = 0.500000F, Z = 0.500000F };
+			GrainSize = new Vector3 { X = 0.500000F, Y = 0.500000F, Z = 0.500000F };
 
 			PostConstruct();
 		}

@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public animSBehaviorConstraintNodeFloorIKCommonData()
 		{
-			GravityCentreBone = new();
+			GravityCentreBone = new animTransformIndex();
 			RootRotationBlendTime = 0.200000F;
 			VerticalVelocityOffsetUpBlendTime = 0.080000F;
 			VerticalVelocityOffsetDownBlendTime = 0.030000F;

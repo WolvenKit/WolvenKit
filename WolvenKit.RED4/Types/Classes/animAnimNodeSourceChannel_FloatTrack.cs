@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNodeSourceChannel_FloatTrack()
 		{
-			FloatTrack = new();
+			FloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

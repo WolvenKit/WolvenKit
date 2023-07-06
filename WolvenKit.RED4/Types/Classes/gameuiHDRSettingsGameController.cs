@@ -166,11 +166,11 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiHDRSettingsGameController()
 		{
-			CallibrationScreenTarget = new();
-			PaperWhiteOptionSelector = new();
-			MaxBrightnessOptionSelector = new();
-			ToneMappingOptionSelector = new();
-			TargetImageWidget = new();
+			CallibrationScreenTarget = new inkWidgetReference();
+			PaperWhiteOptionSelector = new inkCompoundWidgetReference();
+			MaxBrightnessOptionSelector = new inkCompoundWidgetReference();
+			ToneMappingOptionSelector = new inkCompoundWidgetReference();
+			TargetImageWidget = new inkWidgetReference();
 			SettingsElements = new();
 
 			PostConstruct();

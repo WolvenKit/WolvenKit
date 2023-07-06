@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class RagdollTask : AIbehaviortaskScript
+	public abstract partial class RagdollTask : AIbehaviortaskScript
 	{
 		public RagdollTask()
 		{

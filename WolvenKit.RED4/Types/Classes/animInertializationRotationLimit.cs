@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public animInertializationRotationLimit()
 		{
-			ConstrainedTransform = new();
-			LimitOnX = new() { Min = -1.000000F, Max = 1.000000F };
-			LimitOnY = new() { Min = -1.000000F, Max = 1.000000F };
-			LimitOnZ = new() { Min = -1.000000F, Max = 1.000000F };
+			ConstrainedTransform = new animTransformIndex();
+			LimitOnX = new animInertializationFloatClamp { Min = -1.000000F, Max = 1.000000F };
+			LimitOnY = new animInertializationFloatClamp { Min = -1.000000F, Max = 1.000000F };
+			LimitOnZ = new animInertializationFloatClamp { Min = -1.000000F, Max = 1.000000F };
 
 			PostConstruct();
 		}

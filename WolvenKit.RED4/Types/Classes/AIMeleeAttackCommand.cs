@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIMeleeAttackCommand()
 		{
-			TargetOverridePuppetRef = new() { Names = new() };
+			TargetOverridePuppetRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

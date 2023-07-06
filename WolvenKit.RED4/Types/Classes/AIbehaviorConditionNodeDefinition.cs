@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIbehaviorConditionNodeDefinition : AIbehaviorDecoratorNodeDefinition
+	public abstract partial class AIbehaviorConditionNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
 		[Ordinal(1)] 
 		[RED("condition")] 

@@ -118,20 +118,20 @@ namespace WolvenKit.RED4.Types
 
 		public BackdoorDataStreamController()
 		{
-			IdleGroup_384 = new();
-			IdleVPanelC1 = new();
-			IdleVPanelC2 = new();
-			IdleVPanelC3 = new();
-			IdleVPanelC4 = new();
-			HackedGroup = new();
-			IdleCanvas1 = new();
-			IdleCanvas2 = new();
-			IdleCanvas3 = new();
-			IdleCanvas4 = new();
-			CanvasC1 = new();
-			CanvasC2 = new();
-			CanvasC3 = new();
-			CanvasC4 = new();
+			IdleGroup_384 = new inkWidgetReference();
+			IdleVPanelC1 = new inkWidgetReference();
+			IdleVPanelC2 = new inkWidgetReference();
+			IdleVPanelC3 = new inkWidgetReference();
+			IdleVPanelC4 = new inkWidgetReference();
+			HackedGroup = new inkWidgetReference();
+			IdleCanvas1 = new inkWidgetReference();
+			IdleCanvas2 = new inkWidgetReference();
+			IdleCanvas3 = new inkWidgetReference();
+			IdleCanvas4 = new inkWidgetReference();
+			CanvasC1 = new inkWidgetReference();
+			CanvasC2 = new inkWidgetReference();
+			CanvasC3 = new inkWidgetReference();
+			CanvasC4 = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public TimerGameController()
 		{
-			Value = new();
+			Value = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

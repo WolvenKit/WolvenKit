@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 		public PersonnelSystemControllerPS()
 		{
 			DeviceName = "BaseDeviceSystemControllerPS";
-			TweakDBRecord = 100937546540;
+			TweakDBRecord = "Devices.PersonnelSystem";
 			TweakDBDescriptionRecord = 154457407903;
 
 			PostConstruct();

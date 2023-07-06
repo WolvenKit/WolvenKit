@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Elements = new(0);
 			SlotStrides = new(0);
-			Hash = 4294967295;
+			Hash = uint.MaxValue;
 
 			PostConstruct();
 		}

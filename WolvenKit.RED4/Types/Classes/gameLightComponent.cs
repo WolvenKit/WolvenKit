@@ -130,6 +130,7 @@ namespace WolvenKit.RED4.Types
 			TurnOnTime = 0.300000F;
 			TurnOffTime = 0.300000F;
 			IsDestructible = true;
+			DestructionEffect = new CResourceAsyncReference<worldEffect>(@"base\fx\devices\_damage\street_lamps\d_damage_street_lamp_destruction_01.effect");
 
 			PostConstruct();
 		}

@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public inkListController()
 		{
-			ItemSelected = new();
-			ItemActivated = new();
+			ItemSelected = new inkListControllerCallback();
+			ItemActivated = new inkListControllerCallback();
 
 			PostConstruct();
 		}

@@ -70,8 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_StackTransformsExtender()
 		{
-			Id = 4294967295;
-			InputLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
 			TransformInfos = new();
 			SnapMethods = new();
 			SnapToReferenceValues = new();

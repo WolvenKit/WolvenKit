@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entIDestinationBinding : entIBinding
+	public abstract partial class entIDestinationBinding : entIBinding
 	{
 		public entIDestinationBinding()
 		{

@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameLightSettings()
 		{
-			Color = new();
+			Color = new CColor();
 
 			PostConstruct();
 		}

@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerMenuButtonController()
 		{
-			CounterWidget = new();
-			Notificationidget = new();
+			CounterWidget = new inkTextWidgetReference();
+			Notificationidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

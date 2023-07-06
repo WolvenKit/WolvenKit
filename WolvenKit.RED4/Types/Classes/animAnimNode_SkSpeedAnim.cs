@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SkSpeedAnim()
 		{
-			Speed = new();
+			Speed = new animFloatLink();
 
 			PostConstruct();
 		}

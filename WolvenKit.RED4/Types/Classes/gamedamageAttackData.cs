@@ -118,7 +118,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamedamageAttackData()
 		{
-			AttackPosition = new();
+			AttackPosition = new Vector4();
 			Flags = new();
 			StatusEffects = new();
 

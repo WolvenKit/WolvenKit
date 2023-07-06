@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public TransactionRequestData()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 			Quantity = 1;
 
 			PostConstruct();

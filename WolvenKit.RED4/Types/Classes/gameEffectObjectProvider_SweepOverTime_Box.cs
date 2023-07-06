@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public gameEffectObjectProvider_SweepOverTime_Box()
 		{
-			QueryPreset = new();
+			QueryPreset = new physicsQueryPreset();
 
 			PostConstruct();
 		}

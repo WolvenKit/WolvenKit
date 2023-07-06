@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.Types
 
 		public questPlayVoiceset_NodeTypeParams()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 			OverridingVoiceoverContext = Enums.locVoiceoverContext.Default_Vo_Context;
 
 			PostConstruct();

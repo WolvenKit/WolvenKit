@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameAppearanceNameVisualTagsPreset_Entity()
 		{
-			CommonVisualTags = new() { Tags = new() };
+			CommonVisualTags = new redTagList { Tags = new() };
 			AppearancesToTags = new();
 
 			PostConstruct();

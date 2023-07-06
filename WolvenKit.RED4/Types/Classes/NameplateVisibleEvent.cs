@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public NameplateVisibleEvent()
 		{
-			EntityID = new();
+			EntityID = new entEntityID();
 
 			PostConstruct();
 		}

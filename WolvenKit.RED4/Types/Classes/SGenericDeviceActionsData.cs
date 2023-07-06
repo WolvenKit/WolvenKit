@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public SGenericDeviceActionsData()
 		{
-			ToggleON = new();
-			TogglePower = new();
+			ToggleON = new SDeviceActionBoolData();
+			TogglePower = new SDeviceActionBoolData();
 
 			PostConstruct();
 		}

@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldCommunityRegistryNode()
 		{
-			SpawnSetNameToCommunityID = new() { Entries = new() };
+			SpawnSetNameToCommunityID = new gameCommunitySpawnSetNameToID { Entries = new() };
 			CommunitiesData = new();
 			WorkspotsPersistentData = new();
 

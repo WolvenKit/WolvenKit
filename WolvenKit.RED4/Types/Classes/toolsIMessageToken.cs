@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class toolsIMessageToken : ISerializable
+	public abstract partial class toolsIMessageToken : ISerializable
 	{
 		public toolsIMessageToken()
 		{

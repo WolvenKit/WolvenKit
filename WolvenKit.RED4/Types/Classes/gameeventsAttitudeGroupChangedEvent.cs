@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameeventsAttitudeGroupChangedEvent : redEvent
+	public abstract partial class gameeventsAttitudeGroupChangedEvent : redEvent
 	{
 		public gameeventsAttitudeGroupChangedEvent()
 		{

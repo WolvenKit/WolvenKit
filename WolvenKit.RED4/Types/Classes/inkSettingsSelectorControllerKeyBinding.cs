@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public inkSettingsSelectorControllerKeyBinding()
 		{
-			Text = new();
-			ButtonRef = new();
-			EditView = new();
+			Text = new inkRichTextBoxWidgetReference();
+			ButtonRef = new inkWidgetReference();
+			EditView = new inkWidgetReference();
 			EditOpacity = 0.400000F;
 
 			PostConstruct();

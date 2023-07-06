@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamePuppetBase : gameTimeDilatable
+	public abstract partial class gamePuppetBase : gameTimeDilatable
 	{
 		public gamePuppetBase()
 		{

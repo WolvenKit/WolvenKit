@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIEffectParameter_BoolEvaluator : ISerializable
+	public abstract partial class gameIEffectParameter_BoolEvaluator : ISerializable
 	{
 		public gameIEffectParameter_BoolEvaluator()
 		{

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public StimuliEffectEvent()
 		{
-			TargetPoint = new();
+			TargetPoint = new Vector4();
 
 			PostConstruct();
 		}

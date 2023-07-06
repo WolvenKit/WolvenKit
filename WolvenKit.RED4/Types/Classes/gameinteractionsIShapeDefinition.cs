@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameinteractionsIShapeDefinition : ISerializable
+	public abstract partial class gameinteractionsIShapeDefinition : ISerializable
 	{
 		public gameinteractionsIShapeDefinition()
 		{

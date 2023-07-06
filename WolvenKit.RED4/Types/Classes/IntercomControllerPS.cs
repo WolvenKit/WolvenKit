@@ -47,9 +47,9 @@ namespace WolvenKit.RED4.Types
 		public IntercomControllerPS()
 		{
 			DeviceName = "LocKey#163";
-			TweakDBRecord = 71462547290;
+			TweakDBRecord = "Devices.Intercom";
 			TweakDBDescriptionRecord = 123510029761;
-			ForceLookAt = new();
+			ForceLookAt = new entEntityID();
 
 			PostConstruct();
 		}

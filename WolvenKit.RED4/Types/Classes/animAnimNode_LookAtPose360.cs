@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_LookAtPose360()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			SpeedInDegreesPerSecond = 120.000000F;
-			AngleOffsetNode = new();
-			TargetAngleOffsetNode = new();
+			AngleOffsetNode = new animFloatLink();
+			TargetAngleOffsetNode = new animFloatLink();
 
 			PostConstruct();
 		}

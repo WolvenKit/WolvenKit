@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public gameStatModifierSave()
 		{
 			StatModifierUnions = new();
-			StatsObjectID = new() { IdType = Enums.gameStatIDType.Invalid };
+			StatsObjectID = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
 
 			PostConstruct();
 		}

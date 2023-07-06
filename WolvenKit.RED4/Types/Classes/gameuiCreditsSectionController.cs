@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiCreditsSectionController()
 		{
-			SectionName = new();
+			SectionName = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

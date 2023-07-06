@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public PauseMenuGameController()
 		{
-			ButtonHintsManagerRef = new();
-			GameInstance = new();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			GameInstance = new ScriptGameInstance();
 
 			PostConstruct();
 		}

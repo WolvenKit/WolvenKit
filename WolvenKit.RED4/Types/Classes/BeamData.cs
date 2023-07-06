@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public BeamData()
 		{
-			StartDirection = new();
-			EndDirection = new();
+			StartDirection = new Vector4();
+			EndDirection = new Vector4();
 
 			PostConstruct();
 		}

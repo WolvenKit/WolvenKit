@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldEditorDebugColoringSettings : ISerializable
+	public abstract partial class worldEditorDebugColoringSettings : ISerializable
 	{
 		public worldEditorDebugColoringSettings()
 		{

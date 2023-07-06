@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public SPresetTimetableEntry()
 		{
-			Time = new();
+			Time = new SSimpleGameTime();
 
 			PostConstruct();
 		}

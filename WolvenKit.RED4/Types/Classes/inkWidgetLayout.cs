@@ -70,9 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public inkWidgetLayout()
 		{
-			Padding = new();
-			Margin = new();
-			AnchorPoint = new();
+			Padding = new inkMargin();
+			Margin = new inkMargin();
+			AnchorPoint = new Vector2();
 			SizeCoefficient = 1.000000F;
 
 			PostConstruct();

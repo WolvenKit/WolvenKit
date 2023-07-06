@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public LocalPlayerDef()
 		{
-			InsideVehicleForbiddenAreasCount = new();
+			InsideVehicleForbiddenAreasCount = new gamebbScriptID_Int32();
 
 			PostConstruct();
 		}

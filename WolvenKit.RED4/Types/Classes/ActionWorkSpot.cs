@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ActionWorkSpot : ActionBool
+	public abstract partial class ActionWorkSpot : ActionBool
 	{
 		[Ordinal(25)] 
 		[RED("workspotTarget")] 

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnCheckPlayerTargetEntityDistanceInterruptConditionParams()
 		{
-			TargetEntity = new() { Names = new() };
+			TargetEntity = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

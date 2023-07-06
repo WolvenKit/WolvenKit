@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questBehind_ConditionType()
 		{
-			TargetRef = new() { Names = new() };
+			TargetRef = new gameEntityReference { Names = new() };
 			EventType = Enums.questBehindInteractionEventType.StartedBeingBehind;
 
 			PostConstruct();

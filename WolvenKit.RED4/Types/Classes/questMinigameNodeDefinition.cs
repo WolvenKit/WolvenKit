@@ -31,9 +31,9 @@ namespace WolvenKit.RED4.Types
 		public questMinigameNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 			Start = true;
-			NetworkRef = new() { Names = new() };
+			NetworkRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

@@ -62,11 +62,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_Blend2()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			MaxInputValue = 1.000000F;
-			FirstInputNode = new();
-			SecondInputNode = new();
-			WeightNode = new();
+			FirstInputNode = new animPoseLink();
+			SecondInputNode = new animPoseLink();
+			WeightNode = new animFloatLink();
 
 			PostConstruct();
 		}

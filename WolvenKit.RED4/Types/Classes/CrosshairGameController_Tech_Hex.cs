@@ -238,7 +238,7 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Tech_Hex()
 		{
-			BufferedSpread = new();
+			BufferedSpread = new Vector2();
 			CurrentAmmo = 2;
 			CurrentMaxAmmo = 2;
 			MaxSupportedAmmo = 8;

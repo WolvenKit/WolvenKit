@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameItemDropObject()
 		{
-			SpawnedItemID = new();
+			SpawnedItemID = new gameItemID();
 
 			PostConstruct();
 		}

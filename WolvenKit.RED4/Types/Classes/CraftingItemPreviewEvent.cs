@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public CraftingItemPreviewEvent()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

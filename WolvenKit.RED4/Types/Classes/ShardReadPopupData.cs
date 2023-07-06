@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public ShardReadPopupData()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

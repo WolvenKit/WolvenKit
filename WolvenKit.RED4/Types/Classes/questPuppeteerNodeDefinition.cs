@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 		public questPuppeteerNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			Reference = new() { Names = new() };
+			Id = ushort.MaxValue;
+			Reference = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

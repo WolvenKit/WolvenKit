@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnSceneWorkspotInstanceId()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 
 			PostConstruct();
 		}

@@ -90,7 +90,7 @@ namespace WolvenKit.RED4.Types
 			IncludeChannels = Enums.TriggerChannel.TC_Player | Enums.TriggerChannel.TC_Environment;
 			BlendTimeIn = 3.000000F;
 			BlendTimeOut = 3.000000F;
-			Params = new() { AreaParameters = new() };
+			Params = new WorldRenderAreaSettings { AreaParameters = new() };
 			WeatherStateNames = new();
 			WeatherStateValues = new();
 

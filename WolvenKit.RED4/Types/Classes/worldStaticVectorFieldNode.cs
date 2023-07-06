@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldStaticVectorFieldNode()
 		{
-			Direction = new();
+			Direction = new Vector3();
 
 			PostConstruct();
 		}

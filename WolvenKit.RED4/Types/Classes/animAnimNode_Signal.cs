@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_Signal()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			Cooldown = -1.000000F;
 
 			PostConstruct();

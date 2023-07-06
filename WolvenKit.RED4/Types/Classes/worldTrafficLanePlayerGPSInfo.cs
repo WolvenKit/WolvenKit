@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldTrafficLanePlayerGPSInfo()
 		{
-			SubGraphId = 65535;
-			StronglyConnectedComponentId = 65535;
+			SubGraphId = ushort.MaxValue;
+			StronglyConnectedComponentId = ushort.MaxValue;
 
 			PostConstruct();
 		}

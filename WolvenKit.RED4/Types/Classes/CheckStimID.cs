@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class CheckStimID : AIbehaviorconditionScript
+	public abstract partial class CheckStimID : AIbehaviorconditionScript
 	{
 		public CheckStimID()
 		{

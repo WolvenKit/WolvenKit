@@ -111,7 +111,7 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_BlendSpace_InternalsBlendSpace()
 		{
 			SpaceDimension = 1;
-			CoordinatesDescriptions = new() { new() };
+			CoordinatesDescriptions = new() { new animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription() };
 			SpacePoints = new();
 			IsLooped = true;
 			NeedsRuntimeTriangulation = true;

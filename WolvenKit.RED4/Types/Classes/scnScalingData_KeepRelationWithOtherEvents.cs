@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnScalingData_KeepRelationWithOtherEvents()
 		{
-			GroupRfrncNdspaceStarttime = new();
-			GroupRfrncNdspaceEndtime = new();
+			GroupRfrncNdspaceStarttime = new scnSceneTime();
+			GroupRfrncNdspaceEndtime = new scnSceneTime();
 
 			PostConstruct();
 		}

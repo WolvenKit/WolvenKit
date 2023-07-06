@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 		public questInputNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 
 			PostConstruct();
 		}

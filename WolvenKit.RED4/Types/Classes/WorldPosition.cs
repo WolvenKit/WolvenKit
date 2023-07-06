@@ -31,9 +31,9 @@ namespace WolvenKit.RED4.Types
 
 		public WorldPosition()
 		{
-			X = new();
-			Y = new();
-			Z = new();
+			X = new FixedPoint();
+			Y = new FixedPoint();
+			Z = new FixedPoint();
 
 			PostConstruct();
 		}

@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public UI_SystemDef()
 		{
-			IsInMenu = new();
-			CircularBlurEnabled = new();
-			CircularBlurBlendTime = new();
-			TrackedMappin = new();
+			IsInMenu = new gamebbScriptID_Bool();
+			CircularBlurEnabled = new gamebbScriptID_Bool();
+			CircularBlurBlendTime = new gamebbScriptID_Float();
+			TrackedMappin = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

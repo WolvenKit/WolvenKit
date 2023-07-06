@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameTargetSearchQuery()
 		{
-			SearchFilter = new();
+			SearchFilter = new gameTargetSearchFilter();
 			IncludeSecondaryTargets = true;
-			QueryTarget = new();
+			QueryTarget = new entEntityID();
 
 			PostConstruct();
 		}

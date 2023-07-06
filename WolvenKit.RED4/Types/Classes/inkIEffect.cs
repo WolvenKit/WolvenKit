@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIEffect : ISerializable
+	public abstract partial class inkIEffect : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("isEnabled")] 

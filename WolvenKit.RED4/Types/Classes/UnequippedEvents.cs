@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public UnequippedEvents()
 		{
-			StateMachineInstanceData = new();
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
 
 			PostConstruct();
 		}

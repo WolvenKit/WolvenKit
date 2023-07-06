@@ -78,9 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public CodexListVirtualEntry()
 		{
-			Title = new();
-			Icon = new();
-			NewWrapper = new();
+			Title = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			NewWrapper = new inkWidgetReference();
 
 			PostConstruct();
 		}

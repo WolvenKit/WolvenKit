@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiarcadeRoachRaceObstacleController()
 		{
-			Collider = new();
+			Collider = new gameuiarcadeBoundingRect();
 
 			PostConstruct();
 		}

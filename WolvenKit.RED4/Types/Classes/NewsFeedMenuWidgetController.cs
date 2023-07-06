@@ -47,9 +47,9 @@ namespace WolvenKit.RED4.Types
 		public NewsFeedMenuWidgetController()
 		{
 			BannersListWidgetPath = "banners";
-			BannersListWidget = new();
+			BannersListWidget = new inkWidgetReference();
 			BannerWidgetsData = new();
-			FullBannerWidgetData = new() { Content = new() };
+			FullBannerWidgetData = new SBannerWidgetPackage { Content = new redResourceReferenceScriptToken() };
 
 			PostConstruct();
 		}

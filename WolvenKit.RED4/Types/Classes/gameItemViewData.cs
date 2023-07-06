@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameItemViewData()
 		{
-			Id = new();
+			Id = new gameItemID();
 			PrimaryStats = new();
 			SecondaryStats = new();
 

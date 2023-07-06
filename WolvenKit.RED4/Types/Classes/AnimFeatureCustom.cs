@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AnimFeatureCustom : animAnimFeature
+	public abstract partial class AnimFeatureCustom : animAnimFeature
 	{
 		public AnimFeatureCustom()
 		{

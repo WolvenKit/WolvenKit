@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animIAnimNode_PostProcess : ISerializable
+	public abstract partial class animIAnimNode_PostProcess : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("isEnabled")] 

@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public NotifyShardRead()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

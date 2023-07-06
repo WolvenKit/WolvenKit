@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class EffectExecutor_Device : gameEffectExecutor_Scripted
+	public abstract partial class EffectExecutor_Device : gameEffectExecutor_Scripted
 	{
 		[Ordinal(1)] 
 		[RED("maxDelay")] 

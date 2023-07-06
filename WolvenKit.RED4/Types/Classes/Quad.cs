@@ -39,10 +39,10 @@ namespace WolvenKit.RED4.Types
 
 		public Quad()
 		{
-			P1 = new();
-			P2 = new();
-			P3 = new();
-			P4 = new();
+			P1 = new Vector4();
+			P2 = new Vector4();
+			P3 = new Vector4();
+			P4 = new Vector4();
 
 			PostConstruct();
 		}

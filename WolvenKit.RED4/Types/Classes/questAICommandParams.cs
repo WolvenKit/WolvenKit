@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questAICommandParams : scnAICommandFactory
+	public abstract partial class questAICommandParams : scnAICommandFactory
 	{
 		public questAICommandParams()
 		{

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animOverrideBlendTrackInfo()
 		{
-			Track = new();
+			Track = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

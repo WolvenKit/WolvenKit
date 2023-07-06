@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public sampleTextScrolling()
 		{
-			ScrollingText = new();
-			Infiniteloop = new();
+			ScrollingText = new inkTextWidgetReference();
+			Infiniteloop = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

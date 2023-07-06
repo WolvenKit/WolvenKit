@@ -71,8 +71,8 @@ namespace WolvenKit.RED4.Types
 		public gameTelemetryDamage()
 		{
 			AttackType = Enums.gamedataAttackType.Invalid;
-			Weapon = new() { ItemID = new(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
-			SourceEntity = new();
+			Weapon = new gameTelemetryInventoryItem { ItemID = new gameItemID(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
+			SourceEntity = new gameTelemetrySourceEntity();
 			HitCount = 1;
 			Distance = -1.000000F;
 

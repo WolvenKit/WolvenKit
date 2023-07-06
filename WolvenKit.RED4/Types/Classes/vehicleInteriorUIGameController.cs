@@ -206,12 +206,12 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleInteriorUIGameController()
 		{
-			SpeedTextWidget = new();
-			GearTextWidget = new();
-			RpmValueWidget = new();
-			RpmGaugeForegroundWidget = new();
-			AutopilotTextWidget = new();
-			RpmGaugeMaxSize = new();
+			SpeedTextWidget = new inkTextWidgetReference();
+			GearTextWidget = new inkTextWidgetReference();
+			RpmValueWidget = new inkTextWidgetReference();
+			RpmGaugeForegroundWidget = new inkRectangleWidgetReference();
+			AutopilotTextWidget = new inkTextWidgetReference();
+			RpmGaugeMaxSize = new Vector2();
 
 			PostConstruct();
 		}

@@ -246,13 +246,13 @@ namespace WolvenKit.RED4.Types
 
 		public CDecalSpawner()
 		{
-			SpecularColor = new();
+			SpecularColor = new CColor();
 			SpecularBase = 1.000000F;
 			RoughnessScale = 1.000000F;
 			NormalThreshold = 1.000000F;
 			AdditiveNormals = true;
-			DiffuseRandomColor0 = new();
-			DiffuseRandomColor1 = new();
+			DiffuseRandomColor0 = new CColor();
+			DiffuseRandomColor1 = new CColor();
 			Specularity = -1.000000F;
 			FarZ = 1.000000F;
 			NormalFadeScale = 1.000000F;

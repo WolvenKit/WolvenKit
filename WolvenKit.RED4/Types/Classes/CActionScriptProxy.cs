@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class CActionScriptProxy : IScriptable
+	public abstract partial class CActionScriptProxy : IScriptable
 	{
 		public CActionScriptProxy()
 		{

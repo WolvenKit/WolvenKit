@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameFreeCameraLightSettings()
 		{
-			S = new();
-			Lor = new();
+			S = new Vector3();
+			Lor = new Vector4();
 
 			PostConstruct();
 		}

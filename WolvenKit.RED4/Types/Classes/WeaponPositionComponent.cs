@@ -270,14 +270,14 @@ namespace WolvenKit.RED4.Types
 
 		public WeaponPositionComponent()
 		{
-			WeaponPosVec = new();
-			WeaponRotVec = new();
-			WeaponAimPosVec = new();
-			WeaponAimRotVec = new();
-			WeaponPosOffsetFromInput = new();
-			WeaponRotOffsetFromInput = new();
-			WeaponAimPosOffsetFromInput = new();
-			WeaponAimRotOffsetFromInput = new();
+			WeaponPosVec = new Vector4();
+			WeaponRotVec = new Vector4();
+			WeaponAimPosVec = new Vector4();
+			WeaponAimRotVec = new Vector4();
+			WeaponPosOffsetFromInput = new Vector4();
+			WeaponRotOffsetFromInput = new Vector4();
+			WeaponAimPosOffsetFromInput = new Vector4();
+			WeaponAimRotOffsetFromInput = new Vector4();
 
 			PostConstruct();
 		}

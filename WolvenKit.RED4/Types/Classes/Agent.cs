@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public Agent()
 		{
-			Link = new() { PSID = new() };
+			Link = new DeviceLink { PSID = new gamePersistentID() };
 			Reprimands = new();
 			SupportingAgents = new();
 			Areas = new();

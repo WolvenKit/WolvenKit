@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerTargetChangedRequest()
 		{
-			ScannerTarget = new();
+			ScannerTarget = new entEntityID();
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AnimationLogicController()
 		{
-			ImageView = new();
+			ImageView = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

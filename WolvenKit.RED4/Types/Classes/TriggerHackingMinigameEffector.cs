@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Types
 
 		public TriggerHackingMinigameEffector()
 		{
-			Item = new();
+			Item = new gameItemID();
 
 			PostConstruct();
 		}

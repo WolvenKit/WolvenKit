@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorDelegateTaskDefinition()
 		{
-			OnActivate = new();
-			OnUpdate = new();
-			OnDeactivate = new();
+			OnActivate = new AIbehaviorDelegateTaskRef();
+			OnUpdate = new AIbehaviorDelegateTaskRef();
+			OnDeactivate = new AIbehaviorDelegateTaskRef();
 
 			PostConstruct();
 		}

@@ -62,11 +62,11 @@ namespace WolvenKit.RED4.Types
 
 		public scnChoiceNodeNsReminderParams()
 		{
-			ReminderActor = new() { Id = 4294967295 };
-			WaitTimeForReminderA = new();
-			WaitTimeForReminderB = new();
-			WaitTimeForReminderC = new();
-			WaitTimeForLooping = new();
+			ReminderActor = new scnActorId { Id = uint.MaxValue };
+			WaitTimeForReminderA = new scnSceneTime();
+			WaitTimeForReminderB = new scnSceneTime();
+			WaitTimeForReminderC = new scnSceneTime();
+			WaitTimeForLooping = new scnSceneTime();
 
 			PostConstruct();
 		}

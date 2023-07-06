@@ -62,14 +62,14 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiBaseMinimapMappinController()
 		{
-			IconWidget = new();
-			PlayerTrackedWidget = new();
-			ScaleWidget = new();
-			AnimPlayerTrackedWidget = new();
-			AnimPlayerAboveBelowWidget = new();
+			IconWidget = new inkImageWidgetReference();
+			PlayerTrackedWidget = new inkWidgetReference();
+			ScaleWidget = new inkWidgetReference();
+			AnimPlayerTrackedWidget = new inkWidgetReference();
+			AnimPlayerAboveBelowWidget = new inkWidgetReference();
 			TaggedWidgets = new();
-			FixedOrientationWidget = new();
-			ClampArrowWidget = new();
+			FixedOrientationWidget = new inkWidgetReference();
+			ClampArrowWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

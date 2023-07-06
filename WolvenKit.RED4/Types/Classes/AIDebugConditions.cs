@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIDebugConditions : AIbehaviorconditionScript
+	public abstract partial class AIDebugConditions : AIbehaviorconditionScript
 	{
 		public AIDebugConditions()
 		{

@@ -502,23 +502,23 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiHackingMinigameLogicController()
 		{
-			Grid = new();
-			Buffer = new();
-			Programs = new();
-			Timer = new();
-			TimerProgressBar = new();
-			AccessInformationText = new();
-			ActivatedTraps = new();
-			GridVerticalHiglight = new();
-			GridHorizontalHiglight = new();
-			ProgramsColumnHiglight = new();
-			SuccessScreenWidget = new();
-			FailScreenWidget = new();
-			SuccessExitTerminalText = new();
-			FailedExitTerminalText = new();
-			SuccessExitButton = new();
-			FailureExitButton = new();
-			ResetButton = new();
+			Grid = new inkUniformGridWidgetReference();
+			Buffer = new inkCompoundWidgetReference();
+			Programs = new inkCompoundWidgetReference();
+			Timer = new inkTextWidgetReference();
+			TimerProgressBar = new inkWidgetReference();
+			AccessInformationText = new inkTextWidgetReference();
+			ActivatedTraps = new inkCompoundWidgetReference();
+			GridVerticalHiglight = new inkWidgetReference();
+			GridHorizontalHiglight = new inkWidgetReference();
+			ProgramsColumnHiglight = new inkWidgetReference();
+			SuccessScreenWidget = new inkCompoundWidgetReference();
+			FailScreenWidget = new inkCompoundWidgetReference();
+			SuccessExitTerminalText = new inkTextWidgetReference();
+			FailedExitTerminalText = new inkTextWidgetReference();
+			SuccessExitButton = new inkWidgetReference();
+			FailureExitButton = new inkWidgetReference();
+			ResetButton = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -217,18 +217,18 @@ namespace WolvenKit.RED4.Types
 			RidResources = new();
 			Workspots = new();
 			WorkspotInstances = new();
-			ResouresReferences = new() { RidAnimations = new(), RidAnimSets = new(), RidFacialAnimSets = new(), RidCyberwareAnimSets = new(), RidDeformationAnimSets = new(), LipsyncAnimSets = new(), RidCameraAnimations = new(), CinematicAnimSets = new(), GameplayAnimSets = new(), DynamicAnimSets = new(), CinematicAnimNames = new(), GameplayAnimNames = new(), DynamicAnimNames = new(), RidAnimationContainers = new() };
-			ScreenplayStore = new() { Lines = new(), Options = new() };
-			LocStore = new() { VdEntries = new(), VpEntries = new() };
+			ResouresReferences = new scnSRRefCollection { RidAnimations = new(), RidAnimSets = new(), RidFacialAnimSets = new(), RidCyberwareAnimSets = new(), RidDeformationAnimSets = new(), LipsyncAnimSets = new(), RidCameraAnimations = new(), CinematicAnimSets = new(), GameplayAnimSets = new(), DynamicAnimSets = new(), CinematicAnimNames = new(), GameplayAnimNames = new(), DynamicAnimNames = new(), RidAnimationContainers = new() };
+			ScreenplayStore = new scnscreenplayStore { Lines = new(), Options = new() };
+			LocStore = new scnlocLocStoreEmbedded { VdEntries = new(), VpEntries = new() };
 			VoInfo = new();
 			EffectDefinitions = new();
 			EffectInstances = new();
 			ExecutionTags = new();
 			ReferencePoints = new();
 			InterruptionScenarios = new();
-			SceneSolutionHash = new() { SceneSolutionHash = new() };
+			SceneSolutionHash = new scnSceneSolutionHash { SceneSolutionHash = new scnSceneSolutionHashHash() };
 			SceneCategoryTag = Enums.scnSceneCategoryTag.other;
-			DebugSymbols = new() { PerformersDebugSymbols = new(), WorkspotsDebugSymbols = new(), SceneEventsDebugSymbols = new(), SceneNodesDebugSymbols = new() };
+			DebugSymbols = new scnDebugSymbols { PerformersDebugSymbols = new(), WorkspotsDebugSymbols = new(), SceneEventsDebugSymbols = new(), SceneNodesDebugSymbols = new() };
 
 			PostConstruct();
 		}

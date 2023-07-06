@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public MinesDataDef()
 		{
-			CurrentNormal = new();
+			CurrentNormal = new gamebbScriptID_Vector4();
 
 			PostConstruct();
 		}

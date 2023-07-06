@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public gameMuppetInputStates()
 		{
 			Name = "Component";
-			ReplicationTime = new();
+			ReplicationTime = new netTime();
 
 			PostConstruct();
 		}

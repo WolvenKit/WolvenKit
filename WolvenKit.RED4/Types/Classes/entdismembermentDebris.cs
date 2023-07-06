@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entdismembermentDebris()
 		{
-			Items = new() { new() };
+			Items = new() { new entdismembermentDebrisResourceItem() };
 
 			PostConstruct();
 		}

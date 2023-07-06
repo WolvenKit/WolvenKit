@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorExpressionSocket()
 		{
-			TypeHint = new();
+			TypeHint = new AIbehaviorTypeRef();
 
 			PostConstruct();
 		}

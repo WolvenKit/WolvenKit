@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameDelayedFunctionsScheduler()
 		{
-			CurrentTime = new();
+			CurrentTime = new EngineTime();
 			NextCallId = 1;
 
 			PostConstruct();

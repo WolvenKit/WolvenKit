@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public SDeviceTimetableEntry()
 		{
-			Time = new();
+			Time = new SSimpleGameTime();
 
 			PostConstruct();
 		}

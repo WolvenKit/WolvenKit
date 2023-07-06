@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiAdvertLightColorPickerController()
 		{
-			LightColor = new();
+			LightColor = new CColor();
 
 			PostConstruct();
 		}

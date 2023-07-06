@@ -163,9 +163,9 @@ namespace WolvenKit.RED4.Types
 			VirtualCameraName = "Component";
 			ResolutionWidth = 100;
 			ResolutionHeight = 100;
-			Params = new() { AreaParameters = new() };
-			BackgroundColor = new();
-			Features = new() { RenderDecals = true, RenderParticles = true, AntiAliasing = true, LocalShadows = true };
+			Params = new WorldRenderAreaSettings { AreaParameters = new() };
+			BackgroundColor = new CColor();
+			Features = new entRenderToTextureFeatures { RenderDecals = true, RenderParticles = true, AntiAliasing = true, LocalShadows = true };
 			StreamingDistance = 1.000000F;
 
 			PostConstruct();

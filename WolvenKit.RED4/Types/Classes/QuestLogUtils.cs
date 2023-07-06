@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class QuestLogUtils : IScriptable
+	public abstract partial class QuestLogUtils : IScriptable
 	{
 		public QuestLogUtils()
 		{

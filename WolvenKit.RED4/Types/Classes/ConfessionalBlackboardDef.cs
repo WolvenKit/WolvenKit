@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ConfessionalBlackboardDef()
 		{
-			IsConfessing = new();
+			IsConfessing = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

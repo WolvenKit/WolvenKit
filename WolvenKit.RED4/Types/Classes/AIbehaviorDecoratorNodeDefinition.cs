@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIbehaviorDecoratorNodeDefinition : AIbehaviorTreeNodeDefinition
+	public abstract partial class AIbehaviorDecoratorNodeDefinition : AIbehaviorTreeNodeDefinition
 	{
 		[Ordinal(0)] 
 		[RED("child")] 

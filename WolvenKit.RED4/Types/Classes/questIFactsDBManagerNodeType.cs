@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIFactsDBManagerNodeType : ISerializable
+	public abstract partial class questIFactsDBManagerNodeType : ISerializable
 	{
 		public questIFactsDBManagerNodeType()
 		{

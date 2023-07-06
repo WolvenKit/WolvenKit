@@ -170,11 +170,11 @@ namespace WolvenKit.RED4.Types
 			InLanes = new();
 			Outline = new();
 			AccumulatedLengths = new();
-			CrowdCreationInfo = new() { ConnectedFragments = new() };
+			CrowdCreationInfo = new worldTrafficLaneCrowdCreationInfo { ConnectedFragments = new() };
 			DeadEndStart = float.PositiveInfinity;
-			SubGraphId = 65535;
-			PlayerGPSInfo = new() { SubGraphId = 65535, StronglyConnectedComponentId = 65535 };
-			NeighborGroupIndex = 65535;
+			SubGraphId = ushort.MaxValue;
+			PlayerGPSInfo = new worldTrafficLanePlayerGPSInfo { SubGraphId = ushort.MaxValue, StronglyConnectedComponentId = ushort.MaxValue };
+			NeighborGroupIndex = ushort.MaxValue;
 			RoadMaterials = new();
 			Polygon = new();
 

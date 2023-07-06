@@ -134,20 +134,20 @@ namespace WolvenKit.RED4.Types
 
 		public PerkMenuTooltipController()
 		{
-			TitleContainer = new();
-			TitleText = new();
-			TypeContainer = new();
-			TypeText = new();
-			Desc1Container = new();
-			Desc1Text = new();
-			Desc2Container = new();
-			Desc2Text = new();
-			Desc2TextNextLevel = new();
-			Desc2TextNextLevelDesc = new();
-			HoldToUpgrade = new();
-			OpenPerkScreen = new();
-			VideoContainerWidget = new();
-			VideoWidget = new();
+			TitleContainer = new inkWidgetReference();
+			TitleText = new inkTextWidgetReference();
+			TypeContainer = new inkWidgetReference();
+			TypeText = new inkTextWidgetReference();
+			Desc1Container = new inkWidgetReference();
+			Desc1Text = new inkTextWidgetReference();
+			Desc2Container = new inkWidgetReference();
+			Desc2Text = new inkTextWidgetReference();
+			Desc2TextNextLevel = new inkTextWidgetReference();
+			Desc2TextNextLevelDesc = new inkTextWidgetReference();
+			HoldToUpgrade = new inkWidgetReference();
+			OpenPerkScreen = new inkWidgetReference();
+			VideoContainerWidget = new inkWidgetReference();
+			VideoWidget = new inkVideoWidgetReference();
 			MaxProficiencyLevel = 20;
 
 			PostConstruct();

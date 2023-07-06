@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public QuestExecuteTransition()
 		{
-			Transition = new();
+			Transition = new AreaTypeTransition();
 
 			PostConstruct();
 		}

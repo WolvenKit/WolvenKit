@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entRagdollNotifyVelocityTresholdEvent()
 		{
-			Velocity = new() { W = 1.000000F };
+			Velocity = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

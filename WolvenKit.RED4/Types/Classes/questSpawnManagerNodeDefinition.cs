@@ -15,8 +15,8 @@ namespace WolvenKit.RED4.Types
 		public questSpawnManagerNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			Actions = new() { new() };
+			Id = ushort.MaxValue;
+			Actions = new() { new questSpawnManagerNodeActionEntry() };
 
 			PostConstruct();
 		}

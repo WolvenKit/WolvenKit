@@ -526,24 +526,24 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiInventoryGameController()
 		{
-			TooltipsManagerRef = new();
-			ButtonHintsManagerRef = new();
-			ItemModeControllerRef = new();
-			DefaultWrapper = new();
-			ItemWrapper = new();
-			CyberwareSlotRootRefs = new();
-			PaperDollWidget = new();
-			SortingButton = new();
-			SortingDropdown = new();
-			NotificationRoot = new();
-			PlayerStatsWidget = new();
-			BtnBackpack = new();
-			BtnCyberware = new();
-			BtnStats = new();
-			BtnSets = new();
-			CyberdeckLinkContainer = new();
-			CyberdeckLinkItem = new();
-			ItemNotificationRoot = new();
+			TooltipsManagerRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			ItemModeControllerRef = new inkWidgetReference();
+			DefaultWrapper = new inkWidgetReference();
+			ItemWrapper = new inkWidgetReference();
+			CyberwareSlotRootRefs = new inkCompoundWidgetReference();
+			PaperDollWidget = new inkWidgetReference();
+			SortingButton = new inkWidgetReference();
+			SortingDropdown = new inkWidgetReference();
+			NotificationRoot = new inkWidgetReference();
+			PlayerStatsWidget = new inkWidgetReference();
+			BtnBackpack = new inkWidgetReference();
+			BtnCyberware = new inkWidgetReference();
+			BtnStats = new inkWidgetReference();
+			BtnSets = new inkWidgetReference();
+			CyberdeckLinkContainer = new inkWidgetReference();
+			CyberdeckLinkItem = new inkWidgetReference();
+			ItemNotificationRoot = new inkWidgetReference();
 			InventoryList = new();
 			WeaponsList = new();
 			EquipmentList = new();

@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public audioQuadEmitterSettings()
 		{
-			Offset = new();
+			Offset = new Vector3();
 			Events = new(4);
 
 			PostConstruct();

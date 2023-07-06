@@ -86,9 +86,9 @@ namespace WolvenKit.RED4.Types
 
 		public GenericCodexEntryData()
 		{
-			TimeStamp = new();
+			TimeStamp = new GameTime();
 			NewEntries = new();
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

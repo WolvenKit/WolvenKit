@@ -126,12 +126,12 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_DirectConnConstraint()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			SourceTransformIndex = new();
-			TransformIndex = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			SourceTransformIndex = new animTransformIndex();
+			TransformIndex = new animTransformIndex();
 			Weight = 1.000000F;
-			WeightNode = new();
+			WeightNode = new animFloatLink();
 
 			PostConstruct();
 		}

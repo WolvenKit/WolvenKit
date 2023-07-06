@@ -159,9 +159,9 @@ namespace WolvenKit.RED4.Types
 		public QuickSlotCommand()
 		{
 			IsSlotUnlocked = true;
-			ItemId = new();
-			PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid };
-			InteractiveActionOwner = new();
+			ItemId = new gameItemID();
+			PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid };
+			InteractiveActionOwner = new entEntityID();
 
 			PostConstruct();
 		}

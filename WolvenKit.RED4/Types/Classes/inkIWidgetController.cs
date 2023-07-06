@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIWidgetController : IScriptable
+	public abstract partial class inkIWidgetController : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("audioMetadataName")] 

@@ -254,22 +254,22 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkMinigameVisualController()
 		{
-			GridContainer = new();
-			MiddleVideoContainer = new();
-			SidesAnimContainer = new();
-			SidesLibraryPath = new();
-			ProgramsContainer = new();
-			BufferContainer = new();
-			EndScreenContainer = new();
+			GridContainer = new inkCompoundWidgetReference();
+			MiddleVideoContainer = new inkVideoWidgetReference();
+			SidesAnimContainer = new inkWidgetReference();
+			SidesLibraryPath = new redResourceReferenceScriptToken();
+			ProgramsContainer = new inkWidgetReference();
+			BufferContainer = new inkWidgetReference();
+			EndScreenContainer = new inkWidgetReference();
 			FluffToHideContainer = new();
 			DottedLinesList = new();
-			BasicAccessContainer = new();
-			AnimationCallbackContainer = new();
-			DotMask = new();
-			GridController = new();
-			ProgramListController = new();
-			BufferController = new();
-			EndScreenController = new();
+			BasicAccessContainer = new inkWidgetReference();
+			AnimationCallbackContainer = new inkWidgetReference();
+			DotMask = new inkWidgetReference();
+			GridController = new inkWidgetReference();
+			ProgramListController = new inkWidgetReference();
+			BufferController = new inkWidgetReference();
+			EndScreenController = new inkWidgetReference();
 
 			PostConstruct();
 		}

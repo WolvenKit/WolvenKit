@@ -31,9 +31,9 @@ namespace WolvenKit.RED4.Types
 		public RadioControllerPS()
 		{
 			DeviceName = "LocKey#96";
-			TweakDBRecord = 55896600565;
+			TweakDBRecord = "Devices.Radio";
 			TweakDBDescriptionRecord = 109081313862;
-			RadioSetup = new();
+			RadioSetup = new RadioSetup();
 			Stations = new();
 
 			PostConstruct();

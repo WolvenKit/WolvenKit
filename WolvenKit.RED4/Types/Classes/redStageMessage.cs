@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public redStageMessage()
 		{
-			Parent = 4294967295;
+			Parent = uint.MaxValue;
 			Names = new();
 			Ids = new();
 

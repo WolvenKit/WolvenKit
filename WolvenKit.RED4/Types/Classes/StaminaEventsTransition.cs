@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class StaminaEventsTransition : StaminaTransition
+	public abstract partial class StaminaEventsTransition : StaminaTransition
 	{
 		public StaminaEventsTransition()
 		{

@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_TrianglesPerMesh()
 		{
-			MaxColor = new();
-			MinColor = new();
+			MaxColor = new CColor();
+			MinColor = new CColor();
 			MinCount = 500;
 			MaxCount = 20000;
 

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public PerksSkillsLevelDisplayController()
 		{
-			Tint = new();
+			Tint = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -126,15 +126,15 @@ namespace WolvenKit.RED4.Types
 
 		public QuestDetailsPanelController()
 		{
-			QuestTitle = new();
-			QuestDescription = new();
-			QuestLevel = new();
-			ActiveObjectives = new();
-			OptionalObjectives = new();
-			CompletedObjectives = new();
-			CodexLinksContainer = new();
-			ContentContainer = new();
-			NoSelectedQuestContainer = new();
+			QuestTitle = new inkTextWidgetReference();
+			QuestDescription = new inkTextWidgetReference();
+			QuestLevel = new inkTextWidgetReference();
+			ActiveObjectives = new inkCompoundWidgetReference();
+			OptionalObjectives = new inkCompoundWidgetReference();
+			CompletedObjectives = new inkCompoundWidgetReference();
+			CodexLinksContainer = new inkCompoundWidgetReference();
+			ContentContainer = new inkWidgetReference();
+			NoSelectedQuestContainer = new inkWidgetReference();
 
 			PostConstruct();
 		}

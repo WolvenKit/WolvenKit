@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class BaseScriptableAction : gamedeviceAction
+	public abstract partial class BaseScriptableAction : gamedeviceAction
 	{
 		[Ordinal(3)] 
 		[RED("requesterID")] 

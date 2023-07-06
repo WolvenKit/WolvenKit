@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameTelemetryInventoryItem()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 			Quality = Enums.gamedataQuality.Invalid;
 			ItemType = Enums.gamedataItemType.Invalid;
 			ItemLevel = -1;

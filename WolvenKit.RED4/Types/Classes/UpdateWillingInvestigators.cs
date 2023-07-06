@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UpdateWillingInvestigators()
 		{
-			Investigator = new();
+			Investigator = new entEntityID();
 
 			PostConstruct();
 		}

@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 		public questVehicleNodeCommandDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			Vehicle = new() { Names = new() };
+			Id = ushort.MaxValue;
+			Vehicle = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

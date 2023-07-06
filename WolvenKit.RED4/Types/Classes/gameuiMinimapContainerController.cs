@@ -284,19 +284,19 @@ namespace WolvenKit.RED4.Types
 			VisionRadiusSecurityArea = 40.000000F;
 			VisionRadiusInterior = 40.000000F;
 			VisionRadiusExterior = 100.000000F;
-			ClampedMappinContainer = new();
-			UnclampedMappinContainer = new();
-			MaskWidget = new();
-			PlayerIconWidget = new();
-			CompassWidget = new();
-			WorldGeometryContainer = new();
-			WorldGeometryCache = new();
-			TimeDisplayWidget = new();
-			LocationTextWidget = new();
-			FluffText1 = new();
-			SecurityAreaVignetteWidget = new();
-			SecurityAreaText = new();
-			CombatModeHighlight = new();
+			ClampedMappinContainer = new inkCompoundWidgetReference();
+			UnclampedMappinContainer = new inkCompoundWidgetReference();
+			MaskWidget = new inkMaskWidgetReference();
+			PlayerIconWidget = new inkWidgetReference();
+			CompassWidget = new inkWidgetReference();
+			WorldGeometryContainer = new inkCanvasWidgetReference();
+			WorldGeometryCache = new inkCacheWidgetReference();
+			TimeDisplayWidget = new inkCompoundWidgetReference();
+			LocationTextWidget = new inkTextWidgetReference();
+			FluffText1 = new inkTextWidgetReference();
+			SecurityAreaVignetteWidget = new inkWidgetReference();
+			SecurityAreaText = new inkTextWidgetReference();
+			CombatModeHighlight = new inkWidgetReference();
 
 			PostConstruct();
 		}

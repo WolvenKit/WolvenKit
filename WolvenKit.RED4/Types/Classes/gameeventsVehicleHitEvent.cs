@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameeventsVehicleHitEvent()
 		{
-			VehicleVelocity = new();
-			PreyVelocity = new();
+			VehicleVelocity = new Vector4();
+			PreyVelocity = new Vector4();
 
 			PostConstruct();
 		}

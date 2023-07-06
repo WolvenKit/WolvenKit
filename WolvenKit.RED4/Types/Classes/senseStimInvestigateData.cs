@@ -110,8 +110,8 @@ namespace WolvenKit.RED4.Types
 
 		public senseStimInvestigateData()
 		{
-			DistrationPoint = new();
-			AttackInstigatorPosition = new();
+			DistrationPoint = new Vector4();
+			AttackInstigatorPosition = new Vector4();
 			InvestigationSpots = new();
 
 			PostConstruct();

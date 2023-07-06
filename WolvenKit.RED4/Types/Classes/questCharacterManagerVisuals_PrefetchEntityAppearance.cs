@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public questCharacterManagerVisuals_PrefetchEntityAppearance()
 		{
-			AppearanceEntries = new() { new() { PuppetRef = new() { Names = new() } } };
+			AppearanceEntries = new() { new questCharacterManagerVisuals_EntityAppearanceOperationBaseEntityAppearanceEntry { PuppetRef = new gameEntityReference { Names = new() } } };
 
 			PostConstruct();
 		}

@@ -86,8 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public InteractiveDevice()
 		{
-			DisableAreaIndicatorID = new();
-			DelayedUIRefreshID = new();
+			DisableAreaIndicatorID = new gameDelayID();
+			DelayedUIRefreshID = new gameDelayID();
 			InvestigationPositionsArray = new();
 
 			PostConstruct();

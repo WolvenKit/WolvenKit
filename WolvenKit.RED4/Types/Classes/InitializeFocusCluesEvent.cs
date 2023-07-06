@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public InitializeFocusCluesEvent()
 		{
-			RequesterID = new();
+			RequesterID = new entEntityID();
 
 			PostConstruct();
 		}

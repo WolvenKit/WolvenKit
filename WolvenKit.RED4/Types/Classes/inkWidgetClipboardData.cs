@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkWidgetClipboardData()
 		{
-			WidgetPath = new() { Names = new() };
+			WidgetPath = new inkWidgetPath { Names = new() };
 
 			PostConstruct();
 		}

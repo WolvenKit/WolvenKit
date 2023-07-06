@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 
 		public Plane()
 		{
-			NormalDistance = new();
+			NormalDistance = new Vector4();
 
 			PostConstruct();
 		}

@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public inkScreenProjectionData()
 		{
-			StaticWorldPosition = new();
-			FixedWorldOffset = new();
+			StaticWorldPosition = new Vector4();
+			FixedWorldOffset = new Vector4();
 
 			PostConstruct();
 		}

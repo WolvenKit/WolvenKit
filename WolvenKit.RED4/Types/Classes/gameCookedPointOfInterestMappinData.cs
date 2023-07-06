@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameCookedPointOfInterestMappinData()
 		{
-			EntityID = new();
-			Position = new();
+			EntityID = new entEntityID();
+			Position = new Vector3();
 
 			PostConstruct();
 		}

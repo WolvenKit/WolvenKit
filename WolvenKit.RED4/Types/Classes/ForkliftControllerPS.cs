@@ -23,9 +23,9 @@ namespace WolvenKit.RED4.Types
 		public ForkliftControllerPS()
 		{
 			DeviceName = "LocKey#1639";
-			TweakDBRecord = 71902502349;
+			TweakDBRecord = "Devices.Forklift";
 			TweakDBDescriptionRecord = 124000636758;
-			ForkliftSetup = new() { ActionActivateName = "Activate", LiftingAnimationTime = 2.000000F, HasDistractionQuickhack = true };
+			ForkliftSetup = new ForkliftSetup { ActionActivateName = "Activate", LiftingAnimationTime = 2.000000F, HasDistractionQuickhack = true };
 
 			PostConstruct();
 		}

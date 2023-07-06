@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.Types
 
 		public SWidgetAnimationData()
 		{
-			PlaybackOptions = new();
+			PlaybackOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

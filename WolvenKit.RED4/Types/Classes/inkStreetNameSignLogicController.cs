@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public inkStreetNameSignLogicController()
 		{
-			StreetName = new();
-			DistrictName = new();
-			SubdistrictName = new();
+			StreetName = new inkTextWidgetReference();
+			DistrictName = new inkTextWidgetReference();
+			SubdistrictName = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

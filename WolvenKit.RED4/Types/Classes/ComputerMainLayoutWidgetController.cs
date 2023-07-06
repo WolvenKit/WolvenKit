@@ -278,15 +278,15 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerMainLayoutWidgetController()
 		{
-			ScreenSaverSlot = new();
-			WallpaperSlot = new();
-			MenuButtonList = new();
-			MenuContainer = new();
-			InternetContainer = new();
-			OffButton = new();
-			WindowCloseButton = new();
-			WindowContainer = new();
-			WindowHeader = new();
+			ScreenSaverSlot = new inkWidgetReference();
+			WallpaperSlot = new inkWidgetReference();
+			MenuButtonList = new inkWidgetReference();
+			MenuContainer = new inkWidgetReference();
+			InternetContainer = new inkWidgetReference();
+			OffButton = new inkWidgetReference();
+			WindowCloseButton = new inkWidgetReference();
+			WindowContainer = new inkWidgetReference();
+			WindowHeader = new inkTextWidgetReference();
 			WindowCloseAanimation = "windowClose_16x9";
 			WindowOpenAanimation = "windowOpen_16x9";
 			ComputerMenuButtonWidgetsData = new();

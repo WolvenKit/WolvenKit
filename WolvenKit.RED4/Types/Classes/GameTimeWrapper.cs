@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public GameTimeWrapper()
 		{
-			GameTime = new();
+			GameTime = new GameTime();
 
 			PostConstruct();
 		}

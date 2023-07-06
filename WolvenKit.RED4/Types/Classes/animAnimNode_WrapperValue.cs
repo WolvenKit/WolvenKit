@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_WrapperValue()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			WrapperNames = new();
 
 			PostConstruct();

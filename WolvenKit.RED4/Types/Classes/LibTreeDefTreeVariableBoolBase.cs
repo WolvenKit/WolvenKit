@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LibTreeDefTreeVariableBoolBase : LibTreeDefTreeVariable
+	public abstract partial class LibTreeDefTreeVariableBoolBase : LibTreeDefTreeVariable
 	{
 		public LibTreeDefTreeVariableBoolBase()
 		{

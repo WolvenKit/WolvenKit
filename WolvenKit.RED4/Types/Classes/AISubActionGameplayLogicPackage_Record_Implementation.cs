@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISubActionGameplayLogicPackage_Record_Implementation : IScriptable
+	public abstract partial class AISubActionGameplayLogicPackage_Record_Implementation : IScriptable
 	{
 		public AISubActionGameplayLogicPackage_Record_Implementation()
 		{

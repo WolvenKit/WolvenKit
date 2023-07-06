@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_VectorConstant()
 		{
-			Id = 4294967295;
-			Value = new() { W = 1.000000F };
+			Id = uint.MaxValue;
+			Value = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

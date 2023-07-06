@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public PerkDisplayContainerController()
 		{
-			Widget = new();
+			Widget = new inkWidgetReference();
 
 			PostConstruct();
 		}

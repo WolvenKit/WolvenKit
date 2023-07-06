@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.Types
 
 		public BaseModalListPopupGameController()
 		{
-			Content = new();
+			Content = new inkWidgetReference();
 			C_scrollInputThreshold = 0.750000F;
 
 			PostConstruct();

@@ -54,10 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkMinigameProgramListController()
 		{
-			ProgramPlayerContainer = new();
-			ProgramNetworkContainer = new();
+			ProgramPlayerContainer = new inkWidgetReference();
+			ProgramNetworkContainer = new inkWidgetReference();
 			SlotList = new();
-			HeaderBG = new();
+			HeaderBG = new inkWidgetReference();
 
 			PostConstruct();
 		}

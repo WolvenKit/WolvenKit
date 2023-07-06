@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public questMountedObjectInfo()
 		{
-			Ref = new() { Names = new() };
+			Ref = new gameEntityReference { Names = new() };
 			OnMount = true;
 			Role = Enums.gameMountingSlotRole.Invalid;
 

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameBaseGameSession : RedBaseClass
+	public abstract partial class gameBaseGameSession : RedBaseClass
 	{
 		public gameBaseGameSession()
 		{
