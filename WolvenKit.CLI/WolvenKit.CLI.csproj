@@ -27,6 +27,7 @@
         <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
 
   <ItemGroup>
