@@ -59,13 +59,13 @@
                 Content="Open Depot Folder" />
 
             <Grid Margin="16,48,16,16">
-                
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                
+
                 <Button
                     x:Name="GenerateMaterialsButton"
                     Grid.Column="0"
@@ -93,10 +93,13 @@
                     </Button.Content>
                 </Button>
 
-                <ComboBox Grid.Column="1" x:Name="MaterialExtensionCombobox" Margin="0,0,10,0">
+                <ComboBox
+                    x:Name="MaterialExtensionCombobox"
+                    Grid.Column="1"
+                    Margin="0,0,10,0">
                     <ComboBox.ItemTemplate>
-                        <DataTemplate >
-                            <TextBlock Text="{Binding Name}"/>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -108,11 +111,14 @@
                         Height="48"
                         VerticalAlignment="Stretch"
                         Style="{StaticResource BorderTipWarning}">
-                        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Text="Requires 12.3 GB disk space using PNG, or up to 56.2 GB using other formats. Generating Materials is extremely resource intensive!" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Text="Requires 12.3 GB disk space using PNG, or up to 56.2 GB using other formats. Generating Materials is extremely resource intensive!"
+                            TextWrapping="Wrap" />
                     </Border>
                 </StackPanel>
-                
-                
+
+
             </Grid>
 
             <Grid Margin="16">
@@ -154,6 +160,24 @@
                         <TextBlock VerticalAlignment="Center" Text="Requires 71.2 GB disk space and is extremely resource intensive. Not necessary for most modding workflows." />
                     </Border>
                 </StackPanel>
+            </Grid>
+
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    x:Name="MigrateDepotButton"
+                    Grid.Column="0"
+                    Width="190"
+                    Height="48"
+                    HorizontalAlignment="Left"
+                    ToolTip="Migrates depot files to the newest version">
+                    <Button.Content>
+                        <TextBlock Grid.Column="1" Text="Migrate Files" />
+                    </Button.Content>
+                </Button>
             </Grid>
 
         </StackPanel>

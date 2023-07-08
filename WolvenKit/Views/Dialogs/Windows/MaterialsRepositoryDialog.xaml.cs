@@ -30,6 +30,8 @@ namespace WolvenKit.Views.Dialogs.Windows
                    .DisposeWith(disposables);
                 this.BindCommand(ViewModel, x => x.OpenMaterialRepositoryCommand, x => x.OpenMaterialRepositoryButton)
                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel, x => x.MigrateDepotCommand, x => x.MigrateDepotButton)
+                    .DisposeWith(disposables);
 
                 this.Bind(ViewModel, x => x.MaterialsDepotPath, x => x.MaterialsTextBox.Text)
                    .DisposeWith(disposables);

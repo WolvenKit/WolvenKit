@@ -13,6 +13,7 @@ using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
@@ -20,6 +21,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W.JSON;
 using Path = System.IO.Path;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -92,6 +94,33 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
         {
             Commonfunctions.ShowFolderInExplorer(path);
         }
+    }
+
+    [RelayCommand]
+    private async Task MigrateDepot()
+    {
+        var files = Directory.GetFiles(MaterialsDepotPath, "*.json", SearchOption.AllDirectories);
+
+        _loggerService.Info($"Found {files.Length} entries to migrate");
+
+        var progress = 0;
+        _progress.Report(progress);
+
+        async Task UncookAsync(string filePath)
+        {
+            var text = await File.ReadAllTextAsync(filePath);
+            if (RedJsonSerializer.TryDeserialize<RedFileDto>(text, out var redFileDto) && redFileDto != null)
+            {
+                await File.WriteAllTextAsync(filePath, RedJsonSerializer.Serialize(new RedFileDto(redFileDto.Data!, redFileDto.Header.DataType == DataTypes.CR2WFlat)));
+            }
+
+            Interlocked.Increment(ref progress);
+            _progress.Report(progress / (float)files.Length);
+        }
+        await files.ParallelForEachAsync(UncookAsync, _maxDoP);
+
+        _progress.Completed();
+        _loggerService.Success($"Migrated {files.Length} files.");
     }
 
     [RelayCommand]
