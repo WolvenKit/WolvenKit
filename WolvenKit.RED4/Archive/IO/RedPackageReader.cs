@@ -72,6 +72,8 @@ public partial class RedPackageReader : Red4Reader
                 cls.SetProperty(prop.RedName, value);
             }
 
+            PostProcess(value);
+
             if (CollectData)
             {
                 if (prop.Name.Contains("Fact") && !prop.Name.Contains("Factor"))
@@ -100,6 +102,54 @@ public partial class RedPackageReader : Red4Reader
                         }
                     }
                 }
+            }
+
+            void PostProcess(IRedType? internalValue)
+            {
+                if (internalValue is IRedBufferWrapper buf)
+                {
+                    buf.Buffer.ParentTypes.Add($"{cls.GetType().Name}.{varName}");
+                    buf.Buffer.Parent = cls;
+
+                    ParseBuffer(buf.Buffer);
+                }
+
+                if (internalValue is IRedArray arr)
+                {
+                    foreach (IRedType entry in arr)
+                    {
+                        PostProcess(entry);
+                    }
+                }
+            }
+        }
+    }
+
+    private void ParseBuffer(RedBuffer buffer)
+    {
+        if (BufferHelper.TryGetReader(buffer, out var reader))
+        {
+            if (reader is IErrorHandler err)
+            {
+                err.ParsingError += HandleParsingError;
+            }
+
+            if (reader is IDataCollector collector)
+            {
+                collector.CollectData = CollectData;
+            }
+
+            if (reader is RedPackageReader pReader)
+            {
+                pReader.Settings = Settings;
+            }
+
+            reader.ReadBuffer(buffer);
+
+            if (reader is IDataCollector { CollectData: true } collector2)
+            {
+                DataCollection.Buffers ??= new List<DataCollection>();
+                DataCollection.Buffers.Add(collector2.DataCollection);
             }
         }
     }
@@ -307,4 +357,8 @@ public partial class RedPackageReader : Red4Reader
 
     public override CString ReadCString() => ReadSimpleString();
 
+    public override DataBuffer ReadDataBuffer()
+    {
+        return base.ReadDataBuffer();
+    }
 }
