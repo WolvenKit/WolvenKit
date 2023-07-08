@@ -3,4 +3,5 @@
 public sealed class RedJsonSerializerOptions
 {
     public bool SkipHeader { get; set; } = false;
+    public string? JsonVersion { get; set; }
 }

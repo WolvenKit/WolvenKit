@@ -92,9 +92,6 @@ public static class RedJsonSerializer
     internal static void SetHeader(JsonHeader header) =>
         s_threadedStorage[Environment.CurrentManagedThreadId] = header;
 
-    internal static void SetVersion(SemVersion version) =>
-        s_threadedStorage[Environment.CurrentManagedThreadId] = new JsonHeader { WKitJsonVersion = version };
-
     internal static string GetDataType() =>
         s_threadedStorage[Environment.CurrentManagedThreadId].DataType;
 
@@ -174,6 +171,13 @@ public static class RedJsonSerializer
     {
         RedOptions = redOptions ?? new RedJsonSerializerOptions();
 
+        var header = new JsonHeader();
+        if (RedOptions.JsonVersion != null)
+        {
+            header.WKitJsonVersion = SemVersion.Parse(RedOptions.JsonVersion, SemVersionStyles.Strict);
+        }
+        SetHeader(header);
+
         try
         {
             result = Deserialize<T>(json);
@@ -193,7 +197,12 @@ public static class RedJsonSerializer
         s_bufferResolver.Begin();
         s_classResolver.Begin();
 
-        SetHeader(new JsonHeader());
+        var header = new JsonHeader();
+        if (RedOptions.JsonVersion != null)
+        {
+            header.WKitJsonVersion = SemVersion.Parse(RedOptions.JsonVersion, SemVersionStyles.Strict);
+        }
+        SetHeader(header);
 
         try
         {
@@ -212,12 +221,16 @@ public static class RedJsonSerializer
         s_bufferResolver.Begin();
         s_classResolver.Begin();
 
-        SetHeader(new JsonHeader());
-
+        var header = new JsonHeader();
         if (element.ValueKind == JsonValueKind.Object && !element.TryGetProperty("$type", out _))
         {
-            SetVersion(SemVersion.Parse("0.0.1", SemVersionStyles.Strict));
+            header.WKitJsonVersion = SemVersion.Parse("0.0.1", SemVersionStyles.Strict);
         }
+        if (RedOptions.JsonVersion != null)
+        {
+            header.WKitJsonVersion = SemVersion.Parse(RedOptions.JsonVersion, SemVersionStyles.Strict);
+        }
+        SetHeader(header);
 
         try
         {
