@@ -14,6 +14,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -50,6 +51,8 @@ internal static class GenericHost
                 services.AddSingleton<IHashService, HashService>();
                 services.AddSingleton<ITweakDBService, TweakDBService>();
                 services.AddSingleton<ILocKeyService, LocKeyService>();
+
+                services.AddSingleton<IHookService, HookService>();
 
                 //services.AddScoped<TweakDBService>();
                 services.AddScoped<Red4ParserService>();
