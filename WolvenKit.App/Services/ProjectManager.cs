@@ -244,6 +244,8 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                     await File.WriteAllLinesAsync(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
                 }
             }
+
+            await fs.FlushAsync();
         }
         catch (Exception e)
         {
@@ -281,6 +283,8 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                     File.WriteAllLines(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
                 }
             }
+
+            fs.Flush();
         }
         catch (Exception e)
         {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using Semver;
 
 namespace WolvenKit.Modkit.RED4.GeneralStructs
 {
@@ -164,7 +165,44 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             W = w;
         }
     }
-    public record MatData(string MaterialRepo, List<RawMaterial> Materials, List<string> TexturesList, List<RawMaterial> MaterialTemplates, Dictionary<string, string[]> Appearances);
+
+    public class MaterialDataHeader
+    {
+        public SemVersion MaterialJsonVersion { get; set; } = SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
+    }
+
+    public class MatData
+    {
+        public MaterialDataHeader Header { get; set; } = new();
+        public string MaterialRepo { get; set; }
+        public List<RawMaterial> Materials { get; set; }
+        public List<string> TexturesList { get; set; }
+        public List<RawMaterial> MaterialTemplates { get; set; }
+        public Dictionary<string, string[]> Appearances { get; set; }
+
+        [JsonConstructor]
+        public MatData()
+        {
+            Header = new MaterialDataHeader
+            {
+                MaterialJsonVersion = SemVersion.Parse("0.0.0", SemVersionStyles.Strict)
+            };
+            MaterialRepo = "";
+            Materials = new List<RawMaterial>();
+            TexturesList = new List<string>();
+            MaterialTemplates = new List<RawMaterial>();
+            Appearances = new Dictionary<string, string[]>();
+        }
+
+        public MatData(string materialRepo, List<RawMaterial> materials, List<string> texturesList, List<RawMaterial> materialTemplates, Dictionary<string, string[]> appearances)
+        {
+            MaterialRepo = materialRepo;
+            Materials = materials;
+            TexturesList = texturesList;
+            MaterialTemplates = materialTemplates;
+            Appearances = appearances;
+        }
+    }
 
     public class RawMaterial
     {

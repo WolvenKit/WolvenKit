@@ -389,6 +389,8 @@ namespace WolvenKit.Modkit.RED4
                     case ".gradient":
                         ExtractGradient(path);
                         break;
+                    default:
+                        break;
                 }
 
                 // params must be renamed from path to avoid overwriting of outer variable
@@ -673,6 +675,8 @@ namespace WolvenKit.Modkit.RED4
                     case ".gradient":
                         ExtractGradient(path);
                         break;
+                    default:
+                        break;
                 }
 
                 void ExtractXBM(string extractionPath)
@@ -877,7 +881,30 @@ namespace WolvenKit.Modkit.RED4
                     return RedTypeManager.CreateRedType(typeof(CName));
                 }
 
-                return (CName)value.GetString().NotNull();
+                switch (value.ValueKind)
+                {
+                    case JsonValueKind.String:
+                        return (CName)value.GetString().NotNull();
+                    case JsonValueKind.Number:
+                        return (CName)value.GetUInt64();
+                    case JsonValueKind.Object:
+                        if (value.GetProperty("$storage").GetString() == "string")
+                        {
+                            return (CName)value.GetProperty("$value").GetString()!;
+                        }
+                        else if (value.GetProperty("$storage").GetString() == "uint64")
+                        {
+                            return (CName)ulong.Parse(value.GetProperty("$value").GetString()!);
+                        }
+                        throw new NotSupportedException($"Invalid storage type: {value.GetProperty("$storage")}");
+                    case JsonValueKind.Undefined:
+                    case JsonValueKind.Array:
+                    case JsonValueKind.True:
+                    case JsonValueKind.False:
+                    case JsonValueKind.Null:
+                    default:
+                        throw new NotSupportedException($"Invalid element type: {value.ValueKind}");
+                }
             }
 
             if (materialParameterType == typeof(CMaterialParameterCube))
@@ -978,12 +1005,30 @@ namespace WolvenKit.Modkit.RED4
                     throw new NotSupportedException();
                 }
 
-                return value.ValueKind switch
+                switch (value.ValueKind)
                 {
-                    JsonValueKind.String => new CResourceReference<T>(value.GetString().NotNull()),
-                    JsonValueKind.Number => new CResourceReference<T>(value.GetUInt64()),
-                    _ => throw new NotSupportedException()
-                };
+                    case JsonValueKind.String:
+                        return new CResourceReference<T>(value.GetString().NotNull());
+                    case JsonValueKind.Number:
+                        return new CResourceReference<T>(value.GetUInt64());
+                    case JsonValueKind.Object:
+                        if (value.GetProperty("$storage").GetString() == "string")
+                        {
+                            return new CResourceReference<T>(value.GetProperty("$value").GetString()!);
+                        }
+                        else if (value.GetProperty("$storage").GetString() == "uint64")
+                        {
+                            return new CResourceReference<T>(ulong.Parse(value.GetProperty("$value").GetString()!));
+                        }
+                        throw new NotSupportedException($"Invalid storage type: {value.GetProperty("$storage")}");
+                    case JsonValueKind.Undefined:
+                    case JsonValueKind.Array:
+                    case JsonValueKind.True:
+                    case JsonValueKind.False:
+                    case JsonValueKind.Null:
+                    default:
+                        throw new NotSupportedException($"Invalid element type: {value.ValueKind}");
+                }
             }
         }
 
