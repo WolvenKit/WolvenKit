@@ -395,7 +395,7 @@ function entFile_validateComponent(component, _index, validateRecursively) {
     }
 
     if (!validateRecursively || !hasMesh) {
-        Logger.Error(`debugging ${componentName}, no mesh found`);
+        // Logger.Error(`${componentMeshPath}: not validating mesh`);
         return;
     }
     
