@@ -255,8 +255,8 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
     
     for (let i = 0; i < components.length; i++) {
         const component = components[i];
-        entFile_validateComponent(component, i, appearanceName, validateRecursively);
-        if (component.mesh) {            
+        entFile_validateComponent(component, i, validateRecursively);
+        if (component.mesh) {
             meshPathsFromComponents.push(stringifyPotentialCName(component.mesh.DepotPath));
         }
     }
@@ -333,9 +333,12 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
         ? entSettings.checkComponentNameDuplication
         : appFileSettings.checkComponentNameDuplication;
 
+    Logger.Debug(`validateAppFile called: ${app.appearances.length} appearances`);
+    
     if (app["Data"] && app["Data"]["RootChunk"]) {
         return _validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
     }
+    
     for (let i = 0; i < app.appearances.length; i++) {
         const appearance = app.appearances[i];
         appFile_validateAppearance(appearance, i, validateRecursively, validateCollisions);
@@ -366,14 +369,21 @@ function checkDepotPath(depotPath, info) {
     }
 }
 
+const WITH_MESH = 'withMesh';
 // For different component types, check DepotPath property
 function entFile_validateComponent(component, _index, validateRecursively) {
     const componentName = stringifyPotentialCName(component.name) ?? '';
+    let type = component.$type || '';
+    
+    // entGarmentSkinnedMeshComponent - entSkinnedMeshComponent - entMeshComponent
+    if (component && component.mesh && component.mesh.DepotPath) {
+        type = WITH_MESH;
+    }
+    
     // flag for mesh validation, in case this is called recursively from app file
     let hasMesh = false;
-    switch (component.$type || '') {
-        case 'entGarmentSkinnedMeshComponent':
-        case 'entSkinnedMeshComponent':
+    switch (type) {
+        case WITH_MESH:
             checkDepotPath(component.mesh.DepotPath, componentName);
             hasMesh = true;
             break;
@@ -385,6 +395,7 @@ function entFile_validateComponent(component, _index, validateRecursively) {
     }
 
     if (!validateRecursively || !hasMesh) {
+        Logger.Error(`debugging ${componentName}, no mesh found`);
         return;
     }
     
@@ -399,6 +410,11 @@ function entFile_validateComponent(component, _index, validateRecursively) {
     meshesByComponentName[componentName] = componentMeshPath;
     const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);
     
+    if (!meshAppearances) { // for debugging
+        // Logger.Error(`failed to collect appearances from ${componentMeshPath}`);
+        return;
+    }
+
     if (meshAppearances && meshAppearances.length > 0 && !meshAppearances.includes(stringifyPotentialCName(component.meshAppearance))) {
         Logger.Warning(`ent component[${_index}] (${componentName}): Appearance ${component.meshAppearance} not found in '${componentMeshPath}', ([ ${
             meshAppearances.join(", ")            
