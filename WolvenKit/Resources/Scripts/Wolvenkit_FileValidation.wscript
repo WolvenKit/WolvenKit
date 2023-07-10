@@ -1,5 +1,6 @@
 import * as Logger from 'Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
+import {CName} from "TypeHelper.wscript";
 
 /*
  *     .___                      __           .__                                     __  .__    .__           _____.__.__
@@ -19,7 +20,13 @@ import * as TypeHelper from 'TypeHelper.wscript';
  * Best leave it in for now.
  */
 function stringifyPotentialCName(cnameOrString) {
-    return ((typeof cnameOrString === 'string') ? cnameOrString : cnameOrString.value);
+    if (typeof cnameOrString === 'string') {
+        return cnameOrString;
+    }
+    if (!!cnameOrString.$value) {
+        return cnameOrString.$value;
+    }
+    return cnameOrString.value;
 }
 
 export let isDataChangedForWriting = false;
@@ -131,7 +138,7 @@ const alreadyVerifiedAppFiles = [];
 let appFileSettings = {};
 
 function component_collectAppearancesFromMesh(componentMeshPath) {
-    if (!componentMeshPath || !wkit.FileExists(componentMeshPath)) return; 
+    if (!componentMeshPath || /^\d+$/.test(componentMeshPath) || !wkit.FileExists(componentMeshPath)) return; 
     if (undefined === appearanceNamesByMeshFile[componentMeshPath] ) {
         try {
             const fileContent = wkit.LoadGameFileFromProject(componentMeshPath, 'json');            
@@ -200,7 +207,9 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
         overriddenComponents.push(componentName);
 
         const meshPath = componentName && meshesByComponentName[componentName] ? meshesByComponentName[componentName] : '';
-        if (meshPath) {
+        if (/^\d+$/.test(meshPath)) {
+            Logger.Warning(`Invalid mesh path for partsOverride ${index}`);
+        } else if (meshPath) {            
             const appearanceNames = component_collectAppearancesFromMesh(meshPath);
             const meshAppearanceName = stringifyPotentialCName(componentOverride.meshAppearance);
             if (appearanceNames && appearanceNames.length > 1 && !appearanceNames.includes(meshAppearanceName) && !componentOverrideCollisions.includes(meshAppearanceName)) {
@@ -223,7 +232,8 @@ function appFile_validatePartsValue(partsValueEntityDepotPath, index, appearance
 }
 
 function appFile_validateAppearance(appearance, index, validateRecursively, validateComponentCollision) {    
-    let appearanceName = stringifyPotentialCName(appearance.Data.name);
+        
+    let appearanceName = stringifyPotentialCName(appearance.Data ? appearance.Data.name : '');
 
     if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) return;
  
@@ -336,7 +346,7 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
     if (app["Data"] && app["Data"]["RootChunk"]) {
         return _validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
     }
-    
+
     for (let i = 0; i < app.appearances.length; i++) {
         const appearance = app.appearances[i];
         appFile_validateAppearance(appearance, i, validateRecursively, validateCollisions);
@@ -362,7 +372,10 @@ function checkDepotPath(depotPath, info) {
         Logger.Warning(`${info}: DepotPath not set`);
         return;
     }
-    if (!wkit.FileExists(_depotPathString)) {
+    if (/^\d+$/.test(depotPath)) {
+        Logger.Warning(`${info}: No depot path set, only hash given`);
+        
+    } else if (!wkit.FileExists(_depotPathString)) {
         Logger.Warning(`${info}: ${_depotPathString} not found in project or game files`);
     }
 }
@@ -406,8 +419,12 @@ function entFile_validateComponent(component, _index, validateRecursively) {
     }
     
     meshesByComponentName[componentName] = componentMeshPath;
-    const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);
+
+    if (/^\d+$/.test(componentMeshPath)) {
+        return;
+    }
     
+    const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);    
     if (!meshAppearances) { // for debugging
         // Logger.Error(`failed to collect appearances from ${componentMeshPath}`);
         return;
