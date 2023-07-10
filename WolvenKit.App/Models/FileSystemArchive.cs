@@ -7,6 +7,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models;
 
@@ -56,7 +57,7 @@ public class FileSystemArchive : ICyberGameArchive
 
         foreach (var filePath in Directory.EnumerateFiles(modDirectory, "*", SearchOption.AllDirectories))
         {
-            var hash = FNV1A64HashAlgorithm.HashString(filePath[(modDirectory.Length + 1)..]);
+            var hash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(filePath[(modDirectory.Length + 1)..]));
 
             _filePaths.Add(hash, filePath);
             Files.Add(hash, new FileEntry(hashService)
