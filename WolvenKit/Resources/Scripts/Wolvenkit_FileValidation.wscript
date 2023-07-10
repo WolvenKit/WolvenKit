@@ -332,8 +332,6 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
     const validateCollisions = calledFromEntFileValidation 
         ? entSettings.checkComponentNameDuplication
         : appFileSettings.checkComponentNameDuplication;
-
-    Logger.Debug(`validateAppFile called: ${app.appearances.length} appearances`);
     
     if (app["Data"] && app["Data"]["RootChunk"]) {
         return _validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
