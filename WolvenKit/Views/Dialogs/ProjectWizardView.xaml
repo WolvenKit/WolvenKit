@@ -54,7 +54,7 @@
             hc:InfoElement.Title="Project Name"
             hc:InfoElement.TitlePlacement="Top"
             hc:InfoElement.TitleWidth="120"
-            VerifyFunc="VerifyIfProjectExists" />
+            VerifyFunc="VerifyModName" />
 
 
         <hc:TextBox
@@ -62,11 +62,11 @@
             Grid.Row="2"
             Margin="0,5,5,10"
             VerticalAlignment="Top"
+            IsReadOnly="True"
             hc:InfoElement.Necessary="True"
             hc:InfoElement.Title="Creation Location"
             hc:InfoElement.TitlePlacement="Top"
             hc:InfoElement.TitleWidth="120"
-            TextChanged="TextBox_TextChanged"
             VerifyFunc="VerifyFolder" />
 
         <Button

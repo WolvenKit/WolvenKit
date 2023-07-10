@@ -1,4 +1,6 @@
+using System;
 using System.Reactive.Disposables;
+using System.Windows.Controls;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Dialogs;
 
@@ -6,8 +8,6 @@ namespace WolvenKit.Views.Dialogs
 {
     public partial class ProjectWizardView : ReactiveUserControl<ProjectWizardViewModel>
     {
-        private System.Windows.Threading.DispatcherTimer timer;
-
         public ProjectWizardView()
         {
             InitializeComponent();
@@ -68,62 +68,38 @@ namespace WolvenKit.Views.Dialogs
                     .DisposeWith(disposables);
 
 
-                Disposable.Create(() => StopTimer()).DisposeWith(disposables);
-
+                projectPathTxtbx.SetCurrentValue(TextBox.TextProperty, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+                xprojectNameTxtbx.VerifyData();
             });
         }
 
-        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private HandyControl.Data.OperationResult<bool> VerifyModName(string str)
         {
-            if (timer == null)
+            if (string.IsNullOrEmpty(str))
             {
-                StartTimer();
+                return HandyControl.Data.OperationResult.Failed("Please enter a Project name!");
             }
-            ValidateAllFields();
-        }
 
-        private void StartTimer()
-        {
-            if (timer == null)
+            if (System.IO.Directory.Exists(System.IO.Path.Combine(projectPathTxtbx.Text, xprojectNameTxtbx.Text)))
             {
-                timer = new System.Windows.Threading.DispatcherTimer();
-                timer.Tick += new System.EventHandler(OnTimer);
-                timer.Interval = new System.TimeSpan(0, 0, 1);
-                timer.Start();
+                return HandyControl.Data.OperationResult.Failed("A project with this name already exists!");
             }
-        }
-
-        private void StopTimer()
-        {
-            if (timer != null)
-            {
-                timer.Stop();
-                timer.Tick -= new System.EventHandler(OnTimer);
-                timer = null;
-            }
-        }
-
-
-        private void OnTimer(object sender, System.EventArgs e)
-            => ValidateAllFields();
-
-        private void ValidateAllFields()
-        {
-            if (ViewModel is { } vm)
-            {
-                vm.AllFieldsValid = /*projectNameTxtbx.VerifyData() &&*/ projectPathTxtbx.VerifyData();
-            }
+            
+            return HandyControl.Data.OperationResult.Success();
         }
 
         private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
-            => System.IO.Directory.Exists(str)
-                ? HandyControl.Data.OperationResult.Success()
-                : HandyControl.Data.OperationResult.Failed("Selected path does not exist");
+        {
+            if (!System.IO.Directory.Exists(str))
+            {
+                return HandyControl.Data.OperationResult.Failed("Selected path does not exist");
+            }
 
-        private HandyControl.Data.OperationResult<bool> VerifyIfProjectExists(string str)
-            => string.IsNullOrEmpty(str) || System.IO.Directory.Exists(System.IO.Path.Combine(projectPathTxtbx.Text, xprojectNameTxtbx.Text))
-                ? HandyControl.Data.OperationResult.Failed("WolvenKit project exists")
-                : HandyControl.Data.OperationResult.Success();
+            xprojectNameTxtbx.VerifyData();
+
+            return HandyControl.Data.OperationResult.Success();
+        }
+            
 
         //private void ButtonClose(object sender, RoutedEventArgs e) => throw new NotImplementedException();
 
