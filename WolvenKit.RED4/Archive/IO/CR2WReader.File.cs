@@ -41,7 +41,7 @@ public partial class CR2WReader
         {
             foreach (var pair in info.StringDict)
             {
-                DataCollection.RawStringList.Add(pair.Value!);
+                DataCollection.RawStringList.Add(pair.Value);
             }
         }
 
@@ -181,14 +181,14 @@ public partial class CR2WReader
 
     #region Read Sections
 
-    private CName ReadName(CR2WNameInfo info, Dictionary<uint, CName> stringDict) => !stringDict.ContainsKey(info.offset) ? throw new TodoException() : stringDict[info.offset];
+    private CName ReadName(CR2WNameInfo info, Dictionary<uint, string> stringDict) => !stringDict.ContainsKey(info.offset) ? throw new TodoException() : stringDict[info.offset];
 
-    private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, CName> stringDict)
+    private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, string> stringDict)
     {
         var ret = new CR2WImport
         {
             ClassName = _namesList[info.className]!,
-            DepotPath = stringDict[info.offset].GetResolvedText().NotNull(),
+            DepotPath = stringDict[info.offset],
             Flags = (InternalEnums.EImportFlags)info.flags
         };
 
@@ -322,11 +322,11 @@ public partial class CR2WReader
 
     #region Support
 
-    private Dictionary<uint, CName> ReadStringDict(CR2WTable stringInfoTable)
+    private Dictionary<uint, string> ReadStringDict(CR2WTable stringInfoTable)
     {
         Debug.Assert(BaseStream.Position == stringInfoTable.offset);
 
-        var result = new Dictionary<uint, CName>();
+        var result = new Dictionary<uint, string>();
         while (BaseStream.Position < (stringInfoTable.offset + stringInfoTable.itemCount))
         {
             var pos = (uint)BaseStream.Position - stringInfoTable.offset;

@@ -119,7 +119,7 @@ namespace WolvenKit.Utility
                         ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
                         if (parser.TryReadRed4FileHeaders(originalMemoryStream, out var originalFile))
                         {
-                            results[ext].TryAdd(originalFile.StringDict[1].GetString().NotNull(), 0);
+                            results[ext].TryAdd(originalFile.StringDict[1], 0);
                         }
                         else
                         {

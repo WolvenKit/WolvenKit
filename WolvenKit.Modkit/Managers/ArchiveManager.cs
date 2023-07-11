@@ -277,6 +277,17 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
+            foreach (var (_, gameFile) in archive.Files)
+            {
+                using var ms = new MemoryStream();
+                gameFile.Extract(ms);
+
+                if (_wolvenkitFileService.TryReadRed4FileHeaders(ms, out var info))
+                {
+                    info.GetImports();
+                }
+            }
+
             ModArchives.AddOrUpdate(archive);
         }
 

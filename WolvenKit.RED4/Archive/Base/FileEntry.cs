@@ -1,6 +1,7 @@
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Archive;
 public class FileEntry : ICyberGameFile
@@ -110,7 +111,7 @@ public class FileEntry : ICyberGameFile
 
     private string? GetNameString(string? defaultStr = null)
     {
-        var nameStr = _hashService?.Get(NameHash64);
+        var nameStr = ResourcePathPool.ResolveHash(NameHash64);
         if (nameStr == null)
         {
             return defaultStr;
