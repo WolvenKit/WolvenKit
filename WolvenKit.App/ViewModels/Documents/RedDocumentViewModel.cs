@@ -60,7 +60,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
         Red4ParserService parserService,
         IWatcherService watcherService,
         IArchiveManager archiveManager,
-        IHookService hookService) : base(path)
+        IHookService hookService, 
+        bool isReadyOnly = false) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
         _chunkViewmodelFactory = chunkViewmodelFactory;
@@ -81,11 +82,12 @@ public partial class RedDocumentViewModel : DocumentViewModel
         };
 
         _path = path;
-        
+
 
         _extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
 
         Cr2wFile = file;
+        IsReadOnly = isReadyOnly;
         _isInitialized = true;
         PopulateItems();
     }

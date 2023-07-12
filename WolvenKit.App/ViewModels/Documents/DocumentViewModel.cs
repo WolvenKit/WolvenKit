@@ -30,6 +30,7 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     }
 
     [ObservableProperty] private string _filePath;
+    [ObservableProperty] private bool _isReadOnly;
 
     private bool _isDirty;
 

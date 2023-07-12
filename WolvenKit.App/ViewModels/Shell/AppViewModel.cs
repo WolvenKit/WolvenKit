@@ -705,7 +705,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void SelectFile(FileModel model) => GetToolViewModel<PropertiesViewModel>().ExecuteSelectFile(model);
 
-    private bool CanSaveFile() => ActiveDocument is not null;
+    private bool CanSaveFile() => ActiveDocument is not null && !ActiveDocument.IsReadOnly;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
     private void SaveFile() => Save(ActiveDocument.NotNull());
 
@@ -998,7 +998,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 await file.ExtractAsync(stream);
                 if (OpenStream(stream, file.FileName, out var redfile))
                 {
-                    var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this);
+                    var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this, file.Archive is not FileSystemArchive);
                     if (!DockedViews.Contains(fileViewModel))
                     {
                         DockedViews.Add(fileViewModel);
@@ -1044,7 +1044,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
             if (OpenStream(stream, file.FileName, out var redfile))
             {
-                var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this);
+                var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this, false);
                 if (!DockedViews.Contains(fileViewModel))
                 {
                     DockedViews.Add(fileViewModel);
@@ -1053,6 +1053,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 ActiveDocument = fileViewModel;
                 UpdateTitle();
 
+                return true;
             }
         }
 
@@ -1091,7 +1092,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     if (OpenStream(stream, fe.FileName, out var redfile))
                     {
                         var fileNameWithExt = $"{Path.GetFileNameWithoutExtension(fe.FileName)}{fe.Extension}";
-                        RedDocumentViewModel fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, fileNameWithExt, this);
+                        var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, fileNameWithExt, this, true);
                         if (!DockedViews.Contains(fileViewModel))
                         {
                             DockedViews.Add(fileViewModel);
@@ -1470,7 +1471,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.Cr2w:
                 if (OpenFile(fullPath, out var file))
                 {
-                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this);
+                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this, false);
                     result = fileViewModel.IsInitialized();
                 }
                 break;

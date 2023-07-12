@@ -72,7 +72,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             isReadOnly);
     }
 
-    public ChunkViewModel ChunkViewModel(IRedType rootChunk, ReferenceSocket socket, AppViewModel appViewModel)
+    public ChunkViewModel ChunkViewModel(IRedType rootChunk, ReferenceSocket socket, AppViewModel appViewModel, bool isReadOnly = false)
     {
         return new ChunkViewModel(rootChunk, socket, appViewModel,
             this,
@@ -85,10 +85,11 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _archiveManager,
             _tweakDbService,
             _locKeyService,
-            _parserService);
+            _parserService,
+            isReadOnly);
     }
 
-    public ChunkViewModel ChunkViewModel(IRedType rootChunk, RDTDataViewModel tab, AppViewModel appViewModel)
+    public ChunkViewModel ChunkViewModel(IRedType rootChunk, RDTDataViewModel tab, AppViewModel appViewModel, bool isReadOnly = false)
     {
         return new ChunkViewModel(rootChunk, tab, appViewModel,
             this,
@@ -101,6 +102,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _archiveManager,
             _tweakDbService,
             _locKeyService,
-            _parserService);
+            _parserService,
+            isReadOnly);
     }
 }

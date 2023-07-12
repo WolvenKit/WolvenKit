@@ -140,11 +140,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        Red4ParserService parserService
+        Red4ParserService parserService, 
+        bool isReadOnly = false
         ) 
         : this(data, nameof(RDTDataViewModel), appViewModel,
               chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager, 
-              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService
+              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, null, isReadOnly
               )
     {
         _tab = tab;
@@ -172,11 +173,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        Red4ParserService parserService
+        Red4ParserService parserService, 
+        bool isReadOnly = false
         ) 
         : this(export, nameof(ReferenceSocket), appViewModel,
               chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService
+              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, null, isReadOnly
               )
     {
         Socket = socket;

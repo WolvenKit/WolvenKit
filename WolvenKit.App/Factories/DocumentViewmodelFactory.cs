@@ -52,8 +52,8 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         _hookService = hookService;
         
     }
-    public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel) 
-        => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals, _parserService, _watcherService, _archiveManager, _hookService);
+    public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel, bool isReadOnly = false) 
+        => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals, _parserService, _watcherService, _archiveManager, _hookService, isReadOnly);
 
     public WScriptDocumentViewModel WScriptDocumentViewModel(string path) => new(path, _scriptService);
 
