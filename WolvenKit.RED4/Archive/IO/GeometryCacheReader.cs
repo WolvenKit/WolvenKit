@@ -254,7 +254,7 @@ public class GeometryCacheReader : Red4Reader, IBufferReader
                             var ra = new CArray<CFloat>();
                             ra.Add(_reader.ReadUInt16() / ushort.MaxValue);
                             ra.Add(_reader.ReadUInt16() / ushort.MaxValue);
-                            uv.Add(uv);
+                            uv.Add(ra);
                         }
                         entry.Uvs.Add(uv);
                     }

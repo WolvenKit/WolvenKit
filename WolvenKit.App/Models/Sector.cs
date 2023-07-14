@@ -16,7 +16,7 @@ public class Sector
     public ResourcePath DepotPath { get; set; }
     public bool IsLoaded { get; set; }
     public Element3D Text { get; set; }
-    public Element3D? Element { get; set; }
+    public SectorGroup? Element { get; set; }
     public uint NumberOfHandles { get; set; }
 
     private bool _showElements;

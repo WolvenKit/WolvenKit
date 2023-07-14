@@ -1,8 +1,6 @@
-﻿using HelixToolkit.Wpf.SharpDX;
+﻿namespace WolvenKit.App.Models;
 
-namespace WolvenKit.App.Models;
-
-public class SectorGroup : GroupModel3D
+public class SectorGroup : GroupModel3DExt
 {
     public string? MaterialName { get; set; }
     public string? AppearanceName { get; set; }

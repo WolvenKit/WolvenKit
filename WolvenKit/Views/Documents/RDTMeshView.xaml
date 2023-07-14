@@ -364,6 +364,38 @@
                         Content="Export Appearance with Rig (experimental)"
                         Visibility="{Binding PanelVisibility.ShowExportEntity, Converter={StaticResource VisibilityConverter}}" />
                 </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Button
+                        x:Name="ToggleCollisionButton"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Height="24"
+                        Margin="4"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding ToggleCollisionCommand}"
+                        Content="Toggle Collision"
+                        ToolTip="Toggles the collision nodes"
+                        Visibility="{Binding PanelVisibility.ShowToggleCollision, Converter={StaticResource VisibilityConverter}}" />
+                    <Button
+                        x:Name="AddSectorsButton"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Height="24"
+                        Margin="4"
+                        HorizontalAlignment="Stretch"
+                        Command="{Binding AddSectorsToProjectCommand}"
+                        Content="Add Sectors to Project"
+                        ToolTip="Adds the selected sectors to the project"
+                        Visibility="{Binding PanelVisibility.ShowAddSectors, Converter={StaticResource VisibilityConverter}}" />
+                </Grid>
 
                 <!--  Button Click="ReloadModels" Content="Zoom to Extents" /  -->
 
@@ -407,12 +439,15 @@
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid-->
             <syncfusion:SfTreeGrid
+                x:Name="NodeTreeGrid"
                 Grid.Row="1"
+                AllowFiltering="True"
                 AllowResizingColumns="True"
                 AutoExpandMode="AllNodesExpanded"
                 AutoGenerateColumns="False"
                 CheckBoxMappingName="IsRendering"
                 ChildPropertyName="Children"
+                FilterLevel="Extended"
                 ItemsSource="{Binding SelectedAppearance.ModelGroup, Mode=TwoWay}"
                 LiveNodeUpdateMode="AllowDataShaping"
                 NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
@@ -420,6 +455,14 @@
                 SelectedItem="{Binding SelectedItem}"
                 ShowCheckBox="True"
                 TreeGridContextMenuOpening="SfTreeGrid_OnTreeGridContextMenuOpening">
+                <syncfusion:SfTreeGrid.ExpanderContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="CheckAllChildrenMenuItem_OnClick" Header="Check All Children" />
+                        <MenuItem Click="CheckAllChildrenRecursiveMenuItem_OnClick" Header="Check All Children (Recursive)" />
+                        <MenuItem Click="UncheckAllChildrenMenuItem_OnClick" Header="Uncheck All Children" />
+                        <MenuItem Click="UncheckAllChildrenRecursiveMenuItem_OnClick" Header="Uncheck All Children (Recursive)" />
+                    </ContextMenu>
+                </syncfusion:SfTreeGrid.ExpanderContextMenu>
                 <syncfusion:SfTreeGrid.RecordContextMenu>
                     <ContextMenu>
                         <MenuItem Click="CheckAllChildrenMenuItem_OnClick" Header="Check All Children" />
@@ -432,7 +475,7 @@
                     <syncfusion:TreeGridTextColumn
                         ColumnSizer="Auto"
                         HeaderText="Name"
-                        MappingName="Name"
+                        MappingName="Text"
                         MinimumWidth="100" />
                     <!--syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
                         <syncfusion:TreeGridTemplateColumn.CellTemplate>
@@ -463,6 +506,10 @@
                         HeaderText="DepotPath"
                         MappingName="DepotPath"
                         MinimumWidth="100" />
+                    <syncfusion:TreeGridTextColumn
+                        ColumnSizer="Auto"
+                        HeaderText="WorldNodeIndex"
+                        MappingName="WorldNodeIndex" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
