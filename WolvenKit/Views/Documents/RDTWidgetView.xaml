@@ -317,6 +317,11 @@
                 Padding="7,2"
                 Click="SaveAsImage"
                 Content="Save as Images" />
+            <Button
+                Margin="5,5,5,0"
+                Padding="7,2"
+                Click="ClearAndReload"
+                Content="Clear cache" />
 
         </StackPanel>
         <TextBlock

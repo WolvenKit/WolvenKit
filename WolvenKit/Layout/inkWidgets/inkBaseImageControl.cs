@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using WolvenKit.App.Helpers;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
 using Rect = System.Windows.Rect;
@@ -79,7 +80,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             if (OriginalImageSource == null)
             {
-                if (Application.Current.Resources.Contains(TextureAtlas))
+                if (InkCache.Resources.Contains(TextureAtlas))
                 {
                     return;
                 }

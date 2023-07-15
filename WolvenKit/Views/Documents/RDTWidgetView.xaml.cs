@@ -13,6 +13,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Layout.inkWidgets;
@@ -319,6 +320,13 @@ namespace WolvenKit.Views.Documents
                 }
             }
 
+        }
+
+        private void ClearAndReload(object sender, RoutedEventArgs e)
+        {
+            InkCache.Resources.Clear();
+
+            Load();
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
