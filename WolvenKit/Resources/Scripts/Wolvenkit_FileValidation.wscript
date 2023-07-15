@@ -443,8 +443,8 @@ const appearanceNamesByAppFile = {};
 
 function getAppearanceNamesInAppFile(_depotPath) {
     const depotPath = stringifyPotentialCName(_depotPath);
-    
-    if (!wkit.FileExists(depotPath)) {
+     
+    if (!depotPath.endsWith('.app') || !wkit.FileExists(depotPath)) {
         appearanceNamesByAppFile[depotPath] = [];
     }
     if (!appearanceNamesByAppFile[depotPath]) {
@@ -493,7 +493,12 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
     }
 
     if (!wkit.FileExists(appFilePath)) {
-        Logger.Warning(`${appearanceName}: app file '${appFilePath}' not found in project or game files`);
+        Logger.Warning(`${appearanceName}: appearanceResource '${appFilePath}' not found in project or game files`);
+        return;
+    }
+    
+    if (!appFilePath.endsWith('app')) {
+        Logger.Warning(`${appearanceName}: appearanceResource '${appFilePath}' does not appear to be an .app file`);
         return;
     }
 
