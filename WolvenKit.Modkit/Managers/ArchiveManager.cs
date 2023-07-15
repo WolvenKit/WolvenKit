@@ -280,19 +280,20 @@ namespace WolvenKit.RED4.CR2W.Archive
             var importError = false;
             foreach (var (_, gameFile) in archive.Files)
             {
-                using var ms = new MemoryStream();
-                archive.ExtractFile(gameFile, ms);
-
-                if (_wolvenkitFileService.TryReadRed4FileHeaders(ms, out var info))
+                try
                 {
-                    try
+                    using var ms = new MemoryStream();
+                    archive.ExtractFile(gameFile, ms);
+
+                    if (_wolvenkitFileService.TryReadRed4FileHeaders(ms, out var info))
                     {
                         info.GetImports();
                     }
-                    catch (Exception)
-                    {
-                        importError = true;
-                    }
+                }
+                catch (Exception)
+                {
+                    importError = true;
+                    _logger.Debug($"Error while loading the following mod file: {gameFile.FileName}");
                 }
             }
             archive.ReleaseFileHandle();
