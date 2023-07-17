@@ -34,7 +34,7 @@ globalThis.onSave = function (ext, file) {
             break;
         }
     } catch (err) {
-        Logger.Warning(`Could not verify ${file} due to an error in Wolvenkit.`);
+        Logger.Warning(`Could not verify the file you just saved due to an error in Wolvenkit.`);
         Logger.Info('You can ignore this warning or help us fix the problem: get in touch on Discord or create a ticket under https://github.com/WolvenKit/Wolvenkit/issues');
         Logger.Info('Please include the necessary files.')
     }
