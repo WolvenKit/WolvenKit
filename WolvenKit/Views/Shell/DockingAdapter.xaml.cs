@@ -282,7 +282,7 @@ namespace WolvenKit.Views.Shell
 
         private async Task<bool> TryCloseDocument(DocumentViewModel vm)
         {
-            if (vm.IsDirty)
+            if (vm.IsDirty && !vm.IsReadOnly)
             {
                 if (await Interactions.ShowMessageBoxAsync($"\"{vm.Header.TrimEnd('*')}\" has unsaved changes - are you sure you want to close this file?", "Confirm", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
                 {
