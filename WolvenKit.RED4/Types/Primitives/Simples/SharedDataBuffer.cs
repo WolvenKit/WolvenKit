@@ -68,7 +68,7 @@ public class SharedDataBuffer : IRedBufferWrapper, IRedPrimitive, IEquatable<Sha
 
     public object DeepCopy()
     {
-        var db = new SharedDataBuffer();
+        var db = new SharedDataBuffer { Buffer = Buffer.Clone() };
         if (Data is IRedCloneable irc)
         {
             db.Data = (IParseableBuffer)irc.DeepCopy();

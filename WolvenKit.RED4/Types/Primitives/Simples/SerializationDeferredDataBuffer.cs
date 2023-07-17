@@ -79,7 +79,7 @@ public class SerializationDeferredDataBuffer : IRedBufferWrapper, IRedBufferPoin
 
     public object DeepCopy()
     {
-        var db = new SerializationDeferredDataBuffer();
+        var db = new SerializationDeferredDataBuffer { Buffer = Buffer.Clone() };
         if (Data is IRedCloneable irc)
         {
             db.Data = (IParseableBuffer)irc.DeepCopy();

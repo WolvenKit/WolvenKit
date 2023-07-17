@@ -77,7 +77,7 @@ public class DataBuffer : IRedBufferWrapper, IRedBufferPointer, IRedPrimitive, I
 
     public object DeepCopy()
     {
-        var db = new DataBuffer();
+        var db = new DataBuffer { Buffer = Buffer.Clone() };
         if (Data is IRedCloneable irc)
         {
             db.Data = (IParseableBuffer)irc.DeepCopy();
