@@ -200,17 +200,16 @@ public class HandleConverter : CustomRedConverter<IRedBaseHandle>
                     }
 
                     id = reader.GetString();
+                    if (id == null)
+                    {
+                        throw new JsonException();
+                    }
 
                     break;
                 }
 
                 case "Data":
                 {
-                    if (id == null)
-                    {
-                        throw new JsonException();
-                    }
-
                     if (reader.TokenType != JsonTokenType.StartObject)
                     {
                         throw new JsonException();
