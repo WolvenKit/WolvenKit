@@ -1,6 +1,7 @@
 // @version 1.0
 
 const Settings = {
+	Enabled: true,
     Anims: {
         /*
          * Set this to "true" to have the script print all animation names to console
