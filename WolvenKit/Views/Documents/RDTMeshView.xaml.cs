@@ -77,6 +77,24 @@ namespace WolvenKit.Views.Documents
             ////LoadModels(ViewModel.SelectedAppearance);
         }
 
+        private void CollapseAllChildrenRecursiveMenuItem_OnClick(object sender, RoutedEventArgs e) => 
+            _currentNode?.TreeGrid.CollapseAllNodes(_currentNode.TreeNode);
+
+        private void ExpandAllChildrenRecursiveMenuItem_OnClick(object sender, RoutedEventArgs e) =>
+            _currentNode?.TreeGrid.ExpandAllNodes(_currentNode.TreeNode);
+
+        private void CollapseStateAllChildren(TreeNodes nodes, bool state, bool recursive)
+        {
+            foreach (var node in nodes)
+            {
+                node.IsExpanded = state;
+                if (recursive && node.HasChildNodes)
+                {
+                    CollapseStateAllChildren(node.ChildNodes, state, true);
+                }
+            }
+        }
+
         private void CheckAllChildrenMenuItem_OnClick(object sender, RoutedEventArgs e)
         {
             if (_currentNode != null)
