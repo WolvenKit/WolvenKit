@@ -650,22 +650,27 @@ function meshFile_CheckMaterialProperties(material, materialName) {
                 return;
             }
             
-            const materialDepotPath = stringifyPotentialCName(definedMaterial.DepotPath);
+            const materialDepotPath = stringifyPotentialCName(definedMaterial.DepotPath);            
             
             if (/[A-Z]/.test(materialDepotPath)) {
                 hasUppercasePaths = true;
+                return;
+            }
+            
+            if (materialDepotPath && !wkit.FileExists(materialDepotPath)) {
+                Logger.Warning(`${materialName}.values[${i}]: ${materialDepotPath} not found in path or project files.`);
                 return;
             }
 
             switch (key) {
                 case "MultilayerSetup":
                     if (materialDepotPath && !materialDepotPath.endsWith(".mlsetup")) {
-                        Logger.Warning(`${materialName}.values[${i}]: ${definedMaterial.DepotPath.value} doesn't end in .mlsetup. FileValidation might cause crashes.`);
+                        Logger.Warning(`${materialName}.values[${i}]: ${definedMaterial.DepotPath.value} doesn't end in .mlsetup. This might cause crashes.`);
                     }
                     break;
                 case "MultilayerMask":
                     if (materialDepotPath && !materialDepotPath.endsWith(".mlmask")) {
-                        Logger.Warning(`${materialName}.values[${i}]: ${materialDepotPath} doesn't end in .mlmask. FileValidation might cause crashes.`);
+                        Logger.Warning(`${materialName}.values[${i}]: ${materialDepotPath} doesn't end in .mlmask. This might cause crashes.`);
                     }
                     break;
                 case "BaseColor":
@@ -674,9 +679,7 @@ function meshFile_CheckMaterialProperties(material, materialName) {
                 case "Normal":
                 case "GlobalNormal":
                     if (materialDepotPath && !materialDepotPath.endsWith(".xbm")) {
-                        Logger.Warning(`${materialName}.values[${i}]: ${materialDepotPath} doesn't end in .xbm. FileValidation might cause crashes.`);
-                    } else if (materialDepotPath && !wkit.FileExists(materialDepotPath)) {
-                        Logger.Warning(`${materialName}.values[${i}]: ${materialDepotPath} not found in path or project files.`);                        
+                        Logger.Warning(`${materialName}.values[${i}]: ${materialDepotPath} doesn't end in .xbm. This might cause crashes.`);
                     }
                     break;
             }
@@ -749,7 +752,7 @@ export function validateMeshFile(mesh, _meshSettings) {
             let materialName = "unknown";
 
             // Add a warning here???
-            if (i < mesh.materialEntries.length && mesh.materialEntries[i] == "undefined") {
+            if (i < mesh.materialEntries.length) {
                 materialName = mesh.materialEntries[i].name;
             }
             meshFile_CheckMaterialProperties(material, stringifyPotentialCName(materialName));
