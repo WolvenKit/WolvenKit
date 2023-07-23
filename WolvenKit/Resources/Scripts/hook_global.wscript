@@ -6,6 +6,12 @@ import * as TypeHelper from 'TypeHelper.wscript';
 import Settings from 'hook_settings.wscript';
 import {hasUppercasePaths} from "Wolvenkit_FileValidation.wscript";
 
+/**
+ * If this is set to "true" and file validation runs into any errors, then YOUR FILES WILL NO LONGER SAVE.
+ * ONLY ENABLE THIS IF YOU KNOW WHAT YOU'RE DOING!
+ */
+const isWolvenkitDeveloper = false;
+
 globalThis.onSave = function (ext, file) {
     if (!Settings.Enabled) {
         return {
@@ -35,12 +41,18 @@ globalThis.onSave = function (ext, file) {
         case "mesh":
             FileValidation.validateMeshFile(fileContent["Data"]["RootChunk"], Settings.Mesh);
             break;
+        case "mi":
+            FileValidation.validateMiFile(fileContent["Data"]["RootChunk"], Settings.Mi);
+            break;
         case "workspot":
             FileValidation.validateWorkspotFile(fileContent["Data"]["RootChunk"], Settings.Workspot);
             file = TypeHelper.JsonStringify(fileContent);
             break;
         }
     } catch (err) {
+        if (isWolvenkitDeveloper) {
+            throw err;
+        }
         Logger.Warning(`Could not verify the file you just saved due to an error in Wolvenkit.`);
         Logger.Info('You can ignore this warning or help us fix the problem: get in touch on Discord or create a ticket under https://github.com/WolvenKit/Wolvenkit/issues');
         Logger.Info('Please include the necessary files.')

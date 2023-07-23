@@ -20,6 +20,7 @@ import {CName} from "TypeHelper.wscript";
  * Best leave it in for now.
  */
 function stringifyPotentialCName(cnameOrString) {
+    if (!cnameOrString) return undefined;
     if (typeof cnameOrString === 'string') {
         return cnameOrString;
     }
@@ -29,6 +30,38 @@ function stringifyPotentialCName(cnameOrString) {
     return cnameOrString.value;
 }
 
+/**
+ * @param depotPath the depot path to analyse
+ * @param info info string for the user
+ */
+function checkDepotPath(depotPath, info) {
+    // Don't validate if uppercase file names are present
+    if (hasUppercasePaths) {
+        return;
+    }
+    const _depotPathString = stringifyPotentialCName(depotPath) || '';
+    if (!_depotPathString) {
+        Logger.Warning(`${info}: DepotPath not set`);
+        return;
+    }
+    
+    // check if the path has uppercase characters
+    if (/[A-Z]/.test(_depotPathString)) {
+        hasUppercasePaths = true;
+        return;
+    }
+
+    // Check if the file is a numeric hash
+    if (/^\d+$/.test(_depotPathString)) {
+        Logger.Warning(`${info}: No depot path set, only hash given`);
+        return;
+    }
+    
+    // Check if the file exists
+    if (!wkit.FileExists(_depotPathString)) {
+        Logger.Warning(`${info}: ${_depotPathString} not found in project or game files`);
+    }
+}
 export let hasUppercasePaths = false;
 
 export let isDataChangedForWriting = false;
@@ -393,31 +426,6 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
 
 let entSettings = {};
 
-/**
- * @param depotPath the depot path to analyse
- * @param info info string for the user
- */
-function checkDepotPath(depotPath, info) {
-    // Don't validate if uppercase file names are present
-    if (hasUppercasePaths) {
-        return;
-    }
-    const _depotPathString = stringifyPotentialCName(depotPath) || '';
-    if (!_depotPathString) {
-        Logger.Warning(`${info}: DepotPath not set`);
-        return;
-    }
-    if (/[A-Z]/.test(depotPath)) {
-        hasUppercasePaths = true;
-        return;
-    }
-    if (/^\d+$/.test(depotPath)) {
-        Logger.Warning(`${info}: No depot path set, only hash given`);        
-    } else if (!wkit.FileExists(_depotPathString)) {
-        Logger.Warning(`${info}: ${_depotPathString} not found in project or game files`);
-    }
-}
-
 const WITH_MESH = 'withMesh';
 // For different component types, check DepotPath property
 function entFile_validateComponent(component, _index, validateRecursively) {
@@ -637,52 +645,75 @@ let meshSettings = {};
 let materialNames = {};
 let localIndexList = [];
 
+
+/**
+ * Shared for .mesh and .mi files: will validate an entry of the values array of a material definition
+ * 
+ * @param key Key of array, e.g. BaseColor, Normal, MultilayerSetup
+ * @param materialValue The material value definition contained within
+ * @param info String for debugging, e.g. name of material and index of value
+ * @param validateRecursively If set to true, file validation will try to follow the .mi chain
+ */
+function validateMaterialKeyValuePair(key, materialValue, info, validateRecursively) {
+    if (key === "$type" || hasUppercasePaths) {
+        return;
+    }
+    
+    const materialDepotPath = stringifyPotentialCName(materialValue.DepotPath);
+    
+    if (!materialDepotPath) { 
+        return; 
+    }
+    
+    if (/[A-Z]/.test(materialDepotPath)) {
+        hasUppercasePaths = true;
+        return;
+    }
+
+    if (!wkit.FileExists(materialDepotPath)) {
+        Logger.Warning(`${info}${materialDepotPath} not found in path or project files.`);
+        return;
+    }
+    
+    if (validateRecursively && materialDepotPath.endsWith('.mi') && !materialDepotPath.startsWith('base')) {
+        const miFileContent = TypeHelper.JsonParse(wkit.LoadGameFileFromProject(materialDepotPath, 'json'));
+        _validateMiFile(miFileContent);
+    }
+
+    switch (key) {
+        case "MultilayerSetup":
+            if (!materialDepotPath.endsWith(".mlsetup")) {
+                Logger.Error(`${info}${materialValue.DepotPath.value} doesn't end in .mlsetup. This will cause crashes.`);
+            }
+            break;
+        case "MultilayerMask":
+            if (!materialDepotPath.endsWith(".mlmask")) {
+                Logger.Error(`${info}${materialDepotPath} doesn't end in .mlmask. This will cause crashes.`);
+            }
+            break;
+        case "BaseColor":
+        case "Metalness":
+        case "Roughness":
+        case "Normal":
+        case "GlobalNormal":
+            if (!materialDepotPath.endsWith(".xbm")) {
+                Logger.Warning(`${info}${materialDepotPath} doesn't end in .xbm. This might cause crashes.`);
+            }
+            break;
+    }
+}
 function meshFile_CheckMaterialProperties(material, materialName) {
     for (let i = 0; i < material.values.length; i++) {
         let tmp = material.values[i];
 
-        if (!tmp["$type"].startsWith("rRef:")) {
+        const type = tmp["$type"] || tmp["type"];
+        
+        if (!type.startsWith("rRef:")) {
             continue;
         }
 
         Object.entries(tmp).forEach(([key, definedMaterial]) => {
-            if (key === "$type" || hasUppercasePaths) {
-                return;
-            }
-            
-            const materialDepotPath = stringifyPotentialCName(definedMaterial.DepotPath);            
-            
-            if (/[A-Z]/.test(materialDepotPath)) {
-                hasUppercasePaths = true;
-                return;
-            }
-            
-            if (materialDepotPath && !wkit.FileExists(materialDepotPath)) {
-                Logger.Warning(`${materialName}.values[${i}]: ${materialDepotPath} not found in path or project files.`);
-                return;
-            }
-
-            switch (key) {
-                case "MultilayerSetup":
-                    if (materialDepotPath && !materialDepotPath.endsWith(".mlsetup")) {
-                        Logger.Warning(`${materialName}.values[${i}]: ${definedMaterial.DepotPath.value} doesn't end in .mlsetup. This might cause crashes.`);
-                    }
-                    break;
-                case "MultilayerMask":
-                    if (materialDepotPath && !materialDepotPath.endsWith(".mlmask")) {
-                        Logger.Warning(`${materialName}.values[${i}]: ${materialDepotPath} doesn't end in .mlmask. This might cause crashes.`);
-                    }
-                    break;
-                case "BaseColor":
-                case "Metalness":
-                case "Roughness":
-                case "Normal":
-                case "GlobalNormal":
-                    if (materialDepotPath && !materialDepotPath.endsWith(".xbm")) {
-                        Logger.Warning(`${materialName}.values[${i}]: ${materialDepotPath} doesn't end in .xbm. This might cause crashes.`);
-                    }
-                    break;
-            }
+            validateMaterialKeyValuePair(key, definedMaterial, `${materialName}.Values[${i}]`, meshSettings.validateMaterialsRecursively)
         });
     }
 }
@@ -736,7 +767,7 @@ function checkMeshMaterialIndices(mesh) {
 
 export function validateMeshFile(mesh, _meshSettings) {
     if (mesh["Data"] && mesh["Data"]["RootChunk"]) {
-        return validateMeshFile(mesh["Data"]["RootChunk"], meshSettings);
+        return validateMeshFile(mesh["Data"]["RootChunk"], _meshSettings);
     }
 
     meshSettings = _meshSettings;
@@ -751,10 +782,11 @@ export function validateMeshFile(mesh, _meshSettings) {
 
             let materialName = "unknown";
 
-            // Add a warning here???
+            // Add a warning here?
             if (i < mesh.materialEntries.length) {
-                materialName = mesh.materialEntries[i].name;
+                materialName = stringifyPotentialCName(mesh.materialEntries[i].name) || materialName;
             }
+
             meshFile_CheckMaterialProperties(material, stringifyPotentialCName(materialName));
         }
     }
@@ -798,6 +830,43 @@ export function validateMeshFile(mesh, _meshSettings) {
 
 //#endregion
 
+
+//#region miFile
+
+/*
+ * ===============================================================================================================
+ *  mi file
+ * ===============================================================================================================
+ */
+    let miSettings = {};
+    export function validateMiFile(mi, _miSettings) {
+        
+        miSettings = _miSettings;
+        _validateMiFile(mi);
+    }
+    
+    function _validateMiFile(mi) {
+        if (mi["Data"] && mi["Data"]["RootChunk"]) {
+            return _validateMiFile(mi["Data"]["RootChunk"]);
+        }
+
+        // check if base material exists
+        checkDepotPath('base material', mi.baseMaterial.DepotPath);
+
+        const values = mi.values || [];
+        for (let i = 0; i < values.length; i++) {
+            let tmp = values[i];
+
+            if (!tmp["$type"].startsWith("rRef:")) {
+                continue;
+            }
+
+            Object.entries(tmp).forEach(([key, definedMaterial]) => {
+                validateMaterialKeyValuePair(key, definedMaterial, `Values[${i}]`, miSettings.validateRecursively);
+            });
+        }
+    }
+//#endregion
 
 //#region csvFile
 

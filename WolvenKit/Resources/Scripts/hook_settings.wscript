@@ -65,7 +65,19 @@ const Settings = {
          */
         checkComponentNameDuplication: false,
     },
-    Mesh: {},
+    Mesh: {
+        /*
+         * Should file validation check materials along the daisy chain? (Only outside of /base) 
+         */
+        validateMaterialsRecursively: true,
+        
+    },
+    Mi: {
+        /*
+         * Should file validation check materials along the daisy chain? (Only outside of /base) 
+         */
+        validateRecursively: true,
+    },
     Workspot: {
         /*
          * Set this to "false" to stop this script from fixing the index order for you.
