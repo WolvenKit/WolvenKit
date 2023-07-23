@@ -38,6 +38,11 @@ const Settings = {
          * e.g. if you're loading different variants from the same app file depending on a tag.
          */
         checkPotentialOverrideCollisions: false,
+        /*
+         * Set this to "false" to disable warnings about cook data (which will cause display errors if 
+         * cookedAppsNulled isn't installed)
+         */
+        checkCookPaths: true,
     },
     Csv: {
         /*

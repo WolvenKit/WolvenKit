@@ -308,8 +308,8 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
         hasUppercasePaths = true;
         return;
     }
-    
-    if (potentialOverrideDepotPath && potentialOverrideDepotPath !== "0") {
+
+    if (appFileSettings.checkCookPaths && potentialOverrideDepotPath && potentialOverrideDepotPath !== "0") {
         Logger.Warning(`${appearanceName} has a cooked data override. Consider deleting it.`);
     }    
 
@@ -416,6 +416,9 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
         appFile_validateAppearance(appearance, i, validateRecursively, validateCollisions);
     }
 
+    if (appFileSettings.checkCookPaths && app.commonCookData && stringifyPotentialCName(app.commonCookData.DepotPath)) {
+        Logger.Warning('CommonCookData found in app file\'s root. Consider deleting it.');
+    }
 
 }
 
@@ -575,7 +578,7 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
         if (null === appFile) {
             Logger.Warning(`File ${appFilePath} is supposed to exist, but couldn't be parsed.`);
         } else {
-            validateAppFile(appFile, true, true);
+            _validateAppFile(appFile, entSettings.validateRecursively, true);
         }
     }
 }
