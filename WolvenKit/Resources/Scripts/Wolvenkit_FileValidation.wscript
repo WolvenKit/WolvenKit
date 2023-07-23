@@ -851,7 +851,7 @@ export function validateMeshFile(mesh, _meshSettings) {
         }
 
         // check if base material exists
-        checkDepotPath('base material', mi.baseMaterial.DepotPath);
+        checkDepotPath(mi.baseMaterial.DepotPath, 'base material');
 
         const values = mi.values || [];
         for (let i = 0; i < values.length; i++) {
