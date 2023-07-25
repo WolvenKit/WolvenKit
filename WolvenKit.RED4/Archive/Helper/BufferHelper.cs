@@ -27,7 +27,11 @@ public static class BufferHelper
         s_bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
         s_bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
 
+        // Save
         s_bufferReaders.Add("gameSavedStatsData.modifiersBuffer", typeof(ModifiersBufferReader));
+
+        // REDmod
+        s_bufferReaders.Add("CMesh.metadata", typeof(CR2WListReader)); // actually just a single one, to lazy...
     }
 
     public static bool TryGetReader(RedBuffer buffer, [NotNullWhen(true)] out IBufferReader? reader)
