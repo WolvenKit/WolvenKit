@@ -99,6 +99,11 @@ public class RedBuffer : IEquatable<RedBuffer>
             return false;
         }
 
+        if (!Equals(Data, other.Data))
+        {
+            return false;
+        }
+
         return true;
     }
 
