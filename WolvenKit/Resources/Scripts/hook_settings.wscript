@@ -1,6 +1,7 @@
 // @version 1.0
 
 const Settings = {
+	Enabled: true,
     Anims: {
         /*
          * Set this to "true" to have the script print all animation names to console
@@ -37,6 +38,11 @@ const Settings = {
          * e.g. if you're loading different variants from the same app file depending on a tag.
          */
         checkPotentialOverrideCollisions: false,
+        /*
+         * Set this to "false" to disable warnings about cook data (which will cause display errors if 
+         * cookedAppsNulled isn't installed)
+         */
+        checkCookPaths: true,
     },
     Csv: {
         /*
@@ -64,7 +70,19 @@ const Settings = {
          */
         checkComponentNameDuplication: false,
     },
-    Mesh: {},
+    Mesh: {
+        /*
+         * Should file validation check materials along the daisy chain? (Only outside of /base) 
+         */
+        validateMaterialsRecursively: true,
+        
+    },
+    Mi: {
+        /*
+         * Should file validation check materials along the daisy chain? (Only outside of /base) 
+         */
+        validateRecursively: true,
+    },
     Workspot: {
         /*
          * Set this to "false" to stop this script from fixing the index order for you.
