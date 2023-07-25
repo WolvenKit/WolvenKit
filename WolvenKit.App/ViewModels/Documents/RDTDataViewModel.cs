@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
@@ -49,7 +50,10 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         if (SelectedChunk == null && Chunks.Count > 0)
         {
             SelectedChunk = Chunks[0];
-            SelectedChunks.Add(Chunks[0]);
+            if (SelectedChunks is IList lst)
+            {
+                lst.Add(Chunks[0]);
+            }
         }
 
         Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
@@ -89,9 +93,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     [ObservableProperty]
     private bool _isEmbeddedFile;
 
-    [ObservableProperty] private ChunkViewModel? _selectedChunk;
+    [ObservableProperty] private object? _selectedChunk;
 
-    [ObservableProperty] private ObservableCollection<ChunkViewModel> _selectedChunks = new ObservableCollection<ChunkViewModel>();
+    [ObservableProperty] private object? _selectedChunks;
 
 
     [ObservableProperty] private ChunkViewModel? _rootChunk;

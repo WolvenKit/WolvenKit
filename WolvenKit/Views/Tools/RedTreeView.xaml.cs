@@ -44,7 +44,14 @@ namespace WolvenKit.Views.Tools
             set => SetValue(SelectedItemProperty, value);
         }
 
-        public object SelectedItems { get; set; } = new();
+        public static readonly DependencyProperty SelectedItemsProperty =
+            DependencyProperty.Register(nameof(SelectedItems), typeof(object), typeof(RedTreeView));
+
+        public object SelectedItems
+        {
+            get => GetValue(SelectedItemsProperty);
+            set => SetValue(SelectedItemsProperty, value);
+        }
 
         /*
 
@@ -74,7 +81,7 @@ namespace WolvenKit.Views.Tools
         private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
         {
             //Locator.Current.GetService<ILoggerService>().Success($"Selected item : {SelectedItems}");
-
+            
         }
 
         public async void OnCollapsed(object sender, Syncfusion.UI.Xaml.TreeView.NodeExpandedCollapsedEventArgs e)

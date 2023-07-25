@@ -1541,14 +1541,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanCopySelection))]
     private void CopySelection()
     {
-        ArgumentNullException.ThrowIfNull(Parent);
+        if (Parent is not { } || Tab is not { SelectedChunks: IList lst })
+        {
+            return;
+        }
 
         try
         {
-            var ts = Parent.DisplayProperties
-                            .Where(_ => _.IsSelected)
-                            .Select(_ => _)
-                            .ToList();
+            var ts = Parent.DisplayProperties.Where(property => lst.Contains(property)).ToList();
 
             var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
 
