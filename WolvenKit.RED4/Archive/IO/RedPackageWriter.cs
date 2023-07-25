@@ -45,7 +45,7 @@ public partial class RedPackageWriter : Red4Writer
         var typeInfo = RedReflection.GetTypeInfo(cls);
 
         var nonDefaultProperties = new List<ExtendedPropertyInfo>();
-        foreach (var propertyInfo in typeInfo.GetWritableProperties())
+        foreach (var propertyInfo in cls.GetWritableProperties())
         {
             ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
 

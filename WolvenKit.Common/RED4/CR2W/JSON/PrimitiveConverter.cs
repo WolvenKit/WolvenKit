@@ -655,7 +655,31 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
             var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key);
             if (valInfo == null)
             {
-                throw new JsonException();
+                reader.Read();
+
+                if (reader.TokenType != JsonTokenType.StartObject)
+                {
+                    throw new JsonException();
+                }
+
+                reader.Read();
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException();
+                }
+                propertyName = reader.GetString();
+                if (propertyName != "$type")
+                {
+                    throw new JsonException();
+                }
+                reader.Read();
+
+                var propertyTypeStr = reader.GetString().NotNull();
+                var (propertyType, _) = RedReflection.GetCSTypeFromRedType(propertyTypeStr);
+                valInfo = cls.AddDynamicProperty(key, propertyType);
+
+                reader.Read();
             }
 
             object? val;
@@ -690,7 +714,12 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
                 val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
             }
 
-            if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), valInfo.RedName!, val))
+            if (valInfo.IsDynamic)
+            {
+                reader.Read();
+            }
+
+            if (!typeInfo.SerializeDefault && valInfo.IsDefault(val))
             {
                 continue;
             }
@@ -716,6 +745,27 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
             {
                 writer.WritePropertyName(propertyInfo.RedName);
                 JsonSerializer.Serialize(writer, (object?)value.GetProperty(propertyInfo.RedName), options);
+            }
+            else if (propertyInfo is { Name: { } })
+            {
+                //Locator.Current.GetService<ILoggerService>()?.Error($"propertyInfo was null i guess");
+            }
+        }
+
+        foreach (var propertyInfo in value.GetDynamicProperties().OrderBy(x => x.RedName))
+        {
+            if (propertyInfo.RedName is not null)
+            {
+                writer.WritePropertyName(propertyInfo.RedName);
+
+                writer.WriteStartObject();
+
+                writer.WriteString("$type", propertyInfo.RedType);
+
+                writer.WritePropertyName("$value");
+                JsonSerializer.Serialize(writer, (object?)value.GetProperty(propertyInfo.RedName), options);
+
+                writer.WriteEndObject();
             }
             else if (propertyInfo is { Name: { } })
             {

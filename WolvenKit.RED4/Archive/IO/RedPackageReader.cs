@@ -41,7 +41,7 @@ public partial class RedPackageReader : Red4Reader
             var prop = typeInfo.GetPropertyInfoByRedName(varName!);
             if (prop == null)
             {
-                prop = typeInfo.AddDynamicProperty(varName!, typeName!);
+                prop = cls.AddDynamicProperty(varName!, fieldType);
             }
 
             IRedType? value;

@@ -100,7 +100,7 @@ public partial class CR2WReader : Red4Reader
         var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varName!);
         if (prop == null)
         {
-            prop = typeInfo.AddDynamicProperty(varName!, typename!);
+            prop = cls.AddDynamicProperty(varName!, type);
         }
 
         if (prop.IsDynamic)
@@ -126,7 +126,7 @@ public partial class CR2WReader : Red4Reader
                 value = args.Value;
             }
 
-            if (!typeInfo.SerializeDefault && !prop.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varName!, value))
+            if (!typeInfo.SerializeDefault && !prop.SerializeDefault && prop.IsDefault(value))
             {
                 var args = new InvalidDefaultValueEventArgs();
                 if (!HandleParsingError(args))
