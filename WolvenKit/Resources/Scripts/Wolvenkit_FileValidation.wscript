@@ -746,7 +746,7 @@ function checkMeshMaterialIndices(mesh) {
         // Put all material names into a list - we'll use it to verify the appearances later
         let name = stringifyPotentialCName(materialEntry.name);
         
-        if (name in materialNames) {
+        if (name in materialNames && !PLACEHOLDER_NAME_REGEX.test(name)) {
             Logger.Warning(`materialEntries[${i}] (${name}) is already defined in materialEntries[${materialNames[name]}]`);
         } else {
             materialNames[name] = i;
