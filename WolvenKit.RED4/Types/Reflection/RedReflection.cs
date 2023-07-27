@@ -12,6 +12,7 @@ public static class RedReflection
     private static readonly Dictionary<Type, string> s_redTypeCacheReverse = new();
 
     private static readonly Dictionary<string, ExtendedEnumInfo> s_redEnumCache = new();
+    private static readonly Dictionary<Type, ExtendedEnumInfo> s_enumInfoCache = new();
 
     private static readonly ConcurrentDictionary<Type, ExtendedTypeInfo> s_typeInfoCache = new();
     private static readonly ConcurrentDictionary<string, ExtendedTypeInfo> s_dynamicTypeInfoCache = new();
@@ -128,10 +129,10 @@ public static class RedReflection
         return null;
     }
 
-    public static string GetEnumRedName(Type type) => s_redEnumCache.FirstOrDefault(t => t.Value.Type == type).Key;
-
     public static ExtendedEnumInfo GetEnumTypeInfo(Type type) =>
-        s_redEnumCache.TryGetValue(type.Name, out var info) ? info : throw new NotSupportedException(type.Name);
+        s_enumInfoCache.TryGetValue(type, out var info) ? info : throw new NotSupportedException(type.Name);
+
+    public static string GetEnumRedName(Type type) => GetEnumTypeInfo(type).RedName;
 
     public static (Type type, Flags flags) GetCSTypeFromRedType(string redTypeName)
     {
@@ -353,7 +354,8 @@ public static class RedReflection
     {
         if (type.IsEnum)
         {
-            return s_redEnumCache.TryAdd(type.Name, new ExtendedEnumInfo(type));
+            var enumInfo = new ExtendedEnumInfo(type);
+            return s_redEnumCache.TryAdd(enumInfo.RedName, enumInfo) && s_enumInfoCache.TryAdd(type, enumInfo);
         }
 
         return false;

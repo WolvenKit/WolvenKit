@@ -9,6 +9,13 @@ public class ExtendedEnumInfo
         Type = type;
         IsBitfield = type.GetCustomAttribute<FlagsAttribute>() != null;
 
+        RedName = type.Name;
+        var redAttr = type.GetCustomAttribute<REDAttribute>();
+        if (redAttr != null)
+        {
+            RedName = redAttr.Name;
+        }
+
         if (!IsBitfield)
         {
             var val = (Enum)System.Activator.CreateInstance(Type)!;
@@ -29,10 +36,10 @@ public class ExtendedEnumInfo
             }
 
             var member = Type.GetMember(valueName);
-            var redAttr = member[0].GetCustomAttribute<REDAttribute>();
-            if (redAttr != null)
+            var redAttr2 = member[0].GetCustomAttribute<REDAttribute>();
+            if (redAttr2 != null)
             {
-                RedNames.Add(redAttr.Name, valueName);
+                RedNames.Add(redAttr2.Name, valueName);
             }
         }
 
@@ -44,6 +51,8 @@ public class ExtendedEnumInfo
 
     public Type Type { get; set; }
     public bool IsBitfield { get; set; }
+
+    public string RedName { get; set; }
 
     public List<string> Names { get; set; } = new();
     public Dictionary<string, string> RedNames { get; set; } = new();
