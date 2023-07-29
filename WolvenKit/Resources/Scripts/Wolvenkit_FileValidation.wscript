@@ -706,6 +706,12 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
     }
 }
 function meshFile_CheckMaterialProperties(material, materialName) {
+    const baseMaterial = stringifyPotentialCName(material.baseMaterial.DepotPath);
+    if (!baseMaterial) {
+        Logger.Warning(`${materialName}: base material is empty`);
+    } else if (!(baseMaterial.endsWith('.mi') || baseMaterial.endsWith('.mt') || baseMaterial.endsWith('.remt'))) {
+        Logger.Warning(`${materialName}: base material might be invalid (not ending in .mi, .mt or .remt)`);
+    }
     for (let i = 0; i < material.values.length; i++) {
         let tmp = material.values[i];
 
