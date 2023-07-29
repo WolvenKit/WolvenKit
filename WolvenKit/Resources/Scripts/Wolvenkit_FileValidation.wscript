@@ -666,6 +666,8 @@ let meshSettings = {};
 let materialNames = {};
 let localIndexList = [];
 
+// if checkDuplicateMlSetupFilePaths is used: warn user if duplicates exist in list
+let listOfUsedMaterialSetups = {};
 
 /**
  * Shared for .mesh and .mi files: will validate an entry of the values array of a material definition
@@ -704,7 +706,18 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
     switch (key) {
         case "MultilayerSetup":
             if (!materialDepotPath.endsWith(".mlsetup")) {
-                Logger.Error(`${info}${materialValue.DepotPath.value} doesn't end in .mlsetup. This will cause crashes.`);
+                Logger.Error(`${info}${materialDepotPath} doesn't end in .mlsetup. This will cause crashes.`);
+            }
+            if (meshSettings.checkDuplicateMlSetupFilePaths) {
+                listOfUsedMaterialSetups[materialDepotPath] ||= [];
+                 
+                 
+                if (listOfUsedMaterialSetups[materialDepotPath].length > 0) {
+                    Logger.Warning(`${info} uses the same .mlsetup as (a) previous material(s): [ ${
+                        listOfUsedMaterialSetups[materialDepotPath].join(", ")
+                    } ]`)                    
+                }
+                listOfUsedMaterialSetups[materialDepotPath].push(info);
             }
             break;
         case "MultilayerMask":
@@ -740,7 +753,9 @@ function meshFile_CheckMaterialProperties(material, materialName) {
         }
 
         Object.entries(tmp).forEach(([key, definedMaterial]) => {
-            validateMaterialKeyValuePair(key, definedMaterial, `${materialName}.Values[${i}]`, meshSettings.validateMaterialsRecursively)
+            if (!PLACEHOLDER_NAME_REGEX.test(materialName)) {
+                validateMaterialKeyValuePair(key, definedMaterial, `${materialName}.Values[${i}]`, meshSettings.validateMaterialsRecursively);                
+            }
         });
     }
 }

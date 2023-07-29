@@ -76,6 +76,10 @@ const Settings = {
          */
         validateMaterialsRecursively: true,
         
+        /*
+         * Should file validation warn you if two of your materials use the same mlsetup?
+         */
+        checkDuplicateMlSetupFilePaths: true,        
     },
     Mi: {
         /*
