@@ -37,29 +37,47 @@ function stringifyPotentialCName(cnameOrString) {
 function checkDepotPath(depotPath, info) {
     // Don't validate if uppercase file names are present
     if (hasUppercasePaths) {
-        return;
+        return false;
     }
     const _depotPathString = stringifyPotentialCName(depotPath) || '';
     if (!_depotPathString) {
         Logger.Warning(`${info}: DepotPath not set`);
-        return;
+        return false;
     }
     
     // check if the path has uppercase characters
     if (/[A-Z]/.test(_depotPathString)) {
         hasUppercasePaths = true;
-        return;
+        return false;
     }
 
     // Check if the file is a numeric hash
     if (/^\d+$/.test(_depotPathString)) {
         Logger.Warning(`${info}: No depot path set, only hash given`);
-        return;
+        return false;
     }
     
     // Check if the file exists
     if (!wkit.FileExists(_depotPathString)) {
         Logger.Warning(`${info}: ${_depotPathString} not found in project or game files`);
+        return false;
+    }
+    return true;
+}
+
+const validMaterialFileExtensions = [ '.mi', '.mt', '.remt' ];
+function validateShaderTemplate(depotPath, _info) {
+    if (!checkDepotPath(depotPath, _info)) {
+        return;
+    }
+    
+    // shouldn't be falsy, checkDepotPath should take care of that, but better safe than sorry
+    const basePathString = stringifyPotentialCName(depotPath) || '';
+    
+    const extensionParts = basePathString.match(/[^.]+$/);
+    
+    if (!extensionParts || validMaterialFileExtensions.includes(extensionParts[0])) {
+        Logger.Warning(`${_info ? `${_info}: ` : ''}Invalid base material: ${basePathString}`);
     }
 }
 export let hasUppercasePaths = false;
@@ -707,11 +725,11 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
 }
 function meshFile_CheckMaterialProperties(material, materialName) {
     const baseMaterial = stringifyPotentialCName(material.baseMaterial.DepotPath);
-    if (!baseMaterial) {
-        Logger.Warning(`${materialName}: base material is empty`);
-    } else if (!(baseMaterial.endsWith('.mi') || baseMaterial.endsWith('.mt') || baseMaterial.endsWith('.remt'))) {
-        Logger.Warning(`${materialName}: base material might be invalid (not ending in .mi, .mt or .remt)`);
-    }
+    
+    if (checkDepotPath(baseMaterial)) {
+        validateShaderTemplate(baseMaterial, materialName);
+    } 
+    
     for (let i = 0; i < material.values.length; i++) {
         let tmp = material.values[i];
 
@@ -851,16 +869,15 @@ export function validateMeshFile(mesh, _meshSettings) {
     export function validateMiFile(mi, _miSettings) {
         
         miSettings = _miSettings;
-        _validateMiFile(mi);
+        _validateMiFile(mi, '');
     }
     
-    function _validateMiFile(mi) {
+    function _validateMiFile(mi, debugInfo) {
         if (mi["Data"] && mi["Data"]["RootChunk"]) {
             return _validateMiFile(mi["Data"]["RootChunk"]);
         }
-
-        // check if base material exists
-        checkDepotPath(mi.baseMaterial.DepotPath, 'base material');
+        
+        validateShaderTemplate(mi.baseMaterial.DepotPath, debugInfo);
 
         const values = mi.values || [];
         for (let i = 0; i < values.length; i++) {
