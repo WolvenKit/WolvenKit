@@ -406,6 +406,18 @@ public partial class CR2WWriter
 
             buffer.SetBytes(newData);
         }
+
+        if (buffer.Data is FoliageBuffer foliageBuffer)
+        {
+            using var ms = new MemoryStream();
+            using var foliageWriter = new FoliageWriter(ms);
+
+            foliageWriter.WriteBuffer(foliageBuffer);
+
+            var newData = ms.ToArray();
+
+            buffer.SetBytes(newData);
+        }
     }
 
     private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)
