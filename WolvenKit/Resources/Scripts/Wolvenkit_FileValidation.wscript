@@ -56,13 +56,19 @@ function checkDepotPath(depotPath, info) {
         Logger.Warning(`${info}: No depot path set, only hash given`);
         return false;
     }
+
+    // ArchiveXL 1.5 variant magic requires checking this in a loop
+    const componentMeshPaths = getArchiveXlMeshPaths(stringifyPotentialCName(_depotPathString));
+    let ret = true;
     
-    // Check if the file exists
-    if (!wkit.FileExists(_depotPathString)) {
-        Logger.Warning(`${info}: ${_depotPathString} not found in project or game files`);
-        return false;
-    }
-    return true;
+    componentMeshPaths.forEach((resolvedMeshPath) => {
+        // Check if the file exists
+        if (!wkit.FileExists(resolvedMeshPath)) {
+            Logger.Warning(`${info}: ${resolvedMeshPath} not found in project or game files`);
+            ret = false;
+        }       
+    })
+    return ret;
 }
 
 const validMaterialFileExtensions = [ '.mi', '.mt', '.remt' ];
@@ -276,7 +282,10 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
         } else if (meshPath && !hasUppercasePaths) {            
             const appearanceNames = component_collectAppearancesFromMesh(meshPath);
             const meshAppearanceName = stringifyPotentialCName(componentOverride.meshAppearance);
-            if (appearanceNames && appearanceNames.length > 1 && !appearanceNames.includes(meshAppearanceName) && !componentOverrideCollisions.includes(meshAppearanceName)) {
+            if (meshAppearanceName.startsWith('*')) {
+                // TODO: ArchiveXL variant checking
+            } else if (!appearanceNames && appearanceNames.length > 1 && !appearanceNames.includes(meshAppearanceName) && !componentOverrideCollisions.includes(meshAppearanceName)
+            ) {
                 Logger.Warning(`${appearanceName}.partsOverrides[${index}]: Appearance ${meshAppearanceName} not found in '${meshPath}'`);
             }
         }
@@ -332,7 +341,7 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
     }    
 
     if (alreadyDefinedAppearanceNames.includes(appearanceName)) {
-        Logger.Warning(`An appearance with the name ${appearanceName} is already defined in .app file`);
+        Logger.Warning(`.app file: An appearance with the name ${appearanceName} is already defined in .app file`);
     } else {
         alreadyDefinedAppearanceNames.push(appearanceName);
     }
@@ -442,6 +451,48 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
 
 //#endregion
 
+const ARCHIVE_XL_VARIANT_INDICATOR = '*';
+
+// TODO read ArchiveXL stuff from yaml
+
+/**
+ * A list of yaml file paths with an array of all variants
+ * [ key: string ]: { 0: [], 1: [], 2: [] }
+ */
+const yamlFilesAndVariants = {};
+function getVariantsFromYaml() {
+    const variants = [];
+}
+
+function getArchiveXLVariantComponentNames() {
+    
+}
+
+const archiveXLVarsAndValues = {
+    '{gender}': ['m', 'w'],
+    '{camera}': ['fpp', 'tpp'],
+    '{legs_state}': ['lifted', 'flat', 'high_heels', 'flat_shoes'],
+}
+
+function getArchiveXlMeshPaths(depotPath) {
+    let paths = [];
+    if (!depotPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR) || !depotPath.includes('{')) {
+        paths.push(depotPath);
+        return paths;
+    }    
+    Object.keys(archiveXLVarsAndValues).forEach((variantFlag) => {
+        if (depotPath.includes(variantFlag)) {
+            archiveXLVarsAndValues[variantFlag].forEach((variantReplacement) => {
+                paths.push(depotPath.replace(variantFlag, variantReplacement));    
+            });            
+        }   
+    });
+    let ret = [];
+    paths.forEach((path) => {
+        ret = [...ret, ...getArchiveXlMeshPaths(path)];
+    })
+    return ret.map((path) => path.replace('*', ''));
+}
 
 //#region entFile
 
@@ -477,36 +528,41 @@ function entFile_validateComponent(component, _index, validateRecursively) {
         return;
     }
     
-    const componentMeshPath = stringifyPotentialCName(component.mesh.DepotPath);
-    
-    // check for component name uniqueness
-    if (meshesByComponentName[componentName] && meshesByComponentName[componentName] !== componentMeshPath) {
-        componentNameCollisions[componentMeshPath] = componentName;
-        componentNameCollisions[meshesByComponentName[componentName]] = componentName;
-    }
-    
-    meshesByComponentName[componentName] = componentMeshPath;
+    const componentMeshPaths = getArchiveXlMeshPaths(stringifyPotentialCName(component.mesh.DepotPath));
 
-    if (/^\d+$/.test(componentMeshPath)) {
-        return;
-    }
-    if (/[A-Z]/.test(componentMeshPath)) {
-        hasUppercasePaths = true;
-        return;
-    }
+    componentMeshPaths.forEach((componentMeshPath) => {
+        
+        // check for component name uniqueness
+        if (meshesByComponentName[componentName] && meshesByComponentName[componentName] !== componentMeshPath) {
+            componentNameCollisions[componentMeshPath] = componentName;
+            componentNameCollisions[meshesByComponentName[componentName]] = componentName;
+        }
+        
+        meshesByComponentName[componentName] = componentMeshPath;
     
-    const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);    
-    if (!meshAppearances) { // for debugging
-        // Logger.Error(`failed to collect appearances from ${componentMeshPath}`);
-        return;
-    }
-
-    if (meshAppearances && meshAppearances.length > 0 && !meshAppearances.includes(stringifyPotentialCName(component.meshAppearance))) {
-        Logger.Warning(`ent component[${_index}] (${componentName}): Appearance ${component.meshAppearance} not found in '${componentMeshPath}', ([ ${
-            meshAppearances.join(", ")            
-        } ])`);
-    }
-
+        if (/^\d+$/.test(componentMeshPath)) {
+            return;
+        }
+        if (/[A-Z]/.test(componentMeshPath)) {
+            hasUppercasePaths = true;
+            return;
+        }
+        
+        const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);    
+        if (!meshAppearances) { // for debugging
+            // Logger.Error(`failed to collect appearances from ${componentMeshPath}`);
+            return;
+        }
+    
+        const meshAppearanceName = stringifyPotentialCName(component.meshAppearance);
+        if (meshAppearanceName.startsWith('*')) {
+            // TODO: ArchiveXL variant checking
+        } else if (meshAppearances && meshAppearances.length > 0 && !meshAppearances.includes(meshAppearanceName)) {
+            Logger.Warning(`ent component[${_index}] (${componentName}): Appearance ${component.meshAppearance} not found in '${componentMeshPath}', ([ ${
+                meshAppearances.join(", ")            
+            } ])`);
+        }
+    })
 }
 
 // Map: app file depot path name to defined appearances
@@ -545,8 +601,8 @@ const alreadyDefinedAppearanceNames = [];
 function entFile_validateAppearance(appearance, index, isRootEntity) {
 
     const appearanceName = stringifyPotentialCName(appearance.name) || '';
-    const appearanceNameInAppFile = stringifyPotentialCName(appearance.appearanceName) || '';
-    
+    let appearanceNameInAppFile = (stringifyPotentialCName(appearance.appearanceName) || '').trim() || appearanceName;
+        
     // ignore separator appearances such as
     // =============================
     // -----------------------------
@@ -554,10 +610,12 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
         return;
     }
 
-    if (alreadyDefinedAppearanceNames.includes(appearanceName)) {
-        Logger.Warning(`An appearance with the name ${appearanceName} is already defined`);
+    if (!!appearanceName && alreadyDefinedAppearanceNames.includes(`ent_${appearanceName}`)) {
+        Logger.Warning(`.ent file: An appearance with the name ${appearanceName} is already defined`);
+    } else {
+        alreadyDefinedAppearanceNames.push(`ent_${appearanceName}`);        
     }
-    alreadyDefinedAppearanceNames.push(appearanceName);
+    
 
     const appFilePath = stringifyPotentialCName(appearance.appearanceResource.DepotPath);
     if (/[A-Z]/.test(appFilePath)) {
