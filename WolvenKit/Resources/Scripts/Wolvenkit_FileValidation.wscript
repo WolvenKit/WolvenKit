@@ -166,11 +166,75 @@ export function validateAnimationFile(animAnimSet, _animAnimSettings) {
 // map: { 'path/to/file.mesh': ['default', 'red', 'black'] };
 const appearanceNamesByMeshFile = {};
 
+// map: { 'path/to/file.mesh', [ 'not_found1', 'not_found2' ] }
+let invalidVariantAndSubstitutions = {};
+
+/*
+ * appearance collection: gather data and print them in one block rather than spamming when they're found
+ */
+// map: { 'path/to/file.mesh', [ 'not_found1', 'not_found2' ] }
+let meshAppearancesNotFound = {};
+
+// map: { 'path/to/file.mesh', [ 'component_with_broken_appearance1', 'component_with_broken_appearance2' ] }
+let meshAppearancesNotFoundByComponent = {};
+/*
+ * /appearance collection
+ */
+
+function printInvalidAppearanceWarningIfFound() {
+    const warningKeys = Object.keys(meshAppearancesNotFoundByComponent) || [];
+    if (!warningKeys.length) { 
+        return;
+    }    
+    Logger.Warning('Mesh appearances not found. Here\'s a list:');
+    warningKeys.forEach((meshPath) => {
+        const componentNames = meshAppearancesNotFoundByComponent[meshPath] || [];
+        const appearanceNames = meshAppearancesNotFound[meshPath] || [];
+
+        const definedAppearances = component_collectAppearancesFromMesh(meshPath).join(', ')
+        Logger.Warning(`${meshPath} with the appearances [ ${definedAppearances} }`);
+        
+        // print as table
+        Logger.Warning(`  ${'Source'.padEnd(50, ' ')} | Appearance`);
+        // print table entries
+        for (let i = componentNames.length; i > 0; i -= 1) {
+            const calledFrom = componentNames.pop();
+            const appearanceName = appearanceNames.pop();
+            Logger.Warning(`  ${calledFrom.padEnd(50, ' ')} | ${appearanceName}`);
+        }
+
+    })
+}
+
+function printSubstitutionWarningsIfFound() {
+    const warningKeys = Object.keys(invalidVariantAndSubstitutions) || [];
+    if (!warningKeys.length) {
+        return;
+    }
+
+    Logger.Info('Some of your components seem to include ArchiveXL dynamic variants, but they may have errors:');
+    warningKeys.forEach((warningSource) => {
+        const warnings = (invalidVariantAndSubstitutions[warningSource] || []).filter(function(item, pos, self) {
+            return self.indexOf(item) === pos;
+        });
+        if (warnings.length) {
+            Logger.Warning(`${warningSource}:`);
+            const output = warnings.length <= 1 ? `[ ${warnings} ]` : `[\n  ${warnings.join(',\n ')}\n]`
+            Logger.Warning(output);
+        }
+    });
+    
+}
+
+
 // map: { 'myComponent4711': 'path/to/file.mesh' };
 let meshesByComponentName = {};
 
 // map: { 'base/mana/mesh_entity.ent': ['path/to/file.mesh', 'path_to_other_file.mesh'] };
 let meshesByEntityPath = {};
+
+let isInvalidVariantComponent = false;
+
 
 /* map: {
  *	'path/to/file.mesh':  'myComponent4711',
@@ -234,6 +298,7 @@ function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursive
         // fileExists has been checked in validatePartsOverride
         const entity = TypeHelper.JsonParse(fileContent);
         const components = entity && entity.Data && entity.Data.RootChunk ? entity.Data.RootChunk.components || [] : [];
+        isInvalidVariantComponent = false;
         for (let i = 0; i < components.length; i++) {
             const component = components[i];
             entFile_validateComponent(component, i, validateRecursively);
@@ -248,6 +313,18 @@ function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursive
     
     meshesByEntityPath[entityDepotPath] = meshesInEntityFile;
 
+}
+
+function appearanceNotFound(meshPath, meshAppearanceName, calledFrom) {
+    meshAppearancesNotFound[meshPath] ||= [];
+    meshAppearancesNotFound[meshPath].push(meshAppearanceName);
+    
+    meshAppearancesNotFoundByComponent[meshPath] ||= [];
+    meshAppearancesNotFoundByComponent[meshPath].push(calledFrom);
+}
+
+function resetAppearanceNotFoundLookup() {
+    
 }
 
 function appFile_validatePartsOverride(override, index, appearanceName) {
@@ -284,9 +361,9 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
             const meshAppearanceName = stringifyPotentialCName(componentOverride.meshAppearance);
             if (meshAppearanceName.startsWith('*')) {
                 // TODO: ArchiveXL variant checking
-            } else if (!appearanceNames && appearanceNames.length > 1 && !appearanceNames.includes(meshAppearanceName) && !componentOverrideCollisions.includes(meshAppearanceName)
-            ) {
-                Logger.Warning(`${appearanceName}.partsOverrides[${index}]: Appearance ${meshAppearanceName} not found in '${meshPath}'`);
+            } else if ((appearanceNames || []).length > 1 && !appearanceNames.includes(meshAppearanceName) && !componentOverrideCollisions.includes(meshAppearanceName)
+            ) {               
+                appearanceNotFound(meshPath, meshAppearanceName, `${appearanceName}.partsOverrides[${index}]`);
             }
         }
     }
@@ -438,6 +515,11 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
         return _validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
     }
 
+    invalidVariantAndSubstitutions = {};
+    
+    meshAppearancesNotFound = {};
+    meshAppearancesNotFoundByComponent = {};
+
     for (let i = 0; i < app.appearances.length; i++) {
         const appearance = app.appearances[i];
         appFile_validateAppearance(appearance, i, validateRecursively, validateCollisions);
@@ -446,6 +528,11 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
     if (appFileSettings.checkCookPaths && app.commonCookData && stringifyPotentialCName(app.commonCookData.DepotPath)) {
         Logger.Warning('CommonCookData found in app file\'s root. Consider deleting it.');
     }
+
+    if (appFileSettings.validateRecursively) {
+        printInvalidAppearanceWarningIfFound();
+    }
+
 
 }
 
@@ -504,6 +591,8 @@ function entFile_validateComponent(component, _index, validateRecursively) {
     const componentName = stringifyPotentialCName(component.name) ?? '';
     let type = component.$type || '';
     
+    const info = `ent component[${_index}] (${componentName})`;
+    
     // entGarmentSkinnedMeshComponent - entSkinnedMeshComponent - entMeshComponent
     if (component && component.mesh && component.mesh.DepotPath) {
         type = WITH_MESH;
@@ -547,20 +636,27 @@ function entFile_validateComponent(component, _index, validateRecursively) {
             hasUppercasePaths = true;
             return;
         }
+
+        // ArchiveXL: Check for invalid component substitution
         
-        const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);    
+        const meshAppearanceName = stringifyPotentialCName(component.meshAppearance);
+        if (meshAppearanceName && meshAppearanceName.includes("{") && !meshAppearanceName.startsWith("*")) {
+            invalidVariantAndSubstitutions[info] ||= [];
+            invalidVariantAndSubstitutions[info].push(`meshAppearance: ${meshAppearanceName}`);
+        }
+        if (componentMeshPath && componentMeshPath.includes('{') && !componentMeshPath.startsWith('*')) {
+            invalidVariantAndSubstitutions[info].push(`DepotPath: ${componentMeshPath}`);
+        }
+        
+        const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);
         if (!meshAppearances) { // for debugging
             // Logger.Error(`failed to collect appearances from ${componentMeshPath}`);
             return;
         }
-    
-        const meshAppearanceName = stringifyPotentialCName(component.meshAppearance);
         if (meshAppearanceName.startsWith('*')) {
             // TODO: ArchiveXL variant checking
         } else if (meshAppearances && meshAppearances.length > 0 && !meshAppearances.includes(meshAppearanceName)) {
-            Logger.Warning(`ent component[${_index}] (${componentName}): Appearance ${component.meshAppearance} not found in '${componentMeshPath}', ([ ${
-                meshAppearances.join(", ")            
-            } ])`);
+            appearanceNotFound(componentMeshPath, meshAppearanceName, `ent component[${_index}] (${componentName})`);            
         }
     })
 }
@@ -675,12 +771,21 @@ export function validateEntFile(ent, _entSettings) {
 
     const allComponentNames = [];
     const duplicateComponentNames = [];
+
+    invalidVariantAndSubstitutions = {};
+    meshAppearancesNotFound = {};
+    meshAppearancesNotFoundByComponent = {}; 
     
     for (let i = 0; i < ent.components.length; i++) {
         const component = ent.components[i];
         const componentName = stringifyPotentialCName(component.name);
         entFile_validateComponent(component, i, _entSettings.validateRecursively);
         (allComponentNames.includes(componentName) ? duplicateComponentNames : allComponentNames).push(componentName);
+    }
+    
+    if (entSettings.validateRecursively) {
+        printInvalidAppearanceWarningIfFound();
+        printSubstitutionWarningsIfFound();
     }
     
     if (_entSettings.checkComponentNameDuplication && duplicateComponentNames.length > 0) {
