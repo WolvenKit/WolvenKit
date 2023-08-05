@@ -582,8 +582,9 @@ function getArchiveXlMeshPaths(depotPath) {
 }
 
 //#region entFile
-
 let entSettings = {};
+
+let hasEmptyAppearanceName = false;
 
 const WITH_MESH = 'withMesh';
 // For different component types, check DepotPath property
@@ -696,8 +697,13 @@ const alreadyDefinedAppearanceNames = [];
  */
 function entFile_validateAppearance(appearance, index, isRootEntity) {
 
-    const appearanceName = stringifyPotentialCName(appearance.name) || '';
-    let appearanceNameInAppFile = (stringifyPotentialCName(appearance.appearanceName) || '').trim() || appearanceName;
+    const appearanceName = (stringifyPotentialCName(appearance.name) || '');
+    let appearanceNameInAppFile = (stringifyPotentialCName(appearance.appearanceName) || '').trim()
+    if (!appearanceNameInAppFile || appearanceNameInAppFile === 'None') {
+        appearanceNameInAppFile = appearanceName;
+        hasEmptyAppearanceName = true;
+    }
+    
         
     // ignore separator appearances such as
     // =============================
@@ -712,7 +718,6 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
         alreadyDefinedAppearanceNames.push(`ent_${appearanceName}`);        
     }
     
-
     const appFilePath = stringifyPotentialCName(appearance.appearanceResource.DepotPath);
     if (/[A-Z]/.test(appFilePath)) {
         hasUppercasePaths = true;
@@ -798,6 +803,8 @@ export function validateEntFile(ent, _entSettings) {
     alreadyDefinedAppearanceNames.length = 0;
     alreadyVerifiedAppFiles.length = 0;
     
+    hasEmptyAppearanceName = false;
+    
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
         entFile_validateAppearance(appearance, i, !entSettings.skipRootEntityCheck);
@@ -809,9 +816,19 @@ export function validateEntFile(ent, _entSettings) {
     for (let i = 0; i < ent.resolvedDependencies.length; i++) {
         checkDepotPath(ent.resolvedDependencies[i].DepotPath, `resolvedDependencies[${i}]`);
     }
+    
+    if (entSettings.checkDynamicAppearanceTag && hasEmptyAppearanceName) {
+        const visualTagList = ent.visualTagsSchema?.Data?.visualTags?.tags || [];
+        // Do we have a visual tag 'DynamicAppearance'?
+        if (!visualTagList.map((tag) => stringifyPotentialCName(tag)).includes('DynamicAppearance')) {
+            Logger.Info('If you are using dynamic appearances, you need to add the DynamicAppearance visualTag to the root entity.'
+            + ' If you don\'t know what that means, check if your appearance names are empty or "None".' + 
+                ' If everything is fine, ignore this warning.');            
+        }
+    }
 
     isDataChangedForWriting = _isDataChangedForWriting;
-};
+}
 
 //#endregion
 

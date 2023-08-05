@@ -69,6 +69,12 @@ const Settings = {
          * e.g. "] The following components are defined more than once: [ pants_black ]"
          */
         checkComponentNameDuplication: false,
+        
+        /*
+         * Set this to "false" to disable warnings about the dynamic appearance tag
+         * in the root entity (if you don't want to use ArchiveXL >= 1.5's dynamic appearances
+         */
+        checkDynamicAppearanceTag: true,
     },
     Mesh: {
         /*
