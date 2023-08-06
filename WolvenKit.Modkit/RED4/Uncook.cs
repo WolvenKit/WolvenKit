@@ -497,15 +497,13 @@ namespace WolvenKit.Modkit.RED4
 
                         // convert if needed else save to file
                         var ddsPath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
-                        if (xbmargs.UncookExtension != EUncookExtension.dds)
+                        if (xbmargs.UncookExtension != EUncookExtension.dds || xbmargs.Flip)
                         {
                             ms.Seek(0, SeekOrigin.Begin);
                             return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs, decompressedFormat);
                         }
                         else
                         {
-                            //TODO: flip dds
-
                             using var fs = new FileStream(ddsPath, FileMode.Create, FileAccess.Write);
                             ms.Seek(0, SeekOrigin.Begin);
                             ms.CopyTo(fs);

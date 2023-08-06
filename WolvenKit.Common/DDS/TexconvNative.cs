@@ -78,6 +78,7 @@ public static class TexconvNative
     }
     public enum ESaveFileTypes
     {
+        DDS,
         BMP,
         JPEG,
         PNG,
