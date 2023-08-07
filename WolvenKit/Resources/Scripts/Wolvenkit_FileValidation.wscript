@@ -760,6 +760,28 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
     }
 }
 
+function validateAppearanceNameSuffixes(appearanceName, entAppearanceNames) {
+    if (!appearanceName || !appearanceName.includes('&')) {
+        return;
+    }    
+    if (appearanceName.includes('FPP') && !entAppearanceNames.includes(appearanceName.replace('FPP', 'TPP'))) {
+        Logger.Warning(`${appearanceName}: You have not defined a third person appearance.`)
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:TPP" or define "${appearanceName.replace('FPP', 'TPP')}" and point it to an empty appearance in the .app file.`);
+    }
+    if (appearanceName.includes('TPP') && !entAppearanceNames.includes(appearanceName.replace('TPP', 'FPP'))) {
+        Logger.Warning(`${appearanceName}: You have not defined a first person appearance.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:FPP" or define "${appearanceName.replace('TPP', 'FPP')}" and point it to an empty appearance in the .app file.`);
+    }
+    if (appearanceName.includes('Male') && !entAppearanceNames.includes(appearanceName.replace('Male', 'Female'))) {
+        Logger.Warning(`${appearanceName}: You have not defined a female variant.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Male', 'Female')}" and point it to an empty appearance in the .app file.`);
+    }
+    if (appearanceName.includes('Female') && !entAppearanceNames.includes(appearanceName.replace('Female', 'Male'))) {
+        Logger.Warning(`${appearanceName}: You have not defined a male variant.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Female', 'Male')}" and point it to an empty appearance in the .app file.`);
+    }
+}
+
 /**
  *
  * @param {*} ent The entity file as read from WKit
@@ -805,10 +827,19 @@ export function validateEntFile(ent, _entSettings) {
     
     hasEmptyAppearanceName = false;
     
+    const entAppearanceNames = [];
+    
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
         entFile_validateAppearance(appearance, i, !entSettings.skipRootEntityCheck);
+        entAppearanceNames.push((stringifyPotentialCName(appearance.name) || ''));
     }
+    // now validate names
+    for (let i = 0; i < ent.appearances.length; i++) {        
+        const appearance = ent.appearances[i];
+        validateAppearanceNameSuffixes(stringifyPotentialCName(appearance.name) || '', entAppearanceNames);    
+    }
+    
 
     for (let i = 0; i < ent.inplaceResources.length; i++) {
         checkDepotPath(ent.inplaceResources[i].DepotPath, `inplaceResources[${i}]`);
