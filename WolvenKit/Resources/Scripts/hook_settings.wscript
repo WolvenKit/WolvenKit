@@ -76,6 +76,17 @@ const Settings = {
          */
         checkDynamicAppearanceTag: true,
     },
+    Json: {
+        /*
+         * Check for primary key duplication? 
+         */
+        checkDuplicatePrimaryKeys: true,
+        
+        /*
+         * Warn if default value isn't set? 
+         */
+        checkEmptyFemaleVariant: true,
+    },
     Mesh: {
         /*
          * Should file validation check materials along the daisy chain? (Only outside of /base) 

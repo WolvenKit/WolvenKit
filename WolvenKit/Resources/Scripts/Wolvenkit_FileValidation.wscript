@@ -1153,6 +1153,47 @@ export function validateCsvFile(csvData, csvSettings) {
 //#endregion
 
 
+//#region json
+
+export function validateJsonFile(jsonData, jsonSettings) {
+    if (jsonData["Data"] && jsonData["Data"]["RootChunk"]) {
+        return validateJsonFile(jsonData["Data"]["RootChunk"], jsonSettings);
+    }
+    
+    const duplicatePrimaryKeys = [];
+    const emptyFemaleVariants = [];
+
+    for (let i = 0; i < jsonData.root.Data.entries.length; i++) {
+        const element = jsonData.root.Data.entries[i];
+        
+        const potentialFemaleVariant = element.length > 0 ? element[0] : '' || '';
+        const potentialMaleVariant = element.length > 1 ? element[1] : '' || '';
+        const potentialPrimaryKey = element.length > 2 ? element[2] : '' || '';
+        const secondaryKey = element.length > 3 ? element[3] : '' || '';
+        
+        if (potentialMaleVariant && !potentialFemaleVariant) {
+            emptyFemaleVariants.push(secondaryKey);
+        }
+        
+        if (potentialPrimaryKey && potentialPrimaryKey !== '0') {
+            duplicatePrimaryKeys.push(potentialPrimaryKey);
+        }
+    }
+
+    if (jsonSettings.checkDuplicatePrimaryKeys && duplicatePrimaryKeys.length) {
+        Logger.Warning('You have duplicate primary keys in your file. Entries will overwrite each other, '
+         + 'unless you set this value to 0');
+    }
+    
+    if (jsonSettings.checkEmptyFemaleVariant && emptyFemaleVariants.length > 0) {
+        Logger.Warning(`The following entries have no default value (femaleVariant): [ ${emptyFemaleVariants.join(', ')}]`);
+        Logger.Info('Ignore this if your item is masc V only and you\'re using itemsFactoryAppearanceSuffix.Camera or dynamic appearances.');
+        
+    }
+} 
+
+//#endregion
+
 //#region workspotFIle
 
 /*
