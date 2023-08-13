@@ -213,7 +213,8 @@
                     <TextBox
                         x:Name="CNameTextBox"
                         Grid.Row="1"
-                        Grid.Column="2" />
+                        Grid.Column="2"
+                        IsReadOnly="True" />
 
                     <TextBlock
                         Grid.Row="2"
@@ -225,7 +226,8 @@
                     <TextBox
                         x:Name="DepotTextBox"
                         Grid.Row="2"
-                        Grid.Column="2" />
+                        Grid.Column="2"
+                        IsReadOnly="True" />
 
                     <TextBlock
                         Grid.Row="3"
@@ -237,7 +239,8 @@
                     <TextBox
                         x:Name="NodeRefTextBox"
                         Grid.Row="3"
-                        Grid.Column="2" />
+                        Grid.Column="2"
+                        IsReadOnly="True" />
 
                     <TextBlock
                         Grid.Row="4"
@@ -249,7 +252,8 @@
                     <TextBox
                         x:Name="TweakDbIdTextBox"
                         Grid.Row="4"
-                        Grid.Column="2" />
+                        Grid.Column="2"
+                        IsReadOnly="True" />
                 </Grid>
             </TabItem>
         </TabControl>
