@@ -17,7 +17,7 @@ public class AnimFacialSetupMainPosesDataReader : Red4Reader, IBufferReader
             return EFileReadErrorCodes.UnsupportedVersion;
         }
 
-        buffer.Data = new AnimFacialSetupPosesDataBuffer
+        buffer.Data = new AnimFacialSetupMainPosesDataBuffer
         {
             Face = ReadData(animFacialSetup.PosesInfo.Face),
             Tongue = ReadData(animFacialSetup.PosesInfo.Tongue),

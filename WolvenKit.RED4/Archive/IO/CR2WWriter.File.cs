@@ -418,6 +418,42 @@ public partial class CR2WWriter
 
             buffer.SetBytes(newData);
         }
+
+        if (buffer.Data is AnimFacialSetupBakedDataBuffer animFacialSetupBakedDataBuffer)
+        {
+            using var ms = new MemoryStream();
+            using var foliageWriter = new AnimFacialSetupBakedDataWriter(ms);
+
+            foliageWriter.WriteBuffer(animFacialSetupBakedDataBuffer, (animFacialSetup)buffer.Parent);
+
+            var newData = ms.ToArray();
+
+            buffer.SetBytes(newData);
+        }
+
+        if (buffer.Data is AnimFacialSetupMainPosesDataBuffer animFacialSetupMainPosesDataBuffer)
+        {
+            using var ms = new MemoryStream();
+            using var foliageWriter = new AnimFacialSetupMainPosesDataWriter(ms);
+
+            foliageWriter.WriteBuffer(animFacialSetupMainPosesDataBuffer, (animFacialSetup)buffer.Parent);
+
+            var newData = ms.ToArray();
+
+            buffer.SetBytes(newData);
+        }
+
+        if (buffer.Data is AnimFacialSetupCorrectivePosesDataBuffer animFacialSetupCorrectivePosesDataBuffer)
+        {
+            using var ms = new MemoryStream();
+            using var foliageWriter = new AnimFacialSetupCorrectivePosesDataWriter(ms);
+
+            foliageWriter.WriteBuffer(animFacialSetupCorrectivePosesDataBuffer, (animFacialSetup)buffer.Parent);
+
+            var newData = ms.ToArray();
+
+            buffer.SetBytes(newData);
+        }
     }
 
     private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)

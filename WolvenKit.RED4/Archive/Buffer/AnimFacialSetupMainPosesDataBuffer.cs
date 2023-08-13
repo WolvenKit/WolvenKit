@@ -2,7 +2,7 @@
 
 namespace WolvenKit.RED4.Archive.Buffer;
 
-public class AnimFacialSetupPosesDataBuffer : IParseableBuffer
+public class AnimFacialSetupMainPosesDataBuffer : IParseableBuffer
 {
     public IRedType? Data => null;
 

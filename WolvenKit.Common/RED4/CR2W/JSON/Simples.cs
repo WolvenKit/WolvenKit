@@ -788,7 +788,7 @@ internal static class BufferHelper
     {
         writer.WriteNumber("Flags", value.Buffer.Flags);
 
-        if (value.Buffer.Data is CookedInstanceTransformsBuffer or CR2WList or RedPackage or worldNodeDataBuffer or WorldTransformsBuffer or CollisionBuffer or CR2WWrapper or FoliageBuffer or AnimFacialSetupBakedDataBuffer or AnimFacialSetupPosesDataBuffer)
+        if (value.Buffer.Data is CookedInstanceTransformsBuffer or CR2WList or RedPackage or worldNodeDataBuffer or WorldTransformsBuffer or CollisionBuffer or CR2WWrapper or FoliageBuffer or AnimFacialSetupBakedDataBuffer or AnimFacialSetupMainPosesDataBuffer or AnimFacialSetupCorrectivePosesDataBuffer)
         {
             writer.WriteString("Type", value.Buffer.Data.GetType().AssemblyQualifiedName);
 
