@@ -84,6 +84,11 @@
                             <documents:WScriptDocumentView />
                         </Grid>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type toolvm:HashToolViewModel}">
+                        <Grid>
+                            <tools:HashToolView />
+                        </Grid>
+                    </DataTemplate>
 
                 </ResourceDictionary>
 

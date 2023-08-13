@@ -89,4 +89,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     
     public ImportViewModel ImportViewModel() => new(_archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _progressService, _gameController, _parserService, _importExportHelper);
     public ExportViewModel ExportViewModel() => new(_archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _progressService, _importExportHelper);
+
+    public HashToolViewModel HashToolViewModel() => new HashToolViewModel();
 }

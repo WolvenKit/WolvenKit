@@ -37,7 +37,8 @@ public enum EDockedViews
     TweakBrowserViewModel,
     LocKeyBrowserViewModel,
     ImportViewModel,
-    ExportViewModel
+    ExportViewModel,
+    HashToolViewModel
 }
 
 public enum ScriptSource

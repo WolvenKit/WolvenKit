@@ -186,6 +186,9 @@ namespace WolvenKit
                     services.AddTransient<AudioPlayerViewModel>();
                     services.AddTransient<IViewFor<AudioPlayerViewModel>, AudioPlayerView>();
 
+                    services.AddTransient<HashToolViewModel>();
+                    services.AddTransient<IViewFor<HashToolViewModel>, HashToolView>();
+
                     #endregion
 
                     #region homepage
