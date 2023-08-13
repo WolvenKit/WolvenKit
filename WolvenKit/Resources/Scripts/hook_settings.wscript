@@ -69,6 +69,23 @@ const Settings = {
          * e.g. "] The following components are defined more than once: [ pants_black ]"
          */
         checkComponentNameDuplication: false,
+        
+        /*
+         * Set this to "false" to disable warnings about the dynamic appearance tag
+         * in the root entity (if you don't want to use ArchiveXL >= 1.5's dynamic appearances
+         */
+        checkDynamicAppearanceTag: true,
+    },
+    Json: {
+        /*
+         * Check for primary key duplication? 
+         */
+        checkDuplicatePrimaryKeys: true,
+        
+        /*
+         * Warn if default value isn't set? 
+         */
+        checkEmptyFemaleVariant: true,
     },
     Mesh: {
         /*
@@ -76,6 +93,10 @@ const Settings = {
          */
         validateMaterialsRecursively: true,
         
+        /*
+         * Should file validation warn you if two of your materials use the same mlsetup?
+         */
+        checkDuplicateMlSetupFilePaths: true,        
     },
     Mi: {
         /*

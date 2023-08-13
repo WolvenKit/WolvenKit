@@ -37,29 +37,53 @@ function stringifyPotentialCName(cnameOrString) {
 function checkDepotPath(depotPath, info) {
     // Don't validate if uppercase file names are present
     if (hasUppercasePaths) {
-        return;
+        return false;
     }
     const _depotPathString = stringifyPotentialCName(depotPath) || '';
     if (!_depotPathString) {
         Logger.Warning(`${info}: DepotPath not set`);
-        return;
+        return false;
     }
     
     // check if the path has uppercase characters
     if (/[A-Z]/.test(_depotPathString)) {
         hasUppercasePaths = true;
-        return;
+        return false;
     }
 
     // Check if the file is a numeric hash
     if (/^\d+$/.test(_depotPathString)) {
         Logger.Warning(`${info}: No depot path set, only hash given`);
+        return false;
+    }
+
+    // ArchiveXL 1.5 variant magic requires checking this in a loop
+    const componentMeshPaths = getArchiveXlMeshPaths(stringifyPotentialCName(_depotPathString));
+    let ret = true;
+    
+    componentMeshPaths.forEach((resolvedMeshPath) => {
+        // Check if the file exists
+        if (!wkit.FileExists(resolvedMeshPath)) {
+            Logger.Warning(`${info}: ${resolvedMeshPath} not found in project or game files`);
+            ret = false;
+        }       
+    })
+    return ret;
+}
+
+const validMaterialFileExtensions = [ '.mi', '.mt', '.remt' ];
+function validateShaderTemplate(depotPath, _info) {
+    if (!checkDepotPath(depotPath, _info)) {
         return;
     }
     
-    // Check if the file exists
-    if (!wkit.FileExists(_depotPathString)) {
-        Logger.Warning(`${info}: ${_depotPathString} not found in project or game files`);
+    // shouldn't be falsy, checkDepotPath should take care of that, but better safe than sorry
+    const basePathString = stringifyPotentialCName(depotPath) || '';
+    
+    const extensionParts = basePathString.match(/[^.]+$/);
+    
+    if (!extensionParts || validMaterialFileExtensions.includes(extensionParts[0])) {
+        Logger.Warning(`${_info ? `${_info}: ` : ''}Invalid base material: ${basePathString}`);
     }
 }
 export let hasUppercasePaths = false;
@@ -142,11 +166,75 @@ export function validateAnimationFile(animAnimSet, _animAnimSettings) {
 // map: { 'path/to/file.mesh': ['default', 'red', 'black'] };
 const appearanceNamesByMeshFile = {};
 
+// map: { 'path/to/file.mesh', [ 'not_found1', 'not_found2' ] }
+let invalidVariantAndSubstitutions = {};
+
+/*
+ * appearance collection: gather data and print them in one block rather than spamming when they're found
+ */
+// map: { 'path/to/file.mesh', [ 'not_found1', 'not_found2' ] }
+let meshAppearancesNotFound = {};
+
+// map: { 'path/to/file.mesh', [ 'component_with_broken_appearance1', 'component_with_broken_appearance2' ] }
+let meshAppearancesNotFoundByComponent = {};
+/*
+ * /appearance collection
+ */
+
+function printInvalidAppearanceWarningIfFound() {
+    const warningKeys = Object.keys(meshAppearancesNotFoundByComponent) || [];
+    if (!warningKeys.length) { 
+        return;
+    }    
+    Logger.Warning('Mesh appearances not found. Here\'s a list:');
+    warningKeys.forEach((meshPath) => {
+        const componentNames = meshAppearancesNotFoundByComponent[meshPath] || [];
+        const appearanceNames = meshAppearancesNotFound[meshPath] || [];
+
+        const definedAppearances = component_collectAppearancesFromMesh(meshPath).join(', ')
+        Logger.Warning(`${meshPath} with the appearances [ ${definedAppearances} }`);
+        
+        // print as table
+        Logger.Warning(`  ${'Source'.padEnd(50, ' ')} | Appearance`);
+        // print table entries
+        for (let i = componentNames.length; i > 0; i -= 1) {
+            const calledFrom = componentNames.pop();
+            const appearanceName = appearanceNames.pop();
+            Logger.Warning(`  ${calledFrom.padEnd(50, ' ')} | ${appearanceName}`);
+        }
+
+    })
+}
+
+function printSubstitutionWarningsIfFound() {
+    const warningKeys = Object.keys(invalidVariantAndSubstitutions) || [];
+    if (!warningKeys.length) {
+        return;
+    }
+
+    Logger.Info('Some of your components seem to include ArchiveXL dynamic variants, but they may have errors:');
+    warningKeys.forEach((warningSource) => {
+        const warnings = (invalidVariantAndSubstitutions[warningSource] || []).filter(function(item, pos, self) {
+            return self.indexOf(item) === pos;
+        });
+        if (warnings.length) {
+            Logger.Warning(`${warningSource}:`);
+            const output = warnings.length <= 1 ? `[ ${warnings} ]` : `[\n  ${warnings.join(',\n ')}\n]`
+            Logger.Warning(output);
+        }
+    });
+    
+}
+
+
 // map: { 'myComponent4711': 'path/to/file.mesh' };
 let meshesByComponentName = {};
 
 // map: { 'base/mana/mesh_entity.ent': ['path/to/file.mesh', 'path_to_other_file.mesh'] };
 let meshesByEntityPath = {};
+
+let isInvalidVariantComponent = false;
+
 
 /* map: {
  *	'path/to/file.mesh':  'myComponent4711',
@@ -210,6 +298,7 @@ function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursive
         // fileExists has been checked in validatePartsOverride
         const entity = TypeHelper.JsonParse(fileContent);
         const components = entity && entity.Data && entity.Data.RootChunk ? entity.Data.RootChunk.components || [] : [];
+        isInvalidVariantComponent = false;
         for (let i = 0; i < components.length; i++) {
             const component = components[i];
             entFile_validateComponent(component, i, validateRecursively);
@@ -224,6 +313,18 @@ function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursive
     
     meshesByEntityPath[entityDepotPath] = meshesInEntityFile;
 
+}
+
+function appearanceNotFound(meshPath, meshAppearanceName, calledFrom) {
+    meshAppearancesNotFound[meshPath] ||= [];
+    meshAppearancesNotFound[meshPath].push(meshAppearanceName);
+    
+    meshAppearancesNotFoundByComponent[meshPath] ||= [];
+    meshAppearancesNotFoundByComponent[meshPath].push(calledFrom);
+}
+
+function resetAppearanceNotFoundLookup() {
+    
 }
 
 function appFile_validatePartsOverride(override, index, appearanceName) {
@@ -258,8 +359,11 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
         } else if (meshPath && !hasUppercasePaths) {            
             const appearanceNames = component_collectAppearancesFromMesh(meshPath);
             const meshAppearanceName = stringifyPotentialCName(componentOverride.meshAppearance);
-            if (appearanceNames && appearanceNames.length > 1 && !appearanceNames.includes(meshAppearanceName) && !componentOverrideCollisions.includes(meshAppearanceName)) {
-                Logger.Warning(`${appearanceName}.partsOverrides[${index}]: Appearance ${meshAppearanceName} not found in '${meshPath}'`);
+            if (meshAppearanceName.startsWith('*')) {
+                // TODO: ArchiveXL variant checking
+            } else if ((appearanceNames || []).length > 1 && !appearanceNames.includes(meshAppearanceName) && !componentOverrideCollisions.includes(meshAppearanceName)
+            ) {               
+                appearanceNotFound(meshPath, meshAppearanceName, `${appearanceName}.partsOverrides[${index}]`);
             }
         }
     }
@@ -314,7 +418,7 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
     }    
 
     if (alreadyDefinedAppearanceNames.includes(appearanceName)) {
-        Logger.Warning(`An appearance with the name ${appearanceName} is already defined in .app file`);
+        Logger.Warning(`.app file: An appearance with the name ${appearanceName} is already defined in .app file`);
     } else {
         alreadyDefinedAppearanceNames.push(appearanceName);
     }
@@ -411,6 +515,11 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
         return _validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
     }
 
+    invalidVariantAndSubstitutions = {};
+    
+    meshAppearancesNotFound = {};
+    meshAppearancesNotFoundByComponent = {};
+
     for (let i = 0; i < app.appearances.length; i++) {
         const appearance = app.appearances[i];
         appFile_validateAppearance(appearance, i, validateRecursively, validateCollisions);
@@ -420,20 +529,70 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
         Logger.Warning('CommonCookData found in app file\'s root. Consider deleting it.');
     }
 
+    if (appFileSettings.validateRecursively) {
+        printInvalidAppearanceWarningIfFound();
+    }
+
+
 }
 
 //#endregion
 
+const ARCHIVE_XL_VARIANT_INDICATOR = '*';
+
+// TODO read ArchiveXL stuff from yaml
+
+/**
+ * A list of yaml file paths with an array of all variants
+ * [ key: string ]: { 0: [], 1: [], 2: [] }
+ */
+const yamlFilesAndVariants = {};
+function getVariantsFromYaml() {
+    const variants = [];
+}
+
+function getArchiveXLVariantComponentNames() {
+    
+}
+
+const archiveXLVarsAndValues = {
+    '{gender}': ['m', 'w'],
+    '{camera}': ['fpp', 'tpp'],
+    '{legs_state}': ['lifted', 'flat', 'high_heels', 'flat_shoes'],
+}
+
+function getArchiveXlMeshPaths(depotPath) {
+    let paths = [];
+    if (!depotPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR) || !depotPath.includes('{')) {
+        paths.push(depotPath);
+        return paths;
+    }    
+    Object.keys(archiveXLVarsAndValues).forEach((variantFlag) => {
+        if (depotPath.includes(variantFlag)) {
+            archiveXLVarsAndValues[variantFlag].forEach((variantReplacement) => {
+                paths.push(depotPath.replace(variantFlag, variantReplacement));    
+            });            
+        }   
+    });
+    let ret = [];
+    paths.forEach((path) => {
+        ret = [...ret, ...getArchiveXlMeshPaths(path)];
+    })
+    return ret.map((path) => path.replace('*', ''));
+}
 
 //#region entFile
-
 let entSettings = {};
+
+let hasEmptyAppearanceName = false;
 
 const WITH_MESH = 'withMesh';
 // For different component types, check DepotPath property
 function entFile_validateComponent(component, _index, validateRecursively) {
     const componentName = stringifyPotentialCName(component.name) ?? '';
     let type = component.$type || '';
+    
+    const info = `ent component[${_index}] (${componentName})`;
     
     // entGarmentSkinnedMeshComponent - entSkinnedMeshComponent - entMeshComponent
     if (component && component.mesh && component.mesh.DepotPath) {
@@ -459,36 +618,48 @@ function entFile_validateComponent(component, _index, validateRecursively) {
         return;
     }
     
-    const componentMeshPath = stringifyPotentialCName(component.mesh.DepotPath);
-    
-    // check for component name uniqueness
-    if (meshesByComponentName[componentName] && meshesByComponentName[componentName] !== componentMeshPath) {
-        componentNameCollisions[componentMeshPath] = componentName;
-        componentNameCollisions[meshesByComponentName[componentName]] = componentName;
-    }
-    
-    meshesByComponentName[componentName] = componentMeshPath;
+    const componentMeshPaths = getArchiveXlMeshPaths(stringifyPotentialCName(component.mesh.DepotPath));
 
-    if (/^\d+$/.test(componentMeshPath)) {
-        return;
-    }
-    if (/[A-Z]/.test(componentMeshPath)) {
-        hasUppercasePaths = true;
-        return;
-    }
+    componentMeshPaths.forEach((componentMeshPath) => {
+        
+        // check for component name uniqueness
+        if (meshesByComponentName[componentName] && meshesByComponentName[componentName] !== componentMeshPath) {
+            componentNameCollisions[componentMeshPath] = componentName;
+            componentNameCollisions[meshesByComponentName[componentName]] = componentName;
+        }
+        
+        meshesByComponentName[componentName] = componentMeshPath;
     
-    const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);    
-    if (!meshAppearances) { // for debugging
-        // Logger.Error(`failed to collect appearances from ${componentMeshPath}`);
-        return;
-    }
+        if (/^\d+$/.test(componentMeshPath)) {
+            return;
+        }
+        if (/[A-Z]/.test(componentMeshPath)) {
+            hasUppercasePaths = true;
+            return;
+        }
 
-    if (meshAppearances && meshAppearances.length > 0 && !meshAppearances.includes(stringifyPotentialCName(component.meshAppearance))) {
-        Logger.Warning(`ent component[${_index}] (${componentName}): Appearance ${component.meshAppearance} not found in '${componentMeshPath}', ([ ${
-            meshAppearances.join(", ")            
-        } ])`);
-    }
-
+        // ArchiveXL: Check for invalid component substitution
+        
+        const meshAppearanceName = stringifyPotentialCName(component.meshAppearance);
+        if (meshAppearanceName && meshAppearanceName.includes("{") && !meshAppearanceName.startsWith("*")) {
+            invalidVariantAndSubstitutions[info] ||= [];
+            invalidVariantAndSubstitutions[info].push(`meshAppearance: ${meshAppearanceName}`);
+        }
+        if (componentMeshPath && componentMeshPath.includes('{') && !componentMeshPath.startsWith('*')) {
+            invalidVariantAndSubstitutions[info].push(`DepotPath: ${componentMeshPath}`);
+        }
+        
+        const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);
+        if (!meshAppearances) { // for debugging
+            // Logger.Error(`failed to collect appearances from ${componentMeshPath}`);
+            return;
+        }
+        if (meshAppearanceName.startsWith('*')) {
+            // TODO: ArchiveXL variant checking
+        } else if (meshAppearances && meshAppearances.length > 0 && !meshAppearances.includes(meshAppearanceName)) {
+            appearanceNotFound(componentMeshPath, meshAppearanceName, `ent component[${_index}] (${componentName})`);            
+        }
+    })
 }
 
 // Map: app file depot path name to defined appearances
@@ -526,9 +697,14 @@ const alreadyDefinedAppearanceNames = [];
  */
 function entFile_validateAppearance(appearance, index, isRootEntity) {
 
-    const appearanceName = stringifyPotentialCName(appearance.name) || '';
-    const appearanceNameInAppFile = stringifyPotentialCName(appearance.appearanceName) || '';
+    const appearanceName = (stringifyPotentialCName(appearance.name) || '');
+    let appearanceNameInAppFile = (stringifyPotentialCName(appearance.appearanceName) || '').trim()
+    if (!appearanceNameInAppFile || appearanceNameInAppFile === 'None') {
+        appearanceNameInAppFile = appearanceName;
+        hasEmptyAppearanceName = true;
+    }
     
+        
     // ignore separator appearances such as
     // =============================
     // -----------------------------
@@ -536,11 +712,12 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
         return;
     }
 
-    if (alreadyDefinedAppearanceNames.includes(appearanceName)) {
-        Logger.Warning(`An appearance with the name ${appearanceName} is already defined`);
+    if (!!appearanceName && alreadyDefinedAppearanceNames.includes(`ent_${appearanceName}`)) {
+        Logger.Warning(`.ent file: An appearance with the name ${appearanceName} is already defined`);
+    } else {
+        alreadyDefinedAppearanceNames.push(`ent_${appearanceName}`);        
     }
-    alreadyDefinedAppearanceNames.push(appearanceName);
-
+    
     const appFilePath = stringifyPotentialCName(appearance.appearanceResource.DepotPath);
     if (/[A-Z]/.test(appFilePath)) {
         hasUppercasePaths = true;
@@ -563,7 +740,7 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
     const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearanceName) || [];
     
     if (!namesInAppFile.includes(appearanceNameInAppFile)) {
-        Logger.Warning(`.ent file: Can't find appearance ${appearanceNameInAppFile} in .app file ${appFilePath} (only defines [ ${namesInAppFile.join(', ')} ])`);
+        Logger.Warning(`appearance[${index}]: Can't find appearance ${appearanceNameInAppFile} in .app file ${appFilePath} (only defines [ ${namesInAppFile.join(', ')} ])`);
     }
 
     if (alreadyVerifiedAppFiles.includes(appFilePath) || hasUppercasePaths) {
@@ -583,6 +760,28 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
     }
 }
 
+function validateAppearanceNameSuffixes(appearanceName, entAppearanceNames) {
+    if (!appearanceName || !appearanceName.includes('&')) {
+        return;
+    }    
+    if (appearanceName.includes('FPP') && !entAppearanceNames.includes(appearanceName.replace('FPP', 'TPP'))) {
+        Logger.Warning(`${appearanceName}: You have not defined a third person appearance.`)
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:TPP" or define "${appearanceName.replace('FPP', 'TPP')}" and point it to an empty appearance in the .app file.`);
+    }
+    if (appearanceName.includes('TPP') && !entAppearanceNames.includes(appearanceName.replace('TPP', 'FPP'))) {
+        Logger.Warning(`${appearanceName}: You have not defined a first person appearance.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:FPP" or define "${appearanceName.replace('TPP', 'FPP')}" and point it to an empty appearance in the .app file.`);
+    }
+    if (appearanceName.includes('Male') && !entAppearanceNames.includes(appearanceName.replace('Male', 'Female'))) {
+        Logger.Warning(`${appearanceName}: You have not defined a female variant.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Male', 'Female')}" and point it to an empty appearance in the .app file.`);
+    }
+    if (appearanceName.includes('Female') && !entAppearanceNames.includes(appearanceName.replace('Female', 'Male'))) {
+        Logger.Warning(`${appearanceName}: You have not defined a male variant.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Female', 'Male')}" and point it to an empty appearance in the .app file.`);
+    }
+}
+
 /**
  *
  * @param {*} ent The entity file as read from WKit
@@ -599,12 +798,21 @@ export function validateEntFile(ent, _entSettings) {
 
     const allComponentNames = [];
     const duplicateComponentNames = [];
+
+    invalidVariantAndSubstitutions = {};
+    meshAppearancesNotFound = {};
+    meshAppearancesNotFoundByComponent = {};
     
-    for (let i = 0; i < ent.components.length; i++) {
+    for (let i = 0; i < (ent.components?.length || 0); i++) {
         const component = ent.components[i];
         const componentName = stringifyPotentialCName(component.name);
         entFile_validateComponent(component, i, _entSettings.validateRecursively);
         (allComponentNames.includes(componentName) ? duplicateComponentNames : allComponentNames).push(componentName);
+    }
+    
+    if (entSettings.validateRecursively) {
+        printInvalidAppearanceWarningIfFound();
+        printSubstitutionWarningsIfFound();
     }
     
     if (_entSettings.checkComponentNameDuplication && duplicateComponentNames.length > 0) {
@@ -617,10 +825,21 @@ export function validateEntFile(ent, _entSettings) {
     alreadyDefinedAppearanceNames.length = 0;
     alreadyVerifiedAppFiles.length = 0;
     
+    hasEmptyAppearanceName = false;
+    
+    const entAppearanceNames = [];
+    
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
         entFile_validateAppearance(appearance, i, !entSettings.skipRootEntityCheck);
+        entAppearanceNames.push((stringifyPotentialCName(appearance.name) || ''));
     }
+    // now validate names
+    for (let i = 0; i < ent.appearances.length; i++) {        
+        const appearance = ent.appearances[i];
+        validateAppearanceNameSuffixes(stringifyPotentialCName(appearance.name) || '', entAppearanceNames);    
+    }
+    
 
     for (let i = 0; i < ent.inplaceResources.length; i++) {
         checkDepotPath(ent.inplaceResources[i].DepotPath, `inplaceResources[${i}]`);
@@ -628,9 +847,19 @@ export function validateEntFile(ent, _entSettings) {
     for (let i = 0; i < ent.resolvedDependencies.length; i++) {
         checkDepotPath(ent.resolvedDependencies[i].DepotPath, `resolvedDependencies[${i}]`);
     }
+    
+    if (entSettings.checkDynamicAppearanceTag && hasEmptyAppearanceName) {
+        const visualTagList = ent.visualTagsSchema?.Data?.visualTags?.tags || [];
+        // Do we have a visual tag 'DynamicAppearance'?
+        if (!visualTagList.map((tag) => stringifyPotentialCName(tag)).includes('DynamicAppearance')) {
+            Logger.Info('If you are using dynamic appearances, you need to add the DynamicAppearance visualTag to the root entity.'
+            + ' If you don\'t know what that means, check if your appearance names are empty or "None".' + 
+                ' If everything is fine, ignore this warning.');            
+        }
+    }
 
     isDataChangedForWriting = _isDataChangedForWriting;
-};
+}
 
 //#endregion
 
@@ -648,6 +877,8 @@ let meshSettings = {};
 let materialNames = {};
 let localIndexList = [];
 
+// if checkDuplicateMlSetupFilePaths is used: warn user if duplicates exist in list
+let listOfUsedMaterialSetups = {};
 
 /**
  * Shared for .mesh and .mi files: will validate an entry of the values array of a material definition
@@ -686,7 +917,18 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
     switch (key) {
         case "MultilayerSetup":
             if (!materialDepotPath.endsWith(".mlsetup")) {
-                Logger.Error(`${info}${materialValue.DepotPath.value} doesn't end in .mlsetup. This will cause crashes.`);
+                Logger.Error(`${info}${materialDepotPath} doesn't end in .mlsetup. This will cause crashes.`);
+            }
+            if (meshSettings.checkDuplicateMlSetupFilePaths) {
+                listOfUsedMaterialSetups[materialDepotPath] ||= [];
+                 
+                 
+                if (listOfUsedMaterialSetups[materialDepotPath].length > 0) {
+                    Logger.Warning(`${info} uses the same .mlsetup as (a) previous material(s): [ ${
+                        listOfUsedMaterialSetups[materialDepotPath].join(", ")
+                    } ]`)                    
+                }
+                listOfUsedMaterialSetups[materialDepotPath].push(info);
             }
             break;
         case "MultilayerMask":
@@ -706,6 +948,12 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
     }
 }
 function meshFile_CheckMaterialProperties(material, materialName) {
+    const baseMaterial = stringifyPotentialCName(material.baseMaterial.DepotPath);
+    
+    if (checkDepotPath(baseMaterial)) {
+        validateShaderTemplate(baseMaterial, materialName);
+    } 
+    
     for (let i = 0; i < material.values.length; i++) {
         let tmp = material.values[i];
 
@@ -716,7 +964,9 @@ function meshFile_CheckMaterialProperties(material, materialName) {
         }
 
         Object.entries(tmp).forEach(([key, definedMaterial]) => {
-            validateMaterialKeyValuePair(key, definedMaterial, `${materialName}.Values[${i}]`, meshSettings.validateMaterialsRecursively)
+            if (!PLACEHOLDER_NAME_REGEX.test(materialName)) {
+                validateMaterialKeyValuePair(key, definedMaterial, `${materialName}.Values[${i}]`, meshSettings.validateMaterialsRecursively);                
+            }
         });
     }
 }
@@ -746,7 +996,7 @@ function checkMeshMaterialIndices(mesh) {
         // Put all material names into a list - we'll use it to verify the appearances later
         let name = stringifyPotentialCName(materialEntry.name);
         
-        if (name in materialNames) {
+        if (name in materialNames && !PLACEHOLDER_NAME_REGEX.test(name)) {
             Logger.Warning(`materialEntries[${i}] (${name}) is already defined in materialEntries[${materialNames[name]}]`);
         } else {
             materialNames[name] = i;
@@ -845,16 +1095,15 @@ export function validateMeshFile(mesh, _meshSettings) {
     export function validateMiFile(mi, _miSettings) {
         
         miSettings = _miSettings;
-        _validateMiFile(mi);
+        _validateMiFile(mi, '');
     }
     
-    function _validateMiFile(mi) {
+    function _validateMiFile(mi, debugInfo) {
         if (mi["Data"] && mi["Data"]["RootChunk"]) {
             return _validateMiFile(mi["Data"]["RootChunk"]);
         }
-
-        // check if base material exists
-        checkDepotPath(mi.baseMaterial.DepotPath, 'base material');
+        
+        validateShaderTemplate(mi.baseMaterial.DepotPath, debugInfo);
 
         const values = mi.values || [];
         for (let i = 0; i < values.length; i++) {
@@ -903,6 +1152,47 @@ export function validateCsvFile(csvData, csvSettings) {
 
 //#endregion
 
+
+//#region json
+
+export function validateJsonFile(jsonData, jsonSettings) {
+    if (jsonData["Data"] && jsonData["Data"]["RootChunk"]) {
+        return validateJsonFile(jsonData["Data"]["RootChunk"], jsonSettings);
+    }
+    
+    const duplicatePrimaryKeys = [];
+    const emptyFemaleVariants = [];
+
+    for (let i = 0; i < jsonData.root.Data.entries.length; i++) {
+        const element = jsonData.root.Data.entries[i];
+        
+        const potentialFemaleVariant = element.length > 0 ? element[0] : '' || '';
+        const potentialMaleVariant = element.length > 1 ? element[1] : '' || '';
+        const potentialPrimaryKey = element.length > 2 ? element[2] : '' || '';
+        const secondaryKey = element.length > 3 ? element[3] : '' || '';
+        
+        if (potentialMaleVariant && !potentialFemaleVariant) {
+            emptyFemaleVariants.push(secondaryKey);
+        }
+        
+        if (potentialPrimaryKey && potentialPrimaryKey !== '0') {
+            duplicatePrimaryKeys.push(potentialPrimaryKey);
+        }
+    }
+
+    if (jsonSettings.checkDuplicatePrimaryKeys && duplicatePrimaryKeys.length) {
+        Logger.Warning('You have duplicate primary keys in your file. Entries will overwrite each other, '
+         + 'unless you set this value to 0');
+    }
+    
+    if (jsonSettings.checkEmptyFemaleVariant && emptyFemaleVariants.length > 0) {
+        Logger.Warning(`The following entries have no default value (femaleVariant): [ ${emptyFemaleVariants.join(', ')}]`);
+        Logger.Info('Ignore this if your item is masc V only and you\'re using itemsFactoryAppearanceSuffix.Camera or dynamic appearances.');
+        
+    }
+} 
+
+//#endregion
 
 //#region workspotFIle
 
