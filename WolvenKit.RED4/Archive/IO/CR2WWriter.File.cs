@@ -412,7 +412,7 @@ public partial class CR2WWriter
             using var ms = new MemoryStream();
             using var foliageWriter = new FoliageWriter(ms);
 
-            foliageWriter.WriteBuffer(foliageBuffer);
+            foliageWriter.WriteBuffer(foliageBuffer, (worldFoliageCompiledResource)buffer.Parent);
 
             var newData = ms.ToArray();
 

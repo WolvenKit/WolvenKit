@@ -1,5 +1,6 @@
 ﻿using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.IO;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO;
 
@@ -10,8 +11,9 @@ public class FoliageWriter : Red4Writer
 
     }
 
-    public void WriteBuffer(FoliageBuffer buffer)
+    public void WriteBuffer(FoliageBuffer buffer, worldFoliageCompiledResource parent)
     {
+        parent.PopulationCount = (uint)buffer.Populations.Count;
         foreach (var population in buffer.Populations)
         {
             _writer.Write(population.Unk1.X);
@@ -30,6 +32,7 @@ public class FoliageWriter : Red4Writer
             _writer.Write(population.Unk3.Unk2);
         }
 
+        parent.BucketCount = (uint)buffer.Buckets.Count;
         foreach (var bucket in buffer.Buckets)
         {
             _writer.Write(bucket.PopulationSubIndex);
