@@ -1,25 +1,9 @@
-// Exports file and all referenced files (recursively)
-// @author Simarilius, Dzk & Seberoth
-// @version 1.1
-import * as Logger from 'Logger.wscript';
+// Exports individual files and all referenced files (recursively)
+// Can be used to get the embedded files from an object into the project
+// @author Simarilius, DZK & Seberoth
+// @version 1.0
+import * as Logger from 'Wolvenkit\\Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
-
-const fileTemplate = '{"Header":{"WKitJsonVersion":"0.0.7","DataType":"CR2W"},"Data":{"Version":195,"BuildVersion":0,"RootChunk":{},"EmbeddedFiles":[]}}';
-const jsonExtensions = [".app", ".ent"];
-const exportExtensions = [".mesh"];
-const exportEmbeddedExtensions = [".mesh", ".xbm", ".mlmask"];
-
-//list of ent files (paths need double slashes)
-var ents = [];
-
-// if you dont want to process any sectors already in the project set this to false
-var add_from_project = true;
-
-// Set these to true if you want proxys/shadow meshes
-var include_proxys = false;
-var include_shadows = false;
-var include_fx = false;
-
 
 // sets of files that are parsed for processing
 const parsedFiles = new Set();
@@ -27,46 +11,31 @@ const projectSet = new Set();
 const exportSet = new Set();
 const jsonSet = new Set();
 
-if (add_from_project) {
-    for (var filename of wkit.GetProjectFiles('archive')) {
-        //Logger.Info(filename);
-        var ext = filename.split('.').pop();
-        if (ext === "ent") {
-            ents.push(filename);
-        }
-    }
-}
+const fileTemplate = '{"Header":{"WKitJsonVersion":"0.0.7","DataType":"CR2W"},"Data":{"Version":195,"BuildVersion":0,"RootChunk":{},"EmbeddedFiles":[]}}';
+const jsonExtensions = [".app", ".ent"];
+const exportExtensions = [".mesh"];
+const exportEmbeddedExtensions = [".mesh", ".xbm", ".mlmask"];
+
+//list of ent files (paths need double slashes)
+var meshes = ['base\\worlds\\03_night_city\\sectors\\_global\\terrain\\terrain_aaayaai_cell_16337_16337.mesh'];
 
 // loop over every entity in `ents`
-for (var ent in ents) {
-    Logger.Info(ents[ent]);
-    ParseFile(ents[ent], null);
+for (var mesh in meshes) {
+    Logger.Info(meshes[mesh]);
+    ParseFile(meshes[mesh], null);
 }
 
 // save all our files to the project and export JSONs
 for (const fileName of projectSet) {
-    // skip shadows if the variable is set
-    if ((include_shadows == false) && (fileName.includes("shadow"))) {
-        continue;
-    }
-    // skip proxies if the variable is set
-    if ((include_proxys == false) && (fileName.includes("proxy"))) {
-        continue;
-    }
-    // skip fx bodies if the variable is set
-    if ((include_fx == false) && (fileName.includes("fx"))) {
-        continue;
-    }
-
-    // Load project vesion if it exists, otherwise add to the project
-    if (wkit.FileExistsInProject(fileName)) {
-        var file = GetFileFromProject(fileName, OpenAs.GameFile);
-    }
-    else {
-        var file = wkit.GetFileFromBase(fileName);
-        wkit.SaveToProject(fileName, file);
-    }
-
+	// Load project vesion if it exists, otherwise add to the project
+	if (wkit.FileExistsInProject(fileName)){
+        var file = wkit.GetFileFromProject(fileName, OpenAs.GameFile);
+	}
+	else {
+	    var file = wkit.GetFileFromBase(fileName);
+	    wkit.SaveToProject(fileName, file);
+	}
+	
     if (jsonSet.has(fileName)) {
         var path = "";
         if (file.Extension === ".ent") {
@@ -84,8 +53,6 @@ for (const fileName of projectSet) {
 
 // export all of our files with the default export settings
 wkit.ExportFiles([...exportSet]);
-
-Logger.Info("Finished Exporting Entities")
 
 // begin helper functions
 function* GetPaths(jsonData) {

@@ -1,6 +1,6 @@
 ﻿// Entity export script FOR VEHICLES dont use if you dont need all the anims and rig.
-// @author Simarilius & DZK
-// @version 1.0
+// @author Simarilius, DZK & Seberoth
+// @version 1.1
 // Exports ent files and all referenced files (recursively)
 import * as Logger from 'Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
@@ -8,10 +8,13 @@ import * as TypeHelper from 'TypeHelper.wscript';
 const fileTemplate = '{"Header":{"WKitJsonVersion":"0.0.7","DataType":"CR2W"},"Data":{"Version":195,"BuildVersion":0,"RootChunk":{},"EmbeddedFiles":[]}}';
 const jsonExtensions = [".app", ".ent", ".mesh", ".rig"];
 const exportExtensions = [".anims", ".mesh"];
+const exportEmbeddedExtensions = [".mesh", ".xbm", ".mlmask"];
 
 // Rather than a manual list does it for all ents in the project.
-
 var ents = [];
+
+// if you dont want to process any entities already in the project set this to false
+var add_from_project = true;
 
 // sets of files that are parsed for processing
 const parsedFiles = new Set();
@@ -20,14 +23,16 @@ const exportSet = new Set();
 const jsonSet = new Set();
 const rigs = new Map();
 
-for (var filename of wkit.GetProjectFiles('archive')) {
-    //Logger.Info(filename)
-    var ext = filename.split('.').pop();
-    if (ext === "ent") {
-        ents.push(filename);
-    }
-    if (ext === "anims") {
-        exportSet.add(filename);
+if (add_from_project) {
+    for (var filename of wkit.GetProjectFiles('archive')) {
+        //Logger.Info(filename)
+        var ext = filename.split('.').pop();
+        if (ext === "ent") {
+            ents.push(filename);
+        }
+        if (ext === "anims") {
+            exportSet.add(filename);
+        }
     }
 }
 
@@ -72,8 +77,14 @@ for (const fileName of projectSet) {
     if ((include_fx == false) && (fileName.includes("fx"))) {
         continue;
     }
-    var file = wkit.GetFileFromBase(fileName);
-    wkit.SaveToProject(fileName, file);
+    // Load project vesion if it exists, otherwise add to the project
+    if (wkit.FileExistsInProject(fileName)) {
+        var file = wkit.GetFileFromProject(fileName, OpenAs.GameFile);
+    }
+    else {
+        var file = wkit.GetFileFromBase(fileName);
+        wkit.SaveToProject(fileName, file);
+    }
 
     if (jsonSet.has(fileName)) {
         var path = "";
@@ -100,14 +111,14 @@ for (const fileName of projectSet) {
 wkit.ExportFiles([...exportSet]);
 
 // begin helper functions
-function  * GetPaths(jsonData) {
+function* GetPaths(jsonData) {
     for (let [key, value] of Object.entries(jsonData || {})) {
         if (value instanceof TypeHelper.ResourcePath && !value.isEmpty()) {
             yield value.value;
         }
 
         if (typeof value === "object") {
-            yield * GetPaths(value);
+            yield* GetPaths(value);
         }
     }
 }
@@ -148,7 +159,7 @@ function ParseFile(fileName, parentFile) {
                         jsonSet.add(fileName);
                     }
 
-                    if (exportExtensions.includes(extension)) {
+                    if (exportEmbeddedExtensions.includes(extension)) {
                         exportSet.add(fileName);
                     }
 
@@ -167,8 +178,14 @@ function ParseFile(fileName, parentFile) {
         return;
     }
 
-    // try to get the file
-    var file = wkit.GetFileFromBase(fileName);
+    // Load project vesion if it exists, otherwise get the basegamefile
+    if (wkit.FileExistsInProject(fileName)) {
+        var file = wkit.GetFileFromProject(fileName, OpenAs.GameFile);
+    }
+    else {
+        var file = wkit.GetFileFromBase(fileName);
+    }
+
     if (file === null) {
         Logger.Error(fileName + " could not be found");
         return;
@@ -200,7 +217,12 @@ function ParseFile(fileName, parentFile) {
 
 // Parse a ent file for rigs
 function FindEntRigs(fileName) {
-    var file = wkit.GetFileFromBase(fileName);
+    if (wkit.FileExistsInProject(fileName)) {
+        var file = wkit.GetFileFromProject(fileName, OpenAs.GameFile);
+    }
+    else {
+        var file = wkit.GetFileFromBase(fileName);
+    }
     var json = TypeHelper.JsonParse(wkit.GameFileToJson(file));
     //find the rigs in the base ent components (normally root and deformations)
     for (let comp of json["Data"]["RootChunk"]["components"]) {
@@ -230,7 +252,12 @@ function FindEntRigs(fileName) {
 
 // Parse a ent file for rigs
 function FindEntAnims(fileName) {
-    var file = wkit.GetFileFromBase(fileName);
+    if (wkit.FileExistsInProject(fileName)) {
+        var file = wkit.GetFileFromProject(fileName, OpenAs.GameFile);
+    }
+    else {
+        var file = wkit.GetFileFromBase(fileName);
+    }
     var json = TypeHelper.JsonParse(wkit.GameFileToJson(file));
     //find the anims in the ent resolved dependencies
     for (let dep of json["Data"]["RootChunk"]["resolvedDependencies"]) {
