@@ -444,24 +444,6 @@ namespace WolvenKit.Utility
         }
 
         [TestMethod]
-        public void Debug()
-        {
-            //var filePath = @"C:\Users\Marcel\source\repos\WolvenKit\WolvenKit\Tests\WolvenKit.Utility\bin\x64\Debug\net7.0\_CR2WTestResults\infodump\merged.txt";
-
-
-            /*var dict = new ConcurrentDictionary<ulong, string>();
-            Parallel.ForEach(File.ReadAllLines(filePath), s =>
-            {
-                NodeRefPool.AddOrGetHash(s);
-            });*/
-
-            if (NodeRefPool.ResolveHash(4528547175292385543) is { } str)
-            {
-
-            }
-        }
-
-        [TestMethod]
         public void DumpStrings()
         {
             ArgumentNullException.ThrowIfNull(s_bm);
