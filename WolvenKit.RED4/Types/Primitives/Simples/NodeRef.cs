@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Types;
 
@@ -53,7 +52,7 @@ public readonly struct NodeRef : IRedString, IRedPrimitive<NodeRef>, IEquatable<
     public int CompareTo(NodeRef other)
     {
         var strA = GetResolvedText();
-        var strB = GetResolvedText();
+        var strB = other.GetResolvedText();
 
         if (strA != null && strB != null)
         {
@@ -91,5 +90,5 @@ public readonly struct NodeRef : IRedString, IRedPrimitive<NodeRef>, IEquatable<
     }
 
     public string? GetString() => this;
-    public override string ToString() => (GetResolvedText() is var text && !string.IsNullOrEmpty(text)) ? text : _hash.ToString();
+    public override string ToString() => TryGetResolvedText(out var text) ? text : _hash.ToString();
 }

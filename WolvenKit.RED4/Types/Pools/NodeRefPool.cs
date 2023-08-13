@@ -20,7 +20,7 @@ public static class NodeRefPool
             return value;
         }
 
-        return ResolveHashHandler?.Invoke(hash);
+        return null;
     }
 
     public static ulong AddOrGetHash(string value)
@@ -101,7 +101,4 @@ public static class NodeRefPool
     //
     //    return s_poolReverse[value];
     //}
-
-    public delegate string? ExtResolveHash(ulong hash);
-    public static ExtResolveHash? ResolveHashHandler;
 }
