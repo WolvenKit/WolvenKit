@@ -801,9 +801,9 @@ export function validateEntFile(ent, _entSettings) {
 
     invalidVariantAndSubstitutions = {};
     meshAppearancesNotFound = {};
-    meshAppearancesNotFoundByComponent = {}; 
+    meshAppearancesNotFoundByComponent = {};
     
-    for (let i = 0; i < ent.components.length; i++) {
+    for (let i = 0; i < (ent.components?.length || 0); i++) {
         const component = ent.components[i];
         const componentName = stringifyPotentialCName(component.name);
         entFile_validateComponent(component, i, _entSettings.validateRecursively);
