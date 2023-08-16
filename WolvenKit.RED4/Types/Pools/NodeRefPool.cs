@@ -43,12 +43,21 @@ public static class NodeRefPool
                 {
                     var part = parts[i];
 
+                    string? alias = null;
+                    if (part.Contains(';'))
+                    {
+                        var tmp = part.Split(';');
+
+                        part = tmp[0];
+                        alias = tmp[1][1..];
+                    }
+
                     tmpFull += $"/{part}";
 
-                    var isAlias = part[0] == '#';
-                    if (isAlias)
+                    if (part[0] == '#')
                     {
                         part = part[1..];
+                        alias = part;
                     }
 
                     tmpHash += $"/{part}";
@@ -57,9 +66,9 @@ public static class NodeRefPool
                     s_pool.TryAdd(tmpFull, hash);
                     s_poolReverse.TryAdd(hash, tmpFull);
 
-                    if (isAlias)
+                    if (alias != null)
                     {
-                        s_aliasLookup.AddOrUpdate(part, hash, (_, _) => hash);
+                        s_aliasLookup.AddOrUpdate(alias, hash, (_, _) => hash);
                     }
                 }
             }
