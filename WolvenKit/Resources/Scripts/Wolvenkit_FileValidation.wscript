@@ -818,6 +818,17 @@ export function validateEntFile(ent, _entSettings) {
     if (_entSettings.checkComponentNameDuplication && duplicateComponentNames.length > 0) {
         Logger.Warning(`The following components are defined more than once: [ ${ duplicateComponentNames.join(', ') } ]`)
     }
+        
+    if (_entSettings.checkForCrashyDependencies) {
+        if ((ent.inplaceResources?.length || 0) > 0) {
+            Logger.Warning(`Your entity file defines inplaceResources. These might cause crashes due to asynchronous loading.`)    
+        }        
+    }
+    if (_entSettings.checkForResolvedDependencies) {
+        if ((ent.resolvedDependencies?.length || 0) > 0) {
+            Logger.Warning(`Your entity file defines resolvedDependencies, consider deleting them.`)
+        }        
+    }
 
     // will be set to false in app file validation
     const _isDataChangedForWriting = isDataChangedForWriting;

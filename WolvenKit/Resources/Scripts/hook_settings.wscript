@@ -34,6 +34,16 @@ const Settings = {
          */
         checkComponentNameDuplication: true,
         /*
+         * Set this to "false" to disable warnings about inplaceResources and resolvedDependencies
+         * e.g. "these things can make your game crash"
+         */
+        checkForCrashyDependencies: true,
+        /*
+         * Set this to "false" to disable warnings about inplaceResources and resolvedDependencies
+         * e.g. "these things can make your game crash"
+         */
+        checkForResolvedDependencies: true,
+        /*
          * Set this to "false" to disable warnings about components with the same name, but different meshes, 
          * e.g. if you're loading different variants from the same app file depending on a tag.
          */
