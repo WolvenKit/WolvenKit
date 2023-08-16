@@ -821,7 +821,7 @@ export function validateEntFile(ent, _entSettings) {
         
     if (_entSettings.checkForCrashyDependencies) {
         if ((ent.inplaceResources?.length || 0) > 0) {
-            Logger.Warning(`Your entity file defines inplaceResources. These might cause crashes due to asynchronous loading.`)    
+            Logger.Error(`Your entity file defines inplaceResources. These might cause crashes due to asynchronous loading.`)    
         }        
     }
     if (_entSettings.checkForResolvedDependencies) {
