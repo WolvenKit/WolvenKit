@@ -12,6 +12,8 @@ import {hasUppercasePaths} from "Wolvenkit_FileValidation.wscript";
  */
 const isWolvenkitDeveloper = false;
 
+const README_URL = 'https://wiki.redmodding.org/wolvenkit/wolvenkit-app/file-validation';
+
 globalThis.onSave = function (ext, file) {
     if (!Settings.Enabled) {
         return {
@@ -20,7 +22,11 @@ globalThis.onSave = function (ext, file) {
         }
     }
     const fileContent = TypeHelper.JsonParse(file);
-
+    
+    // grab file name from json and inform file validation about it
+    const fileName = (fileContent.Header?.ArchiveFileName || '').split('archive\\').pop() || '';
+    FileValidation.setPathToCurrentFile(fileName);
+    
     let success = true;
     try {
         switch (ext) {
@@ -52,21 +58,32 @@ globalThis.onSave = function (ext, file) {
             FileValidation.validateJsonFile(fileContent["Data"]["RootChunk"], Settings.Json);
             file = TypeHelper.JsonStringify(fileContent);
             break;
-        }
+        }        
     } catch (err) {
         if (isWolvenkitDeveloper) {
             throw err;
         }
         Logger.Warning(`Could not verify the file you just saved due to an error in Wolvenkit.`);
-        Logger.Info('You can ignore this warning or help us fix the problem: get in touch on Discord or create a ticket under https://github.com/WolvenKit/Wolvenkit/issues');
-        Logger.Info('Please include the necessary files.')
-    }
-    
+        Logger.Info('\tYou can ignore this warning or help us fix the problem: get in touch on Discord or create a ticket under https://github.com/WolvenKit/Wolvenkit/issues');
+        Logger.Info('\tPlease include the necessary files from your project\'s source folder.')
+        Logger.Info(`\tFor more information, check ${README_URL}#there-was-an-error`)
+        
+    }    
     if (FileValidation.hasUppercasePaths) {
         Logger.Error(`You have uppercase characters in your file paths. File validation will not work.`);
-        Logger.Info('If you are using this as a hack to disable the feature, consider doing it via Scripts Manager (Tools):');
-        Logger.Info('Switch to "Hook", double-click on "hook_settings" under "User" and set "Enabled" in line 4 to "false".');
-        
+        Logger.Info(`If you are using this as a hack to disable the feature, see ${README_URL}.`)        
+    }
+    
+    // If the file has been changed, don't 
+    if (FileValidation.isDataChangedForWriting) {
+        try {
+            const filePath = wkit.GetActiveDocument().FilePath;
+            Logger.Info(`Automatically closing and re-opening ${filePath} to apply automatic changes…`);
+            wkit.GetActiveDocument().Close();
+            wkit.OpenDocument(filePath);
+        } catch (err) {
+            Logger.Error(`Failed! Automatic changes won't be applied until you close and re-open your file!`);
+        }        
     }
 
     return {
