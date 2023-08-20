@@ -1219,7 +1219,9 @@ export function validateMeshFile(mesh, _meshSettings) {
                 materialName = stringifyPotentialCName(mesh.materialEntries[i].name) || materialName;
             }
 
-            meshFile_CheckMaterialProperties(material, `localMaterialBuffer.${materialName}`);
+            if (!PLACEHOLDER_NAME_REGEX.test(materialName)) {
+                meshFile_CheckMaterialProperties(material, `localMaterialBuffer.${materialName}`);
+            }
         }
     }
 
@@ -1227,13 +1229,16 @@ export function validateMeshFile(mesh, _meshSettings) {
         let material = mesh.preloadLocalMaterialInstances[i];
 
         let materialName = `${i}`;
+        if (!PLACEHOLDER_NAME_REGEX.test(materialName)) {
+              
+            // Add a warning here???
+            if (i < mesh.materialEntries.length && mesh.materialEntries[i] !== "undefined") {
+                materialName = stringifyPotentialCName(mesh.materialEntries[i].name) || materialName;
+            }
+    
+            meshFile_CheckMaterialProperties(material.Data, `preloadLocalMaterials.${materialName}`);
 
-        // Add a warning here???
-        if (i < mesh.materialEntries.length && mesh.materialEntries[i] !== "undefined") {
-            materialName = stringifyPotentialCName(mesh.materialEntries[i].name) || materialName;
         }
-
-        meshFile_CheckMaterialProperties(material.Data, `preloadLocalMaterials.${materialName}`);
     }
 
     let numSubMeshes = 0;
