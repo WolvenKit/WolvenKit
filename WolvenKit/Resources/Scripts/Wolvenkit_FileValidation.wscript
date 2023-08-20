@@ -443,7 +443,7 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
     }
 
     if (isDynamicAppearance && depotPath && shouldHaveSubstitution(depotPath)) {
-        Logger.Warning(`${appearanceName}.partsOverrides[${index}]: Substitution in depot path not supported.`);
+        Logger.Warning(`${info}: Substitution in depot path not supported.`);
     }
     
     const appFilePath = pathToCurrentFile;
@@ -455,7 +455,7 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
         overriddenComponents.push(componentName);
 
         const meshPath = componentName && meshesByComponentName[componentName] ? meshesByComponentName[componentName] : '';
-        if (checkDepotPath(meshPath)) {
+        if (meshPath && !checkDepotPath(meshPath, info)) {
             const appearanceNames = component_collectAppearancesFromMesh(meshPath);
             const meshAppearanceName = stringifyPotentialCName(componentOverride.meshAppearance);
             if (meshAppearanceName.startsWith('*')) {
