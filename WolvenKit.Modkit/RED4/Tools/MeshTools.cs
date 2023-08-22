@@ -1008,7 +1008,18 @@ namespace WolvenKit.Modkit.RED4.Tools
             if (rig is { BoneCount: > 0 })
             {
                 skin = model.CreateSkin();
-                skin.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
+
+                var actualJointNodesOnly = RIG.ExportNodes(ref model, rig).Values.ToArray();
+
+                if (actualJointNodesOnly.Length == 1)
+                {
+                    var parentArmature = actualJointNodesOnly[0].VisualParent;
+                    skin.BindJoints(parentArmature.WorldMatrix, actualJointNodesOnly);
+                }
+                else
+                {
+                    skin.BindJoints(actualJointNodesOnly);
+                }
             }
 
             Dictionary<string, Material>? materials = null;
