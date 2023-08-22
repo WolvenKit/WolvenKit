@@ -1361,7 +1361,10 @@ export function validateJsonFile(jsonData, jsonSettings) {
     
     const duplicatePrimaryKeys = [];
     const secondaryKeys = [];
-    const emptyFemaleVariants = [];
+    const femaleTranslations = [];
+    const maleTranslations = [];
+    const emptyFemaleVariants = [];    
+    
 
     for (let i = 0; i < jsonData.root.Data.entries.length; i++) {
         const element = jsonData.root.Data.entries[i];
@@ -1371,14 +1374,29 @@ export function validateJsonFile(jsonData, jsonSettings) {
         const potentialPrimaryKey = element.length > 2 ? element[2] : '' || '';
         const secondaryKey = element.length > 3 ? element[3] : '' || '';
 
-        secondaryKeys.push(secondaryKey);
-        
-        if (potentialMaleVariant && !potentialFemaleVariant) {
-            emptyFemaleVariants.push(secondaryKey);
-        }
-        
-        if (potentialPrimaryKey && potentialPrimaryKey !== '0') {
-            duplicatePrimaryKeys.push(potentialPrimaryKey);
+        if (!PLACEHOLDER_NAME_REGEX.test(secondaryKey)) {
+            secondaryKeys.push(secondaryKey);
+            
+            if (potentialMaleVariant && !potentialFemaleVariant) {
+                emptyFemaleVariants.push(secondaryKey);
+            }
+            
+            if (jsonSettings.checkDuplicateTranslations) {            
+                if (potentialFemaleVariant && femaleTranslations.includes(potentialFemaleVariant)) {
+                    Logger.Warning(`entry ${i}: ${potentialFemaleVariant} already defined`);
+                } else {
+                    femaleTranslations.push(secondaryKey);
+                }                
+                if (potentialMaleVariant && maleTranslations.includes(potentialMaleVariant)) {
+                    Logger.Warning(`entry ${i}: ${potentialMaleVariant} already defined`);
+                } else {
+                    maleTranslations.push(potentialMaleVariant);
+                }
+            }
+            
+            if (potentialPrimaryKey && potentialPrimaryKey !== '0') {
+                duplicatePrimaryKeys.push(potentialPrimaryKey);
+            }
         }
     }
 

@@ -99,7 +99,10 @@ const Settings = {
          * Check for primary key duplication and duplicate entries? 
          */
         checkDuplicateKeys: true,
-        
+        /*
+         * Check for duplicate translation entries (same text) 
+         */
+        checkDuplicateTranslations: true,        
         /*
          * Warn if default value isn't set? 
          */
