@@ -65,8 +65,9 @@ function checkCurlyBraces(inputString) {
 /**
  * @param _depotPath the depot path to analyse
  * @param _info info string for the user
+ * @param allowEmpty suppress warning if depot path is unset (partsOverrides will target player entity)
  */
-function checkDepotPath(_depotPath, _info) {
+function checkDepotPath(_depotPath, _info, allowEmpty = false) {
     // Don't validate if uppercase file names are present
     if (hasUppercasePaths) {
         return false;
@@ -77,6 +78,9 @@ function checkDepotPath(_depotPath, _info) {
     
     const depotPath = stringifyPotentialCName(_depotPath) || '';
     if (!depotPath) {
+        if (allowEmpty) {
+            return true;
+        }
         Logger.Warning(`${info}DepotPath not set`);
         return false;
     }
@@ -433,11 +437,11 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
     let info = `${appearanceName}.partsOverride[${index}]`;    
     const depotPath = stringifyPotentialCName(override.partResource.DepotPath, info);
 
-    if (!checkDepotPath(depotPath, info)) {
+    if (!checkDepotPath(depotPath, info, true)) {
         return;
     }
     
-    if (!depotPath.endsWith(".ent")) {
+    if (depotPath && !depotPath.endsWith(".ent")) {
         Logger.Error(`${info}: ${depotPath} does not point to an entity file! This can crash your game!`);
         return;
     }
