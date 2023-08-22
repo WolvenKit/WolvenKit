@@ -26,6 +26,11 @@ public static class BufferHelper
         s_bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
         s_bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
         s_bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
+        s_bufferReaders.Add("worldFoliageCompiledResource.dataBuffer", typeof(FoliageReader));
+        
+        s_bufferReaders.Add("animFacialSetup.bakedData", typeof(AnimFacialSetupBakedDataReader));
+        s_bufferReaders.Add("animFacialSetup.mainPosesData", typeof(AnimFacialSetupMainPosesDataReader));
+        s_bufferReaders.Add("animFacialSetup.correctivePosesData", typeof(AnimFacialSetupCorrectivePosesDataReader));
 
         // Save
         s_bufferReaders.Add("gameSavedStatsData.modifiersBuffer", typeof(ModifiersBufferReader));
