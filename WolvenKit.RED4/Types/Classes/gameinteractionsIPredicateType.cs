@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameinteractionsIPredicateType : ISerializable
+	public abstract partial class gameinteractionsIPredicateType : ISerializable
 	{
 		public gameinteractionsIPredicateType()
 		{

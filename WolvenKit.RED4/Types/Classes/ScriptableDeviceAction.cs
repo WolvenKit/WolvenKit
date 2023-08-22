@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ScriptableDeviceAction : BaseScriptableAction
+	public abstract partial class ScriptableDeviceAction : BaseScriptableAction
 	{
 		[Ordinal(11)] 
 		[RED("prop")] 

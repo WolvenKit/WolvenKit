@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsCOrientedBoxDefinition()
 		{
-			Position = new() { W = 1.000000F };
-			Forward = new() { Y = 1.000000F };
-			Right = new() { X = 1.000000F };
-			Up = new() { Z = 1.000000F };
+			Position = new Vector4 { W = 1.000000F };
+			Forward = new Vector4 { Y = 1.000000F };
+			Right = new Vector4 { X = 1.000000F };
+			Up = new Vector4 { Z = 1.000000F };
 
 			PostConstruct();
 		}

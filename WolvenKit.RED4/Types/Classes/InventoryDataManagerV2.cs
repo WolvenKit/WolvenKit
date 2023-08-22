@@ -317,7 +317,7 @@ namespace WolvenKit.RED4.Types
 			ToRebuildEquipment = true;
 			ToRebuildQuickSlots = true;
 			ToRebuildConsumables = true;
-			ActiveWeapon = new();
+			ActiveWeapon = new gameItemID();
 			EquipRecords = new();
 			InventoryItemDataWrappers = new();
 

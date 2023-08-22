@@ -22,10 +22,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_TrackSetter()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			Track = new();
-			Value = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			Track = new animNamedTrackIndex();
+			Value = new animFloatLink();
 
 			PostConstruct();
 		}

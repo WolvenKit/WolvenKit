@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public IntercomInkGameController()
 		{
-			ActionsList = new();
+			ActionsList = new inkWidgetReference();
 
 			PostConstruct();
 		}

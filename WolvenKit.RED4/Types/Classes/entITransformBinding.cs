@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entITransformBinding : entISourceBinding
+	public abstract partial class entITransformBinding : entISourceBinding
 	{
 		public entITransformBinding()
 		{

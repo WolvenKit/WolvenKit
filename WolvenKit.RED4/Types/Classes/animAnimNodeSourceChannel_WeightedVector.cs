@@ -39,8 +39,8 @@ namespace WolvenKit.RED4.Types
 		public animAnimNodeSourceChannel_WeightedVector()
 		{
 			Weight = 1.000000F;
-			WeightLink = new();
-			WeightFloatTrack = new();
+			WeightLink = new animFloatLink();
+			WeightFloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public SFakeFeatureChoice()
 		{
-			FactOnUse = new();
+			FactOnUse = new SFactOperationData();
 			FactsOnUse = new();
 			AffectedComponents = new();
 

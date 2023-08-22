@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameEffectPostAction_BeamVFX : gameEffectPostAction
+	public abstract partial class gameEffectPostAction_BeamVFX : gameEffectPostAction
 	{
 		public gameEffectPostAction_BeamVFX()
 		{

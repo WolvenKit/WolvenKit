@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public IntercomBlackboardDef()
 		{
-			DisplayString = new();
-			EnableActions = new();
-			Status = new();
+			DisplayString = new gamebbScriptID_String();
+			EnableActions = new gamebbScriptID_Bool();
+			Status = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

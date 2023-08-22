@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameTransformAnimation_Movement_PredefinedFunction()
 		{
-			Function = new();
+			Function = new EasingFunction();
 
 			PostConstruct();
 		}

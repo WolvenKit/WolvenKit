@@ -62,10 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public scnSceneMarkerInternalsAnimEventEntry()
 		{
-			StartPos = new();
-			EndPos = new();
-			StartDir = new();
-			EndDir = new();
+			StartPos = new Vector3();
+			EndPos = new Vector3();
+			StartDir = new Vector3();
+			EndDir = new Vector3();
 
 			PostConstruct();
 		}

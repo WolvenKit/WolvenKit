@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public InstallModConfirmationData()
 		{
-			ItemId = new();
-			PartId = new();
-			TelemetryItemData = new() { ItemID = new(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
-			TelemetryPartData = new() { ItemID = new(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
+			ItemId = new gameItemID();
+			PartId = new gameItemID();
+			TelemetryItemData = new gameTelemetryInventoryItem { ItemID = new gameItemID(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
+			TelemetryPartData = new gameTelemetryInventoryItem { ItemID = new gameItemID(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
 
 			PostConstruct();
 		}

@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameCameraLocation()
 		{
-			Position = new();
-			Rotation = new();
+			Position = new Vector3();
+			Rotation = new EulerAngles();
 
 			PostConstruct();
 		}

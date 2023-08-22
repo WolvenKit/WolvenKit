@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ActionInt : ScriptableDeviceAction
+	public abstract partial class ActionInt : ScriptableDeviceAction
 	{
 		public ActionInt()
 		{

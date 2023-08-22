@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorDelegateExpressionDefinition()
 		{
-			DelegateAttribute = new();
+			DelegateAttribute = new AIbehaviorDelegateAttrRef();
 			BehaviorCallbackNames = new();
 
 			PostConstruct();

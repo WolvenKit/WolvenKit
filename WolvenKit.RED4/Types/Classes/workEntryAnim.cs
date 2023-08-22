@@ -70,10 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public workEntryAnim()
 		{
-			Id = new() { Id = 4294967295 };
+			Id = new workWorkEntryId { Id = uint.MaxValue };
 			Flags = 65552;
 			OrientationType = Enums.moveMovementOrientationType.Forward;
-			SyncOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			SyncOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			BlendOutTime = 0.500000F;
 
 			PostConstruct();

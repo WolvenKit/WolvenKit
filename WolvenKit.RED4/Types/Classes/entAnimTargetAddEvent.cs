@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entAnimTargetAddEvent : redEvent
+	public abstract partial class entAnimTargetAddEvent : redEvent
 	{
 		[Ordinal(0)] 
 		[RED("targetPositionProvider")] 

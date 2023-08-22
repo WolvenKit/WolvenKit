@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_State()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			Nodes = new();
 			OutTransitionIndices = new();
 			Tags = new();

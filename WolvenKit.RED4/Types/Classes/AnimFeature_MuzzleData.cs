@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_MuzzleData()
 		{
-			MuzzleOffset = new();
+			MuzzleOffset = new Vector4();
 
 			PostConstruct();
 		}

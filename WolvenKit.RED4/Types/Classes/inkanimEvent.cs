@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkanimEvent : IScriptable
+	public abstract partial class inkanimEvent : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("startTime")] 

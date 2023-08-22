@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public entTagMask()
 		{
-			HardTags = new() { Tags = new() };
-			SoftTags = new() { Tags = new() };
-			ExcludedTags = new() { Tags = new() };
+			HardTags = new redTagList { Tags = new() };
+			SoftTags = new redTagList { Tags = new() };
+			ExcludedTags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questPrefabVariantMapArrayElement()
 		{
-			GlobalNodeRef = new();
+			GlobalNodeRef = new worldGlobalNodeRef();
 			PrefabVariantsReplicatedInfos = new();
 
 			PostConstruct();

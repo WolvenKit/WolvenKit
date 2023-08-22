@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamePersistentState : IScriptable
+	public abstract partial class gamePersistentState : IScriptable
 	{
 		public gamePersistentState()
 		{

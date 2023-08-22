@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entCharacterCustomizationSkinnedMeshComponent()
 		{
-			Tags = new() { Tags = new() };
+			Tags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

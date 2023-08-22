@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiWorldMapPlayerMappinController()
 		{
-			ConeIconWidget = new();
+			ConeIconWidget = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

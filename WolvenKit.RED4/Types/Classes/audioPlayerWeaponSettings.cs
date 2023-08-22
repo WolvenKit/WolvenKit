@@ -174,8 +174,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioPlayerWeaponSettings()
 		{
-			WeaponHandlingSettings = new();
-			FireModeSounds = new();
+			WeaponHandlingSettings = new audioWeaponHandlingSettings();
+			FireModeSounds = new audioWeaponFireModeSounds();
 			TimeLimitForAutoFireSingleShot = 0.250000F;
 			PadVibrationGain = 1.000000F;
 			PadVibrationReloadGain = 1.000000F;

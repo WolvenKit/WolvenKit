@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameAttachmentSlotEventsPartRemovedFromSlotEvent()
 		{
-			ItemID = new();
-			RemovedPartID = new();
+			ItemID = new gameItemID();
+			RemovedPartID = new gameItemID();
 
 			PostConstruct();
 		}

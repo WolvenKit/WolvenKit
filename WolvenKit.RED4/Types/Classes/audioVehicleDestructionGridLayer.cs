@@ -70,14 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public audioVehicleDestructionGridLayer()
 		{
-			BackLeft = new();
-			BackRight = new();
-			CenterBackLeft = new();
-			CenterBackRight = new();
-			CenterForwardLeft = new();
-			CenterForwardRight = new();
-			FrontLeft = new();
-			FrontRight = new();
+			BackLeft = new audioVehicleDestructionGridCell();
+			BackRight = new audioVehicleDestructionGridCell();
+			CenterBackLeft = new audioVehicleDestructionGridCell();
+			CenterBackRight = new audioVehicleDestructionGridCell();
+			CenterForwardLeft = new audioVehicleDestructionGridCell();
+			CenterForwardRight = new audioVehicleDestructionGridCell();
+			FrontLeft = new audioVehicleDestructionGridCell();
+			FrontRight = new audioVehicleDestructionGridCell();
 
 			PostConstruct();
 		}

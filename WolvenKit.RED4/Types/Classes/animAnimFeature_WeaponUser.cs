@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_WeaponUser()
 		{
-			IkLeftHandLocalPosition = new() { W = 1.000000F };
-			IkRightHandLocalPosition = new() { W = 1.000000F };
+			IkLeftHandLocalPosition = new Vector4 { W = 1.000000F };
+			IkRightHandLocalPosition = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

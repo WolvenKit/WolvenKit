@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public Hotkey()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 			Scope = new();
 
 			PostConstruct();

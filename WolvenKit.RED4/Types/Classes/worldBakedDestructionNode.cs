@@ -158,7 +158,7 @@ namespace WolvenKit.RED4.Types
 			ImpulseToDamage = 1.000000F;
 			ContactToDamage = 1.000000F;
 			AccumulateDamage = true;
-			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			NavigationSetting = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
 			UseMeshNavmeshSettings = true;
 
 			PostConstruct();

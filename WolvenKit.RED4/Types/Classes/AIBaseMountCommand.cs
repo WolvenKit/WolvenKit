@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIBaseMountCommand : AICommand
+	public abstract partial class AIBaseMountCommand : AICommand
 	{
 		[Ordinal(4)] 
 		[RED("mountData")] 
@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIBaseMountCommand()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 
 			PostConstruct();
 		}

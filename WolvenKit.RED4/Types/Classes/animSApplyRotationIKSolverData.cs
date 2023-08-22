@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animSApplyRotationIKSolverData()
 		{
-			Bone = new();
+			Bone = new animTransformIndex();
 
 			PostConstruct();
 		}

@@ -126,11 +126,11 @@ namespace WolvenKit.RED4.Types
 
 		public DisassembleManager()
 		{
-			ListRef = new();
+			ListRef = new inkCompoundWidgetReference();
 			InitialPopupDelay = 1.000000F;
 			PopupList = new();
 			ListOfAddedInventoryItems = new();
-			AnimOptions = new();
+			AnimOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

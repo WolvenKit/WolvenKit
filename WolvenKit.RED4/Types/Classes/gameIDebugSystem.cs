@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIDebugSystem : gameIGameSystem
+	public abstract partial class gameIDebugSystem : gameIGameSystem
 	{
 		public gameIDebugSystem()
 		{

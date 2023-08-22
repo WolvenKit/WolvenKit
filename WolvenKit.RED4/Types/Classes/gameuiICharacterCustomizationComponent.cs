@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiICharacterCustomizationComponent : entIComponent
+	public abstract partial class gameuiICharacterCustomizationComponent : entIComponent
 	{
 		public gameuiICharacterCustomizationComponent()
 		{

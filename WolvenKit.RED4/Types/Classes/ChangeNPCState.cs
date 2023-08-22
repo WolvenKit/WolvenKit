@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ChangeNPCState : AIbehaviortaskScript
+	public abstract partial class ChangeNPCState : AIbehaviortaskScript
 	{
 		public ChangeNPCState()
 		{

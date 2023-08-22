@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsCHotSpotAreaFilterDefinition()
 		{
-			Transform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Transform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			Shapes = new();
 			NegativeShapes = new();
 

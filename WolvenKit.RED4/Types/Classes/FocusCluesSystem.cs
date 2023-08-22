@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.Types
 		{
 			LinkedClues = new();
 			DisabledGroupes = new();
-			ActiveLinkedClue = new() { OwnerID = new(), ExtendedClueRecords = new(), PsData = new() { Id = new() } };
+			ActiveLinkedClue = new LinkedFocusClueData { OwnerID = new entEntityID(), ExtendedClueRecords = new(), PsData = new PSOwnerData { Id = new gamePersistentID() } };
 
 			PostConstruct();
 		}

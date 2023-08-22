@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public RequestUIRefreshEvent()
 		{
-			Requester = new();
+			Requester = new gamePersistentID();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIGameManagerNonSignalStoppingNodeType : questIGameManagerNodeType
+	public abstract partial class questIGameManagerNonSignalStoppingNodeType : questIGameManagerNodeType
 	{
 		public questIGameManagerNonSignalStoppingNodeType()
 		{

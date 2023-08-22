@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameJournalBriefingBaseSection : gameJournalEntry
+	public abstract partial class gameJournalBriefingBaseSection : gameJournalEntry
 	{
 		public gameJournalBriefingBaseSection()
 		{

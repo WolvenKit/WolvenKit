@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_DangleExternalInput()
 		{
-			FictitiousAccelerationWs = new();
+			FictitiousAccelerationWs = new Vector4();
 
 			PostConstruct();
 		}

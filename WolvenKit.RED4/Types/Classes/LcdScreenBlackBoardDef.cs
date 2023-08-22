@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public LcdScreenBlackBoardDef()
 		{
-			MessegeData = new();
+			MessegeData = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

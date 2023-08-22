@@ -30,10 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_RagdollControl()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			BlendInDuration = 0.200000F;
 			BlendOutDuration = 0.500000F;
-			InputPoseNode = new();
+			InputPoseNode = new animPoseLink();
 
 			PostConstruct();
 		}

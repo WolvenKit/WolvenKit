@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ElevatorTerminalFakeGameController()
 		{
-			ElevatorTerminalWidget = new();
+			ElevatorTerminalWidget = new inkCanvasWidgetReference();
 
 			PostConstruct();
 		}

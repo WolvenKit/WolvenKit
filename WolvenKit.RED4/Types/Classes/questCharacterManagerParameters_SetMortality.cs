@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerParameters_SetMortality()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

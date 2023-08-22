@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public gameprojectileSlideTrajectoryParams()
 		{
 			Stickiness = 0.500000F;
-			ConstAccel = new() { Z = -0.500000F, W = 1.000000F };
+			ConstAccel = new Vector4 { Z = -0.500000F, W = 1.000000F };
 
 			PostConstruct();
 		}

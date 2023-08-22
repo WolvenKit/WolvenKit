@@ -54,10 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public physicsSystemBody()
 		{
-			Params = new() { SimulationType = Enums.physicsSimulationType.Dynamic, SolverIterationsCountPosition = 4, SolverIterationsCountVelocity = 1, MaxDepenetrationVelocity = -1.000000F, MaxAngularVelocity = -1.000000F, MaxContactImpulse = -1.000000F, Inertia = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, ComOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } } };
-			LocalToModel = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Params = new physicsSystemBodyParams { SimulationType = Enums.physicsSimulationType.Dynamic, SolverIterationsCountPosition = 4, SolverIterationsCountVelocity = 1, MaxDepenetrationVelocity = -1.000000F, MaxAngularVelocity = -1.000000F, MaxContactImpulse = -1.000000F, Inertia = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, ComOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } } };
+			LocalToModel = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			CollisionShapes = new();
-			MappedBoneToBody = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			MappedBoneToBody = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 
 			PostConstruct();
 		}

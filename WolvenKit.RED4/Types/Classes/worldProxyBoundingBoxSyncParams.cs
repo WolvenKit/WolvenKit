@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public worldProxyBoundingBoxSyncParams()
 		{
 			PullRange = 0.050000F;
-			StackOffset = new();
+			StackOffset = new Vector3();
 
 			PostConstruct();
 		}

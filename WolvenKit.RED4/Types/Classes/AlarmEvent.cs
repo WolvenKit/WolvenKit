@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AlarmEvent()
 		{
-			ID = new();
+			ID = new gameDelayID();
 
 			PostConstruct();
 		}

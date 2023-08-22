@@ -70,11 +70,11 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiQuadRacerPlayer()
 		{
-			PlayerImage = new();
-			LeftTireSmoke = new();
-			RightTireSmoke = new();
-			RightFlame = new();
-			LeftFlame = new();
+			PlayerImage = new inkImageWidgetReference();
+			LeftTireSmoke = new inkImageWidgetReference();
+			RightTireSmoke = new inkImageWidgetReference();
+			RightFlame = new inkImageWidgetReference();
+			LeftFlame = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

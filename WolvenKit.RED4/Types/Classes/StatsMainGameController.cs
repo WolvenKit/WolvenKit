@@ -254,16 +254,16 @@ namespace WolvenKit.RED4.Types
 
 		public StatsMainGameController()
 		{
-			MainViewRoot = new();
-			StatsList = new();
-			TooltipsManagerRef = new();
-			LevelControllerRef = new();
-			StreetCredControllerRef = new();
-			DetailListControllerRef = new();
-			StatsStreetCredRewardRef = new();
-			StatsPlayTimeControllerdRef = new();
-			BtnInventory = new();
-			ButtonHintsManagerRef = new();
+			MainViewRoot = new inkWidgetReference();
+			StatsList = new inkCompoundWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
+			LevelControllerRef = new inkWidgetReference();
+			StreetCredControllerRef = new inkWidgetReference();
+			DetailListControllerRef = new inkWidgetReference();
+			StatsStreetCredRewardRef = new inkWidgetReference();
+			StatsPlayTimeControllerdRef = new inkWidgetReference();
+			BtnInventory = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
 			HealthStatsData = new();
 			DPSStatsData = new();
 			ArmorStatsData = new();

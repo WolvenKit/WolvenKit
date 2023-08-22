@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIISquadManager : gameIGameSystem
+	public abstract partial class AIISquadManager : gameIGameSystem
 	{
 		public AIISquadManager()
 		{

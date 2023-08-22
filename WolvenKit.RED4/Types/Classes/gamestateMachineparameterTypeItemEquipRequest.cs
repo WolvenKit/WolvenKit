@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamestateMachineparameterTypeItemEquipRequest()
 		{
-			ItemId = new();
+			ItemId = new gameItemID();
 			StartingRenderingPlane = Enums.ERenderingPlane.RPl_Weapon;
 
 			PostConstruct();

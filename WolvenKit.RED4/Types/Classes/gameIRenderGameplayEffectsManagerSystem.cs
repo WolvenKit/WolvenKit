@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIRenderGameplayEffectsManagerSystem : gameIGameSystem
+	public abstract partial class gameIRenderGameplayEffectsManagerSystem : gameIGameSystem
 	{
 		public gameIRenderGameplayEffectsManagerSystem()
 		{

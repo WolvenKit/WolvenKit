@@ -78,9 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public LinkedFocusClueData()
 		{
-			OwnerID = new();
+			OwnerID = new entEntityID();
 			ExtendedClueRecords = new();
-			PsData = new() { Id = new() };
+			PsData = new PSOwnerData { Id = new gamePersistentID() };
 
 			PostConstruct();
 		}

@@ -78,14 +78,14 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsBraindanceVisibilityEvent()
 		{
-			Id = new() { Id = 18446744073709551615 };
+			Id = new scnSceneEventId { Id = long.MaxValue };
 			Duration = 1000;
-			PerformerId = new() { Id = 4294967040 };
+			PerformerId = new scnPerformerId { Id = 4294967040 };
 			CustomMaterialParam = Enums.ECustomMaterialParam.ECMP_CustomParam0;
 			Priority = 7;
 			PerspectiveBlend = 0.500000F;
-			RenderSettingsFPP = new() { AreaParameters = new() };
-			RenderSettingsTPP = new() { AreaParameters = new() };
+			RenderSettingsFPP = new WorldRenderAreaSettings { AreaParameters = new() };
+			RenderSettingsTPP = new WorldRenderAreaSettings { AreaParameters = new() };
 
 			PostConstruct();
 		}

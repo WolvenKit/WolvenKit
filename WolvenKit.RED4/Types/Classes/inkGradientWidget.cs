@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public inkGradientWidget()
 		{
-			StartColor = new() { Alpha = 1.000000F };
-			EndColor = new();
+			StartColor = new HDRColor { Alpha = 1.000000F };
+			EndColor = new HDRColor();
 
 			PostConstruct();
 		}

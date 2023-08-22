@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IDebugConsole : RedBaseClass
+	public abstract partial class IDebugConsole : RedBaseClass
 	{
 		public IDebugConsole()
 		{

@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIDefTreeVariableComparison()
 		{
-			Id = 65535;
+			Id = ushort.MaxValue;
 			ReadableName = "TreeVar";
-			ReferenceVariableId = 65535;
+			ReferenceVariableId = ushort.MaxValue;
 			Operator = Enums.EComparisonType.Equal;
 
 			PostConstruct();

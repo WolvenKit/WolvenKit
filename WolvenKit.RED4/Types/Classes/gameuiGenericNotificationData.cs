@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiGenericNotificationData()
 		{
-			WidgetLibraryResource = new();
+			WidgetLibraryResource = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

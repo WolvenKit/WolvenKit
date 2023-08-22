@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalRequestContext()
 		{
-			StateFilter = new();
-			ClassFilter = new();
+			StateFilter = new gameJournalRequestStateFilter();
+			ClassFilter = new gameJournalRequestClassFilter();
 
 			PostConstruct();
 		}

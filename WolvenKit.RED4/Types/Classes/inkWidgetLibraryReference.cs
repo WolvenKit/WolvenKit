@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkWidgetLibraryReference()
 		{
-			WidgetLibrary = new();
+			WidgetLibrary = new inkWidgetLibraryResourceWrapper();
 
 			PostConstruct();
 		}

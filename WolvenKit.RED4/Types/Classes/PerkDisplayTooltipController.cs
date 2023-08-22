@@ -174,26 +174,26 @@ namespace WolvenKit.RED4.Types
 
 		public PerkDisplayTooltipController()
 		{
-			Root_16 = new();
-			PerkNameText = new();
-			VideoWrapper = new();
-			VideoWidget = new();
-			UnlockStateText = new();
-			PerkTypeText = new();
-			PerkTypeWrapper = new();
-			UnlockInfoWrapper = new();
-			UnlockPointsText = new();
-			UnlockPointsDesc = new();
-			UnlockPerkWrapper = new();
-			LevelText = new();
-			LevelDescriptionText = new();
-			NextLevelWrapper = new();
-			NextLevelText = new();
-			NextLevelDescriptionText = new();
-			TraitLevelGrowthText = new();
-			UnlockTraitPointsText = new();
-			UnlockTraitWrapper = new();
-			HoldToUpgradeHint = new();
+			Root_16 = new inkWidgetReference();
+			PerkNameText = new inkTextWidgetReference();
+			VideoWrapper = new inkWidgetReference();
+			VideoWidget = new inkVideoWidgetReference();
+			UnlockStateText = new inkTextWidgetReference();
+			PerkTypeText = new inkTextWidgetReference();
+			PerkTypeWrapper = new inkWidgetReference();
+			UnlockInfoWrapper = new inkWidgetReference();
+			UnlockPointsText = new inkTextWidgetReference();
+			UnlockPointsDesc = new inkTextWidgetReference();
+			UnlockPerkWrapper = new inkWidgetReference();
+			LevelText = new inkTextWidgetReference();
+			LevelDescriptionText = new inkTextWidgetReference();
+			NextLevelWrapper = new inkWidgetReference();
+			NextLevelText = new inkTextWidgetReference();
+			NextLevelDescriptionText = new inkTextWidgetReference();
+			TraitLevelGrowthText = new inkTextWidgetReference();
+			UnlockTraitPointsText = new inkTextWidgetReference();
+			UnlockTraitWrapper = new inkWidgetReference();
+			HoldToUpgradeHint = new inkWidgetReference();
 
 			PostConstruct();
 		}

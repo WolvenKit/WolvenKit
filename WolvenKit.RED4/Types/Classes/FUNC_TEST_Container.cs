@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public FUNC_TEST_Container()
 		{
-			BasePanel = new();
-			Compound = new();
-			Leaf = new();
-			Widget = new();
+			BasePanel = new inkBasePanelWidgetReference();
+			Compound = new inkCompoundWidgetReference();
+			Leaf = new inkLeafWidgetReference();
+			Widget = new inkWidgetReference();
 
 			PostConstruct();
 		}

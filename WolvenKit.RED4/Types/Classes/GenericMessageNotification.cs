@@ -134,17 +134,17 @@ namespace WolvenKit.RED4.Types
 
 		public GenericMessageNotification()
 		{
-			Title = new();
-			Message = new();
-			ButtonConfirm = new();
-			ButtonCancel = new();
-			ButtonOk = new();
-			ButtonYes = new();
-			ButtonNo = new();
-			Root = new();
-			Background = new();
-			ButtonHintsRoot = new();
-			LibraryPath = new() { WidgetLibrary = new() };
+			Title = new inkTextWidgetReference();
+			Message = new inkTextWidgetReference();
+			ButtonConfirm = new inkWidgetReference();
+			ButtonCancel = new inkWidgetReference();
+			ButtonOk = new inkWidgetReference();
+			ButtonYes = new inkWidgetReference();
+			ButtonNo = new inkWidgetReference();
+			Root = new inkWidgetReference();
+			Background = new inkWidgetReference();
+			ButtonHintsRoot = new inkWidgetReference();
+			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
 
 			PostConstruct();
 		}

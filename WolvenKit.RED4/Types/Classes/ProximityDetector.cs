@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ProximityDetector : Device
+	public abstract partial class ProximityDetector : Device
 	{
 		[Ordinal(84)] 
 		[RED("scanningAreaName")] 
@@ -55,18 +55,18 @@ namespace WolvenKit.RED4.Types
 		public ProximityDetector()
 		{
 			ControllerTypeName = "ScriptableDeviceComponent";
-			ScreenDefinition = new();
+			ScreenDefinition = new SUIScreenDefinition();
 			IsUIdirty = true;
-			AdvanceInteractionStateResolveDelayID = new();
-			UpdateID = new();
-			DelayedUpdateDeviceStateID = new();
-			LastPingSourceID = new();
-			NetworkGridBeamFX = new();
-			PersonalLinkFailsafeID = new();
-			NetworkGridBeamOffset = new();
+			AdvanceInteractionStateResolveDelayID = new gameDelayID();
+			UpdateID = new gameDelayID();
+			DelayedUpdateDeviceStateID = new gameDelayID();
+			LastPingSourceID = new entEntityID();
+			NetworkGridBeamFX = new gameFxResource();
+			PersonalLinkFailsafeID = new gameDelayID();
+			NetworkGridBeamOffset = new Vector4();
 			AreaEffectsData = new();
 			AreaEffectsInFocusMode = new();
-			DebugOptions = new() { LayerIDs = new() };
+			DebugOptions = new DebuggerProperties { LayerIDs = new() };
 
 			PostConstruct();
 		}

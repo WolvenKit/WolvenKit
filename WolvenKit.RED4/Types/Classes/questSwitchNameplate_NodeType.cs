@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public questSwitchNameplate_NodeType()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

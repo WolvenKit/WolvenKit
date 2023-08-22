@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AITimeCondition : AIbehaviorconditionScript
+	public abstract partial class AITimeCondition : AIbehaviorconditionScript
 	{
 		public AITimeCondition()
 		{

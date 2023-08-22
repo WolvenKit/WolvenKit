@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class CustomBlackboardDef : gamebbScriptDefinition
+	public abstract partial class CustomBlackboardDef : gamebbScriptDefinition
 	{
 		public CustomBlackboardDef()
 		{

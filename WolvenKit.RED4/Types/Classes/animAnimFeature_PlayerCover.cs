@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_PlayerCover()
 		{
-			CameraPositionMS = new();
+			CameraPositionMS = new Vector4();
 
 			PostConstruct();
 		}

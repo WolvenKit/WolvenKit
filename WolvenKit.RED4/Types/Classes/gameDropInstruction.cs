@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameDropInstruction()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 			Quantity = -1;
 
 			PostConstruct();

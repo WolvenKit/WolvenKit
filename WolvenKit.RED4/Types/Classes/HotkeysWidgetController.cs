@@ -94,9 +94,9 @@ namespace WolvenKit.RED4.Types
 
 		public HotkeysWidgetController()
 		{
-			HotkeysList = new();
-			UtilsList = new();
-			GameInstance = new();
+			HotkeysList = new inkHorizontalPanelWidgetReference();
+			UtilsList = new inkHorizontalPanelWidgetReference();
+			GameInstance = new ScriptGameInstance();
 
 			PostConstruct();
 		}

@@ -70,8 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public questAssignCharacter_NodeType()
 		{
-			CharacterRef = new() { Names = new() };
-			VehicleRef = new() { Names = new() };
+			CharacterRef = new gameEntityReference { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
 			Assign = true;
 			SlotName = "seat_front_left";
 			EntrySlotName = "default";

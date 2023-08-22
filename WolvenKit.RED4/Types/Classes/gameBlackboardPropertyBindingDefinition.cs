@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameBlackboardPropertyBindingDefinition()
 		{
-			SerializableID = new();
+			SerializableID = new gameBlackboardSerializableID();
 			PropertyPath = new();
 
 			PostConstruct();

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIbehaviorTaskDefinition : ISerializable
+	public abstract partial class AIbehaviorTaskDefinition : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("ignoreTaskCompletion")] 

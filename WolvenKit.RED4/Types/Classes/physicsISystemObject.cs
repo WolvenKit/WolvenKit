@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class physicsISystemObject : ISerializable
+	public abstract partial class physicsISystemObject : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("name")] 

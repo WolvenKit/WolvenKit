@@ -211,7 +211,7 @@ namespace WolvenKit.RED4.Types
 			AutoTransitionBlendTime = 1.000000F;
 			InitialActions = new();
 			FinalAnimsets = new();
-			Tags = new() { Tags = new() };
+			Tags = new redTagList { Tags = new() };
 			ItemsPolicy = Enums.workWorkspotItemPolicy.ItemPolicy_SpawnItemOnIdleChange | Enums.workWorkspotItemPolicy.ItemPolicy_DespawnItemOnIdleChange | Enums.workWorkspotItemPolicy.ItemPolicy_DespawnItemOnReaction;
 			CustomTransitionAnims = new();
 			InertializationDurationEnter = 0.500000F;
@@ -219,8 +219,8 @@ namespace WolvenKit.RED4.Types
 			InertializationDurationExitForced = 0.200000F;
 			SequencesTimeLimit = 1.000000F;
 			UnmountBodyCarry = true;
-			WhitelistVisualTags = new() { Tags = new() };
-			BlacklistVisualTags = new() { Tags = new() };
+			WhitelistVisualTags = new redTagList { Tags = new() };
+			BlacklistVisualTags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

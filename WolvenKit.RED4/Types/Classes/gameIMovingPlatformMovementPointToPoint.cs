@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIMovingPlatformMovementPointToPoint : gameIMovingPlatformMovement
+	public abstract partial class gameIMovingPlatformMovementPointToPoint : gameIMovingPlatformMovement
 	{
 		public gameIMovingPlatformMovementPointToPoint()
 		{

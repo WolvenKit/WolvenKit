@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entIComponent : IScriptable
+	public abstract partial class entIComponent : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("name")] 

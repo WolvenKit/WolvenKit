@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNodeSourceChannel_StaticVector()
 		{
-			Data = new();
+			Data = new Vector4();
 
 			PostConstruct();
 		}

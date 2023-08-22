@@ -254,9 +254,9 @@ namespace WolvenKit.RED4.Types
 
 		public audioVehicleGeneralData()
 		{
-			VehicleDoorsSettings = new() { Door = new(), Trunk = new(), Hood = new() };
-			VehicleInteriorParameterData = new() { EnterCurveType = Enums.audioESoundCurveType.Linear, EnterCurveTime = 3.000000F, EnterDelayTime = 2.000000F, ExitCurveType = Enums.audioESoundCurveType.Linear, ExitCurveTime = 3.000000F, ExitDelayTime = 2.000000F };
-			VehicleTemperatureSettings = new() { RpmThreshold = 3.000000F, TimeToActivateTemperature = 8.000000F, CooldownTime = 10.000000F };
+			VehicleDoorsSettings = new audioVehicleDoorsSettingsMetadata { Door = new audioVehicleDoorsSettings(), Trunk = new audioVehicleDoorsSettings(), Hood = new audioVehicleDoorsSettings() };
+			VehicleInteriorParameterData = new audioVehicleInteriorParameterData { EnterCurveType = Enums.audioESoundCurveType.Linear, EnterCurveTime = 3.000000F, EnterDelayTime = 2.000000F, ExitCurveType = Enums.audioESoundCurveType.Linear, ExitCurveTime = 3.000000F, ExitDelayTime = 2.000000F };
+			VehicleTemperatureSettings = new audioVehicleTemperatureSettings { RpmThreshold = 3.000000F, TimeToActivateTemperature = 8.000000F, CooldownTime = 10.000000F };
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameEffectObjectSingleFilter : gameEffectObjectFilter
+	public abstract partial class gameEffectObjectSingleFilter : gameEffectObjectFilter
 	{
 		public gameEffectObjectSingleFilter()
 		{

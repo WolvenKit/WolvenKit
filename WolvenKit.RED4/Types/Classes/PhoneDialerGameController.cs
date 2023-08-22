@@ -182,11 +182,11 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneDialerGameController()
 		{
-			ContactsList = new();
-			AvatarImage = new();
-			HintMessenger = new();
-			ScrollArea = new();
-			ScrollControllerWidget = new();
+			ContactsList = new inkWidgetReference();
+			AvatarImage = new inkImageWidgetReference();
+			HintMessenger = new inkWidgetReference();
+			ScrollArea = new inkScrollAreaWidgetReference();
+			ScrollControllerWidget = new inkWidgetReference();
 			SoundName = "Phone";
 			AudioPhoneNavigation = "ui_phone_navigation";
 

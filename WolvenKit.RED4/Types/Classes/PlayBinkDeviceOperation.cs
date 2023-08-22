@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			IsEnabled = true;
 			ToggleOperations = new();
-			Bink = new() { BinkPath = new() };
+			Bink = new SBinkperationData { BinkPath = new redResourceReferenceScriptToken() };
 
 			PostConstruct();
 		}

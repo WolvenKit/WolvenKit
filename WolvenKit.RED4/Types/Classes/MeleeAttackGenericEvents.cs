@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MeleeAttackGenericEvents : MeleeEventsTransition
+	public abstract partial class MeleeAttackGenericEvents : MeleeEventsTransition
 	{
 		[Ordinal(1)] 
 		[RED("effect")] 

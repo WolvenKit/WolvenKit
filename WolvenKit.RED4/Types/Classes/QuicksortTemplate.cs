@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class QuicksortTemplate : IScriptable
+	public abstract partial class QuicksortTemplate : IScriptable
 	{
 		public QuicksortTemplate()
 		{

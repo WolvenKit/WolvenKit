@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ActiveVehicleDataDef()
 		{
-			VehPlayerStateData = new();
-			IsPlayerMounted = new();
-			IsTPPCameraOn = new();
-			PositionInRace = new();
+			VehPlayerStateData = new gamebbScriptID_Variant();
+			IsPlayerMounted = new gamebbScriptID_Bool();
+			IsTPPCameraOn = new gamebbScriptID_Bool();
+			PositionInRace = new gamebbScriptID_Int32();
 
 			PostConstruct();
 		}

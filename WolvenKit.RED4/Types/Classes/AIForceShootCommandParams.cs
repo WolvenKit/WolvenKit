@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIForceShootCommandParams()
 		{
-			TargetOverridePuppetRef = new() { Names = new() };
+			TargetOverridePuppetRef = new gameEntityReference { Names = new() };
 			Duration = -1.000000F;
 
 			PostConstruct();

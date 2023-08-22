@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldPrefabProxyMeshNode : worldMeshNode
+	public abstract partial class worldPrefabProxyMeshNode : worldMeshNode
 	{
 		[Ordinal(16)] 
 		[RED("nearAutoHideDistance")] 
@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldPrefabProxyMeshNode()
 		{
+			Mesh = new CResourceAsyncReference<CMesh>(@"engine\meshes\editor\box.w2mesh");
 			MeshAppearance = "default";
 			OccluderAutohideDistanceScale = 255;
 			CastShadows = true;
@@ -29,7 +30,7 @@ namespace WolvenKit.RED4.Types
 			CastRayTracedLocalShadows = true;
 			WindImpulseEnabled = true;
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
-			LodLevelScales = 4294967295;
+			LodLevelScales = uint.MaxValue;
 
 			PostConstruct();
 		}

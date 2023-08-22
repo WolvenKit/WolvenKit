@@ -22,10 +22,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_MathExpressionPose()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			ExpressionData = new() { FloatSockets = new(), VectorSockets = new(), QuaternionSockets = new() };
-			OutputFloatTrack = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			ExpressionData = new animMathExpressionNodeData { FloatSockets = new(), VectorSockets = new(), QuaternionSockets = new() };
+			OutputFloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

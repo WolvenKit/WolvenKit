@@ -134,11 +134,11 @@ namespace WolvenKit.RED4.Types
 
 		public NewTurnMinigameData()
 		{
-			Position = new();
+			Position = new Vector2();
 			NewPlayerBufferContent = new();
 			NewEnemyBufferContent = new();
 			RegeneratedGridData = new();
-			BasicAccessCompletionState = new() { CompletionProgress = new() };
+			BasicAccessCompletionState = new ProgramProgressData { CompletionProgress = new() };
 			PlayerProgramsCompletionState = new();
 			EnemyProgramsCompletionState = new();
 			PlayerProgramsAdded = new();

@@ -62,14 +62,14 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FloatTrackDirectConnConstraint()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			FloatTrackIndex = new();
-			TransformIndex = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			FloatTrackIndex = new animNamedTrackIndex();
+			TransformIndex = new animTransformIndex();
 			MulFactor = 1.000000F;
 			Weight = 1.000000F;
-			WeightNode = new();
-			MulFactorNode = new();
+			WeightNode = new animFloatLink();
+			MulFactorNode = new animFloatLink();
 
 			PostConstruct();
 		}

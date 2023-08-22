@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public workSetSequenceCategoriesCommandData()
 		{
-			SequenceCategories = new() { Probabilities = new() };
+			SequenceCategories = new gameCategorySelectionProbability { Probabilities = new() };
 
 			PostConstruct();
 		}

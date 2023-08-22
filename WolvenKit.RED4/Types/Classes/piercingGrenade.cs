@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public piercingGrenade()
 		{
-			PiercingEffect = new();
+			PiercingEffect = new gameEffectRef();
 			TrailEffectName = "trail";
 			Alive = true;
 

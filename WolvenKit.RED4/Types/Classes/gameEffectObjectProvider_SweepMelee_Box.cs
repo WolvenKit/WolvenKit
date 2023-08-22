@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectObjectProvider_SweepMelee_Box()
 		{
-			QueryPreset = new();
+			QueryPreset = new physicsQueryPreset();
 			PlayerStaticDetectionConeDistance = 2.000000F;
 			PlayerStaticDetectionConeStartAngle = 5.000000F;
 			PlayerStaticDetectionConeEndAngle = 18.000000F;

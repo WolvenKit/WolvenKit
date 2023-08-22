@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.Types
 
 		public MinimapPOIMappinController()
 		{
-			PulseWidget = new();
+			PulseWidget = new inkWidgetReference();
 			C_pingAnimCount = 3;
 
 			PostConstruct();

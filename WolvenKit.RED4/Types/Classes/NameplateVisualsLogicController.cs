@@ -518,35 +518,35 @@ namespace WolvenKit.RED4.Types
 
 		public NameplateVisualsLogicController()
 		{
-			BigIconMain = new();
-			BigLevelText = new();
-			NameTextMain = new();
-			BigIconArt = new();
-			PreventionIcon = new();
-			LevelContainer = new();
-			NameFrame = new();
-			HealthbarWidget = new();
-			HealthBarFull = new();
-			HealthBarFrame = new();
-			TaggedIcon = new();
-			IconBG = new();
-			CivilianIcon = new();
-			StealthMappinSlot = new();
-			IconTextWrapper = new();
-			Container = new();
-			LevelcontainerAndText = new();
-			RareStars = new();
-			EliteStars = new();
-			HardEnemy = new();
-			HardEnemyWrapper = new();
-			DamagePreviewWrapper = new();
-			DamagePreviewWidget = new();
-			DamagePreviewArrow = new();
-			BuffsList = new();
+			BigIconMain = new inkWidgetReference();
+			BigLevelText = new inkTextWidgetReference();
+			NameTextMain = new inkTextWidgetReference();
+			BigIconArt = new inkImageWidgetReference();
+			PreventionIcon = new inkWidgetReference();
+			LevelContainer = new inkImageWidgetReference();
+			NameFrame = new inkWidgetReference();
+			HealthbarWidget = new inkWidgetReference();
+			HealthBarFull = new inkWidgetReference();
+			HealthBarFrame = new inkWidgetReference();
+			TaggedIcon = new inkWidgetReference();
+			IconBG = new inkWidgetReference();
+			CivilianIcon = new inkWidgetReference();
+			StealthMappinSlot = new inkCompoundWidgetReference();
+			IconTextWrapper = new inkCompoundWidgetReference();
+			Container = new inkWidgetReference();
+			LevelcontainerAndText = new inkCompoundWidgetReference();
+			RareStars = new inkCompoundWidgetReference();
+			EliteStars = new inkCompoundWidgetReference();
+			HardEnemy = new inkImageWidgetReference();
+			HardEnemyWrapper = new inkWidgetReference();
+			DamagePreviewWrapper = new inkWidgetReference();
+			DamagePreviewWidget = new inkWidgetReference();
+			DamagePreviewArrow = new inkWidgetReference();
+			BuffsList = new inkHorizontalPanelWidgetReference();
 			BuffWidgets = new();
-			CachedIncomingData = new() { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
-			BossColor = new();
-			AnimatingObject = new();
+			CachedIncomingData = new gameuiNPCNextToTheCrosshair { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
+			BossColor = new CColor();
+			AnimatingObject = new inkWidgetReference();
 
 			PostConstruct();
 		}

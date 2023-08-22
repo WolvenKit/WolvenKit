@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public grsGatherAreaManager()
 		{
-			ActiveGatherAreaRepInfo = new() { EnteredPlayerIDs = new(0) };
+			ActiveGatherAreaRepInfo = new grsGatherAreaReplicatedInfo { EnteredPlayerIDs = new(0) };
 
 			PostConstruct();
 		}

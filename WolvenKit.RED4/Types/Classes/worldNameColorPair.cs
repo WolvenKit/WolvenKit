@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldNameColorPair()
 		{
-			Color = new();
+			Color = new CColor();
 
 			PostConstruct();
 		}

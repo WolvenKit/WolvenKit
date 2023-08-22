@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public KnockdownEvents()
 		{
-			CachedPlayerVelocity = new();
-			SecondaryKnockdownDir = new();
+			CachedPlayerVelocity = new Vector4();
+			SecondaryKnockdownDir = new Vector4();
 
 			PostConstruct();
 		}

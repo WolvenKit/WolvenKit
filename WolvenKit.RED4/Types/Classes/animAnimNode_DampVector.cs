@@ -62,13 +62,13 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_DampVector()
 		{
-			Id = 4294967295;
-			DefaultIncreaseSpeed = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
-			DefaultDecreaseSpeed = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
-			DefaultInitialValue = new();
-			InputNode = new();
-			IncreaseSpeedNode = new();
-			DecreaseSpeedNode = new();
+			Id = uint.MaxValue;
+			DefaultIncreaseSpeed = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
+			DefaultDecreaseSpeed = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
+			DefaultInitialValue = new Vector4();
+			InputNode = new animVectorLink();
+			IncreaseSpeedNode = new animVectorLink();
+			DecreaseSpeedNode = new animVectorLink();
 
 			PostConstruct();
 		}

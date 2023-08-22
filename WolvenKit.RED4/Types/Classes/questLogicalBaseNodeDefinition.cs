@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questLogicalBaseNodeDefinition : questSignalStoppingNodeDefinition
+	public abstract partial class questLogicalBaseNodeDefinition : questSignalStoppingNodeDefinition
 	{
 		[Ordinal(2)] 
 		[RED("inputSocketCount")] 

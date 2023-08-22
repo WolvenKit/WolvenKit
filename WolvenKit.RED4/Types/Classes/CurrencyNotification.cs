@@ -86,8 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public CurrencyNotification()
 		{
-			CurrencyDiff = new();
-			CurrencyTotal = new();
+			CurrencyDiff = new inkTextWidgetReference();
+			CurrencyTotal = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnIInterruptCondition : ISerializable
+	public abstract partial class scnIInterruptCondition : ISerializable
 	{
 		public scnIInterruptCondition()
 		{

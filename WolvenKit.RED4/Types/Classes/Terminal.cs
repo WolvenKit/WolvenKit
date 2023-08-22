@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public Terminal()
 		{
 			ControllerTypeName = "TerminalController";
-			ShortGlitchDelayID = new();
+			ShortGlitchDelayID = new gameDelayID();
 
 			PostConstruct();
 		}

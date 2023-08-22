@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class InventoryGPRestrictionHelper : IScriptable
+	public abstract partial class InventoryGPRestrictionHelper : IScriptable
 	{
 		public InventoryGPRestrictionHelper()
 		{

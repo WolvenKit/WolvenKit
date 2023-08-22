@@ -126,7 +126,7 @@ namespace WolvenKit.RED4.Types
 
 		public InspectionComponent()
 		{
-			LastInspectedObjID = new();
+			LastInspectedObjID = new entEntityID();
 
 			PostConstruct();
 		}

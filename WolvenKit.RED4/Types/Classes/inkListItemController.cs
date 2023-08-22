@@ -54,12 +54,12 @@ namespace WolvenKit.RED4.Types
 
 		public inkListItemController()
 		{
-			ToggledOff = new();
-			ToggledOn = new();
-			Selected_672 = new();
-			Deselected = new();
-			AddedToList = new();
-			LabelPathRef = new();
+			ToggledOff = new inkListItemControllerCallback();
+			ToggledOn = new inkListItemControllerCallback();
+			Selected_672 = new inkListItemControllerCallback();
+			Deselected = new inkListItemControllerCallback();
+			AddedToList = new inkListItemControllerCallback();
+			LabelPathRef = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

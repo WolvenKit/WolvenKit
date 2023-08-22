@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animDangleConstraint_SimulationSingleBone : animDangleConstraint_Simulation
+	public abstract partial class animDangleConstraint_SimulationSingleBone : animDangleConstraint_Simulation
 	{
 		[Ordinal(13)] 
 		[RED("dangleBone")] 

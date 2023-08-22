@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiTrialPeriodTimerController()
 		{
-			TimerText = new();
+			TimerText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

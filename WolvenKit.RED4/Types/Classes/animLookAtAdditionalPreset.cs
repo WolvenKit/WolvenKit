@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animLookAtAdditionalPreset : IScriptable
+	public abstract partial class animLookAtAdditionalPreset : IScriptable
 	{
 		public animLookAtAdditionalPreset()
 		{

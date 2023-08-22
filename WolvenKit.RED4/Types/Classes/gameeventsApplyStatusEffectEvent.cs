@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameeventsApplyStatusEffectEvent()
 		{
-			InstigatorEntityID = new();
+			InstigatorEntityID = new entEntityID();
 
 			PostConstruct();
 		}

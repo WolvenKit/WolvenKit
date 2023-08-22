@@ -158,7 +158,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_VehiclePassenger()
 		{
-			OverallForceMS = new();
+			OverallForceMS = new Vector4();
 
 			PostConstruct();
 		}

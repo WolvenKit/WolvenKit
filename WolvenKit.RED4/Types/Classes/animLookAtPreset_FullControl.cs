@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Types
 
 		public animLookAtPreset_FullControl()
 		{
-			Limits = new() { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F };
+			Limits = new animLookAtLimits { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F };
 			HeadSuppress = 1.000000F;
 			ChestSuppress = 1.000000F;
 

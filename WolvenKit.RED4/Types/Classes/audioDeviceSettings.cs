@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class audioDeviceSettings : audioEntitySettings
+	public abstract partial class audioDeviceSettings : audioEntitySettings
 	{
 		[Ordinal(6)] 
 		[RED("deviceSettings")] 

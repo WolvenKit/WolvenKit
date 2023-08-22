@@ -200,11 +200,11 @@ namespace WolvenKit.RED4.Types
 		{
 			ScrollingSpeed = 60.000000F;
 			FastforwardScrollingSpeed = 1500.000000F;
-			SectionsContainer = new();
-			SingleTextWidget = new();
-			SpeakerNameTextWidget = new();
-			ExitTooltipContainer = new();
-			SubtitlesContainer = new();
+			SectionsContainer = new inkCompoundWidgetReference();
+			SingleTextWidget = new inkTextWidgetReference();
+			SpeakerNameTextWidget = new inkTextWidgetReference();
+			ExitTooltipContainer = new inkCompoundWidgetReference();
+			SubtitlesContainer = new inkCompoundWidgetReference();
 			ExitNotificationDisplayTime = 3.000000F;
 
 			PostConstruct();

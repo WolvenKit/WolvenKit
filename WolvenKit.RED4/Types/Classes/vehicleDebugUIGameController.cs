@@ -214,7 +214,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleDebugUIGameController()
 		{
-			RpmGaugeMaxSize = new();
+			RpmGaugeMaxSize = new Vector2();
 
 			PostConstruct();
 		}

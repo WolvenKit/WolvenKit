@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioContextualVoiceGruntSettings()
 		{
-			PainShort = new();
-			Effort = new();
+			PainShort = new audioContextualVoiceGrunt();
+			Effort = new audioContextualVoiceGrunt();
 
 			PostConstruct();
 		}

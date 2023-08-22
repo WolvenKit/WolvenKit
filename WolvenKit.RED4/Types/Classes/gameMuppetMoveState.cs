@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameMuppetMoveState()
 		{
-			JumpStartFrameId = 4294967295;
-			LandFrameId = 4294967295;
+			JumpStartFrameId = uint.MaxValue;
+			LandFrameId = uint.MaxValue;
 
 			PostConstruct();
 		}

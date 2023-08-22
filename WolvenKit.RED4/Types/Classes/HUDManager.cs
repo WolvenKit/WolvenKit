@@ -367,16 +367,16 @@ namespace WolvenKit.RED4.Types
 		public HUDManager()
 		{
 			ActiveMode = Enums.ActiveMode.SEMI;
-			InstructionsDelayID = new();
+			InstructionsDelayID = new gameDelayID();
 			ModulesArray = new();
-			LookAtTarget = new();
-			ScannerTarget = new();
-			NameplateTarget = new();
-			QuickHackTarget = new();
-			LootedTarget = new();
-			LookatRequest = new() { CheckRange = true, LookAtTarget = new(), ProcessAsInput = true, BptMaxSwitches = -1.000000F };
-			PulseDelayID = new();
-			PreviousStickInput = new();
+			LookAtTarget = new entEntityID();
+			ScannerTarget = new entEntityID();
+			NameplateTarget = new entEntityID();
+			QuickHackTarget = new entEntityID();
+			LootedTarget = new entEntityID();
+			LookatRequest = new gameaimAssistAimRequest { CheckRange = true, LookAtTarget = new Vector4(), ProcessAsInput = true, BptMaxSwitches = -1.000000F };
+			PulseDelayID = new gameDelayID();
+			PreviousStickInput = new Vector4();
 
 			PostConstruct();
 		}

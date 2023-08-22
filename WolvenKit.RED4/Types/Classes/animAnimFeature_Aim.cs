@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_Aim()
 		{
-			AimPoint = new() { Y = 1.000000F, W = 1.000000F };
+			AimPoint = new Vector4 { Y = 1.000000F, W = 1.000000F };
 
 			PostConstruct();
 		}

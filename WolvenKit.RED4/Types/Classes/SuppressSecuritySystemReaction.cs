@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public SuppressSecuritySystemReaction()
 		{
-			ProtectedEntityID = new();
+			ProtectedEntityID = new entEntityID();
 
 			PostConstruct();
 		}

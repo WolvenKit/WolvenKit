@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class audioMeleeWeaponSettings : audioAudioMetadata
+	public abstract partial class audioMeleeWeaponSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
 		[RED("quickAttackSettings")] 

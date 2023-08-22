@@ -90,7 +90,7 @@ namespace WolvenKit.RED4.Types
 			SurfelScale = 1.000000F;
 			MissingEnergyScale = 1.000000F;
 			OverrideOnPureView = true;
-			SurfAlbedoOverride = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
+			SurfAlbedoOverride = new HDRColor { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
 			SkyScale = 1.000000F;
 			EmissiveScale = 1.000000F;
 			AlbedoMetalness = 1.000000F;

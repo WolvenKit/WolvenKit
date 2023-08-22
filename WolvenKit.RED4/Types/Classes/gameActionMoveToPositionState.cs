@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameActionMoveToPositionState()
 		{
-			Target = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			Target = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
 			UseSpotReservation = true;
 			UsePathfinding = true;
 			UseStart = true;

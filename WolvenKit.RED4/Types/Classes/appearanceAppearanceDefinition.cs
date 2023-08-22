@@ -145,9 +145,9 @@ namespace WolvenKit.RED4.Types
 			PartsMasks = new();
 			PartsValues = new();
 			PartsOverrides = new();
-			ParametersBuffer = new() { ParameterBuffers = new() };
-			VisualTags = new() { Tags = new() };
-			InheritedVisualTags = new() { Tags = new() };
+			ParametersBuffer = new entEntityParametersBuffer { ParameterBuffers = new() };
+			VisualTags = new redTagList { Tags = new() };
+			InheritedVisualTags = new redTagList { Tags = new() };
 			HitRepresentationOverrides = new();
 			ResolvedDependencies = new();
 			LooseDependencies = new();

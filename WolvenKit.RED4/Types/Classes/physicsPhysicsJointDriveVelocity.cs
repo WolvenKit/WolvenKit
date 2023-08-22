@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public physicsPhysicsJointDriveVelocity()
 		{
-			LinearVelocity = new() { W = 1.000000F };
-			AngularVelocity = new() { W = 1.000000F };
+			LinearVelocity = new Vector4 { W = 1.000000F };
+			AngularVelocity = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

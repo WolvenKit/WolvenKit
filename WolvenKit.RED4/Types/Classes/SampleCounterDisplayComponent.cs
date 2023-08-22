@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public SampleCounterDisplayComponent()
 		{
-			TargetPersistentID = new();
+			TargetPersistentID = new gamePersistentID();
 
 			PostConstruct();
 		}

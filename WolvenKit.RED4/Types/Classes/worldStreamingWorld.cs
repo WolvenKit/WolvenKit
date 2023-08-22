@@ -207,7 +207,7 @@ namespace WolvenKit.RED4.Types
 		public worldStreamingWorld()
 		{
 			BlockRefs = new();
-			WorldBoundingBox = new() { Min = new(), Max = new() };
+			WorldBoundingBox = new Box { Min = new Vector4(), Max = new Vector4() };
 
 			PostConstruct();
 		}

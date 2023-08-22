@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_RuntimeSwitch()
 		{
-			Id = 4294967295;
-			True = new();
-			False = new();
+			Id = uint.MaxValue;
+			True = new animPoseLink();
+			False = new animPoseLink();
 
 			PostConstruct();
 		}

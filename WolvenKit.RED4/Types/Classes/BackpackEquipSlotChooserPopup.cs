@@ -142,16 +142,16 @@ namespace WolvenKit.RED4.Types
 
 		public BackpackEquipSlotChooserPopup()
 		{
-			TitleText = new();
-			ButtonHintsRoot = new();
-			RairtyBar = new();
-			Root = new();
-			Background = new();
-			WeaponSlotsContainer = new();
-			TooltipsManagerRef = new();
-			ButtonOk = new();
-			ButtonCancel = new();
-			LibraryPath = new() { WidgetLibrary = new() };
+			TitleText = new inkTextWidgetReference();
+			ButtonHintsRoot = new inkWidgetReference();
+			RairtyBar = new inkWidgetReference();
+			Root = new inkWidgetReference();
+			Background = new inkWidgetReference();
+			WeaponSlotsContainer = new inkCompoundWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
+			ButtonOk = new inkWidgetReference();
+			ButtonCancel = new inkWidgetReference();
+			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
 
 			PostConstruct();
 		}

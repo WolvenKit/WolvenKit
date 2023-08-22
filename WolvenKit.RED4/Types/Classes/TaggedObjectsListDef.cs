@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public TaggedObjectsListDef()
 		{
-			TaggedObjectsList = new();
+			TaggedObjectsList = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

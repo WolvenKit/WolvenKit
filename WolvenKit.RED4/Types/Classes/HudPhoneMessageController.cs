@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.Types
 
 		public HudPhoneMessageController()
 		{
-			MessageText = new();
+			MessageText = new inkTextWidgetReference();
 			ShowingAnimationName = "messageShowingAnimation";
 			HidingAnimationName = "messageHidingAnimation";
 			VisibleAnimationName = "messageVisibleAnimation";

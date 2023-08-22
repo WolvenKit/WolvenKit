@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entAnimInputSetterQuaternion()
 		{
-			Value = new() { R = 1.000000F };
+			Value = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

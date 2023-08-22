@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIVisionModeNodeType : questObjectNodeType
+	public abstract partial class questIVisionModeNodeType : questObjectNodeType
 	{
 		public questIVisionModeNodeType()
 		{

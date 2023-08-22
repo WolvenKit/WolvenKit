@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public OperationExecutionData()
 		{
-			DelayID = new();
+			DelayID = new gameDelayID();
 
 			PostConstruct();
 		}

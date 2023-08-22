@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldTrafficCollisionSphere()
 		{
-			WorldPos = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
-			Direction = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			WorldPos = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			Direction = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
 			Flags = 1;
 
 			PostConstruct();

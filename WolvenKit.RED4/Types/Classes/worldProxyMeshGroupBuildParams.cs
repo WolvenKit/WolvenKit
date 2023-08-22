@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldProxyMeshGroupBuildParams()
 		{
-			BuildParams = new();
+			BuildParams = new worldGroupProxyMeshBuildParams();
 
 			PostConstruct();
 		}

@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public CellData()
 		{
-			Position = new();
-			Element = new();
-			Properties = new() { Traps = new() };
+			Position = new Vector2();
+			Element = new ElementData();
+			Properties = new SpecialProperties { Traps = new() };
 
 			PostConstruct();
 		}

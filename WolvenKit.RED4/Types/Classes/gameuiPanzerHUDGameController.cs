@@ -366,21 +366,21 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiPanzerHUDGameController()
 		{
-			Date = new();
-			Timer = new();
-			HealthStatus = new();
-			HealthBar = new();
-			LeanAngleValue = new();
-			CoriRotation = new();
-			CompassRotation = new();
-			Cori_S = new();
-			Cori_M = new();
-			TrimmerArrow = new();
-			SpeedValue = new();
-			RPMValue = new();
-			CurrentTime = new();
+			Date = new inkTextWidgetReference();
+			Timer = new inkTextWidgetReference();
+			HealthStatus = new inkTextWidgetReference();
+			HealthBar = new inkWidgetReference();
+			LeanAngleValue = new inkCanvasWidgetReference();
+			CoriRotation = new inkCanvasWidgetReference();
+			CompassRotation = new inkCanvasWidgetReference();
+			Cori_S = new inkCanvasWidgetReference();
+			Cori_M = new inkCanvasWidgetReference();
+			TrimmerArrow = new inkImageWidgetReference();
+			SpeedValue = new inkTextWidgetReference();
+			RPMValue = new inkTextWidgetReference();
+			CurrentTime = new GameTime();
 			TargetIndicators = new();
-			TargetHolder = new();
+			TargetHolder = new inkCompoundWidgetReference();
 			TargetWidgetLibraryName = "Marker";
 			TargetWidgetPoolSize = 10;
 

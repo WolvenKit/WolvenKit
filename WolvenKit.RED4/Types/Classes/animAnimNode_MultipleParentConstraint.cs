@@ -78,15 +78,15 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_MultipleParentConstraint()
 		{
-			Id = 4294967295;
-			InputLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
 			ParentsTransform = new();
 			ParentsWeight = new();
 			ParentsTransforms = new();
-			TransformIndex = new();
+			TransformIndex = new animTransformIndex();
 			InterpolationType = Enums.animEInterpolationType.Slerp;
 			Weight = 1.000000F;
-			WeightFloatTrack = new();
+			WeightFloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

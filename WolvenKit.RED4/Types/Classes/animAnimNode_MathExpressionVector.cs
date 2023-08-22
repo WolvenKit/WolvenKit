@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_MathExpressionVector()
 		{
-			Id = 4294967295;
-			ExpressionData = new() { FloatSockets = new(), VectorSockets = new(), QuaternionSockets = new() };
+			Id = uint.MaxValue;
+			ExpressionData = new animMathExpressionNodeData { FloatSockets = new(), VectorSockets = new(), QuaternionSockets = new() };
 
 			PostConstruct();
 		}

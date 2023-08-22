@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIRagdollDelegate()
 		{
-			ClosestNavmeshPoint = new();
+			ClosestNavmeshPoint = new Vector4();
 
 			PostConstruct();
 		}

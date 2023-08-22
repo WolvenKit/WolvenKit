@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_MergedMeshes()
 		{
-			DefaultColor = new();
-			MergedMeshColor = new();
+			DefaultColor = new CColor();
+			MergedMeshColor = new CColor();
 
 			PostConstruct();
 		}

@@ -190,25 +190,25 @@ namespace WolvenKit.RED4.Types
 
 		public Crosshair_Custom_HMG()
 		{
-			LeftPart = new();
-			RightPart = new();
-			TopPart = new();
-			BottomPart = new();
-			HoriPart = new();
-			VertPart = new();
-			OverheatContainer = new();
-			OverheatWarning = new();
-			OverheatMask = new();
-			OverheatValueL = new();
-			OverheatValueR = new();
-			LeftPartExtra = new();
-			RightPartExtra = new();
-			CrosshairContainer = new();
+			LeftPart = new inkWidgetReference();
+			RightPart = new inkWidgetReference();
+			TopPart = new inkWidgetReference();
+			BottomPart = new inkWidgetReference();
+			HoriPart = new inkWidgetReference();
+			VertPart = new inkWidgetReference();
+			OverheatContainer = new inkWidgetReference();
+			OverheatWarning = new inkWidgetReference();
+			OverheatMask = new inkWidgetReference();
+			OverheatValueL = new inkTextWidgetReference();
+			OverheatValueR = new inkTextWidgetReference();
+			LeftPartExtra = new inkImageWidgetReference();
+			RightPartExtra = new inkImageWidgetReference();
+			CrosshairContainer = new inkCanvasWidgetReference();
 			OffsetLeftRight = 0.800000F;
 			OffsetLeftRightExtra = 1.200000F;
 			LatchVertical = 40.000000F;
-			TargetColorChange = new();
-			ForcedCooldownOptions = new();
+			TargetColorChange = new inkWidgetReference();
+			ForcedCooldownOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

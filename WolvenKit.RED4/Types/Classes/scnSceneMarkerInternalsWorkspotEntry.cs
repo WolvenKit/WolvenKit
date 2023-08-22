@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnSceneMarkerInternalsWorkspotEntry()
 		{
-			InstanceOrigin = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			InstanceOrigin = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			Entries = new();
 			Exits = new();
 

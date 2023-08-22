@@ -79,7 +79,7 @@ namespace WolvenKit.RED4.Types
 		public entdismembermentEffectResource()
 		{
 			AppearanceNames = new();
-			Offset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Offset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			Placement = Enums.entdismembermentPlacementE.MAIN_MESH;
 			ResourceSets = Enums.entdismembermentResourceSetMask.BARE | Enums.entdismembermentResourceSetMask.BARE1 | Enums.entdismembermentResourceSetMask.BARE2 | Enums.entdismembermentResourceSetMask.BARE3 | Enums.entdismembermentResourceSetMask.GARMENT | Enums.entdismembermentResourceSetMask.GARMENT1 | Enums.entdismembermentResourceSetMask.GARMENT2 | Enums.entdismembermentResourceSetMask.GARMENT3;
 			WoundType = Enums.entdismembermentWoundTypeE.COARSE;

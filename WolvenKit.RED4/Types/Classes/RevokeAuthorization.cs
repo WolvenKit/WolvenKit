@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public RevokeAuthorization()
 		{
-			User = new();
+			User = new entEntityID();
 
 			PostConstruct();
 		}

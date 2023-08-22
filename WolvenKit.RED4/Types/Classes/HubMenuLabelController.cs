@@ -86,8 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public HubMenuLabelController()
 		{
-			Container = new();
-			Data = new() { Identifier = -1, SubMenus = new() };
+			Container = new inkCompoundWidgetReference();
+			Data = new MenuData { Identifier = -1, SubMenus = new() };
 
 			PostConstruct();
 		}

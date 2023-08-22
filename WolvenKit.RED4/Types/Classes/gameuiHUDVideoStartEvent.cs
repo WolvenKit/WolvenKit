@@ -70,8 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiHUDVideoStartEvent()
 		{
-			Position = new();
-			Size = new();
+			Position = new Vector2();
+			Size = new Vector2();
 
 			PostConstruct();
 		}

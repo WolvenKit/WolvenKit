@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class InputContextTransitionEvents : DefaultTransition
+	public abstract partial class InputContextTransitionEvents : DefaultTransition
 	{
 		[Ordinal(0)] 
 		[RED("gameplaySettings")] 

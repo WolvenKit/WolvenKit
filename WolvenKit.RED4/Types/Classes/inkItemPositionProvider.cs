@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkItemPositionProvider : RedBaseClass
+	public abstract partial class inkItemPositionProvider : RedBaseClass
 	{
 		public inkItemPositionProvider()
 		{

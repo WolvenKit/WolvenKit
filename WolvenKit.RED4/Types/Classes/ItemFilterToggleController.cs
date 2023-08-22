@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public ItemFilterToggleController()
 		{
-			NewItemDot = new();
+			NewItemDot = new inkWidgetReference();
 
 			PostConstruct();
 		}

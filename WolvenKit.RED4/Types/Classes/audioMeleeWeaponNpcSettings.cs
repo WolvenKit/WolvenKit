@@ -5,9 +5,9 @@ namespace WolvenKit.RED4.Types
 	{
 		public audioMeleeWeaponNpcSettings()
 		{
-			QuickAttackSettings = new();
-			StrongAttackSettings = new();
-			WeaponHandlingSettings = new();
+			QuickAttackSettings = new audioMeleeAttackSettings();
+			StrongAttackSettings = new audioMeleeAttackSettings();
+			WeaponHandlingSettings = new audioWeaponHandlingSettings();
 
 			PostConstruct();
 		}

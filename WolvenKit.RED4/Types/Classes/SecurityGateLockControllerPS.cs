@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public SecurityGateLockControllerPS()
 		{
 			TresspasserList = new();
-			EntranceToken = new();
+			EntranceToken = new entEntityID();
 			IsLocked = true;
 
 			PostConstruct();

@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public Intercom()
 		{
 			ControllerTypeName = "IntercomController";
-			ShortGlitchDelayID = new();
+			ShortGlitchDelayID = new gameDelayID();
 			DistractionSound = "dev_radio_ditraction_glitching";
 
 			PostConstruct();

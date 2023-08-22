@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public moveSecureFootingResult()
 		{
-			SlidingDirection = new();
-			NormalDirection = new();
-			LowestLocalPosition = new();
+			SlidingDirection = new Vector4();
+			NormalDirection = new Vector4();
+			LowestLocalPosition = new Vector4();
 			StaticGroundFactor = -1.000000F;
 
 			PostConstruct();

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkWidgetStateAnimatedTransition()
 		{
-			PlaybackOptions = new();
+			PlaybackOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class effectTrackItem : effectBaseItem
+	public abstract partial class effectTrackItem : effectBaseItem
 	{
 		[Ordinal(0)] 
 		[RED("timeBegin")] 

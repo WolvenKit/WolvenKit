@@ -80,7 +80,7 @@ namespace WolvenKit.RED4.Types
 		{
 			RevealDevicesGrid = false;
 			DeviceName = "LocKey#116";
-			TweakDBRecord = 54819981842;
+			TweakDBRecord = "Devices.Fuse";
 			TweakDBDescriptionRecord = 106150556616;
 			MaxLightsSwitchedAtOnce = 5;
 			TimeToNextSwitch = 1.000000F;

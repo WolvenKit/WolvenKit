@@ -70,12 +70,12 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkMinigameProgramController()
 		{
-			Text = new();
+			Text = new inkTextWidgetReference();
 			CommandElementSlotsContainer = new();
-			CompletedMarker = new();
-			ImageRef = new();
+			CompletedMarker = new inkWidgetReference();
+			ImageRef = new inkImageWidgetReference();
 			SlotList = new();
-			Data = new() { CommandLists = new(), Effects = new() };
+			Data = new ProgramData { CommandLists = new(), Effects = new() };
 
 			PostConstruct();
 		}

@@ -70,10 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public ItemPreviewGameController()
 		{
-			ColliderWidgetRef = new();
-			ItemNameText = new();
-			ItemLevelText = new();
-			ItemRarityWidget = new();
+			ColliderWidgetRef = new inkWidgetReference();
+			ItemNameText = new inkTextWidgetReference();
+			ItemLevelText = new inkTextWidgetReference();
+			ItemRarityWidget = new inkWidgetReference();
 			C_ITEM_ROTATION_SPEED = 2.000000F;
 
 			PostConstruct();

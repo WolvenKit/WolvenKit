@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 
 		public Segment()
 		{
-			Origin = new();
-			Direction = new();
+			Origin = new Vector4();
+			Direction = new Vector4();
 
 			PostConstruct();
 		}

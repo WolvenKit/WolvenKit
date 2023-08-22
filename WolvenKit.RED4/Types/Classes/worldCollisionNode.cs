@@ -118,7 +118,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldCollisionNode()
 		{
-			Extents = new();
+			Extents = new Vector4();
 
 			PostConstruct();
 		}

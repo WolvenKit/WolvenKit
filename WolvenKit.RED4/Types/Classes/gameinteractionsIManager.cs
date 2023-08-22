@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameinteractionsIManager : gameIGameSystem
+	public abstract partial class gameinteractionsIManager : gameIGameSystem
 	{
 		public gameinteractionsIManager()
 		{

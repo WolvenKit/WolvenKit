@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnRidResourceHandler()
 		{
-			Id = new() { Id = 4294967295 };
+			Id = new scnRidResourceId { Id = uint.MaxValue };
 
 			PostConstruct();
 		}

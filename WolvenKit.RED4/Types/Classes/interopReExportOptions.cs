@@ -274,12 +274,12 @@ namespace WolvenKit.RED4.Types
 			OcclusionExportOptValues = new();
 			TypeExportOptions = new();
 			Files = new();
-			MaskDumpFilePath = new();
+			MaskDumpFilePath = new AbsolutePathSerializable();
 			ExportMaterials = true;
-			ExportBounds = new() { Min = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, Max = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F, W = -340282346638528859811704183484516925440.000000F } };
-			ReferencePoint = new();
+			ExportBounds = new Box { Min = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, Max = new Vector4 { X = float.MinValue, Y = float.MinValue, Z = float.MinValue, W = float.MinValue } };
+			ReferencePoint = new Vector3();
 			AssetPaths = new();
-			JsonFile = new();
+			JsonFile = new AbsolutePathSerializable();
 			MinBBoxDiag = 0.000000;
 			AsBBoxThreshold = 0.000000;
 			AsBBoxPrefabsThreshold = 0.000000;

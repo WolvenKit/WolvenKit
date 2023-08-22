@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIGameAudioSystem : gameIGameSystem
+	public abstract partial class gameIGameAudioSystem : gameIGameSystem
 	{
 		public gameIGameAudioSystem()
 		{

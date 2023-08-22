@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameNetrunnerPrototypeNodeSetupEvent()
 		{
-			Scale = new();
+			Scale = new Vector3();
 
 			PostConstruct();
 		}

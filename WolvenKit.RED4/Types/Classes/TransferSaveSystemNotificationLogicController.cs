@@ -150,18 +150,18 @@ namespace WolvenKit.RED4.Types
 
 		public TransferSaveSystemNotificationLogicController()
 		{
-			ContentBlock = new();
-			SpinnerBlock = new();
-			ErrorBlock = new();
-			SaveImageContainer = new();
-			SaveImage = new();
-			SaveImageEmpty = new();
-			SaveImageSpinner = new();
-			MessageText = new();
-			SpinnerText = new();
-			ErrorText = new();
-			ProceedButtonWidget = new();
-			CancelButtonWidget = new();
+			ContentBlock = new inkWidgetReference();
+			SpinnerBlock = new inkWidgetReference();
+			ErrorBlock = new inkWidgetReference();
+			SaveImageContainer = new inkWidgetReference();
+			SaveImage = new inkImageWidgetReference();
+			SaveImageEmpty = new inkWidgetReference();
+			SaveImageSpinner = new inkWidgetReference();
+			MessageText = new inkTextWidgetReference();
+			SpinnerText = new inkTextWidgetReference();
+			ErrorText = new inkTextWidgetReference();
+			ProceedButtonWidget = new inkWidgetReference();
+			CancelButtonWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

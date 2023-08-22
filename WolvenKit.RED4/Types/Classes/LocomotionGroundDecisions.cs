@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LocomotionGroundDecisions : LocomotionTransition
+	public abstract partial class LocomotionGroundDecisions : LocomotionTransition
 	{
 		public LocomotionGroundDecisions()
 		{

@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 		public inkanimMarginInterpolator()
 		{
 			InterpolationDirection = Enums.inkanimInterpolationDirection.FromTo;
-			StartValue = new();
-			EndValue = new();
+			StartValue = new inkMargin();
+			EndValue = new inkMargin();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameprojectileTickEvent()
 		{
-			Position = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F };
+			Position = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue };
 
 			PostConstruct();
 		}

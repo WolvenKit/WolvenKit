@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public SetActiveItemInEquipmentArea()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

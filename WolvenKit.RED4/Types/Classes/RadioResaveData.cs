@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public RadioResaveData()
 		{
-			MediaResaveData = new() { MediaDeviceData = new() };
+			MediaResaveData = new MediaResaveData { MediaDeviceData = new MediaDeviceData() };
 			Stations = new();
 
 			PostConstruct();

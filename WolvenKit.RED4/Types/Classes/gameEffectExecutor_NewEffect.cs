@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameEffectExecutor_NewEffect : gameEffectExecutor
+	public abstract partial class gameEffectExecutor_NewEffect : gameEffectExecutor
 	{
 		[Ordinal(1)] 
 		[RED("tagInThisFile")] 

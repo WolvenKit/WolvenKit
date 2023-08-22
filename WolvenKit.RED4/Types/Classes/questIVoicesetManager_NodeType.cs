@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIVoicesetManager_NodeType : questObjectNodeType
+	public abstract partial class questIVoicesetManager_NodeType : questObjectNodeType
 	{
 		public questIVoicesetManager_NodeType()
 		{

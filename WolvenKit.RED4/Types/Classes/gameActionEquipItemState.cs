@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameActionEquipItemState()
 		{
-			ItemId = new();
+			ItemId = new gameItemID();
 			Duration = -1.000000F;
 			SpawnDelay = -1.000000F;
 

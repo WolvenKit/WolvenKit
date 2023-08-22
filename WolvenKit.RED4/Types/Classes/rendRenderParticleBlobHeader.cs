@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public rendRenderParticleBlobHeader()
 		{
-			EmitterInfo = new() { RenderObjectType = Enums.ERenderObjectType.ROT_Particle, Seeds = new(), Lods = new(), VolumetricParticleColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F }, VolumetricParticleNoiseVelocity = new() };
+			EmitterInfo = new rendRenderParticleBlobEmitterInfo { RenderObjectType = Enums.ERenderObjectType.ROT_Particle, Seeds = new(), Lods = new(), VolumetricParticleColor = new HDRColor { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F }, VolumetricParticleNoiseVelocity = new Vector3() };
 
 			PostConstruct();
 		}

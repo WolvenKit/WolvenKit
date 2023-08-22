@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnRidAnimationContainerSRRefAnimContainerContext()
 		{
-			GenderMask = new() { Mask = 128 };
+			GenderMask = new scnGenderMask { Mask = 128 };
 
 			PostConstruct();
 		}

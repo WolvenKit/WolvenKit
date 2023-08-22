@@ -95,7 +95,7 @@ namespace WolvenKit.RED4.Types
 			SceneColorScale = 0.800000F;
 			BloomColorScale = 0.200000F;
 			NumDownsamplePasses = 6;
-			ShaftsAreaSettings = new() { ShaftsLevelIndex = 1, ShaftsIntensity = 1.000000F, ShaftsThresholdsScale = 1.000000F };
+			ShaftsAreaSettings = new ShaftsAreaSettings { ShaftsLevelIndex = 1, ShaftsIntensity = 1.000000F, ShaftsThresholdsScale = 1.000000F };
 
 			PostConstruct();
 		}

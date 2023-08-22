@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questForceVMModule_NodeTypeParams()
 		{
-			Reference = new() { Names = new() };
+			Reference = new gameEntityReference { Names = new() };
 			Components = new();
 
 			PostConstruct();

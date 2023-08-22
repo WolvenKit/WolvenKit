@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public CyberdeckStatController()
 		{
-			Label = new();
+			Label = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

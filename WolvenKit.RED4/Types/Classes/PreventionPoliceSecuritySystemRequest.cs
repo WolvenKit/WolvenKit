@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public PreventionPoliceSecuritySystemRequest()
 		{
-			SecuritySystemID = new();
+			SecuritySystemID = new gamePersistentID();
 
 			PostConstruct();
 		}

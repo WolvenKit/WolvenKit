@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerParameters_SetAnimset()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 			Value = 1.000000F;
 
 			PostConstruct();

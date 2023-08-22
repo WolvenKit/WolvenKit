@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIRPGPrereq : gameIComparisonPrereq
+	public abstract partial class gameIRPGPrereq : gameIComparisonPrereq
 	{
 		public gameIRPGPrereq()
 		{

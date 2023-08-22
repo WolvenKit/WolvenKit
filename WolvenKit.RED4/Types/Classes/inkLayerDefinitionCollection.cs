@@ -70,14 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public inkLayerDefinitionCollection()
 		{
-			MenuLayer = new();
-			MenuLayerMP = new();
-			HudLayer = new();
-			VideoLayer = new();
-			OffscreenLayer = new();
-			GameNotificationsLayer = new();
-			PhotoModeLayer = new();
-			DebugLayer = new() { Entries = new() };
+			MenuLayer = new inkMenuLayerDefinition();
+			MenuLayerMP = new inkMenuLayerDefinition();
+			HudLayer = new inkHUDLayerDefinition();
+			VideoLayer = new inkVideoLayerDefinition();
+			OffscreenLayer = new inkOffscreenLayerDefinition();
+			GameNotificationsLayer = new inkGameNotificationsLayerDefinition();
+			PhotoModeLayer = new inkPhotoModeLayerDefinition();
+			DebugLayer = new inkDebugLayerDefinition { Entries = new() };
 
 			PostConstruct();
 		}

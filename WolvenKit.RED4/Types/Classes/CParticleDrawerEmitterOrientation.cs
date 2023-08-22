@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public CParticleDrawerEmitterOrientation()
 		{
-			CoordinateSystem = new();
+			CoordinateSystem = new EulerAngles();
 
 			PostConstruct();
 		}

@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 		public CHairProfile()
 		{
 			SampleCount = 64;
-			GradientEntriesID = new() { new(), new() };
-			GradientEntriesRootToTip = new() { new(), new() };
+			GradientEntriesID = new() { new rendGradientEntry(), new rendGradientEntry() };
+			GradientEntriesRootToTip = new() { new rendGradientEntry(), new rendGradientEntry() };
 
 			PostConstruct();
 		}

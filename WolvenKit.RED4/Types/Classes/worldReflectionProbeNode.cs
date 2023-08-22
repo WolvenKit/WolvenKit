@@ -217,14 +217,14 @@ namespace WolvenKit.RED4.Types
 			Priority = 2;
 			BoxProjection = true;
 			NeighborMode = Enums.envUtilsNeighborMode.eONLY_SELF;
-			EdgeScale = new() { X = 0.980000F, Y = 0.980000F, Z = 0.980000F };
+			EdgeScale = new Vector3 { X = 0.980000F, Y = 0.980000F, Z = 0.980000F };
 			EmissiveScale = 1.000000F;
 			ReflectionDimming = 1.000000F;
-			SimpleFogColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
+			SimpleFogColor = new HDRColor { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
 			SkyScale = 1.000000F;
 			VolFogAmbient = true;
 			BrightnessEVClamp = 8;
-			CaptureOffset = new();
+			CaptureOffset = new Vector3();
 			NearClipDistance = 0.010000F;
 			FarClipDistance = 4000.000000F;
 			BlendRange = 20;

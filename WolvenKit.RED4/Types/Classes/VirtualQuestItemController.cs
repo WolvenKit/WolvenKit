@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public VirtualQuestItemController()
 		{
-			QuestItem = new();
+			QuestItem = new inkWidgetReference();
 
 			PostConstruct();
 		}

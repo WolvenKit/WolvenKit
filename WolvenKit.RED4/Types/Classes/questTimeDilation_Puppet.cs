@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questTimeDilation_Puppet()
 		{
-			Puppets = new() { Names = new() };
+			Puppets = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

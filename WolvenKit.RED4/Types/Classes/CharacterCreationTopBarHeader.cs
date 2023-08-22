@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public CharacterCreationTopBarHeader()
 		{
-			Icon = new();
-			Label = new();
+			Icon = new inkImageWidgetReference();
+			Label = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

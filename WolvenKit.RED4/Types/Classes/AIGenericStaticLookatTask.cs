@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIGenericStaticLookatTask : AIGenericLookatTask
+	public abstract partial class AIGenericStaticLookatTask : AIGenericLookatTask
 	{
 		[Ordinal(0)] 
 		[RED("lookAtEvent")] 

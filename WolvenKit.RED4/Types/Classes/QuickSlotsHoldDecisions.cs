@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class QuickSlotsHoldDecisions : QuickSlotsDecisions
+	public abstract partial class QuickSlotsHoldDecisions : QuickSlotsDecisions
 	{
 		public QuickSlotsHoldDecisions()
 		{

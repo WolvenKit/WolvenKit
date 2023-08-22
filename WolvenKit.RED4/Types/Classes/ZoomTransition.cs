@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ZoomTransition : DefaultTransition
+	public abstract partial class ZoomTransition : DefaultTransition
 	{
 		public ZoomTransition()
 		{

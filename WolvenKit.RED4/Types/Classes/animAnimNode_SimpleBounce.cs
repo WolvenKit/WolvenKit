@@ -102,11 +102,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SimpleBounce()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			OutputDriverTrack = new();
-			StartTransform = new();
-			EndTransform = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			OutputDriverTrack = new animNamedTrackIndex();
+			StartTransform = new animTransformIndex();
+			EndTransform = new animTransformIndex();
 			Multiplier = 1.000000F;
 			NegativeMultiplier = 1.000000F;
 			SmoothStep = 1.000000F;

@@ -118,20 +118,20 @@ namespace WolvenKit.RED4.Types
 
 		public UIInteractionsDef()
 		{
-			InteractionChoiceHub = new();
-			DialogChoiceHubs = new();
-			LootData = new();
-			ContactsData = new();
-			ActiveChoiceHubID = new();
-			SelectedIndex = new();
-			ActiveInteractions = new();
-			InteractionSkillCheckHub = new();
-			NameplateOwnerID = new();
-			VisualizersInfo = new();
-			ShouldHideClampedMappins = new();
-			LastAttemptedChoice = new();
-			LookAtTargetVisualizerID = new();
-			HasScrollableInteraction = new();
+			InteractionChoiceHub = new gamebbScriptID_Variant();
+			DialogChoiceHubs = new gamebbScriptID_Variant();
+			LootData = new gamebbScriptID_Variant();
+			ContactsData = new gamebbScriptID_Variant();
+			ActiveChoiceHubID = new gamebbScriptID_Int32();
+			SelectedIndex = new gamebbScriptID_Int32();
+			ActiveInteractions = new gamebbScriptID_Variant();
+			InteractionSkillCheckHub = new gamebbScriptID_Variant();
+			NameplateOwnerID = new gamebbScriptID_EntityID();
+			VisualizersInfo = new gamebbScriptID_Variant();
+			ShouldHideClampedMappins = new gamebbScriptID_Bool();
+			LastAttemptedChoice = new gamebbScriptID_Variant();
+			LookAtTargetVisualizerID = new gamebbScriptID_Int32();
+			HasScrollableInteraction = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

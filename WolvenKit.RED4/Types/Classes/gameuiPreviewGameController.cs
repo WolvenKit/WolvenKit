@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiPreviewGameController : gameuiMenuGameController
+	public abstract partial class gameuiPreviewGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
 		[RED("yawSpeed")] 

@@ -174,14 +174,14 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleUIGameController()
 		{
-			SpeedometerWidget = new();
-			TachometerWidget = new();
-			TimeWidget = new();
-			Instruments = new();
-			GearBox = new();
-			Radio = new();
-			AnalogTachWidget = new();
-			AnalogSpeedWidget = new();
+			SpeedometerWidget = new inkWidgetReference();
+			TachometerWidget = new inkWidgetReference();
+			TimeWidget = new inkWidgetReference();
+			Instruments = new inkWidgetReference();
+			GearBox = new inkWidgetReference();
+			Radio = new inkWidgetReference();
+			AnalogTachWidget = new inkWidgetReference();
+			AnalogSpeedWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

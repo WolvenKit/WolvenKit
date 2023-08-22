@@ -54,11 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public TvDeviceWidgetController()
 		{
-			VideoWidget = new();
-			GlobalTVChannelSlot = new();
-			MessegeWidget = new();
-			MessageBackgroundWidget = new();
-			ActiveVideo = new();
+			VideoWidget = new inkVideoWidgetReference();
+			GlobalTVChannelSlot = new inkBasePanelWidgetReference();
+			MessegeWidget = new inkTextWidgetReference();
+			MessageBackgroundWidget = new inkLeafWidgetReference();
+			ActiveVideo = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

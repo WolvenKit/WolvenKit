@@ -134,22 +134,22 @@ namespace WolvenKit.RED4.Types
 
 		public AICTreeNodeActionAnimationCurvePathDefinition()
 		{
-			NodeReference = new() { VariableId = 65535 };
-			ControllersSetupName = new() { VariableId = 65535 };
-			UseStart = new() { VariableId = 65535 };
-			UseStop = new() { VariableId = 65535 };
-			BlendTime = new() { VariableId = 65535 };
-			GlobalInBlendTime = new() { VariableId = 65535 };
-			GlobalOutBlendTime = new() { VariableId = 65535 };
-			TurnCharacterToMatchVelocity = new() { VariableId = 65535 };
-			CustomStartAnimationName = new() { VariableId = 65535 };
-			CustomMainAnimationName = new() { VariableId = 65535 };
-			CustomStopAnimationName = new() { VariableId = 65535 };
-			StartSnapToTerrain = new() { VariableId = 65535 };
-			MainSnapToTerrain = new() { VariableId = 65535 };
-			StopSnapToTerrain = new() { VariableId = 65535 };
-			StartSnapToTerrainBlendTime = new() { VariableId = 65535 };
-			StopSnapToTerrainBlendTime = new() { VariableId = 65535 };
+			NodeReference = new LibTreeDefNodeRef { VariableId = ushort.MaxValue };
+			ControllersSetupName = new LibTreeDefCName { VariableId = ushort.MaxValue };
+			UseStart = new LibTreeDefBool { VariableId = ushort.MaxValue };
+			UseStop = new LibTreeDefBool { VariableId = ushort.MaxValue };
+			BlendTime = new LibTreeDefFloat { VariableId = ushort.MaxValue };
+			GlobalInBlendTime = new LibTreeDefFloat { VariableId = ushort.MaxValue };
+			GlobalOutBlendTime = new LibTreeDefFloat { VariableId = ushort.MaxValue };
+			TurnCharacterToMatchVelocity = new LibTreeDefBool { VariableId = ushort.MaxValue };
+			CustomStartAnimationName = new LibTreeDefCName { VariableId = ushort.MaxValue };
+			CustomMainAnimationName = new LibTreeDefCName { VariableId = ushort.MaxValue };
+			CustomStopAnimationName = new LibTreeDefCName { VariableId = ushort.MaxValue };
+			StartSnapToTerrain = new LibTreeDefBool { VariableId = ushort.MaxValue };
+			MainSnapToTerrain = new LibTreeDefBool { VariableId = ushort.MaxValue };
+			StopSnapToTerrain = new LibTreeDefBool { VariableId = ushort.MaxValue };
+			StartSnapToTerrainBlendTime = new LibTreeDefFloat { VariableId = ushort.MaxValue };
+			StopSnapToTerrainBlendTime = new LibTreeDefFloat { VariableId = ushort.MaxValue };
 
 			PostConstruct();
 		}

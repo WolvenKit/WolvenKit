@@ -70,9 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public DamagePreviewController()
 		{
-			FullBar = new();
-			StippedBar = new();
-			RootCanvas = new();
+			FullBar = new inkWidgetReference();
+			StippedBar = new inkWidgetReference();
+			RootCanvas = new inkWidgetReference();
 
 			PostConstruct();
 		}

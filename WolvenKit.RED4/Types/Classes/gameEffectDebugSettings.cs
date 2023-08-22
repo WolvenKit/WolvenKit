@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public gameEffectDebugSettings()
 		{
 			Duration = 1.000000F;
-			Color = new();
+			Color = new CColor();
 
 			PostConstruct();
 		}

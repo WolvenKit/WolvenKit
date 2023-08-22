@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public questNPCLookAt_NodeType()
 		{
-			PuppetRef = new() { Names = new() };
-			LookAtTargetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
+			LookAtTargetRef = new gameEntityReference { Names = new() };
 			AssignLookAt = true;
 
 			PostConstruct();

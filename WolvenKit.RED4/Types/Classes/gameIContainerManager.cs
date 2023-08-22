@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIContainerManager : gameIGameSystem
+	public abstract partial class gameIContainerManager : gameIGameSystem
 	{
 		public gameIContainerManager()
 		{

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public CooldownPackageDelayIDs()
 		{
-			PackageID = new();
+			PackageID = new CooldownStorageID();
 			DelayIDs = new();
 
 			PostConstruct();

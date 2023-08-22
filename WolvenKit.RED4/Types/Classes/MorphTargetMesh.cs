@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.Types
 		public MorphTargetMesh()
 		{
 			Targets = new();
-			BoundingBox = new() { Min = new(), Max = new() };
+			BoundingBox = new Box { Min = new Vector4(), Max = new Vector4() };
 
 			PostConstruct();
 		}

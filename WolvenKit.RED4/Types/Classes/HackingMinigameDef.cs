@@ -86,16 +86,16 @@ namespace WolvenKit.RED4.Types
 
 		public HackingMinigameDef()
 		{
-			MinigameDefaults = new();
-			NextMinigameData = new();
-			SkipSummaryScreen = new();
-			PlayerPrograms = new();
-			ActivePrograms = new();
-			ActiveTraps = new();
-			State = new();
-			TimerLeftPercent = new();
-			Entity = new();
-			IsJournalTarget = new();
+			MinigameDefaults = new gamebbScriptID_Variant();
+			NextMinigameData = new gamebbScriptID_Variant();
+			SkipSummaryScreen = new gamebbScriptID_Bool();
+			PlayerPrograms = new gamebbScriptID_Variant();
+			ActivePrograms = new gamebbScriptID_Variant();
+			ActiveTraps = new gamebbScriptID_Variant();
+			State = new gamebbScriptID_Int32();
+			TimerLeftPercent = new gamebbScriptID_Float();
+			Entity = new gamebbScriptID_Variant();
+			IsJournalTarget = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

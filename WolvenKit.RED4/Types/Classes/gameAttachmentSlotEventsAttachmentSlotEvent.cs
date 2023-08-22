@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameAttachmentSlotEventsAttachmentSlotEvent : redEvent
+	public abstract partial class gameAttachmentSlotEventsAttachmentSlotEvent : redEvent
 	{
 		public gameAttachmentSlotEventsAttachmentSlotEvent()
 		{

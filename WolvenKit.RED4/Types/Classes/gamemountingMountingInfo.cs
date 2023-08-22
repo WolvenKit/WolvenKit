@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public gamemountingMountingInfo()
 		{
-			ChildId = new();
-			ParentId = new();
-			SlotId = new();
+			ChildId = new entEntityID();
+			ParentId = new entEntityID();
+			SlotId = new gamemountingMountingSlotId();
 
 			PostConstruct();
 		}

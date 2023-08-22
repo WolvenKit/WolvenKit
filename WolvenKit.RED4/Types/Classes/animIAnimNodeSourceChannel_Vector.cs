@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animIAnimNodeSourceChannel_Vector : ISerializable
+	public abstract partial class animIAnimNodeSourceChannel_Vector : ISerializable
 	{
 		public animIAnimNodeSourceChannel_Vector()
 		{

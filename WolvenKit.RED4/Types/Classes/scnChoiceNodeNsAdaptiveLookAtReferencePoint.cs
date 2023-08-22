@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnChoiceNodeNsAdaptiveLookAtReferencePoint()
 		{
-			ReferencePoint = new() { Id = 4294967295 };
+			ReferencePoint = new scnReferencePointId { Id = uint.MaxValue };
 
 			PostConstruct();
 		}

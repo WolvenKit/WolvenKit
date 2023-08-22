@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkanimTextInterpolator : inkanimInterpolator
+	public abstract partial class inkanimTextInterpolator : inkanimInterpolator
 	{
 		[Ordinal(7)] 
 		[RED("startValue")] 

@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_MeleeIKData()
 		{
-			HeadPosition = new();
-			ChestPosition = new();
-			IkOffset = new();
+			HeadPosition = new Vector4();
+			ChestPosition = new Vector4();
+			IkOffset = new Vector4();
 
 			PostConstruct();
 		}

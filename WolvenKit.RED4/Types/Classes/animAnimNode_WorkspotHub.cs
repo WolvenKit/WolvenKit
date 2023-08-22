@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_WorkspotHub()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			AdditionalLinkIds = new();
 			AdditionalLinks = new();
 			FacialKeyWeight = 1.000000F;

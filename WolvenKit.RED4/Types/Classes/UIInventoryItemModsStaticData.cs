@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class UIInventoryItemModsStaticData : IScriptable
+	public abstract partial class UIInventoryItemModsStaticData : IScriptable
 	{
 		public UIInventoryItemModsStaticData()
 		{

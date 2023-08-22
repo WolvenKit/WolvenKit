@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public ElevatorDeviceBlackboardDef()
 		{
-			CurrentFloor = new();
-			IsPlayerScanned = new();
-			IsPaused = new();
+			CurrentFloor = new gamebbScriptID_String();
+			IsPlayerScanned = new gamebbScriptID_Bool();
+			IsPaused = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

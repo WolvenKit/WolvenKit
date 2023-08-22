@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public netEntityAttachmentInterface()
 		{
-			Time = new() { MilliSecs = 18446744073709551615 };
+			Time = new netTime { MilliSecs = long.MaxValue };
 
 			PostConstruct();
 		}

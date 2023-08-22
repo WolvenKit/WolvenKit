@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameCursorInterpolationOverrides()
 		{
-			MinSpeed = new() { X = 0.350000F, Y = 0.350000F };
+			MinSpeed = new Vector2 { X = 0.350000F, Y = 0.350000F };
 			EnterTime = 0.050000F;
 
 			PostConstruct();

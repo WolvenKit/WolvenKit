@@ -22,10 +22,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SetBonePosition()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			Bone = new();
-			PositionMs = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			Bone = new animTransformIndex();
+			PositionMs = new animVectorLink();
 
 			PostConstruct();
 		}

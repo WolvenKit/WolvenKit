@@ -134,9 +134,9 @@ namespace WolvenKit.RED4.Types
 
 		public ServerInfoController()
 		{
-			C_selectionColor = new();
-			C_initialColor = new();
-			C_markColor = new();
+			C_selectionColor = new CColor();
+			C_initialColor = new HDRColor();
+			C_markColor = new HDRColor();
 
 			PostConstruct();
 		}

@@ -126,16 +126,16 @@ namespace WolvenKit.RED4.Types
 
 		public CharacterCreationPersistantElements()
 		{
-			HeaderHolder = new();
-			LBBtn = new();
-			RBBtn = new();
-			FluffHolderRight = new();
-			FluffHolderDown = new();
-			FluffHolderLeft = new();
-			FluffText1 = new();
-			FluffTextRight = new();
-			FluffTextDown = new();
-			FluffTextLeft = new();
+			HeaderHolder = new inkCompoundWidgetReference();
+			LBBtn = new inkWidgetReference();
+			RBBtn = new inkWidgetReference();
+			FluffHolderRight = new inkCompoundWidgetReference();
+			FluffHolderDown = new inkCompoundWidgetReference();
+			FluffHolderLeft = new inkCompoundWidgetReference();
+			FluffText1 = new inkTextWidgetReference();
+			FluffTextRight = new inkTextWidgetReference();
+			FluffTextDown = new inkTextWidgetReference();
+			FluffTextLeft = new inkTextWidgetReference();
 			Headers = new();
 			C_fluffMaxX = 1800.000000F;
 			C_fluffMinY = 300.000000F;

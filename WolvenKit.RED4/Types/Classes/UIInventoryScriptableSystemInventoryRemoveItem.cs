@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryScriptableSystemInventoryRemoveItem()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

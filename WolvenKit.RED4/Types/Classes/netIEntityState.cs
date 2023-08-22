@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class netIEntityState : RedBaseClass
+	public abstract partial class netIEntityState : RedBaseClass
 	{
 		[Ordinal(0)] 
 		[RED("recordID")] 

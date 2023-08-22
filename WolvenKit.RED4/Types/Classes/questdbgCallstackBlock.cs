@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public questdbgCallstackBlock()
 		{
-			Id = 18446744073709551615;
-			ParentId = 18446744073709551615;
+			Id = long.MaxValue;
+			ParentId = long.MaxValue;
 
 			PostConstruct();
 		}

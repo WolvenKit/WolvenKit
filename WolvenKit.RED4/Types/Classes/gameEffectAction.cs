@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameEffectAction : IScriptable
+	public abstract partial class gameEffectAction : IScriptable
 	{
 		public gameEffectAction()
 		{

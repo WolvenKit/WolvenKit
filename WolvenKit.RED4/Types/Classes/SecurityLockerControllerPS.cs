@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public SecurityLockerControllerPS()
 		{
 			DeviceName = "LocKey#122";
-			SecurityLockerProperties = new() { SecurityLevelAccessGranted = Enums.ESecurityAccessLevel.ESL_4, StoreWeaponSFX = "ui_loot_gun", PickUpWeaponSFX = "ui_loot_take_all" };
+			SecurityLockerProperties = new SecurityLockerProperties { SecurityLevelAccessGranted = Enums.ESecurityAccessLevel.ESL_4, StoreWeaponSFX = "ui_loot_gun", PickUpWeaponSFX = "ui_loot_take_all" };
 
 			PostConstruct();
 		}

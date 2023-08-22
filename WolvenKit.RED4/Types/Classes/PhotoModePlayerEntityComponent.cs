@@ -134,14 +134,14 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModePlayerEntityComponent()
 		{
-			UsedWeaponItemId = new();
-			CurrentWeaponInSlot = new();
+			UsedWeaponItemId = new gameItemID();
+			CurrentWeaponInSlot = new gameItemID();
 			AvailableCurrentItemTypesList = new();
 			AvailableCurrentItemsList = new();
-			SwapMeleeWeaponItemId = new();
-			SwapHangunWeaponItemId = new();
-			SwapRifleWeaponItemId = new();
-			SwapShootgunWeaponItemId = new();
+			SwapMeleeWeaponItemId = new gameItemID();
+			SwapHangunWeaponItemId = new gameItemID();
+			SwapRifleWeaponItemId = new gameItemID();
+			SwapShootgunWeaponItemId = new gameItemID();
 			LoadingItems = new();
 
 			PostConstruct();

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMinimapPingSystemMappinController()
 		{
-			RootWidget = new();
+			RootWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

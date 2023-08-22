@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerMainMenuWidgetController()
 		{
-			MenuButtonsListWidget = new();
+			MenuButtonsListWidget = new inkWidgetReference();
 			ComputerMenuButtonWidgetsData = new();
 
 			PostConstruct();

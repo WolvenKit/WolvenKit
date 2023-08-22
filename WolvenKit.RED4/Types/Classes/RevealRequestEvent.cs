@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public RevealRequestEvent()
 		{
-			Requester = new();
+			Requester = new entEntityID();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIBaseNodeType : ISerializable
+	public abstract partial class questIBaseNodeType : ISerializable
 	{
 		public questIBaseNodeType()
 		{

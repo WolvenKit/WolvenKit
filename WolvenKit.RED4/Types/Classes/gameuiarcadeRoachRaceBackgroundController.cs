@@ -39,9 +39,9 @@ namespace WolvenKit.RED4.Types
 		public gameuiarcadeRoachRaceBackgroundController()
 		{
 			ParallaxPlaneRelativeVelocityList = new();
-			DaynightWidget = new();
-			BackgroundObjectSpawner = new();
-			CloudSpawner = new();
+			DaynightWidget = new inkWidgetReference();
+			BackgroundObjectSpawner = new inkWidgetReference();
+			CloudSpawner = new inkWidgetReference();
 
 			PostConstruct();
 		}

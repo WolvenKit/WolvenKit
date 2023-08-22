@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameCustomRequestFilter : RedBaseClass
+	public abstract partial class gameCustomRequestFilter : RedBaseClass
 	{
 		public gameCustomRequestFilter()
 		{

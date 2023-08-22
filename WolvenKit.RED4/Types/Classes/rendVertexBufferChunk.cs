@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public rendVertexBufferChunk()
 		{
-			VertexLayout = new() { Elements = new(0), SlotStrides = new(0), Hash = 4294967295 };
+			VertexLayout = new GpuWrapApiVertexLayoutDesc { Elements = new(0), SlotStrides = new(0), Hash = uint.MaxValue };
 			ByteOffsets = new(0);
 
 			PostConstruct();

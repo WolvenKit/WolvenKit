@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_PreClimbing()
 		{
-			EdgePositionLS = new();
+			EdgePositionLS = new Vector4();
 
 			PostConstruct();
 		}

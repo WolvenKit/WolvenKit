@@ -55,10 +55,10 @@ namespace WolvenKit.RED4.Types
 		public gameuiarcadeArcadeGameController()
 		{
 			DefaultScreenTransitionTotalTime = 1.000000F;
-			ScreenTransitionWidget = new();
-			Menu = new();
-			Gameplay = new();
-			Scoreboard = new();
+			ScreenTransitionWidget = new inkImageWidgetReference();
+			Menu = new inkWidgetReference();
+			Gameplay = new inkWidgetReference();
+			Scoreboard = new inkWidgetReference();
 
 			PostConstruct();
 		}

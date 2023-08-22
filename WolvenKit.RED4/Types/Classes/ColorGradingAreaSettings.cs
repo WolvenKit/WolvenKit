@@ -147,17 +147,17 @@ namespace WolvenKit.RED4.Types
 			ContrastPivot = 0.435000F;
 			Saturation = 1.000000F;
 			Brightness = 1.000000F;
-			Lift = new();
-			GammaValue = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Luminance = 1.000000F };
-			Gain = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Luminance = 1.000000F };
-			Offset = new();
+			Lift = new ColorBalance();
+			GammaValue = new ColorBalance { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Luminance = 1.000000F };
+			Gain = new ColorBalance { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Luminance = 1.000000F };
+			Offset = new ColorBalance();
 			LowRange = 0.100000F;
-			ShadowOffset = new();
-			MidtoneOffset = new();
+			ShadowOffset = new ColorBalance();
+			MidtoneOffset = new ColorBalance();
 			HighRange = 0.450000F;
-			HighlightOffset = new();
-			LdrLut = new() { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
-			HdrLut = new() { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
+			HighlightOffset = new ColorBalance();
+			LdrLut = new ColorGradingLutParams { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
+			HdrLut = new ColorGradingLutParams { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
 
 			PostConstruct();
 		}

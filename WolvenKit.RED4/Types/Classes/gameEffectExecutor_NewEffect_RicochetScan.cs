@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectExecutor_NewEffect_RicochetScan()
 		{
-			Box = new();
+			Box = new Vector4();
 			OnlyForPlayer = true;
 
 			PostConstruct();

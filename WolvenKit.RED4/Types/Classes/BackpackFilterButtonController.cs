@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public BackpackFilterButtonController()
 		{
-			Icon = new();
-			Text = new();
+			Icon = new inkImageWidgetReference();
+			Text = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

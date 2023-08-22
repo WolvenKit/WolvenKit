@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AreaShapeOutline()
 		{
-			Points = new() { new() { X = -1.000000F, Y = -1.000000F }, new() { X = 1.000000F, Y = -1.000000F }, new() { X = 1.000000F, Y = 1.000000F }, new() { X = -1.000000F, Y = 1.000000F } };
+			Points = new() { new Vector3 { X = -1.000000F, Y = -1.000000F }, new Vector3 { X = 1.000000F, Y = -1.000000F }, new Vector3 { X = 1.000000F, Y = 1.000000F }, new Vector3 { X = -1.000000F, Y = 1.000000F } };
 			Height = 2.000000F;
 
 			PostConstruct();

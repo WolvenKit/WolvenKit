@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIStreetSignWidgetComponentWrapper : inkIWorldWidgetComponentWrapper
+	public abstract partial class inkIStreetSignWidgetComponentWrapper : inkIWorldWidgetComponentWrapper
 	{
 		public inkIStreetSignWidgetComponentWrapper()
 		{

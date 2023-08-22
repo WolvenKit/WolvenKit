@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entIKTargetRemoveEvent()
 		{
-			IkTargetRef = new() { Id = -1 };
+			IkTargetRef = new animIKTargetRef { Id = -1 };
 
 			PostConstruct();
 		}

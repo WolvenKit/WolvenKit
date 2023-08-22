@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entISkinableComponent : entIPlacedComponent
+	public abstract partial class entISkinableComponent : entIPlacedComponent
 	{
 		public entISkinableComponent()
 		{

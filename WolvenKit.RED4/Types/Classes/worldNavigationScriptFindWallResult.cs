@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldNavigationScriptFindWallResult()
 		{
-			HitPosition = new();
+			HitPosition = new Vector4();
 
 			PostConstruct();
 		}

@@ -118,17 +118,17 @@ namespace WolvenKit.RED4.Types
 
 		public scnPropDef()
 		{
-			PropId = new() { Id = 4294967295 };
+			PropId = new scnPropId { Id = uint.MaxValue };
 			AnimSets = new();
 			CinematicAnimSets = new();
 			DynamicAnimSets = new();
-			FindEntityInEntityParams = new() { ActorId = new() { Id = 4294967295 }, PerformerId = new() { Id = 4294967040 }, OwnershipTransferOptions = new() { DettachFromSlot = true, RemoveFromInventory = true } };
-			SpawnDespawnParams = new() { SpawnOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } }, ItemOwnerId = new() { Id = 4294967040 }, SpawnOnStart = true, IsEnabled = true, ValidateSpawnPostion = true };
-			SpawnSetParams = new();
-			CommunityParams = new();
-			SpawnerParams = new();
-			FindEntityInNodeParams = new();
-			FindEntityInWorldParams = new() { ActorRef = new() { Names = new() } };
+			FindEntityInEntityParams = new scnFindEntityInEntityParams { ActorId = new scnActorId { Id = uint.MaxValue }, PerformerId = new scnPerformerId { Id = 4294967040 }, OwnershipTransferOptions = new scnPropOwnershipTransferOptions { DettachFromSlot = true, RemoveFromInventory = true } };
+			SpawnDespawnParams = new scnSpawnDespawnEntityParams { SpawnOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } }, ItemOwnerId = new scnPerformerId { Id = 4294967040 }, SpawnOnStart = true, IsEnabled = true, ValidateSpawnPostion = true };
+			SpawnSetParams = new scnSpawnSetParams();
+			CommunityParams = new scnCommunityParams();
+			SpawnerParams = new scnSpawnerParams();
+			FindEntityInNodeParams = new scnFindEntityInNodeParams();
+			FindEntityInWorldParams = new scnFindEntityInWorldParams { ActorRef = new gameEntityReference { Names = new() } };
 
 			PostConstruct();
 		}

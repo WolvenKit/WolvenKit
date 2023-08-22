@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiCreditsPositionController()
 		{
-			TitleText = new();
-			NamesText = new();
+			TitleText = new inkTextWidgetReference();
+			NamesText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

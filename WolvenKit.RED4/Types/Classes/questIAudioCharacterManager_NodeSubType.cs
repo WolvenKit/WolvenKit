@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIAudioCharacterManager_NodeSubType : questINodeType
+	public abstract partial class questIAudioCharacterManager_NodeSubType : questINodeType
 	{
 		[Ordinal(0)] 
 		[RED("characterEntries")] 

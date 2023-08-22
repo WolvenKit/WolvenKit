@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class DeviceSystemBaseController : MasterController
+	public abstract partial class DeviceSystemBaseController : MasterController
 	{
 		public DeviceSystemBaseController()
 		{

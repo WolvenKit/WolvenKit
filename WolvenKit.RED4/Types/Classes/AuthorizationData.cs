@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public AuthorizationData()
 		{
 			IsAuthorizationModuleOn = true;
-			AuthorizationDataEntry = new();
+			AuthorizationDataEntry = new SecurityAccessLevelEntryClient();
 
 			PostConstruct();
 		}

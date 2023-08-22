@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public questAudioVehicleMultipliers_NodeType()
 		{
-			VehicleRef = new() { Names = new() };
-			Multipliers = new() { ThrottleInputMultiplier = 1.000000F, RpmMultiplier = 1.000000F };
+			VehicleRef = new gameEntityReference { Names = new() };
+			Multipliers = new audioVehicleMultipliers { ThrottleInputMultiplier = 1.000000F, RpmMultiplier = 1.000000F };
 
 			PostConstruct();
 		}

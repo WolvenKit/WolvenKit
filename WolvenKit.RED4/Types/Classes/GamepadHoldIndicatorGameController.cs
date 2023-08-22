@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public GamepadHoldIndicatorGameController()
 		{
-			Image = new();
+			Image = new inkImageWidgetReference();
 			PartName = "icon_circle_anim_";
 
 			PostConstruct();

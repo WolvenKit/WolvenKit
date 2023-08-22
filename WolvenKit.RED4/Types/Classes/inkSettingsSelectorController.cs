@@ -118,12 +118,12 @@ namespace WolvenKit.RED4.Types
 
 		public inkSettingsSelectorController()
 		{
-			LabelText = new();
-			ModifiedFlag = new();
-			Raycaster = new();
-			OptionSwitchHint = new();
-			HoverGeneralHighlight = new();
-			Container = new();
+			LabelText = new inkTextWidgetReference();
+			ModifiedFlag = new inkTextWidgetReference();
+			Raycaster = new inkWidgetReference();
+			OptionSwitchHint = new inkWidgetReference();
+			HoverGeneralHighlight = new inkWidgetReference();
+			Container = new inkWidgetReference();
 			HoveredChildren = new();
 
 			PostConstruct();

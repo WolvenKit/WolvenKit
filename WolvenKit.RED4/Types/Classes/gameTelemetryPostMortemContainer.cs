@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameTelemetryPostMortemContainer()
 		{
-			PostMortem = new() { TrackedQuest = new(), Location = new() };
+			PostMortem = new gameTelemetryPostMortem { TrackedQuest = new gameTelemetryTrackedQuest(), Location = new Vector3() };
 
 			PostConstruct();
 		}

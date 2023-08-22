@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SkFrameAnim()
 		{
-			ProgressLink = new();
-			TimeLink = new();
-			FrameLink = new();
+			ProgressLink = new animFloatLink();
+			TimeLink = new animFloatLink();
+			FrameLink = new animFloatLink();
 
 			PostConstruct();
 		}

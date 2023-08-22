@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public WorldMapGangItemController()
 		{
-			FactionNameText = new();
-			FactionIconImage = new();
+			FactionNameText = new inkTextWidgetReference();
+			FactionIconImage = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

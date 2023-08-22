@@ -78,11 +78,11 @@ namespace WolvenKit.RED4.Types
 
 		public AINavigationSystemResult()
 		{
-			LastSourcePosition = new() { X = new(), Y = new(), Z = new() };
-			LastTargetPosition = new() { X = new(), Y = new(), Z = new() };
-			AdjustedTargetPosition = new() { X = new(), Y = new(), Z = new() };
-			ClosestPointOnNavmesh = new() { X = new(), Y = new(), Z = new() };
-			ClosestReachablePoint = new() { X = new(), Y = new(), Z = new() };
+			LastSourcePosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			LastTargetPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			AdjustedTargetPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			ClosestPointOnNavmesh = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
+			ClosestReachablePoint = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() };
 
 			PostConstruct();
 		}

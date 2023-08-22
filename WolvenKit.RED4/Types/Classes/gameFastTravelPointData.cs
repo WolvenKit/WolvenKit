@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameFastTravelPointData()
 		{
-			RequesterID = new();
-			MappinID = new();
+			RequesterID = new entEntityID();
+			MappinID = new gameNewMappinID();
 
 			PostConstruct();
 		}

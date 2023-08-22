@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public CraftingGarmentItemPreviewGameController()
 		{
 			InitialItems = new();
-			PreviewedItem = new();
+			PreviewedItem = new gameItemID();
 
 			PostConstruct();
 		}

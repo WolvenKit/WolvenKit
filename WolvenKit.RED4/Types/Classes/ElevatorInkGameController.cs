@@ -134,14 +134,14 @@ namespace WolvenKit.RED4.Types
 
 		public ElevatorInkGameController()
 		{
-			VerticalPanel = new();
-			CurrentFloorTextWidget = new();
-			OpenCloseButtonWidgets = new();
-			ElevatorUpArrowsWidget = new();
-			ElevatorDownArrowsWidget = new();
-			WaitingStateWidget = new();
-			DataScanningWidget = new();
-			ElevatorStoppedWidget = new();
+			VerticalPanel = new inkVerticalPanelWidgetReference();
+			CurrentFloorTextWidget = new inkTextWidgetReference();
+			OpenCloseButtonWidgets = new inkCanvasWidgetReference();
+			ElevatorUpArrowsWidget = new inkFlexWidgetReference();
+			ElevatorDownArrowsWidget = new inkFlexWidgetReference();
+			WaitingStateWidget = new inkCanvasWidgetReference();
+			DataScanningWidget = new inkCanvasWidgetReference();
+			ElevatorStoppedWidget = new inkCanvasWidgetReference();
 			ButtonSizes = new();
 
 			PostConstruct();

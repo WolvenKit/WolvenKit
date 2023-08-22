@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class audioCustomEmitterMetadata : audioAudioMetadata
+	public abstract partial class audioCustomEmitterMetadata : audioAudioMetadata
 	{
 		public audioCustomEmitterMetadata()
 		{

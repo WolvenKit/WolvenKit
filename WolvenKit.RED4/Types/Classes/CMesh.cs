@@ -191,12 +191,12 @@ namespace WolvenKit.RED4.Types
 		public CMesh()
 		{
 			Parameters = new();
-			BoundingBox = new() { Min = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, Max = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F, W = -340282346638528859811704183484516925440.000000F } };
-			SurfaceAreaPerAxis = new() { X = -1.000000F, Y = -1.000000F, Z = -1.000000F };
+			BoundingBox = new Box { Min = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, Max = new Vector4 { X = float.MinValue, Y = float.MinValue, Z = float.MinValue, W = float.MinValue } };
+			SurfaceAreaPerAxis = new Vector3 { X = -1.000000F, Y = -1.000000F, Z = -1.000000F };
 			MaterialEntries = new();
 			ExternalMaterials = new();
 			LocalMaterialInstances = new();
-			LocalMaterialBuffer = new() { RawDataHeaders = new() };
+			LocalMaterialBuffer = new meshMeshMaterialBuffer { RawDataHeaders = new() };
 			PreloadExternalMaterials = new();
 			PreloadLocalMaterialInstances = new();
 			InplaceResources = new();

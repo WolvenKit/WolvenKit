@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkGridItem()
 		{
-			RootIdx = 4294967295;
+			RootIdx = uint.MaxValue;
 
 			PostConstruct();
 		}

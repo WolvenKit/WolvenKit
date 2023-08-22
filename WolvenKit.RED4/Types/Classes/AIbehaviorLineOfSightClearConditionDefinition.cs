@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorLineOfSightClearConditionDefinition()
 		{
 			CollisionFilters = new();
-			Offset = new();
+			Offset = new Vector3();
 
 			PostConstruct();
 		}

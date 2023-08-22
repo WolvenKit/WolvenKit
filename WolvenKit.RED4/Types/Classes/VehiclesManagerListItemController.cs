@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public VehiclesManagerListItemController()
 		{
-			Label = new();
-			TypeIcon = new();
+			Label = new inkTextWidgetReference();
+			TypeIcon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

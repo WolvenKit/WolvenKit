@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public ProgressBarButton()
 		{
-			CraftingFill = new();
-			CraftingLabel = new();
+			CraftingFill = new inkWidgetReference();
+			CraftingLabel = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

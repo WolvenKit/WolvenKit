@@ -70,9 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalPointOfInterestMappin()
 		{
-			DynamicEntityRef = new() { Names = new() };
-			MappinData = new() { Active = true };
-			Offset = new();
+			DynamicEntityRef = new gameEntityReference { Names = new() };
+			MappinData = new gamemappinsPointOfInterestMappinData { Active = true };
+			Offset = new Vector3();
 
 			PostConstruct();
 		}

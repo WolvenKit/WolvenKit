@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public questMoveOnSplineAdditionalParams()
 		{
-			SimpleParams = new() { SnapToTerrain = true };
-			AnimParams = new() { ControllersSetupName = "Walk" };
-			WithCompanionParams = new() { MovementType = new() { UseNPCMovementParams = true }, CompanionDistancePreset = Enums.gamedataCompanionDistancePreset.Medium, CatchUpWithCompanion = true, TeleportToCompanion = true, MinSearchAngle = 22.500000F, MaxSearchAngle = 60.000000F, InterruptCapability = Enums.scnInterruptCapability.NotInterruptable };
+			SimpleParams = new questSimpleMoveOnSplineParams { SnapToTerrain = true };
+			AnimParams = new questAnimMoveOnSplineParams { ControllersSetupName = "Walk" };
+			WithCompanionParams = new questWithCompanionMoveOnSplineParams { MovementType = new AIMovementTypeSpec { UseNPCMovementParams = true }, CompanionDistancePreset = Enums.gamedataCompanionDistancePreset.Medium, CatchUpWithCompanion = true, TeleportToCompanion = true, MinSearchAngle = 22.500000F, MaxSearchAngle = 60.000000F, InterruptCapability = Enums.scnInterruptCapability.NotInterruptable };
 
 			PostConstruct();
 		}

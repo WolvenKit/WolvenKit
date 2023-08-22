@@ -39,9 +39,9 @@ namespace WolvenKit.RED4.Types
 		public JukeboxControllerPS()
 		{
 			DeviceName = "LocKey#165";
-			TweakDBRecord = 65591369476;
+			TweakDBRecord = "Devices.Jukebox";
 			TweakDBDescriptionRecord = 116534778712;
-			JukeboxSetup = new();
+			JukeboxSetup = new JukeboxSetup();
 			Stations = new();
 			IsPlaying = true;
 

@@ -78,16 +78,16 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_AimConstraint_ObjectRotationUp()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			TargetTransform = new();
-			UpTransform = new();
-			UpTransformVector = new() { Y = 1.000000F };
-			TransformIndex = new();
-			ForwardAxisLS = new() { X = 1.000000F };
-			UpAxisLS = new() { Y = 1.000000F };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			TargetTransform = new animTransformIndex();
+			UpTransform = new animTransformIndex();
+			UpTransformVector = new Vector3 { Y = 1.000000F };
+			TransformIndex = new animTransformIndex();
+			ForwardAxisLS = new Vector3 { X = 1.000000F };
+			UpAxisLS = new Vector3 { Y = 1.000000F };
 			Weight = 1.000000F;
-			WeightFloatTrack = new();
+			WeightFloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

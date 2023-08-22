@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_Pose360()
 		{
-			Id = 4294967295;
-			Angle = new();
+			Id = uint.MaxValue;
+			Angle = new animFloatLink();
 
 			PostConstruct();
 		}

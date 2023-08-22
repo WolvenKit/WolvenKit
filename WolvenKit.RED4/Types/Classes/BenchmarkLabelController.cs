@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public BenchmarkLabelController()
 		{
-			LabelWidget = new();
-			ValueWidget = new();
+			LabelWidget = new inkTextWidgetReference();
+			ValueWidget = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public NPCDebugInfo()
 		{
-			SpawnerID = new();
+			SpawnerID = new entEntityID();
 
 			PostConstruct();
 		}

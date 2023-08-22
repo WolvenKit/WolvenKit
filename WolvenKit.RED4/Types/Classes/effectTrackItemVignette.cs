@@ -47,9 +47,9 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemVignette()
 		{
 			TimeDuration = 1.000000F;
-			VignetteRadius = new();
-			VignetteExp = new();
-			Color = new();
+			VignetteRadius = new effectEffectParameterEvaluatorFloat();
+			VignetteExp = new effectEffectParameterEvaluatorFloat();
+			Color = new effectEffectParameterEvaluatorColor();
 
 			PostConstruct();
 		}

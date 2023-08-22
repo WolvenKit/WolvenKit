@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public GameplayEquipRequest()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 			SlotIndex = -1;
 
 			PostConstruct();

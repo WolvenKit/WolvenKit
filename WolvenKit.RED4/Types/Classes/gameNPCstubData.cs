@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameNPCstubData()
 		{
-			SpawnerID = new();
+			SpawnerID = new entEntityID();
 
 			PostConstruct();
 		}

@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsvisListChoiceData()
 		{
-			Type = new();
-			CaptionParts = new() { Parts = new() };
+			Type = new gameinteractionsChoiceTypeWrapper();
+			CaptionParts = new gameinteractionsChoiceCaption { Parts = new() };
 
 			PostConstruct();
 		}

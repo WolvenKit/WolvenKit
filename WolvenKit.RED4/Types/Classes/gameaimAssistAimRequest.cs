@@ -167,7 +167,7 @@ namespace WolvenKit.RED4.Types
 		public gameaimAssistAimRequest()
 		{
 			CheckRange = true;
-			LookAtTarget = new();
+			LookAtTarget = new Vector4();
 			ProcessAsInput = true;
 			BptMaxSwitches = -1.000000F;
 

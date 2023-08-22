@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public TooltipSpecialAbilityDisplay()
 		{
-			AbilityIcon = new();
-			AbilityDescription = new();
-			QualityRoot = new();
+			AbilityIcon = new inkImageWidgetReference();
+			AbilityDescription = new inkTextWidgetReference();
+			QualityRoot = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerToggleComponent_NodeType()
 		{
-			Params = new() { new() };
+			Params = new() { new questEntityManagerToggleComponent_NodeTypeParams() };
 
 			PostConstruct();
 		}

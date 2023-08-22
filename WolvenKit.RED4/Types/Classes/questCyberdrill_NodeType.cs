@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCyberdrill_NodeType()
 		{
-			Params = new() { new() };
+			Params = new() { new questCyberdrill_NodeTypeParams() };
 
 			PostConstruct();
 		}

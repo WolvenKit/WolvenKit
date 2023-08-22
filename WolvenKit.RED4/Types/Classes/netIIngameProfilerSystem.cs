@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class netIIngameProfilerSystem : gameIGameSystem
+	public abstract partial class netIIngameProfilerSystem : gameIGameSystem
 	{
 		public netIIngameProfilerSystem()
 		{

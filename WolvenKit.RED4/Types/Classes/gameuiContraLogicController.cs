@@ -230,9 +230,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiContraLogicController()
 		{
-			PlayerColliderPositionOffset = new();
-			PlayerColliderSizeOffset = new();
-			GameplayRoot = new();
+			PlayerColliderPositionOffset = new Vector2();
+			PlayerColliderSizeOffset = new Vector2();
+			GameplayRoot = new inkCompoundWidgetReference();
 			Layers = new();
 			CheatCodes = new();
 			AcceptableCheatKeys = new() { "CameraStepDown", "CameraStepUp", "UI_MoveUp", "UI_MoveDown", "UI_MoveLeft", "UI_MoveRight" };

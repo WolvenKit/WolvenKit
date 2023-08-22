@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerParameters_SetStatusEffect()
 		{
-			PuppetRef = new() { Names = new() };
-			StatusEffectSourceObject = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
+			StatusEffectSourceObject = new gameEntityReference { Names = new() };
 			Set = true;
 
 			PostConstruct();

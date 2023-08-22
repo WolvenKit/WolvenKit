@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnChoiceNodeNsBasicLookAtParams()
 		{
-			Offset = new();
+			Offset = new Vector3();
 
 			PostConstruct();
 		}

@@ -166,13 +166,13 @@ namespace WolvenKit.RED4.Types
 
 		public HUDSignalProgressBarController()
 		{
-			Bar = new();
-			Completed = new();
-			SignalLost = new();
-			Percent = new();
+			Bar = new inkWidgetReference();
+			Completed = new inkWidgetReference();
+			SignalLost = new inkWidgetReference();
+			Percent = new inkTextWidgetReference();
 			SignalBars = new();
-			Data = new();
-			AnimOptions = new();
+			Data = new HUDProgressBarData();
+			AnimOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

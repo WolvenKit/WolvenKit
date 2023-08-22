@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamestateMachineparameterTypeItemUnequipRequest()
 		{
-			ItemId = new();
+			ItemId = new gameItemID();
 			Instant = true;
 
 			PostConstruct();

@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameAttachmentSlotData()
 		{
-			ActiveItemID = new();
-			PrevItemID = new();
-			AppearanceItemID = new();
+			ActiveItemID = new gameItemID();
+			PrevItemID = new gameItemID();
+			AppearanceItemID = new gameItemID();
 
 			PostConstruct();
 		}

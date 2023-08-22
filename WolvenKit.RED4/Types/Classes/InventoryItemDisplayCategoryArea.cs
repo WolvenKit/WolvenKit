@@ -48,8 +48,8 @@ namespace WolvenKit.RED4.Types
 		{
 			AreasToHide = new();
 			EquipmentAreas = new();
-			NewItemsWrapper = new();
-			NewItemsCounter = new();
+			NewItemsWrapper = new inkWidgetReference();
+			NewItemsCounter = new inkTextWidgetReference();
 			CategoryAreas = new();
 
 			PostConstruct();

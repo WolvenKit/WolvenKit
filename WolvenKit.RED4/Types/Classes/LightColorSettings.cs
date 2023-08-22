@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public LightColorSettings()
 		{
 			Enable = true;
-			Light = new() { Unit = Enums.ELightUnit.LU_Lux };
+			Light = new worldWorldGlobalLightParameters { Unit = Enums.ELightUnit.LU_Lux };
 
 			PostConstruct();
 		}

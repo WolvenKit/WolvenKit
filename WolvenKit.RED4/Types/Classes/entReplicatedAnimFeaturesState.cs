@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public entReplicatedAnimFeaturesState()
 		{
 			Items = new();
-			LastAppliedActionsTime = new();
+			LastAppliedActionsTime = new netTime();
 
 			PostConstruct();
 		}

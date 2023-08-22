@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public SequenceVideo()
 		{
-			VideoPath = new();
+			VideoPath = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

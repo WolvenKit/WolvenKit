@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questITimeManagerNodeType : questObjectNodeType
+	public abstract partial class questITimeManagerNodeType : questObjectNodeType
 	{
 		public questITimeManagerNodeType()
 		{

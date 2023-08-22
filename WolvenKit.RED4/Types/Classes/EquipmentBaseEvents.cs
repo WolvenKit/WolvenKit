@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class EquipmentBaseEvents : EquipmentBaseTransition
+	public abstract partial class EquipmentBaseEvents : EquipmentBaseTransition
 	{
 		public EquipmentBaseEvents()
 		{

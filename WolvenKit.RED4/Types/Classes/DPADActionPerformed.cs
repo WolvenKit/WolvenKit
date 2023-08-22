@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public DPADActionPerformed()
 		{
-			OwnerID = new();
+			OwnerID = new entEntityID();
 
 			PostConstruct();
 		}

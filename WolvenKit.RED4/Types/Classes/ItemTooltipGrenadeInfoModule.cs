@@ -54,12 +54,12 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipGrenadeInfoModule()
 		{
-			HeaderText = new();
-			TotalDamageText = new();
-			DurationText = new();
-			RangeText = new();
-			DeliveryIcon = new();
-			DeliveryText = new();
+			HeaderText = new inkTextWidgetReference();
+			TotalDamageText = new inkTextWidgetReference();
+			DurationText = new inkTextWidgetReference();
+			RangeText = new inkTextWidgetReference();
+			DeliveryIcon = new inkImageWidgetReference();
+			DeliveryText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

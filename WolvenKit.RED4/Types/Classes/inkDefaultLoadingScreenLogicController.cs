@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkDefaultLoadingScreenLogicController()
 		{
-			ProgressBarRoot = new();
+			ProgressBarRoot = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public LibTreeDefVector()
 		{
-			VariableId = 65535;
-			V = new();
+			VariableId = ushort.MaxValue;
+			V = new Vector3();
 
 			PostConstruct();
 		}

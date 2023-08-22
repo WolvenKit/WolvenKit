@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class BaseItemAction : BaseScriptableAction
+	public abstract partial class BaseItemAction : BaseScriptableAction
 	{
 		[Ordinal(11)] 
 		[RED("itemData")] 

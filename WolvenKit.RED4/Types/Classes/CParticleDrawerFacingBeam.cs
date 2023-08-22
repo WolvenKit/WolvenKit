@@ -72,9 +72,9 @@ namespace WolvenKit.RED4.Types
 		{
 			TexturesPerUnit = 1.000000F;
 			NumSegments = 10;
-			SourceTangent = new();
-			TargetTangent = new();
-			DebugTargetTranslation = new();
+			SourceTangent = new Vector4();
+			TargetTangent = new Vector4();
+			DebugTargetTranslation = new Vector3();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public vgVectorGraphicShape_PolyLine()
 		{
-			CalTransform = new();
+			CalTransform = new CMatrix();
 			Ints = new();
 
 			PostConstruct();

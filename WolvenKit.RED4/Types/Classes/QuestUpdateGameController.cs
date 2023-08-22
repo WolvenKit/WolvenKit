@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public QuestUpdateGameController()
 		{
-			Header = new();
-			Label = new();
-			Icon = new();
+			Header = new inkTextWidgetReference();
+			Label = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

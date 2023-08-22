@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Noise";
 			EditorGroup = "Position";
 			IsEnabled = true;
-			ChangeRate = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			ChangeRate = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 
 			PostConstruct();
 		}

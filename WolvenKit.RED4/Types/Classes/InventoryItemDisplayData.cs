@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemDisplayData()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

@@ -55,8 +55,8 @@ namespace WolvenKit.RED4.Types
 		public questSceneNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			SceneLocation = new() { Type = Enums.scnWorldMarkerType.NodeRef };
+			Id = ushort.MaxValue;
+			SceneLocation = new scnWorldMarker { Type = Enums.scnWorldMarkerType.NodeRef };
 			InterruptionOperations = new();
 
 			PostConstruct();

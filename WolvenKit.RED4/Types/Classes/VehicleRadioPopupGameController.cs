@@ -86,9 +86,9 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleRadioPopupGameController()
 		{
-			Icon = new();
-			ScrollArea = new();
-			ScrollControllerWidget = new();
+			Icon = new inkImageWidgetReference();
+			ScrollArea = new inkScrollAreaWidgetReference();
+			ScrollControllerWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public FollowSlot()
 		{
-			SlotTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			SlotTransform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			IsEnabled = true;
 			IsAvailable = true;
 

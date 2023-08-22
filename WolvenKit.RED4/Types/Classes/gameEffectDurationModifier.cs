@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameEffectDurationModifier : IScriptable
+	public abstract partial class gameEffectDurationModifier : IScriptable
 	{
 		public gameEffectDurationModifier()
 		{

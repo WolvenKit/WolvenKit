@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnSceneGraphNode : ISerializable
+	public abstract partial class scnSceneGraphNode : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("nodeId")] 

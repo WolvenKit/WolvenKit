@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public entTemplateComponentBackendDataOverrideInfo()
 		{
-			Offset = new();
+			Offset = new Vector2();
 
 			PostConstruct();
 		}

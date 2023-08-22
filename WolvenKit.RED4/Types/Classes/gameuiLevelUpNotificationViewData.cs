@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiLevelUpNotificationViewData()
 		{
-			Levelupdata = new();
+			Levelupdata = new questLevelUpData();
 
 			PostConstruct();
 		}

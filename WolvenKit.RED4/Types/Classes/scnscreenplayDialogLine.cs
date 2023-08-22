@@ -62,11 +62,11 @@ namespace WolvenKit.RED4.Types
 
 		public scnscreenplayDialogLine()
 		{
-			ItemId = new() { Id = 4294967040 };
-			Speaker = new() { Id = 4294967295 };
-			Addressee = new() { Id = 4294967295 };
-			Usage = new() { PlayerGenderMask = new() { Mask = 128 } };
-			LocstringId = new();
+			ItemId = new scnscreenplayItemId { Id = 4294967040 };
+			Speaker = new scnActorId { Id = uint.MaxValue };
+			Addressee = new scnActorId { Id = uint.MaxValue };
+			Usage = new scnscreenplayLineUsage { PlayerGenderMask = new scnGenderMask { Mask = 128 } };
+			LocstringId = new scnlocLocstringId();
 
 			PostConstruct();
 		}

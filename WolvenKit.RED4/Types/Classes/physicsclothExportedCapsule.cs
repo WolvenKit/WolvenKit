@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public physicsclothExportedCapsule()
 		{
-			P0 = new();
-			P1 = new();
+			P0 = new Vector3();
+			P1 = new Vector3();
 
 			PostConstruct();
 		}

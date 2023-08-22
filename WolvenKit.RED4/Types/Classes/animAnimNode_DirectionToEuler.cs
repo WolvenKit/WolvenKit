@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_DirectionToEuler()
 		{
-			Id = 4294967295;
-			InputNode = new();
-			InitialForwardVector = new() { Y = 1.000000F };
+			Id = uint.MaxValue;
+			InputNode = new animVectorLink();
+			InitialForwardVector = new Vector4 { Y = 1.000000F };
 
 			PostConstruct();
 		}

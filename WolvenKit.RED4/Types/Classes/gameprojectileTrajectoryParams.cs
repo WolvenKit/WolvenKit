@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameprojectileTrajectoryParams : IScriptable
+	public abstract partial class gameprojectileTrajectoryParams : IScriptable
 	{
 		public gameprojectileTrajectoryParams()
 		{

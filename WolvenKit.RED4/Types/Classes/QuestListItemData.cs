@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.Types
 
 		public QuestListItemData()
 		{
-			Timestamp = new();
+			Timestamp = new GameTime();
 			ObjectivesDistances = new();
 
 			PostConstruct();

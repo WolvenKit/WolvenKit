@@ -39,11 +39,11 @@ namespace WolvenKit.RED4.Types
 		public scnUseSceneWorkspotCommand()
 		{
 			WorkExcludedGestures = new();
-			InfiniteSequenceEntryId = new() { Id = 4294967295 };
-			SceneInstanceId = new() { SceneId = new(), OwnerId = new(), InternalId = 255, Hash = 6242570315725555409 };
-			WorkspotInstanceId = new() { Id = 4294967295 };
-			ItemOverride = new() { PropOverrides = new(), ItemOverrides = new() };
-			NodeId = new() { Id = 4294967295 };
+			InfiniteSequenceEntryId = new workWorkEntryId { Id = uint.MaxValue };
+			SceneInstanceId = new scnSceneInstanceId { SceneId = new scnSceneId(), OwnerId = new scnSceneInstanceOwnerId(), InternalId = 255, Hash = 6242570315725555409 };
+			WorkspotInstanceId = new scnSceneWorkspotInstanceId { Id = uint.MaxValue };
+			ItemOverride = new workWorkspotItemOverride { PropOverrides = new(), ItemOverrides = new() };
+			NodeId = new scnNodeId { Id = uint.MaxValue };
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questSetAsCrowdObstacle_NodeTypeParams()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

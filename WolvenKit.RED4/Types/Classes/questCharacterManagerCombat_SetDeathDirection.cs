@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerCombat_SetDeathDirection()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 			Direction = Enums.gameeventsDeathDirection.Left;
 
 			PostConstruct();

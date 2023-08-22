@@ -463,13 +463,13 @@ namespace WolvenKit.RED4.Types
 		public ScriptedPuppet()
 		{
 			TargetingComponentsArray = new();
-			LinkedStatusEffect = new() { NetrunnerIDs = new(), TargetID = new(), StatusEffectList = new() };
+			LinkedStatusEffect = new LinkedStatusEffect { NetrunnerIDs = new(), TargetID = new entEntityID(), StatusEffectList = new() };
 			CustomAIComponents = new();
 			Listeners = new();
 			ShouldSpawnBloodPuddle = true;
 			CurrentWorkspotTags = new();
 			LootQuality = Enums.gamedataQuality.Invalid;
-			IsActiveCached = new();
+			IsActiveCached = new AIUtilsCachedBoolValue();
 			AttemptedShards = new();
 
 			PostConstruct();

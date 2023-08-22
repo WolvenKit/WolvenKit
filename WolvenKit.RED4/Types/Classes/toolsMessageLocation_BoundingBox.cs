@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public toolsMessageLocation_BoundingBox()
 		{
-			Box = new() { Min = new(), Max = new() };
+            Box = new Box { Min = new Vector4(), Max = new Vector4() };
 
 			PostConstruct();
 		}

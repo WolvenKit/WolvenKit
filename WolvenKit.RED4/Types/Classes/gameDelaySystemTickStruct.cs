@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameDelaySystemTickStruct : ISerializable
+	public abstract partial class gameDelaySystemTickStruct : ISerializable
 	{
 		public gameDelaySystemTickStruct()
 		{

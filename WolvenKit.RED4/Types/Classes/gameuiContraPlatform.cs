@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiContraPlatform()
 		{
-			Image = new();
+			Image = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

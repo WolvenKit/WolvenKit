@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.Types
 		public audioVoiceContextMapItem()
 		{
 			Grunt = Enums.audioVoGruntType.None;
-			Answer = new();
+			Answer = new audioVoiceContextAnswer();
 			OverridingVoContext = Enums.locVoiceoverContext.Default_Vo_Context;
 
 			PostConstruct();

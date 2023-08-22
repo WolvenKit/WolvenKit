@@ -89,8 +89,8 @@ namespace WolvenKit.RED4.Types
 			NearPlaneOverride = 0.100000F;
 			FarPlaneOverride = 1000.000000F;
 			VirtualCameraName = "Component";
-			Params = new() { AreaParameters = new() };
-			BackgroundColor = new();
+			Params = new WorldRenderAreaSettings { AreaParameters = new() };
+			BackgroundColor = new CColor();
 			StreamingDistance = 1.000000F;
 
 			PostConstruct();

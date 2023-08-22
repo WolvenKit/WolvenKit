@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameStatModifierData_Deprecated : IScriptable
+	public abstract partial class gameStatModifierData_Deprecated : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("statType")] 

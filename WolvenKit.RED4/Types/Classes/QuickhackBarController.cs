@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public QuickhackBarController()
 		{
-			EmptyMask = new();
-			Empty = new();
-			Full = new();
+			EmptyMask = new inkWidgetReference();
+			Empty = new inkWidgetReference();
+			Full = new inkWidgetReference();
 
 			PostConstruct();
 		}

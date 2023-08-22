@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class workIWorkspotCommandData : RedBaseClass
+	public abstract partial class workIWorkspotCommandData : RedBaseClass
 	{
 		public workIWorkspotCommandData()
 		{

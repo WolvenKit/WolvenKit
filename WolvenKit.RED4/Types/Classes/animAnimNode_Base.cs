@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animAnimNode_Base : ISerializable
+	public abstract partial class animAnimNode_Base : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("id")] 

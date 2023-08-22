@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LocomotionEventsTransition : LocomotionTransition
+	public abstract partial class LocomotionEventsTransition : LocomotionTransition
 	{
 		[Ordinal(3)] 
 		[RED("causeContactDestruction")] 

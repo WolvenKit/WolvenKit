@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnCameraRid()
 		{
-			Tag = new() { SerialNumber = new() { SerialNumber = 4294967295 } };
+			Tag = new scnRidTag { SerialNumber = new scnRidSerialNumber { SerialNumber = uint.MaxValue } };
 			Animations = new();
 
 			PostConstruct();

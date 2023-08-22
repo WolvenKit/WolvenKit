@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public entEffectDesc()
 		{
-			CompiledEffectInfo = new() { PlacementTags = new(), ComponentNames = new(), RelativePositions = new(), RelativeRotations = new(), PlacementInfos = new(), EventsSortedByRUID = new() };
+			CompiledEffectInfo = new worldCompiledEffectInfo { PlacementTags = new(), ComponentNames = new(), RelativePositions = new(), RelativeRotations = new(), PlacementInfos = new(), EventsSortedByRUID = new() };
 			AutoSpawnTag = "_autospawn";
 			RandomWeight = 1;
 

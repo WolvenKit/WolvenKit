@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public cpGameplayLightComponent()
 		{
-			Begin = new();
-			End = new();
-			DelayRange = new();
+			Begin = new GameTime();
+			End = new GameTime();
+			DelayRange = new GameTime();
 
 			PostConstruct();
 		}

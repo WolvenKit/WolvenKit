@@ -22,9 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_MaskReset()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			WeightNode = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			WeightNode = new animFloatLink();
 			Transforms = new();
 
 			PostConstruct();

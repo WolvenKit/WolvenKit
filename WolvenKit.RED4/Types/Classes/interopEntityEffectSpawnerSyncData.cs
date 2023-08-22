@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public interopEntityEffectSpawnerSyncData()
 		{
-			Effects = new();
-			TemplateColor = new();
+            Effects = new();
+			TemplateColor = new CColor();
 
 			PostConstruct();
 		}

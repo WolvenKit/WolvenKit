@@ -5,9 +5,9 @@ namespace WolvenKit.RED4.Types
 	{
 		public audioGenericEntitySettings()
 		{
-			CommonSettings = new() { StopAllSoundsOnDetach = true };
-			ScanningSettings = new();
-			AuxiliaryMetadata = new();
+			CommonSettings = new audioCommonEntitySettings { StopAllSoundsOnDetach = true };
+			ScanningSettings = new audioScanningSettings();
+			AuxiliaryMetadata = new audioAuxiliaryMetadata();
 
 			PostConstruct();
 		}

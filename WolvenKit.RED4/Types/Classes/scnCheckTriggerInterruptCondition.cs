@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnCheckTriggerInterruptCondition()
 		{
-			Params = new();
+			Params = new scnCheckTriggerInterruptConditionParams();
 
 			PostConstruct();
 		}

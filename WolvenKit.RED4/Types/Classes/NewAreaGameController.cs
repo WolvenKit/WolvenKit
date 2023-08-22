@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public NewAreaGameController()
 		{
-			Label = new();
+			Label = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

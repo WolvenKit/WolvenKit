@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public UI_StealthDef()
 		{
-			CombatDebug = new();
-			NumberOfCombatants = new();
+			CombatDebug = new gamebbScriptID_Bool();
+			NumberOfCombatants = new gamebbScriptID_Uint32();
 
 			PostConstruct();
 		}

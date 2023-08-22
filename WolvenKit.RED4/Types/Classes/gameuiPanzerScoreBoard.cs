@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiPanzerScoreBoard()
 		{
-			ScoreboardList = new();
+			ScoreboardList = new inkVerticalPanelWidgetReference();
 			Champions = new();
 
 			PostConstruct();

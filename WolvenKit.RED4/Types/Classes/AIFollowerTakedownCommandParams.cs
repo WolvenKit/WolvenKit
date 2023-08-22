@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIFollowerTakedownCommandParams()
 		{
-			TargetRef = new() { Names = new() };
+			TargetRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

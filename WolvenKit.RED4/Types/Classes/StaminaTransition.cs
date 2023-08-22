@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class StaminaTransition : DefaultTransition
+	public abstract partial class StaminaTransition : DefaultTransition
 	{
 		[Ordinal(0)] 
 		[RED("staminaChangeToggle")] 

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public FillTakeOverChainBBoardEvent()
 		{
-			RequesterID = new();
+			RequesterID = new gamePersistentID();
 
 			PostConstruct();
 		}

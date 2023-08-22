@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnChoiceNodeNsDeprecatedParams()
 		{
-			ActorId = new() { Id = 4294967295 };
-			PropId = new() { Id = 4294967295 };
+			ActorId = new scnActorId { Id = uint.MaxValue };
+			PropId = new scnPropId { Id = uint.MaxValue };
 
 			PostConstruct();
 		}

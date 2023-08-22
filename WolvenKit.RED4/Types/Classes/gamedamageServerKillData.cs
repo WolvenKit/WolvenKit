@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamedamageServerKillData()
 		{
-			KillInfo = new();
+			KillInfo = new gameuiKillInfo();
 
 			PostConstruct();
 		}

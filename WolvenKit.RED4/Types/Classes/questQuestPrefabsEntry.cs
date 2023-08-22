@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questQuestPrefabsEntry()
 		{
-			NodeRef = new();
+			NodeRef = new worldGlobalNodeRef();
 
 			PostConstruct();
 		}

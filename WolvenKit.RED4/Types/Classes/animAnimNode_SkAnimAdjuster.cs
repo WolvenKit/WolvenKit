@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SkAnimAdjuster()
 		{
-			TargetPositionWs = new();
-			TargetDirectionWs = new();
-			InitialForwardVector = new() { Y = 1.000000F };
+			TargetPositionWs = new animVectorLink();
+			TargetDirectionWs = new animVectorLink();
+			InitialForwardVector = new Vector4 { Y = 1.000000F };
 
 			PostConstruct();
 		}

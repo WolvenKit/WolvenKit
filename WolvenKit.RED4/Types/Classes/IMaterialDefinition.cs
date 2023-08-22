@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IMaterialDefinition : IMaterial
+	public abstract partial class IMaterialDefinition : IMaterial
 	{
 		[Ordinal(1)] 
 		[RED("paramBlockSize", 3)] 

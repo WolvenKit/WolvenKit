@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldSnappableNodeInstance : worldINodeInstance
+	public abstract partial class worldSnappableNodeInstance : worldINodeInstance
 	{
 		public worldSnappableNodeInstance()
 		{

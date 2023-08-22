@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAdditionalFloatTrackEntry()
 		{
-			TrackInfo = new();
+			TrackInfo = new animFloatTrackInfo();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiICustomizationStateUpdater : IScriptable
+	public abstract partial class gameuiICustomizationStateUpdater : IScriptable
 	{
 		public gameuiICustomizationStateUpdater()
 		{

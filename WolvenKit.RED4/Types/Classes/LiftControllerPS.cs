@@ -143,10 +143,10 @@ namespace WolvenKit.RED4.Types
 		public LiftControllerPS()
 		{
 			DeviceName = "LocKey#101";
-			TweakDBRecord = 78520840316;
+			TweakDBRecord = "Devices.LiftDevice";
 			TweakDBDescriptionRecord = 132145755007;
 			DisableQuickHacks = true;
-			LiftSetup = new() { LiftSpeed = 2.500000F, LiftStartingDelay = 1.000000F, LiftTravelTimeOverride = 4.000000F, EmptyLiftSpeedMultiplier = 2.000000F, RadioStationNumer = -1 };
+			LiftSetup = new LiftSetup { LiftSpeed = 2.500000F, LiftStartingDelay = 1.000000F, LiftTravelTimeOverride = 4.000000F, EmptyLiftSpeedMultiplier = 2.000000F, RadioStationNumer = -1 };
 			TargetFloor = -1;
 			Floors = new();
 			FloorIDs = new();

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class vgBaseVectorGraphicShape : ISerializable
+	public abstract partial class vgBaseVectorGraphicShape : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("calTransform")] 

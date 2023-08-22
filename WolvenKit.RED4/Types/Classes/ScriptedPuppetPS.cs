@@ -230,14 +230,14 @@ namespace WolvenKit.RED4.Types
 
 		public ScriptedPuppetPS()
 		{
-			SecuritySystemData = new();
+			SecuritySystemData = new SecuritySystemData();
 			ActiveContexts = new();
 			IsDefeatMechanicActive = true;
-			LeftHandLoadout = new();
-			RightHandLoadout = new();
-			CustomWeaponLoadout = new() { ItemID = new() };
-			GenericMeleeLoadout = new() { ItemID = new() };
-			GenericRangedLoadout = new() { ItemID = new() };
+			LeftHandLoadout = new gameItemID();
+			RightHandLoadout = new gameItemID();
+			CustomWeaponLoadout = new CachedItemLoadout { ItemID = new gameItemID() };
+			GenericMeleeLoadout = new CachedItemLoadout { ItemID = new gameItemID() };
+			GenericRangedLoadout = new CachedItemLoadout { ItemID = new gameItemID() };
 			Transgressions = new();
 
 			PostConstruct();

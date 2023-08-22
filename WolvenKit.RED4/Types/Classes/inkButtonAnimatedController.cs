@@ -102,11 +102,11 @@ namespace WolvenKit.RED4.Types
 
 		public inkButtonAnimatedController()
 		{
-			AnimTargetHover = new();
-			AnimTargetPulse = new();
+			AnimTargetHover = new inkWidgetReference();
+			AnimTargetPulse = new inkWidgetReference();
 			NormalRootOpacity = 1.000000F;
 			HoverRootOpacity = 1.000000F;
-			AnimPulseOptions = new();
+			AnimPulseOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

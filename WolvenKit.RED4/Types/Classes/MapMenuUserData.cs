@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public MapMenuUserData()
 		{
-			MoveTo = new();
+			MoveTo = new Vector3();
 
 			PostConstruct();
 		}

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocTokenManager()
 		{
-			GameInstance = new();
+			GameInstance = new ScriptGameInstance();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIInventoryListener : IScriptable
+	public abstract partial class gameIInventoryListener : IScriptable
 	{
 		public gameIInventoryListener()
 		{

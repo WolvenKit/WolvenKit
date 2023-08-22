@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameRegisterCooldownFromRecordRequest()
 		{
-			OwnerItemId = new();
+			OwnerItemId = new gameItemID();
 
 			PostConstruct();
 		}

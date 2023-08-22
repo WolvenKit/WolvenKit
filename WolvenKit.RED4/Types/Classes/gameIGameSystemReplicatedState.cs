@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIGameSystemReplicatedState : ISerializable
+	public abstract partial class gameIGameSystemReplicatedState : ISerializable
 	{
 		public gameIGameSystemReplicatedState()
 		{

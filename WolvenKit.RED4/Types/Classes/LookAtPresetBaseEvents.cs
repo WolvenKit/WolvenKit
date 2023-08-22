@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LookAtPresetBaseEvents : DefaultTransition
+	public abstract partial class LookAtPresetBaseEvents : DefaultTransition
 	{
 		[Ordinal(0)] 
 		[RED("lookAtEvents")] 

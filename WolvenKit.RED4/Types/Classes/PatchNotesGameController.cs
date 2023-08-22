@@ -182,20 +182,20 @@ namespace WolvenKit.RED4.Types
 
 		public PatchNotesGameController()
 		{
-			ButtonHintsRef = new();
+			ButtonHintsRef = new inkWidgetReference();
 			AnimationName = "intro";
-			ConfirmBtn = new();
-			SelectorRef = new();
-			PatchImageRef = new();
+			ConfirmBtn = new inkWidgetReference();
+			SelectorRef = new inkWidgetReference();
+			PatchImageRef = new inkImageWidgetReference();
 			PlatformSpecificNotes = new();
 			IsInputBlocked = true;
 			ContentList = new();
 			AtlasParts = new();
 			LabelsList = new();
-			ContentPatchRef_1500 = new();
-			ContentPatchRef_1600 = new();
-			TabsRef = new();
-			CloudSaveSettingsBlockRef = new();
+			ContentPatchRef_1500 = new inkCompoundWidgetReference();
+			ContentPatchRef_1600 = new inkCompoundWidgetReference();
+			TabsRef = new inkWidgetReference();
+			CloudSaveSettingsBlockRef = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

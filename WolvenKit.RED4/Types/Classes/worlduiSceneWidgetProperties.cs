@@ -70,8 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public worlduiSceneWidgetProperties()
 		{
-			ProjectionPlaneSize = new() { X = 1.000000F, Y = 1.000000F };
-			FaceVector = new();
+			ProjectionPlaneSize = new Vector2 { X = 1.000000F, Y = 1.000000F };
+			FaceVector = new Vector3();
 
 			PostConstruct();
 		}

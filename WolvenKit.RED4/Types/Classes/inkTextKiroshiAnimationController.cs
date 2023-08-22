@@ -58,10 +58,10 @@ namespace WolvenKit.RED4.Types
 			UseDefaultAnimation = true;
 			EndValue = 1.000000F;
 			TimeToSkip = 0.050000F;
-			PreTranslatedTextWidget = new();
-			PostTranslatedTextWidget = new();
-			NativeTextWidget = new();
-			TranslatedTextWidget = new();
+			PreTranslatedTextWidget = new inkTextWidgetReference();
+			PostTranslatedTextWidget = new inkTextWidgetReference();
+			NativeTextWidget = new inkRichTextBoxWidgetReference();
+			TranslatedTextWidget = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

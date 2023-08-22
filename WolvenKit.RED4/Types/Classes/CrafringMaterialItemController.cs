@@ -86,11 +86,11 @@ namespace WolvenKit.RED4.Types
 
 		public CrafringMaterialItemController()
 		{
-			NameText = new();
-			QuantityText = new();
-			QuantityChangeText = new();
-			Icon = new();
-			Frame = new();
+			NameText = new inkTextWidgetReference();
+			QuantityText = new inkTextWidgetReference();
+			QuantityChangeText = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			Frame = new inkWidgetReference();
 
 			PostConstruct();
 		}

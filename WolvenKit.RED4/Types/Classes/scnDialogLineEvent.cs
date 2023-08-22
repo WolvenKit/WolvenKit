@@ -38,11 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public scnDialogLineEvent()
 		{
-			Id = new() { Id = 18446744073709551615 };
+			Id = new scnSceneEventId { Id = long.MaxValue };
 			Duration = 1000;
-			ScreenplayLineId = new() { Id = 4294967040 };
-			VoParams = new();
-			AdditionalSpeakers = new() { Speakers = new() };
+			ScreenplayLineId = new scnscreenplayItemId { Id = 4294967040 };
+			VoParams = new scnDialogLineVoParams();
+			AdditionalSpeakers = new scnAdditionalSpeakers { Speakers = new() };
 
 			PostConstruct();
 		}

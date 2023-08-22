@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISpot : ISerializable
+	public abstract partial class AISpot : ISerializable
 	{
 		public AISpot()
 		{

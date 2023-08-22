@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISpotInstance : RedBaseClass
+	public abstract partial class AISpotInstance : RedBaseClass
 	{
 		public AISpotInstance()
 		{

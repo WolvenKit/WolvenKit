@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamestateMachineeventBaseEvent : redEvent
+	public abstract partial class gamestateMachineeventBaseEvent : redEvent
 	{
 		[Ordinal(0)] 
 		[RED("id")] 

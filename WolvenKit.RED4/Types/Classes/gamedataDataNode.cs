@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamedataDataNode : ISerializable
+	public abstract partial class gamedataDataNode : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("nodeType")] 

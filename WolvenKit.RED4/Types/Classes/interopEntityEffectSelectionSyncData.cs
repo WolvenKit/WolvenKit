@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public interopEntityEffectSelectionSyncData()
 		{
-			EffectIDPath = new() { Elements = new() };
+			EffectIDPath = new toolsEditorObjectIDPath { Elements = new() };
 
 			PostConstruct();
 		}

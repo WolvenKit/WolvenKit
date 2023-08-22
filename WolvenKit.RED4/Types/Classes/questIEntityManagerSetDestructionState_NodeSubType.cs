@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIEntityManagerSetDestructionState_NodeSubType : questIEntityManager_NodeSubType
+	public abstract partial class questIEntityManagerSetDestructionState_NodeSubType : questIEntityManager_NodeSubType
 	{
 		public questIEntityManagerSetDestructionState_NodeSubType()
 		{

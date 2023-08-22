@@ -342,8 +342,8 @@ namespace WolvenKit.RED4.Types
 
 		public MinimalItemTooltipData()
 		{
-			ItemID = new();
-			TransmogItem = new();
+			ItemID = new gameItemID();
+			TransmogItem = new gameItemID();
 			Stats = new();
 			Mods = new();
 			DedicatedMods = new();

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEquipParam()
 		{
-			ItemIDToEquip = new();
+			ItemIDToEquip = new gameItemID();
 
 			PostConstruct();
 		}

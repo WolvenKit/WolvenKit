@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public SBinkperationData()
 		{
-			BinkPath = new();
+			BinkPath = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

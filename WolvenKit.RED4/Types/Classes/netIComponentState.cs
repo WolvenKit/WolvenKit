@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class netIComponentState : RedBaseClass
+	public abstract partial class netIComponentState : RedBaseClass
 	{
 		[Ordinal(0)] 
 		[RED("componentName")] 

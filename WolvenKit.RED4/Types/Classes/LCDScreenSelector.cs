@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LCDScreenSelector : inkTweakDBIDSelector
+	public abstract partial class LCDScreenSelector : inkTweakDBIDSelector
 	{
 		[Ordinal(1)] 
 		[RED("customMessageID")] 

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEntitySpawnerEvent()
 		{
-			SpawnedEntityId = new();
+			SpawnedEntityId = new entEntityID();
 			EventType = Enums.gameEntitySpawnerEventType.Spawn;
 
 			PostConstruct();

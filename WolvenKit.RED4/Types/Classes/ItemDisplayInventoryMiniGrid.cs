@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public ItemDisplayInventoryMiniGrid()
 		{
-			GridList = new();
-			Label = new();
+			GridList = new inkCompoundWidgetReference();
+			Label = new inkTextWidgetReference();
 			GridData = new();
 
 			PostConstruct();

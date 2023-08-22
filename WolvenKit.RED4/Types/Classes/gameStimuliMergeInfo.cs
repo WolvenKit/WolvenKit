@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameStimuliMergeInfo()
 		{
-			Position = new();
+			Position = new Vector4();
 			Radius = -1.000000F;
 			Type = Enums.gamedataStimType.Invalid;
 			PropagationType = Enums.gamedataStimPropagation.Invalid;

@@ -219,7 +219,7 @@ namespace WolvenKit.RED4.Types
 			MaxVelocityMagnitudeToConsiderPlayerVehicleInactive = 10.000000F;
 			MaxVelocityMagnitudeToConsiderTrafficVehicleIdle = 0.100000F;
 			PlayerInactiveMinTimeNeededToEngageMovingFaster = 8.000000F;
-			VehEngageMovingFasterInterpolation = new() { EnterCurveType = Enums.audioESoundCurveType.Linear, EnterCurveTime = 3.000000F, ExitCurveType = Enums.audioESoundCurveType.Linear, ExitCurveTime = 3.000000F };
+			VehEngageMovingFasterInterpolation = new audioVehicleEngageMovingFasterInterpolationData { EnterCurveType = Enums.audioESoundCurveType.Linear, EnterCurveTime = 3.000000F, ExitCurveType = Enums.audioESoundCurveType.Linear, ExitCurveTime = 3.000000F };
 			TrafficSpeedRC = 0.050000F;
 			TrafficAccelerationRC = 0.200000F;
 			TrafficRpmRC = 0.200000F;

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterAppearancePrefetched_ConditionType()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

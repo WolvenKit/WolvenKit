@@ -30,10 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FloatMathOp()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			OperationType = Enums.animEAnimGraphMathOp.AGMO_Abs;
-			FirstInputNode = new();
-			SecondInputNode = new();
+			FirstInputNode = new animFloatLink();
+			SecondInputNode = new animFloatLink();
 
 			PostConstruct();
 		}

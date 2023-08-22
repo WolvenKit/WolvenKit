@@ -110,13 +110,13 @@ namespace WolvenKit.RED4.Types
 
 		public AITrackedLocation()
 		{
-			LastKnown = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity }, Direction = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity } };
-			Location = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity }, Direction = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity } };
-			SharedLocation = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity }, Direction = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity } };
+			LastKnown = new AILocationInformation { Position = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity }, Direction = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity } };
+			Location = new AILocationInformation { Position = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity }, Direction = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity } };
+			SharedLocation = new AILocationInformation { Position = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity }, Direction = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity } };
 			Accuracy = 1.000000F;
 			SharedAccuracy = 1.000000F;
-			Speed = new();
-			SharedLastKnown = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity }, Direction = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity } };
+			Speed = new Vector4();
+			SharedLastKnown = new AILocationInformation { Position = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity }, Direction = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity } };
 
 			PostConstruct();
 		}

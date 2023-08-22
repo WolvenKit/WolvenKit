@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gsmState : IScriptable
+	public abstract partial class gsmState : IScriptable
 	{
 		public gsmState()
 		{

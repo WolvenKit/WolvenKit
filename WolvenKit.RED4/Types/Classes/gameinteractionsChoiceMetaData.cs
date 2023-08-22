@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsChoiceMetaData()
 		{
-			Type = new();
+			Type = new gameinteractionsChoiceTypeWrapper();
 
 			PostConstruct();
 		}

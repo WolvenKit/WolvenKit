@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public sampleUIAnchorController()
 		{
-			RectangleAnchor = new();
+			RectangleAnchor = new inkRectangleWidgetReference();
 
 			PostConstruct();
 		}

@@ -49,8 +49,8 @@ namespace WolvenKit.RED4.Types
 			PlayCommonAd = true;
 			Video1Path = "Video1";
 			Video2Path = "Video2";
-			Video1 = new();
-			Video2 = new();
+			Video1 = new inkVideoWidgetReference();
+			Video2 = new inkVideoWidgetReference();
 
 			PostConstruct();
 		}

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AbstractLandEvents : LocomotionGroundEvents
+	public abstract partial class AbstractLandEvents : LocomotionGroundEvents
 	{
 		[Ordinal(6)] 
 		[RED("blockLandingStimBroadcasting")] 

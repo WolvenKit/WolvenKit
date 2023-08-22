@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questITutorial_NodeSubType : questIRetNodeType
+	public abstract partial class questITutorial_NodeSubType : questIRetNodeType
 	{
 		public questITutorial_NodeSubType()
 		{

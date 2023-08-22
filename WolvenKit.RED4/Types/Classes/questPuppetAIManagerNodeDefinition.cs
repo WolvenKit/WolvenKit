@@ -15,8 +15,8 @@ namespace WolvenKit.RED4.Types
 		public questPuppetAIManagerNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			Entries = new() { new() };
+			Id = ushort.MaxValue;
+			Entries = new() { new questPuppetAIManagerNodeDefinitionEntry() };
 
 			PostConstruct();
 		}

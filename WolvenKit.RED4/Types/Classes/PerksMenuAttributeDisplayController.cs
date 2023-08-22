@@ -126,18 +126,18 @@ namespace WolvenKit.RED4.Types
 
 		public PerksMenuAttributeDisplayController()
 		{
-			WidgetWrapper = new();
-			ForegroundWrapper = new();
-			AttributeName = new();
-			AttributeIcon = new();
-			AttributeLevel = new();
-			FrameHovered = new();
-			Accent1Hovered = new();
-			Accent1BGHovered = new();
-			Accent2Hovered = new();
-			Accent2BGHovered = new();
-			TopConnectionContainer = new();
-			BottomConnectionContainer = new();
+			WidgetWrapper = new inkWidgetReference();
+			ForegroundWrapper = new inkWidgetReference();
+			AttributeName = new inkTextWidgetReference();
+			AttributeIcon = new inkImageWidgetReference();
+			AttributeLevel = new inkTextWidgetReference();
+			FrameHovered = new inkWidgetReference();
+			Accent1Hovered = new inkWidgetReference();
+			Accent1BGHovered = new inkWidgetReference();
+			Accent2Hovered = new inkWidgetReference();
+			Accent2BGHovered = new inkWidgetReference();
+			TopConnectionContainer = new inkWidgetReference();
+			BottomConnectionContainer = new inkWidgetReference();
 
 			PostConstruct();
 		}

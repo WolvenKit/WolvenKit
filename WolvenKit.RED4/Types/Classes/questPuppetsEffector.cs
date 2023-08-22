@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questPuppetsEffector : ISerializable
+	public abstract partial class questPuppetsEffector : ISerializable
 	{
 		public questPuppetsEffector()
 		{

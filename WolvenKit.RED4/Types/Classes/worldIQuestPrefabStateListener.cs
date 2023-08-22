@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldIQuestPrefabStateListener : ISerializable
+	public abstract partial class worldIQuestPrefabStateListener : ISerializable
 	{
 		public worldIQuestPrefabStateListener()
 		{

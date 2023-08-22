@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public audioVehicleDoorsSettingsMetadata()
 		{
-			Door = new();
-			Trunk = new();
-			Hood = new();
+			Door = new audioVehicleDoorsSettings();
+			Trunk = new audioVehicleDoorsSettings();
+			Hood = new audioVehicleDoorsSettings();
 
 			PostConstruct();
 		}

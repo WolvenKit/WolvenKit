@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemFilmGrain()
 		{
 			TimeDuration = 1.000000F;
-			LuminanceBias = new();
-			Strength = new();
+			LuminanceBias = new effectEffectParameterEvaluatorFloat();
+			Strength = new effectEffectParameterEvaluatorVector();
 
 			PostConstruct();
 		}

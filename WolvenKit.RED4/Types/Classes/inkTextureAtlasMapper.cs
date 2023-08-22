@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public inkTextureAtlasMapper()
 		{
-			ClippingRectInPixels = new();
-			ClippingRectInUVCoords = new();
+			ClippingRectInPixels = new Rect();
+			ClippingRectInUVCoords = new RectF();
 
 			PostConstruct();
 		}

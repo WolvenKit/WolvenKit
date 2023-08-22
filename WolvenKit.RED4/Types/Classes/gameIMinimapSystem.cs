@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIMinimapSystem : gameIGameSystem
+	public abstract partial class gameIMinimapSystem : gameIGameSystem
 	{
 		public gameIMinimapSystem()
 		{

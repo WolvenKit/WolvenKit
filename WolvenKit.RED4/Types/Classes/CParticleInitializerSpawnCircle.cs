@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.Types
 			EditorGroup = "Deprecated";
 			IsEnabled = true;
 			WorldSpace = true;
-			SpawnToLocal = new();
+			SpawnToLocal = new CMatrix();
 
 			PostConstruct();
 		}

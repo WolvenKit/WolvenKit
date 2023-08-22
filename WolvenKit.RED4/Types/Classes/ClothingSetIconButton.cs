@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ClothingSetIconButton()
 		{
-			SetIcon = new();
-			CurrentIconFrame = new();
+			SetIcon = new inkImageWidgetReference();
+			CurrentIconFrame = new inkWidgetReference();
 
 			PostConstruct();
 		}

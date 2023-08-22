@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class genIRandomizationSupervisor : IScriptable
+	public abstract partial class genIRandomizationSupervisor : IScriptable
 	{
 		public genIRandomizationSupervisor()
 		{

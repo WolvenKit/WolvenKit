@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class FunctionalTestsIGameSystem : gameIGameSystem
+	public abstract partial class FunctionalTestsIGameSystem : gameIGameSystem
 	{
 		public FunctionalTestsIGameSystem()
 		{

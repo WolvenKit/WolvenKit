@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public CEvaluatorColorStartEnd()
 		{
-			Start = new();
-			End = new();
+			Start = new CColor();
+			End = new CColor();
 
 			PostConstruct();
 		}

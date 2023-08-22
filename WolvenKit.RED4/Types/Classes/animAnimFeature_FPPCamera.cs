@@ -348,8 +348,8 @@ namespace WolvenKit.RED4.Types
 			VehicleOffsetWeight = 1.000000F;
 			GameplayCameraPoseWeight = 1.000000F;
 			VehicleProceduralCameraWeight = 1.000000F;
-			T4CameraIdleOrientation = new() { R = 1.000000F };
-			T4CameraControlIdleOrientation = new() { R = 1.000000F };
+			T4CameraIdleOrientation = new Quaternion { R = 1.000000F };
+			T4CameraControlIdleOrientation = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

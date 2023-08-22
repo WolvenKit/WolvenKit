@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entSimpleSkinningAttachment : entISkinningAttachment
+	public abstract partial class entSimpleSkinningAttachment : entISkinningAttachment
 	{
 		public entSimpleSkinningAttachment()
 		{

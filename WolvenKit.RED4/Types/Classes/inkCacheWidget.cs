@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkCacheWidget()
 		{
-			InnerScale = new() { X = 1.000000F, Y = 1.000000F };
+			InnerScale = new Vector2 { X = 1.000000F, Y = 1.000000F };
 
 			PostConstruct();
 		}

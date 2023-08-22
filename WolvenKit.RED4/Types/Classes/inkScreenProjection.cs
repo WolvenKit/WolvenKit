@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public inkScreenProjection()
 		{
-			PreviousPosition = new();
-			CurrentPosition = new();
-			UvPosition = new();
+			PreviousPosition = new Vector2();
+			CurrentPosition = new Vector2();
+			UvPosition = new Vector2();
 
 			PostConstruct();
 		}

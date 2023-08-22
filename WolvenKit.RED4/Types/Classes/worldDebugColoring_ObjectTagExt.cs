@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public worldDebugColoring_ObjectTagExt()
 		{
 			Tag = Enums.worldObjectTagExt.None;
-			Color = new();
+			Color = new CColor();
 
 			PostConstruct();
 		}

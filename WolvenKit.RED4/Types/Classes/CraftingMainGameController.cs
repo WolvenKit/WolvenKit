@@ -198,12 +198,12 @@ namespace WolvenKit.RED4.Types
 
 		public CraftingMainGameController()
 		{
-			TooltipsManagerRef = new();
-			TabRootRef = new();
-			ButtonHintsManagerRef = new();
-			SkillWidgetRoot = new();
-			CraftingLogicControllerContainer = new();
-			UpgradingLogicControllerContainer = new();
+			TooltipsManagerRef = new inkWidgetReference();
+			TabRootRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			SkillWidgetRoot = new inkCompoundWidgetReference();
+			CraftingLogicControllerContainer = new inkWidgetReference();
+			UpgradingLogicControllerContainer = new inkWidgetReference();
 
 			PostConstruct();
 		}

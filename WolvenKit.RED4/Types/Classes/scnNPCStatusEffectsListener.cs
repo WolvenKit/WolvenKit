@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnNPCStatusEffectsListener : gameIStatusEffectListener
+	public abstract partial class scnNPCStatusEffectsListener : gameIStatusEffectListener
 	{
 		public scnNPCStatusEffectsListener()
 		{

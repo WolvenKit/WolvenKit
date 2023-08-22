@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerParameters_HealPlayer()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 			Heal = true;
 			RemoveStatusEffects = true;
 			RemoveBuffs = true;

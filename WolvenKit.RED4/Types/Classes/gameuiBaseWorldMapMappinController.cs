@@ -143,8 +143,8 @@ namespace WolvenKit.RED4.Types
 		public gameuiBaseWorldMapMappinController()
 		{
 			CollectionCount = 1;
-			GroupContainerWidget = new();
-			GroupCountTextWidget = new();
+			GroupContainerWidget = new inkWidgetReference();
+			GroupCountTextWidget = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

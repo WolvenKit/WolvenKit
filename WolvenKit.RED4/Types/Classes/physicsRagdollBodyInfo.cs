@@ -139,8 +139,8 @@ namespace WolvenKit.RED4.Types
 			ParentBodyIndex = -1;
 			ShapeRadius = 0.050000F;
 			HalfHeight = 0.050000F;
-			ShapeLocalTranslation = new();
-			ShapeLocalRotation = new() { R = 1.000000F };
+			ShapeLocalTranslation = new Vector3();
+			ShapeLocalRotation = new Quaternion { R = 1.000000F };
 			SwingAnglesY = new(2);
 			SwingAnglesZ = new(2);
 			TwistAngles = new(2);

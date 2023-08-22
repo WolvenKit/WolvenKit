@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldTrafficNullAreaCollisionData()
 		{
-			Header = new() { Direction = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
+			Header = new worldCrowdNullAreaCollisionHeader { Direction = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
 			NullAreaCollisions = new();
 
 			PostConstruct();

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public FailedActionEvent()
 		{
-			WhoFailed = new();
+			WhoFailed = new gamePersistentID();
 
 			PostConstruct();
 		}

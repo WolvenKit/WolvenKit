@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			Absorption = -1.000000F;
 			StreamingDistance = 1000.000000F;
 			AmbientScale = 1.000000F;
-			Color = new();
+			Color = new CColor();
 
 			PostConstruct();
 		}

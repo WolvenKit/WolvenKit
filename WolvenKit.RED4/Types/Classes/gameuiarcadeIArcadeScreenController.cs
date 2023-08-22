@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiarcadeIArcadeScreenController : inkWidgetLogicController
+	public abstract partial class gameuiarcadeIArcadeScreenController : inkWidgetLogicController
 	{
 		public gameuiarcadeIArcadeScreenController()
 		{

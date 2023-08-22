@@ -47,11 +47,11 @@ namespace WolvenKit.RED4.Types
 		public SmartHouseControllerPS()
 		{
 			DeviceName = "LocKey#15648";
-			TweakDBRecord = 81162730366;
+			TweakDBRecord = "Devices.SmartHouse";
 			TweakDBDescriptionRecord = 130612213885;
 			Timetable = new();
 			AvailablePresets = new();
-			SmartHouseCustomization = new();
+			SmartHouseCustomization = new SmartHouseConfiguration();
 
 			PostConstruct();
 		}

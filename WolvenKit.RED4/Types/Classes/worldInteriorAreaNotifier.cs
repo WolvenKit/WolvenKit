@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.Types
 		{
 			IsEnabled = true;
 			IncludeChannels = Enums.TriggerChannel.TC_Player;
-			GameRestrictionIDs = new() { 131161243162 };
+			GameRestrictionIDs = new() { "GameplayRestriction.NoTimeSkip" };
 			TreatAsInterior = true;
 
 			PostConstruct();

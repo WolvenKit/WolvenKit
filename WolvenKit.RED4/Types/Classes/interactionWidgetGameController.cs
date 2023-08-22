@@ -208,7 +208,7 @@ namespace WolvenKit.RED4.Types
 		{
 			WidgetsPool = new();
 			WidgetsCallbacks = new();
-			ProgressBarHolder = new();
+			ProgressBarHolder = new inkWidgetReference();
 			SpawnTokens = new();
 			CurrentOptions = new();
 

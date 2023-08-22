@@ -54,11 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_BlendByMaskDynamic()
 		{
-			Id = 4294967295;
-			Base = new();
-			Blend = new();
-			Mask = new();
-			Weight = new();
+			Id = uint.MaxValue;
+			Base = new animPoseLink();
+			Blend = new animPoseLink();
+			Mask = new animIntLink();
+			Weight = new animFloatLink();
 			Masks = new();
 
 			PostConstruct();

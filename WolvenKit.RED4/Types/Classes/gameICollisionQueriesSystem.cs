@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameICollisionQueriesSystem : gameIGameSystem
+	public abstract partial class gameICollisionQueriesSystem : gameIGameSystem
 	{
 		public gameICollisionQueriesSystem()
 		{

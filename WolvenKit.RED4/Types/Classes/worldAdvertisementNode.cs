@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldAdvertisementNode()
 		{
-			MeshInitialScale = new();
+			MeshInitialScale = new Vector3();
 			LightsData = new();
 
 			PostConstruct();

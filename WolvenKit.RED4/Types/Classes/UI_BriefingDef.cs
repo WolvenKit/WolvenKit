@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public UI_BriefingDef()
 		{
-			BriefingToOpen = new();
-			BriefingSize = new();
-			BriefingAlignment = new();
+			BriefingToOpen = new gamebbScriptID_String();
+			BriefingSize = new gamebbScriptID_Variant();
+			BriefingAlignment = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIITrafficMovementSystem : gameIGameSystem
+	public abstract partial class AIITrafficMovementSystem : gameIGameSystem
 	{
 		public AIITrafficMovementSystem()
 		{

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ComDeviceTransition : DefaultTransition
+	public abstract partial class ComDeviceTransition : DefaultTransition
 	{
 		public ComDeviceTransition()
 		{

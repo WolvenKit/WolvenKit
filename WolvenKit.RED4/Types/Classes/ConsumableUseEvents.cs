@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public ConsumableUseEvents()
 		{
-			ActiveConsumable = new();
+			ActiveConsumable = new gameItemID();
 
 			PostConstruct();
 		}

@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldPersistentSnapData()
 		{
-			TargetObjectPath = new() { Elements = new() };
+			TargetObjectPath = new worldRelativeNodePath { Elements = new() };
 			SnapTangent = true;
 
 			PostConstruct();

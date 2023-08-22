@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnISceneSystem : gameISceneSystem
+	public abstract partial class scnISceneSystem : gameISceneSystem
 	{
 		public scnISceneSystem()
 		{

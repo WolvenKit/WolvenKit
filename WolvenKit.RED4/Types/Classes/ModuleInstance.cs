@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public ModuleInstance()
 		{
-			EntityID = new();
+			EntityID = new entEntityID();
 
 			PostConstruct();
 		}

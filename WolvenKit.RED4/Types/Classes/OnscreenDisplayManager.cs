@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public OnscreenDisplayManager()
 		{
-			ContentText = new();
+			ContentText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

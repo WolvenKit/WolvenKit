@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterKilled_ConditionType()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 			Killed = true;
 			Unconscious = true;
 			Defeated = true;

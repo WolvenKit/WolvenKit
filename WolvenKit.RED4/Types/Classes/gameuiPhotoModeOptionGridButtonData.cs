@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiPhotoModeOptionGridButtonData()
 		{
-			AtlasResource = new();
+			AtlasResource = new redResourceReferenceScriptToken();
 			OptionData = -1;
 
 			PostConstruct();

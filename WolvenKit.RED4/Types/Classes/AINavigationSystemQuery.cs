@@ -70,8 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public AINavigationSystemQuery()
 		{
-			Source = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() } };
-			Target = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() } };
+			Source = new AIPositionSpec { WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() } };
+			Target = new AIPositionSpec { WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() } };
 			AllowedTags = new();
 			BlockedTags = new();
 

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameISubtitleHandlerSystem : gameIGameSystem
+	public abstract partial class gameISubtitleHandlerSystem : gameIGameSystem
 	{
 		public gameISubtitleHandlerSystem()
 		{

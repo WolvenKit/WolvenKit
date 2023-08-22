@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_Event()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			EventValue = 1.000000F;
 
 			PostConstruct();

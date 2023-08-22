@@ -286,20 +286,20 @@ namespace WolvenKit.RED4.Types
 			Tele_max = 360.000000F;
 			Tele_scale = 0.750000F;
 			Max_zoom_level = 4.000000F;
-			Date = new();
-			Timer = new();
-			CameraID = new();
-			TimerHrs = new();
-			TimerMin = new();
-			TimerSec = new();
-			Watermark = new();
-			YawCounter = new();
-			PitchCounter = new();
-			Pitch = new();
-			Yaw = new();
-			Tele = new();
-			TeleScale = new();
-			AnimOptions = new();
+			Date = new inkTextWidgetReference();
+			Timer = new inkTextWidgetReference();
+			CameraID = new inkTextWidgetReference();
+			TimerHrs = new inkTextWidgetReference();
+			TimerMin = new inkTextWidgetReference();
+			TimerSec = new inkTextWidgetReference();
+			Watermark = new inkWidgetReference();
+			YawCounter = new inkTextWidgetReference();
+			PitchCounter = new inkTextWidgetReference();
+			Pitch = new inkCanvasWidgetReference();
+			Yaw = new inkCanvasWidgetReference();
+			Tele = new inkCanvasWidgetReference();
+			TeleScale = new inkCanvasWidgetReference();
+			AnimOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

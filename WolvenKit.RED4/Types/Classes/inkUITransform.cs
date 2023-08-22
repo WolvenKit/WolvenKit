@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public inkUITransform()
 		{
-			Translation = new();
-			Scale = new() { X = 1.000000F, Y = 1.000000F };
-			Shear = new();
+			Translation = new Vector2();
+			Scale = new Vector2 { X = 1.000000F, Y = 1.000000F };
+			Shear = new Vector2();
 
 			PostConstruct();
 		}

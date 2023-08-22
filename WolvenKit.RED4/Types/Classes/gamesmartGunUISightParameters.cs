@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public gamesmartGunUISightParameters()
 		{
-			Center = new();
-			TargetableRegionSize = new();
-			ReticleSize = new();
+			Center = new Vector2();
+			TargetableRegionSize = new Vector2();
+			ReticleSize = new Vector2();
 
 			PostConstruct();
 		}

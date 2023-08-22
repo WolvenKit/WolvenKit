@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIFxSystem : gameIGameSystem
+	public abstract partial class gameIFxSystem : gameIGameSystem
 	{
 		public gameIFxSystem()
 		{

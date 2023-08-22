@@ -326,24 +326,24 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipCommonController()
 		{
-			BackgroundContainer = new();
-			ItemEquippedContainer = new();
-			ItemHeaderContainer = new();
-			ItemIconContainer = new();
-			ItemWeaponInfoContainer = new();
-			ItemClothingInfoContainer = new();
-			ItemGrenadeInfoContainer = new();
-			ItemRequirementsContainer = new();
-			ItemDetailsContainer = new();
-			ItemRecipeDataContainer = new();
-			ItemEvolutionContainer = new();
-			ItemCraftedContainer = new();
-			ItemActionContainer = new();
-			ItemBottomContainer = new();
-			DescriptionWrapper = new();
-			DescriptionText = new();
-			DEBUG_iconErrorWrapper = new();
-			DEBUG_iconErrorText = new();
+			BackgroundContainer = new inkWidgetReference();
+			ItemEquippedContainer = new inkWidgetReference();
+			ItemHeaderContainer = new inkWidgetReference();
+			ItemIconContainer = new inkWidgetReference();
+			ItemWeaponInfoContainer = new inkWidgetReference();
+			ItemClothingInfoContainer = new inkWidgetReference();
+			ItemGrenadeInfoContainer = new inkWidgetReference();
+			ItemRequirementsContainer = new inkWidgetReference();
+			ItemDetailsContainer = new inkWidgetReference();
+			ItemRecipeDataContainer = new inkWidgetReference();
+			ItemEvolutionContainer = new inkWidgetReference();
+			ItemCraftedContainer = new inkWidgetReference();
+			ItemActionContainer = new inkWidgetReference();
+			ItemBottomContainer = new inkWidgetReference();
+			DescriptionWrapper = new inkWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			DEBUG_iconErrorWrapper = new inkWidgetReference();
+			DEBUG_iconErrorText = new inkTextWidgetReference();
 			SpawnedModules = new();
 			RequestedModules = new();
 

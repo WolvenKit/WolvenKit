@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiCharacterCustomizationBodyPartsController : gameuiICharacterCustomizationBodyPartsController
+	public abstract partial class gameuiCharacterCustomizationBodyPartsController : gameuiICharacterCustomizationBodyPartsController
 	{
 		[Ordinal(3)] 
 		[RED("isHiddenInFpp")] 

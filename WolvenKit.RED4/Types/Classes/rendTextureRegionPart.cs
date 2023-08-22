@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public rendTextureRegionPart()
 		{
-			InnerRegion = new();
-			OuterRegion = new();
+			InnerRegion = new Vector4();
+			OuterRegion = new Vector4();
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public GogErrorNotificationController()
 		{
-			ErrorMessageWidget = new();
+			ErrorMessageWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

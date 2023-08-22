@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectNearlyHitAgentData()
 		{
-			HitPosition = new();
-			HitDirection = new();
+			HitPosition = new Vector4();
+			HitDirection = new Vector4();
 
 			PostConstruct();
 		}

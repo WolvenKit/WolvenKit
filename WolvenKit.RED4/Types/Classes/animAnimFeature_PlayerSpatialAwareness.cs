@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_PlayerSpatialAwareness()
 		{
-			LeftClosestVector = new();
-			RightClosestVector = new();
-			UpHitPosition = new();
-			ForwardDistance = 340282346638528859811704183484516925440.000000F;
+			LeftClosestVector = new Vector4();
+			RightClosestVector = new Vector4();
+			UpHitPosition = new Vector4();
+			ForwardDistance = float.MaxValue;
 
 			PostConstruct();
 		}

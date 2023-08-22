@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiarcadeArcadeGameplayController : gameuiarcadeIArcadeScreenController
+	public abstract partial class gameuiarcadeArcadeGameplayController : gameuiarcadeIArcadeScreenController
 	{
 		[Ordinal(1)] 
 		[RED("score")] 

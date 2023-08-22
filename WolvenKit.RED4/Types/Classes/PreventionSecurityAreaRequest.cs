@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public PreventionSecurityAreaRequest()
 		{
-			AreaID = new();
+			AreaID = new gamePersistentID();
 
 			PostConstruct();
 		}

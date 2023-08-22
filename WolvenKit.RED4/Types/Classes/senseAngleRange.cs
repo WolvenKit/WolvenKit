@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public senseAngleRange()
 		{
-			Position = new();
+			Position = new Vector4();
 
 			PostConstruct();
 		}

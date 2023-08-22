@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 
 		public FixedCapsule()
 		{
-			PointRadius = new();
+			PointRadius = new Vector4();
 
 			PostConstruct();
 		}

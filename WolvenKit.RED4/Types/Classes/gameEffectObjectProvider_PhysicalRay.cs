@@ -54,11 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectObjectProvider_PhysicalRay()
 		{
-			InputPosition = new();
-			InputForward = new();
-			InputRange = new();
-			OutputRaycastEnd = new() { BlackboardProperty = new() { SerializableID = new(), PropertyPath = new() } };
-			QueryPreset = new();
+			InputPosition = new gameEffectInputParameter_Vector();
+			InputForward = new gameEffectInputParameter_Vector();
+			InputRange = new gameEffectInputParameter_Float();
+			OutputRaycastEnd = new gameEffectOutputParameter_Vector { BlackboardProperty = new gameBlackboardPropertyBindingDefinition { SerializableID = new gameBlackboardSerializableID(), PropertyPath = new() } };
+			QueryPreset = new physicsQueryPreset();
 
 			PostConstruct();
 		}

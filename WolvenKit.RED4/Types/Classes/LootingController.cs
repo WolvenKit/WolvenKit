@@ -310,25 +310,25 @@ namespace WolvenKit.RED4.Types
 
 		public LootingController()
 		{
-			ItemsListContainer = new();
-			TitleContainer = new();
-			UpArrow = new();
-			DownArrow = new();
-			ListWrapper = new();
-			ActionsListV = new();
-			LockedStatusContainer = new();
+			ItemsListContainer = new inkCompoundWidgetReference();
+			TitleContainer = new inkCompoundWidgetReference();
+			UpArrow = new inkWidgetReference();
+			DownArrow = new inkWidgetReference();
+			ListWrapper = new inkWidgetReference();
+			ActionsListV = new inkCompoundWidgetReference();
+			LockedStatusContainer = new inkWidgetReference();
 			WidgetsPoolList = new();
 			LootList = new();
-			GameInstance = new();
+			GameInstance = new ScriptGameInstance();
 			MaxItemsNum = 3;
-			CurrentComparisonItemId = new();
-			LastTooltipItemId = new();
-			CurrentTooltipItemId = new();
-			LastItemOwnerId = new();
-			CurrentItemOwnerId = new();
-			BufferedOwnerId = new();
-			CurrendData = new() { IsListOpen = true, Choices = new(), ItemIDs = new(), OwnerId = new() };
-			ActiveWeapon = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			CurrentComparisonItemId = new gameItemID();
+			LastTooltipItemId = new gameItemID();
+			CurrentTooltipItemId = new gameItemID();
+			LastItemOwnerId = new entEntityID();
+			CurrentItemOwnerId = new entEntityID();
+			BufferedOwnerId = new entEntityID();
+			CurrendData = new gameinteractionsvisLootData { IsListOpen = true, Choices = new(), ItemIDs = new(), OwnerId = new entEntityID() };
+			ActiveWeapon = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
 
 			PostConstruct();
 		}

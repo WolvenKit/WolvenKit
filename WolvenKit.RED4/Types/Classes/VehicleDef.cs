@@ -214,32 +214,32 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleDef()
 		{
-			BikeTilt = new();
-			SpeedValue = new();
-			GearValue = new();
-			RPMValue = new();
-			RPMMax = new();
-			SuspensionTransversalForce = new();
-			SuspensionLongitudinalForce = new();
-			IsAutopilotOn = new();
-			DeclutchTimer = new();
-			HandlingPenalty = new();
-			LightMode = new();
-			VehicleState = new();
-			VehicleReady = new();
-			VehRadioState = new();
-			VehRadioStationName = new();
-			IsCrowd = new();
-			IsUIActive = new();
-			GameTime = new();
-			Collision = new();
-			DamageState = new();
-			MeanSlipRatio = new();
-			IsHandbraking = new();
-			EngineTemp = new();
-			IsInWater = new();
-			RaceTimer = new();
-			IsTargetingFriendly = new();
+			BikeTilt = new gamebbScriptID_Float();
+			SpeedValue = new gamebbScriptID_Float();
+			GearValue = new gamebbScriptID_Int32();
+			RPMValue = new gamebbScriptID_Float();
+			RPMMax = new gamebbScriptID_Float();
+			SuspensionTransversalForce = new gamebbScriptID_Float();
+			SuspensionLongitudinalForce = new gamebbScriptID_Float();
+			IsAutopilotOn = new gamebbScriptID_Bool();
+			DeclutchTimer = new gamebbScriptID_Float();
+			HandlingPenalty = new gamebbScriptID_Float();
+			LightMode = new gamebbScriptID_Int32();
+			VehicleState = new gamebbScriptID_Int32();
+			VehicleReady = new gamebbScriptID_Bool();
+			VehRadioState = new gamebbScriptID_Bool();
+			VehRadioStationName = new gamebbScriptID_CName();
+			IsCrowd = new gamebbScriptID_Bool();
+			IsUIActive = new gamebbScriptID_Bool();
+			GameTime = new gamebbScriptID_String();
+			Collision = new gamebbScriptID_Bool();
+			DamageState = new gamebbScriptID_Int32();
+			MeanSlipRatio = new gamebbScriptID_Float();
+			IsHandbraking = new gamebbScriptID_Int32();
+			EngineTemp = new gamebbScriptID_Float();
+			IsInWater = new gamebbScriptID_Bool();
+			RaceTimer = new gamebbScriptID_String();
+			IsTargetingFriendly = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

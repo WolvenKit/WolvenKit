@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationNavigationBtn()
 		{
-			Icon1 = new();
+			Icon1 = new inkWidgetReference();
 
 			PostConstruct();
 		}

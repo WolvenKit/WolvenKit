@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiAdvertTranslationController()
 		{
-			AdvertText = new();
+			AdvertText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

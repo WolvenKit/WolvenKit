@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnsimIActionScenario : ISerializable
+	public abstract partial class scnsimIActionScenario : ISerializable
 	{
 		public scnsimIActionScenario()
 		{

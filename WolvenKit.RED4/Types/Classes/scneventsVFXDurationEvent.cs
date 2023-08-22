@@ -62,10 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsVFXDurationEvent()
 		{
-			Id = new() { Id = 18446744073709551615 };
-			EffectEntry = new() { EffectInstanceId = new() { EffectId = new() { Id = 4294967295 }, Id = 4294967295 } };
+			Id = new scnSceneEventId { Id = long.MaxValue };
+			EffectEntry = new scnEffectEntry { EffectInstanceId = new scnEffectInstanceId { EffectId = new scnEffectId { Id = uint.MaxValue }, Id = uint.MaxValue } };
 			EndAction = Enums.scneventsVFXActionType.Kill;
-			PerformerId = new() { Id = 4294967040 };
+			PerformerId = new scnPerformerId { Id = 4294967040 };
 
 			PostConstruct();
 		}

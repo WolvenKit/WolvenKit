@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ScriptConditionTypeBase : IScriptable
+	public abstract partial class ScriptConditionTypeBase : IScriptable
 	{
 		public ScriptConditionTypeBase()
 		{

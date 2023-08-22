@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class TweakAIActionRecord : IScriptable
+	public abstract partial class TweakAIActionRecord : IScriptable
 	{
 		public TweakAIActionRecord()
 		{

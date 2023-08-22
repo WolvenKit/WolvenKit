@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsCFunctorDefinition()
 		{
-			Predicate = new();
+			Predicate = new gameinteractionsCPredicateDefinition();
 
 			PostConstruct();
 		}

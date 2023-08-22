@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameSignalUserDataDefinition : ISerializable
+	public abstract partial class gameSignalUserDataDefinition : ISerializable
 	{
 		public gameSignalUserDataDefinition()
 		{

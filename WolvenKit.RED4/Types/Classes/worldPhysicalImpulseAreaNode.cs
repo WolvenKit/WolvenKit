@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldPhysicalImpulseAreaNode()
 		{
-			Impulse = new();
+			Impulse = new Vector3();
 
 			PostConstruct();
 		}

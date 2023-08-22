@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectObjectProvider_SingleRicochetTarget()
 		{
-			QueryPreset = new();
+			QueryPreset = new physicsQueryPreset();
 
 			PostConstruct();
 		}

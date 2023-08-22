@@ -230,29 +230,29 @@ namespace WolvenKit.RED4.Types
 
 		public ProgramTooltipController()
 		{
-			BackgroundContainer = new();
-			NameText = new();
-			TierText = new();
-			DurationWidget = new();
-			UploadTimeWidget = new();
-			CooldownWidget = new();
-			MemoryCostValueText = new();
-			DamageWrapper = new();
-			DamageLabel = new();
-			DamageValue = new();
-			HealthPercentageLabel = new();
-			PriceContainer = new();
-			PriceText = new();
-			DescriptionWrapper = new();
-			DescriptionText = new();
-			HackTypeWrapper = new();
-			HackTypeText = new();
-			PerkContainer = new();
-			PerkText = new();
-			EffectsList = new();
-			DEBUG_iconErrorWrapper = new();
-			DEBUG_iconErrorText = new();
-			QuickHackData = new() { AttackEffects = new() };
+			BackgroundContainer = new inkCompoundWidgetReference();
+			NameText = new inkTextWidgetReference();
+			TierText = new inkTextWidgetReference();
+			DurationWidget = new inkWidgetReference();
+			UploadTimeWidget = new inkWidgetReference();
+			CooldownWidget = new inkWidgetReference();
+			MemoryCostValueText = new inkTextWidgetReference();
+			DamageWrapper = new inkWidgetReference();
+			DamageLabel = new inkTextWidgetReference();
+			DamageValue = new inkTextWidgetReference();
+			HealthPercentageLabel = new inkTextWidgetReference();
+			PriceContainer = new inkWidgetReference();
+			PriceText = new inkTextWidgetReference();
+			DescriptionWrapper = new inkWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			HackTypeWrapper = new inkWidgetReference();
+			HackTypeText = new inkTextWidgetReference();
+			PerkContainer = new inkWidgetReference();
+			PerkText = new inkTextWidgetReference();
+			EffectsList = new inkCompoundWidgetReference();
+			DEBUG_iconErrorWrapper = new inkWidgetReference();
+			DEBUG_iconErrorText = new inkTextWidgetReference();
+			QuickHackData = new InventoryTooltipData_QuickhackData { AttackEffects = new() };
 
 			PostConstruct();
 		}

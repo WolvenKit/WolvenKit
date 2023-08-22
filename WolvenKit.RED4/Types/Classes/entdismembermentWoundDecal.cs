@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public entdismembermentWoundDecal()
 		{
-			OffsetA = new();
-			OffsetB = new();
+			OffsetA = new Vector3();
+			OffsetB = new Vector3();
 			Scale = 1.000000F;
 			FadeOrigin = 0.700000F;
 			FadePower = 1.000000F;

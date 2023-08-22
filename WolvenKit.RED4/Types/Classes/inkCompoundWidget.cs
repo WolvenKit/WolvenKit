@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkCompoundWidget()
 		{
-			ChildMargin = new();
+			ChildMargin = new inkMargin();
 
 			PostConstruct();
 		}

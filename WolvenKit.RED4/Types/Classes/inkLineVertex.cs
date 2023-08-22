@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkLineVertex()
 		{
-			Int = new();
+			Int = new Vector2();
 
 			PostConstruct();
 		}

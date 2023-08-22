@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AINPCStanceStateCheck : AINPCStateCheck
+	public abstract partial class AINPCStanceStateCheck : AINPCStateCheck
 	{
 		[Ordinal(0)] 
 		[RED("blackboard")] 

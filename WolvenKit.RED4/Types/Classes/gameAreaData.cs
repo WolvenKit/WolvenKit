@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameAreaData()
 		{
-			Position = new() { W = 1.000000F };
+			Position = new Vector4 { W = 1.000000F };
 			Size = 1.000000F;
 
 			PostConstruct();

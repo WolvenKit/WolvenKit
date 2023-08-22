@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public GameplayItemCondition()
 		{
-			EntityID = new();
+			EntityID = new entEntityID();
 
 			PostConstruct();
 		}

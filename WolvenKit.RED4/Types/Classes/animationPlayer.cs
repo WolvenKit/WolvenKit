@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.Types
 			LoopType = Enums.inkanimLoopType.Cycle;
 			PlayInfinite = true;
 			LoopsAmount = 1;
-			AnimTarget = new();
+			AnimTarget = new inkWidgetReference();
 			AutoPlay = true;
 
 			PostConstruct();

@@ -206,25 +206,25 @@ namespace WolvenKit.RED4.Types
 
 		public CharacterCreationStatsMenu()
 		{
-			Attribute_01 = new();
-			Attribute_02 = new();
-			Attribute_03 = new();
-			Attribute_04 = new();
-			Attribute_05 = new();
-			PointsLabel = new();
-			TooltipSlot = new();
-			SkillPointLabel = new();
-			Reset = new();
-			NextMenuConfirmation = new();
-			NextMenukConfirmationLibraryWidget = new();
-			ConfirmationConfirmBtn = new();
-			ConfirmationCloseBtn = new();
-			TooltipsManagerRef = new();
-			PreviousPageBtn = new();
-			NavigationButtons = new();
-			OptionSwitchHint = new();
+			Attribute_01 = new inkWidgetReference();
+			Attribute_02 = new inkWidgetReference();
+			Attribute_03 = new inkWidgetReference();
+			Attribute_04 = new inkWidgetReference();
+			Attribute_05 = new inkWidgetReference();
+			PointsLabel = new inkWidgetReference();
+			TooltipSlot = new inkWidgetReference();
+			SkillPointLabel = new inkTextWidgetReference();
+			Reset = new inkWidgetReference();
+			NextMenuConfirmation = new inkWidgetReference();
+			NextMenukConfirmationLibraryWidget = new inkWidgetReference();
+			ConfirmationConfirmBtn = new inkWidgetReference();
+			ConfirmationCloseBtn = new inkWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
+			PreviousPageBtn = new inkWidgetReference();
+			NavigationButtons = new inkWidgetReference();
+			OptionSwitchHint = new inkWidgetReference();
 			AttributesControllers = new();
-			ToolTipOffset = new();
+			ToolTipOffset = new inkMargin();
 
 			PostConstruct();
 		}

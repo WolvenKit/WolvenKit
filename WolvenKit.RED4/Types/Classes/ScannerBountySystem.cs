@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerBountySystem()
 		{
-			Bounty = new() { Transgressions = new() };
+			Bounty = new BountyUI { Transgressions = new() };
 
 			PostConstruct();
 		}

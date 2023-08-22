@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AreaEntry()
 		{
-			User = new();
+			User = new entEntityID();
 
 			PostConstruct();
 		}

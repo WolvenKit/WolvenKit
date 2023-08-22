@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ElectricBoxBlackboardDef()
 		{
-			IsOverriden = new();
+			IsOverriden = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

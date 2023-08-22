@@ -118,19 +118,19 @@ namespace WolvenKit.RED4.Types
 
 		public worldgeometryDescriptionQuery()
 		{
-			RefPosition = new();
-			RefDirection = new();
-			RefUp = new() { Z = 1.000000F };
-			PrimitiveDimension = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
-			PrimitiveRotation = new() { R = 1.000000F };
+			RefPosition = new Vector4();
+			RefDirection = new Vector4();
+			RefUp = new Vector4 { Z = 1.000000F };
+			PrimitiveDimension = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
+			PrimitiveRotation = new Quaternion { R = 1.000000F };
 			MaxDistance = 2.000000F;
 			MaxExtent = 1.000000F;
 			RaycastStartDistance = 0.500000F;
 			ProbingPrecision = 0.010000F;
 			ProbingMaxDistanceDiff = 0.800000F;
 			MaxProbes = 100;
-			ProbeDimensions = new() { X = 0.400000F, Y = -1.000000F, Z = -1.000000F, W = 1.000000F };
-			Filter = new();
+			ProbeDimensions = new Vector4 { X = 0.400000F, Y = -1.000000F, Z = -1.000000F, W = 1.000000F };
+			Filter = new physicsQueryFilter();
 
 			PostConstruct();
 		}

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questStopVehicle_NodeType()
 		{
-			VehicleRef = new() { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

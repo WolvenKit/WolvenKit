@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public OnDisableAreaData()
 		{
-			Agent = new();
+			Agent = new gamePersistentID();
 			RemainingAreas = new();
 
 			PostConstruct();

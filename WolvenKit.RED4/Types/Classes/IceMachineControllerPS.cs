@@ -23,9 +23,9 @@ namespace WolvenKit.RED4.Types
 		public IceMachineControllerPS()
 		{
 			DeviceName = "LocKey#1637";
-			TweakDBRecord = 78736419072;
+			TweakDBRecord = "Devices.IceMachine";
 			TweakDBDescriptionRecord = 132501907971;
-			IceMachineSFX = new() { IceFalls = "dev_ice_machine_ice_cube_falls", Processing = "dev_vending_machine_processing" };
+			IceMachineSFX = new IceMachineSFX { IceFalls = "dev_ice_machine_ice_cube_falls", Processing = "dev_vending_machine_processing" };
 
 			PostConstruct();
 		}

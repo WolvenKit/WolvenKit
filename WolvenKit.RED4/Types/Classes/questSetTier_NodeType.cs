@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Tier = Enums.GameplayTier.Tier1_FullGameplay;
 			ForceEmptyHands = true;
-			MotionConstrainedTierDataParams = new();
+			MotionConstrainedTierDataParams = new gameMotionConstrainedTierDataParams();
 
 			PostConstruct();
 		}

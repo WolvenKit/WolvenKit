@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemExposureScale()
 		{
 			TimeDuration = 1.000000F;
-			Scale = new();
+			Scale = new effectEffectParameterEvaluatorFloat();
 
 			PostConstruct();
 		}

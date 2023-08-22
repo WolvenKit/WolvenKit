@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiGPSGameController()
 		{
-			GpsSettings = new() { FixedPathOffset = new() { Z = 0.500000F }, FixedPortalMappinOffset = new() { Z = 1.250000F }, PathRefreshTimeInterval = 1.000000F, LastPlayerNavmeshPositionRefreshTimeIntervalSecs = 0.330000F, MaxPathDisplayLength = 400.000000F };
+			GpsSettings = new gamegpsSettings { FixedPathOffset = new Vector3 { Z = 0.500000F }, FixedPortalMappinOffset = new Vector3 { Z = 1.250000F }, PathRefreshTimeInterval = 1.000000F, LastPlayerNavmeshPositionRefreshTimeIntervalSecs = 0.330000F, MaxPathDisplayLength = 400.000000F };
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public senseVisibleObjectSecondaryPositionEvent()
 		{
-			Offset = new();
+			Offset = new Vector3();
 
 			PostConstruct();
 		}

@@ -38,11 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiInteractionMappinController()
 		{
-			IconWidget = new();
-			PlayerTrackedWidget = new();
-			ScaleWidget = new();
-			AnimPlayerTrackedWidget = new();
-			AnimPlayerAboveBelowWidget = new();
+			IconWidget = new inkImageWidgetReference();
+			PlayerTrackedWidget = new inkWidgetReference();
+			ScaleWidget = new inkWidgetReference();
+			AnimPlayerTrackedWidget = new inkWidgetReference();
+			AnimPlayerAboveBelowWidget = new inkWidgetReference();
 			TaggedWidgets = new();
 			CanvasWidgetName = "Canvas";
 			ArrowWidgetName = "Arrow";

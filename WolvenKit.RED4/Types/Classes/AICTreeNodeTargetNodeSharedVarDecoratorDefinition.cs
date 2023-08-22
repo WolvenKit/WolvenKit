@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public AICTreeNodeTargetNodeSharedVarDecoratorDefinition()
 		{
-			SharedVarName = new();
+			SharedVarName = new LibTreeSharedVarRegistrationName();
 
 			PostConstruct();
 		}

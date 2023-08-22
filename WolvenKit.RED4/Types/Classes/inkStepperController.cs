@@ -63,11 +63,11 @@ namespace WolvenKit.RED4.Types
 		public inkStepperController()
 		{
 			CycledNavigation = true;
-			CurrentValueDisplay = new();
-			IndicatorContainer = new();
-			LeftButton = new();
-			RightButton = new();
-			Change = new();
+			CurrentValueDisplay = new inkTextWidgetReference();
+			IndicatorContainer = new inkCompoundWidgetReference();
+			LeftButton = new inkWidgetReference();
+			RightButton = new inkWidgetReference();
+			Change = new inkStepperChangedCallback();
 
 			PostConstruct();
 		}

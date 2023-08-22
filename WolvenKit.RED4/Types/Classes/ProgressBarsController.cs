@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ProgressBarsController()
 		{
-			Mask = new();
+			Mask = new inkWidgetReference();
 
 			PostConstruct();
 		}

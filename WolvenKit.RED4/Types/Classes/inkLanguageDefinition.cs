@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			LanguageCode = "en-us";
 			IsoScriptCode = "Latn";
-			Fonts = new() { new() };
+			Fonts = new() { new inkLanguageFont() };
 
 			PostConstruct();
 		}

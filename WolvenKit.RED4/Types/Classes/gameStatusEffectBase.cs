@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameStatusEffectBase : IScriptable
+	public abstract partial class gameStatusEffectBase : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("statusEffectRecordID")] 

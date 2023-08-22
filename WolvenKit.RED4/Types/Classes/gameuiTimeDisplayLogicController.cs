@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiTimeDisplayLogicController()
 		{
-			TimerText = new();
-			NoConnectionText = new();
+			TimerText = new inkTextWidgetReference();
+			NoConnectionText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

@@ -79,7 +79,7 @@ namespace WolvenKit.RED4.Types
 		public CParticleSystem()
 		{
 			Emitters = new();
-			BoundingBox = new() { Min = new(), Max = new() };
+			BoundingBox = new Box { Min = new Vector4(), Max = new Vector4() };
 			AutoHideDistance = 100.000000F;
 			LastLODFadeoutRange = 10.000000F;
 

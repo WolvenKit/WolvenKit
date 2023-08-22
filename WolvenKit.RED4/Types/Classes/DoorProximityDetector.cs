@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "DoorProximityDetectorController";
 			ScanningAreaName = "scanningArea";
 			SurroundingAreaName = "surroundingArea";
-			TriggeredAlarmID = new();
+			TriggeredAlarmID = new gameDelayID();
 			BlinkInterval = 2.000000F;
 
 			PostConstruct();

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public rendRenderMultilayerMaskBlobPC()
 		{
-			Header = new();
+			Header = new rendRenderMultilayerMaskBlobHeader();
 
 			PostConstruct();
 		}

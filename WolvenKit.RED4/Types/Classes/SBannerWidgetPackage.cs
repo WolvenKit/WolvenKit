@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public SBannerWidgetPackage()
 		{
-			Content = new();
+			Content = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

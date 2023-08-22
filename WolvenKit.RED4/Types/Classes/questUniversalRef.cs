@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questUniversalRef()
 		{
-			EntityReference = new() { Names = new() };
+			EntityReference = new gameEntityReference { Names = new() };
 			RefLocalPlayer = true;
 
 			PostConstruct();

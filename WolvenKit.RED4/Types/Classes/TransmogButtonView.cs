@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public TransmogButtonView()
 		{
-			Container = new();
+			Container = new inkWidgetReference();
 
 			PostConstruct();
 		}

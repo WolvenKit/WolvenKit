@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class senseISenseManager : gameIGameSystem
+	public abstract partial class senseISenseManager : gameIGameSystem
 	{
 		public senseISenseManager()
 		{

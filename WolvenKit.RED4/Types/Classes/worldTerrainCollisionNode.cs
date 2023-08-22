@@ -88,8 +88,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Materials = new();
 			MaterialIndices = new();
-			ActorTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
-			Extents = new();
+			ActorTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
+			Extents = new Vector4();
 
 			PostConstruct();
 		}

@@ -72,10 +72,10 @@ namespace WolvenKit.RED4.Types
 		{
 			EntrySpeed = -1.000000F;
 			ExitSpeed = -1.000000F;
-			EntryTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
-			ExitTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
-			EntryMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
-			ExitMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
+			EntryTransform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			ExitTransform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			EntryMarker = new scnMarker { Type = Enums.scnMarkerType.Global, EntityRef = new gameEntityReference { Names = new() }, IsMounted = true };
+			ExitMarker = new scnMarker { Type = Enums.scnMarkerType.Global, EntityRef = new gameEntityReference { Names = new() }, IsMounted = true };
 
 			PostConstruct();
 		}

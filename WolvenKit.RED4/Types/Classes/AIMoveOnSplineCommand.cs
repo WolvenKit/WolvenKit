@@ -222,7 +222,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIMoveOnSplineCommand()
 		{
-			MovementType = new() { UseNPCMovementParams = true };
+			MovementType = new AIMovementTypeSpec { UseNPCMovementParams = true };
 			DesiredDistance = -5.000000F;
 			DeadZoneRadius = 2.000000F;
 			CatchUpWithCompanion = true;

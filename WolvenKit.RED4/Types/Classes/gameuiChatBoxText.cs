@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiChatBoxText()
 		{
-			Color = new();
+			Color = new CColor();
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public QuickMeleeDataDef()
 		{
-			NPCHit = new();
+			NPCHit = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

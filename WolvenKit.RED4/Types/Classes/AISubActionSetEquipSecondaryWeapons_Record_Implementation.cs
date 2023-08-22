@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISubActionSetEquipSecondaryWeapons_Record_Implementation : IScriptable
+	public abstract partial class AISubActionSetEquipSecondaryWeapons_Record_Implementation : IScriptable
 	{
 		public AISubActionSetEquipSecondaryWeapons_Record_Implementation()
 		{

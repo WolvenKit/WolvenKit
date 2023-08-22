@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public entLookAtRemoveEvent()
 		{
-			LookAtRef = new() { Id = -1 };
+			LookAtRef = new animLookAtRef { Id = -1 };
 			OutTransitionSpeed = 60.000000F;
 
 			PostConstruct();

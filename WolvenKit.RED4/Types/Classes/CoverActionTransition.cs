@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class CoverActionTransition : LocomotionTransition
+	public abstract partial class CoverActionTransition : LocomotionTransition
 	{
 		public CoverActionTransition()
 		{

@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkDexLimoGameController()
 		{
-			VideoPath = new();
+			VideoPath = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

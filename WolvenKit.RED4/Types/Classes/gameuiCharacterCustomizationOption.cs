@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiCharacterCustomizationOption : IScriptable
+	public abstract partial class gameuiCharacterCustomizationOption : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("info")] 

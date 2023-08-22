@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public AIEntityReuseEvent()
 		{
 			Name = "EntityTeleportRequested";
-			Destination = new();
+			Destination = new worldGlobalNodeID();
 
 			PostConstruct();
 		}

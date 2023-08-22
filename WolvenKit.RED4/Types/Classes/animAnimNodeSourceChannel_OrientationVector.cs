@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNodeSourceChannel_OrientationVector()
 		{
-			TransformIndex = new();
-			InputTransformIndex = new();
-			Up = new() { Y = 1.000000F };
+			TransformIndex = new animTransformIndex();
+			InputTransformIndex = new animTransformIndex();
+			Up = new Vector3 { Y = 1.000000F };
 
 			PostConstruct();
 		}

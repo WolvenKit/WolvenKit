@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public CustomQuestNotificationUserData()
 		{
-			Data = new();
+			Data = new questCustomQuestNotificationData();
 
 			PostConstruct();
 		}

@@ -94,8 +94,8 @@ namespace WolvenKit.RED4.Types
 
 		public gamedeviceDataElement()
 		{
-			VideoPath = new();
-			QuestInfo = new();
+			VideoPath = new redResourceReferenceScriptToken();
+			QuestInfo = new gamedeviceQuestInfo();
 			IsEnabled = true;
 
 			PostConstruct();

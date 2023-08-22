@@ -78,9 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_Switch()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			BlendTime = 0.100000F;
-			WeightNode = new();
+			WeightNode = new animFloatLink();
 			InputNodes = new();
 
 			PostConstruct();

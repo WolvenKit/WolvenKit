@@ -15,8 +15,8 @@ namespace WolvenKit.RED4.Types
 		public questClearForcedBehavioursNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			Puppet = new() { Names = new() };
+			Id = ushort.MaxValue;
+			Puppet = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimMathExpressionFloatSocket()
 		{
-			Link = new();
-			InputFloatTrack = new();
+			Link = new animFloatLink();
+			InputFloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

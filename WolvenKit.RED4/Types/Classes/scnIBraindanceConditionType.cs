@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnIBraindanceConditionType : questISceneConditionType
+	public abstract partial class scnIBraindanceConditionType : questISceneConditionType
 	{
 		public scnIBraindanceConditionType()
 		{

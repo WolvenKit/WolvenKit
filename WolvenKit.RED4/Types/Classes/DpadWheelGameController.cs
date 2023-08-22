@@ -342,32 +342,32 @@ namespace WolvenKit.RED4.Types
 
 		public DpadWheelGameController()
 		{
-			HaskMarkContainer = new();
-			ItemContainer = new();
-			SelectorWrapper = new();
-			CenterIcon = new();
-			CenterGlow = new();
-			ItemLabel = new();
-			ItemDesc = new();
-			ButtonHintsManagerRef = new();
-			Indicator02 = new();
-			Indicator03 = new();
-			Indicator04 = new();
-			Indicator05 = new();
-			Indicator06 = new();
-			Indicator07 = new();
-			Indicator08 = new();
+			HaskMarkContainer = new inkCompoundWidgetReference();
+			ItemContainer = new inkCompoundWidgetReference();
+			SelectorWrapper = new inkWidgetReference();
+			CenterIcon = new inkWidgetReference();
+			CenterGlow = new inkWidgetReference();
+			ItemLabel = new inkTextWidgetReference();
+			ItemDesc = new inkTextWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			Indicator02 = new inkImageWidgetReference();
+			Indicator03 = new inkImageWidgetReference();
+			Indicator04 = new inkImageWidgetReference();
+			Indicator05 = new inkImageWidgetReference();
+			Indicator06 = new inkImageWidgetReference();
+			Indicator07 = new inkImageWidgetReference();
+			Indicator08 = new inkImageWidgetReference();
 			ItemDistance = 450.000000F;
 			HashMarkDistance = 350.000000F;
 			MinDistance = 0.200000F;
 			DpadItemsList = new();
 			CommandsList = new();
-			SelectedIndicator = new();
-			Data = new() { WheelItems = new() };
+			SelectedIndicator = new inkWidgetReference();
+			Data = new QuickWheelStartUIStructure { WheelItems = new() };
 			MasterListOfAllCyberware = new();
 			ListOfUnassignedCyberware = new();
-			NeutralChoiceDelayId = new();
-			PreviouslySelectedData = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
+			NeutralChoiceDelayId = new gameDelayID();
+			PreviouslySelectedData = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new entEntityID() };
 
 			PostConstruct();
 		}

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimVariableQuaternion()
 		{
-			Default = new() { R = 1.000000F };
+			Default = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

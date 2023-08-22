@@ -70,11 +70,11 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneContactItemVirtualController()
 		{
-			Label = new();
-			MsgCount = new();
-			MsgIndicator = new();
-			QuestFlag = new();
-			RegFlag = new();
+			Label = new inkTextWidgetReference();
+			MsgCount = new inkTextWidgetReference();
+			MsgIndicator = new inkWidgetReference();
+			QuestFlag = new inkWidgetReference();
+			RegFlag = new inkWidgetReference();
 
 			PostConstruct();
 		}

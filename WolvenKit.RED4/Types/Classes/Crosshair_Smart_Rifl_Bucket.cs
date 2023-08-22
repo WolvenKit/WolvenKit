@@ -62,12 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public Crosshair_Smart_Rifl_Bucket()
 		{
-			ProgressBar = new();
-			ProgressBarValue = new();
-			TargetIndicator = new();
-			LockedIndicator = new();
-			LockingIndicator = new();
-			Data = new() { Pos = new(), EntityID = new() };
+			ProgressBar = new inkWidgetReference();
+			ProgressBarValue = new inkWidgetReference();
+			TargetIndicator = new inkWidgetReference();
+			LockedIndicator = new inkWidgetReference();
+			LockingIndicator = new inkWidgetReference();
+			Data = new gamesmartGunUITargetParameters { Pos = new Vector2(), EntityID = new entEntityID() };
 
 			PostConstruct();
 		}

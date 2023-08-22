@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public MessageCounterController()
 		{
-			MessageCounter = new();
+			MessageCounter = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

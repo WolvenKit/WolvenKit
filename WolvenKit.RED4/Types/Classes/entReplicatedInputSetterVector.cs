@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entReplicatedInputSetterVector()
 		{
-			Value = new();
+			Value = new Vector4();
 
 			PostConstruct();
 		}

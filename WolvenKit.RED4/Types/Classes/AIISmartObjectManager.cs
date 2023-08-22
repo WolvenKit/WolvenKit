@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIISmartObjectManager : gameIGameSystem
+	public abstract partial class AIISmartObjectManager : gameIGameSystem
 	{
 		public AIISmartObjectManager()
 		{

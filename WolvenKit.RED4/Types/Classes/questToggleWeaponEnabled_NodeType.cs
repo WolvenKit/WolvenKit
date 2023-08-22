@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public questToggleWeaponEnabled_NodeType()
 		{
-			VehicleRef = new() { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
 			Val = true;
 			Weapon = Enums.questVehicleWeaponQuestID.All;
 

@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public PatchSettingsController()
 		{
-			SettingsVarControlWidget = new();
+			SettingsVarControlWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

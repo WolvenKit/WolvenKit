@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.Types
 		public questCheckpointNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 			AdditionalEndGameRewardsTweak = new();
 
 			PostConstruct();

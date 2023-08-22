@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public FastTravelButtonLogicController()
 		{
-			DistrictName = new();
-			LocationName = new();
-			SoundData = new() { WidgetAudioName = "Button" };
+			DistrictName = new inkTextWidgetReference();
+			LocationName = new inkTextWidgetReference();
+			SoundData = new SSoundData { WidgetAudioName = "Button" };
 
 			PostConstruct();
 		}

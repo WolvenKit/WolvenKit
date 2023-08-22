@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameprojectileBroadPhaseHitEvent()
 		{
-			TraceResult = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Normal = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
-			Position = new();
+			TraceResult = new physicsTraceResult { Position = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Normal = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
+			Position = new Vector4();
 
 			PostConstruct();
 		}

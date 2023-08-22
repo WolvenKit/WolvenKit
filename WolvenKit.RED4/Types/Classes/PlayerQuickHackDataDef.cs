@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerQuickHackDataDef()
 		{
-			CachedQuickHackList = new();
+			CachedQuickHackList = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

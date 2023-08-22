@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public PaperdollGlitchController()
 		{
-			PaperdollGlichRoot = new();
+			PaperdollGlichRoot = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -118,20 +118,20 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiarcadeRoachRaceGameplayController()
 		{
-			Score = new();
-			PauseText = new();
+			Score = new inkWidgetReference();
+			PauseText = new inkWidgetReference();
 			DefaultWorldVelocity = 1.000000F;
 			CycleWorldVelocityMultiplier = 1.100000F;
 			CarrotPowerupPointsPerSecond = 2.000000F;
 			CarrotPowerupTime = 6.000000F;
 			CarrotPowerupWorldVelocityMultiplier = 1.500000F;
-			Player = new();
-			ObstacleSpawner = new();
-			Background = new();
-			CurrentLevelAndCycleText = new();
-			PointsBoostPickupText = new();
-			Dummy = new();
-			InvincibilityCooldownIndicator = new();
+			Player = new inkWidgetReference();
+			ObstacleSpawner = new inkWidgetReference();
+			Background = new inkWidgetReference();
+			CurrentLevelAndCycleText = new inkTextWidgetReference();
+			PointsBoostPickupText = new inkTextWidgetReference();
+			Dummy = new inkWidgetReference();
+			InvincibilityCooldownIndicator = new inkWidgetReference();
 
 			PostConstruct();
 		}

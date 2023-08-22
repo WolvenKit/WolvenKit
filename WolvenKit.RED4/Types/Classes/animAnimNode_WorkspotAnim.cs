@@ -22,9 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_WorkspotAnim()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			CollectEvents = true;
-			InputLink = new();
+			InputLink = new animPoseLink();
 
 			PostConstruct();
 		}

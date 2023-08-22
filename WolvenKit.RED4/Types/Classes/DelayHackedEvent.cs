@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public DelayHackedEvent()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

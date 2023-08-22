@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiPanzerBonus : gameuiSideScrollerMiniGameDynObjectLogicAdvanced
+	public abstract partial class gameuiPanzerBonus : gameuiSideScrollerMiniGameDynObjectLogicAdvanced
 	{
 		[Ordinal(1)] 
 		[RED("fallingSpeed")] 

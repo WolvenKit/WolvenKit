@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entAttachEffectEvent : redEvent
+	public abstract partial class entAttachEffectEvent : redEvent
 	{
 		public entAttachEffectEvent()
 		{

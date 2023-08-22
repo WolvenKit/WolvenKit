@@ -63,8 +63,8 @@ namespace WolvenKit.RED4.Types
 		public inkWorldLayerDefinition()
 		{
 			ActiveByDefault = true;
-			ProjectionPlaneSize = new() { X = 1.000000F, Y = 1.000000F };
-			FaceVector = new();
+			ProjectionPlaneSize = new Vector2 { X = 1.000000F, Y = 1.000000F };
+			FaceVector = new Vector3();
 
 			PostConstruct();
 		}

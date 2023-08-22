@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIDelaySystem : gameIGameSystem
+	public abstract partial class gameIDelaySystem : gameIGameSystem
 	{
 		public gameIDelaySystem()
 		{

@@ -166,18 +166,18 @@ namespace WolvenKit.RED4.Types
 
 		public physicsSystemJoint()
 		{
-			LocalToWorld = new();
-			LinearLimit = new();
-			TwistLimit = new() { Upper = 180.000000F, Lower = -180.000000F };
-			SwingLimit = new();
-			DriveY = new();
-			DriveX = new();
-			DriveZ = new();
-			DriveTwist = new();
-			DriveSwing = new();
-			DriveSLERP = new();
-			DriveVelocity = new() { LinearVelocity = new() { W = 1.000000F }, AngularVelocity = new() { W = 1.000000F } };
-			DrivePosition = new();
+			LocalToWorld = new CMatrix();
+			LinearLimit = new physicsPhysicsJointLinearLimit();
+			TwistLimit = new physicsPhysicsJointAngularLimitPair { Upper = 180.000000F, Lower = -180.000000F };
+			SwingLimit = new physicsPhysicsJointLimitConePair();
+			DriveY = new physicsPhysicsJointDrive();
+			DriveX = new physicsPhysicsJointDrive();
+			DriveZ = new physicsPhysicsJointDrive();
+			DriveTwist = new physicsPhysicsJointDrive();
+			DriveSwing = new physicsPhysicsJointDrive();
+			DriveSLERP = new physicsPhysicsJointDrive();
+			DriveVelocity = new physicsPhysicsJointDriveVelocity { LinearVelocity = new Vector4 { W = 1.000000F }, AngularVelocity = new Vector4 { W = 1.000000F } };
+			DrivePosition = new CMatrix();
 			LinearTolerance = 10000000000.000000F;
 			AngularTolerance = 3.141593F;
 

@@ -70,15 +70,15 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_TransformRotator()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			Transform = new();
-			Axis = new() { Z = 1.000000F };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			Transform = new animTransformIndex();
+			Axis = new Vector3 { Z = 1.000000F };
 			ValueScale = 1.000000F;
 			AngleMin = -180.000000F;
 			AngleMax = 180.000000F;
-			AngleValueNode = new();
-			AngleSpeedNode = new();
+			AngleValueNode = new animFloatLink();
+			AngleSpeedNode = new animFloatLink();
 
 			PostConstruct();
 		}

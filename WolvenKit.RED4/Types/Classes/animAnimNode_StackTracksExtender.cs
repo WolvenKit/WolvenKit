@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_StackTracksExtender()
 		{
-			Id = 4294967295;
-			InputLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
 			NewTracks = new();
 
 			PostConstruct();

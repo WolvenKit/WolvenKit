@@ -95,10 +95,10 @@ namespace WolvenKit.RED4.Types
 		public gameuiEntityPreviewCameraSettings()
 		{
 			PanSpeed = 0.500000F;
-			RotationSpeed = new() { Pitch = 1.250000F, Yaw = 1.250000F };
-			RotationMin = new() { Pitch = -85.000000F, Yaw = -360.000000F };
-			RotationMax = new() { Pitch = -10.000000F, Yaw = 360.000000F };
-			RotationDefault = new() { Pitch = -70.000000F, Yaw = -90.000000F };
+			RotationSpeed = new EulerAngles { Pitch = 1.250000F, Yaw = 1.250000F };
+			RotationMin = new EulerAngles { Pitch = -85.000000F, Yaw = -360.000000F };
+			RotationMax = new EulerAngles { Pitch = -10.000000F, Yaw = 360.000000F };
+			RotationDefault = new EulerAngles { Pitch = -70.000000F, Yaw = -90.000000F };
 			ZoomSpeed = 0.500000F;
 			ZoomMin = 25.000000F;
 			ZoomMax = 100.000000F;

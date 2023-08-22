@@ -110,10 +110,10 @@ namespace WolvenKit.RED4.Types
 
 		public minimapEncodedShapes()
 		{
-			QuantizationScale = new();
-			QuantizationBias = new();
-			BoxQuantizationScale = new();
-			BoxQuantizationBias = new();
+			QuantizationScale = new Vector2();
+			QuantizationBias = new Vector2();
+			BoxQuantizationScale = new Vector3();
+			BoxQuantizationBias = new Vector3();
 
 			PostConstruct();
 		}

@@ -38,11 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public CarHotkeyController()
 		{
-			HotkeyBackground = new();
-			ButtonHint = new();
+			HotkeyBackground = new inkImageWidgetReference();
+			ButtonHint = new inkWidgetReference();
 			Restrictions = new();
 			DebugCommands = new();
-			CarIconSlot = new();
+			CarIconSlot = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

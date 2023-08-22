@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class OldUpperBodyEventsTransition : OldUpperBodyTransition
+	public abstract partial class OldUpperBodyEventsTransition : OldUpperBodyTransition
 	{
 		public OldUpperBodyEventsTransition()
 		{

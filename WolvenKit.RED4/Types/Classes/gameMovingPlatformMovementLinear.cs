@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public gameMovingPlatformMovementLinear()
 		{
-			InitData = new();
+			InitData = new gameIMovingPlatformMovementInitData();
 
 			PostConstruct();
 		}

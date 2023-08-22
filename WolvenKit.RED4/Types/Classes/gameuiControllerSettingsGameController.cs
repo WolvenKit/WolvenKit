@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.Types
 			DefaultWidgets = new();
 			SouthpawWidgets = new();
 			LegacyWidgets = new();
-			ButtonHintsManagerRef = new();
+			ButtonHintsManagerRef = new inkWidgetReference();
 
 			PostConstruct();
 		}

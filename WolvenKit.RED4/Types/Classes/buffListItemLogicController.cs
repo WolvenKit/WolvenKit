@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public buffListItemLogicController()
 		{
-			Icon = new();
-			Label = new();
-			StackCounter = new();
+			Icon = new inkImageWidgetReference();
+			Label = new inkTextWidgetReference();
+			StackCounter = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

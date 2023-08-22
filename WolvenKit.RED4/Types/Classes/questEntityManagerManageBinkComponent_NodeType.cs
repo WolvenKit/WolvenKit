@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerManageBinkComponent_NodeType()
 		{
-			Params = new() { new() };
+			Params = new() { new questEntityManagerManageBinkComponent_NodeTypeParams() };
 
 			PostConstruct();
 		}

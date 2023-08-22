@@ -134,7 +134,7 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerDevelopmentData()
 		{
-			OwnerID = new();
+			OwnerID = new entEntityID();
 			QueuedCombatExp = new();
 			Proficiencies = new();
 			Attributes = new();

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IRenderProxyCustomData : RedBaseClass
+	public abstract partial class IRenderProxyCustomData : RedBaseClass
 	{
 		public IRenderProxyCustomData()
 		{

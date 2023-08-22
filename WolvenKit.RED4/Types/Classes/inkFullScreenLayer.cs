@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkFullScreenLayer : inkLayer
+	public abstract partial class inkFullScreenLayer : inkLayer
 	{
 		public inkFullScreenLayer()
 		{

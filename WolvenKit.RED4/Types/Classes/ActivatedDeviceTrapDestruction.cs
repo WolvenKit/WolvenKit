@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			HideMeshes = new();
 			HitColliderNames = new();
 			HitColliders = new();
-			ImpulseVector = new();
+			ImpulseVector = new Vector4();
 			PhysicalMeshImpactVFX = new();
 			ComponentsToEnableNames = new();
 			ComponentsToEnable = new();

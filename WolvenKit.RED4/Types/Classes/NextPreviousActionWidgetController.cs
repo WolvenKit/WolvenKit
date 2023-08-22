@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public NextPreviousActionWidgetController()
 		{
-			DefaultContainer = new();
-			DeclineContainer = new();
+			DefaultContainer = new inkWidgetReference();
+			DeclineContainer = new inkWidgetReference();
 			MoneyStatusAnimName = "no_money";
 
 			PostConstruct();

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public LogEntryLogicController()
 		{
-			TextWidget = new();
+			TextWidget = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

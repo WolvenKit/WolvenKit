@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIbehaviorIDebugger : ISerializable
+	public abstract partial class AIbehaviorIDebugger : ISerializable
 	{
 		public AIbehaviorIDebugger()
 		{

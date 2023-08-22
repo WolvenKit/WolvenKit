@@ -22,10 +22,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SetBoneOrientation()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			Bone = new();
-			OrientationMs = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			Bone = new animTransformIndex();
+			OrientationMs = new animQuaternionLink();
 
 			PostConstruct();
 		}

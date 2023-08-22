@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldSocketNode : worldNode
+	public abstract partial class worldSocketNode : worldNode
 	{
 		public worldSocketNode()
 		{

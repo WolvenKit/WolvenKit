@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class graphGraphResource : CResource
+	public abstract partial class graphGraphResource : CResource
 	{
 		[Ordinal(1)] 
 		[RED("graph")] 

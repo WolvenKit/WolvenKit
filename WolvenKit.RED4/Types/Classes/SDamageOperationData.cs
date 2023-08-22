@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public SDamageOperationData()
 		{
 			Range = -1.000000F;
-			Offset = new();
+			Offset = new Vector4();
 
 			PostConstruct();
 		}

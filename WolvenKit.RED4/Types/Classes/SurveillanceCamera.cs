@@ -149,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			SoundDetectionLoopStop = "dev_surveillance_camera_detection_loop_stop";
 			ShouldRotate = true;
 			CanDetectIntruders = true;
-			TargetPosition = new();
+			TargetPosition = new Vector4();
 
 			PostConstruct();
 		}

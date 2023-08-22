@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameMuppetLookState()
 		{
-			LookDir = new();
+			LookDir = new EulerAngles();
 
 			PostConstruct();
 		}

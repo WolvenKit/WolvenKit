@@ -206,26 +206,26 @@ namespace WolvenKit.RED4.Types
 
 		public DpadWheelItemController()
 		{
-			SelectorWrapper = new();
-			Icon = new();
-			DisplayWrapper = new();
-			ItemWrapper = new();
-			Arrows = new();
-			AbilityIcon = new();
-			QuickHackIcon = new();
-			Highlight02 = new();
-			Highlight03 = new();
-			Highlight04 = new();
-			Highlight05 = new();
-			Highlight06 = new();
-			Highlight07 = new();
-			Highlight08 = new();
+			SelectorWrapper = new inkWidgetReference();
+			Icon = new inkImageWidgetReference();
+			DisplayWrapper = new inkWidgetReference();
+			ItemWrapper = new inkWidgetReference();
+			Arrows = new inkWidgetReference();
+			AbilityIcon = new inkImageWidgetReference();
+			QuickHackIcon = new inkImageWidgetReference();
+			Highlight02 = new inkImageWidgetReference();
+			Highlight03 = new inkImageWidgetReference();
+			Highlight04 = new inkImageWidgetReference();
+			Highlight05 = new inkImageWidgetReference();
+			Highlight06 = new inkImageWidgetReference();
+			Highlight07 = new inkImageWidgetReference();
+			Highlight08 = new inkImageWidgetReference();
 			TextDist = 60.000000F;
 			WeaponTextDist = 140.000000F;
-			Data = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
-			Highlight = new();
-			ItemData = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
-			AbilityData = new() { Empty = true, ID = new(), EquipmentArea = Enums.gamedataEquipmentArea.Invalid, AssignedIndex = -1 };
+			Data = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new entEntityID() };
+			Highlight = new inkImageWidgetReference();
+			ItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			AbilityData = new AbilityData { Empty = true, ID = new gameItemID(), EquipmentArea = Enums.gamedataEquipmentArea.Invalid, AssignedIndex = -1 };
 
 			PostConstruct();
 		}

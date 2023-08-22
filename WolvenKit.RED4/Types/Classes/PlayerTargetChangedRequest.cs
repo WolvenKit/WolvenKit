@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerTargetChangedRequest()
 		{
-			PlayerTarget = new();
+			PlayerTarget = new entEntityID();
 
 			PostConstruct();
 		}

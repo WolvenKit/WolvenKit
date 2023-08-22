@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryDataManager()
 		{
-			GameInstance = new();
+			GameInstance = new ScriptGameInstance();
 
 			PostConstruct();
 		}

@@ -46,13 +46,13 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_TranslationLimit()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			ConstrainedTransform = new();
-			ParentTransform = new();
-			LimitOnXAxis = new() { Min = -1.000000F, Max = 1.000000F };
-			LimitOnYAxis = new() { Min = -1.000000F, Max = 1.000000F };
-			LimitOnZAxis = new() { Min = -1.000000F, Max = 1.000000F };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			ConstrainedTransform = new animTransformIndex();
+			ParentTransform = new animTransformIndex();
+			LimitOnXAxis = new animFloatClamp { Min = -1.000000F, Max = 1.000000F };
+			LimitOnYAxis = new animFloatClamp { Min = -1.000000F, Max = 1.000000F };
+			LimitOnZAxis = new animFloatClamp { Min = -1.000000F, Max = 1.000000F };
 
 			PostConstruct();
 		}

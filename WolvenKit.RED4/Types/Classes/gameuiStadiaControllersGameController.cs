@@ -62,12 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiStadiaControllersGameController()
 		{
-			StadiaControllerPage = new();
-			NintendoControllerPage = new();
-			DurangoControllerPage = new();
-			OrbisControllerPage = new();
-			DisclaimerText = new();
-			ButtonHintsManagerRef = new();
+			StadiaControllerPage = new inkWidgetReference();
+			NintendoControllerPage = new inkWidgetReference();
+			DurangoControllerPage = new inkWidgetReference();
+			OrbisControllerPage = new inkWidgetReference();
+			DisclaimerText = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
 
 			PostConstruct();
 		}

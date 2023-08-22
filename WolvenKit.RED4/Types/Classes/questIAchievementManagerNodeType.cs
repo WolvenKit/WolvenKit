@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIAchievementManagerNodeType : ISerializable
+	public abstract partial class questIAchievementManagerNodeType : ISerializable
 	{
 		public questIAchievementManagerNodeType()
 		{

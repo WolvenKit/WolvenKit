@@ -86,10 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public BenchmarkResultsGameController()
 		{
-			ExitButton = new();
-			SettingButton = new();
-			LeftEntriesListContainer = new();
-			RightEntriesListContainer = new();
+			ExitButton = new inkWidgetReference();
+			SettingButton = new inkWidgetReference();
+			LeftEntriesListContainer = new inkCompoundWidgetReference();
+			RightEntriesListContainer = new inkCompoundWidgetReference();
 			LineEntryName = "data";
 			HighlightLineEntryName = "highlight_data";
 			SectionEntryName = "category";

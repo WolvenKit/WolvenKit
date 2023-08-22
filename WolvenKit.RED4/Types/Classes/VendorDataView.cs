@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public VendorDataView()
 		{
-			OpenTime = new();
+			OpenTime = new GameTime();
 
 			PostConstruct();
 		}

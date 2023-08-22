@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameBlackboardChangedEvent()
 		{
-			Id = new() { None = new() };
+			Id = new gamebbScriptID { None = new gamebbID() };
 
 			PostConstruct();
 		}

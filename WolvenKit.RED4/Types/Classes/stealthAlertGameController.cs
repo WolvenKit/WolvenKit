@@ -126,15 +126,15 @@ namespace WolvenKit.RED4.Types
 
 		public stealthAlertGameController()
 		{
-			Label = new();
-			Icon = new();
-			Indicator_01 = new();
-			Indicator_02 = new();
-			Indicator_03 = new();
-			Fluff_01 = new();
-			Fluff_02 = new();
-			Fluff_03 = new();
-			Fluff_04 = new();
+			Label = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			Indicator_01 = new inkImageWidgetReference();
+			Indicator_02 = new inkImageWidgetReference();
+			Indicator_03 = new inkImageWidgetReference();
+			Fluff_01 = new inkWidgetReference();
+			Fluff_02 = new inkWidgetReference();
+			Fluff_03 = new inkWidgetReference();
+			Fluff_04 = new inkWidgetReference();
 
 			PostConstruct();
 		}

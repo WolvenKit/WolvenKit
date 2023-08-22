@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIbehaviorCompanionConditionDefinition : AIbehaviorConditionDefinition
+	public abstract partial class AIbehaviorCompanionConditionDefinition : AIbehaviorConditionDefinition
 	{
 		[Ordinal(1)] 
 		[RED("spline")] 

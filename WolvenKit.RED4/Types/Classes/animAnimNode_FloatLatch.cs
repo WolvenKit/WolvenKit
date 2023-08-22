@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FloatLatch()
 		{
-			Id = 4294967295;
-			Input = new();
+			Id = uint.MaxValue;
+			Input = new animFloatLink();
 
 			PostConstruct();
 		}

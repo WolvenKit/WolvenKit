@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryRipperdocDisplayController()
 		{
-			OwnedBackground = new();
-			OwnedSign = new();
+			OwnedBackground = new inkWidgetReference();
+			OwnedSign = new inkWidgetReference();
 
 			PostConstruct();
 		}

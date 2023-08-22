@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worlduiIWidgetGameController : inkIWidgetController
+	public abstract partial class worlduiIWidgetGameController : inkIWidgetController
 	{
 		[Ordinal(1)] 
 		[RED("elementRecordID")] 

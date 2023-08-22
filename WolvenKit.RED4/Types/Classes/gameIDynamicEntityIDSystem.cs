@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIDynamicEntityIDSystem : gameIGameSystem
+	public abstract partial class gameIDynamicEntityIDSystem : gameIGameSystem
 	{
 		public gameIDynamicEntityIDSystem()
 		{

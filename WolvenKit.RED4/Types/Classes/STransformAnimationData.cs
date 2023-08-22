@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public STransformAnimationData()
 		{
-			PlayData = new() { TimeScale = 1.000000F, TimesPlayed = 1 };
-			SkipData = new();
+			PlayData = new STransformAnimationPlayEventData { TimeScale = 1.000000F, TimesPlayed = 1 };
+			SkipData = new STransformAnimationSkipEventData();
 
 			PostConstruct();
 		}

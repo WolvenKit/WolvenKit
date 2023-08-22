@@ -78,15 +78,15 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_TransformToTrack()
 		{
-			Id = 4294967295;
-			InputLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
 			FloatTrack = -1;
-			FloatTrackIndex = new();
-			TransformIndex = new();
+			FloatTrackIndex = new animNamedTrackIndex();
+			TransformIndex = new animTransformIndex();
 			MulFactor = 1.000000F;
 			Weight = 1.000000F;
-			WeightNode = new();
-			MulFactorNode = new();
+			WeightNode = new animFloatLink();
+			MulFactorNode = new animFloatLink();
 
 			PostConstruct();
 		}

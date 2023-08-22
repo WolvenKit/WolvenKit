@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public physicsControllerHit()
 		{
-			WorldPos = new() { W = 1.000000F };
-			WorldNormal = new() { W = 1.000000F };
+			WorldPos = new Vector4 { W = 1.000000F };
+			WorldNormal = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

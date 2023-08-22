@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public questInstancedCrowdControlNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 			Enable = true;
 
 			PostConstruct();

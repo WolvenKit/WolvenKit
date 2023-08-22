@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameinteractionsvisFamilyBase : RedBaseClass
+	public abstract partial class gameinteractionsvisFamilyBase : RedBaseClass
 	{
 		public gameinteractionsvisFamilyBase()
 		{

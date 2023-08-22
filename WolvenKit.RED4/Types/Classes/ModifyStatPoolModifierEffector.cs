@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public ModifyStatPoolModifierEffector()
 		{
-			OwnerEntityID = new();
-			PoolModifier = new();
-			PreviousMod = new();
+			OwnerEntityID = new entEntityID();
+			PoolModifier = new gameStatPoolModifier();
+			PreviousMod = new gameStatPoolModifier();
 
 			PostConstruct();
 		}

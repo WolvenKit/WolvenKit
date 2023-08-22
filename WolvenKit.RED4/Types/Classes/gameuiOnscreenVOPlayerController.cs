@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiOnscreenVOPlayerController()
 		{
-			SubtitlesContainer = new();
+			SubtitlesContainer = new inkCompoundWidgetReference();
 			AudioVOList = new();
 
 			PostConstruct();

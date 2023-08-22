@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIICoverSelectionSystem : gameIGameSystem
+	public abstract partial class AIICoverSelectionSystem : gameIGameSystem
 	{
 		public AIICoverSelectionSystem()
 		{

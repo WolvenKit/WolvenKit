@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public communitySpawnPhase()
 		{
 			Appearances = new() { "default" };
-			TimePeriods = new() { new() { Quantity = 1, Markings = new(), SpotNodeRefs = new(), Categories = new() } };
+			TimePeriods = new() { new communityPhaseTimePeriod { Quantity = 1, Markings = new(), SpotNodeRefs = new(), Categories = new() } };
 
 			PostConstruct();
 		}

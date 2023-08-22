@@ -118,14 +118,14 @@ namespace WolvenKit.RED4.Types
 
 		public CyberwareMainGameController()
 		{
-			MainViewRoot = new();
-			CyberwareColumnLeft = new();
-			CyberwareColumnRight = new();
-			PersonalStatsList = new();
-			AttributesList = new();
-			ResistancesList = new();
-			TooltipsManagerRef = new();
-			ToolTipOffset = new();
+			MainViewRoot = new inkWidgetReference();
+			CyberwareColumnLeft = new inkCompoundWidgetReference();
+			CyberwareColumnRight = new inkCompoundWidgetReference();
+			PersonalStatsList = new inkCompoundWidgetReference();
+			AttributesList = new inkCompoundWidgetReference();
+			ResistancesList = new inkCompoundWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
+			ToolTipOffset = new inkMargin();
 			RawStatsData = new();
 
 			PostConstruct();

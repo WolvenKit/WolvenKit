@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamePuppetStatPoolsListener : gameIStatPoolsListener
+	public abstract partial class gamePuppetStatPoolsListener : gameIStatPoolsListener
 	{
 		public gamePuppetStatPoolsListener()
 		{

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class CarriedObject : OldUpperBodyTransition
+	public abstract partial class CarriedObject : OldUpperBodyTransition
 	{
 		public CarriedObject()
 		{

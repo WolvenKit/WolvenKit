@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMainMenuGameController()
 		{
-			BackgroundContainer = new();
+			BackgroundContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

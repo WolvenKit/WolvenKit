@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleGarageComponentVehicleData()
 		{
-			EntityID = new();
+			EntityID = new entEntityID();
 
 			PostConstruct();
 		}

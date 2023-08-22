@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public inkHudEntryInfo()
 		{
-			Size = new();
-			Offset = new();
+			Size = new Vector2();
+			Offset = new Vector2();
 
 			PostConstruct();
 		}

@@ -254,16 +254,16 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiPanzerGameLogicController()
 		{
-			PlayerColliderPositionOffset = new();
-			PlayerColliderSizeOffset = new();
-			GameplayRoot = new();
+			PlayerColliderPositionOffset = new Vector2();
+			PlayerColliderSizeOffset = new Vector2();
+			GameplayRoot = new inkCompoundWidgetReference();
 			Layers = new();
 			CheatCodes = new();
 			AcceptableCheatKeys = new() { "CameraStepDown", "CameraStepUp", "UI_MoveUp", "UI_MoveDown", "UI_MoveLeft", "UI_MoveRight" };
 			GameOverDelay = 2.000000F;
 			CloudsLibraryNames = new();
-			ScoreCounter = new();
-			LivesCounter = new();
+			ScoreCounter = new inkTextWidgetReference();
+			LivesCounter = new inkTextWidgetReference();
 			MoveUpKey = "CameraStepPitchUp";
 			MoveDownKey = "CameraStepPitchDown";
 			MoveLeftKey = "CameraStepYawLeft";

@@ -62,11 +62,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_LocomotionAdjuster()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			TargetPosition = new();
-			TargetDirection = new();
-			InitialForwardVector = new() { Y = 1.000000F };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			TargetPosition = new animVectorLink();
+			TargetDirection = new animVectorLink();
+			InitialForwardVector = new Vector4 { Y = 1.000000F };
 			BlendSpeedPos = 8.000000F;
 			BlendSpeedPosMin = 2.000000F;
 			BlendSpeedRot = 180.000000F;

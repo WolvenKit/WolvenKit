@@ -205,13 +205,13 @@ namespace WolvenKit.RED4.Types
 			ParentRotationAltersTransformsOfDangleAndItsChildren = true;
 			ParentRotationAltersTransformsOfNonDanglesAndItsChildren = true;
 			DangleAltersTransformsOfItsChildren = true;
-			DangleBone = new();
+			DangleBone = new animTransformIndex();
 			HalfOfMaxApertureAngle = 45.000000F;
 			Mass = 1.000000F;
 			Damping = 1.000000F;
-			PullForceDirectionLS = new();
-			ExternalForceWS = new();
-			ExternalForceWsLink = new();
+			PullForceDirectionLS = new Vector3();
+			ExternalForceWS = new Vector3();
+			ExternalForceWsLink = new animVectorLink();
 			CosOfHalfMaxApertureAngle = 0.707107F;
 			CosOfHalfOfHalfMaxApertureAngle = 0.923880F;
 			SinOfHalfOfHalfMaxApertureAngle = 0.382683F;
@@ -219,7 +219,7 @@ namespace WolvenKit.RED4.Types
 			SimulationFps = 10.000000F;
 			GravityWS = 9.810000F;
 			ProjectionType = Enums.animPendulumProjectionType.ShortestPathRotational;
-			ConstraintOrientation = new() { X = 90.000000F };
+			ConstraintOrientation = new Vector3 { X = 90.000000F };
 			CosOfHalfXAngle = 0.707107F;
 			CosOfHalfYAngle = 1.000000F;
 			CosOfHalfZAngle = 1.000000F;

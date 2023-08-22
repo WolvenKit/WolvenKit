@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ExplosiveTriggerDeviceProximityEvent()
 		{
-			Instigator = new();
+			Instigator = new entEntityID();
 
 			PostConstruct();
 		}

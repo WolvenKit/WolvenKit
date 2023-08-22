@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldWorldEnvironmentAreaParameters()
 		{
-			GlobalLight = new() { Unit = Enums.ELightUnit.LU_Lux };
+			GlobalLight = new worldWorldGlobalLightParameters { Unit = Enums.ELightUnit.LU_Lux };
 
 			PostConstruct();
 		}

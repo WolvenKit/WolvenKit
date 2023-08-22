@@ -184,10 +184,10 @@ namespace WolvenKit.RED4.Types
 			StatusEffects = new();
 			Damages = new();
 			Items = new();
-			Teleport = new();
-			PlayerWorkspot = new();
+			Teleport = new STeleportOperationData();
+			PlayerWorkspot = new SWorkspotData();
 			ToggleOperations = new();
-			DelayID = new();
+			DelayID = new gameDelayID();
 
 			PostConstruct();
 		}

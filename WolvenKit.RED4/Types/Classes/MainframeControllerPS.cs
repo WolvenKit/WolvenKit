@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public MainframeControllerPS()
 		{
-			FactName = new();
+			FactName = new ComputerQuickHackData();
 
 			PostConstruct();
 		}

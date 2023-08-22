@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ProgramAction : ActionBool
+	public abstract partial class ProgramAction : ActionBool
 	{
 		public ProgramAction()
 		{

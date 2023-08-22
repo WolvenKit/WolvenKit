@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public StatsViewController()
 		{
-			StatLabelRef = new();
-			StatValueRef = new();
-			Icon = new();
-			Stat = new() { Type = Enums.gamedataStatType.Invalid };
+			StatLabelRef = new inkTextWidgetReference();
+			StatValueRef = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			Stat = new gameStatViewData { Type = Enums.gamedataStatType.Invalid };
 
 			PostConstruct();
 		}

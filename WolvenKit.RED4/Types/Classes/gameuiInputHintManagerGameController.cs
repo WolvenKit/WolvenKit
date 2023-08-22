@@ -62,10 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiInputHintManagerGameController()
 		{
-			BaseGroupContainer = new();
-			GroupsContainer = new();
-			HintLibRef = new() { WidgetLibrary = new() };
-			GroupLibRef = new() { WidgetLibrary = new() };
+			BaseGroupContainer = new inkCompoundWidgetReference();
+			GroupsContainer = new inkCompoundWidgetReference();
+			HintLibRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			GroupLibRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
 
 			PostConstruct();
 		}

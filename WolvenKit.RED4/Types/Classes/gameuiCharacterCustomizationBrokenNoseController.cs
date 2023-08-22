@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 		public gameuiCharacterCustomizationBrokenNoseController()
 		{
 			Name = "Component";
-			Stage1App = new();
-			Stage2App = new();
+			Stage1App = new gameuiCharacterCustomizationBrokenNoseControllerBrokenNoseAppearance();
+			Stage2App = new gameuiCharacterCustomizationBrokenNoseControllerBrokenNoseAppearance();
 
 			PostConstruct();
 		}

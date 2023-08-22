@@ -86,13 +86,13 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SetTrackRange()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			MinLink = new();
-			MaxLink = new();
-			OldMinLink = new();
-			OldMaxLink = new();
-			Track = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			MinLink = new animFloatLink();
+			MaxLink = new animFloatLink();
+			OldMinLink = new animFloatLink();
+			OldMaxLink = new animFloatLink();
+			Track = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

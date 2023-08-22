@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public RemoveItemPart()
 		{
-			BaseItem = new();
+			BaseItem = new gameItemID();
 
 			PostConstruct();
 		}

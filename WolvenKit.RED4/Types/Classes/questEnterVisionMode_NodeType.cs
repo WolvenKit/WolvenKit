@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questEnterVisionMode_NodeType()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 			VisionModeType = Enums.gameVisionModeType.Focus;
 
 			PostConstruct();

@@ -78,11 +78,11 @@ namespace WolvenKit.RED4.Types
 
 		public DlcDescriptionController()
 		{
-			TitleRef = new();
-			DescriptionRef = new();
-			GuideRef = new();
-			ImageRef = new();
-			SettingSelectorRef = new();
+			TitleRef = new inkTextWidgetReference();
+			DescriptionRef = new inkTextWidgetReference();
+			GuideRef = new inkTextWidgetReference();
+			ImageRef = new inkImageWidgetReference();
+			SettingSelectorRef = new inkWidgetReference();
 
 			PostConstruct();
 		}

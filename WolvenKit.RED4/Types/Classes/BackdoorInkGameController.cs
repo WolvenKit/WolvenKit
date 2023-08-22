@@ -86,8 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public BackdoorInkGameController()
 		{
-			IdleGroup = new();
-			ConnectedGroup = new();
+			IdleGroup = new inkWidgetReference();
+			ConnectedGroup = new inkWidgetReference();
 
 			PostConstruct();
 		}

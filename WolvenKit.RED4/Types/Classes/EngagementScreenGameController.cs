@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public EngagementScreenGameController()
 		{
-			BackgroundVideo = new();
-			Text = new();
-			TextShadow = new();
-			TextContainer = new();
+			BackgroundVideo = new inkVideoWidgetReference();
+			Text = new inkRichTextBoxWidgetReference();
+			TextShadow = new inkRichTextBoxWidgetReference();
+			TextContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

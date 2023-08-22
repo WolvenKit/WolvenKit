@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public HUDManagerRequest()
 		{
-			OwnerID = new();
+			OwnerID = new entEntityID();
 
 			PostConstruct();
 		}

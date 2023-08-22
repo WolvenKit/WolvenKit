@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public gameeventsHighLevelStateDataEvent()
 		{
 			CurrentHighLevelState = Enums.gamedataNPCHighLevelState.Invalid;
-			CurrentNPCEntityID = new();
+			CurrentNPCEntityID = new entEntityID();
 
 			PostConstruct();
 		}

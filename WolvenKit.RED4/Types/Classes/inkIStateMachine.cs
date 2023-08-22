@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIStateMachine : ISerializable
+	public abstract partial class inkIStateMachine : ISerializable
 	{
 		public inkIStateMachine()
 		{

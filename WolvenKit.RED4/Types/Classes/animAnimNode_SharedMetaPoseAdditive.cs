@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SharedMetaPoseAdditive()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			WeightLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			WeightLink = new animFloatLink();
 			BlendTracks = Enums.animEBlendTracksMode.AGBT_Add;
 			ConvertParentPoseToAdditive = true;
 

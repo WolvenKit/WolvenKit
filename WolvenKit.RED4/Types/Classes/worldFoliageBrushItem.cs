@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldFoliageBrushItem()
 		{
-			Params = new() { Proximity = 1.000000F, Scale = 1.000000F, ScaleVariation = 0.100000F };
+			Params = new worldFoliageBrushParams { Proximity = 1.000000F, Scale = 1.000000F, ScaleVariation = 0.100000F };
 			Selected = true;
 
 			PostConstruct();

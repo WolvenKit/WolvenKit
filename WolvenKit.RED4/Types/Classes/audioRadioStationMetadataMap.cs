@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public audioRadioStationMetadataMap()
 		{
 			RadioStations = new();
-			DefaultBackgroundJingle = new();
+			DefaultBackgroundJingle = new audioRadioStationJingleMetadata();
 
 			PostConstruct();
 		}

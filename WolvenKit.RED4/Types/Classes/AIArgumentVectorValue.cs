@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public AIArgumentVectorValue()
 		{
 			Type = Enums.AIArgumentType.Vector;
-			DefaultValue = new();
+			DefaultValue = new Vector3();
 
 			PostConstruct();
 		}

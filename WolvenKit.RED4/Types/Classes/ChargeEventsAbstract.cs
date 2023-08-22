@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ChargeEventsAbstract : WeaponEventsTransition
+	public abstract partial class ChargeEventsAbstract : WeaponEventsTransition
 	{
 		[Ordinal(3)] 
 		[RED("layerId")] 

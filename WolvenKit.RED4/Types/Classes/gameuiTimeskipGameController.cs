@@ -398,20 +398,20 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiTimeskipGameController()
 		{
-			CurrentTimeLabel = new();
-			TragetTimeLabel = new();
-			DiffTimeLabel = new();
-			RootContainerRef = new();
-			CurrentTimePointerRef = new();
-			TargetTimePointerRef = new();
-			TimeBarRef = new();
-			CircleGradientRef = new();
-			StartCircleGradientRef = new();
-			MouseHitTestRef = new();
-			DayIconRef = new();
-			NightIconRef = new();
-			MorningIconRef = new();
-			EveningIconRef = new();
+			CurrentTimeLabel = new inkTextWidgetReference();
+			TragetTimeLabel = new inkTextWidgetReference();
+			DiffTimeLabel = new inkTextWidgetReference();
+			RootContainerRef = new inkWidgetReference();
+			CurrentTimePointerRef = new inkWidgetReference();
+			TargetTimePointerRef = new inkWidgetReference();
+			TimeBarRef = new inkWidgetReference();
+			CircleGradientRef = new inkWidgetReference();
+			StartCircleGradientRef = new inkWidgetReference();
+			MouseHitTestRef = new inkWidgetReference();
+			DayIconRef = new inkWidgetReference();
+			NightIconRef = new inkWidgetReference();
+			MorningIconRef = new inkWidgetReference();
+			EveningIconRef = new inkWidgetReference();
 			IntoAnimation = "intro";
 			OutroCancelAnimation = "outro_cancel";
 			OutroFinishedAnimation = "outro_finish";
@@ -421,10 +421,10 @@ namespace WolvenKit.RED4.Types
 			LoopAnimationMarkerTo = "loop_to";
 			MouseHoverOverAnimation = "mouseHoverOver";
 			MouseHoverOutAnimation = "mouseHoverOut";
-			GameInstance = new();
-			CurrentTime = new();
+			GameInstance = new ScriptGameInstance();
+			CurrentTime = new GameTime();
 			HoursToSkip = 1;
-			AxisInputCache = new();
+			AxisInputCache = new Vector2();
 			Radius = 310.000000F;
 			AxisInputThreshold = 0.000500F;
 			AnimationDurationMin = 3.000000F;

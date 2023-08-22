@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ActionEntityReference : ScriptableDeviceAction
+	public abstract partial class ActionEntityReference : ScriptableDeviceAction
 	{
 		public ActionEntityReference()
 		{

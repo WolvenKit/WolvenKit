@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerListEntryLogicController()
 		{
-			PlayerNameLabel = new();
-			PlayerClassIcon = new();
+			PlayerNameLabel = new inkWidgetReference();
+			PlayerClassIcon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

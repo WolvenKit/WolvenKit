@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HUDNarrationLogDef()
 		{
-			LastEvent = new();
+			LastEvent = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

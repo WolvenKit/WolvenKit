@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public inkNavigationOverrideEntry()
 		{
-			From = new();
-			To = new();
+			From = new inkWidgetReference();
+			To = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ActionFloat : ScriptableDeviceAction
+	public abstract partial class ActionFloat : ScriptableDeviceAction
 	{
 		public ActionFloat()
 		{

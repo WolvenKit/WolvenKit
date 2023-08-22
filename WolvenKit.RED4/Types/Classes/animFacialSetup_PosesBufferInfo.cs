@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public animFacialSetup_PosesBufferInfo()
 		{
-			Face = new();
-			Tongue = new();
-			Eyes = new();
+			Face = new animFacialSetup_OneSermoPoseBufferInfo();
+			Tongue = new animFacialSetup_OneSermoPoseBufferInfo();
+			Eyes = new animFacialSetup_OneSermoPoseBufferInfo();
 
 			PostConstruct();
 		}

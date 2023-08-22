@@ -86,11 +86,11 @@ namespace WolvenKit.RED4.Types
 
 		public animSimpleBounce_JsonProperties()
 		{
-			StartTransform = new();
-			EndTransform = new();
+			StartTransform = new animTransformIndex();
+			EndTransform = new animTransformIndex();
 			TransformOutputs = new();
 			TrackOutputs = new();
-			OutputDriverTrack = new();
+			OutputDriverTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

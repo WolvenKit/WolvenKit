@@ -478,29 +478,29 @@ namespace WolvenKit.RED4.Types
 
 		public RipperDocGameController()
 		{
-			TooltipsManagerRef = new();
-			ButtonHintsManagerRef = new();
-			AnimationControllerContainer = new();
-			RipperdocIdContainerV1 = new();
-			RipperdocIdContainerV2 = new();
-			FrontalCortexAnchor = new();
-			OcularCortexAnchor = new();
-			LeftMiddleGridAnchor = new();
-			LeftButtomGridAnchor = new();
-			RightTopGridAnchor = new();
-			RightButtomGridAnchor = new();
-			SkeletonAnchor = new();
-			HandsAnchor = new();
-			PlayerMoney = new();
-			PlayerMoneyHolder = new();
-			AllocationPointContainerDefault = new();
-			CyberwareSlotsList = new();
-			CyberwareVirtualGrid = new();
-			RadioGroupRef = new();
-			CyberwareInfoContainer = new();
-			ItemsListScrollAreaContainer = new();
-			SortingButton = new();
-			SortingDropdown = new();
+			TooltipsManagerRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			AnimationControllerContainer = new inkWidgetReference();
+			RipperdocIdContainerV1 = new inkWidgetReference();
+			RipperdocIdContainerV2 = new inkWidgetReference();
+			FrontalCortexAnchor = new inkCompoundWidgetReference();
+			OcularCortexAnchor = new inkCompoundWidgetReference();
+			LeftMiddleGridAnchor = new inkCompoundWidgetReference();
+			LeftButtomGridAnchor = new inkCompoundWidgetReference();
+			RightTopGridAnchor = new inkCompoundWidgetReference();
+			RightButtomGridAnchor = new inkCompoundWidgetReference();
+			SkeletonAnchor = new inkCompoundWidgetReference();
+			HandsAnchor = new inkCompoundWidgetReference();
+			PlayerMoney = new inkTextWidgetReference();
+			PlayerMoneyHolder = new inkWidgetReference();
+			AllocationPointContainerDefault = new inkCompoundWidgetReference();
+			CyberwareSlotsList = new inkCompoundWidgetReference();
+			CyberwareVirtualGrid = new inkVirtualCompoundWidgetReference();
+			RadioGroupRef = new inkWidgetReference();
+			CyberwareInfoContainer = new inkCompoundWidgetReference();
+			ItemsListScrollAreaContainer = new inkWidgetReference();
+			SortingButton = new inkWidgetReference();
+			SortingDropdown = new inkWidgetReference();
 			CybewareGrids = new();
 
 			PostConstruct();

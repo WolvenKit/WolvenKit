@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public UnregisterDropPointMappinRequest()
 		{
-			OwnerID = new();
+			OwnerID = new entEntityID();
 			RemoveFromSystem = true;
 
 			PostConstruct();

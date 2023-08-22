@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsChoiceLookAtDescriptor()
 		{
-			Offset = new();
-			OrbId = new();
+			Offset = new Vector3();
+			OrbId = new gameinteractionsOrbID();
 
 			PostConstruct();
 		}

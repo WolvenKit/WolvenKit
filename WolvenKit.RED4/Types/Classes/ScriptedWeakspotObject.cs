@@ -94,8 +94,8 @@ namespace WolvenKit.RED4.Types
 
 		public ScriptedWeakspotObject()
 		{
-			WeakspotOnDestroyProperties = new() { DisableInteraction = true, DestroyMesh = true };
-			WeakspotRecordData = new();
+			WeakspotOnDestroyProperties = new WeakspotOnDestroyProperties { DisableInteraction = true, DestroyMesh = true };
+			WeakspotRecordData = new WeakspotRecordData();
 			Alive = true;
 
 			PostConstruct();

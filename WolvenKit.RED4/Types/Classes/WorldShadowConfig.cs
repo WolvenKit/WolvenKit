@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public WorldShadowConfig()
 		{
-			ContactShadows = new() { Range = 0.050000F, RangeLimit = 0.075000F, ScreenEdgeFadeRange = 0.150000F, DistanceFadeLimit = 3.000000F, DistanceFadeRange = 1.000000F };
+			ContactShadows = new ContactShadowsConfig { Range = 0.050000F, RangeLimit = 0.075000F, ScreenEdgeFadeRange = 0.150000F, DistanceFadeLimit = 3.000000F, DistanceFadeRange = 1.000000F };
 			DistantShadowsNumLevels = 3;
 			DistantShadowsBaseLevelRadius = 250.000000F;
-			FoliageShadowConfig = new() { FoliageShadowCascadeGradient = 0.100000F, FoliageShadowCascadeFilterScale = 0.100000F, FoliageShadowCascadeGradientDistanceRange = 50.000000F };
+			FoliageShadowConfig = new FoliageShadowConfig { FoliageShadowCascadeGradient = 0.100000F, FoliageShadowCascadeFilterScale = 0.100000F, FoliageShadowCascadeGradientDistanceRange = 50.000000F };
 
 			PostConstruct();
 		}

@@ -254,21 +254,21 @@ namespace WolvenKit.RED4.Types
 
 		public ScannervehicleGameController()
 		{
-			VehicleNameText = new();
-			VehicleManufacturer = new();
-			VehicleProdYearsText = new();
-			VehicleDriveLayoutText = new();
-			VehicleHorsepowerText = new();
-			VehicleMassText = new();
-			VehicleStateText = new();
-			VehicleInfoText = new();
-			VehicleNameHolder = new();
-			VehicleProdYearsHolder = new();
-			VehicleDriveLayoutHolder = new();
-			VehicleHorsepowerHolder = new();
-			VehicleMassHolder = new();
-			VehicleStateHolder = new();
-			VehicleInfoHolder = new();
+			VehicleNameText = new inkTextWidgetReference();
+			VehicleManufacturer = new inkImageWidgetReference();
+			VehicleProdYearsText = new inkTextWidgetReference();
+			VehicleDriveLayoutText = new inkTextWidgetReference();
+			VehicleHorsepowerText = new inkTextWidgetReference();
+			VehicleMassText = new inkTextWidgetReference();
+			VehicleStateText = new inkTextWidgetReference();
+			VehicleInfoText = new inkTextWidgetReference();
+			VehicleNameHolder = new inkWidgetReference();
+			VehicleProdYearsHolder = new inkWidgetReference();
+			VehicleDriveLayoutHolder = new inkWidgetReference();
+			VehicleHorsepowerHolder = new inkWidgetReference();
+			VehicleMassHolder = new inkWidgetReference();
+			VehicleStateHolder = new inkWidgetReference();
+			VehicleInfoHolder = new inkWidgetReference();
 
 			PostConstruct();
 		}

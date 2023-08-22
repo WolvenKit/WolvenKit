@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public RadioLogicController()
 		{
-			RadioTextWidget = new();
-			RadioEQWidget = new();
-			RadioTextWidgetSize = new();
+			RadioTextWidget = new inkTextWidgetReference();
+			RadioEQWidget = new inkCanvasWidgetReference();
+			RadioTextWidgetSize = new Vector2();
 
 			PostConstruct();
 		}

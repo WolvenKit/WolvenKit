@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public entDismembermentAudioEvent()
 		{
-			Position = new();
+			Position = new Vector4();
 
 			PostConstruct();
 		}

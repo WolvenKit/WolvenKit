@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public ImageActionButtonLogicController()
 		{
-			TallImageWidget = new();
+			TallImageWidget = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

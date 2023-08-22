@@ -62,10 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public worldBlockoutData()
 		{
-			Points = new() { new(), new(), new(), new() };
-			Edges = new() { new(), new(), new(), new() };
-			Areas = new() { new() { Name = "area_0", Color = new(), Parent = 4294967295, Children = new(), Outlines = new() { null } } };
-			WorldSize = new() { X = 8000.000000F, Y = 8000.000000F };
+			Points = new() { new worldBlockoutPoint(), new worldBlockoutPoint(), new worldBlockoutPoint(), new worldBlockoutPoint() };
+			Edges = new() { new worldBlockoutEdge(), new worldBlockoutEdge(), new worldBlockoutEdge(), new worldBlockoutEdge() };
+			Areas = new() { new worldBlockoutArea { Name = "area_0", Color = new CColor(), Parent = uint.MaxValue, Children = new(), Outlines = new() { null } } };
+			WorldSize = new Vector2 { X = 8000.000000F, Y = 8000.000000F };
 			FreePoints = new();
 			FreeEdges = new();
 			FreeAreas = new();

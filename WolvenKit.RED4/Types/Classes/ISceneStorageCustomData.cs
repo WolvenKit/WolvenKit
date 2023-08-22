@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ISceneStorageCustomData : RedBaseClass
+	public abstract partial class ISceneStorageCustomData : RedBaseClass
 	{
 		public ISceneStorageCustomData()
 		{

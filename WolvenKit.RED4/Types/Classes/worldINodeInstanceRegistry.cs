@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldINodeInstanceRegistry : worldIRuntimeSystem
+	public abstract partial class worldINodeInstanceRegistry : worldIRuntimeSystem
 	{
 		public worldINodeInstanceRegistry()
 		{

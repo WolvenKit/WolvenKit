@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public DischargeEvents()
 		{
-			WeaponID = new();
+			WeaponID = new entEntityID();
 
 			PostConstruct();
 		}

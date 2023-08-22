@@ -78,8 +78,8 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModeListController()
 		{
-			LogoWidget = new();
-			Panel = new();
+			LogoWidget = new inkWidgetReference();
+			Panel = new inkVerticalPanelWidgetReference();
 
 			PostConstruct();
 		}

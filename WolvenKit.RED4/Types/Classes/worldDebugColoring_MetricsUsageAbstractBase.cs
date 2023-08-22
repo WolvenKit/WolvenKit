@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldDebugColoring_MetricsUsageAbstractBase : worldEditorDebugColoringSettings
+	public abstract partial class worldDebugColoring_MetricsUsageAbstractBase : worldEditorDebugColoringSettings
 	{
 		[Ordinal(0)] 
 		[RED("maxColor")] 

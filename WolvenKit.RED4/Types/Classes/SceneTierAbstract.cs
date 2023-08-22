@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class SceneTierAbstract : HighLevelTransition
+	public abstract partial class SceneTierAbstract : HighLevelTransition
 	{
 		public SceneTierAbstract()
 		{

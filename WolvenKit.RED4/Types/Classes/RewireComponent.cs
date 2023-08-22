@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public RewireComponent()
 		{
-			MiniGameVideoPath = new();
+			MiniGameVideoPath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(1178718037916453964) };
 			MiniGameVideoLenght = 5.000000F;
 
 			PostConstruct();

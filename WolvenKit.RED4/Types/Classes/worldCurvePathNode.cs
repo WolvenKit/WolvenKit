@@ -94,8 +94,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldCurvePathNode()
 		{
-			UserInput = new();
-			DefaultForwardVector = new() { Y = 1.000000F };
+			UserInput = new animCurvePathBakerUserInput();
+			DefaultForwardVector = new Vector4 { Y = 1.000000F };
 			GlobalInBlendTime = 0.200000F;
 			GlobalOutBlendTime = 0.200000F;
 			TurnCharacterToMatchVelocity = true;

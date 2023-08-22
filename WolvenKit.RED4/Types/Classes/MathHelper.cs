@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MathHelper : IScriptable
+	public abstract partial class MathHelper : IScriptable
 	{
 		public MathHelper()
 		{

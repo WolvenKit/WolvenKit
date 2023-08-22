@@ -138,7 +138,7 @@ namespace WolvenKit.RED4.Types
 			EmmModes = new();
 			OutputDirectoryName = "Scene";
 			RecordingFPS = 30;
-			CustomResolution = new();
+			CustomResolution = new Point();
 			ResolutionMultiplier = Enums.rendResolutionMultiplier.X2;
 			OutputPath = new();
 			FovMultiplier = 1.000000F;

@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_Output()
 		{
-			Id = 4294967295;
-			Node = new();
+			Id = uint.MaxValue;
+			Node = new animPoseLink();
 
 			PostConstruct();
 		}

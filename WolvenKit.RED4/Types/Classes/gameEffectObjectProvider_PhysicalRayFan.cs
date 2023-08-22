@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectObjectProvider_PhysicalRayFan()
 		{
-			InputMinRayAngleDiff = new();
+			InputMinRayAngleDiff = new gameEffectInputParameter_Float();
 
 			PostConstruct();
 		}

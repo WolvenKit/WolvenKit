@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 		public questTransformAnimatorNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			ObjectRef = new() { Names = new() };
+			Id = ushort.MaxValue;
+			ObjectRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

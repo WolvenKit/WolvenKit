@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameEffectPostAction : gameEffectAction
+	public abstract partial class gameEffectPostAction : gameEffectAction
 	{
 		public gameEffectPostAction()
 		{

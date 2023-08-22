@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public entRagdollApplyImpulseEvent()
 		{
-			WorldImpulsePos = new() { W = 1.000000F };
-			WorldImpulseValue = new() { W = 1.000000F };
+			WorldImpulsePos = new Vector4 { W = 1.000000F };
+			WorldImpulseValue = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

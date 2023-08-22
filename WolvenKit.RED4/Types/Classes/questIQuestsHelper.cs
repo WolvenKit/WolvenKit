@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIQuestsHelper : gameIGameSystem
+	public abstract partial class questIQuestsHelper : gameIGameSystem
 	{
 		public questIQuestsHelper()
 		{

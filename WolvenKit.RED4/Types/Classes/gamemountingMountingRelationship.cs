@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamemountingMountingRelationship()
 		{
-			SlotId = new();
+			SlotId = new gamemountingMountingSlotId();
 
 			PostConstruct();
 		}

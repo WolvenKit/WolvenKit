@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class EquipmentBaseDecisions : EquipmentBaseTransition
+	public abstract partial class EquipmentBaseDecisions : EquipmentBaseTransition
 	{
 		public EquipmentBaseDecisions()
 		{

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class HUDPhoneElement : inkWidgetLogicController
+	public abstract partial class HUDPhoneElement : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
 		[RED("RootWidget")] 

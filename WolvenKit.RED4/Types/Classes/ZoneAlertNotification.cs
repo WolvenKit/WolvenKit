@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public ZoneAlertNotification()
 		{
-			ZoneLabelText = new();
+			ZoneLabelText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

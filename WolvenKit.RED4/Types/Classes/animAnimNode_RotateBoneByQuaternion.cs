@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_RotateBoneByQuaternion()
 		{
-			Id = 4294967295;
-			InputNode = new();
-			QuaternionNode = new();
-			Bone = new();
+			Id = uint.MaxValue;
+			InputNode = new animPoseLink();
+			QuaternionNode = new animQuaternionLink();
+			Bone = new animTransformIndex();
 			ResetOnActivation = true;
 
 			PostConstruct();

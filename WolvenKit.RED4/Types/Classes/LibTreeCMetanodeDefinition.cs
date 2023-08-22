@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LibTreeCMetanodeDefinition : LibTreeINodeDefinition
+	public abstract partial class LibTreeCMetanodeDefinition : LibTreeINodeDefinition
 	{
 		public LibTreeCMetanodeDefinition()
 		{

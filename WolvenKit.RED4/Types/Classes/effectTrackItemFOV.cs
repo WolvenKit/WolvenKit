@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemFOV()
 		{
 			TimeDuration = 1.000000F;
-			FOV = new();
+			FOV = new effectEffectParameterEvaluatorFloat();
 
 			PostConstruct();
 		}

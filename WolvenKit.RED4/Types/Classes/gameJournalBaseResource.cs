@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameJournalBaseResource : CResource
+	public abstract partial class gameJournalBaseResource : CResource
 	{
 		public gameJournalBaseResource()
 		{

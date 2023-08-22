@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiInputHintGroupController()
 		{
-			TitleTextRef = new();
-			DescriptionTextRef = new();
-			HintsContainerRef = new();
-			IconRef = new();
+			TitleTextRef = new inkTextWidgetReference();
+			DescriptionTextRef = new inkTextWidgetReference();
+			HintsContainerRef = new inkCompoundWidgetReference();
+			IconRef = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

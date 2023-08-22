@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AmmoLogicController : inkWidgetLogicController
+	public abstract partial class AmmoLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
 		[RED("count")] 

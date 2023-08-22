@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public worldPhysicalTriggerAreaNode()
 		{
 			SimulationType = Enums.physicsSimulationType.Dynamic;
-			Shape = new() { ShapeSize = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, ShapeLocalPose = new() { Position = new(), Orientation = new() { R = 1.000000F } } };
+			Shape = new physicsTriggerShape { ShapeSize = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, ShapeLocalPose = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } } };
 
 			PostConstruct();
 		}

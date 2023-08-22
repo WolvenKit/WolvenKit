@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ITonemappingMode : ISerializable
+	public abstract partial class ITonemappingMode : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("colorPreservation")] 

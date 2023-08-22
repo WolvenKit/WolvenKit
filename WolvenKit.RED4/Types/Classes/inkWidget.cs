@@ -171,12 +171,12 @@ namespace WolvenKit.RED4.Types
 			Name = "UNINITIALIZED_WIDGET";
 			State = "Default";
 			Visible = true;
-			Layout = new() { Padding = new(), Margin = new(), AnchorPoint = new(), SizeCoefficient = 1.000000F };
+			Layout = new inkWidgetLayout { Padding = new inkMargin(), Margin = new inkMargin(), AnchorPoint = new Vector2(), SizeCoefficient = 1.000000F };
 			Opacity = 1.000000F;
-			TintColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
-			Size = new();
-			RenderTransformPivot = new() { X = 0.500000F, Y = 0.500000F };
-			RenderTransform = new() { Translation = new(), Scale = new() { X = 1.000000F, Y = 1.000000F }, Shear = new() };
+			TintColor = new HDRColor { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
+			Size = new Vector2();
+			RenderTransformPivot = new Vector2 { X = 0.500000F, Y = 0.500000F };
+			RenderTransform = new inkUITransform { Translation = new Vector2(), Scale = new Vector2 { X = 1.000000F, Y = 1.000000F }, Shear = new Vector2() };
 			Effects = new();
 
 			PostConstruct();

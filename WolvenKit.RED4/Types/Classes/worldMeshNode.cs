@@ -102,6 +102,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldMeshNode()
 		{
+			Mesh = new CResourceAsyncReference<CMesh>(@"engine\meshes\editor\box.w2mesh");
 			MeshAppearance = "default";
 			OccluderAutohideDistanceScale = 255;
 			CastShadows = true;
@@ -109,7 +110,7 @@ namespace WolvenKit.RED4.Types
 			CastRayTracedLocalShadows = true;
 			WindImpulseEnabled = true;
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
-			LodLevelScales = 4294967295;
+			LodLevelScales = uint.MaxValue;
 
 			PostConstruct();
 		}

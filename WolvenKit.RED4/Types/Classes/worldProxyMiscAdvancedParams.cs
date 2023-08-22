@@ -219,8 +219,8 @@ namespace WolvenKit.RED4.Types
 			OcclusionRatio = 40;
 			FillHolesBeforeReduceRatio = 1.500000F;
 			FillHolesAfterReduceRatio = 0.400000F;
-			RsAxisPrecision = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
-			RsAxisExpand = new();
+			RsAxisPrecision = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			RsAxisExpand = new Vector3();
 			RsAliasingReduction = 1.000000F;
 			BcMergeRange = 0.800000F;
 			BcSizeCutoff = 120.000000F;
@@ -233,7 +233,7 @@ namespace WolvenKit.RED4.Types
 			BcFilterSensitivity = 0.250000F;
 			BcBoundsRatioLimit = 0.250000F;
 			RemoveIslands = true;
-			BackgroundColor = new();
+			BackgroundColor = new CColor();
 
 			PostConstruct();
 		}

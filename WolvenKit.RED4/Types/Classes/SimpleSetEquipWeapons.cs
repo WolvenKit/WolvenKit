@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Primary = true;
 			Secondary = true;
-			Game = new();
+			Game = new ScriptGameInstance();
 			PrimaryItems = new();
 			SecondaryItems = new();
 

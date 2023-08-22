@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questINodeType : questIBaseNodeType
+	public abstract partial class questINodeType : questIBaseNodeType
 	{
 		public questINodeType()
 		{

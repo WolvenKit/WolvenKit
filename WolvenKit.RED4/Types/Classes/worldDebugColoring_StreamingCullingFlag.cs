@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_StreamingCullingFlag()
 		{
-			CullableColor = new();
-			ForceCulledAlwaysColor = new();
-			ForceCulledPeripheralColor = new();
-			DefaultColor = new();
+			CullableColor = new CColor();
+			ForceCulledAlwaysColor = new CColor();
+			ForceCulledPeripheralColor = new CColor();
+			DefaultColor = new CColor();
 
 			PostConstruct();
 		}

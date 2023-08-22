@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IParticleEvent : IParticleModule
+	public abstract partial class IParticleEvent : IParticleModule
 	{
 		[Ordinal(3)] 
 		[RED("eventName")] 

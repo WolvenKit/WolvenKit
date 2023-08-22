@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsCameraEvent()
 		{
-			Id = new() { Id = 18446744073709551615 };
+			Id = new scnSceneEventId { Id = long.MaxValue };
 			IsBlendIn = true;
 
 			PostConstruct();

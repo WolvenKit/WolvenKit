@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIDebugLogScope()
 		{
-			Index = 4294967295;
-			Id = 4294967295;
+			Index = uint.MaxValue;
+			Id = uint.MaxValue;
 
 			PostConstruct();
 		}

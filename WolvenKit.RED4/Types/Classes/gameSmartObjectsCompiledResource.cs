@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameSmartObjectsCompiledResource()
 		{
-			LocalBoundingBox = new() { Min = new(), Max = new() };
+			LocalBoundingBox = new Box { Min = new Vector4(), Max = new Vector4() };
 
 			PostConstruct();
 		}

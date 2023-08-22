@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiTooltipSlotData()
 		{
-			Margin = new();
+			Margin = new inkMargin();
 
 			PostConstruct();
 		}

@@ -30,10 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_VectorInterpolation()
 		{
-			Id = 4294967295;
-			FirstInput = new();
-			SecondInput = new();
-			Weight = new();
+			Id = uint.MaxValue;
+			FirstInput = new animVectorLink();
+			SecondInput = new animVectorLink();
+			Weight = new animFloatLink();
 
 			PostConstruct();
 		}

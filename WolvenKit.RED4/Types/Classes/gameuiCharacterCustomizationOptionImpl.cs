@@ -5,8 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public gameuiCharacterCustomizationOptionImpl()
 		{
-			PrevIndex = 4294967295;
-			CurrIndex = 4294967295;
+			PrevIndex = uint.MaxValue;
+			CurrIndex = uint.MaxValue;
 
 			PostConstruct();
 		}

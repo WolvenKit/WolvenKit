@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkDebugLayerEntry()
 		{
-			AnchorPoint = new();
+			AnchorPoint = new Vector2();
 
 			PostConstruct();
 		}

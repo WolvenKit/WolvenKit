@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameICameraSystem : gameIGameSystem
+	public abstract partial class gameICameraSystem : gameIGameSystem
 	{
 		public gameICameraSystem()
 		{

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class TurretTransition : DefaultTransition
+	public abstract partial class TurretTransition : DefaultTransition
 	{
 		public TurretTransition()
 		{

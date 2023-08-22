@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIStatsListener : IScriptable
+	public abstract partial class gameIStatsListener : IScriptable
 	{
 		public gameIStatsListener()
 		{

@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public UI_WantedBarDef()
 		{
-			CurrentBounty = new();
-			CurrentWantedLevel = new();
+			CurrentBounty = new gamebbScriptID_Int32();
+			CurrentWantedLevel = new gamebbScriptID_Int32();
 
 			PostConstruct();
 		}

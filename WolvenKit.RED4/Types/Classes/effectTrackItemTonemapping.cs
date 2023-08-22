@@ -47,10 +47,10 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemTonemapping()
 		{
 			TimeDuration = 1.000000F;
-			MaxStopsSDR = new();
-			MidGrayScaleSDR = new();
-			MaxStopsHDR = new();
-			MidGrayScaleHDR = new();
+			MaxStopsSDR = new effectEffectParameterEvaluatorFloat();
+			MidGrayScaleSDR = new effectEffectParameterEvaluatorFloat();
+			MaxStopsHDR = new effectEffectParameterEvaluatorFloat();
+			MidGrayScaleHDR = new effectEffectParameterEvaluatorFloat();
 
 			PostConstruct();
 		}

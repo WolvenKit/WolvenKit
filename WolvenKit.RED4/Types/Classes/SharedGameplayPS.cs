@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Types
 
 		public SharedGameplayPS()
 		{
-			AuthorizationProperties = new() { IsAuthorizationModuleOn = true, AuthorizationDataEntry = new() };
+			AuthorizationProperties = new AuthorizationData { IsAuthorizationModuleOn = true, AuthorizationDataEntry = new SecurityAccessLevelEntryClient() };
 
 			PostConstruct();
 		}

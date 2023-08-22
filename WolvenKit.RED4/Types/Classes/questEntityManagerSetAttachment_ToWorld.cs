@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerSetAttachment_ToWorld()
 		{
-			CustomOffsetPos = new();
-			CustomOffsetRot = new() { R = 1.000000F };
+			CustomOffsetPos = new Vector3();
+			CustomOffsetRot = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

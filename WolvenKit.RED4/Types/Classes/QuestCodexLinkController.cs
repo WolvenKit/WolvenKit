@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public QuestCodexLinkController()
 		{
-			LinkLabelContainer = new();
+			LinkLabelContainer = new inkWidgetReference();
 
 			PostConstruct();
 		}

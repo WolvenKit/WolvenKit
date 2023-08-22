@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public WindowControllerPS()
 		{
 			DeviceName = "LocKey#78";
-			TweakDBRecord = 63727146667;
+			TweakDBRecord = "Devices.Window";
 			TweakDBDescriptionRecord = 113890133552;
 
 			PostConstruct();

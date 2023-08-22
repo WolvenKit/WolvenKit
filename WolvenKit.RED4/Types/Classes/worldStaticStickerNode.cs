@@ -80,8 +80,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Labels = new();
 			ShowBackground = true;
-			TextColor = new();
-			BackgroundColor = new();
+			TextColor = new CColor();
+			BackgroundColor = new CColor();
 			Sprites = new();
 			SpriteSize = 40;
 			AlignSpritesHorizontally = true;

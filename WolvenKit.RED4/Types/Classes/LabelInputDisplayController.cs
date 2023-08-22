@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public LabelInputDisplayController()
 		{
-			InputLabel = new();
+			InputLabel = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

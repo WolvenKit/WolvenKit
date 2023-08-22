@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public UnregisterNetworkLinksByIdAndTypeRequest()
 		{
-			ID = new();
+			ID = new entEntityID();
 
 			PostConstruct();
 		}

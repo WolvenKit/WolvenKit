@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_GIDebug()
 		{
-			GIVisibleColor = new();
-			GITransparentColor = new();
+			GIVisibleColor = new CColor();
+			GITransparentColor = new CColor();
 
 			PostConstruct();
 		}

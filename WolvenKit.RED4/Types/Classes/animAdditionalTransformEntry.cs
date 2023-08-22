@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAdditionalTransformEntry()
 		{
-			TransformInfo = new() { ReferenceTransformLs = new() { Translation = new() { W = 1.000000F }, Rotation = new() { R = 1.000000F }, Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } } };
-			Value = new() { Translation = new(), Rotation = new() { R = 1.000000F }, Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
+			TransformInfo = new animTransformInfo { ReferenceTransformLs = new QsTransform { Translation = new Vector4 { W = 1.000000F }, Rotation = new Quaternion { R = 1.000000F }, Scale = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } } };
+			Value = new QsTransform { Translation = new Vector4(), Rotation = new Quaternion { R = 1.000000F }, Scale = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
 
 			PostConstruct();
 		}

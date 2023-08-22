@@ -142,7 +142,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiHackingMinigameGameController()
 		{
-			TooltipsManagerRef = new();
+			TooltipsManagerRef = new inkWidgetReference();
 
 			PostConstruct();
 		}

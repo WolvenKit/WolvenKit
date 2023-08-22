@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameRenderGameplayEffectsManagerSaveData()
 		{
-			CyberspacePixelsortParams = new();
+			CyberspacePixelsortParams = new gameCyberspacePixelsortEffectParams();
 
 			PostConstruct();
 		}

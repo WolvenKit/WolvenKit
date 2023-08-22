@@ -70,14 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_OrientConstraint()
 		{
-			Id = 4294967295;
-			InputLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
 			InputTransforms = new();
 			PreprocessedWeights = new();
 			InputWeightedTransforms = new();
-			TransformIndex = new();
+			TransformIndex = new animTransformIndex();
 			Weight = 1.000000F;
-			WeightFloatTrack = new();
+			WeightFloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

@@ -54,10 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public OutputValidationDataStruct()
 		{
-			TargetID = new();
-			AgentID = new();
-			ReprimenderID = new();
-			EventReportedFromArea = new();
+			TargetID = new entEntityID();
+			AgentID = new gamePersistentID();
+			ReprimenderID = new entEntityID();
+			EventReportedFromArea = new gamePersistentID();
 			BreachedAreas = new();
 
 			PostConstruct();

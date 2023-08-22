@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class redICommandlet : RedBaseClass
+	public abstract partial class redICommandlet : RedBaseClass
 	{
 		public redICommandlet()
 		{

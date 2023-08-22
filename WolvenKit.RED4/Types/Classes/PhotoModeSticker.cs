@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModeSticker()
 		{
-			Image = new();
+			Image = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

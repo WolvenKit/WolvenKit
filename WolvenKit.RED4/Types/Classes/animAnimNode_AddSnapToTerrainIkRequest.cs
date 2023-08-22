@@ -38,12 +38,12 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_AddSnapToTerrainIkRequest()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			AnimDeltaZ = new();
-			LeftFootRequest = new() { FootTransformIndex = new(), PoleVectorRefTransformIndex = new(), EnableFootLockFloatTrack = new() };
-			RightFootRequest = new() { FootTransformIndex = new(), PoleVectorRefTransformIndex = new(), EnableFootLockFloatTrack = new() };
-			HipsRequest = new() { HipsTransformIndex = new(), LeftFootTransformIndex = new(), RightFootTransformIndex = new() };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			AnimDeltaZ = new animFloatLink();
+			LeftFootRequest = new animSnapToTerrainIkRequest { FootTransformIndex = new animTransformIndex(), PoleVectorRefTransformIndex = new animTransformIndex(), EnableFootLockFloatTrack = new animNamedTrackIndex() };
+			RightFootRequest = new animSnapToTerrainIkRequest { FootTransformIndex = new animTransformIndex(), PoleVectorRefTransformIndex = new animTransformIndex(), EnableFootLockFloatTrack = new animNamedTrackIndex() };
+			HipsRequest = new animHipsIkRequest { HipsTransformIndex = new animTransformIndex(), LeftFootTransformIndex = new animTransformIndex(), RightFootTransformIndex = new animTransformIndex() };
 
 			PostConstruct();
 		}
