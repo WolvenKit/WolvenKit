@@ -217,7 +217,7 @@ function animFile_CheckForDuplicateNames() {
     Logger.Info(`Duplicate animations found (you can ignore these):`);
     duplicateNames.forEach((animName) => {
         const usedIndices = Object.keys(animNamesByIndex)
-            .filter((key) => animNamesByIndex[key] === animName.value)
+            .filter((key) => animNamesByIndex[key] === animName)
             .map((idx) => `${idx}`.padStart(2, '0'));
         Logger.Info(`        [ ${usedIndices.join(', ')} ]: ${animName}`);
     });
@@ -238,8 +238,8 @@ export function validateAnimationFile(animAnimSet, _animAnimSettings) {
 
     // collect names
     for (let index = 0; index < animAnimSet.animations.length; index++) {
-        const animName = animAnimSet.animations[index].Data.animation.Data.name;
-        animNames.push(stringifyPotentialCName(animName));
+        const animName = stringifyPotentialCName(animAnimSet.animations[index].Data.animation.Data.name);
+        animNames.push(animName);
         // have a key-value map for error messages
         animNamesByIndex[index] = animName;
     }
@@ -679,6 +679,9 @@ const archiveXLVarsAndValues = {
 
 
 function getArchiveXlMeshPaths(depotPath) {
+    if (!depotPath) {
+        return [];
+    }
     if (!depotPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
         return [depotPath];
     }
