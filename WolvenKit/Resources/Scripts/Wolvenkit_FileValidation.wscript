@@ -24,6 +24,9 @@ function stringifyPotentialCName(cnameOrString, _info) {
     if (typeof cnameOrString === 'string') {
         return cnameOrString;
     }
+    if (typeof cnameOrString === 'bigint') {
+        return `${cnameOrString}`;
+    }
     const ret = !!cnameOrString.$value ? cnameOrString.$value : cnameOrString.value;
     if (ret?.indexOf && ret.indexOf(" ") >= 0) {
         const info = _info ? `${_info}: '${ret}' ` : `'${ret}' `;
@@ -158,8 +161,9 @@ let isDynamicAppearance = false;
 let isUsingSubstitution = false;
 
 function shouldHaveSubstitution(str, ignoreAsterisk=false) {
-    if (!str) return false; 
-    return (!ignoreAsterisk && str.trim().startsWith('*')) || str.includes('{') || str.includes('}');
+    if (!str || typeof str === "bigint") return false; 
+    return (!ignoreAsterisk && str.trim().startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) 
+        || str.includes('{') || str.includes('}');
 }
 
 /**
@@ -462,7 +466,7 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
         if (meshPath && !checkDepotPath(meshPath, info)) {
             const appearanceNames = component_collectAppearancesFromMesh(meshPath);
             const meshAppearanceName = stringifyPotentialCName(componentOverride.meshAppearance);
-            if (meshAppearanceName.startsWith('*')) {
+            if (meshAppearanceName.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
                 Logger.Info(`skipping dynamic appearance ${info} - not implemented yet`);
             } else if ((appearanceNames || []).length > 1 && !appearanceNames.includes(meshAppearanceName) && !componentOverrideCollisions.includes(meshAppearanceName)
             ) {
@@ -679,7 +683,7 @@ const archiveXLVarsAndValues = {
 
 
 function getArchiveXlMeshPaths(depotPath) {
-    if (!depotPath) {
+    if (!depotPath || typeof depotPath === "bigint") {
         return [];
     }
     if (!depotPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
@@ -791,7 +795,7 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
         if (nameHasSubstitution && !checkCurlyBraces(meshAppearanceName)) {
             localErrors.push(CURLY_BRACES_WARNING);            
         } 
-        if (nameHasSubstitution && !meshAppearanceName.startsWith("*")) {
+        if (nameHasSubstitution && !meshAppearanceName.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
             localErrors.push(MISSING_PREFIX_WARNING);            
         } 
         if (localErrors.length) {
@@ -803,7 +807,7 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
         if (pathHasSubstitution && !checkCurlyBraces(componentMeshPath)) {
             localErrors.push(CURLY_BRACES_WARNING);            
         } 
-        if (pathHasSubstitution && !componentMeshPath.startsWith("*")) {
+        if (pathHasSubstitution && !componentMeshPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
             localErrors.push(MISSING_PREFIX_WARNING);            
         } 
         if (localErrors.length) {
@@ -817,7 +821,7 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
             // Logger.Error(`failed to collect appearances from ${componentMeshPath}`);
             return;
         }
-        if (meshAppearanceName.startsWith('*')) {
+        if (meshAppearanceName.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
             // TODO: ArchiveXL variant checking
         } else if (meshAppearances && meshAppearances.length > 0 && !meshAppearances.includes(meshAppearanceName)) {
             appearanceNotFound(componentMeshPath, meshAppearanceName, `ent component[${_index}] (${componentName})`);            
