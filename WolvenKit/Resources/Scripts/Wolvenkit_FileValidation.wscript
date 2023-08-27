@@ -65,6 +65,16 @@ function checkCurlyBraces(inputString) {
     return openBraceCount === closeBraceCount;
 }
 
+function hasUppercase(str) {
+    if (!str || !/[A-Z]/.test(str)) return false;
+    hasUppercasePaths = true;
+    return true;
+}
+
+function isNumericHash(str) {
+    return !!str && /^\d+$/.test(str);
+}
+
 /**
  * @param _depotPath the depot path to analyse
  * @param _info info string for the user
@@ -89,13 +99,12 @@ function checkDepotPath(_depotPath, _info, allowEmpty = false) {
     }
     
     // check if the path has uppercase characters
-    if (/[A-Z]/.test(depotPath)) {
-        hasUppercasePaths = true;
+    if (hasUppercase(depotPath)) {        
         return false;
     }
 
     // Check if the file is a numeric hash
-    if (/^\d+$/.test(depotPath)) {
+    if (isNumericHash(depotPath)) {
         Logger.Warning(`${info}No depot path set, only hash given`);
         return false;
     }
@@ -112,6 +121,7 @@ function checkDepotPath(_depotPath, _info, allowEmpty = false) {
     componentMeshPaths.forEach((resolvedMeshPath) => {
         if (pathToCurrentFile === resolvedMeshPath) {
             Logger.Error(`${info}Depot path ${resolvedMeshPath} references itself. This _will_ crash the game!`);
+            ret = false;
             return;
         }
         // all fine
@@ -1078,45 +1088,35 @@ let listOfUsedMaterialSetups = {};
  * @param info String for debugging, e.g. name of material and index of value
  * @param validateRecursively If set to true, file validation will try to follow the .mi chain
  */
-function validateMaterialKeyValuePair(key, materialValue, info, validateRecursively) {
+function validateMaterialKeyValuePair(key, materialValue, info, validateRecursively) {    
     if (key === "$type" || hasUppercasePaths) {
         return;
-    }
+    } 
     
     const materialDepotPath = stringifyPotentialCName(materialValue.DepotPath);
-    
-    if (!materialDepotPath) { 
-        return; 
-    }
-    
-    if (/[A-Z]/.test(materialDepotPath)) {
-        hasUppercasePaths = true;
-        return;
-    }
 
-    if (!wkit.FileExists(materialDepotPath)) {
-        Logger.Warning(`${info}${materialDepotPath} not found in path or project files.`);
+    if (hasUppercase(materialDepotPath) || isNumericHash(materialDepotPath)) {
         return;
-    }
+    }    
     
     if (validateRecursively && materialDepotPath.endsWith('.mi') && !materialDepotPath.startsWith('base')) {
         const miFileContent = TypeHelper.JsonParse(wkit.LoadGameFileFromProject(materialDepotPath, 'json'));
         _validateMiFile(miFileContent);
     }
-
+    
     switch (key) {
         case "MultilayerSetup":
             if (!materialDepotPath.endsWith(".mlsetup")) {
                 Logger.Error(`${info}${materialDepotPath} doesn't end in .mlsetup. This will cause crashes.`);
+                return;
             }
-            if (meshSettings.checkDuplicateMlSetupFilePaths) {
-                listOfUsedMaterialSetups[materialDepotPath] ||= [];
-                 
+            if (!meshSettings.checkDuplicateMlSetupFilePaths) {
+                listOfUsedMaterialSetups[materialDepotPath] ||= [];                 
                  
                 if (listOfUsedMaterialSetups[materialDepotPath].length > 0) {
                     Logger.Warning(`${info} uses the same .mlsetup as (a) previous material(s): [ ${
                         listOfUsedMaterialSetups[materialDepotPath].join(", ")
-                    } ]`)                    
+                    } ]`)  
                 }
                 listOfUsedMaterialSetups[materialDepotPath].push(info);
             }
@@ -1124,17 +1124,32 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
         case "MultilayerMask":
             if (!materialDepotPath.endsWith(".mlmask")) {
                 Logger.Error(`${info}${materialDepotPath} doesn't end in .mlmask. This will cause crashes.`);
+                return;
             }
-            break;
         case "BaseColor":
         case "Metalness":
         case "Roughness":
         case "Normal":
         case "GlobalNormal":
             if (!materialDepotPath.endsWith(".xbm")) {
-                Logger.Warning(`${info}${materialDepotPath} doesn't end in .xbm. This might cause crashes.`);
+                Logger.Error(`${info}${materialDepotPath} doesn't end in .xbm. This will cause crashes.`);
+                return;
             }
-            break;
+    }
+
+    // Once we've made sure that the file extension is correct, check if the file exists.
+    checkDepotPath(materialDepotPath, info);
+}
+
+function meshFile_validatePlaceholderMaterial(material, info) {
+
+    const baseMaterial = stringifyPotentialCName(material.baseMaterial.DepotPath);
+
+    if (!checkDepotPath(baseMaterial, info, true)) {
+        Logger.Warning(`Placeholder ${info}: invalid base material. Consider deleting it.`);
+    }
+    if ((material.values || []).length) {
+        Logger.Warning(`Placeholder ${info} defines values. Consider deleting them.`);
     }
 }
 function meshFile_CheckMaterialProperties(material, materialName) {
@@ -1142,21 +1157,19 @@ function meshFile_CheckMaterialProperties(material, materialName) {
     
     if (checkDepotPath(baseMaterial, materialName)) {
         validateShaderTemplate(baseMaterial, materialName);
-    } 
+    }
     
     for (let i = 0; i < material.values.length; i++) {
         let tmp = material.values[i];
-
+        
         const type = tmp["$type"] || tmp["type"];
         
         if (!type.startsWith("rRef:")) {
             continue;
         }
 
-        Object.entries(tmp).forEach(([key, definedMaterial]) => {
-            if (!PLACEHOLDER_NAME_REGEX.test(materialName)) {
-                validateMaterialKeyValuePair(key, definedMaterial, `${materialName}.Values[${i}]`, meshSettings.validateMaterialsRecursively);                
-            }
+        Object.entries(tmp).forEach(([key, definedMaterial]) => {            
+            validateMaterialKeyValuePair(key, definedMaterial, `${materialName}.Values[${i}]`, meshSettings.validateMaterialsRecursively);
         });
     }
 }
@@ -1223,14 +1236,16 @@ export function validateMeshFile(mesh, _meshSettings) {
         for (let i = 0; i < mesh.localMaterialBuffer.materials.length; i++) {
             let material = mesh.localMaterialBuffer.materials[i];
 
-            let materialName =  `${i}`;
+            let materialName =  `localMaterialBuffer.materials[${i}]`;
 
             // Add a warning here?
             if (i < mesh.materialEntries.length) {
                 materialName = stringifyPotentialCName(mesh.materialEntries[i].name) || materialName;
             }
 
-            if (!PLACEHOLDER_NAME_REGEX.test(materialName)) {
+            if (PLACEHOLDER_NAME_REGEX.test(materialName)) {
+                meshFile_validatePlaceholderMaterial(material, `localMaterialBuffer.materials[${i}]`);
+            } else {
                 meshFile_CheckMaterialProperties(material, `localMaterialBuffer.${materialName}`);
             }
         }
@@ -1239,26 +1254,30 @@ export function validateMeshFile(mesh, _meshSettings) {
     for (let i = 0; i < mesh.preloadLocalMaterialInstances.length; i++) {
         let material = mesh.preloadLocalMaterialInstances[i];
 
-        let materialName = `${i}`;
-        if (!PLACEHOLDER_NAME_REGEX.test(materialName)) {
-              
-            // Add a warning here???
-            if (i < mesh.materialEntries.length && mesh.materialEntries[i] !== "undefined") {
-                materialName = stringifyPotentialCName(mesh.materialEntries[i].name) || materialName;
-            }
-    
-            meshFile_CheckMaterialProperties(material.Data, `preloadLocalMaterials.${materialName}`);
+        let materialName =  `preloadLocalMaterials[${i}]`;
 
+        // Add a warning here?
+        if (i < mesh.materialEntries.length) {
+            materialName = stringifyPotentialCName(mesh.materialEntries[i].name) || materialName;
+        }
+
+        if (PLACEHOLDER_NAME_REGEX.test(materialName)) {
+            meshFile_validatePlaceholderMaterial(material, `preloadLocalMaterials[${i}]`);
+        } else {
+            meshFile_CheckMaterialProperties(material.Data, `preloadLocalMaterials.${materialName}`);
         }
     }
+    
 
     let numSubMeshes = 0;
+    
     // Create RenderResourceBlob if it doesn't exists?
     if (mesh.renderResourceBlob !== "undefined") {
-        numSubMeshes = mesh.renderResourceBlob.Data.header.renderChunkInfos.length;
+        numSubMeshes = mesh.renderResourceBlob?.Data?.header?.renderChunkInfos?.length;
     }
 
     for (let i = 0; i < mesh.appearances.length; i++) {
+        let invisibleSubmeshes = [];
         let appearance = mesh.appearances[i].Data;
         const appearanceName = stringifyPotentialCName(appearance.name);
         if (numSubMeshes > appearance.chunkMaterials.length) {
@@ -1267,9 +1286,13 @@ export function validateMeshFile(mesh, _meshSettings) {
 
         for (let j = 0; j < appearance.chunkMaterials.length; j++) {
             const chunkMaterialName = stringifyPotentialCName(appearance.chunkMaterials[j]) || ''; 
-            if (chunkMaterialName && chunkMaterialName !== "None" && chunkMaterialName !== "none" && !(chunkMaterialName in materialNames)) {                
-                Logger.Warning(`Appearance ${appearanceName}: Chunk material ${chunkMaterialName} doesn't exist, submesh ${j} will render as invisible.`);
+            if (chunkMaterialName && chunkMaterialName !== "None" && chunkMaterialName !== "none" && !(chunkMaterialName in materialNames)) {
+                invisibleSubmeshes.push(`submesh ${j}: ${chunkMaterialName}`);                
             }
+        }
+        if (invisibleSubmeshes.length) {
+            Logger.Warning(`Appearance ${appearanceName}: Invalid material assignments found. The following submeshes will render as invisible:`);
+            Logger.Warning(`\t${invisibleSubmeshes.join('\n\t')}`);
         }
     }
 
