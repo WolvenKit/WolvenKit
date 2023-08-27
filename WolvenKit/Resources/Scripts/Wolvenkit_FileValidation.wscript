@@ -1142,14 +1142,16 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
 }
 
 function meshFile_validatePlaceholderMaterial(material, info) {
+    if (meshSettings.validatePlaceholderValues && (material.values || []).length) {
+        Logger.Warning(`Placeholder ${info} defines values. Consider deleting them.`);
+    }
 
+    if (!meshSettings.validatePlaceholderMaterialPaths) return; 
+    
     const baseMaterial = stringifyPotentialCName(material.baseMaterial.DepotPath);
 
     if (!checkDepotPath(baseMaterial, info, true)) {
         Logger.Warning(`Placeholder ${info}: invalid base material. Consider deleting it.`);
-    }
-    if ((material.values || []).length) {
-        Logger.Warning(`Placeholder ${info} defines values. Consider deleting them.`);
     }
 }
 function meshFile_CheckMaterialProperties(material, materialName) {
