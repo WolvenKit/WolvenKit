@@ -99,7 +99,10 @@ const Settings = {
          * Check for primary key duplication and duplicate entries? 
          */
         checkDuplicateKeys: true,
-        
+        /*
+         * Check for duplicate translation entries (same text) 
+         */
+        checkDuplicateTranslations: true,        
         /*
          * Warn if default value isn't set? 
          */
@@ -113,8 +116,16 @@ const Settings = {
         /*
          * Should file validation check materials along the daisy chain? (Only outside of /base) 
          */
-        validateMaterialsRecursively: true,
-        
+        validateMaterialsRecursively: true,        
+        /*
+         * If you're using placeholder materials, should file validation warn you about properties in values[]? 
+         */
+        validatePlaceholderValues: false,        
+        /*
+         * If you're using placeholder materials, should file validation check depot paths? 
+         * Incorrect depot paths will cause crashes, so you might want to leave this enabled.
+         */
+        validatePlaceholderMaterialPaths: true,        
         /*
          * Should file validation warn you if two of your materials use the same mlsetup?
          */

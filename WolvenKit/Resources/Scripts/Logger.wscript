@@ -12,11 +12,11 @@ function ConvertObject(obj) {
     }
     if (typeof obj === "string") {
         return obj;
-    } else if (typeof obj === "object") {
+    } 
+    if (typeof obj === "object") {
         return TypeHelper.JsonStringify(obj, 4);
-    } else {
-        return obj.ToString();
-    }
+    } 
+    return !!obj.ToString ? obj.ToString() : `${obj}`;
 }
 
 export function Info(obj) {
