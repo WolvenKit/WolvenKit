@@ -1165,7 +1165,7 @@ function meshFile_CheckMaterialProperties(material, materialName) {
         let tmp = material.values[i];
         
         const type = tmp["$type"] || tmp["type"];
-        
+            
         if (!type.startsWith("rRef:")) {
             continue;
         }
@@ -1727,3 +1727,33 @@ export function validateWorkspotFile(workspot, _workspotSettings) {
     return rootEntry;
 }
 //#endregion
+
+
+//#region inkatlas
+export function validateInkatlasFile(inkatlas, _inkatlasSettings) {
+    if (inkatlas["Data"] && inkatlas["Data"]["RootChunk"]) {
+        return validateWorkspotFile(workspot["Data"]["RootChunk"], _inkatlasSettings);
+    }
+    if (!_inkatlasSettings.Enabled) {
+        return;
+    }
+    
+    let depotPath;
+    if (_inkatlasSettings.CheckDynamicTexture) {
+        depotPath = stringifyPotentialCName(inkatlas.dynamicTexture?.DepotPath);
+        checkDepotPath(depotPath, 'inkatlas.dynamicTexture', true);
+        depotPath = stringifyPotentialCName(inkatlas.dynamicTextureSlot?.texture?.DepotPath);
+        checkDepotPath(depotPath, 'inkatlas.dynamicTextureSlot.texture', true); 
+        depotPath = stringifyPotentialCName(inkatlas.texture?.DepotPath);
+        checkDepotPath(depotPath, 'inkatlas.dynamicTextureSlot.texture', true);        
+    }
+
+
+    if (_inkatlasSettings.CheckSlots) {
+        (inkatlas.slots?.Elements || []).forEach((entry, index) => {
+            depotPath = stringifyPotentialCName(entry.texture?.DepotPath);
+            checkDepotPath(depotPath, `inkatlas.slots[${index}].texture`, index > 0);
+        });
+    }
+    
+}

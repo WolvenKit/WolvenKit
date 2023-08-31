@@ -54,6 +54,10 @@ globalThis.onSave = function (ext, file) {
             FileValidation.validateWorkspotFile(fileContent["Data"]["RootChunk"], Settings.Workspot);
             file = TypeHelper.JsonStringify(fileContent);
             break;
+        case "inkatlas":
+            FileValidation.validateInkatlasFile(fileContent["Data"]["RootChunk"], Settings.Inkatlas);
+            file = TypeHelper.JsonStringify(fileContent);
+            break;
         case "json":
             FileValidation.validateJsonFile(fileContent["Data"]["RootChunk"], Settings.Json);
             file = TypeHelper.JsonStringify(fileContent);
