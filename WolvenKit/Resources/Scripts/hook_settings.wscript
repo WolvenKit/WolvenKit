@@ -90,6 +90,20 @@ const Settings = {
          */
         checkDynamicAppearanceTag: true,
     },
+    Inkatlas: {
+        /*
+         * Set this to "false" to disable file validation for .inkatlas files.
+         */
+        Enabled: true,
+        /*
+         * Set this to "false" to skip path check for dynamicTexture and dynamicTextureSlot
+         */
+        CheckDynamicTexture: true,
+        /*
+         * Set this to "false" to skip path check for texture slots (only the first must be set)
+         */
+        CheckSlots: true,
+    },
     Json: {
         /*
          * Set this to "false" to disable file validation for .json files.
