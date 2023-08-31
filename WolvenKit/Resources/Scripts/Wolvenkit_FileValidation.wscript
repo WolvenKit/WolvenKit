@@ -1110,7 +1110,7 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
                 Logger.Error(`${info}${materialDepotPath} doesn't end in .mlsetup. This will cause crashes.`);
                 return;
             }
-            if (!meshSettings.checkDuplicateMlSetupFilePaths) {
+            if (meshSettings.checkDuplicateMlSetupFilePaths) {
                 listOfUsedMaterialSetups[materialDepotPath] ||= [];                 
                  
                 if (listOfUsedMaterialSetups[materialDepotPath].length > 0) {
