@@ -1126,6 +1126,7 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
                 Logger.Error(`${info}${materialDepotPath} doesn't end in .mlmask. This will cause crashes.`);
                 return;
             }
+            break;
         case "BaseColor":
         case "Metalness":
         case "Roughness":
@@ -1135,6 +1136,7 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
                 Logger.Error(`${info}${materialDepotPath} doesn't end in .xbm. This will cause crashes.`);
                 return;
             }
+            break;
     }
 
     // Once we've made sure that the file extension is correct, check if the file exists.
