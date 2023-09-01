@@ -1048,7 +1048,7 @@ export function validateEntFile(ent, _entSettings) {
         checkDepotPath(ent.resolvedDependencies[i].DepotPath, `resolvedDependencies[${i}]`);
     }
     
-    if (entSettings.checkDynamicAppearanceTag && (hasEmptyAppearanceName || isUsingSubstitution)) {
+    if (entSettings.checkDynamicAppearanceTag && (hasEmptyAppearanceName || isUsingSubstitution) && ent.appearances?.length) {
         const visualTagList = ent.visualTagsSchema?.Data?.visualTags?.tags || [];
         // Do we have a visual tag 'DynamicAppearance'?
         if (!visualTagList.map((tag) => stringifyPotentialCName(tag)).includes('DynamicAppearance')) {
