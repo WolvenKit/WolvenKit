@@ -109,9 +109,13 @@ function checkDepotPath(_depotPath, _info, allowEmpty = false) {
         return false;
     }
     
+    if (depotPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR) && !(depotPath.includes("{"))) {
+        Logger.Error(`${info}${depotPath} starts with an * but doesn't contain substitution. This will crash your game!`);
+        return false;
+    }
     // check if the path is using substitutions
     if (!checkCurlyBraces(depotPath)) {
-        Logger.Warning(`${info}${depotPath}'s { and } count doesn't match. Did you make a typo?`)
+        Logger.Warning(`${info}${depotPath}'s { and } count doesn't match. Did you make a typo?`);
     }
 
     // ArchiveXL 1.5 variant magic requires checking this in a loop
