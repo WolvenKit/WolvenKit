@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldIRuntimeSystem : IUpdatableSystem
+	public abstract partial class worldIRuntimeSystem : IUpdatableSystem
 	{
 		public worldIRuntimeSystem()
 		{

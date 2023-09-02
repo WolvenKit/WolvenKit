@@ -46,11 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public audioElevatorSettings()
 		{
-			CommonSettings = new() { StopAllSoundsOnDetach = true };
-			ScanningSettings = new();
-			AuxiliaryMetadata = new();
-			MusicEvents = new();
-			MovementEvents = new();
+			CommonSettings = new audioCommonEntitySettings { StopAllSoundsOnDetach = true };
+			ScanningSettings = new audioScanningSettings();
+			AuxiliaryMetadata = new audioAuxiliaryMetadata();
+			MusicEvents = new audioMusicController();
+			MovementEvents = new audioLoopingSoundController();
 
 			PostConstruct();
 		}

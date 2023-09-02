@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkTextureAtlasSlice()
 		{
-			NineSliceScaleRect = new();
+			NineSliceScaleRect = new RectF();
 
 			PostConstruct();
 		}

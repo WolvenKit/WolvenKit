@@ -222,13 +222,13 @@ namespace WolvenKit.RED4.Types
 
 		public gameMuppetUpperBodyState()
 		{
-			CurrentWeapon = new();
-			WantedWeapon = new();
-			InProgressWeapon = new();
-			LogicWantedWeapon = new();
+			CurrentWeapon = new gameItemID();
+			WantedWeapon = new gameItemID();
+			InProgressWeapon = new gameItemID();
+			LogicWantedWeapon = new gameItemID();
 			CurrentWeaponAmmo = 10;
 			CurrentWeaponAmmoCapacity = 10;
-			SelectedConsumable = new();
+			SelectedConsumable = new gameItemID();
 
 			PostConstruct();
 		}

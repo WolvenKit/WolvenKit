@@ -14,9 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SetRequiredDistanceCategoryByBone()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			Bone = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			Bone = new animTransformIndex();
 
 			PostConstruct();
 		}

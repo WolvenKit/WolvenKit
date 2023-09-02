@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public CombatGadgetDataDef()
 		{
-			ThrowUnequip = new();
-			LastThrowAngle = new();
-			LastThrowPosition = new();
-			LastThrowStartType = new();
+			ThrowUnequip = new gamebbScriptID_Bool();
+			LastThrowAngle = new gamebbScriptID_Float();
+			LastThrowPosition = new gamebbScriptID_Vector4();
+			LastThrowStartType = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

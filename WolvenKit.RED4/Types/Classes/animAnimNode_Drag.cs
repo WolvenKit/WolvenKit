@@ -102,10 +102,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_Drag()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			SourceBone = new();
-			OutTargetBone = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			SourceBone = new animTransformIndex();
+			OutTargetBone = new animTransformIndex();
 			SimulationFps = 100.000000F;
 			SourceSpeedMultiplier = 10.000000F;
 			HasOvershoot = true;

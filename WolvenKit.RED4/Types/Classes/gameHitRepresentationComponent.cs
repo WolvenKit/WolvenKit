@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.Types
 		public gameHitRepresentationComponent()
 		{
 			Representations = new();
-			BvhRoot = new() { ChildrenNodes = new(), ChildrenShapeNames = new() };
+			BvhRoot = new gameHitShapeBVH { ChildrenNodes = new(), ChildrenShapeNames = new() };
 			AppearanceOverrides = new();
 
 			PostConstruct();

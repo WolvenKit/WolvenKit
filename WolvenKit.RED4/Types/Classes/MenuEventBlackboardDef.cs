@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public MenuEventBlackboardDef()
 		{
-			MenuEventToTrigger = new();
+			MenuEventToTrigger = new gamebbScriptID_CName();
 
 			PostConstruct();
 		}

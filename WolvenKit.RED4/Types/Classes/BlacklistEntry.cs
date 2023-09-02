@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public BlacklistEntry()
 		{
-			EntryID = new();
+			EntryID = new entEntityID();
 
 			PostConstruct();
 		}

@@ -78,8 +78,8 @@ namespace WolvenKit.RED4.Types
 
 		public gamesmartGunUITargetParameters()
 		{
-			Pos = new();
-			EntityID = new();
+			Pos = new Vector2();
+			EntityID = new entEntityID();
 
 			PostConstruct();
 		}

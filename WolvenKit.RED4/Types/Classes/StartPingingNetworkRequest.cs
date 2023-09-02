@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public StartPingingNetworkRequest()
 		{
-			FxResource = new();
+			FxResource = new gameFxResource();
 			Duration = 2.000000F;
 
 			PostConstruct();

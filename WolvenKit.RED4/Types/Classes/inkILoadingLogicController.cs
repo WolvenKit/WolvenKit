@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkILoadingLogicController : inkWidgetLogicController
+	public abstract partial class inkILoadingLogicController : inkWidgetLogicController
 	{
 		public inkILoadingLogicController()
 		{

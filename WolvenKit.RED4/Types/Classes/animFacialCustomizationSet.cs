@@ -104,7 +104,7 @@ namespace WolvenKit.RED4.Types
 		{
 			TargetSetups = new();
 			TargetSetupsTemp = new();
-			PosesInfo = new() { Face = new(), Tongue = new(), Eyes = new() };
+			PosesInfo = new animFacialSetup_PosesBufferInfo { Face = new animFacialSetup_OneSermoPoseBufferInfo(), Tongue = new animFacialSetup_OneSermoPoseBufferInfo(), Eyes = new animFacialSetup_OneSermoPoseBufferInfo() };
 			JointRegions = new();
 			UsedTransformIndices = new();
 

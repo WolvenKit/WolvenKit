@@ -118,13 +118,13 @@ namespace WolvenKit.RED4.Types
 
 		public MessengerContactItemVirtualController()
 		{
-			Label = new();
-			MsgPreview = new();
-			MsgCounter = new();
-			MsgIndicator = new();
-			ReplyAlertIcon = new();
-			CollapseIcon = new();
-			Image = new();
+			Label = new inkTextWidgetReference();
+			MsgPreview = new inkTextWidgetReference();
+			MsgCounter = new inkTextWidgetReference();
+			MsgIndicator = new inkWidgetReference();
+			ReplyAlertIcon = new inkWidgetReference();
+			CollapseIcon = new inkWidgetReference();
+			Image = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

@@ -48,8 +48,8 @@ namespace WolvenKit.RED4.Types
 		{
 			PositiveScale = 1.000000F;
 			NegativeScale = 1.000000F;
-			TwistedTransform = new();
-			OutputAngleTrack = new();
+			TwistedTransform = new animTransformIndex();
+			OutputAngleTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

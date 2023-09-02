@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public SecurityAgentSpawnedEvent()
 		{
-			SpawnedAgent = new() { PSID = new() };
+			SpawnedAgent = new DeviceLink { PSID = new gamePersistentID() };
 			SecurityAreas = new();
 
 			PostConstruct();

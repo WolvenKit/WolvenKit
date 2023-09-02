@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemAttachmentDisplay()
 		{
-			QualityRootRef = new();
-			ShapeRef = new();
-			BorderRef = new();
+			QualityRootRef = new inkWidgetReference();
+			ShapeRef = new inkWidgetReference();
+			BorderRef = new inkWidgetReference();
 			MarkedStateName = "Marked";
 
 			PostConstruct();

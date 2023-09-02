@@ -70,14 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SimpleSpline()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			StartTransform = new();
-			MiddleTransform = new();
-			EndTransform = new();
-			ConstrainedTransform = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			StartTransform = new animTransformIndex();
+			MiddleTransform = new animTransformIndex();
+			EndTransform = new animTransformIndex();
+			ConstrainedTransform = new animTransformIndex();
 			DefaultProgress = 0.500000F;
-			ProgressTrack = new();
+			ProgressTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

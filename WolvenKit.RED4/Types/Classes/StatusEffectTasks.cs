@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class StatusEffectTasks : AIbehaviortaskScript
+	public abstract partial class StatusEffectTasks : AIbehaviortaskScript
 	{
 		public StatusEffectTasks()
 		{

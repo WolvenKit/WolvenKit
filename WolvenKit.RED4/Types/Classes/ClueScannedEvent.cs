@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public ClueScannedEvent()
 		{
-			RequesterID = new();
+			RequesterID = new entEntityID();
 
 			PostConstruct();
 		}

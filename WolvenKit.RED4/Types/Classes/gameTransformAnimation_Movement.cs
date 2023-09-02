@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameTransformAnimation_Movement : ISerializable
+	public abstract partial class gameTransformAnimation_Movement : ISerializable
 	{
 		public gameTransformAnimation_Movement()
 		{

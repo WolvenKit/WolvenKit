@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIHudSystem : inkILayerSystem
+	public abstract partial class inkIHudSystem : inkILayerSystem
 	{
 		public inkIHudSystem()
 		{

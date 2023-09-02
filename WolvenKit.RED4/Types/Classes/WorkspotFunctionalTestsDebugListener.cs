@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.Types
 
 		public WorkspotFunctionalTestsDebugListener()
 		{
-			EntityId = new();
+			EntityId = new entEntityID();
 			AnimationsStack = new();
 			AnimationsSkippedStack = new();
 			AnimationsMissingStack = new();

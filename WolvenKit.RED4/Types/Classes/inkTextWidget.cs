@@ -169,7 +169,7 @@ namespace WolvenKit.RED4.Types
 			FitToContent = true;
 			LocalizationString = new() { Unk1 = 0, Value = "" };
 			FontSize = 22;
-			WrappingInfo = new();
+			WrappingInfo = new textWrappingInfo();
 			LineHeightPercentage = 1.000000F;
 			ScrollTextSpeed = 0.200000F;
 			ScrollDelay = 30;

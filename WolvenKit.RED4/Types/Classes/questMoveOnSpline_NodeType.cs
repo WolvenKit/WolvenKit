@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.Types
 
 		public questMoveOnSpline_NodeType()
 		{
-			VehicleRef = new() { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
 			BlendTime = 1.000000F;
 			SceneBlendInDistance = 15.000000F;
 			SceneBlendOutDistance = 15.000000F;

@@ -62,12 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public AIFSMStateDefinition()
 		{
-			OnUpdateTransition = new();
-			OnCompleteTransition = new();
-			OnSuccessTransition = new();
-			OnFailureTransition = new();
-			OnInterruptionTransition = new();
-			OnEventTransitions = new();
+			OnUpdateTransition = new AIFSMTransitionListDefinition();
+			OnCompleteTransition = new AIFSMTransitionListDefinition();
+			OnSuccessTransition = new AIFSMTransitionListDefinition();
+			OnFailureTransition = new AIFSMTransitionListDefinition();
+			OnInterruptionTransition = new AIFSMTransitionListDefinition();
+			OnEventTransitions = new AIFSMTransitionListDefinition();
 
 			PostConstruct();
 		}

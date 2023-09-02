@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameinteractionsIFunctorDefinition : ISerializable
+	public abstract partial class gameinteractionsIFunctorDefinition : ISerializable
 	{
 		public gameinteractionsIFunctorDefinition()
 		{

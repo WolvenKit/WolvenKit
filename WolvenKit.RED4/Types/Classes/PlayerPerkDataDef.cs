@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerPerkDataDef()
 		{
-			WoundedInstigated = new();
-			DismembermentInstigated = new();
-			EntityNoticedPlayer = new();
-			CombatStateTime = new();
+			WoundedInstigated = new gamebbScriptID_Uint32();
+			DismembermentInstigated = new gamebbScriptID_Uint32();
+			EntityNoticedPlayer = new gamebbScriptID_Uint32();
+			CombatStateTime = new gamebbScriptID_Float();
 
 			PostConstruct();
 		}

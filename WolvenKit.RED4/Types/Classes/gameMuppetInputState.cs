@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameMuppetInputState()
 		{
-			FrameId = 4294967295;
+			FrameId = uint.MaxValue;
 
 			PostConstruct();
 		}

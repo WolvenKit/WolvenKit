@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerVulnerabilitiesGameController()
 		{
-			ScannerVulnerabilitiesRightPanel = new();
+			ScannerVulnerabilitiesRightPanel = new inkCompoundWidgetReference();
 			AsyncSpawnRequests = new();
 
 			PostConstruct();

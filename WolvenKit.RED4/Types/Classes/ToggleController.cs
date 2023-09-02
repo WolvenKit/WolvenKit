@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ToggleController()
 		{
-			Label = new();
-			Icon = new();
+			Label = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

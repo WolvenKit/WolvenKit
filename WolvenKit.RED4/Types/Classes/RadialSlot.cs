@@ -78,9 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public RadialSlot()
 		{
-			SlotAnchorRef = new();
-			LibraryRef = new() { WidgetLibrary = new() };
-			AnimData = new() { Hover_in = "Anim name for hover in", Hover_out = "Anim name for hover out", Cycle_in = "Anim name for cycle in animation", Cycle_out = "Anim name for cycle out animation" };
+			SlotAnchorRef = new inkWidgetReference();
+			LibraryRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			AnimData = new RadialAnimData { Hover_in = "Anim name for hover in", Hover_out = "Anim name for hover out", Cycle_in = "Anim name for cycle in animation", Cycle_out = "Anim name for cycle out animation" };
 			Active = "Hover";
 			Inactive = "Default";
 			Blocked = "Blocked";

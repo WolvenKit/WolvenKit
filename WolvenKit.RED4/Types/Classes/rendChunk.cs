@@ -86,8 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public rendChunk()
 		{
-			ChunkVertices = new() { VertexLayout = new() { Elements = new(0), SlotStrides = new(0), Hash = 4294967295 }, ByteOffsets = new(0) };
-			ChunkIndices = new() { Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_Max };
+			ChunkVertices = new rendVertexBufferChunk { VertexLayout = new GpuWrapApiVertexLayoutDesc { Elements = new(0), SlotStrides = new(0), Hash = uint.MaxValue }, ByteOffsets = new(0) };
+			ChunkIndices = new rendIndexBufferChunk { Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_Max };
 			MaterialId = new();
 
 			PostConstruct();

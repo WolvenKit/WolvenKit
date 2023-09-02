@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameHitDetectionDebugFrameData()
 		{
-			TTime = new();
+			TTime = new netTime();
 			Apes = new();
 
 			PostConstruct();

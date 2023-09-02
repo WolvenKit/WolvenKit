@@ -46,12 +46,12 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_MotionAdjuster()
 		{
-			Id = 4294967295;
-			InputNode = new();
-			TargetPosition = new();
-			TargetDirection = new();
-			TotalTimeToAdjust = new();
-			ForwardVector = new() { Y = 1.000000F };
+			Id = uint.MaxValue;
+			InputNode = new animPoseLink();
+			TargetPosition = new animVectorLink();
+			TargetDirection = new animVectorLink();
+			TotalTimeToAdjust = new animFloatLink();
+			ForwardVector = new Vector4 { Y = 1.000000F };
 
 			PostConstruct();
 		}

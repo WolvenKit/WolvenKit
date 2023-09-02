@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameaudioeventsDialogLine()
 		{
-			Data = new();
+			Data = new audioDialogLineEventData();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class communitySpawnInitializer : ISerializable
+	public abstract partial class communitySpawnInitializer : ISerializable
 	{
 		public communitySpawnInitializer()
 		{

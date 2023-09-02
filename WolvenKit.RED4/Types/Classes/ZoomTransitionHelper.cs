@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ZoomTransitionHelper : IScriptable
+	public abstract partial class ZoomTransitionHelper : IScriptable
 	{
 		public ZoomTransitionHelper()
 		{

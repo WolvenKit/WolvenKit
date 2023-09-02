@@ -414,25 +414,25 @@ namespace WolvenKit.RED4.Types
 
 		public scannerBorderGameController()
 		{
-			ZoomMovingContainer = new();
-			DistanceMovingContainer = new();
-			DistanceParentContainer = new();
-			CrosshairProjection = new();
-			LoadingBarCanvas = new();
-			CrosshairContainer = new();
-			ZoomNumber = new();
-			DistanceNumber = new();
-			DistanceImageRuler = new();
-			ZoomMoveBracketL = new();
-			ZoomMoveBracketR = new();
-			ScannerBarWidget = new();
-			ScannerBarFluffText = new();
-			ScannerBarFill = new();
+			ZoomMovingContainer = new inkCompoundWidgetReference();
+			DistanceMovingContainer = new inkCompoundWidgetReference();
+			DistanceParentContainer = new inkCompoundWidgetReference();
+			CrosshairProjection = new inkCompoundWidgetReference();
+			LoadingBarCanvas = new inkCompoundWidgetReference();
+			CrosshairContainer = new inkCompoundWidgetReference();
+			ZoomNumber = new inkTextWidgetReference();
+			DistanceNumber = new inkTextWidgetReference();
+			DistanceImageRuler = new inkImageWidgetReference();
+			ZoomMoveBracketL = new inkImageWidgetReference();
+			ZoomMoveBracketR = new inkImageWidgetReference();
+			ScannerBarWidget = new inkCompoundWidgetReference();
+			ScannerBarFluffText = new inkTextWidgetReference();
+			ScannerBarFill = new inkImageWidgetReference();
 			DeviceFluffs = new();
-			CurrentTarget = new();
-			CurrentTargetBuffered = new();
-			ScannerData = new() { QuestEntries = new() };
-			OriginalScannerBarFillSize = new();
+			CurrentTarget = new entEntityID();
+			CurrentTargetBuffered = new entEntityID();
+			ScannerData = new scannerDataStructure { QuestEntries = new() };
+			OriginalScannerBarFillSize = new Vector2();
 			Squares = new();
 			SquaresFilled = new();
 

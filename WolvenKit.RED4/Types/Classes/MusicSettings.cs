@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MusicSettings : IScriptable
+	public abstract partial class MusicSettings : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("statusEffect")] 

@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameRegisterNewCooldownRequest()
 		{
-			OwnerItemId = new();
+			OwnerItemId = new gameItemID();
 			AffectedByTimeDilation = true;
 
 			PostConstruct();

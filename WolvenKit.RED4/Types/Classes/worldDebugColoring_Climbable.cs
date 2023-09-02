@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_Climbable()
 		{
-			ClimbableColour = new();
-			NotClimbableColour = new();
+			ClimbableColour = new CColor();
+			NotClimbableColour = new CColor();
 
 			PostConstruct();
 		}

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public SmartBulletDeflectedEvent()
 		{
-			LocalToWorld = new();
+			LocalToWorld = new CMatrix();
 
 			PostConstruct();
 		}

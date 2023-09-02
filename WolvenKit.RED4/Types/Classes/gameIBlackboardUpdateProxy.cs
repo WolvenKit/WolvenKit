@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIBlackboardUpdateProxy : gameIGameSystem
+	public abstract partial class gameIBlackboardUpdateProxy : gameIGameSystem
 	{
 		public gameIBlackboardUpdateProxy()
 		{

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public audioKeyUiControlPairDictionaryItem()
 		{
-			Value = new();
+			Value = new audioUiControl();
 
 			PostConstruct();
 		}

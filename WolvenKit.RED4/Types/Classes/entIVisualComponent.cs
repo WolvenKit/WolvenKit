@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entIVisualComponent : entIPlacedComponent
+	public abstract partial class entIVisualComponent : entIPlacedComponent
 	{
 		[Ordinal(5)] 
 		[RED("autoHideDistance")] 

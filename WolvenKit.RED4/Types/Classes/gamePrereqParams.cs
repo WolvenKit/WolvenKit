@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gamePrereqParams()
 		{
-			ObjectID = new() { IdType = Enums.gameStatIDType.Invalid };
-			OtherObjectID = new() { IdType = Enums.gameStatIDType.Invalid };
+			ObjectID = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
+			OtherObjectID = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
 
 			PostConstruct();
 		}

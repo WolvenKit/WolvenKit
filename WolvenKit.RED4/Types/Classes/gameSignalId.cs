@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameSignalId()
 		{
-			Value = 65535;
+			Value = ushort.MaxValue;
 
 			PostConstruct();
 		}

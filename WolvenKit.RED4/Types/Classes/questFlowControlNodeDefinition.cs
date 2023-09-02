@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public questFlowControlNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 			IsOpen = true;
 
 			PostConstruct();

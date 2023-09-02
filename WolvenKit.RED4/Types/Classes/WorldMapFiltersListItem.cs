@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public WorldMapFiltersListItem()
 		{
-			Checker = new();
-			FilterName = new();
+			Checker = new inkWidgetReference();
+			FilterName = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

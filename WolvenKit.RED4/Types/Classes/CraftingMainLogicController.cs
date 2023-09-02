@@ -310,22 +310,22 @@ namespace WolvenKit.RED4.Types
 
 		public CraftingMainLogicController()
 		{
-			Root = new();
-			ItemDetailsContainer = new();
-			LeftListScrollHolder = new();
-			VirtualListContainer = new();
-			FilterGroup = new();
-			SortingButton = new();
-			SortingDropdown = new();
-			TooltipContainer = new();
-			ItemName = new();
-			ItemQuality = new();
-			ProgressBarContainer = new();
-			ProgressButtonContainer = new();
-			BlockedText = new();
-			IngredientsListContainer = new();
+			Root = new inkWidgetReference();
+			ItemDetailsContainer = new inkWidgetReference();
+			LeftListScrollHolder = new inkWidgetReference();
+			VirtualListContainer = new inkVirtualCompoundWidgetReference();
+			FilterGroup = new inkWidgetReference();
+			SortingButton = new inkWidgetReference();
+			SortingDropdown = new inkWidgetReference();
+			TooltipContainer = new inkWidgetReference();
+			ItemName = new inkTextWidgetReference();
+			ItemQuality = new inkTextWidgetReference();
+			ProgressBarContainer = new inkCompoundWidgetReference();
+			ProgressButtonContainer = new inkCompoundWidgetReference();
+			BlockedText = new inkTextWidgetReference();
+			IngredientsListContainer = new inkCompoundWidgetReference();
 			IngredientsControllerList = new();
-			SelectedItemData = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			SelectedItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
 			Filters = new();
 
 			PostConstruct();

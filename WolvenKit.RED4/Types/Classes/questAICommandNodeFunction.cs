@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public questAICommandNodeFunction()
 		{
-			NodeColor = new();
+			NodeColor = new CColor();
 
 			PostConstruct();
 		}

@@ -150,8 +150,8 @@ namespace WolvenKit.RED4.Types
 
 		public MonoDisc()
 		{
-			DiscSpawnPoint = new();
-			DiscPosition = new();
+			DiscSpawnPoint = new Vector4();
+			DiscPosition = new Vector4();
 
 			PostConstruct();
 		}

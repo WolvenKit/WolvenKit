@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_StagePoseEntry()
 		{
-			Id = 4294967295;
-			ParentInput = new();
+			Id = uint.MaxValue;
+			ParentInput = new animPoseLink();
 
 			PostConstruct();
 		}

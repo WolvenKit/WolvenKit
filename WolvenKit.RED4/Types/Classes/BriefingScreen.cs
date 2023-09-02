@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public BriefingScreen()
 		{
-			LogicControllerRef = new();
+			LogicControllerRef = new inkWidgetReference();
 
 			PostConstruct();
 		}

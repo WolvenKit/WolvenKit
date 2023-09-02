@@ -78,8 +78,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameMountEventData()
 		{
-			MountParentEntityId = new();
-			InitialTransformLS = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			MountParentEntityId = new entEntityID();
+			InitialTransformLS = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			RemovePitchRollRotationOnDismount = true;
 
 			PostConstruct();

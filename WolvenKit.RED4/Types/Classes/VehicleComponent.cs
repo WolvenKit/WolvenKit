@@ -318,8 +318,8 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleComponent()
 		{
-			MappinID = new();
-			RaceClockTickID = new();
+			MappinID = new gameNewMappinID();
+			RaceClockTickID = new gameDelayID();
 			ArePlayerHitShapesEnabled = true;
 
 			PostConstruct();

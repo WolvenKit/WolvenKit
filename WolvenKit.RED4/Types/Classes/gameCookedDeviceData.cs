@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Parents = new();
 			Children = new();
-			NodePosition = new();
+			NodePosition = new Vector3();
 
 			PostConstruct();
 		}

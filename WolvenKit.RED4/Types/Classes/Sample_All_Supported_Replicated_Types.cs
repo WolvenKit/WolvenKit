@@ -151,7 +151,7 @@ namespace WolvenKit.RED4.Types
 		public Sample_All_Supported_Replicated_Types()
 		{
 			Double = 0.000000;
-			Struct = new();
+			Struct = new Sample_Replicated_Struct();
 			DynamicArray = new();
 			StaticArray = new(0);
 

@@ -183,18 +183,18 @@ namespace WolvenKit.RED4.Types
 		public QuickhacksListItemController()
 		{
 			ExpandAnimationDuration = 0.200000F;
-			Icon = new();
-			Description = new();
-			MemoryValue = new();
-			MemoryCells = new();
-			ActionStateRoot = new();
-			ActionStateText = new();
-			CooldownIcon = new();
-			CooldownValue = new();
-			DescriptionSize = new();
-			CostReductionArrow = new();
-			CachedDescriptionSize = new();
-			DefaultMargin = new();
+			Icon = new inkImageWidgetReference();
+			Description = new inkTextWidgetReference();
+			MemoryValue = new inkTextWidgetReference();
+			MemoryCells = new inkCompoundWidgetReference();
+			ActionStateRoot = new inkWidgetReference();
+			ActionStateText = new inkTextWidgetReference();
+			CooldownIcon = new inkWidgetReference();
+			CooldownValue = new inkTextWidgetReference();
+			DescriptionSize = new inkWidgetReference();
+			CostReductionArrow = new inkWidgetReference();
+			CachedDescriptionSize = new Vector2();
+			DefaultMargin = new inkMargin();
 
 			PostConstruct();
 		}

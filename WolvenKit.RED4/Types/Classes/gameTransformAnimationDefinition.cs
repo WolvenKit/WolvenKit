@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			TimesToPlay = 1;
 			TimeScale = 1.000000F;
-			Timeline = new() { Items = new() };
+			Timeline = new gameTransformAnimationTimeline { Items = new() };
 
 			PostConstruct();
 		}

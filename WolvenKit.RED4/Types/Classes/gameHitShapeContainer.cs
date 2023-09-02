@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameHitShapeContainer()
 		{
-			Color = new();
-			PhysicsMaterial = new();
+			Color = new CColor();
+			PhysicsMaterial = new physicsMaterialReference();
 
 			PostConstruct();
 		}

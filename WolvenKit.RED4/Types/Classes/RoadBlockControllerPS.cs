@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public RoadBlockControllerPS()
 		{
 			DeviceName = "LocKey#126";
-			TweakDBRecord = 77179103736;
+			TweakDBRecord = "Devices.RoadBlock";
 			TweakDBDescriptionRecord = 127230302630;
 
 			PostConstruct();

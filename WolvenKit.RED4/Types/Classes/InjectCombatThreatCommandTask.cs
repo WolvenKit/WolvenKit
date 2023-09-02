@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public InjectCombatThreatCommandTask()
 		{
-			TargetID = new();
+			TargetID = new entEntityID();
 
 			PostConstruct();
 		}

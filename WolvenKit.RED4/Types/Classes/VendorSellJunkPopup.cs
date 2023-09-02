@@ -158,20 +158,20 @@ namespace WolvenKit.RED4.Types
 
 		public VendorSellJunkPopup()
 		{
-			ItemNameText = new();
-			ButtonHintsRoot = new();
-			ItemDisplayRef = new();
-			RairtyBar = new();
-			EqippedItemContainer = new();
-			ItemPriceContainer = new();
-			ItemPriceText = new();
-			Root = new();
-			Background = new();
-			SellItemsFullQuantity = new();
-			SellItemsLimitedQuantity = new();
-			ButtonOk = new();
-			ButtonCancel = new();
-			LibraryPath = new() { WidgetLibrary = new() };
+			ItemNameText = new inkTextWidgetReference();
+			ButtonHintsRoot = new inkWidgetReference();
+			ItemDisplayRef = new inkWidgetReference();
+			RairtyBar = new inkWidgetReference();
+			EqippedItemContainer = new inkWidgetReference();
+			ItemPriceContainer = new inkWidgetReference();
+			ItemPriceText = new inkTextWidgetReference();
+			Root = new inkWidgetReference();
+			Background = new inkWidgetReference();
+			SellItemsFullQuantity = new inkTextWidgetReference();
+			SellItemsLimitedQuantity = new inkTextWidgetReference();
+			ButtonOk = new inkWidgetReference();
+			ButtonCancel = new inkWidgetReference();
+			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
 
 			PostConstruct();
 		}

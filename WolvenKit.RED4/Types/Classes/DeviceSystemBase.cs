@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class DeviceSystemBase : InteractiveMasterDevice
+	public abstract partial class DeviceSystemBase : InteractiveMasterDevice
 	{
 		public DeviceSystemBase()
 		{

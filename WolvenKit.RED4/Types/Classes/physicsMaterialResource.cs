@@ -74,8 +74,8 @@ namespace WolvenKit.RED4.Types
 			DynamicFriction = 0.300000F;
 			Restitution = 0.200000F;
 			Density = 1000.000000F;
-			Tags = new();
-			Color = new();
+			Tags = new physicsMaterialTags();
+			Color = new CColor();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviorConstantExpressionDefinition()
 		{
-			Type = new() { IsSet = true };
+			Type = new AIbehaviorTypeRef { IsSet = true };
 
 			PostConstruct();
 		}

@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gamemappinsMappinEntry()
 		{
-			Id = new();
-			WorldPosition = new();
+			Id = new gameNewMappinID();
+			WorldPosition = new Vector4();
 
 			PostConstruct();
 		}

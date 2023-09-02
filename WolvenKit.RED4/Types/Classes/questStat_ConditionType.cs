@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public questStat_ConditionType()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 			StatType = Enums.gamedataStatType.Invalid;
 
 			PostConstruct();

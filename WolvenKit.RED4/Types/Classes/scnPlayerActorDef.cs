@@ -150,12 +150,12 @@ namespace WolvenKit.RED4.Types
 
 		public scnPlayerActorDef()
 		{
-			ActorId = new() { Id = 4294967295 };
+			ActorId = new scnActorId { Id = uint.MaxValue };
 			SpecTemplate = "(None)";
 			SpecAppearance = "default";
-			VoicetagId = new();
+			VoicetagId = new scnVoicetagId();
 			AnimSets = new();
-			LipsyncAnimSet = new() { Id = 4294967295 };
+			LipsyncAnimSet = new scnLipsyncAnimSetSRRefId { Id = uint.MaxValue };
 			FacialAnimSets = new();
 			CyberwareAnimSets = new();
 			DeformationAnimSets = new();
@@ -163,8 +163,8 @@ namespace WolvenKit.RED4.Types
 			FacialCinematicAnimSets = new();
 			CyberwareCinematicAnimSets = new();
 			DynamicAnimSets = new();
-			FindNetworkPlayerParams = new();
-			FindActorInContextParams = new() { VoiceVagId = new() };
+			FindNetworkPlayerParams = new scnFindNetworkPlayerParams();
+			FindActorInContextParams = new scnFindEntityInContextParams { VoiceVagId = new scnVoicetagId() };
 
 			PostConstruct();
 		}

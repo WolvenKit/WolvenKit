@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public SetBountyObjectEvent()
 		{
-			Bounty = new() { Transgressions = new() };
+			Bounty = new Bounty { Transgressions = new() };
 
 			PostConstruct();
 		}

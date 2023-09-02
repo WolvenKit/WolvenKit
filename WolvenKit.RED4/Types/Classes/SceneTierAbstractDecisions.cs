@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class SceneTierAbstractDecisions : SceneTierAbstract
+	public abstract partial class SceneTierAbstractDecisions : SceneTierAbstract
 	{
 		public SceneTierAbstractDecisions()
 		{

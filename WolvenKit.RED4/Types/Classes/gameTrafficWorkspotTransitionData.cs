@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameTrafficWorkspotTransitionData()
 		{
-			WorkspotExitTangent = new();
-			TrafficLaneReturnTangent = new();
+			WorkspotExitTangent = new Vector3();
+			TrafficLaneReturnTangent = new Vector3();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public RequestTakeControl()
 		{
-			RequestSource = new();
+			RequestSource = new entEntityID();
 
 			PostConstruct();
 		}

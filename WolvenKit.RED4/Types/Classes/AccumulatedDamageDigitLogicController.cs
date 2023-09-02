@@ -614,11 +614,11 @@ namespace WolvenKit.RED4.Types
 
 		public AccumulatedDamageDigitLogicController()
 		{
-			CritWidget = new();
-			HeadshotWidget = new();
-			ProjectionInterpolationOffset = new();
-			ProjectionInterpolationOffsetTotal = new();
-			AnimStickTargetOffset = new();
+			CritWidget = new inkTextWidgetReference();
+			HeadshotWidget = new inkTextWidgetReference();
+			ProjectionInterpolationOffset = new inkMargin();
+			ProjectionInterpolationOffsetTotal = new inkMargin();
+			AnimStickTargetOffset = new Vector4();
 			AnimTimeFadeIn = 0.100000F;
 			AnimTimeFadeOut = 0.400000F;
 			AnimBothTimeFadeIn = 0.100000F;

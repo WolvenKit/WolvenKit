@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMappinUIProfile()
 		{
-			WidgetResource = new();
+			WidgetResource = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

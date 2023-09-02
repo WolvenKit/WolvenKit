@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldNodeTransform()
 		{
-			Translation = new();
-			Rotation = new() { R = 1.000000F };
-			Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			Translation = new Vector3();
+			Rotation = new Quaternion { R = 1.000000F };
+			Scale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 
 			PostConstruct();
 		}

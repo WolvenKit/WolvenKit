@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameHitRepresentationResult()
 		{
-			Sult = new() { HitShapes = new() };
-			TityID = new();
+			Sult = new gameQueryResult { HitShapes = new() };
+			TityID = new entEntityID();
 
 			PostConstruct();
 		}

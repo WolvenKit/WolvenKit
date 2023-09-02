@@ -278,9 +278,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameMeleeAttackData()
 		{
-			StartPosition = new();
-			EndPosition = new();
-			IkOffset = new();
+			StartPosition = new Vector4();
+			EndPosition = new Vector4();
+			IkOffset = new Vector3();
 
 			PostConstruct();
 		}

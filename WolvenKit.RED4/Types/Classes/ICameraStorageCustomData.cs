@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ICameraStorageCustomData : RedBaseClass
+	public abstract partial class ICameraStorageCustomData : RedBaseClass
 	{
 		public ICameraStorageCustomData()
 		{

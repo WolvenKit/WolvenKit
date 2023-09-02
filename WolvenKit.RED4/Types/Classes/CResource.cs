@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class CResource : ISerializable
+	public abstract partial class CResource : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("cookingPlatform")] 

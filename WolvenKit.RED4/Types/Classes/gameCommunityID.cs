@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameCommunityID()
 		{
-			EntityId = new();
+			EntityId = new entEntityID();
 
 			PostConstruct();
 		}

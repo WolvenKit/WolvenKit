@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public MessangerReplyItemRenderer()
 		{
-			TextRoot = new();
-			Background = new();
+			TextRoot = new inkWidgetReference();
+			Background = new inkWidgetReference();
 			AnimationDuration = 0.300000F;
 
 			PostConstruct();

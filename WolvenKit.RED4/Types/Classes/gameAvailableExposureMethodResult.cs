@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameAvailableExposureMethodResult()
 		{
-			DistanceToTarget = 340282346638528859811704183484516925440.000000F;
+			DistanceToTarget = float.MaxValue;
 			Method = Enums.AICoverExposureMethod.Count;
 
 			PostConstruct();

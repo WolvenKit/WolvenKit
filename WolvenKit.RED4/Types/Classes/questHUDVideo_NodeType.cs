@@ -95,8 +95,8 @@ namespace WolvenKit.RED4.Types
 		public questHUDVideo_NodeType()
 		{
 			PlayOnHud = true;
-			Position = new();
-			Size = new();
+			Position = new Vector2();
+			Size = new Vector2();
 
 			PostConstruct();
 		}

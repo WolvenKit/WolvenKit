@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public workLookAtDrivenTurn()
 		{
-			Id = new() { Id = 4294967295 };
+			Id = new workWorkEntryId { Id = uint.MaxValue };
 			Flags = 512;
 			BlendTime = 0.500000F;
 

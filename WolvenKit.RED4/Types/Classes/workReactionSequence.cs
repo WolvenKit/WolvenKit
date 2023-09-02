@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Types
 
 		public workReactionSequence()
 		{
-			Id = new() { Id = 4294967295 };
+			Id = new workWorkEntryId { Id = uint.MaxValue };
 			List = new();
 			ForcedBlendIn = 0.200000F;
 			ReactionTypes = new();

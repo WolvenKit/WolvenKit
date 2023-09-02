@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Types
 
 		public FocusForcedHighlightPersistentData()
 		{
-			SourceID = new();
+			SourceID = new entEntityID();
 
 			PostConstruct();
 		}

@@ -22,10 +22,10 @@ namespace WolvenKit.RED4.Types
 
 		public physicsColliderBox()
 		{
-			LocalToBody = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			LocalToBody = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			MaterialApperanceOverrides = new();
 			VolumeModifier = 1.000000F;
-			HalfExtents = new();
+			HalfExtents = new Vector3();
 
 			PostConstruct();
 		}

@@ -54,12 +54,12 @@ namespace WolvenKit.RED4.Types
 
 		public scnfppGenderSpecificParams()
 		{
-			GenderMask = new() { Mask = 4 };
+			GenderMask = new scnGenderMask { Mask = 4 };
 			TransitionBlendInTrajectorySpaceAngles = new();
 			TransitionBlendInCameraSpace = new();
 			TransitionEndInputAngles = new();
-			IdleCameraLs = new();
-			IdleControlCameraMs = new();
+			IdleCameraLs = new EulerAngles();
+			IdleControlCameraMs = new EulerAngles();
 
 			PostConstruct();
 		}

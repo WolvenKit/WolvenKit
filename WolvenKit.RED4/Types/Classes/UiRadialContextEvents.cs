@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UiRadialContextEvents()
 		{
-			Mouse = new();
+			Mouse = new Vector4();
 
 			PostConstruct();
 		}

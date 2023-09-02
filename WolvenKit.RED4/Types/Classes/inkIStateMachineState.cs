@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIStateMachineState : RedBaseClass
+	public abstract partial class inkIStateMachineState : RedBaseClass
 	{
 		public inkIStateMachineState()
 		{

@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public StimIdentificationData()
 		{
-			SourceID = new();
-			DelayID = new();
+			SourceID = new entEntityID();
+			DelayID = new gameDelayID();
 
 			PostConstruct();
 		}

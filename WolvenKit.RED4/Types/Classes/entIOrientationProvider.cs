@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class entIOrientationProvider : IScriptable
+	public abstract partial class entIOrientationProvider : IScriptable
 	{
 		public entIOrientationProvider()
 		{

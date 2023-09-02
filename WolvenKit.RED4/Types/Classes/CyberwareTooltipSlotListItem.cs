@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public CyberwareTooltipSlotListItem()
 		{
-			Icon = new();
-			Label = new();
-			Desc = new();
+			Icon = new inkImageWidgetReference();
+			Label = new inkTextWidgetReference();
+			Desc = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

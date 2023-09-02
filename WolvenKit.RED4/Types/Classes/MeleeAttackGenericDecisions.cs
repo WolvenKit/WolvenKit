@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MeleeAttackGenericDecisions : MeleeTransition
+	public abstract partial class MeleeAttackGenericDecisions : MeleeTransition
 	{
 		public MeleeAttackGenericDecisions()
 		{

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questSpawnManagerNodeType : questIRetNodeType
+	public abstract partial class questSpawnManagerNodeType : questIRetNodeType
 	{
 		[Ordinal(0)] 
 		[RED("action")] 

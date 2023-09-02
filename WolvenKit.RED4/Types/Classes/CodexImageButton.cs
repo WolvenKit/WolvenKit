@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public CodexImageButton()
 		{
-			Image = new();
-			Border = new();
-			TranslateOnSelect = new();
+			Image = new inkImageWidgetReference();
+			Border = new inkImageWidgetReference();
+			TranslateOnSelect = new inkWidgetReference();
 
 			PostConstruct();
 		}

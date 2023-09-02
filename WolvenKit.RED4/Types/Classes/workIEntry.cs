@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class workIEntry : ISerializable
+	public abstract partial class workIEntry : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("id")] 

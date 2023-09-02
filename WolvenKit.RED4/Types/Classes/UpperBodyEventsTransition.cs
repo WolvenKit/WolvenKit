@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class UpperBodyEventsTransition : UpperBodyTransition
+	public abstract partial class UpperBodyEventsTransition : UpperBodyTransition
 	{
 		[Ordinal(0)] 
 		[RED("switchButtonPushed")] 

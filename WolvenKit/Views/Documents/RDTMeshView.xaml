@@ -457,6 +457,8 @@
                 TreeGridContextMenuOpening="SfTreeGrid_OnTreeGridContextMenuOpening">
                 <syncfusion:SfTreeGrid.ExpanderContextMenu>
                     <ContextMenu>
+                        <MenuItem Click="CollapseAllChildrenRecursiveMenuItem_OnClick" Header="Collapse All (Recursive)" />
+                        <MenuItem Click="ExpandAllChildrenRecursiveMenuItem_OnClick" Header="Expand All (Recursive)" />
                         <MenuItem Click="CheckAllChildrenMenuItem_OnClick" Header="Check All Children" />
                         <MenuItem Click="CheckAllChildrenRecursiveMenuItem_OnClick" Header="Check All Children (Recursive)" />
                         <MenuItem Click="UncheckAllChildrenMenuItem_OnClick" Header="Uncheck All Children" />
@@ -465,6 +467,8 @@
                 </syncfusion:SfTreeGrid.ExpanderContextMenu>
                 <syncfusion:SfTreeGrid.RecordContextMenu>
                     <ContextMenu>
+                        <MenuItem Click="CollapseAllChildrenRecursiveMenuItem_OnClick" Header="Collapse All (Recursive)" />
+                        <MenuItem Click="ExpandAllChildrenRecursiveMenuItem_OnClick" Header="Expand All (Recursive)" />
                         <MenuItem Click="CheckAllChildrenMenuItem_OnClick" Header="Check All Children" />
                         <MenuItem Click="CheckAllChildrenRecursiveMenuItem_OnClick" Header="Check All Children (Recursive)" />
                         <MenuItem Click="UncheckAllChildrenMenuItem_OnClick" Header="Uncheck All Children" />

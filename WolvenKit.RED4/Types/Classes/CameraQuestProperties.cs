@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public CameraQuestProperties()
 		{
-			FollowedTargetID = new();
+			FollowedTargetID = new entEntityID();
 
 			PostConstruct();
 		}

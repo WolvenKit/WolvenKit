@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnCameraAnimationRid()
 		{
-			Tag = new() { SerialNumber = new() { SerialNumber = 4294967295 } };
-			CameraAnimationLOD = new() { Trajectory = new(0), Tracks = new(0) };
+			Tag = new scnRidTag { SerialNumber = new scnRidSerialNumber { SerialNumber = uint.MaxValue } };
+			CameraAnimationLOD = new scnCameraAnimationLOD { Trajectory = new(0), Tracks = new(0) };
 
 			PostConstruct();
 		}

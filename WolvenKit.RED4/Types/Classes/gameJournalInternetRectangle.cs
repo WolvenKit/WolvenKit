@@ -5,8 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public gameJournalInternetRectangle()
 		{
-			TintColor = new();
-			HoverTintColor = new();
+			TintColor = new CColor();
+			HoverTintColor = new CColor();
 
 			PostConstruct();
 		}

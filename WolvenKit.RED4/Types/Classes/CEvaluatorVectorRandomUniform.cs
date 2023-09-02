@@ -56,8 +56,8 @@ namespace WolvenKit.RED4.Types
 		{
 			FreeAxes = Enums.EFreeVectorAxes.FVA_Three;
 			Spill = true;
-			Min = new();
-			Max = new();
+			Min = new Vector4();
+			Max = new Vector4();
 
 			PostConstruct();
 		}

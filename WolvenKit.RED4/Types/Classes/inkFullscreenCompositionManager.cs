@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkFullscreenCompositionManager : ISerializable
+	public abstract partial class inkFullscreenCompositionManager : ISerializable
 	{
 		public inkFullscreenCompositionManager()
 		{

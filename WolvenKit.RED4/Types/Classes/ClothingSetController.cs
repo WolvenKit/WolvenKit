@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Types
 
 		public ClothingSetController()
 		{
-			SetName = new();
+			SetName = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

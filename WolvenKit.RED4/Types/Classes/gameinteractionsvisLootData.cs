@@ -81,7 +81,7 @@ namespace WolvenKit.RED4.Types
 			IsListOpen = true;
 			Choices = new();
 			ItemIDs = new();
-			OwnerId = new();
+			OwnerId = new entEntityID();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ExpressionTreeCNodeDefinition : LibTreeINodeDefinition
+	public abstract partial class ExpressionTreeCNodeDefinition : LibTreeINodeDefinition
 	{
 		public ExpressionTreeCNodeDefinition()
 		{

@@ -110,14 +110,14 @@ namespace WolvenKit.RED4.Types
 
 		public gameStatusEffect()
 		{
-			DurationID = 4294967295;
+			DurationID = uint.MaxValue;
 			Duration = -1.000000F;
 			RemainingDuration = -1.000000F;
 			MaxStacks = 2147483647;
 			SourcesData = new();
-			OwnerEntityID = new();
-			InstigatorEntityID = new();
-			Direction = new();
+			OwnerEntityID = new entEntityID();
+			InstigatorEntityID = new entEntityID();
+			Direction = new Vector4();
 
 			PostConstruct();
 		}

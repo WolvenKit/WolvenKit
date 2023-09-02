@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LibTreeDefTreeVariableISerializable : LibTreeDefTreeVariable
+	public abstract partial class LibTreeDefTreeVariableISerializable : LibTreeDefTreeVariable
 	{
 		[Ordinal(2)] 
 		[RED("exportAsProperty")] 

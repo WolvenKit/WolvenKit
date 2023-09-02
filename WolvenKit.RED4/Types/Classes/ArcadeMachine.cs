@@ -71,8 +71,8 @@ namespace WolvenKit.RED4.Types
 		public ArcadeMachine()
 		{
 			ControllerTypeName = "ArcadeMachineController";
-			ShortGlitchDelayID = new();
-			CurrentGame = new();
+			ShortGlitchDelayID = new gameDelayID();
+			CurrentGame = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

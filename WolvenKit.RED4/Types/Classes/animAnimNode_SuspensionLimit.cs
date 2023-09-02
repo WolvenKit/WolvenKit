@@ -38,11 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SuspensionLimit()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			ConstrainedTransform = new();
-			RadiusTrack = new();
-			DeviationTrack = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			ConstrainedTransform = new animTransformIndex();
+			RadiusTrack = new animNamedTrackIndex();
+			DeviationTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

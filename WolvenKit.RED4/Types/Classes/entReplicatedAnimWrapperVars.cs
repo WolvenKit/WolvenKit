@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public entReplicatedAnimWrapperVars()
 		{
-			ServerReplicatedTime = new();
+			ServerReplicatedTime = new netTime();
 			Data = new();
 
 			PostConstruct();

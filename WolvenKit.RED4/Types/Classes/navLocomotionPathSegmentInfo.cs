@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public navLocomotionPathSegmentInfo()
 		{
-			SegmentEnd = new();
+			SegmentEnd = new navSerializableSplineProgression();
 
 			PostConstruct();
 		}

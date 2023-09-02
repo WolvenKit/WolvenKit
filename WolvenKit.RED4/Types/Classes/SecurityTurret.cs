@@ -151,17 +151,17 @@ namespace WolvenKit.RED4.Types
 		public SecurityTurret()
 		{
 			ControllerTypeName = "SecurityTurretController";
-			DefaultSensePreset = 77796192748;
+			DefaultSensePreset = "Senses.BasicTurret";
 			IdleSound = "idleStart";
 			IdleSoundStop = "idleStop";
 			SoundDeviceON = "activated";
 			SoundDeviceOFF = "deactivated";
 			SoundDeviceDestroyed = "destroyed";
 			AnimFeatureName = "SecurityTurretData";
-			ItemID = new();
+			ItemID = new gameItemID();
 			LaserFXSlotName = "laser";
-			BurstDelayEvtID = new();
-			NextShootCycleDelayEvtID = new();
+			BurstDelayEvtID = new gameDelayID();
+			NextShootCycleDelayEvtID = new gameDelayID();
 
 			PostConstruct();
 		}

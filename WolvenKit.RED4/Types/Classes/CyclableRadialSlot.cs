@@ -70,10 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public CyclableRadialSlot()
 		{
-			LeftArrowEmpty = new();
-			LeftArrowFull = new();
-			RightArrowEmpty = new();
-			RightArrowFull = new();
+			LeftArrowEmpty = new inkWidgetReference();
+			LeftArrowFull = new inkWidgetReference();
+			RightArrowEmpty = new inkWidgetReference();
+			RightArrowFull = new inkWidgetReference();
 
 			PostConstruct();
 		}

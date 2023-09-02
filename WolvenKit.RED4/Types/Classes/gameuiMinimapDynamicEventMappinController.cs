@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMinimapDynamicEventMappinController()
 		{
-			PulseWidget = new();
+			PulseWidget = new inkWidgetReference();
 			HideAtDistance = 25.000000F;
 			HideInCombat = true;
 

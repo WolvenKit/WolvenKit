@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public workDynamicSyncBindCommandData()
 		{
-			MasterID = new();
+			MasterID = new entEntityID();
 
 			PostConstruct();
 		}

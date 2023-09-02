@@ -103,14 +103,14 @@ namespace WolvenKit.RED4.Types
 		public entColliderComponent()
 		{
 			Name = "Component";
-			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
 			Colliders = new();
 			SimulationType = Enums.physicsSimulationType.Kinematic;
 			MassOverride = -1.000000F;
-			Inertia = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
-			ComOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			Inertia = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			ComOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			IsEnabled = true;
-			DynamicTrafficSetting = new();
+			DynamicTrafficSetting = new TrafficGenDynamicTrafficSetting();
 
 			PostConstruct();
 		}

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameJournalQuestMapPinBase : gameJournalContainerEntry
+	public abstract partial class gameJournalQuestMapPinBase : gameJournalContainerEntry
 	{
 		[Ordinal(2)] 
 		[RED("enableGPS")] 

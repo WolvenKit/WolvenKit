@@ -126,10 +126,10 @@ namespace WolvenKit.RED4.Types
 
 		public SingleplayerMenuGameController()
 		{
-			ButtonHintsManagerRef = new();
-			GogButtonWidgetRef = new();
-			ContinuetooltipContainer = new();
-			ExpansionBanner = new();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			GogButtonWidgetRef = new inkWidgetReference();
+			ContinuetooltipContainer = new inkCompoundWidgetReference();
+			ExpansionBanner = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class workDebuggingTool : RedBaseClass
+	public abstract partial class workDebuggingTool : RedBaseClass
 	{
 		public workDebuggingTool()
 		{

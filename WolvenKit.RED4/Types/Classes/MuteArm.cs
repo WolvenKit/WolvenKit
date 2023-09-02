@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public MuteArm()
 		{
-			GameEffectRef = new();
+			GameEffectRef = new gameEffectRef();
 
 			PostConstruct();
 		}

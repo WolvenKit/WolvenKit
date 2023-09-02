@@ -54,13 +54,13 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_RotationLimit()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			ConstrainedTransform = new();
-			LimitOnX = new() { Min = -1.000000F, Max = 1.000000F };
-			LimitOnY = new() { Min = -1.000000F, Max = 1.000000F };
-			LimitOnZ = new() { Min = -1.000000F, Max = 1.000000F };
-			WeightLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			ConstrainedTransform = new animTransformIndex();
+			LimitOnX = new animSmoothFloatClamp { Min = -1.000000F, Max = 1.000000F };
+			LimitOnY = new animSmoothFloatClamp { Min = -1.000000F, Max = 1.000000F };
+			LimitOnZ = new animSmoothFloatClamp { Min = -1.000000F, Max = 1.000000F };
+			WeightLink = new animFloatLink();
 
 			PostConstruct();
 		}

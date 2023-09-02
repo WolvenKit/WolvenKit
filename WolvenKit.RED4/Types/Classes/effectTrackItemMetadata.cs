@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class effectTrackItemMetadata : effectTrackItem
+	public abstract partial class effectTrackItemMetadata : effectTrackItem
 	{
 		public effectTrackItemMetadata()
 		{

@@ -78,8 +78,8 @@ namespace WolvenKit.RED4.Types
 
 		public Multilayer_LayerTemplate()
 		{
-			Overrides = new() { ColorScale = new(), RoughLevelsIn = new(), RoughLevelsOut = new(), MetalLevelsIn = new(), MetalLevelsOut = new(), NormalStrength = new() };
-			DefaultOverrides = new() { ColorScale = "null_null", NormalStrength = "null", RoughLevelsIn = "null", RoughLevelsOut = "null", MetalLevelsIn = "null", MetalLevelsOut = "null" };
+			Overrides = new Multilayer_LayerTemplateOverrides { ColorScale = new(), RoughLevelsIn = new(), RoughLevelsOut = new(), MetalLevelsIn = new(), MetalLevelsOut = new(), NormalStrength = new() };
+			DefaultOverrides = new Multilayer_LayerOverrideSelection { ColorScale = "null_null", NormalStrength = "null", RoughLevelsIn = "null", RoughLevelsOut = "null", MetalLevelsIn = "null", MetalLevelsOut = "null" };
 			TilingMultiplier = 1.000000F;
 			ColorMaskLevelsIn = new(2);
 			ColorMaskLevelsOut = new(2);

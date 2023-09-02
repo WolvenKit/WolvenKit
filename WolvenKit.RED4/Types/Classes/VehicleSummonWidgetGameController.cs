@@ -310,20 +310,20 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleSummonWidgetGameController()
 		{
-			VehicleNameLabel = new();
-			VehicleTypeIcon = new();
-			VehicleManufactorHolder = new();
-			VehicleManufactorIcon = new();
-			DistanceLabel = new();
-			SubText = new();
-			RadioStationName = new();
-			OptionIntro = new();
-			OptionCounter = new();
-			VehiclePos = new();
-			PlayerPos = new();
-			DistanceVector = new();
-			GameInstance = new();
-			VehicleID = new();
+			VehicleNameLabel = new inkTextWidgetReference();
+			VehicleTypeIcon = new inkImageWidgetReference();
+			VehicleManufactorHolder = new inkWidgetReference();
+			VehicleManufactorIcon = new inkImageWidgetReference();
+			DistanceLabel = new inkTextWidgetReference();
+			SubText = new inkTextWidgetReference();
+			RadioStationName = new inkTextWidgetReference();
+			OptionIntro = new inkanimPlaybackOptions();
+			OptionCounter = new inkanimPlaybackOptions();
+			VehiclePos = new Vector4();
+			PlayerPos = new Vector4();
+			DistanceVector = new Vector4();
+			GameInstance = new ScriptGameInstance();
+			VehicleID = new entEntityID();
 
 			PostConstruct();
 		}

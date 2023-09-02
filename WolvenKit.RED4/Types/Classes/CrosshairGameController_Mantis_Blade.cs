@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Mantis_Blade()
 		{
-			TargetColorChange = new();
+			TargetColorChange = new inkWidgetReference();
 
 			PostConstruct();
 		}

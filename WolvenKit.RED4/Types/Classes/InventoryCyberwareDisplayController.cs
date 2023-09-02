@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryCyberwareDisplayController()
 		{
-			OwnedFrame = new();
-			SelectedFrame = new();
-			AmountPanel = new();
-			Amount = new();
+			OwnedFrame = new inkWidgetReference();
+			SelectedFrame = new inkWidgetReference();
+			AmountPanel = new inkWidgetReference();
+			Amount = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

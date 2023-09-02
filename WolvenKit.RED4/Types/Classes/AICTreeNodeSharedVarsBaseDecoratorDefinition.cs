@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AICTreeNodeSharedVarsBaseDecoratorDefinition : AICTreeNodeDecoratorDefinition
+	public abstract partial class AICTreeNodeSharedVarsBaseDecoratorDefinition : AICTreeNodeDecoratorDefinition
 	{
 		public AICTreeNodeSharedVarsBaseDecoratorDefinition()
 		{

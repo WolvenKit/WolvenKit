@@ -86,8 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public TutorialPopupData()
 		{
-			Margin = new();
-			Video = new();
+			Margin = new inkMargin();
+			Video = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

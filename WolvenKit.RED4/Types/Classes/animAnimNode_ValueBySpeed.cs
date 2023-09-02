@@ -54,11 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_ValueBySpeed()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			ClampType = Enums.animClampType.Clamp;
 			RangeMax = 1.000000F;
 			ResetOnActivation = true;
-			Speed = new();
+			Speed = new animFloatLink();
 
 			PostConstruct();
 		}

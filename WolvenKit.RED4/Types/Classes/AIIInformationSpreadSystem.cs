@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIIInformationSpreadSystem : gameIGameSystem
+	public abstract partial class AIIInformationSpreadSystem : gameIGameSystem
 	{
 		public AIIInformationSpreadSystem()
 		{

@@ -102,17 +102,17 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerDocumentWidgetController()
 		{
-			TitleWidget = new();
-			OwnerNameWidget = new();
-			DateWidget = new();
-			DatePanelWidget = new();
-			OwnerPanelWidget = new();
-			TextContentWidget = new();
-			TextContentHolder = new();
-			VideoContentWidget = new();
-			ImageContentWidget = new();
-			CloseButtonWidget = new();
-			LastPlayedVideo = new();
+			TitleWidget = new inkTextWidgetReference();
+			OwnerNameWidget = new inkTextWidgetReference();
+			DateWidget = new inkTextWidgetReference();
+			DatePanelWidget = new inkTextWidgetReference();
+			OwnerPanelWidget = new inkTextWidgetReference();
+			TextContentWidget = new inkTextWidgetReference();
+			TextContentHolder = new inkWidgetReference();
+			VideoContentWidget = new inkVideoWidgetReference();
+			ImageContentWidget = new inkImageWidgetReference();
+			CloseButtonWidget = new inkWidgetReference();
+			LastPlayedVideo = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

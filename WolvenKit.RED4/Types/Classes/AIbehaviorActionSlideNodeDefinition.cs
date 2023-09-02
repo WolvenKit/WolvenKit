@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIbehaviorActionSlideNodeDefinition : AIbehaviorActionTreeNodeDefinition
+	public abstract partial class AIbehaviorActionSlideNodeDefinition : AIbehaviorActionTreeNodeDefinition
 	{
 		[Ordinal(1)] 
 		[RED("duration")] 

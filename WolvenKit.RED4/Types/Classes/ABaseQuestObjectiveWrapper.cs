@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ABaseQuestObjectiveWrapper : AJournalEntryWrapper
+	public abstract partial class ABaseQuestObjectiveWrapper : AJournalEntryWrapper
 	{
 		[Ordinal(1)] 
 		[RED("questObjective")] 

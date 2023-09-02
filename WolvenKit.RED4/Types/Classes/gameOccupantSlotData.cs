@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameOccupantSlotData()
 		{
-			ExitOffsetFromSlot = new() { W = 1.000000F };
+			ExitOffsetFromSlot = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

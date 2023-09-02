@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryFilterButton()
 		{
-			Label = new();
-			InputIcon = new();
+			Label = new inkTextWidgetReference();
+			InputIcon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

@@ -150,11 +150,11 @@ namespace WolvenKit.RED4.Types
 
 		public questLogGameController()
 		{
-			VirtualList = new();
-			DetailsPanel = new();
-			ButtonHints = new();
-			ButtonTrack = new();
-			Game = new();
+			VirtualList = new inkWidgetReference();
+			DetailsPanel = new inkWidgetReference();
+			ButtonHints = new inkWidgetReference();
+			ButtonTrack = new inkWidgetReference();
+			Game = new ScriptGameInstance();
 			Quests = new();
 			ResolvedQuests = new();
 			ListData = new();

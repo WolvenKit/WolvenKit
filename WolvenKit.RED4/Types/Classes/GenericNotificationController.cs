@@ -78,10 +78,10 @@ namespace WolvenKit.RED4.Types
 
 		public GenericNotificationController()
 		{
-			TitleRef = new();
-			TextRef = new();
-			ActionLabelRef = new();
-			ActionRef = new();
+			TitleRef = new inkTextWidgetReference();
+			TextRef = new inkTextWidgetReference();
+			ActionLabelRef = new inkTextWidgetReference();
+			ActionRef = new inkWidgetReference();
 
 			PostConstruct();
 		}

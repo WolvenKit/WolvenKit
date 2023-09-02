@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public moveMovePoliciesComponentReplicatedState()
 		{
 			Enabled = true;
-			MovePolicies = new() { Items = new(), LastAppliedActionsTime = new() };
+			MovePolicies = new moveReplicatedMovePoliciesState { Items = new(), LastAppliedActionsTime = new netTime() };
 
 			PostConstruct();
 		}

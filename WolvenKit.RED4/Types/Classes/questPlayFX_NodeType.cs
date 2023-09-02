@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questPlayFX_NodeType()
 		{
-			Params = new() { new() };
+			Params = new() { new questPlayFX_NodeTypeParams() };
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UI_PointOfNoReturnRewardScreenDef()
 		{
-			Rewards = new();
+			Rewards = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

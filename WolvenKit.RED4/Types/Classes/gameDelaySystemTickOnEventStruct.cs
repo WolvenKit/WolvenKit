@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameDelaySystemTickOnEventStruct : gameDelaySystemTickStruct
+	public abstract partial class gameDelaySystemTickOnEventStruct : gameDelaySystemTickStruct
 	{
 		public gameDelaySystemTickOnEventStruct()
 		{

@@ -254,15 +254,15 @@ namespace WolvenKit.RED4.Types
 
 		public RainMissileProjectile()
 		{
-			Effect = new();
+			Effect = new gameEffectRef();
 			Alive = true;
-			SpawnPosition = new();
-			LandIndicatorFX = new();
+			SpawnPosition = new Vector4();
+			LandIndicatorFX = new gameFxResource();
 			TimeToDestory = -1.000000F;
-			InitialTargetPosition = new();
-			InitialTargetOffset = new();
-			FinalTargetPosition = new();
-			FinalTargetOffset = new();
+			InitialTargetPosition = new Vector4();
+			InitialTargetOffset = new Vector4();
+			FinalTargetPosition = new Vector4();
+			FinalTargetOffset = new Vector4();
 
 			PostConstruct();
 		}

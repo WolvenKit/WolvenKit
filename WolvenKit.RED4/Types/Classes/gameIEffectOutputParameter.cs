@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIEffectOutputParameter : RedBaseClass
+	public abstract partial class gameIEffectOutputParameter : RedBaseClass
 	{
 		public gameIEffectOutputParameter()
 		{

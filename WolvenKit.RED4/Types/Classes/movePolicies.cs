@@ -270,13 +270,13 @@ namespace WolvenKit.RED4.Types
 
 		public movePolicies()
 		{
-			Destination = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
-			DestinationTangent = new();
-			StartTangent = new();
-			TargetSmartObject = new();
-			StrafingTarget = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
+			Destination = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			DestinationTangent = new Vector3();
+			StartTangent = new Vector3();
+			TargetSmartObject = new AIObjectId();
+			StrafingTarget = new moveStrafingTarget { Position = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
 			FollowSlotOverrides = new(0);
-			LocalTargetOffset = new();
+			LocalTargetOffset = new Vector3();
 			MinFollowerDistance = 1.000000F;
 			MaxFollowerDistance = 3.000000F;
 			UseCollisionAvoidance = true;

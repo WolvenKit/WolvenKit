@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questNodeVisibilityMapArrayElement()
 		{
-			GlobalNodeRef = new();
+			GlobalNodeRef = new worldGlobalNodeRef();
 
 			PostConstruct();
 		}

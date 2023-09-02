@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameinteractionsvisIVisualizerTimeProvider : IScriptable
+	public abstract partial class gameinteractionsvisIVisualizerTimeProvider : IScriptable
 	{
 		public gameinteractionsvisIVisualizerTimeProvider()
 		{

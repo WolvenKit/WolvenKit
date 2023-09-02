@@ -110,9 +110,9 @@ namespace WolvenKit.RED4.Types
 
 		public StaminabarWidgetGameController()
 		{
-			StaminaControllerRef = new();
-			StaminaPercTextPath = new();
-			StaminaStatusTextPath = new();
+			StaminaControllerRef = new inkWidgetReference();
+			StaminaPercTextPath = new inkTextWidgetReference();
+			StaminaStatusTextPath = new inkTextWidgetReference();
 			CurrentStamina = 100.000000F;
 			SceneTier = Enums.GameplayTier.Tier1_FullGameplay;
 

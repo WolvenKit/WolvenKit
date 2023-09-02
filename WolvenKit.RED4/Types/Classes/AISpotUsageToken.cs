@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public AISpotUsageToken()
 		{
-			UsedSpotId = new();
-			SpotUserId = new();
+			UsedSpotId = new worldGlobalNodeID();
+			SpotUserId = new entEntityID();
 
 			PostConstruct();
 		}

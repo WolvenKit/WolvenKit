@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public animSAnimationBufferBitwiseCompressedBoneTrack()
 		{
-			Position = new();
-			Orientation = new();
-			Scale = new();
+			Position = new animSAnimationBufferBitwiseCompressedData();
+			Orientation = new animSAnimationBufferBitwiseCompressedData();
+			Scale = new animSAnimationBufferBitwiseCompressedData();
 
 			PostConstruct();
 		}

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerDestroyCarriedObject()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 			IsPlayer = true;
 
 			PostConstruct();

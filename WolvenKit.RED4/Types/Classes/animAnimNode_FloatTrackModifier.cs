@@ -46,11 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FloatTrackModifier()
 		{
-			Id = 4294967295;
-			FloatTrack = new();
-			InputFloatTrack = new();
-			PoseInputNode = new();
-			FloatInputNode = new();
+			Id = uint.MaxValue;
+			FloatTrack = new animNamedTrackIndex();
+			InputFloatTrack = new animNamedTrackIndex();
+			PoseInputNode = new animPoseLink();
+			FloatInputNode = new animFloatLink();
 
 			PostConstruct();
 		}

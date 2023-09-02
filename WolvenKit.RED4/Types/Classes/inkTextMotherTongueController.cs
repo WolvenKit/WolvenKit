@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public inkTextMotherTongueController()
 		{
-			PreTranslatedTextWidget = new();
-			PostTranslatedTextWidget = new();
-			NativeTextWidget = new();
-			TranslatedTextWidget = new();
+			PreTranslatedTextWidget = new inkTextWidgetReference();
+			PostTranslatedTextWidget = new inkTextWidgetReference();
+			NativeTextWidget = new inkRichTextBoxWidgetReference();
+			TranslatedTextWidget = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

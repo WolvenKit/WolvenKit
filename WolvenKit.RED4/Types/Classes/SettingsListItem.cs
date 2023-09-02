@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public SettingsListItem()
 		{
-			Selector = new();
+			Selector = new inkWidgetReference();
 
 			PostConstruct();
 		}

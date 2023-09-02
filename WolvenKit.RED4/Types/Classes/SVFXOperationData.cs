@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public SVFXOperationData()
 		{
-			VfxResource = new();
+			VfxResource = new gameFxResource();
 
 			PostConstruct();
 		}

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public ActionsSequence()
 		{
-			SequenceInitiator = new();
+			SequenceInitiator = new entEntityID();
 			DelayIDs = new();
 
 			PostConstruct();

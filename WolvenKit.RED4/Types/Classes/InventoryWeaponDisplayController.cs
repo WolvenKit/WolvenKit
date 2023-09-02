@@ -78,14 +78,14 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryWeaponDisplayController()
 		{
-			WeaponSpecyficModsRoot = new();
-			StatsWrapper = new();
-			DpsText = new();
-			DamageTypeIndicatorImage = new();
-			DpsWrapper = new();
-			DpsValue = new();
-			SilencerIcon = new();
-			ScopeIcon = new();
+			WeaponSpecyficModsRoot = new inkCompoundWidgetReference();
+			StatsWrapper = new inkWidgetReference();
+			DpsText = new inkTextWidgetReference();
+			DamageTypeIndicatorImage = new inkImageWidgetReference();
+			DpsWrapper = new inkWidgetReference();
+			DpsValue = new inkTextWidgetReference();
+			SilencerIcon = new inkWidgetReference();
+			ScopeIcon = new inkWidgetReference();
 			WeaponAttachmentsDisplay = new();
 
 			PostConstruct();

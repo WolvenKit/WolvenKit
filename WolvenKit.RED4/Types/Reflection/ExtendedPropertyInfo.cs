@@ -17,6 +17,19 @@ public class ExtendedPropertyInfo
         RedType = type;
     }
 
+    public ExtendedPropertyInfo(ExtendedTypeInfo containingType, string name, Type type)
+    {
+        IsDynamic = true;
+
+        ContainingTypeInfo = containingType;
+
+        Name = name;
+        Type = type;
+
+        RedName = Name;
+        RedType = RedReflection.GetRedTypeFromCSType(Type);
+    }
+
     public ExtendedPropertyInfo(ExtendedTypeInfo containingType, PropertyInfo propertyInfo)
     {
         IsDynamic = false;
@@ -97,13 +110,35 @@ public class ExtendedPropertyInfo
         }
     }
 
-    public bool IsDefault(object? value)
+    private void SetDefaultValue()
     {
-        if (!_isDefaultSet)
+        if (_isDefaultSet)
+        {
+            return;
+        }
+
+        if (!IsDynamic)
         {
             DefaultValue = RedReflection.GetClassDefaultValue(ContainingTypeInfo.Type, this);
-            _isDefaultSet = true;
         }
+        else
+        {
+            DefaultValue = RedTypeManager.CreateRedType(Type);
+        }
+
+        _isDefaultSet = true;
+    }
+
+    public object? GetDefaultValue()
+    {
+        SetDefaultValue();
+
+        return DefaultValue;
+    }
+
+    public bool IsDefault(object? value)
+    {
+        SetDefaultValue();
 
         return Equals(DefaultValue, value);
     }

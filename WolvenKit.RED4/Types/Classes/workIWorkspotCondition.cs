@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class workIWorkspotCondition : ISerializable
+	public abstract partial class workIWorkspotCondition : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("expectedResult")] 

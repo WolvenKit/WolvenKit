@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IParticleModificator : IParticleInitializer
+	public abstract partial class IParticleModificator : IParticleInitializer
 	{
 		public IParticleModificator()
 		{

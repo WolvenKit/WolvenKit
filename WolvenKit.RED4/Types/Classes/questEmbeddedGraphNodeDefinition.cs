@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questEmbeddedGraphNodeDefinition : questSignalStoppingNodeDefinition
+	public abstract partial class questEmbeddedGraphNodeDefinition : questSignalStoppingNodeDefinition
 	{
 		public questEmbeddedGraphNodeDefinition()
 		{

@@ -245,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			SymbolProbabilities = new();
 			InitRound = true;
 			TrapsDelayed = new();
-			NetworkData = new() { GridData = new(), BasicAccess = new() { CommandLists = new(), Effects = new() }, PlayerPrograms = new(), EnemyLockNetwork = new() { CommandLists = new(), Effects = new() }, EnemyPrograms = new() };
+			NetworkData = new NetworkMinigameData { GridData = new(), BasicAccess = new ProgramData { CommandLists = new(), Effects = new() }, PlayerPrograms = new(), EnemyLockNetwork = new ProgramData { CommandLists = new(), Effects = new() }, EnemyPrograms = new() };
 			BufferElements = new();
 			EnemyBufferElements = new();
 			CompletedPrograms = new();
@@ -254,7 +254,7 @@ namespace WolvenKit.RED4.Types
 			EnemyCompletedProgramsPD = new();
 			PlayerProgramsCompletion = new();
 			EnemyProgramsCompletion = new();
-			BasicAccessCompletion = new() { CompletionProgress = new() };
+			BasicAccessCompletion = new ProgramProgressData { CompletionProgress = new() };
 			AppliedViruses = new();
 
 			PostConstruct();

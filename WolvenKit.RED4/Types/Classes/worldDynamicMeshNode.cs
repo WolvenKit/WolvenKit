@@ -56,8 +56,8 @@ namespace WolvenKit.RED4.Types
 		{
 			IsDebris = true;
 			InitialGuess = true;
-			DynamicTrafficSetting = new();
-			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+			DynamicTrafficSetting = new TrafficGenDynamicTrafficSetting();
+			NavigationSetting = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
 			UseMeshNavmeshSettings = true;
 
 			PostConstruct();

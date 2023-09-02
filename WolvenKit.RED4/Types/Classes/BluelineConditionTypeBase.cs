@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class BluelineConditionTypeBase : ScriptConditionTypeBase
+	public abstract partial class BluelineConditionTypeBase : ScriptConditionTypeBase
 	{
 		public BluelineConditionTypeBase()
 		{

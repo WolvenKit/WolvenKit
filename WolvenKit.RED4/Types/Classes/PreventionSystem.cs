@@ -518,16 +518,16 @@ namespace WolvenKit.RED4.Types
 			AgentsWhoSeePlayer = new();
 			HitNPC = new();
 			SpawnedAgents = new();
-			LastCrimePoint = new();
-			LastBodyPosition = new();
-			DeescalationZeroDelayID = new();
-			BlinkingStatusDelayID = new();
-			VehicleSpawnDelayID = new();
-			PolicemenSpawnDelayID = new();
-			PreventionTickDelayID = new();
-			SecurityAreaResetDelayID = new();
+			LastCrimePoint = new Vector4();
+			LastBodyPosition = new Vector4();
+			DeescalationZeroDelayID = new gameDelayID();
+			BlinkingStatusDelayID = new gameDelayID();
+			VehicleSpawnDelayID = new gameDelayID();
+			PolicemenSpawnDelayID = new gameDelayID();
+			PreventionTickDelayID = new gameDelayID();
+			SecurityAreaResetDelayID = new gameDelayID();
 			BlinkReasonsStack = new();
-			InputlockDelayID = new();
+			InputlockDelayID = new gameDelayID();
 			Vehicles = new();
 			Viewers = new();
 

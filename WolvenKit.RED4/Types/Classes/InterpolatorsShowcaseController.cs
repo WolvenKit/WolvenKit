@@ -166,7 +166,7 @@ namespace WolvenKit.RED4.Types
 
 		public InterpolatorsShowcaseController()
 		{
-			StartMargin = new();
+			StartMargin = new inkMargin();
 
 			PostConstruct();
 		}

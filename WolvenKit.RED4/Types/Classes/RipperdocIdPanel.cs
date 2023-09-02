@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocIdPanel()
 		{
-			FluffContainer = new();
-			NameLabel = new();
-			MoneyLabel = new();
+			FluffContainer = new inkWidgetReference();
+			NameLabel = new inkTextWidgetReference();
+			MoneyLabel = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

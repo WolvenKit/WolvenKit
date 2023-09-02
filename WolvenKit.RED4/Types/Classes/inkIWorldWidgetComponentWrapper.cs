@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIWorldWidgetComponentWrapper : RedBaseClass
+	public abstract partial class inkIWorldWidgetComponentWrapper : RedBaseClass
 	{
 		public inkIWorldWidgetComponentWrapper()
 		{

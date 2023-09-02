@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIPhoneConditionType : questIUIConditionType
+	public abstract partial class questIPhoneConditionType : questIUIConditionType
 	{
 		[Ordinal(0)] 
 		[RED("inverted")] 

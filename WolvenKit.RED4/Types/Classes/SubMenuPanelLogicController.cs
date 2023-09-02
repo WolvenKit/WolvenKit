@@ -222,26 +222,26 @@ namespace WolvenKit.RED4.Types
 
 		public SubMenuPanelLogicController()
 		{
-			LevelValue = new();
-			StreetCredLabel = new();
-			CurrencyValue = new();
-			WeightValue = new();
-			SubMenuLabel = new();
-			CentralLine = new();
-			LevelBarProgress = new();
-			LevelBarSpacer = new();
-			StreetCredBarProgress = new();
-			StreetCredBarSpacer = new();
-			MenuselectorWidget = new();
-			SubMenuselectorWidget = new();
-			TopPanel = new();
-			LeftHolder = new();
-			RightHolder = new();
-			LineBarsContainer = new();
-			LineWidget = new();
+			LevelValue = new inkTextWidgetReference();
+			StreetCredLabel = new inkTextWidgetReference();
+			CurrencyValue = new inkTextWidgetReference();
+			WeightValue = new inkTextWidgetReference();
+			SubMenuLabel = new inkTextWidgetReference();
+			CentralLine = new inkWidgetReference();
+			LevelBarProgress = new inkWidgetReference();
+			LevelBarSpacer = new inkWidgetReference();
+			StreetCredBarProgress = new inkWidgetReference();
+			StreetCredBarSpacer = new inkWidgetReference();
+			MenuselectorWidget = new inkWidgetReference();
+			SubMenuselectorWidget = new inkWidgetReference();
+			TopPanel = new inkWidgetReference();
+			LeftHolder = new inkWidgetReference();
+			RightHolder = new inkWidgetReference();
+			LineBarsContainer = new inkCompoundWidgetReference();
+			LineWidget = new inkCompoundWidgetReference();
 			MenusList = new();
-			CurMenuData = new() { Identifier = -1, SubMenus = new() };
-			CurSubMenuData = new() { Identifier = -1, SubMenus = new() };
+			CurMenuData = new MenuData { Identifier = -1, SubMenus = new() };
+			CurSubMenuData = new MenuData { Identifier = -1, SubMenus = new() };
 
 			PostConstruct();
 		}

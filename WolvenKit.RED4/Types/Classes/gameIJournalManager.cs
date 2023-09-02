@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIJournalManager : gameIReplicatedGameSystem
+	public abstract partial class gameIJournalManager : gameIReplicatedGameSystem
 	{
 		public gameIJournalManager()
 		{

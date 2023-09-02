@@ -270,6 +270,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     DockedViews.Add(vm);
                     return true;
                 }
+                case EDockedViews.HashToolViewModel:
+                {
+                    var vm = _paneViewModelFactory.HashToolViewModel();
+                    vm.State = DockState.Dock;
+                    vm.SideInDockedMode = DockSide.Right;
+                    DockedViews.Add(vm);
+                    return true;
+                }
                 default:
                     break;
             }
@@ -1150,6 +1158,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private void ShowTextureExporter()
     {
         var vm = _paneViewModelFactory.ExportViewModel();
+        vm.State = DockState.Float;
+        DockedViews.Add(vm);
+    }
+
+    [RelayCommand]
+    private void ShowHashTool()
+    {
+        var vm = _paneViewModelFactory.HashToolViewModel();
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceConnectionsHighlightSystem()
 		{
-			HighlightedDeviceID = new();
+			HighlightedDeviceID = new entEntityID();
 			HighlightedConnectionsIDs = new();
 
 			PostConstruct();

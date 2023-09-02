@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class BaseSkillCheckContainer : IScriptable
+	public abstract partial class BaseSkillCheckContainer : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("hackingCheckSlot")] 

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIPhotoModeSystem : gameIGameSystem
+	public abstract partial class gameIPhotoModeSystem : gameIGameSystem
 	{
 		public gameIPhotoModeSystem()
 		{

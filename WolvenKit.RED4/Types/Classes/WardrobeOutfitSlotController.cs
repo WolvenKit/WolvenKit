@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public WardrobeOutfitSlotController()
 		{
-			SlotNumberText = new();
-			NewSetIndicator = new();
+			SlotNumberText = new inkTextWidgetReference();
+			NewSetIndicator = new inkWidgetReference();
 
 			PostConstruct();
 		}

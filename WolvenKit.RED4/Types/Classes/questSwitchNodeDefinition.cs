@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public questSwitchNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 			Conditions = new();
 
 			PostConstruct();

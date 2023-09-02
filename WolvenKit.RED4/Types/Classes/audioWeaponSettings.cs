@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class audioWeaponSettings : audioAudioMetadata
+	public abstract partial class audioWeaponSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
 		[RED("bulletType")] 

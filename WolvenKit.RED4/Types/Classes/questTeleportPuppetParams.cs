@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questTeleportPuppetParams()
 		{
-			DestinationOffset = new();
+			DestinationOffset = new Vector3();
 
 			PostConstruct();
 		}

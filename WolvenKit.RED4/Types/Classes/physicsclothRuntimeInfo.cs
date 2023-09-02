@@ -150,9 +150,9 @@ namespace WolvenKit.RED4.Types
 
 		public physicsclothRuntimeInfo()
 		{
-			Translation = new();
-			Rotation = new() { R = 1.000000F };
-			Gravity = new() { Z = -9.810000F };
+			Translation = new Vector3();
+			Rotation = new Quaternion { R = 1.000000F };
+			Gravity = new Vector3 { Z = -9.810000F };
 			Damping = 0.400000F;
 			Drag = 0.200000F;
 			Inertia = 1.000000F;

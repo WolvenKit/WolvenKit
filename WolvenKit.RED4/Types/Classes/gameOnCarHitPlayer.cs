@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameOnCarHitPlayer()
 		{
-			HitDirection = new();
-			CarId = new();
+			HitDirection = new Vector4();
+			CarId = new entEntityID();
 
 			PostConstruct();
 		}

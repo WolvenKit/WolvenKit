@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public gameuiNarrationEvent()
 		{
 			DurationSec = 10.000000F;
-			Color = new();
+			Color = new CColor();
 
 			PostConstruct();
 		}

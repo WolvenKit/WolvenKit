@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIInjectLookatTargetCommand()
 		{
-			TargetPuppetRef = new() { Names = new() };
+			TargetPuppetRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

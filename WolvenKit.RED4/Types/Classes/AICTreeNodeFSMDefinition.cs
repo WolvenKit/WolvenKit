@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.Types
 			Transitions = new();
 			OnEventTransitions = new();
 			States = new();
-			SharedVars = new() { Table = new() };
+			SharedVars = new AISharedVarTableDefinition { Table = new() };
 
 			PostConstruct();
 		}

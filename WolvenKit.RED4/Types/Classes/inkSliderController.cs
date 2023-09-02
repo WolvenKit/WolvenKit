@@ -134,16 +134,16 @@ namespace WolvenKit.RED4.Types
 
 		public inkSliderController()
 		{
-			SlidingAreaRef = new();
-			HandleRef = new();
-			NextRef = new();
-			PriorRef = new();
+			SlidingAreaRef = new inkWidgetReference();
+			HandleRef = new inkWidgetReference();
+			NextRef = new inkWidgetReference();
+			PriorRef = new inkWidgetReference();
 			MinHandleSize = 20.000000F;
 			PercentHandleSize = 0.100000F;
 			MaximumValue = 1.000000F;
-			SliderInput = new();
-			SliderValueChanged = new();
-			SliderHandleReleased = new();
+			SliderInput = new inkSliderControllerInputCallback();
+			SliderValueChanged = new inkSliderControllerValueChangeCallback();
+			SliderHandleReleased = new inkSliderControllerHandleReleasedCallback();
 
 			PostConstruct();
 		}

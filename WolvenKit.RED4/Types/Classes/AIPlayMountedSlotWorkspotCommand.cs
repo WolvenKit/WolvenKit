@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIPlayMountedSlotWorkspotCommand()
 		{
-			MountData = new() { ParentId = new(), InitialTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } }, MountType = Enums.gameMountDescriptorMountType.KeepState };
+			MountData = new gameMountDescriptor { ParentId = new entEntityID(), InitialTransform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } }, MountType = Enums.gameMountDescriptorMountType.KeepState };
 
 			PostConstruct();
 		}

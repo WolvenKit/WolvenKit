@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiSideScrollerMiniGameCollisionLogic()
 		{
-			ColliderPositionOffset = new();
-			ColliderSizeOffset = new();
+			ColliderPositionOffset = new Vector2();
+			ColliderSizeOffset = new Vector2();
 
 			PostConstruct();
 		}

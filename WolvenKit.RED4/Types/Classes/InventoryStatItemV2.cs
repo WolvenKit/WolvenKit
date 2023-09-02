@@ -54,11 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryStatItemV2()
 		{
-			LabelRef = new();
-			ValueRef = new();
-			Icon = new();
-			BackgroundIcon = new();
-			TextGroup = new();
+			LabelRef = new inkTextWidgetReference();
+			ValueRef = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			BackgroundIcon = new inkImageWidgetReference();
+			TextGroup = new inkWidgetReference();
 
 			PostConstruct();
 		}

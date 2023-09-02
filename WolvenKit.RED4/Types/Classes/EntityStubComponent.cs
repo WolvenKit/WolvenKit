@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class EntityStubComponent : gameComponent
+	public abstract partial class EntityStubComponent : gameComponent
 	{
 		public EntityStubComponent()
 		{

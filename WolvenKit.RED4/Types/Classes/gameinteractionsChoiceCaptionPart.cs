@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameinteractionsChoiceCaptionPart : IScriptable
+	public abstract partial class gameinteractionsChoiceCaptionPart : IScriptable
 	{
 		public gameinteractionsChoiceCaptionPart()
 		{

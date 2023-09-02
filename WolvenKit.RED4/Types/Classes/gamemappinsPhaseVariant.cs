@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamemappinsPhaseVariant()
 		{
-			MappinType = 169957907894;
+			MappinType = "Mappins.PointOfInterestMappinDefinition";
 			Phase = Enums.gamedataMappinPhase.DefaultPhase;
 			Variant = Enums.gamedataMappinVariant.DefaultVariant;
 

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISignalCondition : AIbehaviorconditionScript
+	public abstract partial class AISignalCondition : AIbehaviorconditionScript
 	{
 		[Ordinal(0)] 
 		[RED("requiredFlags")] 

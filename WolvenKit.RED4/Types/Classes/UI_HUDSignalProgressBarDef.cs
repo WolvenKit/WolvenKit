@@ -46,11 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HUDSignalProgressBarDef()
 		{
-			TimerID = new();
-			State = new();
-			Progress = new();
-			SignalStrength = new();
-			IsInRange = new();
+			TimerID = new gamebbScriptID_Variant();
+			State = new gamebbScriptID_Uint32();
+			Progress = new gamebbScriptID_Float();
+			SignalStrength = new gamebbScriptID_Float();
+			IsInRange = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

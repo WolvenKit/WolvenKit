@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public gamestateMachineScriptInterface()
 		{
-			OwnerEntityID = new();
-			ExecutionOwnerEntityID = new();
+			OwnerEntityID = new entEntityID();
+			ExecutionOwnerEntityID = new entEntityID();
 
 			PostConstruct();
 		}

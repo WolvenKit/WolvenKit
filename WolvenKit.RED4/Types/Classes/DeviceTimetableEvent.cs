@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceTimetableEvent()
 		{
-			RequesterID = new();
+			RequesterID = new entEntityID();
 
 			PostConstruct();
 		}

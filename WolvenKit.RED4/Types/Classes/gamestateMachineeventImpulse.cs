@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamestateMachineeventImpulse()
 		{
-			Impulse = new();
+			Impulse = new Vector4();
 
 			PostConstruct();
 		}

@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public RoachRaceGameController()
 		{
-			GameMenu = new();
-			ScoreboardMenu = new();
+			GameMenu = new inkWidgetReference();
+			ScoreboardMenu = new inkWidgetReference();
 
 			PostConstruct();
 		}

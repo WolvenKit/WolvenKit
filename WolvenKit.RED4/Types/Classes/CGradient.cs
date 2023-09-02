@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public CGradient()
 		{
-			GradientEntries = new() { new(), new() };
+			GradientEntries = new() { new rendGradientEntry(), new rendGradientEntry() };
 
 			PostConstruct();
 		}

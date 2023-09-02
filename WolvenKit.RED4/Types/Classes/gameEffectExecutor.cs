@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameEffectExecutor : gameEffectNode
+	public abstract partial class gameEffectExecutor : gameEffectNode
 	{
 		[Ordinal(0)] 
 		[RED("usesHitCooldown")] 

@@ -70,9 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public tachometerLogicController()
 		{
-			RpmValueWidget = new();
-			RpmGaugeForegroundWidget = new();
-			RpmGaugeMaxSize = new();
+			RpmValueWidget = new inkTextWidgetReference();
+			RpmGaugeForegroundWidget = new inkRectangleWidgetReference();
+			RpmGaugeMaxSize = new Vector2();
 
 			PostConstruct();
 		}

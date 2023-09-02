@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public questCharacterManagerVisuals_ChangeEntityAppearance()
 		{
-			AppearanceEntries = new() { new() };
+			AppearanceEntries = new() { new questCharacterManagerVisuals_EntityAppearanceOperationBaseEntityAppearanceEntry() };
 
 			PostConstruct();
 		}

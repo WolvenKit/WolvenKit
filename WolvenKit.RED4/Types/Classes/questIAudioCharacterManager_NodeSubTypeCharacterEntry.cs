@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questIAudioCharacterManager_NodeSubTypeCharacterEntry()
 		{
-			PuppetRef = new() { Names = new() };
+			PuppetRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

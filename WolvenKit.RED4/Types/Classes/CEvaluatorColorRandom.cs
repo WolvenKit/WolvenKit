@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public CEvaluatorColorRandom()
 		{
-			Min = new();
-			Max = new();
+			Min = new CColor();
+			Max = new CColor();
 			RandomPerChannel = true;
 
 			PostConstruct();

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkCompositionPreset()
 		{
-			ShaderParams = new() { SphericalDistPower = new(), ShadowDistance = new(), ShadowRadius = 1.000000F, GlowIntensity = 0.500000F, GlowTresholdStart = 0.750000F, GlowTresholdEnd = 1.000000F, BlurredRenderSaturation = 0.730000F, UiSaturation = 1.000000F, ChromaticAberrationStrength = 0.000750F, UiLayer2Scale = new() { X = -0.005000F, Y = -0.002500F }, UiLayer3Scale = new() { X = -0.010800F, Y = -0.006800F }, UiLayer4Scale = new() { X = -0.012600F, Y = -0.007300F }, UiLayer2Weight = 0.080000F, UiLayer3Weight = 0.070000F, UiLayer4Weight = 0.060000F };
+			ShaderParams = new fxCompositionShaderParams { SphericalDistPower = new Vector2(), ShadowDistance = new Vector2(), ShadowRadius = 1.000000F, GlowIntensity = 0.500000F, GlowTresholdStart = 0.750000F, GlowTresholdEnd = 1.000000F, BlurredRenderSaturation = 0.730000F, UiSaturation = 1.000000F, ChromaticAberrationStrength = 0.000750F, UiLayer2Scale = new Vector2 { X = -0.005000F, Y = -0.002500F }, UiLayer3Scale = new Vector2 { X = -0.010800F, Y = -0.006800F }, UiLayer4Scale = new Vector2 { X = -0.012600F, Y = -0.007300F }, UiLayer2Weight = 0.080000F, UiLayer3Weight = 0.070000F, UiLayer4Weight = 0.060000F };
 			Transitions = new();
 
 			PostConstruct();

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsCSphereDefinition()
 		{
-			Position = new() { W = 1.000000F };
+			Position = new Vector4 { W = 1.000000F };
 			Radius = 1.000000F;
 
 			PostConstruct();

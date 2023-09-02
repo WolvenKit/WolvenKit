@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkCursorInfo()
 		{
-			Pos = new();
+			Pos = new Vector2();
 
 			PostConstruct();
 		}

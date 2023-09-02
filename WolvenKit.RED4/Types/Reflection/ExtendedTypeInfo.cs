@@ -95,8 +95,6 @@ public class ExtendedTypeInfo
     public ImmutableList<ExtendedPropertyInfo> PropertyInfos { get; } =
         ImmutableList<ExtendedPropertyInfo>.Empty;
 
-    public List<ExtendedPropertyInfo> DynamicPropertyInfos { get; } = new();
-
     public ExtendedPropertyInfo? GetNativePropertyInfoByName(string name)
     {
         if (string.IsNullOrEmpty(name))
@@ -148,14 +146,6 @@ public class ExtendedTypeInfo
                 yield return propertyInfo;
             }
         }
-
-        foreach (var propertyInfo in DynamicPropertyInfos)
-        {
-            if (!propertyInfo.IsIgnored)
-            {
-                yield return propertyInfo;
-            }
-        }
     }
 
     public ExtendedPropertyInfo? GetPropertyInfoByCsName(string name)
@@ -170,14 +160,6 @@ public class ExtendedTypeInfo
             if (_nameIndex.TryGetValue(name, out var i))
             {
                 return PropertyInfos[i];
-            }
-        }
-
-        foreach (var propertyInfo in DynamicPropertyInfos)
-        {
-            if (propertyInfo.Name == name)
-            {
-                return propertyInfo;
             }
         }
 
@@ -199,36 +181,6 @@ public class ExtendedTypeInfo
             }
         }
 
-        foreach (var propertyInfo in DynamicPropertyInfos)
-        {
-            if (propertyInfo.RedName == name)
-            {
-                return propertyInfo;
-            }
-        }
-
         return null;
-    }
-
-    public ExtendedPropertyInfo AddDynamicProperty(string varName, string typeName)
-    {
-        foreach (var oldPropertyInfo in DynamicPropertyInfos)
-        {
-            if (oldPropertyInfo.RedName == varName)
-            {
-                if (oldPropertyInfo.RedType == typeName)
-                {
-                    return oldPropertyInfo;
-                }
-
-                throw new ArgumentException($"A dynamic property with the name '{varName}' already exists!");
-            }
-        }
-
-        var propertyInfo = new ExtendedPropertyInfo(this, varName, typeName);
-
-        DynamicPropertyInfos.Add(propertyInfo);
-
-        return propertyInfo;
     }
 }

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class EquipmentBaseTransition : DefaultTransition
+	public abstract partial class EquipmentBaseTransition : DefaultTransition
 	{
 		public EquipmentBaseTransition()
 		{

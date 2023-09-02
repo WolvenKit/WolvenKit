@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameTutorialBracketData()
 		{
-			Offset = new();
-			Size = new();
+			Offset = new Vector2();
+			Size = new Vector2();
 
 			PostConstruct();
 		}

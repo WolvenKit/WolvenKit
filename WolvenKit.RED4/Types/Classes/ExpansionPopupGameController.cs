@@ -110,10 +110,10 @@ namespace WolvenKit.RED4.Types
 
 		public ExpansionPopupGameController()
 		{
-			PopupCanvasAnchor = new();
-			CloseButtonRef = new();
+			PopupCanvasAnchor = new inkWidgetReference();
+			CloseButtonRef = new inkWidgetReference();
 			IntroAnimationName = "intro";
-			PreOrderButton = new();
+			PreOrderButton = new inkWidgetReference();
 
 			PostConstruct();
 		}

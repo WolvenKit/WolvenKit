@@ -63,13 +63,13 @@ namespace WolvenKit.RED4.Types
 		public entSkinnedClothComponent()
 		{
 			Name = "Component";
-			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			ForceLODLevel = -1;
 			IsEnabled = true;
 			MeshAppearance = "default";
-			ChunkMask = 18446744073709551615;
-			CompiledTopologyData = new() { GfxIndexToTriangles = new(), PhxIndexToTriangles = new(), GfxBarycentrics = new(), PhxBarycentrics = new(), PhxLodSwitchData = new(), PhxSimulated = new() };
+			ChunkMask = long.MaxValue;
+			CompiledTopologyData = new meshCookedClothMeshTopologyData { GfxIndexToTriangles = new(), PhxIndexToTriangles = new(), GfxBarycentrics = new(), PhxBarycentrics = new(), PhxLodSwitchData = new(), PhxSimulated = new() };
 
 			PostConstruct();
 		}

@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 		public questMiscAICommandNode()
 		{
 			Sockets = new();
-			Id = 65535;
-			EntityReference = new() { Names = new() };
+			Id = ushort.MaxValue;
+			EntityReference = new gameEntityReference { Names = new() };
 			Function = "AIClearRoleCommandParams";
 
 			PostConstruct();

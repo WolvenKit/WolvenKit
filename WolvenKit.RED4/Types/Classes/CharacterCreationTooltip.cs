@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public CharacterCreationTooltip()
 		{
-			AttribiuteLevel = new();
-			MaxedOrMinimumLabelText = new();
-			MaxedOrMinimumLabel = new();
-			AttribiuteLevelLabel = new();
+			AttribiuteLevel = new inkTextWidgetReference();
+			MaxedOrMinimumLabelText = new inkTextWidgetReference();
+			MaxedOrMinimumLabel = new inkWidgetReference();
+			AttribiuteLevelLabel = new inkWidgetReference();
 
 			PostConstruct();
 		}

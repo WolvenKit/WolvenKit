@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public questTimePeriod_ConditionType()
 		{
-			Begin = new();
-			End = new();
+			Begin = new GameTime();
+			End = new GameTime();
 
 			PostConstruct();
 		}

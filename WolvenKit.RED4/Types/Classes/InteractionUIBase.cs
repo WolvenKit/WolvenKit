@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class InteractionUIBase : gameuiHUDGameController
+	public abstract partial class InteractionUIBase : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
 		[RED("InteractionsBlackboard")] 

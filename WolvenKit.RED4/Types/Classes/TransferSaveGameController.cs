@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public TransferSaveGameController()
 		{
-			NotificationController = new();
+			NotificationController = new inkWidgetReference();
 
 			PostConstruct();
 		}

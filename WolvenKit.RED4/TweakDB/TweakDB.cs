@@ -158,7 +158,7 @@ public class TweakDB
         {
             foreach (var pair in values)
             {
-                typeInfo.AddDynamicProperty(pair.Key, RedReflection.GetRedTypeFromCSType(pair.Value.GetType(), Flags.Empty));
+                instance.AddDynamicProperty(pair.Key, pair.Value.GetType());
                 instance.SetProperty(pair.Key, pair.Value);
             }
         }

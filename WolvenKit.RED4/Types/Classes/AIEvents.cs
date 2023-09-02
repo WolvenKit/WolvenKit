@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIEvents : IScriptable
+	public abstract partial class AIEvents : IScriptable
 	{
 		public AIEvents()
 		{

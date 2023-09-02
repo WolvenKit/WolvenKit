@@ -22,9 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_ReadIkRequest()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			OutTransform = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			OutTransform = new animTransformIndex();
 
 			PostConstruct();
 		}

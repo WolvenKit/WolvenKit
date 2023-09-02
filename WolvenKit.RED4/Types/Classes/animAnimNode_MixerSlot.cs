@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_MixerSlot()
 		{
-			Id = 4294967295;
-			InputLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
 			MaxNormalAnimEntriesCount = 2;
 			MaxAdditiveAnimEntriesCount = 2;
 			MaxOverrideAnimEntriesCount = 2;

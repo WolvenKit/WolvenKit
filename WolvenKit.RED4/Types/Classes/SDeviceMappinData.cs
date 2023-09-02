@@ -120,10 +120,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Enabled = true;
 			Range = 30.000000F;
-			Offset = new();
-			Position = new();
+			Offset = new Vector4();
+			Position = new Vector4();
 			CheckIfIsTarget = true;
-			Id = new();
+			Id = new gameNewMappinID();
 
 			PostConstruct();
 		}

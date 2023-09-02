@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public NpcNameplateVisualData()
 		{
-			NpcNextToCrosshair = new() { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
+			NpcNextToCrosshair = new gameuiNPCNextToTheCrosshair { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
 			BuffList = new();
 			DebuffList = new();
 

@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public worldSceneRecordingNodeFilter()
 		{
 			MeshNodesOnly = true;
-			MeshResourceFilter = new() { ForceFilterIgnore = new(), ForceFilterMatch = new() };
+			MeshResourceFilter = new worldSceneRecordingNodeMeshResourceFilter { ForceFilterIgnore = new(), ForceFilterMatch = new() };
 
 			PostConstruct();
 		}

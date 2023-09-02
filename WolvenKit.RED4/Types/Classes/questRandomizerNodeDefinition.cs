@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public questRandomizerNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 			OutputWeights = new() { 1, 1 };
 
 			PostConstruct();

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnCheckDistractedReturnCondition()
 		{
-			Params = new();
+			Params = new scnCheckDistractedReturnConditionParams();
 
 			PostConstruct();
 		}

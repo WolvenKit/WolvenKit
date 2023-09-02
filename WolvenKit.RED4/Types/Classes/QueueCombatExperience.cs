@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public QueueCombatExperience()
 		{
-			Entity = new();
+			Entity = new entEntityID();
 
 			PostConstruct();
 		}

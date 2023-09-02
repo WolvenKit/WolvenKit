@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkSingleDrawMetric()
 		{
-			HierarchySize = new();
+			HierarchySize = new Vector2();
 			UsedTextures = new();
 
 			PostConstruct();

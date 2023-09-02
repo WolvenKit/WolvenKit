@@ -78,8 +78,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiStealthIndicatorPartLogicController()
 		{
-			ArrowFrontWidget = new();
-			Wrapper = new();
+			ArrowFrontWidget = new inkImageWidgetReference();
+			Wrapper = new inkCompoundWidgetReference();
 			StealthIndicatorDeadZoneAngle = 40.000000F;
 			SlowestFlashTime = 0.500000F;
 

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIEntityManager_NodeSubType : questObjectNodeType
+	public abstract partial class questIEntityManager_NodeSubType : questObjectNodeType
 	{
 		public questIEntityManager_NodeSubType()
 		{

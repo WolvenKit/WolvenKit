@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemMotionBlurScale()
 		{
 			TimeDuration = 1.000000F;
-			Scale = new();
+			Scale = new effectEffectParameterEvaluatorFloat();
 
 			PostConstruct();
 		}

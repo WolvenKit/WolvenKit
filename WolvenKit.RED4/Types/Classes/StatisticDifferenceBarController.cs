@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public StatisticDifferenceBarController()
 		{
-			Filled = new();
-			Difference = new();
-			Empty = new();
+			Filled = new inkWidgetReference();
+			Difference = new inkWidgetReference();
+			Empty = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISquadMemberBase : ISerializable
+	public abstract partial class AISquadMemberBase : ISerializable
 	{
 		public AISquadMemberBase()
 		{

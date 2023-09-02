@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public ChangeLightEvent()
 		{
-			Settings = new() { Color = new() };
+			Settings = new ScriptLightSettings { Color = new CColor() };
 
 			PostConstruct();
 		}

@@ -158,7 +158,7 @@ namespace WolvenKit.RED4.Types
 
 		public questWithCompanionMoveOnSplineParams()
 		{
-			MovementType = new() { UseNPCMovementParams = true };
+			MovementType = new AIMovementTypeSpec { UseNPCMovementParams = true };
 			CompanionDistancePreset = Enums.gamedataCompanionDistancePreset.Medium;
 			CatchUpWithCompanion = true;
 			TeleportToCompanion = true;

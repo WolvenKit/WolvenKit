@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 		public workTimeOfDayCondition()
 		{
 			Equals_ = true;
-			ActiveAfter = new();
-			ActiveUntil = new();
+			ActiveAfter = new GameTime();
+			ActiveUntil = new GameTime();
 
 			PostConstruct();
 		}

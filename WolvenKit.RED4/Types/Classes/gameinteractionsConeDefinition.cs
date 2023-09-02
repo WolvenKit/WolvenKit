@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsConeDefinition()
 		{
-			Pos1 = new() { W = 1.000000F };
-			Pos2 = new() { W = 1.000000F };
+			Pos1 = new Vector4 { W = 1.000000F };
+			Pos2 = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

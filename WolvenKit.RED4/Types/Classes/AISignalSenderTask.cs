@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISignalSenderTask : AIbehaviortaskScript
+	public abstract partial class AISignalSenderTask : AIbehaviortaskScript
 	{
 		[Ordinal(0)] 
 		[RED("tags")] 

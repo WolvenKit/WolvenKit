@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animIAnimationBuffer : ISerializable
+	public abstract partial class animIAnimationBuffer : ISerializable
 	{
 		public animIAnimationBuffer()
 		{

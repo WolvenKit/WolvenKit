@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public questReplacer_NodeType()
 		{
 			Enable = true;
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

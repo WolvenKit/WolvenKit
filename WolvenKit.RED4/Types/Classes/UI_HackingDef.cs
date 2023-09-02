@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HackingDef()
 		{
-			AmmoIndicator = new();
+			AmmoIndicator = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

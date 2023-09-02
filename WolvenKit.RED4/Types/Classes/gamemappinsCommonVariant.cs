@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamemappinsCommonVariant()
 		{
-			MappinType = 169957907894;
+			MappinType = "Mappins.PointOfInterestMappinDefinition";
 			Variant = Enums.gamedataMappinVariant.DefaultVariant;
 
 			PostConstruct();

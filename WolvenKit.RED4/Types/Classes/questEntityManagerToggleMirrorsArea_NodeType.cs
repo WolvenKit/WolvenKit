@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerToggleMirrorsArea_NodeType()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

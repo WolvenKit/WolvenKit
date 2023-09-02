@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIEffectParameter_FloatEvaluator : ISerializable
+	public abstract partial class gameIEffectParameter_FloatEvaluator : ISerializable
 	{
 		public gameIEffectParameter_FloatEvaluator()
 		{

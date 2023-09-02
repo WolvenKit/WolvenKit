@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIAutoSaveSystem : gameIGameSystem
+	public abstract partial class gameIAutoSaveSystem : gameIGameSystem
 	{
 		public gameIAutoSaveSystem()
 		{

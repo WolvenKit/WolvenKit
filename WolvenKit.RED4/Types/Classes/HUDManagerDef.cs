@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public HUDManagerDef()
 		{
-			ShowHudHintMessege = new();
-			HudHintMessegeContent = new();
+			ShowHudHintMessege = new gamebbScriptID_Bool();
+			HudHintMessegeContent = new gamebbScriptID_String();
 
 			PostConstruct();
 		}

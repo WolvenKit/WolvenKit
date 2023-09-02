@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ITexture : CResource
+	public abstract partial class ITexture : CResource
 	{
 		public ITexture()
 		{

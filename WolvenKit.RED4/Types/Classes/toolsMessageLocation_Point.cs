@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public toolsMessageLocation_Point()
 		{
-			Point = new();
+            Point = new Vector3();
 
 			PostConstruct();
 		}

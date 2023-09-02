@@ -398,7 +398,7 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryTooltipData()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 			PrimaryStats = new();
 			ComparedStats = new();
 			AdditionalStats = new();
@@ -408,9 +408,9 @@ namespace WolvenKit.RED4.Types
 			SpecialAbilities = new();
 			ItemType = Enums.gamedataItemType.Invalid;
 			ItemAttachments = new();
-			InventoryItemData = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
-			QuickhackData = new() { AttackEffects = new() };
-			TransmogItem = new();
+			InventoryItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			QuickhackData = new InventoryTooltipData_QuickhackData { AttackEffects = new() };
+			TransmogItem = new gameItemID();
 
 			PostConstruct();
 		}

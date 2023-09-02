@@ -86,12 +86,12 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_AddIkRequest()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			TargetBone = new();
-			PositionOffset = new();
-			RotationOffset = new() { R = 1.000000F };
-			PoleVector = new() { TargetBone = new(), PositionOffset = new() };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			TargetBone = new animTransformIndex();
+			PositionOffset = new Vector3();
+			RotationOffset = new Quaternion { R = 1.000000F };
+			PoleVector = new animPoleVectorDetails { TargetBone = new animTransformIndex(), PositionOffset = new Vector3() };
 			WeightPosition = 1.000000F;
 			WeightRotation = 1.000000F;
 			BlendTimeIn = 0.500000F;

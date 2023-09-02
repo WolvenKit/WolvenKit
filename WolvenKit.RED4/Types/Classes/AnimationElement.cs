@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AnimationElement()
 		{
-			AnimOptions = new();
+			AnimOptions = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

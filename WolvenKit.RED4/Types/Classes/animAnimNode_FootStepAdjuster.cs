@@ -134,23 +134,23 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FootStepAdjuster()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			LeftToeName = new();
-			RightToeName = new();
-			LeftFootName = new();
-			RightFootName = new();
-			LeftCalfName = new();
-			RightCalfName = new();
-			LeftThighName = new();
-			RightThighName = new();
-			PelvisBoneName = new();
-			CalfHingeAxis = new() { Z = 1.000000F, W = 1.000000F };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			LeftToeName = new animTransformIndex();
+			RightToeName = new animTransformIndex();
+			LeftFootName = new animTransformIndex();
+			RightFootName = new animTransformIndex();
+			LeftCalfName = new animTransformIndex();
+			RightCalfName = new animTransformIndex();
+			LeftThighName = new animTransformIndex();
+			RightThighName = new animTransformIndex();
+			PelvisBoneName = new animTransformIndex();
+			CalfHingeAxis = new Vector4 { Z = 1.000000F, W = 1.000000F };
 			IKBlendTime = 0.200000F;
 			PelvisAdjustmentBlendSpeed = 0.200000F;
 			StepAdjustmentInterval = 1.000000F;
-			ControlValueNode = new();
-			ControlVectorNode = new();
+			ControlValueNode = new animFloatLink();
+			ControlVectorNode = new animVectorLink();
 
 			PostConstruct();
 		}

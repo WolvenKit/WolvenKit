@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public SettingsSelectorControllerFloat()
 		{
-			SliderWidget = new();
+			SliderWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

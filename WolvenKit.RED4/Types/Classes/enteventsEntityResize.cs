@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public enteventsEntityResize()
 		{
-			Extents = new();
+			Extents = new Vector3();
 
 			PostConstruct();
 		}

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animAnimNode_OnePoseInput : animAnimNode_Base
+	public abstract partial class animAnimNode_OnePoseInput : animAnimNode_Base
 	{
 		[Ordinal(11)] 
 		[RED("inputLink")] 

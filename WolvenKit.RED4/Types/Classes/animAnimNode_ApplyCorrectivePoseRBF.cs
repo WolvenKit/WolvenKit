@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_ApplyCorrectivePoseRBF()
 		{
-			Id = 4294967295;
-			InputLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
 			RbfCoefficient = 3.500000F;
 			RbfPowValue = 20.000000F;
 			CorrectiveFrame = 0.033330F;

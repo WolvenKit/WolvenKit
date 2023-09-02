@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public questMoveOnSplineAndKeepDistance_NodeType()
 		{
-			VehicleRef = new() { Names = new() };
-			KeepDistanceFromRef = new() { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
+			KeepDistanceFromRef = new gameEntityReference { Names = new() };
 			ReduceSpeedOnTurns = true;
 
 			PostConstruct();

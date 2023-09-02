@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Names = new();
 			Actions = new();
-			Tags = new() { Tags = new() };
+			Tags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

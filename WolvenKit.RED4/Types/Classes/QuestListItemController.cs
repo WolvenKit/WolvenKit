@@ -102,14 +102,14 @@ namespace WolvenKit.RED4.Types
 
 		public QuestListItemController()
 		{
-			Title = new();
-			Level = new();
-			TrackedMarker = new();
-			DistrictIcon = new();
-			StateIcon = new();
-			Distance = new();
-			Root = new();
-			NewIcon = new();
+			Title = new inkTextWidgetReference();
+			Level = new inkTextWidgetReference();
+			TrackedMarker = new inkWidgetReference();
+			DistrictIcon = new inkImageWidgetReference();
+			StateIcon = new inkImageWidgetReference();
+			Distance = new inkTextWidgetReference();
+			Root = new inkWidgetReference();
+			NewIcon = new inkWidgetReference();
 
 			PostConstruct();
 		}

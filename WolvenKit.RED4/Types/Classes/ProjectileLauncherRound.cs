@@ -198,10 +198,10 @@ namespace WolvenKit.RED4.Types
 
 		public ProjectileLauncherRound()
 		{
-			ProjectileSpawnPoint = new();
-			InstalledProjectile = new();
-			ReleaseRequestDelayID = new();
-			DetonateRequestDelayID = new();
+			ProjectileSpawnPoint = new Vector4();
+			InstalledProjectile = new gameItemID();
+			ReleaseRequestDelayID = new gameDelayID();
+			DetonateRequestDelayID = new gameDelayID();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animPoseInfoLoggerEntry_FloatTrack()
 		{
-			FloatTrack = new();
+			FloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

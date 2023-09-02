@@ -147,8 +147,8 @@ namespace WolvenKit.RED4.Types
 			C_TimeToUnblockSec = 5.000000F;
 			AllControllers = new();
 			BroadcastBlockingLines = new();
-			LastBroadcastBlockingLineTime = new();
-			LastChoiceTime = new();
+			LastBroadcastBlockingLineTime = new EngineTime();
+			LastChoiceTime = new EngineTime();
 
 			PostConstruct();
 		}

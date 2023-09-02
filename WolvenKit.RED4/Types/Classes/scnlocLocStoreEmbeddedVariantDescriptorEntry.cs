@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public scnlocLocStoreEmbeddedVariantDescriptorEntry()
 		{
-			VariantId = new();
-			LocstringId = new();
-			Signature = new();
-			VpeIndex = 4294967295;
+			VariantId = new scnlocVariantId();
+			LocstringId = new scnlocLocstringId();
+			Signature = new scnlocSignature();
+			VpeIndex = uint.MaxValue;
 
 			PostConstruct();
 		}

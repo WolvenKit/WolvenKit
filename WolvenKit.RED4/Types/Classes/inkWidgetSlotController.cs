@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public inkWidgetSlotController()
 		{
-			Layout = new() { Padding = new(), Margin = new(), AnchorPoint = new(), SizeCoefficient = 1.000000F };
+			Layout = new inkWidgetLayout { Padding = new inkMargin(), Margin = new inkMargin(), AnchorPoint = new Vector2(), SizeCoefficient = 1.000000F };
 
 			PostConstruct();
 		}

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questBaseObjectNodeDefinition : questDisableableNodeDefinition
+	public abstract partial class questBaseObjectNodeDefinition : questDisableableNodeDefinition
 	{
 		[Ordinal(2)] 
 		[RED("reference")] 

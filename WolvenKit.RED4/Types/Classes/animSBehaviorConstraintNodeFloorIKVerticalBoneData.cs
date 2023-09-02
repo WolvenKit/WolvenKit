@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public animSBehaviorConstraintNodeFloorIKVerticalBoneData()
 		{
-			Bone = new();
+			Bone = new animTransformIndex();
 			Min_offset = -0.500000F;
 			Max_offset = 0.500000F;
 			OffsetToDesiredBlendTime = 0.100000F;

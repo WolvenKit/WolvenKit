@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIDebugSystem : inkILayerSystem
+	public abstract partial class inkIDebugSystem : inkILayerSystem
 	{
 		public inkIDebugSystem()
 		{

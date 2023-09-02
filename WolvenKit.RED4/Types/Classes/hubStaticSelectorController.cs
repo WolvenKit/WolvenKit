@@ -134,14 +134,14 @@ namespace WolvenKit.RED4.Types
 
 		public hubStaticSelectorController()
 		{
-			LeftArrowWidget = new();
-			RightArrowWidget = new();
-			Container = new();
-			Line = new();
+			LeftArrowWidget = new inkWidgetReference();
+			RightArrowWidget = new inkWidgetReference();
+			Container = new inkWidgetReference();
+			Line = new inkWidgetReference();
 			Data = new();
 			WidgetsControllers = new();
 			CurrentData = new();
-			DebugText = new();
+			DebugText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

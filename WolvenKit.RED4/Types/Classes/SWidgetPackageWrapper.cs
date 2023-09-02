@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public SWidgetPackageWrapper()
 		{
-			WidgetPackage = new() { OwnerID = new() };
+			WidgetPackage = new SWidgetPackage { OwnerID = new gamePersistentID() };
 
 			PostConstruct();
 		}

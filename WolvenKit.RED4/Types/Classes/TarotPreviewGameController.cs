@@ -54,10 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public TarotPreviewGameController()
 		{
-			Background = new();
-			PreviewImage = new();
-			PreviewTitle = new();
-			PreviewDescription = new();
+			Background = new inkWidgetReference();
+			PreviewImage = new inkImageWidgetReference();
+			PreviewTitle = new inkTextWidgetReference();
+			PreviewDescription = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

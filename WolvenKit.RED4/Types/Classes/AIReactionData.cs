@@ -134,9 +134,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIReactionData()
 		{
-			StimSource = new();
-			StimInvestigateData = new() { DistrationPoint = new(), AttackInstigatorPosition = new(), InvestigationSpots = new() };
-			StimEventData = new();
+			StimSource = new Vector4();
+			StimInvestigateData = new senseStimInvestigateData { DistrationPoint = new Vector4(), AttackInstigatorPosition = new Vector4(), InvestigationSpots = new() };
+			StimEventData = new StimEventData();
 
 			PostConstruct();
 		}

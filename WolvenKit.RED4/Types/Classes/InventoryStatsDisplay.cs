@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryStatsDisplay()
 		{
-			StatsRoot = new();
+			StatsRoot = new inkCompoundWidgetReference();
 			StatItems = new();
 
 			PostConstruct();

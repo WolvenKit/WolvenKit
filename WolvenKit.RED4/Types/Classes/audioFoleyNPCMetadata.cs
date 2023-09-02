@@ -94,17 +94,17 @@ namespace WolvenKit.RED4.Types
 
 		public audioFoleyNPCMetadata()
 		{
-			FastHeavy = new() { Events = new() };
-			FastMedium = new() { Events = new() };
-			FastLight = new() { Events = new() };
-			NormalHeavy = new() { Events = new() };
-			NormalMedium = new() { Events = new() };
-			NormalLight = new() { Events = new() };
-			SlowHeavy = new() { Events = new() };
-			SlowMedium = new() { Events = new() };
-			SlowLight = new() { Events = new() };
-			Walk = new() { Events = new() };
-			Run = new() { Events = new() };
+			FastHeavy = new audioMeleeSound { Events = new() };
+			FastMedium = new audioMeleeSound { Events = new() };
+			FastLight = new audioMeleeSound { Events = new() };
+			NormalHeavy = new audioMeleeSound { Events = new() };
+			NormalMedium = new audioMeleeSound { Events = new() };
+			NormalLight = new audioMeleeSound { Events = new() };
+			SlowHeavy = new audioMeleeSound { Events = new() };
+			SlowMedium = new audioMeleeSound { Events = new() };
+			SlowLight = new audioMeleeSound { Events = new() };
+			Walk = new audioMeleeSound { Events = new() };
+			Run = new audioMeleeSound { Events = new() };
 
 			PostConstruct();
 		}

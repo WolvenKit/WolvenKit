@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questFlushAutopilot_NodeType()
 		{
-			VehicleRef = new() { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

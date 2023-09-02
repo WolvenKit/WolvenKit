@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIONodeDefinition : questDisableableNodeDefinition
+	public abstract partial class questIONodeDefinition : questDisableableNodeDefinition
 	{
 		[Ordinal(2)] 
 		[RED("socketName")] 

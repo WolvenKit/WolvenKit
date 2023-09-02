@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class vehicleIRacingSystem : gameIGameSystem
+	public abstract partial class vehicleIRacingSystem : gameIGameSystem
 	{
 		public vehicleIRacingSystem()
 		{

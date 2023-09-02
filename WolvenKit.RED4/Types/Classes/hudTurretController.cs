@@ -174,19 +174,19 @@ namespace WolvenKit.RED4.Types
 
 		public hudTurretController()
 		{
-			Date = new();
-			Timer = new();
-			CameraID = new();
-			HealthStatus = new();
-			MessageText = new();
-			PitchFluff = new();
-			YawFluff = new();
-			LeftPart = new();
-			RightPart = new();
+			Date = new inkTextWidgetReference();
+			Timer = new inkTextWidgetReference();
+			CameraID = new inkTextWidgetReference();
+			HealthStatus = new inkTextWidgetReference();
+			MessageText = new inkTextWidgetReference();
+			PitchFluff = new inkTextWidgetReference();
+			YawFluff = new inkTextWidgetReference();
+			LeftPart = new inkWidgetReference();
+			RightPart = new inkWidgetReference();
 			OffsetLeft = -838.000000F;
 			OffsetRight = 1495.000000F;
-			CurrentTime = new();
-			GameInstance = new();
+			CurrentTime = new GameTime();
+			GameInstance = new ScriptGameInstance();
 
 			PostConstruct();
 		}

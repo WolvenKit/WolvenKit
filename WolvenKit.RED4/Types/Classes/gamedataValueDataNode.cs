@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamedataValueDataNode : gamedataDataNode
+	public abstract partial class gamedataValueDataNode : gamedataDataNode
 	{
 		public gamedataValueDataNode()
 		{

@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.Types
 
 		public entGameplayVOEvent()
 		{
-			AnsweringEntityId = new();
+			AnsweringEntityId = new entEntityID();
 			OverridingVoiceoverContext = Enums.locVoiceoverContext.Default_Vo_Context;
 
 			PostConstruct();

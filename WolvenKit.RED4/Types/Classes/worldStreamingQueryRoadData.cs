@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldStreamingQueryRoadData()
 		{
-			Transform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
-			RoadGlobalNodeId = new();
-			ConnectedRoadsStartIndex = 65535;
+			Transform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			RoadGlobalNodeId = new worldGlobalNodeID();
+			ConnectedRoadsStartIndex = ushort.MaxValue;
 
 			PostConstruct();
 		}

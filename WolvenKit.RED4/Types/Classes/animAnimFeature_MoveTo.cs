@@ -38,9 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_MoveTo()
 		{
-			InitialFwdVector = new() { Y = 1.000000F };
-			TargetPositionWs = new() { W = 1.000000F };
-			TargetDirectionWs = new() { Y = 1.000000F };
+			InitialFwdVector = new Vector4 { Y = 1.000000F };
+			TargetPositionWs = new Vector4 { W = 1.000000F };
+			TargetDirectionWs = new Vector4 { Y = 1.000000F };
 
 			PostConstruct();
 		}

@@ -86,14 +86,14 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkMinigameEndScreenController()
 		{
-			OutcomeText = new();
-			ProgramsListContainer = new();
+			OutcomeText = new inkTextWidgetReference();
+			ProgramsListContainer = new inkWidgetReference();
 			SlotList = new();
-			EndData = new() { UnlockedPrograms = new() };
-			CloseButton = new();
-			Header_bg = new();
-			CompletionColor = new();
-			FailureColor = new();
+			EndData = new EndScreenData { UnlockedPrograms = new() };
+			CloseButton = new inkWidgetReference();
+			Header_bg = new inkWidgetReference();
+			CompletionColor = new CColor();
+			FailureColor = new CColor();
 
 			PostConstruct();
 		}

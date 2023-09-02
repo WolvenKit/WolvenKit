@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 		public questLookAtDrivenTurnsNode()
 		{
 			Sockets = new();
-			Id = 65535;
-			PuppetRef = new() { Names = new() };
+			Id = ushort.MaxValue;
+			PuppetRef = new gameEntityReference { Names = new() };
 			CanLookAtDrivenTurnsInterruptGesture = true;
 
 			PostConstruct();

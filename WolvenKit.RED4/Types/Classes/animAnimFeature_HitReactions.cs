@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_HitReactions()
 		{
-			HitDirection = new() { Y = -1.000000F };
+			HitDirection = new Vector4 { Y = -1.000000F };
 			HitIntensity = 1.000000F;
 
 			PostConstruct();

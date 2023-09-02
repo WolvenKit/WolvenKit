@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISubActionScaleDurationWithDistance_Record_Implementation : IScriptable
+	public abstract partial class AISubActionScaleDurationWithDistance_Record_Implementation : IScriptable
 	{
 		public AISubActionScaleDurationWithDistance_Record_Implementation()
 		{

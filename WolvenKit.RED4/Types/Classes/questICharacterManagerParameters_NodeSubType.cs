@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questICharacterManagerParameters_NodeSubType : questICharacterManager_NodeSubType
+	public abstract partial class questICharacterManagerParameters_NodeSubType : questICharacterManager_NodeSubType
 	{
 		public questICharacterManagerParameters_NodeSubType()
 		{

@@ -86,14 +86,14 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_DampFloat()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			DefaultIncreaseSpeed = 1.000000F;
 			DefaultDecreaseSpeed = 1.000000F;
 			RangeMin = -180.000000F;
 			RangeMax = 180.000000F;
-			InputNode = new();
-			IncreaseSpeedNode = new();
-			DecreaseSpeedNode = new();
+			InputNode = new animFloatLink();
+			IncreaseSpeedNode = new animFloatLink();
+			DecreaseSpeedNode = new animFloatLink();
 
 			PostConstruct();
 		}

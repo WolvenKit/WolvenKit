@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class RestrictedMovementAreaCondition : AIbehaviorconditionScript
+	public abstract partial class RestrictedMovementAreaCondition : AIbehaviorconditionScript
 	{
 		public RestrictedMovementAreaCondition()
 		{

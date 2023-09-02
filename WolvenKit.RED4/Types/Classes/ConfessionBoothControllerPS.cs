@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 		public ConfessionBoothControllerPS()
 		{
 			DeviceName = "LocKey#1942";
-			TweakDBRecord = 102833522601;
+			TweakDBRecord = "Devices.ConfessionBooth";
 			TweakDBDescriptionRecord = 152595250458;
 
 			PostConstruct();

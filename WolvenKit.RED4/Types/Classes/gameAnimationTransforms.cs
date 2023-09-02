@@ -39,8 +39,8 @@ namespace WolvenKit.RED4.Types
 		public gameAnimationTransforms()
 		{
 			ExtractedMotion = new();
-			GatePosition = new() { Position = new(), Orientation = new() { R = 1.000000F } };
-			BoneOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
+			GatePosition = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			BoneOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 
 			PostConstruct();
 		}

@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public worldStreamingBlock()
 		{
 			Descriptors = new();
-			Index = 4294967295;
+			Index = uint.MaxValue;
 
 			PostConstruct();
 		}

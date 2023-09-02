@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class Example_FxSpawning : gameScriptableComponent
+	public abstract partial class Example_FxSpawning : gameScriptableComponent
 	{
 		[Ordinal(5)] 
 		[RED("effect")] 

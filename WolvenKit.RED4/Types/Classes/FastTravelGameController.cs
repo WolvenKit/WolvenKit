@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public FastTravelGameController()
 		{
-			FastTravelPointsList = new();
+			FastTravelPointsList = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

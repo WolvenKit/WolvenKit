@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkMenuInstance : IScriptable
+	public abstract partial class inkMenuInstance : IScriptable
 	{
 		public inkMenuInstance()
 		{

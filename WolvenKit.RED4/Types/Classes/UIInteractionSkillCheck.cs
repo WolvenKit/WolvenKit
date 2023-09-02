@@ -95,7 +95,7 @@ namespace WolvenKit.RED4.Types
 		public UIInteractionSkillCheck()
 		{
 			AdditionalRequirements = new();
-			OwnerID = new();
+			OwnerID = new entEntityID();
 
 			PostConstruct();
 		}

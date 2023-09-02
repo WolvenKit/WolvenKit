@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public navLocomotionPathPointInfo()
 		{
-			Point = new();
-			UserDataIndex = 4294967295;
+			Point = new navSerializableSplineProgression();
+			UserDataIndex = uint.MaxValue;
 
 			PostConstruct();
 		}

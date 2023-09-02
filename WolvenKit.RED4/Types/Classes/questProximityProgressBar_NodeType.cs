@@ -75,9 +75,9 @@ namespace WolvenKit.RED4.Types
 			Reset = true;
 			Distance = 10.000000F;
 			DistanceComparisonType = Enums.EComparisonType.Less;
-			Target = new() { Names = new() };
+			Target = new gameEntityReference { Names = new() };
 			IsPlayerActivator = true;
-			Activator = new() { Names = new() };
+			Activator = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

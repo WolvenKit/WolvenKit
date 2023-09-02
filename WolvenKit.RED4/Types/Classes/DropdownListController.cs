@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public DropdownListController()
 		{
-			ListContainer = new();
+			ListContainer = new inkCompoundWidgetReference();
 			Data = new();
 
 			PostConstruct();

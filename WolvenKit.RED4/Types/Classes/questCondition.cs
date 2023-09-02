@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questCondition : questIBaseCondition
+	public abstract partial class questCondition : questIBaseCondition
 	{
 		public questCondition()
 		{

@@ -71,7 +71,7 @@ namespace WolvenKit.RED4.Types
 		public FuseBox()
 		{
 			ControllerTypeName = "FuseBoxController";
-			ShortGlitchDelayID = new();
+			ShortGlitchDelayID = new gameDelayID();
 			IndexesOfComponentsToOFF = new();
 			ComponentsON = new();
 			ComponentsOFF = new();

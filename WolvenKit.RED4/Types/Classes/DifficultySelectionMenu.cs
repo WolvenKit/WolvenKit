@@ -94,14 +94,14 @@ namespace WolvenKit.RED4.Types
 
 		public DifficultySelectionMenu()
 		{
-			DifficultyTitle = new();
-			DifficultyIcon = new();
-			Difficulty0 = new();
-			Difficulty1 = new();
-			Difficulty2 = new();
-			Difficulty3 = new();
-			C_atlas1 = new();
-			C_atlas2 = new();
+			DifficultyTitle = new inkTextWidgetReference();
+			DifficultyIcon = new inkImageWidgetReference();
+			Difficulty0 = new inkWidgetReference();
+			Difficulty1 = new inkWidgetReference();
+			Difficulty2 = new inkWidgetReference();
+			Difficulty3 = new inkWidgetReference();
+			C_atlas1 = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\fullscreen\main_menu\difficulty_level.inkatlas") };
+			C_atlas2 = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\fullscreen\main_menu\difficulty_level1.inkatlas") };
 
 			PostConstruct();
 		}

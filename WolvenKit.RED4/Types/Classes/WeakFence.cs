@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public WeakFence()
 		{
-			ImpulseVector = new();
+			ImpulseVector = new Vector4();
 			SideTriggerNames = new();
 			TriggerComponents = new();
 

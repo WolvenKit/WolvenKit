@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SkAnimContinue()
 		{
-			Input = new();
+			Input = new animPoseLink();
 
 			PostConstruct();
 		}

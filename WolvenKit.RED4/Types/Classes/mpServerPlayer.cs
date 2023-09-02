@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public mpServerPlayer()
 		{
-			PeerID = new() { Value = 255 };
+			PeerID = new netPeerID { Value = 255 };
 
 			PostConstruct();
 		}

@@ -206,31 +206,31 @@ namespace WolvenKit.RED4.Types
 
 		public UIGameDataDef()
 		{
-			InteractionData = new();
-			ShowDialogLine = new();
-			HideDialogLine = new();
-			HideDialogLineByData = new();
-			ShowSceneComment = new();
-			HideSceneComment = new();
-			ShowSubtitlesBackground = new();
-			Popup_IsModal = new();
-			Popup_IsShown = new();
-			Popup_Data = new();
-			Popup_Settings = new();
-			Controller_Disconnected = new();
-			ActivityLog = new();
-			RightWeaponRecordID = new();
-			LeftWeaponRecordID = new();
-			UIVendorContextRequest = new();
-			UIjailbreakData = new();
-			QuestTimerInitialDuration = new();
-			QuestTimerCurrentDuration = new();
-			Tutorial_EnableHighlight = new();
-			Tutorial_EntityRefToHighlight = new();
-			WeaponSway = new();
-			NotificationJournalHash = new();
-			IsBriefingActive = new();
-			MuppetStats = new();
+			InteractionData = new gamebbScriptID_Variant();
+			ShowDialogLine = new gamebbScriptID_Variant();
+			HideDialogLine = new gamebbScriptID_Variant();
+			HideDialogLineByData = new gamebbScriptID_Variant();
+			ShowSceneComment = new gamebbScriptID_String();
+			HideSceneComment = new gamebbScriptID_Bool();
+			ShowSubtitlesBackground = new gamebbScriptID_Bool();
+			Popup_IsModal = new gamebbScriptID_Bool();
+			Popup_IsShown = new gamebbScriptID_Bool();
+			Popup_Data = new gamebbScriptID_Variant();
+			Popup_Settings = new gamebbScriptID_Variant();
+			Controller_Disconnected = new gamebbScriptID_Bool();
+			ActivityLog = new gamebbScriptID_Variant();
+			RightWeaponRecordID = new gamebbScriptID_Variant();
+			LeftWeaponRecordID = new gamebbScriptID_Variant();
+			UIVendorContextRequest = new gamebbScriptID_Bool();
+			UIjailbreakData = new gamebbScriptID_Variant();
+			QuestTimerInitialDuration = new gamebbScriptID_Float();
+			QuestTimerCurrentDuration = new gamebbScriptID_Float();
+			Tutorial_EnableHighlight = new gamebbScriptID_Bool();
+			Tutorial_EntityRefToHighlight = new gamebbScriptID_Variant();
+			WeaponSway = new gamebbScriptID_Vector2();
+			NotificationJournalHash = new gamebbScriptID_Int32();
+			IsBriefingActive = new gamebbScriptID_Bool();
+			MuppetStats = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

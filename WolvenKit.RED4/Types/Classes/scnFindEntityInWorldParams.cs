@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnFindEntityInWorldParams()
 		{
-			ActorRef = new() { Names = new() };
+			ActorRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

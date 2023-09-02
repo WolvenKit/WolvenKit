@@ -586,20 +586,20 @@ namespace WolvenKit.RED4.Types
 			HPListenersList = new();
 			SensorDeviceState = Enums.ESensorDeviceStates.IDLE;
 			SensorWakeState = Enums.ESensorDeviceWakeState.NONE;
-			TargetingDelayEventID = new();
-			CurrentResolveDelayEventID = new();
-			TargetLostBySensesDelayEventID = new();
+			TargetingDelayEventID = new gameDelayID();
+			CurrentResolveDelayEventID = new gameDelayID();
+			TargetLostBySensesDelayEventID = new gameDelayID();
 			LightScanRefs = new();
 			LightAttitudeRefs = new();
 			LightInfoRefs = new();
-			LightColors = new() { Off = new() { Color = new() }, Red = new() { Color = new() }, Green = new() { Color = new() }, Blue = new() { Color = new() }, Yellow = new() { Color = new() }, White = new() { Color = new() } };
+			LightColors = new LedColors_SensorDevice { Off = new ScriptLightSettings { Color = new CColor() }, Red = new ScriptLightSettings { Color = new CColor() }, Green = new ScriptLightSettings { Color = new CColor() }, Blue = new ScriptLightSettings { Color = new CColor() }, Yellow = new ScriptLightSettings { Color = new CColor() }, White = new ScriptLightSettings { Color = new CColor() } };
 			ScanFXSlotName = "laser";
-			DefaultSensePreset = 81335754956;
+			DefaultSensePreset = "Senses.BasicCamera";
 			ElementsToHideOnTCS = new();
 			ElementsToHideOnTCSRefs = new();
 			PrevioustagKillList = new();
 			PlayIdleSoundOnIdle = true;
-			PlayerControlData = new();
+			PlayerControlData = new PlayerControlDeviceData();
 			MinPitch = -70.000000F;
 			MaxPitch = 70.000000F;
 

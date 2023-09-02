@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public LibTreeDefTreeVariableCName()
 		{
-			Id = 65535;
+			Id = ushort.MaxValue;
 			ReadableName = "TreeVar";
 			ExportAsProperty = true;
 

@@ -126,9 +126,9 @@ namespace WolvenKit.RED4.Types
 
 		public inkShapeWidget()
 		{
-			Size = new() { X = 1.000000F, Y = 1.000000F };
-			NineSliceScale = new();
-			BorderColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
+			Size = new Vector2 { X = 1.000000F, Y = 1.000000F };
+			NineSliceScale = new inkMargin();
+			BorderColor = new HDRColor { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
 			BorderOpacity = 1.000000F;
 			FillOpacity = 1.000000F;
 			VertexList = new();

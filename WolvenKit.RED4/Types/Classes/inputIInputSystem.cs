@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inputIInputSystem : RedBaseClass
+	public abstract partial class inputIInputSystem : RedBaseClass
 	{
 		public inputIInputSystem()
 		{

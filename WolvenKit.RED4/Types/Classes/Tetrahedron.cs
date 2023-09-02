@@ -39,10 +39,10 @@ namespace WolvenKit.RED4.Types
 
 		public Tetrahedron()
 		{
-			Point1 = new();
-			Point2 = new();
-			Point3 = new();
-			Point4 = new();
+			Point1 = new Vector4();
+			Point2 = new Vector4();
+			Point3 = new Vector4();
+			Point4 = new Vector4();
 
 			PostConstruct();
 		}

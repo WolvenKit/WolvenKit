@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class VehicleEventsTransition : VehicleTransition
+	public abstract partial class VehicleEventsTransition : VehicleTransition
 	{
 		[Ordinal(1)] 
 		[RED("isCameraTogglePressed")] 

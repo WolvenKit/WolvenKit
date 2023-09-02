@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ISerializable : RedBaseClass
+	public abstract partial class ISerializable : RedBaseClass
 	{
 		public ISerializable()
 		{

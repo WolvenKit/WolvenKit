@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIMuppetInputAction : RedBaseClass
+	public abstract partial class gameIMuppetInputAction : RedBaseClass
 	{
 		public gameIMuppetInputAction()
 		{

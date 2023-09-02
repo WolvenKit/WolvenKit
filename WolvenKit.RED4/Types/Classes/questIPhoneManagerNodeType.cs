@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIPhoneManagerNodeType : questIRetOutputNodeType
+	public abstract partial class questIPhoneManagerNodeType : questIRetOutputNodeType
 	{
 		public questIPhoneManagerNodeType()
 		{

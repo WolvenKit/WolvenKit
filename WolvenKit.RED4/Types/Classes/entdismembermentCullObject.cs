@@ -70,13 +70,13 @@ namespace WolvenKit.RED4.Types
 
 		public entdismembermentCullObject()
 		{
-			Plane = new() { NormalDistance = new() { Z = 1.000000F, W = -0.000000F } };
-			Plane1 = new() { NormalDistance = new() { Z = 1.000000F, W = -0.000000F } };
-			CapsulePointA = new();
-			CapsulePointB = new();
+			Plane = new Plane { NormalDistance = new Vector4 { Z = 1.000000F, W = -0.000000F } };
+			Plane1 = new Plane { NormalDistance = new Vector4 { Z = 1.000000F, W = -0.000000F } };
+			CapsulePointA = new Vector3();
+			CapsulePointB = new Vector3();
 			CapsuleRadius = 0.100000F;
 			NearestAnimIndex = -1;
-			RagdollBodyIndex = 65535;
+			RagdollBodyIndex = ushort.MaxValue;
 
 			PostConstruct();
 		}

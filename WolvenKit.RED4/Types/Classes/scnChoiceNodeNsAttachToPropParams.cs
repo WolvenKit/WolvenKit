@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnChoiceNodeNsAttachToPropParams()
 		{
-			PropId = new() { Id = 4294967295 };
+			PropId = new scnPropId { Id = uint.MaxValue };
 			VisualizerStyle = Enums.scnChoiceNodeNsVisualizerStyle.inWorld;
 
 			PostConstruct();

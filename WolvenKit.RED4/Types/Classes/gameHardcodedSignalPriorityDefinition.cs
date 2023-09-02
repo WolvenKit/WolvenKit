@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameHardcodedSignalPriorityDefinition()
 		{
-			DefaultPriority = 65535;
+			DefaultPriority = ushort.MaxValue;
 			Signals = new();
 
 			PostConstruct();

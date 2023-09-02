@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.Types
 		public STvChannel()
 		{
 			ChannelName = "1";
-			VideoPath = new();
+			VideoPath = new redResourceReferenceScriptToken();
 			Looped = true;
 			Sequence = new();
 

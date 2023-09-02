@@ -182,16 +182,16 @@ namespace WolvenKit.RED4.Types
 
 		public scnActorDef()
 		{
-			ActorId = new() { Id = 4294967295 };
-			VoicetagId = new();
-			FindActorInContextParams = new() { VoiceVagId = new() };
-			FindActorInWorldParams = new() { ActorRef = new() { Names = new() } };
-			SpawnDespawnParams = new() { SpawnOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } }, ItemOwnerId = new() { Id = 4294967040 }, SpawnOnStart = true, IsEnabled = true, ValidateSpawnPostion = true };
-			SpawnSetParams = new();
-			CommunityParams = new();
-			SpawnerParams = new();
+			ActorId = new scnActorId { Id = uint.MaxValue };
+			VoicetagId = new scnVoicetagId();
+			FindActorInContextParams = new scnFindEntityInContextParams { VoiceVagId = new scnVoicetagId() };
+			FindActorInWorldParams = new scnFindEntityInWorldParams { ActorRef = new gameEntityReference { Names = new() } };
+			SpawnDespawnParams = new scnSpawnDespawnEntityParams { SpawnOffset = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } }, ItemOwnerId = new scnPerformerId { Id = 4294967040 }, SpawnOnStart = true, IsEnabled = true, ValidateSpawnPostion = true };
+			SpawnSetParams = new scnSpawnSetParams();
+			CommunityParams = new scnCommunityParams();
+			SpawnerParams = new scnSpawnerParams();
 			AnimSets = new();
-			LipsyncAnimSet = new() { Id = 4294967295 };
+			LipsyncAnimSet = new scnLipsyncAnimSetSRRefId { Id = uint.MaxValue };
 			FacialAnimSets = new();
 			CyberwareAnimSets = new();
 			DeformationAnimSets = new();

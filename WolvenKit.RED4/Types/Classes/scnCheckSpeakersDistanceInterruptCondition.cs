@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnCheckSpeakersDistanceInterruptCondition()
 		{
-			Params = new() { Distance = 6.000000F };
+			Params = new scnCheckSpeakersDistanceInterruptConditionParams { Distance = 6.000000F };
 
 			PostConstruct();
 		}

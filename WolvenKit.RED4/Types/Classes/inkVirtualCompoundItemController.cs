@@ -46,11 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public inkVirtualCompoundItemController()
 		{
-			ToggledOff = new();
-			ToggledOn = new();
-			Selected_672 = new();
-			Deselected = new();
-			Added = new();
+			ToggledOff = new inkVirtualCompoundItemControllerCallback();
+			ToggledOn = new inkVirtualCompoundItemControllerCallback();
+			Selected_672 = new inkVirtualCompoundItemSelectControllerCallback();
+			Deselected = new inkVirtualCompoundItemControllerCallback();
+			Added = new inkVirtualCompoundItemControllerCallback();
 
 			PostConstruct();
 		}

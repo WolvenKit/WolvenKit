@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkVirtualCompoundController : inkDiscreteNavigationController
+	public abstract partial class inkVirtualCompoundController : inkDiscreteNavigationController
 	{
 		[Ordinal(4)] 
 		[RED("ItemSelected")] 

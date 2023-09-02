@@ -110,16 +110,16 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_Ik2Constraint()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			FirstBoneIndex = new();
-			SecondBoneIndex = new();
-			EndBoneIndex = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			FirstBoneIndex = new animTransformIndex();
+			SecondBoneIndex = new animTransformIndex();
+			EndBoneIndex = new animTransformIndex();
 			HingeAxis = Enums.animAxis.Y;
 			Weight = 1.000000F;
-			WeightFloatTrack = new();
-			WeightNode = new();
-			TwistNode = new();
+			WeightFloatTrack = new animNamedTrackIndex();
+			WeightNode = new animFloatLink();
+			TwistNode = new animFloatLink();
 
 			PostConstruct();
 		}

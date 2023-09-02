@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerSkillCheckConditionDescriptionLogicController()
 		{
-			NameRef = new();
+			NameRef = new inkTextWidgetReference();
 			PassedStateName = "Passed";
 			FailedStateName = "Failed";
 

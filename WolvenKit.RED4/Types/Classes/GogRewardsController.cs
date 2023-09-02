@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public GogRewardsController()
 		{
-			ContainerWidget = new();
+			ContainerWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

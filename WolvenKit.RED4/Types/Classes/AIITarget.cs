@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIITarget : RedBaseClass
+	public abstract partial class AIITarget : RedBaseClass
 	{
 		public AIITarget()
 		{

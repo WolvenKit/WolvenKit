@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIWaitingSignSystem : inkILayerSystem
+	public abstract partial class inkIWaitingSignSystem : inkILayerSystem
 	{
 		public inkIWaitingSignSystem()
 		{

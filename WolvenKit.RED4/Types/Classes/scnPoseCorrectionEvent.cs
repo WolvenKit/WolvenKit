@@ -22,10 +22,10 @@ namespace WolvenKit.RED4.Types
 
 		public scnPoseCorrectionEvent()
 		{
-			Id = new() { Id = 18446744073709551615 };
+			Id = new scnSceneEventId { Id = long.MaxValue };
 			Duration = 1000;
-			PerformerId = new() { Id = 4294967040 };
-			PoseCorrectionGroup = new() { PoseCorrections = new(0) };
+			PerformerId = new scnPerformerId { Id = 4294967040 };
+			PoseCorrectionGroup = new animPoseCorrectionGroup { PoseCorrections = new(0) };
 
 			PostConstruct();
 		}

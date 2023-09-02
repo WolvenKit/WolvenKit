@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ToggleRefs = new();
 			SelectedIndex = -1;
-			ValueChanged = new();
+			ValueChanged = new inkRadioGroupChangedCallback();
 
 			PostConstruct();
 		}

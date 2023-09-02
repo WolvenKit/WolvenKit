@@ -31,9 +31,9 @@ namespace WolvenKit.RED4.Types
 
 		public OrientedBox()
 		{
-			Position = new();
-			Edge_1 = new();
-			Edge_2 = new();
+			Position = new Vector4();
+			Edge_1 = new Vector4();
+			Edge_2 = new Vector4();
 
 			PostConstruct();
 		}

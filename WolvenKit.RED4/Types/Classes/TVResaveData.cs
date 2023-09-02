@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public TVResaveData()
 		{
-			MediaResaveData = new() { MediaDeviceData = new() };
+			MediaResaveData = new MediaResaveData { MediaDeviceData = new MediaDeviceData() };
 			Channels = new();
 
 			PostConstruct();

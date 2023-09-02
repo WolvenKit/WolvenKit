@@ -143,18 +143,18 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemPointLight()
 		{
 			TimeDuration = 1.000000F;
-			Tint = new();
-			Intensity = new();
-			Radius = new();
-			Offset = new();
-			Color = new();
+			Tint = new effectEffectParameterEvaluatorColor();
+			Intensity = new effectEffectParameterEvaluatorFloat();
+			Radius = new effectEffectParameterEvaluatorFloat();
+			Offset = new Vector3();
+			Color = new CColor();
 			ColorGroupSaturation = 100;
 			UseInGI = true;
 			UseInTransparents = true;
 			UseInParticles = true;
 			SceneDiffuse = true;
 			SceneSpecular = true;
-			Flicker = new() { FlickerPeriod = 0.200000F };
+			Flicker = new rendSLightFlickering { FlickerPeriod = 0.200000F };
 
 			PostConstruct();
 		}

@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public DataTermDeviceBlackboardDef()
 		{
-			FastTravelPoint = new();
-			TriggerWorldMap = new();
+			FastTravelPoint = new gamebbScriptID_Variant();
+			TriggerWorldMap = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

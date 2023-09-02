@@ -342,29 +342,29 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModeMenuListItem()
 		{
-			ScrollBarRef = new();
-			CounterLabelRef = new();
-			TextLabelRef = new();
-			OptionSelectorRef = new();
-			LeftArrow = new();
-			RightArrow = new();
-			LeftButton = new();
-			RightButton = new();
-			OptionLabelRef = new();
-			SelectedWidgetRef = new();
-			TextRootWidgetRef = new();
-			SliderRootWidgetRef = new();
-			OptionSelectorRootWidgetRef = new();
-			HoldButtonRootWidgetRef = new();
-			ScrollBarLineRef = new();
-			ScrollBarHandleRef = new();
-			ScrollSlidingAreaRef = new();
-			HoldProgressRef = new();
-			GridRoot = new();
-			GridTopRow = new();
-			GridBottomRow = new();
+			ScrollBarRef = new inkWidgetReference();
+			CounterLabelRef = new inkTextWidgetReference();
+			TextLabelRef = new inkTextWidgetReference();
+			OptionSelectorRef = new inkWidgetReference();
+			LeftArrow = new inkWidgetReference();
+			RightArrow = new inkWidgetReference();
+			LeftButton = new inkWidgetReference();
+			RightButton = new inkWidgetReference();
+			OptionLabelRef = new inkTextWidgetReference();
+			SelectedWidgetRef = new inkWidgetReference();
+			TextRootWidgetRef = new inkWidgetReference();
+			SliderRootWidgetRef = new inkWidgetReference();
+			OptionSelectorRootWidgetRef = new inkWidgetReference();
+			HoldButtonRootWidgetRef = new inkWidgetReference();
+			ScrollBarLineRef = new inkWidgetReference();
+			ScrollBarHandleRef = new inkWidgetReference();
+			ScrollSlidingAreaRef = new inkWidgetReference();
+			HoldProgressRef = new inkWidgetReference();
+			GridRoot = new inkWidgetReference();
+			GridTopRow = new inkWidgetReference();
+			GridBottomRow = new inkWidgetReference();
 			OptionSelectorValues = new();
-			HoldBgInitMargin = new();
+			HoldBgInitMargin = new inkMargin();
 
 			PostConstruct();
 		}

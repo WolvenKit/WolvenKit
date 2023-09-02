@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public LedColors()
 		{
-			Off = new() { Color = new() };
-			Red = new() { Color = new() };
-			Green = new() { Color = new() };
+			Off = new ScriptLightSettings { Color = new CColor() };
+			Red = new ScriptLightSettings { Color = new CColor() };
+			Green = new ScriptLightSettings { Color = new CColor() };
 
 			PostConstruct();
 		}

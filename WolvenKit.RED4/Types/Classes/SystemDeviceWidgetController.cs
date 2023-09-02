@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public SystemDeviceWidgetController()
 		{
-			SlavesConnectedCount = new();
-			ConnectedDevicesHolder = new();
+			SlavesConnectedCount = new inkTextWidgetReference();
+			ConnectedDevicesHolder = new inkWidgetReference();
 
 			PostConstruct();
 		}

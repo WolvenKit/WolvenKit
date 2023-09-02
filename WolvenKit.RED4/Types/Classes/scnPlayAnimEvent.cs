@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnPlayAnimEvent : scnSceneEvent
+	public abstract partial class scnPlayAnimEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
 		[RED("animData")] 

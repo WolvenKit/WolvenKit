@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public LevelUpUserData()
 		{
-			Data = new();
+			Data = new questLevelUpData();
 
 			PostConstruct();
 		}

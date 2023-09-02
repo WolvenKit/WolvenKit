@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public NarrationJournalGameController()
 		{
-			EntriesContainer = new();
+			EntriesContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

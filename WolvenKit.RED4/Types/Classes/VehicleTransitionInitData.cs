@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleTransitionInitData()
 		{
-			EntityID = new();
+			EntityID = new entEntityID();
 
 			PostConstruct();
 		}

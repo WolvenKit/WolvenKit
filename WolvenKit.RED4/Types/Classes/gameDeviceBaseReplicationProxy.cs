@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameDeviceBaseReplicationProxy()
 		{
-			VersionTimestamp = new() { MilliSecs = 18446744073709551615 };
-			InitialOrientation = new();
-			InitialLocation = new();
+			VersionTimestamp = new netTime { MilliSecs = long.MaxValue };
+			InitialOrientation = new EulerAngles();
+			InitialLocation = new Vector3();
 
 			PostConstruct();
 		}

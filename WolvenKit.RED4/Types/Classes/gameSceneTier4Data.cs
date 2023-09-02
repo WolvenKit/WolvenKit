@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 		public gameSceneTier4Data()
 		{
 			Tier = Enums.GameplayTier.Tier4_FPPCinematic;
-			Params = new();
+			Params = new gameMotionConstrainedTierDataParams();
 
 			PostConstruct();
 		}

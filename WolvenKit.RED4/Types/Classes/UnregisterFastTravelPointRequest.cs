@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public UnregisterFastTravelPointRequest()
 		{
-			RequesterID = new();
+			RequesterID = new entEntityID();
 
 			PostConstruct();
 		}

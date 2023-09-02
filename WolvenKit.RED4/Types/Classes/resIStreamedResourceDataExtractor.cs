@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class resIStreamedResourceDataExtractor : RedBaseClass
+	public abstract partial class resIStreamedResourceDataExtractor : RedBaseClass
 	{
 		public resIStreamedResourceDataExtractor()
 		{

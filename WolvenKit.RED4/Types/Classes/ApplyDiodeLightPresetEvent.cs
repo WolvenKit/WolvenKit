@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyDiodeLightPresetEvent()
 		{
-			Preset = new() { State = true, ColorMax = new(), ColorMin = new(), OverrideColorMin = true, Strength = 1.000000F };
+			Preset = new DiodeLightPreset { State = true, ColorMax = new(), ColorMin = new(), OverrideColorMin = true, Strength = 1.000000F };
 
 			PostConstruct();
 		}

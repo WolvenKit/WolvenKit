@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamemountingMountableComponent : entIComponent
+	public abstract partial class gamemountingMountableComponent : entIComponent
 	{
 		public gamemountingMountableComponent()
 		{

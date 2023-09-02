@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questStartEndNodeDefinition : questDisableableNodeDefinition
+	public abstract partial class questStartEndNodeDefinition : questDisableableNodeDefinition
 	{
 		public questStartEndNodeDefinition()
 		{

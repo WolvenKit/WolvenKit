@@ -278,18 +278,18 @@ namespace WolvenKit.RED4.Types
 
 		public VendorHubMenuGameController()
 		{
-			TabRootContainer = new();
-			TabRootRef = new();
-			PlayerCurrency = new();
-			VendorShopLabel = new();
-			NotificationRoot = new();
-			PlayerWeight = new();
-			LevelValue = new();
-			StreetCredLabel = new();
-			LevelBarProgress = new();
-			LevelBarSpacer = new();
-			StreetCredBarProgress = new();
-			StreetCredBarSpacer = new();
+			TabRootContainer = new inkWidgetReference();
+			TabRootRef = new inkWidgetReference();
+			PlayerCurrency = new inkTextWidgetReference();
+			VendorShopLabel = new inkTextWidgetReference();
+			NotificationRoot = new inkWidgetReference();
+			PlayerWeight = new inkTextWidgetReference();
+			LevelValue = new inkTextWidgetReference();
+			StreetCredLabel = new inkTextWidgetReference();
+			LevelBarProgress = new inkWidgetReference();
+			LevelBarSpacer = new inkWidgetReference();
+			StreetCredBarProgress = new inkWidgetReference();
+			StreetCredBarSpacer = new inkWidgetReference();
 			MenuData = new();
 
 			PostConstruct();

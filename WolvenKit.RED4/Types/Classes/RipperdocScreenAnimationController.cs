@@ -310,36 +310,36 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocScreenAnimationController()
 		{
-			DefaultAnimationTab = new();
-			ItemAnimationTab = new();
-			DefaultTab = new();
-			ItemTab = new();
-			FemaleHovers = new();
-			MaleHovers = new();
-			F_immuneHoverTexture = new();
-			F_systemReplacementHoverTexture = new();
-			F_integumentaryHoverTexture = new();
-			F_musculoskeletalHoverTexture = new();
-			F_nervousHoverTexture = new();
-			F_eyesHoverTexture = new();
-			F_legsHoverTexture = new();
-			F_frontalCortexHoverTexture = new();
-			F_handsHoverTexture = new();
-			F_cardiovascularHoverTexture = new();
-			F_armsHoverTexture = new();
-			M_integumentaryHoverTexture = new();
-			M_armsHoverTexture = new();
-			M_cardiovascularHoverTexture = new();
-			M_handsHoverTexture = new();
-			M_frontalCortexHoverTexture = new();
-			M_immuneHoverTexture = new();
-			M_legsHoverTexture = new();
-			M_systemReplacementHoverTexture = new();
-			M_musculoskeletalHoverTexture = new();
-			M_nervousHoverTexture = new();
-			M_eyesHoverTexture = new();
-			Man_wiresTexture = new();
-			Woman_wiresTexture = new();
+			DefaultAnimationTab = new inkWidgetReference();
+			ItemAnimationTab = new inkWidgetReference();
+			DefaultTab = new inkWidgetReference();
+			ItemTab = new inkWidgetReference();
+			FemaleHovers = new inkWidgetReference();
+			MaleHovers = new inkWidgetReference();
+			F_immuneHoverTexture = new inkWidgetReference();
+			F_systemReplacementHoverTexture = new inkWidgetReference();
+			F_integumentaryHoverTexture = new inkWidgetReference();
+			F_musculoskeletalHoverTexture = new inkWidgetReference();
+			F_nervousHoverTexture = new inkWidgetReference();
+			F_eyesHoverTexture = new inkWidgetReference();
+			F_legsHoverTexture = new inkWidgetReference();
+			F_frontalCortexHoverTexture = new inkWidgetReference();
+			F_handsHoverTexture = new inkWidgetReference();
+			F_cardiovascularHoverTexture = new inkWidgetReference();
+			F_armsHoverTexture = new inkWidgetReference();
+			M_integumentaryHoverTexture = new inkWidgetReference();
+			M_armsHoverTexture = new inkWidgetReference();
+			M_cardiovascularHoverTexture = new inkWidgetReference();
+			M_handsHoverTexture = new inkWidgetReference();
+			M_frontalCortexHoverTexture = new inkWidgetReference();
+			M_immuneHoverTexture = new inkWidgetReference();
+			M_legsHoverTexture = new inkWidgetReference();
+			M_systemReplacementHoverTexture = new inkWidgetReference();
+			M_musculoskeletalHoverTexture = new inkWidgetReference();
+			M_nervousHoverTexture = new inkWidgetReference();
+			M_eyesHoverTexture = new inkWidgetReference();
+			Man_wiresTexture = new inkWidgetReference();
+			Woman_wiresTexture = new inkWidgetReference();
 
 			PostConstruct();
 		}

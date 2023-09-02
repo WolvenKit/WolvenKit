@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectFilter_ReachableByNavigation()
 		{
-			MaxPathLength = new();
+			MaxPathLength = new gameEffectInputParameter_Float();
 
 			PostConstruct();
 		}

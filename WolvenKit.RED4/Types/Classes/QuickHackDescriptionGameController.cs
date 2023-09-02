@@ -142,21 +142,21 @@ namespace WolvenKit.RED4.Types
 
 		public QuickHackDescriptionGameController()
 		{
-			SubHeader = new();
-			Tier = new();
-			Description = new();
-			RecompileTimer = new();
-			Duration = new();
-			Cooldown = new();
-			UploadTime = new();
-			MemoryCost = new();
-			MemoryRawCost = new();
-			CategoryText = new();
-			CategoryContainer = new();
-			DamageWrapper = new();
-			DamageLabel = new();
-			DamageValue = new();
-			HealthPercentageLabel = new();
+			SubHeader = new inkTextWidgetReference();
+			Tier = new inkTextWidgetReference();
+			Description = new inkTextWidgetReference();
+			RecompileTimer = new inkTextWidgetReference();
+			Duration = new inkTextWidgetReference();
+			Cooldown = new inkTextWidgetReference();
+			UploadTime = new inkTextWidgetReference();
+			MemoryCost = new inkTextWidgetReference();
+			MemoryRawCost = new inkTextWidgetReference();
+			CategoryText = new inkTextWidgetReference();
+			CategoryContainer = new inkWidgetReference();
+			DamageWrapper = new inkWidgetReference();
+			DamageLabel = new inkTextWidgetReference();
+			DamageValue = new inkTextWidgetReference();
+			HealthPercentageLabel = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

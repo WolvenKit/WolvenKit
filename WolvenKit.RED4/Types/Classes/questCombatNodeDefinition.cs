@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 		public questCombatNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			EntityReference = new() { Names = new() };
+			Id = ushort.MaxValue;
+			EntityReference = new gameEntityReference { Names = new() };
 			Function = "questCombatNodeParams_ShootAt";
 
 			PostConstruct();

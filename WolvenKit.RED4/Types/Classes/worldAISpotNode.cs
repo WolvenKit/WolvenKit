@@ -97,8 +97,8 @@ namespace WolvenKit.RED4.Types
 			Markings = new();
 			UseCrowdWhitelist = true;
 			UseCrowdBlacklist = true;
-			CrowdWhitelist = new() { Tags = new() };
-			CrowdBlacklist = new() { Tags = new() };
+			CrowdWhitelist = new redTagList { Tags = new() };
+			CrowdBlacklist = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

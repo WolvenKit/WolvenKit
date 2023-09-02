@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnTimedCondition()
 		{
-			Duration = new();
+			Duration = new scnSceneTime();
 
 			PostConstruct();
 		}

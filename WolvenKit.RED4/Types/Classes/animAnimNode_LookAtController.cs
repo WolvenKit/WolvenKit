@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_LookAtController()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			E3_HACK_offset = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			E3_HACK_offset = new animVectorLink();
 			OrderedBodyParts = new();
 			StateMachinesSettings = new();
 			BodyPartsDependencies = new();

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIScriptableSystem : IScriptable
+	public abstract partial class gameIScriptableSystem : IScriptable
 	{
 		public gameIScriptableSystem()
 		{

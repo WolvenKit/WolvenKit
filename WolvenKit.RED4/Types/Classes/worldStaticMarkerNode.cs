@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public worldStaticMarkerNode()
 		{
 			IsEnabled = true;
-			Tags = new() { Tags = new() };
+			Tags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Types
 
 		public BroadcastEvent()
 		{
-			StimData = new() { DistrationPoint = new(), AttackInstigatorPosition = new(), InvestigationSpots = new() };
+			StimData = new senseStimInvestigateData { DistrationPoint = new Vector4(), AttackInstigatorPosition = new Vector4(), InvestigationSpots = new() };
 
 			PostConstruct();
 		}

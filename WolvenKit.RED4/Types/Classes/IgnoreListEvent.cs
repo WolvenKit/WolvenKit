@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public IgnoreListEvent()
 		{
-			BodyID = new();
+			BodyID = new entEntityID();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamemappinsIMappinVolume : ISerializable
+	public abstract partial class gamemappinsIMappinVolume : ISerializable
 	{
 		public gamemappinsIMappinVolume()
 		{

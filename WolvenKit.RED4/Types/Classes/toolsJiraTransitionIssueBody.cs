@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public toolsJiraTransitionIssueBody()
 		{
-			Transition = new();
+			Transition = new toolsJiraIssueTransition();
 
 			PostConstruct();
 		}

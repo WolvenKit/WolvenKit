@@ -62,12 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_TranslateBone()
 		{
-			Id = 4294967295;
-			InputNode = new();
-			InputTranslation = new();
-			Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
-			BiasValue = new();
-			Bone = new();
+			Id = uint.MaxValue;
+			InputNode = new animPoseLink();
+			InputTranslation = new animVectorLink();
+			Scale = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
+			BiasValue = new Vector4();
+			Bone = new animTransformIndex();
 			ResetOnActivation = true;
 
 			PostConstruct();

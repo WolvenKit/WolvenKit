@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public ArcadeMachineControllerPS()
 		{
 			DeviceName = "LocKey#1635";
-			TweakDBRecord = 93060634862;
+			TweakDBRecord = "Devices.ArcadeMachine";
 			TweakDBDescriptionRecord = 143953089827;
 			GameVideosPaths = new();
 			DEBUG_enableArcadeMinigames = true;

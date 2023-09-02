@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IRenderResourceBlob : ISerializable
+	public abstract partial class IRenderResourceBlob : ISerializable
 	{
 		public IRenderResourceBlob()
 		{

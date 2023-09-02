@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldITrafficSystem : worldIRuntimeSystem
+	public abstract partial class worldITrafficSystem : worldIRuntimeSystem
 	{
 		public worldITrafficSystem()
 		{

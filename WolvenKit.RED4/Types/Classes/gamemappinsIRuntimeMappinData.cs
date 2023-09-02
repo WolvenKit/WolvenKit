@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamemappinsIRuntimeMappinData : RedBaseClass
+	public abstract partial class gamemappinsIRuntimeMappinData : RedBaseClass
 	{
 		public gamemappinsIRuntimeMappinData()
 		{

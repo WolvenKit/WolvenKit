@@ -46,11 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_TwistConstraint()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			TransformA = new();
-			TransformB = new();
-			Outputs = new() { new() };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			TransformA = new animTransformIndex();
+			TransformB = new animTransformIndex();
+			Outputs = new() { new animTwistOutput() };
 
 			PostConstruct();
 		}

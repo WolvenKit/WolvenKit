@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldSpeedSplineNodeOrientationChangeSection()
 		{
-			TargetOrientation = new();
+			TargetOrientation = new EulerAngles();
 
 			PostConstruct();
 		}

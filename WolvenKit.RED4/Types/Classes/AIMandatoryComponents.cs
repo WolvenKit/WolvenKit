@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIMandatoryComponents : AIRelatedComponents
+	public abstract partial class AIMandatoryComponents : AIRelatedComponents
 	{
 		public AIMandatoryComponents()
 		{

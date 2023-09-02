@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameStatModifierBase : RedBaseClass
+	public abstract partial class gameStatModifierBase : RedBaseClass
 	{
 		public gameStatModifierBase()
 		{

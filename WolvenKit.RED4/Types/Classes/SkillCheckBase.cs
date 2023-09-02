@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class SkillCheckBase : IScriptable
+	public abstract partial class SkillCheckBase : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("alternativeName")] 

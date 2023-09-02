@@ -135,18 +135,18 @@ namespace WolvenKit.RED4.Types
 		public entMeshComponent()
 		{
 			Name = "Component";
-			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			ForceLODLevel = -1;
 			MeshAppearance = "default";
 			CastShadows = true;
 			CastLocalShadows = true;
 			MotionBlurScale = 1.000000F;
-			VisualScale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
-			ChunkMask = 18446744073709551615;
+			VisualScale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			ChunkMask = long.MaxValue;
 			IsEnabled = true;
 			OverrideMeshNavigationImpact = true;
-			NavigationImpact = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Ignored };
+			NavigationImpact = new NavGenNavigationSetting { NavmeshImpact = Enums.NavGenNavmeshImpact.Ignored };
 
 			PostConstruct();
 		}

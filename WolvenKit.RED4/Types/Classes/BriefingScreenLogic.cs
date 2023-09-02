@@ -102,13 +102,13 @@ namespace WolvenKit.RED4.Types
 
 		public BriefingScreenLogic()
 		{
-			LastSizeSet = new();
-			VideoWidget = new();
-			MapWidget = new();
-			PaperdollWidget = new();
-			AnimatedWidget = new();
-			MinimizedSize = new();
-			MaximizedSize = new();
+			LastSizeSet = new Vector2();
+			VideoWidget = new inkVideoWidgetReference();
+			MapWidget = new inkWidgetReference();
+			PaperdollWidget = new inkWidgetReference();
+			AnimatedWidget = new inkWidgetReference();
+			MinimizedSize = new Vector2();
+			MaximizedSize = new Vector2();
 
 			PostConstruct();
 		}

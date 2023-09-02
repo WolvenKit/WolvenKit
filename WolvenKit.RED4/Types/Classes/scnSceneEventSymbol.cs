@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnSceneEventSymbol()
 		{
-			EditorEventId = 18446744073709551615;
-			OriginNodeId = new() { Id = 4294967295 };
+			EditorEventId = long.MaxValue;
+			OriginNodeId = new scnNodeId { Id = uint.MaxValue };
 			SceneEventIds = new();
 
 			PostConstruct();

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnCheckPlayerTargetNodeDistanceReturnCondition()
 		{
-			Params = new() { Distance = 5.000000F, ComparisonType = Enums.EComparisonType.Less };
+			Params = new scnCheckPlayerTargetNodeDistanceReturnConditionParams { Distance = 5.000000F, ComparisonType = Enums.EComparisonType.Less };
 
 			PostConstruct();
 		}

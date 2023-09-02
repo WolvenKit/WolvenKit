@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemWeaponPlaneBlur()
 		{
 			TimeDuration = 1.000000F;
-			FarPlaneMultiplier = new();
+			FarPlaneMultiplier = new effectEffectParameterEvaluatorFloat();
 
 			PostConstruct();
 		}

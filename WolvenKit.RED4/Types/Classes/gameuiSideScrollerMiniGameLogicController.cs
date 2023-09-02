@@ -79,9 +79,9 @@ namespace WolvenKit.RED4.Types
 		public gameuiSideScrollerMiniGameLogicController()
 		{
 			StartHealth = 3;
-			PlayerColliderPositionOffset = new();
-			PlayerColliderSizeOffset = new();
-			GameplayRoot = new();
+			PlayerColliderPositionOffset = new Vector2();
+			PlayerColliderSizeOffset = new Vector2();
+			GameplayRoot = new inkCompoundWidgetReference();
 			SpawnedListLibraryNames = new();
 
 			PostConstruct();

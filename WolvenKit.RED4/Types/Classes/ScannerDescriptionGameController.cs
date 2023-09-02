@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerDescriptionGameController()
 		{
-			DescriptionText = new();
-			CustomDescriptionText = new();
+			DescriptionText = new inkTextWidgetReference();
+			CustomDescriptionText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

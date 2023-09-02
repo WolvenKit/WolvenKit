@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public gameuiPlayerListGameController()
 		{
 			PlayerEntries = new();
-			Container = new();
+			Container = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

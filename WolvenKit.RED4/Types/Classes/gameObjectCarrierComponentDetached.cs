@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameObjectCarrierComponentDetached : redEvent
+	public abstract partial class gameObjectCarrierComponentDetached : redEvent
 	{
 		public gameObjectCarrierComponentDetached()
 		{

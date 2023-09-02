@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class populationModifier : ISerializable
+	public abstract partial class populationModifier : ISerializable
 	{
 		public populationModifier()
 		{

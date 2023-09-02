@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnUnmountEvent()
 		{
-			Id = new() { Id = 18446744073709551615 };
-			Performer = new() { Id = 4294967040 };
+			Id = new scnSceneEventId { Id = long.MaxValue };
+			Performer = new scnPerformerId { Id = 4294967040 };
 
 			PostConstruct();
 		}

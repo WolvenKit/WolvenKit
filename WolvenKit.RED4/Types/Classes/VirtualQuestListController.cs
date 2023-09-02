@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public VirtualQuestListController()
 		{
-			QuestList = new();
+			QuestList = new inkWidgetReference();
 
 			PostConstruct();
 		}

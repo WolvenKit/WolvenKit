@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public PlayPauseActionWidgetController()
 		{
-			PlayContainer = new();
+			PlayContainer = new inkWidgetReference();
 			IsPlaying = true;
 
 			PostConstruct();

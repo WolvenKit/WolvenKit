@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipClothingInfoModule()
 		{
-			Value = new();
-			Arrow = new();
+			Value = new inkTextWidgetReference();
+			Arrow = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public inkMetroSignLogicController()
 		{
-			StationName = new();
-			SubDistrictName = new();
-			MetroStationsContainer = new();
+			StationName = new inkTextWidgetReference();
+			SubDistrictName = new inkTextWidgetReference();
+			MetroStationsContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

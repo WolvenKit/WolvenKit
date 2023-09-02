@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 
 		public Cylinder()
 		{
-			PositionAndRadius = new();
-			NormalAndHeight = new();
+			PositionAndRadius = new Vector4();
+			NormalAndHeight = new Vector4();
 
 			PostConstruct();
 		}

@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectObjectProvider_QueryBox()
 		{
-			QueryPreset = new();
-			InputPosition = new();
+			QueryPreset = new physicsQueryPreset();
+			InputPosition = new gameEffectInputParameter_Vector();
 
 			PostConstruct();
 		}

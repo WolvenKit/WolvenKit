@@ -86,16 +86,16 @@ namespace WolvenKit.RED4.Types
 
 		public BraindanceBlackboardDef()
 		{
-			ActiveBraindanceVisionMode = new();
-			LastBraindanceVisionMode = new();
-			Progress = new();
-			SectionTime = new();
-			Clue = new();
-			IsActive = new();
-			EnableExit = new();
-			IsFPP = new();
-			PlaybackSpeed = new();
-			PlaybackDirection = new();
+			ActiveBraindanceVisionMode = new gamebbScriptID_Int32();
+			LastBraindanceVisionMode = new gamebbScriptID_Int32();
+			Progress = new gamebbScriptID_Float();
+			SectionTime = new gamebbScriptID_Float();
+			Clue = new gamebbScriptID_Variant();
+			IsActive = new gamebbScriptID_Bool();
+			EnableExit = new gamebbScriptID_Bool();
+			IsFPP = new gamebbScriptID_Bool();
+			PlaybackSpeed = new gamebbScriptID_Variant();
+			PlaybackDirection = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

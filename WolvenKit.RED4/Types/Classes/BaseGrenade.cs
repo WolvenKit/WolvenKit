@@ -446,18 +446,18 @@ namespace WolvenKit.RED4.Types
 
 		public BaseGrenade()
 		{
-			ProjectileSpawnPoint = new();
-			MappinID = new();
-			SpawnBlinkEffectDelayID = new();
-			DetonateRequestDelayID = new();
-			ReleaseRequestDelayID = new();
+			ProjectileSpawnPoint = new Vector4();
+			MappinID = new gameNewMappinID();
+			SpawnBlinkEffectDelayID = new gameDelayID();
+			DetonateRequestDelayID = new gameDelayID();
+			ReleaseRequestDelayID = new gameDelayID();
 			IsAlive = true;
 			PotentialHomingTargets = new();
-			HomingGrenadeTarget = new();
+			HomingGrenadeTarget = new GrenadePotentialHomingTarget();
 			CuttingGrenadePotentialTargets = new();
-			DrillTargetPosition = new();
+			DrillTargetPosition = new Vector4();
 			AttacksSpawned = new();
-			AdditionalEffect = new();
+			AdditionalEffect = new gameFxResource();
 			CpoTimeBeforeRelease = 3.000000F;
 
 			PostConstruct();

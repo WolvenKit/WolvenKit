@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIBaseCondition : graphIGraphNodeCondition
+	public abstract partial class questIBaseCondition : graphIGraphNodeCondition
 	{
 		public questIBaseCondition()
 		{

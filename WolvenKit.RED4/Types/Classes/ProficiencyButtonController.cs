@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public ProficiencyButtonController()
 		{
-			LabelText = new();
-			LevelText = new();
-			FrameHovered = new();
+			LabelText = new inkTextWidgetReference();
+			LevelText = new inkTextWidgetReference();
+			FrameHovered = new inkWidgetReference();
 
 			PostConstruct();
 		}

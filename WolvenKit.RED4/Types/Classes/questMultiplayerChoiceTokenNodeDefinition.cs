@@ -15,8 +15,8 @@ namespace WolvenKit.RED4.Types
 		public questMultiplayerChoiceTokenNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			Params = new() { Timeout = 15 };
+			Id = ushort.MaxValue;
+			Params = new questMultiplayerChoiceTokenParams { Timeout = 15 };
 
 			PostConstruct();
 		}

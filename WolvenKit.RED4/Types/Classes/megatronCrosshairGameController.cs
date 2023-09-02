@@ -94,8 +94,8 @@ namespace WolvenKit.RED4.Types
 
 		public megatronCrosshairGameController()
 		{
-			BufferedSpread = new();
-			OrgSideSize = new();
+			BufferedSpread = new Vector2();
+			OrgSideSize = new Vector2();
 			MinSpread = 120.000000F;
 			GameplaySpreadMultiplier = 1.000000F;
 

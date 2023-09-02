@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiGlobaltvWidgetGameController()
 		{
-			OverlayContainer = new();
+			OverlayContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

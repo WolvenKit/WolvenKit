@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameHitRepresentationVisualTaggedOverride()
 		{
-			VisualTags = new() { Tags = new() };
-			RepresenationOverride = new() { Color = new(), PhysicsMaterial = new() };
+			VisualTags = new redTagList { Tags = new() };
+			RepresenationOverride = new gameHitShapeContainer { Color = new CColor(), PhysicsMaterial = new physicsMaterialReference() };
 
 			PostConstruct();
 		}

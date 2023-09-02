@@ -95,7 +95,7 @@ namespace WolvenKit.RED4.Types
 		public ExplosiveDeviceControllerPS()
 		{
 			DeviceName = "LocKey#42163";
-			TweakDBRecord = 99486442134;
+			TweakDBRecord = "Devices.ExplosiveDevice";
 			TweakDBDescriptionRecord = 151932573733;
 			ShouldScannerShowStatus = false;
 			ShouldScannerShowNetwork = false;

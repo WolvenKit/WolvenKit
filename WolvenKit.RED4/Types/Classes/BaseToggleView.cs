@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class BaseToggleView : inkWidgetLogicController
+	public abstract partial class BaseToggleView : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
 		[RED("ToggleController")] 

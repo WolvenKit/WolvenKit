@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public worldCommunityRegistryItem()
 		{
 			EntriesInitialState = new();
-			CommunityId = new() { EntityId = new() };
+			CommunityId = new gameCommunityID { EntityId = new entEntityID() };
 			CommunityAreaType = Enums.worldCommunityRegistryItemAreaNodeType.Count;
 
 			PostConstruct();

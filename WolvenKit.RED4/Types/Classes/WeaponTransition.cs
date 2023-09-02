@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class WeaponTransition : DefaultTransition
+	public abstract partial class WeaponTransition : DefaultTransition
 	{
 		[Ordinal(0)] 
 		[RED("magazineID")] 

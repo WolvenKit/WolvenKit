@@ -142,14 +142,14 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerDeviceHeaderGameController()
 		{
-			NameText = new();
-			FluffText = new();
-			Separator1 = new();
-			Separator2 = new();
-			LevelText = new();
-			Status = new();
-			StatusIcon = new();
-			LevelWrapper = new();
+			NameText = new inkTextWidgetReference();
+			FluffText = new inkTextWidgetReference();
+			Separator1 = new inkRectangleWidgetReference();
+			Separator2 = new inkRectangleWidgetReference();
+			LevelText = new inkTextWidgetReference();
+			Status = new inkTextWidgetReference();
+			StatusIcon = new inkImageWidgetReference();
+			LevelWrapper = new inkWidgetReference();
 
 			PostConstruct();
 		}

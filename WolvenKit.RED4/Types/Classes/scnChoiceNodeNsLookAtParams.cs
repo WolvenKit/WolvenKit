@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnChoiceNodeNsLookAtParams : ISerializable
+	public abstract partial class scnChoiceNodeNsLookAtParams : ISerializable
 	{
 		public scnChoiceNodeNsLookAtParams()
 		{

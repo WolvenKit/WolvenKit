@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameSSlotVisualInfo()
 		{
-			VisualItem = new();
+			VisualItem = new gameItemID();
 
 			PostConstruct();
 		}

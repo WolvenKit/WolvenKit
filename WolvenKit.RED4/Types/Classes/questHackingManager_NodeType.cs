@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questHackingManager_NodeType()
 		{
-			Params = new() { new() };
+			Params = new() { new questHackingManager_NodeTypeParams() };
 
 			PostConstruct();
 		}

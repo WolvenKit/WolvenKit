@@ -110,13 +110,13 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_BlendAdditive()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			ScaleValue = 1.000000F;
 			BlendTracks = Enums.animEBlendTracksMode.AGBT_Add;
-			InputNode = new();
-			AddedInputNode = new();
-			WeightNode = new();
-			WeightPreviousFrameFloatTrack = new();
+			InputNode = new animPoseLink();
+			AddedInputNode = new animPoseLink();
+			WeightNode = new animFloatLink();
+			WeightPreviousFrameFloatTrack = new animNamedTrackIndex();
 
 			PostConstruct();
 		}

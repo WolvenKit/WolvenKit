@@ -34,7 +34,7 @@ public partial class CR2WWriter : Red4Writer
         _writer.Write((byte)0);
 
         var typeInfo = RedReflection.GetTypeInfo(cls);
-        foreach (var propertyInfo in typeInfo.GetWritableProperties())
+        foreach (var propertyInfo in cls.GetWritableProperties())
         {
             ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
 

@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public RewireEvent()
 		{
-			OwnerID = new();
-			ActivatorID = new();
+			OwnerID = new entEntityID();
+			ActivatorID = new entEntityID();
 
 			PostConstruct();
 		}

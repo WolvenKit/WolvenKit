@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiICharacterCustomizationState : IScriptable
+	public abstract partial class gameuiICharacterCustomizationState : IScriptable
 	{
 		public gameuiICharacterCustomizationState()
 		{

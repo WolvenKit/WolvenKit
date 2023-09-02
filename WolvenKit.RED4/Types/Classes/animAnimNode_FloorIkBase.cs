@@ -54,12 +54,12 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FloorIkBase()
 		{
-			Id = 4294967295;
-			InputLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
 			BlockAnimEvent = "AlignToGround";
 			UseFixedVersion = true;
 			SlopeAngleDamp = 0.200000F;
-			Common = new() { GravityCentreBone = new(), RootRotationBlendTime = 0.200000F, VerticalVelocityOffsetUpBlendTime = 0.080000F, VerticalVelocityOffsetDownBlendTime = 0.030000F, SlidingOnSlopeBlendTime = 0.200000F };
+			Common = new animSBehaviorConstraintNodeFloorIKCommonData { GravityCentreBone = new animTransformIndex(), RootRotationBlendTime = 0.200000F, VerticalVelocityOffsetUpBlendTime = 0.080000F, VerticalVelocityOffsetDownBlendTime = 0.030000F, SlidingOnSlopeBlendTime = 0.200000F };
 
 			PostConstruct();
 		}

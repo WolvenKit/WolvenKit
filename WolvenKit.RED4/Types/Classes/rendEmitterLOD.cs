@@ -65,8 +65,8 @@ namespace WolvenKit.RED4.Types
 			LodSwitchDistance = 100.000000F;
 			BurstList = new();
 			BirthRate = new();
-			EmitterDurationSettings = new() { EmitterDuration = 1.000000F };
-			EmitterDelaySettings = new();
+			EmitterDurationSettings = new rendEmitterDurationSettings { EmitterDuration = 1.000000F };
+			EmitterDelaySettings = new rendEmitterDelaySettings();
 
 			PostConstruct();
 		}

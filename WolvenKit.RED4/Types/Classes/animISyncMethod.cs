@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animISyncMethod : ISerializable
+	public abstract partial class animISyncMethod : ISerializable
 	{
 		public animISyncMethod()
 		{

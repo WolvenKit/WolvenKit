@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_LookAtApplyVehicleRestrictions()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			ReferenceBone = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			ReferenceBone = new animTransformIndex();
 
 			PostConstruct();
 		}

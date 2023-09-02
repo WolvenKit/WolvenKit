@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_AnimSetTagValue()
 		{
-			Id = 4294967295;
-			Tags = new() { Tags = new() };
+			Id = uint.MaxValue;
+			Tags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

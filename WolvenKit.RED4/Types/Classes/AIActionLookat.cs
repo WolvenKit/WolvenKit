@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIActionLookat : IScriptable
+	public abstract partial class AIActionLookat : IScriptable
 	{
 		public AIActionLookat()
 		{

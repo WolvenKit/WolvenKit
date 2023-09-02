@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public interopTerrainImportedTile()
 		{
-			Position = new();
+			Position = new Point();
 
 			PostConstruct();
 		}

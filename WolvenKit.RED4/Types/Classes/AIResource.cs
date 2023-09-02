@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIResource()
 		{
-			Variables = new() { List = new() };
+			Variables = new LibTreeDefTreeVariablesList { List = new() };
 
 			PostConstruct();
 		}

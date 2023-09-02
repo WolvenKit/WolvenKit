@@ -376,7 +376,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ControllerTypeName = "DoorController";
 			BankToLoad_TEMP = "dev_door_sliding_generic";
-			Colors = new() { Off = new() { Color = new() }, Red = new() { Color = new() }, Green = new() { Color = new() } };
+			Colors = new LedColors { Off = new ScriptLightSettings { Color = new CColor() }, Red = new ScriptLightSettings { Color = new CColor() }, Green = new ScriptLightSettings { Color = new CColor() } };
 			ActiveSkillcheckLights = new();
 			AllActiveLights = new();
 			ClosingAnimationLength = 1.100000F;

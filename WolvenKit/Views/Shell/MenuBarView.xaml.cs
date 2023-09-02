@@ -152,6 +152,11 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.MenuItemShowTextureExporter)
                 .DisposeWith(disposables);
 
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.ShowHashToolCommand,
+                    view => view.MenuItemShowHashTool)
+                .DisposeWith(disposables);
+
             // Game
             this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.LaunchGameCommand,

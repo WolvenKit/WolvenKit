@@ -72,8 +72,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Visible = true;
 			VisibleOnUILayer = Enums.inkELayerType.MAX;
-			Offset = new();
-			Size = new();
+			Offset = new Vector2();
+			Size = new Vector2();
 
 			PostConstruct();
 		}

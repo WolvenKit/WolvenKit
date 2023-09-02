@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIComparisonPrereq : gameIPrereq
+	public abstract partial class gameIComparisonPrereq : gameIPrereq
 	{
 		[Ordinal(0)] 
 		[RED("comparisonType")] 

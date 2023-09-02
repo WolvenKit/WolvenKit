@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public SettingControllerScheme()
 		{
-			TabRootRef = new();
-			InputTab = new();
-			VehiclesTab = new();
-			BraindanceTab = new();
+			TabRootRef = new inkWidgetReference();
+			InputTab = new inkWidgetReference();
+			VehiclesTab = new inkWidgetReference();
+			BraindanceTab = new inkWidgetReference();
 
 			PostConstruct();
 		}

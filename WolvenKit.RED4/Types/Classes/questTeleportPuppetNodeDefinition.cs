@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public questTeleportPuppetNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 
 			PostConstruct();
 		}

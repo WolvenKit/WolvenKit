@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questConfigurableAICommandNode : questAICommandNodeBase
+	public abstract partial class questConfigurableAICommandNode : questAICommandNodeBase
 	{
 		public questConfigurableAICommandNode()
 		{

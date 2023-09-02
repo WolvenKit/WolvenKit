@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameJoinTrafficNPCContext()
 		{
-			StartPosition = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
-			ThreatPosition = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			StartPosition = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
+			ThreatPosition = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
 			CheckRoadIntersection = true;
 
 			PostConstruct();

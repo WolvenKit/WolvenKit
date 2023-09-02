@@ -126,8 +126,8 @@ namespace WolvenKit.RED4.Types
 
 		public audioDynamicReverbSettings()
 		{
-			Crossover1 = new();
-			Crossover2 = new();
+			Crossover1 = new audioReverbCrossoverParams();
+			Crossover2 = new audioReverbCrossoverParams();
 			SmallReverbMaxDistance = 20.000000F;
 			SmallReverbFadeOutThreshold = 15.000000F;
 			WeaponTailType = Enums.audioWeaponTailEnvironment.ExteriorUrbanNarrow;

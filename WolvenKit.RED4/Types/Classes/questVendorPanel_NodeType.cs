@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ScenarioName = "MenuScenario_Vendor";
 			OpenVendorPanel = true;
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public RegisterActiveClueOwnerkRequest()
 		{
-			OwnerID = new();
+			OwnerID = new entEntityID();
 
 			PostConstruct();
 		}

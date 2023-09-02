@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_Stage()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			Nodes = new();
 			InputPoses = new();
 

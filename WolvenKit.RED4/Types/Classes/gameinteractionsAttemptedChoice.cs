@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ChoiceIdx = -1;
 			VisualizerType = Enums.gameinteractionsvisEVisualizerType.Invalid;
-			Choice = new() { CaptionParts = new() { Parts = new() }, Data = new(), ChoiceMetaData = new() { Type = new() }, LookAtDescriptor = new() { Offset = new(), OrbId = new() } };
+			Choice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
 
 			PostConstruct();
 		}

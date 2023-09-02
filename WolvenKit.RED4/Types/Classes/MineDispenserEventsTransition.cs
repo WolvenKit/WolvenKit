@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MineDispenserEventsTransition : MineDispenserTransition
+	public abstract partial class MineDispenserEventsTransition : MineDispenserTransition
 	{
 		public MineDispenserEventsTransition()
 		{

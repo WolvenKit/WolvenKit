@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerPuppetPS()
 		{
-			Keybindigs = new();
+			Keybindigs = new KeyBindings();
 			AvailablePrograms = new();
 
 			PostConstruct();

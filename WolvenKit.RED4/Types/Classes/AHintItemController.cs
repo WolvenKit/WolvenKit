@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AHintItemController : inkWidgetLogicController
+	public abstract partial class AHintItemController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
 		[RED("Icon")] 

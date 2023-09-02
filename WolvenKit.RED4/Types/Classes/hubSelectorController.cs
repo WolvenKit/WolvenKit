@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public hubSelectorController()
 		{
-			LeftArrowWidget = new();
-			RightArrowWidget = new();
-			MenuLabelHolder = new();
+			LeftArrowWidget = new inkWidgetReference();
+			RightArrowWidget = new inkWidgetReference();
+			MenuLabelHolder = new inkHorizontalPanelWidgetReference();
 			HubElementsData = new();
 
 			PostConstruct();

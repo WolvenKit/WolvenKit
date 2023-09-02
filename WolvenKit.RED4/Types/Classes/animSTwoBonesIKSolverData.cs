@@ -174,25 +174,25 @@ namespace WolvenKit.RED4.Types
 
 		public animSTwoBonesIKSolverData()
 		{
-			UpperBone = new();
-			JointBone = new();
-			SubLowerBone = new();
-			LowerBone = new();
-			IkBone = new();
+			UpperBone = new animTransformIndex();
+			JointBone = new animTransformIndex();
+			SubLowerBone = new animTransformIndex();
+			LowerBone = new animTransformIndex();
+			IkBone = new animTransformIndex();
 			LimitToLengthPercentage = 0.990000F;
 			AutoSetupDirs = true;
 			JointSideWeightUpper = 0.500000F;
 			JointSideWeightJoint = 0.300000F;
 			JointSideWeightLower = 0.200000F;
-			Joint_to_next_dir_in_upper_s_BS = new() { X = 1.000000F };
-			Joint_to_next_dir_in_joint_s_BS = new() { X = 1.000000F };
-			Joint_to_next_dir_in_lower_s_BS = new() { X = 1.000000F };
-			Joint_side_dir_in_upper_s_BS = new() { Z = 1.000000F };
-			Joint_side_dir_in_joint_s_BS = new() { Z = 1.000000F };
-			Joint_side_dir_in_lower_s_BS = new() { Z = 1.000000F };
-			Joint_bend_dir_in_upper_s_BS = new() { Y = 1.000000F };
-			Joint_bend_dir_in_joint_s_BS = new() { Y = 1.000000F };
-			Joint_bend_dir_in_lower_s_BS = new() { Y = 1.000000F };
+			Joint_to_next_dir_in_upper_s_BS = new Vector4 { X = 1.000000F };
+			Joint_to_next_dir_in_joint_s_BS = new Vector4 { X = 1.000000F };
+			Joint_to_next_dir_in_lower_s_BS = new Vector4 { X = 1.000000F };
+			Joint_side_dir_in_upper_s_BS = new Vector4 { Z = 1.000000F };
+			Joint_side_dir_in_joint_s_BS = new Vector4 { Z = 1.000000F };
+			Joint_side_dir_in_lower_s_BS = new Vector4 { Z = 1.000000F };
+			Joint_bend_dir_in_upper_s_BS = new Vector4 { Y = 1.000000F };
+			Joint_bend_dir_in_joint_s_BS = new Vector4 { Y = 1.000000F };
+			Joint_bend_dir_in_lower_s_BS = new Vector4 { Y = 1.000000F };
 
 			PostConstruct();
 		}

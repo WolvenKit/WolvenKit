@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamePuppetReplicatedState : netIEntityState
+	public abstract partial class gamePuppetReplicatedState : netIEntityState
 	{
 		[Ordinal(2)] 
 		[RED("initialOrientation")] 

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnPlayVideoEvent()
 		{
-			Id = new() { Id = 18446744073709551615 };
+			Id = new scnSceneEventId { Id = long.MaxValue };
 			Duration = 1000;
 
 			PostConstruct();

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMinimapDeviceMappinController()
 		{
-			EffectAreaWidget = new();
+			EffectAreaWidget = new inkCircleWidgetReference();
 
 			PostConstruct();
 		}

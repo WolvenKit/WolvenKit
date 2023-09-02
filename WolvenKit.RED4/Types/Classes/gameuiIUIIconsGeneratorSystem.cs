@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiIUIIconsGeneratorSystem : gameIGameSystem
+	public abstract partial class gameuiIUIIconsGeneratorSystem : gameIGameSystem
 	{
 		public gameuiIUIIconsGeneratorSystem()
 		{

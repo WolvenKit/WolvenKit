@@ -16,4 +16,5 @@ public interface IPaneViewModelFactory
     public LocKeyBrowserViewModel LocKeyBrowserViewModel();
     public ImportViewModel ImportViewModel();
     public ExportViewModel ExportViewModel();
+    public HashToolViewModel HashToolViewModel();
 }

@@ -15,9 +15,9 @@ namespace WolvenKit.RED4.Types
 		public CrossingLightControllerPS()
 		{
 			DeviceName = "LocKey#125";
-			TweakDBRecord = 92771606930;
+			TweakDBRecord = "Devices.CrossingLight";
 			TweakDBDescriptionRecord = 144804359263;
-			CrossingLightSFXSetup = new();
+			CrossingLightSFXSetup = new CrossingLightSetup();
 
 			PostConstruct();
 		}

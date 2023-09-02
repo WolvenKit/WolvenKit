@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameHitDetectionDebugFrameDataShapeEntry()
 		{
-			AnsformWS = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			AnsformWS = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
 
 			PostConstruct();
 		}

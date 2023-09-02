@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiHoldIndicatorGameController()
 		{
-			HoldProgress = new();
-			HoldStart = new();
-			HoldFinish = new();
-			HoldStop = new();
+			HoldProgress = new gameuiHoldIndicatorProgressCallback();
+			HoldStart = new inkEmptyCallback();
+			HoldFinish = new inkEmptyCallback();
+			HoldStop = new inkEmptyCallback();
 
 			PostConstruct();
 		}

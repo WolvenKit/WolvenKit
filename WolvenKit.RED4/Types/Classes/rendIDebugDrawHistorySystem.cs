@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class rendIDebugDrawHistorySystem : RedBaseClass
+	public abstract partial class rendIDebugDrawHistorySystem : RedBaseClass
 	{
 		public rendIDebugDrawHistorySystem()
 		{

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleDriveToPointEvent()
 		{
-			TargetPos = new();
+			TargetPos = new Vector3();
 
 			PostConstruct();
 		}

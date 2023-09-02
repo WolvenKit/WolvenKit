@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiIndexedAppearanceDefinition()
 		{
-			Color = new();
+			Color = new CColor();
 			Actions = new();
-			Tags = new() { Tags = new() };
+			Tags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

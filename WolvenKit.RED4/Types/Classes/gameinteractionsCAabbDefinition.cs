@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsCAabbDefinition()
 		{
-			Min = new() { W = 1.000000F };
-			Max = new() { W = 1.000000F };
+			Min = new Vector4 { W = 1.000000F };
+			Max = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

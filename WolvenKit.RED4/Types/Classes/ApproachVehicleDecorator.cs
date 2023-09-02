@@ -86,8 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public ApproachVehicleDecorator()
 		{
-			MountEntryPoint = new();
-			ActivationTime = new();
+			MountEntryPoint = new Vector4();
+			ActivationTime = new EngineTime();
 
 			PostConstruct();
 		}

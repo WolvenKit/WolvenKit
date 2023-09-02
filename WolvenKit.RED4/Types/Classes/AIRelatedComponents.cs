@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIRelatedComponents : gameScriptableComponent
+	public abstract partial class AIRelatedComponents : gameScriptableComponent
 	{
 		public AIRelatedComponents()
 		{

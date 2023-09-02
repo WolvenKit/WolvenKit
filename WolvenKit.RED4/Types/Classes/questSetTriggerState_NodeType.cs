@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questSetTriggerState_NodeType()
 		{
-			Params = new() { new() };
+			Params = new() { new questSetTriggerState_NodeTypeParams() };
 
 			PostConstruct();
 		}

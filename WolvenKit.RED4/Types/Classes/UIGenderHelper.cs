@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class UIGenderHelper : IScriptable
+	public abstract partial class UIGenderHelper : IScriptable
 	{
 		public UIGenderHelper()
 		{

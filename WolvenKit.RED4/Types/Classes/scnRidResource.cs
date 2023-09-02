@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Actors = new();
 			Cameras = new();
-			NextSerialNumber = new();
+			NextSerialNumber = new scnRidSerialNumber();
 
 			PostConstruct();
 		}

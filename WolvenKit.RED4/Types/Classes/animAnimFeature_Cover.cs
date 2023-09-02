@@ -86,8 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_Cover()
 		{
-			CoverPosition = new();
-			CoverDirection = new();
+			CoverPosition = new Vector4();
+			CoverDirection = new Vector4();
 			CoverState = 1;
 			BehaviorTime_PreAction = 1.000000F;
 			BehaviorTime_Action = 1.000000F;

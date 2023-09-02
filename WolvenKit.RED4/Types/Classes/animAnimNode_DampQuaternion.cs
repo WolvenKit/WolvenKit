@@ -46,12 +46,12 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_DampQuaternion()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			DefaultRotationSpeed = 180.000000F;
-			DefaultInitialValue = new();
-			InputNode = new();
-			InitialValueNode = new();
-			RotationSpeedNode = new();
+			DefaultInitialValue = new EulerAngles();
+			InputNode = new animQuaternionLink();
+			InitialValueNode = new animQuaternionLink();
+			RotationSpeedNode = new animFloatLink();
 
 			PostConstruct();
 		}

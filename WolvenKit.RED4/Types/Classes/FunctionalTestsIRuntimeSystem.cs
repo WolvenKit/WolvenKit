@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class FunctionalTestsIRuntimeSystem : worldIRuntimeSystem
+	public abstract partial class FunctionalTestsIRuntimeSystem : worldIRuntimeSystem
 	{
 		public FunctionalTestsIRuntimeSystem()
 		{

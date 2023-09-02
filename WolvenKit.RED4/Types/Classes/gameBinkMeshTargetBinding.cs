@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 		public gameBinkMeshTargetBinding()
 		{
 			Enabled = true;
-			EnableMask = new() { HardTags = new() { Tags = new() }, SoftTags = new() { Tags = new() }, ExcludedTags = new() { Tags = new() { "NoBinding" } } };
+			EnableMask = new entTagMask { HardTags = new redTagList { Tags = new() }, SoftTags = new redTagList { Tags = new() }, ExcludedTags = new redTagList { Tags = new() { "NoBinding" } } };
 
 			PostConstruct();
 		}

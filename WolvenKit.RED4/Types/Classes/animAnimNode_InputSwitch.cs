@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_InputSwitch()
 		{
-			SelectIntNode = new();
-			SelectFloatNode = new();
+			SelectIntNode = new animIntLink();
+			SelectFloatNode = new animFloatLink();
 
 			PostConstruct();
 		}

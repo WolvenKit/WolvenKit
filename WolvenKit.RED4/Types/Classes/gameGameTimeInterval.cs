@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameGameTimeInterval()
 		{
-			Begin = new();
-			End = new();
+			Begin = new GameTime();
+			End = new GameTime();
 
 			PostConstruct();
 		}

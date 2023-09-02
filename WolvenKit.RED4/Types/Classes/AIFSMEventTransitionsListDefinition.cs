@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIFSMEventTransitionsListDefinition()
 		{
-			Transitions = new();
+			Transitions = new AIFSMTransitionListDefinition();
 
 			PostConstruct();
 		}

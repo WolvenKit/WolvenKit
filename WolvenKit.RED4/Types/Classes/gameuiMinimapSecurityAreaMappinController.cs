@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMinimapSecurityAreaMappinController()
 		{
-			AreaShapeWidget = new();
+			AreaShapeWidget = new inkShapeWidgetReference();
 
 			PostConstruct();
 		}

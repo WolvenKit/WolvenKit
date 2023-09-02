@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 		public questEndNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 
 			PostConstruct();
 		}

@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public CCTVCamera()
 		{
-			CachedPuppetID = new();
+			CachedPuppetID = new entEntityID();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LeftHandCyberwareHelper : IScriptable
+	public abstract partial class LeftHandCyberwareHelper : IScriptable
 	{
 		public LeftHandCyberwareHelper()
 		{

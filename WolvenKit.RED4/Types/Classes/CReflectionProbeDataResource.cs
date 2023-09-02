@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public CReflectionProbeDataResource()
 		{
-			TextureData = new();
+			TextureData = new rendRenderTextureResource();
 			HaveSkyData = true;
 			FaceDepth = new(6);
 

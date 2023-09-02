@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldWaterPatchNode()
 		{
-			Type = new() { TypeName = "Grid_100x100" };
+			Type = new worldWaterPatchNodeType { TypeName = "Grid_100x100" };
 
 			PostConstruct();
 		}

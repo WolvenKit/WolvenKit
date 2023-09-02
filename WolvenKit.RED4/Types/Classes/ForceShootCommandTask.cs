@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public ForceShootCommandTask()
 		{
-			TargetID = new();
+			TargetID = new entEntityID();
 
 			PostConstruct();
 		}

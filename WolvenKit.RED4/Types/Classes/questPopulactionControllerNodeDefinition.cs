@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public questPopulactionControllerNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 			Enable = true;
 
 			PostConstruct();

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public LootingScrollBlockController()
 		{
-			Rectangle = new();
+			Rectangle = new inkWidgetReference();
 
 			PostConstruct();
 		}

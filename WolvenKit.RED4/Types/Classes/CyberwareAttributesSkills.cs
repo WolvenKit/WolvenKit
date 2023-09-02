@@ -118,9 +118,9 @@ namespace WolvenKit.RED4.Types
 
 		public CyberwareAttributesSkills()
 		{
-			Attributes = new() { WidgetBody = new(), WidgetCool = new(), WidgetInt = new(), WidgetRef = new(), WidgetTech = new() };
-			Resistances = new() { WidgetHealth = new(), WidgetPhysical = new(), WidgetThermal = new(), WidgetEMP = new(), WidgetChemical = new(), ResistanceTooltip = new() };
-			LevelUpPoints = new();
+			Attributes = new CyberwareAttributes_ContainersStruct { WidgetBody = new inkWidgetReference(), WidgetCool = new inkWidgetReference(), WidgetInt = new inkWidgetReference(), WidgetRef = new inkWidgetReference(), WidgetTech = new inkWidgetReference() };
+			Resistances = new CyberwareAttributes_ResistancesStruct { WidgetHealth = new inkFlexWidgetReference(), WidgetPhysical = new inkFlexWidgetReference(), WidgetThermal = new inkFlexWidgetReference(), WidgetEMP = new inkFlexWidgetReference(), WidgetChemical = new inkFlexWidgetReference(), ResistanceTooltip = new inkFlexWidgetReference() };
+			LevelUpPoints = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldEditorDebugFilterSettings : ISerializable
+	public abstract partial class worldEditorDebugFilterSettings : ISerializable
 	{
 		public worldEditorDebugFilterSettings()
 		{

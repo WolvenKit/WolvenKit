@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AILookatTask : AIbehaviortaskScript
+	public abstract partial class AILookatTask : AIbehaviortaskScript
 	{
 		public AILookatTask()
 		{

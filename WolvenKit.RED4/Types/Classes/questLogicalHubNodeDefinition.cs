@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 		public questLogicalHubNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
+			Id = ushort.MaxValue;
 			InputSocketCount = 2;
 			OutputSocketCount = 1;
 

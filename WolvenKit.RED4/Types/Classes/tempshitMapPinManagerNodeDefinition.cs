@@ -47,9 +47,9 @@ namespace WolvenKit.RED4.Types
 		public tempshitMapPinManagerNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			NodeRef = new() { Names = new() };
-			Position = new();
+			Id = ushort.MaxValue;
+			NodeRef = new gameEntityReference { Names = new() };
+			Position = new Vector3();
 			ForceCaption = new() { Unk1 = 0, Value = "" };
 
 			PostConstruct();

@@ -118,9 +118,9 @@ namespace WolvenKit.RED4.Types
 
 		public SCooldown()
 		{
-			DelayId = new();
-			RemoveId = new();
-			OwnerItemID = new();
+			DelayId = new gameDelayID();
+			RemoveId = new gameDelayID();
+			OwnerItemID = new gameItemID();
 
 			PostConstruct();
 		}

@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public DropdownButtonController()
 		{
-			Label = new();
-			Icon = new();
-			Frame = new();
-			Arrow = new();
+			Label = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			Frame = new inkWidgetReference();
+			Arrow = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

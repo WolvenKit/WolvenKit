@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public CharacterCreationGenderSelectionMenu()
 		{
-			StreetRat_male = new();
-			StreetRat_female = new();
-			ClickTarget = new();
+			StreetRat_male = new inkWidgetReference();
+			StreetRat_female = new inkWidgetReference();
+			ClickTarget = new inkWidgetReference();
 
 			PostConstruct();
 		}

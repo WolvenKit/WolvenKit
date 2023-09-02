@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AICondition : IScriptable
+	public abstract partial class AICondition : IScriptable
 	{
 		public AICondition()
 		{

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public StarController()
 		{
-			BountyBadgeWidget = new();
+			BountyBadgeWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

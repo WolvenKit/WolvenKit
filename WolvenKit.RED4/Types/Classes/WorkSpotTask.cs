@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class WorkSpotTask : AIbehaviortaskScript
+	public abstract partial class WorkSpotTask : AIbehaviortaskScript
 	{
 		public WorkSpotTask()
 		{

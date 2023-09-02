@@ -39,9 +39,9 @@ namespace WolvenKit.RED4.Types
 		public entAnimationControllerReplicatedState()
 		{
 			Enabled = true;
-			AnimWrapperVarsState = new() { ServerReplicatedTime = new(), Data = new() };
-			AnimFeaturesState = new() { Items = new(), LastAppliedActionsTime = new() };
-			InputSettersState = new() { ServerReplicatedTime = new() };
+			AnimWrapperVarsState = new entReplicatedAnimWrapperVars { ServerReplicatedTime = new netTime(), Data = new() };
+			AnimFeaturesState = new entReplicatedAnimFeaturesState { Items = new(), LastAppliedActionsTime = new netTime() };
+			InputSettersState = new entReplicatedInputSetters { ServerReplicatedTime = new netTime() };
 
 			PostConstruct();
 		}

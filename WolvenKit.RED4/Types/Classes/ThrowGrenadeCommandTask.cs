@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public ThrowGrenadeCommandTask()
 		{
-			TargetID = new();
+			TargetID = new entEntityID();
 
 			PostConstruct();
 		}

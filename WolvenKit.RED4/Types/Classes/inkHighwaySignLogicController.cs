@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public inkHighwaySignLogicController()
 		{
-			DistrictName = new();
-			SubDistrictName = new();
-			MetroStationIconLeft = new();
-			MetroStationIconRight = new();
+			DistrictName = new inkTextWidgetReference();
+			SubDistrictName = new inkTextWidgetReference();
+			MetroStationIconLeft = new inkImageWidgetReference();
+			MetroStationIconRight = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

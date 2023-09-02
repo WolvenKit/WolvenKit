@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameinteractionsPieDefinition()
 		{
-			Center = new() { W = 1.000000F };
+			Center = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

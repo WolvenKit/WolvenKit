@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameHitResult()
 		{
-			HitPositionEnter = new();
-			HitPositionExit = new();
+			HitPositionEnter = new Vector4();
+			HitPositionExit = new Vector4();
 
 			PostConstruct();
 		}

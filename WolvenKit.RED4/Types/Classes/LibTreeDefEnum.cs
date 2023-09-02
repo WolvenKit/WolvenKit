@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public LibTreeDefEnum()
 		{
-			VariableId = 65535;
+			VariableId = ushort.MaxValue;
 
 			PostConstruct();
 		}

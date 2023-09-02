@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldDebugColoring_Discarded()
 		{
-			Color = new();
+			Color = new CColor();
 
 			PostConstruct();
 		}

@@ -78,9 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public HubTimeSkipController()
 		{
-			GameTimeText = new();
-			CantSkipTimeContainer = new();
-			TimeSkipButton = new();
+			GameTimeText = new inkTextWidgetReference();
+			CantSkipTimeContainer = new inkWidgetReference();
+			TimeSkipButton = new inkWidgetReference();
 
 			PostConstruct();
 		}

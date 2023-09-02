@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public StatsPlayTimeController()
 		{
-			PlayTimeRef = new();
-			LifePathRef = new();
-			LifePathIconRef = new();
+			PlayTimeRef = new inkTextWidgetReference();
+			LifePathRef = new inkTextWidgetReference();
+			LifePathIconRef = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameprojectileSpawnerLaunchEvent()
 		{
-			LaunchParams = new();
-			ProjectileParams = new() { TargetPosition = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, SmartGunSpreadOnHitPlane = new(), SmartGunAccuracy = 1.000000F, SmartGunIsProjectileGuided = true, HitPlaneOffset = new(), IgnoreWeaponOwnerCollision = true, RicochetData = new(), Range = -1.000000F };
+			LaunchParams = new gameprojectileLaunchParams();
+			ProjectileParams = new gameprojectileWeaponParams { TargetPosition = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, SmartGunSpreadOnHitPlane = new Vector3(), SmartGunAccuracy = 1.000000F, SmartGunIsProjectileGuided = true, HitPlaneOffset = new Vector4(), IgnoreWeaponOwnerCollision = true, RicochetData = new gameRicochetData(), Range = -1.000000F };
 
 			PostConstruct();
 		}

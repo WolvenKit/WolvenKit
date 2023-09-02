@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_MultiBoolToFloatValue()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 			OnTrue = 1.000000F;
 			InputsData = new();
 

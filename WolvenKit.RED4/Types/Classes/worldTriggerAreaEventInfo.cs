@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldTriggerAreaEventInfo()
 		{
-			EventWorldPosition = new();
+			EventWorldPosition = new Vector3();
 
 			PostConstruct();
 		}

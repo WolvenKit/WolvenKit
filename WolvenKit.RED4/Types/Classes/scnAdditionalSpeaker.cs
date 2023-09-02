@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnAdditionalSpeaker()
 		{
-			ActorId = new() { Id = 4294967295 };
+			ActorId = new scnActorId { Id = uint.MaxValue };
 
 			PostConstruct();
 		}

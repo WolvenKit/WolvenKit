@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldIDynamicCollisionRepresentation : RedBaseClass
+	public abstract partial class worldIDynamicCollisionRepresentation : RedBaseClass
 	{
 		public worldIDynamicCollisionRepresentation()
 		{

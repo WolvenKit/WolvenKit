@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			TopElementName = "KeyboardHintItem_Top";
 			BottomElementName = "KeyboardHintItem_Bot";
-			Layout = new();
+			Layout = new inkBasePanelWidgetReference();
 			UIItems = new();
 
 			PostConstruct();

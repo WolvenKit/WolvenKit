@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UI_VisionModeDef()
 		{
-			IsEnabled = new();
+			IsEnabled = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

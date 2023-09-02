@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public AIArgumentGlobalNodeIdValue()
 		{
 			Type = Enums.AIArgumentType.GlobalNodeId;
-			DefaultValue = new();
+			DefaultValue = new worldGlobalNodeID();
 
 			PostConstruct();
 		}

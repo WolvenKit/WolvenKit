@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_WallRun()
 		{
-			WallPosition = new();
-			WallNormal = new();
+			WallPosition = new Vector4();
+			WallNormal = new Vector4();
 
 			PostConstruct();
 		}

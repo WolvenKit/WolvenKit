@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public rendHistogramBias()
 		{
-			MulCoef = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
-			AddCoef = new();
+			MulCoef = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			AddCoef = new Vector3();
 
 			PostConstruct();
 		}

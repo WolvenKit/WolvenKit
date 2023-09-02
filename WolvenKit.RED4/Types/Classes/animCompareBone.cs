@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animCompareBone()
 		{
-			BoneRotationLs = new() { R = 1.000000F };
+			BoneRotationLs = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

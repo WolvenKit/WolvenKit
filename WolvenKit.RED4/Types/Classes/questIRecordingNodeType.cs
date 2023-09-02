@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIRecordingNodeType : questINodeType
+	public abstract partial class questIRecordingNodeType : questINodeType
 	{
 		public questIRecordingNodeType()
 		{

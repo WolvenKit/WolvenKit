@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public RevealNetworkRequestRequest()
 		{
-			Target = new();
+			Target = new entEntityID();
 
 			PostConstruct();
 		}

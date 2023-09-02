@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameSmartObjectInstance : RedBaseClass
+	public abstract partial class gameSmartObjectInstance : RedBaseClass
 	{
 		public gameSmartObjectInstance()
 		{

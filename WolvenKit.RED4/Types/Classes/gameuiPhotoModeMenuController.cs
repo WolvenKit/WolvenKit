@@ -302,26 +302,26 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiPhotoModeMenuController()
 		{
-			SetAttributeOptionEnabled = new();
-			SetCategoryEnabled = new();
-			SetStickerImage = new();
-			MenuListRoot = new();
-			AdditionalListRoot = new();
-			RadioButtons = new();
-			MenuArea = new();
-			AdditionalMenuArea = new();
-			InputCameraControlKbd = new();
-			InputCameraKbd = new();
-			InputCameraControlPad = new();
-			InputCameraPad = new();
-			InputStickersKbd = new();
-			InputStickersPad = new();
-			InputSaveLoadKbd = new();
-			InputSaveLoadPad = new();
-			InputExit = new();
-			InputScreenshot = new();
-			CameraLocation = new();
-			InputBottomRoot = new();
+			SetAttributeOptionEnabled = new gameuiSetPhotoModeKeyEnabledCallback();
+			SetCategoryEnabled = new gameuiSetPhotoModeKeyEnabledCallback();
+			SetStickerImage = new gameuiStickerImageCallback();
+			MenuListRoot = new inkWidgetReference();
+			AdditionalListRoot = new inkWidgetReference();
+			RadioButtons = new inkCompoundWidgetReference();
+			MenuArea = new inkWidgetReference();
+			AdditionalMenuArea = new inkWidgetReference();
+			InputCameraControlKbd = new inkWidgetReference();
+			InputCameraKbd = new inkWidgetReference();
+			InputCameraControlPad = new inkWidgetReference();
+			InputCameraPad = new inkWidgetReference();
+			InputStickersKbd = new inkWidgetReference();
+			InputStickersPad = new inkWidgetReference();
+			InputSaveLoadKbd = new inkWidgetReference();
+			InputSaveLoadPad = new inkWidgetReference();
+			InputExit = new inkWidgetReference();
+			InputScreenshot = new inkWidgetReference();
+			CameraLocation = new inkWidgetReference();
+			InputBottomRoot = new inkHorizontalPanelWidgetReference();
 			MenuPages = new();
 
 			PostConstruct();

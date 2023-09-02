@@ -78,9 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public InteractionsInputView()
 		{
-			TopArrowRef = new();
-			BotArrowRef = new();
-			InputImage = new();
+			TopArrowRef = new inkWidgetReference();
+			BotArrowRef = new inkWidgetReference();
+			InputImage = new inkImageWidgetReference();
 			ShowArrows = true;
 
 			PostConstruct();

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class UIInventoryHelper : IScriptable
+	public abstract partial class UIInventoryHelper : IScriptable
 	{
 		public UIInventoryHelper()
 		{

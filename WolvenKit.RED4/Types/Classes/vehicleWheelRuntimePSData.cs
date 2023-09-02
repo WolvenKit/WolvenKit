@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleWheelRuntimePSData()
 		{
-			PreviousVisualDisplacement = -340282346638528859811704183484516925440.000000F;
-			PreviousLogicalSpringCompression = -340282346638528859811704183484516925440.000000F;
-			PreviousSwaybarDisplacement = -340282346638528859811704183484516925440.000000F;
-			PreviousDampedSpringForce = -340282346638528859811704183484516925440.000000F;
+			PreviousVisualDisplacement = float.MinValue;
+			PreviousLogicalSpringCompression = float.MinValue;
+			PreviousSwaybarDisplacement = float.MinValue;
+			PreviousDampedSpringForce = float.MinValue;
 
 			PostConstruct();
 		}

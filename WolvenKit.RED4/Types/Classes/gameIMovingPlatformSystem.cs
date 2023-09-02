@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIMovingPlatformSystem : gameIGameSystem
+	public abstract partial class gameIMovingPlatformSystem : gameIGameSystem
 	{
 		public gameIMovingPlatformSystem()
 		{

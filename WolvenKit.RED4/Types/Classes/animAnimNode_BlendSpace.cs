@@ -54,10 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_BlendSpace()
 		{
-			Id = 4294967295;
-			InputLinks = new() { new() };
-			BlendSpace = new() { SpaceDimension = 1, CoordinatesDescriptions = new() { new() }, SpacePoints = new(), IsLooped = true, NeedsRuntimeTriangulation = true, CachedSpacePoints_coordinates = new(), CachedSpaceSimplexes_pointsIndices = new(), CachedSamplesForGridPoints_simplexIndex = new(), CachedSamplesForGridPoints_weightsForPoints = new() };
-			ProgressLink = new();
+			Id = uint.MaxValue;
+			InputLinks = new() { new animFloatLink() };
+			BlendSpace = new animAnimNode_BlendSpace_InternalsBlendSpace { SpaceDimension = 1, CoordinatesDescriptions = new() { new animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription() }, SpacePoints = new(), IsLooped = true, NeedsRuntimeTriangulation = true, CachedSpacePoints_coordinates = new(), CachedSpaceSimplexes_pointsIndices = new(), CachedSamplesForGridPoints_simplexIndex = new(), CachedSamplesForGridPoints_weightsForPoints = new() };
+			ProgressLink = new animFloatLink();
 			IsLooped = true;
 
 			PostConstruct();

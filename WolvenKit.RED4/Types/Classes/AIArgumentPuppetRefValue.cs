@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public AIArgumentPuppetRefValue()
 		{
 			Type = Enums.AIArgumentType.PuppetRef;
-			DefaultValue = new() { Names = new() };
+			DefaultValue = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

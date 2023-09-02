@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SkFrameAnimByTrack()
 		{
-			ProgressFloatTrack = new();
-			TimeFloatTrack = new();
-			FrameFloatTrack = new();
-			InputWithTracks = new();
+			ProgressFloatTrack = new animNamedTrackIndex();
+			TimeFloatTrack = new animNamedTrackIndex();
+			FrameFloatTrack = new animNamedTrackIndex();
+			InputWithTracks = new animPoseLink();
 
 			PostConstruct();
 		}

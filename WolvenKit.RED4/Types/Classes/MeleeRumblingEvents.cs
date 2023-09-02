@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MeleeRumblingEvents : MeleeEventsTransition
+	public abstract partial class MeleeRumblingEvents : MeleeEventsTransition
 	{
 		public MeleeRumblingEvents()
 		{

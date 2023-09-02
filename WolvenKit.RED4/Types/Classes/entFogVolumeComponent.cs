@@ -63,13 +63,13 @@ namespace WolvenKit.RED4.Types
 		public entFogVolumeComponent()
 		{
 			Name = "Component";
-			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			ForceLODLevel = -1;
 			DensityFactor = 100.000000F;
-			Color = new();
+			Color = new CColor();
 			Absorption = -1.000000F;
-			Size = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+			Size = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 			IsEnabled = true;
 
 			PostConstruct();

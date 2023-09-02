@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public SettingsCategoryItem()
 		{
-			LabelHighlight = new();
+			LabelHighlight = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

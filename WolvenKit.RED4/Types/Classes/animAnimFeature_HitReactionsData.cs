@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_HitReactionsData()
 		{
-			HitDirectionWs = new() { W = 1.000000F };
+			HitDirectionWs = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

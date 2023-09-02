@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public AssignToCyberwareWheelRequest()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 			SlotIndex = -1;
 
 			PostConstruct();

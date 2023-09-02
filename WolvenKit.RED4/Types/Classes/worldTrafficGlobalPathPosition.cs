@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldTrafficGlobalPathPosition()
 		{
-			WorldPosition = new();
+			WorldPosition = new Vector3();
 
 			PostConstruct();
 		}

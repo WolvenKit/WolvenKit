@@ -614,30 +614,30 @@ namespace WolvenKit.RED4.Types
 
 		public healthbarWidgetGameController()
 		{
-			HealthPath = new() { Names = new() };
-			HealthBarPath = new() { Names = new() };
-			ArmorPath = new() { Names = new() };
-			ArmorBarPath = new() { Names = new() };
-			ExpBar = new();
-			ExpBarSpacer = new();
-			LevelUpArrow = new();
-			LevelUpFrame = new();
-			BarsLayoutPath = new();
-			BuffsHolder = new();
-			InvulnerableTextPath = new();
-			LevelTextPath = new();
-			NextLevelTextPath = new();
-			HealthTextPath = new();
-			MaxHealthTextPath = new();
-			QuickhacksContainer = new();
-			ExpText = new();
-			ExpTextLabel = new();
-			LostHealthAggregationBar = new();
-			LevelUpRectangle = new();
+			HealthPath = new inkWidgetPath { Names = new() };
+			HealthBarPath = new inkWidgetPath { Names = new() };
+			ArmorPath = new inkWidgetPath { Names = new() };
+			ArmorBarPath = new inkWidgetPath { Names = new() };
+			ExpBar = new inkWidgetReference();
+			ExpBarSpacer = new inkWidgetReference();
+			LevelUpArrow = new inkWidgetReference();
+			LevelUpFrame = new inkWidgetReference();
+			BarsLayoutPath = new inkCompoundWidgetReference();
+			BuffsHolder = new inkCompoundWidgetReference();
+			InvulnerableTextPath = new inkTextWidgetReference();
+			LevelTextPath = new inkTextWidgetReference();
+			NextLevelTextPath = new inkTextWidgetReference();
+			HealthTextPath = new inkTextWidgetReference();
+			MaxHealthTextPath = new inkTextWidgetReference();
+			QuickhacksContainer = new inkCompoundWidgetReference();
+			ExpText = new inkTextWidgetReference();
+			ExpTextLabel = new inkTextWidgetReference();
+			LostHealthAggregationBar = new inkWidgetReference();
+			LevelUpRectangle = new inkWidgetReference();
 			QuickhackBarArray = new();
 			IsUnarmedRightHand = true;
 			IsUnarmedLeftHand = true;
-			GameInstance = new();
+			GameInstance = new ScriptGameInstance();
 			SpawnTokens = new();
 
 			PostConstruct();

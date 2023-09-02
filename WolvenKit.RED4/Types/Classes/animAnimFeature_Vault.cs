@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimFeature_Vault()
 		{
-			LandPosition = new();
+			LandPosition = new Vector4();
 
 			PostConstruct();
 		}

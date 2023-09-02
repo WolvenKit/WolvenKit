@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Force";
 			EditorGroup = "Force";
 			IsEnabled = true;
-			Pivot = new();
+			Pivot = new Vector3();
 			Radius = 10.000000F;
 
 			PostConstruct();

@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectParameter_VectorEvaluator_ValueOrBlackboard()
 		{
-			BlackboardProperty = new() { SerializableID = new(), PropertyPath = new() };
-			Value = new();
+			BlackboardProperty = new gameBlackboardPropertyBindingDefinition { SerializableID = new gameBlackboardSerializableID(), PropertyPath = new() };
+			Value = new Vector4();
 
 			PostConstruct();
 		}

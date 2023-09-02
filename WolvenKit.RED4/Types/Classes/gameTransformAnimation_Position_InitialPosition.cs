@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameTransformAnimation_Position_InitialPosition()
 		{
-			Offset = new();
+			Offset = new Vector3();
 
 			PostConstruct();
 		}

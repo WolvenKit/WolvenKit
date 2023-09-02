@@ -86,14 +86,14 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryWideItemDisplay()
 		{
-			ItemNameText = new();
-			RarityBackground = new();
-			IconWrapper = new();
-			StatsWrapper = new();
-			DpsText = new();
-			DamageIndicatorRef = new();
-			AdditionalInfoText = new();
-			SingleIconSize = new();
+			ItemNameText = new inkTextWidgetReference();
+			RarityBackground = new inkWidgetReference();
+			IconWrapper = new inkWidgetReference();
+			StatsWrapper = new inkWidgetReference();
+			DpsText = new inkTextWidgetReference();
+			DamageIndicatorRef = new inkWidgetReference();
+			AdditionalInfoText = new inkTextWidgetReference();
+			SingleIconSize = new Vector2();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public PSOwnerData()
 		{
-			Id = new();
+			Id = new gamePersistentID();
 
 			PostConstruct();
 		}

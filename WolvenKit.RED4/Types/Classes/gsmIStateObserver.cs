@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gsmIStateObserver : RedBaseClass
+	public abstract partial class gsmIStateObserver : RedBaseClass
 	{
 		public gsmIStateObserver()
 		{

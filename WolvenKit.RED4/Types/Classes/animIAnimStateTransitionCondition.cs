@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animIAnimStateTransitionCondition : ISerializable
+	public abstract partial class animIAnimStateTransitionCondition : ISerializable
 	{
 		public animIAnimStateTransitionCondition()
 		{

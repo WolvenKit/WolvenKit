@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIbehaviortweakTargetLocation()
 		{
-			Position = new();
-			Speed = new();
-			CoverId = new();
+			Position = new Vector3();
+			Speed = new Vector3();
+			CoverId = new AIObjectId();
 
 			PostConstruct();
 		}

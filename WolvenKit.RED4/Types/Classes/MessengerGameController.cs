@@ -86,10 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public MessengerGameController()
 		{
-			ButtonHintsManagerRef = new();
-			ContactsRef = new();
-			DialogRef = new();
-			VirtualList = new();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			ContactsRef = new inkWidgetReference();
+			DialogRef = new inkWidgetReference();
+			VirtualList = new inkWidgetReference();
 
 			PostConstruct();
 		}

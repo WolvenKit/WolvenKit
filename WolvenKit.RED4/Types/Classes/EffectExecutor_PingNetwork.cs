@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public EffectExecutor_PingNetwork()
 		{
-			FxResource = new();
+			FxResource = new gameFxResource();
 
 			PostConstruct();
 		}

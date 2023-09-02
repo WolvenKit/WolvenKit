@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnSceneInstanceId()
 		{
-			SceneId = new();
-			OwnerId = new();
+			SceneId = new scnSceneId();
+			OwnerId = new scnSceneInstanceOwnerId();
 			InternalId = 255;
 			Hash = 6242570315725555409;
 

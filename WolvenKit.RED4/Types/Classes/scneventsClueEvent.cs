@@ -54,9 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public scneventsClueEvent()
 		{
-			Id = new() { Id = 18446744073709551615 };
+			Id = new scnSceneEventId { Id = long.MaxValue };
 			Duration = 1000;
-			ClueEntity = new() { Names = new() };
+			ClueEntity = new gameEntityReference { Names = new() };
 			MarkedOnTimeline = true;
 			OverrideFact = true;
 

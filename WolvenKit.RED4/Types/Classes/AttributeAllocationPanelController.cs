@@ -78,9 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public AttributeAllocationPanelController()
 		{
-			AllocationPointsContainer = new();
-			ArmorAmountText = new();
-			TokenAmountText = new();
+			AllocationPointsContainer = new inkCompoundWidgetReference();
+			ArmorAmountText = new inkTextWidgetReference();
+			TokenAmountText = new inkTextWidgetReference();
 			AllocationData = new();
 			AllocationWidgets = new();
 

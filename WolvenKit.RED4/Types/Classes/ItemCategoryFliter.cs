@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ItemCategoryFliter : IScriptable
+	public abstract partial class ItemCategoryFliter : IScriptable
 	{
 		public ItemCategoryFliter()
 		{

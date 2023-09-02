@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISubActionCallSquadSearchBackUp_Record_Implementation : IScriptable
+	public abstract partial class AISubActionCallSquadSearchBackUp_Record_Implementation : IScriptable
 	{
 		public AISubActionCallSquadSearchBackUp_Record_Implementation()
 		{

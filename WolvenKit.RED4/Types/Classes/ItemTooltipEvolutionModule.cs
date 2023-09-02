@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipEvolutionModule()
 		{
-			WeaponEvolutionIcon = new();
-			WeaponEvolutionName = new();
-			WeaponEvolutionDescription = new();
+			WeaponEvolutionIcon = new inkImageWidgetReference();
+			WeaponEvolutionName = new inkTextWidgetReference();
+			WeaponEvolutionDescription = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

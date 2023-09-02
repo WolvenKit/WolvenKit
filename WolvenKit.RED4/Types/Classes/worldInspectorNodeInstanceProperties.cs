@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldInspectorNodeInstanceProperties()
 		{
-			SetupInfo = new();
+			SetupInfo = new worldCompiledNodeInstanceSetupInfo();
 			LastObserverDistanceToStreamingPoint = -1.000000F;
 			LastObserverDistanceToSecondaryReferencePoint = -1.000000F;
 

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public PreventionCrimeWitnessRequest()
 		{
-			CriminalPosition = new();
+			CriminalPosition = new Vector4();
 
 			PostConstruct();
 		}

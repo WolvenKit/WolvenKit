@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public UIWorldBoundariesDef()
 		{
-			IsPlayerCloseToBoundary = new();
-			IsPlayerGoingDeeper = new();
+			IsPlayerCloseToBoundary = new gamebbScriptID_Bool();
+			IsPlayerGoingDeeper = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

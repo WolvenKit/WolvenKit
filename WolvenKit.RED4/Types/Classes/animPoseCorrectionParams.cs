@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public animPoseCorrectionParams()
 		{
-			PoseCorrectionGroup = new() { PoseCorrections = new(0) };
+			PoseCorrectionGroup = new animPoseCorrectionGroup { PoseCorrections = new(0) };
 			BlendDuration = 0.200000F;
 
 			PostConstruct();

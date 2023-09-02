@@ -78,11 +78,11 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FloatComparator()
 		{
-			Id = 4294967295;
-			FirstInputLink = new();
-			SecondInputLink = new();
-			TrueInputLink = new();
-			FalseInputLink = new();
+			Id = uint.MaxValue;
+			FirstInputLink = new animFloatLink();
+			SecondInputLink = new animFloatLink();
+			TrueInputLink = new animFloatLink();
+			FalseInputLink = new animFloatLink();
 
 			PostConstruct();
 		}

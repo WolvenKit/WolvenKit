@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public TemporalPrereqState()
 		{
-			DelayID = new();
+			DelayID = new gameDelayID();
 
 			PostConstruct();
 		}

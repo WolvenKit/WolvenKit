@@ -158,15 +158,15 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiRoachRaceGameLogicController()
 		{
-			PlayerSpawnPoint = new();
+			PlayerSpawnPoint = new Vector2();
 			MaxSpeedMultiplier = 2.000000F;
 			MultiplierPerScore = 0.020000F;
-			House = new();
-			Ground = new();
+			House = new inkWidgetReference();
+			Ground = new inkWidgetReference();
 			Layers = new();
-			HealthText = new();
-			ScoreText = new();
-			ScoreMultiplierText = new();
+			HealthText = new inkTextWidgetReference();
+			ScoreText = new inkTextWidgetReference();
+			ScoreMultiplierText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

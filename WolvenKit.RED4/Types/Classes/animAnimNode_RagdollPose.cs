@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public animAnimNode_RagdollPose()
 		{
-			Id = 4294967295;
+			Id = uint.MaxValue;
 
 			PostConstruct();
 		}

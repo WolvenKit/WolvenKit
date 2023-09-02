@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public DataTermControllerPS()
 		{
-			TweakDBRecord = 69877812462;
+			TweakDBRecord = "Devices.DataTerm";
 			TweakDBDescriptionRecord = 120924954229;
 
 			PostConstruct();

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ObjectScanningDescription : IScriptable
+	public abstract partial class ObjectScanningDescription : IScriptable
 	{
 		public ObjectScanningDescription()
 		{

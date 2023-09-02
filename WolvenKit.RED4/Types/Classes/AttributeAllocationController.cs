@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public AttributeAllocationController()
 		{
-			PointsContainer = new();
-			AttributeName = new();
-			AttributePoints = new();
-			AttributeIcon = new();
+			PointsContainer = new inkCompoundWidgetReference();
+			AttributeName = new inkTextWidgetReference();
+			AttributePoints = new inkTextWidgetReference();
+			AttributeIcon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

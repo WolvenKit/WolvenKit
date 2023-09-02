@@ -102,10 +102,10 @@ namespace WolvenKit.RED4.Types
 
 		public NetRunnerChargesGameController()
 		{
-			Header = new();
-			List = new();
-			Bar = new();
-			Value = new();
+			Header = new inkTextWidgetReference();
+			List = new inkCompoundWidgetReference();
+			Bar = new inkWidgetReference();
+			Value = new inkTextWidgetReference();
 			ChargesList = new();
 
 			PostConstruct();

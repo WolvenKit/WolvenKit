@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class animIAnimNodeSourceChannel_QsTransform : ISerializable
+	public abstract partial class animIAnimNodeSourceChannel_QsTransform : ISerializable
 	{
 		public animIAnimNodeSourceChannel_QsTransform()
 		{

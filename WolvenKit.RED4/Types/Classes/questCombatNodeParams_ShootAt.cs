@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCombatNodeParams_ShootAt()
 		{
-			TargetOverridePuppet = new() { Names = new() };
+			TargetOverridePuppet = new gameEntityReference { Names = new() };
 			Duration = -1.000000F;
 
 			PostConstruct();

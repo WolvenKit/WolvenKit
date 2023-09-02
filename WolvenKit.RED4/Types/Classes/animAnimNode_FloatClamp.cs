@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_FloatClamp()
 		{
-			Id = 4294967295;
-			InputNode = new();
+			Id = uint.MaxValue;
+			InputNode = new animFloatLink();
 
 			PostConstruct();
 		}

@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_TriggerBranch()
 		{
-			Id = 4294967295;
-			Base = new();
-			Overlay = new();
+			Id = uint.MaxValue;
+			Base = new animPoseLink();
+			Overlay = new animPoseLink();
 			Cooldown = -1.000000F;
 
 			PostConstruct();

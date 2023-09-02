@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ChargeLogicController : inkWidgetLogicController
+	public abstract partial class ChargeLogicController : inkWidgetLogicController
 	{
 		public ChargeLogicController()
 		{

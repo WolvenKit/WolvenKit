@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIFinisherScenario : ISerializable
+	public abstract partial class gameIFinisherScenario : ISerializable
 	{
 		public gameIFinisherScenario()
 		{

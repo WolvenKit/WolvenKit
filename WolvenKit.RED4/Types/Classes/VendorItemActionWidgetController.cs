@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public VendorItemActionWidgetController()
 		{
-			PriceWidget = new();
-			PriceContainer = new();
-			MoneyStatusContainer = new();
-			ProcessingStatusContainer = new();
+			PriceWidget = new inkTextWidgetReference();
+			PriceContainer = new inkWidgetReference();
+			MoneyStatusContainer = new inkWidgetReference();
+			ProcessingStatusContainer = new inkWidgetReference();
 
 			PostConstruct();
 		}

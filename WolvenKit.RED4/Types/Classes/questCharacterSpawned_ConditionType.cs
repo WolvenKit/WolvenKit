@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterSpawned_ConditionType()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

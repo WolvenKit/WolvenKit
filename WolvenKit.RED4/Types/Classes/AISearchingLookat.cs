@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AISearchingLookat : AIGenericStaticLookatTask
+	public abstract partial class AISearchingLookat : AIGenericStaticLookatTask
 	{
 		[Ordinal(4)] 
 		[RED("minAngleDifferenceMapping")] 

@@ -15,7 +15,7 @@ namespace WolvenKit.RED4.Types
 		public LightDirectionSettings()
 		{
 			Enable = true;
-			Direction = new() { TimeOfYearSeason = Enums.ETimeOfYearSeason.ETOYS_Summer };
+			Direction = new GlobalLightingTrajectoryOverride { TimeOfYearSeason = Enums.ETimeOfYearSeason.ETOYS_Summer };
 
 			PostConstruct();
 		}

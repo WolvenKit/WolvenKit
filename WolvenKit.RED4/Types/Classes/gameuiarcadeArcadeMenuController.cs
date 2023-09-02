@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiarcadeArcadeMenuController()
 		{
-			StartArrow = new();
-			ScoreboardArrow = new();
+			StartArrow = new inkWidgetReference();
+			ScoreboardArrow = new inkWidgetReference();
 
 			PostConstruct();
 		}

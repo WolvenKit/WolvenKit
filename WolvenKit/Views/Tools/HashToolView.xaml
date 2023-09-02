@@ -1,0 +1,261 @@
+﻿<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.Tools.HashToolView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Tools"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:TypeArguments="tools:HashToolViewModel"
+    mc:Ignorable="d">
+    <Grid Margin="6,0" Background="{StaticResource ContentBackground}">
+        <TabControl>
+            <TabItem Header="Calculate">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        Text:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="InputTextBox"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Grid.ColumnSpan="5"
+                        TextChanged="InputTextBox_OnTextChanged" />
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        CName (FNV1A64):
+                    </TextBlock>
+                    <TextBox
+                        x:Name="CNameHash"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        IsReadOnly="True" />
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="4"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        Hex:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="CNameHashHex"
+                        Grid.Row="1"
+                        Grid.Column="6" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        DepotPath (FNV1A64):
+                    </TextBlock>
+                    <TextBox
+                        x:Name="DepotHash"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        IsReadOnly="True" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="4"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        Hex:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="DepotHashHex"
+                        Grid.Row="2"
+                        Grid.Column="6" />
+
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        NodeRef (FNV1A64):
+                    </TextBlock>
+                    <TextBox
+                        x:Name="NodeRefHash"
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        IsReadOnly="True" />
+
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="4"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        Hex:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="NodeRefHashHex"
+                        Grid.Row="3"
+                        Grid.Column="6" />
+
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        TweakDbId (CRC32):
+                    </TextBlock>
+                    <TextBox
+                        x:Name="TweakDbIdHash"
+                        Grid.Row="4"
+                        Grid.Column="2"
+                        IsReadOnly="True" />
+
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="4"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        Hex:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="TweakDbIdHashHex"
+                        Grid.Row="4"
+                        Grid.Column="6" />
+
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        Murmur3:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="Murmur3Hash"
+                        Grid.Row="5"
+                        Grid.Column="2"
+                        IsReadOnly="True" />
+
+                    <TextBlock
+                        Grid.Row="5"
+                        Grid.Column="4"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        Hex:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="Murmur3HashHex"
+                        Grid.Row="5"
+                        Grid.Column="6" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="LookUp">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        Number:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="NumberTextBox"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        TextChanged="NumberTextBox_OnTextChanged" />
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        CName:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="CNameTextBox"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        IsReadOnly="True" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        Depot:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="DepotTextBox"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        IsReadOnly="True" />
+
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        NodeRef:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="NodeRefTextBox"
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        IsReadOnly="True" />
+
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        TweakDbId:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="TweakDbIdTextBox"
+                        Grid.Row="4"
+                        Grid.Column="2"
+                        IsReadOnly="True" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</reactiveUi:ReactiveUserControl>

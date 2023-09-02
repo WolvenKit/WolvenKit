@@ -55,7 +55,7 @@ namespace WolvenKit.RED4.Types
 		public ProgressionWidgetGameController()
 		{
 			Duration = 3.000000F;
-			GameInstance = new();
+			GameInstance = new ScriptGameInstance();
 
 			PostConstruct();
 		}

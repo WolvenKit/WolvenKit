@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.Types
 			HeadGroups = new();
 			ArmsGroups = new();
 			PerspectiveInfo = new();
-			Tags = new() { Tags = new() };
+			Tags = new redTagList { Tags = new() };
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public questEntityManagerSetDestructionState_NodeType()
 		{
-			Params = new() { new() };
+			Params = new() { new questEntityManagerSetDestructionState_NodeTypeParams() };
 
 			PostConstruct();
 		}

@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public rendRenderTextureBlobMipMapInfo()
 		{
-			Layout = new();
-			Placement = new();
+			Layout = new rendRenderTextureBlobMemoryLayout();
+			Placement = new rendRenderTextureBlobPlacement();
 
 			PostConstruct();
 		}

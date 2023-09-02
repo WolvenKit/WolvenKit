@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public SWidgetPackageBase()
 		{
-			LibraryPath = new();
+			LibraryPath = new redResourceReferenceScriptToken();
 			IsValid = true;
 
 			PostConstruct();

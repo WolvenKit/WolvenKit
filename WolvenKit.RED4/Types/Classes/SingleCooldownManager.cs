@@ -166,18 +166,18 @@ namespace WolvenKit.RED4.Types
 
 		public SingleCooldownManager()
 		{
-			Sprite = new();
-			SpriteBg = new();
-			Icon = new();
-			Name = new();
-			Desc = new();
-			TimeRemaining = new();
-			StackCount = new();
-			Fill = new();
-			FullSizeValue = new();
-			Pool = new();
-			Grid = new();
-			BuffData = new();
+			Sprite = new inkImageWidgetReference();
+			SpriteBg = new inkImageWidgetReference();
+			Icon = new inkImageWidgetReference();
+			Name = new inkTextWidgetReference();
+			Desc = new inkTextWidgetReference();
+			TimeRemaining = new inkTextWidgetReference();
+			StackCount = new inkTextWidgetReference();
+			Fill = new inkRectangleWidgetReference();
+			FullSizeValue = new Vector2();
+			Pool = new inkCompoundWidgetReference();
+			Grid = new inkCompoundWidgetReference();
+			BuffData = new UIBuffInfo();
 			C_EXCLUDED_STATUS_EFFECT_NAME = "BaseStatusEffect.AlcoholDebuff";
 
 			PostConstruct();

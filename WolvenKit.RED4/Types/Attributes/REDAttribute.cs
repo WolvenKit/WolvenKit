@@ -10,7 +10,7 @@ public enum EREDMetaInfo
 /// <summary>
 /// Marks a field as serializable for redengine files.
 /// </summary>
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Enum, AllowMultiple = false)]
 public class REDAttribute : Attribute
 {
     #region Constructors

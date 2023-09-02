@@ -86,11 +86,11 @@ namespace WolvenKit.RED4.Types
 
 		public CyberwareAttributes_ContainersStruct()
 		{
-			WidgetBody = new();
-			WidgetCool = new();
-			WidgetInt = new();
-			WidgetRef = new();
-			WidgetTech = new();
+			WidgetBody = new inkWidgetReference();
+			WidgetCool = new inkWidgetReference();
+			WidgetInt = new inkWidgetReference();
+			WidgetRef = new inkWidgetReference();
+			WidgetTech = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiSideScrollerMiniGameController()
 		{
-			GameplayCanvas = new();
+			GameplayCanvas = new inkWidgetReference();
 
 			PostConstruct();
 		}

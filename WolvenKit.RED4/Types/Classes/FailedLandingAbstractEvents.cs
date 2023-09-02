@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class FailedLandingAbstractEvents : AbstractLandEvents
+	public abstract partial class FailedLandingAbstractEvents : AbstractLandEvents
 	{
 		public FailedLandingAbstractEvents()
 		{

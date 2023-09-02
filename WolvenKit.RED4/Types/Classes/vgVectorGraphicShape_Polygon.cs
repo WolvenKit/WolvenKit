@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public vgVectorGraphicShape_Polygon()
 		{
-			CalTransform = new();
+			CalTransform = new CMatrix();
 			Ints = new();
 
 			PostConstruct();

@@ -78,11 +78,11 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationLifePathBtn()
 		{
-			Selector = new();
-			Desc = new();
-			Image = new();
-			Label = new();
-			Video = new();
+			Selector = new inkWidgetReference();
+			Desc = new inkTextWidgetReference();
+			Image = new inkImageWidgetReference();
+			Label = new inkTextWidgetReference();
+			Video = new inkVideoWidgetReference();
 
 			PostConstruct();
 		}

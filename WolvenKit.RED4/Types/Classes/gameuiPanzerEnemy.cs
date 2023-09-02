@@ -127,7 +127,7 @@ namespace WolvenKit.RED4.Types
 		public gameuiPanzerEnemy()
 		{
 			NoBonusChanceCoeff = 80;
-			ShootPoint = new();
+			ShootPoint = new Vector2();
 			LifeBonusChanceCoeff = 5;
 			ScoreBonusChanceCoeff = 15;
 			Score50ChanceCoeff = 50;

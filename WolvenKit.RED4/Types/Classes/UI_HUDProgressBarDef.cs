@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HUDProgressBarDef()
 		{
-			TimerID = new();
-			Header = new();
-			Active = new();
-			Progress = new();
+			TimerID = new gamebbScriptID_Variant();
+			Header = new gamebbScriptID_String();
+			Active = new gamebbScriptID_Bool();
+			Progress = new gamebbScriptID_Float();
 
 			PostConstruct();
 		}

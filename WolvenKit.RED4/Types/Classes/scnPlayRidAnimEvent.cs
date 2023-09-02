@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public scnPlayRidAnimEvent()
 		{
-			AnimResRefId = new() { Id = 4294967295 };
-			AnimOriginMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
+			AnimResRefId = new scnRidAnimationSRRefId { Id = uint.MaxValue };
+			AnimOriginMarker = new scnMarker { Type = Enums.scnMarkerType.Global, EntityRef = new gameEntityReference { Names = new() }, IsMounted = true };
 			ActorHasCollision = true;
 
 			PostConstruct();

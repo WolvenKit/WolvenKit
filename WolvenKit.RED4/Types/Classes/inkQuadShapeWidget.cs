@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkQuadShapeWidget()
 		{
-			VertexList = new() { new(), new(), new(), new() };
+			VertexList = new() { new Vector2(), new Vector2(), new Vector2(), new Vector2() };
 
 			PostConstruct();
 		}

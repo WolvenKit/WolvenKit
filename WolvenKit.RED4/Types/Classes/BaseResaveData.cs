@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public BaseResaveData()
 		{
-			BaseDeviceData = new();
+			BaseDeviceData = new BaseDeviceData();
 
 			PostConstruct();
 		}

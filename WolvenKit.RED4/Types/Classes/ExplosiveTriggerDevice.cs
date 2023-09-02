@@ -80,7 +80,7 @@ namespace WolvenKit.RED4.Types
 		{
 			TriggerName = "trapTrigger";
 			SurroundingAreaName = "surroundingArea";
-			ProximityExplosionEventID = new();
+			ProximityExplosionEventID = new gameDelayID();
 
 			PostConstruct();
 		}

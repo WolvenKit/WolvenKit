@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIParametrizedResourceReference()
 		{
-			Overrides = new() { Overrides = new() };
+			Overrides = new LibTreeParametersForwarder { Overrides = new() };
 
 			PostConstruct();
 		}

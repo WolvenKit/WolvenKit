@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public BinkVideoEvent()
 		{
-			Path = new();
+			Path = new redResourceReferenceScriptToken();
 
 			PostConstruct();
 		}

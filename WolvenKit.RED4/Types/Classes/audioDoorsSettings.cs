@@ -62,10 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public audioDoorsSettings()
 		{
-			CommonSettings = new() { StopAllSoundsOnDetach = true };
-			ScanningSettings = new();
-			AuxiliaryMetadata = new();
-			DeviceSettings = new();
+			CommonSettings = new audioCommonEntitySettings { StopAllSoundsOnDetach = true };
+			ScanningSettings = new audioScanningSettings();
+			AuxiliaryMetadata = new audioAuxiliaryMetadata();
+			DeviceSettings = new audioDeviceStateSettings();
 
 			PostConstruct();
 		}

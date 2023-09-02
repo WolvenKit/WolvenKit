@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public entRagdollNotifyEnabledEvent()
 		{
-			Instigator = new();
+			Instigator = new entEntityID();
 
 			PostConstruct();
 		}

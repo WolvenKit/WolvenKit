@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questIInspectListener : IScriptable
+	public abstract partial class questIInspectListener : IScriptable
 	{
 		public questIInspectListener()
 		{

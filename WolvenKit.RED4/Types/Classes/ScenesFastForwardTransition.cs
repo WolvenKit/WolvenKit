@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ScenesFastForwardTransition : DefaultTransition
+	public abstract partial class ScenesFastForwardTransition : DefaultTransition
 	{
 		public ScenesFastForwardTransition()
 		{

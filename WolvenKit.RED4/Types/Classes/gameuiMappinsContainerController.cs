@@ -63,9 +63,9 @@ namespace WolvenKit.RED4.Types
 		public gameuiMappinsContainerController()
 		{
 			Tier = Enums.GameplayTier.Tier1_FullGameplay;
-			SpawnContainerPath = new() { Names = new() };
-			GpsQuestPathWidget = new();
-			GpsPlayerTrackedPathWidget = new();
+			SpawnContainerPath = new inkWidgetPath { Names = new() };
+			GpsQuestPathWidget = new inkLinePatternWidgetReference();
+			GpsPlayerTrackedPathWidget = new inkLinePatternWidgetReference();
 
 			PostConstruct();
 		}

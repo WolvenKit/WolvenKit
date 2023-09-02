@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneSystem()
 		{
-			LastCallInformation = new();
+			LastCallInformation = new questPhoneCallInformation();
 
 			PostConstruct();
 		}

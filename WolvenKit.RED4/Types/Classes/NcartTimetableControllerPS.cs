@@ -23,9 +23,9 @@ namespace WolvenKit.RED4.Types
 		public NcartTimetableControllerPS()
 		{
 			DeviceName = "LocKey#1653";
-			TweakDBRecord = 96749304508;
+			TweakDBRecord = "Devices.NcartTimetable";
 			TweakDBDescriptionRecord = 147694950908;
-			NcartTimetableSetup = new() { DepartFrequency = 5, UiUpdateFrequency = 1 };
+			NcartTimetableSetup = new NcartTimetableSetup { DepartFrequency = 5, UiUpdateFrequency = 1 };
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnIReturnCondition : ISerializable
+	public abstract partial class scnIReturnCondition : ISerializable
 	{
 		public scnIReturnCondition()
 		{

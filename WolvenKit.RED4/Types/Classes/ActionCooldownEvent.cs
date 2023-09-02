@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public ActionCooldownEvent()
 		{
-			StorageID = new();
+			StorageID = new CooldownStorageID();
 
 			PostConstruct();
 		}

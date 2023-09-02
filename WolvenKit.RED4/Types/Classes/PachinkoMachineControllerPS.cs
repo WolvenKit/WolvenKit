@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 		public PachinkoMachineControllerPS()
 		{
 			DeviceName = "LocKey#172";
-			TweakDBRecord = 102188727223;
+			TweakDBRecord = "Devices.PachinkoMachine";
 			TweakDBDescriptionRecord = 153491964164;
 
 			PostConstruct();

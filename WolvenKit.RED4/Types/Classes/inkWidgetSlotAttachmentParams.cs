@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public inkWidgetSlotAttachmentParams()
 		{
 			UseSlotLayout = true;
-			LayoutOverride = new() { Padding = new(), Margin = new(), AnchorPoint = new(), SizeCoefficient = 1.000000F };
+			LayoutOverride = new inkWidgetLayout { Padding = new inkMargin(), Margin = new inkMargin(), AnchorPoint = new Vector2(), SizeCoefficient = 1.000000F };
 
 			PostConstruct();
 		}

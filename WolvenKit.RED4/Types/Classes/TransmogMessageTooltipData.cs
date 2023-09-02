@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public TransmogMessageTooltipData()
 		{
-			TransmogItem = new();
+			TransmogItem = new gameItemID();
 
 			PostConstruct();
 		}

@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldStaticLaneCollisions()
 		{
-			Lane = new();
+			Lane = new worldTrafficLaneUID();
 			Collisions = new();
 			DeadEndStart = float.PositiveInfinity;
 

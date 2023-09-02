@@ -70,12 +70,12 @@ namespace WolvenKit.RED4.Types
 
 		public CreditsGameController()
 		{
-			VideoContainer = new();
-			SceneTexture = new();
-			BackgroundVideo = new();
-			BinkVideo = new();
+			VideoContainer = new inkCompoundWidgetReference();
+			SceneTexture = new inkImageWidgetReference();
+			BackgroundVideo = new inkVideoWidgetReference();
+			BinkVideo = new inkVideoWidgetReference();
 			BinkVideos = new();
-			VideoSummary = new();
+			VideoSummary = new inkVideoWidgetSummary();
 
 			PostConstruct();
 		}

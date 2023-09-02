@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 		public entEntityOrientationProvider()
 		{
 			SlotId = -1;
-			OrientationEntitySpace = new() { R = 1.000000F };
+			OrientationEntitySpace = new Quaternion { R = 1.000000F };
 
 			PostConstruct();
 		}

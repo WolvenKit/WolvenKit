@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldTrafficLaneExitDefinition()
 		{
-			ExitPosition = new();
+			ExitPosition = new Vector4();
 			ExitProbability = 1.000000F;
 
 			PostConstruct();

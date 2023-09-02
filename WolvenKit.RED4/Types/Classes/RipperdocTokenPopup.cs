@@ -62,12 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocTokenPopup()
 		{
-			Option1 = new();
-			Option2 = new();
-			Option3 = new();
-			ButtonCancel = new();
-			ButtonHintsRoot = new();
-			LibraryPath = new() { WidgetLibrary = new() };
+			Option1 = new inkWidgetReference();
+			Option2 = new inkWidgetReference();
+			Option3 = new inkWidgetReference();
+			ButtonCancel = new inkWidgetReference();
+			ButtonHintsRoot = new inkWidgetReference();
+			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
 
 			PostConstruct();
 		}

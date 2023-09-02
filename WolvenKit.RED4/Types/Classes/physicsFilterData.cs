@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public physicsFilterData()
 		{
-			SimulationFilter = new();
-			QueryFilter = new();
+			SimulationFilter = new physicsSimulationFilter();
+			QueryFilter = new physicsQueryFilter();
 
 			PostConstruct();
 		}

@@ -151,8 +151,8 @@ namespace WolvenKit.RED4.Types
 		public ActivatedDeviceSetup()
 		{
 			ActionName = "LocKey#233";
-			VfxResource = new();
-			ThumbnailIconRecord = 133181765352;
+			VfxResource = new gameFxResource();
+			ThumbnailIconRecord = "DeviceIcons.GenenericDeviceIcon";
 
 			PostConstruct();
 		}

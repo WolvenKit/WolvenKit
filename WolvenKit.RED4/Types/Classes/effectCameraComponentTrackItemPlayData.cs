@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class effectCameraComponentTrackItemPlayData : effectTrackItemPlayData
+	public abstract partial class effectCameraComponentTrackItemPlayData : effectTrackItemPlayData
 	{
 		public effectCameraComponentTrackItemPlayData()
 		{

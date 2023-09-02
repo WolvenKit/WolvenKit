@@ -5,6 +5,6 @@ namespace WolvenKit.Common
         public const string RedDbKark = "red.kark";
         public const string RedDb = "red.db";
 
-        public const string RedJsonVersion = "0.0.7";
+        public const string RedJsonVersion = "0.0.8";
     }
 }

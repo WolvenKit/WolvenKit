@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public OutlineRequest()
 		{
-			OutlineData = new();
+			OutlineData = new OutlineData();
 
 			PostConstruct();
 		}

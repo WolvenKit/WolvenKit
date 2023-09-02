@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gamemappinsSenseCone()
 		{
-			Position1 = new();
-			Position2 = new();
+			Position1 = new Vector4();
+			Position2 = new Vector4();
 
 			PostConstruct();
 		}

@@ -90,9 +90,9 @@ namespace WolvenKit.RED4.Types
 			MinHeelDepthToApplyImpulses = -0.050000F;
 			ShallowWaterDepth = 0.200000F;
 			IntermediateWaterDepth = 0.700000F;
-			ShallowSettings = new() { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
-			IntermediateSettings = new() { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
-			DeepSettings = new() { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
+			ShallowSettings = new audioLocomotionWaterContextSettings { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
+			IntermediateSettings = new audioLocomotionWaterContextSettings { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
+			DeepSettings = new audioLocomotionWaterContextSettings { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
 
 			PostConstruct();
 		}

@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
 		public QuestIllegalActionNotification()
 		{
 			NotifySpecificNPCs = new();
-			RevealPlayerSettings = new();
+			RevealPlayerSettings = new RevealPlayerSettings();
 
 			PostConstruct();
 		}

@@ -182,24 +182,24 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Simple()
 		{
-			LeftPart = new();
-			RightPart = new();
-			LeftPartExtra = new();
-			RightPartExtra = new();
+			LeftPart = new inkImageWidgetReference();
+			RightPart = new inkImageWidgetReference();
+			LeftPartExtra = new inkImageWidgetReference();
+			RightPartExtra = new inkImageWidgetReference();
 			OffsetLeftRight = 0.800000F;
 			OffsetLeftRightExtra = 1.200000F;
 			LatchVertical = 40.000000F;
-			TopPart = new();
-			BottomPart = new();
-			HoriPart = new();
-			VertPart = new();
-			TargetColorChange = new();
-			MiddlePart = new();
-			OverheatShake = new();
-			OverheatTL = new();
-			OverheatBL = new();
-			OverheatTR = new();
-			OverheatBR = new();
+			TopPart = new inkImageWidgetReference();
+			BottomPart = new inkImageWidgetReference();
+			HoriPart = new inkWidgetReference();
+			VertPart = new inkWidgetReference();
+			TargetColorChange = new inkWidgetReference();
+			MiddlePart = new inkWidgetReference();
+			OverheatShake = new inkWidgetReference();
+			OverheatTL = new inkWidgetReference();
+			OverheatBL = new inkWidgetReference();
+			OverheatTR = new inkWidgetReference();
+			OverheatBR = new inkWidgetReference();
 
 			PostConstruct();
 		}

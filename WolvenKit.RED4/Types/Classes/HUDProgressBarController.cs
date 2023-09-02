@@ -134,11 +134,11 @@ namespace WolvenKit.RED4.Types
 
 		public HUDProgressBarController()
 		{
-			Bar = new();
-			Header = new();
-			Percent = new();
-			Completed = new();
-			Failed = new();
+			Bar = new inkWidgetReference();
+			Header = new inkTextWidgetReference();
+			Percent = new inkTextWidgetReference();
+			Completed = new inkTextWidgetReference();
+			Failed = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

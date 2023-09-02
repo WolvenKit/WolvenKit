@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleUnlockedVehicle()
 		{
-			VehicleID = new();
+			VehicleID = new vehicleGarageVehicleID();
 			Health = 100.000000F;
 
 			PostConstruct();

@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameMuppetHighLevelState()
 		{
-			DeathFrameId = 4294967295;
+			DeathFrameId = uint.MaxValue;
 
 			PostConstruct();
 		}

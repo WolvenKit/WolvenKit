@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameuiIUIObjectsLoaderSystem : gameIGameSystem
+	public abstract partial class gameuiIUIObjectsLoaderSystem : gameIGameSystem
 	{
 		public gameuiIUIObjectsLoaderSystem()
 		{

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gsmMenuState : gsmState
+	public abstract partial class gsmMenuState : gsmState
 	{
 		public gsmMenuState()
 		{

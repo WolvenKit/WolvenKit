@@ -6,9 +6,9 @@ namespace WolvenKit.RED4.Types
 		public entTriggerComponent()
 		{
 			Name = "Component";
-			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
+			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
 			SimulationType = Enums.physicsSimulationType.Dynamic;
-			Shape = new() { ShapeSize = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, ShapeLocalPose = new() { Position = new(), Orientation = new() { R = 1.000000F } } };
+			Shape = new physicsTriggerShape { ShapeSize = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, ShapeLocalPose = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } } };
 			IsEnabled = true;
 
 			PostConstruct();

@@ -134,16 +134,16 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkMinigameGridController()
 		{
-			GridContainer = new();
-			HorizontalHoverHighlight = new();
-			HorizontalCurrentHighlight = new();
-			VerticalHoverHighlight = new();
-			VerticalCurrentHighlight = new();
-			GridVisualOffset = new();
+			GridContainer = new inkWidgetReference();
+			HorizontalHoverHighlight = new inkWidgetReference();
+			HorizontalCurrentHighlight = new inkWidgetReference();
+			VerticalHoverHighlight = new inkWidgetReference();
+			VerticalCurrentHighlight = new inkWidgetReference();
+			GridVisualOffset = new Vector2();
 			GridData = new();
-			LastSelected = new() { Position = new(), Element = new(), Properties = new() { Traps = new() } };
-			CurrentActivePosition = new();
-			LastHighlighted = new() { Position = new(), Element = new(), Properties = new() { Traps = new() } };
+			LastSelected = new CellData { Position = new Vector2(), Element = new ElementData(), Properties = new SpecialProperties { Traps = new() } };
+			CurrentActivePosition = new Vector2();
+			LastHighlighted = new CellData { Position = new Vector2(), Element = new ElementData(), Properties = new SpecialProperties { Traps = new() } };
 
 			PostConstruct();
 		}

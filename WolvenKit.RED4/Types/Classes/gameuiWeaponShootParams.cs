@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiWeaponShootParams()
 		{
-			FromWorldPosition = new();
-			Forward = new();
+			FromWorldPosition = new Vector4();
+			Forward = new Vector4();
 
 			PostConstruct();
 		}

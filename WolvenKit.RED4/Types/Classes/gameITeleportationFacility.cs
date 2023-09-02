@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameITeleportationFacility : gameIGameSystem
+	public abstract partial class gameITeleportationFacility : gameIGameSystem
 	{
 		public gameITeleportationFacility()
 		{

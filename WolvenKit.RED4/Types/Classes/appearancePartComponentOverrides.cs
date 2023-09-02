@@ -63,9 +63,9 @@ namespace WolvenKit.RED4.Types
 		public appearancePartComponentOverrides()
 		{
 			MeshAppearance = "default";
-			ChunkMask = 18446744073709551615;
-			InitialTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
-			VisualScale = new();
+			ChunkMask = long.MaxValue;
+			InitialTransform = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
+			VisualScale = new Vector3();
 			AcceptDismemberment = true;
 
 			PostConstruct();

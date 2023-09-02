@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalBriefingMapSection()
 		{
-			MapLocation = new();
+			MapLocation = new Vector3();
 
 			PostConstruct();
 		}

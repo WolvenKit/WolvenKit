@@ -94,7 +94,7 @@
         <editors:RedTypeView
             x:Name="CustomPG"
             Grid.Column="2"
-            DataContext="{Binding SelectedChunk, IsAsync=True}" />
+            DataContext="{Binding SelectedChunk}" />
         <!--
             ViewModel="{Binding}"
         -->

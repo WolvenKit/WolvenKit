@@ -230,31 +230,31 @@ namespace WolvenKit.RED4.Types
 
 		public CyberdeckTooltip()
 		{
-			ItemNameText = new();
-			ItemRarityText = new();
-			RarityBars = new();
-			CategoriesWrapper = new();
-			TopContainer = new();
-			HeaderContainer = new();
-			StatsContainer = new();
-			DescriptionContainer = new();
-			BottomContainer = new();
-			StatsList = new();
-			PriceContainer = new();
-			DescriptionText = new();
-			PriceText = new();
-			EquipedWrapper = new();
-			ItemTypeText = new();
-			ItemWeightWrapper = new();
-			ItemWeightText = new();
-			CybderdeckBaseMemoryValue = new();
-			CybderdeckBufferValue = new();
-			CybderdeckSlotsValue = new();
-			DeviceHacksGrid = new();
-			ItemIconImage = new();
-			ItemAttributeRequirements = new();
-			ItemAttributeRequirementsText = new();
-			IconicLines = new();
+			ItemNameText = new inkTextWidgetReference();
+			ItemRarityText = new inkTextWidgetReference();
+			RarityBars = new inkWidgetReference();
+			CategoriesWrapper = new inkCompoundWidgetReference();
+			TopContainer = new inkCompoundWidgetReference();
+			HeaderContainer = new inkCompoundWidgetReference();
+			StatsContainer = new inkCompoundWidgetReference();
+			DescriptionContainer = new inkCompoundWidgetReference();
+			BottomContainer = new inkCompoundWidgetReference();
+			StatsList = new inkCompoundWidgetReference();
+			PriceContainer = new inkCompoundWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			PriceText = new inkTextWidgetReference();
+			EquipedWrapper = new inkWidgetReference();
+			ItemTypeText = new inkTextWidgetReference();
+			ItemWeightWrapper = new inkWidgetReference();
+			ItemWeightText = new inkTextWidgetReference();
+			CybderdeckBaseMemoryValue = new inkTextWidgetReference();
+			CybderdeckBufferValue = new inkTextWidgetReference();
+			CybderdeckSlotsValue = new inkTextWidgetReference();
+			DeviceHacksGrid = new inkCompoundWidgetReference();
+			ItemIconImage = new inkImageWidgetReference();
+			ItemAttributeRequirements = new inkWidgetReference();
+			ItemAttributeRequirementsText = new inkTextWidgetReference();
+			IconicLines = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

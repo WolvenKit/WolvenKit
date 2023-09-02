@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SkPhaseWithSpeedAnim()
 		{
-			SpeedLink = new();
+			SpeedLink = new animFloatLink();
 
 			PostConstruct();
 		}

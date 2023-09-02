@@ -14,9 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_AdditionalTransform()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			AdditionalTransforms = new() { Entries = new() };
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			AdditionalTransforms = new animAdditionalTransformContainer { Entries = new() };
 
 			PostConstruct();
 		}

@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public worldNavigationScriptFindPointResult()
 		{
 			Status = Enums.worldNavigationRequestStatus.OtherError;
-			Point = new();
+			Point = new Vector4();
 
 			PostConstruct();
 		}

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class workIWorkspotQuestAction : ISerializable
+	public abstract partial class workIWorkspotQuestAction : ISerializable
 	{
 		public workIWorkspotQuestAction()
 		{

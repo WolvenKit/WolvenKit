@@ -566,22 +566,22 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiStealthMappinController()
 		{
-			AnimImage = new();
-			Arrow = new();
-			Fill = new();
-			EyeFillWhite = new();
-			EyeFillBlack = new();
-			MarkExclamation = new();
-			Distance = new();
-			MainArt = new();
-			Frame = new();
-			EliteFrameSize = new();
-			ObjectMarker = new();
-			LevelIcon = new();
-			StatusEffectHolder = new();
-			StatusEffectIcon = new();
-			StatusEffectTimer = new();
-			TaggedContainer = new();
+			AnimImage = new inkImageWidgetReference();
+			Arrow = new inkImageWidgetReference();
+			Fill = new inkWidgetReference();
+			EyeFillWhite = new inkWidgetReference();
+			EyeFillBlack = new inkWidgetReference();
+			MarkExclamation = new inkTextWidgetReference();
+			Distance = new inkTextWidgetReference();
+			MainArt = new inkWidgetReference();
+			Frame = new inkImageWidgetReference();
+			EliteFrameSize = new Vector2();
+			ObjectMarker = new inkWidgetReference();
+			LevelIcon = new inkImageWidgetReference();
+			StatusEffectHolder = new inkWidgetReference();
+			StatusEffectIcon = new inkImageWidgetReference();
+			StatusEffectTimer = new inkTextWidgetReference();
+			TaggedContainer = new inkWidgetReference();
 			ObjectMarkerFirstShowing = true;
 			C_awareToCombatThreshold = 1.000000F;
 			C_combatToAwareThreshold = 99.900002F;

@@ -142,23 +142,23 @@ namespace WolvenKit.RED4.Types
 
 		public CaptionImageIconsLogicController()
 		{
-			LifeIcon = new();
-			CheckIcon = new();
-			GenericIcon = new();
-			PayIcon = new();
-			LifeHolder = new();
-			CheckHolder = new();
-			GenericHolder = new();
-			PayHolder = new();
-			LifeDescriptionText = new();
-			CheckText = new();
-			PayText = new();
-			LifeBackground = new();
-			LifeBackgroundFail = new();
-			CheckBackground = new();
-			CheckBackgroundFail = new();
-			PayBackground = new();
-			PayBackgroundFail = new();
+			LifeIcon = new inkImageWidgetReference();
+			CheckIcon = new inkImageWidgetReference();
+			GenericIcon = new inkImageWidgetReference();
+			PayIcon = new inkImageWidgetReference();
+			LifeHolder = new inkCompoundWidgetReference();
+			CheckHolder = new inkCompoundWidgetReference();
+			GenericHolder = new inkCompoundWidgetReference();
+			PayHolder = new inkCompoundWidgetReference();
+			LifeDescriptionText = new inkTextWidgetReference();
+			CheckText = new inkTextWidgetReference();
+			PayText = new inkTextWidgetReference();
+			LifeBackground = new inkWidgetReference();
+			LifeBackgroundFail = new inkWidgetReference();
+			CheckBackground = new inkWidgetReference();
+			CheckBackgroundFail = new inkWidgetReference();
+			PayBackground = new inkWidgetReference();
+			PayBackgroundFail = new inkWidgetReference();
 
 			PostConstruct();
 		}

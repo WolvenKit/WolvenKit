@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkImageWidget()
 		{
-			NineSliceScale = new();
+			NineSliceScale = new inkMargin();
 			TileHAlign = Enums.inkEHorizontalAlign.Left;
 			TileVAlign = Enums.inkEVerticalAlign.Top;
 

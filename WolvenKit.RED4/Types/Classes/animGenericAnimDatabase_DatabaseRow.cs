@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public animGenericAnimDatabase_DatabaseRow()
 		{
 			InputValues = new();
-			AnimationData = new();
+			AnimationData = new animGenericAnimDatabase_AnimationData();
 
 			PostConstruct();
 		}

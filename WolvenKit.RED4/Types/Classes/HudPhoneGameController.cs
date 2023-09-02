@@ -278,7 +278,7 @@ namespace WolvenKit.RED4.Types
 
 		public HudPhoneGameController()
 		{
-			AvatarControllerRef = new();
+			AvatarControllerRef = new inkWidgetReference();
 			SoundNameActionOnOpen = "OnOpen";
 			SoundNameActionOnClose = "OnOpen";
 			AudioInitiateCallPositiveEvent = "PhoneCallPopup";
@@ -286,14 +286,14 @@ namespace WolvenKit.RED4.Types
 			AudioInitiateCallEvent = "PhoneCallPopup";
 			AudioPhoneOnEvent = "PhoneCallPopup";
 			AudioPhoneOffEvent = "PhoneCallPopup";
-			Holder = new();
+			Holder = new inkWidgetReference();
 			UnreadMessages = new();
-			CurrentCallInformation = new();
+			CurrentCallInformation = new questPhoneCallInformation();
 			GameplayRestrictions = new();
-			DelayedCallbackId = new();
-			DelayedTimeoutCallbackId = new();
+			DelayedCallbackId = new gameDelayID();
+			DelayedTimeoutCallbackId = new gameDelayID();
 			TimeoutPeroid = 8.000000F;
-			Options = new();
+			Options = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiarcadeArcadeObjectController()
 		{
-			Image = new();
+			Image = new inkWidgetReference();
 
 			PostConstruct();
 		}

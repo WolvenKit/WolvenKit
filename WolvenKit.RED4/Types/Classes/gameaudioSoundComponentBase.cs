@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameaudioSoundComponentBase : entIPlacedComponent
+	public abstract partial class gameaudioSoundComponentBase : entIPlacedComponent
 	{
 		[Ordinal(5)] 
 		[RED("audioName")] 

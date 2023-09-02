@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public CrossplayInfoPanelController()
 		{
-			DisconnectBtn = new();
+			DisconnectBtn = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -94,9 +94,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimation()
 		{
-			Tags = new() { Tags = new() };
-			AdditionalTransforms = new() { Entries = new() };
-			AdditionalTracks = new() { Entries = new(), OverwriteExistingValues = true };
+			Tags = new redTagList { Tags = new() };
+			AdditionalTransforms = new animAdditionalTransformContainer { Entries = new() };
+			AdditionalTracks = new animAdditionalFloatTrackContainer { Entries = new(), OverwriteExistingValues = true };
 			FrameClampingStartFrame = -1;
 			FrameClampingEndFrame = -1;
 

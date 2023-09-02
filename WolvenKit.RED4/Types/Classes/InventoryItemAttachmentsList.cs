@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemAttachmentsList()
 		{
-			Container = new();
+			Container = new inkCompoundWidgetReference();
 			ItemsList = new();
 			Data = new();
 

@@ -190,10 +190,10 @@ namespace WolvenKit.RED4.Types
 
 		public audioVehicleMetadata()
 		{
-			GeneralData = new() { VehicleDoorsSettings = new() { Door = new(), Trunk = new(), Hood = new() }, VehicleInteriorParameterData = new() { EnterCurveType = Enums.audioESoundCurveType.Linear, EnterCurveTime = 3.000000F, EnterDelayTime = 2.000000F, ExitCurveType = Enums.audioESoundCurveType.Linear, ExitCurveTime = 3.000000F, ExitDelayTime = 2.000000F }, VehicleTemperatureSettings = new() { RpmThreshold = 3.000000F, TimeToActivateTemperature = 8.000000F, CooldownTime = 10.000000F } };
-			MechanicalData = new();
-			WheelData = new() { WheelStartEvents = new(), WheelStopEvents = new(), WheelRegularSuspensionImpacts = new(), WheelLandingSuspensionImpacts = new(), SuspensionPressureMultiplier = 2.000000F, LandingSuspensionPressureMultiplier = 1.000000F, SuspensionPressureLimit = 1.000000F, MinSuspensionPressureThreshold = 0.100000F, SuspensionImpactCooldown = 0.200000F, MinWheelTimeInAirBeforeLanding = 0.500000F };
-			EmitterPositionData = new() { EngineEmitterPosition = new(), ExaustEmitterPosition = new(), CentralEmitterPosition = new(), HoodEmitterPosition = new(), TrunkEmitterPosition = new(), Wheel1Position = new(), Wheel2Position = new(), Wheel3Position = new(), Wheel4Position = new() };
+			GeneralData = new audioVehicleGeneralData { VehicleDoorsSettings = new audioVehicleDoorsSettingsMetadata { Door = new audioVehicleDoorsSettings(), Trunk = new audioVehicleDoorsSettings(), Hood = new audioVehicleDoorsSettings() }, VehicleInteriorParameterData = new audioVehicleInteriorParameterData { EnterCurveType = Enums.audioESoundCurveType.Linear, EnterCurveTime = 3.000000F, EnterDelayTime = 2.000000F, ExitCurveType = Enums.audioESoundCurveType.Linear, ExitCurveTime = 3.000000F, ExitDelayTime = 2.000000F }, VehicleTemperatureSettings = new audioVehicleTemperatureSettings { RpmThreshold = 3.000000F, TimeToActivateTemperature = 8.000000F, CooldownTime = 10.000000F } };
+			MechanicalData = new audioVehicleMechanicalData();
+			WheelData = new audioVehicleWheelData { WheelStartEvents = new(), WheelStopEvents = new(), WheelRegularSuspensionImpacts = new(), WheelLandingSuspensionImpacts = new(), SuspensionPressureMultiplier = 2.000000F, LandingSuspensionPressureMultiplier = 1.000000F, SuspensionPressureLimit = 1.000000F, MinSuspensionPressureThreshold = 0.100000F, SuspensionImpactCooldown = 0.200000F, MinWheelTimeInAirBeforeLanding = 0.500000F };
+			EmitterPositionData = new audioVehicleEmitterPositionData { EngineEmitterPosition = new Vector3(), ExaustEmitterPosition = new Vector3(), CentralEmitterPosition = new Vector3(), HoodEmitterPosition = new Vector3(), TrunkEmitterPosition = new Vector3(), Wheel1Position = new Vector3(), Wheel2Position = new Vector3(), Wheel3Position = new Vector3(), Wheel4Position = new Vector3() };
 			DopplerFactor = 1.000000F;
 			GearSweeteners = new();
 			AcousticIsolationFactor = 1.000000F;

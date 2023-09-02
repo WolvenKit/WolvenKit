@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public PSD_DetectorPS()
 		{
-			LastEntityID = new();
-			LastPersistentID = new();
+			LastEntityID = new entEntityID();
+			LastPersistentID = new gamePersistentID();
 
 			PostConstruct();
 		}

@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public questInventory_ConditionType()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 			IsPlayer = true;
 			ComparisonType = Enums.EComparisonType.Equal;
 

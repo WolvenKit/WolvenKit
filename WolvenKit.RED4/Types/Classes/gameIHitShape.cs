@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIHitShape : ISerializable
+	public abstract partial class gameIHitShape : ISerializable
 	{
 		public gameIHitShape()
 		{

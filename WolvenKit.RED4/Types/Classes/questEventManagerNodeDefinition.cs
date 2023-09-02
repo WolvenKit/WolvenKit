@@ -55,8 +55,8 @@ namespace WolvenKit.RED4.Types
 		public questEventManagerNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			ObjectRef = new() { Names = new() };
+			Id = ushort.MaxValue;
+			ObjectRef = new gameEntityReference { Names = new() };
 			ManagerName = "None";
 
 			PostConstruct();

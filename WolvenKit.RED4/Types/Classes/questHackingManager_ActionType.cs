@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questHackingManager_ActionType : ISerializable
+	public abstract partial class questHackingManager_ActionType : ISerializable
 	{
 		public questHackingManager_ActionType()
 		{

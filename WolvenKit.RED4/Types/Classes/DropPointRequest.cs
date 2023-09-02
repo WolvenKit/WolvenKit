@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public DropPointRequest()
 		{
-			Holder = new();
+			Holder = new gamePersistentID();
 
 			PostConstruct();
 		}

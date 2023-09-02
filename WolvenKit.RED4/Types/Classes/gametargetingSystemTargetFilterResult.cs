@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gametargetingSystemTargetFilterResult()
 		{
-			HitEntId = new();
+			HitEntId = new entEntityID();
 
 			PostConstruct();
 		}

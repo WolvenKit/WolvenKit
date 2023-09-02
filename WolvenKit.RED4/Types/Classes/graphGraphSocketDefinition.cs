@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class graphGraphSocketDefinition : graphIGraphObjectDefinition
+	public abstract partial class graphGraphSocketDefinition : graphIGraphObjectDefinition
 	{
 		[Ordinal(0)] 
 		[RED("name")] 

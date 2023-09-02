@@ -62,8 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldBlockoutArea()
 		{
-			Color = new();
-			Parent = 4294967295;
+			Color = new CColor();
+			Parent = uint.MaxValue;
 			Children = new();
 			Outlines = new();
 

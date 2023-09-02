@@ -22,9 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_AdditionalFloatTrack()
 		{
-			Id = 4294967295;
-			PoseInputNode = new();
-			AdditionalTracks = new() { Entries = new(), OverwriteExistingValues = true };
+			Id = uint.MaxValue;
+			PoseInputNode = new animPoseLink();
+			AdditionalTracks = new animAdditionalFloatTrackContainer { Entries = new(), OverwriteExistingValues = true };
 
 			PostConstruct();
 		}

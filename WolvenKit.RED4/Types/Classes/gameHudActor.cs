@@ -110,9 +110,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameHudActor()
 		{
-			EntityID = new();
+			EntityID = new entEntityID();
 			ActiveModules = new();
-			ClueData = new();
+			ClueData = new HUDClueData();
 			ShouldRefreshQHack = true;
 
 			PostConstruct();

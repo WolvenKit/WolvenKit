@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public VehiclesManagerPopupGameController()
 		{
-			Icon = new();
-			ScrollArea = new();
-			ScrollControllerWidget = new();
+			Icon = new inkImageWidgetReference();
+			ScrollArea = new inkScrollAreaWidgetReference();
+			ScrollControllerWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

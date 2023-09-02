@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIThreatPositionProvider : entIPositionProvider
+	public abstract partial class AIThreatPositionProvider : entIPositionProvider
 	{
 		public AIThreatPositionProvider()
 		{

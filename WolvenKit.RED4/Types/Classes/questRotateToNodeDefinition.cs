@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Types
 		public questRotateToNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			EntityReference = new() { Names = new() };
+			Id = ushort.MaxValue;
+			EntityReference = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

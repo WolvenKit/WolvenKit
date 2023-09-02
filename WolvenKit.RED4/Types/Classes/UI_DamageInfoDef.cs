@@ -62,13 +62,13 @@ namespace WolvenKit.RED4.Types
 
 		public UI_DamageInfoDef()
 		{
-			DamageList = new();
-			KillList = new();
-			DigitsMode = new();
-			DigitsInterpolationOn = new();
-			DigitsStickingMode = new();
-			HitIndicatorEnabled = new();
-			DmgIndicatorMode = new();
+			DamageList = new gamebbScriptID_Variant();
+			KillList = new gamebbScriptID_Variant();
+			DigitsMode = new gamebbScriptID_Variant();
+			DigitsInterpolationOn = new gamebbScriptID_Bool();
+			DigitsStickingMode = new gamebbScriptID_Variant();
+			HitIndicatorEnabled = new gamebbScriptID_Bool();
+			DmgIndicatorMode = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

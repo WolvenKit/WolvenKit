@@ -71,11 +71,11 @@ namespace WolvenKit.RED4.Types
 		public effectTrackItemParticles()
 		{
 			TimeDuration = 1.000000F;
-			EmissionScale = new();
-			Alpha = new();
-			Size = new();
-			Velocity = new();
-			SoundPositionOffset = new();
+			EmissionScale = new effectEffectParameterEvaluatorFloat();
+			Alpha = new effectEffectParameterEvaluatorFloat();
+			Size = new effectEffectParameterEvaluatorFloat();
+			Velocity = new effectEffectParameterEvaluatorFloat();
+			SoundPositionOffset = new Vector3();
 			RenderLayerMask = Enums.RenderSceneLayerMask.Default;
 
 			PostConstruct();

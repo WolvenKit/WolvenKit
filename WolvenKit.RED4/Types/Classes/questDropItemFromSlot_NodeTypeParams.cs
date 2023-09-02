@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questDropItemFromSlot_NodeTypeParams()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 			UseGravity = true;
 
 			PostConstruct();

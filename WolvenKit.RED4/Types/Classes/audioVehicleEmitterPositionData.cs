@@ -78,15 +78,15 @@ namespace WolvenKit.RED4.Types
 
 		public audioVehicleEmitterPositionData()
 		{
-			EngineEmitterPosition = new();
-			ExaustEmitterPosition = new();
-			CentralEmitterPosition = new();
-			HoodEmitterPosition = new();
-			TrunkEmitterPosition = new();
-			Wheel1Position = new();
-			Wheel2Position = new();
-			Wheel3Position = new();
-			Wheel4Position = new();
+			EngineEmitterPosition = new Vector3();
+			ExaustEmitterPosition = new Vector3();
+			CentralEmitterPosition = new Vector3();
+			HoodEmitterPosition = new Vector3();
+			TrunkEmitterPosition = new Vector3();
+			Wheel1Position = new Vector3();
+			Wheel2Position = new Vector3();
+			Wheel3Position = new Vector3();
+			Wheel4Position = new Vector3();
 
 			PostConstruct();
 		}

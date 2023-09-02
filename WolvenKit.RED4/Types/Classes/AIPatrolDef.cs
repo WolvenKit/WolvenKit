@@ -94,17 +94,17 @@ namespace WolvenKit.RED4.Types
 
 		public AIPatrolDef()
 		{
-			PatrolPathOverride = new();
-			PatrolWithWeapon = new();
-			ForceAlerted = new();
-			Sprint = new();
-			SelectedPath = new();
-			ClosestPathPoint = new();
-			WorkspotData = new();
-			WorkspotEntryPosition = new();
-			WorkspotExitPosition = new();
-			PatrolAction = new();
-			PatrolInProgress = new();
+			PatrolPathOverride = new gamebbScriptID_Variant();
+			PatrolWithWeapon = new gamebbScriptID_Bool();
+			ForceAlerted = new gamebbScriptID_Bool();
+			Sprint = new gamebbScriptID_Bool();
+			SelectedPath = new gamebbScriptID_Variant();
+			ClosestPathPoint = new gamebbScriptID_Vector4();
+			WorkspotData = new gamebbScriptID_Variant();
+			WorkspotEntryPosition = new gamebbScriptID_Vector4();
+			WorkspotExitPosition = new gamebbScriptID_Vector4();
+			PatrolAction = new gamebbScriptID_Variant();
+			PatrolInProgress = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

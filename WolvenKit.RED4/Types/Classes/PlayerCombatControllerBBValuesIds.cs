@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerCombatControllerBBValuesIds()
 		{
-			CrouchActive = new();
+			CrouchActive = new gamebbScriptID_Int32();
 
 			PostConstruct();
 		}

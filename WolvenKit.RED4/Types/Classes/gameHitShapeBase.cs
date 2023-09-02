@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameHitShapeBase : gameIHitShape
+	public abstract partial class gameHitShapeBase : gameIHitShape
 	{
 		[Ordinal(0)] 
 		[RED("translation")] 

@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public animPoleVectorDetails()
 		{
-			TargetBone = new();
-			PositionOffset = new();
+			TargetBone = new animTransformIndex();
+			PositionOffset = new Vector3();
 
 			PostConstruct();
 		}

@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public ToggleVisibilityInAnimSystemRequest()
 		{
-			EntityID = new();
+			EntityID = new entEntityID();
 
 			PostConstruct();
 		}

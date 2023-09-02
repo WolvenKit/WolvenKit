@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class PreventionConditionAbstract : AIbehaviorconditionScript
+	public abstract partial class PreventionConditionAbstract : AIbehaviorconditionScript
 	{
 		public PreventionConditionAbstract()
 		{

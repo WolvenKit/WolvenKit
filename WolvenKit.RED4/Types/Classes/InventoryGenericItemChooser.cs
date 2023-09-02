@@ -126,12 +126,12 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryGenericItemChooser()
 		{
-			ItemContainer = new();
-			SlotsCategory = new();
-			SlotsRootContainer = new();
-			SlotsRootLabel = new();
-			SlotsContainer = new();
-			TransmogCtrlsContainer = new();
+			ItemContainer = new inkCompoundWidgetReference();
+			SlotsCategory = new inkWidgetReference();
+			SlotsRootContainer = new inkWidgetReference();
+			SlotsRootLabel = new inkTextWidgetReference();
+			SlotsContainer = new inkCompoundWidgetReference();
+			TransmogCtrlsContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

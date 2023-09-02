@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameaudioeventsEmitterEvent : redEvent
+	public abstract partial class gameaudioeventsEmitterEvent : redEvent
 	{
 		[Ordinal(0)] 
 		[RED("emitterName")] 

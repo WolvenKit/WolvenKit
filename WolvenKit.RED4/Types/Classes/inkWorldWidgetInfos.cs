@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkWorldWidgetInfos : inkUserData
+	public abstract partial class inkWorldWidgetInfos : inkUserData
 	{
 		public inkWorldWidgetInfos()
 		{

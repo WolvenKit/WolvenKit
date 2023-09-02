@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIITargetTrackingListener : IScriptable
+	public abstract partial class AIITargetTrackingListener : IScriptable
 	{
 		public AIITargetTrackingListener()
 		{

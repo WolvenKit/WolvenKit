@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameEffectObjectProvider_SweepOverTime : gameEffectObjectProvider
+	public abstract partial class gameEffectObjectProvider_SweepOverTime : gameEffectObjectProvider
 	{
 		[Ordinal(0)] 
 		[RED("filterData")] 

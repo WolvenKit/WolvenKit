@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AIBlackboardDef : gamebbScriptDefinition
+	public abstract partial class AIBlackboardDef : gamebbScriptDefinition
 	{
 		public AIBlackboardDef()
 		{

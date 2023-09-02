@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questISceneManagerNodeType : questIRetNodeType
+	public abstract partial class questISceneManagerNodeType : questIRetNodeType
 	{
 		public questISceneManagerNodeType()
 		{

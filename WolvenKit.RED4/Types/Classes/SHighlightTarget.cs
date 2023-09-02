@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public SHighlightTarget()
 		{
-			TargetID = new();
+			TargetID = new entEntityID();
 
 			PostConstruct();
 		}

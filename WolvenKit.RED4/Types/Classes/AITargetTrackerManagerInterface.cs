@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class AITargetTrackerManagerInterface : gameIGameSystem
+	public abstract partial class AITargetTrackerManagerInterface : gameIGameSystem
 	{
 		public AITargetTrackerManagerInterface()
 		{

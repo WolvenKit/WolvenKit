@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiWorldMapDebugOutlineLogicController()
 		{
-			OutlineWidget = new();
+			OutlineWidget = new inkShapeWidgetReference();
 
 			PostConstruct();
 		}

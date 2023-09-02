@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamestateMachineIStateActionDefinition : ISerializable
+	public abstract partial class gamestateMachineIStateActionDefinition : ISerializable
 	{
 		public gamestateMachineIStateActionDefinition()
 		{

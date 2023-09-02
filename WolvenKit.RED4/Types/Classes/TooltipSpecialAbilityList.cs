@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public TooltipSpecialAbilityList()
 		{
-			Container = new();
+			Container = new inkCompoundWidgetReference();
 			ItemsList = new();
 			Data = new();
 

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameEffectObjectProvider : gameEffectNode
+	public abstract partial class gameEffectObjectProvider : gameEffectNode
 	{
 		public gameEffectObjectProvider()
 		{

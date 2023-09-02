@@ -110,16 +110,16 @@ namespace WolvenKit.RED4.Types
 
 		public LootingListItemController()
 		{
-			WidgetWrapper = new();
-			ItemName = new();
-			ItemRarity = new();
-			IconicLines = new();
-			ItemQuantity = new();
-			DefaultIcon = new();
-			SpecialIcon = new();
-			ComparisionArrow = new();
-			ItemTypeIconWrapper = new();
-			ItemTypeIcon = new();
+			WidgetWrapper = new inkWidgetReference();
+			ItemName = new inkTextWidgetReference();
+			ItemRarity = new inkWidgetReference();
+			IconicLines = new inkWidgetReference();
+			ItemQuantity = new inkTextWidgetReference();
+			DefaultIcon = new inkWidgetReference();
+			SpecialIcon = new inkImageWidgetReference();
+			ComparisionArrow = new inkImageWidgetReference();
+			ItemTypeIconWrapper = new inkWidgetReference();
+			ItemTypeIcon = new inkImageWidgetReference();
 			HighlightFrames = new();
 
 			PostConstruct();

@@ -70,14 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public WeaponDataDef()
 		{
-			Charge = new();
-			OverheatPercentage = new();
-			IsInForcedOverheatCooldown = new();
-			ChargeStep = new();
-			TriggerMode = new();
-			MagazineAmmoCapacity = new();
-			MagazineAmmoCount = new();
-			MagazineAmmoID = new();
+			Charge = new gamebbScriptID_Float();
+			OverheatPercentage = new gamebbScriptID_Float();
+			IsInForcedOverheatCooldown = new gamebbScriptID_Bool();
+			ChargeStep = new gamebbScriptID_Variant();
+			TriggerMode = new gamebbScriptID_Variant();
+			MagazineAmmoCapacity = new gamebbScriptID_Uint32();
+			MagazineAmmoCount = new gamebbScriptID_Uint32();
+			MagazineAmmoID = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

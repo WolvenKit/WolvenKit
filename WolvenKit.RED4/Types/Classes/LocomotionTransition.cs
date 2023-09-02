@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class LocomotionTransition : DefaultTransition
+	public abstract partial class LocomotionTransition : DefaultTransition
 	{
 		[Ordinal(0)] 
 		[RED("ownerRecordId")] 

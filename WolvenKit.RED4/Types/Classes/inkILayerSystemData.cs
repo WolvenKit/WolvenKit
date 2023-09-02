@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkILayerSystemData : IScriptable
+	public abstract partial class inkILayerSystemData : IScriptable
 	{
 		public inkILayerSystemData()
 		{

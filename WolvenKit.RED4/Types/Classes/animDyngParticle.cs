@@ -81,8 +81,8 @@ namespace WolvenKit.RED4.Types
 			Mass = 1.000000F;
 			Damping = 1.000000F;
 			IsFree = true;
-			Bone = new();
-			CollisionCapsuleAxisLS = new() { X = 0.500000F };
+			Bone = new animTransformIndex();
+			CollisionCapsuleAxisLS = new Vector3 { X = 0.500000F };
 			ProjectionType = Enums.animDyngParticleProjectionType.ShortestPath;
 
 			PostConstruct();

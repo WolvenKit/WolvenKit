@@ -78,8 +78,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIMoveToCommand()
 		{
-			MovementTarget = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() } };
-			FacingTarget = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() } };
+			MovementTarget = new AIPositionSpec { WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() } };
+			FacingTarget = new AIPositionSpec { WorldPosition = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() } };
 
 			PostConstruct();
 		}

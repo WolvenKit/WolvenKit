@@ -70,12 +70,12 @@ namespace WolvenKit.RED4.Types
 
 		public TerminalMainLayoutWidgetController()
 		{
-			ThumbnailsListSlot = new();
-			DeviceSlot = new();
-			ReturnButton = new();
-			TitleWidget = new();
-			BackgroundImage = new();
-			BackgroundImageTrace = new();
+			ThumbnailsListSlot = new inkWidgetReference();
+			DeviceSlot = new inkWidgetReference();
+			ReturnButton = new inkWidgetReference();
+			TitleWidget = new inkTextWidgetReference();
+			BackgroundImage = new inkImageWidgetReference();
+			BackgroundImageTrace = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

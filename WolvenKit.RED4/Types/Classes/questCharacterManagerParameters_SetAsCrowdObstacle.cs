@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questCharacterManagerParameters_SetAsCrowdObstacle()
 		{
-			Params = new() { new() };
+			Params = new() { new questSetAsCrowdObstacle_NodeTypeParams() };
 
 			PostConstruct();
 		}

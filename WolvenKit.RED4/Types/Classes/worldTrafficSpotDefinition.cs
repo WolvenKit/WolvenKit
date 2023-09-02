@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldTrafficSpotDefinition : ISerializable
+	public abstract partial class worldTrafficSpotDefinition : ISerializable
 	{
 		[Ordinal(0)] 
 		[RED("length")] 

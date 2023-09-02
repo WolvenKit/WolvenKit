@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiPanzerScoreRecord()
 		{
-			NameWidget = new();
-			ScoreWidget = new();
+			NameWidget = new inkTextWidgetReference();
+			ScoreWidget = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

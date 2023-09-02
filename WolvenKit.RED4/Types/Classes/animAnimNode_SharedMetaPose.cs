@@ -14,9 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public animAnimNode_SharedMetaPose()
 		{
-			Id = 4294967295;
-			InputLink = new();
-			WeightLink = new();
+			Id = uint.MaxValue;
+			InputLink = new animPoseLink();
+			WeightLink = new animFloatLink();
 
 			PostConstruct();
 		}

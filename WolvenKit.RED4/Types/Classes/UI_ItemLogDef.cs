@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ItemLogDef()
 		{
-			ItemLogItem = new();
+			ItemLogItem = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

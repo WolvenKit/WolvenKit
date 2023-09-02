@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIDebugPlayerBreadcrumbs : gameIGameSystem
+	public abstract partial class gameIDebugPlayerBreadcrumbs : gameIGameSystem
 	{
 		public gameIDebugPlayerBreadcrumbs()
 		{

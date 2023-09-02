@@ -46,11 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ActiveWeaponDataDef()
 		{
-			WeaponRecordID = new();
-			BulletSpread = new();
-			SmartGunParams = new();
-			TargetHitEvent = new();
-			ShootEvent = new();
+			WeaponRecordID = new gamebbScriptID_Variant();
+			BulletSpread = new gamebbScriptID_Vector2();
+			SmartGunParams = new gamebbScriptID_Variant();
+			TargetHitEvent = new gamebbScriptID_Variant();
+			ShootEvent = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

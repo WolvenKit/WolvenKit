@@ -94,13 +94,13 @@ namespace WolvenKit.RED4.Types
 
 		public scnReminderCondition()
 		{
-			ReminderActor = new() { Id = 4294967295 };
-			WaitTimeForReminderA = new();
-			WaitTimeForReminderB = new();
-			WaitTimeForReminderC = new();
-			WaitTimeForLooping = new();
-			StartTime = new();
-			ReminderParams = new() { ReminderActor = new() { Id = 4294967295 }, WaitTimeForReminderA = new(), WaitTimeForReminderB = new(), WaitTimeForReminderC = new(), WaitTimeForLooping = new() };
+			ReminderActor = new scnActorId { Id = uint.MaxValue };
+			WaitTimeForReminderA = new scnSceneTime();
+			WaitTimeForReminderB = new scnSceneTime();
+			WaitTimeForReminderC = new scnSceneTime();
+			WaitTimeForLooping = new scnSceneTime();
+			StartTime = new scnSceneTime();
+			ReminderParams = new scnChoiceNodeNsReminderParams { ReminderActor = new scnActorId { Id = uint.MaxValue }, WaitTimeForReminderA = new scnSceneTime(), WaitTimeForReminderB = new scnSceneTime(), WaitTimeForReminderC = new scnSceneTime(), WaitTimeForLooping = new scnSceneTime() };
 
 			PostConstruct();
 		}

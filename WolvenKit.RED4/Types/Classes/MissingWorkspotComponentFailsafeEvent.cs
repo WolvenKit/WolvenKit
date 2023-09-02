@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public MissingWorkspotComponentFailsafeEvent()
 		{
-			PlayerEntityID = new();
+			PlayerEntityID = new entEntityID();
 
 			PostConstruct();
 		}

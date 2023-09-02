@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameTimeSystemReplicatedState()
 		{
-			GameTime = new();
+			GameTime = new GameTime();
 
 			PostConstruct();
 		}

@@ -38,10 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public AdHocAnimationDef()
 		{
-			IsActive = new();
-			AnimationIndex = new();
-			UseBothHands = new();
-			UnequipWeapon = new();
+			IsActive = new gamebbScriptID_Bool();
+			AnimationIndex = new gamebbScriptID_Int32();
+			UseBothHands = new gamebbScriptID_Bool();
+			UnequipWeapon = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

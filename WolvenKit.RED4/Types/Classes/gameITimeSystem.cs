@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameITimeSystem : gameIReplicatedGameSystem
+	public abstract partial class gameITimeSystem : gameIReplicatedGameSystem
 	{
 		public gameITimeSystem()
 		{

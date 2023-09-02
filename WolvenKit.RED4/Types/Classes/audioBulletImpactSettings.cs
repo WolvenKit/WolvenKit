@@ -62,9 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public audioBulletImpactSettings()
 		{
-			CommonSettings = new() { StopAllSoundsOnDetach = true };
-			ScanningSettings = new();
-			AuxiliaryMetadata = new();
+			CommonSettings = new audioCommonEntitySettings { StopAllSoundsOnDetach = true };
+			ScanningSettings = new audioScanningSettings();
+			AuxiliaryMetadata = new audioAuxiliaryMetadata();
 
 			PostConstruct();
 		}

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameJournalContainerEntry : gameJournalEntry
+	public abstract partial class gameJournalContainerEntry : gameJournalEntry
 	{
 		[Ordinal(1)] 
 		[RED("entries")] 

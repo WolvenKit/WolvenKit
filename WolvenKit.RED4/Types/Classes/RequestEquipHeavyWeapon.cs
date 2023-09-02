@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public RequestEquipHeavyWeapon()
 		{
-			ItemID = new();
+			ItemID = new gameItemID();
 
 			PostConstruct();
 		}

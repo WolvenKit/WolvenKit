@@ -174,7 +174,7 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryItem()
 		{
-			ID = new();
+			ID = new gameItemID();
 
 			PostConstruct();
 		}

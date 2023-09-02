@@ -62,7 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public PSODescDepthStencilModeDesc()
 		{
-			FrontFace = new();
+			FrontFace = new PSODescStencilFuncDesc();
 
 			PostConstruct();
 		}

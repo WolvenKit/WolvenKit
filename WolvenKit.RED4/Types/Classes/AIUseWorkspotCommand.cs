@@ -39,8 +39,8 @@ namespace WolvenKit.RED4.Types
 		public AIUseWorkspotCommand()
 		{
 			WorkExcludedGestures = new();
-			InfiniteSequenceEntryId = new() { Id = 4294967295 };
-			EntryId = new() { Id = 4294967295 };
+			InfiniteSequenceEntryId = new workWorkEntryId { Id = uint.MaxValue };
+			EntryId = new workWorkEntryId { Id = uint.MaxValue };
 
 			PostConstruct();
 		}

@@ -40,8 +40,8 @@ namespace WolvenKit.RED4.Types
 		{
 			RevealDevicesGrid = false;
 			SequenceDuration = 2.000000F;
-			ActionTypeToForward = new() { QHack = true };
-			OngoingSequence = new() { SequenceInitiator = new(), DelayIDs = new() };
+			ActionTypeToForward = new SActionTypeForward { QHack = true };
+			OngoingSequence = new ActionsSequence { SequenceInitiator = new entEntityID(), DelayIDs = new() };
 
 			PostConstruct();
 		}

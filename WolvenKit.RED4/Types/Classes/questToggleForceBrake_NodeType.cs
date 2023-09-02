@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questToggleForceBrake_NodeType()
 		{
-			VehicleRef = new() { Names = new() };
+			VehicleRef = new gameEntityReference { Names = new() };
 			Val = true;
 
 			PostConstruct();

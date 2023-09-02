@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameCookedAreaData()
 		{
-			EntityID = new();
-			Position = new();
+			EntityID = new entEntityID();
+			Position = new Vector3();
 
 			PostConstruct();
 		}

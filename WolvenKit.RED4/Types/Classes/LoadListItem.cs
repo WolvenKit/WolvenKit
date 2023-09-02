@@ -174,21 +174,21 @@ namespace WolvenKit.RED4.Types
 
 		public LoadListItem()
 		{
-			ImageReplacement = new();
-			Label = new();
-			LabelDate = new();
-			Type = new();
-			Quest = new();
-			Level = new();
-			Lifepath = new();
-			CloudStatus = new();
-			PlayTime = new();
-			CharacterLevel = new();
-			CharacterLevelLabel = new();
-			GameVersion = new();
-			EmptySlotWrapper = new();
-			Wrapper = new();
-			DefaultAtlasPath = new();
+			ImageReplacement = new inkImageWidgetReference();
+			Label = new inkTextWidgetReference();
+			LabelDate = new inkTextWidgetReference();
+			Type = new inkTextWidgetReference();
+			Quest = new inkTextWidgetReference();
+			Level = new inkTextWidgetReference();
+			Lifepath = new inkImageWidgetReference();
+			CloudStatus = new inkImageWidgetReference();
+			PlayTime = new inkTextWidgetReference();
+			CharacterLevel = new inkTextWidgetReference();
+			CharacterLevelLabel = new inkTextWidgetReference();
+			GameVersion = new inkTextWidgetReference();
+			EmptySlotWrapper = new inkWidgetReference();
+			Wrapper = new inkWidgetReference();
+			DefaultAtlasPath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\fullscreen\load_game\save_game.inkatlas") };
 
 			PostConstruct();
 		}

@@ -94,9 +94,9 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
                 throw new ArgumentException($"Native prop '{propertyName}' could not be found!");
             }
 
-            if (!_dynamicProperties.Contains(propertyName))
+            if (!_dynamicProperties.ContainsKey(propertyName))
             {
-                _dynamicProperties.Add(propertyName);
+                throw new ArgumentException($"Dynamic prop '{propertyName}' could not be found!");
             }
         }
 
@@ -106,7 +106,7 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
     #region Properties
 
     private readonly IDictionary<string, IRedType?> _properties = new Dictionary<string, IRedType?>();
-    private readonly IList<string> _dynamicProperties = new List<string>();
+    // private readonly IList<string> _dynamicProperties = new List<string>();
 
 
     /// <summary>
@@ -143,7 +143,7 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
 
     public IRedType? GetProperty(string propertyName)
     {
-        if (_dynamicProperties.Contains(propertyName))
+        if (_dynamicProperties.ContainsKey(propertyName))
         {
             return _properties[propertyName];
         }
@@ -156,7 +156,7 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
                 throw new PropertyNotFoundException(" RedName is null ");
             }
 
-            if ( _properties.ContainsKey(propertyInfo.RedName))
+            if (_properties.ContainsKey(propertyInfo.RedName))
             {
                 return _properties[propertyInfo.RedName];
             }
@@ -189,11 +189,10 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
             return true;
         }
 
-        if (_dynamicProperties.Contains(name))
+        if (_dynamicProperties.TryGetValue(name, out propertyInfo))
         {
-            _dynamicProperties.Remove(name);
-            _properties.Remove(name);
-
+            ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
+            SetProperty(propertyInfo.RedName, (IRedType?)RedReflection.GetClassDefaultValue(propertyInfo.ContainingTypeInfo.Type, propertyInfo));
             return true;
         }
 
@@ -201,9 +200,54 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
     }
 
     public List<string> GetPropertyNames() => new(_properties.Keys);
-    public List<string> GetDynamicPropertyNames() => new(_dynamicProperties);
+    
 
     #endregion Properties
+
+    #region Dynamic Properties
+
+    private readonly Dictionary<string, ExtendedPropertyInfo> _dynamicProperties = new();
+
+    public ExtendedPropertyInfo AddDynamicProperty(string redName, Type type)
+    {
+        if (_dynamicProperties.ContainsKey(redName))
+        {
+            throw new TodoException("Property already defined");
+        }
+
+        var property = new ExtendedPropertyInfo(RedReflection.GetTypeInfo(GetType()), redName, type);
+
+        _dynamicProperties.Add(redName , property);
+
+        return property;
+    }
+
+    public IEnumerable<ExtendedPropertyInfo> GetWritableProperties()
+    {
+        foreach (var extendedPropertyInfo in RedReflection.GetTypeInfo(GetType()).GetWritableProperties())
+        {
+            yield return extendedPropertyInfo;
+        }
+
+        foreach (var extendedPropertyInfo in GetDynamicProperties())
+        {
+            yield return extendedPropertyInfo;
+        }
+    }
+
+    public IEnumerable<ExtendedPropertyInfo> GetDynamicProperties()
+    {
+        foreach (var (name, info) in _dynamicProperties)
+        {
+            yield return info;
+        }
+    }
+
+    public List<string> GetDynamicPropertyNames() => _dynamicProperties.Keys.ToList();
+
+    #endregion
+
+    #region IEquatable
 
     public override bool Equals(object? obj)
     {
@@ -259,4 +303,6 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
     }
 
     public override int GetHashCode() => base.GetHashCode();
+
+    #endregion IEquatable
 }

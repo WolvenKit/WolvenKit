@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public DisableBraindanceActions()
 		{
-			ActionMask = new();
+			ActionMask = new SBraindanceInputMask();
 
 			PostConstruct();
 		}

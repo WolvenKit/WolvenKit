@@ -70,9 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public worldInstancedMeshNode()
 		{
-			MeshLODScales = 4294967295;
+			MeshLODScales = uint.MaxValue;
 			OccluderAutohideDistanceScale = 255;
-			WorldTransformsBuffer = new();
+			WorldTransformsBuffer = new worldRenderProxyTransformBuffer();
 
 			PostConstruct();
 		}

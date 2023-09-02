@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gameIHitRepresentationSystem : gameIGameSystem
+	public abstract partial class gameIHitRepresentationSystem : gameIGameSystem
 	{
 		public gameIHitRepresentationSystem()
 		{

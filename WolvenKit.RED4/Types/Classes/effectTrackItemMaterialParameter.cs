@@ -72,13 +72,13 @@ namespace WolvenKit.RED4.Types
 		{
 			TimeDuration = 1.000000F;
 			Scale0 = 1.000000F;
-			CustomParameter0 = new();
+			CustomParameter0 = new effectEffectParameterEvaluator();
 			Scale1 = 1.000000F;
-			CustomParameter1 = new();
+			CustomParameter1 = new effectEffectParameterEvaluator();
 			Scale2 = 1.000000F;
-			CustomParameter2 = new();
+			CustomParameter2 = new effectEffectParameterEvaluator();
 			Scale3 = 1.000000F;
-			CustomParameter3 = new();
+			CustomParameter3 = new effectEffectParameterEvaluator();
 
 			PostConstruct();
 		}

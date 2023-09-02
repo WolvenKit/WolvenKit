@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public rendRenderTextureBlobHeader()
 		{
-			SizeInfo = new() { Depth = 1 };
-			TextureInfo = new();
+			SizeInfo = new rendRenderTextureBlobSizeInfo { Depth = 1 };
+			TextureInfo = new rendRenderTextureBlobTextureInfo();
 			MipMapInfo = new();
 			HistogramData = new();
 

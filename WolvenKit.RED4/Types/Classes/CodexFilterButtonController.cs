@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public CodexFilterButtonController()
 		{
-			Root = new();
-			Image = new();
+			Root = new inkWidgetReference();
+			Image = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

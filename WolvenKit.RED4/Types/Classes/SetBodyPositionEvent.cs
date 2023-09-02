@@ -30,8 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public SetBodyPositionEvent()
 		{
-			BodyPosition = new();
-			BodyPositionID = new();
+			BodyPosition = new Vector4();
+			BodyPositionID = new entEntityID();
 
 			PostConstruct();
 		}

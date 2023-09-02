@@ -974,14 +974,14 @@ namespace WolvenKit.RED4.Types
 
 		public HitReactionComponent()
 		{
-			OwnerID = new();
+			OwnerID = new entEntityID();
 			ImpactDamageDuration = 0.200000F;
 			StaggerDamageDuration = 0.400000F;
 			ImpactDamageDurationMelee = 0.250000F;
 			StaggerDamageDurationMelee = 1.500000F;
 			KnockdownDamageDuration = 2.500000F;
 			PreviousAnimHitReactionArray = new();
-			HitShapeData = new() { Result = new() { HitPositionEnter = new(), HitPositionExit = new() } };
+			HitShapeData = new gameShapeData { Result = new gameHitResult { HitPositionEnter = new Vector4(), HitPositionExit = new Vector4() } };
 			DismembermentBodyPartDamageThreshold = new();
 			WoundedBodyPartDamageThreshold = new();
 			DefeatedBodyPartDamageThreshold = new();
@@ -996,8 +996,8 @@ namespace WolvenKit.RED4.Types
 			PreviousParryTimeStamp = -1.000000F;
 			DisableDismembermentAfterDeathDelay = 10.000000F;
 			CumulativeDamageUpdateInterval = 0.250000F;
-			HitPosition = new();
-			HitDirection = new();
+			HitPosition = new Vector4();
+			HitDirection = new Vector4();
 			MaxHitChainForMelee = 2;
 			MaxHitChainForRanged = 2;
 			HitCountData = new(100);

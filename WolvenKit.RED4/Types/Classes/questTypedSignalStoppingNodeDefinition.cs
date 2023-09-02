@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class questTypedSignalStoppingNodeDefinition : questSignalStoppingNodeDefinition
+	public abstract partial class questTypedSignalStoppingNodeDefinition : questSignalStoppingNodeDefinition
 	{
 		public questTypedSignalStoppingNodeDefinition()
 		{

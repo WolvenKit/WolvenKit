@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public CMaterialParameterVector()
 		{
-			Vector = new();
+			Vector = new Vector4();
 
 			PostConstruct();
 		}

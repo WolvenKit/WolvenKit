@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 		public questMovePuppetNodeDefinition()
 		{
 			Sockets = new();
-			Id = 65535;
-			EntityReference = new() { Names = new() };
+			Id = ushort.MaxValue;
+			EntityReference = new gameEntityReference { Names = new() };
 			MoveType = "questMoveOnSplineParams";
 
 			PostConstruct();

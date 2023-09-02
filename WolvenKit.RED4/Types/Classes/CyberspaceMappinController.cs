@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public CyberspaceMappinController()
 		{
-			Image = new();
+			Image = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

@@ -30,9 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public UI_EquipmentDataDef()
 		{
-			EquipmentData = new();
-			UIjailbreakData = new();
-			AmmoLooted = new();
+			EquipmentData = new gamebbScriptID_Variant();
+			UIjailbreakData = new gamebbScriptID_Variant();
+			AmmoLooted = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

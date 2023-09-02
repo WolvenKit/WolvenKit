@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public CEvaluatorColorConst()
 		{
-			Value = new();
+			Value = new CColor();
 
 			PostConstruct();
 		}

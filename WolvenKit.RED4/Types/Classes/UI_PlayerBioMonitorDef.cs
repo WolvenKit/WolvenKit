@@ -78,15 +78,15 @@ namespace WolvenKit.RED4.Types
 
 		public UI_PlayerBioMonitorDef()
 		{
-			PlayerStatsInfo = new();
-			BuffsList = new();
-			DebuffsList = new();
-			Cooldowns = new();
-			AdrenalineBar = new();
-			CurrentNetrunnerCharges = new();
-			NetworkChargesCapacity = new();
-			NetworkName = new();
-			MemoryPercent = new();
+			PlayerStatsInfo = new gamebbScriptID_Variant();
+			BuffsList = new gamebbScriptID_Variant();
+			DebuffsList = new gamebbScriptID_Variant();
+			Cooldowns = new gamebbScriptID_Variant();
+			AdrenalineBar = new gamebbScriptID_Float();
+			CurrentNetrunnerCharges = new gamebbScriptID_Int32();
+			NetworkChargesCapacity = new gamebbScriptID_Int32();
+			NetworkName = new gamebbScriptID_CName();
+			MemoryPercent = new gamebbScriptID_Float();
 
 			PostConstruct();
 		}

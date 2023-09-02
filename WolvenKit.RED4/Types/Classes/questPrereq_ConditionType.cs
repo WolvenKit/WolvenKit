@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public questPrereq_ConditionType()
 		{
-			ObjectRef = new() { Names = new() };
+			ObjectRef = new gameEntityReference { Names = new() };
 
 			PostConstruct();
 		}

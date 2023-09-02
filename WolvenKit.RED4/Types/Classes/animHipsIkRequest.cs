@@ -46,9 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public animHipsIkRequest()
 		{
-			HipsTransformIndex = new();
-			LeftFootTransformIndex = new();
-			RightFootTransformIndex = new();
+			HipsTransformIndex = new animTransformIndex();
+			LeftFootTransformIndex = new animTransformIndex();
+			RightFootTransformIndex = new animTransformIndex();
 
 			PostConstruct();
 		}

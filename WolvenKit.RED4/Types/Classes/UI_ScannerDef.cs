@@ -166,26 +166,26 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ScannerDef()
 		{
-			Scannables = new();
-			CurrentProgress = new();
-			CurrentState = new();
-			ProgressBarText = new();
-			ScannedObject = new();
-			ScannerMode = new();
-			ScannerTooltip = new();
-			ScannerData = new();
-			ScannerObjectDistance = new();
-			ScannerObjectStats = new();
-			ScannerQuickHackActionId = new();
-			ScannerQuickHackActionStarted = new();
-			ScannerQuickHackTime = new();
-			ExclusiveFocusActive = new();
-			LastTaggedTarget = new();
-			SkillCheckInfo = new();
-			ShowHudHintMessege = new();
-			HudHintMessegeContent = new();
-			UIVisible = new();
-			ScannerLookAt = new();
+			Scannables = new gamebbScriptID_Variant();
+			CurrentProgress = new gamebbScriptID_Float();
+			CurrentState = new gamebbScriptID_Variant();
+			ProgressBarText = new gamebbScriptID_String();
+			ScannedObject = new gamebbScriptID_EntityID();
+			ScannerMode = new gamebbScriptID_Variant();
+			ScannerTooltip = new gamebbScriptID_Int32();
+			ScannerData = new gamebbScriptID_Variant();
+			ScannerObjectDistance = new gamebbScriptID_Float();
+			ScannerObjectStats = new gamebbScriptID_Variant();
+			ScannerQuickHackActionId = new gamebbScriptID_Int32();
+			ScannerQuickHackActionStarted = new gamebbScriptID_Bool();
+			ScannerQuickHackTime = new gamebbScriptID_Float();
+			ExclusiveFocusActive = new gamebbScriptID_Bool();
+			LastTaggedTarget = new gamebbScriptID_Variant();
+			SkillCheckInfo = new gamebbScriptID_Variant();
+			ShowHudHintMessege = new gamebbScriptID_Bool();
+			HudHintMessegeContent = new gamebbScriptID_String();
+			UIVisible = new gamebbScriptID_Bool();
+			ScannerLookAt = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

@@ -5,8 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public worldDebugColoring_GPUMemoryUsage()
 		{
-			MaxColor = new();
-			MinColor = new();
+			MaxColor = new CColor();
+			MinColor = new CColor();
 			MinSize = 1;
 			MaxSize = 5000;
 

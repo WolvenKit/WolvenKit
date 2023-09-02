@@ -96,7 +96,7 @@ namespace WolvenKit.Common.DDS
                 EUncookExtension.png => TexconvNative.ESaveFileTypes.PNG,
                 EUncookExtension.tga => TexconvNative.ESaveFileTypes.TGA,
                 EUncookExtension.tiff => TexconvNative.ESaveFileTypes.TIFF,
-                EUncookExtension.dds => throw new NotImplementedException(),
+                EUncookExtension.dds => TexconvNative.ESaveFileTypes.DDS,
                 _ => throw new ArgumentOutOfRangeException(nameof(extension), extension, null)
             };
 
@@ -137,7 +137,7 @@ namespace WolvenKit.Common.DDS
                     break;
             }
 
-            return uext != EUncookExtension.dds && ConvertFromDdsAndSave(ms, outfilename, ToSaveFormat(uext), vflip, false, decompressedFormat);
+            return ConvertFromDdsAndSave(ms, outfilename, ToSaveFormat(uext), vflip, false, decompressedFormat);
         }
         public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, TexconvNative.ESaveFileTypes filetype, bool vflip = false, bool hflip = false, DXGI_FORMAT decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
         {
@@ -174,8 +174,16 @@ namespace WolvenKit.Common.DDS
                     throw new ArgumentException($"Could not load image file");
                 }
 
+                if (vflip)
+                {
+                    image.FlipV();
+                }
+
                 switch (filetype)
                 {
+                    case TexconvNative.ESaveFileTypes.DDS:
+                        image.SaveToDDS(newpath);
+                        break;
                     case TexconvNative.ESaveFileTypes.BMP:
                         image.SaveToBMP(newpath);
                         break;

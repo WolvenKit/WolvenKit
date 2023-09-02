@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public HackPlayerEvent()
 		{
-			NetrunnerID = new();
-			TargetID = new();
+			NetrunnerID = new entEntityID();
+			TargetID = new entEntityID();
 			ShowDirectionalIndicator = true;
 
 			PostConstruct();

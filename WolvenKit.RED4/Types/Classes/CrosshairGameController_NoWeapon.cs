@@ -158,13 +158,13 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_NoWeapon()
 		{
-			AimDownSightContainer = new();
-			ZoomMovingContainer = new();
-			ZoomNumber = new();
-			ZoomNumberR = new();
-			DistanceImageRuler = new();
-			ZoomMoveBracketL = new();
-			ZoomMoveBracketR = new();
+			AimDownSightContainer = new inkCompoundWidgetReference();
+			ZoomMovingContainer = new inkCompoundWidgetReference();
+			ZoomNumber = new inkTextWidgetReference();
+			ZoomNumberR = new inkTextWidgetReference();
+			DistanceImageRuler = new inkImageWidgetReference();
+			ZoomMoveBracketL = new inkImageWidgetReference();
+			ZoomMoveBracketR = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

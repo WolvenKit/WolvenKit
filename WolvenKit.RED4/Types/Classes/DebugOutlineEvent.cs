@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public DebugOutlineEvent()
 		{
-			Requester = new();
+			Requester = new entEntityID();
 
 			PostConstruct();
 		}

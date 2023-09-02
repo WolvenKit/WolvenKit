@@ -124,8 +124,8 @@ namespace WolvenKit.RED4.Types
 			PitchDownLimit = 30.000000F;
 			YawSpeedMultiplier = 1.000000F;
 			PitchSpeedMultiplier = 1.000000F;
-			ObjectRef = new() { Names = new() };
-			OffsetPos = new();
+			ObjectRef = new gameEntityReference { Names = new() };
+			OffsetPos = new Vector3();
 			RotationTime = 0.500000F;
 			UsePlayerWorkspot = true;
 
