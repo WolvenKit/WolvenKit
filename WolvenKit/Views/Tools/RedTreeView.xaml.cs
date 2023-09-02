@@ -1,10 +1,13 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
+using Syncfusion.UI.Xaml.TreeView.Engine;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
@@ -123,131 +126,99 @@ namespace WolvenKit.Views.Tools
         public bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
 
 
+        private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
+        {
+            if (e.DraggingNodes?[0].Content is not ChunkViewModel source ||
+                e.TargetNode?.Content is not ChunkViewModel target)
+            {
+                return false;
+            }
+
+            if (source == target || source.Data is null || target.Parent == null || target.Parent.IsReadOnly)
+            {
+                return false;
+            }
+
+            switch (IsControlBeingHeld)
+            {
+                case false when !target.IsInArray:
+                case true when target.Parent.Data is IRedBufferPointer:
+                    return true;
+                case true:
+                {
+                    if (target.Parent.Data is not IRedArray arr)
+                    {
+                        return false;
+                    }
+
+                    var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
+
+                    return arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize);
+                }
+                default:
+                    return true;
+            }
+        }
+
         private void SfTreeView_ItemDragOver(object sender, TreeViewItemDragOverEventArgs e)
         {
-            var allowDrop = false;
-            if (sender is SfTreeView tv)
+            if (sender is not SfTreeView)
             {
-                if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
-                {
-                    if (e.TargetNode != null && e.TargetNode.Content is ChunkViewModel target)
-                    {
-                        if (source == target)
-                        {
-                            allowDrop = false;
-                        }
-                        //else if (source.CanBeDroppedOn(target))
-                        //{
-                        //    e.DropPosition = DropPosition.DropAsChild;
-                        //}
-                        else if (source.Data is not null)
-                        {
-                            if (IsControlBeingHeld && !target.Parent.IsReadOnly)
-                            {
-                                if (target.Parent.Data is IRedBufferPointer)
-                                {
-                                    allowDrop = true;
-                                }
-
-                                if (target.Parent.Data is IRedArray arr)
-                                {
-                                    var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
-
-                                    if (arrayType == typeof(CArray<>))
-                                    {
-                                        allowDrop = true;
-                                    }
-
-                                    if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
-                                    {
-                                        allowDrop = true;
-                                    }
-                                }
-                            }
-                            else if (target.IsInArray && !target.Parent.IsReadOnly)
-                            {
-                                allowDrop = true;
-                            }
-                        }
-                    }
-                }
-                if (e.DropPosition is DropPosition.DropAsChild or DropPosition.DropHere)
-                {
-                    e.DropPosition = DropPosition.DropBelow;
-                }
-                e.DropPosition = allowDrop ? e.DropPosition : DropPosition.None;
+                return;
             }
-            //if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            //{
-            //    if (e.TargetNode != null && e.TargetNode.Content is ChunkViewModel target)
-            //    {
-            //        var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop));
-            //        if (files.Count == 1)
-            //        {
-            //            if (dropFileLocation != files[0])
-            //            {
-            //                try
-            //                {
-            //                    dropFileLocation = files[0];
-            //                    var json = File.ReadAllText(files[0]);
-            //                    dropFile = JsonConvert.DeserializeObject<RedTypeDto>(json);
-            //                }
-            //                catch (Exception)
-            //                {
 
-            //                }
-            //            }
-            //            //if (dropFile != null && dropFile.Type == target.Type)
-            //            //{
-            //            e.DropPosition = DropPosition.DropAsChild;
-            //            //}
-            //        }
-            //    }
-            //}
+            if (e.DropPosition is DropPosition.DropAsChild or DropPosition.DropHere)
+            {
+                e.DropPosition = DropPosition.DropBelow;
+            }
+
+            e.DropPosition = IsAllowDrop(e) ? e.DropPosition : DropPosition.None;
+
+        }
+
+        private void DragDropInsertNode()
+        {
         }
 
         private async void SfTreeView_ItemDropping(object sender, TreeViewItemDroppingEventArgs e)
         {
-            e.Handled = true;
-            if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
+            if (e.DraggingNodes == null
+                || e.TargetNode.Content is not ChunkViewModel target
+                || target.Parent == null
+                || (e.DropPosition != DropPosition.DropBelow && e.DropPosition != DropPosition.DropAbove))
             {
-                if (e.TargetNode.Content is ChunkViewModel target && target.Parent != null && (e.DropPosition == DropPosition.DropBelow || e.DropPosition == DropPosition.DropAbove))
+                e.Handled = true;
+                return;
+            }
+
+            var targetIndex = target.Parent.Properties.IndexOf(target);
+
+            foreach (var node in e.DraggingNodes.Where(node => node.Content is ChunkViewModel))
+            {
+                var source = (ChunkViewModel)node.Content;
+
+                if (IsControlBeingHeld && source.Data is IRedCloneable irc)
                 {
-                    if (IsControlBeingHeld)
+                    if (await Interactions.ShowMessageBoxAsync($"Duplicate {source.Data.GetType().Name} here?",
+                            "Duplicate Confirmation", WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes)
                     {
-                        if (source.Data is IRedCloneable irc)
-                        {
-                            if (await Interactions.ShowMessageBoxAsync($"Duplicate {source.Data.GetType().Name} here?", "Duplicate Confirmation", WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes)
-                            {
-                                target.Parent.InsertChild(target.Parent.Properties.IndexOf(target) + (e.DropPosition == DropPosition.DropBelow ? 1 : 0), (IRedType)irc.DeepCopy());
-                            }
-                        }
+                        target.Parent.InsertChild(
+                            target.Parent.Properties.IndexOf(target) +
+                            (e.DropPosition == DropPosition.DropBelow ? 1 : 0), (IRedType)irc.DeepCopy());
                     }
-                    else
-                    {
-                        target.Parent.MoveChild(target.Parent.Properties.IndexOf(target) + (e.DropPosition == DropPosition.DropBelow ? 1 : 0), source);
-                    }
-                    //if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
-                    //{
-                    //    target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                    //}
-
-                    //if (target.Parent.Data is IRedArray arr)
-                    //{
-                    //    var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
-
-                    //    if (arrayType == typeof(CArray<>))
-                    //    {
-                    //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                    //    }
-
-                    //    if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
-                    //    {
-                    //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                    //    }
-                    //}
+                }
+                else
+                {
+                    Debug.WriteLine("Moved a node to " + targetIndex);
+                    target.Parent.MoveChild(
+                        targetIndex + (e.DropPosition == DropPosition.DropBelow ? 1 : 0),
+                        source);
+                    targetIndex += 1;
                 }
             }
+
+
+            e.Handled = true;
         }
 
         private void SfTreeView_ItemDropped(object sender, TreeViewItemDroppedEventArgs e)
