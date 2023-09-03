@@ -1020,7 +1020,7 @@ export function validateEntFile(ent, _entSettings) {
     if (_entSettings.checkForResolvedDependencies) {
         if ((ent.resolvedDependencies?.length || 0) > 0) {
             Logger.Info(`Your entity file defines resolvedDependencies, consider deleting them.`)
-        }        
+        }
     }
 
     // will be set to false in app file validation
@@ -1028,20 +1028,28 @@ export function validateEntFile(ent, _entSettings) {
 
     alreadyDefinedAppearanceNames.length = 0;
     alreadyVerifiedAppFiles.length = 0;
-    
+
     hasEmptyAppearanceName = false;
-    
+
+    // prevent exceptions in borked entities
+    if (!ent.appearances) {
+        Logger.Error('.ent file: "appearances" doesn\'t exist. There\'s a good chance that this file won\'t work.');
+        ent.appearances = [];
+    }
     const entAppearanceNames = [];
-    
+
+    // if there is just one appearance and the root name ends in an underscore, assume as dynamic
+    isDynamicAppearance ||= ent.appearances.length === 1 && ent.appearances[0].name.endsWith('_');
+
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
         entFile_validateAppearance(appearance, i, !entSettings.skipRootEntityCheck);
         entAppearanceNames.push((stringifyPotentialCName(appearance.name) || ''));
     }
     // now validate names
-    for (let i = 0; i < ent.appearances.length; i++) {        
+    for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
-        validateAppearanceNameSuffixes(stringifyPotentialCName(appearance.name) || '', entAppearanceNames);    
+        validateAppearanceNameSuffixes(stringifyPotentialCName(appearance.name) || '', entAppearanceNames);
     }
     
 
