@@ -1039,7 +1039,7 @@ export function validateEntFile(ent, _entSettings) {
     const entAppearanceNames = [];
 
     // if there is just one appearance and the root name ends in an underscore, assume as dynamic
-    isDynamicAppearance ||= ent.appearances.length === 1 && ent.appearances[0].name.endsWith('_');
+    isDynamicAppearance ||= ent.appearances.length === 1 && stringifyPotentialCName(ent.appearances[0].name).endsWith('_');
 
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
