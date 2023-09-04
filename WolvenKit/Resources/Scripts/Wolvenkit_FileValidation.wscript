@@ -556,7 +556,7 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
         for (let i = 0; i < components.length; i++) {
             const component = components[i];
             if (appFileSettings?.validateRecursively || validateRecursively) {
-                entFile_appFile_validateComponent(component, i, validateRecursively);
+                entFile_appFile_validateComponent(component, i, validateRecursively, `app.${appearanceName}`);
             }
             if (component.mesh) {
                 const meshDepotPath = stringifyPotentialCName(component.mesh.DepotPath);
@@ -592,14 +592,20 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
             });
         }
     }
-    
+
+    const allComponentNames = components.map((component) => stringifyPotentialCName(component.name));
+    const numAmmComponents = allComponentNames.filter((name) => !!name && name.startsWith('amm_prop_slot')).length;
+    if (numAmmComponents > 0 && numAmmComponents < 4 && !allComponentNames.includes('amm_prop_slot1')) {
+        Logger.Info(`app[${appearanceName}] Is this an AMM prop appearance? Only components with the names "amm_prop_slot1" - "amm_prop_slot4" will support scaling.`);
+    }
+
     // Dynamic appearances will ignore the components in the mesh. We'll use 'isUsingSubstitution' as indicator,
     // since those only work for dynamic appearances, and the app file doesn't know if it's dynamic otherwise. 
-    if (!isDynamicAppearance && !isUsingSubstitution) {        
+    if (!isDynamicAppearance && !isUsingSubstitution) {
         const duplicateMeshes = meshPathsFromComponents
             .filter((path, i, array) => !!path && array.indexOf(path) === i) // only unique
             .filter((path) => meshPathsFromEntityFiles.includes(path))
-            
+
         if (duplicateMeshes.length > 0) {
             Logger.Warning(`${appearanceName}: You are adding meshes via partsValues (entity file) AND components. To avoid visual glitches and broken appearances, use only one!`);
             duplicateMeshes.forEach((path) => {
@@ -763,11 +769,11 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
     switch (type) {
         case WITH_MESH:
             const canBeEmpty = componentName !== 'amm_prop_slot1' && componentName?.startsWith('amm_prop_slot');
-            checkDepotPath(component.mesh.DepotPath, componentName, canBeEmpty);
+            checkDepotPath(component.mesh.DepotPath, `${info}.${componentName}`, canBeEmpty);
             hasMesh = true;
             break;
         case 'workWorkspotResourceComponent':
-            checkDepotPath(component.workspotResource.DepotPath, componentName);
+            checkDepotPath(component.workspotResource.DepotPath, `${info}.${componentName}`);
             break;
         default:
             break;
@@ -997,23 +1003,28 @@ export function validateEntFile(ent, _entSettings) {
     if (visualTagList.includes('DynamicAppearance')) {
         isDynamicAppearance = true
     }
-    
+
     for (let i = 0; i < (ent.components?.length || 0); i++) {
         const component = ent.components[i];
         const componentName = stringifyPotentialCName(component.name) || `${i}`;
         entFile_appFile_validateComponent(component, i, _entSettings.validateRecursively, `ent.components.${componentName}`);
         (allComponentNames.includes(componentName) ? duplicateComponentNames : allComponentNames).push(componentName);
     }
-    
+
+    const numAmmComponents = allComponentNames.filter((name) => !!name && name.startsWith('amm_prop_slot')).length;
+    if (numAmmComponents > 0 && numAmmComponents < 4 && !allComponentNames.includes('amm_prop_slot1')) {
+        Logger.Info('Is this an AMM prop appearance? Only components with the names "amm_prop_slot1" - "amm_prop_slot4" will support scaling.');
+    }
+
     if (entSettings.validateRecursively) {
         printInvalidAppearanceWarningIfFound();
         printSubstitutionWarningsIfFound();
     }
-    
+
     if (_entSettings.checkComponentNameDuplication && duplicateComponentNames.length > 0) {
-        Logger.Warning(`The following components are defined more than once: [ ${ duplicateComponentNames.join(', ') } ]`)
+        Logger.Warning(`The following components are defined more than once: [ ${duplicateComponentNames.join(', ')} ]`)
     }
-        
+
     if (_entSettings.checkForCrashyDependencies) {
         if ((ent.inplaceResources?.length || 0) > 0) {
             Logger.Error(`Your entity file defines inplaceResources. These might cause crashes due to asynchronous loading.`)    
