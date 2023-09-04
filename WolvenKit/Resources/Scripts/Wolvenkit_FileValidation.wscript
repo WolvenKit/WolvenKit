@@ -756,12 +756,14 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
     if (component && component.mesh && component.mesh.DepotPath) {
         type = WITH_MESH;
     }
-    
+
+
     // flag for mesh validation, in case this is called recursively from app file
     let hasMesh = false;
     switch (type) {
         case WITH_MESH:
-            checkDepotPath(component.mesh.DepotPath, componentName);
+            const canBeEmpty = componentName !== 'amm_prop_slot1' && componentName?.startsWith('amm_prop_slot');
+            checkDepotPath(component.mesh.DepotPath, componentName, canBeEmpty);
             hasMesh = true;
             break;
         case 'workWorkspotResourceComponent':
