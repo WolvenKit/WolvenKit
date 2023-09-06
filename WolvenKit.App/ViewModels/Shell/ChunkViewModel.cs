@@ -25,6 +25,7 @@ using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
@@ -49,6 +50,7 @@ namespace WolvenKit.App.ViewModels.Shell;
 public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
 {
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
+    private readonly ChunkViewModelTools _chunkViewModelTools = new ChunkViewModelTools();
     private readonly IDocumentTabViewmodelFactory _tabViewmodelFactory;
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
@@ -93,7 +95,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
-        ChunkViewModel? parent = null, bool isReadOnly = false)
+        ChunkViewModel? parent = null,
+        bool isReadOnly = false
+    )
     {
         _chunkViewmodelFactory = chunkViewmodelFactory;
         _tabViewmodelFactory = tabViewmodelFactory;
@@ -140,12 +144,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        Red4ParserService parserService, 
+        Red4ParserService parserService,
         bool isReadOnly = false
         ) 
         : this(data, nameof(RDTDataViewModel), appViewModel,
-              chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager, 
-              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, null, isReadOnly
+            chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
+            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, null,
+            isReadOnly
               )
     {
         _tab = tab;
@@ -173,7 +178,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        Red4ParserService parserService, 
+        Red4ParserService parserService,
         bool isReadOnly = false
         ) 
         : this(export, nameof(ReferenceSocket), appViewModel,
@@ -185,7 +190,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         socket.Node = this;
         RelativePath = socket.File;
     }
-
+    
     partial void OnIsSelectedChanged(bool value)
     {
         if (IsSelected && !_propertiesLoaded)
@@ -196,6 +201,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         if (IsExpanded && !_propertiesLoaded)
             CalculateProperties();
+
+        if (IsShiftBeingHeld)
+        {
+            _chunkViewModelTools.SetChildExpansionStates(this, IsExpanded);
+        }
     }
 
     partial void OnDataChanged(IRedType value)
@@ -2558,6 +2568,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
     public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+    public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
 
     // node stuff
 
