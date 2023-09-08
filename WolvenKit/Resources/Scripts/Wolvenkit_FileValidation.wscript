@@ -1278,6 +1278,9 @@ export function validateMeshFile(mesh, _meshSettings) {
             if (PLACEHOLDER_NAME_REGEX.test(materialName)) {
                 meshFile_validatePlaceholderMaterial(material, `localMaterialBuffer.materials[${i}]`);
             } else {
+                if (!/^[a-z]+/.test(materialName)) {
+                    Logger.Info(`materials[${i}]: ${materialName} does not begin with a lower case letter. It might not load.`);
+                }
                 meshFile_CheckMaterialProperties(material, `localMaterialBuffer.${materialName}`);
             }
         }
