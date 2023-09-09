@@ -16,10 +16,9 @@ import {CName} from "TypeHelper.wscript";
  */
 
 /**
- * Workaround for CName heisenbug that happened on my machine. It might happen on your machine as well!
- * Best leave it in for now.
+ * Will safely convert a cname to string and run some validation on it
  */
-function stringifyPotentialCName(cnameOrString, _info) {
+function stringifyPotentialCName(cnameOrString, _info = '', suppressSpaceCheck = false) {
     if (!cnameOrString) return undefined;
     if (typeof cnameOrString === 'string') {
         return cnameOrString;
@@ -28,13 +27,14 @@ function stringifyPotentialCName(cnameOrString, _info) {
         return `${cnameOrString}`;
     }
     const ret = !!cnameOrString.$value ? cnameOrString.$value : cnameOrString.value;
-    if (ret?.indexOf && ret.indexOf(" ") >= 0) {
-        const info = _info ? `${_info}: '${ret}' ` : `'${ret}' `;
-        if (ret.trim() !== ret) {
-            Logger.Error(`${info}has trailing or leading spaces! Make sure to remove them, or your item won't load!`);    
-        } else {
-            Logger.Warning(`${info}includes spaces. Please use _ instead.`);            
-        }
+    const info = _info ? `${_info}: '${ret}' ` : `'${ret}' `;
+
+    if (ret && ret.trim && ret.trim() !== ret) {
+        Logger.Error(`${info}has trailing or leading spaces! Make sure to remove them, or the component might not work!`);
+    }
+
+    if (!suppressSpaceCheck && ret?.indexOf && ret.indexOf(" ") >= 0) {
+        Logger.Warning(`${info}includes spaces. Please use _ instead.`);
     }
     return ret;
 }
@@ -73,6 +73,45 @@ function hasUppercase(str) {
 
 function isNumericHash(str) {
     return !!str && /^\d+$/.test(str);
+}
+
+/**
+ * Some users had files that were outright broken - they didn't make the game crash, but silently failed to work
+ * and caused exceptions in file validation because certain values weren't set. This method fixes the structure
+ * and prints warnings.
+ *
+ * @param data the file's data
+ * @param fileType for the switch case.
+ * @param _info Optional: information for the debug output
+ */
+function checkIfFileIsBroken(data, fileType, _info = '') {
+    let errorMsg = [];
+    let info = _info;
+    if (!info) {
+        const fileName = (pathToCurrentFile || '').split('\\\\').pop();
+        info = `${fileName ? fileName : `${fileType} file`}`;
+    }
+
+    switch (fileType) {
+        case 'ent':
+            if (!data.components) {
+                errorMsg.push('"components" doesn\'t exist. There\'s a good chance that this file won\'t work.');
+            }
+            if (!data.appearances) {
+                errorMsg.push('"appearances" doesn\'t exist. There\'s a good chance that this file won\'t work.');
+            }
+            break;
+        default:
+            break;
+    }
+    if (!errorMsg.length) {
+        return false;
+    }
+
+    Logger.Error(`${info}: File structure invalid. This will not work (best-case) or crash your game (worst-case).`);
+    Logger.Error(`The following errors have been found:`);
+    errorMsg.forEach((msg) => Logger.Error(`\t${msg}`));
+    return true;
 }
 
 /**
@@ -242,17 +281,16 @@ function animFile_CheckForDuplicateNames() {
 }
 
 export function validateAnimationFile(animAnimSet, _animAnimSettings) {
-    if (!_animAnimSettings?.Enabled) {
-        return;
-    }
-    
-    animAnimSettings = _animAnimSettings;
-    resetInternalFlagsAndCaches();
-
+    if (!_animAnimSettings?.Enabled) return;
     if (animAnimSet["Data"] && animAnimSet["Data"]["RootChunk"]) {
         validateAnimationFile(animAnimSet["Data"]["RootChunk"], animAnimSettings);
         return;
     }
+    if (checkIfFileIsBroken(animAnimSet, 'animAnimSet')) {
+        return;
+    }
+    animAnimSettings = _animAnimSettings;
+    resetInternalFlagsAndCaches();
 
     // collect names
     for (let index = 0; index < animAnimSet.animations.length; index++) {
@@ -593,7 +631,10 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
         }
     }
 
-    const allComponentNames = components.map((component) => stringifyPotentialCName(component.name));
+    const allComponentNames = components.map((component, index) => {
+
+        return stringifyPotentialCName(component.name, `${appearanceName}.components[${index}]`);
+    });
     const numAmmComponents = allComponentNames.filter((name) => !!name && name.startsWith('amm_prop_slot')).length;
     if (numAmmComponents > 0 && numAmmComponents < 4 && !allComponentNames.includes('amm_prop_slot1')) {
         Logger.Info(`app[${appearanceName}] Is this an AMM prop appearance? Only components with the names "amm_prop_slot1" - "amm_prop_slot4" will support scaling.`);
@@ -624,22 +665,25 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
 }
 
 export function validateAppFile(app, _appFileSettings) {
-    // invalid app file - not found
-    if (!app || !_appFileSettings.Enabled) {
-        return;
-    }
+    if (!_appFileSettings.Enabled) return;
     
     appFileSettings = _appFileSettings;
 
     resetInternalFlagsAndCaches();
 
     _validateAppFile(app, _appFileSettings?.validateRecursively, false);
-
 }
 
 function _validateAppFile(app, validateRecursively, calledFromEntFileValidation) {
     // invalid app file - not found
     if (!app) {
+        return;
+    }
+    if (app["Data"] && app["Data"]["RootChunk"]) {
+        return _validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
+    }
+
+    if (checkIfFileIsBroken(app, 'app')) {
         return;
     }
 
@@ -649,13 +693,10 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
 
     meshesByComponentName = {};
 
-    const validateCollisions = calledFromEntFileValidation 
+    const validateCollisions = calledFromEntFileValidation
         ? entSettings.checkComponentNameDuplication
         : appFileSettings.checkComponentNameDuplication;
     
-    if (app["Data"] && app["Data"]["RootChunk"]) {
-        return _validateAppFile(app["Data"]["RootChunk"], validateRecursively, calledFromEntFileValidation);
-    }  
     
     invalidVariantAndSubstitutions = {};
     
@@ -956,7 +997,7 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
 function validateAppearanceNameSuffixes(appearanceName, entAppearanceNames) {
     if (!appearanceName || !appearanceName.includes('&')) {
         return;
-    }    
+    }
     if (appearanceName.includes('FPP') && !entAppearanceNames.includes(appearanceName.replace('FPP', 'TPP'))) {
         Logger.Warning(`${appearanceName}: You have not defined a third person appearance.`)
         Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:TPP" or define "${appearanceName.replace('FPP', 'TPP')}" and point it to an empty appearance in the .app file.`);
@@ -981,13 +1022,13 @@ function validateAppearanceNameSuffixes(appearanceName, entAppearanceNames) {
  * @param {*} _entSettings Settings object
  */
 export function validateEntFile(ent, _entSettings) {
-    if (!_entSettings?.Enabled) return; 
+    if (!_entSettings?.Enabled) return;
+
+    if (ent?.Data?.RootChunk) return validateEntFile(ent.Data.RootChunk);
+    if (checkIfFileIsBroken(ent, 'ent')) return;
+
     entSettings = _entSettings;
     resetInternalFlagsAndCaches();
-    
-    if (ent["Data"] && ent["Data"]["RootChunk"]) {
-        return validateEntFile(ent["Data"]["RootChunk"]);
-    }
 
     const allComponentNames = [];
     const duplicateComponentNames = [];
@@ -998,16 +1039,21 @@ export function validateEntFile(ent, _entSettings) {
 
     // Collect tags
     const visualTagList = (ent.visualTagsSchema?.Data?.visualTags?.tags || []).map((tag) => stringifyPotentialCName(tag));
-    
+
     // we're using a dynamic appearance and need to consider that
     if (visualTagList.includes('DynamicAppearance')) {
         isDynamicAppearance = true
     }
 
-    for (let i = 0; i < (ent.components?.length || 0); i++) {
+    const isRootEntity = isDynamicAppearance || (ent.appearances?.length || 0) > 0;
+
+
+    // validate ent component names
+    for (let i = 0; i < (ent.components.length || 0); i++) {
         const component = ent.components[i];
-        const componentName = stringifyPotentialCName(component.name) || `${i}`;
+        const componentName = stringifyPotentialCName(component.name, `ent.components[${i}]`, isRootEntity) || `${i}`;
         entFile_appFile_validateComponent(component, i, _entSettings.validateRecursively, `ent.components.${componentName}`);
+        // put its name into the correct map
         (allComponentNames.includes(componentName) ? duplicateComponentNames : allComponentNames).push(componentName);
     }
 
@@ -1021,18 +1067,23 @@ export function validateEntFile(ent, _entSettings) {
         printSubstitutionWarningsIfFound();
     }
 
-    if (_entSettings.checkComponentNameDuplication && duplicateComponentNames.length > 0) {
+    if (!isRootEntity && _entSettings.checkComponentNameDuplication && duplicateComponentNames.length > 0) {
         Logger.Warning(`The following components are defined more than once: [ ${duplicateComponentNames.join(', ')} ]`)
     }
 
     if (_entSettings.checkForCrashyDependencies) {
         if ((ent.inplaceResources?.length || 0) > 0) {
-            Logger.Error(`Your entity file defines inplaceResources. These might cause crashes due to asynchronous loading.`)    
-        }        
+            Logger.Error(`Your entity file defines inplaceResources. These might cause crashes due to asynchronous loading. Consider deleting them!`)
+        }
     }
-    if (_entSettings.checkForResolvedDependencies) {
-        if ((ent.resolvedDependencies?.length || 0) > 0) {
+
+    if ((ent.resolvedDependencies?.length || 0) > 0) {
+        if (_entSettings.checkForResolvedDependencies) {
             Logger.Info(`Your entity file defines resolvedDependencies, consider deleting them.`)
+        } else {
+            for (let i = 0; i < ent.resolvedDependencies.length; i++) {
+                checkDepotPath(ent.resolvedDependencies[i].DepotPath, `resolvedDependencies[${i}]`);
+            }
         }
     }
 
@@ -1044,11 +1095,6 @@ export function validateEntFile(ent, _entSettings) {
 
     hasEmptyAppearanceName = false;
 
-    // prevent exceptions in borked entities
-    if (!ent.appearances) {
-        Logger.Error('.ent file: "appearances" doesn\'t exist. There\'s a good chance that this file won\'t work.');
-        ent.appearances = [];
-    }
     const entAppearanceNames = [];
 
     // if there is just one appearance and the root name ends in an underscore, assume as dynamic
@@ -1062,27 +1108,25 @@ export function validateEntFile(ent, _entSettings) {
         entAppearanceNames.push((stringifyPotentialCName(appearance.name) || ''));
         pathToCurrentFile = _pathToCurrentFile;
     }
+
     // now validate names
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
-        validateAppearanceNameSuffixes(stringifyPotentialCName(appearance.name) || '', entAppearanceNames);
+        validateAppearanceNameSuffixes(stringifyPotentialCName(appearance.name, `ent.appearances[${i}].name`) || '', entAppearanceNames);
     }
-    
 
+    ent.inplaceResources ||= [];
     for (let i = 0; i < ent.inplaceResources.length; i++) {
         checkDepotPath(ent.inplaceResources[i].DepotPath, `inplaceResources[${i}]`);
     }
-    for (let i = 0; i < ent.resolvedDependencies.length; i++) {
-        checkDepotPath(ent.resolvedDependencies[i].DepotPath, `resolvedDependencies[${i}]`);
-    }
-    
+
     if (entSettings.checkDynamicAppearanceTag && (hasEmptyAppearanceName || isUsingSubstitution) && ent.appearances?.length) {
         const visualTagList = ent.visualTagsSchema?.Data?.visualTags?.tags || [];
         // Do we have a visual tag 'DynamicAppearance'?
         if (!visualTagList.map((tag) => stringifyPotentialCName(tag)).includes('DynamicAppearance')) {
-            Logger.Info('If you are using dynamic appearances, you need to add the DynamicAppearance visualTag to the root entity.'
-            + ' If you don\'t know what that means, check if your appearance names are empty or "None".' + 
-                ' If everything is fine, ignore this warning.');            
+            Logger.Info('If you are using dynamic appearances, you need to add the "DynamicAppearance" visualTag to the root entity.'
+                + ' If you don\'t know what that means, check if your appearance names are empty or "None".' +
+                ' If everything is fine, ignore this warning.');
         }
     }
 
@@ -1254,14 +1298,16 @@ function checkMeshMaterialIndices(mesh) {
 }
 
 export function validateMeshFile(mesh, _meshSettings) {
+    // check if settings are enabled
     if (!_meshSettings?.Enabled) return;
-    if (mesh["Data"] && mesh["Data"]["RootChunk"]) {
-        return validateMeshFile(mesh["Data"]["RootChunk"], _meshSettings);
-    }
-    
+
+    // check if file needs to be called recursively or is invalid
+    if (mesh?.Data?.RootChunk) return validateMeshFile(mesh.Data.RootChunk, _meshSettings);
+    if (checkIfFileIsBroken(mesh, 'mesh')) return;
+
     meshSettings = _meshSettings;
     resetInternalFlagsAndCaches();
-    
+
     checkMeshMaterialIndices(mesh);
 
     if (mesh.localMaterialBuffer.materials !== null) {
@@ -1346,7 +1392,12 @@ export function validateMeshFile(mesh, _meshSettings) {
  */
     let miSettings = {};
     export function validateMiFile(mi, _miSettings) {
+        // check if enabled in settings
         if (!_miSettings.Enabled) return;
+
+        // check if file is valid (prevent exceptions)
+        if (checkIfFileIsBroken(mi, 'mi')) return;
+
         miSettings = _miSettings;
         resetInternalFlagsAndCaches();
         _validateMiFile(mi, '');
@@ -1382,18 +1433,21 @@ export function validateMeshFile(mesh, _meshSettings) {
  * ===============================================================================================================
  */
 
-export function validateCsvFile(csvData, csvSettings) {    
+export function validateCsvFile(csvData, csvSettings) {
+    // check if enabled in settings
     if (!csvSettings.Enabled) return;
 
-    if (csvData["Data"] && csvData["Data"]["RootChunk"]) {
-        return validateCsvFile(csvData["Data"]["RootChunk"], csvSettings);
-    }
+    // check if needs to be called recursively
+    if (csvData?.Data?.RootChunk) return validateCsvFile(csvData.Data.RootChunk, csvSettings);
+
+    // check if file is valid
+    if (checkIfFileIsBroken(csvData, 'csv')) return;
 
     resetInternalFlagsAndCaches();
-    
+
     // check if we have invalid depot paths (mixing up a json and a csv maybe) 
-    let potentiallyInvalidFactoryPaths = []; 
-    
+    let potentiallyInvalidFactoryPaths = [];
+
     for (let i = 0; i < csvData.compiledData.length; i++) {
         const element = csvData.compiledData[i];
         const potentialName = element.length > 0 ? `${i} ${element[0]}` : `${i}` || `${i}`;
@@ -1401,7 +1455,7 @@ export function validateCsvFile(csvData, csvSettings) {
         // Check if it's a file path
         if (potentialPath) {
             if (!/^(.+)([\/\\])([^\/]+)$/.test(potentialPath)) {
-                potentiallyInvalidFactoryPaths.push(`${potentialName}: ${potentialPath}`);                
+                potentiallyInvalidFactoryPaths.push(`${potentialName}: ${potentialPath}`);
             } else if (!wkit.FileExists(potentialPath)) {
                 Logger.Warning(`${potentialName}: ${potentialPath} seems to be a file path, but can't be found in project or game files`);                
             }
@@ -1420,20 +1474,24 @@ export function validateCsvFile(csvData, csvSettings) {
 //#region json
 
 export function validateJsonFile(jsonData, jsonSettings) {
-    if (jsonData["Data"] && jsonData["Data"]["RootChunk"]) {
-        return validateJsonFile(jsonData["Data"]["RootChunk"], jsonSettings);
-    }
-    
+    // check if it's enabled
+    if (!jsonSettings?.Enabled) return;
+
+    // check if the file structure is valid / needs to be called recursively
+    if (jsonData?.Data?.RootChunk) return validateJsonFile(jsonData.Data.RootChunk, jsonSettings);
+    if (checkIfFileIsBroken(jsonData, 'json')) return;
+
+    resetInternalFlagsAndCaches();
+
     const duplicatePrimaryKeys = [];
     const secondaryKeys = [];
     const femaleTranslations = [];
     const maleTranslations = [];
-    const emptyFemaleVariants = [];    
-    
+    const emptyFemaleVariants = [];
 
     for (let i = 0; i < jsonData.root.Data.entries.length; i++) {
         const element = jsonData.root.Data.entries[i];
-        
+
         const potentialFemaleVariant = element.length > 0 ? element[0] : '' || '';
         const potentialMaleVariant = element.length > 1 ? element[1] : '' || '';
         const potentialPrimaryKey = element.length > 2 ? element[2] : '' || '';
@@ -1469,16 +1527,15 @@ export function validateJsonFile(jsonData, jsonSettings) {
         if (duplicatePrimaryKeys.length) {
             Logger.Warning('You have duplicate primary keys in your file. Entries will overwrite each other, '
                 + 'unless you set this value to 0');
-        }                
+        }
         const duplicateKeys = secondaryKeys
             .filter((path, i, array) => !!path && array.indexOf(path) !== i) // filter out unique keys 
             .filter((path, i, array) => !!path && array.indexOf(path) === i); // filter out duplicates
-        
+
         if (duplicateKeys?.length) {
             Logger.Warning('You have duplicate secondary keys in your file. The following entries will overwrite each other:'
-                + duplicateKeys.length === 1 ? `${duplicateKeys}` : `[ ${duplicateKeys.join(", ")} ]`);            
+            + duplicateKeys.length === 1 ? `${duplicateKeys}` : `[ ${duplicateKeys.join(", ")} ]`);
         }
-            
     } 
     
     if (jsonSettings.checkEmptyFemaleVariant && emptyFemaleVariants.length > 0) {
@@ -1680,16 +1737,20 @@ function workspotFile_SetIndexOrder(rootEntry) {
 }
 
 export function validateWorkspotFile(workspot, _workspotSettings) {
-    if (workspot["Data"] && workspot["Data"]["RootChunk"]) {
-        return validateWorkspotFile(workspot["Data"]["RootChunk"], _workspotSettings);
-    }
+    // check if enabled
+    if (!_workspotSettings?.Enabled) return;
+
+    // check if file is valid/needs to be called recursively
+    if (workspot?.Data?.RootChunk) return validateWorkspotFile(workspot.Data.RootChunk, _workspotSettings);
+    if (checkIfFileIsBroken(workspot, 'workspot')) return;
 
     workspotSettings = _workspotSettings;
-    if (workspotSettings.fixIndexOrder) {
-        workspotSettings.checkIdDuplication = false; 
-    }
+
+    // If we're auto-fixing index order, we don't need to fix ID duplication anymore
+    workspotSettings.checkIdDuplication = workspotSettings.checkIdDuplication && !workspotSettings.fixIndexOrder;
+
     resetInternalFlagsAndCaches();
-    
+
     const workspotTree = workspot.workspotTree;
 
     const finalAnimsets = workspotTree.Data.finalAnimsets || [];
@@ -1764,21 +1825,22 @@ export function validateWorkspotFile(workspot, _workspotSettings) {
 
 //#region inkatlas
 export function validateInkatlasFile(inkatlas, _inkatlasSettings) {
+    if (!_inkatlasSettings?.Enabled) return;
     if (inkatlas["Data"] && inkatlas["Data"]["RootChunk"]) {
         return validateWorkspotFile(workspot["Data"]["RootChunk"], _inkatlasSettings);
     }
-    if (!_inkatlasSettings.Enabled) {
+    if (checkIfFileIsBroken(inkatlas, 'inkatlas')) {
         return;
     }
-    
+
     let depotPath;
     if (_inkatlasSettings.CheckDynamicTexture) {
         depotPath = stringifyPotentialCName(inkatlas.dynamicTexture?.DepotPath);
         checkDepotPath(depotPath, 'inkatlas.dynamicTexture', true);
         depotPath = stringifyPotentialCName(inkatlas.dynamicTextureSlot?.texture?.DepotPath);
-        checkDepotPath(depotPath, 'inkatlas.dynamicTextureSlot.texture', true); 
+        checkDepotPath(depotPath, 'inkatlas.dynamicTextureSlot.texture', true);
         depotPath = stringifyPotentialCName(inkatlas.texture?.DepotPath);
-        checkDepotPath(depotPath, 'inkatlas.dynamicTextureSlot.texture', true);        
+        checkDepotPath(depotPath, 'inkatlas.dynamicTextureSlot.texture', true);
     }
 
 
