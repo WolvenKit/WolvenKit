@@ -309,6 +309,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public ObservableCollectionExtended<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
 
+    // Fix annoying "Property not found" error spam
+    public bool IsDeletable => true;
+
     [ObservableProperty] private string? _value;
 
     [ObservableProperty] private string? _descriptor;
