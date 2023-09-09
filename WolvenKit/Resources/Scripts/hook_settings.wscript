@@ -1,7 +1,17 @@
 // @version 1.0
 
+/* 
+ * See the documentation for more info:
+ * https://wiki.redmodding.org/wolvenkit/wolvenkit-app/file-validation
+ */
 const Settings = {
-	Enabled: true,
+    Enabled: true,
+    /*
+     * Under certain circumstances, file validation can correct mistakes in the files.
+     * Set this to "true" to disable the feature for good.
+     */
+    DisableAutofix: false,
+    /* .anims files */
     Anims: {
         /*
          * Set this to "false" to disable file validation for .anims files.
@@ -161,10 +171,17 @@ const Settings = {
          */
         Enabled: true,
         /*
-         * Disable reordering of file indices in the workspot. 
-         * (This feature requires that you close and reopen your file after saving, which the message will tell you about)
+         * Disable reordering of file indices in the workspot. Will do nothing if:
+         * - Settings.DisableAutofix is true
          */
         fixIndexOrder: true,
+
+        /*
+         * Disable reordering of file indices in the workspot. Will do nothing if: 
+         * - Settings.DisableAutofix is true
+         * - Settings.Workspot.fixIndexOrder is false
+         */
+        autoReopenFile: false,
 
         /*
          * Set this to "false" to suppress the warning "Items from .anim files not found in .workspot:"
