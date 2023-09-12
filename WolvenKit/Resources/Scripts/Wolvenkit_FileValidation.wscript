@@ -1050,6 +1050,10 @@ export function validateEntFile(ent, _entSettings) {
         isDynamicAppearance = true
     }
 
+    if (visualTagList.some((tag) => tag.startsWith('hide'))) {
+        Logger.Warnong('Your .ent file has visual tags to hide chunkmasks, but these will only work inside the .app file!');
+    }
+
     const isRootEntity = isDynamicAppearance || (ent.appearances?.length || 0) > 0;
 
 
