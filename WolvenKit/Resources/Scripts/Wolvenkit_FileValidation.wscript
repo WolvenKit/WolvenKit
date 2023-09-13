@@ -453,25 +453,30 @@ function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursive
     if (undefined !== meshesByEntityPath[entityDepotPath]) {
         return;
     }
-    
+
     const meshesInEntityFile = [];
-    if (validateRecursively) {        
-        const fileContent = wkit.LoadGameFileFromProject(entityDepotPath, 'json');
-        
-        // fileExists has been checked in validatePartsOverride
-        const entity = TypeHelper.JsonParse(fileContent);
-        const components = entity && entity.Data && entity.Data.RootChunk ? entity.Data.RootChunk.components || [] : [];
-        isInvalidVariantComponent = false;
-        for (let i = 0; i < components.length; i++) {
-            const component = components[i];
-            entFile_appFile_validateComponent(component, i, validateRecursively, `${info}.components[${i}]`);
-            const meshPath = component.mesh ? stringifyPotentialCName(component.mesh.DepotPath) : '';
-            if (meshPath && !meshesInEntityFile.includes(meshPath)) {
-                meshesInEntityFile.push(meshPath);
+    if (validateRecursively) {
+        try {
+            const fileContent = wkit.LoadGameFileFromProject(entityDepotPath, 'json');
+
+            // fileExists has been checked in validatePartsOverride
+            const entity = TypeHelper.JsonParse(fileContent);
+            const components = entity && entity.Data && entity.Data.RootChunk ? entity.Data.RootChunk.components || [] : [];
+            isInvalidVariantComponent = false;
+            for (let i = 0; i < components.length; i++) {
+                const component = components[i];
+                entFile_appFile_validateComponent(component, i, validateRecursively, `${info}.components[${i}]`);
+                const meshPath = component.mesh ? stringifyPotentialCName(component.mesh.DepotPath) : '';
+                if (meshPath && !meshesInEntityFile.includes(meshPath)) {
+                    meshesInEntityFile.push(meshPath);
+                }
             }
-        } 
+        } catch (err) {
+            Logger.Error(`Couldn't load file from depot path: ${entityDepotPath} (${err.message})`);
+            Logger.Info(`\tThat can happen if you use a root entity instead of a mesh entity.`);
+        }
     }
-    
+
     meshesByEntityPath[entityDepotPath] = meshesInEntityFile;
 
 }
@@ -1045,6 +1050,10 @@ export function validateEntFile(ent, _entSettings) {
         isDynamicAppearance = true
     }
 
+    if (visualTagList.some((tag) => tag.startsWith('hide'))) {
+        Logger.Warnong('Your .ent file has visual tags to hide chunkmasks, but these will only work inside the .app file!');
+    }
+
     const isRootEntity = isDynamicAppearance || (ent.appearances?.length || 0) > 0;
 
 
@@ -1297,6 +1306,12 @@ function checkMeshMaterialIndices(mesh) {
     }
 }
 
+function ignoreChunkMaterialName(materialName) {
+    if (!materialName || !materialName.endsWith) return false;
+    const name = materialName.toLowerCase();
+    return name.includes("none") || name.includes("invis") || name.includes("hide") || name.includes("hidden");
+}
+
 export function validateMeshFile(mesh, _meshSettings) {
     // check if settings are enabled
     if (!_meshSettings?.Enabled) return;
@@ -1361,14 +1376,14 @@ export function validateMeshFile(mesh, _meshSettings) {
         let invisibleSubmeshes = [];
         let appearance = mesh.appearances[i].Data;
         const appearanceName = stringifyPotentialCName(appearance.name);
-        if (numSubMeshes > appearance.chunkMaterials.length) {
+        if (appearanceName && !PLACEHOLDER_NAME_REGEX.test(appearanceName) && numSubMeshes > (appearance.chunkMaterials || []).length) {
             Logger.Warning(`Appearance ${appearanceName} has only ${appearance.chunkMaterials.length} of ${numSubMeshes} submesh appearances assigned. Meshes without appearances will render as invisible.`);
         }
 
         for (let j = 0; j < appearance.chunkMaterials.length; j++) {
-            const chunkMaterialName = stringifyPotentialCName(appearance.chunkMaterials[j]) || ''; 
-            if (chunkMaterialName && chunkMaterialName !== "None" && chunkMaterialName !== "none" && !(chunkMaterialName in materialNames)) {
-                invisibleSubmeshes.push(`submesh ${j}: ${chunkMaterialName}`);                
+            const chunkMaterialName = stringifyPotentialCName(appearance.chunkMaterials[j]) || '';
+            if (!ignoreChunkMaterialName(chunkMaterialName) && !(chunkMaterialName in materialNames)) {
+                invisibleSubmeshes.push(`submesh ${j}: ${chunkMaterialName}`);
             }
         }
         if (invisibleSubmeshes.length) {
