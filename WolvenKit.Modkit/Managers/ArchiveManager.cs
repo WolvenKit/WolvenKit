@@ -328,23 +328,32 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             ModArchives.Clear();
 
-            var modsDirs = new DirectoryInfo[]
-            {
-                new(Path.Combine(di.Parent.Parent.FullName, "mods")),
-                new(Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "mod")),
-            };
+            var redModBasePath = Path.Combine(di.Parent.Parent.FullName, "mods");
+            var legacyModPath = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "mod");
 
             var files = new List<string>();
-            foreach (var modsDir in modsDirs)
+            if (Directory.Exists(redModBasePath))
             {
-                if (!modsDir.Exists)
+                foreach (var redModPath in Directory.GetDirectories(redModBasePath))
                 {
-                    continue;
-                }
+                    var archiveDir = Path.Combine(redModPath, "archives");
+                    if (!Directory.Exists(archiveDir))
+                    {
+                        continue;
+                    }
 
-                foreach (var file in Directory.GetFiles(modsDir.FullName, "*.archive", SearchOption.AllDirectories))
+                    foreach (var archiveFile in Directory.GetFiles(archiveDir, "*.archive"))
+                    {
+                        files.Add(archiveFile);
+                    }
+                }
+            }
+
+            if (Directory.Exists(legacyModPath))
+            {
+                foreach (var archiveFile in Directory.GetFiles(legacyModPath, "*.archive"))
                 {
-                    files.Add(file);
+                    files.Add(archiveFile);
                 }
             }
 
