@@ -36,8 +36,8 @@ namespace WolvenKit.Common
 
         public void LoadGameArchives(FileInfo executable, bool rebuildtree = true);
         public void LoadArchive(string path, bool ispatch = false);
-        public void LoadModArchive(string filename);
-        public void LoadModsArchives(FileInfo executable);
+        public void LoadModArchive(string filename, bool analyzeFiles = true);
+        public void LoadModsArchives(FileInfo executable, bool analyzeFiles = true);
 
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
         public IEnumerable<FileEntry> GetFiles();

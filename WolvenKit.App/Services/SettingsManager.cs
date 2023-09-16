@@ -50,7 +50,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
             nameof(ShowReferenceGraph),
-            nameof(GameLanguage)
+            nameof(GameLanguage),
+            nameof(AnalyzeModArchives)
             )
           .Subscribe(_ =>
           {
@@ -226,6 +227,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     [property: Browsable(false)]
     private Dictionary<string, bool>? _scriptStatus;
+
+    [Display(Name = "Check mod archives for file names and invalid files", GroupName = "Cyberpunk")] 
+    [ObservableProperty]
+    private bool _analyzeModArchives;
 
     #endregion properties
 

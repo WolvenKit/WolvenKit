@@ -43,9 +43,9 @@ namespace WolvenKit.Common.Model
 
         public abstract void LoadArchive(string path, bool ispatch = false);
 
-        public abstract void LoadModArchive(string filename);
+        public abstract void LoadModArchive(string filename, bool analyzeFiles = true);
 
-        public abstract void LoadModsArchives(FileInfo executable);
+        public abstract void LoadModsArchives(FileInfo executable, bool analyzeFiles = true);
 
         protected static string GetModFolder(string path)
         {

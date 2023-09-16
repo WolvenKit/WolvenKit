@@ -37,6 +37,7 @@ public class SettingsDto : ISettingsDto
         GameLanguage = settings.GameLanguage;
         LaunchProfiles = settings.LaunchProfiles;
         ScriptStatus = settings.ScriptStatus;
+        AnalyzeModArchives = settings.AnalyzeModArchives;
         
         if (settings.SettingsVersion < 2)
         {
@@ -69,6 +70,7 @@ public class SettingsDto : ISettingsDto
     public EGameLanguage GameLanguage { get; set; } = EGameLanguage.en_us;
     public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
     public Dictionary<string, bool>? ScriptStatus { get; set; }
+    public bool AnalyzeModArchives { get; set; } = true;
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -102,6 +104,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.LaunchProfiles = LaunchProfiles;
         settingsManager.ScriptStatus = ScriptStatus;
         settingsManager.GameLanguage = GameLanguage;
+        settingsManager.AnalyzeModArchives = AnalyzeModArchives;
 
         return settingsManager;
     }

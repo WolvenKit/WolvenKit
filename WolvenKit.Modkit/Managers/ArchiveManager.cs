@@ -262,7 +262,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <param name="filename">
         /// file to process
         /// </param>
-        public override void LoadModArchive(string filename)
+        public override void LoadModArchive(string filename, bool analyzeFiles = true)
         {
             if (ModArchives.Lookup(filename).HasValue)
             {
@@ -277,30 +277,33 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var importError = false;
-            foreach (var (_, gameFile) in archive.Files)
+            if (analyzeFiles)
             {
-                try
+                var importError = false;
+                foreach (var (_, gameFile) in archive.Files)
                 {
-                    using var ms = new MemoryStream();
-                    archive.ExtractFile(gameFile, ms);
-
-                    if (_wolvenkitFileService.TryReadRed4FileHeaders(ms, out var info))
+                    try
                     {
-                        info.GetImports();
+                        using var ms = new MemoryStream();
+                        archive.ExtractFile(gameFile, ms);
+
+                        if (_wolvenkitFileService.TryReadRed4FileHeaders(ms, out var info))
+                        {
+                            info.GetImports();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        importError = true;
+                        _logger.Debug($"Error while loading the following mod file: {gameFile.FileName}");
                     }
                 }
-                catch (Exception)
-                {
-                    importError = true;
-                    _logger.Debug($"Error while loading the following mod file: {gameFile.FileName}");
-                }
-            }
-            archive.ReleaseFileHandle();
+                archive.ReleaseFileHandle();
 
-            if (importError)
-            {
-                _logger.Warning($"Error while loading the following mod archive: {filename}");
+                if (importError)
+                {
+                    _logger.Warning($"Error while loading the following mod archive: {filename}");
+                }
             }
 
             ModArchives.AddOrUpdate(archive);
@@ -309,7 +312,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <summary>
         /// Loads bundles from specified mods and dlc folder
         /// </summary>
-        public override void LoadModsArchives(FileInfo executable)
+        public override void LoadModsArchives(FileInfo executable, bool analyzeFiles = true)
         {
             var di = executable.Directory;
             if (di?.Parent?.Parent is null)
@@ -350,7 +353,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             foreach (var file in files)
             {
-                LoadModArchive(file);
+                LoadModArchive(file, analyzeFiles);
             }
 
             foreach (var modArchive in ModArchives.Items)

@@ -59,7 +59,7 @@ public partial class ConsoleFunctions
 
         #endregion
 
-        _archiveManager.LoadModsArchives(gameExe);
+        _archiveManager.LoadModsArchives(gameExe, false);
         var mods = _archiveManager.ModArchives.Items.ToList();
 
         // TODO get correct redmod load order
