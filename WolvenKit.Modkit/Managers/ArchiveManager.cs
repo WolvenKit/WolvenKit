@@ -382,6 +382,56 @@ namespace WolvenKit.RED4.CR2W.Archive
             IsManagerLoaded = true;
         }
 
+        public override void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true)
+        {
+            if (!Directory.Exists(archiveBasePath))
+            {
+                return;
+            }
+
+            IsManagerLoading = true;
+
+            var files = new List<string>();
+            foreach (var archiveFile in Directory.GetFiles(archiveBasePath, "*.archive", SearchOption.AllDirectories))
+            {
+                files.Add(archiveFile);
+            }
+
+            if (files.Count == 0)
+            {
+                return;
+            }
+
+            files.Sort(string.CompareOrdinal);
+            files.Reverse();
+
+            foreach (var file in files)
+            {
+                LoadModArchive(file, analyzeFiles);
+            }
+
+            foreach (var modArchive in ModArchives.Items)
+            {
+                if (!files.Contains(modArchive.ArchiveAbsolutePath))
+                {
+                    continue;
+                }
+
+                modArchive.ArchiveRelativePath = Path.GetRelativePath(archiveBasePath, modArchive.ArchiveAbsolutePath);
+            }
+
+            RebuildModRoot();
+
+            _modCache.Edit(innerCache =>
+            {
+                innerCache.Clear();
+                innerCache.Add(ModRoots);
+            });
+
+            IsManagerLoading = false;
+            IsManagerLoaded = true;
+        }
+
         #endregion
 
         /// <summary>

@@ -63,6 +63,9 @@ namespace WolvenKit.Views.HomePage.Pages
                     case nameof(ISettingsManager.MaterialRepositoryPath):
                         propertyItem.Editor = new Controls.SingleFolderPathEditor();
                         break;
+                    case nameof(ISettingsManager.ExtraModDirPath):
+                        propertyItem.Editor = new Controls.SingleFolderPathEditor();
+                        break;
                     case nameof(ISettingsDto.ThemeAccentString):
                         propertyItem.Editor = new BrushEditor();
                         break;

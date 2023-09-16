@@ -570,6 +570,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 return;
             }
             _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath), _settings.AnalyzeModArchives);
+
+            if (Directory.Exists(_settings.ExtraModDirPath))
+            {
+                _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, _settings.AnalyzeModArchives);
+            }
+
             LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
         }
         else

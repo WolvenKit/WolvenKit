@@ -47,6 +47,8 @@ namespace WolvenKit.Common.Model
 
         public abstract void LoadModsArchives(FileInfo executable, bool analyzeFiles = true);
 
+        public abstract void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true);
+
         protected static string GetModFolder(string path)
         {
             if (path.Split('\\').Length > 3 && path.Split('\\').Contains("content"))

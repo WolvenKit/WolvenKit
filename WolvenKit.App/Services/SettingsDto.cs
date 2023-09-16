@@ -38,6 +38,7 @@ public class SettingsDto : ISettingsDto
         LaunchProfiles = settings.LaunchProfiles;
         ScriptStatus = settings.ScriptStatus;
         AnalyzeModArchives = settings.AnalyzeModArchives;
+        ExtraModDirPath = settings.ExtraModDirPath;
         
         if (settings.SettingsVersion < 2)
         {
@@ -71,6 +72,7 @@ public class SettingsDto : ISettingsDto
     public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
     public Dictionary<string, bool>? ScriptStatus { get; set; }
     public bool AnalyzeModArchives { get; set; } = true;
+    public string? ExtraModDirPath { get; set; }
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -105,6 +107,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ScriptStatus = ScriptStatus;
         settingsManager.GameLanguage = GameLanguage;
         settingsManager.AnalyzeModArchives = AnalyzeModArchives;
+        settingsManager.ExtraModDirPath = ExtraModDirPath;
 
         return settingsManager;
     }

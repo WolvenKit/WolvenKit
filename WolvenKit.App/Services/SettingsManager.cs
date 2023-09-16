@@ -51,7 +51,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowTweakDBIDAsHex),
             nameof(ShowReferenceGraph),
             nameof(GameLanguage),
-            nameof(AnalyzeModArchives)
+            nameof(AnalyzeModArchives),
+            nameof(ExtraModDirPath)
             )
           .Subscribe(_ =>
           {
@@ -231,6 +232,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Check mod archives for file names and invalid files", GroupName = "Cyberpunk")] 
     [ObservableProperty]
     private bool _analyzeModArchives;
+
+    [Display(Name = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
+    [ObservableProperty]
+    private string? _extraModDirPath;
 
     #endregion properties
 
