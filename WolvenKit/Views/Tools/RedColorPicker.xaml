@@ -71,12 +71,13 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top">
                         <Label Content="Hex" />
-                        <colorpicker:HexColorTextBox ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}" />
+                        <colorpicker:HexColorTextBox ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}" ShowAlpha="{Binding ElementName=rcp, Path=ShowAlpha, Mode=TwoWay}" />
                     </DockPanel>
                     <colorpicker:ColorSliders
                         Grid.Row="1"
                         Grid.Column="1"
-                        ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}" />
+                        ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}"
+                        ShowAlpha="{Binding ElementName=rcp, Path=ShowAlpha, Mode=TwoWay}" />
                 </Grid>
             </Border>
         </Popup>

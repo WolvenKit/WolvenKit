@@ -21,6 +21,14 @@ namespace WolvenKit.Views.Tools
             Color.PropertyChanged += OnColorPropertyChanged;
         }
 
+        public bool ShowAlpha
+        {
+            get => (bool)GetValue(ShowAlphaProperty);
+            set => SetValue(ShowAlphaProperty, value);
+        }
+        public static readonly DependencyProperty ShowAlphaProperty = DependencyProperty.Register(
+            nameof(ShowAlpha), typeof(bool), typeof(RedColorPicker), new PropertyMetadata(default(bool)));
+
         public CColor RedColor
         {
             get => (CColor)GetValue(RedColorProperty);
@@ -48,7 +56,7 @@ namespace WolvenKit.Views.Tools
         private void UpdateBrush()
         {
             SetCurrentValue(BrushProperty, new SolidColorBrush(System.Windows.Media.Color.FromArgb(
-                (byte)Math.Round(Color.A),
+                (byte)(ShowAlpha ? Math.Round(Color.A) : 255),
                 (byte)Math.Round(Color.RGB_R),
                 (byte)Math.Round(Color.RGB_G),
                 (byte)Math.Round(Color.RGB_B))));

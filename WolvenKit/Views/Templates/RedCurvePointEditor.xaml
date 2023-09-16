@@ -35,7 +35,7 @@
                     <local:RedFloatEditor RedNumber="{Binding ElementName=uc, Path=Value, Mode=TwoWay}" />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type types:HDRColor}">
-                    <tools:RedColorPicker RedHDRColor="{Binding ElementName=uc, Path=Value, Mode=TwoWay}" />
+                    <tools:RedColorPicker RedHDRColor="{Binding ElementName=uc, Path=Value, Mode=TwoWay}" ShowAlpha="False" />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type types:Vector2}">
                     <local:RedVector2Editor X="{Binding X}" Y="{Binding Y}" />
