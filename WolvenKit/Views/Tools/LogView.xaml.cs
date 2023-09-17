@@ -41,10 +41,10 @@ namespace WolvenKit.Views.Tools
             .DisposeMany()
             .Subscribe(OnNext);
 
-            var firaCode = new FontFamily("Fira Code");
-            if (firaCode != null)
+            var consolas = new FontFamily("Consolas");
+            if (consolas != null)
             {
-                LogRichTextBox.FontFamily = firaCode;
+                LogRichTextBox.FontFamily = consolas;
                 LogRichTextBox.FontSize = 10;
             }
         }
@@ -100,7 +100,7 @@ namespace WolvenKit.Views.Tools
             {
                 LineHeight = 1
             };
-            var run = new Run($"[{DateTime.Now}] {item.RenderMessage()}")
+            var run = new Run($"[{DateTime.Now}] [{level,-9}] {item.RenderMessage()}")
             {
                 Foreground = GetBrushForLevel(level),
                 FontSize = 12,
@@ -127,11 +127,11 @@ namespace WolvenKit.Views.Tools
 
         private static Brush GetBrushForLevel(Logtype level) => level switch
         {
-            Logtype.Normal or Logtype.Debug => Brushes.White,
+            Logtype.Normal or Logtype.Important => Brushes.LightGray,
             Logtype.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
-            Logtype.Warning => (Brush)Application.Current.FindResource("WolvenKitPurple"),
-            Logtype.Important => (Brush)Application.Current.FindResource("WolvenKitYellow"),
-            Logtype.Success => (Brush)Application.Current.FindResource("WolvenKitCyan"),
+            Logtype.Warning => (Brush)Application.Current.FindResource("WolvenKitYellow"),
+            Logtype.Debug => (Brush)Application.Current.FindResource("WolvenKitPurple"),
+            Logtype.Success => Brushes.Green,
 
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
         };
