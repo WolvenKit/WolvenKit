@@ -11,6 +11,7 @@ using Syncfusion.UI.Xaml.TreeView.Engine;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
@@ -83,8 +84,21 @@ namespace WolvenKit.Views.Tools
 
         private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
         {
-            //Locator.Current.GetService<ILoggerService>().Success($"Selected item : {SelectedItems}");
-            
+            foreach (var removedItem in e.RemovedItems)
+            {
+                if (removedItem is ISelectableTreeViewItemModel selectable)
+                {
+                    selectable.IsSelected = false;
+                }
+            }
+
+            foreach (var removedItem in e.AddedItems)
+            {
+                if (removedItem is ISelectableTreeViewItemModel selectable)
+                {
+                    selectable.IsSelected = true;
+                }
+            }
         }
 
         public async void OnCollapsed(object sender, Syncfusion.UI.Xaml.TreeView.NodeExpandedCollapsedEventArgs e)

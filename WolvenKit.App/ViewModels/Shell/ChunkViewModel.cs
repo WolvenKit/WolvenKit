@@ -194,13 +194,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     partial void OnIsSelectedChanged(bool value)
     {
         if (IsSelected && !_propertiesLoaded)
-        CalculateProperties();
+        {
+            CalculateProperties();
+        }
     }
 
     partial void OnIsExpandedChanged(bool value)
     {
         if (IsExpanded && !_propertiesLoaded)
+        {
             CalculateProperties();
+        }
 
         if (IsShiftBeingHeld)
         {
