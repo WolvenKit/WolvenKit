@@ -372,6 +372,20 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
+            if (image.Metadata.Width % 2 != 0 || image.Metadata.Height % 2 != 0)
+            {
+                if (args.Compression != ETextureCompression.TCM_None)
+                {
+                    _loggerService.Error("Image dimension (width and/or height) is an odd number. To import regardless, set Compression to TCM_None at own risk.");
+                    return false;
+                }
+
+                if (args.TextureGroup != GpuWrapApieTextureGroup.TEXG_Generic_Data)
+                {
+                    _loggerService.Warning("Image dimension (width and/or height) is an odd number. Texture might not work as expected.");
+                }
+            }
+
             // create resource
             var bitmap = image.SaveToXBM(args);
 

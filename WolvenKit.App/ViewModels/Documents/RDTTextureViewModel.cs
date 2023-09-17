@@ -123,6 +123,20 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
                 return;
             }
 
+            if (image.Metadata.Width % 2 != 0 || image.Metadata.Height % 2 != 0)
+            {
+                if (bitmap.Setup.Compression != ETextureCompression.TCM_None)
+                {
+                    _loggerService.Error("Image dimension (width and/or height) is an odd number. To import regardless, set Compression to TCM_None at own risk.");
+                    return;
+                }
+
+                if (bitmap.Setup.Group != GpuWrapApieTextureGroup.TEXG_Generic_Data)
+                {
+                    _loggerService.Warning("Image dimension (width and/or height) is an odd number. Texture might not work as expected.");
+                }
+            }
+
             var xbmImportArgs = new XbmImportArgs
             {
                 RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString()),
