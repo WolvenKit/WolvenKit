@@ -1123,7 +1123,7 @@ namespace WolvenKit.Modkit.RED4
             throw new FileNotFoundException(path);
         }
 
-        private (string? materialTemplate, Dictionary<string, object?> valueDict) GetMaterialChain(CMaterialInstance cMaterialInstance, List<ICyberGameArchive> archives, ref Dictionary<string, CMaterialTemplate> mts)
+        private (string? materialTemplate, Dictionary<string, object?> valueDict, bool enableMask) GetMaterialChain(CMaterialInstance cMaterialInstance, List<ICyberGameArchive> archives, ref Dictionary<string, CMaterialTemplate> mts)
         {
             var resultDict = new Dictionary<string, object?>();
 
@@ -1132,14 +1132,14 @@ namespace WolvenKit.Modkit.RED4
             var path = cMaterialInstance.BaseMaterial.DepotPath;
             if (path == ResourcePath.Empty)
             {
-                return (null, resultDict);
+                return (null, resultDict, cMaterialInstance.EnableMask);
             }
 
             while (!Path.GetExtension(path).Contains("mt"))
             {
                 if (path == ResourcePath.Empty)
                 {
-                    return (null, resultDict);
+                    return (null, resultDict, cMaterialInstance.EnableMask);
                 }
 
                 var file = LoadFile(path.ToString().NotNull(), archives);
@@ -1165,7 +1165,6 @@ namespace WolvenKit.Modkit.RED4
                 mt = (CMaterialTemplate)file.RootChunk;
                 mts.Add(spath, mt);
             }
-
 
             foreach (var usedParameter in mt.UsedParameters[2].NotNull())
             {
@@ -1204,12 +1203,12 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            return (path, resultDict);
+            return (path, resultDict, mt.CanBeMasked && cMaterialInstance.EnableMask);
         }
 
         private RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string name, List<ICyberGameArchive> archives, ref Dictionary<string, CMaterialTemplate> mts)
         {
-            var (materialTemplatePath, valueDict) = GetMaterialChain(cMaterialInstance, archives, ref mts);
+            var (materialTemplatePath, valueDict, enableMask) = GetMaterialChain(cMaterialInstance, archives, ref mts);
             if (materialTemplatePath == null)
             {
                 _loggerService.Warning($"Missing path in \"{name}\"");
@@ -1220,6 +1219,7 @@ namespace WolvenKit.Modkit.RED4
                 Name = name,
                 BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath,
                 MaterialTemplate = materialTemplatePath,
+                EnableMask = enableMask,
                 Data = new Dictionary<string, object?>()
             };
 
@@ -1308,7 +1308,7 @@ namespace WolvenKit.Modkit.RED4
                 var chunk = new CMaterialInstance
                 {
                     CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
-                    EnableMask = true,
+                    EnableMask = mat.EnableMask!.Value,
                     ResourceVersion = 4,
                     BaseMaterial = new CResourceReference<IMaterial>(mat.BaseMaterial.NotNull()),
                     Values = new CArray<CKeyValuePair>()
@@ -1345,7 +1345,7 @@ namespace WolvenKit.Modkit.RED4
                     BaseMaterial = new CResourceReference<IMaterial>(mat.BaseMaterial),
                     Values = new CArray<CKeyValuePair>()
                 };
-                var (materialTemplate, valueDict) = GetMaterialChain(fakeMaterialInstance, archives, ref mts);
+                var (materialTemplate, valueDict, enableMask) = GetMaterialChain(fakeMaterialInstance, archives, ref mts);
 
                 if (mt != null)
                 {
