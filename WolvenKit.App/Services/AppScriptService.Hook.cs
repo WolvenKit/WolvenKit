@@ -269,6 +269,10 @@ public partial class AppScriptService
         {
             _loggerService.Error(ex2);
         }
+        finally
+        {
+            engine.Dispose();
+        }
 
         return result;
     }
