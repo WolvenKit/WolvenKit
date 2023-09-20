@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -13,6 +14,8 @@ namespace WolvenKit.Modkit.Scripting;
 
 public partial class ScriptService : ObservableObject
 {
+    private readonly ConcurrentDictionary<string, ScriptFile> _scriptCache = new();
+
     public const string ScriptExtension = "wscript";
 
     protected readonly ILoggerService _loggerService;
@@ -116,7 +119,12 @@ public partial class ScriptService : ObservableObject
 
         foreach (var file in Directory.GetFiles(path, $"*.{ScriptExtension}", SearchOption.AllDirectories))
         {
-            result.Add(new ScriptFile(file));
+            if (!_scriptCache.ContainsKey(file))
+            {
+                _scriptCache.TryAdd(file, new ScriptFile(file));
+            }
+
+            result.Add(_scriptCache[file]);
         }
 
         return result;

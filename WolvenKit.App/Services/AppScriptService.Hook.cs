@@ -72,7 +72,7 @@ public partial class AppScriptService
             var dto = new RedFileDto(cr2wFile);
             dto.Header.ArchiveFileName = filePath;
 
-            var (success, json) = OnSaveExecute(script.Path, extStr, RedJsonSerializer.Serialize(dto));
+            var (success, json) = OnSaveExecute(script, extStr, RedJsonSerializer.Serialize(dto));
             if (success == Enums.EBOOL.UNINITIALZED)
             {
                 return true;
@@ -97,9 +97,9 @@ public partial class AppScriptService
         return true;
     }
 
-    private (Enums.EBOOL, string) OnSaveExecute(string scriptFilePath, string extStr, string json)
+    private (Enums.EBOOL, string) OnSaveExecute(ScriptFile scriptFile, string extStr, string json)
     {
-        var result = HookExecute(scriptFilePath, "onSave", scriptObj => scriptObj.onSave(extStr, json));
+        var result = HookExecute(scriptFile, "onSave", scriptObj => scriptObj.onSave(extStr, json));
 
         if ((bool)result[NoHook])
         {
@@ -133,7 +133,7 @@ public partial class AppScriptService
         {
             if (scriptFile.HookExtension == "global")
             {
-                var (status, newArgs) = OnExportExecute(scriptFile.Path, fileInfo, args);
+                var (status, newArgs) = OnExportExecute(scriptFile, fileInfo, args);
                 if (status == Enums.EBOOL.TRUE)
                 {
                     args = newArgs!;
@@ -142,10 +142,10 @@ public partial class AppScriptService
         }
     }
 
-    private (Enums.EBOOL, GlobalExportArgs?) OnExportExecute(string scriptFilePath, FileInfo fileInfo, GlobalExportArgs args)
+    private (Enums.EBOOL, GlobalExportArgs?) OnExportExecute(ScriptFile scriptFile, FileInfo fileInfo, GlobalExportArgs args)
     {
         var jsonArgs = JsonSerializer.Serialize(args, new JsonSerializerOptions { Converters = { new ImportExportArgsConverter() } });
-        var result = HookExecute(scriptFilePath, "onExport", scriptObj => scriptObj.onExport(fileInfo.FullName, jsonArgs));
+        var result = HookExecute(scriptFile, "onExport", scriptObj => scriptObj.onExport(fileInfo.FullName, jsonArgs));
 
         if ((bool)result[NoHook])
         {
@@ -173,7 +173,7 @@ public partial class AppScriptService
         {
             if (scriptFile.HookExtension == "global")
             {
-                var (status, newArgs) = OnPreImportExecute(scriptFile.Path, rawRelative, args, outDir);
+                var (status, newArgs) = OnPreImportExecute(scriptFile, rawRelative, args, outDir);
                 if (status == Enums.EBOOL.TRUE)
                 {
                     args = newArgs!;
@@ -182,10 +182,10 @@ public partial class AppScriptService
         }
     }
 
-    private (Enums.EBOOL, GlobalImportArgs?) OnPreImportExecute(string scriptFilePath, RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir)
+    private (Enums.EBOOL, GlobalImportArgs?) OnPreImportExecute(ScriptFile scriptFile, RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir)
     {
         var jsonArgs = JsonSerializer.Serialize(args, new JsonSerializerOptions { Converters = { new ImportExportArgsConverter() } });
-        var result = HookExecute(scriptFilePath, "onPreImport", scriptObj => scriptObj.onPreImport(rawRelative, jsonArgs));
+        var result = HookExecute(scriptFile, "onPreImport", scriptObj => scriptObj.onPreImport(rawRelative, jsonArgs));
 
         if ((bool)result[NoHook])
         {
@@ -231,11 +231,11 @@ public partial class AppScriptService
         }
     }
 
-    private Dictionary<string, object> HookExecute(string scriptFilePath, string function, Func<dynamic, dynamic?> action)
+    private Dictionary<string, object> HookExecute(ScriptFile scriptFile, string function, Func<dynamic, dynamic?> action)
     {
         var engine = GetScriptEngine(DefaultHostObject);
 
-        var code = File.ReadAllText(scriptFilePath);
+        var code = scriptFile.GetContent();
 
         var result = new Dictionary<string, object>
         {
@@ -263,7 +263,7 @@ public partial class AppScriptService
         }
         catch (ScriptEngineException ex1)
         {
-            _loggerService.Error($"{ex1.ErrorDetails}\r\nin {scriptFilePath}");
+            _loggerService.Error($"{ex1.ErrorDetails}\r\nin {scriptFile.Path}");
         }
         catch (Exception ex2)
         {

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace WolvenKit.Modkit.Scripting;
@@ -20,6 +21,9 @@ public partial class ScriptFile
 
     public string? Version { get; private set; }
     public string? Author { get; private set; }
+
+    private DateTime _lastModified = DateTime.MinValue;
+    private string _content = string.Empty;
 
     private void GetInfo()
     {
@@ -63,6 +67,20 @@ public partial class ScriptFile
                 }
             }
         }
+    }
+
+    public string GetContent()
+    {
+        var localLastModified = File.GetLastWriteTimeUtc(Path);
+        if (_lastModified >= localLastModified)
+        {
+            return _content;
+        }
+
+        _content = File.ReadAllText(Path);
+        _lastModified = localLastModified;
+
+        return _content;
     }
 
     [GeneratedRegex("^hook_(.*)$")]
