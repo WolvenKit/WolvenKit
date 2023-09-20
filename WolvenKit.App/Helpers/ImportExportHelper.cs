@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.App.Controllers;
+using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -50,14 +51,14 @@ public class ImportExportHelper
 
     #region FinalizeArgs
 
-    public bool Finalize(GlobalExportArgs args) =>
-        Finalize(args.Get<MeshExportArgs>()) &&
+    public bool Finalize(GlobalExportArgs args, FileSystemArchive projectArchive) =>
+        Finalize(args.Get<MeshExportArgs>(), projectArchive) &&
         Finalize(args.Get<MorphTargetExportArgs>()) &&
         Finalize(args.Get<OpusExportArgs>()) &&
         Finalize(args.Get<EntityExportArgs>()) &&
         Finalize(args.Get<AnimationExportArgs>());
 
-    public bool Finalize(MeshExportArgs args)
+    public bool Finalize(MeshExportArgs args, FileSystemArchive projectArchive)
     {
         if (_projectManager.ActiveProject is not { } proj)
         {
@@ -70,8 +71,8 @@ public class ImportExportHelper
         {
             args.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
         }
+        args.Archives.Insert(0, projectArchive);
 
-        args.Archives.Insert(0, proj.AsArchive());
         args.MaterialRepo = _settingsManager.MaterialRepositoryPath;
 
         return true;
@@ -132,26 +133,20 @@ public class ImportExportHelper
         return true;
     }
 
-    public bool Finalize(ImportArgs mainArgs, GlobalImportArgs args)
+    public bool Finalize(ImportArgs mainArgs, GlobalImportArgs args, FileSystemArchive projectArchive)
     {
         if (mainArgs is ReImportArgs && !Finalize(args.Get<ReImportArgs>()))
         {
             return false;
         }
 
-        return Finalize(args.Get<GltfImportArgs>());
+        return Finalize(args.Get<GltfImportArgs>(), projectArchive);
     }
 
-    public bool Finalize(GltfImportArgs args)
+    public bool Finalize(GltfImportArgs args, FileSystemArchive projectArchive)
     {
-        if (_projectManager.ActiveProject is not { } proj)
-        {
-            _loggerService.Error("No project loaded");
-            return false;
-        }
-
         args.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-        args.Archives.Insert(0, proj.AsArchive());
+        args.Archives.Insert(0, projectArchive);
 
         return true;
     }

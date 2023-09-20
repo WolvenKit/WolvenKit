@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
@@ -94,6 +95,13 @@ public partial class ExportViewModel : AbstractExportViewModel
 
     protected override async Task ExecuteProcessBulk(bool all = false)
     {
+        var proj = _projectManager.ActiveProject;
+        if (proj == null)
+        {
+            _loggerService.Error("No project loaded!");
+            return;
+        }
+
         IsProcessing = true;
         _watcherService.IsSuspended = true;
         var progress = 0;
@@ -105,6 +113,8 @@ public partial class ExportViewModel : AbstractExportViewModel
         //prepare a list of failed items
         var failedItems = new List<string>();
 
+        var projectArchive = proj.AsArchive();
+
         var toBeExported = Items
             .Where(_ => all || _.IsChecked)
             .Cast<ExportableItemViewModel>()
@@ -112,7 +122,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         total = toBeExported.Count;
         foreach (var item in toBeExported)
         {
-            if (await ExportSingleAsync(item))
+            if (await ExportSingleAsync(item, projectArchive))
             {
                 sucessful++;
             }
@@ -147,14 +157,8 @@ public partial class ExportViewModel : AbstractExportViewModel
         _progressService.Completed();
     }
 
-    private async Task<bool> ExportSingleAsync(ExportableItemViewModel item)
+    private async Task<bool> ExportSingleAsync(ExportableItemViewModel item, FileSystemArchive projectArchive)
     {
-        var proj = _projectManager.ActiveProject;
-        if (proj == null)
-        {
-            return false;
-        }
-
         var fi = new FileInfo(item.BaseFile);
         if (!fi.Exists)
         {
@@ -167,12 +171,12 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
         var settings = new GlobalExportArgs().Register(e);
-        if (!_importExportHelper.Finalize(settings))
+        if (!_importExportHelper.Finalize(settings, projectArchive))
         {
             return false;
         }
 
-        return await _importExportHelper.Export(fi, settings, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory));
+        return await _importExportHelper.Export(fi, settings, new DirectoryInfo(projectArchive.Project.ModDirectory), new DirectoryInfo(projectArchive.Project.RawDirectory));
     }
 
     protected override async Task LoadFilesAsync()

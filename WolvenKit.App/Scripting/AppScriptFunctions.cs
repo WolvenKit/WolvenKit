@@ -10,6 +10,7 @@ using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
@@ -374,6 +375,8 @@ public class AppScriptFunctions : ScriptFunctions
             return;
         }
 
+        var projectArchive = proj.AsArchive();
+
         var fileDict = new Dictionary<FileInfo, GlobalExportArgs>();
         foreach (var entry in fileList)
         {
@@ -381,20 +384,20 @@ public class AppScriptFunctions : ScriptFunctions
             {
                 if (settingsPair is [string filePath1])
                 {
-                    AddFile(filePath1, defaultSettings);
+                    AddFile(filePath1, projectArchive, defaultSettings);
                     continue;
                 }
 
                 if (settingsPair is [string filePath2, ScriptObject settings])
                 {
-                    AddFile(filePath2, settings);
+                    AddFile(filePath2, projectArchive, settings);
                     continue;
                 }
             }
 
             if (entry is string fileStr)
             {
-                AddFile(fileStr, defaultSettings);
+                AddFile(fileStr, projectArchive, defaultSettings);
                 continue;
             }
 
@@ -413,7 +416,7 @@ public class AppScriptFunctions : ScriptFunctions
             }
         });
 
-        void AddFile(string filePath, ScriptObject? settings = null)
+        void AddFile(string filePath, FileSystemArchive projectArchive, ScriptObject? settings = null)
         {
             var fileInfo = new FileInfo(Path.Combine(proj.ModDirectory, filePath));
             if (!fileInfo.Exists)
@@ -429,7 +432,7 @@ public class AppScriptFunctions : ScriptFunctions
             }
 
             var globalExport = settings != null ? GetGlobalExportArgs(settings) : new GlobalExportArgs();
-            _importExportHelper.Finalize(globalExport);
+            _importExportHelper.Finalize(globalExport, projectArchive);
 
             fileDict.Add(fileInfo, globalExport);
         }

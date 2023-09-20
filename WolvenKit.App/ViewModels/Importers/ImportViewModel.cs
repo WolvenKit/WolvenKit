@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
@@ -121,6 +122,18 @@ public partial class ImportViewModel : AbstractImportViewModel
 
     protected override async Task ExecuteProcessBulk(bool all = false)
     {
+        if (_gameController.GetController() is not RED4Controller)
+        {
+            return;
+        }
+
+        var proj = _projectManager.ActiveProject;
+        if (proj is null)
+        {
+            _loggerService.Error("No project loaded!");
+            return;
+        }
+
         if (!Items.Any())
         {
             return;
@@ -137,6 +150,8 @@ public partial class ImportViewModel : AbstractImportViewModel
         //prepare a list of failed items
         var failedItems = new List<string>();
 
+        var projectArchive = proj.AsArchive();
+
         var toBeImported = Items
             .Where(_ => all || _.IsChecked)
             .Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString()))
@@ -145,7 +160,7 @@ public partial class ImportViewModel : AbstractImportViewModel
         total = toBeImported.Count;
         foreach (var item in toBeImported)
         {
-            if (await ImportSingleAsync(item))
+            if (await ImportSingleAsync(item, projectArchive))
             {
                 sucessful++;
             }
@@ -209,19 +224,8 @@ public partial class ImportViewModel : AbstractImportViewModel
         return Task.FromResult(false);
     }
 
-    private async Task<bool> ImportSingleAsync(ImportableItemViewModel item)
+    private async Task<bool> ImportSingleAsync(ImportableItemViewModel item, FileSystemArchive projectArchive)
     {
-        if (_gameController.GetController() is not RED4Controller)
-        {
-            return false;
-        }
-
-        var proj = _projectManager.ActiveProject;
-        if (proj is null)
-        {
-            return false;
-        }
-
         var fi = new FileInfo(item.BaseFile);
         if (!fi.Exists)
         {
@@ -235,17 +239,17 @@ public partial class ImportViewModel : AbstractImportViewModel
         }
 
         var settings = new GlobalImportArgs().Register(prop);
-        if (!_importExportHelper.Finalize(prop, settings))
+        if (!_importExportHelper.Finalize(prop, settings, projectArchive))
         {
             return false;
         }
 
-        var rawDir = new DirectoryInfo(proj.RawDirectory);
+        var rawDir = new DirectoryInfo(projectArchive.Project.RawDirectory);
         var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
 
         try
         {
-            return await _importExportHelper.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
+            return await _importExportHelper.Import(redrelative, settings, new DirectoryInfo(projectArchive.Project.ModDirectory));
         }
         catch (Exception e)
         {
