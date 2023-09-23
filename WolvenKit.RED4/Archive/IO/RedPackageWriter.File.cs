@@ -20,6 +20,7 @@ public partial class RedPackageWriter
         _header = new RedPackageHeader
         {
             version = _file.Version,
+            unk1 = _file.Unknown1,
             numSections = 6,
             numComponents = (uint)_file.Chunks.Count
         };
@@ -182,6 +183,7 @@ public partial class RedPackageWriter
     private void WriteHeader()
     {
         _writer.Write(_header.version);
+        _writer.Write(_header.unk1);
         _writer.Write(_header.numSections);
         _writer.Write(_header.numComponents);
 

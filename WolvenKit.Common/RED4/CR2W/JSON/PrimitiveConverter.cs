@@ -1196,7 +1196,7 @@ public class RedPackageConverter : CustomRedConverter<RedPackage>
                         throw new JsonException();
                     }
 
-                    result.Version = reader.GetUInt16();
+                    result.Version = reader.GetByte();
                     break;
                 }
 
