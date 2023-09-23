@@ -65,11 +65,11 @@ public partial class RedPackageWriter : Red4Writer
         var currentDataPosition = BaseStream.Position + (nonDefaultProperties.Count * 8);
         var descStartPosition = BaseStream.Position;
 
+        var compiledPropertyData = cls as IRedCompiledPropertyData;
+
         foreach (var propertyInfo in nonDefaultProperties)
         {
             ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
-
-            var value = cls.GetProperty(propertyInfo.RedName);
 
             string redTypeName;
             if (propertyInfo.IsDynamic)
@@ -93,7 +93,16 @@ public partial class RedPackageWriter : Red4Writer
 
             BaseStream.Position = currentDataPosition;
             // write data, prefixed with size?
-            Write(value);
+            
+            if (compiledPropertyData != null)
+            {
+                compiledPropertyData.CustomWrite(this, propertyInfo.RedName);
+            }
+            else
+            {
+                var value = cls.GetProperty(propertyInfo.RedName);
+                Write(value);
+            }
 
             currentDataPosition = BaseStream.Position;
         }
