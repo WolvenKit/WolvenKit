@@ -1363,10 +1363,17 @@ export function validateMeshFile(mesh, _meshSettings) {
             meshFile_CheckMaterialProperties(material.Data, `preloadLocalMaterials.${materialName}`);
         }
     }
-    
+
+    if (meshSettings.checkExternalMaterialPaths) {
+        mesh.externalMaterials ||= [];
+        for (let i = 0; i < mesh.externalMaterials.length; i++) {
+            const material = mesh.externalMaterials[i];
+            checkDepotPath(material?.DepotPath, `externalMaterials[${i}]`);
+        }
+    }
 
     let numSubMeshes = 0;
-    
+
     // Create RenderResourceBlob if it doesn't exists?
     if (mesh.renderResourceBlob !== "undefined") {
         numSubMeshes = mesh.renderResourceBlob?.Data?.header?.renderChunkInfos?.length;
