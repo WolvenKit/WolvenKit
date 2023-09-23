@@ -140,20 +140,24 @@ const Settings = {
         /*
          * Should file validation check materials along the daisy chain? (Only outside of /base) 
          */
-        validateMaterialsRecursively: true,        
+        validateMaterialsRecursively: true,
         /*
          * If you're using placeholder materials, should file validation warn you about properties in values[]? 
          */
-        validatePlaceholderValues: false,        
+        validatePlaceholderValues: false,
         /*
          * If you're using placeholder materials, should file validation check depot paths? 
          * Incorrect depot paths will cause crashes, so you might want to leave this enabled.
          */
-        validatePlaceholderMaterialPaths: true,        
+        validatePlaceholderMaterialPaths: true,
         /*
          * Should file validation warn you if two of your materials use the same mlsetup?
          */
-        checkDuplicateMlSetupFilePaths: true,        
+        checkDuplicateMlSetupFilePaths: true,
+        /*
+         * Should file validation verify paths to external materials in your mesh?
+         */
+        checkExternalMaterialPaths: true,
     },
     Mi: {
         /*
