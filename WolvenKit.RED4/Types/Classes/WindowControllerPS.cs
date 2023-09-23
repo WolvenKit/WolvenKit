@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WindowControllerPS : DoorControllerPS
 	{
-		[Ordinal(114)] 
+		[Ordinal(117)] 
 		[RED("windowSkillChecks")] 
 		public CHandle<EngDemoContainer> WindowSkillChecks
 		{
@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public WindowControllerPS()
 		{
-			DeviceName = "LocKey#78";
-			TweakDBRecord = "Devices.Window";
-			TweakDBDescriptionRecord = 113890133552;
-
 			PostConstruct();
 		}
 

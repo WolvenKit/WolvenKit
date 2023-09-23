@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class cpExplosiveBarrel : gameDestructibleObject
 	{
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("colliderComponentName")] 
 		public CName ColliderComponentName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("destructionComponentName")] 
 		public CName DestructionComponentName
 		{

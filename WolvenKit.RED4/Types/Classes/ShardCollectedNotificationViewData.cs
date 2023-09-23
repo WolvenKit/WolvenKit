@@ -36,10 +36,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("imageId")] 
+		public TweakDBID ImageId
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
 		public ShardCollectedNotificationViewData()
 		{
-			ItemID = new gameItemID();
-
 			PostConstruct();
 		}
 

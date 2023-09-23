@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public GameplaySettingsDef()
 		{
-			DisableAutomaticSwitchToVehicleTPP = new gamebbScriptID_Bool();
-			EnableVehicleToggleSummonMode = new gamebbScriptID_Bool();
-
 			PostConstruct();
 		}
 

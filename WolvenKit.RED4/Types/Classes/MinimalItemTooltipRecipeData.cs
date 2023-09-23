@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public MinimalItemTooltipRecipeData()
 		{
-			DamageTypes = new();
-			RecipeStats = new();
-
 			PostConstruct();
 		}
 

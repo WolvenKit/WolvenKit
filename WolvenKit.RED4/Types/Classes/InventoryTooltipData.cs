@@ -77,6 +77,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("gameplayDescription")] 
+		public CString GameplayDescription
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("category")] 
 		public CString Category
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("quality")] 
 		public CString Quality
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("itemName")] 
 		public CString ItemName
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("perkRequiredName")] 
 		public CString PerkRequiredName
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("price")] 
 		public CFloat Price
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("buyPrice")] 
 		public CFloat BuyPrice
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("unlockProgress")] 
 		public CFloat UnlockProgress
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("primaryStats")] 
 		public CArray<InventoryTooltipData_StatData> PrimaryStats
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryTooltipData_StatData>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("comparedStats")] 
 		public CArray<InventoryTooltipData_StatData> ComparedStats
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryTooltipData_StatData>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("additionalStats")] 
 		public CArray<InventoryTooltipData_StatData> AdditionalStats
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryTooltipData_StatData>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("randomDamageTypes")] 
 		public CArray<InventoryTooltipData_StatData> RandomDamageTypes
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryTooltipData_StatData>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("recipeAdditionalStats")] 
 		public CArray<InventoryTooltipData_StatData> RecipeAdditionalStats
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryTooltipData_StatData>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("damageType")] 
 		public CEnum<gamedataDamageType> DamageType
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataDamageType>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("isBroken")] 
 		public CBool IsBroken
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("levelRequired")] 
 		public CInt32 LevelRequired
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("attachments")] 
 		public CArray<CName> Attachments
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("specialAbilities")] 
 		public CArray<gameInventoryItemAbility> SpecialAbilities
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameInventoryItemAbility>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("equipArea")] 
 		public CEnum<gamedataEquipmentArea> EquipArea
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("showCyclingDots")] 
 		public CBool ShowCyclingDots
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("numberOfCyclingDots")] 
 		public CInt32 NumberOfCyclingDots
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("selectedCyclingDot")] 
 		public CInt32 SelectedCyclingDot
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("comparedQuality")] 
 		public CEnum<gamedataQuality> ComparedQuality
 		{
@@ -252,7 +260,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
+		[RED("qualityF")] 
+		public CFloat QualityF
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("comparisonQualityF")] 
+		public CFloat ComparisonQualityF
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(34)] 
 		[RED("showIcon")] 
 		public CBool ShowIcon
 		{
@@ -260,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("randomizedStatQuantity")] 
 		public CInt32 RandomizedStatQuantity
 		{
@@ -268,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("itemType")] 
 		public CEnum<gamedataItemType> ItemType
 		{
@@ -276,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataItemType>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("HasPlayerSmartGunLink")] 
 		public CBool HasPlayerSmartGunLink
 		{
@@ -284,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(38)] 
 		[RED("PlayerLevel")] 
 		public CInt32 PlayerLevel
 		{
@@ -292,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(39)] 
 		[RED("PlayerStrenght")] 
 		public CInt32 PlayerStrenght
 		{
@@ -300,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(40)] 
 		[RED("PlayerReflexes")] 
 		public CInt32 PlayerReflexes
 		{
@@ -308,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(41)] 
 		[RED("PlayerStreetCred")] 
 		public CInt32 PlayerStreetCred
 		{
@@ -316,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(42)] 
 		[RED("itemAttachments")] 
 		public CArray<CHandle<gameInventoryItemAttachments>> ItemAttachments
 		{
@@ -324,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameInventoryItemAttachments>>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(43)] 
 		[RED("inventoryItemData")] 
 		public gameInventoryItemData InventoryItemData
 		{
@@ -332,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(44)] 
 		[RED("overrideRarity")] 
 		public CBool OverrideRarity
 		{
@@ -340,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(45)] 
 		[RED("quickhackData")] 
 		public InventoryTooltipData_QuickhackData QuickhackData
 		{
@@ -348,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<InventoryTooltipData_QuickhackData>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(46)] 
 		[RED("grenadeData")] 
 		public CHandle<InventoryTooltiData_GrenadeData> GrenadeData
 		{
@@ -356,7 +380,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryTooltiData_GrenadeData>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(47)] 
+		[RED("cyberdeckData")] 
+		public CHandle<InventoryTooltipData_CyberdeckData> CyberdeckData
+		{
+			get => GetPropertyValue<CHandle<InventoryTooltipData_CyberdeckData>>();
+			set => SetPropertyValue<CHandle<InventoryTooltipData_CyberdeckData>>(value);
+		}
+
+		[Ordinal(48)] 
+		[RED("cyberwareUpgradeData")] 
+		public CHandle<InventoryTooltiData_CyberwareUpgradeData> CyberwareUpgradeData
+		{
+			get => GetPropertyValue<CHandle<InventoryTooltiData_CyberwareUpgradeData>>();
+			set => SetPropertyValue<CHandle<InventoryTooltiData_CyberwareUpgradeData>>(value);
+		}
+
+		[Ordinal(49)] 
 		[RED("displayContext")] 
 		public CEnum<InventoryTooltipDisplayContext> DisplayContext
 		{
@@ -364,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<InventoryTooltipDisplayContext>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(50)] 
 		[RED("parentItemData")] 
 		public CWeakHandle<gameItemData> ParentItemData
 		{
@@ -372,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(51)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
@@ -380,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(52)] 
 		[RED("transmogItem")] 
 		public gameItemID TransmogItem
 		{
@@ -388,7 +428,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(53)] 
+		[RED("managerRef")] 
+		public CWeakHandle<UIInventoryItemsManager> ManagerRef
+		{
+			get => GetPropertyValue<CWeakHandle<UIInventoryItemsManager>>();
+			set => SetPropertyValue<CWeakHandle<UIInventoryItemsManager>>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("statsManager")] 
+		public CHandle<UIInventoryItemStatsManager> StatsManager
+		{
+			get => GetPropertyValue<CHandle<UIInventoryItemStatsManager>>();
+			set => SetPropertyValue<CHandle<UIInventoryItemStatsManager>>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("statsManagerFetched")] 
+		public CBool StatsManagerFetched
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(56)] 
 		[RED("DEBUG_iconErrorInfo")] 
 		public CHandle<DEBUG_IconErrorInfo> DEBUG_iconErrorInfo
 		{
@@ -398,20 +462,6 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryTooltipData()
 		{
-			ItemID = new gameItemID();
-			PrimaryStats = new();
-			ComparedStats = new();
-			AdditionalStats = new();
-			RandomDamageTypes = new();
-			RecipeAdditionalStats = new();
-			Attachments = new();
-			SpecialAbilities = new();
-			ItemType = Enums.gamedataItemType.Invalid;
-			ItemAttachments = new();
-			InventoryItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
-			QuickhackData = new InventoryTooltipData_QuickhackData { AttackEffects = new() };
-			TransmogItem = new gameItemID();
-
 			PostConstruct();
 		}
 

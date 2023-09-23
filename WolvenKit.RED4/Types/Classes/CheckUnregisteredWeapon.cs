@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public CheckUnregisteredWeapon()
 		{
-			PrimaryItemArrayRecordTweakDBID = new();
-			SecondaryItemArrayRecordTweakDBID = new();
-
 			PostConstruct();
 		}
 

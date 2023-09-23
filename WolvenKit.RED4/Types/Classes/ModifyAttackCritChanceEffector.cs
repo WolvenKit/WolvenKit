@@ -5,11 +5,11 @@ namespace WolvenKit.RED4.Types
 	public partial class ModifyAttackCritChanceEffector : ModifyAttackEffector
 	{
 		[Ordinal(0)] 
-		[RED("value")] 
-		public CFloat Value
+		[RED("applicationChanceMods")] 
+		public CArray<CWeakHandle<gamedataStatModifier_Record>> ApplicationChanceMods
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<CArray<CWeakHandle<gamedataStatModifier_Record>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gamedataStatModifier_Record>>>(value);
 		}
 
 		public ModifyAttackCritChanceEffector()

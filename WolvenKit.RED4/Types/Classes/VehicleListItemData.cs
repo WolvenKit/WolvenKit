@@ -28,10 +28,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataUIIcon_Record>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("repairTimeRemaining")] 
+		public CFloat RepairTimeRemaining
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public VehicleListItemData()
 		{
-			Data = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid };
-
 			PostConstruct();
 		}
 

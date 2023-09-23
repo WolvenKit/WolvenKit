@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public PlaceMineEvent()
 		{
-			Position = new Vector4();
-			Normal = new Vector4();
-
 			PostConstruct();
 		}
 

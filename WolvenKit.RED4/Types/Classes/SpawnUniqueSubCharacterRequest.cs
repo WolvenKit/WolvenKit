@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public SpawnUniqueSubCharacterRequest()
 		{
-			DesiredDistance = 3.000000F;
-
 			PostConstruct();
 		}
 

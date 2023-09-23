@@ -38,11 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public RequestCLSStateChangeDeviceOperation()
 		{
-			IsEnabled = true;
-			ToggleOperations = new();
-			Priority = Enums.EPriority.Medium;
-			RemovePreviousRequests = true;
-
 			PostConstruct();
 		}
 

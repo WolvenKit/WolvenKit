@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AlarmLight : BasicDistractionDevice
 	{
-		[Ordinal(100)] 
+		[Ordinal(106)] 
 		[RED("isGlitching")] 
 		public CBool IsGlitching
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public AlarmLight()
 		{
-			ControllerTypeName = "AlarmLightController";
-
 			PostConstruct();
 		}
 

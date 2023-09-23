@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PersonnelSystem : DeviceSystemBase
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("EnableE3QuickHacks")] 
 		public CBool EnableE3QuickHacks
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public PersonnelSystem()
 		{
-			ControllerTypeName = "PersonnelSystemController";
-
 			PostConstruct();
 		}
 

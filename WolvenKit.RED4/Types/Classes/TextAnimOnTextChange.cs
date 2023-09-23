@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public TextAnimOnTextChange()
 		{
-			TextField = new inkTextWidgetReference();
-			AnimationName = "default";
-
 			PostConstruct();
 		}
 

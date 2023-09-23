@@ -60,11 +60,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("dpadAnimProxy")] 
+		public CHandle<inkanimProxy> DpadAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("clickAnimProxy")] 
+		public CHandle<inkanimProxy> ClickAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
 		public CursorGameController()
 		{
-			Margin = new inkMargin();
-			CursorType = "default";
-
 			PostConstruct();
 		}
 

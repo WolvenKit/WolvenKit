@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("deviceActionQueue")] 
+		public CHandle<DeviceActionQueue> DeviceActionQueue
+		{
+			get => GetPropertyValue<CHandle<DeviceActionQueue>>();
+			set => SetPropertyValue<CHandle<DeviceActionQueue>>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
@@ -70,9 +78,6 @@ namespace WolvenKit.RED4.Types
 
 		public UploadProgramProgressEvent()
 		{
-			Duration = 3.000000F;
-			StatPoolType = Enums.gamedataStatPoolType.Invalid;
-
 			PostConstruct();
 		}
 

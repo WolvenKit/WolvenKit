@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BackDoorDeviceBlackboardDef : MasterDeviceBaseBlackboardDef
 	{
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("isInDefaultState")] 
 		public gamebbScriptID_Bool IsInDefaultState
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("shutdownModule")] 
 		public gamebbScriptID_Int32 ShutdownModule
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("bootModule")] 
 		public gamebbScriptID_Int32 BootModule
 		{
@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public BackDoorDeviceBlackboardDef()
 		{
-			IsInDefaultState = new gamebbScriptID_Bool();
-			ShutdownModule = new gamebbScriptID_Int32();
-			BootModule = new gamebbScriptID_Int32();
-
 			PostConstruct();
 		}
 

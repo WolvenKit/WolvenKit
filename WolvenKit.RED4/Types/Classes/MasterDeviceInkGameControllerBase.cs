@@ -20,10 +20,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
+		[Ordinal(18)] 
+		[RED("onCleanPasswordListener")] 
+		public CHandle<redCallbackObject> OnCleanPasswordListener
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("keypadController")] 
+		public CWeakHandle<KeypadDeviceController> KeypadController
+		{
+			get => GetPropertyValue<CWeakHandle<KeypadDeviceController>>();
+			set => SetPropertyValue<CWeakHandle<KeypadDeviceController>>(value);
+		}
+
 		public MasterDeviceInkGameControllerBase()
 		{
-			ThumbnailWidgetsData = new();
-
 			PostConstruct();
 		}
 

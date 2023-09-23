@@ -28,9 +28,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("blockCombat")] 
+		public CBool BlockCombat
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public questForbiddenTrigger_NodeType()
 		{
 			Activate = true;
+			BlockCombat = true;
 
 			PostConstruct();
 		}

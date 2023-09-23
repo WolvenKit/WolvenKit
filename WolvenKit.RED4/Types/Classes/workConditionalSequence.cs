@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class workConditionalSequence : workSequence
 	{
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("multipleConditionOperator")] 
 		public CEnum<workLogicalOperation> MultipleConditionOperator
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<workLogicalOperation>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("conditionList")] 
 		public CArray<CHandle<workIWorkspotCondition>> ConditionList
 		{

@@ -5,54 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class gameuiMinimapContainerController : gameuiMappinsContainerController
 	{
 		[Ordinal(16)] 
-		[RED("visionRadiusVehicle")] 
-		public CFloat VisionRadiusVehicle
+		[RED("settings")] 
+		public CHandle<gameMinimapSettings> Settings
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<CHandle<gameMinimapSettings>>();
+			set => SetPropertyValue<CHandle<gameMinimapSettings>>(value);
 		}
 
 		[Ordinal(17)] 
-		[RED("visionRadiusCombat")] 
-		public CFloat VisionRadiusCombat
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(18)] 
-		[RED("visionRadiusQuestArea")] 
-		public CFloat VisionRadiusQuestArea
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(19)] 
-		[RED("visionRadiusSecurityArea")] 
-		public CFloat VisionRadiusSecurityArea
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(20)] 
-		[RED("visionRadiusInterior")] 
-		public CFloat VisionRadiusInterior
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(21)] 
-		[RED("visionRadiusExterior")] 
-		public CFloat VisionRadiusExterior
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(22)] 
 		[RED("clampedMappinContainer")] 
 		public inkCompoundWidgetReference ClampedMappinContainer
 		{
@@ -60,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(18)] 
 		[RED("unclampedMappinContainer")] 
 		public inkCompoundWidgetReference UnclampedMappinContainer
 		{
@@ -68,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(19)] 
 		[RED("maskWidget")] 
 		public inkMaskWidgetReference MaskWidget
 		{
@@ -76,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkMaskWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(20)] 
 		[RED("playerIconWidget")] 
 		public inkWidgetReference PlayerIconWidget
 		{
@@ -84,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(21)] 
 		[RED("compassWidget")] 
 		public inkWidgetReference CompassWidget
 		{
@@ -92,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(22)] 
 		[RED("worldGeometryContainer")] 
 		public inkCanvasWidgetReference WorldGeometryContainer
 		{
@@ -100,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(23)] 
 		[RED("worldGeometryCache")] 
 		public inkCacheWidgetReference WorldGeometryCache
 		{
@@ -108,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCacheWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(24)] 
 		[RED("geometryLibraryID")] 
 		public CName GeometryLibraryID
 		{
@@ -116,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(25)] 
 		[RED("timeDisplayWidget")] 
 		public inkCompoundWidgetReference TimeDisplayWidget
 		{
@@ -124,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(26)] 
 		[RED("rootZoneSafety")] 
 		public CWeakHandle<inkWidget> RootZoneSafety
 		{
@@ -132,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(27)] 
 		[RED("locationTextWidget")] 
 		public inkTextWidgetReference LocationTextWidget
 		{
@@ -140,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(28)] 
 		[RED("fluffText1")] 
 		public inkTextWidgetReference FluffText1
 		{
@@ -148,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(29)] 
 		[RED("securityAreaVignetteWidget")] 
 		public inkWidgetReference SecurityAreaVignetteWidget
 		{
@@ -156,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(30)] 
 		[RED("securityAreaText")] 
 		public inkTextWidgetReference SecurityAreaText
 		{
@@ -164,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(31)] 
 		[RED("combatModeHighlight")] 
 		public inkWidgetReference CombatModeHighlight
 		{
@@ -172,7 +132,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(32)] 
+		[RED("courierTimerContainer")] 
+		public inkWidgetReference CourierTimerContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("courierTimerText")] 
+		public inkTextWidgetReference CourierTimerText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(34)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
@@ -180,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(35)] 
 		[RED("zoneVignetteAnimProxy")] 
 		public CHandle<inkanimProxy> ZoneVignetteAnimProxy
 		{
@@ -188,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(36)] 
 		[RED("inPublicOrRestrictedZone")] 
 		public CBool InPublicOrRestrictedZone
 		{
@@ -196,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(37)] 
 		[RED("fluffTextCount")] 
 		public CInt32 FluffTextCount
 		{
@@ -204,7 +180,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(38)] 
+		[RED("psmBlackboard")] 
+		public CWeakHandle<gameIBlackboard> PsmBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(39)] 
 		[RED("mapBlackboard")] 
 		public CWeakHandle<gameIBlackboard> MapBlackboard
 		{
@@ -212,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(40)] 
 		[RED("mapDefinition")] 
 		public CHandle<UI_MapDef> MapDefinition
 		{
@@ -220,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_MapDef>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(41)] 
 		[RED("locationDataCallback")] 
 		public CHandle<redCallbackObject> LocationDataCallback
 		{
@@ -228,7 +212,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
+		[Ordinal(42)] 
+		[RED("countdownTimerBlackboard")] 
+		public CWeakHandle<gameIBlackboard> CountdownTimerBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(43)] 
+		[RED("countdownTimerDefinition")] 
+		public CHandle<UI_HUDCountdownTimerDef> CountdownTimerDefinition
+		{
+			get => GetPropertyValue<CHandle<UI_HUDCountdownTimerDef>>();
+			set => SetPropertyValue<CHandle<UI_HUDCountdownTimerDef>>(value);
+		}
+
 		[Ordinal(44)] 
+		[RED("countdownTimerActiveCallback")] 
+		public CHandle<redCallbackObject> CountdownTimerActiveCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("countdownTimerTimeCallback")] 
+		public CHandle<redCallbackObject> CountdownTimerTimeCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(46)] 
 		[RED("securityBlackBoardID")] 
 		public CHandle<redCallbackObject> SecurityBlackBoardID
 		{
@@ -236,7 +252,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
+		[RED("remoteControlledVehicleDataCallback")] 
+		public CHandle<redCallbackObject> RemoteControlledVehicleDataCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(48)] 
+		[RED("remoteControlledVehicleCameraChangedToTPPCallback")] 
+		public CHandle<redCallbackObject> RemoteControlledVehicleCameraChangedToTPPCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(49)] 
 		[RED("combatAnimation")] 
 		public CHandle<inkanimProxy> CombatAnimation
 		{
@@ -244,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(50)] 
 		[RED("playerInCombat")] 
 		public CBool PlayerInCombat
 		{
@@ -252,23 +284,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(47)] 
-		[RED("zoneNeedsUpdate")] 
-		public CBool ZoneNeedsUpdate
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(48)] 
-		[RED("lastZoneType")] 
-		public CEnum<ESecurityAreaType> LastZoneType
+		[Ordinal(51)] 
+		[RED("currentZoneType")] 
+		public CEnum<ESecurityAreaType> CurrentZoneType
 		{
 			get => GetPropertyValue<CEnum<ESecurityAreaType>>();
 			set => SetPropertyValue<CEnum<ESecurityAreaType>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(52)] 
 		[RED("messageCounterController")] 
 		public CWeakHandle<inkCompoundWidget> MessageCounterController
 		{
@@ -278,12 +302,6 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMinimapContainerController()
 		{
-			VisionRadiusVehicle = 125.000000F;
-			VisionRadiusCombat = 40.000000F;
-			VisionRadiusQuestArea = 40.000000F;
-			VisionRadiusSecurityArea = 40.000000F;
-			VisionRadiusInterior = 40.000000F;
-			VisionRadiusExterior = 100.000000F;
 			ClampedMappinContainer = new inkCompoundWidgetReference();
 			UnclampedMappinContainer = new inkCompoundWidgetReference();
 			MaskWidget = new inkMaskWidgetReference();
@@ -292,11 +310,6 @@ namespace WolvenKit.RED4.Types
 			WorldGeometryContainer = new inkCanvasWidgetReference();
 			WorldGeometryCache = new inkCacheWidgetReference();
 			TimeDisplayWidget = new inkCompoundWidgetReference();
-			LocationTextWidget = new inkTextWidgetReference();
-			FluffText1 = new inkTextWidgetReference();
-			SecurityAreaVignetteWidget = new inkWidgetReference();
-			SecurityAreaText = new inkTextWidgetReference();
-			CombatModeHighlight = new inkWidgetReference();
 
 			PostConstruct();
 		}

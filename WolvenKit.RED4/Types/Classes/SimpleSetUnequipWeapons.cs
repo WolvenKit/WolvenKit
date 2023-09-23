@@ -62,10 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public SimpleSetUnequipWeapons()
 		{
-			Game = new ScriptGameInstance();
-			PrimaryItems = new();
-			SecondaryItems = new();
-
 			PostConstruct();
 		}
 

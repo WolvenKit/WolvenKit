@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			WorldBounds = new Box { Min = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, Max = new Vector4 { X = float.MinValue, Y = float.MinValue, Z = float.MinValue, W = float.MinValue } };
 			AutohideDistanceScale = 255;
-			Mesh = new CResourceAsyncReference<CMesh>(@"engine\meshes\editor\box_occluder.w2mesh");
+			Mesh = new CResourceAsyncReference<CMesh>(14029023581072192580);
 
 			PostConstruct();
 		}

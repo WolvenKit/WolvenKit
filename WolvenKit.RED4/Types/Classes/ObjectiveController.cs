@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ObjectiveController : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("ObjectiveLabel")] 
 		public inkTextWidgetReference ObjectiveLabel
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("ObjectiveStatus")] 
 		public inkTextWidgetReference ObjectiveStatus
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("QuestIcon")] 
 		public inkImageWidgetReference QuestIcon
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("TrackedIcon")] 
 		public inkImageWidgetReference TrackedIcon
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("FrameBackground_On")] 
 		public inkImageWidgetReference FrameBackground_On
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("FrameBackground_Off")] 
 		public inkImageWidgetReference FrameBackground_Off
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("FrameFluff_On")] 
 		public inkImageWidgetReference FrameFluff_On
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("FrameFluff_Off")] 
 		public inkImageWidgetReference FrameFluff_Off
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("Folder_On")] 
 		public inkImageWidgetReference Folder_On
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("Folder_Off")] 
 		public inkImageWidgetReference Folder_Off
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("QuestObjectiveData")] 
 		public CHandle<ABaseQuestObjectiveWrapper> QuestObjectiveData
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ABaseQuestObjectiveWrapper>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("ToTrack")] 
 		public CWeakHandle<ABaseQuestObjectiveWrapper> ToTrack
 		{
@@ -102,17 +102,6 @@ namespace WolvenKit.RED4.Types
 
 		public ObjectiveController()
 		{
-			ObjectiveLabel = new inkTextWidgetReference();
-			ObjectiveStatus = new inkTextWidgetReference();
-			QuestIcon = new inkImageWidgetReference();
-			TrackedIcon = new inkImageWidgetReference();
-			FrameBackground_On = new inkImageWidgetReference();
-			FrameBackground_Off = new inkImageWidgetReference();
-			FrameFluff_On = new inkImageWidgetReference();
-			FrameFluff_Off = new inkImageWidgetReference();
-			Folder_On = new inkImageWidgetReference();
-			Folder_Off = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -206,13 +206,6 @@ namespace WolvenKit.RED4.Types
 
 		public ObjectiveEntryLogicController()
 		{
-			BlinkInterval = 0.800000F;
-			BlinkTotalTime = 5.000000F;
-			TexturePart_Tracked = "tracked_left";
-			TexturePart_Untracked = "untracked_left";
-			TexturePart_Succeeded = "succeeded";
-			TexturePart_Failed = "failed";
-
 			PostConstruct();
 		}
 

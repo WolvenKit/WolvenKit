@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WindowBlindersControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("windowBlindersSkillChecks")] 
 		public CHandle<EngDemoContainer> WindowBlindersSkillChecks
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("windowBlindersData")] 
 		public WindowBlindersData WindowBlindersData
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<WindowBlindersData>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("cachedState")] 
 		public CEnum<EWindowBlindersStates> CachedState
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EWindowBlindersStates>>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("alarmRaised")] 
 		public CBool AlarmRaised
 		{
@@ -38,11 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public WindowBlindersControllerPS()
 		{
-			DeviceName = "LocKey#104";
-			TweakDBRecord = "Devices.WindowBlinders";
-			TweakDBDescriptionRecord = 148393279395;
-			WindowBlindersData = new WindowBlindersData { WindowBlindersState = Enums.EWindowBlindersStates.Closed, HasOpenInteraction = true, HasQuickHack = true };
-
 			PostConstruct();
 		}
 

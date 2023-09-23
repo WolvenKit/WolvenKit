@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public inkTypographyResource()
 		{
-			Languages = new() { new inkLanguageDefinition { LanguageCode = "en-us", IsoScriptCode = "Latn", Fonts = new() { new inkLanguageFont { Font = new CResourceAsyncReference<inkFontFamilyResource>(@"engine\ink\fonts\arial.inkfontfamily") } } } };
+			Languages = new() { new inkLanguageDefinition { LanguageCode = "en-us", IsoScriptCode = "Latn", Fonts = new() { new inkLanguageFont { Font = new CResourceAsyncReference<inkFontFamilyResource>(12877316844558660473) } } } };
 
 			PostConstruct();
 		}

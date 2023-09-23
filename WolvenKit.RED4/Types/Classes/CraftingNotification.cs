@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CraftingNotification : GenericNotificationController
 	{
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("introAnimation")] 
 		public CHandle<inkanimProxy> IntroAnimation
 		{

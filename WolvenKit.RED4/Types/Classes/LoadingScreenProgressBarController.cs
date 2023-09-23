@@ -54,10 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public LoadingScreenProgressBarController()
 		{
-			ProgressBarRoot = new inkWidgetReference();
-			ProgressBarFill = new inkWidgetReference();
-			ProgressSpinerRoot = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

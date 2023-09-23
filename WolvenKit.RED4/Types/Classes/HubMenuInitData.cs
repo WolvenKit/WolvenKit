@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("combatRestriction")] 
+		public CBool CombatRestriction
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("userData")] 
 		public CHandle<IScriptable> UserData
 		{

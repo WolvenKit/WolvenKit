@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class OdaCementBagControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("cementEffectCooldown")] 
 		public CFloat CementEffectCooldown
 		{
@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public OdaCementBagControllerPS()
 		{
-			DeviceName = "LocKey#17265";
-			TweakDBRecord = "Devices.CementContainer";
-			TweakDBDescriptionRecord = 153526934731;
-
 			PostConstruct();
 		}
 

@@ -14,9 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerModule()
 		{
-			InstancesList = new();
-			ActiveScans = new();
-
 			PostConstruct();
 		}
 

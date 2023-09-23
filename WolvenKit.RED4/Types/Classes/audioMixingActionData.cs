@@ -72,7 +72,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ActionType = Enums.audioMixingActionType.EmitterTag;
 			VoContext = Enums.locVoiceoverContext.Vo_Context_Community;
-			DistanceRolloffFactor = 1.000000F;
 			CustomParameters = new();
 
 			PostConstruct();

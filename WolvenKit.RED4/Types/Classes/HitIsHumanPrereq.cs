@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HitIsHumanPrereq : GenericHitPrereq
 	{
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
@@ -14,9 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public HitIsHumanPrereq()
 		{
-			IsSync = true;
-			PipelineStage = Enums.gameDamagePipelineStage.Process;
-
 			PostConstruct();
 		}
 

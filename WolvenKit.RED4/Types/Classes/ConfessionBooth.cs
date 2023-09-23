@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ConfessionBooth : BasicDistractionDevice
 	{
-		[Ordinal(100)] 
+		[Ordinal(106)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(107)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public ConfessionBooth()
 		{
-			ControllerTypeName = "ConfessionBoothController";
-			ShortGlitchDelayID = new gameDelayID();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WeaponTraining : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("rewardRecord")] 
 		public TweakDBID RewardRecord
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("weaponTypes")] 
 		public CArray<CEnum<gamedataItemType>> WeaponTypes
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataItemType>>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("limitOfHits")] 
 		public CInt32 LimitOfHits
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("amountOfHits")] 
 		public CInt32 AmountOfHits
 		{
@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public WeaponTraining()
 		{
-			ControllerTypeName = "WeaponTrainingController";
-			WeaponTypes = new();
-			LimitOfHits = 30;
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SpeakerControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("speakerSetup")] 
 		public SpeakerSetup SpeakerSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SpeakerSetup>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("currentValue")] 
 		public CName CurrentValue
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("previousValue")] 
 		public CName PreviousValue
 		{
@@ -30,11 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public SpeakerControllerPS()
 		{
-			DeviceName = "LocKey#166";
-			TweakDBRecord = "Devices.Speaker";
-			TweakDBDescriptionRecord = 118735618267;
-			SpeakerSetup = new SpeakerSetup { Range = 10.000000F, GlitchSFX = "dev_radio_ditraction_glitching" };
-
 			PostConstruct();
 		}
 

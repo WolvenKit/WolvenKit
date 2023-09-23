@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ChestPress : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("animFeatureData")] 
 		public CHandle<AnimFeature_ChestPress> AnimFeatureData
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_ChestPress>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("animFeatureDataName")] 
 		public CName AnimFeatureDataName
 		{
@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public ChestPress()
 		{
-			ControllerTypeName = "ChestPressController";
-
 			PostConstruct();
 		}
 

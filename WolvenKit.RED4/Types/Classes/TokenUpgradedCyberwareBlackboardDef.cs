@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public TokenUpgradedCyberwareBlackboardDef()
 		{
-			CyberwareTypes = new gamebbScriptID_Variant();
-
 			PostConstruct();
 		}
 

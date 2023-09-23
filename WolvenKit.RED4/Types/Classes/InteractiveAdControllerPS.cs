@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InteractiveAdControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("showAd")] 
 		public CBool ShowAd
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("showVendor")] 
 		public CBool ShowVendor
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("locationAdded")] 
 		public CBool LocationAdded
 		{
@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public InteractiveAdControllerPS()
 		{
-			DeviceName = "LocKey#197";
-			TweakDBRecord = "Devices.InteractiveAd";
-			TweakDBDescriptionRecord = 143211166331;
-
 			PostConstruct();
 		}
 

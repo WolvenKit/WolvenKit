@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CrosshairGameController_Launcher : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] 
+		[Ordinal(27)] 
 		[RED("weaponBBID")] 
 		public CHandle<redCallbackObject> WeaponBBID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(28)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(29)] 
 		[RED("Cori_S")] 
 		public inkCanvasWidgetReference Cori_S
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(30)] 
 		[RED("Cori_M")] 
 		public inkCanvasWidgetReference Cori_M
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(31)] 
 		[RED("rightStickX")] 
 		public CFloat RightStickX
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(32)] 
 		[RED("rightStickY")] 
 		public CFloat RightStickY
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(33)] 
 		[RED("currentState")] 
 		public CEnum<gamePSMLeftHandCyberware> CurrentState
 		{
@@ -62,9 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Launcher()
 		{
-			Cori_S = new inkCanvasWidgetReference();
-			Cori_M = new inkCanvasWidgetReference();
-
 			PostConstruct();
 		}
 

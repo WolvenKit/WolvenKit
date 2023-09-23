@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HitStatusEffectPresentPrereq : GenericHitPrereq
 	{
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("checkType")] 
 		public CEnum<gamedataCheckType> CheckType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataCheckType>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("statusEffectParam")] 
 		public CString StatusEffectParam
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("tag")] 
 		public CName Tag
 		{
@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public HitStatusEffectPresentPrereq()
 		{
-			IsSync = true;
-			PipelineStage = Enums.gameDamagePipelineStage.Process;
-
 			PostConstruct();
 		}
 

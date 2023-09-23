@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DropPoint : BasicDistractionDevice
 	{
-		[Ordinal(100)] 
+		[Ordinal(106)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(107)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(108)] 
 		[RED("mappinID")] 
 		public gameNewMappinID MappinID
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameNewMappinID>(value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(109)] 
 		[RED("mappinInSystem")] 
 		public CBool MappinInSystem
 		{
@@ -36,20 +36,8 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(104)] 
-		[RED("inventory")] 
-		public CHandle<gameInventory> Inventory
-		{
-			get => GetPropertyValue<CHandle<gameInventory>>();
-			set => SetPropertyValue<CHandle<gameInventory>>(value);
-		}
-
 		public DropPoint()
 		{
-			ControllerTypeName = "DropPointController";
-			ShortGlitchDelayID = new gameDelayID();
-			MappinID = new gameNewMappinID();
-
 			PostConstruct();
 		}
 

@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemComparableTypesCache()
 		{
-			ComparableTypes = new();
-			ComparableRecordTypes = new();
-
 			PostConstruct();
 		}
 

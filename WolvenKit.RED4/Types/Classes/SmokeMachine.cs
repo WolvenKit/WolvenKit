@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SmokeMachine : BasicDistractionDevice
 	{
-		[Ordinal(100)] 
+		[Ordinal(106)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(107)] 
 		[RED("highLightActive")] 
 		public CBool HighLightActive
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(108)] 
 		[RED("entities")] 
 		public CArray<CWeakHandle<entEntity>> Entities
 		{
@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public SmokeMachine()
 		{
-			ControllerTypeName = "SmokeMachineController";
-			Entities = new();
-
 			PostConstruct();
 		}
 

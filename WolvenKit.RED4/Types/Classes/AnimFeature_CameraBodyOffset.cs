@@ -94,12 +94,6 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_CameraBodyOffset()
 		{
-			Lookat_pitch_forward_offset = 0.050000F;
-			Lookat_pitch_forward_down_ratio = 0.400000F;
-			Lookat_yaw_offset_active_angle = 45.000000F;
-			Paralax_radius = 0.100000F;
-			Paralax_forward_offset = 0.100000F;
-
 			PostConstruct();
 		}
 

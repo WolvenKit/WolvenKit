@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public gameJournalFileGroup()
 		{
+			JournalEntryOverrideDataList = new();
 			Entries = new();
 
 			PostConstruct();

@@ -54,8 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleDeathTask()
 		{
-			TimeToRagdoll = 0.440000F;
-
 			PostConstruct();
 		}
 

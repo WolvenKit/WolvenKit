@@ -78,9 +78,6 @@ namespace WolvenKit.RED4.Types
 
 		public CompanionHealthBarGameController()
 		{
-			Healthbar = new inkWidgetReference();
-			GameInstance = new ScriptGameInstance();
-
 			PostConstruct();
 		}
 

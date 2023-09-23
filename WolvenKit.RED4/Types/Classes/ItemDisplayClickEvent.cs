@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("isQuestBought")] 
+		public CBool IsQuestBought
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("toggleVisibilityRequest")] 
 		public CBool ToggleVisibilityRequest
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("transmogItem")] 
 		public gameItemID TransmogItem
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("uiInventoryItem")] 
 		public CHandle<UIInventoryItem> UiInventoryItem
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItem>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("displayContextData")] 
 		public CWeakHandle<ItemDisplayContextData> DisplayContextData
 		{
@@ -68,7 +76,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemDisplayContextData>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
+		[RED("additionalData")] 
+		public CHandle<IScriptable> AdditionalData
+		{
+			get => GetPropertyValue<CHandle<IScriptable>>();
+			set => SetPropertyValue<CHandle<IScriptable>>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("evt")] 
 		public CHandle<inkPointerEvent> Evt
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkPointerEvent>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("actionName")] 
 		public CHandle<inkActionName> ActionName
 		{
@@ -86,9 +102,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemDisplayClickEvent()
 		{
-			ItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
-			TransmogItem = new gameItemID();
-
 			PostConstruct();
 		}
 

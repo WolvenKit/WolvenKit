@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CandleControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("candleSkillChecks")] 
 		public CHandle<EngDemoContainer> CandleSkillChecks
 		{
@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public CandleControllerPS()
 		{
-			DeviceName = "LocKey#45725";
-			TweakDBRecord = 62927945580;
-			TweakDBDescriptionRecord = 115775549431;
-
 			PostConstruct();
 		}
 

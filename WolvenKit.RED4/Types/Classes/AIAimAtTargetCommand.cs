@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public AIAimAtTargetCommand()
 		{
-			TargetOverridePuppetRef = new gameEntityReference { Names = new() };
-
 			PostConstruct();
 		}
 

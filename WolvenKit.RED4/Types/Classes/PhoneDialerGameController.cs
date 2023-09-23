@@ -2,9 +2,9 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class PhoneDialerGameController : gameuiHUDGameController
+	public partial class PhoneDialerGameController : gameuiNewPhoneRelatedHUDGameController
 	{
-		[Ordinal(9)] 
+		[Ordinal(13)] 
 		[RED("contactsList")] 
 		public inkWidgetReference ContactsList
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(14)] 
 		[RED("avatarImage")] 
 		public inkImageWidgetReference AvatarImage
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(15)] 
 		[RED("hintMessenger")] 
 		public inkWidgetReference HintMessenger
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(16)] 
 		[RED("scrollArea")] 
 		public inkScrollAreaWidgetReference ScrollArea
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkScrollAreaWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(17)] 
 		[RED("scrollControllerWidget")] 
 		public inkWidgetReference ScrollControllerWidget
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(18)] 
 		[RED("journalManager")] 
 		public CHandle<gameJournalManager> JournalManager
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(19)] 
 		[RED("phoneSystem")] 
 		public CWeakHandle<PhoneSystem> PhoneSystem
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhoneSystem>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(20)] 
 		[RED("active")] 
 		public CBool Active
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(21)] 
 		[RED("listController")] 
 		public CWeakHandle<inkVirtualListController> ListController
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkVirtualListController>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(22)] 
 		[RED("dataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> DataSource
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("dataView")] 
 		public CHandle<DialerContactDataView> DataView
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DialerContactDataView>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("templateClassifier")] 
 		public CHandle<DialerContactTemplateClassifier> TemplateClassifier
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DialerContactTemplateClassifier>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("scrollController")] 
 		public CWeakHandle<inkScrollController> ScrollController
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkScrollController>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("soundName")] 
 		public CName SoundName
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
 		[RED("audioPhoneNavigation")] 
 		public CName AudioPhoneNavigation
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(28)] 
 		[RED("phoneBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PhoneBlackboard
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(29)] 
 		[RED("phoneBBDefinition")] 
 		public CHandle<UI_ComDeviceDef> PhoneBBDefinition
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_ComDeviceDef>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(30)] 
 		[RED("contactOpensBBID")] 
 		public CHandle<redCallbackObject> ContactOpensBBID
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(31)] 
 		[RED("switchAnimProxy")] 
 		public CHandle<inkanimProxy> SwitchAnimProxy
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(32)] 
 		[RED("transitionAnimProxy")] 
 		public CHandle<inkanimProxy> TransitionAnimProxy
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(33)] 
 		[RED("repeatingScrollActionEnabled")] 
 		public CBool RepeatingScrollActionEnabled
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(34)] 
 		[RED("firstInit")] 
 		public CBool FirstInit
 		{
@@ -182,14 +182,6 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneDialerGameController()
 		{
-			ContactsList = new inkWidgetReference();
-			AvatarImage = new inkImageWidgetReference();
-			HintMessenger = new inkWidgetReference();
-			ScrollArea = new inkScrollAreaWidgetReference();
-			ScrollControllerWidget = new inkWidgetReference();
-			SoundName = "Phone";
-			AudioPhoneNavigation = "ui_phone_navigation";
-
 			PostConstruct();
 		}
 

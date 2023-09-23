@@ -20,10 +20,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("weakspotDestroyed")] 
+		public CBool WeakspotDestroyed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("player")] 
+		public CWeakHandle<PlayerPuppet> Player
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
 		public SasquatchComponent()
 		{
-			Owner_id = new entEntityID();
-
 			PostConstruct();
 		}
 

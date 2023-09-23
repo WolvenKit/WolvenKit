@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public CraftBook()
 		{
-			KnownRecipes = new();
-			NewRecipes = new();
-
 			PostConstruct();
 		}
 

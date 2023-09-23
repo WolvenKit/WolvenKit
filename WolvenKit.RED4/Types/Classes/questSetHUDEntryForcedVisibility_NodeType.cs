@@ -36,6 +36,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worlduiEntryVisibility>>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("skipAnimation")] 
+		public CBool SkipAnimation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public questSetHUDEntryForcedVisibility_NodeType()
 		{
 			HudEntryName = new();

@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public CyberwareTooltip()
 		{
-			SlotList = new inkCompoundWidgetReference();
-			Label = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

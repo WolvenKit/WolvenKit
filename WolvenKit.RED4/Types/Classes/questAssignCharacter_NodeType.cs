@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("clearAssignedVehicleIdWhenUnmounting")] 
+		public CBool ClearAssignedVehicleIdWhenUnmounting
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("entryAnimName")] 
 		public CName EntryAnimName
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("entrySlotName")] 
 		public CName EntrySlotName
 		{

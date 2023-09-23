@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public PerksLevelBarController()
 		{
-			ForegroundImage = new inkWidgetReference();
-			BackgroundImage = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

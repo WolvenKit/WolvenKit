@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public JukeboxBlackboardDef()
 		{
-			IsPlaying = new gamebbScriptID_Bool();
-
 			PostConstruct();
 		}
 

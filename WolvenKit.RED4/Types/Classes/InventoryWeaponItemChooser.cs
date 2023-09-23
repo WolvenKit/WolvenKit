@@ -94,18 +94,6 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryWeaponItemChooser()
 		{
-			ScopeRootContainer = new inkCompoundWidgetReference();
-			MagazineRootContainer = new inkCompoundWidgetReference();
-			SilencerRootContainer = new inkCompoundWidgetReference();
-			ScopeContainer = new inkCompoundWidgetReference();
-			MagazineContainer = new inkCompoundWidgetReference();
-			SilencerContainer = new inkCompoundWidgetReference();
-			AttachmentsLabel = new inkTextWidgetReference();
-			AttachmentsContainer = new inkWidgetReference();
-			SoftwareModsLabel = new inkTextWidgetReference();
-			SoftwareModsPush = new inkWidgetReference();
-			SoftwareModsContainer = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

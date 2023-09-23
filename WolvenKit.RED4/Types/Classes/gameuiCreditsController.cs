@@ -189,6 +189,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(25)] 
+		[RED("isPreVideoFinished")] 
+		public CBool IsPreVideoFinished
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("isEp1CreditsImplementation")] 
+		public CBool IsEp1CreditsImplementation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("exitNotificationDisplayTime")] 
 		public CFloat ExitNotificationDisplayTime
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiGenderSelectionPuppetPreviewGameController : gameuiPuppetPreviewGameController
 	{
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("sceneName")] 
 		public CName SceneName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("cameraRef")] 
 		public NodeRef CameraRef
 		{

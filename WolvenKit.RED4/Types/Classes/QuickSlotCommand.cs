@@ -160,7 +160,7 @@ namespace WolvenKit.RED4.Types
 		{
 			IsSlotUnlocked = true;
 			ItemId = new gameItemID();
-			PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid };
+			PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, DestructionTimeStamp = new EngineTime() };
 			InteractiveActionOwner = new entEntityID();
 
 			PostConstruct();

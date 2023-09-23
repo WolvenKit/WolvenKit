@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public SlotMachineSlot()
 		{
-			ImagesUpper = new();
-			ImagesLower = new();
-			ImagePresets = new();
-
 			PostConstruct();
 		}
 

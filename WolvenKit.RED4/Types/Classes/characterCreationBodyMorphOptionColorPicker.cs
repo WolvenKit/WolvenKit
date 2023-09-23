@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationBodyMorphOptionColorPicker()
 		{
-			Grid = new inkUniformGridWidgetReference();
-			Title = new inkTextWidgetReference();
-			SelectedIndex = -1;
-
 			PostConstruct();
 		}
 

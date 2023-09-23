@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PingSquad : PuppetAction
 	{
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("shouldForward")] 
 		public CBool ShouldForward
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public PingSquad()
 		{
-			ShouldForward = true;
-
 			PostConstruct();
 		}
 

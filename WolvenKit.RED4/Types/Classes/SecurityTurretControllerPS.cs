@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SecurityTurretControllerPS : SensorDeviceControllerPS
 	{
-		[Ordinal(145)] 
+		[Ordinal(150)] 
 		[RED("pendingSecuritySystemDisableRequest")] 
 		public CBool PendingSecuritySystemDisableRequest
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(146)] 
+		[Ordinal(151)] 
 		[RED("turretSkillChecks")] 
 		public CHandle<EngDemoContainer> TurretSkillChecks
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
 		}
 
-		[Ordinal(147)] 
+		[Ordinal(152)] 
 		[RED("ignoreSkillcheckGeneration")] 
 		public CBool IgnoreSkillcheckGeneration
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(148)] 
+		[Ordinal(153)] 
 		[RED("laserGameEffectRef")] 
 		public gameEffectRef LaserGameEffectRef
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(149)] 
+		[Ordinal(154)] 
 		[RED("weaponItemRecordString")] 
 		public CString WeaponItemRecordString
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(150)] 
+		[Ordinal(155)] 
 		[RED("vfxNameOnShoot")] 
 		public CName VfxNameOnShoot
 		{
@@ -54,13 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public SecurityTurretControllerPS()
 		{
-			DeviceName = "LocKey#121";
-			TweakDBRecord = "Devices.SecurityTurret";
-			TweakDBDescriptionRecord = 147741407213;
-			LookAtPresetVert = "LookatPreset.TurretVertical";
-			LookAtPresetHor = "LookatPreset.TurretHorizontal";
-			LaserGameEffectRef = new gameEffectRef();
-
 			PostConstruct();
 		}
 

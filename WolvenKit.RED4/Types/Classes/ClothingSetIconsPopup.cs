@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public ClothingSetIconsPopup()
 		{
-			IconGrid = new inkWidgetReference();
-			ButtonHintsRoot = new inkWidgetReference();
-			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
-
 			PostConstruct();
 		}
 

@@ -56,7 +56,6 @@ namespace WolvenKit.RED4.Types
 		{
 			SkipButtonPanel = new inkWidgetReference();
 			LoadingPartsContainer = new inkCompoundWidgetReference();
-			ProgressBarRoot = new inkWidgetReference();
 
 			PostConstruct();
 		}

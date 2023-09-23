@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class RoadBlock : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("openingSpeed")] 
 		public CFloat OpeningSpeed
 		{
@@ -12,7 +12,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
+		[RED("coverObjectRefs")] 
+		public CArray<NodeRef> CoverObjectRefs
+		{
+			get => GetPropertyValue<CArray<NodeRef>>();
+			set => SetPropertyValue<CArray<NodeRef>>(value);
+		}
+
+		[Ordinal(100)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entAnimationControllerComponent>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(101)] 
 		[RED("offMeshConnection")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnection
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(102)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_RoadBlock> AnimFeature
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_RoadBlock>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(103)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAnimationType>>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(104)] 
 		[RED("forceEnableLink")] 
 		public CBool ForceEnableLink
 		{
@@ -52,11 +60,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(105)] 
+		[RED("globalCoverObjectRefs")] 
+		public CArray<worldGlobalNodeRef> GlobalCoverObjectRefs
+		{
+			get => GetPropertyValue<CArray<worldGlobalNodeRef>>();
+			set => SetPropertyValue<CArray<worldGlobalNodeRef>>(value);
+		}
+
+		[Ordinal(106)] 
+		[RED("areGlobalCoverRefsInitialized")] 
+		public CBool AreGlobalCoverRefsInitialized
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public RoadBlock()
 		{
-			ControllerTypeName = "RoadBlockController";
-			OpeningSpeed = 2.000000F;
-
 			PostConstruct();
 		}
 

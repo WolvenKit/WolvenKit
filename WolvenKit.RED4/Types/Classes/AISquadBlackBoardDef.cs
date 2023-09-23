@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public AISquadBlackBoardDef()
 		{
-			BarkPlayed = new gamebbScriptID_Bool();
-			LowHealthBarkPlayed = new gamebbScriptID_Bool();
-			BarkPlayedTimeStamp = new gamebbScriptID_Float();
-
 			PostConstruct();
 		}
 

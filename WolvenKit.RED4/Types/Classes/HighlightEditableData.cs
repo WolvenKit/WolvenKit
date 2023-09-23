@@ -62,10 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public HighlightEditableData()
 		{
-			OutlineType = Enums.EFocusOutlineType.INVALID;
-			InTransitionTime = 0.500000F;
-			OutTransitionTime = 0.500000F;
-
 			PostConstruct();
 		}
 

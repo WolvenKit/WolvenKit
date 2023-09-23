@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerSecureAreaDef()
 		{
-			Inside = new gamebbScriptID_Bool();
-
 			PostConstruct();
 		}
 

@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("espionagePoints")] 
+		public CInt32 EspionagePoints
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("disableAction")] 
 		public CBool DisableAction
 		{

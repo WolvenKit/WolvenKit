@@ -28,10 +28,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("globalEntityLODDistanceScale")] 
+		public CFloat GlobalEntityLODDistanceScale
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public worldPerformanceAreaNode()
 		{
 			QualitySettingsArray = new();
 			GlobalStreamingDistanceScale = 1.000000F;
+			GlobalEntityLODDistanceScale = 1.000000F;
 
 			PostConstruct();
 		}

@@ -54,8 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public AIFindPositionAroundSelf()
 		{
-			FinalPosition = new Vector4();
-
 			PostConstruct();
 		}
 

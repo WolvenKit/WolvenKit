@@ -195,19 +195,6 @@ namespace WolvenKit.RED4.Types
 			FlipY = true;
 			RootMargin = new inkMargin();
 			ScreenMargin = new inkMargin { Right = 10.000000F, Bottom = 125.000000F };
-			TooltipRequesters = new();
-			GenericTooltipsNames = new();
-			TooltipLibrariesReferences = new();
-			TooltipLibrariesStyledReferences = new();
-			TooltipsLibrary = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\tooltipslibrary_4k.inkwidget") };
-			MenuTooltipStylePath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\tooltip_menu.inkstyle") };
-			HudTooltipStylePath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\tooltip_hud.inkstyle") };
-			IndexedTooltips = new();
-			NamedTooltips = new();
-			TooltipStylePath = new redResourceReferenceScriptToken();
-			EnableTransitionAnimation = true;
-			AxisDataThreshold = 0.500000F;
-			MouseDataThreshold = 7.000000F;
 
 			PostConstruct();
 		}

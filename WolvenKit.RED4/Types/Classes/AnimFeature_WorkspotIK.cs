@@ -70,13 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_WorkspotIK()
 		{
-			RightHandPosition = new Vector4();
-			LeftHandPosition = new Vector4();
-			CameraPosition = new Vector4();
-			RightHandRotation = new Quaternion { R = 1.000000F };
-			LeftHandRotation = new Quaternion { R = 1.000000F };
-			CameraRotation = new Quaternion { R = 1.000000F };
-
 			PostConstruct();
 		}
 

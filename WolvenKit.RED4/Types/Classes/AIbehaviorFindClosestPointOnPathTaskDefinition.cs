@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("forceStartFromClosest")] 
+		public CHandle<AIArgumentMapping> ForceStartFromClosest
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("patrolProgress")] 
 		public CHandle<AIArgumentMapping> PatrolProgress
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("positionOnPath")] 
 		public CHandle<AIArgumentMapping> PositionOnPath
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("entryTangent")] 
 		public CHandle<AIArgumentMapping> EntryTangent
 		{

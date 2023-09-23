@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("inputContainer")] 
+		public inkWidgetReference InputContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{
@@ -38,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public BaseCodexLinkController()
 		{
-			LinkImage = new inkImageWidgetReference();
-			LinkLabel = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

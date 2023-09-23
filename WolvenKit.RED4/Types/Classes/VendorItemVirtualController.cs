@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VendorItemVirtualController : inkVirtualCompoundItemController
 	{
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("data")] 
 		public CHandle<VendorInventoryItemData> Data
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorInventoryItemData>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("newData")] 
 		public CHandle<VendorUIInventoryItemData> NewData
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorUIInventoryItemData>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("itemViewController")] 
 		public CWeakHandle<InventoryItemDisplayController> ItemViewController
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("isSpawnInProgress")] 
 		public CBool IsSpawnInProgress
 		{

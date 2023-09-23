@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleRadioTierEvent()
 		{
-			RadioTier = 1;
-
 			PostConstruct();
 		}
 

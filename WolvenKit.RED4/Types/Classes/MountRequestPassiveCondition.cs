@@ -62,9 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public MountRequestPassiveCondition()
 		{
-			AcceptInstant = true;
-			AcceptNotInstant = true;
-
 			PostConstruct();
 		}
 

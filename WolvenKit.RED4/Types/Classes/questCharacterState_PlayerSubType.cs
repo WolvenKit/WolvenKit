@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(5)] 
 		[RED("weaponState")] 
-		public CEnum<gamePSMWeaponStates> WeaponState
+		public CEnum<gamePSMRangedWeaponStates> WeaponState
 		{
-			get => GetPropertyValue<CEnum<gamePSMWeaponStates>>();
-			set => SetPropertyValue<CEnum<gamePSMWeaponStates>>(value);
+			get => GetPropertyValue<CEnum<gamePSMRangedWeaponStates>>();
+			set => SetPropertyValue<CEnum<gamePSMRangedWeaponStates>>(value);
 		}
 
 		[Ordinal(6)] 
@@ -120,7 +120,7 @@ namespace WolvenKit.RED4.Types
 		{
 			LocomotionState = Enums.gamePSMLocomotionStates.Any;
 			UpperBodyState = Enums.gamePSMUpperBodyStates.Any;
-			WeaponState = Enums.gamePSMWeaponStates.Any;
+			WeaponState = Enums.gamePSMRangedWeaponStates.Any;
 			TimeDilationState = Enums.gamePSMTimeDilation.Any;
 			VehicleState = Enums.gamePSMVehicle.Any;
 			TakedownState = Enums.gamePSMTakedown.Any;

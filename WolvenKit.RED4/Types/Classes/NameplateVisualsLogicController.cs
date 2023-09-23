@@ -13,22 +13,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("bigIconMain")] 
-		public inkWidgetReference BigIconMain
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(3)] 
-		[RED("bigLevelText")] 
-		public inkTextWidgetReference BigLevelText
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(4)] 
 		[RED("nameTextMain")] 
 		public inkTextWidgetReference NameTextMain
 		{
@@ -36,31 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
-		[RED("bigIconArt")] 
-		public inkImageWidgetReference BigIconArt
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(6)] 
-		[RED("preventionIcon")] 
-		public inkWidgetReference PreventionIcon
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(7)] 
-		[RED("levelContainer")] 
-		public inkImageWidgetReference LevelContainer
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(8)] 
+		[Ordinal(3)] 
 		[RED("nameFrame")] 
 		public inkWidgetReference NameFrame
 		{
@@ -68,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(4)] 
 		[RED("healthbarWidget")] 
 		public inkWidgetReference HealthbarWidget
 		{
@@ -76,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(5)] 
 		[RED("healthBarFull")] 
 		public inkWidgetReference HealthBarFull
 		{
@@ -84,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(6)] 
 		[RED("healthBarFrame")] 
 		public inkWidgetReference HealthBarFrame
 		{
@@ -92,31 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
-		[RED("taggedIcon")] 
-		public inkWidgetReference TaggedIcon
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(13)] 
-		[RED("iconBG")] 
-		public inkWidgetReference IconBG
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(14)] 
-		[RED("civilianIcon")] 
-		public inkWidgetReference CivilianIcon
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(15)] 
+		[Ordinal(7)] 
 		[RED("stealthMappinSlot")] 
 		public inkCompoundWidgetReference StealthMappinSlot
 		{
@@ -124,63 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
-		[RED("iconTextWrapper")] 
-		public inkCompoundWidgetReference IconTextWrapper
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(17)] 
-		[RED("container")] 
-		public inkWidgetReference Container
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(18)] 
-		[RED("LevelcontainerAndText")] 
-		public inkCompoundWidgetReference LevelcontainerAndText
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(19)] 
-		[RED("rareStars")] 
-		public inkCompoundWidgetReference RareStars
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(20)] 
-		[RED("eliteStars")] 
-		public inkCompoundWidgetReference EliteStars
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(21)] 
-		[RED("hardEnemy")] 
-		public inkImageWidgetReference HardEnemy
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(22)] 
-		[RED("hardEnemyWrapper")] 
-		public inkWidgetReference HardEnemyWrapper
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(23)] 
+		[Ordinal(8)] 
 		[RED("damagePreviewWrapper")] 
 		public inkWidgetReference DamagePreviewWrapper
 		{
@@ -188,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(9)] 
 		[RED("damagePreviewWidget")] 
 		public inkWidgetReference DamagePreviewWidget
 		{
@@ -196,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(10)] 
 		[RED("damagePreviewArrow")] 
 		public inkWidgetReference DamagePreviewArrow
 		{
@@ -204,23 +84,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
-		[RED("buffsList")] 
-		public inkHorizontalPanelWidgetReference BuffsList
+		[Ordinal(11)] 
+		[RED("rarityHolder")] 
+		public inkWidgetReference RarityHolder
 		{
-			get => GetPropertyValue<inkHorizontalPanelWidgetReference>();
-			set => SetPropertyValue<inkHorizontalPanelWidgetReference>(value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
-		[RED("buffWidgets")] 
-		public CArray<CWeakHandle<inkWidget>> BuffWidgets
+		[Ordinal(12)] 
+		[RED("rarities")] 
+		public CArray<inkWidgetReference> Rarities
 		{
-			get => GetPropertyValue<CArray<CWeakHandle<inkWidget>>>();
-			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(13)] 
 		[RED("cachedPuppet")] 
 		public CWeakHandle<gameObject> CachedPuppet
 		{
@@ -228,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(14)] 
 		[RED("cachedIncomingData")] 
 		public gameuiNPCNextToTheCrosshair CachedIncomingData
 		{
@@ -236,15 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameuiNPCNextToTheCrosshair>(value);
 		}
 
-		[Ordinal(30)] 
-		[RED("isOfficer")] 
-		public CBool IsOfficer
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(31)] 
+		[Ordinal(15)] 
 		[RED("isBoss")] 
 		public CBool IsBoss
 		{
@@ -252,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(16)] 
 		[RED("isElite")] 
 		public CBool IsElite
 		{
@@ -260,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(17)] 
 		[RED("isRare")] 
 		public CBool IsRare
 		{
@@ -268,15 +140,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(34)] 
-		[RED("isPrevention")] 
-		public CBool IsPrevention
+		[Ordinal(18)] 
+		[RED("isNCPD")] 
+		public CBool IsNCPD
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(19)] 
 		[RED("canCallReinforcements")] 
 		public CBool CanCallReinforcements
 		{
@@ -284,15 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
-		[RED("isCivilian")] 
-		public CBool IsCivilian
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(37)] 
+		[Ordinal(20)] 
 		[RED("isBurning")] 
 		public CBool IsBurning
 		{
@@ -300,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(21)] 
 		[RED("isPoisoned")] 
 		public CBool IsPoisoned
 		{
@@ -308,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(22)] 
 		[RED("bossColor")] 
 		public CColor BossColor
 		{
@@ -316,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(23)] 
 		[RED("npcDefeated")] 
 		public CBool NpcDefeated
 		{
@@ -324,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(24)] 
 		[RED("isStealthMappinVisible")] 
 		public CBool IsStealthMappinVisible
 		{
@@ -332,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(25)] 
 		[RED("playerZone")] 
 		public CEnum<gamePSMZones> PlayerZone
 		{
@@ -340,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMZones>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(26)] 
 		[RED("npcNamesEnabled")] 
 		public CBool NpcNamesEnabled
 		{
@@ -348,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(27)] 
 		[RED("healthController")] 
 		public CWeakHandle<NameplateBarLogicController> HealthController
 		{
@@ -356,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<NameplateBarLogicController>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(28)] 
 		[RED("hasCenterIcon")] 
 		public CBool HasCenterIcon
 		{
@@ -364,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(29)] 
 		[RED("animatingObject")] 
 		public inkWidgetReference AnimatingObject
 		{
@@ -372,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(30)] 
 		[RED("isAnimating")] 
 		public CBool IsAnimating
 		{
@@ -380,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(31)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -388,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(32)] 
 		[RED("alpha_fadein")] 
 		public CHandle<inkanimDefinition> Alpha_fadein
 		{
@@ -396,15 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(50)] 
-		[RED("preventionAnimProxy")] 
-		public CHandle<inkanimProxy> PreventionAnimProxy
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(51)] 
+		[Ordinal(33)] 
 		[RED("damagePreviewAnimProxy")] 
 		public CHandle<inkanimProxy> DamagePreviewAnimProxy
 		{
@@ -412,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(34)] 
 		[RED("isQuestTarget")] 
 		public CBool IsQuestTarget
 		{
@@ -420,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(35)] 
 		[RED("forceHide")] 
 		public CBool ForceHide
 		{
@@ -428,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(36)] 
 		[RED("isHardEnemy")] 
 		public CBool IsHardEnemy
 		{
@@ -436,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(37)] 
 		[RED("npcIsAggressive")] 
 		public CBool NpcIsAggressive
 		{
@@ -444,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(38)] 
 		[RED("playerAimingDownSights")] 
 		public CBool PlayerAimingDownSights
 		{
@@ -452,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(39)] 
 		[RED("playerInCombat")] 
 		public CBool PlayerInCombat
 		{
@@ -460,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(40)] 
 		[RED("playerInStealth")] 
 		public CBool PlayerInStealth
 		{
@@ -468,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(41)] 
 		[RED("healthNotFull")] 
 		public CBool HealthNotFull
 		{
@@ -476,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(42)] 
 		[RED("healthbarVisible")] 
 		public CBool HealthbarVisible
 		{
@@ -484,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(43)] 
 		[RED("levelContainerShouldBeVisible")] 
 		public CBool LevelContainerShouldBeVisible
 		{
@@ -492,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(44)] 
 		[RED("currentHealth")] 
 		public CInt32 CurrentHealth
 		{
@@ -500,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(45)] 
 		[RED("maximumHealth")] 
 		public CInt32 MaximumHealth
 		{
@@ -508,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(46)] 
 		[RED("currentDamagePreviewValue")] 
 		public CInt32 CurrentDamagePreviewValue
 		{
@@ -518,36 +374,6 @@ namespace WolvenKit.RED4.Types
 
 		public NameplateVisualsLogicController()
 		{
-			BigIconMain = new inkWidgetReference();
-			BigLevelText = new inkTextWidgetReference();
-			NameTextMain = new inkTextWidgetReference();
-			BigIconArt = new inkImageWidgetReference();
-			PreventionIcon = new inkWidgetReference();
-			LevelContainer = new inkImageWidgetReference();
-			NameFrame = new inkWidgetReference();
-			HealthbarWidget = new inkWidgetReference();
-			HealthBarFull = new inkWidgetReference();
-			HealthBarFrame = new inkWidgetReference();
-			TaggedIcon = new inkWidgetReference();
-			IconBG = new inkWidgetReference();
-			CivilianIcon = new inkWidgetReference();
-			StealthMappinSlot = new inkCompoundWidgetReference();
-			IconTextWrapper = new inkCompoundWidgetReference();
-			Container = new inkWidgetReference();
-			LevelcontainerAndText = new inkCompoundWidgetReference();
-			RareStars = new inkCompoundWidgetReference();
-			EliteStars = new inkCompoundWidgetReference();
-			HardEnemy = new inkImageWidgetReference();
-			HardEnemyWrapper = new inkWidgetReference();
-			DamagePreviewWrapper = new inkWidgetReference();
-			DamagePreviewWidget = new inkWidgetReference();
-			DamagePreviewArrow = new inkWidgetReference();
-			BuffsList = new inkHorizontalPanelWidgetReference();
-			BuffWidgets = new();
-			CachedIncomingData = new gameuiNPCNextToTheCrosshair { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
-			BossColor = new CColor();
-			AnimatingObject = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

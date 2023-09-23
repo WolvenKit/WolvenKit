@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SimpleSwitch : InteractiveMasterDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAnimationType>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("animationSpeed")] 
 		public CFloat AnimationSpeed
 		{
@@ -22,10 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public SimpleSwitch()
 		{
-			ControllerTypeName = "SimpleSwitchController";
-			DeviceState = Enums.EDeviceStatus.ON;
-			AnimationSpeed = 1.000000F;
-
 			PostConstruct();
 		}
 

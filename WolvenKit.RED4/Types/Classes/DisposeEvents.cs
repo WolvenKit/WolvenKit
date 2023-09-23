@@ -5,9 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public DisposeEvents()
 		{
-			StyleName = "CarriedObject.Style";
-			ForceStyleName = "CarriedObject.ForcedStyle";
-
 			PostConstruct();
 		}
 

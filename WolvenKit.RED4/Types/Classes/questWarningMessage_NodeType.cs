@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("type")] 
+		public CEnum<gameSimpleMessageType> Type
+		{
+			get => GetPropertyValue<CEnum<gameSimpleMessageType>>();
+			set => SetPropertyValue<CEnum<gameSimpleMessageType>>(value);
+		}
+
 		public questWarningMessage_NodeType()
 		{
 			LocalizedMessage = new() { Unk1 = 0, Value = "" };

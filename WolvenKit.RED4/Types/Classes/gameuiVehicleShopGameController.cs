@@ -1,0 +1,158 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	public partial class gameuiVehicleShopGameController : gameuiWidgetGameController
+	{
+		[Ordinal(2)] 
+		[RED("homePage")] 
+		public inkWidgetReference HomePage
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("homePageMainText")] 
+		public inkTextWidgetReference HomePageMainText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("rightSidePanel")] 
+		public inkWidgetReference RightSidePanel
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("headerImage")] 
+		public inkWidgetReference HeaderImage
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("offersCanvas")] 
+		public inkWidgetReference OffersCanvas
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("detailsCanvas")] 
+		public inkWidgetReference DetailsCanvas
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("brandsListWidget")] 
+		public inkCompoundWidgetReference BrandsListWidget
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("offersGridWidget")] 
+		public inkCompoundWidgetReference OffersGridWidget
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("headerText")] 
+		public inkTextWidgetReference HeaderText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("scrollControllerWidget")] 
+		public inkWidgetReference ScrollControllerWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("uiScriptableSystem")] 
+		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
+		{
+			get => GetPropertyValue<CWeakHandle<UIScriptableSystem>>();
+			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("brandButtons")] 
+		public CArray<CWeakHandle<VehicleBrandFilterLogicController>> BrandButtons
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<VehicleBrandFilterLogicController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<VehicleBrandFilterLogicController>>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("offerButtons")] 
+		public CArray<CWeakHandle<VehicleOfferLogicController>> OfferButtons
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<VehicleOfferLogicController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<VehicleOfferLogicController>>>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("detailsController")] 
+		public CWeakHandle<VehicleDetailsLogicController> DetailsController
+		{
+			get => GetPropertyValue<CWeakHandle<VehicleDetailsLogicController>>();
+			set => SetPropertyValue<CWeakHandle<VehicleDetailsLogicController>>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("currentBrandController")] 
+		public CWeakHandle<VehicleBrandFilterLogicController> CurrentBrandController
+		{
+			get => GetPropertyValue<CWeakHandle<VehicleBrandFilterLogicController>>();
+			set => SetPropertyValue<CWeakHandle<VehicleBrandFilterLogicController>>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("discount")] 
+		public CFloat Discount
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("c_discountFactTDBID")] 
+		public TweakDBID C_discountFactTDBID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("c_discountValuesTDBID")] 
+		public TweakDBID C_discountValuesTDBID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		public gameuiVehicleShopGameController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
+	}
+}

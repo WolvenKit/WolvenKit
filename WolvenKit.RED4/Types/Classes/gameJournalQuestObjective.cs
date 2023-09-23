@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public gameJournalQuestObjective()
 		{
+			JournalEntryOverrideDataList = new();
 			Entries = new();
 			Description = new() { Unk1 = 0, Value = "" };
 

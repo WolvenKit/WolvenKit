@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SmartHouseControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("timetable")] 
 		public CArray<SPresetTimetableEntry> Timetable
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SPresetTimetableEntry>>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("activePreset")] 
 		public CHandle<SmartHousePreset> ActivePreset
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SmartHousePreset>>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("availablePresets")] 
 		public CArray<CHandle<SmartHousePreset>> AvailablePresets
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<SmartHousePreset>>>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("smartHouseCustomization")] 
 		public SmartHouseConfiguration SmartHouseCustomization
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SmartHouseConfiguration>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("callbackID")] 
 		public CUInt32 CallbackID
 		{
@@ -46,13 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public SmartHouseControllerPS()
 		{
-			DeviceName = "LocKey#15648";
-			TweakDBRecord = "Devices.SmartHouse";
-			TweakDBDescriptionRecord = 130612213885;
-			Timetable = new();
-			AvailablePresets = new();
-			SmartHouseCustomization = new SmartHouseConfiguration();
-
 			PostConstruct();
 		}
 

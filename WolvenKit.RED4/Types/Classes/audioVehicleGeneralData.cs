@@ -61,6 +61,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("UIStartEvent")] 
+		public CName UIStartEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("UIEndEvent")] 
+		public CName UIEndEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("hornOnEvent")] 
 		public CName HornOnEvent
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("hornOffEvent")] 
 		public CName HornOffEvent
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("policeHornOnEvent")] 
 		public CName PoliceHornOnEvent
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("policeHornOffEvent")] 
 		public CName PoliceHornOffEvent
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("trafficPanicHornOnEvent")] 
 		public CName TrafficPanicHornOnEvent
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("trafficPanicHornOffEvent")] 
 		public CName TrafficPanicHornOffEvent
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("sirenOnEvent")] 
 		public CName SirenOnEvent
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("sirenOffEvent")] 
 		public CName SirenOffEvent
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("rainStartEvent")] 
 		public CName RainStartEvent
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("rainStopEvent")] 
 		public CName RainStopEvent
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("waterStartEvent")] 
 		public CName WaterStartEvent
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("waterStopEvent")] 
 		public CName WaterStopEvent
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("tyreBurstEvent")] 
 		public CName TyreBurstEvent
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("skid")] 
 		public CName Skid
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("inclination")] 
 		public CName Inclination
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("impactVelocity")] 
 		public CName ImpactVelocity
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("impactGridCellRawChange")] 
 		public CName ImpactGridCellRawChange
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("collisionSoundEvent")] 
 		public CName CollisionSoundEvent
 		{
@@ -204,7 +220,71 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
+		[RED("brakeApplyEvent")] 
+		public CName BrakeApplyEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("brakeReleaseEvent")] 
+		public CName BrakeReleaseEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("handbrakeApplyEvent")] 
+		public CName HandbrakeApplyEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("handbrakeReleaseEvent")] 
+		public CName HandbrakeReleaseEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("brakeLoopStartEvent")] 
+		public CName BrakeLoopStartEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("brakeLoopEndEvent")] 
+		public CName BrakeLoopEndEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("lightsOnEvent")] 
+		public CName LightsOnEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("lightsOffEvent")] 
+		public CName LightsOffEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(35)] 
 		[RED("interiorReverbBus")] 
 		public CName InteriorReverbBus
 		{
@@ -212,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(36)] 
 		[RED("acoustingIsolationFactor")] 
 		public CName AcoustingIsolationFactor
 		{
@@ -220,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(37)] 
 		[RED("dopplerShift")] 
 		public CName DopplerShift
 		{
@@ -228,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(38)] 
 		[RED("vehicleDoorsSettings")] 
 		public audioVehicleDoorsSettingsMetadata VehicleDoorsSettings
 		{
@@ -236,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<audioVehicleDoorsSettingsMetadata>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(39)] 
 		[RED("vehicleInteriorParameterData")] 
 		public audioVehicleInteriorParameterData VehicleInteriorParameterData
 		{
@@ -244,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<audioVehicleInteriorParameterData>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(40)] 
 		[RED("vehicleTemperatureSettings")] 
 		public audioVehicleTemperatureSettings VehicleTemperatureSettings
 		{

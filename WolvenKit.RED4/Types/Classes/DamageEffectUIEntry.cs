@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class DamageEffectUIEntry : IScriptable
 	{
 		[Ordinal(0)] 
+		[RED("damageType")] 
+		public CEnum<gamedataDamageType> DamageType
+		{
+			get => GetPropertyValue<CEnum<gamedataDamageType>>();
+			set => SetPropertyValue<CEnum<gamedataDamageType>>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("valueStat")] 
 		public CEnum<gamedataStatType> ValueStat
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("targetStat")] 
 		public CEnum<gamedataStatType> TargetStat
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("displayType")] 
 		public CEnum<DamageEffectDisplayType> DisplayType
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<DamageEffectDisplayType>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("valueToDisplay")] 
 		public CFloat ValueToDisplay
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("effectorDuration")] 
 		public CFloat EffectorDuration
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("effectorDelay")] 
 		public CFloat EffectorDelay
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("isContinuous")] 
 		public CBool IsContinuous
 		{

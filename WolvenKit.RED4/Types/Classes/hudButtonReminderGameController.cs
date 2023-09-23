@@ -94,10 +94,6 @@ namespace WolvenKit.RED4.Types
 
 		public hudButtonReminderGameController()
 		{
-			Button1 = new inkCompoundWidgetReference();
-			Button2 = new inkCompoundWidgetReference();
-			Button3 = new inkCompoundWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -12,6 +12,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("lockState")] 
+		public CEnum<VehicleQuestEngineLockState> LockState
+		{
+			get => GetPropertyValue<CEnum<VehicleQuestEngineLockState>>();
+			set => SetPropertyValue<CEnum<VehicleQuestEngineLockState>>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("vehicleOnEngineOff")] 
+		public CBool VehicleOnEngineOff
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public VehicleQuestToggleEngineEvent()
 		{
 			PostConstruct();

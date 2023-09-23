@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public CheckVectorIsValid()
 		{
-			Value = new Vector4();
-
 			PostConstruct();
 		}
 

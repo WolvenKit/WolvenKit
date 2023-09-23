@@ -29,14 +29,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
-		[RED("dedicatedMods")] 
-		public CArray<CHandle<UIInventoryItemModAttachment>> DedicatedMods
+		[RED("attachments")] 
+		public CArray<CHandle<UIInventoryItemModAttachment>> Attachments
 		{
 			get => GetPropertyValue<CArray<CHandle<UIInventoryItemModAttachment>>>();
 			set => SetPropertyValue<CArray<CHandle<UIInventoryItemModAttachment>>>(value);
 		}
 
 		[Ordinal(4)] 
+		[RED("dedicatedMod")] 
+		public CHandle<UIInventoryItemModAttachment> DedicatedMod
+		{
+			get => GetPropertyValue<CHandle<UIInventoryItemModAttachment>>();
+			set => SetPropertyValue<CHandle<UIInventoryItemModAttachment>>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("transactionSystem")] 
 		public CHandle<gameTransactionSystem> TransactionSystem
 		{
@@ -46,11 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryItemModsManager()
 		{
-			EmptySlots = new();
-			UsedSlots = new();
-			Mods = new();
-			DedicatedMods = new();
-
 			PostConstruct();
 		}
 

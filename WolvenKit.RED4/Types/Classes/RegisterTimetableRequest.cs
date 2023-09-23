@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public RegisterTimetableRequest()
 		{
-			RequesterData = new PSOwnerData { Id = new gamePersistentID() };
-			TimeTable = new();
-
 			PostConstruct();
 		}
 

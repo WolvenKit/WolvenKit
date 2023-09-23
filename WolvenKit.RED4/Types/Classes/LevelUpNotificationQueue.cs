@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class LevelUpNotificationQueue : gameuiGenericNotificationGameController
 	{
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("levelUpBlackboard")] 
 		public CWeakHandle<gameIBlackboard> LevelUpBlackboard
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("playerLevelUpListener")] 
 		public CHandle<redCallbackObject> PlayerLevelUpListener
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("playerObject")] 
 		public CWeakHandle<gameObject> PlayerObject
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("combatModePSM")] 
 		public CEnum<gamePSMCombat> CombatModePSM
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMCombat>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("combatModeListener")] 
 		public CHandle<redCallbackObject> CombatModeListener
 		{
@@ -52,10 +52,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("lastEspionageLevel")] 
+		public CInt32 LastEspionageLevel
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public LevelUpNotificationQueue()
 		{
-			Duration = 2.000000F;
-
 			PostConstruct();
 		}
 

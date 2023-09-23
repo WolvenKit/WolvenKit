@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HitFlagPrereq : GenericHitPrereq
 	{
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("flag")] 
 		public CEnum<hitFlag> Flag
 		{

@@ -86,11 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public VendorDataManager()
 		{
-			BuyingCart = new();
-			SellingCart = new();
-			VendingBlacklist = new();
-			OpenTime = new GameTime();
-
 			PostConstruct();
 		}
 

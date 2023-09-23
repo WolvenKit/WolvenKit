@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalCodexCategory : gameJournalFileEntry
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("categoryName")] 
 		public LocalizationString CategoryName
 		{
@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalCodexCategory()
 		{
+			JournalEntryOverrideDataList = new();
 			Entries = new();
 			CategoryName = new() { Unk1 = 0, Value = "" };
 

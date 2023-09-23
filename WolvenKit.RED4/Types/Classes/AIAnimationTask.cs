@@ -78,8 +78,6 @@ namespace WolvenKit.RED4.Types
 
 		public AIAnimationTask()
 		{
-			AnimVariationValue = -1;
-
 			PostConstruct();
 		}
 

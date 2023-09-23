@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AntiRadar : gameweaponObject
 	{
-		[Ordinal(59)] 
+		[Ordinal(66)] 
 		[RED("colliderComponent")] 
 		public CHandle<entIComponent> ColliderComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(67)] 
 		[RED("gameEffectRef")] 
 		public gameEffectRef GameEffectRef
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(68)] 
 		[RED("gameEffectInstance")] 
 		public CHandle<gameEffectInstance> GameEffectInstance
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(69)] 
 		[RED("jammedSensorsArray")] 
 		public CArray<CWeakHandle<SensorDevice>> JammedSensorsArray
 		{
@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public AntiRadar()
 		{
-			GameEffectRef = new gameEffectRef();
-			JammedSensorsArray = new();
-
 			PostConstruct();
 		}
 

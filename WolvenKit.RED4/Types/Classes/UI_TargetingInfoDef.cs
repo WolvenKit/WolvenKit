@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("CrosshairRaycastTarget")] 
+		public gamebbScriptID_EntityID CrosshairRaycastTarget
+		{
+			get => GetPropertyValue<gamebbScriptID_EntityID>();
+			set => SetPropertyValue<gamebbScriptID_EntityID>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("VisibleTargetDistance")] 
 		public gamebbScriptID_Float VisibleTargetDistance
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("VisibleTargetAttitude")] 
 		public gamebbScriptID_Int32 VisibleTargetAttitude
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("CurrentObstructedTarget")] 
 		public gamebbScriptID_EntityID CurrentObstructedTarget
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_EntityID>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("ObstructedTargetDistance")] 
 		public gamebbScriptID_Float ObstructedTargetDistance
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("ObstructedTargetAttitude")] 
 		public gamebbScriptID_Int32 ObstructedTargetAttitude
 		{
@@ -54,13 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_TargetingInfoDef()
 		{
-			CurrentVisibleTarget = new gamebbScriptID_EntityID();
-			VisibleTargetDistance = new gamebbScriptID_Float();
-			VisibleTargetAttitude = new gamebbScriptID_Int32();
-			CurrentObstructedTarget = new gamebbScriptID_EntityID();
-			ObstructedTargetDistance = new gamebbScriptID_Float();
-			ObstructedTargetAttitude = new gamebbScriptID_Int32();
-
 			PostConstruct();
 		}
 

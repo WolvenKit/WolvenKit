@@ -29,30 +29,38 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
-		[RED("wantedCallbackID")] 
-		public CHandle<redCallbackObject> WantedCallbackID
+		[RED("wantedDataCallbackID")] 
+		public CHandle<redCallbackObject> WantedDataCallbackID
 		{
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(13)] 
-		[RED("animProxy")] 
-		public CHandle<inkanimProxy> AnimProxy
+		[RED("wantedStateCallbackID")] 
+		public CHandle<redCallbackObject> WantedStateCallbackID
 		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		[Ordinal(14)] 
-		[RED("attentionAnimProxy")] 
-		public CHandle<inkanimProxy> AttentionAnimProxy
+		[RED("wantedZoneCallbackID")] 
+		public CHandle<redCallbackObject> WantedZoneCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("introAnimProxy")] 
+		public CHandle<inkanimProxy> IntroAnimProxy
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("bountyStarAnimProxy")] 
 		public CArray<CHandle<inkanimProxy>> BountyStarAnimProxy
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<inkanimProxy>>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("bountyAnimProxy")] 
 		public CHandle<inkanimProxy> BountyAnimProxy
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("animOptionsLoop")] 
 		public inkanimPlaybackOptions AnimOptionsLoop
 		{
@@ -76,7 +84,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
+		[RED("currentState")] 
+		public CInt32 CurrentState
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("numOfStar")] 
 		public CInt32 NumOfStar
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("wantedLevel")] 
 		public CInt32 WantedLevel
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
@@ -100,7 +116,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
+		[RED("isDogtown")] 
+		public CBool IsDogtown
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("WANTED_TIER_1")] 
 		public CFloat WANTED_TIER_1
 		{
@@ -108,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("WANTED_MIN")] 
 		public CFloat WANTED_MIN
 		{
@@ -118,12 +142,6 @@ namespace WolvenKit.RED4.Types
 
 		public WantedBarGameController()
 		{
-			StarsWidget = new();
-			BountyStarAnimProxy = new();
-			AnimOptionsLoop = new inkanimPlaybackOptions();
-			WANTED_TIER_1 = 1.000000F;
-			WANTED_MIN = 0.100000F;
-
 			PostConstruct();
 		}
 

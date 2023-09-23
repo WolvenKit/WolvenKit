@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public StatusEffectSignalEvent()
 		{
-			Tags = new();
-			Flags = new();
-
 			PostConstruct();
 		}
 

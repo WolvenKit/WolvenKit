@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NetworkMinigameGridCellController : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("cellData")] 
 		public CellData CellData
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CellData>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("grid")] 
 		public CWeakHandle<NetworkMinigameGridController> Grid
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<NetworkMinigameGridController>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("slotsContainer")] 
 		public inkWidgetReference SlotsContainer
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("slotsContent")] 
 		public CWeakHandle<NetworkMinigameElementController> SlotsContent
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<NetworkMinigameElementController>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("elementLibraryName")] 
 		public CName ElementLibraryName
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("defaultColor")] 
 		public HDRColor DefaultColor
 		{
@@ -54,10 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkMinigameGridCellController()
 		{
-			CellData = new CellData { Position = new Vector2(), Element = new ElementData(), Properties = new SpecialProperties { Traps = new() } };
-			SlotsContainer = new inkWidgetReference();
-			DefaultColor = new HDRColor();
-
 			PostConstruct();
 		}
 

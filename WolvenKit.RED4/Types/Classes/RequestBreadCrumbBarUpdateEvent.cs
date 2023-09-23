@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public RequestBreadCrumbBarUpdateEvent()
 		{
-			Requester = new gamePersistentID();
-			BreadCrumbData = new SBreadCrumbUpdateData();
-
 			PostConstruct();
 		}
 

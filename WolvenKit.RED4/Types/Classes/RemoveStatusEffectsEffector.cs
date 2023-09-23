@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public RemoveStatusEffectsEffector()
 		{
-			EffectTypes = new();
-			EffectString = new();
-			EffectTags = new();
-
 			PostConstruct();
 		}
 

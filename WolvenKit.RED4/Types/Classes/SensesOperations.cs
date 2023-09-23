@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public SensesOperations()
 		{
-			Components = new();
-			FxInstances = new();
-			SensesOperations_ = new();
-
 			PostConstruct();
 		}
 

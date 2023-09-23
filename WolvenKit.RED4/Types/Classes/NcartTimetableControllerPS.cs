@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NcartTimetableControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("ncartTimetableSetup")] 
 		public NcartTimetableSetup NcartTimetableSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NcartTimetableSetup>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("currentTimeToDepart")] 
 		public CInt32 CurrentTimeToDepart
 		{
@@ -22,11 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public NcartTimetableControllerPS()
 		{
-			DeviceName = "LocKey#1653";
-			TweakDBRecord = "Devices.NcartTimetable";
-			TweakDBDescriptionRecord = 147694950908;
-			NcartTimetableSetup = new NcartTimetableSetup { DepartFrequency = 5, UiUpdateFrequency = 1 };
-
 			PostConstruct();
 		}
 

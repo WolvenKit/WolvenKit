@@ -52,6 +52,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("showAvatar")] 
+		public CBool ShowAvatar
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("visuals")] 
+		public CEnum<questPhoneCallVisuals> Visuals
+		{
+			get => GetPropertyValue<CEnum<questPhoneCallVisuals>>();
+			set => SetPropertyValue<CEnum<questPhoneCallVisuals>>(value);
+		}
+
 		public questTriggerCallRequest()
 		{
 			CallPhase = Enums.questPhoneCallPhase.IncomingCall;

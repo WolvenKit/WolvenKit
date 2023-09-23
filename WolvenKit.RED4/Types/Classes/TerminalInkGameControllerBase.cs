@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TerminalInkGameControllerBase : MasterDeviceInkGameControllerBase
 	{
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("layoutID")] 
 		public TweakDBID LayoutID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("currentLayoutLibraryID")] 
 		public CName CurrentLayoutLibraryID
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("mainLayout")] 
 		public CWeakHandle<inkWidget> MainLayout
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("currentlyActiveDevices")] 
 		public CArray<gamePersistentID> CurrentlyActiveDevices
 		{
@@ -36,7 +36,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gamePersistentID>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
+		[RED("buttonVisibility")] 
+		public CBool ButtonVisibility
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("mainDisplayWidget")] 
 		public CWeakHandle<inkVideoWidget> MainDisplayWidget
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkVideoWidget>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("terminalTitle")] 
 		public CString TerminalTitle
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("onGlitchingStateChangedListener")] 
 		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
@@ -62,8 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public TerminalInkGameControllerBase()
 		{
-			CurrentlyActiveDevices = new();
-
 			PostConstruct();
 		}
 

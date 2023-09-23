@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PSD_DetectorPS : gameDeviceComponentPS
 	{
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("counter")] 
 		public CInt32 Counter
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("toggle")] 
 		public CBool Toggle
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("lastEntityID")] 
 		public entEntityID LastEntityID
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("lastPersistentID")] 
 		public gamePersistentID LastPersistentID
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamePersistentID>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("name")] 
 		public CName Name
 		{
@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public PSD_DetectorPS()
 		{
-			LastEntityID = new entEntityID();
-			LastPersistentID = new gamePersistentID();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class LeftHandCyberwareActionAbstractEvents : LeftHandCyberwareEventsTransition
 	{
-		[Ordinal(0)] 
+		[Ordinal(2)] 
 		[RED("projectileReleased")] 
 		public CBool ProjectileReleased
 		{

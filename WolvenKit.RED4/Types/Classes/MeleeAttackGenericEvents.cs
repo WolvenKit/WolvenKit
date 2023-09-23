@@ -45,6 +45,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("finisherTarget")] 
+		public CWeakHandle<ScriptedPuppet> FinisherTarget
+		{
+			get => GetPropertyValue<CWeakHandle<ScriptedPuppet>>();
+			set => SetPropertyValue<CWeakHandle<ScriptedPuppet>>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("finisherCameraRotReseted")] 
+		public CBool FinisherCameraRotReseted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("textLayer")] 
 		public CUInt32 TextLayer
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("rumblePlayed")] 
 		public CBool RumblePlayed
 		{
@@ -60,12 +76,36 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("shouldBlockImpulseUpdate")] 
 		public CBool ShouldBlockImpulseUpdate
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("enteredFromMeleeLeap")] 
+		public CBool EnteredFromMeleeLeap
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("effectPositionUpdated")] 
+		public CBool EffectPositionUpdated
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("tppYawOverride")] 
+		public CFloat TppYawOverride
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public MeleeAttackGenericEvents()

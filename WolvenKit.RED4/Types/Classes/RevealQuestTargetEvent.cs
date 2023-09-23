@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public RevealQuestTargetEvent()
 		{
-			Reveal = true;
-			Timeout = 4.000000F;
-
 			PostConstruct();
 		}
 

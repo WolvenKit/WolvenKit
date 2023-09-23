@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NanoWireProjectile : BaseProjectile
 	{
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("maxAttackRange")] 
 		public CFloat MaxAttackRange
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("launchMode")] 
 		public CEnum<ELaunchMode> LaunchMode
 		{

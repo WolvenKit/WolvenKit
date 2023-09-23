@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WeakFenceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("weakfenceSkillChecks")] 
 		public CHandle<EngDemoContainer> WeakfenceSkillChecks
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("weakFenceSetup")] 
 		public WeakFenceSetup WeakFenceSetup
 		{
@@ -22,14 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public WeakFenceControllerPS()
 		{
-			DeviceName = "LocKey#189";
-			TweakDBRecord = "Devices.WeakFence";
-			TweakDBDescriptionRecord = 128236067982;
-			ShouldScannerShowStatus = false;
-			ShouldScannerShowNetwork = false;
-			ShouldScannerShowRole = true;
-			WeakFenceSetup = new WeakFenceSetup();
-
 			PostConstruct();
 		}
 

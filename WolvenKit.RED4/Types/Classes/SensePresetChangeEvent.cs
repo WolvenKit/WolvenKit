@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class SensePresetChangeEvent : senseVisibilityEvent
+	public partial class sensePresetChangeEvent : senseVisibilityEvent
 	{
 		[Ordinal(4)] 
 		[RED("presetID")] 
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		public SensePresetChangeEvent()
+		public sensePresetChangeEvent()
 		{
 			PostConstruct();
 		}

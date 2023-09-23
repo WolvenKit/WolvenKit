@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalQuestTitleModifier : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("title")] 
 		public LocalizationString Title
 		{
@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalQuestTitleModifier()
 		{
+			JournalEntryOverrideDataList = new();
 			Title = new() { Unk1 = 0, Value = "" };
 
 			PostConstruct();

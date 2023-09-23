@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("cooldownTitle")] 
+		public inkWidgetReference CooldownTitle
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("cooldownContainer")] 
 		public inkCompoundWidgetReference CooldownContainer
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("poolHolder")] 
 		public inkCompoundWidgetReference PoolHolder
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("mode")] 
 		public CEnum<ECooldownGameControllerMode> Mode
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ECooldownGameControllerMode>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("effectTypes")] 
 		public CArray<CEnum<gamedataStatusEffectType>> EffectTypes
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataStatusEffectType>>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("cooldownPool")] 
 		public CArray<CWeakHandle<SingleCooldownManager>> CooldownPool
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<SingleCooldownManager>>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("matchBuffer")] 
 		public CArray<CWeakHandle<SingleCooldownManager>> MatchBuffer
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<SingleCooldownManager>>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("buffsCallback")] 
 		public CHandle<redCallbackObject> BuffsCallback
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("debuffsCallback")] 
 		public CHandle<redCallbackObject> DebuffsCallback
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("blackboardDef")] 
 		public CHandle<UI_PlayerBioMonitorDef> BlackboardDef
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_PlayerBioMonitorDef>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
@@ -94,12 +102,6 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiCooldownGameController()
 		{
-			CooldownContainer = new inkCompoundWidgetReference();
-			PoolHolder = new inkCompoundWidgetReference();
-			EffectTypes = new();
-			CooldownPool = new();
-			MatchBuffer = new();
-
 			PostConstruct();
 		}
 

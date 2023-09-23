@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HoloDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("isPlaying")] 
 		public CBool IsPlaying
 		{
@@ -14,9 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public HoloDeviceControllerPS()
 		{
-			TweakDBRecord = "Devices.HoloDevice";
-			TweakDBDescriptionRecord = 130097364595;
-
 			PostConstruct();
 		}
 

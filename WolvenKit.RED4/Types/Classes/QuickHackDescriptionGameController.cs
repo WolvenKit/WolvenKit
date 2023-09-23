@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("durationRoot")] 
+		public inkWidgetReference DurationRoot
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("cooldown")] 
 		public inkTextWidgetReference Cooldown
 		{
@@ -52,7 +60,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
+		[RED("cooldownRoot")] 
+		public inkWidgetReference CooldownRoot
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("uploadTime")] 
 		public inkTextWidgetReference UploadTime
 		{
@@ -60,7 +76,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
+		[RED("uploadTimeRoot")] 
+		public inkWidgetReference UploadTimeRoot
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("memoryCost")] 
 		public inkTextWidgetReference MemoryCost
 		{
@@ -68,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("memoryRawCost")] 
 		public inkTextWidgetReference MemoryRawCost
 		{
@@ -76,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("categoryText")] 
 		public inkTextWidgetReference CategoryText
 		{
@@ -84,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("categoryContainer")] 
 		public inkWidgetReference CategoryContainer
 		{
@@ -92,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("damageWrapper")] 
 		public inkWidgetReference DamageWrapper
 		{
@@ -100,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("damageLabel")] 
 		public inkTextWidgetReference DamageLabel
 		{
@@ -108,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("damageValue")] 
 		public inkTextWidgetReference DamageValue
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("healthPercentageLabel")] 
 		public inkTextWidgetReference HealthPercentageLabel
 		{
@@ -124,7 +148,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
+		[RED("effectsList")] 
+		public inkCompoundWidgetReference EffectsList
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("quickHackDataCallbackID")] 
 		public CHandle<redCallbackObject> QuickHackDataCallbackID
 		{
@@ -132,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("selectedData")] 
 		public CHandle<QuickhackData> SelectedData
 		{
@@ -140,24 +172,32 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<QuickhackData>>(value);
 		}
 
+		[Ordinal(26)] 
+		[RED("player")] 
+		public CWeakHandle<PlayerPuppet> Player
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("equippedQuickHackData")] 
+		public CHandle<EquippedQuickHackData> EquippedQuickHackData
+		{
+			get => GetPropertyValue<CHandle<EquippedQuickHackData>>();
+			set => SetPropertyValue<CHandle<EquippedQuickHackData>>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("uiScriptableSystem")] 
+		public CHandle<UIScriptableSystem> UiScriptableSystem
+		{
+			get => GetPropertyValue<CHandle<UIScriptableSystem>>();
+			set => SetPropertyValue<CHandle<UIScriptableSystem>>(value);
+		}
+
 		public QuickHackDescriptionGameController()
 		{
-			SubHeader = new inkTextWidgetReference();
-			Tier = new inkTextWidgetReference();
-			Description = new inkTextWidgetReference();
-			RecompileTimer = new inkTextWidgetReference();
-			Duration = new inkTextWidgetReference();
-			Cooldown = new inkTextWidgetReference();
-			UploadTime = new inkTextWidgetReference();
-			MemoryCost = new inkTextWidgetReference();
-			MemoryRawCost = new inkTextWidgetReference();
-			CategoryText = new inkTextWidgetReference();
-			CategoryContainer = new inkWidgetReference();
-			DamageWrapper = new inkWidgetReference();
-			DamageLabel = new inkTextWidgetReference();
-			DamageValue = new inkTextWidgetReference();
-			HealthPercentageLabel = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

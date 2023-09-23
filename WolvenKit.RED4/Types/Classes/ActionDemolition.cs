@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ActionDemolition : ActionSkillCheck
 	{
-		[Ordinal(31)] 
+		[Ordinal(44)] 
 		[RED("slotID")] 
 		public gamemountingMountingSlotId SlotID
 		{
@@ -14,15 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public ActionDemolition()
 		{
-			RequesterID = new entEntityID();
-			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
-			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
-			CanTriggerStim = true;
-			SkillCheckName = Enums.EDeviceChallengeSkill.Athletics;
-			LocalizedName = "LocKey#22271";
-			SkillcheckDescription = new UIInteractionSkillCheck { AdditionalRequirements = new(), OwnerID = new entEntityID() };
-			SlotID = new gamemountingMountingSlotId();
-
 			PostConstruct();
 		}
 

@@ -110,11 +110,6 @@ namespace WolvenKit.RED4.Types
 
 		public PerksMenuAttributeItemController()
 		{
-			AttributeDisplay = new inkWidgetReference();
-			ConnectionLine = new inkImageWidgetReference();
-			SkillsLevelsContainer = new inkCompoundWidgetReference();
-			ProficiencyButtonRefs = new();
-
 			PostConstruct();
 		}
 

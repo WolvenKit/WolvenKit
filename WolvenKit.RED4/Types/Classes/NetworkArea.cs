@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NetworkArea : InteractiveMasterDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("area")] 
 		public CHandle<gameStaticTriggerAreaComponent> Area
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkArea()
 		{
-			ControllerTypeName = "NetworkAreaController";
-
 			PostConstruct();
 		}
 

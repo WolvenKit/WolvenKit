@@ -126,14 +126,6 @@ namespace WolvenKit.RED4.Types
 
 		public weaponIndicatorController()
 		{
-			TriggerModeControllers = new();
-			AmmoLogicControllers = new();
-			ChargeLogicControllers = new();
-			TriggerModeInstances = new();
-			AmmoLogicInstances = new();
-			ChargeLogicInstances = new();
-			ActiveWeapon = new gameSlotWeaponData { WeaponID = new gameItemID(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new gameItemID(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
-
 			PostConstruct();
 		}
 

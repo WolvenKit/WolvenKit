@@ -86,17 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public AIAlertedPatrolDef()
 		{
-			PatrolPathOverride = new gamebbScriptID_Variant();
-			Sprint = new gamebbScriptID_Bool();
-			SelectedPath = new gamebbScriptID_Variant();
-			ClosestPathPoint = new gamebbScriptID_Vector4();
-			WorkspotData = new gamebbScriptID_Variant();
-			WorkspotEntryPosition = new gamebbScriptID_Vector4();
-			WorkspotExitPosition = new gamebbScriptID_Vector4();
-			PatrolAction = new gamebbScriptID_Variant();
-			ForceAlerted = new gamebbScriptID_Bool();
-			PatrolInProgress = new gamebbScriptID_Bool();
-
 			PostConstruct();
 		}
 

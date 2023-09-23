@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerRequirementsGameController()
 		{
-			ScannerRequirementsRightPanel = new inkCompoundWidgetReference();
-			AsyncSpawnRequests = new();
-
 			PostConstruct();
 		}
 

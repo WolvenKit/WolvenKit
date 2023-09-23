@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public GoToMenuEvent()
 		{
-			WakeUp = true;
-			OwnerID = new entEntityID();
-
 			PostConstruct();
 		}
 

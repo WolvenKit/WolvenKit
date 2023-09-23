@@ -71,9 +71,6 @@ namespace WolvenKit.RED4.Types
 		public gameVisionModeComponent()
 		{
 			Name = "vision";
-			ForcedHighlights = new();
-			ActiveRevealRequests = new();
-			SlaveObjectsToHighlight = new();
 
 			PostConstruct();
 		}

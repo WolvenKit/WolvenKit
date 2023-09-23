@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class FastTravelButtonLogicController : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("districtName")] 
 		public inkTextWidgetReference DistrictName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("locationName")] 
 		public inkTextWidgetReference LocationName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("soundData")] 
 		public SSoundData SoundData
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SSoundData>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("fastTravelPointData")] 
 		public CWeakHandle<gameFastTravelPointData> FastTravelPointData
 		{
@@ -46,10 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public FastTravelButtonLogicController()
 		{
-			DistrictName = new inkTextWidgetReference();
-			LocationName = new inkTextWidgetReference();
-			SoundData = new SSoundData { WidgetAudioName = "Button" };
-
 			PostConstruct();
 		}
 

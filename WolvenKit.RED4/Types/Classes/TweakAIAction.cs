@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TweakAIAction : TweakAIActionAbstract
 	{
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("record")] 
 		public TweakDBID Record
 		{
@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public TweakAIAction()
 		{
-			LookatEvents = new();
-			GeneralSubActionsResults = new(8);
-			PhaseSubActionsResults = new(8);
-
 			PostConstruct();
 		}
 

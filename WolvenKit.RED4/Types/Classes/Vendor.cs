@@ -45,6 +45,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("newItems")] 
+		public CArray<TweakDBID> NewItems
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("soldItems")] 
+		public CHandle<SoldItemsCache> SoldItems
+		{
+			get => GetPropertyValue<CHandle<SoldItemsCache>>();
+			set => SetPropertyValue<CHandle<SoldItemsCache>>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("priceMultiplier")] 
 		public CFloat PriceMultiplier
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("vendorPersistentID")] 
 		public gamePersistentID VendorPersistentID
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamePersistentID>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("stockInit")] 
 		public CBool StockInit
 		{
@@ -68,7 +84,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
+		[RED("playerHacksInit")] 
+		public CBool PlayerHacksInit
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("inventoryInit")] 
 		public CBool InventoryInit
 		{
@@ -76,7 +100,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
+		[RED("isAttached")] 
+		public CBool IsAttached
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("inventoryReinitWithPlayerStats")] 
 		public CBool InventoryReinitWithPlayerStats
 		{
@@ -84,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(14)] 
 		[RED("vendorRecord")] 
 		public CWeakHandle<gamedataVendor_Record> VendorRecord
 		{
@@ -92,13 +124,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataVendor_Record>>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("playerHacks")] 
+		public CArray<gameItemID> PlayerHacks
+		{
+			get => GetPropertyValue<CArray<gameItemID>>();
+			set => SetPropertyValue<CArray<gameItemID>>(value);
+		}
+
 		public Vendor()
 		{
-			GameInstance = new ScriptGameInstance();
-			Stock = new();
-			PriceMultiplier = 1.000000F;
-			VendorPersistentID = new gamePersistentID();
-
 			PostConstruct();
 		}
 

@@ -46,11 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public ImageSwappingController()
 		{
-			ButtonsPaths = new();
-			ButtonsNames = new();
-			ButtonsValues = new();
-			Buttons = new();
-
 			PostConstruct();
 		}
 

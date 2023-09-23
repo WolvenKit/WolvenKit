@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class GarmentItemPreviewGameController : gameuiBaseGarmentItemPreviewGameController
 	{
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("data")] 
 		public CHandle<InventoryItemPreviewData> Data
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryItemPreviewData>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("isMouseDown")] 
 		public CBool IsMouseDown
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("c_GARMENT_ROTATION_SPEED")] 
 		public CFloat C_GARMENT_ROTATION_SPEED
 		{
@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public GarmentItemPreviewGameController()
 		{
-			C_GARMENT_ROTATION_SPEED = 100.000000F;
-
 			PostConstruct();
 		}
 

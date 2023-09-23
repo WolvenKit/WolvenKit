@@ -52,12 +52,48 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<GameplayRoleMappinData>>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("queueQuickHackWidgets")] 
+		public CArray<inkWidgetReference> QueueQuickHackWidgets
+		{
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("queueQuickHackControllers")] 
+		public CArray<CWeakHandle<QuickHackQueueItem>> QueueQuickHackControllers
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<QuickHackQueueItem>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<QuickHackQueueItem>>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("mappinDataQueue")] 
+		public CArray<CHandle<GameplayRoleMappinData>> MappinDataQueue
+		{
+			get => GetPropertyValue<CArray<CHandle<GameplayRoleMappinData>>>();
+			set => SetPropertyValue<CArray<CHandle<GameplayRoleMappinData>>>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("animUpload")] 
+		public CHandle<inkanimProxy> AnimUpload
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("animQueue")] 
+		public CHandle<inkanimProxy> AnimQueue
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
 		public QuickHackMappinController()
 		{
-			Bar = new inkWidgetReference();
-			Header = new inkTextWidgetReference();
-			IconWidgetActive = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

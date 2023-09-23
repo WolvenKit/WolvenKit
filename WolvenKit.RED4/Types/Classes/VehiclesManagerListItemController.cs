@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VehiclesManagerListItemController : inkVirtualCompoundItemController
 	{
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("typeIcon")] 
 		public inkImageWidgetReference TypeIcon
 		{
@@ -20,7 +20,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
+		[RED("repairTime")] 
+		public inkTextWidgetReference RepairTime
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("vehicleData")] 
 		public CHandle<VehicleListItemData> VehicleData
 		{
@@ -30,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public VehiclesManagerListItemController()
 		{
-			Label = new inkTextWidgetReference();
-			TypeIcon = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

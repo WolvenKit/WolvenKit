@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class EquipmentSystem : gameScriptableSystem
+	public partial class EquipmentSystem : gameIEquipmentSystem
 	{
 		[Ordinal(0)] 
 		[RED("ownerData")] 
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public EquipmentSystem()
 		{
-			OwnerData = new();
-
 			PostConstruct();
 		}
 

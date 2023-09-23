@@ -36,13 +36,48 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("IsFPPRearviewCameraActivated")] 
+		public gamebbScriptID_Bool IsFPPRearviewCameraActivated
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("RemoteControlledVehicleData")] 
+		public gamebbScriptID_Variant RemoteControlledVehicleData
+		{
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("MountedWeaponsTargets")] 
+		public gamebbScriptID_Variant MountedWeaponsTargets
+		{
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("MountedMissileLauncherAmmo")] 
+		public gamebbScriptID_Uint32 MountedMissileLauncherAmmo
+		{
+			get => GetPropertyValue<gamebbScriptID_Uint32>();
+			set => SetPropertyValue<gamebbScriptID_Uint32>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("MountedPowerWeaponAmmo")] 
+		public gamebbScriptID_Uint32 MountedPowerWeaponAmmo
+		{
+			get => GetPropertyValue<gamebbScriptID_Uint32>();
+			set => SetPropertyValue<gamebbScriptID_Uint32>(value);
+		}
+
 		public UI_ActiveVehicleDataDef()
 		{
-			VehPlayerStateData = new gamebbScriptID_Variant();
-			IsPlayerMounted = new gamebbScriptID_Bool();
-			IsTPPCameraOn = new gamebbScriptID_Bool();
-			PositionInRace = new gamebbScriptID_Int32();
-
 			PostConstruct();
 		}
 

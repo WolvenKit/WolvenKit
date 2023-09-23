@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_CodexSystemDef()
 		{
-			CodexUpdated = new gamebbScriptID_Variant();
-
 			PostConstruct();
 		}
 

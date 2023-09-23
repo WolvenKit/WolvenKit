@@ -70,9 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public ProcessRelevantDevicesForNetworkGridEvent()
 		{
-			BreachedResource = new gameFxResource();
-			DefaultResource = new gameFxResource();
-
 			PostConstruct();
 		}
 

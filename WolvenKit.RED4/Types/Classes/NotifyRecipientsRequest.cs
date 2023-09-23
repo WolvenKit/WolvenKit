@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public NotifyRecipientsRequest()
 		{
-			Recipients = new();
-			Time = new GameTime();
-
 			PostConstruct();
 		}
 

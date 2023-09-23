@@ -5,14 +5,6 @@ namespace WolvenKit.RED4.Types
 	public partial class UI_WantedBarDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
-		[RED("CurrentBounty")] 
-		public gamebbScriptID_Int32 CurrentBounty
-		{
-			get => GetPropertyValue<gamebbScriptID_Int32>();
-			set => SetPropertyValue<gamebbScriptID_Int32>(value);
-		}
-
-		[Ordinal(1)] 
 		[RED("CurrentWantedLevel")] 
 		public gamebbScriptID_Int32 CurrentWantedLevel
 		{
@@ -20,11 +12,40 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("DeescalationStages")] 
+		public gamebbScriptID_Int32 DeescalationStages
+		{
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("CurrentChaseState")] 
+		public gamebbScriptID_CName CurrentChaseState
+		{
+			get => GetPropertyValue<gamebbScriptID_CName>();
+			set => SetPropertyValue<gamebbScriptID_CName>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("BlinkingStarsDurationTime")] 
+		public gamebbScriptID_Float BlinkingStarsDurationTime
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("IsDogtown")] 
+		public gamebbScriptID_Bool IsDogtown
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public UI_WantedBarDef()
 		{
-			CurrentBounty = new gamebbScriptID_Int32();
-			CurrentWantedLevel = new gamebbScriptID_Int32();
-
 			PostConstruct();
 		}
 

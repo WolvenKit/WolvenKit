@@ -142,20 +142,6 @@ namespace WolvenKit.RED4.Types
 
 		public ContinueGameTooltip()
 		{
-			MainContainer = new inkWidgetReference();
-			ImageReplacement = new inkImageWidgetReference();
-			NetworkStatusError = new inkWidgetReference();
-			NetworkSyncingIndicator = new inkWidgetReference();
-			Label = new inkTextWidgetReference();
-			LabelDate = new inkTextWidgetReference();
-			Location = new inkTextWidgetReference();
-			Quest = new inkTextWidgetReference();
-			Level = new inkTextWidgetReference();
-			Lifepath = new inkImageWidgetReference();
-			CloudStatus = new inkImageWidgetReference();
-			PlayTime = new inkTextWidgetReference();
-			DefaultAtlasPath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\fullscreen\load_game\save_game.inkatlas") };
-
 			PostConstruct();
 		}
 

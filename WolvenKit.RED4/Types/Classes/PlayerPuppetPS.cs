@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PlayerPuppetPS : ScriptedPuppetPS
 	{
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("keybindigs")] 
 		public KeyBindings Keybindigs
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<KeyBindings>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("availablePrograms")] 
 		public CArray<gameuiMinigameProgramData> AvailablePrograms
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameuiMinigameProgramData>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("hasAutoReveal")] 
 		public CBool HasAutoReveal
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("combatExitTimestamp")] 
 		public CFloat CombatExitTimestamp
 		{
@@ -36,7 +36,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
+		[RED("isInDriverCombat")] 
+		public CBool IsInDriverCombat
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(40)] 
+		[RED("permanentHealthBonus")] 
+		public CFloat PermanentHealthBonus
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("permanentStaminaBonus")] 
+		public CFloat PermanentStaminaBonus
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(42)] 
+		[RED("permanentMemoryBonus")] 
+		public CFloat PermanentMemoryBonus
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(43)] 
 		[RED("minigameBB")] 
 		public CWeakHandle<gameIBlackboard> MinigameBB
 		{
@@ -46,9 +78,6 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerPuppetPS()
 		{
-			Keybindigs = new KeyBindings();
-			AvailablePrograms = new();
-
 			PostConstruct();
 		}
 

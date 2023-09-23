@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SecuritySystemOutput : ActionBool
 	{
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("currentSecurityState")] 
 		public CEnum<ESecuritySystemState> CurrentSecurityState
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESecuritySystemState>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(39)] 
 		[RED("breachOrigin")] 
 		public CEnum<EBreachOrigin> BreachOrigin
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EBreachOrigin>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(40)] 
 		[RED("originalInputEvent")] 
 		public CHandle<SecuritySystemInput> OriginalInputEvent
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SecuritySystemInput>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(41)] 
 		[RED("securityStateChanged")] 
 		public CBool SecurityStateChanged
 		{
@@ -38,11 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public SecuritySystemOutput()
 		{
-			RequesterID = new entEntityID();
-			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
-			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
-			CanTriggerStim = true;
-
 			PostConstruct();
 		}
 

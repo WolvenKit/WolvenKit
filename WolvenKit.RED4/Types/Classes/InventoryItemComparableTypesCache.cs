@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemComparableTypesCache()
 		{
-			ComparableTypes = new();
-			ComparableRecordTypes = new();
-
 			PostConstruct();
 		}
 

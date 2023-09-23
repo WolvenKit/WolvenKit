@@ -46,11 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public AnimateAnchorOnHoverView()
 		{
-			Raycaster = new inkWidgetReference();
-			HoverAnchor = new Vector2();
-			NormalAnchor = new Vector2();
-			AnimTime = 0.100000F;
-
 			PostConstruct();
 		}
 

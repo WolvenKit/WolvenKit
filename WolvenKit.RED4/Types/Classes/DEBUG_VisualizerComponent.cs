@@ -94,14 +94,6 @@ namespace WolvenKit.RED4.Types
 
 		public DEBUG_VisualizerComponent()
 		{
-			Records = new();
-			TICK_TIME_DELTA = 0.010000F;
-			TEXT_SCALE_NAME = 3.000000F;
-			TEXT_SCALE_ATTITUDE = 2.000000F;
-			TEXT_SCALE_IMMORTALITY_MODE = 1.000000F;
-			TEXT_TOP = 2.300000F;
-			TEXT_OFFSET = 0.200000F;
-
 			PostConstruct();
 		}
 

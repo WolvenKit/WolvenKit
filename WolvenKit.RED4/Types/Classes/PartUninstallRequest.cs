@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public PartUninstallRequest()
 		{
-			ItemID = new gameItemID();
-			PartID = new gameItemID();
-
 			PostConstruct();
 		}
 

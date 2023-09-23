@@ -36,6 +36,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("malfunctioning")] 
+		public CInt32 Malfunctioning
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public AnimFeatureDoor()
 		{
 			PostConstruct();

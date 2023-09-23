@@ -44,12 +44,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("skipBeingHackedSetUp")] 
+		public CBool SkipBeingHackedSetUp
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public HackPlayerEvent()
 		{
-			NetrunnerID = new entEntityID();
-			TargetID = new entEntityID();
-			ShowDirectionalIndicator = true;
-
 			PostConstruct();
 		}
 

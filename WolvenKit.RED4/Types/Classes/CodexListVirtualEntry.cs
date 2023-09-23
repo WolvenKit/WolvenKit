@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CodexListVirtualEntry : inkVirtualCompoundItemController
 	{
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("title")] 
 		public inkTextWidgetReference Title
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("newWrapper")] 
 		public inkWidgetReference NewWrapper
 		{
@@ -28,7 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
+		[RED("ep1Icon")] 
+		public inkWidgetReference Ep1Icon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("entryData")] 
 		public CHandle<CodexEntryData> EntryData
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CodexEntryData>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("nestedListData")] 
 		public CHandle<VirutalNestedListData> NestedListData
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VirutalNestedListData>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("activeItemSync")] 
 		public CWeakHandle<CodexListSyncData> ActiveItemSync
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<CodexListSyncData>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("isItemHovered")] 
 		public CBool IsItemHovered
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
 		[RED("isItemToggled")] 
 		public CBool IsItemToggled
 		{
@@ -78,10 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public CodexListVirtualEntry()
 		{
-			Title = new inkTextWidgetReference();
-			Icon = new inkImageWidgetReference();
-			NewWrapper = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

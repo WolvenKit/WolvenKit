@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiItemPreviewGameController : gameuiPreviewGameController
 	{
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("root")] 
 		public inkWidgetReference Root
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("sceneName")] 
 		public CName SceneName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("cameraRef")] 
 		public NodeRef CameraRef
 		{
@@ -40,7 +40,6 @@ namespace WolvenKit.RED4.Types
 		{
 			YawSpeed = 1.250000F;
 			YawDefault = -125.000000F;
-			RotationSpeed = 30.000000F;
 			Root = new inkWidgetReference();
 			Image = new inkImageWidgetReference();
 

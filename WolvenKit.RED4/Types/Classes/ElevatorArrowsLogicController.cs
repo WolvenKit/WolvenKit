@@ -94,13 +94,6 @@ namespace WolvenKit.RED4.Types
 
 		public ElevatorArrowsLogicController()
 		{
-			Arrow1Widget = new inkWidgetReference();
-			Arrow2Widget = new inkWidgetReference();
-			Arrow3Widget = new inkWidgetReference();
-			AnimOptions1 = new inkanimPlaybackOptions();
-			AnimOptions2 = new inkanimPlaybackOptions();
-			AnimOptions3 = new inkanimPlaybackOptions();
-
 			PostConstruct();
 		}
 

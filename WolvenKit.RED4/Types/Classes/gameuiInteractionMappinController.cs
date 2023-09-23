@@ -41,9 +41,6 @@ namespace WolvenKit.RED4.Types
 			IconWidget = new inkImageWidgetReference();
 			PlayerTrackedWidget = new inkWidgetReference();
 			ScaleWidget = new inkWidgetReference();
-			AnimPlayerTrackedWidget = new inkWidgetReference();
-			AnimPlayerAboveBelowWidget = new inkWidgetReference();
-			TaggedWidgets = new();
 			CanvasWidgetName = "Canvas";
 			ArrowWidgetName = "Arrow";
 

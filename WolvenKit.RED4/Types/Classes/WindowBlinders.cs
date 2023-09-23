@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WindowBlinders : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SimpleDevice> AnimFeature
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_SimpleDevice>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("workspotSideName")] 
 		public CName WorkspotSideName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("portalLight")] 
 		public CHandle<gameLightComponent> PortalLight
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("portalLight2")] 
 		public CHandle<gameLightComponent> PortalLight2
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(102)] 
 		[RED("portalLight3")] 
 		public CHandle<gameLightComponent> PortalLight3
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(103)] 
 		[RED("portalLight4")] 
 		public CHandle<gameLightComponent> PortalLight4
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(104)] 
 		[RED("sideTriggerNames")] 
 		public CArray<CName> SideTriggerNames
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(105)] 
 		[RED("triggerComponents")] 
 		public CArray<CHandle<gameStaticTriggerAreaComponent>> TriggerComponents
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameStaticTriggerAreaComponent>>>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(106)] 
 		[RED("interactionBlockingCollider")] 
 		public CHandle<entIPlacedComponent> InteractionBlockingCollider
 		{
@@ -78,10 +78,6 @@ namespace WolvenKit.RED4.Types
 
 		public WindowBlinders()
 		{
-			ControllerTypeName = "WindowBlindersController";
-			SideTriggerNames = new();
-			TriggerComponents = new();
-
 			PostConstruct();
 		}
 

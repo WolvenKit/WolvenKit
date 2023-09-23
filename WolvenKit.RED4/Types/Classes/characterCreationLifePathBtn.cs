@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class characterCreationLifePathBtn : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("selector")] 
 		public inkWidgetReference Selector
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("desc")] 
 		public inkTextWidgetReference Desc
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("video")] 
 		public inkVideoWidgetReference Video
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkVideoWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("translationAnimationCtrl")] 
 		public CWeakHandle<inkTextReplaceAnimationController> TranslationAnimationCtrl
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextReplaceAnimationController>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("localizedText")] 
 		public CString LocalizedText
 		{
@@ -78,12 +78,6 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationLifePathBtn()
 		{
-			Selector = new inkWidgetReference();
-			Desc = new inkTextWidgetReference();
-			Image = new inkImageWidgetReference();
-			Label = new inkTextWidgetReference();
-			Video = new inkVideoWidgetReference();
-
 			PostConstruct();
 		}
 

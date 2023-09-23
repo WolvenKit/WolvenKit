@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public CompareBuilder()
 		{
-			FLOAT_EQUAL_EPSILON = 0.010000F;
-
 			PostConstruct();
 		}
 

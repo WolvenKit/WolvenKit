@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HitDamageOverTimePrereq : GenericHitPrereq
 	{
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("dotType")] 
 		public CEnum<gamedataStatusEffectType> DotType
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public HitDamageOverTimePrereq()
 		{
-			IsSync = true;
-
 			PostConstruct();
 		}
 

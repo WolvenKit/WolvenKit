@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ElectricLightControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("isConnectedToCLS")] 
 		public CBool IsConnectedToCLS
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("wasCLSInitTriggered")] 
 		public CBool WasCLSInitTriggered
 		{
@@ -22,10 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public ElectricLightControllerPS()
 		{
-			DeviceName = "LocKey#42165";
-			TweakDBRecord = "Devices.ElectricLight";
-			TweakDBDescriptionRecord = 142476847136;
-
 			PostConstruct();
 		}
 

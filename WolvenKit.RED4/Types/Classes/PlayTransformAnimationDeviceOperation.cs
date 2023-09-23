@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public PlayTransformAnimationDeviceOperation()
 		{
-			IsEnabled = true;
-			ToggleOperations = new();
-			TransformAnimations = new();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class UiRadialContextEvents : InputContextTransitionEvents
 	{
-		[Ordinal(1)] 
+		[Ordinal(8)] 
 		[RED("mouse")] 
 		public Vector4 Mouse
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public UiRadialContextEvents()
 		{
-			Mouse = new Vector4();
-
 			PostConstruct();
 		}
 

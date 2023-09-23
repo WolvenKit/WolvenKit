@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public lookAtPresetGunBaseEvents()
 		{
-			LookAtEvents = new();
-			OverrideLookAtEvents = new();
-
 			PostConstruct();
 		}
 

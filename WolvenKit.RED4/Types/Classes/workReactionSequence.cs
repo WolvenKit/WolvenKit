@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class workReactionSequence : workIContainerEntry
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("forcedBlendIn")] 
 		public CFloat ForcedBlendIn
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("reactionTypes")] 
 		public CArray<TweakDBID> ReactionTypes
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("mainEmotionalState")] 
 		public CName MainEmotionalState
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("emotionalExpression")] 
 		public CName EmotionalExpression
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("facialKeyWeight")] 
 		public CFloat FacialKeyWeight
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("facialIdleMaleAnimation")] 
 		public CName FacialIdleMaleAnimation
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("facialIdleKey_MaleAnimation")] 
 		public CName FacialIdleKey_MaleAnimation
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("facialIdleFemaleAnimation")] 
 		public CName FacialIdleFemaleAnimation
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("facialIdleKey_FemaleAnimation")] 
 		public CName FacialIdleKey_FemaleAnimation
 		{

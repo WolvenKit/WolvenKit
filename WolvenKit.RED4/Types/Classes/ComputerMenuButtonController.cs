@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ComputerMenuButtonController : DeviceButtonLogicControllerBase
 	{
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("counterWidget")] 
 		public inkTextWidgetReference CounterWidget
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("notificationidget")] 
 		public inkWidgetReference Notificationidget
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("menuID")] 
 		public CString MenuID
 		{
@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerMenuButtonController()
 		{
-			CounterWidget = new inkTextWidgetReference();
-			Notificationidget = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

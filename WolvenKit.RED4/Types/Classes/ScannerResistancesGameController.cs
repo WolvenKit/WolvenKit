@@ -198,29 +198,6 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerResistancesGameController()
 		{
-			PhysicalResistText = new inkTextWidgetReference();
-			PhysicalResistContainer = new inkCompoundWidgetReference();
-			ThermalResistText = new inkTextWidgetReference();
-			ThermalResistContainer = new inkCompoundWidgetReference();
-			ChemicalResistText = new inkTextWidgetReference();
-			ChemicalResistContainer = new inkCompoundWidgetReference();
-			ElectricResistText = new inkTextWidgetReference();
-			ElectricResistContainer = new inkCompoundWidgetReference();
-			HackingResistText = new inkTextWidgetReference();
-			HackingResistContainer = new inkCompoundWidgetReference();
-			PhysicalWeaknessText = new inkTextWidgetReference();
-			PhysicalWeaknessContainer = new inkCompoundWidgetReference();
-			ThermalWeaknessText = new inkTextWidgetReference();
-			ThermalWeaknessContainer = new inkCompoundWidgetReference();
-			ChemicalWeaknessText = new inkTextWidgetReference();
-			ChemicalWeaknessContainer = new inkCompoundWidgetReference();
-			ElectricWeaknessText = new inkTextWidgetReference();
-			ElectricWeaknessContainer = new inkCompoundWidgetReference();
-			HackingWeaknessText = new inkTextWidgetReference();
-			HackingWeaknessContainer = new inkCompoundWidgetReference();
-			LeftPanel = new inkCompoundWidgetReference();
-			RightPanel = new inkCompoundWidgetReference();
-
 			PostConstruct();
 		}
 

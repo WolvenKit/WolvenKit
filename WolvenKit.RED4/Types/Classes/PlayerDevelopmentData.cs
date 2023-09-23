@@ -93,6 +93,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("attributesData")] 
+		public CArray<SAttributeData> AttributesData
+		{
+			get => GetPropertyValue<CArray<SAttributeData>>();
+			set => SetPropertyValue<CArray<SAttributeData>>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("highestCompletedMinigameLevel")] 
 		public CInt32 HighestCompletedMinigameLevel
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("startingLevel")] 
 		public CInt32 StartingLevel
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("startingExperience")] 
 		public CInt32 StartingExperience
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("lifePath")] 
 		public CEnum<gamedataLifePath> LifePath
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataLifePath>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("displayActivityLog")] 
 		public CBool DisplayActivityLog
 		{
@@ -132,21 +140,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("progressionBuildSetCompleted")] 
+		public CBool ProgressionBuildSetCompleted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PlayerDevelopmentData()
 		{
-			OwnerID = new entEntityID();
-			QueuedCombatExp = new();
-			Proficiencies = new();
-			Attributes = new();
-			PerkAreas = new();
-			Traits = new();
-			DevPoints = new();
-			SkillPrereqs = new();
-			StatPrereqs = new();
-			KnownRecipes = new();
-			StartingLevel = 1;
-			DisplayActivityLog = true;
-
 			PostConstruct();
 		}
 

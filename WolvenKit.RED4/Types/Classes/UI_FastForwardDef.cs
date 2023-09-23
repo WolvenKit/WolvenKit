@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_FastForwardDef()
 		{
-			FastForwardAvailable = new gamebbScriptID_Bool();
-			FastForwardActive = new gamebbScriptID_Bool();
-
 			PostConstruct();
 		}
 

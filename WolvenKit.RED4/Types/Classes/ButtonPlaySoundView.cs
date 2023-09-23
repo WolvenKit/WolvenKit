@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ButtonPlaySoundView : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("SoundPrefix")] 
 		public CName SoundPrefix
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("PressSoundName")] 
 		public CName PressSoundName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("HoverSoundName")] 
 		public CName HoverSoundName
 		{
@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public ButtonPlaySoundView()
 		{
-			SoundPrefix = "Button";
-			PressSoundName = "OnPress";
-
 			PostConstruct();
 		}
 

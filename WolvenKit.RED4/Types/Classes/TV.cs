@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TV : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("isTVMoving")] 
 		public CBool IsTVMoving
 		{
@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public TV()
 		{
-			ControllerTypeName = "TVController";
-			ShortGlitchDelayID = new gameDelayID();
-
 			PostConstruct();
 		}
 

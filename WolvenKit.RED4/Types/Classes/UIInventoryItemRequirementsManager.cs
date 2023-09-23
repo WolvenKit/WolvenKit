@@ -77,6 +77,62 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("isHumanityRequirementMet")] 
+		public CBool IsHumanityRequirementMet
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("isEquippable")] 
+		public CBool IsEquippable
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("isEquippableAdditionalValue")] 
+		public CBool IsEquippableAdditionalValue
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("isEquippableFetched")] 
+		public CBool IsEquippableFetched
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("equipRequirements")] 
+		public CArray<gameSItemStackRequirementData> EquipRequirements
+		{
+			get => GetPropertyValue<CArray<gameSItemStackRequirementData>>();
+			set => SetPropertyValue<CArray<gameSItemStackRequirementData>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("equipRequirementsFetched")] 
+		public CBool EquipRequirementsFetched
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("player")] 
+		public CWeakHandle<gameObject> Player
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("attachedItem")] 
 		public CWeakHandle<UIInventoryItem> AttachedItem
 		{

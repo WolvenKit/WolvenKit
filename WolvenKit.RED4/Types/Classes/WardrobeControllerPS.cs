@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WardrobeControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("clothingSets")] 
 		public CArray<CHandle<gameClothingSet>> ClothingSets
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameClothingSet>>>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("hasInteraction")] 
 		public CBool HasInteraction
 		{
@@ -22,12 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public WardrobeControllerPS()
 		{
-			DeviceName = "LocKey#2120";
-			TweakDBRecord = "Devices.Wardrobe";
-			ShouldScannerShowStatus = false;
-			ShouldScannerShowNetwork = false;
-			ClothingSets = new();
-
 			PostConstruct();
 		}
 

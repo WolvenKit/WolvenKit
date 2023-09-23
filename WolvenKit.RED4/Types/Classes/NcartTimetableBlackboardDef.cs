@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public NcartTimetableBlackboardDef()
 		{
-			TimeToDepart = new gamebbScriptID_Int32();
-
 			PostConstruct();
 		}
 

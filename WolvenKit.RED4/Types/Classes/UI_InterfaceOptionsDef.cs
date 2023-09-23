@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_InterfaceOptionsDef()
 		{
-			CrowdsOnMinimap = new gamebbScriptID_Bool();
-			ObjectMarkersEnabled = new gamebbScriptID_Bool();
-			NPCNamesEnabled = new gamebbScriptID_Bool();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class cpConveyor : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("lines")] 
 		public CArray<cpConveyorLine> Lines
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<cpConveyorLine>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("movementCurve")] 
 		public CLegacySingleChannelCurve<CFloat> MovementCurve
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("entityDistance")] 
 		public CFloat EntityDistance
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("entitySpawnOffset")] 
 		public CFloat EntitySpawnOffset
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("audioParameterLineActive")] 
 		public CName AudioParameterLineActive
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("audioParameterLineCycle")] 
 		public CName AudioParameterLineCycle
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("audioParameterLineSpeed")] 
 		public CName AudioParameterLineSpeed
 		{

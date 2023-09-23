@@ -46,11 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public TutorialMainController()
 		{
-			InstructionPanel = new inkWidgetReference();
-			InstructionDesc = new inkTextWidgetReference();
-			Pointer = new inkWidgetReference();
-			CurrentTutorialStep = new TutorialStep { AllowedActions = new() };
-
 			PostConstruct();
 		}
 

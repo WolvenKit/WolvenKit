@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class dbgSpawner : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("objectRecordId")] 
 		public TweakDBID ObjectRecordId
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("appearance")] 
 		public CName Appearance
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("alwaysSpawned")] 
 		public CEnum<gameAlwaysSpawnedState> AlwaysSpawned
 		{

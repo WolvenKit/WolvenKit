@@ -13,8 +13,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
-		[RED("devcesStackSlot")] 
-		public CWeakHandle<inkHorizontalPanelWidget> DevcesStackSlot
+		[RED("devicesStackSlot")] 
+		public CWeakHandle<inkHorizontalPanelWidget> DevicesStackSlot
 		{
 			get => GetPropertyValue<CWeakHandle<inkHorizontalPanelWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkHorizontalPanelWidget>>(value);
@@ -70,8 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public ControlledDevicesInkGameController()
 		{
-			ControlledDevicesWidgetsData = new();
-
 			PostConstruct();
 		}
 

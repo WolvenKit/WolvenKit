@@ -29,14 +29,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("virtualList")] 
-		public inkWidgetReference VirtualList
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(7)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("dialogController")] 
 		public CWeakHandle<MessengerDialogViewController> DialogController
 		{
@@ -52,15 +44,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<MessengerDialogViewController>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("listController")] 
-		public CWeakHandle<MessengerContactsVirtualNestedListController> ListController
+		public CWeakHandle<SimpleMessengerContactsVirtualListController> ListController
 		{
-			get => GetPropertyValue<CWeakHandle<MessengerContactsVirtualNestedListController>>();
-			set => SetPropertyValue<CWeakHandle<MessengerContactsVirtualNestedListController>>(value);
+			get => GetPropertyValue<CWeakHandle<SimpleMessengerContactsVirtualListController>>();
+			set => SetPropertyValue<CWeakHandle<SimpleMessengerContactsVirtualListController>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
@@ -68,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -76,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("activeData")] 
 		public CHandle<MessengerContactSyncData> ActiveData
 		{
@@ -86,11 +78,6 @@ namespace WolvenKit.RED4.Types
 
 		public MessengerGameController()
 		{
-			ButtonHintsManagerRef = new inkWidgetReference();
-			ContactsRef = new inkWidgetReference();
-			DialogRef = new inkWidgetReference();
-			VirtualList = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

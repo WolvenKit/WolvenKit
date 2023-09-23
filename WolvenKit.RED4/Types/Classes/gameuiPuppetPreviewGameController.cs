@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiPuppetPreviewGameController : gameuiPreviewGameController
 	{
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("cameraController")] 
 		public gameuiPuppetPreviewCameraController CameraController
 		{
@@ -16,7 +16,6 @@ namespace WolvenKit.RED4.Types
 		{
 			YawSpeed = 1.250000F;
 			YawDefault = -125.000000F;
-			RotationSpeed = 30.000000F;
 			CameraController = new gameuiPuppetPreviewCameraController { CameraSetup = new(), TransitionDelay = 0.500000F };
 
 			PostConstruct();

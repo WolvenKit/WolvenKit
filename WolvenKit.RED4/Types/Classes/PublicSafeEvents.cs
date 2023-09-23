@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PublicSafeEvents : WeaponEventsTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("weaponUnequipRequestSent")] 
 		public CBool WeaponUnequipRequestSent
 		{

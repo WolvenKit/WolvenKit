@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class LeftHandCyberwareChargeEvents : LeftHandCyberwareEventsTransition
 	{
-		[Ordinal(0)] 
+		[Ordinal(2)] 
 		[RED("chargeModeAim")] 
 		public CHandle<gameweaponAnimFeature_AimPlayer> ChargeModeAim
 		{
@@ -12,12 +12,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameweaponAnimFeature_AimPlayer>>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("leftHandObject")] 
 		public CWeakHandle<gameweaponObject> LeftHandObject
 		{
 			get => GetPropertyValue<CWeakHandle<gameweaponObject>>();
 			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("aimInTimeRemaining")] 
+		public CFloat AimInTimeRemaining
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public LeftHandCyberwareChargeEvents()

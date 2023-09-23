@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryStatsController()
 		{
-			DetailsButton = new inkWidgetReference();
-			EntryContainer = new inkCompoundWidgetReference();
-
 			PostConstruct();
 		}
 

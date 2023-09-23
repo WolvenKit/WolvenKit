@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class JukeboxSetup : RedBaseClass
 	{
 		[Ordinal(0)] 
+		[RED("randomizeStartingStation")] 
+		public CBool RandomizeStartingStation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("startingStation")] 
 		public CEnum<ERadioStationList> StartingStation
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ERadioStationList>>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("glitchSFX")] 
 		public CName GlitchSFX
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("paymentRecordID")] 
 		public TweakDBID PaymentRecordID
 		{

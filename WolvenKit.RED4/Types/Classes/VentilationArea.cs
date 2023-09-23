@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VentilationArea : InteractiveMasterDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("RestartGameEffectOnAttach")] 
 		public CBool RestartGameEffectOnAttach
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("AttackRecord")] 
 		public CString AttackRecord
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("gameEffectRef")] 
 		public gameEffectRef GameEffectRef
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(102)] 
 		[RED("gameEffect")] 
 		public CHandle<gameEffectInstance> GameEffect
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(103)] 
 		[RED("highLightActive")] 
 		public CBool HighLightActive
 		{
@@ -54,10 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public VentilationArea()
 		{
-			ControllerTypeName = "VentilationAreaController";
-			AttackRecord = "Attacks.FragGrenade";
-			GameEffectRef = new gameEffectRef();
-
 			PostConstruct();
 		}
 

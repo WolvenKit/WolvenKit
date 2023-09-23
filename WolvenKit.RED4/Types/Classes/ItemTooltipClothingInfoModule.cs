@@ -4,7 +4,23 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemTooltipClothingInfoModule : ItemTooltipModuleController
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
+		[RED("allocationCostsWrapper")] 
+		public inkCompoundWidgetReference AllocationCostsWrapper
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("armorContainer")] 
+		public inkWidgetReference ArmorContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("value")] 
 		public inkTextWidgetReference Value
 		{
@@ -12,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("arrow")] 
 		public inkImageWidgetReference Arrow
 		{
@@ -22,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipClothingInfoModule()
 		{
-			Value = new inkTextWidgetReference();
-			Arrow = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

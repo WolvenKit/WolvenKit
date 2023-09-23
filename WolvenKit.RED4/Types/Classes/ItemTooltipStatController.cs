@@ -54,12 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipStatController()
 		{
-			StatName = new inkTextWidgetReference();
-			StatValue = new inkTextWidgetReference();
-			StatComparedContainer = new inkWidgetReference();
-			StatComparedValue = new inkTextWidgetReference();
-			Arrow = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

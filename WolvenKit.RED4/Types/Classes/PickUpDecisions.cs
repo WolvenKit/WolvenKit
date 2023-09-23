@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class PickUpDecisions : CarriedObject
+	public partial class PickUpDecisions : CanTransitionToThrowDecisions
 	{
 		public PickUpDecisions()
 		{

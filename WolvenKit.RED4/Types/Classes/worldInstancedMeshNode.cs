@@ -22,18 +22,18 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(6)] 
 		[RED("castShadows")] 
-		public CBool CastShadows
+		public CEnum<shadowsShadowCastingMode> CastShadows
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
 		[Ordinal(7)] 
 		[RED("castLocalShadows")] 
-		public CBool CastLocalShadows
+		public CEnum<shadowsShadowCastingMode> CastLocalShadows
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
 		[Ordinal(8)] 
@@ -66,6 +66,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<worldRenderProxyTransformBuffer>();
 			set => SetPropertyValue<worldRenderProxyTransformBuffer>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("version")] 
+		public CUInt8 Version
+		{
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public worldInstancedMeshNode()

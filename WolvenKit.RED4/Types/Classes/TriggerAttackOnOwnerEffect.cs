@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("attackPositionSlotName")] 
+		public CName AttackPositionSlotName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("playerAsInstigator")] 
 		public CBool PlayerAsInstigator
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("triggerHitReaction")] 
 		public CBool TriggerHitReaction
 		{
@@ -36,12 +44,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
-		[RED("attackPositionSlotName")] 
-		public CName AttackPositionSlotName
+		[Ordinal(5)] 
+		[RED("isRandom")] 
+		public CBool IsRandom
 		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("applicationChance")] 
+		public CFloat ApplicationChance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public TriggerAttackOnOwnerEffect()

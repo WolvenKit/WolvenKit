@@ -45,19 +45,19 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("isCollection")] 
-		public CBool IsCollection
+		[RED("moreInfo")] 
+		public CBool MoreInfo
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
-		[RED("collectionCount")] 
-		public CInt32 CollectionCount
+		[RED("isCollection")] 
+		public CBool IsCollection
 		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public WorldMapTooltipData()

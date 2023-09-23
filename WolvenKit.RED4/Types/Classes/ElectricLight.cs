@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ElectricLight : Device
 	{
-		[Ordinal(84)] 
+		[Ordinal(88)] 
 		[RED("lightComponents")] 
 		public CArray<CHandle<gameLightComponent>> LightComponents
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameLightComponent>>>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(89)] 
 		[RED("lightDefinitions")] 
 		public CArray<gamedataLightPreset> LightDefinitions
 		{
@@ -22,10 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public ElectricLight()
 		{
-			ControllerTypeName = "ElectricLightController";
-			LightComponents = new();
-			LightDefinitions = new();
-
 			PostConstruct();
 		}
 

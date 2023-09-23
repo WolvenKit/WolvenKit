@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public SideScrollerMiniGameScoreSystem()
 		{
-			ScoreData = new(3);
-			GameNames = new(3);
-
 			PostConstruct();
 		}
 

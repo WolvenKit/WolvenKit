@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public MountRequestCondition()
 		{
-			TestMountRequest = true;
-			AcceptInstant = true;
-			AcceptNotInstant = true;
-
 			PostConstruct();
 		}
 

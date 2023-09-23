@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DischargeEvents : WeaponEventsTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("layerId")] 
 		public CUInt32 LayerId
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("statPoolsSystem")] 
 		public CHandle<gameStatPoolsSystem> StatPoolsSystem
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatPoolsSystem>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("statsSystem")] 
 		public CHandle<gameStatsSystem> StatsSystem
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatsSystem>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("weaponID")] 
 		public entEntityID WeaponID
 		{
@@ -38,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public DischargeEvents()
 		{
-			WeaponID = new entEntityID();
-
 			PostConstruct();
 		}
 

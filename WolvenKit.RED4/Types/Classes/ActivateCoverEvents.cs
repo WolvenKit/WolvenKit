@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ActivateCoverEvents : CoverActionEventsTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(7)] 
 		[RED("usingCover")] 
 		public CBool UsingCover
 		{

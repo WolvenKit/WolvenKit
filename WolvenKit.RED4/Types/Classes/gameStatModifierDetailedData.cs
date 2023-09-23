@@ -5,14 +5,6 @@ namespace WolvenKit.RED4.Types
 	public partial class gameStatModifierDetailedData : RedBaseClass
 	{
 		[Ordinal(0)] 
-		[RED("statType")] 
-		public CEnum<gamedataStatType> StatType
-		{
-			get => GetPropertyValue<CEnum<gamedataStatType>>();
-			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
-		}
-
-		[Ordinal(1)] 
 		[RED("value")] 
 		public CFloat Value
 		{
@@ -20,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("modifierType")] 
 		public CEnum<gameStatModifierType> ModifierType
 		{
@@ -30,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public gameStatModifierDetailedData()
 		{
-			StatType = Enums.gamedataStatType.Invalid;
-
 			PostConstruct();
 		}
 

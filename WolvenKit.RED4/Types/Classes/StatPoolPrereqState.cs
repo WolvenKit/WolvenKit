@@ -13,22 +13,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("inventoryCallback")] 
-		public CHandle<StatPoolPrereqInventoryScriptCallback> InventoryCallback
-		{
-			get => GetPropertyValue<CHandle<StatPoolPrereqInventoryScriptCallback>>();
-			set => SetPropertyValue<CHandle<StatPoolPrereqInventoryScriptCallback>>(value);
-		}
-
-		[Ordinal(2)] 
-		[RED("inventoryListener")] 
-		public CHandle<gameInventoryScriptListener> InventoryListener
-		{
-			get => GetPropertyValue<CHandle<gameInventoryScriptListener>>();
-			set => SetPropertyValue<CHandle<gameInventoryScriptListener>>(value);
-		}
-
-		[Ordinal(3)] 
 		[RED("statpoolWasMissing")] 
 		public CBool StatpoolWasMissing
 		{
@@ -36,7 +20,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(2)] 
+		[RED("object")] 
+		public CWeakHandle<gameObject> Object
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("statsObjID")] 
 		public gameStatsObjectID StatsObjID
 		{
@@ -46,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public StatPoolPrereqState()
 		{
-			StatsObjID = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
-
 			PostConstruct();
 		}
 

@@ -22,21 +22,37 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(10)] 
 		[RED("castShadows")] 
-		public CBool CastShadows
+		public CEnum<shadowsShadowCastingMode> CastShadows
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
 		[Ordinal(11)] 
 		[RED("castLocalShadows")] 
-		public CBool CastLocalShadows
+		public CEnum<shadowsShadowCastingMode> CastLocalShadows
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
 		[Ordinal(12)] 
+		[RED("castRayTracedGlobalShadows")] 
+		public CEnum<shadowsShadowCastingMode> CastRayTracedGlobalShadows
+		{
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("castRayTracedLocalShadows")] 
+		public CEnum<shadowsShadowCastingMode> CastRayTracedLocalShadows
+		{
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("motionBlurScale")] 
 		public CFloat MotionBlurScale
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("visualScale")] 
 		public Vector3 VisualScale
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("renderingPlane")] 
 		public CEnum<ERenderingPlane> RenderingPlane
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ERenderingPlane>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("objectTypeID")] 
 		public CEnum<ERenderObjectType> ObjectTypeID
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ERenderObjectType>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("numInstances")] 
 		public CUInt32 NumInstances
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("chunkMask")] 
 		public CUInt64 ChunkMask
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("order")] 
 		public CUInt8 Order
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("LODMode")] 
 		public CEnum<entMeshComponentLODMode> LODMode
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<entMeshComponentLODMode>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("forcedLodDistance")] 
 		public CEnum<entForcedLodDistance> ForcedLodDistance
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<entForcedLodDistance>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("overrideMeshNavigationImpact")] 
 		public CBool OverrideMeshNavigationImpact
 		{
@@ -124,12 +140,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("navigationImpact")] 
 		public NavGenNavigationSetting NavigationImpact
 		{
 			get => GetPropertyValue<NavGenNavigationSetting>();
 			set => SetPropertyValue<NavGenNavigationSetting>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("version")] 
+		public CUInt8 Version
+		{
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public entMeshComponent()
@@ -139,8 +163,6 @@ namespace WolvenKit.RED4.Types
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			ForceLODLevel = -1;
 			MeshAppearance = "default";
-			CastShadows = true;
-			CastLocalShadows = true;
 			MotionBlurScale = 1.000000F;
 			VisualScale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 			ChunkMask = long.MaxValue;

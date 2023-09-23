@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class gameEffectExecutor_Finisher : gameEffectExecutor
 	{
 		[Ordinal(1)] 
+		[RED("InfluencedByPlayerCostBlock")] 
+		public CBool InfluencedByPlayerCostBlock
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("finisherScenarios")] 
 		public CArray<CHandle<gameIFinisherScenario>> FinisherScenarios
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameIFinisherScenario>>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("alwaysUseEntryAnims")] 
 		public CBool AlwaysUseEntryAnims
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("allowCameraMovement")] 
 		public CBool AllowCameraMovement
 		{

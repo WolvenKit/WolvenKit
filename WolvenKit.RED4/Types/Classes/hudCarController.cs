@@ -125,6 +125,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(24)] 
+		[RED("rpmMaxValue")] 
+		public CFloat RpmMaxValue
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("activeVehicle")] 
 		public CWeakHandle<vehicleBaseObject> ActiveVehicle
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("driver")] 
 		public CBool Driver
 		{
@@ -142,10 +150,6 @@ namespace WolvenKit.RED4.Types
 
 		public hudCarController()
 		{
-			SpeedValue = new inkTextWidgetReference();
-			RPMChunks = new();
-			CurrentTime = new GameTime();
-
 			PostConstruct();
 		}
 

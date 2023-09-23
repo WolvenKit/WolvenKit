@@ -126,18 +126,6 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationSummaryMenu()
 		{
-			BackstoryTitle = new inkTextWidgetReference();
-			BackstoryIcon = new inkImageWidgetReference();
-			Backstory = new inkTextWidgetReference();
-			Difficulty = new inkTextWidgetReference();
-			AttributeBodyValue = new inkTextWidgetReference();
-			AttributeIntelligenceValue = new inkTextWidgetReference();
-			AttributeReflexesValue = new inkTextWidgetReference();
-			AttributeTechnicalAbilityValue = new inkTextWidgetReference();
-			AttributeCoolValue = new inkTextWidgetReference();
-			PreviousPageBtn = new inkWidgetReference();
-			GlitchBtn = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

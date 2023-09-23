@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PachinkoMachine : ArcadeMachine
 	{
-		[Ordinal(102)] 
+		[Ordinal(109)] 
 		[RED("distractionFXName")] 
 		public CName DistractionFXName
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public PachinkoMachine()
 		{
-			DistractionFXName = "effect_distraction";
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiarcadeRoachRaceObstacleSpawnerController : gameuiarcadeArcadeSpawnerController
 	{
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("initialMinimumSpawnTime")] 
 		public CFloat InitialMinimumSpawnTime
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("initialDoubleSpawnChance")] 
 		public CFloat InitialDoubleSpawnChance
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("spawnRateIncreasePerCycle")] 
 		public CFloat SpawnRateIncreasePerCycle
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("doubleSpawnChanceIncreasePerLevel")] 
 		public CFloat DoubleSpawnChanceIncreasePerLevel
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("doubleSpawnDelay")] 
 		public CFloat DoubleSpawnDelay
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("powerupSpawnTimeDelayMultiplier")] 
 		public CFloat PowerupSpawnTimeDelayMultiplier
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("appleSpawnTime")] 
 		public CFloat AppleSpawnTime
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("carrotSpawnTime")] 
 		public CFloat CarrotSpawnTime
 		{
@@ -70,6 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiarcadeRoachRaceObstacleSpawnerController()
 		{
+			ObjectLibraryID = "Obstacle";
 			InitialMinimumSpawnTime = 1.650000F;
 			SpawnRateIncreasePerCycle = 0.100000F;
 			DoubleSpawnChanceIncreasePerLevel = 0.100000F;

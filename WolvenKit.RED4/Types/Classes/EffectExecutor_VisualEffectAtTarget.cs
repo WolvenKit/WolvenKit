@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public EffectExecutor_VisualEffectAtTarget()
 		{
-			Effect = new gameFxResource();
-
 			PostConstruct();
 		}
 

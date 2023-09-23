@@ -158,12 +158,6 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModeGridList()
 		{
-			ScrollArea = new inkScrollAreaWidgetReference();
-			ContentRoot = new inkWidgetReference();
-			SliderWidget = new inkWidgetReference();
-			Buttons = new();
-			Rows = new();
-
 			PostConstruct();
 		}
 

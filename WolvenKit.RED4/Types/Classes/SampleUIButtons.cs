@@ -54,13 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public SampleUIButtons()
 		{
-			Button = new inkWidgetReference();
-			Toggle1 = new inkWidgetReference();
-			Toggle2 = new inkWidgetReference();
-			Toggle3 = new inkWidgetReference();
-			RadioGroup = new inkWidgetReference();
-			Text = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

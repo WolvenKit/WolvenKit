@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BaseDestructibleControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("destroyed")] 
 		public CBool Destroyed
 		{
@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public BaseDestructibleControllerPS()
 		{
-			DeviceName = "LocKey#127";
-			TweakDBRecord = "Devices.TrafficLight";
-			TweakDBDescriptionRecord = 137459607504;
-
 			PostConstruct();
 		}
 

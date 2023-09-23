@@ -92,11 +92,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataDistrict_Record>>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("journalManager")] 
+		public CWeakHandle<gameJournalManager> JournalManager
+		{
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
+		}
+
 		public QuestDataWrapper()
 		{
-			QuestObjectives = new();
-			Links = new();
-
 			PostConstruct();
 		}
 

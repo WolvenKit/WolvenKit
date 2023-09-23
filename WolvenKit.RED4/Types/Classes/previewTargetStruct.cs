@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EHitReactionZone>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("currentlyHittingBreach")] 
+		public CBool CurrentlyHittingBreach
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public previewTargetStruct()
 		{
 			PostConstruct();

@@ -4,15 +4,15 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BackdoorDataStreamController : BackdoorInkGameController
 	{
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("idleGroup")] 
-		public inkWidgetReference IdleGroup_384
+		public inkWidgetReference IdleGroup_416
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("idleVPanelC1")] 
 		public inkWidgetReference IdleVPanelC1
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("idleVPanelC2")] 
 		public inkWidgetReference IdleVPanelC2
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("idleVPanelC3")] 
 		public inkWidgetReference IdleVPanelC3
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("idleVPanelC4")] 
 		public inkWidgetReference IdleVPanelC4
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("hackedGroup")] 
 		public inkWidgetReference HackedGroup
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("idleCanvas1")] 
 		public inkWidgetReference IdleCanvas1
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("idleCanvas2")] 
 		public inkWidgetReference IdleCanvas2
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("idleCanvas3")] 
 		public inkWidgetReference IdleCanvas3
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("idleCanvas4")] 
 		public inkWidgetReference IdleCanvas4
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("canvasC1")] 
 		public inkWidgetReference CanvasC1
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("canvasC2")] 
 		public inkWidgetReference CanvasC2
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("canvasC3")] 
 		public inkWidgetReference CanvasC3
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("canvasC4")] 
 		public inkWidgetReference CanvasC4
 		{
@@ -118,21 +118,6 @@ namespace WolvenKit.RED4.Types
 
 		public BackdoorDataStreamController()
 		{
-			IdleGroup_384 = new inkWidgetReference();
-			IdleVPanelC1 = new inkWidgetReference();
-			IdleVPanelC2 = new inkWidgetReference();
-			IdleVPanelC3 = new inkWidgetReference();
-			IdleVPanelC4 = new inkWidgetReference();
-			HackedGroup = new inkWidgetReference();
-			IdleCanvas1 = new inkWidgetReference();
-			IdleCanvas2 = new inkWidgetReference();
-			IdleCanvas3 = new inkWidgetReference();
-			IdleCanvas4 = new inkWidgetReference();
-			CanvasC1 = new inkWidgetReference();
-			CanvasC2 = new inkWidgetReference();
-			CanvasC3 = new inkWidgetReference();
-			CanvasC4 = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

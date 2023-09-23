@@ -4,7 +4,15 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VendorUIInventoryItemData : WrappedInventoryItemData
 	{
-		[Ordinal(9)] 
+		[Ordinal(10)] 
+		[RED("ItemPrice")] 
+		public CFloat ItemPrice
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("IsVendorItem")] 
 		public CBool IsVendorItem
 		{
@@ -12,15 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
-		[RED("IsEnoughMoney")] 
-		public CBool IsEnoughMoney
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("IsBuybackStack")] 
 		public CBool IsBuybackStack
 		{
@@ -28,7 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
+		[RED("IsEnoughMoney")] 
+		public CBool IsEnoughMoney
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("IsDLCAddedActiveItem")] 
 		public CBool IsDLCAddedActiveItem
 		{
@@ -36,20 +44,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("IsNotInWardrobe")] 
 		public CBool IsNotInWardrobe
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(14)] 
-		[RED("ItemPrice")] 
-		public CFloat ItemPrice
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public VendorUIInventoryItemData()

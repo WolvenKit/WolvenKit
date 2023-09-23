@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public TagLinkedCluekRequest()
 		{
-			LinkedCluekData = new LinkedFocusClueData { OwnerID = new entEntityID(), ExtendedClueRecords = new(), PsData = new PSOwnerData { Id = new gamePersistentID() } };
-
 			PostConstruct();
 		}
 

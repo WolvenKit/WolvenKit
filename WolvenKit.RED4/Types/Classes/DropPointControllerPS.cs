@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DropPointControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(113)] 
 		[RED("vendorRecord")] 
 		public CString VendorRecord
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(114)] 
 		[RED("rewardsLootTable")] 
 		public CArray<TweakDBID> RewardsLootTable
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(115)] 
 		[RED("hasPlayerCollectedReward")] 
 		public CBool HasPlayerCollectedReward
 		{
@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public DropPointControllerPS()
 		{
-			RewardsLootTable = new();
-
 			PostConstruct();
 		}
 

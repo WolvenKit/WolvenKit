@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public Reprimand()
 		{
-			ReprimandData = new ReprimandData { Receiver = new entEntityID() };
-
 			PostConstruct();
 		}
 

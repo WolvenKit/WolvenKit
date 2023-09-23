@@ -37,16 +37,16 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("isPercentage")] 
-		public CBool IsPercentage
+		[RED("decimalPlaces")] 
+		public CInt32 DecimalPlaces
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(5)] 
-		[RED("roundValue")] 
-		public CBool RoundValue
+		[RED("displayPercent")] 
+		public CBool DisplayPercent
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -79,6 +79,30 @@ namespace WolvenKit.RED4.Types
 		[Ordinal(9)] 
 		[RED("inSpeed")] 
 		public CBool InSpeed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("multiplyBy100InText")] 
+		public CBool MultiplyBy100InText
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("roundValue")] 
+		public CBool RoundValue
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("flipNegative")] 
+		public CBool FlipNegative
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

@@ -62,8 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public analogSpeedometerLogicController()
 		{
-			AnalogSpeedNeedleWidget = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

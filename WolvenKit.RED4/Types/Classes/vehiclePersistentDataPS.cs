@@ -65,7 +65,7 @@ namespace WolvenKit.RED4.Types
 			WheelRuntimeData = new(4);
 			QuestEnforcedTransform = new Transform { Position = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Orientation = new Quaternion { R = 1.000000F } };
 			Destruction = new vehicleDestructionPSData { GridValues = new(30), WindshieldPoints = new(), DetachedParts = new() };
-			Audio = new vehicleAudioPSData { AcousticIsolationFactor = float.MinValue };
+			Audio = new vehicleAudioPSData { AcousticIsolationFactor = float.MinValue, GlassAcousticIsolationFactor = float.MinValue, OpenedWindows = new(0) };
 
 			PostConstruct();
 		}

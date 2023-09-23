@@ -77,6 +77,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("availableCars")] 
+		public CArray<CName> AvailableCars
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("previousAttributeLevels")] 
+		public CArray<UIScriptableSystemAttributeLevel> PreviousAttributeLevels
+		{
+			get => GetPropertyValue<CArray<UIScriptableSystemAttributeLevel>>();
+			set => SetPropertyValue<CArray<UIScriptableSystemAttributeLevel>>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("comparisionTooltipDisabled")] 
 		public CBool ComparisionTooltipDisabled
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("attachedPlayer")] 
 		public CWeakHandle<PlayerPuppet> AttachedPlayer
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("inventoryListenerCallback")] 
 		public CHandle<UIScriptableInventoryListenerCallback> InventoryListenerCallback
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIScriptableInventoryListenerCallback>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameInventoryScriptListener> InventoryListener
 		{
@@ -108,13 +124,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameInventoryScriptListener>>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("DEV_useNewTooltips")] 
+		public CBool DEV_useNewTooltips
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("DEV_useLongScanTooltips")] 
+		public CBool DEV_useLongScanTooltips
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public UIScriptableSystem()
 		{
-			NewItems = new();
-			DLCAddedItems = new();
-			NewWardrobeSets = new();
-			NewWardrobeItems = new();
-
 			PostConstruct();
 		}
 

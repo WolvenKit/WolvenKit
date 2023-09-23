@@ -12,6 +12,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<worldEffectBlackboard>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("disableStaminaRegenModifier")] 
+		public CHandle<gameConstantStatModifierData_Deprecated> DisableStaminaRegenModifier
+		{
+			get => GetPropertyValue<CHandle<gameConstantStatModifierData_Deprecated>>();
+			set => SetPropertyValue<CHandle<gameConstantStatModifierData_Deprecated>>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("player")] 
+		public CWeakHandle<PlayerPuppet> Player
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
 		public ExhaustedEvents()
 		{
 			PostConstruct();

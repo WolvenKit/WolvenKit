@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public BlacklistPlayer()
 		{
-			Blacklist = true;
-			Reason = Enums.BlacklistReason.COMBAT;
-
 			PostConstruct();
 		}
 

@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemCompareBuilder()
 		{
-			SortData1 = new gameInventoryItemSortData();
-			SortData2 = new gameInventoryItemSortData();
-
 			PostConstruct();
 		}
 

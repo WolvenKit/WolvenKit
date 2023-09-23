@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("forceUseHitPosition")] 
+		public CBool ForceUseHitPosition
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameEffectExecutor_PhysicalImpulseFromInstigator_Value()
 		{
 			PostConstruct();

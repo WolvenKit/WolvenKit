@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VentilationAreaControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("ventilationAreaSetup")] 
 		public VentilationAreaSetup VentilationAreaSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<VentilationAreaSetup>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -22,11 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public VentilationAreaControllerPS()
 		{
-			DeviceName = "VentilationArea";
-			TweakDBRecord = "Devices.VentilationArea";
-			TweakDBDescriptionRecord = 153160213641;
-			VentilationAreaSetup = new VentilationAreaSetup { ActionName = "Activate" };
-
 			PostConstruct();
 		}
 

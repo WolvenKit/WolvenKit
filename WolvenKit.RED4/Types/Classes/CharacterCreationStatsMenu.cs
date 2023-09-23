@@ -204,28 +204,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
+		[Ordinal(31)] 
+		[RED("menuVisited")] 
+		public CBool MenuVisited
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CharacterCreationStatsMenu()
 		{
-			Attribute_01 = new inkWidgetReference();
-			Attribute_02 = new inkWidgetReference();
-			Attribute_03 = new inkWidgetReference();
-			Attribute_04 = new inkWidgetReference();
-			Attribute_05 = new inkWidgetReference();
-			PointsLabel = new inkWidgetReference();
-			TooltipSlot = new inkWidgetReference();
-			SkillPointLabel = new inkTextWidgetReference();
-			Reset = new inkWidgetReference();
-			NextMenuConfirmation = new inkWidgetReference();
-			NextMenukConfirmationLibraryWidget = new inkWidgetReference();
-			ConfirmationConfirmBtn = new inkWidgetReference();
-			ConfirmationCloseBtn = new inkWidgetReference();
-			TooltipsManagerRef = new inkWidgetReference();
-			PreviousPageBtn = new inkWidgetReference();
-			NavigationButtons = new inkWidgetReference();
-			OptionSwitchHint = new inkWidgetReference();
-			AttributesControllers = new();
-			ToolTipOffset = new inkMargin();
-
 			PostConstruct();
 		}
 

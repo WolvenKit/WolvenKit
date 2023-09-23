@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("phantomVisibleStates")] 
+		public CArray<CEnum<gamePhantomEntityState>> PhantomVisibleStates
+		{
+			get => GetPropertyValue<CArray<CEnum<gamePhantomEntityState>>>();
+			set => SetPropertyValue<CArray<CEnum<gamePhantomEntityState>>>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("blendableAppearanceMatches")] 
 		public CArray<gamePhantomEntityParametersBlendableAppearanceMatch> BlendableAppearanceMatches
 		{
@@ -46,6 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamePhantomEntityParameters()
 		{
+			PhantomVisibleStates = new() { Enums.gamePhantomEntityState.RootMotion, Enums.gamePhantomEntityState.Workspot };
 			BlendableAppearanceMatches = new();
 
 			PostConstruct();

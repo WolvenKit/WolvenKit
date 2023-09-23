@@ -54,12 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public PerksSkillsLevelsContainerController()
 		{
-			TopRowItemsContainer = new inkCompoundWidgetReference();
-			BottomRowItemsContainer = new inkCompoundWidgetReference();
-			LevelBar = new inkWidgetReference();
-			LevelBarSpacer = new inkWidgetReference();
-			Label = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

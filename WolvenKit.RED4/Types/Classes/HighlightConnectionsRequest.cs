@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public HighlightConnectionsRequest()
 		{
-			HighlightTargets = new();
-			RequestingDevice = new entEntityID();
-
 			PostConstruct();
 		}
 

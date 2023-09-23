@@ -5,8 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public PUPPET_ACtor()
 		{
-			Type = Enums.HUDActorType.PUPPET;
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Jukebox : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("uiComponentBig")] 
 		public CWeakHandle<IWorldWidgetComponent> UiComponentBig
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public Jukebox()
 		{
-			ControllerTypeName = "JukeboxController";
-
 			PostConstruct();
 		}
 

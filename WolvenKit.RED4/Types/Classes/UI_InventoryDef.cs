@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_InventoryDef()
 		{
-			ItemAdded = new gamebbScriptID_Variant();
-			ItemRemoved = new gamebbScriptID_Variant();
-
 			PostConstruct();
 		}
 

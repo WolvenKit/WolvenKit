@@ -2,9 +2,9 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ItemTooltipController : AGenericTooltipController
+	public partial class ItemTooltipController : AGenericTooltipControllerWithDebug
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("itemNameText")] 
 		public inkTextWidgetReference ItemNameText
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("itemRarityText")] 
 		public inkTextWidgetReference ItemRarityText
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("progressBar")] 
 		public inkWidgetReference ProgressBar
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("recipeStatsTitle")] 
 		public inkTextWidgetReference RecipeStatsTitle
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("categoriesWrapper")] 
 		public inkCompoundWidgetReference CategoriesWrapper
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("backgroundContainer")] 
 		public inkCompoundWidgetReference BackgroundContainer
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("topContainer")] 
 		public inkCompoundWidgetReference TopContainer
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("headerContainer")] 
 		public inkCompoundWidgetReference HeaderContainer
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("headerWeaponContainer")] 
 		public inkCompoundWidgetReference HeaderWeaponContainer
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("headerItemContainer")] 
 		public inkCompoundWidgetReference HeaderItemContainer
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("headerGrenadeContainer")] 
 		public inkCompoundWidgetReference HeaderGrenadeContainer
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("headerArmorContainer")] 
 		public inkCompoundWidgetReference HeaderArmorContainer
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("primmaryStatsContainer")] 
 		public inkCompoundWidgetReference PrimmaryStatsContainer
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("secondaryStatsContainer")] 
 		public inkCompoundWidgetReference SecondaryStatsContainer
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("recipeStatsContainer")] 
 		public inkCompoundWidgetReference RecipeStatsContainer
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("recipeDamageTypesContainer")] 
 		public inkCompoundWidgetReference RecipeDamageTypesContainer
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("modsContainer")] 
 		public inkCompoundWidgetReference ModsContainer
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("dedicatedModsContainer")] 
 		public inkCompoundWidgetReference DedicatedModsContainer
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("descriptionContainer")] 
 		public inkCompoundWidgetReference DescriptionContainer
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("craftedItemContainer")] 
 		public inkCompoundWidgetReference CraftedItemContainer
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("bottomContainer")] 
 		public inkCompoundWidgetReference BottomContainer
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("primmaryStatsList")] 
 		public inkCompoundWidgetReference PrimmaryStatsList
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("secondaryStatsList")] 
 		public inkCompoundWidgetReference SecondaryStatsList
 		{
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("recipeStatsTypesList")] 
 		public inkCompoundWidgetReference RecipeStatsTypesList
 		{
@@ -196,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("recipeDamageTypesList")] 
 		public inkCompoundWidgetReference RecipeDamageTypesList
 		{
@@ -204,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("modsList")] 
 		public inkCompoundWidgetReference ModsList
 		{
@@ -212,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("dedicatedModsList")] 
 		public inkCompoundWidgetReference DedicatedModsList
 		{
@@ -220,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("requiredLevelContainer")] 
 		public inkCompoundWidgetReference RequiredLevelContainer
 		{
@@ -228,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("priceContainer")] 
 		public inkCompoundWidgetReference PriceContainer
 		{
@@ -236,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
@@ -244,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("requireLevelText")] 
 		public inkTextWidgetReference RequireLevelText
 		{
@@ -252,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("priceText")] 
 		public inkTextWidgetReference PriceText
 		{
@@ -260,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("dpsWrapper")] 
 		public inkWidgetReference DpsWrapper
 		{
@@ -268,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(38)] 
 		[RED("dpsArrow")] 
 		public inkImageWidgetReference DpsArrow
 		{
@@ -276,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(39)] 
 		[RED("dpsText")] 
 		public inkTextWidgetReference DpsText
 		{
@@ -284,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(40)] 
 		[RED("nonLethalText")] 
 		public inkTextWidgetReference NonLethalText
 		{
@@ -292,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(41)] 
 		[RED("damagePerHitValue")] 
 		public inkTextWidgetReference DamagePerHitValue
 		{
@@ -300,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(42)] 
 		[RED("attacksPerSecondValue")] 
 		public inkTextWidgetReference AttacksPerSecondValue
 		{
@@ -308,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(43)] 
 		[RED("silencerPartWrapper")] 
 		public inkWidgetReference SilencerPartWrapper
 		{
@@ -316,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(44)] 
 		[RED("scopePartWrapper")] 
 		public inkWidgetReference ScopePartWrapper
 		{
@@ -324,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(45)] 
 		[RED("craftedItemIcon")] 
 		public inkWidgetReference CraftedItemIcon
 		{
@@ -332,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(46)] 
 		[RED("grenadeDamageTypeWrapper")] 
 		public inkWidgetReference GrenadeDamageTypeWrapper
 		{
@@ -340,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(47)] 
 		[RED("grenadeDamageTypeIcon")] 
 		public inkImageWidgetReference GrenadeDamageTypeIcon
 		{
@@ -348,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(48)] 
 		[RED("grenadeRangeValue")] 
 		public inkTextWidgetReference GrenadeRangeValue
 		{
@@ -356,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(49)] 
 		[RED("grenadeRangeText")] 
 		public inkTextWidgetReference GrenadeRangeText
 		{
@@ -364,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(50)] 
 		[RED("grenadeDeliveryLabel")] 
 		public inkTextWidgetReference GrenadeDeliveryLabel
 		{
@@ -372,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(51)] 
 		[RED("grenadeDeliveryIcon")] 
 		public inkImageWidgetReference GrenadeDeliveryIcon
 		{
@@ -380,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(52)] 
 		[RED("grenadeDamageStatWrapper")] 
 		public inkWidgetReference GrenadeDamageStatWrapper
 		{
@@ -388,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(53)] 
 		[RED("grenadeDamageStatLabel")] 
 		public inkTextWidgetReference GrenadeDamageStatLabel
 		{
@@ -396,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(54)] 
 		[RED("grenadeDamageStatValue")] 
 		public inkTextWidgetReference GrenadeDamageStatValue
 		{
@@ -404,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(55)] 
 		[RED("armorStatArrow")] 
 		public inkImageWidgetReference ArmorStatArrow
 		{
@@ -412,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(56)] 
 		[RED("armorStatLabel")] 
 		public inkTextWidgetReference ArmorStatLabel
 		{
@@ -420,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(57)] 
 		[RED("quickhackStatWrapper")] 
 		public inkWidgetReference QuickhackStatWrapper
 		{
@@ -428,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(58)] 
 		[RED("quickhackCostValue")] 
 		public inkTextWidgetReference QuickhackCostValue
 		{
@@ -436,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(59)] 
 		[RED("quickhackDuration")] 
 		public inkTextWidgetReference QuickhackDuration
 		{
@@ -444,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(60)] 
 		[RED("quickhackCooldown")] 
 		public inkTextWidgetReference QuickhackCooldown
 		{
@@ -452,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(61)] 
 		[RED("quickhackUpload")] 
 		public inkTextWidgetReference QuickhackUpload
 		{
@@ -460,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(62)] 
 		[RED("damageTypeWrapper")] 
 		public inkWidgetReference DamageTypeWrapper
 		{
@@ -468,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(63)] 
 		[RED("damageTypeIcon")] 
 		public inkImageWidgetReference DamageTypeIcon
 		{
@@ -476,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(64)] 
 		[RED("equipedWrapper")] 
 		public inkWidgetReference EquipedWrapper
 		{
@@ -484,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(65)] 
 		[RED("itemTypeText")] 
 		public inkTextWidgetReference ItemTypeText
 		{
@@ -492,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(66)] 
 		[RED("itemPreviewWrapper")] 
 		public inkWidgetReference ItemPreviewWrapper
 		{
@@ -500,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(67)] 
 		[RED("itemPreviewIcon")] 
 		public inkImageWidgetReference ItemPreviewIcon
 		{
@@ -508,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(68)] 
 		[RED("itemPreviewIconicLines")] 
 		public inkWidgetReference ItemPreviewIconicLines
 		{
@@ -516,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(69)] 
 		[RED("itemWeightWrapper")] 
 		public inkWidgetReference ItemWeightWrapper
 		{
@@ -524,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(70)] 
 		[RED("itemWeightText")] 
 		public inkTextWidgetReference ItemWeightText
 		{
@@ -532,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(71)] 
 		[RED("itemAmmoWrapper")] 
 		public inkWidgetReference ItemAmmoWrapper
 		{
@@ -540,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(72)] 
 		[RED("itemAmmoText")] 
 		public inkTextWidgetReference ItemAmmoText
 		{
@@ -548,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(73)] 
 		[RED("itemRequirements")] 
 		public inkWidgetReference ItemRequirements
 		{
@@ -556,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(74)] 
 		[RED("itemLevelRequirements")] 
 		public inkWidgetReference ItemLevelRequirements
 		{
@@ -564,7 +564,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(75)] 
 		[RED("itemStrenghtRequirements")] 
 		public inkWidgetReference ItemStrenghtRequirements
 		{
@@ -572,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(76)] 
 		[RED("itemAttributeRequirements")] 
 		public inkWidgetReference ItemAttributeRequirements
 		{
@@ -580,7 +580,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(77)] 
 		[RED("itemSmartGunLinkRequirements")] 
 		public inkWidgetReference ItemSmartGunLinkRequirements
 		{
@@ -588,7 +588,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(78)] 
 		[RED("itemLevelRequirementsValue")] 
 		public inkTextWidgetReference ItemLevelRequirementsValue
 		{
@@ -596,7 +596,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(79)] 
 		[RED("itemStrenghtRequirementsValue")] 
 		public inkTextWidgetReference ItemStrenghtRequirementsValue
 		{
@@ -604,7 +604,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(80)] 
 		[RED("itemAttributeRequirementsText")] 
 		public inkTextWidgetReference ItemAttributeRequirementsText
 		{
@@ -612,7 +612,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(81)] 
 		[RED("weaponEvolutionWrapper")] 
 		public inkWidgetReference WeaponEvolutionWrapper
 		{
@@ -620,7 +620,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(82)] 
 		[RED("weaponEvolutionIcon")] 
 		public inkImageWidgetReference WeaponEvolutionIcon
 		{
@@ -628,7 +628,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(83)] 
 		[RED("weaponEvolutionName")] 
 		public inkTextWidgetReference WeaponEvolutionName
 		{
@@ -636,7 +636,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(84)] 
 		[RED("weaponEvolutionDescription")] 
 		public inkTextWidgetReference WeaponEvolutionDescription
 		{
@@ -644,7 +644,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(85)] 
 		[RED("DEBUG_iconErrorWrapper")] 
 		public inkWidgetReference DEBUG_iconErrorWrapper
 		{
@@ -652,7 +652,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(86)] 
 		[RED("DEBUG_iconErrorText")] 
 		public inkTextWidgetReference DEBUG_iconErrorText
 		{
@@ -660,15 +660,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(84)] 
-		[RED("DEBUG_showAdditionalInfo")] 
-		public CBool DEBUG_showAdditionalInfo
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(85)] 
+		[Ordinal(87)] 
 		[RED("data")] 
 		public CHandle<InventoryTooltipData> Data
 		{
@@ -676,7 +668,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryTooltipData>>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(88)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -684,7 +676,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(89)] 
 		[RED("playAnimation")] 
 		public CBool PlayAnimation
 		{
@@ -694,89 +686,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipController()
 		{
-			ItemNameText = new inkTextWidgetReference();
-			ItemRarityText = new inkTextWidgetReference();
-			ProgressBar = new inkWidgetReference();
-			RecipeStatsTitle = new inkTextWidgetReference();
-			CategoriesWrapper = new inkCompoundWidgetReference();
-			BackgroundContainer = new inkCompoundWidgetReference();
-			TopContainer = new inkCompoundWidgetReference();
-			HeaderContainer = new inkCompoundWidgetReference();
-			HeaderWeaponContainer = new inkCompoundWidgetReference();
-			HeaderItemContainer = new inkCompoundWidgetReference();
-			HeaderGrenadeContainer = new inkCompoundWidgetReference();
-			HeaderArmorContainer = new inkCompoundWidgetReference();
-			PrimmaryStatsContainer = new inkCompoundWidgetReference();
-			SecondaryStatsContainer = new inkCompoundWidgetReference();
-			RecipeStatsContainer = new inkCompoundWidgetReference();
-			RecipeDamageTypesContainer = new inkCompoundWidgetReference();
-			ModsContainer = new inkCompoundWidgetReference();
-			DedicatedModsContainer = new inkCompoundWidgetReference();
-			DescriptionContainer = new inkCompoundWidgetReference();
-			CraftedItemContainer = new inkCompoundWidgetReference();
-			BottomContainer = new inkCompoundWidgetReference();
-			PrimmaryStatsList = new inkCompoundWidgetReference();
-			SecondaryStatsList = new inkCompoundWidgetReference();
-			RecipeStatsTypesList = new inkCompoundWidgetReference();
-			RecipeDamageTypesList = new inkCompoundWidgetReference();
-			ModsList = new inkCompoundWidgetReference();
-			DedicatedModsList = new inkCompoundWidgetReference();
-			RequiredLevelContainer = new inkCompoundWidgetReference();
-			PriceContainer = new inkCompoundWidgetReference();
-			DescriptionText = new inkTextWidgetReference();
-			RequireLevelText = new inkTextWidgetReference();
-			PriceText = new inkTextWidgetReference();
-			DpsWrapper = new inkWidgetReference();
-			DpsArrow = new inkImageWidgetReference();
-			DpsText = new inkTextWidgetReference();
-			NonLethalText = new inkTextWidgetReference();
-			DamagePerHitValue = new inkTextWidgetReference();
-			AttacksPerSecondValue = new inkTextWidgetReference();
-			SilencerPartWrapper = new inkWidgetReference();
-			ScopePartWrapper = new inkWidgetReference();
-			CraftedItemIcon = new inkWidgetReference();
-			GrenadeDamageTypeWrapper = new inkWidgetReference();
-			GrenadeDamageTypeIcon = new inkImageWidgetReference();
-			GrenadeRangeValue = new inkTextWidgetReference();
-			GrenadeRangeText = new inkTextWidgetReference();
-			GrenadeDeliveryLabel = new inkTextWidgetReference();
-			GrenadeDeliveryIcon = new inkImageWidgetReference();
-			GrenadeDamageStatWrapper = new inkWidgetReference();
-			GrenadeDamageStatLabel = new inkTextWidgetReference();
-			GrenadeDamageStatValue = new inkTextWidgetReference();
-			ArmorStatArrow = new inkImageWidgetReference();
-			ArmorStatLabel = new inkTextWidgetReference();
-			QuickhackStatWrapper = new inkWidgetReference();
-			QuickhackCostValue = new inkTextWidgetReference();
-			QuickhackDuration = new inkTextWidgetReference();
-			QuickhackCooldown = new inkTextWidgetReference();
-			QuickhackUpload = new inkTextWidgetReference();
-			DamageTypeWrapper = new inkWidgetReference();
-			DamageTypeIcon = new inkImageWidgetReference();
-			EquipedWrapper = new inkWidgetReference();
-			ItemTypeText = new inkTextWidgetReference();
-			ItemPreviewWrapper = new inkWidgetReference();
-			ItemPreviewIcon = new inkImageWidgetReference();
-			ItemPreviewIconicLines = new inkWidgetReference();
-			ItemWeightWrapper = new inkWidgetReference();
-			ItemWeightText = new inkTextWidgetReference();
-			ItemAmmoWrapper = new inkWidgetReference();
-			ItemAmmoText = new inkTextWidgetReference();
-			ItemRequirements = new inkWidgetReference();
-			ItemLevelRequirements = new inkWidgetReference();
-			ItemStrenghtRequirements = new inkWidgetReference();
-			ItemAttributeRequirements = new inkWidgetReference();
-			ItemSmartGunLinkRequirements = new inkWidgetReference();
-			ItemLevelRequirementsValue = new inkTextWidgetReference();
-			ItemStrenghtRequirementsValue = new inkTextWidgetReference();
-			ItemAttributeRequirementsText = new inkTextWidgetReference();
-			WeaponEvolutionWrapper = new inkWidgetReference();
-			WeaponEvolutionIcon = new inkImageWidgetReference();
-			WeaponEvolutionName = new inkTextWidgetReference();
-			WeaponEvolutionDescription = new inkTextWidgetReference();
-			DEBUG_iconErrorWrapper = new inkWidgetReference();
-			DEBUG_iconErrorText = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

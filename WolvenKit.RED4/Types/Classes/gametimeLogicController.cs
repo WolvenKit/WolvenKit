@@ -46,8 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public gametimeLogicController()
 		{
-			GametimeTextWidget = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

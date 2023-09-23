@@ -38,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public TargetAttitudeAnimationController()
 		{
-			Attitude = Enums.EAIAttitude.AIA_Neutral;
-
 			PostConstruct();
 		}
 

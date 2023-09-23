@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ApartmentScreen : LcdScreen
 	{
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("timeSystemCallbackID")] 
 		public CUInt32 TimeSystemCallbackID
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public ApartmentScreen()
 		{
-			ControllerTypeName = "ApartmentScreenController";
-
 			PostConstruct();
 		}
 

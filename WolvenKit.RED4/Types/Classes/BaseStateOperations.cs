@@ -38,11 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public BaseStateOperations()
 		{
-			Components = new();
-			FxInstances = new();
-			StateActionsOverrides = new SGenericDeviceActionsData { ToggleON = new SDeviceActionBoolData(), TogglePower = new SDeviceActionBoolData() };
-			BaseStateOperations_ = new();
-
 			PostConstruct();
 		}
 

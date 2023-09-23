@@ -109,6 +109,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("soundsLimitingSettings")] 
+		public CName SoundsLimitingSettings
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("isMusic")] 
 		public CBool IsMusic
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("groupingSettings")] 
 		public audioAmbientAreaGroupingSettings GroupingSettings
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<audioAmbientAreaGroupingSettings>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("quadSettings")] 
 		public audioQuadEmitterSettings QuadSettings
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<audioQuadEmitterSettings>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("outerDistance")] 
 		public CFloat OuterDistance
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("verticalOuterDistance")] 
 		public CFloat VerticalOuterDistance
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("insideSourceDistance")] 
 		public CFloat InsideSourceDistance
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("eventOverrides")] 
 		public CName EventOverrides
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("outdoornessOverride")] 
 		public CBool OutdoornessOverride
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("outdoorness")] 
 		public CFloat Outdoorness
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("mergeRoomsWithinArea")] 
 		public CBool MergeRoomsWithinArea
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("mixingContext")] 
 		public CName MixingContext
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("ambientPaletteEntries")] 
 		public CArray<audioAmbientPaletteEntry> AmbientPaletteEntries
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			SoundBanks = new();
 			Switches = new();
 			Parameters = new();
-			GroupingSettings = new audioAmbientAreaGroupingSettings { MaxDistance = 100.000000F };
+			GroupingSettings = new audioAmbientAreaGroupingSettings { MaxDistance = 100.000000F, GroupingVerticallimit = 3.000000F };
 			QuadSettings = new audioQuadEmitterSettings { Offset = new Vector3(), Events = new(4) };
 			AmbientPaletteEntries = new();
 

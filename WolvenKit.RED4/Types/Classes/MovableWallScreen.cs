@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MovableWallScreen : Door
 	{
-		[Ordinal(140)] 
+		[Ordinal(143)] 
 		[RED("animationLength")] 
 		public CFloat AnimationLength
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(141)] 
+		[Ordinal(144)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SimpleDevice> AnimFeature
 		{
@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public MovableWallScreen()
 		{
-			ControllerTypeName = "MovableWallScreenController";
-
 			PostConstruct();
 		}
 

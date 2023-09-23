@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameeventsHitEvent>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("missEvent")] 
+		public CHandle<gameeventsMissEvent> MissEvent
+		{
+			get => GetPropertyValue<CHandle<gameeventsMissEvent>>();
+			set => SetPropertyValue<CHandle<gameeventsMissEvent>>(value);
+		}
+
 		public GenericHitPrereqState()
 		{
 			PostConstruct();

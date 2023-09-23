@@ -2,17 +2,17 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class PerkDisplayTooltipController : AGenericTooltipController
+	public partial class PerkDisplayTooltipController : AGenericTooltipControllerWithDebug
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("root")] 
-		public inkWidgetReference Root_16
+		public inkWidgetReference Root_24
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("perkNameText")] 
 		public inkTextWidgetReference PerkNameText
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("videoWrapper")] 
 		public inkWidgetReference VideoWrapper
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("videoWidget")] 
 		public inkVideoWidgetReference VideoWidget
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkVideoWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("unlockStateText")] 
 		public inkTextWidgetReference UnlockStateText
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("perkTypeText")] 
 		public inkTextWidgetReference PerkTypeText
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("perkTypeWrapper")] 
 		public inkWidgetReference PerkTypeWrapper
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("unlockInfoWrapper")] 
 		public inkWidgetReference UnlockInfoWrapper
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("unlockPointsText")] 
 		public inkTextWidgetReference UnlockPointsText
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("unlockPointsDesc")] 
 		public inkTextWidgetReference UnlockPointsDesc
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("unlockPerkWrapper")] 
 		public inkWidgetReference UnlockPerkWrapper
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("levelText")] 
 		public inkTextWidgetReference LevelText
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("levelDescriptionText")] 
 		public inkTextWidgetReference LevelDescriptionText
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("nextLevelWrapper")] 
 		public inkWidgetReference NextLevelWrapper
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("nextLevelText")] 
 		public inkTextWidgetReference NextLevelText
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("nextLevelDescriptionText")] 
 		public inkTextWidgetReference NextLevelDescriptionText
 		{
@@ -132,7 +132,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
+		[RED("level1Wrapper")] 
+		public inkWidgetReference Level1Wrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("levelsDescriptions")] 
+		public CArray<PerkTooltipDescriptionEntry> LevelsDescriptions
+		{
+			get => GetPropertyValue<CArray<PerkTooltipDescriptionEntry>>();
+			set => SetPropertyValue<CArray<PerkTooltipDescriptionEntry>>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("relatedWeaponTypeWrapper")] 
+		public inkWidgetReference RelatedWeaponTypeWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("relatedWeaponTypeIcon")] 
+		public inkImageWidgetReference RelatedWeaponTypeIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("relatedWeaponTypeText")] 
+		public inkTextWidgetReference RelatedWeaponTypeText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(26)] 
 		[RED("traitLevelGrowthText")] 
 		public inkTextWidgetReference TraitLevelGrowthText
 		{
@@ -140,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(27)] 
 		[RED("unlockTraitPointsText")] 
 		public inkTextWidgetReference UnlockTraitPointsText
 		{
@@ -148,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(28)] 
 		[RED("unlockTraitWrapper")] 
 		public inkWidgetReference UnlockTraitWrapper
 		{
@@ -156,15 +196,111 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
-		[RED("holdToUpgradeHint")] 
-		public inkWidgetReference HoldToUpgradeHint
+		[Ordinal(29)] 
+		[RED("inputHints")] 
+		public inkWidgetReference InputHints
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(30)] 
+		[RED("buyHint")] 
+		public inkWidgetReference BuyHint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("sellHint")] 
+		public inkWidgetReference SellHint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("relicCost")] 
+		public inkWidgetReference RelicCost
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("costText")] 
+		public inkTextWidgetReference CostText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("costImage")] 
+		public inkImageWidgetReference CostImage
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("perkLevelWrapper")] 
+		public inkWidgetReference PerkLevelWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("perkLevelCurrent")] 
+		public inkTextWidgetReference PerkLevelCurrent
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("perkLevelMax")] 
+		public inkTextWidgetReference PerkLevelMax
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("cornerContainer")] 
+		public inkWidgetReference CornerContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(39)] 
+		[RED("cyberwareDetailsInfo")] 
+		public inkWidgetReference CyberwareDetailsInfo
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(40)] 
+		[RED("DEBUG_iconErrorWrapper")] 
+		public inkWidgetReference DEBUG_iconErrorWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("DEBUG_iconErrorText")] 
+		public inkTextWidgetReference DEBUG_iconErrorText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("data")] 
 		public CHandle<BasePerksMenuTooltipData> Data
 		{
@@ -174,27 +310,6 @@ namespace WolvenKit.RED4.Types
 
 		public PerkDisplayTooltipController()
 		{
-			Root_16 = new inkWidgetReference();
-			PerkNameText = new inkTextWidgetReference();
-			VideoWrapper = new inkWidgetReference();
-			VideoWidget = new inkVideoWidgetReference();
-			UnlockStateText = new inkTextWidgetReference();
-			PerkTypeText = new inkTextWidgetReference();
-			PerkTypeWrapper = new inkWidgetReference();
-			UnlockInfoWrapper = new inkWidgetReference();
-			UnlockPointsText = new inkTextWidgetReference();
-			UnlockPointsDesc = new inkTextWidgetReference();
-			UnlockPerkWrapper = new inkWidgetReference();
-			LevelText = new inkTextWidgetReference();
-			LevelDescriptionText = new inkTextWidgetReference();
-			NextLevelWrapper = new inkWidgetReference();
-			NextLevelText = new inkTextWidgetReference();
-			NextLevelDescriptionText = new inkTextWidgetReference();
-			TraitLevelGrowthText = new inkTextWidgetReference();
-			UnlockTraitPointsText = new inkTextWidgetReference();
-			UnlockTraitWrapper = new inkWidgetReference();
-			HoldToUpgradeHint = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

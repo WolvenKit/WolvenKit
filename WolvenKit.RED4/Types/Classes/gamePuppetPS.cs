@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("hasQuickHackBegunUpload")] 
+		public CBool HasQuickHackBegunUpload
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("hasAlternativeName")] 
 		public CBool HasAlternativeName
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("isCrouch")] 
 		public CBool IsCrouch
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("allowVehicleCollisionRagdoll")] 
 		public CBool AllowVehicleCollisionRagdoll
 		{

@@ -20,6 +20,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("timeTotal")] 
+		public CFloat TimeTotal
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("stackCount")] 
+		public CUInt32 StackCount
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
 		public gameuiBuffInfo()
 		{
 			PostConstruct();

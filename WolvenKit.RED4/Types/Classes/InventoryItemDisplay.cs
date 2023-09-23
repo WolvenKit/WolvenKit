@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryItemDisplay : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("RarityRoot")] 
 		public inkWidgetReference RarityRoot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("ModsRoot")] 
 		public inkCompoundWidgetReference ModsRoot
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("RarityWrapper")] 
 		public inkWidgetReference RarityWrapper
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("IconImage")] 
 		public inkImageWidgetReference IconImage
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("IconShadowImage")] 
 		public inkImageWidgetReference IconShadowImage
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("IconFallback")] 
 		public inkImageWidgetReference IconFallback
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("BackgroundShape")] 
 		public inkImageWidgetReference BackgroundShape
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("BackgroundHighlight")] 
 		public inkImageWidgetReference BackgroundHighlight
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("BackgroundFrame")] 
 		public inkImageWidgetReference BackgroundFrame
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("QuantityText")] 
 		public inkTextWidgetReference QuantityText
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("ModName")] 
 		public CName ModName
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("toggleHighlight")] 
 		public inkWidgetReference ToggleHighlight
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("equippedIcon")] 
 		public inkWidgetReference EquippedIcon
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("DefaultCategoryIconName")] 
 		public CString DefaultCategoryIconName
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("ItemData")] 
 		public gameInventoryItemData ItemData
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("AttachementsDisplay")] 
 		public CArray<CWeakHandle<InventoryItemAttachmentDisplay>> AttachementsDisplay
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<InventoryItemAttachmentDisplay>>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("smallSize")] 
 		public Vector2 SmallSize
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("bigSize")] 
 		public Vector2 BigSize
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
@@ -158,24 +158,6 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemDisplay()
 		{
-			RarityRoot = new inkWidgetReference();
-			ModsRoot = new inkCompoundWidgetReference();
-			RarityWrapper = new inkWidgetReference();
-			IconImage = new inkImageWidgetReference();
-			IconShadowImage = new inkImageWidgetReference();
-			IconFallback = new inkImageWidgetReference();
-			BackgroundShape = new inkImageWidgetReference();
-			BackgroundHighlight = new inkImageWidgetReference();
-			BackgroundFrame = new inkImageWidgetReference();
-			QuantityText = new inkTextWidgetReference();
-			ToggleHighlight = new inkWidgetReference();
-			EquippedIcon = new inkWidgetReference();
-			DefaultCategoryIconName = "undefined";
-			ItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
-			AttachementsDisplay = new();
-			SmallSize = new Vector2();
-			BigSize = new Vector2();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiarcadeRoachRaceCloudSpawnerController : gameuiarcadeArcadeSpawnerController
 	{
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("minCloudRelativeVelocity")] 
 		public CFloat MinCloudRelativeVelocity
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("maxCloudRelativeVelocity")] 
 		public CFloat MaxCloudRelativeVelocity
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("cloudSpawnTime")] 
 		public CFloat CloudSpawnTime
 		{

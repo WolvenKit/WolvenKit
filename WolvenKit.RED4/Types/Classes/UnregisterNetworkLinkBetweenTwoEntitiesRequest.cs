@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public UnregisterNetworkLinkBetweenTwoEntitiesRequest()
 		{
-			FirstID = new entEntityID();
-			SecondID = new entEntityID();
-
 			PostConstruct();
 		}
 

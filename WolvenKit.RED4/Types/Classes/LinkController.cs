@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class LinkController : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("linkAddress")] 
 		public CString LinkAddress
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("defaultColor")] 
 		public HDRColor DefaultColor
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<HDRColor>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("hoverColor")] 
 		public HDRColor HoverColor
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<HDRColor>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("IGNORED_COLOR")] 
 		public HDRColor IGNORED_COLOR
 		{
@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public LinkController()
 		{
-			DefaultColor = new HDRColor();
-			HoverColor = new HDRColor();
-			IGNORED_COLOR = new HDRColor();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CarHotkeyController : GenericHotkeyController
 	{
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("carIconSlot")] 
 		public inkImageWidgetReference CarIconSlot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("vehicleSystem")] 
 		public CWeakHandle<gameVehicleSystem> VehicleSystem
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameVehicleSystem>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("psmBB")] 
 		public CWeakHandle<gameIBlackboard> PsmBB
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("bbListener")] 
 		public CHandle<redCallbackObject> BbListener
 		{
@@ -38,12 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public CarHotkeyController()
 		{
-			HotkeyBackground = new inkImageWidgetReference();
-			ButtonHint = new inkWidgetReference();
-			Restrictions = new();
-			DebugCommands = new();
-			CarIconSlot = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class gsmBaseRequestsHandler : inkISystemRequestsHandler
 	{
-		[Ordinal(15)] 
+		[Ordinal(19)] 
 		[RED("SavingComplete")] 
 		public gsmSavingRequesResult SavingComplete
 		{

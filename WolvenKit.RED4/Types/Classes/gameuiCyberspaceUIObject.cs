@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiCyberspaceUIObject : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("mappinType")] 
 		public CEnum<gameuiCyberspaceElementType> MappinType
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameuiCyberspaceElementType>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("caption")] 
 		public CString Caption
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalRootFolderEntry : gameJournalFolderEntry
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("descriptor")] 
 		public CResourceAsyncReference<gameJournalDescriptorResource> Descriptor
 		{

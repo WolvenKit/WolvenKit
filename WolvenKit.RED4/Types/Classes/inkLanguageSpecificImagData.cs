@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class inkLanguageSpecificImagData : RedBaseClass
 	{
 		[Ordinal(0)] 
+		[RED("languageID")] 
+		public CEnum<inkLanguageId> LanguageID
+		{
+			get => GetPropertyValue<CEnum<inkLanguageId>>();
+			set => SetPropertyValue<CEnum<inkLanguageId>>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("textureAtlasForLanguage")] 
 		public CResourceAsyncReference<inkTextureAtlas> TextureAtlasForLanguage
 		{
@@ -12,20 +20,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("partNameForLanguage")] 
 		public CName PartNameForLanguage
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(2)] 
-		[RED("languageID")] 
-		public CEnum<inkLanguageId> LanguageID
-		{
-			get => GetPropertyValue<CEnum<inkLanguageId>>();
-			set => SetPropertyValue<CEnum<inkLanguageId>>(value);
 		}
 
 		public inkLanguageSpecificImagData()

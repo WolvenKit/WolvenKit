@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class FridgeControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("isOpen")] 
 		public CBool IsOpen
 		{
@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public FridgeControllerPS()
 		{
-			DeviceName = "LocKey#79";
-			TweakDBRecord = "Devices.Fridge";
-			TweakDBDescriptionRecord = 115920876132;
-
 			PostConstruct();
 		}
 

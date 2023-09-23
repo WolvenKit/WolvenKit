@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public InteractionAreaOperations()
 		{
-			Components = new();
-			FxInstances = new();
-			InteractionAreaOperations_ = new();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BackdoorInkGameController : MasterDeviceInkGameControllerBase
 	{
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("IdleGroup")] 
 		public inkWidgetReference IdleGroup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("ConnectedGroup")] 
 		public inkWidgetReference ConnectedGroup
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("IntroAnimationName")] 
 		public CName IntroAnimationName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("IdleAnimationName")] 
 		public CName IdleAnimationName
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("GlitchAnimationName")] 
 		public CName GlitchAnimationName
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("RunningAnimation")] 
 		public CHandle<inkanimProxy> RunningAnimation
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("onGlitchingListener")] 
 		public CHandle<redCallbackObject> OnGlitchingListener
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("onIsInDefaultStateListener")] 
 		public CHandle<redCallbackObject> OnIsInDefaultStateListener
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("onShutdownModuleListener")] 
 		public CHandle<redCallbackObject> OnShutdownModuleListener
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("onBootModuleListener")] 
 		public CHandle<redCallbackObject> OnBootModuleListener
 		{
@@ -86,9 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public BackdoorInkGameController()
 		{
-			IdleGroup = new inkWidgetReference();
-			ConnectedGroup = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

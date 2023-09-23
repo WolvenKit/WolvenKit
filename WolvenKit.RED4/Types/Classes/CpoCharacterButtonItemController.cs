@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CpoCharacterButtonItemController : inkButtonDpadSupportedController
 	{
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("characterRecordId")] 
 		public TweakDBID CharacterRecordId
 		{

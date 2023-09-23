@@ -181,6 +181,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(22)] 
+		[RED("uiQuickHackKeepContext")] 
+		public CBool UiQuickHackKeepContext
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(23)] 
 		[RED("quickHackDescriptionVisible")] 
 		public CBool QuickHackDescriptionVisible
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("targetingSystem")] 
 		public CWeakHandle<gametargetingTargetingSystem> TargetingSystem
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gametargetingTargetingSystem>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("visionModeSystem")] 
 		public CWeakHandle<gameVisionModeSystem> VisionModeSystem
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameVisionModeSystem>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("isHackingMinigameActive")] 
 		public CBool IsHackingMinigameActive
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("stickInputListener")] 
 		public CHandle<redCallbackObject> StickInputListener
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("quickHackPanelListener")] 
 		public CHandle<redCallbackObject> QuickHackPanelListener
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("carriedBodyListener")] 
 		public CHandle<redCallbackObject> CarriedBodyListener
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("grappleListener")] 
 		public CHandle<redCallbackObject> GrappleListener
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("lookatRequest")] 
 		public gameaimAssistAimRequest LookatRequest
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameaimAssistAimRequest>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("isQHackUIInputLocked")] 
 		public CBool IsQHackUIInputLocked
 		{
@@ -260,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("playerAttachedCallbackID")] 
 		public CUInt32 PlayerAttachedCallbackID
 		{
@@ -268,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("playerDetachedCallbackID")] 
 		public CUInt32 PlayerDetachedCallbackID
 		{
@@ -276,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("playerTargetCallbackID")] 
 		public CHandle<redCallbackObject> PlayerTargetCallbackID
 		{
@@ -284,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("braindanceToggleCallbackID")] 
 		public CHandle<redCallbackObject> BraindanceToggleCallbackID
 		{
@@ -292,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("nameplateCallbackID")] 
 		public CHandle<redCallbackObject> NameplateCallbackID
 		{
@@ -300,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("visionModeChangedCallbackID")] 
 		public CHandle<redCallbackObject> VisionModeChangedCallbackID
 		{
@@ -308,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("scannerTargetCallbackID")] 
 		public CHandle<redCallbackObject> ScannerTargetCallbackID
 		{
@@ -316,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("hackingMinigameCallbackID")] 
 		public CHandle<redCallbackObject> HackingMinigameCallbackID
 		{
@@ -324,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("uiScannerVisibleCallbackID")] 
 		public CHandle<redCallbackObject> UiScannerVisibleCallbackID
 		{
@@ -332,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("uiQuickHackVisibleCallbackID")] 
 		public CHandle<redCallbackObject> UiQuickHackVisibleCallbackID
 		{
@@ -340,7 +348,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
+		[RED("uiQuickhackKeepContextCallbackID")] 
+		public CHandle<redCallbackObject> UiQuickhackKeepContextCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(44)] 
 		[RED("lootDataCallbackID")] 
 		public CHandle<redCallbackObject> LootDataCallbackID
 		{
@@ -348,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("pulseDelayID")] 
 		public gameDelayID PulseDelayID
 		{
@@ -356,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("previousStickInput")] 
 		public Vector4 PreviousStickInput
 		{
@@ -366,18 +382,6 @@ namespace WolvenKit.RED4.Types
 
 		public HUDManager()
 		{
-			ActiveMode = Enums.ActiveMode.SEMI;
-			InstructionsDelayID = new gameDelayID();
-			ModulesArray = new();
-			LookAtTarget = new entEntityID();
-			ScannerTarget = new entEntityID();
-			NameplateTarget = new entEntityID();
-			QuickHackTarget = new entEntityID();
-			LootedTarget = new entEntityID();
-			LookatRequest = new gameaimAssistAimRequest { CheckRange = true, LookAtTarget = new Vector4(), ProcessAsInput = true, BptMaxSwitches = -1.000000F };
-			PulseDelayID = new gameDelayID();
-			PreviousStickInput = new Vector4();
-
 			PostConstruct();
 		}
 

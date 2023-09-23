@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class JournalNotification : GenericNotificationController
 	{
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("interactionsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> InteractionsBlackboard
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("bbListenerId")] 
 		public CHandle<redCallbackObject> BbListenerId
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("questNotificationData")] 
 		public CHandle<gameuiQuestUpdateNotificationViewData> QuestNotificationData
 		{

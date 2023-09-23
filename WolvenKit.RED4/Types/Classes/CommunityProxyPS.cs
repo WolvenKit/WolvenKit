@@ -5,9 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public CommunityProxyPS()
 		{
-			RevealDevicesGrid = false;
-			HasNetworkBackdoor = true;
-
 			PostConstruct();
 		}
 

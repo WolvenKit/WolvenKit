@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public ExtractDevicesEvent()
 		{
-			LazyDevices = new();
-			Devices = new();
-
 			PostConstruct();
 		}
 

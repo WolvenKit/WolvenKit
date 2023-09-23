@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("receivedStimPropagation")] 
+		public CEnum<gamedataStimPropagation> ReceivedStimPropagation
+		{
+			get => GetPropertyValue<CEnum<gamedataStimPropagation>>();
+			set => SetPropertyValue<CEnum<gamedataStimPropagation>>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("inCrowd")] 
 		public CBool InCrowd
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("inTrafficLane")] 
 		public CBool InTrafficLane
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("desiredFearPhase")] 
 		public CInt32 DesiredFearPhase
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("previousFearPhase")] 
 		public CInt32 PreviousFearPhase
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("NPCRadius")] 
 		public CFloat NPCRadius
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("bumpTriggerDistanceBufferMounted")] 
 		public CFloat BumpTriggerDistanceBufferMounted
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("bumpTriggerDistanceBufferCrouched")] 
 		public CFloat BumpTriggerDistanceBufferCrouched
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("delayReactionEventID")] 
 		public gameDelayID DelayReactionEventID
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("delay")] 
 		public Vector2 Delay
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("delayDetectionEventID")] 
 		public gameDelayID DelayDetectionEventID
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("delayStimEventID")] 
 		public gameDelayID DelayStimEventID
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("resetReactionDataID")] 
 		public gameDelayID ResetReactionDataID
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("callingPoliceID")] 
 		public gameDelayID CallingPoliceID
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("lookatEvent")] 
 		public CHandle<entLookAtAddEvent> LookatEvent
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entLookAtAddEvent>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("ignoreList")] 
 		public CArray<entEntityID> IgnoreList
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<entEntityID>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("investigationList")] 
 		public CArray<StimEventData> InvestigationList
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<StimEventData>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("pendingReaction")] 
 		public CHandle<AIReactionData> PendingReaction
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIReactionData>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("ovefloodCooldown")] 
 		public CFloat OvefloodCooldown
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("stanceState")] 
 		public CEnum<gamedataNPCStanceState> StanceState
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataNPCStanceState>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("highLevelState")] 
 		public CEnum<gamedataNPCHighLevelState> HighLevelState
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataNPCHighLevelState>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("aiRole")] 
 		public CEnum<EAIRole> AiRole
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAIRole>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("pendingBehaviorCb")] 
 		public CHandle<redCallbackObject> PendingBehaviorCb
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("inPendingBehavior")] 
 		public CBool InPendingBehavior
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("cacheSecuritySysOutput")] 
 		public CHandle<SecuritySystemOutput> CacheSecuritySysOutput
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SecuritySystemOutput>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("environmentalHazards")] 
 		public CArray<CHandle<senseStimuliEvent>> EnvironmentalHazards
 		{
@@ -260,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<senseStimuliEvent>>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("environmentalHazardsDelayIDs")] 
 		public CArray<gameDelayID> EnvironmentalHazardsDelayIDs
 		{
@@ -268,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameDelayID>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("stolenVehicle")] 
 		public CWeakHandle<vehicleBaseObject> StolenVehicle
 		{
@@ -276,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("isAlertedByDeadBody")] 
 		public CBool IsAlertedByDeadBody
 		{
@@ -284,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("isInCrosswalk")] 
 		public CBool IsInCrosswalk
 		{
@@ -292,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("beignHijacked")] 
 		public CBool BeignHijacked
 		{
@@ -300,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("owner_id")] 
 		public entEntityID Owner_id
 		{
@@ -308,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("presetName")] 
 		public CName PresetName
 		{
@@ -316,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("updateByActive")] 
 		public CBool UpdateByActive
 		{
@@ -324,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("personalities")] 
 		public CArray<CEnum<gamedataStatType>> Personalities
 		{
@@ -332,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataStatType>>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("workspotReactionPlayed")] 
 		public CBool WorkspotReactionPlayed
 		{
@@ -340,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("inReactionSequence")] 
 		public CBool InReactionSequence
 		{
@@ -348,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("playerProximity")] 
 		public CBool PlayerProximity
 		{
@@ -356,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("fearToIdleDistance")] 
 		public Vector2 FearToIdleDistance
 		{
@@ -364,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("exitWorkspotAim")] 
 		public Vector2 ExitWorkspotAim
 		{
@@ -372,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("bumpedRecently")] 
 		public CInt32 BumpedRecently
 		{
@@ -380,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("bumpTimestamp")] 
 		public CFloat BumpTimestamp
 		{
@@ -388,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("crowdAimingReactionDistance")] 
 		public CFloat CrowdAimingReactionDistance
 		{
@@ -396,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("fearInPlaceAroundDistance")] 
 		public CFloat FearInPlaceAroundDistance
 		{
@@ -404,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("lookatRepeat")] 
 		public CBool LookatRepeat
 		{
@@ -412,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("disturbingComfortZoneInProgress")] 
 		public CBool DisturbingComfortZoneInProgress
 		{
@@ -420,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(58)] 
 		[RED("entereProximityRecently")] 
 		public CInt32 EntereProximityRecently
 		{
@@ -428,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(59)] 
 		[RED("comfortZoneTimestamp")] 
 		public CFloat ComfortZoneTimestamp
 		{
@@ -436,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(60)] 
 		[RED("disturbComfortZoneEventId")] 
 		public gameDelayID DisturbComfortZoneEventId
 		{
@@ -444,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(61)] 
 		[RED("checkComfortZoneEventId")] 
 		public gameDelayID CheckComfortZoneEventId
 		{
@@ -452,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(62)] 
 		[RED("spreadingFearEventId")] 
 		public gameDelayID SpreadingFearEventId
 		{
@@ -460,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(63)] 
 		[RED("proximityLookatEventId")] 
 		public gameDelayID ProximityLookatEventId
 		{
@@ -468,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(64)] 
 		[RED("resetFacialEventId")] 
 		public gameDelayID ResetFacialEventId
 		{
@@ -476,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(65)] 
 		[RED("exitWorkspotSequenceEventId")] 
 		public gameDelayID ExitWorkspotSequenceEventId
 		{
@@ -484,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(66)] 
 		[RED("exitFearInVehicleEventId")] 
 		public gameDelayID ExitFearInVehicleEventId
 		{
@@ -492,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(67)] 
 		[RED("fastWalk")] 
 		public CBool FastWalk
 		{
@@ -500,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(68)] 
 		[RED("createThreshold")] 
 		public CBool CreateThreshold
 		{
@@ -508,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(69)] 
 		[RED("initialized")] 
 		public CBool Initialized
 		{
@@ -516,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(70)] 
 		[RED("initCrowd")] 
 		public CBool InitCrowd
 		{
@@ -524,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(71)] 
 		[RED("facialCooldown")] 
 		public CFloat FacialCooldown
 		{
@@ -532,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(72)] 
 		[RED("disturbComfortZoneAggressiveEventId")] 
 		public gameDelayID DisturbComfortZoneAggressiveEventId
 		{
@@ -540,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(73)] 
 		[RED("backOffInProgress")] 
 		public CBool BackOffInProgress
 		{
@@ -548,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(74)] 
 		[RED("backOffTimestamp")] 
 		public CFloat BackOffTimestamp
 		{
@@ -556,7 +564,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(75)] 
 		[RED("crowdFearStage")] 
 		public CEnum<gameFearStage> CrowdFearStage
 		{
@@ -564,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameFearStage>>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(76)] 
 		[RED("fearLocomotionWrapper")] 
 		public CBool FearLocomotionWrapper
 		{
@@ -572,7 +580,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(77)] 
 		[RED("successfulFearDeescalation")] 
 		public CFloat SuccessfulFearDeescalation
 		{
@@ -580,7 +588,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(78)] 
 		[RED("willingToCallPolice")] 
 		public CBool WillingToCallPolice
 		{
@@ -588,7 +596,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(79)] 
 		[RED("deadBodyInvestigators")] 
 		public CArray<entEntityID> DeadBodyInvestigators
 		{
@@ -596,7 +604,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<entEntityID>>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(80)] 
 		[RED("deadBodyStartingPosition")] 
 		public Vector4 DeadBodyStartingPosition
 		{
@@ -604,7 +612,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(81)] 
 		[RED("currentStimThresholdValue")] 
 		public CInt32 CurrentStimThresholdValue
 		{
@@ -612,7 +620,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(82)] 
 		[RED("timeStampThreshold")] 
 		public CFloat TimeStampThreshold
 		{
@@ -620,7 +628,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(83)] 
 		[RED("currentStealthStimThresholdValue")] 
 		public CInt32 CurrentStealthStimThresholdValue
 		{
@@ -628,7 +636,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(84)] 
 		[RED("stealthTimeStampThreshold")] 
 		public CFloat StealthTimeStampThreshold
 		{
@@ -636,44 +644,56 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(85)] 
+		[RED("driverAllowedToGetAggressive")] 
+		public CBool DriverAllowedToGetAggressive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(86)] 
+		[RED("driverIsAggressive")] 
+		public CBool DriverIsAggressive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(87)] 
+		[RED("logSource")] 
+		public CEnum<EReactLogSource> LogSource
+		{
+			get => GetPropertyValue<CEnum<EReactLogSource>>();
+			set => SetPropertyValue<CEnum<EReactLogSource>>(value);
+		}
+
+		[Ordinal(88)] 
+		[RED("gracePeriodDuration")] 
+		public CFloat GracePeriodDuration
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(89)] 
+		[RED("recentAlertObject")] 
+		public CWeakHandle<gameObject> RecentAlertObject
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(90)] 
+		[RED("recentAlertTimeStamp")] 
+		public CFloat RecentAlertTimeStamp
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public ReactionManagerComponent()
 		{
-			StimuliCache = new();
-			ReactionCache = new();
-			DesiredFearPhase = -1;
-			NPCRadius = 0.300000F;
-			BumpTriggerDistanceBufferMounted = 1.000000F;
-			BumpTriggerDistanceBufferCrouched = -0.110000F;
-			DelayReactionEventID = new gameDelayID();
-			Delay = new Vector2();
-			DelayDetectionEventID = new gameDelayID();
-			DelayStimEventID = new gameDelayID();
-			ResetReactionDataID = new gameDelayID();
-			CallingPoliceID = new gameDelayID();
-			IgnoreList = new();
-			InvestigationList = new();
-			OvefloodCooldown = 1.000000F;
-			StanceState = Enums.gamedataNPCStanceState.Stand;
-			HighLevelState = Enums.gamedataNPCHighLevelState.Relaxed;
-			EnvironmentalHazards = new();
-			EnvironmentalHazardsDelayIDs = new();
-			Owner_id = new entEntityID();
-			Personalities = new();
-			FearToIdleDistance = new Vector2();
-			ExitWorkspotAim = new Vector2();
-			DisturbComfortZoneEventId = new gameDelayID();
-			CheckComfortZoneEventId = new gameDelayID();
-			SpreadingFearEventId = new gameDelayID();
-			ProximityLookatEventId = new gameDelayID();
-			ResetFacialEventId = new gameDelayID();
-			ExitWorkspotSequenceEventId = new gameDelayID();
-			ExitFearInVehicleEventId = new gameDelayID();
-			FastWalk = true;
-			CreateThreshold = true;
-			DisturbComfortZoneAggressiveEventId = new gameDelayID();
-			DeadBodyInvestigators = new();
-			DeadBodyStartingPosition = new Vector4();
-
 			PostConstruct();
 		}
 

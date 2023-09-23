@@ -166,12 +166,6 @@ namespace WolvenKit.RED4.Types
 
 		public TvInkGameController()
 		{
-			ActiveChannelIDX = -1;
-			ActiveSequence = new();
-			GlobalTVChannels = new();
-			PreviousGlobalTVChannelID = -1;
-			GlobalTVchanellsCount = -1;
-
 			PostConstruct();
 		}
 

@@ -5,9 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public DoorSystemControllerPS()
 		{
-			TweakDBRecord = 79792717846;
-			TweakDBDescriptionRecord = 129263239957;
-
 			PostConstruct();
 		}
 

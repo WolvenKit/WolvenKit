@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SubCharUnequipRequest : UnequipRequest
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("subCharType")] 
 		public CEnum<gamedataSubCharacter> SubCharType
 		{

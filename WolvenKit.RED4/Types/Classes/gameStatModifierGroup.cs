@@ -29,8 +29,48 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("relatedModifierGroups")] 
+		public CArray<TweakDBID> RelatedModifierGroups
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("statModifierGroupRecordID")] 
+		public TweakDBID StatModifierGroupRecordID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("stackCount")] 
+		public CUInt16 StackCount
+		{
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("drawBasedOnStatType")] 
 		public CBool DrawBasedOnStatType
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("saveBasedOnStatType")] 
+		public CBool SaveBasedOnStatType
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("optimiseCombinedModifiers")] 
+		public CBool OptimiseCombinedModifiers
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -39,6 +79,7 @@ namespace WolvenKit.RED4.Types
 		public gameStatModifierGroup()
 		{
 			StatModifierArray = new();
+			RelatedModifierGroups = new();
 
 			PostConstruct();
 		}

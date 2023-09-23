@@ -38,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public speedometerLogicController()
 		{
-			SpeedTextWidget = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

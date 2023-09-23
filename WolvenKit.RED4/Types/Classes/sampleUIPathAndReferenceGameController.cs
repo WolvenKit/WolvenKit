@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public sampleUIPathAndReferenceGameController()
 		{
-			TextWidget = new inkTextWidgetReference();
-			ImageWidgetPath = new inkWidgetPath { Names = new() };
-
 			PostConstruct();
 		}
 

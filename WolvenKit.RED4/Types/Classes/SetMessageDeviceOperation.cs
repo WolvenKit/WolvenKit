@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public SetMessageDeviceOperation()
 		{
-			IsEnabled = true;
-			ToggleOperations = new();
-
 			PostConstruct();
 		}
 

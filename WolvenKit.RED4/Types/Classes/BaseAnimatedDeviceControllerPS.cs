@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BaseAnimatedDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("hasInteraction")] 
 		public CBool HasInteraction
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("randomizeAnimationTime")] 
 		public CBool RandomizeAnimationTime
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("nameForActivation")] 
 		public TweakDBID NameForActivation
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("nameForDeactivation")] 
 		public TweakDBID NameForDeactivation
 		{
@@ -46,8 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public BaseAnimatedDeviceControllerPS()
 		{
-			DeviceName = "Gameplay-Devices-DisplayNames-RoadBlock";
-
 			PostConstruct();
 		}
 

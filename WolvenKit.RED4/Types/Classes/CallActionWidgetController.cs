@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CallActionWidgetController : DeviceActionWidgetControllerBase
 	{
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("statusText")] 
 		public inkTextWidgetReference StatusText
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("callingAnimName")] 
 		public CName CallingAnimName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("talkingAnimName")] 
 		public CName TalkingAnimName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("status")] 
 		public CEnum<IntercomStatus> Status
 		{
@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public CallActionWidgetController()
 		{
-			StatusText = new inkTextWidgetReference();
-			CallingAnimName = "calling_animation_maelstrom";
-			TalkingAnimName = "talking_animation_maelstrom";
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,15 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ArcadeMachine : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
+		[RED("arcadeMachineType")] 
+		public CEnum<ArcadeMachineType> ArcadeMachineType
+		{
+			get => GetPropertyValue<CEnum<ArcadeMachineType>>();
+			set => SetPropertyValue<CEnum<ArcadeMachineType>>(value);
+		}
+
+		[Ordinal(99)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(100)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -20,15 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(96)] 
-		[RED("currentGame")] 
-		public redResourceReferenceScriptToken CurrentGame
+		[Ordinal(101)] 
+		[RED("currentGameVideo")] 
+		public redResourceReferenceScriptToken CurrentGameVideo
 		{
 			get => GetPropertyValue<redResourceReferenceScriptToken>();
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(102)] 
 		[RED("currentGameAudio")] 
 		public CName CurrentGameAudio
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(103)] 
 		[RED("currentGameAudioStop")] 
 		public CName CurrentGameAudioStop
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(104)] 
 		[RED("meshAppearanceOn")] 
 		public CName MeshAppearanceOn
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(105)] 
 		[RED("meshAppearanceOff")] 
 		public CName MeshAppearanceOff
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(106)] 
 		[RED("arcadeMinigameComponent")] 
 		public CHandle<workWorkspotResourceComponent> ArcadeMinigameComponent
 		{
@@ -68,12 +76,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<workWorkspotResourceComponent>>(value);
 		}
 
+		[Ordinal(107)] 
+		[RED("minigame")] 
+		public CEnum<ArcadeMinigame> Minigame
+		{
+			get => GetPropertyValue<CEnum<ArcadeMinigame>>();
+			set => SetPropertyValue<CEnum<ArcadeMinigame>>(value);
+		}
+
+		[Ordinal(108)] 
+		[RED("combatStateListener")] 
+		public CHandle<redCallbackObject> CombatStateListener
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
 		public ArcadeMachine()
 		{
-			ControllerTypeName = "ArcadeMachineController";
-			ShortGlitchDelayID = new gameDelayID();
-			CurrentGame = new redResourceReferenceScriptToken();
-
 			PostConstruct();
 		}
 

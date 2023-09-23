@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TrafficLight : Device
 	{
-		[Ordinal(84)] 
+		[Ordinal(88)] 
 		[RED("lightState")] 
 		public CEnum<worldTrafficLightColor> LightState
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldTrafficLightColor>>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(89)] 
 		[RED("trafficLightMesh")] 
 		public CHandle<entPhysicalMeshComponent> TrafficLightMesh
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entPhysicalMeshComponent>>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(90)] 
 		[RED("destroyedMesh")] 
 		public CHandle<entPhysicalMeshComponent> DestroyedMesh
 		{
@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public TrafficLight()
 		{
-			ControllerTypeName = "TrafficLightController";
-
 			PostConstruct();
 		}
 

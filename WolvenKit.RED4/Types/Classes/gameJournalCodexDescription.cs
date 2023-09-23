@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalCodexDescription : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("subTitle")] 
 		public LocalizationString SubTitle
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("textContent")] 
 		public LocalizationString TextContent
 		{
@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalCodexDescription()
 		{
+			JournalEntryOverrideDataList = new();
 			SubTitle = new() { Unk1 = 0, Value = "" };
 			TextContent = new() { Unk1 = 0, Value = "" };
 

@@ -189,6 +189,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(23)] 
+		[RED("splineRecalculation")] 
+		public CBool SplineRecalculation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("disableFootIK")] 
+		public CBool DisableFootIK
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("useCombatState")] 
 		public CBool UseCombatState
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("useAlertedState")] 
 		public CBool UseAlertedState
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("noWaitToEndDistance")] 
 		public CFloat NoWaitToEndDistance
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("noWaitToEndCompanionDistance")] 
 		public CFloat NoWaitToEndCompanionDistance
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("lowestCompanionDistanceToEnd")] 
 		public CFloat LowestCompanionDistanceToEnd
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("previousCompanionDistanceToEnd")] 
 		public CFloat PreviousCompanionDistanceToEnd
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("maxCompanionDistanceOnSpline")] 
 		public CFloat MaxCompanionDistanceOnSpline
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("companion")] 
 		public CWeakHandle<gameObject> Companion
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("ignoreLineOfSightCheck")] 
 		public CBool IgnoreLineOfSightCheck
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("shootingTarget")] 
 		public CWeakHandle<gameObject> ShootingTarget
 		{
@@ -268,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("minSearchAngle")] 
 		public CFloat MinSearchAngle
 		{
@@ -276,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("maxSearchAngle")] 
 		public CFloat MaxSearchAngle
 		{
@@ -284,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("desiredDistance")] 
 		public CFloat DesiredDistance
 		{
@@ -292,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("deadZoneRadius")] 
 		public CFloat DeadZoneRadius
 		{
@@ -300,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("shouldBeInFrontOfCompanion")] 
 		public CBool ShouldBeInFrontOfCompanion
 		{
@@ -308,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("useMatchForSpeedForPlayer")] 
 		public CBool UseMatchForSpeedForPlayer
 		{
@@ -316,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("lookAtTarget")] 
 		public CWeakHandle<gameObject> LookAtTarget
 		{
@@ -324,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("distanceToCompanion")] 
 		public CFloat DistanceToCompanion
 		{
@@ -332,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("splineEndPoint")] 
 		public Vector4 SplineEndPoint
 		{
@@ -340,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("hasSplineEndPoint")] 
 		public CBool HasSplineEndPoint
 		{
@@ -348,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("playerCompanion")] 
 		public CWeakHandle<PlayerPuppet> PlayerCompanion
 		{
@@ -356,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("firstWaitingDemandTimestamp")] 
 		public CFloat FirstWaitingDemandTimestamp
 		{
@@ -364,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("useOffMeshLinkReservation")] 
 		public CBool UseOffMeshLinkReservation
 		{
@@ -372,7 +388,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
+		[RED("allowCrowdOnPath")] 
+		public CBool AllowCrowdOnPath
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(49)] 
 		[RED("sprint")] 
 		public CBool Sprint
 		{
@@ -380,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(50)] 
 		[RED("run")] 
 		public CBool Run
 		{
@@ -388,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(51)] 
 		[RED("waitForCompanion")] 
 		public CBool WaitForCompanion
 		{
@@ -396,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(52)] 
 		[RED("followTargetCommand")] 
 		public CHandle<AIFollowTargetCommand> FollowTargetCommand
 		{
@@ -404,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIFollowTargetCommand>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(53)] 
 		[RED("stopWhenDestinationReached")] 
 		public CBool StopWhenDestinationReached
 		{
@@ -412,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(54)] 
 		[RED("teleportToTarget")] 
 		public CBool TeleportToTarget
 		{
@@ -420,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(55)] 
 		[RED("shouldTeleportNow")] 
 		public CBool ShouldTeleportNow
 		{
@@ -428,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(56)] 
 		[RED("teleportDestination")] 
 		public Vector4 TeleportDestination
 		{
@@ -436,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(57)] 
 		[RED("matchTargetSpeed")] 
 		public CBool MatchTargetSpeed
 		{
@@ -446,11 +470,6 @@ namespace WolvenKit.RED4.Types
 
 		public AIMoveCommandsDelegate()
 		{
-			LowestCompanionDistanceToEnd = 9999999.000000F;
-			PreviousCompanionDistanceToEnd = 9999999.000000F;
-			SplineEndPoint = new Vector4();
-			TeleportDestination = new Vector4();
-
 			PostConstruct();
 		}
 

@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public DoorStateOperations()
 		{
-			Components = new();
-			FxInstances = new();
-			DoorStateOperations_ = new();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SecurityAlarm : InteractiveMasterDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("workingAlarm")] 
 		public CHandle<entMeshComponent> WorkingAlarm
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("destroyedAlarm")] 
 		public CHandle<entMeshComponent> DestroyedAlarm
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("isGlitching")] 
 		public CBool IsGlitching
 		{
@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public SecurityAlarm()
 		{
-			ControllerTypeName = "SecurityAlarmController";
-
 			PostConstruct();
 		}
 

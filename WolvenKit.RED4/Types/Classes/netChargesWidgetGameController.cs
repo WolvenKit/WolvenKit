@@ -110,8 +110,6 @@ namespace WolvenKit.RED4.Types
 
 		public netChargesWidgetGameController()
 		{
-			ChargesList = new();
-
 			PostConstruct();
 		}
 

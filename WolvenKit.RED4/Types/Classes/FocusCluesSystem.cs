@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public FocusCluesSystem()
 		{
-			LinkedClues = new();
-			DisabledGroupes = new();
-			ActiveLinkedClue = new LinkedFocusClueData { OwnerID = new entEntityID(), ExtendedClueRecords = new(), PsData = new PSOwnerData { Id = new gamePersistentID() } };
-
 			PostConstruct();
 		}
 

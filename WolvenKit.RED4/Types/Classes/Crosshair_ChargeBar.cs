@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Crosshair_ChargeBar : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] 
+		[Ordinal(27)] 
 		[RED("bar")] 
 		public inkWidgetReference Bar
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(28)] 
 		[RED("ammo")] 
 		public inkTextWidgetReference Ammo
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(29)] 
 		[RED("leftPart")] 
 		public CWeakHandle<inkWidget> LeftPart
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(30)] 
 		[RED("rightPart")] 
 		public CWeakHandle<inkWidget> RightPart
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(31)] 
 		[RED("topPart")] 
 		public CWeakHandle<inkWidget> TopPart
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(32)] 
 		[RED("chargeBar")] 
 		public CWeakHandle<inkRectangleWidget> ChargeBar
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkRectangleWidget>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(33)] 
 		[RED("sizeOfChargeBar")] 
 		public Vector2 SizeOfChargeBar
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(34)] 
 		[RED("chargeBBID")] 
 		public CHandle<redCallbackObject> ChargeBBID
 		{
@@ -70,10 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public Crosshair_ChargeBar()
 		{
-			Bar = new inkWidgetReference();
-			Ammo = new inkTextWidgetReference();
-			SizeOfChargeBar = new Vector2();
-
 			PostConstruct();
 		}
 

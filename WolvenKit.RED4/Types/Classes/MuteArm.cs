@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MuteArm : gameweaponObject
 	{
-		[Ordinal(59)] 
+		[Ordinal(66)] 
 		[RED("gameEffectRef")] 
 		public gameEffectRef GameEffectRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(67)] 
 		[RED("gameEffectInstance")] 
 		public CHandle<gameEffectInstance> GameEffectInstance
 		{
@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public MuteArm()
 		{
-			GameEffectRef = new gameEffectRef();
-
 			PostConstruct();
 		}
 

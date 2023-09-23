@@ -46,29 +46,37 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(9)] 
 		[RED("castShadows")] 
-		public CBool CastShadows
+		public CEnum<shadowsShadowCastingMode> CastShadows
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("castLocalShadows")] 
-		public CBool CastLocalShadows
+		public CEnum<shadowsShadowCastingMode> CastLocalShadows
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
 		[Ordinal(11)] 
-		[RED("castRayTracedLocalShadows")] 
-		public CBool CastRayTracedLocalShadows
+		[RED("castRayTracedGlobalShadows")] 
+		public CEnum<shadowsShadowCastingMode> CastRayTracedGlobalShadows
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
 		[Ordinal(12)] 
+		[RED("castRayTracedLocalShadows")] 
+		public CEnum<shadowsShadowCastingMode> CastRayTracedLocalShadows
+		{
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("windImpulseEnabled")] 
 		public CBool WindImpulseEnabled
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("removeFromRainMap")] 
 		public CBool RemoveFromRainMap
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("renderSceneLayerMask")] 
 		public CBitField<RenderSceneLayerMask> RenderSceneLayerMask
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<RenderSceneLayerMask>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("lodLevelScales")] 
 		public CUInt32 LodLevelScales
 		{
@@ -100,14 +108,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("version")] 
+		public CUInt8 Version
+		{
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
 		public worldMeshNode()
 		{
-			Mesh = new CResourceAsyncReference<CMesh>(@"engine\meshes\editor\box.w2mesh");
+			Mesh = new CResourceAsyncReference<CMesh>(11172089723266472358);
 			MeshAppearance = "default";
 			OccluderAutohideDistanceScale = 255;
-			CastShadows = true;
-			CastLocalShadows = true;
-			CastRayTracedLocalShadows = true;
 			WindImpulseEnabled = true;
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			LodLevelScales = uint.MaxValue;

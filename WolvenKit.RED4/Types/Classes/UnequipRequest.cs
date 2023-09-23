@@ -20,10 +20,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("force")] 
+		public CBool Force
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public UnequipRequest()
 		{
-			SlotIndex = -1;
-
 			PostConstruct();
 		}
 

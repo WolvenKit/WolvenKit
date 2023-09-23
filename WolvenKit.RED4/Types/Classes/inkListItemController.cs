@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class inkListItemController : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("ToggledOff")] 
 		public inkListItemControllerCallback ToggledOff
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkListItemControllerCallback>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("ToggledOn")] 
 		public inkListItemControllerCallback ToggledOn
 		{
@@ -20,15 +20,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkListItemControllerCallback>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("Selected")] 
-		public inkListItemControllerCallback Selected_672
+		public inkListItemControllerCallback Selected_744
 		{
 			get => GetPropertyValue<inkListItemControllerCallback>();
 			set => SetPropertyValue<inkListItemControllerCallback>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("Deselected")] 
 		public inkListItemControllerCallback Deselected
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkListItemControllerCallback>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("AddedToList")] 
 		public inkListItemControllerCallback AddedToList
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkListItemControllerCallback>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("labelPathRef")] 
 		public inkTextWidgetReference LabelPathRef
 		{
@@ -56,10 +56,9 @@ namespace WolvenKit.RED4.Types
 		{
 			ToggledOff = new inkListItemControllerCallback();
 			ToggledOn = new inkListItemControllerCallback();
-			Selected_672 = new inkListItemControllerCallback();
+			Selected_744 = new inkListItemControllerCallback();
 			Deselected = new inkListItemControllerCallback();
 			AddedToList = new inkListItemControllerCallback();
-			LabelPathRef = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

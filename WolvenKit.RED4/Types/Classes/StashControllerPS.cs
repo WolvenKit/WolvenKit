@@ -5,9 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public StashControllerPS()
 		{
-			ShouldScannerShowStatus = false;
-			ShouldScannerShowNetwork = false;
-
 			PostConstruct();
 		}
 

@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("permanentlyEnabledByDefault")] 
+		public CBool PermanentlyEnabledByDefault
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public worldCrowdNullAreaNode()
 		{
 			PostConstruct();

@@ -36,6 +36,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("applyOverclock")] 
+		public CBool ApplyOverclock
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SpreadEffector()
 		{
 			PostConstruct();

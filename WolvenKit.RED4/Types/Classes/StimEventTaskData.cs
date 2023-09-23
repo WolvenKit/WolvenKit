@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("delayed")] 
+		public CBool Delayed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("id")] 
 		public CUInt32 Id
 		{

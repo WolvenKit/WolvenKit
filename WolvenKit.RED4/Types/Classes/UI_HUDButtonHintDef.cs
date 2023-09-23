@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HUDButtonHintDef()
 		{
-			ActionsData = new gamebbScriptID_Variant();
-
 			PostConstruct();
 		}
 

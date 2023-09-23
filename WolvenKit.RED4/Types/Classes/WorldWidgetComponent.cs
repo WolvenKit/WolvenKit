@@ -78,7 +78,6 @@ namespace WolvenKit.RED4.Types
 			SceneWidgetProperties = new worlduiSceneWidgetProperties { ProjectionPlaneSize = new Vector2 { X = 1.000000F, Y = 1.000000F }, FaceVector = new Vector3() };
 			SpawnDistanceOverride = -1.000000F;
 			LimitedSpawnDistanceFromVehicle = true;
-			ScreenDefinition = new SUIScreenDefinition();
 
 			PostConstruct();
 		}

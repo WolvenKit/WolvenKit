@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SensorDevice : ExplosiveDevice
 	{
-		[Ordinal(117)] 
+		[Ordinal(123)] 
 		[RED("attitudeAgent")] 
 		public CHandle<gameAttitudeAgent> AttitudeAgent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameAttitudeAgent>>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(124)] 
 		[RED("senseComponent")] 
 		public CHandle<senseComponent> SenseComponent
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<senseComponent>>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(125)] 
 		[RED("visibleObjectComponent")] 
 		public CHandle<senseVisibleObjectComponent> VisibleObjectComponent
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<senseVisibleObjectComponent>>(value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(126)] 
 		[RED("forwardFaceSlotComponent")] 
 		public CHandle<entSlotComponent> ForwardFaceSlotComponent
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(127)] 
 		[RED("targetingComponent")] 
 		public CHandle<gameTargetingComponent> TargetingComponent
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameTargetingComponent>>(value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(128)] 
 		[RED("targetTrackerComponent")] 
 		public CHandle<AITargetTrackerComponent> TargetTrackerComponent
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AITargetTrackerComponent>>(value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(129)] 
 		[RED("cameraComponentInverted")] 
 		public CHandle<gameCameraComponent> CameraComponentInverted
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameCameraComponent>>(value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(130)] 
 		[RED("targets")] 
 		public CArray<CHandle<Target>> Targets
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<Target>>>(value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(131)] 
 		[RED("currentlyFollowedTarget")] 
 		public CWeakHandle<gameObject> CurrentlyFollowedTarget
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(132)] 
 		[RED("currentLookAtEventVert")] 
 		public CHandle<entLookAtAddEvent> CurrentLookAtEventVert
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entLookAtAddEvent>>(value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(133)] 
 		[RED("currentLookAtEventHor")] 
 		public CHandle<entLookAtAddEvent> CurrentLookAtEventHor
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entLookAtAddEvent>>(value);
 		}
 
-		[Ordinal(128)] 
+		[Ordinal(134)] 
 		[RED("HPListenersList")] 
 		public CArray<CHandle<TargetedObjectDeathListener>> HPListenersList
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<TargetedObjectDeathListener>>>(value);
 		}
 
-		[Ordinal(129)] 
+		[Ordinal(135)] 
 		[RED("sensorDeviceState")] 
 		public CEnum<ESensorDeviceStates> SensorDeviceState
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESensorDeviceStates>>(value);
 		}
 
-		[Ordinal(130)] 
+		[Ordinal(136)] 
 		[RED("sensorWakeState")] 
 		public CEnum<ESensorDeviceWakeState> SensorWakeState
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESensorDeviceWakeState>>(value);
 		}
 
-		[Ordinal(131)] 
+		[Ordinal(137)] 
 		[RED("sensorWakeStatePrevious")] 
 		public CEnum<ESensorDeviceWakeState> SensorWakeStatePrevious
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESensorDeviceWakeState>>(value);
 		}
 
-		[Ordinal(132)] 
+		[Ordinal(138)] 
 		[RED("targetingDelayEventID")] 
 		public gameDelayID TargetingDelayEventID
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(133)] 
+		[Ordinal(139)] 
 		[RED("hack_isTargetingDelayEventFilled")] 
 		public CBool Hack_isTargetingDelayEventFilled
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(134)] 
+		[Ordinal(140)] 
 		[RED("currentResolveDelayEventID")] 
 		public gameDelayID CurrentResolveDelayEventID
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(135)] 
+		[Ordinal(141)] 
 		[RED("hack_isResolveDelayEventFilled")] 
 		public CBool Hack_isResolveDelayEventFilled
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(136)] 
+		[Ordinal(142)] 
 		[RED("animFeatureData")] 
 		public CHandle<AnimFeature_SensorDevice> AnimFeatureData
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_SensorDevice>>(value);
 		}
 
-		[Ordinal(137)] 
+		[Ordinal(143)] 
 		[RED("animFeatureDataName")] 
 		public CName AnimFeatureDataName
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(138)] 
+		[Ordinal(144)] 
 		[RED("targetLostBySensesDelayEventID")] 
 		public gameDelayID TargetLostBySensesDelayEventID
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(139)] 
+		[Ordinal(145)] 
 		[RED("hack_isTargetLostBySensesDelEvtFilled")] 
 		public CBool Hack_isTargetLostBySensesDelEvtFilled
 		{
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(140)] 
+		[Ordinal(146)] 
 		[RED("initialAttitude")] 
 		public CName InitialAttitude
 		{
@@ -196,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(141)] 
+		[Ordinal(147)] 
 		[RED("detectionFactorMultiplier")] 
 		public CFloat DetectionFactorMultiplier
 		{
@@ -204,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(142)] 
+		[Ordinal(148)] 
 		[RED("taggedListenerCallback")] 
 		public CHandle<redCallbackObject> TaggedListenerCallback
 		{
@@ -212,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(143)] 
+		[Ordinal(149)] 
 		[RED("lightScanRefs")] 
 		public CArray<CHandle<gameLightComponent>> LightScanRefs
 		{
@@ -220,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameLightComponent>>>(value);
 		}
 
-		[Ordinal(144)] 
+		[Ordinal(150)] 
 		[RED("lightAttitudeRefs")] 
 		public CArray<CHandle<gameLightComponent>> LightAttitudeRefs
 		{
@@ -228,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameLightComponent>>>(value);
 		}
 
-		[Ordinal(145)] 
+		[Ordinal(151)] 
 		[RED("lightInfoRefs")] 
 		public CArray<CHandle<gameLightComponent>> LightInfoRefs
 		{
@@ -236,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameLightComponent>>>(value);
 		}
 
-		[Ordinal(146)] 
+		[Ordinal(152)] 
 		[RED("lightColors")] 
 		public LedColors_SensorDevice LightColors
 		{
@@ -244,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LedColors_SensorDevice>(value);
 		}
 
-		[Ordinal(147)] 
+		[Ordinal(153)] 
 		[RED("deviceFXRecord")] 
 		public CHandle<gamedataDeviceFX_Record> DeviceFXRecord
 		{
@@ -252,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataDeviceFX_Record>>(value);
 		}
 
-		[Ordinal(148)] 
+		[Ordinal(154)] 
 		[RED("scanGameEffect")] 
 		public CHandle<gameEffectInstance> ScanGameEffect
 		{
@@ -260,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(149)] 
+		[Ordinal(155)] 
 		[RED("scanFXSlotName")] 
 		public CName ScanFXSlotName
 		{
@@ -268,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(150)] 
+		[Ordinal(156)] 
 		[RED("visionConeEffectInstance")] 
 		public CHandle<gameEffectInstance> VisionConeEffectInstance
 		{
@@ -276,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(151)] 
+		[Ordinal(157)] 
 		[RED("idleGameEffectInstance")] 
 		public CHandle<gameEffectInstance> IdleGameEffectInstance
 		{
@@ -284,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(152)] 
+		[Ordinal(158)] 
 		[RED("targetForcedFormTagKill")] 
 		public CBool TargetForcedFormTagKill
 		{
@@ -292,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(153)] 
+		[Ordinal(159)] 
 		[RED("hasSupport")] 
 		public CBool HasSupport
 		{
@@ -300,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(154)] 
+		[Ordinal(160)] 
 		[RED("defaultSensePreset")] 
 		public TweakDBID DefaultSensePreset
 		{
@@ -308,7 +308,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(155)] 
+		[Ordinal(161)] 
+		[RED("keepHostilityTowardsPlayerHostiles")] 
+		public CBool KeepHostilityTowardsPlayerHostiles
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(162)] 
+		[RED("hostileUpdateTowardsPlayerHostilesDelayed")] 
+		public CBool HostileUpdateTowardsPlayerHostilesDelayed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(163)] 
 		[RED("elementsToHideOnTCS")] 
 		public CArray<CName> ElementsToHideOnTCS
 		{
@@ -316,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(156)] 
+		[Ordinal(164)] 
 		[RED("elementsToHideOnTCSRefs")] 
 		public CArray<CHandle<entIPlacedComponent>> ElementsToHideOnTCSRefs
 		{
@@ -324,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(157)] 
+		[Ordinal(165)] 
 		[RED("previoustagKillList")] 
 		public CArray<CWeakHandle<gameObject>> PrevioustagKillList
 		{
@@ -332,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<gameObject>>>(value);
 		}
 
-		[Ordinal(158)] 
+		[Ordinal(166)] 
 		[RED("playIdleSoundOnIdle")] 
 		public CBool PlayIdleSoundOnIdle
 		{
@@ -340,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(159)] 
+		[Ordinal(167)] 
 		[RED("idleSound")] 
 		public CName IdleSound
 		{
@@ -348,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(160)] 
+		[Ordinal(168)] 
 		[RED("idleSoundStop")] 
 		public CName IdleSoundStop
 		{
@@ -356,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(161)] 
+		[Ordinal(169)] 
 		[RED("soundDeviceON")] 
 		public CName SoundDeviceON
 		{
@@ -364,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(162)] 
+		[Ordinal(170)] 
 		[RED("soundDeviceOFF")] 
 		public CName SoundDeviceOFF
 		{
@@ -372,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(163)] 
+		[Ordinal(171)] 
 		[RED("idleSoundIsPlaying")] 
 		public CBool IdleSoundIsPlaying
 		{
@@ -380,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(164)] 
+		[Ordinal(172)] 
 		[RED("soundDeviceDestroyed")] 
 		public CName SoundDeviceDestroyed
 		{
@@ -388,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(165)] 
+		[Ordinal(173)] 
 		[RED("soundDetectionLoop")] 
 		public CName SoundDetectionLoop
 		{
@@ -396,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(166)] 
+		[Ordinal(174)] 
 		[RED("soundDetectionLoopStop")] 
 		public CName SoundDetectionLoopStop
 		{
@@ -404,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(167)] 
+		[Ordinal(175)] 
 		[RED("isPLAYERSAFETargetLock")] 
 		public CBool IsPLAYERSAFETargetLock
 		{
@@ -412,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(168)] 
+		[Ordinal(176)] 
 		[RED("playerDetected")] 
 		public CBool PlayerDetected
 		{
@@ -420,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(169)] 
+		[Ordinal(177)] 
 		[RED("clientForceSetAnimFeature")] 
 		public CBool ClientForceSetAnimFeature
 		{
@@ -428,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(170)] 
+		[Ordinal(178)] 
 		[RED("playerControlData")] 
 		public PlayerControlDeviceData PlayerControlData
 		{
@@ -436,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<PlayerControlDeviceData>(value);
 		}
 
-		[Ordinal(171)] 
+		[Ordinal(179)] 
 		[RED("engineTimeInSec")] 
 		public CFloat EngineTimeInSec
 		{
@@ -444,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(172)] 
+		[Ordinal(180)] 
 		[RED("TCExitEngineTime")] 
 		public CFloat TCExitEngineTime
 		{
@@ -452,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(173)] 
+		[Ordinal(181)] 
 		[RED("hack_wasTargetReevaluated")] 
 		public CBool Hack_wasTargetReevaluated
 		{
@@ -460,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(174)] 
+		[Ordinal(182)] 
 		[RED("hack_wasSSOutupFromSelf")] 
 		public CBool Hack_wasSSOutupFromSelf
 		{
@@ -468,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(175)] 
+		[Ordinal(183)] 
 		[RED("degbu_SS_inputsSend")] 
 		public CInt32 Degbu_SS_inputsSend
 		{
@@ -476,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(176)] 
+		[Ordinal(184)] 
 		[RED("debug_SS_inputsSendTargetLock")] 
 		public CInt32 Debug_SS_inputsSendTargetLock
 		{
@@ -484,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(177)] 
+		[Ordinal(185)] 
 		[RED("debug_SS_inputsSendIntresting")] 
 		public CInt32 Debug_SS_inputsSendIntresting
 		{
@@ -492,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(178)] 
+		[Ordinal(186)] 
 		[RED("debug_SS_inputsSendLoseTarget")] 
 		public CInt32 Debug_SS_inputsSendLoseTarget
 		{
@@ -500,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(179)] 
+		[Ordinal(187)] 
 		[RED("debug_SS_outputRecieved")] 
 		public CInt32 Debug_SS_outputRecieved
 		{
@@ -508,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(180)] 
+		[Ordinal(188)] 
 		[RED("debug_SS_outputFormSelfRecieved")] 
 		public CInt32 Debug_SS_outputFormSelfRecieved
 		{
@@ -516,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(181)] 
+		[Ordinal(189)] 
 		[RED("debug_SS_outputFromElseRecieved")] 
 		public CInt32 Debug_SS_outputFromElseRecieved
 		{
@@ -524,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(182)] 
+		[Ordinal(190)] 
 		[RED("debug_SS_reevaluatesDone")] 
 		public CInt32 Debug_SS_reevaluatesDone
 		{
@@ -532,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(183)] 
+		[Ordinal(191)] 
 		[RED("debug_SS_trespassingRecieved")] 
 		public CInt32 Debug_SS_trespassingRecieved
 		{
@@ -540,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(184)] 
+		[Ordinal(192)] 
 		[RED("debug_SS_TargetAssessmentRequest")] 
 		public CInt32 Debug_SS_TargetAssessmentRequest
 		{
@@ -548,7 +564,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(185)] 
+		[Ordinal(193)] 
 		[RED("minPitch")] 
 		public CFloat MinPitch
 		{
@@ -556,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(186)] 
+		[Ordinal(194)] 
 		[RED("maxPitch")] 
 		public CFloat MaxPitch
 		{
@@ -564,7 +580,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(187)] 
+		[Ordinal(195)] 
 		[RED("minYaw")] 
 		public CFloat MinYaw
 		{
@@ -572,7 +588,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(188)] 
+		[Ordinal(196)] 
 		[RED("maxYaw")] 
 		public CFloat MaxYaw
 		{
@@ -582,27 +598,6 @@ namespace WolvenKit.RED4.Types
 
 		public SensorDevice()
 		{
-			Targets = new();
-			HPListenersList = new();
-			SensorDeviceState = Enums.ESensorDeviceStates.IDLE;
-			SensorWakeState = Enums.ESensorDeviceWakeState.NONE;
-			TargetingDelayEventID = new gameDelayID();
-			CurrentResolveDelayEventID = new gameDelayID();
-			TargetLostBySensesDelayEventID = new gameDelayID();
-			LightScanRefs = new();
-			LightAttitudeRefs = new();
-			LightInfoRefs = new();
-			LightColors = new LedColors_SensorDevice { Off = new ScriptLightSettings { Color = new CColor() }, Red = new ScriptLightSettings { Color = new CColor() }, Green = new ScriptLightSettings { Color = new CColor() }, Blue = new ScriptLightSettings { Color = new CColor() }, Yellow = new ScriptLightSettings { Color = new CColor() }, White = new ScriptLightSettings { Color = new CColor() } };
-			ScanFXSlotName = "laser";
-			DefaultSensePreset = "Senses.BasicCamera";
-			ElementsToHideOnTCS = new();
-			ElementsToHideOnTCSRefs = new();
-			PrevioustagKillList = new();
-			PlayIdleSoundOnIdle = true;
-			PlayerControlData = new PlayerControlDeviceData();
-			MinPitch = -70.000000F;
-			MaxPitch = 70.000000F;
-
 			PostConstruct();
 		}
 

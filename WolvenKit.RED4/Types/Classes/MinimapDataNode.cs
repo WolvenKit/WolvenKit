@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("streamingDistance")] 
+		public CFloat StreamingDistance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("localBounds")] 
 		public Box LocalBounds
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Box>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("allInteriorShapes")] 
 		public CBool AllInteriorShapes
 		{
@@ -30,7 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public MinimapDataNode()
 		{
-			LocalBounds = new Box { Min = new Vector4(), Max = new Vector4() };
+			StreamingDistance = 975.000000F;
+			LocalBounds = new Box { Min = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, Max = new Vector4 { X = float.MinValue, Y = float.MinValue, Z = float.MinValue, W = float.MinValue } };
 
 			PostConstruct();
 		}

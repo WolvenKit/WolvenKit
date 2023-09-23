@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.Types
 		{
 			SlidingDirection = new Vector4();
 			NormalDirection = new Vector4();
-			LowestLocalPosition = new Vector4();
+			LowestLocalPosition = new Vector4 { W = 1.000000F };
 			StaticGroundFactor = -1.000000F;
 
 			PostConstruct();

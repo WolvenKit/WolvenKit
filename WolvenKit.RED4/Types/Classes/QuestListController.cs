@@ -54,11 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public QuestListController()
 		{
-			CategoryName = new inkTextWidgetReference();
-			Icon = new inkImageWidgetReference();
-			QuestListRef = new inkCompoundWidgetReference();
-			QuestItems = new();
-
 			PostConstruct();
 		}
 

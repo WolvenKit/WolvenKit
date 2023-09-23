@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public RegisterPingNetworkLinkRequest()
 		{
-			LinksData = new();
-
 			PostConstruct();
 		}
 

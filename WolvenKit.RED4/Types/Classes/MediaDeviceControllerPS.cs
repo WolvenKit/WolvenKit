@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MediaDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("previousStation")] 
 		public CInt32 PreviousStation
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("activeChannelName")] 
 		public CString ActiveChannelName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("dataInitialized")] 
 		public CBool DataInitialized
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("amountOfStations")] 
 		public CInt32 AmountOfStations
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("activeStation")] 
 		public CInt32 ActiveStation
 		{

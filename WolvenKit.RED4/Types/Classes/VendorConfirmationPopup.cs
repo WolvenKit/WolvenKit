@@ -150,19 +150,6 @@ namespace WolvenKit.RED4.Types
 
 		public VendorConfirmationPopup()
 		{
-			ItemNameText = new inkTextWidgetReference();
-			ButtonHintsRoot = new inkWidgetReference();
-			ItemDisplayRef = new inkWidgetReference();
-			RairtyBar = new inkWidgetReference();
-			EqippedItemContainer = new inkWidgetReference();
-			ItemPriceContainer = new inkWidgetReference();
-			ItemPriceText = new inkTextWidgetReference();
-			Root = new inkWidgetReference();
-			Background = new inkWidgetReference();
-			ButtonOk = new inkWidgetReference();
-			ButtonCancel = new inkWidgetReference();
-			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
-
 			PostConstruct();
 		}
 

@@ -140,15 +140,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<LoadListItem>>(value);
 		}
 
+		[Ordinal(20)] 
+		[RED("isEp1Enabled")] 
+		public CBool IsEp1Enabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SaveGameMenuGameController()
 		{
-			List = new inkCompoundWidgetReference();
-			ButtonHintsManagerRef = new inkWidgetReference();
-			GogButtonWidgetRef = new inkWidgetReference();
-			GogContainer = new inkWidgetReference();
-			Scrollbar = new inkWidgetReference();
-			Saves = new();
-
 			PostConstruct();
 		}
 

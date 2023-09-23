@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("combatRestriction")] 
+		public CBool CombatRestriction
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("hubMenuInstanceID")] 
 		public CUInt32 HubMenuInstanceID
 		{

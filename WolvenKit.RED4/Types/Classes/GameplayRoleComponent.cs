@@ -148,15 +148,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(23)] 
+		[RED("enabledMinimapMappins")] 
+		public CArray<CEnum<gamedataMappinVariant>> EnabledMinimapMappins
+		{
+			get => GetPropertyValue<CArray<CEnum<gamedataMappinVariant>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataMappinVariant>>>(value);
+		}
+
 		public GameplayRoleComponent()
 		{
-			AutoDeterminGameplayRole = true;
-			MappinsDisplayMode = Enums.EMappinDisplayMode.MINIMALISTIC;
-			AlwaysCreateMappinAsDynamic = true;
-			ForcedMappinVisualState = Enums.EMappinVisualState.None;
-			Mappins = new();
-			OffsetValue = 0.040000F;
-
 			PostConstruct();
 		}
 

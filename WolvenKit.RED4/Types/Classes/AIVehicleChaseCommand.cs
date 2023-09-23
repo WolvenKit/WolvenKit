@@ -36,6 +36,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("aggressiveRamming")] 
+		public CBool AggressiveRamming
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("ignoreChaseVehiclesLimit")] 
+		public CBool IgnoreChaseVehiclesLimit
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("boostDrivingStats")] 
+		public CBool BoostDrivingStats
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public AIVehicleChaseCommand()
 		{
 			DistanceMin = 0.500000F;

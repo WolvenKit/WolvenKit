@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CrafringMaterialItemController : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("nameText")] 
 		public inkTextWidgetReference NameText
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("quantityText")] 
 		public inkTextWidgetReference QuantityText
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("quantityChangeText")] 
 		public inkTextWidgetReference QuantityChangeText
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("frame")] 
 		public inkWidgetReference Frame
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("data")] 
 		public CHandle<CachedCraftingMaterial> Data
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CachedCraftingMaterial>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("hovered")] 
 		public CBool Hovered
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("lastState")] 
 		public CEnum<CrafringMaterialItemHighlight> LastState
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<CrafringMaterialItemHighlight>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("shouldBeHighlighted")] 
 		public CBool ShouldBeHighlighted
 		{
@@ -84,14 +84,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("useSimpleFromat")] 
+		public CBool UseSimpleFromat
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("hideIfZero")] 
+		public CBool HideIfZero
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CrafringMaterialItemController()
 		{
-			NameText = new inkTextWidgetReference();
-			QuantityText = new inkTextWidgetReference();
-			QuantityChangeText = new inkTextWidgetReference();
-			Icon = new inkImageWidgetReference();
-			Frame = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -5,6 +5,22 @@ namespace WolvenKit.RED4.Types
 	public partial class physicsSectorCacheArtifact : CResource
 	{
 		[Ordinal(1)] 
+		[RED("sectorGeometryKeys")] 
+		public CArray<physicsGeometryKey> SectorGeometryKeys
+		{
+			get => GetPropertyValue<CArray<physicsGeometryKey>>();
+			set => SetPropertyValue<CArray<physicsGeometryKey>>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("sectorInPlaceGeometry")] 
+		public CHandle<physicsGeometryCacheArtifact> SectorInPlaceGeometry
+		{
+			get => GetPropertyValue<CHandle<physicsGeometryCacheArtifact>>();
+			set => SetPropertyValue<CHandle<physicsGeometryCacheArtifact>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("sectorBounds")] 
 		public Box SectorBounds
 		{
@@ -12,18 +28,10 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Box>(value);
 		}
 
-		[Ordinal(2)] 
-		[RED("sectorGeometries")] 
-		public CArray<physicsGeometryKey> SectorGeometries
-		{
-			get => GetPropertyValue<CArray<physicsGeometryKey>>();
-			set => SetPropertyValue<CArray<physicsGeometryKey>>(value);
-		}
-
 		public physicsSectorCacheArtifact()
 		{
+			SectorGeometryKeys = new();
 			SectorBounds = new Box { Min = new Vector4(), Max = new Vector4() };
-			SectorGeometries = new();
 
 			PostConstruct();
 		}

@@ -102,16 +102,6 @@ namespace WolvenKit.RED4.Types
 
 		public CraftingPopupController()
 		{
-			TooltipContainer = new inkWidgetReference();
-			CraftIcon = new inkImageWidgetReference();
-			ItemName = new inkTextWidgetReference();
-			ItemTopName = new inkTextWidgetReference();
-			ItemQuality = new inkTextWidgetReference();
-			HeaderText = new inkTextWidgetReference();
-			CloseButton = new inkWidgetReference();
-			ButtonHintsRoot = new inkWidgetReference();
-			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
-
 			PostConstruct();
 		}
 

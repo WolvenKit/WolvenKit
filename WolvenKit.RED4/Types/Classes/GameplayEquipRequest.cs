@@ -52,11 +52,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("extraQuality")] 
+		public CFloat ExtraQuality
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("partsToAdd")] 
+		public CArray<gameItemID> PartsToAdd
+		{
+			get => GetPropertyValue<CArray<gameItemID>>();
+			set => SetPropertyValue<CArray<gameItemID>>(value);
+		}
+
 		public GameplayEquipRequest()
 		{
-			ItemID = new gameItemID();
-			SlotIndex = -1;
-
 			PostConstruct();
 		}
 

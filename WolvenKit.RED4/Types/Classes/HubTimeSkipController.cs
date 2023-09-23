@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("timeSkipText")] 
+		public inkTextWidgetReference TimeSkipText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("cantSkipTimeContainer")] 
 		public inkWidgetReference CantSkipTimeContainer
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("timeSkipButton")] 
 		public inkWidgetReference TimeSkipButton
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("gameCtrlRef")] 
 		public CWeakHandle<gameuiMenuGameController> GameCtrlRef
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiMenuGameController>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("timeSystem")] 
 		public CWeakHandle<gameTimeSystem> TimeSystem
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameTimeSystem>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("timeSkipPopupToken")] 
 		public CHandle<inkGameNotificationToken> TimeSkipPopupToken
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("cantSkipTimeAnim")] 
 		public CHandle<inkanimProxy> CantSkipTimeAnim
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("gameTimeTextParams")] 
 		public CHandle<textTextParameterSet> GameTimeTextParams
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("canSkipTime")] 
 		public CBool CanSkipTime
 		{
@@ -78,10 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public HubTimeSkipController()
 		{
-			GameTimeText = new inkTextWidgetReference();
-			CantSkipTimeContainer = new inkWidgetReference();
-			TimeSkipButton = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

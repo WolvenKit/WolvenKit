@@ -46,10 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryWeaponSlot()
 		{
-			DamageIndicatorRef = new inkWidgetReference();
-			DPSRef = new inkWidgetReference();
-			DPSValueLabel = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

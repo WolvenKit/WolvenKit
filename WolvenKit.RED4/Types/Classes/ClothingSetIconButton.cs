@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ClothingSetIconButton : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("setIcon")] 
 		public inkImageWidgetReference SetIcon
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("currentIconFrame")] 
 		public inkWidgetReference CurrentIconFrame
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("iconID")] 
 		public TweakDBID IconID
 		{
@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public ClothingSetIconButton()
 		{
-			SetIcon = new inkImageWidgetReference();
-			CurrentIconFrame = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

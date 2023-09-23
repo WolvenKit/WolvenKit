@@ -85,6 +85,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("proxyEntityID")] 
+		public entEntityID ProxyEntityID
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("direction")] 
 		public Vector4 Direction
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("removeAllStacksWhenDurationEnds")] 
 		public CBool RemoveAllStacksWhenDurationEnds
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("applicationSource")] 
 		public CName ApplicationSource
 		{
@@ -117,6 +125,7 @@ namespace WolvenKit.RED4.Types
 			SourcesData = new();
 			OwnerEntityID = new entEntityID();
 			InstigatorEntityID = new entEntityID();
+			ProxyEntityID = new entEntityID();
 			Direction = new Vector4();
 
 			PostConstruct();

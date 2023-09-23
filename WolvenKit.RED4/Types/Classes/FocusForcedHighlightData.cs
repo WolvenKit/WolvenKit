@@ -94,11 +94,6 @@ namespace WolvenKit.RED4.Types
 
 		public FocusForcedHighlightData()
 		{
-			SourceID = new entEntityID();
-			OutlineType = Enums.EFocusOutlineType.INVALID;
-			InTransitionTime = 0.500000F;
-			OutTransitionTime = 2.000000F;
-
 			PostConstruct();
 		}
 

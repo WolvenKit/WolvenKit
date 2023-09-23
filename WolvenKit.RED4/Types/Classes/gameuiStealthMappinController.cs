@@ -5,14 +5,6 @@ namespace WolvenKit.RED4.Types
 	public partial class gameuiStealthMappinController : gameuiInteractionMappinController
 	{
 		[Ordinal(11)] 
-		[RED("animImage")] 
-		public inkImageWidgetReference AnimImage
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(12)] 
 		[RED("arrow")] 
 		public inkImageWidgetReference Arrow
 		{
@@ -20,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("fill")] 
 		public inkWidgetReference Fill
 		{
@@ -28,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("eyeFillWhite")] 
 		public inkWidgetReference EyeFillWhite
 		{
@@ -36,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("eyeFillBlack")] 
 		public inkWidgetReference EyeFillBlack
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("markExclamation")] 
 		public inkTextWidgetReference MarkExclamation
 		{
@@ -52,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("distance")] 
 		public inkTextWidgetReference Distance
 		{
@@ -60,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(17)] 
 		[RED("mainArt")] 
 		public inkWidgetReference MainArt
 		{
@@ -68,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("frame")] 
 		public inkImageWidgetReference Frame
 		{
@@ -76,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("eliteFrameName")] 
 		public CName EliteFrameName
 		{
@@ -84,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(20)] 
 		[RED("eliteFrameSize")] 
 		public Vector2 EliteFrameSize
 		{
@@ -92,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("objectMarker")] 
 		public inkWidgetReference ObjectMarker
 		{
@@ -100,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("levelIcon")] 
 		public inkImageWidgetReference LevelIcon
 		{
@@ -108,31 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
-		[RED("statusEffectHolder")] 
-		public inkWidgetReference StatusEffectHolder
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(25)] 
-		[RED("statusEffectIcon")] 
-		public inkImageWidgetReference StatusEffectIcon
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(26)] 
-		[RED("statusEffectTimer")] 
-		public inkTextWidgetReference StatusEffectTimer
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(27)] 
+		[Ordinal(23)] 
 		[RED("taggedContainer")] 
 		public inkWidgetReference TaggedContainer
 		{
@@ -140,7 +108,55 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(24)] 
+		[RED("background")] 
+		public inkCompoundWidgetReference Background
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("contagiousQuickhackArrows")] 
+		public inkCompoundWidgetReference ContagiousQuickhackArrows
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("statusEffectMain")] 
+		public inkWidgetReference StatusEffectMain
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("statusEffectIcon")] 
+		public inkImageWidgetReference StatusEffectIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
 		[Ordinal(28)] 
+		[RED("statusEffectFill")] 
+		public inkWidgetReference StatusEffectFill
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("statusEffectBackground")] 
+		public inkWidgetReference StatusEffectBackground
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(30)] 
 		[RED("ownerObject")] 
 		public CWeakHandle<gameObject> OwnerObject
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("ownerNPC")] 
 		public CWeakHandle<NPCPuppet> OwnerNPC
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<NPCPuppet>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("ownerDevice")] 
 		public CWeakHandle<Device> OwnerDevice
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<Device>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("mappin")] 
 		public CWeakHandle<gamemappinsStealthMappin> Mappin
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamemappinsStealthMappin>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("canvas")] 
 		public CWeakHandle<inkWidget> Canvas
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("nameplateController")] 
 		public CWeakHandle<gameuiNpcNameplateGameController> NameplateController
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiNpcNameplateGameController>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("isFriendly")] 
 		public CBool IsFriendly
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("isFriendlyFromHack")] 
 		public CBool IsFriendlyFromHack
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("isHostile")] 
 		public CBool IsHostile
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("isAggressive")] 
 		public CBool IsAggressive
 		{
@@ -228,7 +244,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
+		[RED("isNCPD")] 
+		public CBool IsNCPD
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("isDevice")] 
 		public CBool IsDevice
 		{
@@ -236,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(43)] 
 		[RED("isDrone")] 
 		public CBool IsDrone
 		{
@@ -244,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(44)] 
 		[RED("isMech")] 
 		public CBool IsMech
 		{
@@ -252,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(45)] 
 		[RED("isCamera")] 
 		public CBool IsCamera
 		{
@@ -260,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(46)] 
 		[RED("isTurret")] 
 		public CBool IsTurret
 		{
@@ -268,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(47)] 
 		[RED("isHiddenByQuest")] 
 		public CBool IsHiddenByQuest
 		{
@@ -276,15 +300,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(45)] 
-		[RED("NPCRarity")] 
-		public CEnum<gamedataNPCRarity> NPCRarity
+		[Ordinal(48)] 
+		[RED("hideUIElements")] 
+		public CBool HideUIElements
 		{
-			get => GetPropertyValue<CEnum<gamedataNPCRarity>>();
-			set => SetPropertyValue<CEnum<gamedataNPCRarity>>(value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(49)] 
 		[RED("puppetStateBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PuppetStateBlackboard
 		{
@@ -292,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(50)] 
 		[RED("highLevelState")] 
 		public CEnum<gamedataNPCHighLevelState> HighLevelState
 		{
@@ -300,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataNPCHighLevelState>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(51)] 
 		[RED("numberOfCombatants")] 
 		public CInt32 NumberOfCombatants
 		{
@@ -308,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(52)] 
 		[RED("waitingToExitCombat")] 
 		public CBool WaitingToExitCombat
 		{
@@ -316,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(53)] 
 		[RED("reaction")] 
 		public CEnum<gamedataOutput> Reaction
 		{
@@ -324,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataOutput>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(54)] 
 		[RED("lastState")] 
 		public CEnum<gamedataNPCHighLevelState> LastState
 		{
@@ -332,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataNPCHighLevelState>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(55)] 
 		[RED("lastReaction")] 
 		public CEnum<gamedataOutput> LastReaction
 		{
@@ -340,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataOutput>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(56)] 
 		[RED("lastPercent")] 
 		public CFloat LastPercent
 		{
@@ -348,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(57)] 
 		[RED("canSeePlayer")] 
 		public CBool CanSeePlayer
 		{
@@ -356,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(58)] 
 		[RED("squadInCombat")] 
 		public CBool SquadInCombat
 		{
@@ -364,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(59)] 
 		[RED("archetypeTextureName")] 
 		public CName ArchetypeTextureName
 		{
@@ -372,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(60)] 
 		[RED("isTagged")] 
 		public CBool IsTagged
 		{
@@ -380,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(61)] 
 		[RED("canHaveObjectMarker")] 
 		public CBool CanHaveObjectMarker
 		{
@@ -388,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(62)] 
 		[RED("canShowObjectMarker")] 
 		public CBool CanShowObjectMarker
 		{
@@ -396,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(63)] 
 		[RED("objectMarkerVisible")] 
 		public CBool ObjectMarkerVisible
 		{
@@ -404,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(64)] 
 		[RED("nameplateVisible")] 
 		public CBool NameplateVisible
 		{
@@ -412,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(65)] 
 		[RED("detectionVisible")] 
 		public CBool DetectionVisible
 		{
@@ -420,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(66)] 
 		[RED("inNameplateMode")] 
 		public CBool InNameplateMode
 		{
@@ -428,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(67)] 
 		[RED("objectMarkerFirstShowing")] 
 		public CBool ObjectMarkerFirstShowing
 		{
@@ -436,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(68)] 
 		[RED("statusEffectShowing")] 
 		public CBool StatusEffectShowing
 		{
@@ -444,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(69)] 
 		[RED("statusEffectCurrentPriority")] 
 		public CFloat StatusEffectCurrentPriority
 		{
@@ -452,7 +476,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(70)] 
+		[RED("isInCombatWithPlayer")] 
+		public CBool IsInCombatWithPlayer
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(71)] 
 		[RED("animationIsPlaying")] 
 		public CBool AnimationIsPlaying
 		{
@@ -460,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(72)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -468,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(73)] 
 		[RED("nameplateAnimationProxy")] 
 		public CHandle<inkanimProxy> NameplateAnimationProxy
 		{
@@ -476,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(74)] 
 		[RED("nameplateAnimationIsPlaying")] 
 		public CBool NameplateAnimationIsPlaying
 		{
@@ -484,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(75)] 
 		[RED("reprimandAnimationProxy")] 
 		public CHandle<inkanimProxy> ReprimandAnimationProxy
 		{
@@ -492,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(76)] 
 		[RED("reprimandAnimationIsPlaying")] 
 		public CBool ReprimandAnimationIsPlaying
 		{
@@ -500,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(77)] 
 		[RED("reprimandAnimationState")] 
 		public CEnum<gameReprimandMappinAnimationState> ReprimandAnimationState
 		{
@@ -508,7 +540,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameReprimandMappinAnimationState>>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(78)] 
+		[RED("monowireHackAnimationProxy")] 
+		public CHandle<inkanimProxy> MonowireHackAnimationProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(79)] 
 		[RED("currentAnimState")] 
 		public CEnum<gameEnemyStealthAwarenessState> CurrentAnimState
 		{
@@ -516,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameEnemyStealthAwarenessState>>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(80)] 
 		[RED("c_emptyThreshold")] 
 		public CFloat C_emptyThreshold
 		{
@@ -524,7 +564,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(81)] 
 		[RED("c_awareToCombatThreshold")] 
 		public CFloat C_awareToCombatThreshold
 		{
@@ -532,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(82)] 
 		[RED("c_combatToAwareThreshold")] 
 		public CFloat C_combatToAwareThreshold
 		{
@@ -540,7 +580,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(83)] 
 		[RED("c_deviceCombatToAwareThreshold")] 
 		public CFloat C_deviceCombatToAwareThreshold
 		{
@@ -548,7 +588,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(84)] 
 		[RED("c_objectMarkerMaxDistance")] 
 		public CFloat C_objectMarkerMaxDistance
 		{
@@ -556,7 +596,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(85)] 
 		[RED("c_objectMarkerMaxCameraDistance")] 
 		public CFloat C_objectMarkerMaxCameraDistance
 		{
@@ -564,31 +604,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(86)] 
+		[RED("statusEffectStartTime")] 
+		public CFloat StatusEffectStartTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(87)] 
+		[RED("statusEffectTextureName")] 
+		public CString StatusEffectTextureName
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
 		public gameuiStealthMappinController()
 		{
-			AnimImage = new inkImageWidgetReference();
-			Arrow = new inkImageWidgetReference();
-			Fill = new inkWidgetReference();
-			EyeFillWhite = new inkWidgetReference();
-			EyeFillBlack = new inkWidgetReference();
-			MarkExclamation = new inkTextWidgetReference();
-			Distance = new inkTextWidgetReference();
-			MainArt = new inkWidgetReference();
-			Frame = new inkImageWidgetReference();
-			EliteFrameSize = new Vector2();
-			ObjectMarker = new inkWidgetReference();
-			LevelIcon = new inkImageWidgetReference();
-			StatusEffectHolder = new inkWidgetReference();
-			StatusEffectIcon = new inkImageWidgetReference();
-			StatusEffectTimer = new inkTextWidgetReference();
-			TaggedContainer = new inkWidgetReference();
-			ObjectMarkerFirstShowing = true;
-			C_awareToCombatThreshold = 1.000000F;
-			C_combatToAwareThreshold = 99.900002F;
-			C_deviceCombatToAwareThreshold = 35.000000F;
-			C_objectMarkerMaxDistance = 50.000000F;
-			C_objectMarkerMaxCameraDistance = 30.000000F;
-
 			PostConstruct();
 		}
 

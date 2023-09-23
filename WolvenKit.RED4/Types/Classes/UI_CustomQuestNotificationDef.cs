@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_CustomQuestNotificationDef()
 		{
-			Data = new gamebbScriptID_Variant();
-
 			PostConstruct();
 		}
 

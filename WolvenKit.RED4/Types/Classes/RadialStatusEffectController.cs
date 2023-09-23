@@ -46,12 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public RadialStatusEffectController()
 		{
-			EffectsContainerRef = new inkCompoundWidgetReference();
-			PoolHolderRef = new inkCompoundWidgetReference();
-			EffectTemplateRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
-			MaxSize = 8;
-			Effects = new();
-
 			PostConstruct();
 		}
 

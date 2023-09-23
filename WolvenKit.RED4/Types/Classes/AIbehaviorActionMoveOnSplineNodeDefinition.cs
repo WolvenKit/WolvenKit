@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("splineRecalculation")] 
+		public CHandle<AIArgumentMapping> SplineRecalculation
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("useStart")] 
 		public CHandle<AIArgumentMapping> UseStart
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("useStop")] 
 		public CHandle<AIArgumentMapping> UseStop
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("reverse")] 
 		public CHandle<AIArgumentMapping> Reverse
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("isBackAndForth")] 
 		public CHandle<AIArgumentMapping> IsBackAndForth
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("isInfinite")] 
 		public CHandle<AIArgumentMapping> IsInfinite
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("numberOfLoops")] 
 		public CHandle<AIArgumentMapping> NumberOfLoops
 		{
@@ -108,9 +116,25 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("useOffMeshLinkReservation")] 
 		public CHandle<AIArgumentMapping> UseOffMeshLinkReservation
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("disableFootIK")] 
+		public CHandle<AIArgumentMapping> DisableFootIK
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("allowCrowdOnPath")] 
+		public CHandle<AIArgumentMapping> AllowCrowdOnPath
 		{
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);

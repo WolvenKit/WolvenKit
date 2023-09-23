@@ -54,11 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public CooldownStorage()
 		{
-			Owner = new PSOwnerData { Id = new gamePersistentID() };
-			GameInstanceHack = new ScriptGameInstance();
-			Packages = new();
-			Map = new();
-
 			PostConstruct();
 		}
 

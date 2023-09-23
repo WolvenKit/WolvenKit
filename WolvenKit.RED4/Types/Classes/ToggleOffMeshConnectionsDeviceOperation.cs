@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public ToggleOffMeshConnectionsDeviceOperation()
 		{
-			IsEnabled = true;
-			ToggleOperations = new();
-
 			PostConstruct();
 		}
 

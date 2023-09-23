@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_VendorDef()
 		{
-			VendorData = new gamebbScriptID_Variant();
-
 			PostConstruct();
 		}
 

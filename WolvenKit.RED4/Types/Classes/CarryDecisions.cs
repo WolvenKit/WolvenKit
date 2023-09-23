@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class CarryDecisions : CarriedObject
+	public partial class CarryDecisions : CanTransitionToThrowDecisions
 	{
 		public CarryDecisions()
 		{

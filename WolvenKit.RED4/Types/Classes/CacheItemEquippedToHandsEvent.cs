@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public CacheItemEquippedToHandsEvent()
 		{
-			ItemID = new gameItemID();
-
 			PostConstruct();
 		}
 

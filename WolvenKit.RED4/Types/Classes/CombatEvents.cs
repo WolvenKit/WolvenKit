@@ -5,8 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public CombatEvents()
 		{
-			CameraToggleHoldToResetTimeSeconds = 0.350000F;
-
 			PostConstruct();
 		}
 

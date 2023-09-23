@@ -68,15 +68,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<MenuData>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("isRadialVariant")] 
+		public CBool IsRadialVariant
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public HubMenuLabelContentContainer()
 		{
-			Label = new inkTextWidgetReference();
-			Icon = new inkImageWidgetReference();
-			DesiredSizeWrapper = new inkWidgetReference();
-			Border = new inkBorderWidgetReference();
-			Line = new inkWidgetReference();
-			Data = new MenuData { Identifier = -1, SubMenus = new() };
-
 			PostConstruct();
 		}
 

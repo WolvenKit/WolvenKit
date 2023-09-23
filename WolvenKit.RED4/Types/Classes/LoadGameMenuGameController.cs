@@ -141,6 +141,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(20)] 
+		[RED("saveToLoadID")] 
+		public CUInt64 SaveToLoadID
+		{
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("isInputDisabled")] 
 		public CBool IsInputDisabled
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("saveTransferPopupToken")] 
 		public CHandle<inkGameNotificationToken> SaveTransferPopupToken
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("saves")] 
 		public CArray<CString> Saves
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("saveFilesReady")] 
 		public CBool SaveFilesReady
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("cloudSynced")] 
 		public CBool CloudSynced
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("onlineSystem")] 
 		public CWeakHandle<gameIOnlineSystem> OnlineSystem
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIOnlineSystem>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("systemHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> SystemHandler
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("pendingRegistration")] 
 		public CBool PendingRegistration
 		{
@@ -204,17 +212,32 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(29)] 
+		[RED("isEp1Enabled")] 
+		public CBool IsEp1Enabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("animProxy")] 
+		public CHandle<inkanimProxy> AnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("sourceIndex")] 
+		public CInt32 SourceIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public LoadGameMenuGameController()
 		{
-			List = new inkCompoundWidgetReference();
-			NoSavedGamesLabel = new inkWidgetReference();
-			ButtonHintsManagerRef = new inkWidgetReference();
-			GogButtonWidgetRef = new inkWidgetReference();
-			GogContainer = new inkWidgetReference();
-			LaodingSpinner = new inkWidgetReference();
-			Scrollbar = new inkWidgetReference();
-			Saves = new();
-
 			PostConstruct();
 		}
 

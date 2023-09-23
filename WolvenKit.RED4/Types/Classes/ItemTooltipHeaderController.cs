@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemTooltipHeaderController : ItemTooltipModuleController
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("itemNameText")] 
 		public inkTextWidgetReference ItemNameText
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("itemRarityText")] 
 		public inkTextWidgetReference ItemRarityText
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("itemTypeText")] 
 		public inkTextWidgetReference ItemTypeText
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("localizedIconicText")] 
 		public CString LocalizedIconicText
 		{
@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipHeaderController()
 		{
-			ItemNameText = new inkTextWidgetReference();
-			ItemRarityText = new inkTextWidgetReference();
-			ItemTypeText = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

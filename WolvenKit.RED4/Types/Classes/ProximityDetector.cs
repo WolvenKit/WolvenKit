@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class ProximityDetector : Device
 	{
-		[Ordinal(84)] 
+		[Ordinal(88)] 
 		[RED("scanningAreaName")] 
 		public CName ScanningAreaName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(89)] 
 		[RED("surroundingAreaName")] 
 		public CName SurroundingAreaName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(90)] 
 		[RED("scanningArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> ScanningArea
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(91)] 
 		[RED("surroundingArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> SurroundingArea
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(92)] 
 		[RED("securityAreaType")] 
 		public CEnum<ESecurityAreaType> SecurityAreaType
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESecurityAreaType>>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(93)] 
 		[RED("notifiactionType")] 
 		public CEnum<ESecurityNotificationType> NotifiactionType
 		{
@@ -54,20 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public ProximityDetector()
 		{
-			ControllerTypeName = "ScriptableDeviceComponent";
-			ScreenDefinition = new SUIScreenDefinition();
-			IsUIdirty = true;
-			AdvanceInteractionStateResolveDelayID = new gameDelayID();
-			UpdateID = new gameDelayID();
-			DelayedUpdateDeviceStateID = new gameDelayID();
-			LastPingSourceID = new entEntityID();
-			NetworkGridBeamFX = new gameFxResource();
-			PersonalLinkFailsafeID = new gameDelayID();
-			NetworkGridBeamOffset = new Vector4();
-			AreaEffectsData = new();
-			AreaEffectsInFocusMode = new();
-			DebugOptions = new DebuggerProperties { LayerIDs = new() };
-
 			PostConstruct();
 		}
 

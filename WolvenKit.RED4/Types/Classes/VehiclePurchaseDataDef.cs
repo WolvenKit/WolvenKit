@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public VehiclePurchaseDataDef()
 		{
-			PurchasedVehicleRecordID = new gamebbScriptID_Variant();
-
 			PostConstruct();
 		}
 

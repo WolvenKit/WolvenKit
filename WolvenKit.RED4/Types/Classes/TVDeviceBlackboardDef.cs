@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public TVDeviceBlackboardDef()
 		{
-			PreviousChannel = new gamebbScriptID_Int32();
-			CurrentChannel = new gamebbScriptID_Int32();
-
 			PostConstruct();
 		}
 

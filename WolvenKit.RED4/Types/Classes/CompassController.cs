@@ -86,13 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public CompassController()
 		{
-			FaceLeft = new inkWidgetReference();
-			FaceRight = new inkWidgetReference();
-			TextWidget = new inkTextWidgetReference();
-			DecimalPrecision = 2;
-			FaceRightStartPosition = new Vector2();
-			FaceLeftStartPosition = new Vector2();
-
 			PostConstruct();
 		}
 

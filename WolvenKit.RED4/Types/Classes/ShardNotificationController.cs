@@ -77,6 +77,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("imageWidget")] 
+		public inkImageWidgetReference ImageWidget
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("scrollWidget")] 
+		public inkWidgetReference ScrollWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("data")] 
 		public CHandle<ShardReadPopupData> Data
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ShardReadPopupData>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("longTextTrashold")] 
 		public CInt32 LongTextTrashold
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("mingameBB")] 
 		public CWeakHandle<gameIBlackboard> MingameBB
 		{
@@ -116,19 +132,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
+		[Ordinal(18)] 
+		[RED("scroll")] 
+		public CWeakHandle<inkScrollController> Scroll
+		{
+			get => GetPropertyValue<CWeakHandle<inkScrollController>>();
+			set => SetPropertyValue<CWeakHandle<inkScrollController>>(value);
+		}
+
 		public ShardNotificationController()
 		{
-			TitleRef = new inkTextWidgetReference();
-			ShortTextRef = new inkTextWidgetReference();
-			LongTextRef = new inkTextWidgetReference();
-			ShortTextHolderRef = new inkWidgetReference();
-			LongTextHolderRef = new inkWidgetReference();
-			ButtonHintsManagerRef = new inkWidgetReference();
-			ButtonHintsManagerParentRef = new inkWidgetReference();
-			ButtonHintsSecondaryManagerRef = new inkWidgetReference();
-			ButtonHintsSecondaryManagerParentRef = new inkWidgetReference();
-			LongTextTrashold = 1000;
-
 			PostConstruct();
 		}
 

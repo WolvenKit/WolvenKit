@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalTarot : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("name")] 
 		public LocalizationString Name
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("description")] 
 		public LocalizationString Description
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("imagePart")] 
 		public CName ImagePart
 		{
@@ -38,6 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalTarot()
 		{
+			JournalEntryOverrideDataList = new();
 			Name = new() { Unk1 = 0, Value = "" };
 			Description = new() { Unk1 = 0, Value = "" };
 

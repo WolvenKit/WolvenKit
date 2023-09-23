@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("glassAcousticIsolationFactor")] 
+		public CFloat GlassAcousticIsolationFactor
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("isPlayerVehicleSummoned")] 
 		public CBool IsPlayerVehicleSummoned
 		{
@@ -28,9 +36,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("openedWindows", 6)] 
+		public CStatic<CName> OpenedWindows
+		{
+			get => GetPropertyValue<CStatic<CName>>();
+			set => SetPropertyValue<CStatic<CName>>(value);
+		}
+
 		public vehicleAudioPSData()
 		{
 			AcousticIsolationFactor = float.MinValue;
+			GlassAcousticIsolationFactor = float.MinValue;
+			OpenedWindows = new(0);
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SellItemToVendor : ActionBool
 	{
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
@@ -14,12 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public SellItemToVendor()
 		{
-			RequesterID = new entEntityID();
-			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
-			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
-			CanTriggerStim = true;
-			ItemID = new gameItemID();
-
 			PostConstruct();
 		}
 

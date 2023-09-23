@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public abstract partial class CarriedObjectEvents : OldUpperBodyEventsTransition
+	public abstract partial class CarriedObjectEvents : CarriedObjectTransition
 	{
 		[Ordinal(0)] 
 		[RED("animFeature")] 

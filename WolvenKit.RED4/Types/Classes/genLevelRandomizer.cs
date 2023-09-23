@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class genLevelRandomizer : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("entries")] 
 		public CArray<genLevelRandomizerEntry> Entries
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<genLevelRandomizerEntry>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("seed")] 
 		public CUInt32 Seed
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("dataSource")] 
 		public CEnum<genLevelRandomizerDataSource> DataSource
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<genLevelRandomizerDataSource>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("supervisorType")] 
 		public CName SupervisorType
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("debugSpawnAll")] 
 		public CBool DebugSpawnAll
 		{

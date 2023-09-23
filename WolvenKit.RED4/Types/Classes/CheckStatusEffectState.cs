@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public CheckStatusEffectState()
 		{
-			StateToCheck = Enums.EstatusEffectsState.Activating;
-
 			PostConstruct();
 		}
 

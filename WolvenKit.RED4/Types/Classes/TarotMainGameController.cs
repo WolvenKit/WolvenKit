@@ -100,13 +100,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("baseCards")] 
+		public CInt32 BaseCards
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("ep1Cards")] 
+		public CInt32 Ep1Cards
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public TarotMainGameController()
 		{
-			ButtonHintsManagerRef = new inkWidgetReference();
-			TooltipsManagerRef = new inkWidgetReference();
-			List = new inkCompoundWidgetReference();
-			NumberOfCardsInTarotDeck = 22;
-
 			PostConstruct();
 		}
 

@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("localBlackboard")] 
+		public CWeakHandle<gameIBlackboard> LocalBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("mouseZoomLevel")] 
 		public CFloat MouseZoomLevel
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("zoomLevelNum")] 
 		public CInt32 ZoomLevelNum
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("numZoomLevels")] 
 		public CInt32 NumZoomLevels
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("delayAimSnap")] 
 		public CInt32 DelayAimSnap
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("isAiming")] 
 		public CBool IsAiming
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("aimInTimeRemaining")] 
 		public CFloat AimInTimeRemaining
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("aimBroadcast")] 
 		public CBool AimBroadcast
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("zoomLevel")] 
 		public CFloat ZoomLevel
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("finalZoomLevel")] 
 		public CFloat FinalZoomLevel
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("previousZoomLevel")] 
 		public CFloat PreviousZoomLevel
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("currentZoomLevel")] 
 		public CFloat CurrentZoomLevel
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("timeToBlendZoom")] 
 		public CFloat TimeToBlendZoom
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("time")] 
 		public CFloat Time
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("itemChanged")] 
 		public CBool ItemChanged
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("firearmsNoUnequipNoSwitch")] 
 		public CBool FirearmsNoUnequipNoSwitch
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("shootingRangeCompetition")] 
 		public CBool ShootingRangeCompetition
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("weaponHasPerfectAim")] 
 		public CBool WeaponHasPerfectAim
 		{
@@ -188,7 +196,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
+		[RED("statsSystem")] 
+		public CHandle<gameStatsSystem> StatsSystem
+		{
+			get => GetPropertyValue<CHandle<gameStatsSystem>>();
+			set => SetPropertyValue<CHandle<gameStatsSystem>>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("statusEffectSystem")] 
+		public CHandle<gameStatusEffectSystem> StatusEffectSystem
+		{
+			get => GetPropertyValue<CHandle<gameStatusEffectSystem>>();
+			set => SetPropertyValue<CHandle<gameStatusEffectSystem>>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("attachmentSlotListener")] 
 		public CHandle<gameAttachmentSlotsScriptListener> AttachmentSlotListener
 		{
@@ -196,10 +220,40 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>(value);
 		}
 
+		[Ordinal(33)] 
+		[RED("prevDownwardsGravity")] 
+		public CFloat PrevDownwardsGravity
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("downwardsGravityChanged")] 
+		public CBool DownwardsGravityChanged
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("accelerationMod")] 
+		public CHandle<gameConstantStatModifierData_Deprecated> AccelerationMod
+		{
+			get => GetPropertyValue<CHandle<gameConstantStatModifierData_Deprecated>>();
+			set => SetPropertyValue<CHandle<gameConstantStatModifierData_Deprecated>>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("decelerationMod")] 
+		public CHandle<gameConstantStatModifierData_Deprecated> DecelerationMod
+		{
+			get => GetPropertyValue<CHandle<gameConstantStatModifierData_Deprecated>>();
+			set => SetPropertyValue<CHandle<gameConstantStatModifierData_Deprecated>>(value);
+		}
+
 		public AimingStateEvents()
 		{
-			MouseZoomLevel = 100000.000000F;
-
 			PostConstruct();
 		}
 

@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("forceDisableUI")] 
+		public CBool ForceDisableUI
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("highLevelCb")] 
 		public CHandle<redCallbackObject> HighLevelCb
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("reactionCb")] 
 		public CHandle<redCallbackObject> ReactionCb
 		{
@@ -52,7 +60,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
+		[RED("wantedLevelChangedCb")] 
+		public CHandle<redCallbackObject> WantedLevelChangedCb
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("highLevelState")] 
 		public CEnum<gamedataNPCHighLevelState> HighLevelState
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataNPCHighLevelState>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("mainPreset")] 
 		public TweakDBID MainPreset
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("secondaryPreset")] 
 		public TweakDBID SecondaryPreset
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("puppetBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PuppetBlackboard
 		{
@@ -84,7 +100,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
+		[RED("hideUIElements")] 
+		public CBool HideUIElements
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("enabledSenses")] 
+		public CBool EnabledSenses
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("shouldStartDetectingPlayerCached")] 
+		public CBool ShouldStartDetectingPlayerCached
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("wasPlayerLastReactionTarget")] 
+		public CBool WasPlayerLastReactionTarget
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("logSource")] 
+		public CEnum<ESenseLogSource> LogSource
+		{
+			get => GetPropertyValue<CEnum<ESenseLogSource>>();
+			set => SetPropertyValue<CEnum<ESenseLogSource>>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("playerTakedownStateCallbackID")] 
 		public CHandle<redCallbackObject> PlayerTakedownStateCallbackID
 		{
@@ -92,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(23)] 
 		[RED("playerUpperBodyStateCallbackID")] 
 		public CHandle<redCallbackObject> PlayerUpperBodyStateCallbackID
 		{
@@ -100,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(24)] 
 		[RED("playerCarryingStateCallbackID")] 
 		public CHandle<redCallbackObject> PlayerCarryingStateCallbackID
 		{
@@ -108,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(25)] 
 		[RED("playerInPerception")] 
 		public CWeakHandle<PlayerPuppet> PlayerInPerception
 		{

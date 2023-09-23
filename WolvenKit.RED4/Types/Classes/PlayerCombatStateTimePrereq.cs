@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerCombatStateTimePrereq()
 		{
-			MinTime = -1.000000F;
-			MaxTime = -1.000000F;
-
 			PostConstruct();
 		}
 

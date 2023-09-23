@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MaintenancePanelControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("maintenancePanelSkillChecks")] 
 		public CHandle<EngineeringContainer> MaintenancePanelSkillChecks
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public MaintenancePanelControllerPS()
 		{
-			DeviceName = "Gameplay-Devices-DisplayNames-MaintenancePanel";
-
 			PostConstruct();
 		}
 

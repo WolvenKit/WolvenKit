@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalInternetSite : gameJournalFileEntry
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("shortName")] 
 		public LocalizationString ShortName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("mainPagePath")] 
 		public CHandle<gameJournalPath> MainPagePath
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameJournalPath>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("ignoredAtDesktop")] 
 		public CBool IgnoredAtDesktop
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("textureAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> TextureAtlas
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("texturePart")] 
 		public CName TexturePart
 		{
@@ -46,6 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalInternetSite()
 		{
+			JournalEntryOverrideDataList = new();
 			Entries = new();
 			ShortName = new() { Unk1 = 0, Value = "" };
 

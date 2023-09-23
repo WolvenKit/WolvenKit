@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public IsFacingTowardsSource()
 		{
-			MaxAllowedAngleYaw = 90.000000F;
-			MaxAllowedAnglePitch = 45.000000F;
-
 			PostConstruct();
 		}
 

@@ -21,14 +21,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
-		[RED("iconHolder")] 
-		public inkWidgetReference IconHolder
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(12)] 
 		[RED("mappinSlot")] 
 		public inkWidgetReference MappinSlot
 		{
@@ -36,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("chattersSlot")] 
 		public inkWidgetReference ChattersSlot
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkCompoundWidget> RootWidget
 		{
@@ -52,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("visualController")] 
 		public CWeakHandle<NameplateVisualsLogicController> VisualController
 		{
@@ -60,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<NameplateVisualsLogicController>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("cachedMappinControllers")] 
 		public CArray<CWeakHandle<gameuiMappinBaseController>> CachedMappinControllers
 		{
@@ -68,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<gameuiMappinBaseController>>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("visualControllerNeedsMappinsUpdate")] 
 		public CBool VisualControllerNeedsMappinsUpdate
 		{
@@ -76,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(17)] 
 		[RED("nameplateProjection")] 
 		public CHandle<inkScreenProjection> NameplateProjection
 		{
@@ -84,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScreenProjection>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("nameplateProjectionCloseDistance")] 
 		public CHandle<inkScreenProjection> NameplateProjectionCloseDistance
 		{
@@ -92,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScreenProjection>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("nameplateProjectionDevice")] 
 		public CHandle<inkScreenProjection> NameplateProjectionDevice
 		{
@@ -100,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScreenProjection>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(20)] 
 		[RED("nameplateProjectionDeviceCloseDistance")] 
 		public CHandle<inkScreenProjection> NameplateProjectionDeviceCloseDistance
 		{
@@ -108,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScreenProjection>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("bufferedGameObject")] 
 		public CWeakHandle<gameObject> BufferedGameObject
 		{
@@ -116,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("bufferedPuppetHideNameTag")] 
 		public CBool BufferedPuppetHideNameTag
 		{
@@ -124,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(23)] 
 		[RED("bufferedCharacterNamePlateRecord")] 
 		public CHandle<gamedataUINameplate_Record> BufferedCharacterNamePlateRecord
 		{
@@ -132,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataUINameplate_Record>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(24)] 
 		[RED("isScanning")] 
 		public CBool IsScanning
 		{
@@ -140,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(25)] 
 		[RED("isNewNPC")] 
 		public CBool IsNewNPC
 		{
@@ -148,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(26)] 
 		[RED("attitude")] 
 		public CEnum<EAIAttitude> Attitude
 		{
@@ -156,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAIAttitude>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(27)] 
 		[RED("UI_NameplateDataDef")] 
 		public CHandle<UI_NameplateDataDef> UI_NameplateDataDef
 		{
@@ -164,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_NameplateDataDef>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(28)] 
 		[RED("zoom")] 
 		public CFloat Zoom
 		{
@@ -172,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(29)] 
 		[RED("currentHealth")] 
 		public CInt32 CurrentHealth
 		{
@@ -180,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(30)] 
 		[RED("maximumHealth")] 
 		public CInt32 MaximumHealth
 		{
@@ -188,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(31)] 
 		[RED("c_DisplayRange")] 
 		public CFloat C_DisplayRange
 		{
@@ -196,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(32)] 
 		[RED("c_MaxDisplayRange")] 
 		public CFloat C_MaxDisplayRange
 		{
@@ -204,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(33)] 
 		[RED("c_MaxDisplayRangeNotAggressive")] 
 		public CFloat C_MaxDisplayRangeNotAggressive
 		{
@@ -212,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(34)] 
 		[RED("c_DisplayRangeNotAggressive")] 
 		public CFloat C_DisplayRangeNotAggressive
 		{
@@ -220,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(35)] 
 		[RED("bbNameplateData")] 
 		public CHandle<redCallbackObject> BbNameplateData
 		{
@@ -228,23 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(37)] 
-		[RED("bbBuffsList")] 
-		public CHandle<redCallbackObject> BbBuffsList
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(38)] 
-		[RED("bbDebuffsList")] 
-		public CHandle<redCallbackObject> BbDebuffsList
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(39)] 
+		[Ordinal(36)] 
 		[RED("bbHighLevelStateID")] 
 		public CHandle<redCallbackObject> BbHighLevelStateID
 		{
@@ -252,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(37)] 
 		[RED("bbNPCNamesEnabledID")] 
 		public CHandle<redCallbackObject> BbNPCNamesEnabledID
 		{
@@ -260,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(38)] 
 		[RED("VisionStateBlackboardId")] 
 		public CHandle<redCallbackObject> VisionStateBlackboardId
 		{
@@ -268,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(39)] 
 		[RED("ZoomStateBlackboardId")] 
 		public CHandle<redCallbackObject> ZoomStateBlackboardId
 		{
@@ -276,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(40)] 
 		[RED("playerZonesBlackboardID")] 
 		public CHandle<redCallbackObject> PlayerZonesBlackboardID
 		{
@@ -284,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(41)] 
 		[RED("playerCombatBlackboardID")] 
 		public CHandle<redCallbackObject> PlayerCombatBlackboardID
 		{
@@ -292,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(42)] 
 		[RED("playerAimStatusBlackboardID")] 
 		public CHandle<redCallbackObject> PlayerAimStatusBlackboardID
 		{
@@ -300,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(43)] 
 		[RED("damagePreviewBlackboardID")] 
 		public CHandle<redCallbackObject> DamagePreviewBlackboardID
 		{
@@ -308,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(44)] 
 		[RED("uiBlackboardTargetNPC")] 
 		public CWeakHandle<gameIBlackboard> UiBlackboardTargetNPC
 		{
@@ -316,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(45)] 
 		[RED("uiBlackboardInteractions")] 
 		public CWeakHandle<gameIBlackboard> UiBlackboardInteractions
 		{
@@ -324,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(46)] 
 		[RED("interfaceOptionsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> InterfaceOptionsBlackboard
 		{
@@ -332,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(47)] 
 		[RED("uiBlackboardNameplateBlackboard")] 
 		public CWeakHandle<gameIBlackboard> UiBlackboardNameplateBlackboard
 		{
@@ -340,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(48)] 
 		[RED("nextDistanceCheckTime")] 
 		public CFloat NextDistanceCheckTime
 		{
@@ -351,14 +327,6 @@ namespace WolvenKit.RED4.Types
 		public gameuiNpcNameplateGameController()
 		{
 			Projection = new inkWidgetReference();
-			DisplayName = new inkWidgetReference();
-			IconHolder = new inkWidgetReference();
-			MappinSlot = new inkWidgetReference();
-			ChattersSlot = new inkWidgetReference();
-			CachedMappinControllers = new();
-			Zoom = 1.000000F;
-			CurrentHealth = 100;
-			MaximumHealth = 100;
 
 			PostConstruct();
 		}

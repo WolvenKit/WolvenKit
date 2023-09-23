@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("enteredWithSprint")] 
+		public CBool EnteredWithSprint
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("addDecelerationModifier")] 
 		public CHandle<gameStatModifierData_Deprecated> AddDecelerationModifier
 		{

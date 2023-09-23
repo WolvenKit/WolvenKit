@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public PlayBinkDeviceOperation()
 		{
-			IsEnabled = true;
-			ToggleOperations = new();
-			Bink = new SBinkperationData { BinkPath = new redResourceReferenceScriptToken() };
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ActivatedDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("animationSetup")] 
 		public ActivatedDeviceAnimSetup AnimationSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ActivatedDeviceAnimSetup>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("activatedDeviceSetup")] 
 		public ActivatedDeviceSetup ActivatedDeviceSetup
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ActivatedDeviceSetup>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("spiderbotInteractionLocationOverride")] 
 		public NodeRef SpiderbotInteractionLocationOverride
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("industrialArmAnimationOverride")] 
 		public CInt32 IndustrialArmAnimationOverride
 		{
@@ -38,14 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public ActivatedDeviceControllerPS()
 		{
-			DeviceName = "ActivatedDevice";
-			TweakDBRecord = "Devices.ActivatedDeviceTrap";
-			TweakDBDescriptionRecord = 171165425479;
-			ShouldScannerShowRole = true;
-			AnimationSetup = new ActivatedDeviceAnimSetup { AnimationTime = 0.500000F };
-			ActivatedDeviceSetup = new ActivatedDeviceSetup { ActionName = "LocKey#233", VfxResource = new gameFxResource(), ThumbnailIconRecord = "DeviceIcons.GenenericDeviceIcon" };
-			IndustrialArmAnimationOverride = -1;
-
 			PostConstruct();
 		}
 

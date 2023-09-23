@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Crosshair_Power_Tactician : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] 
+		[Ordinal(27)] 
 		[RED("leftPart")] 
 		public inkWidgetReference LeftPart
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(28)] 
 		[RED("rightPart")] 
 		public inkWidgetReference RightPart
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(29)] 
 		[RED("topPart")] 
 		public inkWidgetReference TopPart
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(30)] 
 		[RED("botPart")] 
 		public inkWidgetReference BotPart
 		{
@@ -38,11 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public Crosshair_Power_Tactician()
 		{
-			LeftPart = new inkWidgetReference();
-			RightPart = new inkWidgetReference();
-			TopPart = new inkWidgetReference();
-			BotPart = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

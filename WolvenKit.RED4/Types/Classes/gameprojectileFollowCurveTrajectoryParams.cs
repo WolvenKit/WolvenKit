@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("targetSlotName")] 
+		public CName TargetSlotName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("targetPosition")] 
 		public Vector4 TargetPosition
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("linearTimeRatio")] 
 		public CFloat LinearTimeRatio
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("interpolationTimeRatio")] 
 		public CFloat InterpolationTimeRatio
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("returnTimeMargin")] 
 		public CFloat ReturnTimeMargin
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("bendTimeRatio")] 
 		public CFloat BendTimeRatio
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("bendFactor")] 
 		public CFloat BendFactor
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("angleInHitPlane")] 
 		public CFloat AngleInHitPlane
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("angleInVerticalPlane")] 
 		public CFloat AngleInVerticalPlane
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("shouldRotate")] 
 		public CBool ShouldRotate
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("halfLeanAngle")] 
 		public CFloat HalfLeanAngle
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("endLeanAngle")] 
 		public CFloat EndLeanAngle
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("angleInterpolationDuration")] 
 		public CFloat AngleInterpolationDuration
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("snapRadius")] 
 		public CFloat SnapRadius
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("accuracy")] 
 		public CFloat Accuracy
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("offset")] 
 		public Vector4 Offset
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("offsetInPlane")] 
 		public Vector3 OffsetInPlane
 		{
@@ -164,9 +172,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("sendFollowEvent")] 
 		public CBool SendFollowEvent
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("startVelocityDirectionCheck")] 
+		public CBool StartVelocityDirectionCheck
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -190,6 +206,7 @@ namespace WolvenKit.RED4.Types
 			Offset = new Vector4();
 			OffsetInPlane = new Vector3();
 			SendFollowEvent = true;
+			StartVelocityDirectionCheck = true;
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemTooltipRecipeDataModule : ItemTooltipModuleController
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("randomQualityLabel")] 
 		public inkTextWidgetReference RandomQualityLabel
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("randomQualityWrapper")] 
 		public inkWidgetReference RandomQualityWrapper
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("statsLabel")] 
 		public inkTextWidgetReference StatsLabel
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("statsWrapper")] 
 		public inkWidgetReference StatsWrapper
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("statsContainer")] 
 		public inkCompoundWidgetReference StatsContainer
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("damageTypesLabel")] 
 		public inkTextWidgetReference DamageTypesLabel
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("damageTypesWrapper")] 
 		public inkWidgetReference DamageTypesWrapper
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("damageTypesContainer")] 
 		public inkCompoundWidgetReference DamageTypesContainer
 		{
@@ -70,15 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipRecipeDataModule()
 		{
-			RandomQualityLabel = new inkTextWidgetReference();
-			RandomQualityWrapper = new inkWidgetReference();
-			StatsLabel = new inkTextWidgetReference();
-			StatsWrapper = new inkWidgetReference();
-			StatsContainer = new inkCompoundWidgetReference();
-			DamageTypesLabel = new inkTextWidgetReference();
-			DamageTypesWrapper = new inkWidgetReference();
-			DamageTypesContainer = new inkCompoundWidgetReference();
-
 			PostConstruct();
 		}
 

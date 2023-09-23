@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("isAutoBounceSurface")] 
+		public CBool IsAutoBounceSurface
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("angle")] 
 		public CFloat Angle
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("numBounces")] 
 		public CUInt32 NumBounces
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("projectilePenetration")] 
 		public CName ProjectilePenetration
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("isTechPiercing")] 
 		public CBool IsTechPiercing
 		{
@@ -68,9 +76,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("isDestructible")] 
+		public CBool IsDestructible
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameprojectileCollisionEvaluatorParams()
 		{
-			Position = new Vector4();
+			Position = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

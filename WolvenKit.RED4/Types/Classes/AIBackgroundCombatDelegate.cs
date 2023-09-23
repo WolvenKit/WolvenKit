@@ -118,9 +118,6 @@ namespace WolvenKit.RED4.Types
 
 		public AIBackgroundCombatDelegate()
 		{
-			Steps = new();
-			DesiredTarget = new gameEntityReference { Names = new() };
-
 			PostConstruct();
 		}
 

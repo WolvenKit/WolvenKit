@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DispenceItemFromVendor : ActionBool
 	{
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(39)] 
 		[RED("price")] 
 		public CInt32 Price
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(40)] 
 		[RED("atlasTexture")] 
 		public CName AtlasTexture
 		{
@@ -30,13 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public DispenceItemFromVendor()
 		{
-			RequesterID = new entEntityID();
-			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
-			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
-			CanTriggerStim = true;
-			ItemID = new gameItemID();
-			Price = -1;
-
 			PostConstruct();
 		}
 

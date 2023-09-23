@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public InstallItemPart()
 		{
-			BaseItem = new gameItemID();
-			PartToInstall = new gameItemID();
-
 			PostConstruct();
 		}
 

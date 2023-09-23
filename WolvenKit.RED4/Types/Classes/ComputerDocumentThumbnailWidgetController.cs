@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ComputerDocumentThumbnailWidgetController : DeviceButtonLogicControllerBase
 	{
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("documentIconWidget")] 
 		public inkImageWidgetReference DocumentIconWidget
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("documentAdress")] 
 		public SDocumentAdress DocumentAdress
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SDocumentAdress>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("documentType")] 
 		public CEnum<EDocumentType> DocumentType
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EDocumentType>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("questInfo")] 
 		public gamedeviceQuestInfo QuestInfo
 		{
@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerDocumentThumbnailWidgetController()
 		{
-			DocumentIconWidget = new inkImageWidgetReference();
-			DocumentAdress = new SDocumentAdress { FolderID = -1, DocumentID = -1 };
-			QuestInfo = new gamedeviceQuestInfo();
-
 			PostConstruct();
 		}
 

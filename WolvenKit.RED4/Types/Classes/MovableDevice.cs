@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MovableDevice : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("workspotSideName")] 
 		public CName WorkspotSideName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("sideTriggerNames")] 
 		public CArray<CName> SideTriggerNames
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("triggerComponents")] 
 		public CArray<CHandle<gameStaticTriggerAreaComponent>> TriggerComponents
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameStaticTriggerAreaComponent>>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("offMeshConnectionsToOpenNames")] 
 		public CArray<CName> OffMeshConnectionsToOpenNames
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(102)] 
 		[RED("offMeshConnectionsToOpen")] 
 		public CArray<CHandle<AIOffMeshConnectionComponent>> OffMeshConnectionsToOpen
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<AIOffMeshConnectionComponent>>>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(103)] 
 		[RED("additionalMeshComponent")] 
 		public CHandle<entMeshComponent> AdditionalMeshComponent
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(104)] 
 		[RED("UseWorkspotComponentPosition")] 
 		public CBool UseWorkspotComponentPosition
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(105)] 
 		[RED("shouldMoveRight")] 
 		public CBool ShouldMoveRight
 		{
@@ -70,12 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public MovableDevice()
 		{
-			ControllerTypeName = "MovableDeviceController";
-			SideTriggerNames = new();
-			TriggerComponents = new();
-			OffMeshConnectionsToOpenNames = new();
-			OffMeshConnectionsToOpen = new();
-
 			PostConstruct();
 		}
 

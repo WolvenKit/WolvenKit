@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public MineDispenserPlaceEvents()
 		{
-			SpawnPosition = new Vector4();
-			SpawnNormal = new Vector4();
-
 			PostConstruct();
 		}
 

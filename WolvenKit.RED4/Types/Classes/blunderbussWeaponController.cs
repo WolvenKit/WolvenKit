@@ -102,9 +102,6 @@ namespace WolvenKit.RED4.Types
 
 		public blunderbussWeaponController()
 		{
-			ChargeWidgetSize = new Vector2();
-			Shots = new();
-
 			PostConstruct();
 		}
 

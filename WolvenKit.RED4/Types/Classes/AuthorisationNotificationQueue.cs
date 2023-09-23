@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AuthorisationNotificationQueue : gameuiGenericNotificationGameController
 	{
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public AuthorisationNotificationQueue()
 		{
-			Duration = 2.000000F;
-
 			PostConstruct();
 		}
 

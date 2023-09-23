@@ -5,9 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public MovableWallScreenControllerPS()
 		{
-			TweakDBRecord = 77660230936;
-			TweakDBDescriptionRecord = 131405305371;
-
 			PostConstruct();
 		}
 

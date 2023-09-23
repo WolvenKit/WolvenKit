@@ -38,21 +38,13 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(4)] 
 		[RED("labels")] 
-		public CArray<CString> Labels
-		{
-			get => GetPropertyValue<CArray<CString>>();
-			set => SetPropertyValue<CArray<CString>>(value);
-		}
-
-		[Ordinal(5)] 
-		[RED("flagPosition")] 
-		public CString FlagPosition
+		public CString Labels
 		{
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("assignee")] 
 		public CString Assignee
 		{
@@ -60,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("description")] 
 		public CString Description
 		{
@@ -68,15 +60,55 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("versions")] 
+		public CString Versions
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
 		[Ordinal(8)] 
-		[RED("cameraLocation")] 
-		public CString CameraLocation
+		[RED("fixVersions")] 
+		public CString FixVersions
 		{
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(9)] 
+		[RED("flagPosition")] 
+		public CString FlagPosition
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("components")] 
+		public CString Components
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("attachments")] 
+		public CArray<toolsJiraAttachment> Attachments
+		{
+			get => GetPropertyValue<CArray<toolsJiraAttachment>>();
+			set => SetPropertyValue<CArray<toolsJiraAttachment>>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("customfield_17400")] 
+		public CString Customfield_17400
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("customfield_18373")] 
 		public CString Customfield_18373
 		{
@@ -84,31 +116,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(10)] 
-		[RED("customfield_10505")] 
-		public CString Customfield_10505
+		[Ordinal(14)] 
+		[RED("customfield_34100")] 
+		public CString Customfield_34100
 		{
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(11)] 
-		[RED("fixVersions")] 
-		public CArray<CString> FixVersions
-		{
-			get => GetPropertyValue<CArray<CString>>();
-			set => SetPropertyValue<CArray<CString>>(value);
-		}
-
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("customfield_15306")] 
-		public CArray<CString> Customfield_15306
+		public CString Customfield_15306
 		{
-			get => GetPropertyValue<CArray<CString>>();
-			set => SetPropertyValue<CArray<CString>>(value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("customfield_13009")] 
 		public CString Customfield_13009
 		{
@@ -116,15 +140,87 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(14)] 
-		[RED("attachment")] 
-		public CArray<toolsJiraAttachment> Attachment
+		[Ordinal(17)] 
+		[RED("customfield_10013")] 
+		public CString Customfield_10013
 		{
-			get => GetPropertyValue<CArray<toolsJiraAttachment>>();
-			set => SetPropertyValue<CArray<toolsJiraAttachment>>(value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
+		[RED("customfield_10503")] 
+		public CString Customfield_10503
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("customfield_10502")] 
+		public CString Customfield_10502
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("customfield_34718")] 
+		public CString Customfield_34718
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("customfield_36106")] 
+		public CString Customfield_36106
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("customfield_10006")] 
+		public CString Customfield_10006
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("customfield_10505")] 
+		public CString Customfield_10505
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("customfield_10603")] 
+		public CString Customfield_10603
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("customfield_24700")] 
+		public CString Customfield_24700
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("customfield_34706")] 
+		public CString Customfield_34706
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("customfield_25500")] 
 		public CString Customfield_25500
 		{
@@ -132,12 +228,65 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(28)] 
+		[RED("customfield_15808")] 
+		public CString Customfield_15808
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("customfield_33701")] 
+		public CString Customfield_33701
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("customfield_18006")] 
+		public CString Customfield_18006
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("customfield_29900")] 
+		public CString Customfield_29900
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("customfield_10005")] 
+		public CString Customfield_10005
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("customfield_10606")] 
+		public CString Customfield_10606
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("customfield_10002")] 
+		public CString Customfield_10002
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
 		public toolsJiraIssueFieldsResult()
 		{
-			Labels = new();
-			FixVersions = new();
-			Customfield_15306 = new();
-			Attachment = new();
+			Attachments = new();
 
 			PostConstruct();
 		}

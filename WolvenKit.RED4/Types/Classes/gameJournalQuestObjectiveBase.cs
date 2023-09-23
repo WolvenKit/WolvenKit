@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class gameJournalQuestObjectiveBase : gameJournalContainerEntry
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("description")] 
 		public LocalizationString Description
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("counter")] 
 		public CUInt32 Counter
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("optional")] 
 		public CBool Optional
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("locationPrefabRef")] 
 		public NodeRef LocationPrefabRef
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("itemID")] 
 		public TweakDBID ItemID
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("districtID")] 
 		public CString DistrictID
 		{

@@ -4,23 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class questStat_ConditionType : questIStatsConditionType
 	{
-		[Ordinal(0)] 
-		[RED("objectRef")] 
-		public gameEntityReference ObjectRef
-		{
-			get => GetPropertyValue<gameEntityReference>();
-			set => SetPropertyValue<gameEntityReference>(value);
-		}
-
 		[Ordinal(1)] 
-		[RED("isPlayer")] 
-		public CBool IsPlayer
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(2)] 
 		[RED("statType")] 
 		public CEnum<gamedataStatType> StatType
 		{
@@ -28,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("value")] 
 		public CFloat Value
 		{
@@ -36,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{
@@ -46,7 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public questStat_ConditionType()
 		{
-			ObjectRef = new gameEntityReference { Names = new() };
 			StatType = Enums.gamedataStatType.Invalid;
 
 			PostConstruct();

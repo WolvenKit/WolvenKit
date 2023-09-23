@@ -29,14 +29,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
-		[RED("bg")] 
-		public inkWidgetReference Bg
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(13)] 
 		[RED("toggleDescirptionHackPart")] 
 		public inkWidgetReference ToggleDescirptionHackPart
 		{
@@ -44,23 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
-		[RED("toggleDescriptionScanIcon")] 
-		public inkWidgetReference ToggleDescriptionScanIcon
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("fitToContentBackground")] 
-		public inkWidgetReference FitToContentBackground
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(16)] 
+		[Ordinal(13)] 
 		[RED("kiroshiLogo")] 
 		public inkWidgetReference KiroshiLogo
 		{
@@ -68,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(14)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -76,31 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(18)] 
-		[RED("gameInstance")] 
-		public ScriptGameInstance GameInstance
-		{
-			get => GetPropertyValue<ScriptGameInstance>();
-			set => SetPropertyValue<ScriptGameInstance>(value);
-		}
-
-		[Ordinal(19)] 
-		[RED("objectTypeCallbackID")] 
-		public CHandle<redCallbackObject> ObjectTypeCallbackID
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(20)] 
-		[RED("uiScannerChunkBlackboard")] 
-		public CWeakHandle<gameIBlackboard> UiScannerChunkBlackboard
-		{
-			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
-			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
-		}
-
-		[Ordinal(21)] 
+		[Ordinal(15)] 
 		[RED("scanningState")] 
 		public CEnum<gameScanningState> ScanningState
 		{
@@ -108,55 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameScanningState>>(value);
 		}
 
-		[Ordinal(22)] 
-		[RED("scanStatusCallbackID")] 
-		public CHandle<redCallbackObject> ScanStatusCallbackID
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(23)] 
-		[RED("scanObjectCallbackID")] 
-		public CHandle<redCallbackObject> ScanObjectCallbackID
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(24)] 
-		[RED("uiBlackboard")] 
-		public CWeakHandle<gameIBlackboard> UiBlackboard
-		{
-			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
-			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
-		}
-
-		[Ordinal(25)] 
-		[RED("quickSlotsBoard")] 
-		public CWeakHandle<gameIBlackboard> QuickSlotsBoard
-		{
-			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
-			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
-		}
-
-		[Ordinal(26)] 
-		[RED("quickSlotsCallbackID")] 
-		public CHandle<redCallbackObject> QuickSlotsCallbackID
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(27)] 
-		[RED("quickhackStartedCallbackID")] 
-		public CHandle<redCallbackObject> QuickhackStartedCallbackID
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(28)] 
+		[Ordinal(16)] 
 		[RED("scannedObjectType")] 
 		public CEnum<ScannerObjectType> ScannedObjectType
 		{
@@ -164,63 +68,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ScannerObjectType>>(value);
 		}
 
-		[Ordinal(29)] 
-		[RED("showScanAnimProxy")] 
-		public CHandle<inkanimProxy> ShowScanAnimProxy
+		[Ordinal(17)] 
+		[RED("currentTab")] 
+		public CEnum<ScannerDetailTab> CurrentTab
 		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+			get => GetPropertyValue<CEnum<ScannerDetailTab>>();
+			set => SetPropertyValue<CEnum<ScannerDetailTab>>(value);
 		}
 
-		[Ordinal(30)] 
-		[RED("hideScanAnimProxy")] 
-		public CHandle<inkanimProxy> HideScanAnimProxy
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(31)] 
-		[RED("toggleScanDescriptionAnimProxy")] 
-		public CHandle<inkanimProxy> ToggleScanDescriptionAnimProxy
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(32)] 
-		[RED("previousToggleAnimName")] 
-		public CName PreviousToggleAnimName
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(33)] 
-		[RED("hasHacks")] 
-		public CBool HasHacks
+		[Ordinal(18)] 
+		[RED("isQuickHackAble")] 
+		public CBool IsQuickHackAble
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(34)] 
-		[RED("lastScannedObject")] 
-		public entEntityID LastScannedObject
-		{
-			get => GetPropertyValue<entEntityID>();
-			set => SetPropertyValue<entEntityID>(value);
-		}
-
-		[Ordinal(35)] 
-		[RED("isDescriptionVisible")] 
-		public CBool IsDescriptionVisible
+		[Ordinal(19)] 
+		[RED("isQuickHackPanelOpened")] 
+		public CBool IsQuickHackPanelOpened
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(20)] 
 		[RED("asyncSpawnRequests")] 
 		public CArray<CWeakHandle<inkAsyncSpawnRequest>> AsyncSpawnRequests
 		{
@@ -228,21 +100,72 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>(value);
 		}
 
+		[Ordinal(21)] 
+		[RED("uiScannedObjectTypeChangedCallbackID")] 
+		public CHandle<redCallbackObject> UiScannedObjectTypeChangedCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("uiScanningStateChangedCallbackID")] 
+		public CHandle<redCallbackObject> UiScanningStateChangedCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("uiScannedObjectChangedCallbackID")] 
+		public CHandle<redCallbackObject> UiScannedObjectChangedCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("uiQHDescriptionChangedCallbackID")] 
+		public CHandle<redCallbackObject> UiQHDescriptionChangedCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("uiQHPanelOpenedCallbackID")] 
+		public CHandle<redCallbackObject> UiQHPanelOpenedCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("introAnimProxy")] 
+		public CHandle<inkanimProxy> IntroAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("outroAnimProxy")] 
+		public CHandle<inkanimProxy> OutroAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("scannerToggleTabAnimProxy")] 
+		public CHandle<inkanimProxy> ScannerToggleTabAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
 		public scannerDetailsGameController()
 		{
-			ScannerCountainer = new inkCompoundWidgetReference();
-			QuickhackContainer = new inkCompoundWidgetReference();
-			CluesContainer = new inkCompoundWidgetReference();
-			Bg = new inkWidgetReference();
-			ToggleDescirptionHackPart = new inkWidgetReference();
-			ToggleDescriptionScanIcon = new inkWidgetReference();
-			FitToContentBackground = new inkWidgetReference();
-			KiroshiLogo = new inkWidgetReference();
-			GameInstance = new ScriptGameInstance();
-			LastScannedObject = new entEntityID();
-			IsDescriptionVisible = true;
-			AsyncSpawnRequests = new();
-
 			PostConstruct();
 		}
 

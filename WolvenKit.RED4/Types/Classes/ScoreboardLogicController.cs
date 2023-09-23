@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public ScoreboardLogicController()
 		{
-			NamesWidget = new inkCompoundWidgetReference();
-			ScoresWidget = new inkCompoundWidgetReference();
-			HighScores = new();
-
 			PostConstruct();
 		}
 

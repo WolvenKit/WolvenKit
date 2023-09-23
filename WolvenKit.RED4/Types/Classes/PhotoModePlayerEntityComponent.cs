@@ -132,18 +132,64 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(21)] 
+		[RED("holsteredArmsShouldBeVisible")] 
+		public CBool HolsteredArmsShouldBeVisible
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("holsteredArmsBeingSpawned")] 
+		public CBool HolsteredArmsBeingSpawned
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("holsteredArmsVisible")] 
+		public CBool HolsteredArmsVisible
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("holsteredArmsItem")] 
+		public gameItemID HolsteredArmsItem
+		{
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("cyberwareArmsBeingSpawned")] 
+		public CBool CyberwareArmsBeingSpawned
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("cyberwareArmsVisible")] 
+		public CBool CyberwareArmsVisible
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("cyberwareArmsItem")] 
+		public gameItemID CyberwareArmsItem
+		{
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
 		public PhotoModePlayerEntityComponent()
 		{
-			UsedWeaponItemId = new gameItemID();
-			CurrentWeaponInSlot = new gameItemID();
-			AvailableCurrentItemTypesList = new();
-			AvailableCurrentItemsList = new();
-			SwapMeleeWeaponItemId = new gameItemID();
-			SwapHangunWeaponItemId = new gameItemID();
-			SwapRifleWeaponItemId = new gameItemID();
-			SwapShootgunWeaponItemId = new gameItemID();
-			LoadingItems = new();
-
 			PostConstruct();
 		}
 

@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CompareBuilder>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("sortMethod")] 
+		public CEnum<ContactsSortMethod> SortMethod
+		{
+			get => GetPropertyValue<CEnum<ContactsSortMethod>>();
+			set => SetPropertyValue<CEnum<ContactsSortMethod>>(value);
+		}
+
 		public DialerContactDataView()
 		{
 			PostConstruct();

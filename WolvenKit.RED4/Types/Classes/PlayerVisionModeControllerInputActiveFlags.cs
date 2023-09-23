@@ -20,6 +20,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("driverCombatButtonHold")] 
+		public CBool DriverCombatButtonHold
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("driverCombatButtonActivate")] 
+		public CBool DriverCombatButtonActivate
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PlayerVisionModeControllerInputActiveFlags()
 		{
 			PostConstruct();

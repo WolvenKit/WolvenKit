@@ -276,25 +276,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(35)] 
+		[RED("displayContextData")] 
+		public CHandle<ItemDisplayContextData> DisplayContextData
+		{
+			get => GetPropertyValue<CHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
+		}
+
 		public WardrobeSetEditorUIController()
 		{
-			ItemsGridWidget = new inkWidgetReference();
-			ItemGridText = new inkTextWidgetReference();
-			SortingDropdown = new inkWidgetReference();
-			SortingButton = new inkWidgetReference();
-			HideFaceButton = new inkWidgetReference();
-			HideHeadButton = new inkWidgetReference();
-			EmptyGridText = new inkWidgetReference();
-			WearButton = new inkWidgetReference();
-			TakeOffButton = new inkWidgetReference();
-			ResetButton = new inkWidgetReference();
-			EquipmentAreaCategoryEventQueue = new();
-			EquipmentAreaCategories = new();
-			AreaSlotControllers = new();
-			HiddenEquipmentAreas = new();
-			DelayedTimeoutCallbackId = new gameDelayID();
-			TimeoutPeroid = 0.500000F;
-
 			PostConstruct();
 		}
 

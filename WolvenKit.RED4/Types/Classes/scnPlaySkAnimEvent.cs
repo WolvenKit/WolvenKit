@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class scnPlaySkAnimEvent : scnPlayFPPControlAnimEvent
 	{
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("animName")] 
 		public CHandle<scnAnimName> AnimName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<scnAnimName>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("poseBlendOutWorkspot")] 
 		public CHandle<scnEventBlendWorkspotSetupParameters> PoseBlendOutWorkspot
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<scnEventBlendWorkspotSetupParameters>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("rootMotionData")] 
 		public scnPlaySkAnimRootMotionData RootMotionData
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnPlaySkAnimRootMotionData>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("playerData")] 
 		public scnPlayerAnimData PlayerData
 		{

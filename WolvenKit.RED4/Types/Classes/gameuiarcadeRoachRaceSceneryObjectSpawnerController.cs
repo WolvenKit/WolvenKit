@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiarcadeRoachRaceSceneryObjectSpawnerController : gameuiarcadeArcadeSpawnerController
 	{
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("sceneryObjectSpawnTime")] 
 		public CFloat SceneryObjectSpawnTime
 		{

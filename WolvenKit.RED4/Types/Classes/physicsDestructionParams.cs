@@ -141,6 +141,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("debrisInstantRemovalThreshold")] 
+		public CFloat DebrisInstantRemovalThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("debrisTimeoutThreshold")] 
+		public CFloat DebrisTimeoutThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("debrisTimeout")] 
 		public CBool DebrisTimeout
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("debrisTimeoutMin")] 
 		public CFloat DebrisTimeoutMin
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("debrisTimeoutMax")] 
 		public CFloat DebrisTimeoutMax
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("fadeOutTime")] 
 		public CFloat FadeOutTime
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("debrisMaxSeparation")] 
 		public CFloat DebrisMaxSeparation
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("visualsRemain")] 
 		public CBool VisualsRemain
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("debrisDestructible")] 
 		public CBool DebrisDestructible
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("supportDamage")] 
 		public CBool SupportDamage
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("maxAngularVelocity")] 
 		public CFloat MaxAngularVelocity
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("fractureFieldMask")] 
 		public CBitField<physicsFractureFieldType> FractureFieldMask
 		{

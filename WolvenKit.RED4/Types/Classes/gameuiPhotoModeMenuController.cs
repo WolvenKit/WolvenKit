@@ -305,24 +305,6 @@ namespace WolvenKit.RED4.Types
 			SetAttributeOptionEnabled = new gameuiSetPhotoModeKeyEnabledCallback();
 			SetCategoryEnabled = new gameuiSetPhotoModeKeyEnabledCallback();
 			SetStickerImage = new gameuiStickerImageCallback();
-			MenuListRoot = new inkWidgetReference();
-			AdditionalListRoot = new inkWidgetReference();
-			RadioButtons = new inkCompoundWidgetReference();
-			MenuArea = new inkWidgetReference();
-			AdditionalMenuArea = new inkWidgetReference();
-			InputCameraControlKbd = new inkWidgetReference();
-			InputCameraKbd = new inkWidgetReference();
-			InputCameraControlPad = new inkWidgetReference();
-			InputCameraPad = new inkWidgetReference();
-			InputStickersKbd = new inkWidgetReference();
-			InputStickersPad = new inkWidgetReference();
-			InputSaveLoadKbd = new inkWidgetReference();
-			InputSaveLoadPad = new inkWidgetReference();
-			InputExit = new inkWidgetReference();
-			InputScreenshot = new inkWidgetReference();
-			CameraLocation = new inkWidgetReference();
-			InputBottomRoot = new inkHorizontalPanelWidgetReference();
-			MenuPages = new();
 
 			PostConstruct();
 		}

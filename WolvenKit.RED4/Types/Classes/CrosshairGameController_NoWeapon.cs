@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CrosshairGameController_NoWeapon : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] 
+		[Ordinal(27)] 
 		[RED("AimDownSightContainer")] 
 		public inkCompoundWidgetReference AimDownSightContainer
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(28)] 
 		[RED("ZoomMovingContainer")] 
 		public inkCompoundWidgetReference ZoomMovingContainer
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(29)] 
 		[RED("ZoomNumber")] 
 		public inkTextWidgetReference ZoomNumber
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(30)] 
 		[RED("ZoomNumberR")] 
 		public inkTextWidgetReference ZoomNumberR
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(31)] 
 		[RED("DistanceImageRuler")] 
 		public inkImageWidgetReference DistanceImageRuler
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(32)] 
 		[RED("ZoomMoveBracketL")] 
 		public inkImageWidgetReference ZoomMoveBracketL
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(33)] 
 		[RED("ZoomMoveBracketR")] 
 		public inkImageWidgetReference ZoomMoveBracketR
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(34)] 
 		[RED("ZoomLevelString")] 
 		public CString ZoomLevelString
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(35)] 
 		[RED("PlayerSMBB")] 
 		public CWeakHandle<gameIBlackboard> PlayerSMBB
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(36)] 
 		[RED("ZoomLevelBBID")] 
 		public CHandle<redCallbackObject> ZoomLevelBBID
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(37)] 
 		[RED("sceneTierBlackboardId")] 
 		public CHandle<redCallbackObject> SceneTierBlackboardId
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(38)] 
 		[RED("sceneTier")] 
 		public CEnum<gamePSMHighLevel> SceneTier
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMHighLevel>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(39)] 
 		[RED("zoomUpAnim")] 
 		public CHandle<inkanimProxy> ZoomUpAnim
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(40)] 
 		[RED("animLockOn")] 
 		public CHandle<inkanimProxy> AnimLockOn
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(41)] 
 		[RED("zoomDownAnim")] 
 		public CHandle<inkanimProxy> ZoomDownAnim
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(42)] 
 		[RED("animLockOff")] 
 		public CHandle<inkanimProxy> AnimLockOff
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(43)] 
 		[RED("zoomShowAnim")] 
 		public CHandle<inkanimProxy> ZoomShowAnim
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(44)] 
 		[RED("zoomHideAnim")] 
 		public CHandle<inkanimProxy> ZoomHideAnim
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(45)] 
 		[RED("argZoomBuffered")] 
 		public CFloat ArgZoomBuffered
 		{
@@ -158,14 +158,6 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_NoWeapon()
 		{
-			AimDownSightContainer = new inkCompoundWidgetReference();
-			ZoomMovingContainer = new inkCompoundWidgetReference();
-			ZoomNumber = new inkTextWidgetReference();
-			ZoomNumberR = new inkTextWidgetReference();
-			DistanceImageRuler = new inkImageWidgetReference();
-			ZoomMoveBracketL = new inkImageWidgetReference();
-			ZoomMoveBracketR = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

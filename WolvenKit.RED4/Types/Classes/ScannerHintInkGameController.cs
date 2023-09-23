@@ -54,8 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerHintInkGameController()
 		{
-			IconWidget = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

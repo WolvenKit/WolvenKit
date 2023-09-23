@@ -101,6 +101,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("splineRecalculation")] 
+		public CBool SplineRecalculation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("ignoreNavigation")] 
 		public CBool IgnoreNavigation
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("snapToTerrain")] 
 		public CBool SnapToTerrain
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("ignoreLineOfSightCheck")] 
 		public CBool IgnoreLineOfSightCheck
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("useAlertedState")] 
 		public CBool UseAlertedState
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("useStart")] 
 		public CBool UseStart
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("useStop")] 
 		public CBool UseStop
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("useCombatState")] 
 		public CBool UseCombatState
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("reverse")] 
 		public CBool Reverse
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("useOMLReservation")] 
 		public CBool UseOMLReservation
 		{
@@ -172,7 +180,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
+		[RED("disableFootIK")] 
+		public CBool DisableFootIK
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("allowCrowdOnPath")] 
+		public CBool AllowCrowdOnPath
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(31)] 
 		[RED("lookAtTarget")] 
 		public CWeakHandle<gameObject> LookAtTarget
 		{
@@ -180,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("minSearchAngle")] 
 		public CFloat MinSearchAngle
 		{
@@ -188,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("maxSearchAngle")] 
 		public CFloat MaxSearchAngle
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("noWaitToEndDistance")] 
 		public CFloat NoWaitToEndDistance
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("noWaitToEndCompanionDistance")] 
 		public CFloat NoWaitToEndCompanionDistance
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("maxCompanionDistanceOnSpline")] 
 		public CFloat MaxCompanionDistanceOnSpline
 		{
@@ -228,6 +252,7 @@ namespace WolvenKit.RED4.Types
 			CatchUpWithCompanion = true;
 			TeleportToCompanion = true;
 			UseMatchForSpeedForPlayer = true;
+			SplineRecalculation = true;
 			SnapToTerrain = true;
 			UseStart = true;
 			UseStop = true;

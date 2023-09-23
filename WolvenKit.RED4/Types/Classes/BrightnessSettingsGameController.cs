@@ -62,9 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public BrightnessSettingsGameController()
 		{
-			SettingsOptionsList = new inkCompoundWidgetReference();
-			SettingsElements = new();
-
 			PostConstruct();
 		}
 

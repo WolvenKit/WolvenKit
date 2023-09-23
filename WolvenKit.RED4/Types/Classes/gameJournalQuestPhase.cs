@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalQuestPhase : gameJournalContainerEntry
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("locationPrefabRef")] 
 		public NodeRef LocationPrefabRef
 		{
@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalQuestPhase()
 		{
+			JournalEntryOverrideDataList = new();
 			Entries = new();
 
 			PostConstruct();

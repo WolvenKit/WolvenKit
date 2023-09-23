@@ -5,8 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public DestructibleMasterDevice()
 		{
-			ControllerTypeName = "DestructibleMasterDeviceController";
-
 			PostConstruct();
 		}
 

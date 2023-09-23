@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class questEventManagerNodeDefinition : questDisableableNodeDefinition
 	{
 		[Ordinal(2)] 
+		[RED("isUiEvent")] 
+		public CBool IsUiEvent
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("isObjectPlayer")] 
 		public CBool IsObjectPlayer
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("objectRef")] 
 		public gameEntityReference ObjectRef
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("managerName")] 
 		public CString ManagerName
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("event")] 
 		public CHandle<IScriptable> Event
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<IScriptable>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("PSClassName")] 
 		public CName PSClassName
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("componentName")] 
 		public CName ComponentName
 		{

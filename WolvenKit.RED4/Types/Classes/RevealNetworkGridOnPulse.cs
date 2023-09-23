@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public RevealNetworkGridOnPulse()
 		{
-			Duration = 1.000000F;
-
 			PostConstruct();
 		}
 

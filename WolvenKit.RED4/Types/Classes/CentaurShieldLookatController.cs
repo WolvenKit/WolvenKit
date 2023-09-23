@@ -54,8 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public CentaurShieldLookatController()
 		{
-			ShieldTargetTimeStamp = -1.000000F;
-
 			PostConstruct();
 		}
 

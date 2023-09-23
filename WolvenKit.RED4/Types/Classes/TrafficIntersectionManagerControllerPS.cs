@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TrafficIntersectionManagerControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("trafficLightStatus")] 
 		public CEnum<worldTrafficLightColor> TrafficLightStatus
 		{
@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public TrafficIntersectionManagerControllerPS()
 		{
-			DeviceName = "Traffic Intersection Manager";
-			TweakDBRecord = 147361436664;
-			TweakDBDescriptionRecord = 201737502228;
-
 			PostConstruct();
 		}
 

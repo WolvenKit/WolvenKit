@@ -5,8 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public LaserDetectorControllerPS()
 		{
-			DeviceName = "Gameplay-Devices-DisplayNames-LaserDetector";
-
 			PostConstruct();
 		}
 

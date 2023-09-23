@@ -110,13 +110,6 @@ namespace WolvenKit.RED4.Types
 
 		public hudCarRaceController()
 		{
-			Countdown = new inkCanvasWidgetReference();
-			PositionCounter = new inkCanvasWidgetReference();
-			RacePosition = new inkTextWidgetReference();
-			RaceTime = new inkTextWidgetReference();
-			RaceCheckpoint = new inkTextWidgetReference();
-			RaceStartEngineTime = new EngineTime();
-
 			PostConstruct();
 		}
 

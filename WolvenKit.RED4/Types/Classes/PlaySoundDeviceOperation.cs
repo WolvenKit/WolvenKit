@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public PlaySoundDeviceOperation()
 		{
-			IsEnabled = true;
-			ToggleOperations = new();
-			SFXs = new();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class entPhysicalMeshComponent : entMeshComponent
 	{
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("visibilityAnimationParam")] 
 		public CName VisibilityAnimationParam
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsSimulationType>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("useResourceSimulationType")] 
 		public CBool UseResourceSimulationType
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("startInactive")] 
 		public CBool StartInactive
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsFilterDataSource>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{

@@ -38,11 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleSummonDataDef()
 		{
-			GarageState = new gamebbScriptID_Uint32();
-			UnlockedVehiclesCount = new gamebbScriptID_Uint32();
-			SummonState = new gamebbScriptID_Uint32();
-			SummonedVehicleEntityID = new gamebbScriptID_EntityID();
-
 			PostConstruct();
 		}
 

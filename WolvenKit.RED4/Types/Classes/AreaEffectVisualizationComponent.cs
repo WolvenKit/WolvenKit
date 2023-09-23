@@ -54,11 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public AreaEffectVisualizationComponent()
 		{
-			ForceHighlightTargetBuckets = new();
-			AvailableQuickHacks = new();
-			AvailablespiderbotActions = new();
-			ActiveEffectIndex = -1;
-
 			PostConstruct();
 		}
 

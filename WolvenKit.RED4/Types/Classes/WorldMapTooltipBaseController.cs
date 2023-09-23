@@ -38,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public WorldMapTooltipBaseController()
 		{
-			Root = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

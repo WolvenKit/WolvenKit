@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public DlcMenuGameController()
 		{
-			ButtonHintsRef = new inkWidgetReference();
-			ContainersRef = new inkCompoundWidgetReference();
-
 			PostConstruct();
 		}
 

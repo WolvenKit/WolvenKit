@@ -110,19 +110,6 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_DroneProcedural()
 		{
-			Mass = 100.000000F;
-			Size_front = 1.500000F;
-			Size_back = -1.500000F;
-			Size_left = 1.200000F;
-			Size_right = -1.200000F;
-			Walk_tilt_coef = 1.330000F;
-			Mass_normalized_coef = 2.000000F;
-			Tilt_angle_on_speed = 40.000000F;
-			Speed_idle_threshold = 0.200000F;
-			Starting_recovery_ballance = 0.010000F;
-			Pseudo_acceleration = 30.000000F;
-			Turn_inertia_damping = 0.750000F;
-
 			PostConstruct();
 		}
 

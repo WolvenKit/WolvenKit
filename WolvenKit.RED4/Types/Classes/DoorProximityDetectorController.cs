@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class DoorProximityDetectorController : ScriptableDeviceComponent
+	public partial class DoorProximityDetectorController : ProximityDetectorController
 	{
 		public DoorProximityDetectorController()
 		{

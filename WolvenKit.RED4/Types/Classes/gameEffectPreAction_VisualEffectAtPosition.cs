@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("vertical")] 
+		public CBool Vertical
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("effectTag")] 
 		public CName EffectTag
 		{

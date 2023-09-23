@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public PuppetSquadInterface()
 		{
-			TicketHistory = new();
-			EnumValueToNdx = new gameEnumNameToIndexCache();
-
 			PostConstruct();
 		}
 

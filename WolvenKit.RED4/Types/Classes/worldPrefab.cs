@@ -149,6 +149,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("maxProxyStreamingDistance")] 
+		public CFloat MaxProxyStreamingDistance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("proxyDistanceFactor")] 
 		public CFloat ProxyDistanceFactor
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("averageNodeDiagonal")] 
 		public CFloat AverageNodeDiagonal
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("boostInnerNodesToProxyDistance")] 
 		public CBool BoostInnerNodesToProxyDistance
 		{
@@ -172,7 +180,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
+		[RED("overrideStreamingPosWithBBoxCenter")] 
+		public CBool OverrideStreamingPosWithBBoxCenter
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("ignoreMeshEmbeddedOccluders")] 
 		public CBool IgnoreMeshEmbeddedOccluders
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("ignoreAllOccluders")] 
 		public CBool IgnoreAllOccluders
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("excludeOnConsole")] 
 		public CBool ExcludeOnConsole
 		{
@@ -196,7 +212,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
+		[RED("excludeOnNextGenConsoles")] 
+		public CBool ExcludeOnNextGenConsoles
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("isTerrainPrefab")] 
 		public CBool IsTerrainPrefab
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("minimapContribution")] 
 		public CEnum<worldPrefabMinimapContribution> MinimapContribution
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldPrefabMinimapContribution>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("interiorMapContribution")] 
 		public CEnum<worldPrefabInteriorMapContribution> InteriorMapContribution
 		{
@@ -220,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldPrefabInteriorMapContribution>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("booleanProxyHelper")] 
 		public CResourceAsyncReference<worldPrefab> BooleanProxyHelper
 		{
@@ -228,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldPrefab>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("proxyLimiterHelper")] 
 		public CResourceAsyncReference<worldPrefab> ProxyLimiterHelper
 		{
@@ -236,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldPrefab>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("customProxyMeshHelper")] 
 		public CResourceAsyncReference<CMesh> CustomProxyMeshHelper
 		{
@@ -247,7 +271,7 @@ namespace WolvenKit.RED4.Types
 		public worldPrefab()
 		{
 			MaxBounds = new Box { Min = new Vector4 { X = float.MinValue, Y = float.MinValue, Z = float.MinValue, W = float.MinValue }, Max = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue } };
-			EnvironmentDefinition = new CResourceAsyncReference<worldEnvironmentDefinition>(@"engine\preview_panel\preview_panel_env_base.env");
+			EnvironmentDefinition = new CResourceAsyncReference<worldEnvironmentDefinition>(3401007022174020352);
 			MetadataArray = new();
 			ProxyMeshBuildParams = new worldProxyMeshBuildParams { Resolution = 5, Polycount = 500, PolycountPercentage = 5.000000F, CoreAxis = Enums.worldProxyCoreAxis.Z, GroupingNormals = Enums.worldProxyGroupingNormals.Around_All_Axes, Windows = new worldProxyWindowsParams { WindowsType = Enums.worldProxWindowsType.PropagateWindows, Distance = 0.400000F, DistanceAboveProxy = 0.020000F, RemoveSmallerThan = 0.300000F, DistantWindowsEmissive = 1.000000F, DistantWindowsSize = 3.000000F, DistantWindowsSaturation = 0.750000F, DistantWindowsTurnedOf = 0.450000F }, Textures = new worldProxyTextureParams { AlbedoTextureResolution = Enums.worldProxyMeshTexRes.RES_256, GenerateAlbedo = true, NormalTextureResolution = Enums.worldProxyMeshTexRes.RES_128, RoughnessTextureResolution = Enums.worldProxyMeshTexRes.RES_128, GenerateRoughness = true, MetalnessTextureResolution = Enums.worldProxyMeshTexRes.RES_128, DiffuseAlphaAsEmissive = true }, CustomGeometry = new worldProxyCustomGeometryParams { UvType = Enums.worldProxyMeshUVType.UvGenerateNew }, AdvancedParams = new worldProxyMeshAdvancedBuildParams { BoundingBoxSyncParams = new worldProxyBoundingBoxSyncParams { PullRange = 0.050000F, StackOffset = new Vector3() }, SurfaceFlattenParams = new worldProxySurfaceFlattenParams { GroupingStepAngle = Enums.worldProxyNormalAngleStepSize.STEP_45 }, Misc = new worldProxyMiscAdvancedParams { UseLod1 = true, BlurCutout = 20, OcclusionRatio = 40, FillHolesBeforeReduceRatio = 1.500000F, FillHolesAfterReduceRatio = 0.400000F, RsAxisPrecision = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, RsAxisExpand = new Vector3(), RsAliasingReduction = 1.000000F, BcMergeRange = 0.800000F, BcSizeCutoff = 120.000000F, BcIterations = 0.500000F, BcMaxSize = 120.000000F, BcMinSize = 2.000000F, BcMergeSensitivity = 50.000000F, BcMinScale = 1.000000F, BcGridSize = 120.000000F, BcFilterSensitivity = 0.250000F, BcBoundsRatioLimit = 0.250000F, RemoveIslands = true, BackgroundColor = new CColor() }, RayBias = 2.100000F, RayMaxDistance = -1.000000F } };
 			ProxyScale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };

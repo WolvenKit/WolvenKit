@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PerksMenuAttributeDisplayController : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("widgetWrapper")] 
 		public inkWidgetReference WidgetWrapper
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("foregroundWrapper")] 
 		public inkWidgetReference ForegroundWrapper
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("attributeName")] 
 		public inkTextWidgetReference AttributeName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("attributeIcon")] 
 		public inkImageWidgetReference AttributeIcon
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("attributeLevel")] 
 		public inkTextWidgetReference AttributeLevel
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("frameHovered")] 
 		public inkWidgetReference FrameHovered
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("accent1Hovered")] 
 		public inkWidgetReference Accent1Hovered
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("accent1BGHovered")] 
 		public inkWidgetReference Accent1BGHovered
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("accent2Hovered")] 
 		public inkWidgetReference Accent2Hovered
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("accent2BGHovered")] 
 		public inkWidgetReference Accent2BGHovered
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("topConnectionContainer")] 
 		public inkWidgetReference TopConnectionContainer
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("bottomConnectionContainer")] 
 		public inkWidgetReference BottomConnectionContainer
 		{
@@ -100,7 +100,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
+		[RED("levelContainer")] 
+		public inkWidgetReference LevelContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("dataManager")] 
 		public CHandle<PlayerDevelopmentDataManager> DataManager
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PlayerDevelopmentDataManager>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(19)] 
 		[RED("attribute")] 
 		public CEnum<PerkMenuAttribute> Attribute
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<PerkMenuAttribute>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(20)] 
 		[RED("attributeData")] 
 		public CHandle<AttributeData> AttributeData
 		{
@@ -126,19 +134,6 @@ namespace WolvenKit.RED4.Types
 
 		public PerksMenuAttributeDisplayController()
 		{
-			WidgetWrapper = new inkWidgetReference();
-			ForegroundWrapper = new inkWidgetReference();
-			AttributeName = new inkTextWidgetReference();
-			AttributeIcon = new inkImageWidgetReference();
-			AttributeLevel = new inkTextWidgetReference();
-			FrameHovered = new inkWidgetReference();
-			Accent1Hovered = new inkWidgetReference();
-			Accent1BGHovered = new inkWidgetReference();
-			Accent2Hovered = new inkWidgetReference();
-			Accent2BGHovered = new inkWidgetReference();
-			TopConnectionContainer = new inkWidgetReference();
-			BottomConnectionContainer = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -29,8 +29,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
-		[RED("occupiedByNeutral")] 
-		public CBool OccupiedByNeutral
+		[RED("occupiedByNonFriendly")] 
+		public CBool OccupiedByNonFriendly
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -38,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleTransitionInitData()
 		{
-			EntityID = new entEntityID();
-
 			PostConstruct();
 		}
 

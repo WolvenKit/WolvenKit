@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class entDebug_MeshComponent : entMeshComponent
 	{
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("filterName")] 
 		public CString FilterName
 		{

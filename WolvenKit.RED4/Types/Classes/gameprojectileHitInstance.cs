@@ -104,8 +104,8 @@ namespace WolvenKit.RED4.Types
 		{
 			TraceResult = new physicsTraceResult { Position = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Normal = new Vector3 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
 			Position = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue };
-			ProjectilePosition = new Vector4();
-			ProjectileSourcePosition = new Vector4();
+			ProjectilePosition = new Vector4 { W = 1.000000F };
+			ProjectileSourcePosition = new Vector4 { W = 1.000000F };
 			Forward = new Vector4();
 			Velocity = new Vector4();
 			HitRepresentationResult = new gameQueryResult { HitShapes = new() };

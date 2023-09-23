@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("blips")] 
+		public CArray<audioRadioBlip> Blips
+		{
+			get => GetPropertyValue<CArray<audioRadioBlip>>();
+			set => SetPropertyValue<CArray<audioRadioBlip>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("speaker")] 
 		public CEnum<audioRadioSpeakerType> Speaker
 		{
@@ -23,6 +31,7 @@ namespace WolvenKit.RED4.Types
 		public audioRadioStationMetadata()
 		{
 			Tracks = new();
+			Blips = new();
 
 			PostConstruct();
 		}

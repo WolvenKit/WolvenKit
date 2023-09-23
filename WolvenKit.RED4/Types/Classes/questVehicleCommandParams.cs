@@ -52,6 +52,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questvehicleJoinTrafficParams>>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("additionalParamsPanic")] 
+		public CHandle<questvehiclePanicParams> AdditionalParamsPanic
+		{
+			get => GetPropertyValue<CHandle<questvehiclePanicParams>>();
+			set => SetPropertyValue<CHandle<questvehiclePanicParams>>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("additionalParamsChase")] 
+		public CHandle<questvehicleChaseParams> AdditionalParamsChase
+		{
+			get => GetPropertyValue<CHandle<questvehicleChaseParams>>();
+			set => SetPropertyValue<CHandle<questvehicleChaseParams>>(value);
+		}
+
 		public questVehicleCommandParams()
 		{
 			PostConstruct();

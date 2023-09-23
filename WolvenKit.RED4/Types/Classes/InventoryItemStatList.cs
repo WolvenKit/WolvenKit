@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemStatList()
 		{
-			Data = new();
-			ItemsList = new();
-
 			PostConstruct();
 		}
 

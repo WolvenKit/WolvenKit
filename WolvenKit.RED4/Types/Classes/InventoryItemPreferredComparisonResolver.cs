@@ -54,10 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemPreferredComparisonResolver()
 		{
-			CacheadAreaItems = new();
-			CachedComparableTypes = new();
-			TypeComparableItemsCache = new();
-
 			PostConstruct();
 		}
 

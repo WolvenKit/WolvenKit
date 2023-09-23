@@ -94,17 +94,6 @@ namespace WolvenKit.RED4.Types
 
 		public SubtitleLineLogicController()
 		{
-			SpeakerNameWidget = new inkTextWidgetReference();
-			SubtitleWidget = new inkTextWidgetReference();
-			RadioSpeaker = new inkTextWidgetReference();
-			RadioSubtitle = new inkTextWidgetReference();
-			Background = new inkWidgetReference();
-			BackgroundSpeaker = new inkWidgetReference();
-			KiroshiAnimationContainer = new inkWidgetReference();
-			MotherTongueContainter = new inkWidgetReference();
-			TargetTextWidgetRef = new inkTextWidgetReference();
-			LineData = new scnDialogLineData();
-
 			PostConstruct();
 		}
 

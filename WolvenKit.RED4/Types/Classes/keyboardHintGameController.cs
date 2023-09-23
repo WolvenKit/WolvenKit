@@ -70,11 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public keyboardHintGameController()
 		{
-			TopElementName = "KeyboardHintItem_Top";
-			BottomElementName = "KeyboardHintItem_Bot";
-			Layout = new inkBasePanelWidgetReference();
-			UIItems = new();
-
 			PostConstruct();
 		}
 

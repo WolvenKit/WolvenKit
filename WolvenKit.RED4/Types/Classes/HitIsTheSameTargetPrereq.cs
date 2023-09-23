@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HitIsTheSameTargetPrereq : GenericHitPrereq
 	{
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("isMoving")] 
 		public CBool IsMoving
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("object")] 
 		public CString Object
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public HitIsTheSameTargetPrereq()
 		{
-			IsSync = true;
-			PipelineStage = Enums.gameDamagePipelineStage.Process;
-
 			PostConstruct();
 		}
 

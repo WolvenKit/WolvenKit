@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemTooltipDetailsModule : ItemTooltipModuleController
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("statsLine")] 
 		public inkWidgetReference StatsLine
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("statsWrapper")] 
 		public inkWidgetReference StatsWrapper
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("statsContainer")] 
 		public inkCompoundWidgetReference StatsContainer
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("dedicatedModsLine")] 
 		public inkWidgetReference DedicatedModsLine
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("dedicatedModsWrapper")] 
 		public inkWidgetReference DedicatedModsWrapper
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("dedicatedModsContainer")] 
 		public inkCompoundWidgetReference DedicatedModsContainer
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("modsLine")] 
 		public inkWidgetReference ModsLine
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("modsWrapper")] 
 		public inkWidgetReference ModsWrapper
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("modsContainer")] 
 		public inkCompoundWidgetReference ModsContainer
 		{
@@ -76,18 +76,32 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
+		[Ordinal(14)] 
+		[RED("modifierPowerLine")] 
+		public inkWidgetReference ModifierPowerLine
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("modifierPowerLabel")] 
+		public inkTextWidgetReference ModifierPowerLabel
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("modifierPowerWrapper")] 
+		public inkCompoundWidgetReference ModifierPowerWrapper
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
 		public ItemTooltipDetailsModule()
 		{
-			StatsLine = new inkWidgetReference();
-			StatsWrapper = new inkWidgetReference();
-			StatsContainer = new inkCompoundWidgetReference();
-			DedicatedModsLine = new inkWidgetReference();
-			DedicatedModsWrapper = new inkWidgetReference();
-			DedicatedModsContainer = new inkCompoundWidgetReference();
-			ModsLine = new inkWidgetReference();
-			ModsWrapper = new inkWidgetReference();
-			ModsContainer = new inkCompoundWidgetReference();
-
 			PostConstruct();
 		}
 

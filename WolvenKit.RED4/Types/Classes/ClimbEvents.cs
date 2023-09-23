@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public ClimbEvents()
 		{
-			IkHandEvents = new();
-			PlayerCapsuleDimensions = new Vector4();
-
 			PostConstruct();
 		}
 

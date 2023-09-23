@@ -54,10 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public inkHoverResizeController()
 		{
-			VectorNewSize = new Vector2();
-			VectorOldSize = new Vector2();
-			AnimationDuration = 0.100000F;
-
 			PostConstruct();
 		}
 

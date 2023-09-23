@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HotkeyItemController : GenericHotkeyController
 	{
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("hotkeyItemSlot")] 
 		public inkWidgetReference HotkeyItemSlot
 		{
@@ -12,7 +12,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
+		[RED("hotkeyItemWidget")] 
+		public CWeakHandle<inkWidget> HotkeyItemWidget
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("hotkeyItemController")] 
 		public CWeakHandle<InventoryItemDisplayController> HotkeyItemController_
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(26)] 
 		[RED("currentItem")] 
 		public gameInventoryItemData CurrentItem
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(27)] 
 		[RED("hotkeyBlackboard")] 
 		public CWeakHandle<gameIBlackboard> HotkeyBlackboard
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(28)] 
 		[RED("hotkeyCallbackID")] 
 		public CHandle<redCallbackObject> HotkeyCallbackID
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(29)] 
 		[RED("equipmentSystem")] 
 		public CWeakHandle<EquipmentSystem> EquipmentSystem
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<EquipmentSystem>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(30)] 
 		[RED("inventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -60,15 +68,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
+		[Ordinal(31)] 
+		[RED("dpadAnim")] 
+		public CHandle<inkanimProxy> DpadAnim
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
 		public HotkeyItemController()
 		{
-			HotkeyBackground = new inkImageWidgetReference();
-			ButtonHint = new inkWidgetReference();
-			Restrictions = new();
-			DebugCommands = new();
-			HotkeyItemSlot = new inkWidgetReference();
-			CurrentItem = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
-
 			PostConstruct();
 		}
 

@@ -77,6 +77,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("fallbackNumFloatTrackData")] 
+		public CUInt16 FallbackNumFloatTrackData
+		{
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("rig")] 
 		public CResourceReference<animRig> Rig
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<animRig>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redTagList>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{

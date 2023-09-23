@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public instrumentPanelLogicController()
 		{
-			LightStateImageWidget = new inkImageWidgetReference();
-			CautionStateImageWidget = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

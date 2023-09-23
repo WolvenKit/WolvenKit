@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemAddedNotification : GenericNotificationController
 	{
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("itemImage")] 
 		public inkImageWidgetReference ItemImage
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("rarityBar")] 
 		public inkWidgetReference RarityBar
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("itemIconGender")] 
 		public CEnum<gameItemIconGender> ItemIconGender
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameItemIconGender>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("animationName")] 
 		public CName AnimationName
 		{
@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemAddedNotification()
 		{
-			ItemImage = new inkImageWidgetReference();
-			RarityBar = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

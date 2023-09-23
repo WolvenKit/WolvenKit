@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("nestIcon")] 
+		public CWeakHandle<inkImageWidget> NestIcon
+		{
+			get => GetPropertyValue<CWeakHandle<inkImageWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("activeBg")] 
 		public CWeakHandle<inkRectangleWidget> ActiveBg
 		{

@@ -14,16 +14,16 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(2)] 
 		[RED("index")] 
-		public CUInt32 Index
+		public worldStreamingBlockIndex Index
 		{
-			get => GetPropertyValue<CUInt32>();
-			set => SetPropertyValue<CUInt32>(value);
+			get => GetPropertyValue<worldStreamingBlockIndex>();
+			set => SetPropertyValue<worldStreamingBlockIndex>(value);
 		}
 
 		public worldStreamingBlock()
 		{
 			Descriptors = new();
-			Index = uint.MaxValue;
+			Index = new worldStreamingBlockIndex();
 
 			PostConstruct();
 		}

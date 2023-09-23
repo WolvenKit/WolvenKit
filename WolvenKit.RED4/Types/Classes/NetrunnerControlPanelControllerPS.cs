@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NetrunnerControlPanelControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(113)] 
 		[RED("factQuickHackSetup")] 
 		public ComputerQuickHackData FactQuickHackSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ComputerQuickHackData>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(114)] 
 		[RED("quickhackPerformed")] 
 		public CBool QuickhackPerformed
 		{
@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public NetrunnerControlPanelControllerPS()
 		{
-			FactQuickHackSetup = new ComputerQuickHackData();
-
 			PostConstruct();
 		}
 

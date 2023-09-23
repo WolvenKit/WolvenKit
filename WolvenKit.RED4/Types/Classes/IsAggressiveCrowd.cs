@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public IsAggressiveCrowd()
 		{
-			EntityID = new entEntityID();
-
 			PostConstruct();
 		}
 

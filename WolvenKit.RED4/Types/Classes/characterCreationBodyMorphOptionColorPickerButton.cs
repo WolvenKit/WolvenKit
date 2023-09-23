@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationBodyMorphOptionColorPickerButton()
 		{
-			Background = new inkWidgetReference();
-			Icon = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

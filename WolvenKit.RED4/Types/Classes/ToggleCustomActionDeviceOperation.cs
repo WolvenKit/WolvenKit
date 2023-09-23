@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public ToggleCustomActionDeviceOperation()
 		{
-			IsEnabled = true;
-			ToggleOperations = new();
-
 			PostConstruct();
 		}
 

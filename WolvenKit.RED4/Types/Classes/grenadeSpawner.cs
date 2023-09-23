@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class grenadeSpawner : gameweaponObject
 	{
-		[Ordinal(59)] 
+		[Ordinal(66)] 
 		[RED("isCombatGadgetActive")] 
 		public CBool IsCombatGadgetActive
 		{

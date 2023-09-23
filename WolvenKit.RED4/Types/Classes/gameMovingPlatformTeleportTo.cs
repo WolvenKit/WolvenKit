@@ -12,18 +12,8 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(1)] 
-		[RED("rootEntityPosition")] 
-		public Vector4 RootEntityPosition
-		{
-			get => GetPropertyValue<Vector4>();
-			set => SetPropertyValue<Vector4>(value);
-		}
-
 		public gameMovingPlatformTeleportTo()
 		{
-			RootEntityPosition = new Vector4();
-
 			PostConstruct();
 		}
 

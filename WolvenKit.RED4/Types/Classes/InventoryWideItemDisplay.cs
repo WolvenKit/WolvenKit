@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryWideItemDisplay : InventoryItemDisplay
 	{
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("itemNameText")] 
 		public inkTextWidgetReference ItemNameText
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("rarityBackground")] 
 		public inkWidgetReference RarityBackground
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("iconWrapper")] 
 		public inkWidgetReference IconWrapper
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("statsWrapper")] 
 		public inkWidgetReference StatsWrapper
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("dpsText")] 
 		public inkTextWidgetReference DpsText
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("damageIndicatorRef")] 
 		public inkWidgetReference DamageIndicatorRef
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("additionalInfoText")] 
 		public inkTextWidgetReference AdditionalInfoText
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("singleIconSize")] 
 		public Vector2 SingleIconSize
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("damageTypeIndicator")] 
 		public CWeakHandle<DamageTypeIndicator> DamageTypeIndicator
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<DamageTypeIndicator>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("additionalInfoToShow")] 
 		public CEnum<ItemAdditionalInfoType> AdditionalInfoToShow
 		{
@@ -86,15 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryWideItemDisplay()
 		{
-			ItemNameText = new inkTextWidgetReference();
-			RarityBackground = new inkWidgetReference();
-			IconWrapper = new inkWidgetReference();
-			StatsWrapper = new inkWidgetReference();
-			DpsText = new inkTextWidgetReference();
-			DamageIndicatorRef = new inkWidgetReference();
-			AdditionalInfoText = new inkTextWidgetReference();
-			SingleIconSize = new Vector2();
-
 			PostConstruct();
 		}
 

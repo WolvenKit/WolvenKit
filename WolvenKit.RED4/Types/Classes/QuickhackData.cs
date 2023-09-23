@@ -5,19 +5,19 @@ namespace WolvenKit.RED4.Types
 	public partial class QuickhackData : IScriptable
 	{
 		[Ordinal(0)] 
-		[RED("action")] 
-		public CHandle<BaseScriptableAction> Action
-		{
-			get => GetPropertyValue<CHandle<BaseScriptableAction>>();
-			set => SetPropertyValue<CHandle<BaseScriptableAction>>(value);
-		}
-
-		[Ordinal(1)] 
 		[RED("actionOwner")] 
 		public entEntityID ActionOwner
 		{
 			get => GetPropertyValue<entEntityID>();
 			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(1)] 
+		[RED("action")] 
+		public CHandle<BaseScriptableAction> Action
+		{
+			get => GetPropertyValue<CHandle<BaseScriptableAction>>();
+			set => SetPropertyValue<CHandle<BaseScriptableAction>>(value);
 		}
 
 		[Ordinal(2)] 
@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("itemID")] 
+		public gameItemID ItemID
+		{
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("icon")] 
 		public TweakDBID Icon
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("iconCategory")] 
 		public CName IconCategory
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("title")] 
 		public CString Title
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("titleAlternative")] 
 		public CString TitleAlternative
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("description")] 
 		public CString Description
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("inactiveReason")] 
 		public CString InactiveReason
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("actionState")] 
 		public CEnum<EActionInactivityReson> ActionState
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EActionInactivityReson>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("type")] 
 		public CEnum<gamedataObjectActionType> Type
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataObjectActionType>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("cost")] 
 		public CInt32 Cost
 		{
@@ -108,7 +116,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
+		[RED("awarenessCost")] 
+		public CFloat AwarenessCost
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("showRevealInfo")] 
+		public CBool ShowRevealInfo
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("willReveal")] 
+		public CBool WillReveal
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("costRaw")] 
 		public CInt32 CostRaw
 		{
@@ -116,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(18)] 
 		[RED("uploadTime")] 
 		public CFloat UploadTime
 		{
@@ -124,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(19)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
@@ -132,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(20)] 
 		[RED("ICELevelVisible")] 
 		public CBool ICELevelVisible
 		{
@@ -140,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(21)] 
 		[RED("ICELevel")] 
 		public CFloat ICELevel
 		{
@@ -148,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(22)] 
 		[RED("vulnerabilities")] 
 		public CArray<TweakDBID> Vulnerabilities
 		{
@@ -156,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("quality")] 
 		public CInt32 Quality
 		{
@@ -164,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("isInstant")] 
 		public CBool IsInstant
 		{
@@ -172,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("cooldown")] 
 		public CFloat Cooldown
 		{
@@ -180,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("cooldownTweak")] 
 		public TweakDBID CooldownTweak
 		{
@@ -188,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
 		[RED("actionMatchesTarget")] 
 		public CBool ActionMatchesTarget
 		{
@@ -196,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(28)] 
 		[RED("maxListSize")] 
 		public CInt32 MaxListSize
 		{
@@ -204,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(29)] 
 		[RED("category")] 
 		public CWeakHandle<gamedataHackCategory_Record> Category
 		{
@@ -212,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataHackCategory_Record>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(30)] 
 		[RED("actionCompletionEffects")] 
 		public CArray<CWeakHandle<gamedataObjectActionEffect_Record>> ActionCompletionEffects
 		{
@@ -220,7 +252,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<gamedataObjectActionEffect_Record>>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(31)] 
+		[RED("noQuickhackData")] 
+		public CBool NoQuickhackData
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("networkBreached")] 
 		public CBool NetworkBreached
 		{
@@ -230,10 +270,6 @@ namespace WolvenKit.RED4.Types
 
 		public QuickhackData()
 		{
-			ActionOwner = new entEntityID();
-			Vulnerabilities = new();
-			ActionCompletionEffects = new();
-
 			PostConstruct();
 		}
 

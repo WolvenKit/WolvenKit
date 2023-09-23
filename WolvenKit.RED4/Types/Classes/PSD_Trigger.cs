@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PSD_Trigger : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("ref")] 
 		public NodeRef Ref
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("className")] 
 		public CName ClassName
 		{
@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public PSD_Trigger()
 		{
-			ClassName = "PSD_DetectorPS";
-
 			PostConstruct();
 		}
 

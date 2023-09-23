@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class sampleVisClueMaster : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("dependableEntities")] 
 		public CArray<NodeRef> DependableEntities
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public sampleVisClueMaster()
 		{
-			DependableEntities = new();
-
 			PostConstruct();
 		}
 

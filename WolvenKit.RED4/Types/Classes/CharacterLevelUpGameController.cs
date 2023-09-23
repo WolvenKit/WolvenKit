@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public CharacterLevelUpGameController()
 		{
-			Value = new inkTextWidgetReference();
-			ProficencyLabel = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

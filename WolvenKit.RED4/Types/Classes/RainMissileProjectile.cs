@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class RainMissileProjectile : BaseProjectile
 	{
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("meshComponent")] 
 		public CHandle<entIComponent> MeshComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("effect")] 
 		public gameEffectRef Effect
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("damage")] 
 		public CHandle<gameEffectInstance> Damage
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("weapon")] 
 		public CWeakHandle<gameweaponObject> Weapon
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("countTime")] 
 		public CFloat CountTime
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
@@ -60,15 +60,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_480
+		public CFloat Lifetime_496
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(56)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
@@ -76,15 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(55)] 
-		[RED("hit")] 
-		public CBool Hit
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("arrived")] 
 		public CBool Arrived
 		{
@@ -92,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(58)] 
 		[RED("spawnPosition")] 
 		public Vector4 SpawnPosition
 		{
@@ -100,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(59)] 
 		[RED("phase1Duration")] 
 		public CFloat Phase1Duration
 		{
@@ -108,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(60)] 
 		[RED("landIndicatorFX")] 
 		public gameFxResource LandIndicatorFX
 		{
@@ -116,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameFxResource>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(61)] 
 		[RED("fxInstance")] 
 		public CHandle<gameFxInstance> FxInstance
 		{
@@ -124,7 +116,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameFxInstance>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(62)] 
+		[RED("armingDistance")] 
+		public CFloat ArmingDistance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(63)] 
+		[RED("armed")] 
+		public CBool Armed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(64)] 
 		[RED("hasExploded")] 
 		public CBool HasExploded
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(65)] 
 		[RED("missileDBID")] 
 		public TweakDBID MissileDBID
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(66)] 
 		[RED("missileAttackRecord")] 
 		public CWeakHandle<gamedataAttack_Record> MissileAttackRecord
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataAttack_Record>>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(67)] 
 		[RED("timeToDestory")] 
 		public CFloat TimeToDestory
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(68)] 
 		[RED("initialTargetPosition")] 
 		public Vector4 InitialTargetPosition
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(69)] 
 		[RED("initialTargetOffset")] 
 		public Vector4 InitialTargetOffset
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(70)] 
 		[RED("finalTargetPosition")] 
 		public Vector4 FinalTargetPosition
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(71)] 
 		[RED("finalTargetOffset")] 
 		public Vector4 FinalTargetOffset
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(72)] 
 		[RED("finalTargetPositionCalculationDelay")] 
 		public CFloat FinalTargetPositionCalculationDelay
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(73)] 
 		[RED("targetComponent")] 
 		public CWeakHandle<entIPlacedComponent> TargetComponent
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(74)] 
 		[RED("followTargetInPhase2")] 
 		public CBool FollowTargetInPhase2
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(75)] 
 		[RED("puppetBroadphaseHitRadiusSquared")] 
 		public CFloat PuppetBroadphaseHitRadiusSquared
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(76)] 
 		[RED("phase")] 
 		public CEnum<EMissileRainPhase> Phase
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EMissileRainPhase>>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(77)] 
 		[RED("spiralParams")] 
 		public CHandle<gameprojectileSpiralParams> SpiralParams
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameprojectileSpiralParams>>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(78)] 
 		[RED("useSpiralParams")] 
 		public CBool UseSpiralParams
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(79)] 
 		[RED("randStartVelocity")] 
 		public CFloat RandStartVelocity
 		{
@@ -254,16 +262,6 @@ namespace WolvenKit.RED4.Types
 
 		public RainMissileProjectile()
 		{
-			Effect = new gameEffectRef();
-			Alive = true;
-			SpawnPosition = new Vector4();
-			LandIndicatorFX = new gameFxResource();
-			TimeToDestory = -1.000000F;
-			InitialTargetPosition = new Vector4();
-			InitialTargetOffset = new Vector4();
-			FinalTargetPosition = new Vector4();
-			FinalTargetOffset = new Vector4();
-
 			PostConstruct();
 		}
 

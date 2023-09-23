@@ -62,12 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemLogPopupLogicController()
 		{
-			Quantity = new inkTextWidgetReference();
-			Icon = new inkImageWidgetReference();
-			Label = new inkTextWidgetReference();
-			Duration = 3.000000F;
-			AnimOptions = new inkanimPlaybackOptions();
-
 			PostConstruct();
 		}
 

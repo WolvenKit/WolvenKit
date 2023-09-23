@@ -5,9 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public ForceDropBodyEvents()
 		{
-			StyleName = "CarriedObject.Style";
-			ForceStyleName = "CarriedObject.ForcedStyle";
-
 			PostConstruct();
 		}
 

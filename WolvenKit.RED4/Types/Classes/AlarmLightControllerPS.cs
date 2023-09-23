@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AlarmLightControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(113)] 
 		[RED("securityAlarmState")] 
 		public CEnum<ESecuritySystemState> SecurityAlarmState
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public AlarmLightControllerPS()
 		{
-			SecurityAlarmState = Enums.ESecuritySystemState.SAFE;
-
 			PostConstruct();
 		}
 

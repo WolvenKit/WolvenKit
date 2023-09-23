@@ -44,10 +44,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MinimalLootingListItemData>>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("comparisonWeaponBars")] 
+		public CHandle<UIInventoryItemWeaponBars> ComparisonWeaponBars
+		{
+			get => GetPropertyValue<CHandle<UIInventoryItemWeaponBars>>();
+			set => SetPropertyValue<CHandle<UIInventoryItemWeaponBars>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("comparisonQualityF")] 
+		public CFloat ComparisonQualityF
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public TooltipLootingCachedData()
 		{
-			ComparisonItemId = new gameItemID();
-
 			PostConstruct();
 		}
 

@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public EnableFastTravelRequest()
 		{
-			ForceRefreshUI = true;
-			Reason = "quest";
-
 			PostConstruct();
 		}
 

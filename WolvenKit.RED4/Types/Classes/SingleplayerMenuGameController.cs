@@ -5,14 +5,22 @@ namespace WolvenKit.RED4.Types
 	public partial class SingleplayerMenuGameController : gameuiMainMenuGameController
 	{
 		[Ordinal(7)] 
-		[RED("buttonHintsManagerRef")] 
-		public inkWidgetReference ButtonHintsManagerRef
+		[RED("baseLogoContainer")] 
+		public inkCompoundWidgetReference BaseLogoContainer
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
+		[RED("ep1LogoContainer")] 
+		public inkCompoundWidgetReference Ep1LogoContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("gogButtonWidgetRef")] 
 		public inkWidgetReference GogButtonWidgetRef
 		{
@@ -20,15 +28,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
-		[RED("continuetooltipContainer")] 
-		public inkCompoundWidgetReference ContinuetooltipContainer
+		[Ordinal(10)] 
+		[RED("accountSelector")] 
+		public inkCompoundWidgetReference AccountSelector
 		{
 			get => GetPropertyValue<inkCompoundWidgetReference>();
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
+		[RED("gameVersionButton")] 
+		public inkCompoundWidgetReference GameVersionButton
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("patch2Notification")] 
+		public inkCompoundWidgetReference Patch2Notification
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("patch2NotificationDelay")] 
+		public CFloat Patch2NotificationDelay
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("expansionBanner")] 
 		public inkCompoundWidgetReference ExpansionBanner
 		{
@@ -36,7 +68,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(15)] 
+		[RED("ep1IdName")] 
+		public CName Ep1IdName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("buttonHintsManagerRef")] 
+		public inkWidgetReference ButtonHintsManagerRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("continuetooltipContainer")] 
+		public inkCompoundWidgetReference ContinuetooltipContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("onlineSystem")] 
 		public CWeakHandle<gameIOnlineSystem> OnlineSystem
 		{
@@ -44,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIOnlineSystem>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(19)] 
 		[RED("requestHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
 		{
@@ -52,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(20)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -60,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(21)] 
 		[RED("continueGameTooltipController")] 
 		public CWeakHandle<ContinueGameTooltip> ContinueGameTooltipController
 		{
@@ -68,7 +124,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ContinueGameTooltip>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(22)] 
+		[RED("expansionHintController")] 
+		public CWeakHandle<inkWidgetLogicController> ExpansionHintController
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidgetLogicController>>();
+			set => SetPropertyValue<CWeakHandle<inkWidgetLogicController>>(value);
+		}
+
+		[Ordinal(23)] 
 		[RED("expansionBannerController")] 
 		public CWeakHandle<ExpansionBannerController> ExpansionBannerController
 		{
@@ -76,7 +140,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ExpansionBannerController>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(24)] 
+		[RED("accountSelectorController")] 
+		public CWeakHandle<inkMenuAccountLogicController> AccountSelectorController
+		{
+			get => GetPropertyValue<CWeakHandle<inkMenuAccountLogicController>>();
+			set => SetPropertyValue<CWeakHandle<inkMenuAccountLogicController>>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("uiSystem")] 
+		public CHandle<gameuiGameSystemUI> UiSystem
+		{
+			get => GetPropertyValue<CHandle<gameuiGameSystemUI>>();
+			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
+		}
+
+		[Ordinal(26)] 
 		[RED("dataSyncStatus")] 
 		public CEnum<servicesCloudSavesQueryStatus> DataSyncStatus
 		{
@@ -84,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<servicesCloudSavesQueryStatus>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(27)] 
 		[RED("savesCount")] 
 		public CInt32 SavesCount
 		{
@@ -92,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(28)] 
 		[RED("savesReady")] 
 		public CBool SavesReady
 		{
@@ -100,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(29)] 
 		[RED("isOffline")] 
 		public CBool IsOffline
 		{
@@ -108,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(30)] 
 		[RED("isModded")] 
 		public CBool IsModded
 		{
@@ -116,21 +196,80 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
-		[RED("mainMenuShownFirstTime")] 
-		public CBool MainMenuShownFirstTime
+		[Ordinal(31)] 
+		[RED("isExpansionHintShown")] 
+		public CBool IsExpansionHintShown
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(32)] 
+		[RED("isMainMenuShownFirstTime")] 
+		public CBool IsMainMenuShownFirstTime
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("isPatch2NotificationShown")] 
+		public CBool IsPatch2NotificationShown
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("isReloadPopupShown")] 
+		public CBool IsReloadPopupShown
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("isEp1Enabled")] 
+		public CBool IsEp1Enabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("isDataValidationErrorShown")] 
+		public CBool IsDataValidationErrorShown
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("patch2NotificationIntroName")] 
+		public CName Patch2NotificationIntroName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("patch2NotificationOutroName")] 
+		public CName Patch2NotificationOutroName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(39)] 
+		[RED("patch2NotificationAnimProxy")] 
+		public CHandle<inkanimProxy> Patch2NotificationAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
 		public SingleplayerMenuGameController()
 		{
-			ButtonHintsManagerRef = new inkWidgetReference();
-			GogButtonWidgetRef = new inkWidgetReference();
-			ContinuetooltipContainer = new inkCompoundWidgetReference();
-			ExpansionBanner = new inkCompoundWidgetReference();
-
 			PostConstruct();
 		}
 

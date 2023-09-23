@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMenuItemListGameController()
 		{
-			MenuList = new inkCompoundWidgetReference();
-
 			PostConstruct();
 		}
 

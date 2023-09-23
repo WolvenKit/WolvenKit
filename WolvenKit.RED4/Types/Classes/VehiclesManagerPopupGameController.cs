@@ -4,15 +4,31 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VehiclesManagerPopupGameController : BaseModalListPopupGameController
 	{
-		[Ordinal(13)] 
-		[RED("icon")] 
-		public inkImageWidgetReference Icon
+		[Ordinal(14)] 
+		[RED("repairOverlay")] 
+		public inkWidgetReference RepairOverlay
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("vehicleIconContainer")] 
+		public inkWidgetReference VehicleIconContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("vehicleIcon")] 
+		public inkImageWidgetReference VehicleIcon
 		{
 			get => GetPropertyValue<inkImageWidgetReference>();
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("scrollArea")] 
 		public inkScrollAreaWidgetReference ScrollArea
 		{
@@ -20,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkScrollAreaWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("scrollControllerWidget")] 
 		public inkWidgetReference ScrollControllerWidget
 		{
@@ -28,7 +44,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
+		[RED("confirmButton")] 
+		public inkWidgetReference ConfirmButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("dataView")] 
 		public CHandle<VehiclesManagerDataView> DataView
 		{
@@ -36,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VehiclesManagerDataView>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(21)] 
 		[RED("dataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> DataSource
 		{
@@ -44,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(22)] 
 		[RED("quickSlotsManager")] 
 		public CWeakHandle<QuickSlotsManager> QuickSlotsManager
 		{
@@ -52,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<QuickSlotsManager>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("scrollController")] 
 		public CWeakHandle<inkScrollController> ScrollController
 		{
@@ -62,10 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public VehiclesManagerPopupGameController()
 		{
-			Icon = new inkImageWidgetReference();
-			ScrollArea = new inkScrollAreaWidgetReference();
-			ScrollControllerWidget = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

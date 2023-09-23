@@ -86,10 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public CustomAnimationsHudGameController()
 		{
-			OnSpawnAnimations = new();
-			DefaultLibraryItemAnchor = Enums.inkEAnchor.Fill;
-			OwnerID = new entEntityID();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VehicleComponentPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("defaultStateSet")] 
 		public CBool DefaultStateSet
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("stateModifiedByQuest")] 
 		public CBool StateModifiedByQuest
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("playerVehicle")] 
 		public CBool PlayerVehicle
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("npcOccupiedSlots")] 
 		public CArray<CName> NpcOccupiedSlots
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("isDestroyed")] 
 		public CBool IsDestroyed
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("isStolen")] 
 		public CBool IsStolen
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(113)] 
 		[RED("crystalDomeQuestModified")] 
 		public CBool CrystalDomeQuestModified
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(114)] 
 		[RED("crystalDomeQuestState")] 
 		public CBool CrystalDomeQuestState
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(115)] 
 		[RED("crystalDomeState")] 
 		public CBool CrystalDomeState
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(116)] 
 		[RED("visualDestructionSet")] 
 		public CBool VisualDestructionSet
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(117)] 
 		[RED("visualDestructionNeeded")] 
 		public CBool VisualDestructionNeeded
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(118)] 
 		[RED("exploded")] 
 		public CBool Exploded
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(119)] 
 		[RED("submerged")] 
 		public CBool Submerged
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(120)] 
 		[RED("sirenOn")] 
 		public CBool SirenOn
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(121)] 
 		[RED("sirenSoundOn")] 
 		public CBool SirenSoundOn
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(122)] 
 		[RED("sirenLightsOn")] 
 		public CBool SirenLightsOn
 		{
@@ -132,7 +132,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(123)] 
+		[RED("isDefaultLightToggleSet")] 
+		public CBool IsDefaultLightToggleSet
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(124)] 
 		[RED("anyDoorOpen")] 
 		public CBool AnyDoorOpen
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(125)] 
 		[RED("previousInteractionState")] 
 		public CArray<TemporaryDoorState> PreviousInteractionState
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TemporaryDoorState>>(value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(126)] 
 		[RED("thrusterState")] 
 		public CBool ThrusterState
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(127)] 
 		[RED("uiQuestModified")] 
 		public CBool UiQuestModified
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(128)] 
 		[RED("uiState")] 
 		public CBool UiState
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(129)] 
 		[RED("vehicleSkillChecks")] 
 		public CHandle<EngDemoContainer> VehicleSkillChecks
 		{
@@ -180,7 +188,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(130)] 
+		[RED("controlStimShouldBeActive")] 
+		public CBool ControlStimShouldBeActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(131)] 
+		[RED("controlStimRunning")] 
+		public CBool ControlStimRunning
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(132)] 
 		[RED("ready")] 
 		public CBool Ready
 		{
@@ -188,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(133)] 
 		[RED("isPlayerPerformingBodyDisposal")] 
 		public CBool IsPlayerPerformingBodyDisposal
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(128)] 
+		[Ordinal(134)] 
 		[RED("submergedTimestamp")] 
 		public CFloat SubmergedTimestamp
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(129)] 
+		[Ordinal(135)] 
 		[RED("vehicleControllerPS")] 
 		public CHandle<vehicleControllerPS> VehicleControllerPS
 		{
@@ -214,9 +238,6 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleComponentPS()
 		{
-			NpcOccupiedSlots = new();
-			PreviousInteractionState = new();
-
 			PostConstruct();
 		}
 

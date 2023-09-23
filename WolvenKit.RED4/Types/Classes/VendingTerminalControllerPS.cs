@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VendingTerminalControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("vendingTerminalSetup")] 
 		public VendingTerminalSetup VendingTerminalSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<VendingTerminalSetup>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("isReady")] 
 		public CBool IsReady
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("VendorDataManager")] 
 		public CHandle<VendorDataManager> VendorDataManager
 		{
@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public VendingTerminalControllerPS()
 		{
-			TweakDBRecord = 98928467386;
-			TweakDBDescriptionRecord = 152448345865;
-			VendingTerminalSetup = new VendingTerminalSetup { VendingBlacklist = new(), TimeToCompletePurchase = 3.000000F };
-
 			PostConstruct();
 		}
 

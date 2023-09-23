@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CrossingLight : TrafficLight
 	{
-		[Ordinal(87)] 
+		[Ordinal(91)] 
 		[RED("audioLightIsGreen")] 
 		public CBool AudioLightIsGreen
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public CrossingLight()
 		{
-			ControllerTypeName = "CrossingLightController";
-
 			PostConstruct();
 		}
 

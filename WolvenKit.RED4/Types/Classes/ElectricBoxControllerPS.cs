@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ElectricBoxControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("techieSkillChecks")] 
 		public CHandle<EngineeringContainer> TechieSkillChecks
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<EngineeringContainer>>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("questFactSetup")] 
 		public ComputerQuickHackData QuestFactSetup
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ComputerQuickHackData>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("isOverriden")] 
 		public CBool IsOverriden
 		{
@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public ElectricBoxControllerPS()
 		{
-			QuestFactSetup = new ComputerQuickHackData();
-
 			PostConstruct();
 		}
 

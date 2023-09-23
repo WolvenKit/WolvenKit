@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public DropPointTerminalInkGameController()
 		{
-			SellAction = new inkWidgetReference();
-			StatusText = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

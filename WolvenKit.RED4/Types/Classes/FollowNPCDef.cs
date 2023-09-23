@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public FollowNPCDef()
 		{
-			Position = new gamebbScriptID_Vector4();
-
 			PostConstruct();
 		}
 

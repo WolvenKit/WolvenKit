@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DisassemblableEntitySimple : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("mesh")] 
 		public CHandle<entMeshComponent> Mesh
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("collider")] 
 		public CHandle<entIComponent> Collider
 		{
@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public DisassemblableEntitySimple()
 		{
-			ControllerTypeName = "GenericDeviceController";
-
 			PostConstruct();
 		}
 

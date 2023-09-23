@@ -54,9 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerNPCBodyGameController()
 		{
-			FactionText = new inkTextWidgetReference();
-			DataBaseWidgetHolder = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

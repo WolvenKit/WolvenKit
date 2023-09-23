@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public SimpleCanUseCover()
 		{
-			Prereqs = new();
-			Game = new ScriptGameInstance();
-
 			PostConstruct();
 		}
 

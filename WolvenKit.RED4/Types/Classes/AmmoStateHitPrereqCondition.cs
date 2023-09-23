@@ -12,6 +12,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EMagazineAmmoState>>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("ratio")] 
+		public CFloat Ratio
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("comparisonType")] 
+		public CEnum<EComparisonType> ComparisonType
+		{
+			get => GetPropertyValue<CEnum<EComparisonType>>();
+			set => SetPropertyValue<CEnum<EComparisonType>>(value);
+		}
+
 		public AmmoStateHitPrereqCondition()
 		{
 			PostConstruct();

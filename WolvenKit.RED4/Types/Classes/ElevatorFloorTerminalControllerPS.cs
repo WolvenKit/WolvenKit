@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ElevatorFloorTerminalControllerPS : TerminalControllerPS
 	{
-		[Ordinal(114)] 
+		[Ordinal(117)] 
 		[RED("elevatorFloorSetup")] 
 		public ElevatorFloorSetup ElevatorFloorSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ElevatorFloorSetup>(value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(118)] 
 		[RED("hasDirectInteration")] 
 		public CBool HasDirectInteration
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(119)] 
 		[RED("isElevatorAtThisFloor")] 
 		public CBool IsElevatorAtThisFloor
 		{
@@ -30,11 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public ElevatorFloorTerminalControllerPS()
 		{
-			DeviceName = "LocKey#88";
-			TweakDBRecord = "Devices.ElevatorFloorTerminal";
-			TweakDBDescriptionRecord = 179291460156;
-			ElevatorFloorSetup = new ElevatorFloorSetup { DoorShouldOpenFrontLeftRight = new() };
-
 			PostConstruct();
 		}
 

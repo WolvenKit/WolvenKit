@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BillboardDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("glitchSFX")] 
 		public CName GlitchSFX
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("useLights")] 
 		public CBool UseLights
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("lightsSettings")] 
 		public CArray<EditableGameLightSettings> LightsSettings
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<EditableGameLightSettings>>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("useDeviceAppearence")] 
 		public CBool UseDeviceAppearence
 		{
@@ -38,14 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public BillboardDeviceControllerPS()
 		{
-			DeviceName = "LocKey#153";
-			TweakDBRecord = "Devices.Billboard";
-			TweakDBDescriptionRecord = 126200537756;
-			GlitchSFX = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110";
-			UseLights = true;
-			LightsSettings = new();
-			UseDeviceAppearence = true;
-
 			PostConstruct();
 		}
 

@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public UIVendorItemsBoughtEvent()
 		{
-			ItemsID = new();
-			Quantity = new();
-
 			PostConstruct();
 		}
 

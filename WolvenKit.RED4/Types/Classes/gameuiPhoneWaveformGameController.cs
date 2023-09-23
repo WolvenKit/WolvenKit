@@ -88,12 +88,6 @@ namespace WolvenKit.RED4.Types
 		{
 			MeasurementsIntreval = 0.100000F;
 			MeasurementsCount = 10;
-			Bars = new();
-			Traces = new();
-			CachedRootSize = new Vector2();
-			MaxValue = 200.000000F;
-			BarsPadding = 4.000000F;
-			BarSize = new Vector2();
 
 			PostConstruct();
 		}

@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public worldgeometryHandIKDescriptionResult()
 		{
-			GrabPointStart = new Vector4();
-			GrabPointEnd = new Vector4();
+			GrabPointStart = new Vector4 { W = 1.000000F };
+			GrabPointEnd = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

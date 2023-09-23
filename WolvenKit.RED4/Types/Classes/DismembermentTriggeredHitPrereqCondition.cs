@@ -5,11 +5,11 @@ namespace WolvenKit.RED4.Types
 	public partial class DismembermentTriggeredHitPrereqCondition : BaseHitPrereqCondition
 	{
 		[Ordinal(3)] 
-		[RED("dotType")] 
-		public CEnum<gamedataStatusEffectType> DotType
+		[RED("currValue")] 
+		public CUInt32 CurrValue
 		{
-			get => GetPropertyValue<CEnum<gamedataStatusEffectType>>();
-			set => SetPropertyValue<CEnum<gamedataStatusEffectType>>(value);
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public DismembermentTriggeredHitPrereqCondition()

@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class OpenExpansionPopupEvent : redEvent
 	{
 		[Ordinal(0)] 
+		[RED("type")] 
+		public CEnum<ExpansionPopupType> Type
+		{
+			get => GetPropertyValue<CEnum<ExpansionPopupType>>();
+			set => SetPropertyValue<CEnum<ExpansionPopupType>>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<ExpansionStatus> State
 		{
@@ -12,17 +20,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ExpansionStatus>>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("forcibly")] 
 		public CBool Forcibly
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(2)] 
-		[RED("showThankYou")] 
-		public CBool ShowThankYou
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

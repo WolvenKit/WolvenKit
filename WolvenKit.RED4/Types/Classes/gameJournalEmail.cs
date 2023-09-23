@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalEmail : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("sender")] 
 		public LocalizationString Sender
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("addressee")] 
 		public LocalizationString Addressee
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("title")] 
 		public LocalizationString Title
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("content")] 
 		public LocalizationString Content
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("videoResource")] 
 		public CResourceAsyncReference<Bink> VideoResource
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<Bink>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("pictureTweak")] 
 		public TweakDBID PictureTweak
 		{
@@ -54,6 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalEmail()
 		{
+			JournalEntryOverrideDataList = new();
 			Sender = new() { Unk1 = 0, Value = "" };
 			Addressee = new() { Unk1 = 0, Value = "" };
 			Title = new() { Unk1 = 0, Value = "" };

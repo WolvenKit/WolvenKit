@@ -28,10 +28,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt16>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("vertexTbn")] 
+		public CArray<CUInt32> VertexTbn
+		{
+			get => GetPropertyValue<CArray<CUInt32>>();
+			set => SetPropertyValue<CArray<CUInt32>>(value);
+		}
+
 		public entGarmentParameterChunkData()
 		{
 			MorphOffsetScales = new();
 			VisibleTriangleInds = new();
+			VertexTbn = new();
 
 			PostConstruct();
 		}

@@ -54,13 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HudButtonHelpDef()
 		{
-			Button1_Text = new gamebbScriptID_String();
-			Button1_Icon = new gamebbScriptID_CName();
-			Button2_Text = new gamebbScriptID_String();
-			Button2_Icon = new gamebbScriptID_CName();
-			Button3_Text = new gamebbScriptID_String();
-			Button3_Icon = new gamebbScriptID_CName();
-
 			PostConstruct();
 		}
 

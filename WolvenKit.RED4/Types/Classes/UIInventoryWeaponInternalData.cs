@@ -5,30 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class UIInventoryWeaponInternalData : IScriptable
 	{
 		[Ordinal(0)] 
-		[RED("ammoFetched")] 
-		public CBool AmmoFetched
+		[RED("fetchedFlags")] 
+		public CInt32 FetchedFlags
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(1)] 
-		[RED("weaponEvolutionFetched")] 
-		public CBool WeaponEvolutionFetched
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(2)] 
-		[RED("damageDataFetched")] 
-		public CBool DamageDataFetched
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(3)] 
 		[RED("WeaponType")] 
 		public CEnum<WeaponType> WeaponType
 		{
@@ -36,12 +20,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<WeaponType>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("Evolution")] 
 		public CEnum<gamedataWeaponEvolution> Evolution
 		{
 			get => GetPropertyValue<CEnum<gamedataWeaponEvolution>>();
 			set => SetPropertyValue<CEnum<gamedataWeaponEvolution>>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("PerkGroup")] 
+		public CEnum<gamedataPerkWeaponGroupType> PerkGroup
+		{
+			get => GetPropertyValue<CEnum<gamedataPerkWeaponGroupType>>();
+			set => SetPropertyValue<CEnum<gamedataPerkWeaponGroupType>>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("GameplayDescription")] 
+		public CString GameplayDescription
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(5)] 
@@ -134,9 +134,6 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryWeaponInternalData()
 		{
-			EmptySlots = new();
-			UsedSlots = new();
-
 			PostConstruct();
 		}
 

@@ -5,8 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public GameplayLight()
 		{
-			ControllerTypeName = "GameplayLightController";
-
 			PostConstruct();
 		}
 

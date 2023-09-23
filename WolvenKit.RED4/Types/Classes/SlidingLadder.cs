@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SlidingLadder : BaseAnimatedDevice
 	{
-		[Ordinal(99)] 
+		[Ordinal(103)] 
 		[RED("offMeshConnectionDown")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionDown
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(104)] 
 		[RED("offMeshConnectionUp")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionUp
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(105)] 
 		[RED("ladderInteraction")] 
 		public CHandle<gameinteractionsComponent> LadderInteraction
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(106)] 
 		[RED("wasShot")] 
 		public CBool WasShot
 		{
@@ -38,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public SlidingLadder()
 		{
-			ControllerTypeName = "SlidingLadderController";
-
 			PostConstruct();
 		}
 

@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("timeout")] 
+		public CFloat Timeout
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("invert")] 
 		public CBool Invert
 		{

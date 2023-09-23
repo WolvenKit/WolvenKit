@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public inkMenuAccountLogicController()
 		{
-			PlayerId = new inkTextWidgetReference();
-			ChangeAccountLabelTextRef = new inkTextWidgetReference();
-			InputDisplayControllerRef = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

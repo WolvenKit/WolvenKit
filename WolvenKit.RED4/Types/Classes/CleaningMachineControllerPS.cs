@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CleaningMachineControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(113)] 
 		[RED("cleaningMachineSkillChecks")] 
 		public CHandle<EngDemoContainer> CleaningMachineSkillChecks
 		{
@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public CleaningMachineControllerPS()
 		{
-			DeviceName = "LocKey#2033";
-			TweakDBRecord = 99989064598;
-			TweakDBDescriptionRecord = 151161254181;
-
 			PostConstruct();
 		}
 

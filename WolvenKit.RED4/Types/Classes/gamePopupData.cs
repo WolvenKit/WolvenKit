@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("messageOverrideDataList")] 
+		public CArray<CHandle<gameJournalEntryOverrideData>> MessageOverrideDataList
+		{
+			get => GetPropertyValue<CArray<CHandle<gameJournalEntryOverrideData>>>();
+			set => SetPropertyValue<CArray<CHandle<gameJournalEntryOverrideData>>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("iconID")] 
 		public TweakDBID IconID
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("isModal")] 
 		public CBool IsModal
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("videoType")] 
 		public CEnum<gameVideoType> VideoType
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameVideoType>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("video")] 
 		public CResourceAsyncReference<Bink> Video
 		{
@@ -54,6 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamePopupData()
 		{
+			MessageOverrideDataList = new();
 			VideoType = Enums.gameVideoType.Unknown;
 
 			PostConstruct();

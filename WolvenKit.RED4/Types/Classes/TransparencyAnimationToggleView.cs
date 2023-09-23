@@ -62,12 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public TransparencyAnimationToggleView()
 		{
-			AnimationTime = 0.020000F;
-			HoverTransparency = 0.200000F;
-			PressTransparency = 0.400000F;
-			AnimationProxies = new();
-			Targets = new();
-
 			PostConstruct();
 		}
 

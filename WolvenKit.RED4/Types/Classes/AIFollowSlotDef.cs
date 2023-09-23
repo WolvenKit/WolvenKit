@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public AIFollowSlotDef()
 		{
-			SlotID = new gamebbScriptID_Int32();
-			SlotTransform = new gamebbScriptID_Variant();
-
 			PostConstruct();
 		}
 

@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public AuthorizePlayerInSecuritySystem()
 		{
-			Authorize = true;
-			ForceRemoveFromBlacklist = true;
-			ESL = Enums.ESecurityAccessLevel.ESL_4;
-
 			PostConstruct();
 		}
 

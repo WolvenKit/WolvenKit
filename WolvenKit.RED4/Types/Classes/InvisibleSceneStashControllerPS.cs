@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InvisibleSceneStashControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("storedItems")] 
 		public CArray<gameItemID> StoredItems
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public InvisibleSceneStashControllerPS()
 		{
-			StoredItems = new();
-
 			PostConstruct();
 		}
 

@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("cursorPattern")] 
+		public inkWidgetReference CursorPattern
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("progressBar")] 
 		public inkWidgetReference ProgressBar
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("progressBarFrame")] 
 		public inkWidgetReference ProgressBarFrame
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -38,10 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public CursorRootController()
 		{
-			MainCursor = new inkWidgetReference();
-			ProgressBar = new inkWidgetReference();
-			ProgressBarFrame = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

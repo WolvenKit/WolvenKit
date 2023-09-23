@@ -30,10 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(3)] 
 		[RED("antiAliasing")] 
-		public CBool AntiAliasing
+		public CEnum<entRenderToTextureFeaturesPlatform> AntiAliasing
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>();
+			set => SetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>(value);
 		}
 
 		[Ordinal(4)] 
@@ -52,11 +52,26 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("SSAO")] 
+		public CEnum<entRenderToTextureFeaturesPlatform> SSAO
+		{
+			get => GetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>();
+			set => SetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("reflections")] 
+		public CEnum<entRenderToTextureFeaturesPlatform> Reflections
+		{
+			get => GetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>();
+			set => SetPropertyValue<CEnum<entRenderToTextureFeaturesPlatform>>(value);
+		}
+
 		public entRenderToTextureFeatures()
 		{
 			RenderDecals = true;
 			RenderParticles = true;
-			AntiAliasing = true;
 			LocalShadows = true;
 
 			PostConstruct();

@@ -46,12 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_EquipmentDef()
 		{
-			ItemEquipped = new gamebbScriptID_Variant();
-			LastModifiedArea = new gamebbScriptID_Variant();
-			AreaChanged = new gamebbScriptID_Int32();
-			AreaChangedSlotIndex = new gamebbScriptID_Int32();
-			EquipmentInProgress = new gamebbScriptID_Bool();
-
 			PostConstruct();
 		}
 

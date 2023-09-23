@@ -85,6 +85,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("probingMaxHeight")] 
+		public CFloat ProbingMaxHeight
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("maxProbes")] 
 		public CUInt32 MaxProbes
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("probeDimensions")] 
 		public Vector4 ProbeDimensions
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("filter")] 
 		public physicsQueryFilter Filter
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<physicsQueryFilter>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("flags")] 
 		public CUInt32 Flags
 		{
@@ -118,7 +126,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldgeometryDescriptionQuery()
 		{
-			RefPosition = new Vector4();
+			RefPosition = new Vector4 { W = 1.000000F };
 			RefDirection = new Vector4();
 			RefUp = new Vector4 { Z = 1.000000F };
 			PrimitiveDimension = new Vector4 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F };
@@ -128,6 +136,7 @@ namespace WolvenKit.RED4.Types
 			RaycastStartDistance = 0.500000F;
 			ProbingPrecision = 0.010000F;
 			ProbingMaxDistanceDiff = 0.800000F;
+			ProbingMaxHeight = 2.200000F;
 			MaxProbes = 100;
 			ProbeDimensions = new Vector4 { X = 0.400000F, Y = -1.000000F, Z = -1.000000F, W = 1.000000F };
 			Filter = new physicsQueryFilter();

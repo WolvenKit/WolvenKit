@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class inkButtonTintController : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("NormalColor")] 
 		public CColor NormalColor
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("HoverColor")] 
 		public CColor HoverColor
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("PressColor")] 
 		public CColor PressColor
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("DisableColor")] 
 		public CColor DisableColor
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("TintControlRef")] 
 		public inkWidgetReference TintControlRef
 		{
@@ -46,12 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public inkButtonTintController()
 		{
-			NormalColor = new CColor();
-			HoverColor = new CColor();
-			PressColor = new CColor();
-			DisableColor = new CColor();
-			TintControlRef = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

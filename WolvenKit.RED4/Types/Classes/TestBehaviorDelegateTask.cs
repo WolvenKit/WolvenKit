@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public TestBehaviorDelegateTask()
 		{
-			AttrRef = new AIbehaviorDelegateAttrRef();
-			TaskRef = new AIbehaviorDelegateTaskRef();
-
 			PostConstruct();
 		}
 

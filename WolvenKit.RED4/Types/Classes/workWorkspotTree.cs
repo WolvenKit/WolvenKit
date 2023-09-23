@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("propsPlaySyncAnim")] 
+		public CBool PropsPlaySyncAnim
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("rootEntry")] 
 		public CHandle<workIEntry> RootEntry
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<workIEntry>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("idCounter")] 
 		public CUInt32 IdCounter
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("dontInjectWorkspotGraph")] 
 		public CBool DontInjectWorkspotGraph
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("animGraphSlotName")] 
 		public CName AnimGraphSlotName
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("autoTransitionBlendTime")] 
 		public CFloat AutoTransitionBlendTime
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("initialActions")] 
 		public CArray<CHandle<workIWorkspotItemAction>> InitialActions
 		{
@@ -68,7 +76,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<workIWorkspotItemAction>>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
+		[RED("initialCanUseExits")] 
+		public CBool InitialCanUseExits
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("blendOutTime")] 
 		public CFloat BlendOutTime
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("finalAnimsets")] 
 		public CArray<workWorkspotAnimsetEntry> FinalAnimsets
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<workWorkspotAnimsetEntry>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("tags")] 
 		public redTagList Tags
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redTagList>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("itemsPolicy")] 
 		public CBitField<workWorkspotItemPolicy> ItemsPolicy
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<workWorkspotItemPolicy>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("censorshipFlags")] 
 		public CBitField<CensorshipFlags> CensorshipFlags
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<CensorshipFlags>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("customTransitionAnims")] 
 		public CArray<workTransitionAnim> CustomTransitionAnims
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<workTransitionAnim>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("inertializationDurationEnter")] 
 		public CFloat InertializationDurationEnter
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("inertializationDurationExitNatural")] 
 		public CFloat InertializationDurationExitNatural
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("inertializationDurationExitForced")] 
 		public CFloat InertializationDurationExitForced
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("useTimeLimitForSequences")] 
 		public CBool UseTimeLimitForSequences
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("frezeAtTheLastFrame_UseWithCaution")] 
 		public CBool FrezeAtTheLastFrame_UseWithCaution
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("sequencesTimeLimit")] 
 		public CFloat SequencesTimeLimit
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("snapToTerrain")] 
 		public CBool SnapToTerrain
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("unmountBodyCarry")] 
 		public CBool UnmountBodyCarry
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("statusEffectID")] 
 		public TweakDBID StatusEffectID
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("whitelistVisualTags")] 
 		public redTagList WhitelistVisualTags
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redTagList>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("blacklistVisualTags")] 
 		public redTagList BlacklistVisualTags
 		{
@@ -210,6 +226,7 @@ namespace WolvenKit.RED4.Types
 			AnimGraphSlotName = "WORKSPOT";
 			AutoTransitionBlendTime = 1.000000F;
 			InitialActions = new();
+			InitialCanUseExits = true;
 			FinalAnimsets = new();
 			Tags = new redTagList { Tags = new() };
 			ItemsPolicy = Enums.workWorkspotItemPolicy.ItemPolicy_SpawnItemOnIdleChange | Enums.workWorkspotItemPolicy.ItemPolicy_DespawnItemOnIdleChange | Enums.workWorkspotItemPolicy.ItemPolicy_DespawnItemOnReaction;

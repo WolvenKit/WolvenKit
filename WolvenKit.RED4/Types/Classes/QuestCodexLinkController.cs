@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class QuestCodexLinkController : BaseCodexLinkController
 	{
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("linkLabelContainer")] 
 		public inkWidgetReference LinkLabelContainer
 		{
@@ -12,18 +12,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("journalEntry")] 
-		public CHandle<gameJournalEntry> JournalEntry
+		public CWeakHandle<gameJournalEntry> JournalEntry
 		{
-			get => GetPropertyValue<CHandle<gameJournalEntry>>();
-			set => SetPropertyValue<CHandle<gameJournalEntry>>(value);
+			get => GetPropertyValue<CWeakHandle<gameJournalEntry>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalEntry>>(value);
 		}
 
 		public QuestCodexLinkController()
 		{
-			LinkLabelContainer = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

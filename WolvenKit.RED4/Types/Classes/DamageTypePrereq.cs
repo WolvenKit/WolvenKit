@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DamageTypePrereq : GenericHitPrereq
 	{
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("damageType")] 
 		public CEnum<gamedataDamageType> DamageType
 		{

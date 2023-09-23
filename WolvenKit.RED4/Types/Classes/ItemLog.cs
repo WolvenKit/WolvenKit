@@ -94,12 +94,6 @@ namespace WolvenKit.RED4.Types
 
 		public ItemLog()
 		{
-			ListRef = new inkCompoundWidgetReference();
-			InitialPopupDelay = 1.000000F;
-			PopupList = new();
-			ListOfAddedInventoryItems = new();
-			AnimOptions = new inkanimPlaybackOptions();
-
 			PostConstruct();
 		}
 

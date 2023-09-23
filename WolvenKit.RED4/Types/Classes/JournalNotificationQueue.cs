@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class JournalNotificationQueue : gameuiGenericNotificationGameController
 	{
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("showDuration")] 
 		public CFloat ShowDuration
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("currencyNotification")] 
 		public CName CurrencyNotification
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("shardNotification")] 
 		public CName ShardNotification
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("itemNotification")] 
 		public CName ItemNotification
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("questNotification")] 
 		public CName QuestNotification
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("genericNotification")] 
 		public CName GenericNotification
 		{
@@ -52,15 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(8)] 
-		[RED("messageNotification")] 
-		public CName MessageNotification
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("journalMgr")] 
 		public CWeakHandle<gameJournalManager> JournalMgr
 		{
@@ -68,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("newAreablackboard")] 
 		public CWeakHandle<gameIBlackboard> NewAreablackboard
 		{
@@ -76,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("newAreaDef")] 
 		public CHandle<UI_MapDef> NewAreaDef
 		{
@@ -84,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_MapDef>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("newAreaID")] 
 		public CHandle<redCallbackObject> NewAreaID
 		{
@@ -92,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("tutorialBlackboard")] 
 		public CWeakHandle<gameIBlackboard> TutorialBlackboard
 		{
@@ -100,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("tutorialDef")] 
 		public CHandle<UIGameDataDef> TutorialDef
 		{
@@ -108,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIGameDataDef>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("tutorialID")] 
 		public CHandle<redCallbackObject> TutorialID
 		{
@@ -116,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("tutorialDataID")] 
 		public CHandle<redCallbackObject> TutorialDataID
 		{
@@ -124,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("isHiddenByTutorial")] 
 		public CBool IsHiddenByTutorial
 		{
@@ -132,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("customQuestNotificationblackBoardID")] 
 		public CHandle<redCallbackObject> CustomQuestNotificationblackBoardID
 		{
@@ -140,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("customQuestNotificationblackboardDef")] 
 		public CHandle<UI_CustomQuestNotificationDef> CustomQuestNotificationblackboardDef
 		{
@@ -148,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_CustomQuestNotificationDef>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("customQuestNotificationblackboard")] 
 		public CWeakHandle<gameIBlackboard> CustomQuestNotificationblackboard
 		{
@@ -156,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("transactionSystem")] 
 		public CWeakHandle<gameTransactionSystem> TransactionSystem
 		{
@@ -164,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameTransactionSystem>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("playerPuppet")] 
 		public CWeakHandle<gameObject> PlayerPuppet
 		{
@@ -172,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("activeVehicleBlackboard")] 
 		public CWeakHandle<gameIBlackboard> ActiveVehicleBlackboard
 		{
@@ -180,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("mountBBConnectionId")] 
 		public CHandle<redCallbackObject> MountBBConnectionId
 		{
@@ -188,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("isPlayerMounted")] 
 		public CBool IsPlayerMounted
 		{
@@ -196,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
@@ -204,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("uiSystemBB")] 
 		public CHandle<UI_SystemDef> UiSystemBB
 		{
@@ -212,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_SystemDef>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("uiSystemId")] 
 		public CHandle<redCallbackObject> UiSystemId
 		{
@@ -220,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("trackedMappinId")] 
 		public CHandle<redCallbackObject> TrackedMappinId
 		{
@@ -228,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("uiSystem")] 
 		public CHandle<gameuiGameSystemUI> UiSystem
 		{
@@ -236,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("shardTransactionListener")] 
 		public CWeakHandle<gameInventoryScriptListener> ShardTransactionListener
 		{
@@ -246,14 +238,6 @@ namespace WolvenKit.RED4.Types
 
 		public JournalNotificationQueue()
 		{
-			ShowDuration = 6.000000F;
-			CurrencyNotification = "notification_currency";
-			ShardNotification = "notification_shard";
-			ItemNotification = "Item_Received_SMALL";
-			QuestNotification = "notification_quest";
-			GenericNotification = "notification";
-			MessageNotification = "notification_message";
-
 			PostConstruct();
 		}
 

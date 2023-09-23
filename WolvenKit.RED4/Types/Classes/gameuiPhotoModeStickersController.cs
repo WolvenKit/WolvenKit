@@ -251,16 +251,6 @@ namespace WolvenKit.RED4.Types
 			SetFrameImage = new gameuiStickerFrameCallback();
 			SetBackground = new gameuiStickerBackgroundCallback();
 			SetSetSelectedSticker = new gameuiStickerCallback();
-			StickersRoot = new inkWidgetReference();
-			FrameRoot = new inkWidgetReference();
-			BackgroundViewRoot = new inkWidgetReference();
-			Stickers = new();
-			StickerDragStartScale = new Vector2();
-			StickerDragStartPos = new Vector2();
-			MouseDragStartPos = new Vector2();
-			MouseDragCurrentPos = new Vector2();
-			StickerMove = new Vector2();
-			StickersAreaSize = new Vector2();
 
 			PostConstruct();
 		}

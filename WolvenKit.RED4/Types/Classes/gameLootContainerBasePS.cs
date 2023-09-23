@@ -28,6 +28,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("shouldHideLockedUI")] 
+		public CBool ShouldHideLockedUI
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("started")] 
+		public CBool Started
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameLootContainerBasePS()
 		{
 			PostConstruct();

@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public TooltipCycleDotController()
 		{
-			SlotBorder = new inkWidgetReference();
-			SlotBackground = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -76,8 +76,26 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("applyCustomTimeDilation")] 
+		public CBool ApplyCustomTimeDilation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("customTimeDilation")] 
+		public CFloat CustomTimeDilation
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public inkanimPlaybackOptions()
 		{
+			CustomTimeDilation = 1.000000F;
+
 			PostConstruct();
 		}
 

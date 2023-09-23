@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ForkliftControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("forkliftSetup")] 
 		public ForkliftSetup ForkliftSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ForkliftSetup>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("isUp")] 
 		public CBool IsUp
 		{
@@ -22,11 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public ForkliftControllerPS()
 		{
-			DeviceName = "LocKey#1639";
-			TweakDBRecord = "Devices.Forklift";
-			TweakDBDescriptionRecord = 124000636758;
-			ForkliftSetup = new ForkliftSetup { ActionActivateName = "Activate", LiftingAnimationTime = 2.000000F, HasDistractionQuickhack = true };
-
 			PostConstruct();
 		}
 

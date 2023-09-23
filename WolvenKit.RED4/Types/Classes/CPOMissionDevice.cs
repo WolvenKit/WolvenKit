@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CPOMissionDevice : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("compatibleDeviceName")] 
 		public CName CompatibleDeviceName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("blockAfterOperation")] 
 		public CBool BlockAfterOperation
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("factToUnblock")] 
 		public CName FactToUnblock
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("isBlocked")] 
 		public CBool IsBlocked
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("factUnblockCallbackID")] 
 		public CUInt32 FactUnblockCallbackID
 		{
@@ -46,8 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public CPOMissionDevice()
 		{
-			BlockAfterOperation = true;
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DoorSystemUIPS : VirtualSystemPS
 	{
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("isOpen")] 
 		public CBool IsOpen
 		{

@@ -222,26 +222,6 @@ namespace WolvenKit.RED4.Types
 
 		public questLogV2GameController()
 		{
-			QuestDetailsRef = new inkWidgetReference();
-			QuestDetailsHeader = new inkWidgetReference();
-			OptinalObjectivesGroupRef = new inkWidgetReference();
-			CompletedObjectivesGroupRef = new inkWidgetReference();
-			QuestListRef = new inkCompoundWidgetReference();
-			ObjectivesListRef = new inkCompoundWidgetReference();
-			OptinalObjectivesListRef = new inkCompoundWidgetReference();
-			CompletedObjectivesListRef = new inkCompoundWidgetReference();
-			QuestTitleRef = new inkTextWidgetReference();
-			QuestDescriptionRef = new inkTextWidgetReference();
-			RecommendedLevel = new inkTextWidgetReference();
-			RewardsList = new inkCompoundWidgetReference();
-			CodexLinksList = new inkCompoundWidgetReference();
-			CodexEntryParent = new inkCompoundWidgetReference();
-			CodexButtonRef = new inkCompoundWidgetReference();
-			ButtonHintsManagerRef = new inkWidgetReference();
-			CodexLibraryPath = new redResourceReferenceScriptToken();
-			ObjectiveItems = new();
-			QuestLists = new();
-
 			PostConstruct();
 		}
 

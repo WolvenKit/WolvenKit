@@ -62,11 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public PingNetworkGridEvent()
 		{
-			OwnerEntityPosition = new Vector4();
-			FxResource = new gameFxResource();
-			Lifetime = -1.000000F;
-			RevealMaster = true;
-
 			PostConstruct();
 		}
 

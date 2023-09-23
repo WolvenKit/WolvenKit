@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class gameMovingPlatformSavedData : RedBaseClass
 	{
 		[Ordinal(0)] 
+		[RED("currentLocalPosition")] 
+		public Vector4 CurrentLocalPosition
+		{
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("movement")] 
 		public CHandle<gameIMovingPlatformMovement> Movement
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameIMovingPlatformMovement>>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("destinationName")] 
 		public CName DestinationName
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("destinationData")] 
 		public CInt32 DestinationData
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("time")] 
 		public CFloat Time
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("maxTime")] 
 		public CFloat MaxTime
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("mountedPlayerEntityID")] 
 		public CUInt32 MountedPlayerEntityID
 		{
@@ -52,8 +60,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("isPaused")] 
+		public CBool IsPaused
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameMovingPlatformSavedData()
 		{
+			CurrentLocalPosition = new Vector4();
+
 			PostConstruct();
 		}
 

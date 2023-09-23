@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("executedHistory")] 
+		public CArray<CUInt64> ExecutedHistory
+		{
+			get => GetPropertyValue<CArray<CUInt64>>();
+			set => SetPropertyValue<CArray<CUInt64>>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("failed")] 
 		public CArray<CUInt64> Failed
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CUInt64>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("callstackRevision")] 
 		public CUInt32 CallstackRevision
 		{
@@ -57,6 +65,7 @@ namespace WolvenKit.RED4.Types
 			Phases = new();
 			Blocks = new();
 			Executed = new();
+			ExecutedHistory = new();
 			Failed = new();
 
 			PostConstruct();

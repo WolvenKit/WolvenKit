@@ -70,12 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public SimpleSetEquipWeapons()
 		{
-			Primary = true;
-			Secondary = true;
-			Game = new ScriptGameInstance();
-			PrimaryItems = new();
-			SecondaryItems = new();
-
 			PostConstruct();
 		}
 

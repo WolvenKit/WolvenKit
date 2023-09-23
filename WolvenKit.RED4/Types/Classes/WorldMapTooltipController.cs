@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("additionalDescText")] 
+		public inkTextWidgetReference AdditionalDescText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("lineBreak")] 
 		public inkWidgetReference LineBreak
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
@@ -36,7 +44,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
+		[RED("ep1Icon")] 
+		public inkImageWidgetReference Ep1Icon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("inputOpenJournalContainer")] 
 		public inkCompoundWidgetReference InputOpenJournalContainer
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("inputInteractContainer")] 
 		public inkCompoundWidgetReference InputInteractContainer
 		{
@@ -52,7 +68,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
+		[RED("inputMoreInfoContainer")] 
+		public inkCompoundWidgetReference InputMoreInfoContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("threatLevelPanel")] 
 		public inkWidgetReference ThreatLevelPanel
 		{
@@ -60,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("threatLevelValue")] 
 		public inkTextWidgetReference ThreatLevelValue
 		{
@@ -68,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("fixerPanel")] 
 		public inkWidgetReference FixerPanel
 		{
@@ -76,23 +100,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
-		[RED("collectionCountContainer")] 
-		public inkCompoundWidgetReference CollectionCountContainer
+		[Ordinal(17)] 
+		[RED("linkImage")] 
+		public inkImageWidgetReference LinkImage
 		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
-		[RED("collectionCountText")] 
-		public inkTextWidgetReference CollectionCountText
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("gigProgress")] 
 		public CFloat GigProgress
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("bar")] 
 		public inkWidgetReference Bar
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("barAnimationProxy")] 
 		public CHandle<inkanimProxy> BarAnimationProxy
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("gigBarCompletedText")] 
 		public inkTextWidgetReference GigBarCompletedText
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("gigBarTotalText")] 
 		public inkTextWidgetReference GigBarTotalText
 		{
@@ -142,21 +158,6 @@ namespace WolvenKit.RED4.Types
 
 		public WorldMapTooltipController()
 		{
-			TitleText = new inkTextWidgetReference();
-			DescText = new inkTextWidgetReference();
-			LineBreak = new inkWidgetReference();
-			Icon = new inkImageWidgetReference();
-			InputOpenJournalContainer = new inkCompoundWidgetReference();
-			InputInteractContainer = new inkCompoundWidgetReference();
-			ThreatLevelPanel = new inkWidgetReference();
-			ThreatLevelValue = new inkTextWidgetReference();
-			FixerPanel = new inkWidgetReference();
-			CollectionCountContainer = new inkCompoundWidgetReference();
-			CollectionCountText = new inkTextWidgetReference();
-			Bar = new inkWidgetReference();
-			GigBarCompletedText = new inkTextWidgetReference();
-			GigBarTotalText = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

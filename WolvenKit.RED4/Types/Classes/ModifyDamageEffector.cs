@@ -20,6 +20,38 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("statType")] 
+		public CEnum<gamedataStatType> StatType
+		{
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("ownerID")] 
+		public entEntityID OwnerID
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("statListener")] 
+		public CHandle<ModifyDamageEffectorStatListener> StatListener
+		{
+			get => GetPropertyValue<CHandle<ModifyDamageEffectorStatListener>>();
+			set => SetPropertyValue<CHandle<ModifyDamageEffectorStatListener>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("statBasedValue")] 
+		public CFloat StatBasedValue
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public ModifyDamageEffector()
 		{
 			PostConstruct();

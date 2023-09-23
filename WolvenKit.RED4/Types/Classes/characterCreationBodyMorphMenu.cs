@@ -389,6 +389,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(54)] 
+		[RED("randomizing")] 
+		public CBool Randomizing
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(55)] 
 		[RED("scrollController")] 
 		public CWeakHandle<inkScrollController> ScrollController
 		{
@@ -396,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkScrollController>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("sliderController")] 
 		public CWeakHandle<inkSliderController> SliderController
 		{
@@ -404,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkSliderController>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("inputDisabled")] 
 		public CBool InputDisabled
 		{
@@ -414,43 +422,6 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationBodyMorphMenu()
 		{
-			DefaultPreviewSlot = "UI_Skin";
-			OptionsList = new inkCompoundWidgetReference();
-			ColorPicker = new inkWidgetReference();
-			ColorPickerBG = new inkWidgetReference();
-			ColorPickerClose = new inkWidgetReference();
-			ScrollWidget = new inkWidgetReference();
-			ScrollArea = new inkScrollAreaWidgetReference();
-			Slider = new inkWidgetReference();
-			PreviousPageBtn = new inkWidgetReference();
-			PreviousPageBtnBg = new inkImageWidgetReference();
-			PreviousPageBtnText = new inkTextWidgetReference();
-			NextPageBtnBg = new inkImageWidgetReference();
-			NextPageBtnText = new inkTextWidgetReference();
-			BackConfirmation = new inkWidgetReference();
-			BackConfirmationWidget = new inkWidgetReference();
-			ConfirmationConfirmBtn = new inkWidgetReference();
-			ConfirmationCloseBtn = new inkWidgetReference();
-			Preset1Group = new inkWidgetReference();
-			Preset2Group = new inkWidgetReference();
-			Preset3Group = new inkWidgetReference();
-			RandomizeGroup = new inkWidgetReference();
-			PresetsLabel = new inkWidgetReference();
-			Preset1 = new inkWidgetReference();
-			Preset2 = new inkWidgetReference();
-			Preset3 = new inkWidgetReference();
-			Randomize = new inkWidgetReference();
-			Preset1Thumbnail = new inkImageWidgetReference();
-			Preset2Thumbnail = new inkImageWidgetReference();
-			Preset3Thumbnail = new inkImageWidgetReference();
-			RandomizThumbnail = new inkImageWidgetReference();
-			Preset1Bg = new inkImageWidgetReference();
-			Preset2Bg = new inkImageWidgetReference();
-			Preset3Bg = new inkImageWidgetReference();
-			RandomizBg = new inkImageWidgetReference();
-			NavigationButtons = new inkWidgetReference();
-			NavigationControllers = new();
-
 			PostConstruct();
 		}
 

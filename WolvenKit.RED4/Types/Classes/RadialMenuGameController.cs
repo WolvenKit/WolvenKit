@@ -54,10 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public RadialMenuGameController()
 		{
-			ContainerRef = new inkCompoundWidgetReference();
-			HighlightRef = new inkWidgetReference();
-			ItemListRef = new();
-
 			PostConstruct();
 		}
 

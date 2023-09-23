@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Crosshair_Tech_Omaha : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] 
+		[Ordinal(27)] 
 		[RED("leftPart")] 
 		public CWeakHandle<inkWidget> LeftPart
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(28)] 
 		[RED("rightPart")] 
 		public CWeakHandle<inkWidget> RightPart
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(29)] 
 		[RED("topPart")] 
 		public CWeakHandle<inkWidget> TopPart
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(30)] 
 		[RED("chargeBar")] 
 		public CWeakHandle<inkRectangleWidget> ChargeBar
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkRectangleWidget>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(31)] 
 		[RED("sizeOfChargeBar")] 
 		public Vector2 SizeOfChargeBar
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(32)] 
 		[RED("chargeBBID")] 
 		public CHandle<redCallbackObject> ChargeBBID
 		{
@@ -54,8 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public Crosshair_Tech_Omaha()
 		{
-			SizeOfChargeBar = new Vector2();
-
 			PostConstruct();
 		}
 

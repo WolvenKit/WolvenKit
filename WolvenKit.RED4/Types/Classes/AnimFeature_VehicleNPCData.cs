@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("forcePanic")] 
+		public CBool ForcePanic
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public AnimFeature_VehicleNPCData()
 		{
 			PostConstruct();

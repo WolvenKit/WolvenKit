@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ActivatedDeviceTransfromAnim : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("animationState")] 
 		public CInt32 AnimationState
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CPOVotingDevice : CPOMissionDevice
 	{
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("deviceName")] 
 		public CName DeviceName
 		{
@@ -14,9 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public CPOVotingDevice()
 		{
-			BlockAfterOperation = false;
-			FactToUnblock = "defaults to compatibleDeviceName_enabled";
-
 			PostConstruct();
 		}
 

@@ -20,8 +20,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("clGeneratedIds")] 
+		public CArray<CString> ClGeneratedIds
+		{
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
+		}
+
 		public localizationPersistenceCLNumberDateContainer()
 		{
+			ClGeneratedIds = new();
+
 			PostConstruct();
 		}
 

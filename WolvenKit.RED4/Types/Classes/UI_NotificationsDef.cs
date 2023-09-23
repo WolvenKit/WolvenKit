@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_NotificationsDef()
 		{
-			WarningMessage = new gamebbScriptID_Variant();
-			OnscreenMessage = new gamebbScriptID_Variant();
-
 			PostConstruct();
 		}
 

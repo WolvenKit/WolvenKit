@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class cpConveyorObject : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("rotationLerpFactor")] 
 		public CFloat RotationLerpFactor
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("ignoreZAxis")] 
 		public CBool IgnoreZAxis
 		{

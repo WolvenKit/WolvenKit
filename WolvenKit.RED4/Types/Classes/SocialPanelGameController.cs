@@ -54,9 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public SocialPanelGameController()
 		{
-			SocialPanelContactsListRef = new inkWidgetReference();
-			SocialPanelContactsDetailsRef = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

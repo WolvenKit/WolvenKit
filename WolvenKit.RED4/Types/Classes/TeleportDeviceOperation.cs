@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public TeleportDeviceOperation()
 		{
-			IsEnabled = true;
-			ToggleOperations = new();
-			Teleport = new STeleportOperationData();
-
 			PostConstruct();
 		}
 

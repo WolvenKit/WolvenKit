@@ -93,6 +93,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("fluffText")] 
+		public inkTextWidgetReference FluffText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("itemHovered")] 
 		public CBool ItemHovered
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("panelHovered")] 
 		public CBool PanelHovered
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("panelTransitionProxy")] 
 		public CHandle<inkanimProxy> PanelTransitionProxy
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("buttonTransitionProxy")] 
 		public CHandle<inkanimProxy> ButtonTransitionProxy
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("isPanelShown")] 
 		public CBool IsPanelShown
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("isDimmed")] 
 		public CBool IsDimmed
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("isHyperlink")] 
 		public CBool IsHyperlink
 		{
@@ -150,18 +158,6 @@ namespace WolvenKit.RED4.Types
 
 		public MenuItemController()
 		{
-			MenuData = new MenuData { Identifier = -1, SubMenus = new() };
-			Label = new inkTextWidgetReference();
-			Icon = new inkImageWidgetReference();
-			FrameHovered = new inkWidgetReference();
-			HoverPanel = new inkWidgetReference();
-			Background = new inkWidgetReference();
-			LevelFlag = new inkWidgetReference();
-			AttrFlag = new inkWidgetReference();
-			AttrText = new inkTextWidgetReference();
-			PerkFlag = new inkWidgetReference();
-			PerkText = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -182,24 +182,6 @@ namespace WolvenKit.RED4.Types
 
 		public interactionItemLogicController()
 		{
-			InputButtonContainer = new inkCompoundWidgetReference();
-			InputDisplayControllerRef = new inkWidgetReference();
-			QuickHackCostHolder = new inkWidgetReference();
-			QuickHackCost = new inkTextWidgetReference();
-			QuickHackIcon = new inkImageWidgetReference();
-			QuickHackHolder = new inkCompoundWidgetReference();
-			Label = new inkTextWidgetReference();
-			LabelFail = new inkTextWidgetReference();
-			SkillCheckPassBG = new inkWidgetReference();
-			SkillCheckFailBG = new inkWidgetReference();
-			QHIllegalIndicator = new inkWidgetReference();
-			SCIllegalIndicator = new inkWidgetReference();
-			AdditionalReqsNeeded = new inkWidgetReference();
-			SkillCheck = new inkCompoundWidgetReference();
-			SkillCheckNormalReqs = new inkCompoundWidgetReference();
-			SkillCheckIcon = new inkImageWidgetReference();
-			SkillCheckText = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

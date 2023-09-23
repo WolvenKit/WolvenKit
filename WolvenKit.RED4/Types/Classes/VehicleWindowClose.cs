@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VehicleWindowClose : ActionBool
 	{
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("slotID")] 
 		public CName SlotID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(39)] 
 		[RED("speed")] 
 		public CName Speed
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(40)] 
 		[RED("isInteractionSource")] 
 		public CBool IsInteractionSource
 		{
@@ -30,11 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleWindowClose()
 		{
-			RequesterID = new entEntityID();
-			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
-			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
-			CanTriggerStim = true;
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SlidingLadderControllerPS : BaseAnimatedDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("isShootable")] 
 		public CBool IsShootable
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(113)] 
 		[RED("animationTime")] 
 		public CFloat AnimationTime
 		{
@@ -22,13 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public SlidingLadderControllerPS()
 		{
-			DeviceName = "LocKey#2128";
-			TweakDBRecord = "Devices.SlidingLadder";
-			TweakDBDescriptionRecord = 144242295596;
-			ShouldScannerShowStatus = false;
-			IsShootable = true;
-			AnimationTime = 1.000000F;
-
 			PostConstruct();
 		}
 

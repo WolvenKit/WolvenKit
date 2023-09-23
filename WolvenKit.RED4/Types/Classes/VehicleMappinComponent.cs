@@ -126,10 +126,6 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleMappinComponent()
 		{
-			VehicleEntityID = new entEntityID();
-			ScheduleDiscreteModeDelayID = new gameDelayID();
-			InvalidDelayID = new gameDelayID();
-
 			PostConstruct();
 		}
 

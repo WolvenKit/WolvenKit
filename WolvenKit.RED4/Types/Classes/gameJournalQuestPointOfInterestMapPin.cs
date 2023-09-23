@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public gameJournalQuestPointOfInterestMapPin()
 		{
+			JournalEntryOverrideDataList = new();
 			Entries = new();
 			EnableGPS = true;
 

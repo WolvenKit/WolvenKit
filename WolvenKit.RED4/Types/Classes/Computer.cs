@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Computer : Terminal
 	{
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("bannerUpdateActive")] 
 		public CBool BannerUpdateActive
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(102)] 
 		[RED("bannerUpdateID")] 
 		public gameDelayID BannerUpdateID
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(103)] 
 		[RED("transformX")] 
 		public CHandle<entIPlacedComponent> TransformX
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(104)] 
 		[RED("transformY")] 
 		public CHandle<entIPlacedComponent> TransformY
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(105)] 
 		[RED("playerControlData")] 
 		public PlayerControlDeviceData PlayerControlData
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<PlayerControlDeviceData>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(106)] 
 		[RED("currentAnimationState")] 
 		public CEnum<EComputerAnimationState> CurrentAnimationState
 		{
@@ -54,10 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public Computer()
 		{
-			ControllerTypeName = "ComputerController";
-			BannerUpdateID = new gameDelayID();
-			PlayerControlData = new PlayerControlDeviceData();
-
 			PostConstruct();
 		}
 

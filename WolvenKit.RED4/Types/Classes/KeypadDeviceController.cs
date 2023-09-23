@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class KeypadDeviceController : DeviceWidgetControllerBase
 	{
 		[Ordinal(10)] 
+		[RED("hasButtonAuthorization")] 
+		public CBool HasButtonAuthorization
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("enteredPasswordWidget")] 
 		public CWeakHandle<inkTextWidget> EnteredPasswordWidget
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("passwordStatusWidget")] 
 		public CWeakHandle<inkTextWidget> PasswordStatusWidget
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("actionButton")] 
 		public CWeakHandle<inkWidget> ActionButton
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("ActionText")] 
 		public CWeakHandle<inkTextWidget> ActionText
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("passwordsList")] 
 		public CArray<CName> PasswordsList
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("cardName")] 
 		public CString CardName
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("isPasswordKnown")] 
 		public CBool IsPasswordKnown
 		{
@@ -60,7 +68,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
+		[RED("maxDigitsCount")] 
+		public CInt32 MaxDigitsCount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("row1")] 
 		public CWeakHandle<inkHorizontalPanelWidget> Row1
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkHorizontalPanelWidget>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("row2")] 
 		public CWeakHandle<inkHorizontalPanelWidget> Row2
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkHorizontalPanelWidget>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("row3")] 
 		public CWeakHandle<inkHorizontalPanelWidget> Row3
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkHorizontalPanelWidget>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("row4")] 
 		public CWeakHandle<inkHorizontalPanelWidget> Row4
 		{
@@ -92,10 +108,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkHorizontalPanelWidget>>(value);
 		}
 
+		[Ordinal(23)] 
+		[RED("arePasswordsInitialized")] 
+		public CBool ArePasswordsInitialized
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("blackboard")] 
+		public CWeakHandle<gameIBlackboard> Blackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
 		public KeypadDeviceController()
 		{
-			PasswordsList = new();
-
 			PostConstruct();
 		}
 

@@ -84,11 +84,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("isRadialVariant")] 
+		public CBool IsRadialVariant
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public HubMenuLabelController()
 		{
-			Container = new inkCompoundWidgetReference();
-			Data = new MenuData { Identifier = -1, SubMenus = new() };
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalBriefingVideoSection : gameJournalBriefingBaseSection
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("videoResource")] 
 		public CResourceAsyncReference<Bink> VideoResource
 		{
@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalBriefingVideoSection()
 		{
+			JournalEntryOverrideDataList = new();
+
 			PostConstruct();
 		}
 

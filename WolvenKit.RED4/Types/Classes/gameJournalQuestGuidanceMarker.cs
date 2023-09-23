@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalQuestGuidanceMarker : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("pathfindingType")] 
 		public CEnum<gameQuestGuidanceMarkerPathfindingType> PathfindingType
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameQuestGuidanceMarkerPathfindingType>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("isPortal")] 
 		public CBool IsPortal
 		{
@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalQuestGuidanceMarker()
 		{
+			JournalEntryOverrideDataList = new();
+
 			PostConstruct();
 		}
 

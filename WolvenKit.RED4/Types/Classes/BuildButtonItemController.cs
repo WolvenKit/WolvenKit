@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BuildButtonItemController : inkButtonDpadSupportedController
 	{
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("associatedBuild")] 
 		public CEnum<gamedataBuildType> AssociatedBuild
 		{

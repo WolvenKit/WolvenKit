@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public TextSpawnerController()
 		{
-			AmountOfRows = 6;
-			Texts = new();
-
 			PostConstruct();
 		}
 

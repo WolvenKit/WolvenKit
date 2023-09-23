@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_SceneScreenDef()
 		{
-			AnimName = new gamebbScriptID_CName();
-
 			PostConstruct();
 		}
 

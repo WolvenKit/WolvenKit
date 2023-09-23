@@ -198,10 +198,6 @@ namespace WolvenKit.RED4.Types
 
 		public sampleUICustomizableAnimationsController()
 		{
-			DefaultSize = new Vector2();
-			DefaultMargin = new inkMargin();
-			DefaultColor = new HDRColor();
-
 			PostConstruct();
 		}
 

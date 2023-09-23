@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_Stamina()
 		{
-			StaminaValue = 1.000000F;
-
 			PostConstruct();
 		}
 

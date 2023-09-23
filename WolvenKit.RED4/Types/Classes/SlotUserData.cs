@@ -5,11 +5,11 @@ namespace WolvenKit.RED4.Types
 	public partial class SlotUserData : IScriptable
 	{
 		[Ordinal(0)] 
-		[RED("itemData")] 
-		public gameInventoryItemData ItemData
+		[RED("item")] 
+		public CWeakHandle<UIInventoryItem> Item
 		{
-			get => GetPropertyValue<gameInventoryItemData>();
-			set => SetPropertyValue<gameInventoryItemData>(value);
+			get => GetPropertyValue<CWeakHandle<UIInventoryItem>>();
+			set => SetPropertyValue<CWeakHandle<UIInventoryItem>>(value);
 		}
 
 		[Ordinal(1)] 
@@ -28,10 +28,64 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("isLocked")] 
+		public CBool IsLocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("visibleWhenLocked")] 
+		public CBool VisibleWhenLocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("screen")] 
+		public CEnum<CyberwareScreenType> Screen
+		{
+			get => GetPropertyValue<CEnum<CyberwareScreenType>>();
+			set => SetPropertyValue<CEnum<CyberwareScreenType>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("isPerkRequired")] 
+		public CBool IsPerkRequired
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("canUpgrade")] 
+		public CBool CanUpgrade
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("upgradeItem")] 
+		public CWeakHandle<gamedataItem_Record> UpgradeItem
+		{
+			get => GetPropertyValue<CWeakHandle<gamedataItem_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataItem_Record>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("upgradeItemQuality")] 
+		public CEnum<gamedataQuality> UpgradeItemQuality
+		{
+			get => GetPropertyValue<CEnum<gamedataQuality>>();
+			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
+		}
+
 		public SlotUserData()
 		{
-			ItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
-
 			PostConstruct();
 		}
 

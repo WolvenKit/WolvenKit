@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalPhoneMessage : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("sender")] 
 		public CEnum<gameMessageSender> Sender
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameMessageSender>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("text")] 
 		public LocalizationString Text
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("imageId")] 
 		public TweakDBID ImageId
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("delay")] 
 		public CFloat Delay
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("attachment")] 
 		public CHandle<gameJournalPath> Attachment
 		{
@@ -46,6 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalPhoneMessage()
 		{
+			JournalEntryOverrideDataList = new();
 			Text = new() { Unk1 = 0, Value = "" };
 			Delay = 3.000000F;
 

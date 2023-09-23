@@ -5,9 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public CustomEventSender()
 		{
-			Tags = new();
-			Flags = new();
-
 			PostConstruct();
 		}
 

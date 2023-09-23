@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalOnscreen : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("tag")] 
 		public CName Tag
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("title")] 
 		public LocalizationString Title
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("description")] 
 		public LocalizationString Description
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("iconID")] 
 		public TweakDBID IconID
 		{
@@ -38,6 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalOnscreen()
 		{
+			JournalEntryOverrideDataList = new();
 			Title = new() { Unk1 = 0, Value = "" };
 			Description = new() { Unk1 = 0, Value = "" };
 

@@ -38,8 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public senseSimpleCone()
 		{
-			Position1 = new Vector4();
-			Position2 = new Vector4();
+			Position1 = new Vector4 { W = 1.000000F };
+			Position2 = new Vector4 { W = 1.000000F };
 
 			PostConstruct();
 		}

@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public TimetableCallbackData()
 		{
-			Time = new SSimpleGameTime();
-			Recipients = new();
-
 			PostConstruct();
 		}
 

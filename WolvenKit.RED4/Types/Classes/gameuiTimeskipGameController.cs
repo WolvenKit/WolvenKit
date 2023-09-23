@@ -117,6 +117,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(16)] 
+		[RED("weatherIcon")] 
+		public inkImageWidgetReference WeatherIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("intoAnimation")] 
 		public CName IntoAnimation
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("outroCancelAnimation")] 
 		public CName OutroCancelAnimation
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("outroFinishedAnimation")] 
 		public CName OutroFinishedAnimation
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("progressAnimation")] 
 		public CName ProgressAnimation
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("finishingAnimation")] 
 		public CName FinishingAnimation
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("loopAnimationMarkerFrom")] 
 		public CName LoopAnimationMarkerFrom
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("loopAnimationMarkerTo")] 
 		public CName LoopAnimationMarkerTo
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("mouseHoverOverAnimation")] 
 		public CName MouseHoverOverAnimation
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("mouseHoverOutAnimation")] 
 		public CName MouseHoverOutAnimation
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("outroAnimDuration")] 
 		public CFloat OutroAnimDuration
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("data")] 
 		public CHandle<TimeSkipPopupData> Data
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<TimeSkipPopupData>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("timeSystem")] 
 		public CHandle<gameTimeSystem> TimeSystem
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameTimeSystem>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("currentTimeTextParams")] 
 		public CHandle<textTextParameterSet> CurrentTimeTextParams
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("targetTimeTextParams")] 
 		public CHandle<textTextParameterSet> TargetTimeTextParams
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("diffTimeTextParams")] 
 		public CHandle<textTextParameterSet> DiffTimeTextParams
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -260,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("progressAnimProxy")] 
 		public CHandle<inkanimProxy> ProgressAnimProxy
 		{
@@ -268,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("hoverAnimProxy")] 
 		public CHandle<inkanimProxy> HoverAnimProxy
 		{
@@ -276,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("currentTime")] 
 		public GameTime CurrentTime
 		{
@@ -284,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<GameTime>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("hoursToSkip")] 
 		public CInt32 HoursToSkip
 		{
@@ -292,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("currentTimeAngle")] 
 		public CFloat CurrentTimeAngle
 		{
@@ -300,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("targetTimeAngle")] 
 		public CFloat TargetTimeAngle
 		{
@@ -308,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("axisInputCache")] 
 		public Vector2 AxisInputCache
 		{
@@ -316,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("inputEnabled")] 
 		public CBool InputEnabled
 		{
@@ -324,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
@@ -332,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("axisInputThreshold")] 
 		public CFloat AxisInputThreshold
 		{
@@ -340,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("animationDurationMin")] 
 		public CFloat AnimationDurationMin
 		{
@@ -348,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("animationDurationMax")] 
 		public CFloat AnimationDurationMax
 		{
@@ -356,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("diff")] 
 		public CFloat Diff
 		{
@@ -364,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("timeSkipped")] 
 		public CBool TimeSkipped
 		{
@@ -372,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("mouseInputEnabled")] 
 		public CBool MouseInputEnabled
 		{
@@ -380,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("scenarioEvt")] 
 		public CHandle<TimeSkipFinishEvent> ScenarioEvt
 		{
@@ -388,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<TimeSkipFinishEvent>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("hoveredOver")] 
 		public CBool HoveredOver
 		{
@@ -398,38 +406,6 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiTimeskipGameController()
 		{
-			CurrentTimeLabel = new inkTextWidgetReference();
-			TragetTimeLabel = new inkTextWidgetReference();
-			DiffTimeLabel = new inkTextWidgetReference();
-			RootContainerRef = new inkWidgetReference();
-			CurrentTimePointerRef = new inkWidgetReference();
-			TargetTimePointerRef = new inkWidgetReference();
-			TimeBarRef = new inkWidgetReference();
-			CircleGradientRef = new inkWidgetReference();
-			StartCircleGradientRef = new inkWidgetReference();
-			MouseHitTestRef = new inkWidgetReference();
-			DayIconRef = new inkWidgetReference();
-			NightIconRef = new inkWidgetReference();
-			MorningIconRef = new inkWidgetReference();
-			EveningIconRef = new inkWidgetReference();
-			IntoAnimation = "intro";
-			OutroCancelAnimation = "outro_cancel";
-			OutroFinishedAnimation = "outro_finish";
-			ProgressAnimation = "progress";
-			FinishingAnimation = "finishing";
-			LoopAnimationMarkerFrom = "loop_from";
-			LoopAnimationMarkerTo = "loop_to";
-			MouseHoverOverAnimation = "mouseHoverOver";
-			MouseHoverOutAnimation = "mouseHoverOut";
-			GameInstance = new ScriptGameInstance();
-			CurrentTime = new GameTime();
-			HoursToSkip = 1;
-			AxisInputCache = new Vector2();
-			Radius = 310.000000F;
-			AxisInputThreshold = 0.000500F;
-			AnimationDurationMin = 3.000000F;
-			AnimationDurationMax = 6.000000F;
-
 			PostConstruct();
 		}
 

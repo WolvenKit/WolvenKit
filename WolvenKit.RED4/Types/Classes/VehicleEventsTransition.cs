@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class VehicleEventsTransition : VehicleTransition
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("isCameraTogglePressed")] 
 		public CBool IsCameraTogglePressed
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("cameraToggleHoldToResetTimeSeconds")] 
 		public CFloat CameraToggleHoldToResetTimeSeconds
 		{

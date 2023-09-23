@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SurveillanceCameraControllerPS : SensorDeviceControllerPS
 	{
-		[Ordinal(145)] 
+		[Ordinal(150)] 
 		[RED("cameraProperties")] 
 		public CameraSetup CameraProperties
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CameraSetup>(value);
 		}
 
-		[Ordinal(146)] 
+		[Ordinal(151)] 
 		[RED("cameraQuestProperties")] 
 		public CameraQuestProperties CameraQuestProperties
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CameraQuestProperties>(value);
 		}
 
-		[Ordinal(147)] 
+		[Ordinal(152)] 
 		[RED("cameraState")] 
 		public CEnum<ESurveillanceCameraStatus> CameraState
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESurveillanceCameraStatus>>(value);
 		}
 
-		[Ordinal(148)] 
+		[Ordinal(153)] 
 		[RED("shouldStream")] 
 		public CBool ShouldStream
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(149)] 
+		[Ordinal(154)] 
 		[RED("isDetecting")] 
 		public CBool IsDetecting
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(150)] 
+		[Ordinal(155)] 
 		[RED("feedReceivers")] 
 		public CArray<entEntityID> FeedReceivers
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<entEntityID>>(value);
 		}
 
-		[Ordinal(151)] 
+		[Ordinal(156)] 
 		[RED("mostRecentRequester")] 
 		public entEntityID MostRecentRequester
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(152)] 
+		[Ordinal(157)] 
 		[RED("virtualComponentName")] 
 		public CName VirtualComponentName
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(153)] 
+		[Ordinal(158)] 
 		[RED("isFeedReplacedWithBink")] 
 		public CBool IsFeedReplacedWithBink
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(154)] 
+		[Ordinal(159)] 
 		[RED("binkVideoPath")] 
 		public redResourceReferenceScriptToken BinkVideoPath
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(155)] 
+		[Ordinal(160)] 
 		[RED("shouldRevealEnemies")] 
 		public CBool ShouldRevealEnemies
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(156)] 
+		[Ordinal(161)] 
 		[RED("cameraSkillChecks")] 
 		public CHandle<EngDemoContainer> CameraSkillChecks
 		{
@@ -100,20 +100,32 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
 		}
 
+		[Ordinal(162)] 
+		[RED("overrideTakeOverCameraAngle")] 
+		public CBool OverrideTakeOverCameraAngle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(163)] 
+		[RED("overrideTakeOverPitch")] 
+		public CFloat OverrideTakeOverPitch
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(164)] 
+		[RED("overrideTakeOverRotation")] 
+		public CFloat OverrideTakeOverRotation
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public SurveillanceCameraControllerPS()
 		{
-			DeviceName = "LocKey#100";
-			TweakDBRecord = "Devices.SurveillanceCamera";
-			TweakDBDescriptionRecord = 165799279213;
-			CanBeInDeviceChain = true;
-			LookAtPresetVert = "LookatPreset.CameraVertical";
-			LookAtPresetHor = "LookatPreset.CameraHorizontal";
-			CameraProperties = new CameraSetup();
-			CameraQuestProperties = new CameraQuestProperties { FollowedTargetID = new entEntityID() };
-			FeedReceivers = new();
-			MostRecentRequester = new entEntityID();
-			BinkVideoPath = new redResourceReferenceScriptToken();
-
 			PostConstruct();
 		}
 

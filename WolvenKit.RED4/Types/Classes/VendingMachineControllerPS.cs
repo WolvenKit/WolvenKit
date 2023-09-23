@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VendingMachineControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("vendingMachineSetup")] 
 		public VendingMachineSetup VendingMachineSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<VendingMachineSetup>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("vendingMachineSFX")] 
 		public VendingMachineSFX VendingMachineSFX
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<VendingMachineSFX>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("soldOutProbability")] 
 		public CFloat SoldOutProbability
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("isReady")] 
 		public CBool IsReady
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("isSoldOut")] 
 		public CBool IsSoldOut
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("hackCount")] 
 		public CInt32 HackCount
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(113)] 
 		[RED("shopStock")] 
 		public CArray<gameSItemStack> ShopStock
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameSItemStack>>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(114)] 
 		[RED("shopStockInit")] 
 		public CBool ShopStockInit
 		{
@@ -70,16 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public VendingMachineControllerPS()
 		{
-			DeviceName = "LocKey#176";
-			TweakDBRecord = "Devices.VendingMachine";
-			TweakDBDescriptionRecord = 146495886677;
-			VendingMachineSetup = new VendingMachineSetup { TimeToCompletePurchase = 0.100000F };
-			VendingMachineSFX = new VendingMachineSFX { GlitchingStart = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110", GlitchingStop = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110_stop" };
-			SoldOutProbability = 0.050000F;
-			IsReady = true;
-			HackCount = 2;
-			ShopStock = new();
-
 			PostConstruct();
 		}
 

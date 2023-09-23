@@ -85,6 +85,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("blackWallEffectOnShow")] 
+		public CBool BlackWallEffectOnShow
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("LoopAnimationName")] 
 		public CName LoopAnimationName
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("ShowingAnimationName")] 
 		public CName ShowingAnimationName
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("HidingAnimationName")] 
 		public CName HidingAnimationName
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("AudiocallShowingAnimationName")] 
 		public CName AudiocallShowingAnimationName
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("AudiocallHidingAnimationName")] 
 		public CName AudiocallHidingAnimationName
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("HolocallShowingAnimationName")] 
 		public CName HolocallShowingAnimationName
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("HolocallHidingAnimationName")] 
 		public CName HolocallHidingAnimationName
 		{
@@ -140,20 +148,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("LoopAnimation")] 
 		public CHandle<inkanimProxy> LoopAnimation
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(20)] 
-		[RED("options")] 
-		public inkanimPlaybackOptions Options
-		{
-			get => GetPropertyValue<inkanimPlaybackOptions>();
-			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
 		[Ordinal(21)] 
@@ -197,11 +197,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(26)] 
-		[RED("alpha_fadein")] 
-		public CHandle<inkanimDefinition> Alpha_fadein
+		[RED("Owner")] 
+		public CWeakHandle<gameObject> Owner
 		{
-			get => GetPropertyValue<CHandle<inkanimDefinition>>();
-			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		[Ordinal(27)] 
@@ -220,28 +220,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(29)] 
+		[RED("showAvatar")] 
+		public CBool ShowAvatar
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public HudPhoneAvatarController()
 		{
-			ContactAvatar = new inkImageWidgetReference();
-			HolocallRenderTexture = new inkImageWidgetReference();
-			SignalRangeIcon = new inkImageWidgetReference();
-			ContactName = new inkTextWidgetReference();
-			StatusText = new inkTextWidgetReference();
-			WaveformPlaceholder = new inkCanvasWidgetReference();
-			HolocallHolder = new inkFlexWidgetReference();
-			UnknownAvatarName = "Unknown";
-			DefaultPortraitColor = new CColor();
-			DefaultImageSize = new Vector2();
-			LoopAnimationName = "avatarHoloCallLoopAnimation";
-			ShowingAnimationName = "portraitIntro";
-			HidingAnimationName = "portraitOutro";
-			AudiocallShowingAnimationName = "avatarAudiocallShowingAnimation";
-			AudiocallHidingAnimationName = "avatarAudiocallHidingAnimation";
-			HolocallShowingAnimationName = "avatarHolocallShowingAnimation";
-			HolocallHidingAnimationName = "avatarHolocallHidingAnimation";
-			Options = new inkanimPlaybackOptions();
-			Holder = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -46,11 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceWidgetControllerBase()
 		{
-			BackgroundTextureRef = new inkImageWidgetReference();
-			StatusNameWidget = new inkTextWidgetReference();
-			ActionsListWidget = new inkWidgetReference();
-			ActionWidgetsData = new();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class GenericDevice : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("currentSpiderbotAction")] 
 		public CHandle<CustomDeviceAction> CurrentSpiderbotAction
 		{
@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public GenericDevice()
 		{
-			ControllerTypeName = "GenericDeviceController";
-
 			PostConstruct();
 		}
 

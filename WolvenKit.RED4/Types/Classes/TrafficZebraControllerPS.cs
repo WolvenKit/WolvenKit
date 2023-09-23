@@ -5,8 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public TrafficZebraControllerPS()
 		{
-			DeviceName = "Gameplay-Devices-DisplayNames-Zebra";
-
 			PostConstruct();
 		}
 

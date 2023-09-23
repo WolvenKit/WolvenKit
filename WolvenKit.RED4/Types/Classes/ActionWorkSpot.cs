@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class ActionWorkSpot : ActionBool
 	{
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("workspotTarget")] 
 		public CWeakHandle<gamePuppet> WorkspotTarget
 		{

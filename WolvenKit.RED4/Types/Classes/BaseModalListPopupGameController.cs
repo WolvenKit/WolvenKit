@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("timeDilationProfile")] 
+		public CString TimeDilationProfile
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("templateClassifier")] 
 		public CHandle<BaseModalListPopupTemplateClassifier> TemplateClassifier
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<BaseModalListPopupTemplateClassifier>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("systemRequestsHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> SystemRequestsHandler
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("switchAnimProxy")] 
 		public CHandle<inkanimProxy> SwitchAnimProxy
 		{
@@ -60,15 +68,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(9)] 
-		[RED("transitionAnimProxy")] 
-		public CHandle<inkanimProxy> TransitionAnimProxy
+		[Ordinal(10)] 
+		[RED("inoutTransitionAnimProxy")] 
+		public CHandle<inkanimProxy> InoutTransitionAnimProxy
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("isInMenuCallbackID")] 
 		public CHandle<redCallbackObject> IsInMenuCallbackID
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("c_scrollInputThreshold")] 
 		public CFloat C_scrollInputThreshold
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("firstInit")] 
 		public CBool FirstInit
 		{
@@ -94,9 +102,6 @@ namespace WolvenKit.RED4.Types
 
 		public BaseModalListPopupGameController()
 		{
-			Content = new inkWidgetReference();
-			C_scrollInputThreshold = 0.750000F;
-
 			PostConstruct();
 		}
 

@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("journalEntryOverrideDataList")] 
+		public CArray<CHandle<gameJournalEntryOverrideData>> JournalEntryOverrideDataList
+		{
+			get => GetPropertyValue<CArray<CHandle<gameJournalEntryOverrideData>>>();
+			set => SetPropertyValue<CArray<CHandle<gameJournalEntryOverrideData>>>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("imageId")] 
 		public TweakDBID ImageId
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("counter")] 
 		public CInt32 Counter
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("timeStamp")] 
 		public GameTime TimeStamp
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<GameTime>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("isNew")] 
 		public CBool IsNew
 		{
@@ -60,7 +68,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
+		[RED("isEp1")] 
+		public CBool IsEp1
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("newEntries")] 
 		public CArray<CInt32> NewEntries
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("activeDataSync")] 
 		public CWeakHandle<CodexListSyncData> ActiveDataSync
 		{
@@ -86,10 +102,6 @@ namespace WolvenKit.RED4.Types
 
 		public GenericCodexEntryData()
 		{
-			TimeStamp = new GameTime();
-			NewEntries = new();
-			ItemID = new gameItemID();
-
 			PostConstruct();
 		}
 

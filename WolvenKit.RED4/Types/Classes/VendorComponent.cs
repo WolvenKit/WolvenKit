@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public VendorComponent()
 		{
-			JunkItemArray = new();
-			BrandProcessingSFX = "dev_vending_machine_processing";
-			ItemFallSFX = "dev_vending_machine_can_falls";
-
 			PostConstruct();
 		}
 

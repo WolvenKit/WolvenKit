@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public ProgressBarAnimationChunkController()
 		{
-			RootCanvas = new inkWidgetReference();
-			BarCanvas = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

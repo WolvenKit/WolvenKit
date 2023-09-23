@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class minibossPlasmaProjectile : BaseProjectile
 	{
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("countTime")] 
 		public CFloat CountTime
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
@@ -20,15 +20,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_376
+		public CFloat Lifetime_392
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("effectName")] 
 		public CName EffectName
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("hitEffectName")] 
 		public CName HitEffectName
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("followTarget")] 
 		public CBool FollowTarget
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("bendFactor")] 
 		public CFloat BendFactor
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("bendRatio")] 
 		public CFloat BendRatio
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(56)] 
 		[RED("shouldRotate")] 
 		public CBool ShouldRotate
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(57)] 
 		[RED("attackRecordID")] 
 		public TweakDBID AttackRecordID
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(58)] 
 		[RED("instigator")] 
 		public CWeakHandle<gameObject> Instigator
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(59)] 
 		[RED("spawnGameEffectOnCollision")] 
 		public CBool SpawnGameEffectOnCollision
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(60)] 
 		[RED("collisionAttackRecord")] 
 		public CHandle<gamedataAttack_Record> CollisionAttackRecord
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataAttack_Record>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(61)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(62)] 
 		[RED("owner")] 
 		public CWeakHandle<ScriptedPuppet> Owner
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ScriptedPuppet>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(63)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
@@ -134,8 +134,6 @@ namespace WolvenKit.RED4.Types
 
 		public minibossPlasmaProjectile()
 		{
-			Alive = true;
-
 			PostConstruct();
 		}
 

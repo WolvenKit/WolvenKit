@@ -86,12 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public VendingMachineInkGameController()
 		{
-			ActionsPanel = new inkHorizontalPanelWidgetReference();
-			ActionsPanel2 = new inkHorizontalPanelWidgetReference();
-			PriceText = new inkTextWidgetReference();
-			NoMoneyPanel = new inkCompoundWidgetReference();
-			SoldOutPanel = new inkCompoundWidgetReference();
-
 			PostConstruct();
 		}
 

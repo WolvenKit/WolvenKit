@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceOperationsContainer()
 		{
-			Operations = new();
-			Triggers = new();
-
 			PostConstruct();
 		}
 

@@ -222,21 +222,6 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkSystem()
 		{
-			NetworkLinks = new();
-			NetworkRevealTargets = new();
-			NetworkRevealTargetsLastSession = new();
-			LastTargetSlaveID = new entEntityID();
-			LastTargetMasterID = new entEntityID();
-			UnregisterLinksRequestDelay = new gameDelayID();
-			LastBeamResource = new gameFxResource();
-			LastPingSourceID = new entEntityID();
-			ActivePings = new();
-			PingedSquads = new();
-			Backdoors = new();
-			DebugCashedPingFxResource = new gameFxResource();
-			ActivateLinksDelayID = new gameDelayID();
-			DeactivateLinksDelayID = new gameDelayID();
-
 			PostConstruct();
 		}
 

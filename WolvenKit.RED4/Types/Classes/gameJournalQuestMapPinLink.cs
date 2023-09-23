@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalQuestMapPinLink : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("path")] 
 		public CHandle<gameJournalPath> Path
 		{
@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalQuestMapPinLink()
 		{
+			JournalEntryOverrideDataList = new();
+
 			PostConstruct();
 		}
 

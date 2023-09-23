@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ProgressionWidgetGameController : gameuiGenericNotificationGameController
 	{
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("playerDevelopmentSystem")] 
 		public CHandle<PlayerDevelopmentSystem> PlayerDevelopmentSystem
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PlayerDevelopmentSystem>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("combatModePSM")] 
 		public CEnum<gamePSMCombat> CombatModePSM
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMCombat>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("combatModeListener")] 
 		public CHandle<redCallbackObject> CombatModeListener
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("playerObject")] 
 		public CWeakHandle<gameObject> PlayerObject
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -54,9 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public ProgressionWidgetGameController()
 		{
-			Duration = 3.000000F;
-			GameInstance = new ScriptGameInstance();
-
 			PostConstruct();
 		}
 

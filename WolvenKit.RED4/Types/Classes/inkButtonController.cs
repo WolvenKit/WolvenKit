@@ -2,9 +2,9 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkButtonController : inkWidgetLogicController
+	public partial class inkButtonController : inkDiscreteNavigationController
 	{
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("ButtonClick")] 
 		public inkButtonClickCallback ButtonClick
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkButtonClickCallback>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("ButtonHoldComplete")] 
 		public inkButtonHoldCompleteCallback ButtonHoldComplete
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkButtonHoldCompleteCallback>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("ButtonStateChanged")] 
 		public inkButtonStateChangeCallback ButtonStateChanged
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkButtonStateChangeCallback>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("ButtonSelectionChanged")] 
 		public inkButtonSelectionCallback ButtonSelectionChanged
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkButtonSelectionCallback>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("ButtonHoldProgressChanged")] 
 		public inkButtonProgressChangedCallback ButtonHoldProgressChanged
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkButtonProgressChangedCallback>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("canHold")] 
 		public CBool CanHold
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("selectable")] 
 		public CBool Selectable
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("selected")] 
 		public CBool Selected
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("autoUpdateWidgetState")] 
 		public CBool AutoUpdateWidgetState
 		{
@@ -83,7 +83,6 @@ namespace WolvenKit.RED4.Types
 			ButtonStateChanged = new inkButtonStateChangeCallback();
 			ButtonSelectionChanged = new inkButtonSelectionCallback();
 			ButtonHoldProgressChanged = new inkButtonProgressChangedCallback();
-			AutoUpdateWidgetState = true;
 
 			PostConstruct();
 		}

@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("expansionWidget")] 
+		public inkWidgetReference ExpansionWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("scrollWidget")] 
 		public inkWidgetReference ScrollWidget
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("contentWrapper")] 
 		public inkWidgetReference ContentWrapper
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("noEntrySelectedWidget")] 
 		public inkWidgetReference NoEntrySelectedWidget
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("data")] 
 		public CHandle<GenericCodexEntryData> Data
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<GenericCodexEntryData>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("scroll")] 
 		public CWeakHandle<inkScrollController> Scroll
 		{
@@ -86,15 +94,6 @@ namespace WolvenKit.RED4.Types
 
 		public CodexEntryViewController()
 		{
-			TitleText = new inkTextWidgetReference();
-			DescriptionText = new inkTextWidgetReference();
-			ImageWidget = new inkImageWidgetReference();
-			ImageWidgetFallback = new inkWidgetReference();
-			ImageWidgetWrapper = new inkWidgetReference();
-			ScrollWidget = new inkWidgetReference();
-			ContentWrapper = new inkWidgetReference();
-			NoEntrySelectedWidget = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

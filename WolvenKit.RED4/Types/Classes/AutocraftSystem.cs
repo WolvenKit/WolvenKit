@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public AutocraftSystem()
 		{
-			CurrentDelayID = new gameDelayID();
-			ItemsUsed = new();
-
 			PostConstruct();
 		}
 

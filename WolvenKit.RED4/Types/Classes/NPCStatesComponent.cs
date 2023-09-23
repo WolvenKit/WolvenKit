@@ -173,6 +173,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(26)] 
+		[RED("keepRecentThreatAfterRelaxedDuration")] 
+		public CFloat KeepRecentThreatAfterRelaxedDuration
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("inCombat")] 
 		public CBool InCombat
 		{
@@ -182,13 +190,6 @@ namespace WolvenKit.RED4.Types
 
 		public NPCStatesComponent()
 		{
-			HighLevelAnimFeatureName = "highLevelState";
-			UpperBodyAnimFeatureName = "upperBodyState";
-			StanceAnimFeatureName = "stanceState";
-			PrevNPCStanceState = Enums.gamedataNPCStanceState.Invalid;
-			PreviousHighLevelState = Enums.gamedataNPCHighLevelState.Invalid;
-			PrevHitReactionMode = Enums.EHitReactionMode.Invalid;
-
 			PostConstruct();
 		}
 

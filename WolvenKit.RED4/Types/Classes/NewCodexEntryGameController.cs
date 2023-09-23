@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public NewCodexEntryGameController()
 		{
-			Label = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

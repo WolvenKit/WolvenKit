@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ScriptedWeakspotObject : gameWeakspotObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("weakspotOnDestroyProperties")] 
 		public WeakspotOnDestroyProperties WeakspotOnDestroyProperties
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<WeakspotOnDestroyProperties>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("mesh")] 
 		public CHandle<entMeshComponent> Mesh
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{
@@ -28,7 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
+		[RED("targeting")] 
+		public CHandle<gameTargetingComponent> Targeting
+		{
+			get => GetPropertyValue<CHandle<gameTargetingComponent>>();
+			set => SetPropertyValue<CHandle<gameTargetingComponent>>(value);
+		}
+
+		[Ordinal(40)] 
 		[RED("collider")] 
 		public CHandle<entIPlacedComponent> Collider
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("instigator")] 
 		public CWeakHandle<gameObject> Instigator
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("weakspotRecordData")] 
 		public WeakspotRecordData WeakspotRecordData
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<WeakspotRecordData>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("hasBeenScanned")] 
 		public CBool HasBeenScanned
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("statPoolSystem")] 
 		public CHandle<gameStatPoolsSystem> StatPoolSystem
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatPoolsSystem>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("healthListener")] 
 		public CHandle<WeakspotHealthChangeListener> HealthListener
 		{
@@ -92,12 +100,32 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<WeakspotHealthChangeListener>>(value);
 		}
 
+		[Ordinal(48)] 
+		[RED("parentMaxhealth")] 
+		public CFloat ParentMaxhealth
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(49)] 
+		[RED("blockHighlight")] 
+		public CBool BlockHighlight
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(50)] 
+		[RED("blockDamage")] 
+		public CBool BlockDamage
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public ScriptedWeakspotObject()
 		{
-			WeakspotOnDestroyProperties = new WeakspotOnDestroyProperties { DisableInteraction = true, DestroyMesh = true };
-			WeakspotRecordData = new WeakspotRecordData();
-			Alive = true;
-
 			PostConstruct();
 		}
 

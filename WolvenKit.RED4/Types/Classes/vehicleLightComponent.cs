@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class vehicleLightComponent : gameLightComponent
 	{
-		[Ordinal(76)] 
+		[Ordinal(77)] 
 		[RED("allowSeparateEmissiveColor")] 
 		public CBool AllowSeparateEmissiveColor
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(78)] 
 		[RED("emissiveColor")] 
 		public CColor EmissiveColor
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(79)] 
 		[RED("lightType")] 
 		public CEnum<vehicleELightType> LightType
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<vehicleELightType>>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(80)] 
 		[RED("highBeamPitchAngle")] 
 		public CFloat HighBeamPitchAngle
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(81)] 
 		[RED("highBeamRadiusMultiplier")] 
 		public CFloat HighBeamRadiusMultiplier
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(82)] 
 		[RED("highBeamConeMultiplier")] 
 		public CFloat HighBeamConeMultiplier
 		{
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.Types
 			EmissiveColor = new CColor();
 			LightType = Enums.vehicleELightType.Head;
 			HighBeamRadiusMultiplier = 2.000000F;
-			HighBeamConeMultiplier = 2.000000F;
+			HighBeamConeMultiplier = 1.000000F;
 
 			PostConstruct();
 		}

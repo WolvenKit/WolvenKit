@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SmartHouse : InteractiveMasterDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("timetableActive")] 
 		public CBool TimetableActive
 		{
@@ -14,9 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public SmartHouse()
 		{
-			ControllerTypeName = "SmartHouseController";
-			TimetableActive = true;
-
 			PostConstruct();
 		}
 

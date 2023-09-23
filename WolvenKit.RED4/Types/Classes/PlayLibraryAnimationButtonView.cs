@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PlayLibraryAnimationButtonView : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("ToHoverAnimationName")] 
 		public CName ToHoverAnimationName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("ToPressedAnimationName")] 
 		public CName ToPressedAnimationName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("ToDefaultAnimationName")] 
 		public CName ToDefaultAnimationName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("ToDisabledAnimationName")] 
 		public CName ToDisabledAnimationName
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("InputAnimation")] 
 		public CHandle<inkanimProxy> InputAnimation
 		{

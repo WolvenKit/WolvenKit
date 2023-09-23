@@ -166,20 +166,6 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerBountySystemGameController()
 		{
-			MoneyReward = new inkTextWidgetReference();
-			MoneyRewardRow = new inkWidgetReference();
-			StreetCredReward = new inkTextWidgetReference();
-			StreetCredRewardRow = new inkWidgetReference();
-			Transgressions = new inkTextWidgetReference();
-			TransgressionsWidget = new inkWidgetReference();
-			RewardPanel = new inkCompoundWidgetReference();
-			MugShot = new inkRectangleWidgetReference();
-			Wanted = new inkTextWidgetReference();
-			NotFound = new inkTextWidgetReference();
-			DeadNotice = new inkTextWidgetReference();
-			CrossedOut = new inkWidgetReference();
-			StarsWidget = new();
-
 			PostConstruct();
 		}
 

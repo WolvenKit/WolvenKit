@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public CacheStatusEffectFXEvent()
 		{
-			VfxToCache = new();
-			SfxToCache = new();
-
 			PostConstruct();
 		}
 

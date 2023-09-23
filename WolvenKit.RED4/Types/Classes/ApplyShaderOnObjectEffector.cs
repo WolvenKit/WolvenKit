@@ -78,8 +78,6 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyShaderOnObjectEffector()
 		{
-			Effects = new();
-
 			PostConstruct();
 		}
 

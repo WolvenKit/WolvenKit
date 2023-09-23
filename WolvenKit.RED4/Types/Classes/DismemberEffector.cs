@@ -38,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public DismemberEffector()
 		{
-			HitPosition = new Vector3();
-
 			PostConstruct();
 		}
 

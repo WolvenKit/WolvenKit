@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public QuickSlotButtonHoldEndEvent()
 		{
-			RightStickAngle = -1.000000F;
-			TryExecuteCommand = true;
-
 			PostConstruct();
 		}
 

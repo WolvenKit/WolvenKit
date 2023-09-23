@@ -20,11 +20,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Uint32>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("highestDetectionOnPlayer")] 
+		public gamebbScriptID_Float HighestDetectionOnPlayer
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("highestHostileDetectionOnPlayer")] 
+		public gamebbScriptID_Float HighestHostileDetectionOnPlayer
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
 		public UI_StealthDef()
 		{
-			CombatDebug = new gamebbScriptID_Bool();
-			NumberOfCombatants = new gamebbScriptID_Uint32();
-
 			PostConstruct();
 		}
 

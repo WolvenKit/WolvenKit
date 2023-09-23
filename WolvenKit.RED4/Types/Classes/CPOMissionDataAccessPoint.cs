@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CPOMissionDataAccessPoint : CPOMissionDevice
 	{
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("hasDataToDownload")] 
 		public CBool HasDataToDownload
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("damagesPresetName")] 
 		public CName DamagesPresetName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("factsOnDownload")] 
 		public CArray<SFactToChange> FactsOnDownload
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SFactToChange>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("factsOnUpload")] 
 		public CArray<SFactToChange> FactsOnUpload
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SFactToChange>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("ownerDecidesOnTransfer")] 
 		public CBool OwnerDecidesOnTransfer
 		{
@@ -46,11 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public CPOMissionDataAccessPoint()
 		{
-			HasDataToDownload = true;
-			DamagesPresetName = "CPODataRaceParams";
-			FactsOnDownload = new();
-			FactsOnUpload = new();
-
 			PostConstruct();
 		}
 

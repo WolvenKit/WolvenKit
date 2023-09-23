@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<physicsQueryPreset>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("playerUseCameraPositionForCheck")] 
+		public CBool PlayerUseCameraPositionForCheck
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameEffectFilter_NotObstructed()
 		{
 			QueryPreset = new physicsQueryPreset();

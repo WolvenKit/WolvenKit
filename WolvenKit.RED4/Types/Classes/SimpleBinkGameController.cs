@@ -46,12 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public SimpleBinkGameController()
 		{
-			PlayCommonAd = true;
-			Video1Path = "Video1";
-			Video2Path = "Video2";
-			Video1 = new inkVideoWidgetReference();
-			Video2 = new inkVideoWidgetReference();
-
 			PostConstruct();
 		}
 

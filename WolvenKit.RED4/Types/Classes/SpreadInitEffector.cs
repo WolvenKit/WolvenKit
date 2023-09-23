@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("applyOverclock")] 
+		public CBool ApplyOverclock
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SpreadInitEffector()
 		{
 			PostConstruct();

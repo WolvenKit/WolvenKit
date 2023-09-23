@@ -22,11 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public CustomActionOperations()
 		{
-			Components = new();
-			FxInstances = new();
-			CustomActions = new SCustomDeviceActionsData { Actions = new() };
-			CustomActionsOperations = new();
-
 			PostConstruct();
 		}
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Terminal : InteractiveMasterDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("cameraFeed")] 
 		public CHandle<ScriptableVirtualCameraViewComponent> CameraFeed
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ScriptableVirtualCameraViewComponent>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public Terminal()
 		{
-			ControllerTypeName = "TerminalController";
-			ShortGlitchDelayID = new gameDelayID();
-
 			PostConstruct();
 		}
 

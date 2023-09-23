@@ -45,6 +45,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("bbAreaZoneEventId")] 
+		public CHandle<redCallbackObject> BbAreaZoneEventId
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("combatModeListener")] 
+		public CHandle<redCallbackObject> CombatModeListener
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("staminaController")] 
 		public CWeakHandle<NameplateBarLogicController> StaminaController
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<NameplateBarLogicController>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("RootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
@@ -60,31 +76,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(16)] 
-		[RED("animLongFade")] 
-		public CHandle<inkanimDefinition> AnimLongFade
-		{
-			get => GetPropertyValue<CHandle<inkanimDefinition>>();
-			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
-		}
-
-		[Ordinal(17)] 
-		[RED("animHideStaminaProxy")] 
-		public CHandle<inkanimProxy> AnimHideStaminaProxy
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
 		[Ordinal(18)] 
-		[RED("currentStamina")] 
-		public CFloat CurrentStamina
+		[RED("currentBarValue")] 
+		public CFloat CurrentBarValue
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
+		[RED("currentStatPool")] 
+		public CEnum<gamedataStatPoolType> CurrentStatPool
+		{
+			get => GetPropertyValue<CEnum<gamedataStatPoolType>>();
+			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("sceneTier")] 
 		public CEnum<GameplayTier> SceneTier
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<GameplayTier>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("staminaState")] 
 		public CEnum<gamePSMStamina> StaminaState
 		{
@@ -100,7 +108,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMStamina>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
+		[RED("zoneState")] 
+		public CEnum<gamePSMZones> ZoneState
+		{
+			get => GetPropertyValue<CEnum<gamePSMZones>>();
+			set => SetPropertyValue<CEnum<gamePSMZones>>(value);
+		}
+
+		[Ordinal(23)] 
 		[RED("staminaPoolListener")] 
 		public CHandle<StaminaPoolListener> StaminaPoolListener
 		{
@@ -108,14 +124,48 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<StaminaPoolListener>>(value);
 		}
 
+		[Ordinal(24)] 
+		[RED("statsSystem")] 
+		public CHandle<gameStatsSystem> StatsSystem
+		{
+			get => GetPropertyValue<CHandle<gameStatsSystem>>();
+			set => SetPropertyValue<CHandle<gameStatsSystem>>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("forceHidden")] 
+		public CBool ForceHidden
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("staminaRatioEnterCondition")] 
+		public CFloat StaminaRatioEnterCondition
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("pulse")] 
+		public CHandle<PulseAnimation> Pulse
+		{
+			get => GetPropertyValue<CHandle<PulseAnimation>>();
+			set => SetPropertyValue<CHandle<PulseAnimation>>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("playerPuppet")] 
+		public CWeakHandle<gameObject> PlayerPuppet
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
 		public StaminabarWidgetGameController()
 		{
-			StaminaControllerRef = new inkWidgetReference();
-			StaminaPercTextPath = new inkTextWidgetReference();
-			StaminaStatusTextPath = new inkTextWidgetReference();
-			CurrentStamina = 100.000000F;
-			SceneTier = Enums.GameplayTier.Tier1_FullGameplay;
-
 			PostConstruct();
 		}
 

@@ -77,6 +77,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("inputHintKeyCombinationType")] 
+		public CEnum<inkInputHintKeyCombinationType> InputHintKeyCombinationType
+		{
+			get => GetPropertyValue<CEnum<inkInputHintKeyCombinationType>>();
+			set => SetPropertyValue<CEnum<inkInputHintKeyCombinationType>>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("enableHoldAnimation")] 
 		public CBool EnableHoldAnimation
 		{
@@ -86,6 +94,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiInputHintData()
 		{
+			HoldIndicationType = Enums.inkInputHintHoldIndicationType.Press;
+
 			PostConstruct();
 		}
 

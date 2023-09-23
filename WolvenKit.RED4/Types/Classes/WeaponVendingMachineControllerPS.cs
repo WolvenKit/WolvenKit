@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WeaponVendingMachineControllerPS : VendingMachineControllerPS
 	{
-		[Ordinal(112)] 
+		[Ordinal(115)] 
 		[RED("weaponVendingMachineSetup")] 
 		public WeaponVendingMachineSetup WeaponVendingMachineSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<WeaponVendingMachineSetup>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(116)] 
 		[RED("weaponVendingMachineSFX")] 
 		public WeaponVendingMachineSFX WeaponVendingMachineSFX
 		{
@@ -22,12 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public WeaponVendingMachineControllerPS()
 		{
-			DeviceName = "LocKey#17883";
-			TweakDBRecord = "Devices.WeaponVendingMachine";
-			TweakDBDescriptionRecord = 174063646172;
-			WeaponVendingMachineSetup = new WeaponVendingMachineSetup { TimeToCompletePurchase = 3.000000F };
-			WeaponVendingMachineSFX = new WeaponVendingMachineSFX { Processing = "dev_vending_machine_processing" };
-
 			PostConstruct();
 		}
 

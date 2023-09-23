@@ -165,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			ResolutionHeight = 100;
 			Params = new WorldRenderAreaSettings { AreaParameters = new() };
 			BackgroundColor = new CColor();
-			Features = new entRenderToTextureFeatures { RenderDecals = true, RenderParticles = true, AntiAliasing = true, LocalShadows = true };
+			Features = new entRenderToTextureFeatures { RenderDecals = true, RenderParticles = true, LocalShadows = true };
 			StreamingDistance = 1.000000F;
 
 			PostConstruct();

@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public IceMachineInkGameController()
 		{
-			ButtonContainer = new inkWidgetReference();
-			SoldOutText = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

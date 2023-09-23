@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("animationDuration")] 
+		public CFloat AnimationDuration
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public AdHocAnimationEvent()
 		{
 			PostConstruct();

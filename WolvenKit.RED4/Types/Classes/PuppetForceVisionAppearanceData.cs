@@ -86,12 +86,6 @@ namespace WolvenKit.RED4.Types
 
 		public PuppetForceVisionAppearanceData()
 		{
-			HighlightType = Enums.EFocusForcedHighlightType.INVALID;
-			TransitionTime = 0.500000F;
-			Priority = Enums.EPriority.VeryHigh;
-			Targets = new();
-			HighlightedTargets = new();
-
 			PostConstruct();
 		}
 

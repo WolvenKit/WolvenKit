@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public TooltipSpawnedCallbackData()
 		{
-			Index = -1;
-			StyleResRef = new redResourceReferenceScriptToken();
-
 			PostConstruct();
 		}
 

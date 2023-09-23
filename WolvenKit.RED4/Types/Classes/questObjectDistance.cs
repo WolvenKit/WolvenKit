@@ -5,22 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class questObjectDistance : questIDistance
 	{
 		[Ordinal(0)] 
-		[RED("isPlayer")] 
-		public CBool IsPlayer
+		[RED("entityRef")] 
+		public CHandle<questUniversalRef> EntityRef
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CHandle<questUniversalRef>>();
+			set => SetPropertyValue<CHandle<questUniversalRef>>(value);
 		}
 
 		[Ordinal(1)] 
-		[RED("nodeRef1")] 
-		public gameEntityReference NodeRef1
-		{
-			get => GetPropertyValue<gameEntityReference>();
-			set => SetPropertyValue<gameEntityReference>(value);
-		}
-
-		[Ordinal(2)] 
 		[RED("nodeRef2")] 
 		public gameEntityReference NodeRef2
 		{
@@ -30,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public questObjectDistance()
 		{
-			IsPlayer = true;
-			NodeRef1 = new gameEntityReference { Names = new() };
 			NodeRef2 = new gameEntityReference { Names = new() };
 
 			PostConstruct();

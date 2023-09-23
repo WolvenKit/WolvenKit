@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ActivatedDeviceNPCControllerPS : ActivatedDeviceControllerPS
 	{
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("activatedDeviceNPCSetup")] 
 		public ActivatedDeviceNPCSetup ActivatedDeviceNPCSetup
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public ActivatedDeviceNPCControllerPS()
 		{
-			ActivatedDeviceNPCSetup = new ActivatedDeviceNPCSetup();
-
 			PostConstruct();
 		}
 

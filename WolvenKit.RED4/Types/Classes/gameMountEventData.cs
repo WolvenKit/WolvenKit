@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("entrySlotName")] 
+		public CName EntrySlotName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("initialTransformLS")] 
 		public Transform InitialTransformLS
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Transform>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("setEntityVisibleWhenMountFinish")] 
 		public CBool SetEntityVisibleWhenMountFinish
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("removePitchRollRotationOnDismount")] 
 		public CBool RemovePitchRollRotationOnDismount
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("ignoreHLS")] 
 		public CBool IgnoreHLS
 		{
@@ -68,7 +76,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
+		[RED("switchRenderPlane")] 
+		public CBool SwitchRenderPlane
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("isJustAttached")] 
+		public CBool IsJustAttached
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("isCarrying")] 
+		public CBool IsCarrying
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("allowFailsafeTeleport")] 
+		public CBool AllowFailsafeTeleport
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("mountEventOptions")] 
 		public CHandle<gameMountEventOptions> MountEventOptions
 		{
@@ -79,8 +119,10 @@ namespace WolvenKit.RED4.Types
 		public gameMountEventData()
 		{
 			MountParentEntityId = new entEntityID();
+			EntrySlotName = "default";
 			InitialTransformLS = new Transform { Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F } };
 			RemovePitchRollRotationOnDismount = true;
+			SwitchRenderPlane = true;
 
 			PostConstruct();
 		}

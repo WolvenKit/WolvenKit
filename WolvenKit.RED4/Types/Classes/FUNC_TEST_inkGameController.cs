@@ -126,22 +126,6 @@ namespace WolvenKit.RED4.Types
 
 		public FUNC_TEST_inkGameController()
 		{
-			Canvas = new inkCanvasWidgetReference();
-			HorizontalPanel = new inkHorizontalPanelWidgetReference();
-			VerticalPanel = new inkVerticalPanelWidgetReference();
-			Flex = new inkFlexWidgetReference();
-			UniformGrid = new inkUniformGridWidgetReference();
-			Text = new inkTextWidgetReference();
-			TextInput = new inkTextInputWidgetReference();
-			Image = new inkImageWidgetReference();
-			Video = new inkVideoWidgetReference();
-			Border = new inkBorderWidgetReference();
-			Rectangle = new inkRectangleWidgetReference();
-			Circle = new inkCircleWidgetReference();
-			Shape = new inkShapeWidgetReference();
-			BasicInputFields = new FUNC_TEST_Container_2();
-			AdditionalFields = new FUNC_TEST_Container { BasePanel = new inkBasePanelWidgetReference(), Compound = new inkCompoundWidgetReference(), Leaf = new inkLeafWidgetReference(), Widget = new inkWidgetReference() };
-
 			PostConstruct();
 		}
 

@@ -62,16 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public KeyboardHintItemController()
 		{
-			Icon = new inkImageWidgetReference();
-			UnavaliableText = new inkTextWidgetReference();
-			NumberText = new inkTextWidgetReference();
-			Frame = new inkImageWidgetReference();
-			DisabledStateName = "Disabled";
-			SelectedStateName = "Selected";
-			FrameSelectedName = "top_button_selected";
-			FrameUnselectedName = "top_button";
-			AnimationName = "AnimRootOnThenOff";
-
 			PostConstruct();
 		}
 

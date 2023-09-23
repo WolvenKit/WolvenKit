@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public ActionWeightManagerDelegate()
 		{
-			ActionsConditions = new();
-			ActionsWeights = new();
-
 			PostConstruct();
 		}
 

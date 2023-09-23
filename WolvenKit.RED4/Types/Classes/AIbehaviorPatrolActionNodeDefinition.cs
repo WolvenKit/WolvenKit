@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("patrolContinuationPolicy")] 
+		public CHandle<AIArgumentMapping> PatrolContinuationPolicy
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("playStartAnimation")] 
 		public CHandle<AIArgumentMapping> PlayStartAnimation
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("fastForwardAfterTeleport")] 
 		public CHandle<AIArgumentMapping> FastForwardAfterTeleport
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("workspotData")] 
 		public CHandle<AIArgumentMapping> WorkspotData
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("dependentWorkspotData")] 
 		public CHandle<AIArgumentMapping> DependentWorkspotData
 		{
@@ -60,9 +68,25 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("lookAtTarget")] 
 		public CHandle<AIArgumentMapping> LookAtTarget
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("usePathContext")] 
+		public CHandle<AIArgumentMapping> UsePathContext
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("useOffMeshLinkReservation")] 
+		public CHandle<AIArgumentMapping> UseOffMeshLinkReservation
 		{
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);

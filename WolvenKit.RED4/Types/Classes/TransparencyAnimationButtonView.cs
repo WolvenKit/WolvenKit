@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TransparencyAnimationButtonView : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("AnimationTime")] 
 		public CFloat AnimationTime
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("HoverTransparency")] 
 		public CFloat HoverTransparency
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("PressTransparency")] 
 		public CFloat PressTransparency
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("DefaultTransparency")] 
 		public CFloat DefaultTransparency
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("DisabledTransparency")] 
 		public CFloat DisabledTransparency
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("AnimationProxies")] 
 		public CArray<CHandle<inkanimProxy>> AnimationProxies
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<inkanimProxy>>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("Targets")] 
 		public CArray<inkWidgetReference> Targets
 		{
@@ -62,12 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public TransparencyAnimationButtonView()
 		{
-			AnimationTime = 0.100000F;
-			HoverTransparency = 0.200000F;
-			PressTransparency = 0.400000F;
-			AnimationProxies = new();
-			Targets = new();
-
 			PostConstruct();
 		}
 

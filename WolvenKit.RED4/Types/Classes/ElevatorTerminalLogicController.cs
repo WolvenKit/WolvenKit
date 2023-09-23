@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public ElevatorTerminalLogicController()
 		{
-			ElevatorUpArrowsWidget = new inkFlexWidgetReference();
-			ElevatorDownArrowsWidget = new inkFlexWidgetReference();
-
 			PostConstruct();
 		}
 

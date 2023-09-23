@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("vehCommand")] 
+		public CHandle<AIVehicleChaseCommand> VehCommand
+		{
+			get => GetPropertyValue<CHandle<AIVehicleChaseCommand>>();
+			set => SetPropertyValue<CHandle<AIVehicleChaseCommand>>(value);
+		}
+
 		public InVehicleCombatDecorator()
 		{
 			PostConstruct();

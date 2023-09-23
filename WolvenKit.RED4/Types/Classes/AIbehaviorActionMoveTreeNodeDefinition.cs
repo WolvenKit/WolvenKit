@@ -100,6 +100,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("ignoreCollisionsWhenCloseToTarget")] 
+		public CHandle<AIArgumentMapping> IgnoreCollisionsWhenCloseToTarget
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("failWhenStoppedByCollision")] 
+		public CHandle<AIArgumentMapping> FailWhenStoppedByCollision
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
 		public AIbehaviorActionMoveTreeNodeDefinition()
 		{
 			PostConstruct();

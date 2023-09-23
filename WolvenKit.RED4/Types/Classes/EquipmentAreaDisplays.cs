@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public EquipmentAreaDisplays()
 		{
-			EquipmentAreas = new();
-			DisplayControllers = new();
-
 			PostConstruct();
 		}
 

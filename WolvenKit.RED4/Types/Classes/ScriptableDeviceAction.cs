@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class ScriptableDeviceAction : BaseScriptableAction
 	{
-		[Ordinal(11)] 
+		[Ordinal(22)] 
 		[RED("prop")] 
 		public CHandle<gamedeviceActionProperty> Prop
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedeviceActionProperty>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(23)] 
 		[RED("actionWidgetPackage")] 
 		public SActionWidgetPackage ActionWidgetPackage
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SActionWidgetPackage>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(24)] 
 		[RED("spiderbotActionLocationOverride")] 
 		public NodeRef SpiderbotActionLocationOverride
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(25)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(26)] 
 		[RED("canTriggerStim")] 
 		public CBool CanTriggerStim
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(27)] 
 		[RED("wasPerformedOnOwner")] 
 		public CBool WasPerformedOnOwner
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(28)] 
 		[RED("shouldActivateDevice")] 
 		public CBool ShouldActivateDevice
 		{
@@ -60,7 +60,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(29)] 
+		[RED("disableSpread")] 
+		public CBool DisableSpread
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(30)] 
 		[RED("isQuickHack")] 
 		public CBool IsQuickHack
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(31)] 
 		[RED("isSpiderbotAction")] 
 		public CBool IsSpiderbotAction
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(32)] 
 		[RED("attachedProgram")] 
 		public TweakDBID AttachedProgram
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(33)] 
 		[RED("activeStatusEffect")] 
 		public TweakDBID ActiveStatusEffect
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(34)] 
 		[RED("interactionIconType")] 
 		public TweakDBID InteractionIconType
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(35)] 
 		[RED("hasInteraction")] 
 		public CBool HasInteraction
 		{
@@ -108,12 +116,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(36)] 
 		[RED("inactiveReason")] 
 		public CString InactiveReason
 		{
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("widgetStyle")] 
+		public CEnum<gamedataComputerUIStyle> WidgetStyle
+		{
+			get => GetPropertyValue<CEnum<gamedataComputerUIStyle>>();
+			set => SetPropertyValue<CEnum<gamedataComputerUIStyle>>(value);
 		}
 
 		public ScriptableDeviceAction()

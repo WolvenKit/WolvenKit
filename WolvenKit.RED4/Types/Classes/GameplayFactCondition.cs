@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public GameplayFactCondition()
 		{
-			EntityID = new entEntityID();
-			Description = "Quest progress";
-
 			PostConstruct();
 		}
 

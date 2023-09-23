@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class DataTrackingSystem : gameScriptableSystem
 	{
 		[Ordinal(0)] 
+		[RED("achievementEnumKeyMap")] 
+		public CArray<CInt32> AchievementEnumKeyMap
+		{
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("achievementsMask")] 
 		public CArray<CBool> AchievementsMask
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CBool>>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("rangedAttacksMade")] 
 		public CInt32 RangedAttacksMade
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("meleeAttacksMade")] 
 		public CInt32 MeleeAttacksMade
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("meleeKills")] 
 		public CInt32 MeleeKills
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("rangedKills")] 
 		public CInt32 RangedKills
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("quickhacksMade")] 
 		public CInt32 QuickhacksMade
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("distractionsMade")] 
 		public CInt32 DistractionsMade
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("legendaryItemsCrafted")] 
 		public CInt32 LegendaryItemsCrafted
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("npcMeleeLightAttackReceived")] 
 		public CInt32 NpcMeleeLightAttackReceived
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("npcMeleeStrongAttackReceived")] 
 		public CInt32 NpcMeleeStrongAttackReceived
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("npcMeleeBlockAttackReceived")] 
 		public CInt32 NpcMeleeBlockAttackReceived
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("npcMeleeBlockedAttacks")] 
 		public CInt32 NpcMeleeBlockedAttacks
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("npcMeleeDeflectedAttacks")] 
 		public CInt32 NpcMeleeDeflectedAttacks
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("downedEnemies")] 
 		public CInt32 DownedEnemies
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("killedEnemies")] 
 		public CInt32 KilledEnemies
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("defeatedEnemies")] 
 		public CInt32 DefeatedEnemies
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("incapacitatedEnemies")] 
 		public CInt32 IncapacitatedEnemies
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("finishedEnemies")] 
 		public CInt32 FinishedEnemies
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("downedWithRanged")] 
 		public CInt32 DownedWithRanged
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("downedWithMelee")] 
 		public CInt32 DownedWithMelee
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("downedInTimeDilatation")] 
 		public CInt32 DownedInTimeDilatation
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("rangedProgress")] 
 		public CInt32 RangedProgress
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("meleeProgress")] 
 		public CInt32 MeleeProgress
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("dilationProgress")] 
 		public CInt32 DilationProgress
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("failedShardDrops")] 
 		public CFloat FailedShardDrops
 		{
@@ -204,7 +212,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
+		[RED("LegPlusPlusHackDropped")] 
+		public CBool LegPlusPlusHackDropped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("bluelinesUseCount")] 
 		public CInt32 BluelinesUseCount
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("twoHeadssourceID")] 
 		public entEntityID TwoHeadssourceID
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("twoHeadsValidTimestamp")] 
 		public CFloat TwoHeadsValidTimestamp
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("lastKillTimestamp")] 
 		public CFloat LastKillTimestamp
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("enemiesKilledInTimeInterval")] 
 		public CArray<CWeakHandle<gameObject>> EnemiesKilledInTimeInterval
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<gameObject>>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("timeInterval")] 
 		public CFloat TimeInterval
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("numerOfKillsRequired")] 
 		public CInt32 NumerOfKillsRequired
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("gunKataKilledEnemies")] 
 		public CInt32 GunKataKilledEnemies
 		{
@@ -268,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("gunKataValidTimestamp")] 
 		public CFloat GunKataValidTimestamp
 		{
@@ -276,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("hardKneesInProgress")] 
 		public CBool HardKneesInProgress
 		{
@@ -284,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("hardKneesKilledEnemies")] 
 		public CInt32 HardKneesKilledEnemies
 		{
@@ -292,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("harKneesValidTimestamp")] 
 		public CFloat HarKneesValidTimestamp
 		{
@@ -300,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("resetKilledReqDelayID")] 
 		public gameDelayID ResetKilledReqDelayID
 		{
@@ -308,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("resetFinishedReqDelayID")] 
 		public gameDelayID ResetFinishedReqDelayID
 		{
@@ -316,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("resetDefeatedReqDelayID")] 
 		public gameDelayID ResetDefeatedReqDelayID
 		{
@@ -324,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("resetIncapacitatedReqDelayID")] 
 		public gameDelayID ResetIncapacitatedReqDelayID
 		{
@@ -332,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("resetDownedReqDelayID")] 
 		public gameDelayID ResetDownedReqDelayID
 		{
@@ -340,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("resetMeleeAttackReqDelayID")] 
 		public gameDelayID ResetMeleeAttackReqDelayID
 		{
@@ -348,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("resetRangedAttackReqDelayID")] 
 		public gameDelayID ResetRangedAttackReqDelayID
 		{
@@ -356,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("resetAttackReqDelayID")] 
 		public gameDelayID ResetAttackReqDelayID
 		{
@@ -364,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("resetNpcMeleeLightAttackReqDelayID")] 
 		public gameDelayID ResetNpcMeleeLightAttackReqDelayID
 		{
@@ -372,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("resetNpcMeleeStrongAttackReqDelayID")] 
 		public gameDelayID ResetNpcMeleeStrongAttackReqDelayID
 		{
@@ -380,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("resetNpcMeleeFinalAttackReqDelayID")] 
 		public gameDelayID ResetNpcMeleeFinalAttackReqDelayID
 		{
@@ -388,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("resetNpcMeleeBlockAttackReqDelayID")] 
 		public gameDelayID ResetNpcMeleeBlockAttackReqDelayID
 		{
@@ -396,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("resetNpcBlockedReqDelayID")] 
 		public gameDelayID ResetNpcBlockedReqDelayID
 		{
@@ -404,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("resetNpcDeflectedReqDelayID")] 
 		public gameDelayID ResetNpcDeflectedReqDelayID
 		{
@@ -412,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("resetNpcGuardbreakReqDelayID")] 
 		public gameDelayID ResetNpcGuardbreakReqDelayID
 		{
@@ -422,27 +438,6 @@ namespace WolvenKit.RED4.Types
 
 		public DataTrackingSystem()
 		{
-			AchievementsMask = new();
-			TwoHeadssourceID = new entEntityID();
-			EnemiesKilledInTimeInterval = new();
-			TimeInterval = 5.000000F;
-			NumerOfKillsRequired = 3;
-			ResetKilledReqDelayID = new gameDelayID();
-			ResetFinishedReqDelayID = new gameDelayID();
-			ResetDefeatedReqDelayID = new gameDelayID();
-			ResetIncapacitatedReqDelayID = new gameDelayID();
-			ResetDownedReqDelayID = new gameDelayID();
-			ResetMeleeAttackReqDelayID = new gameDelayID();
-			ResetRangedAttackReqDelayID = new gameDelayID();
-			ResetAttackReqDelayID = new gameDelayID();
-			ResetNpcMeleeLightAttackReqDelayID = new gameDelayID();
-			ResetNpcMeleeStrongAttackReqDelayID = new gameDelayID();
-			ResetNpcMeleeFinalAttackReqDelayID = new gameDelayID();
-			ResetNpcMeleeBlockAttackReqDelayID = new gameDelayID();
-			ResetNpcBlockedReqDelayID = new gameDelayID();
-			ResetNpcDeflectedReqDelayID = new gameDelayID();
-			ResetNpcGuardbreakReqDelayID = new gameDelayID();
-
 			PostConstruct();
 		}
 

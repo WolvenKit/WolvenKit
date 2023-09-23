@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PerkDisplayController : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("levelText")] 
 		public inkTextWidgetReference LevelText
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("fluffText")] 
 		public inkTextWidgetReference FluffText
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("requiredTrainerIcon")] 
 		public inkWidgetReference RequiredTrainerIcon
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("requiredPointsText")] 
 		public inkTextWidgetReference RequiredPointsText
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("displayData")] 
 		public CHandle<BasePerkDisplayData> DisplayData
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<BasePerkDisplayData>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("dataManager")] 
 		public CHandle<PlayerDevelopmentDataManager> DataManager
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PlayerDevelopmentDataManager>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("playerDevelopmentData")] 
 		public CWeakHandle<PlayerDevelopmentData> PlayerDevelopmentData
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerDevelopmentData>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("recentlyPurchased")] 
 		public CBool RecentlyPurchased
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("holdStarted")] 
 		public CBool HoldStarted
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("isTrait")] 
 		public CBool IsTrait
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("wasLocked")] 
 		public CBool WasLocked
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("cool_in_proxy")] 
 		public CHandle<inkanimProxy> Cool_in_proxy
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("cool_out_proxy")] 
 		public CHandle<inkanimProxy> Cool_out_proxy
 		{
@@ -126,12 +126,6 @@ namespace WolvenKit.RED4.Types
 
 		public PerkDisplayController()
 		{
-			LevelText = new inkTextWidgetReference();
-			Icon = new inkImageWidgetReference();
-			FluffText = new inkTextWidgetReference();
-			RequiredTrainerIcon = new inkWidgetReference();
-			RequiredPointsText = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

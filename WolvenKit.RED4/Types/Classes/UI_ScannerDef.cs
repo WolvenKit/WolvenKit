@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("scannerChangeTargetTooltipVisibility")] 
+		public gamebbScriptID_Bool ScannerChangeTargetTooltipVisibility
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("scannerData")] 
 		public gamebbScriptID_Variant ScannerData
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("scannerObjectDistance")] 
 		public gamebbScriptID_Float ScannerObjectDistance
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("scannerObjectStats")] 
 		public gamebbScriptID_Variant ScannerObjectStats
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("scannerQuickHackActionId")] 
 		public gamebbScriptID_Int32 ScannerQuickHackActionId
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("scannerQuickHackActionStarted")] 
 		public gamebbScriptID_Bool ScannerQuickHackActionStarted
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("scannerQuickHackTime")] 
 		public gamebbScriptID_Float ScannerQuickHackTime
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("exclusiveFocusActive")] 
 		public gamebbScriptID_Bool ExclusiveFocusActive
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("LastTaggedTarget")] 
 		public gamebbScriptID_Variant LastTaggedTarget
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("skillCheckInfo")] 
 		public gamebbScriptID_Variant SkillCheckInfo
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("ShowHudHintMessege")] 
 		public gamebbScriptID_Bool ShowHudHintMessege
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("HudHintMessegeContent")] 
 		public gamebbScriptID_String HudHintMessegeContent
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_String>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("UIVisible")] 
 		public gamebbScriptID_Bool UIVisible
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("ScannerLookAt")] 
 		public gamebbScriptID_Bool ScannerLookAt
 		{
@@ -166,27 +174,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ScannerDef()
 		{
-			Scannables = new gamebbScriptID_Variant();
-			CurrentProgress = new gamebbScriptID_Float();
-			CurrentState = new gamebbScriptID_Variant();
-			ProgressBarText = new gamebbScriptID_String();
-			ScannedObject = new gamebbScriptID_EntityID();
-			ScannerMode = new gamebbScriptID_Variant();
-			ScannerTooltip = new gamebbScriptID_Int32();
-			ScannerData = new gamebbScriptID_Variant();
-			ScannerObjectDistance = new gamebbScriptID_Float();
-			ScannerObjectStats = new gamebbScriptID_Variant();
-			ScannerQuickHackActionId = new gamebbScriptID_Int32();
-			ScannerQuickHackActionStarted = new gamebbScriptID_Bool();
-			ScannerQuickHackTime = new gamebbScriptID_Float();
-			ExclusiveFocusActive = new gamebbScriptID_Bool();
-			LastTaggedTarget = new gamebbScriptID_Variant();
-			SkillCheckInfo = new gamebbScriptID_Variant();
-			ShowHudHintMessege = new gamebbScriptID_Bool();
-			HudHintMessegeContent = new gamebbScriptID_String();
-			UIVisible = new gamebbScriptID_Bool();
-			ScannerLookAt = new gamebbScriptID_Bool();
-
 			PostConstruct();
 		}
 

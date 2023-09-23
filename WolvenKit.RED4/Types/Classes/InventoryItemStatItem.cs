@@ -70,13 +70,6 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemStatItem()
 		{
-			LabelText = new inkTextWidgetReference();
-			ValueText = new inkTextWidgetReference();
-			DifferenceBarRef = new inkWidgetReference();
-			DiffrenceArrowIndicatorRef = new inkWidgetReference();
-			NegativeState = "worse";
-			PositiveState = "better";
-
 			PostConstruct();
 		}
 

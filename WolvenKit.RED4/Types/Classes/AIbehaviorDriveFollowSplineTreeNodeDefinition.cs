@@ -148,6 +148,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
+		[Ordinal(19)] 
+		[RED("audioCurvesParam")] 
+		public CHandle<AIArgumentMapping> AudioCurvesParam
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
 		public AIbehaviorDriveFollowSplineTreeNodeDefinition()
 		{
 			PostConstruct();

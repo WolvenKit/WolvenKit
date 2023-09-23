@@ -29,14 +29,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("InActiveTextRef")] 
-		public inkTextWidgetReference InActiveTextRef
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(5)] 
 		[RED("InActiveTextRootRef")] 
 		public inkWidgetReference InActiveTextRootRef
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("TextFlexRef")] 
 		public inkWidgetReference TextFlexRef
 		{
@@ -52,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("SelectedBgRef")] 
 		public inkWidgetReference SelectedBgRef
 		{
@@ -60,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("SelectedBgRefJohnny")] 
 		public inkWidgetReference SelectedBgRefJohnny
 		{
@@ -68,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("CaptionHolder")] 
 		public inkCompoundWidgetReference CaptionHolder
 		{
@@ -76,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("SecondaryCaptionHolder")] 
 		public inkCompoundWidgetReference SecondaryCaptionHolder
 		{
@@ -84,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("RootWidget")] 
 		public CWeakHandle<inkCompoundWidget> RootWidget
 		{
@@ -92,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("AnimationTime")] 
 		public CFloat AnimationTime
 		{
@@ -100,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("AnimationSpeed")] 
 		public CFloat AnimationSpeed
 		{
@@ -108,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("UseConstantSpeed")] 
 		public CBool UseConstantSpeed
 		{
@@ -116,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("phoneIcon")] 
 		public inkWidgetReference PhoneIcon
 		{
@@ -124,7 +116,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("tagWrapper")] 
+		public inkWidgetReference TagWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
 		[Ordinal(16)] 
+		[RED("tagSeparator")] 
+		public inkWidgetReference TagSeparator
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("tagTextRef")] 
+		public inkTextWidgetReference TagTextRef
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("TextFlex")] 
 		public CWeakHandle<inkWidget> TextFlex
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("InActiveTextRoot")] 
 		public CWeakHandle<inkWidget> InActiveTextRoot
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("SelectedBg")] 
 		public CWeakHandle<inkWidget> SelectedBg
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("SelectedBgJohnny")] 
 		public CWeakHandle<inkWidget> SelectedBgJohnny
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("InputView")] 
 		public CWeakHandle<InteractionsInputView> InputView
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InteractionsInputView>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("CaptionControllers")] 
 		public CArray<CWeakHandle<CaptionImageIconsLogicController>> CaptionControllers
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<CaptionImageIconsLogicController>>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("SecondaryCaptionControllers")] 
 		public CArray<CWeakHandle<CaptionImageIconsLogicController>> SecondaryCaptionControllers
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<CaptionImageIconsLogicController>>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("type")] 
 		public gameinteractionsChoiceTypeWrapper Type
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameinteractionsChoiceTypeWrapper>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("prevIsSelected")] 
 		public CBool PrevIsSelected
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("hasDedicatedInput")] 
 		public CBool HasDedicatedInput
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("overriddenInput")] 
 		public CBool OverriddenInput
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("isPreserveSelectionFadeOut")] 
 		public CBool IsPreserveSelectionFadeOut
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("isPhoneLockActive")] 
 		public CBool IsPhoneLockActive
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("dedicatedInputName")] 
 		public CName DedicatedInputName
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("Active")] 
 		public CName Active
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("Inactive")] 
 		public CName Inactive
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("Black")] 
 		public CName Black
 		{
@@ -268,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("questColor")] 
 		public CName QuestColor
 		{
@@ -276,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("possessedDialog")] 
 		public CName PossessedDialog
 		{
@@ -284,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("ControllerPromptLimit")] 
 		public CInt32 ControllerPromptLimit
 		{
@@ -292,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("fadingOptionEndTransparency")] 
 		public CFloat FadingOptionEndTransparency
 		{
@@ -300,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("animSelectedBgProxy")] 
 		public CHandle<inkanimProxy> AnimSelectedBgProxy
 		{
@@ -308,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("animSelectedJohnnyBgProxy")] 
 		public CHandle<inkanimProxy> AnimSelectedJohnnyBgProxy
 		{
@@ -316,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("animActiveTextProxy")] 
 		public CHandle<inkanimProxy> AnimActiveTextProxy
 		{
@@ -324,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("animfFadingOutProxy")] 
 		public CHandle<inkanimProxy> AnimfFadingOutProxy
 		{
@@ -332,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("animIntroProxy")] 
 		public CHandle<inkanimProxy> AnimIntroProxy
 		{
@@ -342,25 +358,6 @@ namespace WolvenKit.RED4.Types
 
 		public DialogChoiceLogicController()
 		{
-			InputViewRef = new inkWidgetReference();
-			VerticalLineWidget = new inkWidgetReference();
-			ActiveTextRef = new inkTextWidgetReference();
-			InActiveTextRef = new inkTextWidgetReference();
-			InActiveTextRootRef = new inkWidgetReference();
-			TextFlexRef = new inkWidgetReference();
-			SelectedBgRef = new inkWidgetReference();
-			SelectedBgRefJohnny = new inkWidgetReference();
-			CaptionHolder = new inkCompoundWidgetReference();
-			SecondaryCaptionHolder = new inkCompoundWidgetReference();
-			AnimationTime = 0.150000F;
-			AnimationSpeed = 500.000000F;
-			PhoneIcon = new inkWidgetReference();
-			CaptionControllers = new();
-			SecondaryCaptionControllers = new();
-			Type = new gameinteractionsChoiceTypeWrapper();
-			ControllerPromptLimit = 3;
-			FadingOptionEndTransparency = 0.100000F;
-
 			PostConstruct();
 		}
 

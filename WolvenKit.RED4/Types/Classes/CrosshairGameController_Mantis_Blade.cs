@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CrosshairGameController_Mantis_Blade : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] 
+		[Ordinal(27)] 
 		[RED("weaponBBID")] 
 		public CHandle<redCallbackObject> WeaponBBID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(28)] 
 		[RED("meleeWeaponState")] 
 		public CEnum<gamePSMMeleeWeapon> MeleeWeaponState
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMMeleeWeapon>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(29)] 
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(30)] 
 		[RED("holdAnim")] 
 		public CHandle<inkanimProxy> HoldAnim
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(31)] 
 		[RED("aimAnim")] 
 		public CHandle<inkanimProxy> AimAnim
 		{
@@ -44,10 +44,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(32)] 
+		[RED("isInHoldState")] 
+		public CBool IsInHoldState
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("meleeLeapAttackObjectTagger")] 
+		public CHandle<MeleeLeapAttackObjectTagger> MeleeLeapAttackObjectTagger
+		{
+			get => GetPropertyValue<CHandle<MeleeLeapAttackObjectTagger>>();
+			set => SetPropertyValue<CHandle<MeleeLeapAttackObjectTagger>>(value);
+		}
+
 		public CrosshairGameController_Mantis_Blade()
 		{
-			TargetColorChange = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

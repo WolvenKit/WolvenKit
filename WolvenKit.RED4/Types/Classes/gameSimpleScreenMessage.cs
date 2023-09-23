@@ -36,6 +36,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("type")] 
+		public CEnum<gameSimpleMessageType> Type
+		{
+			get => GetPropertyValue<CEnum<gameSimpleMessageType>>();
+			set => SetPropertyValue<CEnum<gameSimpleMessageType>>(value);
+		}
+
 		public gameSimpleScreenMessage()
 		{
 			PostConstruct();

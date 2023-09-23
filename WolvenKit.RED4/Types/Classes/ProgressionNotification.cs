@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ProgressionNotification : GenericNotificationController
 	{
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("progression_data")] 
 		public CHandle<gameuiProgressionViewData> Progression_data
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiProgressionViewData>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("expBar")] 
 		public inkWidgetReference ExpBar
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("expText")] 
 		public inkTextWidgetReference ExpText
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("barFG")] 
 		public inkWidgetReference BarFG
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("barBG")] 
 		public inkWidgetReference BarBG
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("root")] 
 		public inkWidgetReference Root
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("currentLevel")] 
 		public inkTextWidgetReference CurrentLevel
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("nextLevel")] 
 		public inkTextWidgetReference NextLevel
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("expBarWidthSize")] 
 		public CFloat ExpBarWidthSize
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("expBarHeightSize")] 
 		public CFloat ExpBarHeightSize
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("barAnimationProxy")] 
 		public CHandle<inkanimProxy> BarAnimationProxy
 		{
@@ -102,14 +102,6 @@ namespace WolvenKit.RED4.Types
 
 		public ProgressionNotification()
 		{
-			ExpBar = new inkWidgetReference();
-			ExpText = new inkTextWidgetReference();
-			BarFG = new inkWidgetReference();
-			BarBG = new inkWidgetReference();
-			Root = new inkWidgetReference();
-			CurrentLevel = new inkTextWidgetReference();
-			NextLevel = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

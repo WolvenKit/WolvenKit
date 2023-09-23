@@ -37,6 +37,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("maxRange")] 
+		public CFloat MaxRange
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("maxRangeTPP")] 
+		public CFloat MaxRangeTPP
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("effectTag")] 
 		public CName EffectTag
 		{
@@ -46,6 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectPostAction_BeamVFX_Custom()
 		{
+			MaxRange = -1.000000F;
+			MaxRangeTPP = -1.000000F;
+
 			PostConstruct();
 		}
 

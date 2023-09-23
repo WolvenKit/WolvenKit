@@ -5,8 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public CleaningMachine()
 		{
-			ControllerTypeName = "CleaningMachineController";
-
 			PostConstruct();
 		}
 

@@ -29,14 +29,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("skillWidgetRoot")] 
-		public inkCompoundWidgetReference SkillWidgetRoot
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(7)] 
 		[RED("craftingLogicControllerContainer")] 
 		public inkWidgetReference CraftingLogicControllerContainer
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("upgradingLogicControllerContainer")] 
 		public inkWidgetReference UpgradingLogicControllerContainer
 		{
@@ -52,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -60,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -68,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -76,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("craftingSystem")] 
 		public CHandle<CraftingSystem> CraftingSystem
 		{
@@ -84,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CraftingSystem>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("playerCraftBook")] 
 		public CHandle<CraftBook> PlayerCraftBook
 		{
@@ -92,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CraftBook>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("VendorDataManager")] 
 		public CHandle<VendorDataManager> VendorDataManager
 		{
@@ -100,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorDataManager>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -108,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("uiScriptableSystem")] 
 		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -116,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("tooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -124,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(17)] 
 		[RED("craftingDef")] 
 		public CHandle<UI_CraftingDef> CraftingDef
 		{
@@ -132,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_CraftingDef>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("craftingBlackboard")] 
 		public CWeakHandle<gameIBlackboard> CraftingBlackboard
 		{
@@ -140,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("craftingBBID")] 
 		public CHandle<redCallbackObject> CraftingBBID
 		{
@@ -148,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(20)] 
 		[RED("levelUpBlackboard")] 
 		public CWeakHandle<gameIBlackboard> LevelUpBlackboard
 		{
@@ -156,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("playerLevelUpListener")] 
 		public CHandle<redCallbackObject> PlayerLevelUpListener
 		{
@@ -164,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("mode")] 
 		public CEnum<CraftingMode> Mode
 		{
@@ -172,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<CraftingMode>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(23)] 
 		[RED("isInitializeOver")] 
 		public CBool IsInitializeOver
 		{
@@ -180,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(24)] 
 		[RED("craftingLogicController")] 
 		public CWeakHandle<CraftingLogicController> CraftingLogicController
 		{
@@ -188,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<CraftingLogicController>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(25)] 
 		[RED("upgradingLogicController")] 
 		public CWeakHandle<UpgradingScreenController> UpgradingLogicController
 		{
@@ -196,15 +188,24 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UpgradingScreenController>>(value);
 		}
 
+		[Ordinal(26)] 
+		[RED("tabRoot")] 
+		public CWeakHandle<TabRadioGroup> TabRoot
+		{
+			get => GetPropertyValue<CWeakHandle<TabRadioGroup>>();
+			set => SetPropertyValue<CWeakHandle<TabRadioGroup>>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("isTabEnabled")] 
+		public CBool IsTabEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CraftingMainGameController()
 		{
-			TooltipsManagerRef = new inkWidgetReference();
-			TabRootRef = new inkWidgetReference();
-			ButtonHintsManagerRef = new inkWidgetReference();
-			SkillWidgetRoot = new inkCompoundWidgetReference();
-			CraftingLogicControllerContainer = new inkWidgetReference();
-			UpgradingLogicControllerContainer = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

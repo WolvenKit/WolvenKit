@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class LcdScreenControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("messageRecordID")] 
 		public TweakDBID MessageRecordID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("replaceTextWithCustomNumber")] 
 		public CBool ReplaceTextWithCustomNumber
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("customNumber")] 
 		public CInt32 CustomNumber
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("messageRecordSelector")] 
 		public CHandle<ScreenMessageSelector> MessageRecordSelector
 		{
@@ -38,11 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public LcdScreenControllerPS()
 		{
-			DeviceName = "LocKey#193";
-			TweakDBRecord = "Devices.LcdScreen";
-			TweakDBDescriptionRecord = 126712954239;
-			DisableQuickHacks = true;
-
 			PostConstruct();
 		}
 

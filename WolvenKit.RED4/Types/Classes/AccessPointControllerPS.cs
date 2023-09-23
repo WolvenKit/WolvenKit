@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AccessPointControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("rewardNotificationIcons")] 
 		public CArray<CString> RewardNotificationIcons
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CString>>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("rewardNotificationString")] 
 		public CString RewardNotificationString
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("accessPointSkillChecks")] 
 		public CHandle<HackingContainer> AccessPointSkillChecks
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HackingContainer>>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("isBreached")] 
 		public CBool IsBreached
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("moneyAwarded")] 
 		public CBool MoneyAwarded
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(113)] 
 		[RED("isVirtual")] 
 		public CBool IsVirtual
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(114)] 
 		[RED("pingedSquads")] 
 		public CArray<CName> PingedSquads
 		{
@@ -62,16 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public AccessPointControllerPS()
 		{
-			RevealDevicesGrid = false;
-			HasNetworkBackdoor = true;
-			DeviceName = "LocKey#138";
-			TweakDBRecord = "Devices.AccessPoint";
-			TweakDBDescriptionRecord = 134736165949;
-			HasPersonalLinkSlot = true;
-			ShouldScannerShowNetwork = false;
-			RewardNotificationIcons = new();
-			PingedSquads = new();
-
 			PostConstruct();
 		}
 

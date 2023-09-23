@@ -62,14 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public CharacterCreationGenderBackstoryPathHeader()
 		{
-			Label = new inkTextWidgetReference();
-			Desc = new inkTextWidgetReference();
-			Bg = new inkWidgetReference();
-			SelectedColor = new CColor();
-			UnSelectedColor = new CColor();
-			TextSelectedColor = new CColor();
-			TextUnselectedColor = new CColor();
-
 			PostConstruct();
 		}
 

@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public gameSmartObjectDefinition()
 		{
 			Actions = new() { "CoverGetOut" };
-			MotionActionDatabase = new CResourceReference<animActionAnimDatabase>(@"base\animations\anim_motion_database\action_animation.actionanimdb");
+			MotionActionDatabase = new CResourceReference<animActionAnimDatabase>(4960121789495904435);
 			Enabled = true;
 
 			PostConstruct();

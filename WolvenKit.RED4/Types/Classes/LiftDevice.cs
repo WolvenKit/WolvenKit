@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class LiftDevice : InteractiveMasterDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("advertismentNames")] 
 		public CArray<CName> AdvertismentNames
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("advertisments")] 
 		public CArray<CHandle<entIPlacedComponent>> Advertisments
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("movingPlatform")] 
 		public CHandle<gameMovingPlatform> MovingPlatform
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameMovingPlatform>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("floors")] 
 		public CArray<ElevatorFloorSetup> Floors
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<ElevatorFloorSetup>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(102)] 
 		[RED("QuestSafeguardColliders")] 
 		public CArray<CHandle<entIPlacedComponent>> QuestSafeguardColliders
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(103)] 
 		[RED("QuestSafeguardColliderNames")] 
 		public CArray<CName> QuestSafeguardColliderNames
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(104)] 
 		[RED("frontDoorOccluder")] 
 		public CHandle<entIPlacedComponent> FrontDoorOccluder
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(105)] 
 		[RED("backDoorOccluder")] 
 		public CHandle<entIPlacedComponent> BackDoorOccluder
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(106)] 
 		[RED("radioMesh")] 
 		public CHandle<entIPlacedComponent> RadioMesh
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(107)] 
 		[RED("radioDestroyed")] 
 		public CHandle<entIPlacedComponent> RadioDestroyed
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(108)] 
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(109)] 
 		[RED("isLoadPerformed")] 
 		public CBool IsLoadPerformed
 		{
@@ -102,13 +102,6 @@ namespace WolvenKit.RED4.Types
 
 		public LiftDevice()
 		{
-			ControllerTypeName = "LiftController";
-			AdvertismentNames = new();
-			Advertisments = new();
-			Floors = new();
-			QuestSafeguardColliders = new();
-			QuestSafeguardColliderNames = new();
-
 			PostConstruct();
 		}
 

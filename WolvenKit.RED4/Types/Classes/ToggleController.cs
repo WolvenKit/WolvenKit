@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ToggleController : inkToggleController
 	{
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("data")] 
 		public CInt32 Data
 		{
@@ -30,9 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public ToggleController()
 		{
-			Label = new inkTextWidgetReference();
-			Icon = new inkImageWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public PartInstallRequest()
 		{
-			ItemID = new gameItemID();
-			PartID = new gameItemID();
-
 			PostConstruct();
 		}
 

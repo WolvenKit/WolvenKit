@@ -28,10 +28,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("requiredLevel")] 
+		public CInt32 RequiredLevel
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public GameplaySkillCondition()
 		{
-			EntityID = new entEntityID();
-
 			PostConstruct();
 		}
 

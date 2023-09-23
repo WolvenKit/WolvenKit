@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("diveSuitName")] 
+		public CName DiveSuitName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public audioLocomotionEmitterMetadata()
 		{
 			PostConstruct();

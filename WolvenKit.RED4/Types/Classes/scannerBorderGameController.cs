@@ -414,28 +414,6 @@ namespace WolvenKit.RED4.Types
 
 		public scannerBorderGameController()
 		{
-			ZoomMovingContainer = new inkCompoundWidgetReference();
-			DistanceMovingContainer = new inkCompoundWidgetReference();
-			DistanceParentContainer = new inkCompoundWidgetReference();
-			CrosshairProjection = new inkCompoundWidgetReference();
-			LoadingBarCanvas = new inkCompoundWidgetReference();
-			CrosshairContainer = new inkCompoundWidgetReference();
-			ZoomNumber = new inkTextWidgetReference();
-			DistanceNumber = new inkTextWidgetReference();
-			DistanceImageRuler = new inkImageWidgetReference();
-			ZoomMoveBracketL = new inkImageWidgetReference();
-			ZoomMoveBracketR = new inkImageWidgetReference();
-			ScannerBarWidget = new inkCompoundWidgetReference();
-			ScannerBarFluffText = new inkTextWidgetReference();
-			ScannerBarFill = new inkImageWidgetReference();
-			DeviceFluffs = new();
-			CurrentTarget = new entEntityID();
-			CurrentTargetBuffered = new entEntityID();
-			ScannerData = new scannerDataStructure { QuestEntries = new() };
-			OriginalScannerBarFillSize = new Vector2();
-			Squares = new();
-			SquaresFilled = new();
-
 			PostConstruct();
 		}
 

@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public TriggerVolumeOperations()
 		{
-			Components = new();
-			FxInstances = new();
-			TriggerVolumeOperations_ = new();
-
 			PostConstruct();
 		}
 

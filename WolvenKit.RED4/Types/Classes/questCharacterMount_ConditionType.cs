@@ -108,11 +108,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<questMountVehicleOrigin>>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("vehicleAfiliation")] 
+		public CEnum<gamedataAffiliation> VehicleAfiliation
+		{
+			get => GetPropertyValue<CEnum<gamedataAffiliation>>();
+			set => SetPropertyValue<CEnum<gamedataAffiliation>>(value);
+		}
+
 		public questCharacterMount_ConditionType()
 		{
 			ParentRef = new gameEntityReference { Names = new() };
 			ChildRef = new gameEntityReference { Names = new() };
 			Role = Enums.gameMountingSlotRole.Invalid;
+			VehicleAfiliation = Enums.gamedataAffiliation.Invalid;
 
 			PostConstruct();
 		}

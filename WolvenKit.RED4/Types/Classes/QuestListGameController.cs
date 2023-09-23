@@ -126,13 +126,6 @@ namespace WolvenKit.RED4.Types
 
 		public QuestListGameController()
 		{
-			EntryList = new inkVerticalPanelWidgetReference();
-			ScanPulse = new inkCompoundWidgetReference();
-			OptionalHeader = new inkWidgetReference();
-			ToDoHeader = new inkWidgetReference();
-			OptionalList = new inkVerticalPanelWidgetReference();
-			NonOptionalList = new inkVerticalPanelWidgetReference();
-
 			PostConstruct();
 		}
 

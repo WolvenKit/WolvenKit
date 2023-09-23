@@ -1,0 +1,78 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	public partial class ChargedHotkeyItemCyberwareController : ChargedHotkeyItemBaseController
+	{
+		[Ordinal(42)] 
+		[RED("currentStatPoolType")] 
+		public CEnum<gamedataStatPoolType> CurrentStatPoolType
+		{
+			get => GetPropertyValue<CEnum<gamedataStatPoolType>>();
+			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
+		}
+
+		[Ordinal(43)] 
+		[RED("psmBlackboardListener")] 
+		public CHandle<redCallbackObject> PsmBlackboardListener
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(44)] 
+		[RED("c_cyberdeckOverclockPerkType")] 
+		public CEnum<gamedataNewPerkType> C_cyberdeckOverclockPerkType
+		{
+			get => GetPropertyValue<CEnum<gamedataNewPerkType>>();
+			set => SetPropertyValue<CEnum<gamedataNewPerkType>>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("c_vehicleManeuversPerkType")] 
+		public CEnum<gamedataNewPerkType> C_vehicleManeuversPerkType
+		{
+			get => GetPropertyValue<CEnum<gamedataNewPerkType>>();
+			set => SetPropertyValue<CEnum<gamedataNewPerkType>>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("c_berserkKey")] 
+		public CName C_berserkKey
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(47)] 
+		[RED("c_cyberdeckKey")] 
+		public CName C_cyberdeckKey
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(48)] 
+		[RED("c_sandevistanKey")] 
+		public CName C_sandevistanKey
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(49)] 
+		[RED("c_capacityBoosterKey")] 
+		public CName C_capacityBoosterKey
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public ChargedHotkeyItemCyberwareController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
+	}
+}

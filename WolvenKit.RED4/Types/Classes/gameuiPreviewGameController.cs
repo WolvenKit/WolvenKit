@@ -36,6 +36,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("inputDisabled")] 
+		public CBool InputDisabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameuiPreviewGameController()
 		{
 			PostConstruct();

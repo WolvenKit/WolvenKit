@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AnimatedSign : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_AnimatedDevice> AnimFeature
 		{

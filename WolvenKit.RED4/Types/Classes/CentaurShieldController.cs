@@ -46,10 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public CentaurShieldController()
 		{
-			StartWithShieldActive = true;
-			AnimFeatureName = "ShieldState";
-			ShieldDestroyedModifierName = "Shield_ControllerDestroyed";
-
 			PostConstruct();
 		}
 

@@ -4,15 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SecurityLocker : InteractiveDevice
 	{
-		[Ordinal(94)] 
-		[RED("inventory")] 
-		public CHandle<gameInventory> Inventory
-		{
-			get => GetPropertyValue<CHandle<gameInventory>>();
-			set => SetPropertyValue<CHandle<gameInventory>>(value);
-		}
-
-		[Ordinal(95)] 
+		[Ordinal(98)] 
 		[RED("cachedEvent")] 
 		public CHandle<UseSecurityLocker> CachedEvent
 		{
@@ -22,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public SecurityLocker()
 		{
-			ControllerTypeName = "SecurityLockerController";
-
 			PostConstruct();
 		}
 

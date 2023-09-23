@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public SetDestinationWaypoint()
 		{
-			Destinations = new();
-			FinalDestinations = new();
-
 			PostConstruct();
 		}
 

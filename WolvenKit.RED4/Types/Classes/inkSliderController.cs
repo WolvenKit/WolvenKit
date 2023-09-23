@@ -132,6 +132,86 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkSliderControllerHandleReleasedCallback>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("handleWidgetRef")] 
+		public CWeakHandle<inkWidget> HandleWidgetRef
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("slidingAreaWidgetRef")] 
+		public CWeakHandle<inkWidget> SlidingAreaWidgetRef
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("isDragging")] 
+		public CBool IsDragging
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("defaultScale")] 
+		public Vector2 DefaultScale
+		{
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("pressedScale")] 
+		public Vector2 PressedScale
+		{
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("defaultOpacity")] 
+		public CFloat DefaultOpacity
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("defaultColor")] 
+		public CName DefaultColor
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("hoveredColor")] 
+		public CName HoveredColor
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("pressedColor")] 
+		public CName PressedColor
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("pressedOpacity")] 
+		public CFloat PressedOpacity
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public inkSliderController()
 		{
 			SlidingAreaRef = new inkWidgetReference();

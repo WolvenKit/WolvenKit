@@ -38,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public AdvanceChangeLightEvent()
 		{
-			Settings = new EditableGameLightSettings { Color = new CColor() };
-
 			PostConstruct();
 		}
 

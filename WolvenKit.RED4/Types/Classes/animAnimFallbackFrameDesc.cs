@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("mFloatTracks")] 
+		public CUInt16 MFloatTracks
+		{
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
+		}
+
 		public animAnimFallbackFrameDesc()
 		{
 			PostConstruct();

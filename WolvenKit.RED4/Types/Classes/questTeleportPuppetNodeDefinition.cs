@@ -20,10 +20,27 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questTeleportPuppetParamsV1>>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("lookAtAction")] 
+		public CEnum<questLookAtAction> LookAtAction
+		{
+			get => GetPropertyValue<CEnum<questLookAtAction>>();
+			set => SetPropertyValue<CEnum<questLookAtAction>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("playerLookAt")] 
+		public CHandle<questPlayerLookAtParams> PlayerLookAt
+		{
+			get => GetPropertyValue<CHandle<questPlayerLookAtParams>>();
+			set => SetPropertyValue<CHandle<questPlayerLookAtParams>>(value);
+		}
+
 		public questTeleportPuppetNodeDefinition()
 		{
 			Sockets = new();
 			Id = ushort.MaxValue;
+			LookAtAction = Enums.questLookAtAction.Reset;
 
 			PostConstruct();
 		}

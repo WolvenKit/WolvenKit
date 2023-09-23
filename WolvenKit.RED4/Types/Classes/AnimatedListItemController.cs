@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AnimatedListItemController : inkListItemController
 	{
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("animOutName")] 
 		public CName AnimOutName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("animPulseName")] 
 		public CName AnimPulseName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("animTargetHover")] 
 		public inkWidgetReference AnimTargetHover
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("animTargetPulse")] 
 		public inkWidgetReference AnimTargetPulse
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("normalRootOpacity")] 
 		public CFloat NormalRootOpacity
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("hoverRootOpacity")] 
 		public CFloat HoverRootOpacity
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkCompoundWidget> RootWidget
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("animTarget_Hover")] 
 		public CWeakHandle<inkWidget> AnimTarget_Hover
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("animTarget_Pulse")] 
 		public CWeakHandle<inkWidget> AnimTarget_Pulse
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("animHover")] 
 		public CHandle<inkanimDefinition> AnimHover
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("animPulse")] 
 		public CHandle<inkanimDefinition> AnimPulse
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("animHoverProxy")] 
 		public CHandle<inkanimProxy> AnimHoverProxy
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("animPulseProxy")] 
 		public CHandle<inkanimProxy> AnimPulseProxy
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("animPulseOptions")] 
 		public inkanimPlaybackOptions AnimPulseOptions
 		{
@@ -118,14 +118,6 @@ namespace WolvenKit.RED4.Types
 
 		public AnimatedListItemController()
 		{
-			AnimOutName = "MenuButtonFadeOut";
-			AnimPulseName = "MenuButtonPulse";
-			AnimTargetHover = new inkWidgetReference();
-			AnimTargetPulse = new inkWidgetReference();
-			NormalRootOpacity = 1.000000F;
-			HoverRootOpacity = 1.000000F;
-			AnimPulseOptions = new inkanimPlaybackOptions();
-
 			PostConstruct();
 		}
 

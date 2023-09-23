@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ActivityLogDef()
 		{
-			ActivityLogHide = new gamebbScriptID_Bool();
-
 			PostConstruct();
 		}
 

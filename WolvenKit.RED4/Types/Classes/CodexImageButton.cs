@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CodexImageButton : CodexListItemController
 	{
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("border")] 
 		public inkImageWidgetReference Border
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("translateOnSelect")] 
 		public inkWidgetReference TranslateOnSelect
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("selectTranslationX")] 
 		public CFloat SelectTranslationX
 		{
@@ -38,10 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public CodexImageButton()
 		{
-			Image = new inkImageWidgetReference();
-			Border = new inkImageWidgetReference();
-			TranslateOnSelect = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

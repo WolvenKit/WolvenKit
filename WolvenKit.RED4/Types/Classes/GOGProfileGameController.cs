@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public GOGProfileGameController()
 		{
-			RetryButton = new inkWidgetReference();
-			ParentContainerWidget = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

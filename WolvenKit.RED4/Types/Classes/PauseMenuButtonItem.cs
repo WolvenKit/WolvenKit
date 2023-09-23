@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PauseMenuButtonItem : AnimatedListItemController
 	{
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("Fluff")] 
 		public inkTextWidgetReference Fluff
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("animLoop")] 
 		public CHandle<inkanimProxy> AnimLoop
 		{
@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public PauseMenuButtonItem()
 		{
-			Fluff = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

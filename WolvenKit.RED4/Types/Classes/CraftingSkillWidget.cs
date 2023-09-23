@@ -102,15 +102,6 @@ namespace WolvenKit.RED4.Types
 
 		public CraftingSkillWidget()
 		{
-			AmountText = new inkTextWidgetReference();
-			ExpFill = new inkWidgetReference();
-			PerkHolder = new inkWidgetReference();
-			LevelUpAnimation = new inkWidgetReference();
-			ExpAnimation = new inkWidgetReference();
-			NextLevelText = new inkTextWidgetReference();
-			ExpPointText1 = new inkTextWidgetReference();
-			ExpPointText2 = new inkTextWidgetReference();
-
 			PostConstruct();
 		}
 

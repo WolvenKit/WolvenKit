@@ -62,8 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public GetRandomPositionAroundPoint()
 		{
-			FinalPosition = new Vector4();
-
 			PostConstruct();
 		}
 

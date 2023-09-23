@@ -29,6 +29,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("aggressiveRammingEnabled")] 
+		public CBool AggressiveRammingEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("ignoreChaseVehiclesLimit")] 
+		public CBool IgnoreChaseVehiclesLimit
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("boostDrivingStats")] 
+		public CBool BoostDrivingStats
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("targetObjToReach")] 
 		public CWeakHandle<gameObject> TargetObjToReach
 		{
@@ -36,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("targetObjToFollow")] 
 		public CWeakHandle<gameObject> TargetObjToFollow
 		{
@@ -44,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("targetRef")] 
 		public NodeRef TargetRef
 		{
@@ -52,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("splineRef")] 
 		public NodeRef SplineRef
 		{
@@ -60,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("splineRefBackwards")] 
 		public NodeRef SplineRefBackwards
 		{
@@ -68,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("vehicleRef")] 
 		public gameEntityReference VehicleRef
 		{
@@ -76,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("targetPosition")] 
 		public Vector3 TargetPosition
 		{
@@ -84,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("drivingID")] 
 		public TweakDBID DrivingID
 		{
@@ -92,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("distanceMin")] 
 		public CFloat DistanceMin
 		{
@@ -100,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("distanceMax")] 
 		public CFloat DistanceMax
 		{
@@ -108,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("wantToStop")] 
 		public CBool WantToStop
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("stopHasReachedTarget")] 
 		public CBool StopHasReachedTarget
 		{
@@ -124,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("driveBackwards")] 
 		public CBool DriveBackwards
 		{
@@ -132,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("reverseSpline")] 
 		public CBool ReverseSpline
 		{
@@ -140,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("startFromClosest")] 
 		public CBool StartFromClosest
 		{
@@ -148,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("canClearActions")] 
 		public CBool CanClearActions
 		{
@@ -156,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("keepDistanceParamBool")] 
 		public CBool KeepDistanceParamBool
 		{
@@ -164,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("keepDistanceParamCompanion")] 
 		public CWeakHandle<gameObject> KeepDistanceParamCompanion
 		{
@@ -172,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("keepDistanceParamDistance")] 
 		public CFloat KeepDistanceParamDistance
 		{
@@ -180,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("rubberBandingBool")] 
 		public CBool RubberBandingBool
 		{
@@ -188,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("rubberBandingTargetRef")] 
 		public CWeakHandle<gameObject> RubberBandingTargetRef
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("rubberBandingMinDistance")] 
 		public CFloat RubberBandingMinDistance
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("rubberBandingMaxDistance")] 
 		public CFloat RubberBandingMaxDistance
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("rubberBandingStopAndWait")] 
 		public CBool RubberBandingStopAndWait
 		{
@@ -220,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("rubberBandingTeleportToCatchUp")] 
 		public CBool RubberBandingTeleportToCatchUp
 		{
@@ -228,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("rubberBandingStayInFront")] 
 		public CBool RubberBandingStayInFront
 		{
@@ -236,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("secureTimeOut")] 
 		public CFloat SecureTimeOut
 		{
@@ -244,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("portalsList")] 
 		public CHandle<vehiclePortalsList> PortalsList
 		{
@@ -252,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<vehiclePortalsList>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("trafficTryNeighborsForStart")] 
 		public CBool TrafficTryNeighborsForStart
 		{
@@ -260,12 +284,76 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("trafficTryNeighborsForEnd")] 
 		public CBool TrafficTryNeighborsForEnd
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("allowSimplifiedMovement")] 
+		public CBool AllowSimplifiedMovement
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("ignoreTickets")] 
+		public CBool IgnoreTickets
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("disableStuckDetection")] 
+		public CBool DisableStuckDetection
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(39)] 
+		[RED("tryDriveAwayFromPlayer")] 
+		public CBool TryDriveAwayFromPlayer
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(40)] 
+		[RED("useSpeedBasedLookupRange")] 
+		public CBool UseSpeedBasedLookupRange
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("clearTrafficOnPath")] 
+		public CBool ClearTrafficOnPath
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(42)] 
+		[RED("emergencyPatrol")] 
+		public CBool EmergencyPatrol
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(43)] 
+		[RED("numPatrolLoops")] 
+		public CUInt32 NumPatrolLoops
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
 		}
 
 		public vehicleAutonomousData()
@@ -277,6 +365,9 @@ namespace WolvenKit.RED4.Types
 			StopHasReachedTarget = true;
 			StartFromClosest = true;
 			SecureTimeOut = 60.000000F;
+			ClearTrafficOnPath = true;
+			EmergencyPatrol = true;
+			NumPatrolLoops = 1;
 
 			PostConstruct();
 		}

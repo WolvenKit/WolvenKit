@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Fan : BasicDistractionDevice
 	{
-		[Ordinal(100)] 
+		[Ordinal(106)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAnimationType>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(107)] 
 		[RED("rotateClockwise")] 
 		public CBool RotateClockwise
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(108)] 
 		[RED("randomizeBladesSpeed")] 
 		public CBool RandomizeBladesSpeed
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(109)] 
 		[RED("maxRotationSpeed")] 
 		public CFloat MaxRotationSpeed
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(110)] 
 		[RED("timeToMaxRotation")] 
 		public CFloat TimeToMaxRotation
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(111)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_RotatingObject> AnimFeature
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_RotatingObject>>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(112)] 
 		[RED("updateComp")] 
 		public CHandle<UpdateComponent> UpdateComp
 		{
@@ -62,11 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public Fan()
 		{
-			ControllerTypeName = "FanController";
-			RotateClockwise = true;
-			MaxRotationSpeed = 150.000000F;
-			TimeToMaxRotation = 3.000000F;
-
 			PostConstruct();
 		}
 

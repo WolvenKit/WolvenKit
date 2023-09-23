@@ -46,10 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public ForceCLSStateRequest()
 		{
-			Priority = Enums.EPriority.Medium;
-			RemovePreviousRequests = true;
-			Savable = true;
-
 			PostConstruct();
 		}
 

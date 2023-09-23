@@ -38,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public FactOperationTriggerData()
 		{
-			FactValue = 1;
-
 			PostConstruct();
 		}
 

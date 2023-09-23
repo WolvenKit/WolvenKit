@@ -62,9 +62,6 @@ namespace WolvenKit.RED4.Types
 
 		public gameScanningComponentPS()
 		{
-			StoredClues = new();
-			IsDecriptionEnabled = true;
-
 			PostConstruct();
 		}
 

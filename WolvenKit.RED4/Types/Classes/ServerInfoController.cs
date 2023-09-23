@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ServerInfoController : inkListItemController
 	{
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("settingsListCtrl")] 
 		public CWeakHandle<inkListController> SettingsListCtrl
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("number")] 
 		public CWeakHandle<inkTextWidget> Number
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("numberPath")] 
 		public CName NumberPath
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("kind")] 
 		public CWeakHandle<inkTextWidget> Kind
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("kindPath")] 
 		public CName KindPath
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("hostname")] 
 		public CWeakHandle<inkTextWidget> Hostname
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("hostnamePath")] 
 		public CName HostnamePath
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("address")] 
 		public CWeakHandle<inkTextWidget> Address
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("addressPath")] 
 		public CName AddressPath
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("worldDescription")] 
 		public CWeakHandle<inkTextWidget> WorldDescription
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("worldDescriptionPath")] 
 		public CName WorldDescriptionPath
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("background")] 
 		public CWeakHandle<inkImageWidget> Background
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("c_selectionColor")] 
 		public CColor C_selectionColor
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("c_initialColor")] 
 		public HDRColor C_initialColor
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<HDRColor>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("c_markColor")] 
 		public HDRColor C_markColor
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<HDRColor>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("marked")] 
 		public CBool Marked
 		{
@@ -134,10 +134,6 @@ namespace WolvenKit.RED4.Types
 
 		public ServerInfoController()
 		{
-			C_selectionColor = new CColor();
-			C_initialColor = new HDRColor();
-			C_markColor = new HDRColor();
-
 			PostConstruct();
 		}
 

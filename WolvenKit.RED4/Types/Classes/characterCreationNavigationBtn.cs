@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class characterCreationNavigationBtn : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("icon1")] 
 		public inkWidgetReference Icon1
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("shouldPlaySoundOnHover")] 
 		public CBool ShouldPlaySoundOnHover
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationNavigationBtn()
 		{
-			Icon1 = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -110,14 +110,6 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationVoiceOverSwitcher()
 		{
-			SelectedLabel = new inkTextWidgetReference();
-			SelectorNextBtn = new inkWidgetReference();
-			SelectorPrevBtn = new inkWidgetReference();
-			WarningLabel = new inkTextWidgetReference();
-			SelectorTexture = new inkImageWidgetReference();
-			ArrowsTexture = new inkImageWidgetReference();
-			OptionSwitchHint = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

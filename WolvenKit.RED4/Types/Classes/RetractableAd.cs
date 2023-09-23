@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class RetractableAd : BaseAnimatedDevice
 	{
-		[Ordinal(99)] 
+		[Ordinal(103)] 
 		[RED("offMeshConnection")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnection
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(104)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(105)] 
 		[RED("advUiComponent")] 
 		public CHandle<entIComponent> AdvUiComponent
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(106)] 
 		[RED("isPartOfTheTrap")] 
 		public CBool IsPartOfTheTrap
 		{
@@ -38,8 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public RetractableAd()
 		{
-			ControllerTypeName = "RetractableAdController";
-
 			PostConstruct();
 		}
 

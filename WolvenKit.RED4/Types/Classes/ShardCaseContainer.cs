@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ShardCaseContainer : gameContainerObjectSingleItem
 	{
-		[Ordinal(47)] 
+		[Ordinal(50)] 
 		[RED("wasOpened")] 
 		public CBool WasOpened
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(51)] 
 		[RED("shardMesh")] 
 		public CHandle<entMeshComponent> ShardMesh
 		{

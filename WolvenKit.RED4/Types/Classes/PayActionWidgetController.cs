@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PayActionWidgetController : DeviceActionWidgetControllerBase
 	{
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("priceContainer")] 
 		public inkWidgetReference PriceContainer
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("moneyStatusContainer")] 
 		public inkWidgetReference MoneyStatusContainer
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("processingStatusContainer")] 
 		public inkWidgetReference ProcessingStatusContainer
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("moneyStatusAnimName")] 
 		public CName MoneyStatusAnimName
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("processingAnimName")] 
 		public CName ProcessingAnimName
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("isProcessingPayment")] 
 		public CBool IsProcessingPayment
 		{
@@ -54,12 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public PayActionWidgetController()
 		{
-			PriceContainer = new inkWidgetReference();
-			MoneyStatusContainer = new inkWidgetReference();
-			ProcessingStatusContainer = new inkWidgetReference();
-			MoneyStatusAnimName = "no_money";
-			ProcessingAnimName = "pay";
-
 			PostConstruct();
 		}
 

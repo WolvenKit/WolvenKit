@@ -118,11 +118,6 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceInkGameControllerBase()
 		{
-			ActionWidgetsData = new();
-			DeviceWidgetsData = new();
-			BreadcrumbStack = new();
-			ActiveBreadcrumb = new SBreadcrumbElementData();
-
 			PostConstruct();
 		}
 

@@ -14,10 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public StimDeviceOperation()
 		{
-			IsEnabled = true;
-			ToggleOperations = new();
-			Stims = new();
-
 			PostConstruct();
 		}
 

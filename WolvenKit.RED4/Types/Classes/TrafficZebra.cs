@@ -5,8 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public TrafficZebra()
 		{
-			ControllerTypeName = "TrafficZebraController";
-
 			PostConstruct();
 		}
 

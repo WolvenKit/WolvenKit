@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public VendingMachineDeviceBlackboardDef()
 		{
-			ActionStatus = new gamebbScriptID_Variant();
-			SoldOut = new gamebbScriptID_Bool();
-
 			PostConstruct();
 		}
 

@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("forceSelectEntry")] 
+		public CInt32 ForceSelectEntry
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public RequestChangeTrackedObjective()
 		{
 			PostConstruct();

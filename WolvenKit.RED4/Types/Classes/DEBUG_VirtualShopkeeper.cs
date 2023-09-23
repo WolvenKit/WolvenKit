@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DEBUG_VirtualShopkeeper : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("vendorID")] 
 		public CString VendorID
 		{
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public DEBUG_VirtualShopkeeper()
 		{
-			VendorID = "Vendors.CCLVendor";
-
 			PostConstruct();
 		}
 

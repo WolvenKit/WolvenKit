@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("arrowBigWidget")] 
+		public inkImageWidgetReference ArrowBigWidget
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("damageThreshold")] 
 		public CFloat DamageThreshold
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("damageTaken")] 
 		public CFloat DamageTaken
 		{
@@ -52,9 +60,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("continuous")] 
 		public CBool Continuous
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("revengeActive")] 
+		public CBool RevengeActive
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -63,8 +79,6 @@ namespace WolvenKit.RED4.Types
 		public gameuiDamageIndicatorPartLogicController()
 		{
 			MaxDistanceForSharedIndicators = 4.000000F;
-			ArrowFrontWidget = new inkImageWidgetReference();
-			DamageThreshold = 100.000000F;
 
 			PostConstruct();
 		}

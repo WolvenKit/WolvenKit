@@ -54,12 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public RevealNetworkGridEvent()
 		{
-			OwnerEntityPosition = new Vector4();
-			FxDefault = new gameFxResource();
-			FxBreached = new gameFxResource();
-			RevealSlave = true;
-			RevealMaster = true;
-
 			PostConstruct();
 		}
 

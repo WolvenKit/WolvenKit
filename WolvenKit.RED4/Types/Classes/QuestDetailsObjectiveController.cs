@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("journalManager")] 
+		public CWeakHandle<gameJournalManager> JournalManager
+		{
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("hovered")] 
 		public CBool Hovered
 		{
@@ -44,12 +52,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("isTracked")] 
+		public CBool IsTracked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public QuestDetailsObjectiveController()
 		{
-			ObjectiveName = new inkTextWidgetReference();
-			TrackingMarker = new inkWidgetReference();
-			Root = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

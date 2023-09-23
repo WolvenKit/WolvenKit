@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("isHumanityStatRequirementNotMet")] 
+		public CBool IsHumanityStatRequirementNotMet
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("isPerkRequirementNotMet")] 
 		public CBool IsPerkRequirementNotMet
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("isRarityRequirementNotMet")] 
 		public CBool IsRarityRequirementNotMet
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("strengthOrReflexStatName")] 
 		public CString StrengthOrReflexStatName
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("perkLocKey")] 
 		public CString PerkLocKey
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("strengthOrReflexValue")] 
 		public CInt32 StrengthOrReflexValue
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("requiredLevel")] 
 		public CInt32 RequiredLevel
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("anyStatRequirements")] 
 		public CArray<CHandle<MinimalItemTooltipDataStatRequirement>> AnyStatRequirements
 		{
@@ -102,8 +110,6 @@ namespace WolvenKit.RED4.Types
 
 		public MinimalItemTooltipDataRequirements()
 		{
-			AnyStatRequirements = new();
-
 			PostConstruct();
 		}
 

@@ -30,10 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public sampleStyleManagerGameController()
 		{
-			StylePath1 = new redResourceReferenceScriptToken();
-			StylePath2 = new redResourceReferenceScriptToken();
-			Content = new inkWidgetReference();
-
 			PostConstruct();
 		}
 

@@ -22,9 +22,6 @@ namespace WolvenKit.RED4.Types
 
 		public CW_MuteArmDef()
 		{
-			MuteArmActive = new gamebbScriptID_Bool();
-			MuteArmRadius = new gamebbScriptID_Float();
-
 			PostConstruct();
 		}
 

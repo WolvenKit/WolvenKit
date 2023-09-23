@@ -14,9 +14,6 @@ namespace WolvenKit.RED4.Types
 
 		public DropEvents()
 		{
-			StyleName = "CarriedObject.Style";
-			ForceStyleName = "CarriedObject.ForcedStyle";
-
 			PostConstruct();
 		}
 

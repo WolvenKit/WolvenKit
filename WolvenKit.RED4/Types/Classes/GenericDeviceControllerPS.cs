@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class GenericDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("isRecognizableBySenses")] 
 		public CBool IsRecognizableBySenses
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("genericDeviceActionsSetup")] 
 		public GenericDeviceActionsData GenericDeviceActionsSetup
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<GenericDeviceActionsData>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("genericDeviceSkillChecks")] 
 		public CHandle<GenericContainer> GenericDeviceSkillChecks
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<GenericContainer>>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("deviceWidgetRecord")] 
 		public TweakDBID DeviceWidgetRecord
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("thumbnailWidgetRecord")] 
 		public TweakDBID ThumbnailWidgetRecord
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("performedCustomActionsIDs")] 
 		public CArray<CName> PerformedCustomActionsIDs
 		{
@@ -54,10 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public GenericDeviceControllerPS()
 		{
-			TweakDBDescriptionRecord = 143157997633;
-			GenericDeviceActionsSetup = new GenericDeviceActionsData { StateActionsOverrides = new SGenericDeviceActionsData { ToggleON = new SDeviceActionBoolData(), TogglePower = new SDeviceActionBoolData() }, CustomActions = new SCustomDeviceActionsData { Actions = new() } };
-			PerformedCustomActionsIDs = new();
-
 			PostConstruct();
 		}
 

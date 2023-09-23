@@ -190,14 +190,6 @@ namespace WolvenKit.RED4.Types
 
 		public WardrobeUIGameController()
 		{
-			TooltipsManagerRef = new inkWidgetReference();
-			ButtonHintsManagerRef = new inkWidgetReference();
-			SetEditorWidget = new inkWidgetReference();
-			SetGridWidget = new inkCompoundWidgetReference();
-			Sets = new();
-			MaxSetsAmount = 6;
-			SetControllers = new();
-
 			PostConstruct();
 		}
 

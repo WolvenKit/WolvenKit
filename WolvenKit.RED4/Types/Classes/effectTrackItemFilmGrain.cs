@@ -28,11 +28,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<effectEffectParameterEvaluatorVector>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("mask")] 
+		public CArray<CEnum<ERenderObjectType>> Mask
+		{
+			get => GetPropertyValue<CArray<CEnum<ERenderObjectType>>>();
+			set => SetPropertyValue<CArray<CEnum<ERenderObjectType>>>(value);
+		}
+
 		public effectTrackItemFilmGrain()
 		{
 			TimeDuration = 1.000000F;
 			LuminanceBias = new effectEffectParameterEvaluatorFloat();
 			Strength = new effectEffectParameterEvaluatorVector();
+			Mask = new();
 
 			PostConstruct();
 		}

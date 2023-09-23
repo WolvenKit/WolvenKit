@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HitStatPoolPrereq : GenericHitPrereq
 	{
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("valueToCheck")] 
 		public CFloat ValueToCheck
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("objectToCheck")] 
 		public CString ObjectToCheck
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("statPoolToCompare")] 
 		public CEnum<gamedataStatPoolType> StatPoolToCompare
 		{
@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public HitStatPoolPrereq()
 		{
-			IsSync = true;
-			PipelineStage = Enums.gameDamagePipelineStage.Process;
-
 			PostConstruct();
 		}
 

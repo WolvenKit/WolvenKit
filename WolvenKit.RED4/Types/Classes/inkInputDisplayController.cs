@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("iconAND")] 
+		public inkTextWidgetReference IconAND
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("nameRef")] 
 		public inkWidgetReference NameRef
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("canvasRef")] 
 		public inkWidgetReference CanvasRef
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("holdIndicatorContainerRef")] 
 		public inkCompoundWidgetReference HoldIndicatorContainerRef
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("gamepadHoldIndicatorLibraryRef")] 
 		public inkWidgetLibraryReference GamepadHoldIndicatorLibraryRef
 		{
@@ -44,20 +52,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetLibraryReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("keyboardHoldIndicatorLibraryRef")] 
 		public inkWidgetLibraryReference KeyboardHoldIndicatorLibraryRef
 		{
 			get => GetPropertyValue<inkWidgetLibraryReference>();
 			set => SetPropertyValue<inkWidgetLibraryReference>(value);
-		}
-
-		[Ordinal(7)] 
-		[RED("supportAnimatedHoldIndicator")] 
-		public CBool SupportAnimatedHoldIndicator
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
@@ -87,11 +87,13 @@ namespace WolvenKit.RED4.Types
 		public inkInputDisplayController()
 		{
 			IconRef = new inkWidgetReference();
+			IconAND = new inkTextWidgetReference();
 			NameRef = new inkWidgetReference();
 			CanvasRef = new inkWidgetReference();
 			HoldIndicatorContainerRef = new inkCompoundWidgetReference();
 			GamepadHoldIndicatorLibraryRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
 			KeyboardHoldIndicatorLibraryRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			HoldIndicationType = Enums.inkInputHintHoldIndicationType.Press;
 
 			PostConstruct();
 		}

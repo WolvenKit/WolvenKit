@@ -5,8 +5,6 @@ namespace WolvenKit.RED4.Types
 	{
 		public SurveillanceSystem()
 		{
-			ControllerTypeName = "SurveillanceSystemController";
-
 			PostConstruct();
 		}
 

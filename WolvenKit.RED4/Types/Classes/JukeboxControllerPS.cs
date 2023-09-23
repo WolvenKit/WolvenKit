@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class JukeboxControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("jukeboxSetup")] 
 		public JukeboxSetup JukeboxSetup
 		{
@@ -12,15 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<JukeboxSetup>(value);
 		}
 
-		[Ordinal(105)] 
-		[RED("stations")] 
-		public CArray<RadioStationsMap> Stations
-		{
-			get => GetPropertyValue<CArray<RadioStationsMap>>();
-			set => SetPropertyValue<CArray<RadioStationsMap>>(value);
-		}
-
-		[Ordinal(106)] 
+		[Ordinal(108)] 
 		[RED("activeStation")] 
 		public CInt32 ActiveStation
 		{
@@ -28,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(109)] 
 		[RED("isPlaying")] 
 		public CBool IsPlaying
 		{
@@ -38,13 +30,6 @@ namespace WolvenKit.RED4.Types
 
 		public JukeboxControllerPS()
 		{
-			DeviceName = "LocKey#165";
-			TweakDBRecord = "Devices.Jukebox";
-			TweakDBDescriptionRecord = 116534778712;
-			JukeboxSetup = new JukeboxSetup();
-			Stations = new();
-			IsPlaying = true;
-
 			PostConstruct();
 		}
 

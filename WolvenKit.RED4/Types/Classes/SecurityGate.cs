@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SecurityGate : InteractiveMasterDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("sideA")] 
 		public CHandle<gameStaticTriggerAreaComponent> SideA
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("sideB")] 
 		public CHandle<gameStaticTriggerAreaComponent> SideB
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("scanningArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> ScanningArea
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("trespassersDataList")] 
 		public CArray<TrespasserEntry> TrespassersDataList
 		{
@@ -38,9 +38,6 @@ namespace WolvenKit.RED4.Types
 
 		public SecurityGate()
 		{
-			ControllerTypeName = "SecurityGateController";
-			TrespassersDataList = new();
-
 			PostConstruct();
 		}
 

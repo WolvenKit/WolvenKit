@@ -46,9 +46,6 @@ namespace WolvenKit.RED4.Types
 
 		public ChaosWeaponCustomEffector()
 		{
-			EffectorOwnerID = new entEntityID();
-			Target = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
-
 			PostConstruct();
 		}
 
