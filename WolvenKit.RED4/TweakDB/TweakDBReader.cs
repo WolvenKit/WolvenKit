@@ -82,29 +82,31 @@ public class TweakDBReader : Red4Reader
         return EFileReadErrorCodes.NoError;
     }
 
+    private record FlatTypeInfo(ulong TypeHash, uint ValueCount, uint KeyCount, uint Offset);
+
     private void ReadFlats(int offset, FlatsPool pool)
     {
         Position = offset;
 
-        var flatTypeCounts = new Dictionary<ulong, uint>();
+        var flatTypes = new List<FlatTypeInfo>();
         var numFlatTypes = BaseReader.ReadInt32();
         for (var i = 0; i < numFlatTypes; i++)
         {
-            var typeHash = BaseReader.ReadUInt64();
-            var typeCount = BaseReader.ReadUInt32();
-            flatTypeCounts.Add(typeHash, typeCount);
+            flatTypes.Add(new FlatTypeInfo(BaseReader.ReadUInt64(), BaseReader.ReadUInt32(), BaseReader.ReadUInt32(), BaseReader.ReadUInt32()));
         }
 
         var flatTypeValues = new Dictionary<ulong, List<IRedType>>();
-        foreach (var (typeHash, typeCount) in flatTypeCounts)
+        foreach (var flatTypeInfo in flatTypes)
         {
-            flatTypeValues[typeHash] = new List<IRedType>();
-            var redTypeInfos = s_typeHashes[typeHash];
+            BaseStream.Position = flatTypeInfo.Offset;
+
+            flatTypeValues[flatTypeInfo.TypeHash] = new List<IRedType>();
+            var redTypeInfos = s_typeHashes[flatTypeInfo.TypeHash];
 
             var numValues = BaseReader.ReadUInt32();
             for (var j = 0; j < numValues; j++)
             {
-                flatTypeValues[typeHash].Add(Read(redTypeInfos) ?? throw new ArgumentNullException());
+                flatTypeValues[flatTypeInfo.TypeHash].Add(Read(redTypeInfos) ?? throw new ArgumentNullException());
             }
 
             var numKeys = BaseReader.ReadUInt32();
@@ -113,7 +115,7 @@ public class TweakDBReader : Red4Reader
                 var keyHash = ReadTweakDBID();
                 var valueIndex = BaseReader.ReadInt32();
 
-                pool.Add(keyHash, flatTypeValues[typeHash][valueIndex]);
+                pool.Add(keyHash, flatTypeValues[flatTypeInfo.TypeHash][valueIndex]);
             }
         }
     }
@@ -194,56 +196,76 @@ public class TweakDBReader : Red4Reader
 
     public override CName ReadCName() => BaseReader.ReadLengthPrefixedString();
 
-    public override IRedArray ReadCArray(List<RedTypeInfo> redTypeInfos, uint size, bool readAdditionalBytes = true) => base.ReadCArray(redTypeInfos, size, false);
+    public override IRedArray ReadCArray(List<RedTypeInfo> redTypeInfos, uint size, bool readAdditionalBytes = true)
+    {
+        if (redTypeInfos.Count < 2)
+        {
+            throw new TodoException();
+        }
+
+        var type = RedReflection.GetFullType(redTypeInfos);
+        if (System.Activator.CreateInstance(type) is not IRedArray result)
+        {
+            throw new Exception();
+        }
+
+        var startPos = BaseStream.Position;
+
+        var elementCount = _reader.ReadVLQInt32();
+
+        for (var i = 0; i < elementCount; i++)
+        {
+            result.Add(Read(redTypeInfos.Skip(1).ToList()));
+        }
+
+        var remaining = size - (BaseStream.Position - startPos);
+        while (readAdditionalBytes && remaining > 0)
+        {
+            result.Add(Read(redTypeInfos.Skip(1).ToList()));
+
+            remaining = size - (BaseStream.Position - startPos);
+        }
+
+        return result;
+    }
 
     public override IRedResourceAsyncReference ReadCResourceAsyncReference(List<RedTypeInfo> redTypeInfos, uint size) =>
         new CResourceAsyncReference<CResource>(BaseReader.ReadUInt64());
 
     public override void ReadClass(RedBaseClass cls, uint size)
     {
-        var unk1 = BaseReader.ReadByte();
-
-        var typeInfo = RedReflection.GetTypeInfo(cls);
-        while (true)
+        if (cls is Vector2 vector2)
         {
-            var varName = BaseReader.ReadLengthPrefixedString();
-            if (varName == "None")
-            {
-                break;
-            }
-            var valueTypeName = BaseReader.ReadLengthPrefixedString();
-            var (valueType, valueFlags) = RedReflection.GetCSTypeFromRedType(valueTypeName);
-            var redTypeInfos = RedReflection.GetRedTypeInfos(valueTypeName);
-
-            BaseReader.ReadUInt32();
-
-            var propertyInfo = RedReflection.GetPropertyByRedName(cls.GetType(), varName);
-            IRedType? value;
-
-            if (propertyInfo == null)
-            {
-                value = Read(redTypeInfos);
-                cls.SetProperty(varName, value);
-            }
-            else
-            {
-                ArgumentNullException.ThrowIfNull(propertyInfo.RedName);
-
-                value = Read(redTypeInfos);
-
-                if (valueType != propertyInfo.Type)
-                {
-                    var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
-                    var args = new InvalidRTTIEventArgs(propName, propertyInfo.Type, valueType, value);
-                    if (!HandleParsingError(args))
-                    {
-                        throw new InvalidRTTIException(propName, propertyInfo.Type, valueType);
-                    }
-                    value = args.Value;
-                }
-
-                cls.SetProperty(propertyInfo.RedName, value);
-            }
+            vector2.X = ReadCFloat();
+            vector2.Y = ReadCFloat();
+            return;
         }
+
+        if (cls is Vector3 vector3)
+        {
+            vector3.X = ReadCFloat();
+            vector3.Y = ReadCFloat();
+            vector3.Z = ReadCFloat();
+            return;
+        }
+
+        if (cls is Quaternion quaternion)
+        {
+            quaternion.I = ReadCFloat();
+            quaternion.J = ReadCFloat();
+            quaternion.K = ReadCFloat();
+            quaternion.R = ReadCFloat();
+            return;
+        }
+
+        if (cls is EulerAngles eulerAngles)
+        {
+            eulerAngles.Pitch = ReadCFloat();
+            eulerAngles.Yaw = ReadCFloat();
+            eulerAngles.Roll = ReadCFloat();
+            return;
+        }
+
+        throw new NotImplementedException();
     }
 }
