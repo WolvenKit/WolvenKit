@@ -54,6 +54,9 @@ public class worldNodeDataWriter : Red4Writer
             _writer.Write(t.Uk10);
             _writer.Write(t.Uk11);
             _writer.Write(t.Uk12);
+
+            _writer.Write(t.Uk13);
+            _writer.Write(t.Uk14);
         }
     }
 }
