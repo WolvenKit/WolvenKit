@@ -109,6 +109,11 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
     {
         if (propertyName == "placementTags")
         {
+            if (PlacementTags == null)
+            {
+                return;
+            }
+
             writer.BaseWriter.Write(PlacementTags.Count);
             foreach (var placementTag in PlacementTags)
             {
@@ -118,6 +123,11 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 
         if (propertyName == "componentNames")
         {
+            if (ComponentNames == null)
+            {
+                return;
+            }
+
             writer.BaseWriter.Write(ComponentNames.Count);
             foreach (var componentName in ComponentNames)
             {
@@ -127,6 +137,11 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 
         if (propertyName == "relativePositions")
         {
+            if (RelativePositions == null)
+            {
+                return;
+            }
+
             writer.BaseWriter.Write(RelativePositions.Count);
             foreach (var relativePosition in RelativePositions)
             {
@@ -138,6 +153,11 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 
         if (propertyName == "relativeRotations")
         {
+            if (RelativeRotations == null)
+            {
+                return;
+            }
+
             writer.BaseWriter.Write(RelativeRotations.Count);
             foreach (var relativeRotation in RelativeRotations)
             {
@@ -150,6 +170,11 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 
         if (propertyName == "placementInfos")
         {
+            if (PlacementInfos == null)
+            {
+                return;
+            }
+
             writer.BaseWriter.Write(PlacementInfos.Count);
             foreach (var placementInfo in PlacementInfos)
             {
@@ -162,6 +187,11 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 
         if (propertyName == "eventsSortedByRUID")
         {
+            if (EventsSortedByRUID == null)
+            {
+                return;
+            }
+
             writer.BaseWriter.Write(EventsSortedByRUID.Count);
             foreach (var eventInfo in EventsSortedByRUID)
             {
