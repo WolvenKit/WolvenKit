@@ -598,19 +598,6 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
     
     appearanceErrorMessages[appearanceName] ||= [];
 
-    // check override
-    if (appFileSettings.checkCookPaths && appearance.Data.cookedDataPathOverride) {        
-        const potentialCookedOverride = stringifyPotentialCName(appearance.Data.cookedDataPathOverride.DepotPath) || '';        
-        
-        if (potentialCookedOverride && potentialCookedOverride !== "0") {
-            if (/[A-Z]/.test(potentialCookedOverride)) {
-                hasUppercasePaths = true;
-                return;
-            }
-            appearanceErrorMessages[appearanceName].push(`Cooked data override found. Consider deleting it.`);
-        }
-    }
-
     if (alreadyDefinedAppearanceNames.includes(appearanceName)) {
         appearanceErrorMessages[appearanceName].push(`An appearance with the name ${appearanceName} is already defined in .app file`);
     } else {
@@ -743,10 +730,6 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
     for (let i = 0; i < app.appearances.length; i++) {
         const appearance = app.appearances[i];
         appFile_validateAppearance(appearance, i, validateRecursively, validateCollisions);
-    }
-
-    if (appFileSettings.checkCookPaths && app.commonCookData && stringifyPotentialCName(app.commonCookData.DepotPath)) {
-        Logger.Warning('CommonCookData found in app file\'s root. Consider deleting it.');
     }
 
     // If we're recursively validating an ent file, we're calling this one in there
