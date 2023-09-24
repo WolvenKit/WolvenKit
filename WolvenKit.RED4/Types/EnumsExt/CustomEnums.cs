@@ -60,4 +60,10 @@ public static partial class Enums
         Community,
         SpawnSet
     }
+
+    public enum scnbExternalLayerVersion
+    {
+        VER_unset,
+        VER_saving_substance
+    }
 }
