@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("attackInitRange")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat AttackInitRange
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("attackName")]
 		[REDProperty(IsIgnored = true)]
 		public CName AttackName
@@ -43,12 +51,68 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("attackWidth")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat AttackWidth
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("axisLowerMargin")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat AxisLowerMargin
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("axisUpperMargin")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat AxisUpperMargin
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("colliderBoxSize")]
 		[REDProperty(IsIgnored = true)]
 		public Vector3 ColliderBoxSize
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);
+		}
+		
+		[RED("coneDirection")]
+		[REDProperty(IsIgnored = true)]
+		public Vector3 ConeDirection
+		{
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+		
+		[RED("coneHalfAngle")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat ConeHalfAngle
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("positionOffset")]
+		[REDProperty(IsIgnored = true)]
+		public Vector3 PositionOffset
+		{
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+		
+		[RED("stopContinuousAttackOnDurationEnd")]
+		[REDProperty(IsIgnored = true)]
+		public CBool StopContinuousAttackOnDurationEnd
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("weaponSlots")]

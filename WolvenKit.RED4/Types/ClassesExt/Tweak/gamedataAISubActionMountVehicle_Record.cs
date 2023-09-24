@@ -3,6 +3,14 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataAISubActionMountVehicle_Record
 	{
+		[RED("ignoreFlatTires")]
+		[REDProperty(IsIgnored = true)]
+		public CBool IgnoreFlatTires
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("mountInstantly")]
 		[REDProperty(IsIgnored = true)]
 		public CBool MountInstantly

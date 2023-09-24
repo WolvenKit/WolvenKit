@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("removeWithEffector")]
+		[REDProperty(IsIgnored = true)]
+		public CBool RemoveWithEffector
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("statGroup")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID StatGroup

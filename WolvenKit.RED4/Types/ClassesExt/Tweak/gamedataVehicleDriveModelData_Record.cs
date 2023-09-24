@@ -115,14 +115,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("burnOutRotationModifier")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat BurnOutRotationModifier
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("center_of_mass_offset")]
 		[REDProperty(IsIgnored = true)]
 		public Vector3 Center_of_mass_offset
@@ -153,6 +145,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
+		[RED("flatTireSim")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID FlatTireSim
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("forwardWeightTransferFactor")]
@@ -510,6 +510,30 @@ namespace WolvenKit.RED4.Types
 		[RED("turnUpdateMaxSpeedTurnMul")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat TurnUpdateMaxSpeedTurnMul
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("turnUpdateMidSpeedThreshold")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat TurnUpdateMidSpeedThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("turnUpdateMidSpeedTurnChangeMul")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat TurnUpdateMidSpeedTurnChangeMul
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("turnUpdateMidSpeedTurnMul")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat TurnUpdateMidSpeedTurnMul
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);

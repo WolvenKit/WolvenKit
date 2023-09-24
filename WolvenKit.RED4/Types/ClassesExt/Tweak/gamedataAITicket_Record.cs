@@ -43,6 +43,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("difficulty")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Difficulty
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("difficultyComparisonOp")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID DifficultyComparisonOp
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("maxNumberOfTickets")]
 		[REDProperty(IsIgnored = true)]
 		public CInt32 MaxNumberOfTickets
@@ -113,6 +129,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("stdDevStarsTrash")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID StdDevStarsTrash
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("syncTimeout")]

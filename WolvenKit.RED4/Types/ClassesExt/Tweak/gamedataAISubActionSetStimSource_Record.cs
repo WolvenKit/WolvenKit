@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("revertStimSourceDirection")]
+		[REDProperty(IsIgnored = true)]
+		public CBool RevertStimSourceDirection
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("stimTarget")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID StimTarget

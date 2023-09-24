@@ -91,6 +91,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("canSkipBlock")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CanSkipBlock
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("dontScaleWithAttackSpeed")]
 		[REDProperty(IsIgnored = true)]
 		public CBool DontScaleWithAttackSpeed
@@ -217,14 +225,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("staminaCost")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> StaminaCost
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
 		[RED("standUpDelay")]

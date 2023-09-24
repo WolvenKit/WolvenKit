@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
+		[RED("ignoreSelfInflictedPressureWave")]
+		[REDProperty(IsIgnored = true)]
+		public CBool IgnoreSelfInflictedPressureWave
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("isSynchronous")]
 		[REDProperty(IsIgnored = true)]
 		public CBool IsSynchronous
@@ -30,6 +38,14 @@ namespace WolvenKit.RED4.Types
 		[RED("pipelineStage")]
 		[REDProperty(IsIgnored = true)]
 		public CString PipelineStage
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+		
+		[RED("pipelineType")]
+		[REDProperty(IsIgnored = true)]
+		public CString PipelineType
 		{
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);

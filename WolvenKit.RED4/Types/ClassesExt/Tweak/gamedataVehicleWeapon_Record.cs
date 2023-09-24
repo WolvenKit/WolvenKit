@@ -11,9 +11,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("canFiendlyFire")]
+		[RED("canFriendlyFire")]
 		[REDProperty(IsIgnored = true)]
-		public CBool CanFiendlyFire
+		public CBool CanFriendlyFire
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -105,6 +105,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("spread")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Spread
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 		
 		[RED("weaponShootAnimEvent")]

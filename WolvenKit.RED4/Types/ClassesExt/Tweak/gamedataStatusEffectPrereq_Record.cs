@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("objectToCheck")]
+		[REDProperty(IsIgnored = true)]
+		public CName ObjectToCheck
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("statusEffect")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID StatusEffect

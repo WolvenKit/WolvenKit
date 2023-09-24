@@ -11,20 +11,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 		
-		[RED("avoidSelectingSameTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool AvoidSelectingSameTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("avoidSelectingSameTargetMethod")]
 		[REDProperty(IsIgnored = true)]
 		public CInt32 AvoidSelectingSameTargetMethod
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
+		}
+		
+		[RED("blockLoSByNonPenetrableObj")]
+		[REDProperty(IsIgnored = true)]
+		public CBool BlockLoSByNonPenetrableObj
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("delay")]

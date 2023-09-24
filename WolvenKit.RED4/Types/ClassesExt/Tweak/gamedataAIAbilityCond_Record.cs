@@ -10,5 +10,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
+		
+		[RED("target")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Target
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
 	}
 }

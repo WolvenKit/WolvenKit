@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("DefaultLightToggle")]
+		[REDProperty(IsIgnored = true)]
+		public CBool DefaultLightToggle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("DisableAllInteractions")]
 		[REDProperty(IsIgnored = true)]
 		public CBool DisableAllInteractions
@@ -25,6 +33,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("LightToggleComponents")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<CInt32> LightToggleComponents
+		{
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 		
 		[RED("LockAll")]

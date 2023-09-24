@@ -3,6 +3,14 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataSpreadInitEffector_Record
 	{
+		[RED("applyOverclock")]
+		[REDProperty(IsIgnored = true)]
+		public CBool ApplyOverclock
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("bonusJumps")]
 		[REDProperty(IsIgnored = true)]
 		public CInt32 BonusJumps

@@ -3,6 +3,22 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataVehicleDestruction_Record
 	{
+		[RED("chargePortCenter")]
+		[REDProperty(IsIgnored = true)]
+		public Vector3 ChargePortCenter
+		{
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+		
+		[RED("chargePortRadius")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat ChargePortRadius
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("damageExponent")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat DamageExponent
@@ -41,6 +57,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CResourceAsyncReference<CResource>>();
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
+		}
+		
+		[RED("doorDetachRules")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> DoorDetachRules
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
 		[RED("enableOnHit")]

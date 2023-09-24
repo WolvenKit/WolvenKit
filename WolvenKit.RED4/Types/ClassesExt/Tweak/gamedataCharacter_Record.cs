@@ -91,6 +91,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("bossHealthBarThresholds")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<CFloat> BossHealthBarThresholds
+		{
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
+		}
+		
 		[RED("bountyDrawTable")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID BountyDrawTable
@@ -227,9 +235,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("dropsAmmoOnDeath")]
+		[RED("dropsAmmoOnDeathChance")]
 		[REDProperty(IsIgnored = true)]
-		public CBool DropsAmmoOnDeath
+		public CFloat DropsAmmoOnDeathChance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("dropsControlledLoot")]
+		[REDProperty(IsIgnored = true)]
+		public CBool DropsControlledLoot
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -315,6 +331,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("hideUIDetection")]
+		[REDProperty(IsIgnored = true)]
+		public CBool HideUIDetection
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("hideUIElements")]
+		[REDProperty(IsIgnored = true)]
+		public CBool HideUIElements
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("holocallInitializerPath")]
 		[REDProperty(IsIgnored = true)]
 		public CResourceAsyncReference<CResource> HolocallInitializerPath
@@ -329,6 +361,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("ignoreDetectionForAudioCue")]
+		[REDProperty(IsIgnored = true)]
+		public CBool IgnoreDetectionForAudioCue
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("isBumpable")]
@@ -390,6 +430,14 @@ namespace WolvenKit.RED4.Types
 		[RED("lootDrop")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID LootDrop
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("lootInjectionParams")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID LootInjectionParams
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);

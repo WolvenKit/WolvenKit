@@ -29,12 +29,12 @@ namespace WolvenKit.RED4.Types
 		
 		[RED("objectToCheck")]
 		[REDProperty(IsIgnored = true)]
-		public TweakDBID ObjectToCheck
+		public CName ObjectToCheck
 		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
-        
+		
 		[RED("skipOnApply")]
 		[REDProperty(IsIgnored = true)]
 		public CBool SkipOnApply
@@ -53,10 +53,10 @@ namespace WolvenKit.RED4.Types
 		
 		[RED("valueToCheck")]
 		[REDProperty(IsIgnored = true)]
-		public CFloat ValueToCheck
+		public CArray<TweakDBID> ValueToCheck
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 	}
 }

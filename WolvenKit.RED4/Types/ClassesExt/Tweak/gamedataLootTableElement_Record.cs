@@ -35,6 +35,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("quantityModifiers")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> QuantityModifiers
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("statModifiers")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> StatModifiers

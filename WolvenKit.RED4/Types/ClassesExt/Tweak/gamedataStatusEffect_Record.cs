@@ -3,7 +3,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataStatusEffect_Record
 	{
-        [RED("additionalParam")]
+		[RED("additionalParam")]
 		[REDProperty(IsIgnored = true)]
 		public CName AdditionalParam
 		{
@@ -18,8 +18,16 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
-
-        [RED("duration")]
+		
+		[RED("debugTags")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<CName> DebugTags
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+		
+		[RED("duration")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Duration
 		{
@@ -89,6 +97,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("reapplyPackagesOnMaxStacks")]
+		[REDProperty(IsIgnored = true)]
+		public CBool ReapplyPackagesOnMaxStacks
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("removeAllStacksWhenDurationEnds")]

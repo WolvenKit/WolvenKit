@@ -11,12 +11,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("hitsToFlatten")]
+		[REDProperty(IsIgnored = true)]
+		public CInt32 HitsToFlatten
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+		
 		[RED("intact")]
 		[REDProperty(IsIgnored = true)]
 		public CName Intact
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("linkedTire")]
+		[REDProperty(IsIgnored = true)]
+		public CInt32 LinkedTire
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 		
 		[RED("name")]

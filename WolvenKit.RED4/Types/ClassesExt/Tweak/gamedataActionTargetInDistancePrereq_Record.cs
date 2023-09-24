@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("distanceStat")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID DistanceStat
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("invert")]
 		[REDProperty(IsIgnored = true)]
 		public CBool Invert

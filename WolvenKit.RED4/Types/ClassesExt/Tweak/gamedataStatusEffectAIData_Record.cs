@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
+		[RED("allowDelayStatusEffectSignalIfSamePriorityExecuting")]
+		[REDProperty(IsIgnored = true)]
+		public CBool AllowDelayStatusEffectSignalIfSamePriorityExecuting
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("behaviorEventFlag")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID BehaviorEventFlag

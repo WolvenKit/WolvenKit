@@ -27,17 +27,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("removeAfterPrereqCheck")]
+		[REDProperty(IsIgnored = true)]
+		public CBool RemoveAfterPrereqCheck
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("statModifierGroups")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> StatModifierGroups
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("statPoolUpdates")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> StatPoolUpdates
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);

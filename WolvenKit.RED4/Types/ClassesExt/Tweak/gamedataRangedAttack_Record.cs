@@ -34,5 +34,21 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
+		
+		[RED("secondaryPlayerAttack")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID SecondaryPlayerAttack
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("secondaryPlayerTimeDilated")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID SecondaryPlayerTimeDilated
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
 	}
 }

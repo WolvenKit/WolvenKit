@@ -11,12 +11,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 		
-		[RED("statModifier")]
+		[RED("statModifiers")]
 		[REDProperty(IsIgnored = true)]
-		public TweakDBID StatModifier
+		public CArray<TweakDBID> StatModifiers
 		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
 		[RED("value")]

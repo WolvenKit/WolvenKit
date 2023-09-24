@@ -35,6 +35,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("blockadeLeftPassengerOffset")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat BlockadeLeftPassengerOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("blockadeRightPassengerOffset")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat BlockadeRightPassengerOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("brakelightColor")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<CInt32> BrakelightColor
@@ -65,6 +81,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CResourceAsyncReference<CResource>>();
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
+		}
+		
+		[RED("debugStatusString")]
+		[REDProperty(IsIgnored = true)]
+		public CString DebugStatusString
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 		
 		[RED("destroyedAppearance")]
@@ -171,6 +195,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 		
+		[RED("hitCooldown")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat HitCooldown
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("icon")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Icon
@@ -193,6 +225,22 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CArray<CInt32>>();
 			set => SetPropertyValue<CArray<CInt32>>(value);
+		}
+		
+		[RED("isArmoredVehicle")]
+		[REDProperty(IsIgnored = true)]
+		public CBool IsArmoredVehicle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("isHackable")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID IsHackable
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("leftBackCamber")]
@@ -241,6 +289,22 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("maxVehiclePassengersCount")]
+		[REDProperty(IsIgnored = true)]
+		public CInt32 MaxVehiclePassengersCount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+		
+		[RED("minVehiclePassengersCount")]
+		[REDProperty(IsIgnored = true)]
+		public CInt32 MinVehiclePassengersCount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 		
 		[RED("model")]
@@ -377,6 +441,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);
+		}
+		
+		[RED("usesSecondaryHoodEmitter")]
+		[REDProperty(IsIgnored = true)]
+		public CBool UsesSecondaryHoodEmitter
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("utilityLightColor")]
@@ -585,6 +657,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
+		[RED("weaponSafeModeBounds")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID WeaponSafeModeBounds
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("widgetStyleSheetPath")]

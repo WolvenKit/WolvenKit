@@ -3,6 +3,22 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataAimAssistBulletMagnetism_Record
 	{
+		[RED("deadReckoningSearchAnglePitch")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat DeadReckoningSearchAnglePitch
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("deadReckoningSearchAngleYaw")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat DeadReckoningSearchAngleYaw
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("isEnabled")]
 		[REDProperty(IsIgnored = true)]
 		public CBool IsEnabled

@@ -5,10 +5,10 @@ namespace WolvenKit.RED4.Types
 	{
 		[RED("applicationChance")]
 		[REDProperty(IsIgnored = true)]
-		public CFloat ApplicationChance
+		public CArray<TweakDBID> ApplicationChance
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
 		[RED("isRandom")]

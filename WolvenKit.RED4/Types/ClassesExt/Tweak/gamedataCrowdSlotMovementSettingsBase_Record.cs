@@ -315,6 +315,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("predictSpecialVehicles")]
+		[REDProperty(IsIgnored = true)]
+		public CBool PredictSpecialVehicles
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("radiusBottomClamp")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat RadiusBottomClamp

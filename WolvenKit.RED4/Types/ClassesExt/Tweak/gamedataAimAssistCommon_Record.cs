@@ -51,6 +51,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<EulerAngles>(value);
 		}
 		
+		[RED("forceSoftLockMinimumWeight")]
+		[REDProperty(IsIgnored = true)]
+		public CBool ForceSoftLockMinimumWeight
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("isEnabled")]
 		[REDProperty(IsIgnored = true)]
 		public CBool IsEnabled
@@ -73,6 +81,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("primaryComponentsOnly")]
+		[REDProperty(IsIgnored = true)]
+		public CBool PrimaryComponentsOnly
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("recentInputTime")]
@@ -99,6 +115,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<EulerAngles>(value);
 		}
 		
+		[RED("softLockTargetLostTimeOut")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat SoftLockTargetLostTimeOut
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("softLockTargetWeight")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat SoftLockTargetWeight
@@ -110,6 +134,30 @@ namespace WolvenKit.RED4.Types
 		[RED("targetAcquisitionDelayTime")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat TargetAcquisitionDelayTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("targetFilter")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID TargetFilter
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("targetFilterPriority")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID TargetFilterPriority
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("targetFilterPriorityBonus")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat TargetFilterPriorityBonus
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);

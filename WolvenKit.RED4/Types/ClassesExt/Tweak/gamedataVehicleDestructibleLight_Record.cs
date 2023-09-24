@@ -26,5 +26,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+		
+		[RED("Thrusters")]
+		[REDProperty(IsIgnored = true)]
+		public CBool Thrusters
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

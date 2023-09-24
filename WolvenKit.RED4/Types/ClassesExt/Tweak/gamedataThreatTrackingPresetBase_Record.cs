@@ -51,6 +51,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("mountedHysteresisThreatDrop")]
+		[REDProperty(IsIgnored = true)]
+		public Vector2 MountedHysteresisThreatDrop
+		{
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
+		}
+		
 		[RED("moveBeliefOnlyIfVisible")]
 		[REDProperty(IsIgnored = true)]
 		public CBool MoveBeliefOnlyIfVisible

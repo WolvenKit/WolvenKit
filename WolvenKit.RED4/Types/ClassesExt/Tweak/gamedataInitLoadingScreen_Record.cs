@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("isBase")]
+		[REDProperty(IsIgnored = true)]
+		public CBool IsBase
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("loadingScreenResource")]
 		[REDProperty(IsIgnored = true)]
 		public CResourceAsyncReference<CResource> LoadingScreenResource

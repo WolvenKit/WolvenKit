@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("profile")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Profile
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("widgetResource")]
 		[REDProperty(IsIgnored = true)]
 		public CResourceAsyncReference<CResource> WidgetResource

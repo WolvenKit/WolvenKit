@@ -27,22 +27,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("autoCenterStartTimeGamepad")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AutoCenterStartTimeGamepad
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("autoCenterStartTimeMouse")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AutoCenterStartTimeMouse
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("cameraBoomExtensionSpeed")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat CameraBoomExtensionSpeed
@@ -238,6 +222,14 @@ namespace WolvenKit.RED4.Types
 		[RED("headLookAtRotationSpeed")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat HeadLookAtRotationSpeed
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("inverseCameraInputBreakThreshold")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat InverseCameraInputBreakThreshold
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);

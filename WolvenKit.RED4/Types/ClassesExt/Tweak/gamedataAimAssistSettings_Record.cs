@@ -3,6 +3,14 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataAimAssistSettings_Record
 	{
+		[RED("heavy")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Heavy
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("light")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Light

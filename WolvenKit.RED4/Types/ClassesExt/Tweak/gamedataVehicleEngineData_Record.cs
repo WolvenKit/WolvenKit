@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("finalGearTorqueDecimationScalor")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat FinalGearTorqueDecimationScalor
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("flyWheelMomentOfInertia")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat FlyWheelMomentOfInertia

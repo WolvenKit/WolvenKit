@@ -35,9 +35,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("boomLength")]
+		[RED("baseBoomLength")]
 		[REDProperty(IsIgnored = true)]
-		public CFloat BoomLength
+		public CFloat BaseBoomLength
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("boomLengthOffset")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat BoomLengthOffset
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);

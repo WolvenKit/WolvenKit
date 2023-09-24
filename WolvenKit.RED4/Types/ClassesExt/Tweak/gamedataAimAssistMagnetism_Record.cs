@@ -99,6 +99,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("softLockBlendInTime")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat SoftLockBlendInTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("softLockMinimumMagnetism")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat SoftLockMinimumMagnetism
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("softLockTimeToReach")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat SoftLockTimeToReach
@@ -118,6 +134,14 @@ namespace WolvenKit.RED4.Types
 		[RED("targetLostBlendOut")]
 		[REDProperty(IsIgnored = true)]
 		public CBool TargetLostBlendOut
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("trackedTargetAutoTargeting")]
+		[REDProperty(IsIgnored = true)]
+		public CBool TrackedTargetAutoTargeting
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
