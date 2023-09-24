@@ -198,11 +198,12 @@ function validateShaderTemplate(depotPath, _info) {
     const basePathString = stringifyPotentialCName(depotPath) || '';
     
     const extensionParts = basePathString.match(/[^.]+$/);
-    
+
     if (!extensionParts || validMaterialFileExtensions.includes(extensionParts[0])) {
         Logger.Warning(`${_info ? `${_info}: ` : ''}Invalid base material: ${basePathString}`);
     }
 }
+
 export let hasUppercasePaths = false;
 
 export let isDataChangedForWriting = false;
@@ -210,12 +211,15 @@ export let isDataChangedForWriting = false;
 /** Is the root entity using a dynamic appearance? */
 let isDynamicAppearance = false;
 
+/** Allow spaces in root entity names */
+let isRootEntity = false;
+
 /** Are path substitutions used in the .app or the mesh entity?  */
 let isUsingSubstitution = false;
 
-function shouldHaveSubstitution(str, ignoreAsterisk=false) {
-    if (!str || typeof str === "bigint") return false; 
-    return (!ignoreAsterisk && str.trim().startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) 
+function shouldHaveSubstitution(str, ignoreAsterisk = false) {
+    if (!str || typeof str === "bigint") return false;
+    return (!ignoreAsterisk && str.trim().startsWith(ARCHIVE_XL_VARIANT_INDICATOR))
         || str.includes('{') || str.includes('}');
 }
 
@@ -235,13 +239,16 @@ export function setPathToCurrentFile(path) {
 
 function resetInternalFlagsAndCaches() {
     isDataChangedForWriting = false;
-    alreadyVerifiedAppFiles.length = 0;
     hasUppercasePaths = false;
     isDynamicAppearance = false;
     isUsingSubstitution = false;
-    
+
+    alreadyVerifiedAppFiles.length = 0;
+    invalidFiles.length = 0;
+
     // ent file
-    hasEmptyAppearanceName =false;
+    hasEmptyAppearanceName = false;
+    isRootEntity = false;
 }
 
 //#region animFile
@@ -330,14 +337,18 @@ let meshAppearancesNotFound = {};
 
 // map: { 'path/to/file.mesh', [ 'component_with_broken_appearance1', 'component_with_broken_appearance2' ] }
 let meshAppearancesNotFoundByComponent = {};
-/*
- * /appearance collection
- */
 
+// map: { 'path/to/file.app', { 'ent_appearance': 'invalid_appearance_name', 'ent_appearance_2': 'not_defined' } }
+let entAppearancesNotFoundByFile = {};
+
+
+/*
+ * Print warnings about invalid appearances
+ */
 function printInvalidAppearanceWarningIfFound() {
-    const warningKeys = Object.keys(meshAppearancesNotFoundByComponent) || [];
-    if (warningKeys.length) { 
-        Logger.Warning('Mesh appearances not found. Here\'s a list:');        
+    let warningKeys = Object.keys(meshAppearancesNotFoundByComponent) || [];
+    if (warningKeys.length) {
+        Logger.Warning('Mesh appearances not found. Here\'s a list:');
     }
     warningKeys.forEach((meshPath) => {
         const componentNames = meshAppearancesNotFoundByComponent[meshPath] || [];
@@ -345,7 +356,7 @@ function printInvalidAppearanceWarningIfFound() {
 
         const definedAppearances = component_collectAppearancesFromMesh(meshPath).join(', ')
         Logger.Warning(`${meshPath} with the appearances [ ${definedAppearances} }`);
-        
+
         // print as table
         Logger.Warning(`  ${'Source'.padEnd(50, ' ')} | Appearance`);
         // print table entries
@@ -355,18 +366,37 @@ function printInvalidAppearanceWarningIfFound() {
             Logger.Warning(`  ${calledFrom.padEnd(50, ' ')} | ${appearanceName}`);
         }
     })
-    
+
     const appearanceErrors = Object.keys(appearanceErrorMessages) || [];
-    if (!appearanceErrors.length) { 
-        return;
-    }    
-    Logger.Warning('Mesh appearances have errors. Here\'s a list:');
-    appearanceErrors.forEach((key) => {
-        const allErrors = (appearanceErrorMessages[key] || []);
-        const foundErrors = allErrors.filter(function(item, pos, self) {
-            return self.indexOf(item) === pos;
-        });
-        foundErrors.forEach((err) => Logger.Warning(err));
+    if (appearanceErrors.length) {
+        Logger.Warning('Mesh appearances have errors. Here\'s a list:');
+        appearanceErrors.forEach((key) => {
+            const allErrors = (appearanceErrorMessages[key] || []);
+            const foundErrors = allErrors.filter(function (item, pos, self) {
+                return self.indexOf(item) === pos;
+            });
+            foundErrors.forEach((err) => Logger.Warning(err));
+        })
+    }
+
+
+    warningKeys = (Object.keys(entAppearancesNotFoundByFile) || [])
+        .filter((depotPath) => !!depotPath && wkit.FileExists(depotPath) && !invalidFiles.includes(depotPath));
+
+    if (warningKeys.length) {
+        Logger.Warning('Appearances not found in files. Here\'s a list:');
+    }
+
+    warningKeys.forEach((appFilePath) => {
+        const appearanceNames = (getAppearanceNamesInAppFile(appFilePath) || []).join(', ');
+        Logger.Warning(`${appFilePath} defines appearances [ ${appearanceNames} ]`);
+        Logger.Warning(`  ${'name'.padEnd(50, ' ')} | Appearance`);
+        const data = entAppearancesNotFoundByFile[appFilePath] || {};
+        if (!Object.keys(data)?.length) return;
+
+        Object.keys(data).forEach((appearancName) => {
+            Logger.Warning(`  ${appearancName.padEnd(50, ' ')} | ${data[appearancName]}`);
+        })
     })
 }
 
@@ -719,7 +749,10 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
         Logger.Warning('CommonCookData found in app file\'s root. Consider deleting it.');
     }
 
-    printInvalidAppearanceWarningIfFound();
+    // If we're recursively validating an ent file, we're calling this one in there
+    if (!calledFromEntFileValidation || !entSettings?.validateRecursively) {
+        printInvalidAppearanceWarningIfFound();
+    }
 }
 
 //#endregion
@@ -801,7 +834,7 @@ const MISSING_PREFIX_WARNING = 'not starting with *, substitution disabled';
 const WITH_MESH = 'withMesh';
 // For different component types, check DepotPath property
 function entFile_appFile_validateComponent(component, _index, validateRecursively, info) {
-    const componentName = stringifyPotentialCName(component.name) ?? '';
+    const componentName = stringifyPotentialCName(component.name, info, isRootEntity) ?? '';
     let type = component.$type || '';
         
     // entGarmentSkinnedMeshComponent - entSkinnedMeshComponent - entMeshComponent
@@ -925,19 +958,21 @@ function getAppearanceNamesInAppFile(_depotPath) {
 // check for name duplications
 const alreadyDefinedAppearanceNames = [];
 
+// files that couldn't be parsed 
+const invalidFiles = [];
+
 /**
  * @param appearance the appearance object
  * @param index numeric index (for debugging)
- * @param isRootEntity should we recursively validate the linked files?
  */
-function entFile_validateAppearance(appearance, index, isRootEntity) {
+function entFile_validateAppearance(appearance, index) {
     const appearanceName = (stringifyPotentialCName(appearance.name) || '');
     let appearanceNameInAppFile = (stringifyPotentialCName(appearance.appearanceName) || '').trim()
     if (!appearanceNameInAppFile || appearanceNameInAppFile === 'None') {
         appearanceNameInAppFile = appearanceName;
         hasEmptyAppearanceName = true;
     }
-    
+
     // ignore separator appearances such as
     // =============================
     // -----------------------------
@@ -958,7 +993,7 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
     }
     
     const appFilePath = stringifyPotentialCName(appearance.appearanceResource.DepotPath);
-    if (!checkDepotPath(appFilePath, info)) {
+    if (!checkDepotPath(appFilePath, info) || alreadyVerifiedAppFiles.includes(appFilePath)) {
         return;
     }
     
@@ -977,7 +1012,8 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
     const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearanceName) || [];
     
     if (!namesInAppFile.includes(appearanceNameInAppFile)) {
-        Logger.Warning(`appearance[${index}]: Can't find appearance ${appearanceNameInAppFile} in .app file ${appFilePath} (only defines [ ${namesInAppFile.join(', ')} ])`);
+        entAppearancesNotFoundByFile[appFilePath] ||= {};
+        entAppearancesNotFoundByFile[appFilePath][appearanceName] = appearanceNameInAppFile;
     }
 
     if (alreadyVerifiedAppFiles.includes(appFilePath) || hasUppercasePaths) {
@@ -990,7 +1026,8 @@ function entFile_validateAppearance(appearance, index, isRootEntity) {
         const fileContent = wkit.LoadGameFileFromProject(appFilePath, 'json');
         const appFile = TypeHelper.JsonParse(fileContent);
         if (null === appFile) {
-            Logger.Warning(`File ${appFilePath} is supposed to exist, but couldn't be parsed.`);
+            Logger.Warning(`File ${appFilePath} exists, but couldn't be parsed.`);
+            invalidFiles.push(appFilePath);
         } else {
             _validateAppFile(appFile, entSettings.validateRecursively, true);
         }
@@ -1035,6 +1072,7 @@ export function validateEntFile(ent, _entSettings) {
     entSettings = _entSettings;
     resetInternalFlagsAndCaches();
 
+
     const allComponentNames = [];
     const duplicateComponentNames = [];
 
@@ -1050,12 +1088,11 @@ export function validateEntFile(ent, _entSettings) {
         isDynamicAppearance = true
     }
 
+    isRootEntity = isDynamicAppearance || (ent.appearances?.length || 0) > 0;
+
     if (visualTagList.some((tag) => tag.startsWith('hide'))) {
         Logger.Warning('Your .ent file has visual tags to hide chunkmasks, but these will only work inside the .app file!');
     }
-
-    const isRootEntity = isDynamicAppearance || (ent.appearances?.length || 0) > 0;
-
 
     // validate ent component names
     for (let i = 0; i < (ent.components.length || 0); i++) {
@@ -1071,10 +1108,8 @@ export function validateEntFile(ent, _entSettings) {
         Logger.Info('Is this an AMM prop appearance? Only components with the names "amm_prop_slot1" - "amm_prop_slot4" will support scaling.');
     }
 
-    if (entSettings.validateRecursively) {
-        printInvalidAppearanceWarningIfFound();
-        printSubstitutionWarningsIfFound();
-    }
+    isRootEntity = isRootEntity && !entSettings.skipRootEntityCheck;
+
 
     if (!isRootEntity && _entSettings.checkComponentNameDuplication && duplicateComponentNames.length > 0) {
         Logger.Warning(`The following components are defined more than once: [ ${duplicateComponentNames.join(', ')} ]`)
@@ -1113,7 +1148,7 @@ export function validateEntFile(ent, _entSettings) {
 
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
-        entFile_validateAppearance(appearance, i, !entSettings.skipRootEntityCheck);
+        entFile_validateAppearance(appearance, i);
         entAppearanceNames.push((stringifyPotentialCName(appearance.name) || ''));
         pathToCurrentFile = _pathToCurrentFile;
     }
@@ -1137,6 +1172,11 @@ export function validateEntFile(ent, _entSettings) {
                 + ' If you don\'t know what that means, check if your appearance names are empty or "None".' +
                 ' If everything is fine, ignore this warning.');
         }
+    }
+
+    if (entSettings.validateRecursively) {
+        printInvalidAppearanceWarningIfFound();
+        printSubstitutionWarningsIfFound();
     }
 
     isDataChangedForWriting = _isDataChangedForWriting;
