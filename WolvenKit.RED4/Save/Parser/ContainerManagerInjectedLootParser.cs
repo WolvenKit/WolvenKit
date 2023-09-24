@@ -27,12 +27,12 @@ public class ContainerManagerInjectedLoot : INodeData
 
     public class SubEntry
     {
-        public TweakDBID ItemTbdId { get; set; }
-        public byte Unknown2 { get; set; }
+        public TweakDBID Unknown1 { get; set; }
+        public uint Unknown2 { get; set; }
         public uint Unknown3 { get; set; }
-        public byte Unknown4 { get; set; }
-        public byte Unknown5 { get; set; }
-        public byte Unknown6 { get; set; }
+        public List<string> Unknown4 { get; set; } = new();
+        public TweakDBID Unknown5 { get; set; }
+        public ulong Unknown6 { get; set; }
     }
 }
 
@@ -60,12 +60,18 @@ public class ContainerManagerInjectedLootParser : INodeParser
             {
                 var subEntry = new ContainerManagerInjectedLoot.SubEntry();
 
-                subEntry.ItemTbdId = reader.ReadUInt64();
-                subEntry.Unknown2 = reader.ReadByte();
+                subEntry.Unknown1 = reader.ReadUInt64();
+                subEntry.Unknown2 = reader.ReadUInt32();
                 subEntry.Unknown3 = reader.ReadUInt32();
-                subEntry.Unknown4 = reader.ReadByte();
-                subEntry.Unknown5 = reader.ReadByte();
-                subEntry.Unknown6 = reader.ReadByte();
+
+                var cnt = reader.ReadByte();
+                for (int j = 0; j < cnt; j++)
+                {
+                    subEntry.Unknown4.Add(reader.ReadLengthPrefixedString());
+                }
+
+                subEntry.Unknown5 = reader.ReadUInt64();
+                subEntry.Unknown6 = reader.ReadUInt64();
 
                 entry.Entries.Add(subEntry);
             }
@@ -91,12 +97,17 @@ public class ContainerManagerInjectedLootParser : INodeParser
             writer.Write((byte)entry.Entries.Count);
             foreach (var subEntry in entry.Entries)
             {
-                var hash = (ulong)subEntry.ItemTbdId;
-                writer.Write(hash);
+                writer.Write((ulong)subEntry.Unknown1);
                 writer.Write(subEntry.Unknown2);
                 writer.Write(subEntry.Unknown3);
-                writer.Write(subEntry.Unknown4);
-                writer.Write(subEntry.Unknown5);
+                
+                writer.Write((byte)subEntry.Unknown4.Count);
+                foreach (var str in subEntry.Unknown4)
+                {
+                    writer.WriteLengthPrefixedString(str);
+                }
+
+                writer.Write((ulong)subEntry.Unknown5);
                 writer.Write(subEntry.Unknown6);
             }
         }
