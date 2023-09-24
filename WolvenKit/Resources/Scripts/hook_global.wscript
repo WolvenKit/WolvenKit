@@ -22,46 +22,46 @@ globalThis.onSave = function (ext, file) {
         }
     }
     const fileContent = TypeHelper.JsonParse(file);
-    
+
     // grab file name from json and inform file validation about it
     const fileName = (fileContent.Header?.ArchiveFileName || '').split('archive\\').pop() || '';
     FileValidation.setPathToCurrentFile(fileName);
     
     let success = true;
     try {
+        const data = fileContent["Data"]["RootChunk"];
         switch (ext) {
-        case "anims":
-            FileValidation.validateAnimationFile(fileContent["Data"]["RootChunk"], Settings.Anims);
-            break;
-        case "app":
-            if (fileContent["Data"]["RootChunk"].appearances.length > 0) {
-                FileValidation.validateAppFile(fileContent["Data"]["RootChunk"], Settings.App);
-            }
-            break;
-        case "csv":
-            FileValidation.validateCsvFile(fileContent["Data"]["RootChunk"], Settings.Csv);
-            break;
-        case "ent":
-            FileValidation.validateEntFile(fileContent["Data"]["RootChunk"], Settings.Ent);
-            break;
-        case "mesh":
-            FileValidation.validateMeshFile(fileContent["Data"]["RootChunk"], Settings.Mesh);
-            break;
-        case "mi":
-            FileValidation.validateMiFile(fileContent["Data"]["RootChunk"], Settings.Mi);
-            break;
-        case "workspot":
-            FileValidation.validateWorkspotFile(fileContent["Data"]["RootChunk"], Settings.Workspot);
-            file = TypeHelper.JsonStringify(fileContent);
-            break;
-        case "inkatlas":
-            FileValidation.validateInkatlasFile(fileContent["Data"]["RootChunk"], Settings.Inkatlas);
-            file = TypeHelper.JsonStringify(fileContent);
-            break;
-        case "json":
-            FileValidation.validateJsonFile(fileContent["Data"]["RootChunk"], Settings.Json);
-            file = TypeHelper.JsonStringify(fileContent);
-            break;
+            case "anims":
+                FileValidation.validateAnimationFile(data, Settings.Anims);
+                break;
+            case "app":
+                if ((data.appearances?.length || 0) > 0)
+                    FileValidation.validateAppFile(data, Settings.App);
+                break;
+            case "csv":
+                FileValidation.validateCsvFile(data, Settings.Csv);
+                break;
+            case "ent":
+                FileValidation.validateEntFile(data, Settings.Ent);
+                break;
+            case "mesh":
+                FileValidation.validateMeshFile(data, Settings.Mesh);
+                break;
+            case "mi":
+                FileValidation.validateMiFile(data, Settings.Mi);
+                break;
+            case "workspot":
+                FileValidation.validateWorkspotFile(data, Settings.Workspot);
+                file = TypeHelper.JsonStringify(fileContent);
+                break;
+            case "inkatlas":
+                FileValidation.validateInkatlasFile(data, Settings.Inkatlas);
+                file = TypeHelper.JsonStringify(fileContent);
+                break;
+            case "json":
+                FileValidation.validateJsonFile(data, Settings.Json);
+                file = TypeHelper.JsonStringify(fileContent);
+                break;
         }        
     } catch (err) {
         if (isWolvenkitDeveloper) {
