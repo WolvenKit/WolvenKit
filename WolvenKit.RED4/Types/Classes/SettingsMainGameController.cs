@@ -342,6 +342,31 @@ namespace WolvenKit.RED4.Types
 
 		public SettingsMainGameController()
 		{
+			ScrollPanel = new inkWidgetReference();
+			SelectorWidget = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			SettingsOptionsList = new inkCompoundWidgetReference();
+			ApplyButton = new inkWidgetReference();
+			ResetButton = new inkWidgetReference();
+			DefaultButton = new inkWidgetReference();
+			BenchmarkButton = new inkWidgetReference();
+			BrightnessButton = new inkWidgetReference();
+			HdrButton = new inkWidgetReference();
+			ControllerButton = new inkWidgetReference();
+			SafezonesButton = new inkWidgetReference();
+			LanguageInstallProgressBarRoot = new inkWidgetReference();
+			LanguageDisclaimer = new inkWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			SettingGroupName_Video = "/video";
+			SettingGroupName_Graphics = "/graphics";
+			SettingGroupName_Interface = "/interface";
+			SettingGroupName_Controls = "/controls";
+			SettingGroupName_Language = "/language";
+			SettingGroupName_KeyBindings = "/key_bindings";
+			SettingsElements = new();
+			Data = new();
+			MenusList = new();
+
 			PostConstruct();
 		}
 

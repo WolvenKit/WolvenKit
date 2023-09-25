@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public ExpansionStatePopupGameController()
 		{
+			StatusRef = new inkTextWidgetReference();
+			AnimationName = "popupAnim";
+
 			PostConstruct();
 		}
 

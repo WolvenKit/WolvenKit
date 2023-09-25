@@ -54,6 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public Crosshair_Smart_Rifl_Bucket()
 		{
+			LockingAnimationLength = 1.000000F;
+			UnlockingAnimationLength = 1.000000F;
+			Data = new gamesmartGunUITargetParameters { Pos = new Vector2(), EntityID = new entEntityID() };
+			ActiveCallbacks = new();
+
 			PostConstruct();
 		}
 

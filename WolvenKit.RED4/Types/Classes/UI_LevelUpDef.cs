@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public UI_LevelUpDef()
 		{
+			Level = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

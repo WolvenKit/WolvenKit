@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public HitIsMovingPrereq()
 		{
+			IsSync = true;
+			PipelineStage = Enums.gameDamagePipelineStage.Process;
+
 			PostConstruct();
 		}
 

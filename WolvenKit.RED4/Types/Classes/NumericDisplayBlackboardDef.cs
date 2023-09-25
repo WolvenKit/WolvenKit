@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public NumericDisplayBlackboardDef()
 		{
+			CurrentNumber = new gamebbScriptID_Int32();
+			Direction = new gamebbScriptID_Int32();
+
 			PostConstruct();
 		}
 

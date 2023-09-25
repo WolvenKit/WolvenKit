@@ -38,6 +38,13 @@ namespace WolvenKit.RED4.Types
 
 		public ArcadeMachineControllerPS()
 		{
+			DeviceName = "LocKey#1635";
+			TweakDBRecord = "Devices.ArcadeMachine";
+			TweakDBDescriptionRecord = 143953089827;
+			GameVideosPaths = new();
+			DEBUG_enableArcadeMinigames = true;
+			Minigame = Enums.ArcadeMinigame.INVALID;
+
 			PostConstruct();
 		}
 

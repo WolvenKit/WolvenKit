@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public NewItemTooltipDescriptionModule()
 		{
+			DescriptionText = new inkTextWidgetReference();
+			DefaultMargin = new inkMargin();
+
 			PostConstruct();
 		}
 

@@ -78,6 +78,11 @@ namespace WolvenKit.RED4.Types
 
 		public buffListGameController()
 		{
+			BuffsList = new inkHorizontalPanelWidgetReference();
+			BuffDataList = new();
+			DebuffDataList = new();
+			BuffWidgets = new();
+
 			PostConstruct();
 		}
 

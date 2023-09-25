@@ -310,6 +310,25 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryDataManagerV2()
 		{
+			InventoryItemsData = new();
+			EquipmentAreaInventoryItemsData = new();
+			InventoryItemsDataWithoutEquipment = new();
+			EquipmentItemsData = new();
+			WeaponItemsData = new();
+			QuickSlotsData = new();
+			ConsumablesSlotsData = new();
+			PartsData = new();
+			ToRebuild = true;
+			ToRebuildEquipmentArea = new();
+			ToRebuildItemsWithEquipped = true;
+			ToRebuildWeapons = true;
+			ToRebuildEquipment = true;
+			ToRebuildQuickSlots = true;
+			ToRebuildConsumables = true;
+			ActiveWeapon = new gameItemID();
+			EquipRecords = new();
+			InventoryItemDataWrappers = new();
+
 			PostConstruct();
 		}
 

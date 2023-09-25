@@ -182,6 +182,17 @@ namespace WolvenKit.RED4.Types
 
 		public ChatterLineLogicController()
 		{
+			TextContainer = new inkWidgetReference();
+			SpeachBubble = new inkWidgetReference();
+			Background = new inkRectangleWidgetReference();
+			Container_normal = new inkWidgetReference();
+			Container_wide = new inkWidgetReference();
+			Text_normal = new inkTextWidgetReference();
+			Text_wide = new inkTextWidgetReference();
+			NameplateEntityId = new entEntityID();
+			OwnerId = new entEntityID();
+			C_ExtraWideTextWidth = 110;
+
 			PostConstruct();
 		}
 

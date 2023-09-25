@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public ActionTargetInDistancePrereq()
 		{
+			DistanceStat = Enums.gamedataStatType.Invalid;
+
 			PostConstruct();
 		}
 

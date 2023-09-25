@@ -150,6 +150,12 @@ namespace WolvenKit.RED4.Types
 
 		public QuestTrackerGameController()
 		{
+			QuestTitle = new inkTextWidgetReference();
+			ObjectiveContainer = new inkCompoundWidgetReference();
+			TrackedMappinTitle = new inkTextWidgetReference();
+			TrackedMappinContainer = new inkWidgetReference();
+			TrackedMappinObjectiveContainer = new inkCompoundWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -118,6 +118,9 @@ namespace WolvenKit.RED4.Types
 
 		public InteractionUIBase()
 		{
+			ShowAnimationName = "unfold";
+			HideAnimationName = "fold";
+
 			PostConstruct();
 		}
 

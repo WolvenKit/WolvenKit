@@ -174,6 +174,23 @@ namespace WolvenKit.RED4.Types
 
 		public InnerBunkerCoreScreenGameController()
 		{
+			Systems = new(6);
+			Statuses = new(6);
+			ShutdownButton = new inkWidgetReference();
+			ProcessingPanel = new inkWidgetReference();
+			FailurePopup = new inkWidgetReference();
+			SuccessPopup = new inkWidgetReference();
+			SystemCheckTimeOffline = 2.500000F;
+			SystemCheckTimeUnresponsive = 3.500000F;
+			ShowResultTime = 3.500000F;
+			SystemsCheckAnimName = "systems_check_loop";
+			CoreStatusNormalAnimName = "state_nominal";
+			CoreStatusMalfunctionAnimName = "state_malfunction";
+			CoreStatusShutdownAnimName = "state_shutdown";
+			CoreStatusShutingDownAnimName = "state_shuting_down";
+			FailurePopupAnimName = "popup_01_fail";
+			SuccessPopupAnimName = "popup_02_success";
+
 			PostConstruct();
 		}
 

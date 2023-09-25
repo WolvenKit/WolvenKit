@@ -46,6 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkAreaControllerPS()
 		{
+			RevealDevicesGrid = false;
+			DeviceName = "DBGNetworkName";
+
 			PostConstruct();
 		}
 

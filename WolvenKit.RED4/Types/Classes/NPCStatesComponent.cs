@@ -190,6 +190,13 @@ namespace WolvenKit.RED4.Types
 
 		public NPCStatesComponent()
 		{
+			HighLevelAnimFeatureName = "highLevelState";
+			UpperBodyAnimFeatureName = "upperBodyState";
+			StanceAnimFeatureName = "stanceState";
+			PrevNPCStanceState = Enums.gamedataNPCStanceState.Invalid;
+			PreviousHighLevelState = Enums.gamedataNPCHighLevelState.Invalid;
+			PrevHitReactionMode = Enums.EHitReactionMode.Invalid;
+
 			PostConstruct();
 		}
 

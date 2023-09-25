@@ -374,6 +374,21 @@ namespace WolvenKit.RED4.Types
 
 		public NameplateVisualsLogicController()
 		{
+			NameTextMain = new inkTextWidgetReference();
+			NameFrame = new inkWidgetReference();
+			HealthbarWidget = new inkWidgetReference();
+			HealthBarFull = new inkWidgetReference();
+			HealthBarFrame = new inkWidgetReference();
+			StealthMappinSlot = new inkCompoundWidgetReference();
+			DamagePreviewWrapper = new inkWidgetReference();
+			DamagePreviewWidget = new inkWidgetReference();
+			DamagePreviewArrow = new inkWidgetReference();
+			RarityHolder = new inkWidgetReference();
+			Rarities = new();
+			CachedIncomingData = new gameuiNPCNextToTheCrosshair { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
+			BossColor = new CColor();
+			AnimatingObject = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public CoderControllerPS()
 		{
+			ProvidedAuthorizationLevel = Enums.ESecurityAccessLevel.ESL_4;
+
 			PostConstruct();
 		}
 

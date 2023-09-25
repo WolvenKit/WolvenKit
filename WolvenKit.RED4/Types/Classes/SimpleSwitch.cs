@@ -22,6 +22,10 @@ namespace WolvenKit.RED4.Types
 
 		public SimpleSwitch()
 		{
+			ControllerTypeName = "SimpleSwitchController";
+			DeviceState = Enums.EDeviceStatus.ON;
+			AnimationSpeed = 1.000000F;
+
 			PostConstruct();
 		}
 

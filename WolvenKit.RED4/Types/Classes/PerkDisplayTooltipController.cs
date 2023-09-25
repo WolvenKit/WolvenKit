@@ -310,6 +310,44 @@ namespace WolvenKit.RED4.Types
 
 		public PerkDisplayTooltipController()
 		{
+			Root_24 = new inkWidgetReference();
+			PerkNameText = new inkTextWidgetReference();
+			VideoWrapper = new inkWidgetReference();
+			VideoWidget = new inkVideoWidgetReference();
+			UnlockStateText = new inkTextWidgetReference();
+			PerkTypeText = new inkTextWidgetReference();
+			PerkTypeWrapper = new inkWidgetReference();
+			UnlockInfoWrapper = new inkWidgetReference();
+			UnlockPointsText = new inkTextWidgetReference();
+			UnlockPointsDesc = new inkTextWidgetReference();
+			UnlockPerkWrapper = new inkWidgetReference();
+			LevelText = new inkTextWidgetReference();
+			LevelDescriptionText = new inkTextWidgetReference();
+			NextLevelWrapper = new inkWidgetReference();
+			NextLevelText = new inkTextWidgetReference();
+			NextLevelDescriptionText = new inkTextWidgetReference();
+			Level1Wrapper = new inkWidgetReference();
+			LevelsDescriptions = new();
+			RelatedWeaponTypeWrapper = new inkWidgetReference();
+			RelatedWeaponTypeIcon = new inkImageWidgetReference();
+			RelatedWeaponTypeText = new inkTextWidgetReference();
+			TraitLevelGrowthText = new inkTextWidgetReference();
+			UnlockTraitPointsText = new inkTextWidgetReference();
+			UnlockTraitWrapper = new inkWidgetReference();
+			InputHints = new inkWidgetReference();
+			BuyHint = new inkWidgetReference();
+			SellHint = new inkWidgetReference();
+			RelicCost = new inkWidgetReference();
+			CostText = new inkTextWidgetReference();
+			CostImage = new inkImageWidgetReference();
+			PerkLevelWrapper = new inkWidgetReference();
+			PerkLevelCurrent = new inkTextWidgetReference();
+			PerkLevelMax = new inkTextWidgetReference();
+			CornerContainer = new inkWidgetReference();
+			CyberwareDetailsInfo = new inkWidgetReference();
+			DEBUG_iconErrorWrapper = new inkWidgetReference();
+			DEBUG_iconErrorText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

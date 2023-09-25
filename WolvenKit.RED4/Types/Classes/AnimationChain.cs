@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public AnimationChain()
 		{
+			Data = new();
+
 			PostConstruct();
 		}
 

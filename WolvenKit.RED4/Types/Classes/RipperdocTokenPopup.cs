@@ -422,6 +422,31 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocTokenPopup()
 		{
+			OptionRef = new(4);
+			OptionTooltipParent = new(4);
+			Option1ProgressBarRef = new inkWidgetReference();
+			Option2ProgressBarRef = new inkWidgetReference();
+			Option3ProgressBarRef = new inkWidgetReference();
+			Option1HoverZone = new inkWidgetReference();
+			Option2HoverZone = new inkWidgetReference();
+			Option3HoverZone = new inkWidgetReference();
+			ProgressEffectName = "progress";
+			Option1UpgradeBtnAnchor = new inkWidgetReference();
+			Option2UpgradeBtnAnchor = new inkWidgetReference();
+			Option3UpgradeBtnAnchor = new inkWidgetReference();
+			UpgradeBtnContainerRef = new inkWidgetReference();
+			UpgradeButtonAnimDuration = 0.300000F;
+			UpgradeButtonResRef = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\cyberware_tooltip_modules.inkwidget") };
+			UpgradeButtonResName = "itemCyberwareUpgrade";
+			ExitInputName = "close_popup";
+			ButtonHintsRoot = new inkWidgetReference();
+			ItemToolitpResRef = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\itemtooltip.inkwidget") };
+			ItemTooltipName = "itemTooltip";
+			CyberdeckToolitpResRef = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\cyberdecktooltip.inkwidget") };
+			CyberdeckTooltipName = "cyberdeckTooltip";
+			ToolitpWidgetRef = new redResourceReferenceScriptToken();
+			Choice = -1;
+
 			PostConstruct();
 		}
 

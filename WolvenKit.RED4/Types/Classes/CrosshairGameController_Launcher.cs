@@ -62,6 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Launcher()
 		{
+			Cori_S = new inkCanvasWidgetReference();
+			Cori_M = new inkCanvasWidgetReference();
+
 			PostConstruct();
 		}
 

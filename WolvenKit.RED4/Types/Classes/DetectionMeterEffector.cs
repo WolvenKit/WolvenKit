@@ -78,6 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public DetectionMeterEffector()
 		{
+			GameInstance = new ScriptGameInstance();
+			OwnerID = new entEntityID();
+
 			PostConstruct();
 		}
 

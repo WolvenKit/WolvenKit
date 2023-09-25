@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceLinkRequest()
 		{
+			DeviceLink = new DeviceLink { PSID = new gamePersistentID() };
+
 			PostConstruct();
 		}
 

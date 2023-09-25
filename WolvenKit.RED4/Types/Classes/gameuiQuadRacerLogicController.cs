@@ -323,6 +323,10 @@ namespace WolvenKit.RED4.Types
 			SegmentDetails = 1;
 			CameraFov = 80.000000F;
 			CameraHeight = 1000.000000F;
+			TimeLeftText = new inkTextWidgetReference();
+			ScoreText = new inkTextWidgetReference();
+			SpeedText = new inkTextWidgetReference();
+			NotificationText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

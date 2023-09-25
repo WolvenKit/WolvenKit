@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public SetHeatLevelLimiter()
 		{
+			HeatLevelMax = 5;
+
 			PostConstruct();
 		}
 

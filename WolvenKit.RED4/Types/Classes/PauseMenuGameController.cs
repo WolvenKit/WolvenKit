@@ -94,6 +94,12 @@ namespace WolvenKit.RED4.Types
 
 		public PauseMenuGameController()
 		{
+			BaseLogoContainer = new inkCompoundWidgetReference();
+			Ep1LogoContainer = new inkCompoundWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			ExpansionNotyficationRef = new inkWidgetReference();
+			GameInstance = new ScriptGameInstance();
+
 			PostConstruct();
 		}
 

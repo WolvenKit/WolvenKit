@@ -94,6 +94,13 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkMinigameElementController()
 		{
+			Data = new ElementData();
+			Text = new inkTextWidgetReference();
+			TextNormalColor = new CColor();
+			TextHighlightColor = new CColor();
+			Bg = new inkRectangleWidgetReference();
+			ColorAccent = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

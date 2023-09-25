@@ -78,6 +78,15 @@ namespace WolvenKit.RED4.Types
 
 		public TutorialPopupDisplayController()
 		{
+			Title = new inkTextWidgetReference();
+			Message = new inkTextWidgetReference();
+			Image = new inkImageWidgetReference();
+			Video_1360x768 = new inkVideoWidgetReference();
+			Video_1024x576 = new inkVideoWidgetReference();
+			Video_1280x720 = new inkVideoWidgetReference();
+			Video_720x405 = new inkVideoWidgetReference();
+			InputHint = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

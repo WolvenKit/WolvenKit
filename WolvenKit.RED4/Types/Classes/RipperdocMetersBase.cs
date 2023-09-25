@@ -190,6 +190,22 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocMetersBase()
 		{
+			BarAnchor = new inkWidgetReference();
+			HoverArea = new inkWidgetReference();
+			BarGapSize = 12.000000F;
+			BarIntroAnimDuration = 0.300000F;
+			BAR_COUNT = 50;
+			BAR_SLOPE_COUNT = 4;
+			BAR_ANIM_DURATION = 0.300000F;
+			BAR_DELAY_OFFSET = 0.050000F;
+			PulseAnimtopOpacity = 1.000000F;
+			PulseAnimbottomOpacity = 0.200000F;
+			PulseAnimpulseRate = 0.400000F;
+			PulseAnimdelay = 0.100000F;
+			PulseAnimationParams = new PulseAnimationParams();
+			Bars = new();
+			BarGaps = new();
+
 			PostConstruct();
 		}
 

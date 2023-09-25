@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public PreventionUnitSpawnedRequest()
 		{
+			RequestResult = new gameSpawnRequestResult { SpawnedObjects = new() };
+
 			PostConstruct();
 		}
 

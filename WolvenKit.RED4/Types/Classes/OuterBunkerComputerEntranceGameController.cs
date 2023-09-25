@@ -46,6 +46,12 @@ namespace WolvenKit.RED4.Types
 
 		public OuterBunkerComputerEntranceGameController()
 		{
+			HarvestIntroAnimName = "data_harvest_intro";
+			HarvestLoop1AnimName = "data_harvest_part_02_loop";
+			HarvestLoop2AnimName = "data_harvest_loop";
+			HarvestLoop3AnimName = "data_harvest_part_04_loop";
+			HarvestOutroAnimName = "data_harvest_outro";
+
 			PostConstruct();
 		}
 

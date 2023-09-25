@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public TakedownExecuteTakedownAndDisposeEvents()
 		{
+			TargetID = new entEntityID();
+
 			PostConstruct();
 		}
 

@@ -102,6 +102,13 @@ namespace WolvenKit.RED4.Types
 
 		public SimpleMessengerItemVirtualController()
 		{
+			Label = new inkTextWidgetReference();
+			MsgPreview = new inkTextWidgetReference();
+			MsgIndicator = new inkWidgetReference();
+			ReplyAlertIcon = new inkWidgetReference();
+			CollapseIcon = new inkWidgetReference();
+			Image = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

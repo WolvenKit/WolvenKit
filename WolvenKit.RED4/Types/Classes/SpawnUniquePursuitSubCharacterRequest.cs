@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public SpawnUniquePursuitSubCharacterRequest()
 		{
+			Position = new Vector4();
+
 			PostConstruct();
 		}
 

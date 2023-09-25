@@ -102,6 +102,13 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiChatBoxGameController()
 		{
+			ChatBox = new inkWidgetReference();
+			EnteredText = new inkTextInputWidgetReference();
+			RecentChatsShown = new();
+			ChatHistory = new();
+			MaxChatsDisplayed = 7;
+			MaxChatHistory = 100;
+
 			PostConstruct();
 		}
 

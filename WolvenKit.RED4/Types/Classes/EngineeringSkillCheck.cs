@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public EngineeringSkillCheck()
 		{
+			SkillToCheck = Enums.EDeviceChallengeSkill.Engineering;
+
 			PostConstruct();
 		}
 

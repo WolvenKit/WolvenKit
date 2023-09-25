@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public LeftHandCyberwareDataDef()
 		{
+			ProjectileCaught = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

@@ -494,6 +494,57 @@ namespace WolvenKit.RED4.Types
 
 		public CyberdeckTooltip()
 		{
+			ItemNameText = new inkTextWidgetReference();
+			ItemRarityText = new inkTextWidgetReference();
+			RarityBars = new inkWidgetReference();
+			CategoriesWrapper = new inkCompoundWidgetReference();
+			TopContainer = new inkCompoundWidgetReference();
+			HeaderContainer = new inkCompoundWidgetReference();
+			StatsContainer = new inkCompoundWidgetReference();
+			HacksContainer = new inkCompoundWidgetReference();
+			DescriptionContainer = new inkCompoundWidgetReference();
+			BottomContainer = new inkCompoundWidgetReference();
+			StatsList = new inkCompoundWidgetReference();
+			PriceContainer = new inkCompoundWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			PriceText = new inkTextWidgetReference();
+			EquipedWrapper = new inkWidgetReference();
+			ItemTypeText = new inkTextWidgetReference();
+			ItemWeightWrapper = new inkWidgetReference();
+			ItemWeightText = new inkTextWidgetReference();
+			CybderdeckBaseMemoryValue = new inkTextWidgetReference();
+			CybderdeckBufferValue = new inkTextWidgetReference();
+			CybderdeckSlotsValue = new inkTextWidgetReference();
+			DeviceHacksGrid = new inkCompoundWidgetReference();
+			DeviceHackHeader = new inkTextWidgetReference();
+			NamesTextContainer = new inkWidgetReference();
+			DeviceHackNamesText = new inkTextWidgetReference();
+			TextBG = new inkWidgetReference();
+			NamesTextContainer2 = new inkWidgetReference();
+			DeviceHackNamesText2 = new inkTextWidgetReference();
+			TextBG2 = new inkWidgetReference();
+			NamesTextContainer3 = new inkWidgetReference();
+			DeviceHackNamesText3 = new inkTextWidgetReference();
+			TextBG3 = new inkWidgetReference();
+			NamesTextContainer4 = new inkWidgetReference();
+			DeviceHackNamesText4 = new inkTextWidgetReference();
+			TextBG4 = new inkWidgetReference();
+			ItemIconImage = new inkImageWidgetReference();
+			ItemAttributeRequirementsWrapper = new inkWidgetReference();
+			ItemAttributeRequirements = new inkWidgetReference();
+			ItemAttributeRequirementsText = new inkTextWidgetReference();
+			AllocationCostsWrapper = new inkCompoundWidgetReference();
+			IconicLines = new inkImageWidgetReference();
+			EquipedCorner = new inkWidgetReference();
+			Root_1024 = new inkWidgetReference();
+			IconicBG = new inkWidgetReference();
+			RecipeWrapper = new inkWidgetReference();
+			RecipeBG = new inkWidgetReference();
+			CyberwareUpgradeContainer = new inkWidgetReference();
+			ItemCWQuickHackMenuLinkContainer = new inkWidgetReference();
+			AdditionalModulesLibraryRes = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\cyberware_tooltip_modules.inkwidget") };
+			CyberwareUpgradeModuleName = "itemCyberwareUpgrade";
+
 			PostConstruct();
 		}
 

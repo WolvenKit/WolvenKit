@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public HotkeyRadioWidgetController()
 		{
+			Container = new inkCompoundWidgetReference();
+			DpadHintLibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+
 			PostConstruct();
 		}
 

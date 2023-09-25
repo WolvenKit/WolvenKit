@@ -1214,6 +1214,67 @@ namespace WolvenKit.RED4.Types
 
 		public RipperDocGameController()
 		{
+			TooltipsManagerRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			AnimationControllerContainer = new inkWidgetReference();
+			ArmsAnchor = new inkCompoundWidgetReference();
+			LegsAnchor = new inkCompoundWidgetReference();
+			HandsAnchor = new inkCompoundWidgetReference();
+			SystemAnchor = new inkCompoundWidgetReference();
+			NervousAnchor = new inkCompoundWidgetReference();
+			SkeletonAnchor = new inkCompoundWidgetReference();
+			OcularCortexAnchor = new inkCompoundWidgetReference();
+			IntegumentaryAnchor = new inkCompoundWidgetReference();
+			FrontalCortexAnchor = new inkCompoundWidgetReference();
+			CardiovascularAnchor = new inkCompoundWidgetReference();
+			MinigridTargetAnchor = new inkCompoundWidgetReference();
+			MinigridTargetAnchorMargin = new inkMargin();
+			MinigridSelectorLeftAnchor = new inkCompoundWidgetReference();
+			MinigridSelectorRightAnchor = new inkCompoundWidgetReference();
+			MinigridSelectorLeftAnchorMargin = new inkMargin();
+			MinigridSelectorRightAnchorMargin = new inkMargin();
+			TooltipLeftAnchor = new inkWidgetReference();
+			TooltipRightAnchor = new inkWidgetReference();
+			UpgradeResourcesAnchor = new inkCompoundWidgetReference();
+			UpgradeCWInputName = "upgrade_cyberware";
+			AllocationPointContainerDefault = new inkCompoundWidgetReference();
+			InventoryViewAnchor = new inkCompoundWidgetReference();
+			SelectorAnchor = new inkCompoundWidgetReference();
+			InventoryWarnning = new inkWidgetReference();
+			MaleEyeAndMaskBinkAnimation = new inkVideoWidgetReference();
+			FemaleEyeAndMaskBinkAnimation = new inkVideoWidgetReference();
+			C_maleOcular = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\movies\misc\paperdoll\man\man_ocular.bk2") };
+			C_femaleOcular = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\movies\misc\paperdoll\woman\woman_ocular.bk2") };
+			C_maleMask = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\movies\misc\paperdoll\man\man_mask.bk2") };
+			C_femaleMask = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\movies\misc\paperdoll\woman\woman_mask.bk2") };
+			CapacityTutorialAnchor = new inkWidgetReference();
+			ArmorTutorialAnchor = new inkWidgetReference();
+			SlotsTutorialAnchor = new inkWidgetReference();
+			PerkBarCapacity = Enums.gamedataNewPerkType.Tech_Master_Perk_3;
+			PerkBarArmor = Enums.gamedataNewPerkType.Tech_Central_Milestone_3;
+			PerkSlotSkeleton = Enums.gamedataNewPerkType.Tech_Central_Milestone_3;
+			PerkSlotHands = Enums.gamedataNewPerkType.Tech_Central_Perk_3_2;
+			PlayerID = new entEntityID();
+			Categories = new();
+			DefaultTooltipsMargin = new inkMargin();
+			DefaultTooltipGap = 10.000000F;
+			AllFilters = new();
+			CachedAvailableItemsCounters = new();
+			CachedVendorItemsCounters = new();
+			CachedPlayerItemsCounters = new();
+			CachedPlayerItems = new(10);
+			CachedVendorItems = new(10);
+			CraftingMaterialsListItems = new();
+			CommonCraftingMaterials = new();
+			EquipmentMinigrids = new();
+			MinigridsMap = new(10);
+			EquipAnimationCategories = new();
+			EquippedSlotIndex = -1;
+			UpgradeCostData = new CyberwareUpgradeCostData();
+			ArmorAttunemendDescription = "LocKey#91185";
+			ArmorAttunemendDescription2 = "LocKey#91756";
+			ArmorMultBonusDescription = "LocKey#89019";
+
 			PostConstruct();
 		}
 

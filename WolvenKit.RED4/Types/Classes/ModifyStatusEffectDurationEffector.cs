@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public ModifyStatusEffectDurationEffector()
 		{
+			Tags = new();
+			GameInstance = new ScriptGameInstance();
+
 			PostConstruct();
 		}
 

@@ -46,6 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public DebugHubMenuLogicController()
 		{
+			MenusList = new();
+			EventsList = new();
+
 			PostConstruct();
 		}
 

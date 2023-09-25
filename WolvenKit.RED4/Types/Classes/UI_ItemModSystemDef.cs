@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ItemModSystemDef()
 		{
+			ItemModSystemUpdated = new gamebbScriptID_Variant();
+			ItemModSystemUpgradingInProgress = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

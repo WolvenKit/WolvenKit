@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public HandleItemEquippedNextFrameEvent()
 		{
+			ItemID = new gameItemID();
+
 			PostConstruct();
 		}
 

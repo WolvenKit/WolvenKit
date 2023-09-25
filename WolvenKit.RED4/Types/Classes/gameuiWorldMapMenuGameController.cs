@@ -644,6 +644,34 @@ namespace WolvenKit.RED4.Types
 			HoveredSubDistrict = Enums.gamedataDistrict.Invalid;
 			SelectedDistrict = Enums.gamedataDistrict.Invalid;
 			CanChangeCustomFilter = true;
+			PreloaderWidget = new inkWidgetReference();
+			GameTimeText = new inkTextWidgetReference();
+			FastTravelInstructions = new inkWidgetReference();
+			FilterSelector = new inkWidgetReference();
+			FilterSelectorWarning = new inkWidgetReference();
+			FilterText = new inkTextWidgetReference();
+			DistrictIconImage = new inkImageWidgetReference();
+			DistrictNameText = new inkTextWidgetReference();
+			SubdistrictNameText = new inkTextWidgetReference();
+			LocationAndGangsContainer = new inkWidgetReference();
+			GangsInfoContainer = new inkWidgetReference();
+			GangsList = new inkCompoundWidgetReference();
+			QuestContainer = new inkWidgetReference();
+			QuestName = new inkTextWidgetReference();
+			OpenInJournalButton = new inkWidgetReference();
+			ObjectiveName = new inkTextWidgetReference();
+			ObjectiveBackground = new inkWidgetReference();
+			ObjectiveFrame = new inkWidgetReference();
+			TopShadow = new inkWidgetReference();
+			RightAxisZoomThreshold = 0.800000F;
+			CustomFilters = new inkWidgetReference();
+			FiltersList = new inkVerticalPanelWidgetReference();
+			FilterLeftArrow = new inkWidgetReference();
+			FilterRightArrow = new inkWidgetReference();
+			QuickFilterIndicators = new();
+			MappinsPositions = new();
+			GangsAsyncSpawnRequests = new();
+			CustomFiltersList = new();
 
 			PostConstruct();
 		}

@@ -78,6 +78,14 @@ namespace WolvenKit.RED4.Types
 
 		public Activator()
 		{
+			ControllerTypeName = "ActivatorController";
+			MeshAppearence = "default";
+			MeshAppearenceBreaking = "Yellow";
+			MeshAppearenceBroken = "red";
+			DefaultDelay = 2.980000F;
+			YellowDelay = 1.680000F;
+			RedDelay = 4.030000F;
+
 			PostConstruct();
 		}
 

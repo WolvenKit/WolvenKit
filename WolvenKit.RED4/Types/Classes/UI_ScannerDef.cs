@@ -174,6 +174,28 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ScannerDef()
 		{
+			Scannables = new gamebbScriptID_Variant();
+			CurrentProgress = new gamebbScriptID_Float();
+			CurrentState = new gamebbScriptID_Variant();
+			ProgressBarText = new gamebbScriptID_String();
+			ScannedObject = new gamebbScriptID_EntityID();
+			ScannerMode = new gamebbScriptID_Variant();
+			ScannerTooltip = new gamebbScriptID_Int32();
+			ScannerChangeTargetTooltipVisibility = new gamebbScriptID_Bool();
+			ScannerData = new gamebbScriptID_Variant();
+			ScannerObjectDistance = new gamebbScriptID_Float();
+			ScannerObjectStats = new gamebbScriptID_Variant();
+			ScannerQuickHackActionId = new gamebbScriptID_Int32();
+			ScannerQuickHackActionStarted = new gamebbScriptID_Bool();
+			ScannerQuickHackTime = new gamebbScriptID_Float();
+			ExclusiveFocusActive = new gamebbScriptID_Bool();
+			LastTaggedTarget = new gamebbScriptID_Variant();
+			SkillCheckInfo = new gamebbScriptID_Variant();
+			ShowHudHintMessege = new gamebbScriptID_Bool();
+			HudHintMessegeContent = new gamebbScriptID_String();
+			UIVisible = new gamebbScriptID_Bool();
+			ScannerLookAt = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

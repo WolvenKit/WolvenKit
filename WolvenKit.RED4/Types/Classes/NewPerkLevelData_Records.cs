@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerkLevelData_Records()
 		{
+			Arr = new();
+
 			PostConstruct();
 		}
 

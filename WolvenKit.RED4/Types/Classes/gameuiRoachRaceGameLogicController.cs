@@ -164,6 +164,9 @@ namespace WolvenKit.RED4.Types
 			House = new inkWidgetReference();
 			Ground = new inkWidgetReference();
 			Layers = new();
+			HealthText = new inkTextWidgetReference();
+			ScoreText = new inkTextWidgetReference();
+			ScoreMultiplierText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public KurtzBossComponent()
 		{
+			Owner_id = new entEntityID();
+
 			PostConstruct();
 		}
 

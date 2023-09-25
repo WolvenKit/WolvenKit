@@ -383,6 +383,7 @@ namespace WolvenKit.RED4.Types
 		public gameuiMinimapStealthMappinController()
 		{
 			VisionConeWidget = new inkImageWidgetReference();
+			PreventionVisionConeColor = "MainColors.EnemyMinimapBase";
 
 			PostConstruct();
 		}

@@ -462,6 +462,39 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipCommonController()
 		{
+			BackgroundContainer = new inkWidgetReference();
+			ItemEquippedContainer = new inkWidgetReference();
+			ItemRecipeContainer = new inkWidgetReference();
+			ItemHeaderContainer = new inkWidgetReference();
+			ItemIconContainer = new inkWidgetReference();
+			ItemWeaponInfoContainer = new inkWidgetReference();
+			ItemClothingInfoContainer = new inkWidgetReference();
+			ItemGrenadeInfoContainer = new inkWidgetReference();
+			ItemCyberwareContainer = new inkWidgetReference();
+			ItemRequirementsContainer = new inkWidgetReference();
+			ItemDetailsContainer = new inkWidgetReference();
+			ItemRecipeDataContainer = new inkWidgetReference();
+			ItemEvolutionContainer = new inkWidgetReference();
+			ItemCraftedContainer = new inkWidgetReference();
+			ItemActionContainer = new inkWidgetReference();
+			ItemBottomContainer = new inkWidgetReference();
+			ItemCWUpgradeContainer = new inkWidgetReference();
+			ItemCWQuickHackMenuLinkContainer = new inkWidgetReference();
+			ContentWrapper = new inkWidgetReference();
+			CornerContainer = new inkWidgetReference();
+			Root_504 = new inkWidgetReference();
+			IconicBG = new inkWidgetReference();
+			RecipeBG = new inkWidgetReference();
+			DescriptionWrapper = new inkWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			CyberwareUpgradeModuleName = "itemCyberwareUpgrade";
+			CyberwareQuickHackMenuLinkName = "itemCyberwareQuickHacKMenuLink";
+			CyberwareModulesLibraryRes = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\cyberware_tooltip_modules.inkwidget") };
+			DEBUG_iconErrorWrapper = new inkWidgetReference();
+			DEBUG_iconErrorText = new inkTextWidgetReference();
+			SpawnedModules = new();
+			RequestedModules = new();
+
 			PostConstruct();
 		}
 

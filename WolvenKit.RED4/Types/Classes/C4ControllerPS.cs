@@ -14,6 +14,12 @@ namespace WolvenKit.RED4.Types
 
 		public C4ControllerPS()
 		{
+			IsScanned = true;
+			ExposeQuickHacks = true;
+			TweakDBRecord = "Devices.C4";
+			TweakDBDescriptionRecord = 97999174197;
+			ItemTweakDBString = "C4";
+
 			PostConstruct();
 		}
 

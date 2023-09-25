@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public CombatGadgetChargedThrowEvents()
 		{
+			LocalAimForward = new Vector4();
+			LocalAimPosition = new Vector4();
+
 			PostConstruct();
 		}
 

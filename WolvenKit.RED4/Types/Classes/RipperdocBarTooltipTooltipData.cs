@@ -86,6 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocBarTooltipTooltipData()
 		{
+			StatsData = new();
+
 			PostConstruct();
 		}
 

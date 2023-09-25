@@ -70,6 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_StatusEffect()
 		{
+			Duration = -1.000000F;
+			Variation = 1;
+			ImpactDirection = -1;
+
 			PostConstruct();
 		}
 

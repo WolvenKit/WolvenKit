@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public SecuritySystemUIPS()
 		{
+			DeviceName = "LocKey#50988";
+
 			PostConstruct();
 		}
 

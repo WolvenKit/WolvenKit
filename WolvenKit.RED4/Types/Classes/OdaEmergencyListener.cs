@@ -62,6 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public OdaEmergencyListener()
 		{
+			Heal1HealthPercentage = 70.000000F;
+			Heal2HealthPercentage = 55.000000F;
+			Heal3HealthPercentage = 40.000000F;
+			Heal4HealthPercentage = 25.000000F;
+			Heal5HealthPercentage = 10.000000F;
+
 			PostConstruct();
 		}
 

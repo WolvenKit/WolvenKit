@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public CachedCraftingMaterial()
 		{
+			ItemID = new gameItemID();
+
 			PostConstruct();
 		}
 

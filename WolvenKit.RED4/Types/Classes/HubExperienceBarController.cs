@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public HubExperienceBarController()
 		{
+			ForegroundContainer = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

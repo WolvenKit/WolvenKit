@@ -350,6 +350,34 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocBarTooltip()
 		{
+			StatsHolder = new inkWidgetReference();
+			PerksHolder = new inkWidgetReference();
+			CapacityDescription = new inkWidgetReference();
+			ArmorDescription = new inkWidgetReference();
+			ArmorReductionDescription = new inkTextWidgetReference();
+			TitleHolder = new inkWidgetReference();
+			TitleName = new inkTextWidgetReference();
+			TitleTotalValue = new inkTextWidgetReference();
+			TitleMaxValue = new inkTextWidgetReference();
+			Stats1 = new inkWidgetReference();
+			Stats1Name = new inkTextWidgetReference();
+			Stats1Value = new inkTextWidgetReference();
+			Stats2 = new inkWidgetReference();
+			Stats2Name = new inkTextWidgetReference();
+			Stats2Value = new inkTextWidgetReference();
+			Stats3 = new inkWidgetReference();
+			Stats3Name = new inkTextWidgetReference();
+			Stats3Value = new inkTextWidgetReference();
+			PerkTypeName = new inkTextWidgetReference();
+			Perk1 = new inkWidgetReference();
+			Perk1Icon = new inkImageWidgetReference();
+			Perk1Name = new inkTextWidgetReference();
+			Perk2 = new inkWidgetReference();
+			Perk2Icon = new inkImageWidgetReference();
+			Perk2Name = new inkTextWidgetReference();
+			PerkTreeInput = new inkWidgetReference();
+			PerkTreeIcon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

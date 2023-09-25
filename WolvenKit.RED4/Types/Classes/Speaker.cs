@@ -54,6 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public Speaker()
 		{
+			ControllerTypeName = "SpeakerController";
+			EffectRef = new gameEffectRef();
+			Targets = new();
+
 			PostConstruct();
 		}
 

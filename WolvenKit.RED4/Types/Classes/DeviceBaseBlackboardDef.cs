@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceBaseBlackboardDef()
 		{
+			ActionWidgetsData = new gamebbScriptID_Variant();
+			DeviceWidgetsData = new gamebbScriptID_Variant();
+			UIupdate = new gamebbScriptID_Bool();
+			BreadCrumbElement = new gamebbScriptID_Variant();
+			GlitchData = new gamebbScriptID_Variant();
+			UI_InteractivityBlocked = new gamebbScriptID_Bool();
+			IsInvestigated = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

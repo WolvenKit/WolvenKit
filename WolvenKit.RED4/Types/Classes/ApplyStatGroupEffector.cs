@@ -86,6 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyStatGroupEffector()
 		{
+			Target = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
+
 			PostConstruct();
 		}
 

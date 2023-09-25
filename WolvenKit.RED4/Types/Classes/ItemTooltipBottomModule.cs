@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipBottomModule()
 		{
+			WeightWrapper = new inkWidgetReference();
+			PriceWrapper = new inkWidgetReference();
+			WeightText = new inkTextWidgetReference();
+			PriceText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

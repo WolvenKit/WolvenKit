@@ -126,6 +126,19 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerkTabsController()
 		{
+			TabText = new inkTextWidgetReference();
+			CurrentAttributePoints = new inkTextWidgetReference();
+			CurrentAttributeIcon = new inkImageWidgetReference();
+			LeftArrow = new inkWidgetReference();
+			RightArrow = new inkWidgetReference();
+			AttributePointsWrapper = new inkWidgetReference();
+			AttributePointsText = new inkTextWidgetReference();
+			PerkPointsWrapper = new inkWidgetReference();
+			PerkPointsText = new inkTextWidgetReference();
+			EspionagePointsWrapper = new inkWidgetReference();
+			EspionagePointsText = new inkTextWidgetReference();
+			Bars = new();
+
 			PostConstruct();
 		}
 

@@ -54,6 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public TimeDilationParameters()
 		{
+			TimeDilation = 0.010000F;
+			PlayerTimeDilation = 0.010000F;
+			Duration = 9999.000000F;
+
 			PostConstruct();
 		}
 

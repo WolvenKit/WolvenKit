@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public ProximityDetectorControllerPS()
 		{
+			DeviceName = "Gameplay-Devices-DisplayNames-LaserDetector";
+
 			PostConstruct();
 		}
 

@@ -66,8 +66,8 @@ namespace WolvenKit.RED4.Types
 			SlotName = "UI_Interaction";
 			SlotOffset = new Vector3 { Z = 0.500000F };
 			DynamicMappinRadius = 30.000000F;
-			StaticMappinDef = 196254225639;
-			DynamicMappinDef = 201635944716;
+			StaticMappinDef = "Mappins.StaticPointOfInterestMappinDefinition";
+			DynamicMappinDef = "Mappins.DynamicPointOfInterestMappinDefinition";
 
 			PostConstruct();
 		}

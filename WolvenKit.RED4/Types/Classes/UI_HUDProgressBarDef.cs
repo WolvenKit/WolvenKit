@@ -78,6 +78,16 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HUDProgressBarDef()
 		{
+			TimerID = new gamebbScriptID_Variant();
+			Header = new gamebbScriptID_String();
+			BottomText = new gamebbScriptID_String();
+			CompletedText = new gamebbScriptID_String();
+			FailedText = new gamebbScriptID_String();
+			Active = new gamebbScriptID_Bool();
+			Progress = new gamebbScriptID_Float();
+			ProgressBump = new gamebbScriptID_Float();
+			MessageType = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

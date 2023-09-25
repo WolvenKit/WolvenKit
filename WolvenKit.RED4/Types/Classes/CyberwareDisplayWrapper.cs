@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public CyberwareDisplayWrapper()
 		{
+			DisplayData = new InventoryItemDisplayData { ItemID = new gameItemID() };
+
 			PostConstruct();
 		}
 

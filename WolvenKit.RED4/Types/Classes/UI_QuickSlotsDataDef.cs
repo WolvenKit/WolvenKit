@@ -158,6 +158,26 @@ namespace WolvenKit.RED4.Types
 
 		public UI_QuickSlotsDataDef()
 		{
+			UIRadialContextRequest = new gamebbScriptID_Bool();
+			UIRadialContextRightStickAngle = new gamebbScriptID_Float();
+			LeftStick = new gamebbScriptID_Vector4();
+			DPadCommand = new gamebbScriptID_Variant();
+			KeyboardCommand = new gamebbScriptID_Variant();
+			WheelInteractionStarted = new gamebbScriptID_Variant();
+			WheelInteractionEnded = new gamebbScriptID_Variant();
+			CyberwareAssignmentComplete = new gamebbScriptID_Bool();
+			WheelAssignmentComplete = new gamebbScriptID_Bool();
+			QuickSlotsStructure = new gamebbScriptID_Variant();
+			ActiveQuickSlotItem = new gamebbScriptID_Variant();
+			QuickSlotsActiveWeaponIndex = new gamebbScriptID_Int32();
+			QuickhackPanelOpen = new gamebbScriptID_Bool();
+			QuickHackDescritpionVisible = new gamebbScriptID_Bool();
+			QuickHackDataSelected = new gamebbScriptID_Variant();
+			QuickhackPanelKeepContext = new gamebbScriptID_Bool();
+			DpadHintRefresh = new gamebbScriptID_Bool();
+			ContainerConsumable = new gamebbScriptID_Variant();
+			ConsumableBeingUsed = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

@@ -414,6 +414,12 @@ namespace WolvenKit.RED4.Types
 
 		public NewHudPhoneGameController()
 		{
+			CurrActiveQueueId = -1;
+			GameplayRestrictions = new();
+			TimeoutPeroid = 8.000000F;
+			DelayedTimeoutCallbackId = new gameDelayID();
+			CurrentCallInformation = new questPhoneCallInformation();
+
 			PostConstruct();
 		}
 

@@ -86,6 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public StatPoolBasedTimeBankEffector()
 		{
+			PlayerEntityID = new entEntityID();
+			GameInstance = new ScriptGameInstance();
+			RegenMod = new gameStatPoolModifier();
+
 			PostConstruct();
 		}
 

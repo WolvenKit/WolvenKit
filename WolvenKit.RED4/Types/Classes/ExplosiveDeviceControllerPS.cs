@@ -94,6 +94,17 @@ namespace WolvenKit.RED4.Types
 
 		public ExplosiveDeviceControllerPS()
 		{
+			DeviceName = "LocKey#42163";
+			TweakDBRecord = "Devices.ExplosiveDevice";
+			TweakDBDescriptionRecord = 151932573733;
+			ShouldScannerShowStatus = false;
+			ShouldScannerShowNetwork = false;
+			ShouldScannerShowHealth = true;
+			ExplosionDefinition = new();
+			TimeToMeshSwap = 0.100000F;
+			ProvideExplodeAction = true;
+			DoExplosiveEngineerLogic = true;
+
 			PostConstruct();
 		}
 

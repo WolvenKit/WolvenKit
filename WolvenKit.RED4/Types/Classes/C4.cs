@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public C4()
 		{
+			ControllerTypeName = "C4Controller";
+
 			PostConstruct();
 		}
 

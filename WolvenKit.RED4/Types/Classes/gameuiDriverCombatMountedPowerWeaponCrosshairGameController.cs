@@ -86,6 +86,13 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiDriverCombatMountedPowerWeaponCrosshairGameController()
 		{
+			ReticleLeft = new inkWidgetReference();
+			ReticleRight = new inkWidgetReference();
+			ReticleStartingRange = 3.000000F;
+			DefaultOpacity = 1.000000F;
+			ReducedOpacity = 0.200000F;
+			WeaponList = new();
+
 			PostConstruct();
 		}
 

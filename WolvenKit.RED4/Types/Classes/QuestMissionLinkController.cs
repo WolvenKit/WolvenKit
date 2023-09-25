@@ -70,6 +70,11 @@ namespace WolvenKit.RED4.Types
 
 		public QuestMissionLinkController()
 		{
+			LinkContainer = new inkWidgetReference();
+			Title = new inkTextWidgetReference();
+			Description = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

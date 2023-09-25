@@ -254,6 +254,9 @@ namespace WolvenKit.RED4.Types
 
 		public AimingStateEvents()
 		{
+			MouseZoomLevel = 100000.000000F;
+			PrevDownwardsGravity = -16.000000F;
+
 			PostConstruct();
 		}
 

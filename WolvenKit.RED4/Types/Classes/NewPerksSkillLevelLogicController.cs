@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerksSkillLevelLogicController()
 		{
+			LevelText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

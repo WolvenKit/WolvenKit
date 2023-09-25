@@ -70,6 +70,12 @@ namespace WolvenKit.RED4.Types
 
 		public BasicDistractionDevice()
 		{
+			ControllerTypeName = "BasicDistractionDeviceController";
+			DistractionComponentSwapNamesToON = new();
+			DistractionComponentSwapNamesToOFF = new();
+			DistractionComponentON = new();
+			DistractionComponentOFF = new();
+
 			PostConstruct();
 		}
 

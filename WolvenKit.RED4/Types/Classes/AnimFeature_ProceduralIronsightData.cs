@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_ProceduralIronsightData()
 		{
+			Position = new Vector4();
+			Rotation = new Quaternion { R = 1.000000F };
+
 			PostConstruct();
 		}
 

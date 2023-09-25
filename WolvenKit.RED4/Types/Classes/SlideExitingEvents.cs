@@ -14,6 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public SlideExitingEvents()
 		{
+			ExitSlot = "combat";
+			ExitMomentum = new Vector4();
+
 			PostConstruct();
 		}
 

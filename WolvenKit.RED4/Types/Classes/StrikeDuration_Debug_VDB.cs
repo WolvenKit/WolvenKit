@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public StrikeDuration_Debug_VDB()
 		{
+			UPDATE_DELAY = 1.000000F;
+			DISPLAY_DURATION = 1.100000F;
+
 			PostConstruct();
 		}
 

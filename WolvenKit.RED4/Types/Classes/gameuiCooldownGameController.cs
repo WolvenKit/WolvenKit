@@ -102,6 +102,13 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiCooldownGameController()
 		{
+			CooldownTitle = new inkWidgetReference();
+			CooldownContainer = new inkCompoundWidgetReference();
+			PoolHolder = new inkCompoundWidgetReference();
+			EffectTypes = new();
+			CooldownPool = new();
+			MatchBuffer = new();
+
 			PostConstruct();
 		}
 

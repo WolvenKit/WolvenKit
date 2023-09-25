@@ -558,6 +558,12 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleVcarGameController()
 		{
+			RpmGaugeMaxSize = new Vector2();
+			Fluff1animOptions1 = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			Fluff1animOptions2 = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			Fluff2animOptions1 = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			Fluff2animOptions2 = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

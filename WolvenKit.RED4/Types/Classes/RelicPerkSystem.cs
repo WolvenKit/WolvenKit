@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public RelicPerkSystem()
 		{
+			RegisteredPerkDevices = new();
+
 			PostConstruct();
 		}
 

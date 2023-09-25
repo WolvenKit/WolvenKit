@@ -59,6 +59,7 @@ namespace WolvenKit.RED4.Types
 			Selected_744 = new inkListItemControllerCallback();
 			Deselected = new inkListItemControllerCallback();
 			AddedToList = new inkListItemControllerCallback();
+			LabelPathRef = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

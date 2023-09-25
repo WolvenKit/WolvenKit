@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public ConsumableChargesPrereqState()
 		{
+			StatsObjID = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
+
 			PostConstruct();
 		}
 

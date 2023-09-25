@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public EffectExecutor_SlashEffect()
 		{
+			Entries = new();
+
 			PostConstruct();
 		}
 

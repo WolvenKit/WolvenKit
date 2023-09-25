@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public PerkDeviceMappinData()
 		{
+			OwnerID = new entEntityID();
+			Position = new Vector4();
+			MappinID = new gameNewMappinID();
+
 			PostConstruct();
 		}
 

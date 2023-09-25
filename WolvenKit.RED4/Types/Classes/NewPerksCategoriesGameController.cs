@@ -454,6 +454,33 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerksCategoriesGameController()
 		{
+			TooltipsManagerRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			PerksCategoriesContainer = new inkWidgetReference();
+			TabsContainer = new inkWidgetReference();
+			PerksScreenContainer = new inkWidgetReference();
+			EspionageScreenContainer = new inkWidgetReference();
+			SkillsScreenContainer = new inkWidgetReference();
+			PointsDisplay = new inkWidgetReference();
+			PlayerLevel = new inkTextWidgetReference();
+			ResetAttributesButton = new inkWidgetReference();
+			SkillsScreenButton = new inkWidgetReference();
+			EspionageAttributeMask = new inkWidgetReference();
+			EspionagePointsRef = new inkWidgetReference();
+			AttributeTooltipHolderRight = new inkWidgetReference();
+			AttributeTooltipHolderLeft = new inkWidgetReference();
+			CenterHiglightParts = new();
+			PerkTooltipPlacementLeft = new inkWidgetReference();
+			PerkTooltipPlacementRight = new inkWidgetReference();
+			PerkTooltipBgLeft = new inkWidgetReference();
+			PerkTooltipBgRight = new inkWidgetReference();
+			AttributesControllersList = new();
+			PerksMenuItemCreatedQueue = new();
+			PreviousScreen = Enums.NewPeksActiveScreen.Invalid;
+			CurrentStatScreen = Enums.gamedataStatType.Invalid;
+			CurrentTooltipData = new PerkHoverEventTooltipData();
+			CurrentCursorPos = new Vector2();
+
 			PostConstruct();
 		}
 

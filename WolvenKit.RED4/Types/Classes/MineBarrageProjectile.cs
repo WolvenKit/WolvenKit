@@ -86,6 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public MineBarrageProjectile()
 		{
+			LandIndicatorFX = new gameFxResource();
+
 			PostConstruct();
 		}
 

@@ -446,6 +446,18 @@ namespace WolvenKit.RED4.Types
 
 		public MinimalItemTooltipData()
 		{
+			ItemID = new gameItemID();
+			TransmogItem = new gameItemID();
+			QualityF = -1.000000F;
+			ComparisonQualityF = -1.000000F;
+			AttributeAllocationStats = new();
+			Stats = new();
+			Mods = new();
+			DedicatedMods = new();
+			ItemType = Enums.gamedataItemType.Invalid;
+			EquipmentArea = Enums.gamedataEquipmentArea.Invalid;
+			ItemEvolution = Enums.gamedataWeaponEvolution.Invalid;
+
 			PostConstruct();
 		}
 

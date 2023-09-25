@@ -54,6 +54,13 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerSkillCheckItemLogicController()
 		{
+			NameRef = new inkTextWidgetReference();
+			ConditionDataListRef = new inkCompoundWidgetReference();
+			ConditionDataItems = new();
+			ConditionDataItemName = "ConditionDataItem";
+			PassedStateName = "Passed";
+			FailedStateName = "Failed";
+
 			PostConstruct();
 		}
 

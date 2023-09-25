@@ -46,6 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public PerkTraining()
 		{
+			ControllerTypeName = "PerkTrainingController";
+
 			PostConstruct();
 		}
 

@@ -224,6 +224,12 @@ namespace WolvenKit.RED4.Types
 			SliderInput = new inkSliderControllerInputCallback();
 			SliderValueChanged = new inkSliderControllerValueChangeCallback();
 			SliderHandleReleased = new inkSliderControllerHandleReleasedCallback();
+			DefaultScale = new Vector2();
+			PressedScale = new Vector2();
+			DefaultColor = "MainColors.Red";
+			HoveredColor = "MainColors.Blue";
+			PressedColor = "MainColors.ActiveBlue";
+			PressedOpacity = 0.700000F;
 
 			PostConstruct();
 		}

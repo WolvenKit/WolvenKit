@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public DistrictManager()
 		{
+			Stack = new();
+			VisitedDistricts = new();
+
 			PostConstruct();
 		}
 

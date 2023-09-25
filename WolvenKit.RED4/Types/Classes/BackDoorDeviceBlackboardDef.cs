@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public BackDoorDeviceBlackboardDef()
 		{
+			IsInDefaultState = new gamebbScriptID_Bool();
+			ShutdownModule = new gamebbScriptID_Int32();
+			BootModule = new gamebbScriptID_Int32();
+
 			PostConstruct();
 		}
 

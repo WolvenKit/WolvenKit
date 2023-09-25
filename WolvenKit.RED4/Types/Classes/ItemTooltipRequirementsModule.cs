@@ -78,6 +78,16 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipRequirementsModule()
 		{
+			LevelRequirementsWrapper = new inkWidgetReference();
+			StrenghtOrReflexWrapper = new inkWidgetReference();
+			SmartlinkGunWrapper = new inkWidgetReference();
+			AnyAttributeWrapper = new inkCompoundWidgetReference();
+			Line = new inkWidgetReference();
+			LevelRequirementsText = new inkTextWidgetReference();
+			StrenghtOrReflexText = new inkTextWidgetReference();
+			PerkText = new inkTextWidgetReference();
+			PerkDot = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

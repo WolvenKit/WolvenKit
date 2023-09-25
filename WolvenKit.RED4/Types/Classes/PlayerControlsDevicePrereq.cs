@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerControlsDevicePrereq()
 		{
+			Inverse = true;
+
 			PostConstruct();
 		}
 

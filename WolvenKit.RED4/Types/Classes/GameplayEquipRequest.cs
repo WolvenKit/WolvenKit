@@ -70,6 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public GameplayEquipRequest()
 		{
+			ItemID = new gameItemID();
+			SlotIndex = -1;
+			PartsToAdd = new();
+
 			PostConstruct();
 		}
 

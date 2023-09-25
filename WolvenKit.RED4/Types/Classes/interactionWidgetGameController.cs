@@ -206,6 +206,12 @@ namespace WolvenKit.RED4.Types
 
 		public interactionWidgetGameController()
 		{
+			WidgetsPool = new();
+			WidgetsCallbacks = new();
+			ProgressBarHolder = new inkWidgetReference();
+			SpawnTokens = new();
+			CurrentOptions = new();
+
 			PostConstruct();
 		}
 

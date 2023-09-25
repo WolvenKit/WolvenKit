@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public StatsStreetCredRewardItem()
 		{
+			LevelRef = new inkTextWidgetReference();
+			IconRef = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

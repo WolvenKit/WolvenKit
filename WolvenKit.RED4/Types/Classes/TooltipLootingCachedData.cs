@@ -62,6 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public TooltipLootingCachedData()
 		{
+			ComparisonItemId = new gameItemID();
+			ComparisonQualityF = -1.000000F;
+
 			PostConstruct();
 		}
 

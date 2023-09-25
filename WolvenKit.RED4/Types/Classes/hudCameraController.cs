@@ -278,6 +278,29 @@ namespace WolvenKit.RED4.Types
 
 		public hudCameraController()
 		{
+			Pitch_min = -360.000000F;
+			Pitch_max = 360.000000F;
+			Yaw_min = -640.000000F;
+			Yaw_max = 640.000000F;
+			Tele_min = -360.000000F;
+			Tele_max = 360.000000F;
+			Tele_scale = 0.750000F;
+			Max_zoom_level = 4.000000F;
+			Date = new inkTextWidgetReference();
+			Timer = new inkTextWidgetReference();
+			CameraID = new inkTextWidgetReference();
+			TimerHrs = new inkTextWidgetReference();
+			TimerMin = new inkTextWidgetReference();
+			TimerSec = new inkTextWidgetReference();
+			Watermark = new inkWidgetReference();
+			YawCounter = new inkTextWidgetReference();
+			PitchCounter = new inkTextWidgetReference();
+			Pitch = new inkCanvasWidgetReference();
+			Yaw = new inkCanvasWidgetReference();
+			Tele = new inkCanvasWidgetReference();
+			TeleScale = new inkCanvasWidgetReference();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public RemoveAllModifiersEffector()
 		{
+			Target = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };
+
 			PostConstruct();
 		}
 

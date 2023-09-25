@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyQuickhackEffector()
 		{
+			ApplyQuickhackDelayConst = 0.100000F;
+
 			PostConstruct();
 		}
 

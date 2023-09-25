@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public TabRadioGroup()
 		{
+			Root = new inkCompoundWidgetReference();
+			Toggles = new();
+
 			PostConstruct();
 		}
 

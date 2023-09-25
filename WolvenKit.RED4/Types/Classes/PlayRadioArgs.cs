@@ -70,6 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public PlayRadioArgs()
 		{
+			Instance = new ScriptGameInstance();
+
 			PostConstruct();
 		}
 

@@ -166,6 +166,9 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_LookAt()
 		{
+			GpLookAtTarget = new Vector4();
+			GpLookAtUp = new Vector4();
+
 			PostConstruct();
 		}
 

@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public MorningPreset()
 		{
+			Timetable = new SPresetTimetableEntry { Time = new SSimpleGameTime() };
+
 			PostConstruct();
 		}
 

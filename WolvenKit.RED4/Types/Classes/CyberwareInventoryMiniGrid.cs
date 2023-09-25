@@ -174,6 +174,14 @@ namespace WolvenKit.RED4.Types
 
 		public CyberwareInventoryMiniGrid()
 		{
+			GridContainer = new inkUniformGridWidgetReference();
+			Label = new inkTextWidgetReference();
+			IsNew = new inkWidgetReference();
+			Margin = new inkMargin();
+			TargetMargin = new inkMargin();
+			Parent = new inkCompoundWidgetReference();
+			GridData = new();
+
 			PostConstruct();
 		}
 

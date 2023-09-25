@@ -86,6 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public hudCorpoController()
 		{
+			ScrollText = new inkTextWidgetReference();
+			ScrollTextWidget = new inkWidgetReference();
+			Root_canvas = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

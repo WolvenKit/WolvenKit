@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public ModifyDamageEffector()
 		{
+			StatType = Enums.gamedataStatType.Invalid;
+			OwnerID = new entEntityID();
+
 			PostConstruct();
 		}
 

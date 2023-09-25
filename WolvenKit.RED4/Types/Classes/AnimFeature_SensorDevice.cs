@@ -110,6 +110,9 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_SensorDevice()
 		{
+			IsInitialized = true;
+			CurrentRotation = new Vector4();
+
 			PostConstruct();
 		}
 

@@ -350,6 +350,22 @@ namespace WolvenKit.RED4.Types
 
 		public ArmorEquipGameController()
 		{
+			Inventory = new();
+			AreaTags = new();
+			RecipeItemList = new();
+			TooltipsLibrary = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\tooltipslibrary.inkwidget") };
+			ItemTooltipName = "itemTooltip";
+			TooltipStylePath = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\tooltip_menu.inkstyle") };
+			PaperDollList = new();
+			FaceTags = new();
+			HeadTags = new();
+			ChestTags = new();
+			LegTags = new();
+			WeaponTags = new();
+			ConsumableTags = new();
+			ModulesTags = new();
+			FramesTags = new();
+
 			PostConstruct();
 		}
 

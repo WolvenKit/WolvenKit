@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public DebugMenuScenario_HubMenu()
 		{
+			DefaultMenu = "builds_panel";
+			CpoDefaultMenu = "builds_panel";
+
 			PostConstruct();
 		}
 

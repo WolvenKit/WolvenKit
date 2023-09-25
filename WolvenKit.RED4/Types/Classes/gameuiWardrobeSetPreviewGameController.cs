@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiWardrobeSetPreviewGameController()
 		{
+			ColliderWidgetRef = new inkWidgetReference();
+			C_GARMENT_ROTATION_SPEED = 100.000000F;
+
 			PostConstruct();
 		}
 

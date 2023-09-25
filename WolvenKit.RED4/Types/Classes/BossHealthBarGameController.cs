@@ -102,6 +102,13 @@ namespace WolvenKit.RED4.Types
 
 		public BossHealthBarGameController()
 		{
+			HealthControllerRef = new inkWidgetReference();
+			HealthPercentage = new inkTextWidgetReference();
+			BossName = new inkTextWidgetReference();
+			DividerContainerRef = new inkCompoundWidgetReference();
+			Thresholds = new();
+			BossPuppets = new();
+
 			PostConstruct();
 		}
 

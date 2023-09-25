@@ -5,6 +5,9 @@ namespace WolvenKit.RED4.Types
 	{
 		public ThrowEvents()
 		{
+			StyleName = "CarriedObject.Style";
+			ForceStyleName = "CarriedObject.ForcedStyle";
+
 			PostConstruct();
 		}
 

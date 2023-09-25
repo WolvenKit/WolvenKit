@@ -150,6 +150,11 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryItemsManager()
 		{
+			EquippedItems = new();
+			TransmogItems = new();
+			MaxStatValuesData = new();
+			NotSellableTags = new();
+
 			PostConstruct();
 		}
 

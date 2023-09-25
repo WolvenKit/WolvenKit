@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 
 		public Intercom()
 		{
+			ControllerTypeName = "IntercomController";
+			ShortGlitchDelayID = new gameDelayID();
+			DialStartSound = "dev_intercom_dial_start";
+			DialStopSound = "dev_intercom_dial_stop";
+			DistractionStartSound = "dev_intercom_distraction_start";
+			DistractionStopSound = "dev_intercom_distraction_stop";
+			AnsweredSound = "dev_intercom_answered";
+
 			PostConstruct();
 		}
 

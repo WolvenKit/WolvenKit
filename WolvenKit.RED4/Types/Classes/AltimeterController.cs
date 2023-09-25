@@ -86,6 +86,14 @@ namespace WolvenKit.RED4.Types
 
 		public AltimeterController()
 		{
+			FaceUp = new inkWidgetReference();
+			FaceDown = new inkWidgetReference();
+			TextWidget = new inkTextWidgetReference();
+			DecimalPrecision = 2;
+			FaceUpStartPosition = new Vector2();
+			FaceDownStartPosition = new Vector2();
+			WarpDistance = 2.000000F;
+
 			PostConstruct();
 		}
 

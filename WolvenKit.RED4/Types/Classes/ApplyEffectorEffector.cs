@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyEffectorEffector()
 		{
+			Target = new entEntityID();
+
 			PostConstruct();
 		}
 

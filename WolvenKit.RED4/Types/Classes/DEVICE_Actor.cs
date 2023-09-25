@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public DEVICE_Actor()
 		{
+			Type = Enums.HUDActorType.DEVICE;
+
 			PostConstruct();
 		}
 

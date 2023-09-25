@@ -134,6 +134,18 @@ namespace WolvenKit.RED4.Types
 
 		public ServerNode()
 		{
+			ControllerTypeName = "ServerNodeController";
+			LivePinMeshes = new();
+			DeadPinMeshes = new();
+			ClosedFrontPlates = new();
+			AnimatedFrontPlates = new();
+			NumOfPins = 12;
+			AlivePins = 12;
+			PinIndices = new();
+			NodesDestroyedInTotalQuestFactName = "q303_03_server_nodes_destroyed";
+			VentingFX = "venting";
+			DamagedFX = "damage_state_01";
+
 			PostConstruct();
 		}
 

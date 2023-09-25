@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public ItemCategoryFliterManager()
 		{
+			FiltersToCheck = new();
+			Filters = new();
+			SharedFiltersToCheck = new();
+
 			PostConstruct();
 		}
 

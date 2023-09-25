@@ -46,6 +46,12 @@ namespace WolvenKit.RED4.Types
 
 		public FastTRavelSystemDef()
 		{
+			DestinationPoint = new gamebbScriptID_Variant();
+			StartingPoint = new gamebbScriptID_Variant();
+			FastTravelStarted = new gamebbScriptID_Bool();
+			FastTravelLoadingScreenStarted = new gamebbScriptID_Bool();
+			FastTravelLoadingScreenFinished = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

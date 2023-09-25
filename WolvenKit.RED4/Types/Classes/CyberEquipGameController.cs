@@ -110,6 +110,20 @@ namespace WolvenKit.RED4.Types
 
 		public CyberEquipGameController()
 		{
+			EyesTags = new();
+			BrainTags = new();
+			MusculoskeletalTags = new();
+			NervousTags = new();
+			CardiovascularTags = new();
+			ImmuneTags = new();
+			IntegumentaryTags = new();
+			HandsTags = new();
+			ArmsTags = new();
+			LegsTags = new();
+			QuickSlotTags = new();
+			WeaponsQuickSlotTags = new();
+			FragmentTags = new();
+
 			PostConstruct();
 		}
 

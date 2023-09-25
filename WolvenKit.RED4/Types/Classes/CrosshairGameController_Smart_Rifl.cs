@@ -342,6 +342,41 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Smart_Rifl()
 		{
+			TxtAccuracy = new inkTextWidgetReference();
+			TxtTargetsCount = new inkTextWidgetReference();
+			TxtFluffStatus = new inkTextWidgetReference();
+			LeftPart = new inkImageWidgetReference();
+			RightPart = new inkImageWidgetReference();
+			LeftPartExtra = new inkImageWidgetReference();
+			RightPartExtra = new inkImageWidgetReference();
+			OffsetLeftRight = 0.800000F;
+			OffsetLeftRightExtra = 1.200000F;
+			LatchVertical = 40.000000F;
+			TopPart = new inkImageWidgetReference();
+			BottomPart = new inkImageWidgetReference();
+			HoriPart = new inkWidgetReference();
+			VertPart = new inkWidgetReference();
+			TargetWidgetLibraryName = "bucket";
+			TargetsPullSize = 10;
+			TargetColorChange = new inkWidgetReference();
+			TargetingFrame = new inkWidgetReference();
+			ReticleFrame = new inkWidgetReference();
+			BufferFrame = new inkWidgetReference();
+			TargetHolder = new inkCompoundWidgetReference();
+			LockHolder = new inkCompoundWidgetReference();
+			ReloadIndicator = new inkCompoundWidgetReference();
+			ReloadIndicatorInv = new inkCompoundWidgetReference();
+			SmartLinkDot = new inkCompoundWidgetReference();
+			SmartLinkFrame = new inkCompoundWidgetReference();
+			SmartLinkFluff = new inkCompoundWidgetReference();
+			SmartLinkFirmwareOnline = new inkCompoundWidgetReference();
+			SmartLinkFirmwareOffline = new inkCompoundWidgetReference();
+			TargetsPool = new();
+			Targets = new();
+			BufferedSpread = new Vector2();
+			PrevTargetedEntityIDs = new();
+			CurrTargetedEntityIDs = new();
+
 			PostConstruct();
 		}
 

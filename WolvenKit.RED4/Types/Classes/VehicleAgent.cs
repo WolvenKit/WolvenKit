@@ -78,6 +78,8 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleAgent()
 		{
+			NearTimeStamp = -1.000000F;
+
 			PostConstruct();
 		}
 

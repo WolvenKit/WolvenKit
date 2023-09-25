@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 
 		public UI_TargetingInfoDef()
 		{
+			CurrentVisibleTarget = new gamebbScriptID_EntityID();
+			CrosshairRaycastTarget = new gamebbScriptID_EntityID();
+			VisibleTargetDistance = new gamebbScriptID_Float();
+			VisibleTargetAttitude = new gamebbScriptID_Int32();
+			CurrentObstructedTarget = new gamebbScriptID_EntityID();
+			ObstructedTargetDistance = new gamebbScriptID_Float();
+			ObstructedTargetAttitude = new gamebbScriptID_Int32();
+
 			PostConstruct();
 		}
 

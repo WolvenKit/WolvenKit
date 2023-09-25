@@ -70,6 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public DriverCombatFirearmsEvents()
 		{
+			AngleDelta = new EulerAngles();
+			LocalOrientation = new EulerAngles();
+			MinSwaySpeed = 0.100000F;
+
 			PostConstruct();
 		}
 

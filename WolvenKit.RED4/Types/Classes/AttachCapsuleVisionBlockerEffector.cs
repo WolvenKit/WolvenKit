@@ -86,6 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public AttachCapsuleVisionBlockerEffector()
 		{
+			VisionBlockerOffset = new Vector3();
+
 			PostConstruct();
 		}
 

@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public HitOperations()
 		{
+			Components = new();
+			FxInstances = new();
+			HitOperations_ = new();
+
 			PostConstruct();
 		}
 

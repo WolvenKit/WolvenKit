@@ -86,6 +86,14 @@ namespace WolvenKit.RED4.Types
 
 		public NewItemTooltipAttachmentGroupController()
 		{
+			IndicatorContainer = new inkWidgetReference();
+			IndicatorWidget = new inkWidgetReference();
+			RarityContainer = new inkWidgetReference();
+			RarityWidget = new inkImageWidgetReference();
+			EntriesContainer = new inkCompoundWidgetReference();
+			EntriesControllers = new();
+			EntriesData = new();
+
 			PostConstruct();
 		}
 

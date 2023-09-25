@@ -206,6 +206,23 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocMetersArmor()
 		{
+			BarWidgetLibraryName = "ArmorMeterBar";
+			SlopeLengthModifier = 0.250000F;
+			BarsHeigh = 9.000000F;
+			BarsMargin = 9.000000F;
+			BarScale = 2.500000F;
+			CurrentArmorLabelContainer = new inkWidgetReference();
+			CurrentArmorLabelBackground = new inkWidgetReference();
+			CostArmorLabelContainer = new inkWidgetReference();
+			CostArmorLabelBackground = new inkWidgetReference();
+			CostArmorLabelValue = new inkTextWidgetReference();
+			MaxArmorLabel = new inkWidgetReference();
+			MaxArmorLabelContainer = new inkWidgetReference();
+			MaxArmorLabelValue = new inkTextWidgetReference();
+			C_costLabelAnchorPoint_ADD = new Vector2();
+			C_costLabelAnchorPoint_SUBTRACT = new Vector2();
+			C_costLabelAnchorPoint_EQUIPPED = new Vector2();
+
 			PostConstruct();
 		}
 

@@ -16,6 +16,7 @@ namespace WolvenKit.RED4.Types
 		{
 			YawSpeed = 1.250000F;
 			YawDefault = -125.000000F;
+			RotationSpeed = 30.000000F;
 			CameraController = new gameuiPuppetPreviewCameraController { CameraSetup = new(), TransitionDelay = 0.500000F };
 
 			PostConstruct();

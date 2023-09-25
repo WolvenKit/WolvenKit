@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public ProgramTooltipStatController()
 		{
+			Arrow = new inkImageWidgetReference();
+			Value = new inkTextWidgetReference();
+			Name = new inkTextWidgetReference();
+			DiffValue = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

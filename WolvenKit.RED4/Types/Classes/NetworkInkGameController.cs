@@ -238,6 +238,25 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkInkGameController()
 		{
+			Turn = "Initial";
+			Dimension = 5;
+			Steps = 6;
+			Symbols = new();
+			SymbolProbabilities = new();
+			InitRound = true;
+			TrapsDelayed = new();
+			NetworkData = new NetworkMinigameData { GridData = new(), BasicAccess = new ProgramData { CommandLists = new(), Effects = new() }, PlayerPrograms = new(), EnemyLockNetwork = new ProgramData { CommandLists = new(), Effects = new() }, EnemyPrograms = new() };
+			BufferElements = new();
+			EnemyBufferElements = new();
+			CompletedPrograms = new();
+			CompletedProgramsPD = new();
+			EnemyCompletedPrograms = new();
+			EnemyCompletedProgramsPD = new();
+			PlayerProgramsCompletion = new();
+			EnemyProgramsCompletion = new();
+			BasicAccessCompletion = new ProgramProgressData { CompletionProgress = new() };
+			AppliedViruses = new();
+
 			PostConstruct();
 		}
 

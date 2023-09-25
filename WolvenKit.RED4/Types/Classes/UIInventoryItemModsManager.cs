@@ -54,6 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryItemModsManager()
 		{
+			EmptySlots = new();
+			UsedSlots = new();
+			Mods = new();
+			Attachments = new();
+
 			PostConstruct();
 		}
 

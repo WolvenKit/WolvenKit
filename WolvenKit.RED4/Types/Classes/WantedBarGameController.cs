@@ -142,6 +142,12 @@ namespace WolvenKit.RED4.Types
 
 		public WantedBarGameController()
 		{
+			StarsWidget = new();
+			BountyStarAnimProxy = new();
+			AnimOptionsLoop = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			WANTED_TIER_1 = 1.000000F;
+			WANTED_MIN = 0.100000F;
+
 			PostConstruct();
 		}
 

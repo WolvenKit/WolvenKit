@@ -174,6 +174,16 @@ namespace WolvenKit.RED4.Types
 
 		public CodexGameController()
 		{
+			ButtonHintsManagerRef = new inkWidgetReference();
+			EntryViewRef = new inkCompoundWidgetReference();
+			CharacterEntryViewRef = new inkCompoundWidgetReference();
+			NoEntrySelectedWidget = new inkWidgetReference();
+			VirtualList = new inkWidgetReference();
+			EmptyPlaceholderRef = new inkWidgetReference();
+			LeftBlockControllerRef = new inkWidgetReference();
+			FiltersContainer = new inkCompoundWidgetReference();
+			FiltersControllers = new();
+
 			PostConstruct();
 		}
 

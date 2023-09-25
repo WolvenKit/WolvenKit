@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public SceneScreenUIAnimationsData()
 		{
+			OnSpawnAnimations = new();
+			DefaultLibraryItemAnchor = Enums.inkEAnchor.Fill;
+
 			PostConstruct();
 		}
 

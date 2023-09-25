@@ -238,6 +238,26 @@ namespace WolvenKit.RED4.Types
 
 		public QuestDetailsPanelController()
 		{
+			QuestTitle = new inkTextWidgetReference();
+			QuestDescription = new inkTextWidgetReference();
+			QuestLevel = new inkTextWidgetReference();
+			ActiveObjectives = new inkCompoundWidgetReference();
+			OptionalObjectives = new inkCompoundWidgetReference();
+			CompletedObjectives = new inkCompoundWidgetReference();
+			CodexLinksContainer = new inkCompoundWidgetReference();
+			MissionLinksContainer = new inkCompoundWidgetReference();
+			FluffLinksContainer = new inkCompoundWidgetReference();
+			MapLinksContainer = new inkCompoundWidgetReference();
+			MissionLinkLine = new inkCompoundWidgetReference();
+			FluffShardLinkLine = new inkCompoundWidgetReference();
+			CodexLinkLine = new inkCompoundWidgetReference();
+			ContentContainer = new inkWidgetReference();
+			ScrollContainer = new inkWidgetReference();
+			NoSelectedQuestContainer = new inkWidgetReference();
+			Ep1Marker = new inkWidgetReference();
+			ObjectiveOffset = 20.000000F;
+			ObjectiveActionOffset = 124.000000F;
+
 			PostConstruct();
 		}
 

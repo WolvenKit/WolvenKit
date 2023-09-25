@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public BaseSubtitleLineLogicController()
 		{
+			C_tier1_duration = 0.500000F;
+			C_tier2_duration = 5.000000F;
+
 			PostConstruct();
 		}
 

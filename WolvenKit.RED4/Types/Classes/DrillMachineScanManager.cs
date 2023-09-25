@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public DrillMachineScanManager()
 		{
+			IdleToScanTime = 1.700000F;
+			PpOffFrameDelay = 2;
+
 			PostConstruct();
 		}
 

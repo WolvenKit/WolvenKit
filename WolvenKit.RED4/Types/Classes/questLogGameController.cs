@@ -302,6 +302,22 @@ namespace WolvenKit.RED4.Types
 
 		public questLogGameController()
 		{
+			VirtualList = new inkWidgetReference();
+			DetailsPanel = new inkWidgetReference();
+			ButtonHints = new inkWidgetReference();
+			FiltersList = new inkWidgetReference();
+			QuestList = new inkWidgetReference();
+			Game = new ScriptGameInstance();
+			Quests = new();
+			ResolvedQuests = new();
+			Filters = new();
+			AxisDataThreshold = 0.500000F;
+			MouseDataThreshold = 7.000000F;
+			DelayedShowDuration = 0.200000F;
+			DelayedShow = new gameDelayID();
+			ListData = new();
+			QuestTypeList = new();
+
 			PostConstruct();
 		}
 

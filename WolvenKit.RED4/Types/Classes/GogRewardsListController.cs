@@ -46,6 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public GogRewardsListController()
 		{
+			ContainerWidget = new inkWidgetReference();
+			ScrollArea = new inkWidgetReference();
+			SizeRefWrapper = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

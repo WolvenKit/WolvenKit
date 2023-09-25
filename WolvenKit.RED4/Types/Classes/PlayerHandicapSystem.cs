@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerHandicapSystem()
 		{
+			CanDropHealingConsumable = true;
+			CanDropAmmo = true;
+
 			PostConstruct();
 		}
 

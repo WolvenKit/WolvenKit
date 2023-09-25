@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldPrefabProxyMeshNode()
 		{
-			Mesh = new CResourceAsyncReference<CMesh>(11172089723266472358);
+			Mesh = new CResourceAsyncReference<CMesh>(@"engine\meshes\editor\box.w2mesh");
 			MeshAppearance = "default";
 			OccluderAutohideDistanceScale = 255;
 			WindImpulseEnabled = true;

@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public AdHocAnimationEvent()
 		{
+			AnimationDuration = -1.000000F;
+
 			PostConstruct();
 		}
 

@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public RadioInkGameController()
 		{
+			StationNameWidget = new inkTextWidgetReference();
+			StationLogoWidget = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

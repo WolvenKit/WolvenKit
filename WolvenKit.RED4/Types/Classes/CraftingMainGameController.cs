@@ -206,6 +206,13 @@ namespace WolvenKit.RED4.Types
 
 		public CraftingMainGameController()
 		{
+			TooltipsManagerRef = new inkWidgetReference();
+			TabRootRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			CraftingLogicControllerContainer = new inkWidgetReference();
+			UpgradingLogicControllerContainer = new inkWidgetReference();
+			IsTabEnabled = true;
+
 			PostConstruct();
 		}
 

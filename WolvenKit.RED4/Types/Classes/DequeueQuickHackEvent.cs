@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public DequeueQuickHackEvent()
 		{
+			MappinID = new gameNewMappinID();
+
 			PostConstruct();
 		}
 

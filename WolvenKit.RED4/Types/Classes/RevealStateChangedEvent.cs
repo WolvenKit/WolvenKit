@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public RevealStateChangedEvent()
 		{
+			Reason = new gameVisionModeSystemRevealIdentifier { SourceEntityId = new entEntityID() };
+
 			PostConstruct();
 		}
 

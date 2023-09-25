@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public sampleTextScrolling()
 		{
+			ScrollingText = new inkTextWidgetReference();
+			Infiniteloop = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

@@ -94,6 +94,12 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocSelectorController()
 		{
+			Label = new inkTextWidgetReference();
+			LeftArrowAnchor = new inkWidgetReference();
+			RightArrowAnchor = new inkWidgetReference();
+			IndicatorAnchors = new();
+			Names = new();
+
 			PostConstruct();
 		}
 

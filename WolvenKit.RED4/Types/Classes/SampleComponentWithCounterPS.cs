@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public SampleComponentWithCounterPS()
 		{
+			Counter = 1000;
+
 			PostConstruct();
 		}
 

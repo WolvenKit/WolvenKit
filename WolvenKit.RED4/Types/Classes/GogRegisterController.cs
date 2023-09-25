@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public GogRegisterController()
 		{
+			LinkWidget = new inkWidgetReference();
+			QrImageWidget = new inkWidgetReference();
+			TextDescription = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

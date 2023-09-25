@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipTransmogModule()
 		{
+			ButtonHintWidgetRef = new inkWidgetReference();
+			LabelRef = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

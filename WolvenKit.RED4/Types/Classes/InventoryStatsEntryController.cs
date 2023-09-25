@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryStatsEntryController()
 		{
+			IconWidget = new inkImageWidgetReference();
+			LabelWidget = new inkTextWidgetReference();
+			ValueWidget = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

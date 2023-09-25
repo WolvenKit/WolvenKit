@@ -566,6 +566,42 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiInventoryGameController()
 		{
+			TooltipsManagerRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			ItemModeControllerRef = new inkWidgetReference();
+			DefaultWrapper = new inkWidgetReference();
+			ItemWrapper = new inkWidgetReference();
+			CyberwareSlotRootRefs = new inkCompoundWidgetReference();
+			CyberwareHolder = new inkWidgetReference();
+			PaperDollWidget = new inkWidgetReference();
+			SortingButton = new inkWidgetReference();
+			SortingDropdown = new inkWidgetReference();
+			NotificationRoot = new inkWidgetReference();
+			PlayerStatsWidget = new inkWidgetReference();
+			BtnBackpack = new inkWidgetReference();
+			BtnCyberware = new inkWidgetReference();
+			BtnCrafting = new inkWidgetReference();
+			BtnStats = new inkWidgetReference();
+			BtnSets = new inkWidgetReference();
+			ItemNotificationRoot = new inkWidgetReference();
+			InventoryList = new();
+			WeaponsList = new();
+			EquipmentList = new();
+			CyberwareList = new();
+			PocketList = new();
+			ConsumablesList = new();
+			AnimationList = new();
+			EquipAreas = new();
+			CyberwareAreas = new();
+			WeaponAreas = new();
+			PocketAreas = new();
+			ConsumablesAreas = new();
+			EquipmentAreaCategoryEventQueue = new();
+			CyberwareItems = new();
+			EquipmentAreaCategories = new();
+			WardrobeOutfitAreas = new();
+			LastClothingSetIndex = -1;
+
 			PostConstruct();
 		}
 

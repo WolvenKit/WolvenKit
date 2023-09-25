@@ -126,6 +126,12 @@ namespace WolvenKit.RED4.Types
 
 		public PerkDisplayController()
 		{
+			LevelText = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			FluffText = new inkTextWidgetReference();
+			RequiredTrainerIcon = new inkWidgetReference();
+			RequiredPointsText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

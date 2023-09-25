@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceMappinsContainer()
 		{
+			Mappins = new();
+			NewNewFocusMappin = new SDeviceMappinData { Enabled = true, Range = 30.000000F, Offset = new Vector4(), Position = new Vector4(), CheckIfIsTarget = true, Id = new gameNewMappinID() };
+			OffsetValue = 0.200000F;
+
 			PostConstruct();
 		}
 

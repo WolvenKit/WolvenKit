@@ -70,6 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public OpenMenuRequest()
 		{
+			EventData = new MenuData { Identifier = -1, SubMenus = new() };
+
 			PostConstruct();
 		}
 

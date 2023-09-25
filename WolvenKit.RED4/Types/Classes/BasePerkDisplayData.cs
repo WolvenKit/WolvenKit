@@ -86,6 +86,8 @@ namespace WolvenKit.RED4.Types
 
 		public BasePerkDisplayData()
 		{
+			BinkRef = new redResourceReferenceScriptToken();
+
 			PostConstruct();
 		}
 

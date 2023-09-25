@@ -118,6 +118,9 @@ namespace WolvenKit.RED4.Types
 
 		public MeleeBodySlamAttackEvents()
 		{
+			FullAttackIndex = 2;
+			WeakAttackIndex = 1;
+
 			PostConstruct();
 		}
 

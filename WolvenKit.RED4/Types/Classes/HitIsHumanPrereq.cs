@@ -14,6 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public HitIsHumanPrereq()
 		{
+			IsSync = true;
+			PipelineStage = Enums.gameDamagePipelineStage.Process;
+
 			PostConstruct();
 		}
 

@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public CameraTagEnemyLimitDataModule()
 		{
+			CameraLimit = 5;
+			CameraList = new();
+
 			PostConstruct();
 		}
 

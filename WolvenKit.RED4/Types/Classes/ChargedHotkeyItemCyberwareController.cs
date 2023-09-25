@@ -70,6 +70,13 @@ namespace WolvenKit.RED4.Types
 
 		public ChargedHotkeyItemCyberwareController()
 		{
+			C_cyberdeckOverclockPerkType = Enums.gamedataNewPerkType.Intelligence_Central_Milestone_3;
+			C_vehicleManeuversPerkType = Enums.gamedataNewPerkType.Cool_Left_Milestone_1;
+			C_berserkKey = "Berserk";
+			C_cyberdeckKey = "Cyberdeck";
+			C_sandevistanKey = "Sandevistan";
+			C_capacityBoosterKey = "CapacityBooster";
+
 			PostConstruct();
 		}
 

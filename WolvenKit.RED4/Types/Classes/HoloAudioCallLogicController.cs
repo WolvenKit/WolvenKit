@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public HoloAudioCallLogicController()
 		{
+			AvatarControllerRef = new inkWidgetReference();
+			Holder = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

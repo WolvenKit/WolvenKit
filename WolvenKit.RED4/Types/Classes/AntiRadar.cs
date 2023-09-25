@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public AntiRadar()
 		{
+			GameEffectRef = new gameEffectRef();
+			JammedSensorsArray = new();
+
 			PostConstruct();
 		}
 

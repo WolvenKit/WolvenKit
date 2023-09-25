@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public CpoCharacterSelectionWidgetGameController()
 		{
+			HorizontalPanelsList = new();
+			Amount = 5;
+
 			PostConstruct();
 		}
 

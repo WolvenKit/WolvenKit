@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public CustomCentaurBlackboardDef()
 		{
+			ShieldState = new gamebbScriptID_Int32();
+			WeakSpotHitTimeStamp = new gamebbScriptID_Float();
+			ShieldTarget = new gamebbScriptID_EntityID();
+			WoundedStateHPThreshold = new gamebbScriptID_Float();
+
 			PostConstruct();
 		}
 

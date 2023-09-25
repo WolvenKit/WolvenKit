@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceInkLogicControllerBase()
 		{
+			TargetWidgetRef = new inkWidgetReference();
+			DisplayNameWidget = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

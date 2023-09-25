@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerBannerWidgetController()
 		{
+			TitleWidget = new inkTextWidgetReference();
+			TextContentWidget = new inkTextWidgetReference();
+			VideoContentWidget = new inkVideoWidgetReference();
+			ImageContentWidget = new inkImageWidgetReference();
+			BannerButtonWidget = new inkWidgetReference();
+			BannerData = new SBannerWidgetPackage { Content = new redResourceReferenceScriptToken() };
+			LastPlayedVideo = new redResourceReferenceScriptToken();
+
 			PostConstruct();
 		}
 

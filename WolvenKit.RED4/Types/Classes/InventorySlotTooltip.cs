@@ -270,6 +270,30 @@ namespace WolvenKit.RED4.Types
 
 		public InventorySlotTooltip()
 		{
+			ItemName = new inkTextWidgetReference();
+			ItemCategory = new inkTextWidgetReference();
+			ItemPrice = new inkTextWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			LockedText = new inkTextWidgetReference();
+			RequiredLevelText = new inkTextWidgetReference();
+			AdditionalStatsTextRef = new inkTextWidgetReference();
+			EquippedHeader = new inkWidgetReference();
+			PrimaryStatsList = new inkWidgetReference();
+			ComparedStatsList = new inkWidgetReference();
+			AdditionalStatsList = new inkWidgetReference();
+			ItemPriceGroup = new inkWidgetReference();
+			DamageIndicator = new inkWidgetReference();
+			RequiredLevelGroup = new inkWidgetReference();
+			DamageIndicatorRef = new inkWidgetReference();
+			AttachmentsListVertRef = new inkWidgetReference();
+			AttachmentsCtrlHorRef = new inkWidgetReference();
+			SpecialAbilitiesListRef = new inkWidgetReference();
+			RarityBarRef = new inkWidgetReference();
+			ElementsToSetRarityState = new();
+			RarityElementsRefs = new();
+			TooltipCycleIndicatorsContainer = new inkCompoundWidgetReference();
+			TooltipCycleHintContainer = new inkCompoundWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -30,6 +30,11 @@ namespace WolvenKit.RED4.Types
 
 		public SpeakerControllerPS()
 		{
+			DeviceName = "LocKey#166";
+			TweakDBRecord = "Devices.Speaker";
+			TweakDBDescriptionRecord = 118735618267;
+			SpeakerSetup = new SpeakerSetup { Range = 10.000000F, GlitchSFX = "dev_radio_ditraction_glitching" };
+
 			PostConstruct();
 		}
 

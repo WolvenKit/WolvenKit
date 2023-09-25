@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public SetHeatCounterMultiplier()
 		{
+			HeatMultiplier = 1.000000F;
+
 			PostConstruct();
 		}
 

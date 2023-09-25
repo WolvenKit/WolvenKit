@@ -190,6 +190,9 @@ namespace WolvenKit.RED4.Types
 
 		public ContactData()
 		{
+			UnreadMessages = new();
+			TimeStamp = new GameTime();
+
 			PostConstruct();
 		}
 

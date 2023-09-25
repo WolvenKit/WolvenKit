@@ -406,6 +406,31 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerksScreenLogicController()
 		{
+			PerksWidgets = new();
+			Gauge = new inkWidgetReference();
+			Tiers = new();
+			AnimationBoldLineWidget = new inkWidgetReference();
+			AnimationLineWidget = new inkWidgetReference();
+			AnimationGradientWidget = new inkWidgetReference();
+			AttributeButtonWidget = new inkWidgetReference();
+			LockedLineIcon = new inkWidgetReference();
+			UnlockedLineIcon = new inkWidgetReference();
+			AttributeRequirementTexts = new();
+			LevelRequirementTexts = new();
+			PerkControllersArray = new();
+			EnabledControllers = new();
+			PerksList = new();
+			Levels = new();
+			HighlightData = new();
+			ActiveProxies = new();
+			HighlightedWires = new();
+			HighlightedPerks = new();
+			DimmedWidgets = new();
+			DimProxies = new();
+			UndimProxies = new();
+			UnlockAnimData = new UnlockAnimData();
+			PerkToSnapCursor = Enums.gamedataNewPerkType.Invalid;
+
 			PostConstruct();
 		}
 

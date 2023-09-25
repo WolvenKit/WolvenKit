@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIHoldPositionCommandParams()
 		{
+			Duration = -1.000000F;
+
 			PostConstruct();
 		}
 

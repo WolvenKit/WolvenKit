@@ -86,6 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerkSkillsLogicController()
 		{
+			VirtualGridContainer = new inkVirtualCompoundWidgetReference();
+			ScrollBarContainer = new inkWidgetReference();
+			VirtualItems = new();
+
 			PostConstruct();
 		}
 

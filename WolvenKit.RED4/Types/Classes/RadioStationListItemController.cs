@@ -70,6 +70,13 @@ namespace WolvenKit.RED4.Types
 
 		public RadioStationListItemController()
 		{
+			Label = new inkTextWidgetReference();
+			TypeIcon = new inkImageWidgetReference();
+			EquilizerIcon = new inkHorizontalPanelWidgetReference();
+			CodeTLicon = new inkImageWidgetReference();
+			TrackName = new inkTextWidgetReference();
+			CurrentRadioStationId = -1;
+
 			PostConstruct();
 		}
 

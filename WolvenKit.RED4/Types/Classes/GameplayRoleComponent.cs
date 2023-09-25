@@ -158,6 +158,14 @@ namespace WolvenKit.RED4.Types
 
 		public GameplayRoleComponent()
 		{
+			AutoDeterminGameplayRole = true;
+			MappinsDisplayMode = Enums.EMappinDisplayMode.MINIMALISTIC;
+			AlwaysCreateMappinAsDynamic = true;
+			ForcedMappinVisualState = Enums.EMappinVisualState.None;
+			Mappins = new();
+			OffsetValue = 0.040000F;
+			EnabledMinimapMappins = new();
+
 			PostConstruct();
 		}
 

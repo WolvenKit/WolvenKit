@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIBackgroundCombatCommand()
 		{
+			Steps = new();
+
 			PostConstruct();
 		}
 

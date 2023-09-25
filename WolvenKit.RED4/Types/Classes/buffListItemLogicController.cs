@@ -70,6 +70,13 @@ namespace WolvenKit.RED4.Types
 
 		public buffListItemLogicController()
 		{
+			Icon = new inkImageWidgetReference();
+			IconBg = new inkImageWidgetReference();
+			Fill = new inkWidgetReference();
+			TimeLabel = new inkTextWidgetReference();
+			StackCounter = new inkTextWidgetReference();
+			StackCounterContainer = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

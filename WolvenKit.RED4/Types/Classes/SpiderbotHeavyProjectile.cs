@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public SpiderbotHeavyProjectile()
 		{
+			Effect = new gameEffectRef();
+			Alive = true;
+
 			PostConstruct();
 		}
 

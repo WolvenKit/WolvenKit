@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public PlaybackOptionsUpdateData()
 		{
+			PlaybackOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

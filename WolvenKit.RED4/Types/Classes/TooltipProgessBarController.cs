@@ -78,6 +78,14 @@ namespace WolvenKit.RED4.Types
 
 		public TooltipProgessBarController()
 		{
+			ProgressFill = new inkWidgetReference();
+			HintHolder = new inkWidgetReference();
+			ProgressHolder = new inkWidgetReference();
+			PostprogressHolder = new inkWidgetReference();
+			HintTextHolder = new inkCompoundWidgetReference();
+			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			PostprogressText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

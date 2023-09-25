@@ -54,6 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryTooltiData_CyberwareUpgradeData()
 		{
+			UpgradeCost = new CyberwareUpgradeCostData();
+
 			PostConstruct();
 		}
 

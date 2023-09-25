@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public UI_CpoCharacterSelectionDef()
 		{
+			SelectionMenuVisible = new gamebbScriptID_Bool();
+			CharacterRecordId = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

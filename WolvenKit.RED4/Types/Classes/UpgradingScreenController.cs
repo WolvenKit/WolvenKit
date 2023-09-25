@@ -78,6 +78,13 @@ namespace WolvenKit.RED4.Types
 
 		public UpgradingScreenController()
 		{
+			MaxIngredientCount = 8;
+			ItemNameUpgrade = new inkTextWidgetReference();
+			ArrowComparison = new inkWidgetReference();
+			WeaponAreas = new();
+			EquipAreas = new();
+			DELAYED_TOOLTIP_RIGHT = 0.150000F;
+
 			PostConstruct();
 		}
 

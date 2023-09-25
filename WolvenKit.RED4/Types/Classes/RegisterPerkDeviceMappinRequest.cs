@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public RegisterPerkDeviceMappinRequest()
 		{
+			OwnerID = new entEntityID();
+			Position = new Vector4();
+
 			PostConstruct();
 		}
 

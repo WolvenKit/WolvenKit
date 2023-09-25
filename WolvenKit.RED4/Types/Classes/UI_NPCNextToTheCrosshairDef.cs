@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public UI_NPCNextToTheCrosshairDef()
 		{
+			NameplateData = new gamebbScriptID_Variant();
+			BuffsList = new gamebbScriptID_Variant();
+			DebuffsList = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

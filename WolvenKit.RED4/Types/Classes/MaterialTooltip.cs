@@ -62,6 +62,13 @@ namespace WolvenKit.RED4.Types
 
 		public MaterialTooltip()
 		{
+			TitleWrapper = new inkWidgetReference();
+			DescriptionWrapper = new inkWidgetReference();
+			DescriptionLine = new inkWidgetReference();
+			Title = new inkTextWidgetReference();
+			BasePrice = new inkTextWidgetReference();
+			Price = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

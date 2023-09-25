@@ -94,6 +94,12 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiRemoteControlDrivingHUDGameController()
 		{
+			Overlay = new inkWidgetReference();
+			VehicleManufacturer = new inkImageWidgetReference();
+			ContainerSignalStrength = new inkWidgetReference();
+			SignalStrengthBarFill = new inkWidgetReference();
+			MappinID = new gameNewMappinID();
+
 			PostConstruct();
 		}
 

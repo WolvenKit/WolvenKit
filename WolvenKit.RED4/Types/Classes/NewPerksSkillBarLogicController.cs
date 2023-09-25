@@ -54,6 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerksSkillBarLogicController()
 		{
+			StatsProgressWidget = new inkWidgetReference();
+			LevelsContainer = new inkCompoundWidgetReference();
+			LevelsControllers = new();
+
 			PostConstruct();
 		}
 

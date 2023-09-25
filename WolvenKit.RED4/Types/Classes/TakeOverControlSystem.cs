@@ -118,6 +118,11 @@ namespace WolvenKit.RED4.Types
 
 		public TakeOverControlSystem()
 		{
+			TakeControlSourceID = new entEntityID();
+			ChainLockSources = new();
+			TCDUpdateDelayID = new gameDelayID();
+			TCSupdateRate = 0.100000F;
+
 			PostConstruct();
 		}
 

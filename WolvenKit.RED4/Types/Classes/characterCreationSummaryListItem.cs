@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationSummaryListItem()
 		{
+			HeaderLabel = new inkTextWidgetReference();
+			DescLabel = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

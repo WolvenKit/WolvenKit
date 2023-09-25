@@ -14,6 +14,11 @@ namespace WolvenKit.RED4.Types
 
 		public LaserDetector()
 		{
+			ControllerTypeName = "LaserDetectorController";
+			ScanningAreaName = "scanningArea";
+			SurroundingAreaName = "surroundingArea";
+			Lasers = new(2);
+
 			PostConstruct();
 		}
 

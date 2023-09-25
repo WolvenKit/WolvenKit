@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public UI_MapDef()
 		{
+			CurrentLocation = new gamebbScriptID_String();
+			CurrentLocationEnumName = new gamebbScriptID_String();
+			NewLocationDiscovered = new gamebbScriptID_Bool();
+			CurrentState = new gamebbScriptID_String();
+
 			PostConstruct();
 		}
 

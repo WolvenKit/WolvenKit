@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public SocialPanelContactsDetails()
 		{
+			ContactAvatarRef = new inkImageWidgetReference();
+			ContactNameRef = new inkTextWidgetReference();
+			ContactDescriptionRef = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

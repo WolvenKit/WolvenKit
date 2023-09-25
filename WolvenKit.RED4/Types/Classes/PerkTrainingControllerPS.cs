@@ -54,6 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public PerkTrainingControllerPS()
 		{
+			DeviceName = "LocKey#79367";
+			HasPersonalLinkSlot = true;
+			ShouldSkipNetrunnerMinigame = true;
+			ShouldScannerShowStatus = false;
+
 			PostConstruct();
 		}
 

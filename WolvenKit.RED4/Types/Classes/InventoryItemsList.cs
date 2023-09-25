@@ -70,6 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemsList()
 		{
+			ItemsLayoutRef = new inkCompoundWidgetReference();
+			TooltipsData = new();
+			InventoryItems = new();
+
 			PostConstruct();
 		}
 

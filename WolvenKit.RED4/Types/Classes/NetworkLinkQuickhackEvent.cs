@@ -46,6 +46,12 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkLinkQuickhackEvent()
 		{
+			NetrunnerID = new entEntityID();
+			ProxyID = new entEntityID();
+			TargetID = new entEntityID();
+			From = new entEntityID();
+			To = new entEntityID();
+
 			PostConstruct();
 		}
 

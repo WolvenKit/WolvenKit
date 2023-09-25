@@ -70,6 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public RoyceComponent()
 		{
+			Owner_id = new entEntityID();
+
 			PostConstruct();
 		}
 

@@ -158,6 +158,14 @@ namespace WolvenKit.RED4.Types
 
 		public QuestMappinController()
 		{
+			ArrowCanvas = new inkWidgetReference();
+			ArrowPart = new inkWidgetReference();
+			Selector = new inkWidgetReference();
+			ScanningDiamond = new inkWidgetReference();
+			PortalIcon = new inkWidgetReference();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			VehicleAlreadySummonedTime = new EngineTime();
+
 			PostConstruct();
 		}
 

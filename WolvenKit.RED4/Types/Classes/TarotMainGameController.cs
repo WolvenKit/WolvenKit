@@ -118,6 +118,12 @@ namespace WolvenKit.RED4.Types
 
 		public TarotMainGameController()
 		{
+			ButtonHintsManagerRef = new inkWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
+			List = new inkCompoundWidgetReference();
+			BaseCards = 22;
+			Ep1Cards = 26;
+
 			PostConstruct();
 		}
 

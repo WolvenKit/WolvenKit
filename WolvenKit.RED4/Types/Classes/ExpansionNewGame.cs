@@ -150,6 +150,18 @@ namespace WolvenKit.RED4.Types
 
 		public ExpansionNewGame()
 		{
+			NewGameDescription = new inkTextWidgetReference();
+			TextureTop = new inkImageWidgetReference();
+			TextureBottom = new inkImageWidgetReference();
+			CreditsBaseTexture = new inkImageWidgetReference();
+			CreditsExpansionTexture = new inkImageWidgetReference();
+			CreditsBase = new inkWidgetReference();
+			CreditsExpansion = new inkWidgetReference();
+			CreditsHoverFrameLeft = new inkWidgetReference();
+			CreditsHoverFrameRight = new inkWidgetReference();
+			BaseGameButton = new inkWidgetReference();
+			StandaloneButton = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

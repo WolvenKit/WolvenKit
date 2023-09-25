@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public RadioHotkeyController()
 		{
+			HotkeyBackground = new inkImageWidgetReference();
+			ButtonHint = new inkWidgetReference();
+			Restrictions = new();
+			DebugCommands = new();
+
 			PostConstruct();
 		}
 

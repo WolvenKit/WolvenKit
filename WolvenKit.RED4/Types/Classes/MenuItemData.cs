@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public MenuItemData()
 		{
+			MenuData = new MenuData { Identifier = -1, SubMenus = new() };
+
 			PostConstruct();
 		}
 

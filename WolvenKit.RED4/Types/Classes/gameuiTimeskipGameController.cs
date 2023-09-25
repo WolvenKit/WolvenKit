@@ -406,6 +406,39 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiTimeskipGameController()
 		{
+			CurrentTimeLabel = new inkTextWidgetReference();
+			TragetTimeLabel = new inkTextWidgetReference();
+			DiffTimeLabel = new inkTextWidgetReference();
+			RootContainerRef = new inkWidgetReference();
+			CurrentTimePointerRef = new inkWidgetReference();
+			TargetTimePointerRef = new inkWidgetReference();
+			TimeBarRef = new inkWidgetReference();
+			CircleGradientRef = new inkWidgetReference();
+			StartCircleGradientRef = new inkWidgetReference();
+			MouseHitTestRef = new inkWidgetReference();
+			DayIconRef = new inkWidgetReference();
+			NightIconRef = new inkWidgetReference();
+			MorningIconRef = new inkWidgetReference();
+			EveningIconRef = new inkWidgetReference();
+			WeatherIcon = new inkImageWidgetReference();
+			IntoAnimation = "intro";
+			OutroCancelAnimation = "outro_cancel";
+			OutroFinishedAnimation = "outro_finish";
+			ProgressAnimation = "progress";
+			FinishingAnimation = "finishing";
+			LoopAnimationMarkerFrom = "loop_from";
+			LoopAnimationMarkerTo = "loop_to";
+			MouseHoverOverAnimation = "mouseHoverOver";
+			MouseHoverOutAnimation = "mouseHoverOut";
+			GameInstance = new ScriptGameInstance();
+			CurrentTime = new GameTime();
+			HoursToSkip = 1;
+			AxisInputCache = new Vector2();
+			Radius = 310.000000F;
+			AxisInputThreshold = 0.000500F;
+			AnimationDurationMin = 3.000000F;
+			AnimationDurationMax = 6.000000F;
+
 			PostConstruct();
 		}
 

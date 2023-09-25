@@ -86,6 +86,16 @@ namespace WolvenKit.RED4.Types
 
 		public MessangerItemRenderer()
 		{
+			Image = new inkImageWidgetReference();
+			Container = new inkWidgetReference();
+			MessageBubbleBG = new inkImageWidgetReference();
+			MessageBubbleFG = new inkImageWidgetReference();
+			ReplyBubbleBG = new inkImageWidgetReference();
+			ReplyBubbleFG = new inkImageWidgetReference();
+			StateMessage = "Default";
+			StatePlayerReply = "Player";
+			StateQuestReply = "Quest";
+
 			PostConstruct();
 		}
 

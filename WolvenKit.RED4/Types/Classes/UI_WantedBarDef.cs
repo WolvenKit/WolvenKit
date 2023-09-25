@@ -46,6 +46,12 @@ namespace WolvenKit.RED4.Types
 
 		public UI_WantedBarDef()
 		{
+			CurrentWantedLevel = new gamebbScriptID_Int32();
+			DeescalationStages = new gamebbScriptID_Int32();
+			CurrentChaseState = new gamebbScriptID_CName();
+			BlinkingStarsDurationTime = new gamebbScriptID_Float();
+			IsDogtown = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

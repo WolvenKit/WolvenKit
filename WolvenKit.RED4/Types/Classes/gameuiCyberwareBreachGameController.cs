@@ -235,6 +235,23 @@ namespace WolvenKit.RED4.Types
 			MaxHealth = 1.000000F;
 			CurrentHealth = 1.000000F;
 			LastHealth = 1.000000F;
+			CurrentSway = new Vector2();
+			BreachCanvasWRef = new inkWidgetReference();
+			StrokeFgRef = new inkBorderWidgetReference();
+			StrokeBgRef = new inkBorderWidgetReference();
+			WaveStrokeRef = new inkBorderWidgetReference();
+			FillRef = new inkWidgetReference();
+			TextScaleWidgetRef = new inkCompoundWidgetReference();
+			XTextRef = new inkTextWidgetReference();
+			YTextRef = new inkTextWidgetReference();
+			ErrorTextRef = new inkTextWidgetReference();
+			StrokeThicknessPercent = 0.020000F;
+			MinThickness = 4.000000F;
+			MaxThickness = 6.000000F;
+			MinTextScale = 0.100000F;
+			MaxTextScale = 1.000000F;
+			MaxRadius = 0.075000F;
+			MinRadiusForFluff = 0.018000F;
 
 			PostConstruct();
 		}

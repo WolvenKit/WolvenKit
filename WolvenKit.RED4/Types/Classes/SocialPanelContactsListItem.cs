@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public SocialPanelContactsListItem()
 		{
+			Label = new inkTextWidgetReference();
+			ContactInfo = new SocialPanelContactInfo();
+
 			PostConstruct();
 		}
 

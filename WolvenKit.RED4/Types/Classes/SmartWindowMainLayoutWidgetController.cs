@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public SmartWindowMainLayoutWidgetController()
 		{
+			MenuMailsSlot = new inkWidgetReference();
+			MenuFilesSlot = new inkWidgetReference();
+			MenuNewsFeedSlot = new inkWidgetReference();
+			MenuDevicesSlot = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

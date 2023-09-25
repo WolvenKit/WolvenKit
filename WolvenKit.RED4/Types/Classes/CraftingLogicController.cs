@@ -126,6 +126,14 @@ namespace WolvenKit.RED4.Types
 
 		public CraftingLogicController()
 		{
+			MaxIngredientCount = 5;
+			IngredientsWeaponContainer = new inkCompoundWidgetReference();
+			ItemPreviewContainer = new inkWidgetReference();
+			WeaponPreviewContainer = new inkWidgetReference();
+			GarmentPreviewContainer = new inkWidgetReference();
+			PerkNotificationContainer = new inkWidgetReference();
+			PerkNotificationText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

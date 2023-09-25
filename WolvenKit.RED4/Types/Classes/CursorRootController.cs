@@ -46,6 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public CursorRootController()
 		{
+			MainCursor = new inkWidgetReference();
+			CursorPattern = new inkWidgetReference();
+			ProgressBar = new inkWidgetReference();
+			ProgressBarFrame = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

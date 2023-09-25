@@ -118,6 +118,14 @@ namespace WolvenKit.RED4.Types
 
 		public AnimatedListItemController()
 		{
+			AnimOutName = "MenuButtonFadeOut";
+			AnimPulseName = "MenuButtonPulse";
+			AnimTargetHover = new inkWidgetReference();
+			AnimTargetPulse = new inkWidgetReference();
+			NormalRootOpacity = 1.000000F;
+			HoverRootOpacity = 1.000000F;
+			AnimPulseOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

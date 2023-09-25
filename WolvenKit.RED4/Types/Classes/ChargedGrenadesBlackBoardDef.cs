@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public ChargedGrenadesBlackBoardDef()
 		{
+			CurentGrenadeCharges = new gamebbScriptID_Int32();
+			MaxGrenadeCharges = new gamebbScriptID_Int32();
+			RechargeGoingOn = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

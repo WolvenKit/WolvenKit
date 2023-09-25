@@ -62,6 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public QuestDetailsObjectiveController()
 		{
+			ObjectiveName = new inkTextWidgetReference();
+			TrackingMarker = new inkWidgetReference();
+			Root = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

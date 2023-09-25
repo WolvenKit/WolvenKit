@@ -310,6 +310,13 @@ namespace WolvenKit.RED4.Types
 			WorldGeometryContainer = new inkCanvasWidgetReference();
 			WorldGeometryCache = new inkCacheWidgetReference();
 			TimeDisplayWidget = new inkCompoundWidgetReference();
+			LocationTextWidget = new inkTextWidgetReference();
+			FluffText1 = new inkTextWidgetReference();
+			SecurityAreaVignetteWidget = new inkWidgetReference();
+			SecurityAreaText = new inkTextWidgetReference();
+			CombatModeHighlight = new inkWidgetReference();
+			CourierTimerContainer = new inkWidgetReference();
+			CourierTimerText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

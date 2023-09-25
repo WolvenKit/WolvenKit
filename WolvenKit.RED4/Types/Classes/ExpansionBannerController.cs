@@ -62,6 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public ExpansionBannerController()
 		{
+			StatusTextRef = new inkTextWidgetReference();
+			InputHintRef = new inkWidgetReference();
+			IndicatorRef = new inkWidgetReference();
+			ErrorPanelRef = new inkWidgetReference();
+			ErrorIconRef = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

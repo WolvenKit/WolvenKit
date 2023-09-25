@@ -70,6 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public CodexPopupGameController()
 		{
+			EntryViewRef = new inkCompoundWidgetReference();
+			CharacterEntryViewRef = new inkCompoundWidgetReference();
+			ImageViewRef = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

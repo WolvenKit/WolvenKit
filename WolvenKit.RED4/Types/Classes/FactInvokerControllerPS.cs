@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public FactInvokerControllerPS()
 		{
+			FactDataEntries = new();
+			Passwords = new();
+
 			PostConstruct();
 		}
 

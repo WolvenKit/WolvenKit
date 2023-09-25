@@ -86,6 +86,9 @@ namespace WolvenKit.RED4.Types
 
 		public UploadFromNPCToPlayerListener()
 		{
+			NpcSquad = new();
+			VariantHud = new HUDProgressBarData();
+
 			PostConstruct();
 		}
 

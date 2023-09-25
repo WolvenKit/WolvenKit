@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public NewItemTooltipAttachmentEntryController()
 		{
+			Text = new inkTextWidgetReference();
+			AttunementContainer = new inkWidgetReference();
+			AttunementText = new inkTextWidgetReference();
+			AttunementIcon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -262,6 +262,21 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneMessagePopupGameController()
 		{
+			Content = new inkWidgetReference();
+			Title = new inkTextWidgetReference();
+			AvatarImage = new inkImageWidgetReference();
+			MenuBackgrouns = new inkWidgetReference();
+			HintsContainer = new inkWidgetReference();
+			HintTrack = new inkWidgetReference();
+			HintClose = new inkWidgetReference();
+			HintReply = new inkWidgetReference();
+			ScrollReply = new inkWidgetReference();
+			HintMessenger = new inkWidgetReference();
+			HintCall = new inkWidgetReference();
+			ScrollSlider = new inkWidgetReference();
+			ContactsPath = new inkWidgetReference();
+			MessagesPath = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public ButtonPlaySoundView()
 		{
+			SoundPrefix = "Button";
+			PressSoundName = "OnPress";
+
 			PostConstruct();
 		}
 

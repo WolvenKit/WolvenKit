@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public ProgramEntry()
 		{
+			ItemID = new gameItemID();
+			Abilities = new();
+
 			PostConstruct();
 		}
 

@@ -102,6 +102,12 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneDialerSelectionController()
 		{
+			LeftArrowWidget = new inkWidgetReference();
+			RightArrowWidget = new inkWidgetReference();
+			Container = new inkCompoundWidgetReference();
+			Line = new inkWidgetReference();
+			WidgetsControllers = new();
+
 			PostConstruct();
 		}
 

@@ -134,6 +134,16 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceButtonLogicControllerBase()
 		{
+			TargetWidgetRef = new inkWidgetReference();
+			DisplayNameWidget = new inkTextWidgetReference();
+			IconWidget = new inkImageWidgetReference();
+			ToggleSwitchWidget = new inkImageWidgetReference();
+			SizeProviderWidget = new inkWidgetReference();
+			SelectionMarkerWidget = new inkWidgetReference();
+			DefaultStyle = new redResourceReferenceScriptToken();
+			SelectionStyle = new redResourceReferenceScriptToken();
+			SoundData = new SSoundData { WidgetAudioName = "Button" };
+
 			PostConstruct();
 		}
 

@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public DropPointSystem()
 		{
+			Packages = new();
+			Mappins = new();
+			IsEnabled = true;
+			DropPointSystemLocks = new();
+
 			PostConstruct();
 		}
 

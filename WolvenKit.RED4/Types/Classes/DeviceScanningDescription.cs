@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceScanningDescription()
 		{
+			DeviceCustomDescriptions = new();
+			DeviceRoleActionsDescriptions = new();
+
 			PostConstruct();
 		}
 

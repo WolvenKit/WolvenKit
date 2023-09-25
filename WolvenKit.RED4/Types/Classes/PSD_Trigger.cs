@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public PSD_Trigger()
 		{
+			ClassName = "PSD_DetectorPS";
+
 			PostConstruct();
 		}
 

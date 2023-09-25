@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public NewLocationNotification()
 		{
+			DistrictName = new inkTextWidgetReference();
+			DistrictIcon = new inkImageWidgetReference();
+			DistrictFluffIcon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

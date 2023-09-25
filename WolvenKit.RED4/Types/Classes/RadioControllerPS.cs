@@ -22,6 +22,11 @@ namespace WolvenKit.RED4.Types
 
 		public RadioControllerPS()
 		{
+			DeviceName = "LocKey#96";
+			TweakDBRecord = "Devices.Radio";
+			TweakDBDescriptionRecord = 109081313862;
+			RadioSetup = new RadioSetup { HithPitchNoiseVFX = new gameFxResource(), HithPitchNoiseRadius = 5.000000F, AoeDamageVFX = new gameFxResource() };
+
 			PostConstruct();
 		}
 

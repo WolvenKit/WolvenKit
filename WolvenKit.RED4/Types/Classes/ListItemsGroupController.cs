@@ -78,6 +78,11 @@ namespace WolvenKit.RED4.Types
 
 		public ListItemsGroupController()
 		{
+			MenuList = new inkCompoundWidgetReference();
+			FoldArrowRef = new inkWidgetReference();
+			FoldoutButton = new inkWidgetReference();
+			Data = new();
+
 			PostConstruct();
 		}
 

@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public SmokeMachine()
 		{
+			ControllerTypeName = "SmokeMachineController";
+			Entities = new();
+
 			PostConstruct();
 		}
 

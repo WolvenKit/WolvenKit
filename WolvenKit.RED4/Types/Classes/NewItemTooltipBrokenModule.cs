@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public NewItemTooltipBrokenModule()
 		{
+			DescriptionText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

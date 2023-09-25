@@ -102,6 +102,13 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerksAttributeButtonController()
 		{
+			AttributePointsButton = new inkWidgetReference();
+			AttributeText = new inkTextWidgetReference();
+			CurrentText = new inkTextWidgetReference();
+			TextGhost = new inkTextWidgetReference();
+			RequirementText = new inkTextWidgetReference();
+			ButtonWidget = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

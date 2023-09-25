@@ -70,6 +70,11 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneMessageNotificationsGameController()
 		{
+			MaxMessageSize = 60;
+			Title = new inkTextWidgetReference();
+			Text = new inkTextWidgetReference();
+			ActionText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

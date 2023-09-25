@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public VendorGameItemData()
 		{
+			ItemStack = new gameSItemStack { ItemID = new gameItemID(), Quantity = 1, IsAvailable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, DynamicTags = new() };
+
 			PostConstruct();
 		}
 

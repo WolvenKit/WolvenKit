@@ -22,6 +22,10 @@ namespace WolvenKit.RED4.Types
 
 		public DestructibleMasterLight()
 		{
+			ControllerTypeName = "DestructibleMasterLightController";
+			LightComponents = new();
+			LightDefinitions = new();
+
 			PostConstruct();
 		}
 

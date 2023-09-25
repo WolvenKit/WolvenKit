@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.Types
 			FilesMenu = true;
 			SystemMenu = true;
 			InternetMenu = true;
-			StylePreset = 135462153520;
+			StylePreset = "ComputerUIPresets.DefaultPreset";
 			MailsStructure = new();
 			FilesStructure = new();
 			NewsFeed = new();

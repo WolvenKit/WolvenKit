@@ -166,6 +166,10 @@ namespace WolvenKit.RED4.Types
 
 		public StatPoolBasedStatusEffectEffector()
 		{
+			GameInstance = new ScriptGameInstance();
+			OwnerID = new entEntityID();
+			OwnerWeaponID = new entEntityID();
+
 			PostConstruct();
 		}
 

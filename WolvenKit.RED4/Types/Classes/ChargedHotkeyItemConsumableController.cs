@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public ChargedHotkeyItemConsumableController()
 		{
+			C_statPool = Enums.gamedataStatPoolType.HealingItemsCharges;
+
 			PostConstruct();
 		}
 

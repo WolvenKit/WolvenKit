@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public DropPointMappinRegistrationData()
 		{
+			OwnerID = new entEntityID();
+			Position = new Vector4();
+			MapinID = new gameNewMappinID();
+			TrackingAlternativeMappinID = new gameNewMappinID();
+
 			PostConstruct();
 		}
 

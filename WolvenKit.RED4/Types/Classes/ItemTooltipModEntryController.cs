@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipModEntryController()
 		{
+			ModName = new inkTextWidgetReference();
+			AttunementContainer = new inkWidgetReference();
+			AttunementText = new inkTextWidgetReference();
+			AttunementIcon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -230,6 +230,25 @@ namespace WolvenKit.RED4.Types
 
 		public HudPhoneAvatarController()
 		{
+			ContactAvatar = new inkImageWidgetReference();
+			HolocallRenderTexture = new inkImageWidgetReference();
+			SignalRangeIcon = new inkImageWidgetReference();
+			ContactName = new inkTextWidgetReference();
+			StatusText = new inkTextWidgetReference();
+			WaveformPlaceholder = new inkCanvasWidgetReference();
+			HolocallHolder = new inkFlexWidgetReference();
+			UnknownAvatarName = "Unknown";
+			DefaultPortraitColor = new CColor();
+			DefaultImageSize = new Vector2();
+			LoopAnimationName = "avatarHoloCallLoopAnimation";
+			ShowingAnimationName = "portraitIntro";
+			HidingAnimationName = "portraitOutro";
+			AudiocallShowingAnimationName = "avatarAudiocallShowingAnimation";
+			AudiocallHidingAnimationName = "avatarAudiocallHidingAnimation";
+			HolocallShowingAnimationName = "avatarHolocallShowingAnimation";
+			HolocallHidingAnimationName = "avatarHolocallHidingAnimation";
+			Holder = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

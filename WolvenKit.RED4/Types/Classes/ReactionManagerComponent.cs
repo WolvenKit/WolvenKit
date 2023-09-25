@@ -694,6 +694,43 @@ namespace WolvenKit.RED4.Types
 
 		public ReactionManagerComponent()
 		{
+			StimuliCache = new();
+			ReactionCache = new();
+			DesiredFearPhase = -1;
+			NPCRadius = 0.300000F;
+			BumpTriggerDistanceBufferMounted = 1.000000F;
+			BumpTriggerDistanceBufferCrouched = -0.110000F;
+			DelayReactionEventID = new gameDelayID();
+			Delay = new Vector2();
+			DelayDetectionEventID = new gameDelayID();
+			DelayStimEventID = new gameDelayID();
+			ResetReactionDataID = new gameDelayID();
+			CallingPoliceID = new gameDelayID();
+			IgnoreList = new();
+			InvestigationList = new();
+			OvefloodCooldown = 1.000000F;
+			StanceState = Enums.gamedataNPCStanceState.Stand;
+			HighLevelState = Enums.gamedataNPCHighLevelState.Relaxed;
+			EnvironmentalHazards = new();
+			EnvironmentalHazardsDelayIDs = new();
+			Owner_id = new entEntityID();
+			Personalities = new();
+			FearToIdleDistance = new Vector2();
+			ExitWorkspotAim = new Vector2();
+			DisturbComfortZoneEventId = new gameDelayID();
+			CheckComfortZoneEventId = new gameDelayID();
+			SpreadingFearEventId = new gameDelayID();
+			ProximityLookatEventId = new gameDelayID();
+			ResetFacialEventId = new gameDelayID();
+			ExitWorkspotSequenceEventId = new gameDelayID();
+			ExitFearInVehicleEventId = new gameDelayID();
+			FastWalk = true;
+			CreateThreshold = true;
+			DisturbComfortZoneAggressiveEventId = new gameDelayID();
+			DeadBodyInvestigators = new();
+			DeadBodyStartingPosition = new Vector4();
+			GracePeriodDuration = 5.000000F;
+
 			PostConstruct();
 		}
 

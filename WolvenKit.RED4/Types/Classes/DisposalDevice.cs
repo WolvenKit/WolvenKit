@@ -166,6 +166,20 @@ namespace WolvenKit.RED4.Types
 
 		public DisposalDevice()
 		{
+			ControllerTypeName = "DisposalDeviceController";
+			SideTriggerNames = new();
+			TriggerComponents = new();
+			CurrentDisposalSyncName = "disposalSyncSide1";
+			CurrentKillSyncName = "killSyncSide1";
+			PhysicalMeshNames = new();
+			PhysicalMeshes = new();
+			LethalTakedownKillDelay = 0.200000F;
+			LethalTakedownComponentNames = new();
+			LethalTakedownComponents = new();
+			DistractionSoundName = "v_car_thorton_galena_horn";
+			DistractionSoundDuration = 5.000000F;
+			WorkspotDuration = 0.010000F;
+
 			PostConstruct();
 		}
 

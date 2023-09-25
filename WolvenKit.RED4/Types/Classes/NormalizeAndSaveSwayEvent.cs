@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public NormalizeAndSaveSwayEvent()
 		{
+			Sway = new Vector2();
+
 			PostConstruct();
 		}
 

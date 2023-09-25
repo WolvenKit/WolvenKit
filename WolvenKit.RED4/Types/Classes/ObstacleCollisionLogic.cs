@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public ObstacleCollisionLogic()
 		{
+			InvincibityBonusTime = 0.800000F;
+
 			PostConstruct();
 		}
 

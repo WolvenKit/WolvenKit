@@ -70,6 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public TooltipAnimationController()
 		{
+			TooltipContainer = new inkWidgetReference();
+			AxisDataThreshold = 0.400000F;
+			MouseDataThreshold = 0.900000F;
+
 			PostConstruct();
 		}
 

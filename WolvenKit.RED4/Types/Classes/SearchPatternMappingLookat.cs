@@ -22,6 +22,13 @@ namespace WolvenKit.RED4.Types
 
 		public SearchPatternMappingLookat()
 		{
+			LookatTarget = new Vector4();
+			CurrentLookatTarget = new Vector4();
+			CurrentTarget = new Vector4();
+			LastTarget = new Vector4();
+			SideHorizontal = 1;
+			SideVertical = 1;
+
 			PostConstruct();
 		}
 

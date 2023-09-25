@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public ItemAddedNotification()
 		{
+			ItemImage = new inkImageWidgetReference();
+			RarityBar = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

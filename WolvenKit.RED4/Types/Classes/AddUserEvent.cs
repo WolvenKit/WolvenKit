@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AddUserEvent()
 		{
+			UserEntry = new SecuritySystemClearanceEntry { User = new entEntityID() };
+
 			PostConstruct();
 		}
 

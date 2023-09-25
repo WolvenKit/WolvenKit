@@ -70,6 +70,15 @@ namespace WolvenKit.RED4.Types
 
 		public CoverActionDataDef()
 		{
+			CoverActionStateId = new gamebbScriptID_Int32();
+			PlayerNearValidEdge = new gamebbScriptID_Bool();
+			DebugLeaning = new gamebbScriptID_Bool();
+			DebugAutoLeaning = new gamebbScriptID_Bool();
+			DebugDpadLeaning = new gamebbScriptID_Bool();
+			DebugLsLeaning = new gamebbScriptID_Bool();
+			DebugStagesLeaning = new gamebbScriptID_Bool();
+			DebugAdsLeaning = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

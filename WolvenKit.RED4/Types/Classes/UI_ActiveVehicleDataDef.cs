@@ -78,6 +78,16 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ActiveVehicleDataDef()
 		{
+			VehPlayerStateData = new gamebbScriptID_Variant();
+			IsPlayerMounted = new gamebbScriptID_Bool();
+			IsTPPCameraOn = new gamebbScriptID_Bool();
+			PositionInRace = new gamebbScriptID_Int32();
+			IsFPPRearviewCameraActivated = new gamebbScriptID_Bool();
+			RemoteControlledVehicleData = new gamebbScriptID_Variant();
+			MountedWeaponsTargets = new gamebbScriptID_Variant();
+			MountedMissileLauncherAmmo = new gamebbScriptID_Uint32();
+			MountedPowerWeaponAmmo = new gamebbScriptID_Uint32();
+
 			PostConstruct();
 		}
 

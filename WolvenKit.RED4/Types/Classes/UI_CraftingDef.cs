@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public UI_CraftingDef()
 		{
+			LastCommand = new gamebbScriptID_Variant();
+			LastItem = new gamebbScriptID_Variant();
+			LastIngredients = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

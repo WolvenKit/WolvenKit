@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public LevelUpdateEvent()
 		{
+			DevPoints = new();
+
 			PostConstruct();
 		}
 

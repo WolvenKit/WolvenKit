@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public IncomingCallLogicController()
 		{
+			ContactNameWidget = new inkTextWidgetReference();
+			ButtonHint = new inkWidgetReference();
+			Avatar = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

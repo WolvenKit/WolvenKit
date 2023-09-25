@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public TvDeviceWidgetCustomData()
 		{
+			VideoPath = new redResourceReferenceScriptToken();
+
 			PostConstruct();
 		}
 

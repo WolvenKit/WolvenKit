@@ -182,6 +182,14 @@ namespace WolvenKit.RED4.Types
 
 		public HudPhoneGameController()
 		{
+			AvatarControllerRef = new inkWidgetReference();
+			Holder = new inkWidgetReference();
+			CurrentCallInformation = new questPhoneCallInformation();
+			GameplayRestrictions = new();
+			DelayedCallbackId = new gameDelayID();
+			DelayedTimeoutCallbackId = new gameDelayID();
+			TimeoutPeroid = 8.000000F;
+
 			PostConstruct();
 		}
 

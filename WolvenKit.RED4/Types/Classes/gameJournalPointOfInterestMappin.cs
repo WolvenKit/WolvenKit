@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			JournalEntryOverrideDataList = new();
 			DynamicEntityRef = new gameEntityReference { Names = new() };
-			MappinData = new gamemappinsPointOfInterestMappinData { Active = true, SlotName = "UI_Interaction", SlotOffset = new Vector3 { Z = 0.500000F }, DynamicMappinRadius = 30.000000F, StaticMappinDef = 196254225639, DynamicMappinDef = 201635944716 };
+			MappinData = new gamemappinsPointOfInterestMappinData { Active = true, SlotName = "UI_Interaction", SlotOffset = new Vector3 { Z = 0.500000F }, DynamicMappinRadius = 30.000000F, StaticMappinDef = "Mappins.StaticPointOfInterestMappinDefinition", DynamicMappinDef = "Mappins.DynamicPointOfInterestMappinDefinition" };
 			Offset = new Vector3();
 
 			PostConstruct();

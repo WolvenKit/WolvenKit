@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public SpeedIndicatorIconsManager()
 		{
+			SpeedIndicator = new inkImageWidgetReference();
+			MirroredSpeedIndicator = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -142,6 +142,12 @@ namespace WolvenKit.RED4.Types
 
 		public ExplosiveDevice()
 		{
+			ControllerTypeName = "ExplosiveDeviceController";
+			IndexesOfComponentsToOFF = new();
+			SpawnedFxInstancesToKill = new();
+			ComponentsON = new();
+			ComponentsOFF = new();
+
 			PostConstruct();
 		}
 

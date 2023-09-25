@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public ReflexesMasterPerk1Effector()
 		{
+			DamageHistory = new();
+			LastTargetID = new entEntityID();
+
 			PostConstruct();
 		}
 

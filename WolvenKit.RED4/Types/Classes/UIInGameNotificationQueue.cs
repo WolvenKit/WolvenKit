@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public UIInGameNotificationQueue()
 		{
+			Duration = 5.000000F;
+
 			PostConstruct();
 		}
 

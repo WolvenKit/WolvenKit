@@ -70,6 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public ChargeIndicatorGameController()
 		{
+			ItemIcon = new inkImageWidgetReference();
+			C_fullChargeOpacity = 0.400000F;
+
 			PostConstruct();
 		}
 

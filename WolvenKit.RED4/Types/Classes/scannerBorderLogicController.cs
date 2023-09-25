@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public scannerBorderLogicController()
 		{
+			BraindanceSetVisible = new();
+			BraindanceSetHidden = new();
+
 			PostConstruct();
 		}
 

@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipClothingInfoModule()
 		{
+			AllocationCostsWrapper = new inkCompoundWidgetReference();
+			ArmorContainer = new inkWidgetReference();
+			Value = new inkTextWidgetReference();
+			Arrow = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

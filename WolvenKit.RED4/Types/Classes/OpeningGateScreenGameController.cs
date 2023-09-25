@@ -214,6 +214,24 @@ namespace WolvenKit.RED4.Types
 
 		public OpeningGateScreenGameController()
 		{
+			SystemConsole = new inkWidgetReference();
+			GateScheme = new inkWidgetReference();
+			BackButton = new inkWidgetReference();
+			IdleAnimName = "idle_state";
+			LoopAnimName = "loop_state";
+			FailureAnimName = "failure_state";
+			SuccessAnimName = "success_state";
+			FailurePopupIntroAnimName = "popup2_intro";
+			SuccessPopupIntroAnimName = "popup1_intro";
+			FailurePopupAnimName = "popup2_loop";
+			SuccessPopupAnimName = "popup1_loop";
+			GateIsOpenedFact = "q305_open_the_gate";
+			GateChainBeginningFact = "Q305_gate_chain_beginning";
+			GotoLoopDelay = 2.500000F;
+			GoBackDelay = 6.000000F;
+			SystemsStatus = new();
+			PhasesCount = 3;
+
 			PostConstruct();
 		}
 

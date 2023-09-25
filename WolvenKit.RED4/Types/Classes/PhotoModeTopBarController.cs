@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModeTopBarController()
 		{
+			PhotoModeTogglesArray = new();
+
 			PostConstruct();
 		}
 

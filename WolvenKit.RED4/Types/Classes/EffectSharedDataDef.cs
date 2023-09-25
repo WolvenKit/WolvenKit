@@ -526,6 +526,72 @@ namespace WolvenKit.RED4.Types
 
 		public EffectSharedDataDef()
 		{
+			AttackStatModList = new gamebbScriptID_Variant();
+			Box = new gamebbScriptID_Vector4();
+			Charge = new gamebbScriptID_Float();
+			Duration = new gamebbScriptID_Float();
+			HitCooldown = new gamebbScriptID_Float();
+			EffectName = new gamebbScriptID_String();
+			Entity = new gamebbScriptID_EntityPtr();
+			Forward = new gamebbScriptID_Vector4();
+			FxPackage = new gamebbScriptID_Variant();
+			AttackData = new gamebbScriptID_Variant();
+			InfiniteDuration = new gamebbScriptID_Bool();
+			PlayerOwnedWeapon = new gamebbScriptID_Bool();
+			Position = new gamebbScriptID_Vector4();
+			MuzzlePosition = new gamebbScriptID_Vector4();
+			ProjectileHitEvent = new gamebbScriptID_Variant();
+			Radius = new gamebbScriptID_Float();
+			Range = new gamebbScriptID_Float();
+			Height = new gamebbScriptID_Float();
+			InitRange = new gamebbScriptID_Float();
+			Width = new gamebbScriptID_Float();
+			AxisConstraints = new gamebbScriptID_Vector4();
+			RenderMaterialOverride = new gamebbScriptID_Bool();
+			ClearMaterialOverlayOnDetach = new gamebbScriptID_Bool();
+			Rotation = new gamebbScriptID_Quaternion();
+			MinRayAngleDiff = new gamebbScriptID_Float();
+			StatType = new gamebbScriptID_Int32();
+			StimuliEvent = new gamebbScriptID_Variant();
+			StimuliRaycastTest = new gamebbScriptID_Bool();
+			StimType = new gamebbScriptID_Int32();
+			Value = new gamebbScriptID_Float();
+			Flags = new gamebbScriptID_Variant();
+			Attack = new gamebbScriptID_Variant();
+			AttackId = new gamebbScriptID_Variant();
+			AttackNumber = new gamebbScriptID_Int32();
+			ImpactOrientationSlot = new gamebbScriptID_CName();
+			VfxOffset = new gamebbScriptID_Vector4();
+			DisableVfx = new gamebbScriptID_Bool();
+			EnableImpulseFalloff = new gamebbScriptID_Bool();
+			ImpulseFalloffFactor = new gamebbScriptID_Float();
+			StatusEffect = new gamebbScriptID_Variant();
+			Angle = new gamebbScriptID_Float();
+			Fallback_weaponPierce = new gamebbScriptID_Bool();
+			Fallback_weaponPierceChargeLevel = new gamebbScriptID_Float();
+			RaycastEnd = new gamebbScriptID_Vector4();
+			MaxPathLength = new gamebbScriptID_Float();
+			EffectorRecordName = new gamebbScriptID_String();
+			Targets = new gamebbScriptID_Variant();
+			HighlightType = new gamebbScriptID_Int32();
+			OutlineType = new gamebbScriptID_Int32();
+			HighlightPriority = new gamebbScriptID_Int32();
+			FxResource = new gamebbScriptID_Variant();
+			DotCycleDuration = new gamebbScriptID_Float();
+			DotLastApplicationTime = new gamebbScriptID_Float();
+			Enable = new gamebbScriptID_Bool();
+			SlotName = new gamebbScriptID_CName();
+			TargetComponent = new gamebbScriptID_Variant();
+			MeleeCleave = new gamebbScriptID_Bool();
+			InTPP = new gamebbScriptID_Bool();
+			TppScale = new gamebbScriptID_Float();
+			HighlightedTargets = new gamebbScriptID_Variant();
+			ForceVisionAppearanceData = new gamebbScriptID_Variant();
+			TickRateOverride = new gamebbScriptID_Float();
+			RandRoll = new gamebbScriptID_Float();
+			IgnoreMountedVehicleCollision = new gamebbScriptID_Bool();
+			DebugBool = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

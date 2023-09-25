@@ -142,6 +142,21 @@ namespace WolvenKit.RED4.Types
 
 		public QuestItemController()
 		{
+			QuestTitle = new inkTextWidgetReference();
+			QuestStatus = new inkTextWidgetReference();
+			QuestIcon = new inkImageWidgetReference();
+			TrackedIcon = new inkImageWidgetReference();
+			NewIcon = new inkImageWidgetReference();
+			FrameBackground_On = new inkImageWidgetReference();
+			FrameBackground_Off = new inkImageWidgetReference();
+			FrameFluff_On = new inkImageWidgetReference();
+			FrameFluff_Off = new inkImageWidgetReference();
+			Folder_On = new inkImageWidgetReference();
+			Folder_Off = new inkImageWidgetReference();
+			StyleRoot = new inkWidgetReference();
+			DefaultStateName = "Default";
+			MarkedStateName = "Marked";
+
 			PostConstruct();
 		}
 

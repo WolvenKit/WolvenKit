@@ -150,6 +150,20 @@ namespace WolvenKit.RED4.Types
 
 		public LevelUpNotification()
 		{
+			LevelUpLabelText = new inkTextWidgetReference();
+			LevelUpValue = new inkTextWidgetReference();
+			LevelUpHolder = new inkWidgetReference();
+			LevelUpPreviousValue = new inkTextWidgetReference();
+			AttributePointsValue = new inkTextWidgetReference();
+			AttributePointsPreviousValue = new inkTextWidgetReference();
+			AttributePointsHolder = new inkWidgetReference();
+			PerkPointsValue = new inkTextWidgetReference();
+			PerkPreviousValue = new inkTextWidgetReference();
+			SkillIcon = new inkImageWidgetReference();
+			SkillIconShadow = new inkImageWidgetReference();
+			PassiveBonusRewardLabel = new inkTextWidgetReference();
+			PassiveBonusReward = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -62,6 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiHUDGameController()
 		{
+			ShowAnimationName = "unfold";
+			HideAnimationName = "fold";
+
 			PostConstruct();
 		}
 

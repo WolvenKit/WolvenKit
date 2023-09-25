@@ -414,6 +414,20 @@ namespace WolvenKit.RED4.Types
 
 		public Device()
 		{
+			ControllerTypeName = "ScriptableDeviceComponent";
+			ScreenDefinition = new SUIScreenDefinition();
+			IsUIdirty = true;
+			AdvanceInteractionStateResolveDelayID = new gameDelayID();
+			UpdateID = new gameDelayID();
+			DelayedUpdateDeviceStateID = new gameDelayID();
+			LastPingSourceID = new entEntityID();
+			NetworkGridBeamFX = new gameFxResource();
+			PersonalLinkFailsafeID = new gameDelayID();
+			NetworkGridBeamOffset = new Vector4();
+			AreaEffectsData = new();
+			AreaEffectsInFocusMode = new();
+			DebugOptions = new DebuggerProperties { LayerIDs = new() };
+
 			PostConstruct();
 		}
 

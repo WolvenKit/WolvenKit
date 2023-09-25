@@ -358,6 +358,27 @@ namespace WolvenKit.RED4.Types
 
 		public DialogChoiceLogicController()
 		{
+			InputViewRef = new inkWidgetReference();
+			VerticalLineWidget = new inkWidgetReference();
+			ActiveTextRef = new inkTextWidgetReference();
+			InActiveTextRootRef = new inkWidgetReference();
+			TextFlexRef = new inkWidgetReference();
+			SelectedBgRef = new inkWidgetReference();
+			SelectedBgRefJohnny = new inkWidgetReference();
+			CaptionHolder = new inkCompoundWidgetReference();
+			SecondaryCaptionHolder = new inkCompoundWidgetReference();
+			AnimationTime = 0.150000F;
+			AnimationSpeed = 500.000000F;
+			PhoneIcon = new inkWidgetReference();
+			TagWrapper = new inkWidgetReference();
+			TagSeparator = new inkWidgetReference();
+			TagTextRef = new inkTextWidgetReference();
+			CaptionControllers = new();
+			SecondaryCaptionControllers = new();
+			Type = new gameinteractionsChoiceTypeWrapper();
+			ControllerPromptLimit = 3;
+			FadingOptionEndTransparency = 0.100000F;
+
 			PostConstruct();
 		}
 

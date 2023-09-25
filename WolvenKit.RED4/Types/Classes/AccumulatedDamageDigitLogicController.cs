@@ -614,6 +614,43 @@ namespace WolvenKit.RED4.Types
 
 		public AccumulatedDamageDigitLogicController()
 		{
+			CritWidget = new inkTextWidgetReference();
+			HeadshotWidget = new inkTextWidgetReference();
+			ProjectionInterpolationOffset = new inkMargin();
+			ProjectionInterpolationOffsetTotal = new inkMargin();
+			AnimStickTargetOffset = new Vector4();
+			AnimTimeFadeIn = 0.100000F;
+			AnimTimeFadeOut = 0.400000F;
+			AnimBothTimeFadeIn = 0.100000F;
+			AnimBothTimeFadeOut = 0.250000F;
+			AnimTimeDelay = 1.300000F;
+			AnimBothTimeDelay = 1.750000F;
+			AnimStartHeight = -80.000000F;
+			AnimEndHeight = -140.000000F;
+			AnimPopScale = 1.500000F;
+			AnimPopEndScale = 1.200000F;
+			AnimPopInDuration = 0.050000F;
+			AnimPopOutDuration = 0.150000F;
+			AnimBothOffsetY = -50.000000F;
+			AnimBothStickingOffsetY = -105.000000F;
+			AnimTimeCritDelay = 1.300000F;
+			AnimBothTimeCritDelay = 1.750000F;
+			AnimTimeCritFade = 0.400000F;
+			AnimBothTimeCritFade = 0.250000F;
+			AnimMaxScreenDistanceFromLast = 500.000000F;
+			AnimScreenInterpolationTime = 0.080000F;
+			AnimMinScreenDistanceFromLast = 60.000000F;
+			AnimStickTargetWorldZOffset = 0.500000F;
+			AnimStickingOffsetY = -85.000000F;
+			AnimDistanceModifierMinDistance = 7.000000F;
+			AnimDistanceModifierMaxDistance = 25.000000F;
+			AnimDistanceModifierMinValue = 0.600000F;
+			AnimDistanceModifierMaxValue = 1.000000F;
+			AnimDistanceHeightBias = 70.000000F;
+			AnimStickingDistanceHeightBias = 70.000000F;
+			AnimPositiveOpacity = 1.000000F;
+			AnimNegativeOpacity = 0.800000F;
+
 			PostConstruct();
 		}
 

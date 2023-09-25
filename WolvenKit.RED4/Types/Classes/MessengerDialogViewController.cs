@@ -198,6 +198,15 @@ namespace WolvenKit.RED4.Types
 
 		public MessengerDialogViewController()
 		{
+			MessagesList = new inkCompoundWidgetReference();
+			ChoicesList = new inkCompoundWidgetReference();
+			ReplayFluff = new inkCompoundWidgetReference();
+			TypingFluff = new inkWidgetReference();
+			TypingIndicator = new inkWidgetReference();
+			DelayedTypingCallbackId = new gameDelayID();
+			ReplyOptions = new();
+			Messages = new();
+
 			PostConstruct();
 		}
 

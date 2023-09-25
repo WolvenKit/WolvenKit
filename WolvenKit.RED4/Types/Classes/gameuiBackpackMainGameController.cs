@@ -446,6 +446,22 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiBackpackMainGameController()
 		{
+			CommonCraftingMaterialsGrid = new inkCompoundWidgetReference();
+			HackingCraftingMaterialsGrid = new inkCompoundWidgetReference();
+			FilterButtonsGrid = new inkCompoundWidgetReference();
+			VirtualItemsGrid = new inkVirtualCompoundWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			SortingButton = new inkWidgetReference();
+			SortingDropdown = new inkWidgetReference();
+			ItemsListScrollAreaContainer = new inkWidgetReference();
+			ItemNotificationRoot = new inkWidgetReference();
+			ItemTypeSorting = new();
+			ItemDropQueueItems = new();
+			ItemDropQueue = new();
+			CraftingMaterialsListItems = new();
+			FilterSpawnRequests = new();
+
 			PostConstruct();
 		}
 

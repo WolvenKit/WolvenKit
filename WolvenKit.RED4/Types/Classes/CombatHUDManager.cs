@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public CombatHUDManager()
 		{
+			Targets = new();
+			Interval = 1.000000F;
+
 			PostConstruct();
 		}
 

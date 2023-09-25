@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public MessageDescTooltip()
 		{
+			TitleWrapper = new inkWidgetReference();
+			DescriptionWrapper = new inkWidgetReference();
+			DescriptionLine = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

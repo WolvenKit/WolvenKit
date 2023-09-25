@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocPerkTooltip()
 		{
+			PerkName = new inkTextWidgetReference();
+			PerkIcon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

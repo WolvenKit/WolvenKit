@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationBodyMorphOptionColorPickerItem()
 		{
+			Background = new inkWidgetReference();
+			Icon = new inkImageWidgetReference();
+			Foreground = new inkWidgetReference();
+			SelectionMark = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

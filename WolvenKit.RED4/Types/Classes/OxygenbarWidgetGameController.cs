@@ -126,6 +126,12 @@ namespace WolvenKit.RED4.Types
 
 		public OxygenbarWidgetGameController()
 		{
+			OxygenControllerRef = new inkWidgetReference();
+			OxygenPercTextPath = new inkTextWidgetReference();
+			OxygenStatusTextPath = new inkTextWidgetReference();
+			CurrentOxygen = 100.000000F;
+			SceneTier = Enums.GameplayTier.Tier1_FullGameplay;
+
 			PostConstruct();
 		}
 

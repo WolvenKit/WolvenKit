@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public PoliceChaseParamsDef()
 		{
+			SearchAreaRadius = new gamebbScriptID_Float();
+			ChasePlayerDistance = new gamebbScriptID_Float();
+
 			PostConstruct();
 		}
 

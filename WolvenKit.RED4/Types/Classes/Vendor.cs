@@ -134,6 +134,13 @@ namespace WolvenKit.RED4.Types
 
 		public Vendor()
 		{
+			GameInstance = new ScriptGameInstance();
+			Stock = new();
+			NewItems = new();
+			PriceMultiplier = 1.000000F;
+			VendorPersistentID = new gamePersistentID();
+			PlayerHacks = new();
+
 			PostConstruct();
 		}
 

@@ -190,6 +190,21 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiTutorialPopupGameController()
 		{
+			ActionHint = new inkWidgetReference();
+			PopupPanel = new inkWidgetReference();
+			PopupFullscreenPanel = new inkWidgetReference();
+			PopupBlockingPanel = new inkWidgetReference();
+			PopupFullscreenRightPanel = new inkWidgetReference();
+			AnimIntroPopup = "into_popup";
+			AnimIntroPopupModal = "into_popup_modal";
+			AnimIntroFullscreenLeft = "into_fullscreen_left";
+			AnimIntroFullscreenRight = "into_fullscreen_right";
+			AnimOutroPopup = "outro_popup";
+			AnimOutroPopupModal = "outro_popup_modal";
+			AnimOutroFullscreenLeft = "outro_fullscreen_left";
+			AnimOutroFullscreenRight = "outro_fullscreen_right";
+			TargetPopup = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

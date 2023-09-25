@@ -203,6 +203,8 @@ namespace WolvenKit.RED4.Types
 			AutoGenerateBoundingSphere = true;
 			BoundingSphere = new Sphere { CenterRadius2 = new Vector4 { W = -1.000000F } };
 			CpoEnableMultiplePlayersScanningModifier = true;
+			Clues = new();
+			IsEntityVisible = true;
 
 			PostConstruct();
 		}

@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerName()
 		{
+			DisplayName = "LocKey#42211";
+
 			PostConstruct();
 		}
 

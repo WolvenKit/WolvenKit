@@ -598,6 +598,27 @@ namespace WolvenKit.RED4.Types
 
 		public SensorDevice()
 		{
+			Targets = new();
+			HPListenersList = new();
+			SensorDeviceState = Enums.ESensorDeviceStates.IDLE;
+			SensorWakeState = Enums.ESensorDeviceWakeState.NONE;
+			TargetingDelayEventID = new gameDelayID();
+			CurrentResolveDelayEventID = new gameDelayID();
+			TargetLostBySensesDelayEventID = new gameDelayID();
+			LightScanRefs = new();
+			LightAttitudeRefs = new();
+			LightInfoRefs = new();
+			LightColors = new LedColors_SensorDevice { Off = new ScriptLightSettings { Color = new CColor() }, Red = new ScriptLightSettings { Color = new CColor() }, Green = new ScriptLightSettings { Color = new CColor() }, Blue = new ScriptLightSettings { Color = new CColor() }, Yellow = new ScriptLightSettings { Color = new CColor() }, White = new ScriptLightSettings { Color = new CColor() } };
+			ScanFXSlotName = "laser";
+			DefaultSensePreset = "Senses.BasicCamera";
+			ElementsToHideOnTCS = new();
+			ElementsToHideOnTCSRefs = new();
+			PrevioustagKillList = new();
+			PlayIdleSoundOnIdle = true;
+			PlayerControlData = new PlayerControlDeviceData();
+			MinPitch = -70.000000F;
+			MaxPitch = 70.000000F;
+
 			PostConstruct();
 		}
 

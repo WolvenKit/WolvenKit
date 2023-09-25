@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public DemolitionSkillCheck()
 		{
+			SkillToCheck = Enums.EDeviceChallengeSkill.Athletics;
+
 			PostConstruct();
 		}
 

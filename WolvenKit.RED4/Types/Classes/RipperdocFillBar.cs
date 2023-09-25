@@ -54,6 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocFillBar()
 		{
+			MaxSize = new Vector2();
+
 			PostConstruct();
 		}
 

@@ -1062,6 +1062,27 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerPuppet()
 		{
+			DelayEventID = new gameDelayID();
+			ResetTickID = new gameDelayID();
+			CurrentPlayerWorkspotTags = new();
+			RemoteMappinId = new gameNewMappinID();
+			DataDamageUpdateID = new gameDelayID();
+			CallbackHandles = new();
+			EquipmentMeshOverlaySlots = new();
+			ControllingDeviceID = new entEntityID();
+			AttackingNetrunnerID = new entEntityID();
+			LastDmgInflicted = new EngineTime();
+			CritHealthRumbleDurationID = new gameDelayID();
+			OverlappedSecurityZones = new();
+			InterestingFacts = new InterestingFacts();
+			InterestingFactsListenersIds = new InterestingFactsListenersIds();
+			InterestingFactsListenersFunctions = new InterestingFactsListenersFunctions();
+			HandlingModifiers = new PlayerWeaponHandlingModifiers { RecoilGroup = new(), TimeOutGroup = new(), MultSwayGroup = new(), AddSwayGroup = new(), SpreadGroup = new() };
+			CachedGameplayRestrictions = new();
+			DelayEndGracePeriodAfterSpawnEventID = new gameDelayID();
+			FriendlyDevicesHostileToEnemies = new();
+			BossThatTargetsPlayer = new entEntityID();
+
 			PostConstruct();
 		}
 

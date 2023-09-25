@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public BaseActionOperations()
 		{
+			Components = new();
+			FxInstances = new();
+			BaseActionsOperations = new();
+
 			PostConstruct();
 		}
 

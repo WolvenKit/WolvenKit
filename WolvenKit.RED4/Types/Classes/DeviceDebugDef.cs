@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceDebugDef()
 		{
+			CurrentlyDebuggedDevice = new gamebbScriptID_CName();
+			DebuggedEntityIDAsString = new gamebbScriptID_String();
+
 			PostConstruct();
 		}
 

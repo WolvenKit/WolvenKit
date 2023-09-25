@@ -262,6 +262,16 @@ namespace WolvenKit.RED4.Types
 
 		public RadialWheelController()
 		{
+			RadialWeapons = new();
+			PointerRef = new inkWidgetReference();
+			ConsSlotCachedData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			GadgetSlotCachedData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			RegisteredInputHints = new();
+			ApplyInputHint = new gameuiInputHintData { HoldIndicationType = Enums.inkInputHintHoldIndicationType.Press };
+			CycleInputHintDataLeft = new gameuiInputHintData { HoldIndicationType = Enums.inkInputHintHoldIndicationType.Press };
+			CycleInputHintDataRight = new gameuiInputHintData { HoldIndicationType = Enums.inkInputHintHoldIndicationType.Press };
+			RadialMode = Enums.ERadialMode.ApplyActiveSlotAndConsumables;
+
 			PostConstruct();
 		}
 

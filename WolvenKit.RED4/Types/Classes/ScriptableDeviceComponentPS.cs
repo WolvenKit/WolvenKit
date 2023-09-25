@@ -678,6 +678,32 @@ namespace WolvenKit.RED4.Types
 
 		public ScriptableDeviceComponentPS()
 		{
+			DeviceState = Enums.EDeviceStatus.ON;
+			RevealDevicesGrid = true;
+			Masters = new();
+			FullDepth = true;
+			TweakDBRecord = "Devices.GenericDevice";
+			HasAuthorizationModule = true;
+			BackdoorBreachDifficulty = Enums.EGameplayChallengeLevel.EASY;
+			MinigameAttempt = 1;
+			DisassembleProperties = new DisassembleOptions();
+			FlatheadScavengeProperties = new SpiderbotScavengeOptions();
+			DestructionProperties = new DestructionData();
+			CurrentlyAuthorizedUsers = new();
+			PerformedActions = new();
+			IllegalActions = new IllegalActionTypes { SkillChecks = true };
+			AvailableQuickHacks = new();
+			ActionsWithDisabledRPGChecks = new();
+			AvailableSpiderbotActions = new();
+			ShouldScannerShowStatus = true;
+			ShouldScannerShowNetwork = true;
+			ConnectionHighlightObjects = new();
+			ActiveContexts = new();
+			Playstyles = new();
+			QuickHackVulnerabilties = new();
+			WillingInvestigators = new();
+			IsInteractive = true;
+
 			PostConstruct();
 		}
 

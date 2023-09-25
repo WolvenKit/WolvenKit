@@ -70,6 +70,12 @@ namespace WolvenKit.RED4.Types
 
 		public ChargedHotkeyItemGadgetController()
 		{
+			C_grenadeKey = "Grenade";
+			C_projectileLauncherKey = "ProjectileLauncher";
+			C_opticalCamoKey = "OpticalCamo";
+			C_cwMaskKey = "CWMask";
+			OpticalCamoTags = new();
+
 			PostConstruct();
 		}
 

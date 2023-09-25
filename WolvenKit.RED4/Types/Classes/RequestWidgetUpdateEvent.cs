@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public RequestWidgetUpdateEvent()
 		{
+			Requester = new gamePersistentID();
+			ScreenDefinition = new ScreenDefinitionPackage();
+
 			PostConstruct();
 		}
 

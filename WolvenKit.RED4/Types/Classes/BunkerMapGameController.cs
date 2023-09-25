@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public BunkerMapGameController()
 		{
+			MapPosition01 = new inkWidgetReference();
+			MapPosition02 = new inkWidgetReference();
+			MapPosition03 = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

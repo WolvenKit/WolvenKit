@@ -62,6 +62,16 @@ namespace WolvenKit.RED4.Types
 
 		public AccessPointControllerPS()
 		{
+			RevealDevicesGrid = false;
+			HasNetworkBackdoor = true;
+			DeviceName = "LocKey#138";
+			TweakDBRecord = "Devices.AccessPoint";
+			TweakDBDescriptionRecord = 134736165949;
+			HasPersonalLinkSlot = true;
+			ShouldScannerShowNetwork = false;
+			RewardNotificationIcons = new();
+			PingedSquads = new();
+
 			PostConstruct();
 		}
 

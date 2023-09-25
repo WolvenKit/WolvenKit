@@ -5,6 +5,9 @@ namespace WolvenKit.RED4.Types
 	{
 		public EffectPreAction_PreAttack_WithFriendlyFire()
 		{
+			WithFriendlyFire = true;
+			WithSelfDamage = true;
+
 			PostConstruct();
 		}
 

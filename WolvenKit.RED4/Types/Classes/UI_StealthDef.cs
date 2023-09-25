@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public UI_StealthDef()
 		{
+			CombatDebug = new gamebbScriptID_Bool();
+			NumberOfCombatants = new gamebbScriptID_Uint32();
+			HighestDetectionOnPlayer = new gamebbScriptID_Float();
+			HighestHostileDetectionOnPlayer = new gamebbScriptID_Float();
+
 			PostConstruct();
 		}
 

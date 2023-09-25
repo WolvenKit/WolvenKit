@@ -54,6 +54,13 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocCategoryTooltip()
 		{
+			Desc = new inkTextWidgetReference();
+			AvailableLabelCounter = new inkTextWidgetReference();
+			OwnedLabelCounter = new inkTextWidgetReference();
+			OwnedLabel = new inkWidgetReference();
+			AvailableLabel = new inkWidgetReference();
+			NALabel = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

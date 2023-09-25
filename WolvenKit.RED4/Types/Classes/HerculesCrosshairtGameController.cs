@@ -78,6 +78,10 @@ namespace WolvenKit.RED4.Types
 
 		public HerculesCrosshairtGameController()
 		{
+			Game = new ScriptGameInstance();
+			TargetedApperance = new gameVisionAppearance();
+			Targets = new();
+
 			PostConstruct();
 		}
 

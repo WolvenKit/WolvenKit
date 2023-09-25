@@ -54,6 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public StatPoolPrereq()
 		{
+			ValueToCheck = new();
+
 			PostConstruct();
 		}
 

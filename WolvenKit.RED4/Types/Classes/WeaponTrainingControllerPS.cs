@@ -5,6 +5,9 @@ namespace WolvenKit.RED4.Types
 	{
 		public WeaponTrainingControllerPS()
 		{
+			DeviceName = "LocKey#79367";
+			ShouldScannerShowStatus = false;
+
 			PostConstruct();
 		}
 

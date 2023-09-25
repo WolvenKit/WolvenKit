@@ -54,6 +54,13 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerksGaugeController()
 		{
+			Bar = new inkWidgetReference();
+			PossibleBar = new inkWidgetReference();
+			CurrentLevelIndicator = new inkWidgetReference();
+			PossibleLevelIndicator = new inkWidgetReference();
+			LevelText = new inkTextWidgetReference();
+			Levels = new();
+
 			PostConstruct();
 		}
 

@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiBaseGarmentItemPreviewGameController()
 		{
+			GivenItem = new gameItemID();
+			InitialItem = new gameItemID();
+
 			PostConstruct();
 		}
 

@@ -67,6 +67,7 @@ namespace WolvenKit.RED4.Types
 			DurangoControllerPage = new inkWidgetReference();
 			OrbisControllerPage = new inkWidgetReference();
 			DisclaimerText = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
 
 			PostConstruct();
 		}

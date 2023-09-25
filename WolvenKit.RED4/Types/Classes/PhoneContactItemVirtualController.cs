@@ -150,6 +150,17 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneContactItemVirtualController()
 		{
+			Label = new inkTextWidgetReference();
+			Preview = new inkTextWidgetReference();
+			MsgCount = new inkTextWidgetReference();
+			MsgIndicator = new inkWidgetReference();
+			QuestFlag = new inkWidgetReference();
+			RegFlag = new inkWidgetReference();
+			ReplyAlertIcon = new inkWidgetReference();
+			CallInputHint = new inkWidgetReference();
+			ChatInputHint = new inkWidgetReference();
+			Separtor = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

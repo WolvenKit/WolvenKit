@@ -14,6 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public MeshAppearanceDeviceOperation()
 		{
+			IsEnabled = true;
+			ToggleOperations = new();
+
 			PostConstruct();
 		}
 

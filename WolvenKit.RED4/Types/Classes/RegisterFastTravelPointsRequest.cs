@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public RegisterFastTravelPointsRequest()
 		{
+			FastTravelNodes = new();
+			Register = true;
+
 			PostConstruct();
 		}
 

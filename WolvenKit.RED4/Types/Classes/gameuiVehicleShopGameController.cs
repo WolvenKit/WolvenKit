@@ -150,6 +150,21 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiVehicleShopGameController()
 		{
+			HomePage = new inkWidgetReference();
+			HomePageMainText = new inkTextWidgetReference();
+			RightSidePanel = new inkWidgetReference();
+			HeaderImage = new inkWidgetReference();
+			OffersCanvas = new inkWidgetReference();
+			DetailsCanvas = new inkWidgetReference();
+			BrandsListWidget = new inkCompoundWidgetReference();
+			OffersGridWidget = new inkCompoundWidgetReference();
+			HeaderText = new inkTextWidgetReference();
+			ScrollControllerWidget = new inkWidgetReference();
+			BrandButtons = new();
+			OfferButtons = new();
+			C_discountFactTDBID = "RTDB.VehicleDiscountSettings.discountFact";
+			C_discountValuesTDBID = "RTDB.VehicleDiscountSettings.discountValues";
+
 			PostConstruct();
 		}
 

@@ -110,6 +110,19 @@ namespace WolvenKit.RED4.Types
 
 		public GateSchemeLogicController()
 		{
+			SfxFactsSet = new SoundFxFactsSet();
+			Tube1 = new inkWidgetReference();
+			Tube2 = new inkWidgetReference();
+			Tube3 = new inkWidgetReference();
+			Tube4 = new inkWidgetReference();
+			Tube5 = new inkWidgetReference();
+			Tube6 = new inkWidgetReference();
+			Tube7 = new inkWidgetReference();
+			Tube8 = new inkWidgetReference();
+			OpeningGateLeftAnimName = "logic_controller_left";
+			OpeningGateRightAnimName = "logic_controller_right";
+			GameInstance = new ScriptGameInstance();
+
 			PostConstruct();
 		}
 

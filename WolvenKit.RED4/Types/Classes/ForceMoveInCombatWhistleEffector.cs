@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public ForceMoveInCombatWhistleEffector()
 		{
+			TargetPosition = new Vector4();
+
 			PostConstruct();
 		}
 

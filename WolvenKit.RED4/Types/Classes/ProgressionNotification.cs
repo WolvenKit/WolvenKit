@@ -102,6 +102,14 @@ namespace WolvenKit.RED4.Types
 
 		public ProgressionNotification()
 		{
+			ExpBar = new inkWidgetReference();
+			ExpText = new inkTextWidgetReference();
+			BarFG = new inkWidgetReference();
+			BarBG = new inkWidgetReference();
+			Root = new inkWidgetReference();
+			CurrentLevel = new inkTextWidgetReference();
+			NextLevel = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

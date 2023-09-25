@@ -102,6 +102,19 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkBlackboardDef()
 		{
+			MinigameDef = new gamebbScriptID_Variant();
+			NetworkName = new gamebbScriptID_String();
+			NetworkTDBID = new gamebbScriptID_Variant();
+			DevicesCount = new gamebbScriptID_Int32();
+			DeviceID = new gamebbScriptID_EntityID();
+			OfficerBreach = new gamebbScriptID_Bool();
+			SuicideBreach = new gamebbScriptID_Bool();
+			RemoteBreach = new gamebbScriptID_Bool();
+			ItemBreach = new gamebbScriptID_Bool();
+			Attempt = new gamebbScriptID_Int32();
+			SelectedMinigameDef = new gamebbScriptID_Variant();
+			PersonalLinkStatus = new gamebbScriptID_Int32();
+
 			PostConstruct();
 		}
 

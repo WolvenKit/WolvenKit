@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public InteractiveDeviceBlackboardDef()
 		{
+			ShowAd = new gamebbScriptID_Bool();
+			ShowVendor = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

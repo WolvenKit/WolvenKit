@@ -166,6 +166,13 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiMinimapPreventionVehicleMappinController()
 		{
+			PulseWidget = new inkWidgetReference();
+			VisionWidget = new inkWidgetReference();
+			OuterIcon = new inkImageWidgetReference();
+			MaxTackIcon = new inkImageWidgetReference();
+			MappinState = "Prevention_LightBlue";
+			KeepIconOnClamping = true;
+
 			PostConstruct();
 		}
 

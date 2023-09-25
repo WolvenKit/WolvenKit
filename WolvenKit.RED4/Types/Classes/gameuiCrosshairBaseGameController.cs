@@ -207,6 +207,7 @@ namespace WolvenKit.RED4.Types
 		public gameuiCrosshairBaseGameController()
 		{
 			Details = new inkWidgetReference();
+			DeadEyeWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

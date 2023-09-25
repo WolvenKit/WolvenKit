@@ -193,6 +193,18 @@ namespace WolvenKit.RED4.Types
 			DefaultWidgets = new();
 			SouthpawWidgets = new();
 			LegacyWidgets = new();
+			GeneralInputPanel = new inkWidgetReference();
+			VehicleInputPanel = new inkWidgetReference();
+			VehicleCombatInputPanel = new inkWidgetReference();
+			SelectorWidget = new inkWidgetReference();
+			SchemeLegacyRef = new inkWidgetReference();
+			SchemeAgileRef = new inkWidgetReference();
+			SchemeAlternativeRef = new inkWidgetReference();
+			InputSettingSelectorRef = new inkWidgetReference();
+			InputSettingGroupName = "/controls/controller";
+			InputSettingVarName = "InputSchemesMode";
+			ButtonHintsManagerRef = new inkWidgetReference();
+			InputPanel = new();
 
 			PostConstruct();
 		}

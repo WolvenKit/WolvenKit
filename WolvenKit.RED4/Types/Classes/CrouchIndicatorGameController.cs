@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public CrouchIndicatorGameController()
 		{
+			CrouchIcon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -78,6 +78,13 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiHUDCyberwareInfoGameController()
 		{
+			ActivatePopupAnimName = "cw_reactivated_popup";
+			DeactivatePopupAnimName = "cw_deactivated_popup";
+			ActivateAnimName = "hud_addon_outro";
+			DeactivateAnimName = "hud_addon_intro";
+			Fact = "q306_cyberware_deactivated";
+			HudElement = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

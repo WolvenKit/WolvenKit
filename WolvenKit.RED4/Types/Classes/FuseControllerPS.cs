@@ -78,6 +78,14 @@ namespace WolvenKit.RED4.Types
 
 		public FuseControllerPS()
 		{
+			RevealDevicesGrid = false;
+			DeviceName = "LocKey#116";
+			TweakDBRecord = "Devices.Fuse";
+			TweakDBDescriptionRecord = 106150556616;
+			MaxLightsSwitchedAtOnce = 5;
+			TimeToNextSwitch = 1.000000F;
+			LightSwitchRandomizerType = Enums.ELightSwitchRandomizerType.RANDOM_PROGRESSIVE;
+
 			PostConstruct();
 		}
 

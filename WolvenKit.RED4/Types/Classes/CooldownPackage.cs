@@ -46,6 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public CooldownPackage()
 		{
+			Addressees = new();
+			Label = new CooldownStorageID();
+
 			PostConstruct();
 		}
 

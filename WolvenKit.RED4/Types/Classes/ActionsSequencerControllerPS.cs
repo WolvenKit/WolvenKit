@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public ActionsSequencerControllerPS()
 		{
+			RevealDevicesGrid = false;
+			SequenceDuration = 2.000000F;
+			ActionTypeToForward = new SActionTypeForward { QHack = true };
+			OngoingSequence = new ActionsSequence { SequenceInitiator = new entEntityID(), DelayIDs = new() };
+
 			PostConstruct();
 		}
 

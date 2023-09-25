@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public VehiclesManagerListItemController()
 		{
+			Label = new inkTextWidgetReference();
+			TypeIcon = new inkImageWidgetReference();
+			RepairTime = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

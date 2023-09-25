@@ -46,6 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public RevealDevicesGridEvent()
 		{
+			OwnerEntityPosition = new Vector4();
+			FxDefault = new gameFxResource();
+			RevealSlave = true;
+			RevealMaster = true;
+
 			PostConstruct();
 		}
 

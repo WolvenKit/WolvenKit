@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public tarotCardLogicController()
 		{
+			Image = new inkImageWidgetReference();
+			Highlight = new inkWidgetReference();
+			Ep1Icon = new inkWidgetReference();
+			Data = new TarotCardData();
+
 			PostConstruct();
 		}
 

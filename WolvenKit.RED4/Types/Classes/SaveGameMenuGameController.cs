@@ -150,6 +150,13 @@ namespace WolvenKit.RED4.Types
 
 		public SaveGameMenuGameController()
 		{
+			List = new inkCompoundWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			GogButtonWidgetRef = new inkWidgetReference();
+			GogContainer = new inkWidgetReference();
+			Scrollbar = new inkWidgetReference();
+			Saves = new();
+
 			PostConstruct();
 		}
 

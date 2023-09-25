@@ -89,6 +89,7 @@ namespace WolvenKit.RED4.Types
 			MainBackgroundImage = new inkImageWidgetReference();
 			SupportBackgroundImage = new inkImageWidgetReference();
 			TooltipsWidget = new inkRichTextBoxWidgetReference();
+			ProgressBarRoot = new inkWidgetReference();
 
 			PostConstruct();
 		}

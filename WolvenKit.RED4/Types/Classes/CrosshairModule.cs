@@ -14,6 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairModule()
 		{
+			InstancesList = new();
+			ActiveCrosshairs = new();
+
 			PostConstruct();
 		}
 

@@ -78,6 +78,12 @@ namespace WolvenKit.RED4.Types
 
 		public InteractiveAdInkGameController()
 		{
+			ProcessingVideo = new inkVideoWidgetReference();
+			PersonalAd = new inkVideoWidgetReference();
+			CommonAd = new inkVideoWidgetReference();
+			FadeDuration = 0.500000F;
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

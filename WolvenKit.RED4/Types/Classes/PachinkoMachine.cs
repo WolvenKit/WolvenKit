@@ -14,6 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public PachinkoMachine()
 		{
+			ArcadeMachineType = Enums.ArcadeMachineType.Pachinko;
+			DistractionFXName = "effect_distraction";
+
 			PostConstruct();
 		}
 

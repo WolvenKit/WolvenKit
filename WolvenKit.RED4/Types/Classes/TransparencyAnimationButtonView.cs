@@ -62,6 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public TransparencyAnimationButtonView()
 		{
+			AnimationTime = 0.100000F;
+			HoverTransparency = 0.200000F;
+			PressTransparency = 0.400000F;
+			AnimationProxies = new();
+			Targets = new();
+
 			PostConstruct();
 		}
 

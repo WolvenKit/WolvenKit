@@ -14,6 +14,11 @@ namespace WolvenKit.RED4.Types
 
 		public FanControllerPS()
 		{
+			DeviceName = "LocKey#94";
+			TweakDBRecord = "Devices.Fan";
+			TweakDBDescriptionRecord = 102801160369;
+			FanSetup = new FanSetup { RotateClockwise = true, MaxRotationSpeed = 150.000000F, TimeToMaxRotation = 3.000000F };
+
 			PostConstruct();
 		}
 

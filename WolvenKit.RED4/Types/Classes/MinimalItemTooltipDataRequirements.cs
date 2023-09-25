@@ -110,6 +110,8 @@ namespace WolvenKit.RED4.Types
 
 		public MinimalItemTooltipDataRequirements()
 		{
+			AnyStatRequirements = new();
+
 			PostConstruct();
 		}
 

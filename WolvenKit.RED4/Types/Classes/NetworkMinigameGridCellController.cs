@@ -54,6 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkMinigameGridCellController()
 		{
+			CellData = new CellData { Position = new Vector2(), Element = new ElementData(), Properties = new SpecialProperties { Traps = new() } };
+			SlotsContainer = new inkWidgetReference();
+			DefaultColor = new HDRColor();
+
 			PostConstruct();
 		}
 

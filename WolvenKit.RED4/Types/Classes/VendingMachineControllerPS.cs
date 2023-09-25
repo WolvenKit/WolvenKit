@@ -70,6 +70,16 @@ namespace WolvenKit.RED4.Types
 
 		public VendingMachineControllerPS()
 		{
+			DeviceName = "LocKey#176";
+			TweakDBRecord = "Devices.VendingMachine";
+			TweakDBDescriptionRecord = 146495886677;
+			VendingMachineSetup = new VendingMachineSetup { TimeToCompletePurchase = 0.100000F };
+			VendingMachineSFX = new VendingMachineSFX { GlitchingStart = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110", GlitchingStop = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110_stop" };
+			SoldOutProbability = 0.050000F;
+			IsReady = true;
+			HackCount = 2;
+			ShopStock = new();
+
 			PostConstruct();
 		}
 

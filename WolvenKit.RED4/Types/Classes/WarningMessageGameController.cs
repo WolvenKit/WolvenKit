@@ -150,6 +150,15 @@ namespace WolvenKit.RED4.Types
 
 		public WarningMessageGameController()
 		{
+			MainTextWidget = new inkTextWidgetReference();
+			AttencionIcon = new inkWidgetReference();
+			NeutralIcon = new inkWidgetReference();
+			VehicleIcon = new inkWidgetReference();
+			ApartmentIcon = new inkWidgetReference();
+			RelicIcon = new inkWidgetReference();
+			MoneyIcon = new inkWidgetReference();
+			SimpleMessage = new gameSimpleScreenMessage();
+
 			PostConstruct();
 		}
 

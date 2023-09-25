@@ -46,6 +46,12 @@ namespace WolvenKit.RED4.Types
 
 		public hudJohnnyController()
 		{
+			TourHeader = new inkTextWidgetReference();
+			LeftDates = new inkTextWidgetReference();
+			RightDates = new inkTextWidgetReference();
+			Cancelled = new inkWidgetReference();
+			GameInstance = new ScriptGameInstance();
+
 			PostConstruct();
 		}
 

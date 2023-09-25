@@ -158,6 +158,22 @@ namespace WolvenKit.RED4.Types
 
 		public InnerSubsystemScreenGameController()
 		{
+			LoopAnimName = new(3);
+			AdminAccessPopupAnimName = "popup_00_admin_access";
+			UnrecognizedPopupAnimName = "popup_01_unrecognized";
+			PreAuthorizingPopupAnimName = "popup_02_authorizing_01";
+			PostAuthorizingPopupAnimName = "popup_02_authorizing_02";
+			DeniedPopupAnimName = "popup_03_denied";
+			SuccessPopupAnimName = "popup_04_success";
+			ErrorPopupAnimName = "popup_05_error";
+			IcePopupAnimName = "popup_06_ice";
+			ShutdownButton = new(3);
+			AdminPanelButton = new(3);
+			AdminPanelPopupButton = new inkWidgetReference();
+			TransitionToAuthorization = new inkWidgetReference();
+			TransitionToMinigame = new inkWidgetReference();
+			TransitionToAdminPanel = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public UnequipCycleDecisions()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

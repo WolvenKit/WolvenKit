@@ -62,6 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public analogTachLogicController()
 		{
+			AnalogTachNeedleWidget = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

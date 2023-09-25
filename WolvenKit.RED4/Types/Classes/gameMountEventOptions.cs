@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameMountEventOptions()
 		{
+			EntityID = new entEntityID();
+
 			PostConstruct();
 		}
 

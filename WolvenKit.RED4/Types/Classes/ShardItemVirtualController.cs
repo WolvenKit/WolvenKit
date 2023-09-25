@@ -110,6 +110,12 @@ namespace WolvenKit.RED4.Types
 
 		public ShardItemVirtualController()
 		{
+			Icon = new inkWidgetReference();
+			Label = new inkTextWidgetReference();
+			Counter = new inkTextWidgetReference();
+			CollapseIcon = new inkWidgetReference();
+			IsNewFlag = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

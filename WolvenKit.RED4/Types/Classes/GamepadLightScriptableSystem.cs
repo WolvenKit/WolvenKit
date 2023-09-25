@@ -86,6 +86,11 @@ namespace WolvenKit.RED4.Types
 
 		public GamepadLightScriptableSystem()
 		{
+			ControllerCurrentColor = new Vector3();
+			ControllerStartColor = new Vector3();
+			ControllerTargetColor = new Vector3();
+			CurrrentId = new gameDelayID();
+
 			PostConstruct();
 		}
 

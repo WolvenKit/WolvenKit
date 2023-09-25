@@ -102,6 +102,11 @@ namespace WolvenKit.RED4.Types
 
 		public GenericCodexEntryData()
 		{
+			JournalEntryOverrideDataList = new();
+			TimeStamp = new GameTime();
+			NewEntries = new();
+			ItemID = new gameItemID();
+
 			PostConstruct();
 		}
 

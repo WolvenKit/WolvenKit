@@ -110,6 +110,11 @@ namespace WolvenKit.RED4.Types
 
 		public DamageDigitsGameController()
 		{
+			MaxVisible = 50;
+			MaxAccumulatedVisible = 10;
+			IndividualControllerArray = new();
+			AccumulatedControllerArray = new();
+
 			PostConstruct();
 		}
 

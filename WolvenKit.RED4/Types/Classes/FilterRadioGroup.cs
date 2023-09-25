@@ -46,6 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public FilterRadioGroup()
 		{
+			LibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			Toggles = new();
+
 			PostConstruct();
 		}
 

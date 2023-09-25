@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public HitStatusEffectPresentPrereq()
 		{
+			IsSync = true;
+			PipelineStage = Enums.gameDamagePipelineStage.Process;
+
 			PostConstruct();
 		}
 

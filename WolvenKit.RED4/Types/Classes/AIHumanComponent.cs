@@ -214,6 +214,14 @@ namespace WolvenKit.RED4.Types
 
 		public AIHumanComponent()
 		{
+			LastOwnerBlockedAttackEventID = new gameDelayID();
+			LastOwnerParriedAttackEventID = new gameDelayID();
+			LastOwnerDodgedAttackEventID = new gameDelayID();
+			GrenadeThrowQueryId = -1;
+			ScriptContext = new AIbehaviorScriptExecutionContext();
+			LastReservedSeatVehicle = new entEntityID();
+			ActiveCommands = new AIbehaviorUniqueActiveCommandList();
+
 			PostConstruct();
 		}
 

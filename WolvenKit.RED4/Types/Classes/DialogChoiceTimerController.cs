@@ -86,6 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public DialogChoiceTimerController()
 		{
+			Bar = new inkWidgetReference();
+			TimerValue = new inkTextWidgetReference();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

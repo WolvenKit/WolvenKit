@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Color = new CColor();
 			AutohideDistanceScale = 255;
-			Mesh = new CResourceAsyncReference<CMesh>(14029023581072192580);
+			Mesh = new CResourceAsyncReference<CMesh>(@"engine\meshes\editor\box_occluder.w2mesh");
 
 			PostConstruct();
 		}

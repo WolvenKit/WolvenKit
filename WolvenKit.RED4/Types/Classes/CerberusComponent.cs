@@ -94,6 +94,12 @@ namespace WolvenKit.RED4.Types
 
 		public CerberusComponent()
 		{
+			LaserGameEffectRefUp = new gameEffectRef();
+			LaserGameEffectRefUp2 = new gameEffectRef();
+			LaserGameEffectRefBeam = new gameEffectRef();
+			LaserGameEffectRefBottom = new gameEffectRef();
+			LaserGameEffectRefBottom2 = new gameEffectRef();
+
 			PostConstruct();
 		}
 

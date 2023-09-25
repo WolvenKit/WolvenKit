@@ -46,6 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public PointerController()
 		{
+			Connectors = new();
+			Pointer = new inkWidgetReference();
+			CenterButtonSlot = new inkWidgetReference();
+			CurrentIndex = -1;
+
 			PostConstruct();
 		}
 

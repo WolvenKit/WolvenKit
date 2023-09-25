@@ -46,6 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public QuestListFilterButtonController()
 		{
+			Icon = new inkImageWidgetReference();
+			Counter = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

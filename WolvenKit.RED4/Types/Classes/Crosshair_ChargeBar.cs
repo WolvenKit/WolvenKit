@@ -70,6 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public Crosshair_ChargeBar()
 		{
+			Bar = new inkWidgetReference();
+			Ammo = new inkTextWidgetReference();
+			SizeOfChargeBar = new Vector2();
+
 			PostConstruct();
 		}
 

@@ -5,6 +5,9 @@ namespace WolvenKit.RED4.Types
 	{
 		public VentilationEffectorControllerPS()
 		{
+			TweakDBRecord = "Devices.VentilationEffector";
+			TweakDBDescriptionRecord = 169996443522;
+
 			PostConstruct();
 		}
 

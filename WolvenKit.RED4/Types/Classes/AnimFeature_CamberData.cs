@@ -70,6 +70,11 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_CamberData()
 		{
+			RightFrontCamberOffset = new Vector4();
+			LeftFrontCamberOffset = new Vector4();
+			RightBackCamberOffset = new Vector4();
+			LeftBackCamberOffset = new Vector4();
+
 			PostConstruct();
 		}
 

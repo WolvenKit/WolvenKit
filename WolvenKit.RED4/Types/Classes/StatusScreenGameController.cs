@@ -54,6 +54,13 @@ namespace WolvenKit.RED4.Types
 
 		public StatusScreenGameController()
 		{
+			AlphaSys = new inkWidgetReference();
+			BravoSys = new inkWidgetReference();
+			SierraSys = new inkWidgetReference();
+			VictorSys = new inkWidgetReference();
+			SierraBackupSys = new inkWidgetReference();
+			VictorBackupSys = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

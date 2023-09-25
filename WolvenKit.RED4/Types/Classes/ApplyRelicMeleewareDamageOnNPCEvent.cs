@@ -46,6 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyRelicMeleewareDamageOnNPCEvent()
 		{
+			HitPosition = new Vector4();
+
 			PostConstruct();
 		}
 

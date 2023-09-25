@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public SoundSystem()
 		{
+			ControllerTypeName = "SoundSystemController";
+
 			PostConstruct();
 		}
 

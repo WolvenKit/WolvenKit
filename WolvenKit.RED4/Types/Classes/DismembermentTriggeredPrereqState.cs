@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public DismembermentTriggeredPrereqState()
 		{
+			DismembermentInfo = new DismembermentInstigatedInfo { TargetPosition = new Vector4(), AttackPosition = new Vector4() };
+
 			PostConstruct();
 		}
 

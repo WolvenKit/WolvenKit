@@ -110,6 +110,9 @@ namespace WolvenKit.RED4.Types
 
 		public ProficiencyDisplayData()
 		{
+			Areas = new();
+			PassiveBonusesData = new();
+
 			PostConstruct();
 		}
 

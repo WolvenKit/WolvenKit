@@ -46,6 +46,12 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemDisplayCategoryArea()
 		{
+			AreasToHide = new();
+			EquipmentAreas = new();
+			NewItemsWrapper = new inkWidgetReference();
+			NewItemsCounter = new inkTextWidgetReference();
+			CategoryAreas = new();
+
 			PostConstruct();
 		}
 

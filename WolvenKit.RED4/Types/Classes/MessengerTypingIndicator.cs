@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public MessengerTypingIndicator()
 		{
+			Container = new inkWidgetReference();
+			NameText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

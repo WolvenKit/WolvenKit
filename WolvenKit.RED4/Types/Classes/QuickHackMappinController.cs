@@ -94,6 +94,13 @@ namespace WolvenKit.RED4.Types
 
 		public QuickHackMappinController()
 		{
+			Bar = new inkWidgetReference();
+			Header = new inkTextWidgetReference();
+			IconWidgetActive = new inkImageWidgetReference();
+			QueueQuickHackWidgets = new();
+			QueueQuickHackControllers = new();
+			MappinDataQueue = new();
+
 			PostConstruct();
 		}
 

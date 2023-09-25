@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public MeleeLeapAttackObjectTagger()
 		{
+			Game = new ScriptGameInstance();
+			MinDistanceToTarget = 2.000000F;
+
 			PostConstruct();
 		}
 

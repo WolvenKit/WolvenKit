@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public DisableFields()
 		{
+			ActionMask = new SBraindanceInputMask();
+
 			PostConstruct();
 		}
 

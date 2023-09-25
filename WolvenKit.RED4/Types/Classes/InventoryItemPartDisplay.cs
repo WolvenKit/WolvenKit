@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemPartDisplay()
 		{
+			PartIconImage = new inkImageWidgetReference();
+			Rarity = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

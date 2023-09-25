@@ -174,6 +174,22 @@ namespace WolvenKit.RED4.Types
 
 		public hubSelectorSingleCarouselController()
 		{
+			NUMBER_OF_WIDGETS = 7;
+			WIDGETS_PADDING = 10.000000F;
+			SMALL_WIDGET_SCALE = 0.800000F;
+			SMALL_WIDGET_OPACITY = 1.000000F;
+			ANIMATION_TIME = 0.200000F;
+			DEFAULT_WIDGET_COLOR = new HDRColor();
+			SELECTED_WIDGET_COLOR = new HDRColor();
+			LeftArrowWidget = new inkWidgetReference();
+			RightArrowWidget = new inkWidgetReference();
+			Container = new inkWidgetReference();
+			DefaultColorDummy = new inkWidgetReference();
+			ActiveColorDummy = new inkWidgetReference();
+			Elements = new();
+			WidgetsControllers = new();
+			ActiveAnimations = new();
+
 			PostConstruct();
 		}
 

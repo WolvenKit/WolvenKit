@@ -62,6 +62,11 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModeToggle()
 		{
+			SelectedWidget = new inkWidgetReference();
+			FrameWidget = new inkWidgetReference();
+			IconWidget = new inkImageWidgetReference();
+			LabelWidget = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

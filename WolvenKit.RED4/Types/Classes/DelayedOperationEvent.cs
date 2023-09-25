@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public DelayedOperationEvent()
 		{
+			Operation = new SBaseDeviceOperationData { IsEnabled = true, TransformAnimations = new(), VFXs = new(), SFXs = new(), Facts = new(), Components = new(), Stims = new(), StatusEffects = new(), Damages = new(), Items = new(), Teleport = new STeleportOperationData(), PlayerWorkspot = new SWorkspotData(), ToggleOperations = new(), DelayID = new gameDelayID() };
+
 			PostConstruct();
 		}
 

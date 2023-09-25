@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AVSpawnedRequest()
 		{
+			SpawnedObjects = new();
+
 			PostConstruct();
 		}
 

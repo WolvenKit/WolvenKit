@@ -54,6 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public ReloadingExpansionPopupController()
 		{
+			ProgressBarRef = new inkWidgetReference();
+			TitleTextRef = new inkTextWidgetReference();
+			DescriptionTextRef = new inkTextWidgetReference();
+			WarningTextRef = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

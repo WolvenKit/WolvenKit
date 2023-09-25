@@ -22,6 +22,14 @@ namespace WolvenKit.RED4.Types
 
 		public WeakFenceControllerPS()
 		{
+			DeviceName = "LocKey#189";
+			TweakDBRecord = "Devices.WeakFence";
+			TweakDBDescriptionRecord = 128236067982;
+			ShouldScannerShowStatus = false;
+			ShouldScannerShowNetwork = false;
+			ShouldScannerShowRole = true;
+			WeakFenceSetup = new WeakFenceSetup();
+
 			PostConstruct();
 		}
 

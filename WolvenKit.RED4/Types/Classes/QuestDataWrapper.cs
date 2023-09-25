@@ -102,6 +102,9 @@ namespace WolvenKit.RED4.Types
 
 		public QuestDataWrapper()
 		{
+			QuestObjectives = new();
+			Links = new();
+
 			PostConstruct();
 		}
 

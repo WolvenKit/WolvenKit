@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public DoorProximityDetectorControllerPS()
 		{
+			DeviceName = "Gameplay-Devices-DisplayNames-DoorDetector";
+
 			PostConstruct();
 		}
 

@@ -46,6 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public BaseAnimatedDevice()
 		{
+			ControllerTypeName = "BaseAnimatedDeviceController";
+			OpeningSpeed = 2.000000F;
+			ClosingSpeed = 2.000000F;
+
 			PostConstruct();
 		}
 

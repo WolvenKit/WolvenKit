@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public RemoveStatusEffectOnAttackEffector()
 		{
+			EffectTypes = new();
+			EffectString = new();
+			EffectTags = new();
+
 			PostConstruct();
 		}
 

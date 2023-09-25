@@ -78,6 +78,16 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Simple()
 		{
+			TopPart = new inkWidgetReference();
+			BottomPart = new inkWidgetReference();
+			HoriPart = new inkWidgetReference();
+			VertPart = new inkWidgetReference();
+			LeftPart = new inkWidgetReference();
+			RightPart = new inkWidgetReference();
+			TargetColorChange = new inkWidgetReference();
+			OffsetLeftRight = 0.800000F;
+			LatchVertical = 40.000000F;
+
 			PostConstruct();
 		}
 

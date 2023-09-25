@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public StaticPlatform()
 		{
+			ControllerTypeName = "StaticPlatformController";
+			ComponentsToToggleNames = new();
+			ComponentsToToggle = new();
+
 			PostConstruct();
 		}
 

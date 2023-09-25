@@ -122,6 +122,10 @@ namespace WolvenKit.RED4.Types
 			Values = new();
 			CycledNavigation = true;
 			SelectionChanged = new inkSelectionChangeCallback();
+			LabelPath = "Panel/Label";
+			ValuePath = "Panel/Value";
+			LeftArrowPath = "Panel/LeftArrow";
+			RightArrowPath = "Panel/RightArrow";
 
 			PostConstruct();
 		}

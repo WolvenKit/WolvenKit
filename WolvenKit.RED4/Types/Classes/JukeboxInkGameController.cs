@@ -46,6 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public JukeboxInkGameController()
 		{
+			ActionsPanel = new inkHorizontalPanelWidgetReference();
+			PriceText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

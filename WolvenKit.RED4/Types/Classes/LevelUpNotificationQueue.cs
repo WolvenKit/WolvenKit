@@ -62,6 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public LevelUpNotificationQueue()
 		{
+			Duration = 2.000000F;
+
 			PostConstruct();
 		}
 

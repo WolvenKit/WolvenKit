@@ -182,6 +182,26 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleDetailsLogicController()
 		{
+			BackButton = new inkWidgetReference();
+			PurchaseButton = new inkWidgetReference();
+			OwnedWidget = new inkWidgetReference();
+			InsufficientMoneyWidget = new inkWidgetReference();
+			DetailsImage = new inkImageWidgetReference();
+			VehicleNameText = new inkTextWidgetReference();
+			DetailsText = new inkTextWidgetReference();
+			ScrollControllerWidget = new inkWidgetReference();
+			GunImage = new inkImageWidgetReference();
+			RocketImage = new inkImageWidgetReference();
+			PriceWrapper = new inkWidgetReference();
+			PriceText = new inkTextWidgetReference();
+			DiscountWrapper = new inkWidgetReference();
+			DiscountText = new inkTextWidgetReference();
+			OriginalPriceWrapper = new inkWidgetReference();
+			OriginalPriceText = new inkTextWidgetReference();
+			DiscountImageWrapper = new inkWidgetReference();
+			HowToUnlockWrapper = new inkWidgetReference();
+			HowToUnlockText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

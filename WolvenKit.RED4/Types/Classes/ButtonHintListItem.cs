@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public ButtonHintListItem()
 		{
+			InputDisplay = new inkWidgetReference();
+			Label = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -158,6 +158,21 @@ namespace WolvenKit.RED4.Types
 
 		public FeaturesExpansionPopupController()
 		{
+			HoverArrow = new inkImageWidgetReference();
+			BuyButtonRef = new inkWidgetReference();
+			BuyButtonText = new inkTextWidgetReference();
+			BuyButtonInputIcon = new inkWidgetReference();
+			BuyButtonSpinner = new inkWidgetReference();
+			LocKey_Buy = "UI-DLC-EP1-PurchaseFlow-EP1Popup-BuyNow";
+			LocKey_PreOrder = "UI-DLC-EP1-PurchaseFlow-MainMenuBanner-PreOrderNow";
+			SlectorContainerRef = new inkWidgetReference();
+			SlectorArrowLeftRef = new inkWidgetReference();
+			SlectorArrowRightRef = new inkWidgetReference();
+			VideoCarouselRef = new inkWidgetReference();
+			VideoContainerRef = new inkWidgetReference();
+			VideoCarouselData = new();
+			HoverAnimationOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

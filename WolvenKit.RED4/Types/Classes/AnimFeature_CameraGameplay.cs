@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_CameraGameplay()
 		{
+			Is_forward_offset = 1.000000F;
+			Forward_offset_value = 0.200000F;
+
 			PostConstruct();
 		}
 

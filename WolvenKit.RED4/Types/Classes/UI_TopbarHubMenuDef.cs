@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public UI_TopbarHubMenuDef()
 		{
+			IsSubmenuHidden = new gamebbScriptID_Bool();
+			MetaQuestStatus = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

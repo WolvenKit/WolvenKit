@@ -134,6 +134,16 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationStatsAttributeBtn()
 		{
+			Value = new inkTextWidgetReference();
+			Label = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			Buttons = new inkImageWidgetReference();
+			Selector = new inkImageWidgetReference();
+			AddBtnhitArea = new inkWidgetReference();
+			MinusBtnhitArea = new inkWidgetReference();
+			MinMaxLabel = new inkWidgetReference();
+			MinMaxLabelText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

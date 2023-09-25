@@ -110,6 +110,10 @@ namespace WolvenKit.RED4.Types
 
 		public ChimeraComponent()
 		{
+			OwnerId = new entEntityID();
+			Weakspots = new();
+			WeakspotsDelay = new gameDelayID();
+
 			PostConstruct();
 		}
 

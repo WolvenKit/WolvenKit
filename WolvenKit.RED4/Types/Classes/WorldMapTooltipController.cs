@@ -158,6 +158,23 @@ namespace WolvenKit.RED4.Types
 
 		public WorldMapTooltipController()
 		{
+			TitleText = new inkTextWidgetReference();
+			DescText = new inkTextWidgetReference();
+			AdditionalDescText = new inkTextWidgetReference();
+			LineBreak = new inkWidgetReference();
+			Icon = new inkImageWidgetReference();
+			Ep1Icon = new inkImageWidgetReference();
+			InputOpenJournalContainer = new inkCompoundWidgetReference();
+			InputInteractContainer = new inkCompoundWidgetReference();
+			InputMoreInfoContainer = new inkCompoundWidgetReference();
+			ThreatLevelPanel = new inkWidgetReference();
+			ThreatLevelValue = new inkTextWidgetReference();
+			FixerPanel = new inkWidgetReference();
+			LinkImage = new inkImageWidgetReference();
+			Bar = new inkWidgetReference();
+			GigBarCompletedText = new inkTextWidgetReference();
+			GigBarTotalText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

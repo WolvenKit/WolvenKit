@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public FactsDeviceOperation()
 		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			Facts = new();
+
 			PostConstruct();
 		}
 

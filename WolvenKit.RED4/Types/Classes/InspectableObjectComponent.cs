@@ -54,6 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public InspectableObjectComponent()
 		{
+			Offset = 0.500000F;
+			AdsOffset = 0.250000F;
+			TimeToScan = 2.000000F;
+			Slot = "AttachmentSlots.Inspect";
+
 			PostConstruct();
 		}
 

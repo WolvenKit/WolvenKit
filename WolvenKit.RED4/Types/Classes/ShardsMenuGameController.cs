@@ -182,6 +182,14 @@ namespace WolvenKit.RED4.Types
 
 		public ShardsMenuGameController()
 		{
+			ButtonHintsManagerRef = new inkWidgetReference();
+			EntryViewRef = new inkCompoundWidgetReference();
+			VirtualList = new inkWidgetReference();
+			EmptyPlaceholderRef = new inkWidgetReference();
+			RightViewPlaceholderRef = new inkWidgetReference();
+			LeftBlockControllerRef = new inkWidgetReference();
+			CrackHint = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

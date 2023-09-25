@@ -90,6 +90,7 @@ namespace WolvenKit.RED4.Types
 			IsInfinite = true;
 			NumberOfLoops = 1;
 			SortPatrolPoints = true;
+			PatrolAction = "PatrolActions.DefaultPatrolAction";
 
 			PostConstruct();
 		}

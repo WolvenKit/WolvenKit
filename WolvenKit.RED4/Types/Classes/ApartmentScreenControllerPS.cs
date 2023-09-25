@@ -118,6 +118,11 @@ namespace WolvenKit.RED4.Types
 
 		public ApartmentScreenControllerPS()
 		{
+			ShowOverdueValue = true;
+			RandomizeInitialOverdue = true;
+			AllowAutomaticRentStatusChange = true;
+			MaxDays = 90;
+
 			PostConstruct();
 		}
 

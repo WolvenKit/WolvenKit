@@ -70,6 +70,12 @@ namespace WolvenKit.RED4.Types
 
 		public MovableDevice()
 		{
+			ControllerTypeName = "MovableDeviceController";
+			SideTriggerNames = new();
+			TriggerComponents = new();
+			OffMeshConnectionsToOpenNames = new();
+			OffMeshConnectionsToOpen = new();
+
 			PostConstruct();
 		}
 

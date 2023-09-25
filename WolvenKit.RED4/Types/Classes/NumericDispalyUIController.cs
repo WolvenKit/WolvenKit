@@ -94,6 +94,13 @@ namespace WolvenKit.RED4.Types
 
 		public NumericDispalyUIController()
 		{
+			CurrentNumberTextWidget = new inkTextWidgetReference();
+			UpArrowWidget = new inkWidgetReference();
+			DownArrowWidget = new inkWidgetReference();
+			IdleAnimName = "idle";
+			GoingUpAnimName = "going_up";
+			GoingDownAnimName = "going_down";
+
 			PostConstruct();
 		}
 

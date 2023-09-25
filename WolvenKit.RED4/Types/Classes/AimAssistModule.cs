@@ -14,6 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public AimAssistModule()
 		{
+			InstancesList = new();
+			ActiveAssists = new();
+
 			PostConstruct();
 		}
 

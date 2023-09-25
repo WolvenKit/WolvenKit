@@ -286,6 +286,11 @@ namespace WolvenKit.RED4.Types
 
 		public RadialMenuHubGameController()
 		{
+			NotificationRoot = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			BgFluff = new inkWidgetReference();
+			GameTimeContainer = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

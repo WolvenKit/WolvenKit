@@ -134,6 +134,9 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryWeaponInternalData()
 		{
+			EmptySlots = new();
+			UsedSlots = new();
+
 			PostConstruct();
 		}
 

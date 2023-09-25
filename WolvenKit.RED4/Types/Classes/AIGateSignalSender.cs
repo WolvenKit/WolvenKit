@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public AIGateSignalSender()
 		{
+			Tags = new();
+			Flags = new();
+
 			PostConstruct();
 		}
 

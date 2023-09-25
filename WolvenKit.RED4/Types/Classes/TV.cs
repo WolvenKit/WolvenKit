@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public TV()
 		{
+			ControllerTypeName = "TVController";
+			ShortGlitchDelayID = new gameDelayID();
+
 			PostConstruct();
 		}
 

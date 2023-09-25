@@ -326,6 +326,29 @@ namespace WolvenKit.RED4.Types
 
 		public NewItemTooltipCommonController()
 		{
+			BackgroundContainer = new inkWidgetReference();
+			ItemEquippedContainer = new inkWidgetReference();
+			ItemRecipeContainer = new inkWidgetReference();
+			ItemHeaderContainer = new inkWidgetReference();
+			ItemBrokenContainer = new inkWidgetReference();
+			ItemWeaponBarsContainer = new inkWidgetReference();
+			ItemRequirementsContainer = new inkWidgetReference();
+			ItemDetailsStatsContainer = new inkWidgetReference();
+			ItemDescriptionContainer = new inkWidgetReference();
+			ItemDetailsContainer = new inkWidgetReference();
+			ItemBottomContainer = new inkWidgetReference();
+			CornerContainer = new inkWidgetReference();
+			Root_312 = new inkWidgetReference();
+			IconicBG = new inkWidgetReference();
+			RecipeBG = new inkWidgetReference();
+			DescriptionWrapper = new inkWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			DEBUG_iconErrorWrapper = new inkWidgetReference();
+			DEBUG_iconErrorText = new inkTextWidgetReference();
+			Frames = new();
+			SpawnedModules = new();
+			RequestedModules = new();
+
 			PostConstruct();
 		}
 

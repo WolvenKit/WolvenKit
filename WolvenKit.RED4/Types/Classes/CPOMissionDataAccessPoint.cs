@@ -46,6 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public CPOMissionDataAccessPoint()
 		{
+			HasDataToDownload = true;
+			DamagesPresetName = "CPODataRaceParams";
+			FactsOnDownload = new();
+			FactsOnUpload = new();
+
 			PostConstruct();
 		}
 

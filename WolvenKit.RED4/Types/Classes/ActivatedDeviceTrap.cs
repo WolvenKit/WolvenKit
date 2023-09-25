@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public ActivatedDeviceTrap()
 		{
+			ControllerTypeName = "ActivatedDeviceController";
+
 			PostConstruct();
 		}
 

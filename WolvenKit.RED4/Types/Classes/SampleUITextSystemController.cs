@@ -158,6 +158,25 @@ namespace WolvenKit.RED4.Types
 
 		public SampleUITextSystemController()
 		{
+			LocKeyTextWidget = new inkTextWidgetReference();
+			LocalizedTextWidget = new inkTextWidgetReference();
+			NumberTextWidget = new inkTextWidgetReference();
+			NumberIncreaseButton = new inkWidgetReference();
+			NumberDecreaseButton = new inkWidgetReference();
+			NumberToInject = 1;
+			StringTextInputWidget = new inkTextInputWidgetReference();
+			StringToInject = "Dex";
+			TimeRefreshButton = new inkWidgetReference();
+			MeasurementWidgets = new();
+			MetricSystemButton = new inkWidgetReference();
+			ImperialSystemButton = new inkWidgetReference();
+			AnimateTextOffsetButton = new inkWidgetReference();
+			TextOffsetWidget = new inkTextWidgetReference();
+			AnimateTextReplaceButton = new inkWidgetReference();
+			TextReplaceWidget = new inkTextWidgetReference();
+			AnimateValueButton = new inkWidgetReference();
+			AnimateValueWidget = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

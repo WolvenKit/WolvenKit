@@ -142,6 +142,14 @@ namespace WolvenKit.RED4.Types
 
 		public ChattersGameController()
 		{
+			C_DisplayRange = 150.000000F;
+			C_CloseDisplayRange = 20.000000F;
+			C_TimeToUnblockSec = 5.000000F;
+			AllControllers = new();
+			BroadcastBlockingLines = new();
+			LastBroadcastBlockingLineTime = new EngineTime();
+			LastChoiceTime = new EngineTime();
+
 			PostConstruct();
 		}
 

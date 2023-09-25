@@ -86,6 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public PreventionDamageRequest()
 		{
+			TargetID = new entEntityID();
+			TargetPosition = new Vector4();
+			RequestedHeat = Enums.EPreventionHeatStage.Invalid;
+
 			PostConstruct();
 		}
 

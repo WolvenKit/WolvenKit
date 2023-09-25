@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public EquippedDecisions()
 		{
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

@@ -238,6 +238,27 @@ namespace WolvenKit.RED4.Types
 
 		public SecuritySystemControllerPS()
 		{
+			RevealDevicesGrid = false;
+			DeviceName = "LocKey#50988";
+			TweakDBRecord = "Devices.SecuritySystem";
+			TweakDBDescriptionRecord = 147752589635;
+			Level_0 = new();
+			Level_1 = new();
+			Level_2 = new();
+			Level_3 = new();
+			Level_4 = new();
+			AllowSecuritySystemToDisableItself = true;
+			PerformAutomaticResetAfter = new Time();
+			SecuritySystemState = Enums.ESecuritySystemState.SAFE;
+			UpdateInterval = 1.000000F;
+			RestartDuration = 60;
+			ProtectedEntityIDs = new();
+			EntitiesRemainingAtGate = new();
+			Blacklist = new();
+			BlacklistDelayID = new gameDelayID();
+			MaxGlobalWarningsCount = 4;
+			DeescalationEventID = new gameDelayID();
+
 			PostConstruct();
 		}
 

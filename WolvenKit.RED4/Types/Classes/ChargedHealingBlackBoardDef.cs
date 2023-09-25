@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public ChargedHealingBlackBoardDef()
 		{
+			CurrHealingItemCharge = new gamebbScriptID_Int32();
+			RechargeGoingOn = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

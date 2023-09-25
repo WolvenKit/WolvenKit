@@ -126,6 +126,19 @@ namespace WolvenKit.RED4.Types
 
 		public IngredientListItemLogicController()
 		{
+			ItemName = new inkTextWidgetReference();
+			InventoryQuantity = new inkTextWidgetReference();
+			IngredientQuantity = new inkTextWidgetReference();
+			Availability = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			EmptyIcon = new inkImageWidgetReference();
+			AvailableBgElements = new();
+			UnavailableBgElements = new();
+			BuyButton = new inkWidgetReference();
+			CountWrapper = new inkWidgetReference();
+			ItemRarity = new inkWidgetReference();
+			Data = new IngredientData();
+
 			PostConstruct();
 		}
 

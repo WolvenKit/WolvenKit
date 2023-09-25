@@ -142,6 +142,15 @@ namespace WolvenKit.RED4.Types
 
 		public SurveillanceCamera()
 		{
+			ControllerTypeName = "SurveillanceCameraController";
+			IdleSound = "dev_surveillance_camera_rotating";
+			IdleSoundStop = "dev_surveillance_camera_rotating_stop";
+			SoundDetectionLoop = "dev_surveillance_camera_detection_loop_start";
+			SoundDetectionLoopStop = "dev_surveillance_camera_detection_loop_stop";
+			ShouldRotate = true;
+			CanDetectIntruders = true;
+			TargetPosition = new Vector4();
+
 			PostConstruct();
 		}
 

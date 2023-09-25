@@ -86,6 +86,13 @@ namespace WolvenKit.RED4.Types
 
 		public VehiclesManagerPopupGameController()
 		{
+			RepairOverlay = new inkWidgetReference();
+			VehicleIconContainer = new inkWidgetReference();
+			VehicleIcon = new inkImageWidgetReference();
+			ScrollArea = new inkScrollAreaWidgetReference();
+			ScrollControllerWidget = new inkWidgetReference();
+			ConfirmButton = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

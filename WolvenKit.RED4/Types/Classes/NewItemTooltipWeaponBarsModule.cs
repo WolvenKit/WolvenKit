@@ -54,6 +54,12 @@ namespace WolvenKit.RED4.Types
 
 		public NewItemTooltipWeaponBarsModule()
 		{
+			Bars = new();
+			DiffBars = new();
+			BetterColorDummyHolder = new inkWidgetReference();
+			WorseColorDummyHolder = new inkWidgetReference();
+			StatsToDisplay = new();
+
 			PostConstruct();
 		}
 

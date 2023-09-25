@@ -142,6 +142,24 @@ namespace WolvenKit.RED4.Types
 
 		public AICoverDataDef()
 		{
+			ExposureMethod = new gamebbScriptID_CName();
+			FallbackExposureMethod = new gamebbScriptID_CName();
+			LastAvailableMethods = new gamebbScriptID_Uint32();
+			CurrentlyExposed = new gamebbScriptID_Bool();
+			CommandExposureMethods = new gamebbScriptID_Variant();
+			CommandCoverOverride = new gamebbScriptID_Bool();
+			CurrentCoverStance = new gamebbScriptID_CName();
+			DesiredCoverStance = new gamebbScriptID_CName();
+			LastCoverPreset = new gamebbScriptID_CName();
+			LastInitialCoverPreset = new gamebbScriptID_CName();
+			LastCoverChangeThreshold = new gamebbScriptID_Float();
+			LastVisibilityCheckTimestamp = new gamebbScriptID_Float();
+			CurrentRing = new gamebbScriptID_Variant();
+			LastCoverRing = new gamebbScriptID_Variant();
+			LastDebugCoverPreset = new gamebbScriptID_Int32();
+			FirstCoverEvaluationDone = new gamebbScriptID_Bool();
+			StartCoverEvaluationTimeStamp = new gamebbScriptID_Float();
+
 			PostConstruct();
 		}
 

@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerDeviceBlackboardDef()
 		{
+			MailThumbnailWidgetsData = new gamebbScriptID_Variant();
+			FileThumbnailWidgetsData = new gamebbScriptID_Variant();
+			MailWidgetsData = new gamebbScriptID_Variant();
+			FileWidgetsData = new gamebbScriptID_Variant();
+			MenuButtonWidgetsData = new gamebbScriptID_Variant();
+			MainMenuButtonWidgetsData = new gamebbScriptID_Variant();
+			BannerWidgetsData = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

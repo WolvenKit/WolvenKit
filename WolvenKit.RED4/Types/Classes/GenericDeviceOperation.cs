@@ -110,6 +110,21 @@ namespace WolvenKit.RED4.Types
 
 		public GenericDeviceOperation()
 		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			FxInstances = new();
+			TransformAnimations = new();
+			VFXs = new();
+			SFXs = new();
+			Facts = new();
+			Components = new();
+			Stims = new();
+			StatusEffects = new();
+			Damages = new();
+			Items = new();
+			Teleport = new STeleportOperationData();
+			PlayerWorkspot = new SWorkspotData();
+
 			PostConstruct();
 		}
 

@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public GameEffectExecutor_StimOnHit()
 		{
+			SuppressedByStimTypes = new();
+
 			PostConstruct();
 		}
 

@@ -70,6 +70,11 @@ namespace WolvenKit.RED4.Types
 
 		public FindServersMenuGameController()
 		{
+			NONE_CHOOSEN = -1;
+			CurentlyChoosenServer = -1;
+			C_onlineColor = new CColor();
+			C_offlineColor = new CColor();
+
 			PostConstruct();
 		}
 

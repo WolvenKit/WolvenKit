@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public GarmentItemPreviewGameController()
 		{
+			C_GARMENT_ROTATION_SPEED = 100.000000F;
+
 			PostConstruct();
 		}
 

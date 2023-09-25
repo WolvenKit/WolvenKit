@@ -190,6 +190,22 @@ namespace WolvenKit.RED4.Types
 
 		public PerkScreenController()
 		{
+			HubSelector = new inkWidgetReference();
+			ConnectionLinesContainer = new inkCompoundWidgetReference();
+			BoughtConnectionLinesContainer = new inkCompoundWidgetReference();
+			MaxedConnectionLinesContainer = new inkCompoundWidgetReference();
+			BoughtMaskContainer = new inkCanvasWidgetReference();
+			MaxedMaskContainer = new inkCanvasWidgetReference();
+			AttributeNameText = new inkTextWidgetReference();
+			AttributeLevelText = new inkTextWidgetReference();
+			LevelControllerRef = new inkWidgetReference();
+			RewardsControllerRef = new inkWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
+			ProficiencyRootRef = new inkWidgetReference();
+			ProficiencyDescriptionText = new inkTextWidgetReference();
+			WidgetMap = new();
+			ConnectionLines = new(45);
+
 			PostConstruct();
 		}
 

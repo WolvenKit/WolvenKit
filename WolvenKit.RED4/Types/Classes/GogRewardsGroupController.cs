@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public GogRewardsGroupController()
 		{
+			Label = new inkTextWidgetReference();
+			ContainerWidget = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

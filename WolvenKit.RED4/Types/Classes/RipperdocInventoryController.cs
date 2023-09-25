@@ -166,6 +166,13 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocInventoryController()
 		{
+			VirtualGridContainer = new inkVirtualCompoundWidgetReference();
+			ScrollBarContainer = new inkWidgetReference();
+			LabelPrefix = new inkTextWidgetReference();
+			LabelSuffix = new inkTextWidgetReference();
+			CachedPlayerItems = new();
+			CachedVendorItems = new();
+
 			PostConstruct();
 		}
 

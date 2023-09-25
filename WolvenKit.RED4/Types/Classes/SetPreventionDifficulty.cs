@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public SetPreventionDifficulty()
 		{
+			DamageDealtToPlayerMultiplier = 1.000000F;
+			ChaseAggressivnessMultiplier = 1.000000F;
+
 			PostConstruct();
 		}
 

@@ -382,6 +382,33 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneDialerLogicController()
 		{
+			TabsContainer = new inkWidgetReference();
+			TitleContainer = new inkWidgetReference();
+			TitleTextWidget = new inkTextWidgetReference();
+			AcceptButtonLabel = new inkTextWidgetReference();
+			Action2ButtonLabel = new inkTextWidgetReference();
+			InputHintsPanel = new inkWidgetReference();
+			ThreadPanel = new inkWidgetReference();
+			ThreadList = new inkWidgetReference();
+			CallsQuestFlag = new inkWidgetReference();
+			Arrow = new inkWidgetReference();
+			ThreadTab = new inkWidgetReference();
+			UnreadTab = new inkWidgetReference();
+			ThreadTabLabel = new inkTextWidgetReference();
+			ContactsList = new inkWidgetReference();
+			AvatarImage = new inkImageWidgetReference();
+			ContactAvatarsFluff = new inkWidgetReference();
+			ScrollArea = new inkScrollAreaWidgetReference();
+			ScrollControllerWidget = new inkWidgetReference();
+			AcceptButtonWidget = new inkWidgetReference();
+			Action2ButtonWidget = new inkWidgetReference();
+			ShowAllButtonWidget = new inkWidgetReference();
+			ShowAllLabel = new inkTextWidgetReference();
+			NothingToReadMessageWidget = new inkWidgetReference();
+			ScrollBarWidget = new inkWidgetReference();
+			LeftMargin = new inkMargin();
+			RightMargin = new inkMargin();
+
 			PostConstruct();
 		}
 

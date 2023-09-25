@@ -62,6 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public EntityHealthBarGameController()
 		{
+			HealthControllerRef = new inkWidgetReference();
+			HealthPercentageRef = new inkTextWidgetReference();
+			TargetEntityRef = new gameEntityReference { Names = new() };
+			GameInstance = new ScriptGameInstance();
+			TargetEntityID = new entEntityID();
+
 			PostConstruct();
 		}
 

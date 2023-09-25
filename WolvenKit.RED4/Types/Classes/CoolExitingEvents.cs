@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public CoolExitingEvents()
 		{
+			ExitSlot = "cool";
+			ExitMomentum = new Vector4();
+
 			PostConstruct();
 		}
 

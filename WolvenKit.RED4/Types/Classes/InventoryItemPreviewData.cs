@@ -62,6 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemPreviewData()
 		{
+			ItemID = new gameItemID();
+
 			PostConstruct();
 		}
 

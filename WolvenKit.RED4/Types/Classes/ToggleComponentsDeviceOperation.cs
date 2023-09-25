@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public ToggleComponentsDeviceOperation()
 		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			Components = new();
+
 			PostConstruct();
 		}
 

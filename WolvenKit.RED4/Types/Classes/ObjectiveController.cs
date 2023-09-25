@@ -102,6 +102,17 @@ namespace WolvenKit.RED4.Types
 
 		public ObjectiveController()
 		{
+			ObjectiveLabel = new inkTextWidgetReference();
+			ObjectiveStatus = new inkTextWidgetReference();
+			QuestIcon = new inkImageWidgetReference();
+			TrackedIcon = new inkImageWidgetReference();
+			FrameBackground_On = new inkImageWidgetReference();
+			FrameBackground_Off = new inkImageWidgetReference();
+			FrameFluff_On = new inkImageWidgetReference();
+			FrameFluff_Off = new inkImageWidgetReference();
+			Folder_On = new inkImageWidgetReference();
+			Folder_Off = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -838,6 +838,40 @@ namespace WolvenKit.RED4.Types
 
 		public PreventionSystem()
 		{
+			CrimeScoreMultiplierByQuest = 1.000000F;
+			PreventionQuestEventSources = new();
+			SystemLockSources = new();
+			NodeEventSources = new();
+			IgnoreSecurityAreas = true;
+			PlayerIsInSecurityArea = new();
+			PoliceSecuritySystems = new();
+			AgentGroupsList = new();
+			LastKnownPosition = new Vector4();
+			DistrictMultiplier = 1.000000F;
+			LastAttackTargetIDs = new();
+			Viewers = new();
+			CrimescoreTimerDelayID = new gameDelayID();
+			StarStateBufferTimerDelayID = new gameDelayID();
+			BeliefAccuracyTimerDelayID = new gameDelayID();
+			BlinkingStatusDelayID = new gameDelayID();
+			SearchingStatusDelayID = new gameDelayID();
+			TransitionToGreyStateDelayID = new gameDelayID();
+			PolicemenSpawnDelayID = new gameDelayID();
+			SecurityAreaResetDelayID = new gameDelayID();
+			InputlockDelayID = new gameDelayID();
+			FreeAreaResetDelayID = new gameDelayID();
+			BlinkReasonsStack = new();
+			PreviousHitTargetID = new entEntityID();
+			MaxHeatLevel = Enums.EPreventionHeatStage.Heat_5;
+			DefaultHeatLevels = true;
+			VehicleSpawnBlockSide = Enums.EVehicleSpawnBlockSide.Default;
+			DamageToPlayerMultiplier = 1.000000F;
+			ChaseMultiplier = 1.000000F;
+			Debug_lastAVRequestedSpawnPosition = new Vector3();
+			AvSpawnPointList = new();
+			MaxAllowedDistanceToPlayer = 20.000000F;
+			LastAVRequestedSpawnPositionsArray = new();
+
 			PostConstruct();
 		}
 

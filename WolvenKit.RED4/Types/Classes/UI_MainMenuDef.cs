@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public UI_MainMenuDef()
 		{
+			ShowDataValidationError = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

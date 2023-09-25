@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerSkillCheckLogicController()
 		{
+			ScannerSkillCheckItemName = "SkillCheckItem";
+			SkillCheckObjects = new();
+
 			PostConstruct();
 		}
 

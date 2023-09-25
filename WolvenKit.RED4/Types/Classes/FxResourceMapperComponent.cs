@@ -62,6 +62,11 @@ namespace WolvenKit.RED4.Types
 
 		public FxResourceMapperComponent()
 		{
+			AreaEffectData = new();
+			InvestigationSlotOffsetMultiplier = 1.000000F;
+			AreaEffectInFocusMode = new();
+			OptionalAreaEffectData = new();
+
 			PostConstruct();
 		}
 

@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public GetOnWindowCombatDecorator()
 		{
+			MountInfo = new gamemountingMountingInfo { ChildId = new entEntityID(), ParentId = new entEntityID(), SlotId = new gamemountingMountingSlotId() };
+
 			PostConstruct();
 		}
 

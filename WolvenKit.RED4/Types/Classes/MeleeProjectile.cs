@@ -134,6 +134,10 @@ namespace WolvenKit.RED4.Types
 
 		public MeleeProjectile()
 		{
+			ForceRegisterInHudManager = true;
+			IsActive = true;
+			DeactivationDepth = -99999.000000F;
+
 			PostConstruct();
 		}
 

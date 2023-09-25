@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public CyberdeckDeviceHackIcon()
 		{
+			Image = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -62,6 +62,12 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiInteractionsHubGameController()
 		{
+			TopInteractionWidgetsLibraries = new();
+			TopInteractionsRoot = new inkWidgetReference();
+			BotInteractionWidgetsLibraries = new();
+			BotInteractionsRoot = new inkWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -54,6 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public WeaponVendorActionWidgetController()
 		{
+			ButtonText = new inkTextWidgetReference();
+			StandardButtonContainer = new inkWidgetReference();
+			HoveredButtonContainer = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

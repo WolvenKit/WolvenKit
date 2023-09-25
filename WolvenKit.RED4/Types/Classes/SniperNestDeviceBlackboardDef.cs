@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public SniperNestDeviceBlackboardDef()
 		{
+			IsInTheSniperNest = new gamebbScriptID_Bool();
+			FastForwardToZoom4 = new gamebbScriptID_Bool();
+			SniperNestDefaultSpeedMultiplier = new gamebbScriptID_Float();
+			SniperNestZoomedSpeedMultiplier = new gamebbScriptID_Float();
+
 			PostConstruct();
 		}
 

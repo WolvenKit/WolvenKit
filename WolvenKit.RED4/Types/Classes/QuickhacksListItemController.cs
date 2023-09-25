@@ -270,6 +270,29 @@ namespace WolvenKit.RED4.Types
 
 		public QuickhacksListItemController()
 		{
+			ExpandAnimationDuration = 0.200000F;
+			Icon = new inkImageWidgetReference();
+			Description = new inkTextWidgetReference();
+			MemoryValue = new inkTextWidgetReference();
+			MemoryCells = new inkCompoundWidgetReference();
+			ActionStateRoot = new inkWidgetReference();
+			ActionStateText = new inkTextWidgetReference();
+			CategoryRoot = new inkWidgetReference();
+			CategoryText = new inkTextWidgetReference();
+			RevealRoot = new inkWidgetReference();
+			RevealText = new inkTextWidgetReference();
+			CooldownIcon = new inkWidgetReference();
+			CooldownValue = new inkTextWidgetReference();
+			DescriptionSize = new inkWidgetReference();
+			CostReductionArrow = new inkImageWidgetReference();
+			HackColorDamage = "QuickHackAction.iconColorDamage";
+			HackColorControl = "QuickHackAction.iconColorControl";
+			HackColorCovert = "QuickHackAction.iconColorCovert";
+			HackColorUltimate = "QuickHackAction.iconColorUltimate";
+			HackColorDefault = "QuickHackAction.textColor";
+			CachedDescriptionSize = new Vector2();
+			DefaultMargin = new inkMargin();
+
 			PostConstruct();
 		}
 

@@ -46,6 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public DatatermLoginGameController()
 		{
+			AlphaSys = new inkWidgetReference();
+			BravoSys = new inkWidgetReference();
+			SierraSys = new inkWidgetReference();
+			VictorSys = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -102,6 +102,13 @@ namespace WolvenKit.RED4.Types
 
 		public LiftDevice()
 		{
+			ControllerTypeName = "LiftController";
+			AdvertismentNames = new();
+			Advertisments = new();
+			Floors = new();
+			QuestSafeguardColliders = new();
+			QuestSafeguardColliderNames = new();
+
 			PostConstruct();
 		}
 

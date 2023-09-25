@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public RetractableAdControllerPS()
 		{
+			DeviceName = "LocKey#196";
+			TweakDBRecord = "Devices.RoadBlock";
+			TweakDBDescriptionRecord = 127230302630;
+
 			PostConstruct();
 		}
 

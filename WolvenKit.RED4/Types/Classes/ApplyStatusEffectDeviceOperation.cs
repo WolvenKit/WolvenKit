@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyStatusEffectDeviceOperation()
 		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			StatusEffects = new();
+
 			PostConstruct();
 		}
 

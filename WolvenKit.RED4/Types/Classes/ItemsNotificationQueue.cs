@@ -110,6 +110,11 @@ namespace WolvenKit.RED4.Types
 
 		public ItemsNotificationQueue()
 		{
+			ShowDuration = 6.000000F;
+			CurrencyNotification = "notification_currency";
+			ItemNotification = "Item_Received_SMALL";
+			XpNotification = "progression";
+
 			PostConstruct();
 		}
 

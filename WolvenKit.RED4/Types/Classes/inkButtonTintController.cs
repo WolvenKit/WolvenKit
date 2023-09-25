@@ -46,6 +46,12 @@ namespace WolvenKit.RED4.Types
 
 		public inkButtonTintController()
 		{
+			NormalColor = new CColor();
+			HoverColor = new CColor();
+			PressColor = new CColor();
+			DisableColor = new CColor();
+			TintControlRef = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

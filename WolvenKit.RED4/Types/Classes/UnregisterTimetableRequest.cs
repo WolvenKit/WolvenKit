@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public UnregisterTimetableRequest()
 		{
+			RequesterData = new PSOwnerData { Id = new gamePersistentID() };
+
 			PostConstruct();
 		}
 

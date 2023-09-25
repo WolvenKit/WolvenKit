@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public GAMEOBJECT_Actor()
 		{
+			Type = Enums.HUDActorType.GAME_OBJECT;
+
 			PostConstruct();
 		}
 

@@ -118,6 +118,20 @@ namespace WolvenKit.RED4.Types
 
 		public ItemModeGridContainer()
 		{
+			ScrollControllerWidget = new inkCompoundWidgetReference();
+			SliderWidget = new inkWidgetReference();
+			ItemsGridWidget = new inkWidgetReference();
+			FilterGridWidget = new inkCompoundWidgetReference();
+			F_eyesTexture = new inkWidgetReference();
+			F_systemReplacementTexture = new inkWidgetReference();
+			F_handsTexture = new inkWidgetReference();
+			M_eyesTexture = new inkWidgetReference();
+			M_systemReplacementTexture = new inkWidgetReference();
+			M_handsTexture = new inkWidgetReference();
+			InventoryWrapper = new inkWidgetReference();
+			GridWrapper = new inkWidgetReference();
+			ScrollArea = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

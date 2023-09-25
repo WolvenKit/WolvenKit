@@ -118,6 +118,16 @@ namespace WolvenKit.RED4.Types
 
 		public CreditsGameController()
 		{
+			VideoContainer = new inkCompoundWidgetReference();
+			SceneTexture = new inkImageWidgetReference();
+			BackgroundVideo = new inkVideoWidgetReference();
+			BinkVideo = new inkVideoWidgetReference();
+			BinkVideos = new();
+			FastForward = new inkTextWidgetReference();
+			MusicVideoEp1 = new inkVideoWidgetReference();
+			CreditsAnimEp1 = new inkCompoundWidgetReference();
+			VideoSummary = new inkVideoWidgetSummary();
+
 			PostConstruct();
 		}
 

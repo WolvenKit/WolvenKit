@@ -158,6 +158,22 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerksCyberwareTooltipController()
 		{
+			Title = new inkTextWidgetReference();
+			SubTitle = new inkTextWidgetReference();
+			Description = new inkTextWidgetReference();
+			SubDescription = new inkTextWidgetReference();
+			VideoWidget = new inkVideoWidgetReference();
+			CornerContainer = new inkWidgetReference();
+			RelicCost = new inkWidgetReference();
+			Bars = new();
+			InputHints = new inkWidgetReference();
+			BuyHint = new inkWidgetReference();
+			SellHint = new inkWidgetReference();
+			C_swipeLeftOut = "espionage_central_swipe_left_out";
+			C_swipeLeftIn = "espionage_central_swipe_left_in";
+			C_swipeRightOut = "espionage_central_swipe_right_out";
+			C_swipeRightIn = "espionage_central_swipe_right_in";
+
 			PostConstruct();
 		}
 

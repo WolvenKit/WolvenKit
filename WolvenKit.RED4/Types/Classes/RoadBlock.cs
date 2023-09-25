@@ -78,6 +78,11 @@ namespace WolvenKit.RED4.Types
 
 		public RoadBlock()
 		{
+			ControllerTypeName = "RoadBlockController";
+			OpeningSpeed = 2.000000F;
+			CoverObjectRefs = new();
+			GlobalCoverObjectRefs = new();
+
 			PostConstruct();
 		}
 

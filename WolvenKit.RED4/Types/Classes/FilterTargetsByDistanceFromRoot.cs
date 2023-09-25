@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public FilterTargetsByDistanceFromRoot()
 		{
+			RootOffset_Z = 1.000000F;
+			Tollerance = 0.500000F;
+
 			PostConstruct();
 		}
 

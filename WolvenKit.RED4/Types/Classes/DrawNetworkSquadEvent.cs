@@ -70,6 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public DrawNetworkSquadEvent()
 		{
+			MemberID = new gamePersistentID();
+			FxResource = new gameFxResource();
+
 			PostConstruct();
 		}
 

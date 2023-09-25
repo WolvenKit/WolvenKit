@@ -62,6 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		public DataTerm()
 		{
+			ControllerTypeName = "DataTermController";
+			MappinID = new gameNewMappinID();
+			ShortGlitchDelayID = new gameDelayID();
+
 			PostConstruct();
 		}
 

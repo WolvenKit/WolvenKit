@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public GiveRewardEffector()
 		{
+			Target = new entEntityID();
+
 			PostConstruct();
 		}
 

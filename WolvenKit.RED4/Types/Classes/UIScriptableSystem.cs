@@ -142,6 +142,14 @@ namespace WolvenKit.RED4.Types
 
 		public UIScriptableSystem()
 		{
+			NewItems = new();
+			DLCAddedItems = new();
+			NewWardrobeSets = new();
+			NewWardrobeItems = new();
+			AvailableCars = new();
+			PreviousAttributeLevels = new();
+			DEV_useLongScanTooltips = true;
+
 			PostConstruct();
 		}
 

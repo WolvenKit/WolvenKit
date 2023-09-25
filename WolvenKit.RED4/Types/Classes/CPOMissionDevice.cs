@@ -46,6 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public CPOMissionDevice()
 		{
+			BlockAfterOperation = true;
+
 			PostConstruct();
 		}
 

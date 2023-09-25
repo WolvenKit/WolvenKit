@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public MarketSystem()
 		{
+			Vendors = new();
+			VendingMachinesVendors = new();
+
 			PostConstruct();
 		}
 

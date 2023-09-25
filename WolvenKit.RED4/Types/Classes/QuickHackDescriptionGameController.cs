@@ -198,6 +198,26 @@ namespace WolvenKit.RED4.Types
 
 		public QuickHackDescriptionGameController()
 		{
+			SubHeader = new inkTextWidgetReference();
+			Tier = new inkTextWidgetReference();
+			Description = new inkTextWidgetReference();
+			RecompileTimer = new inkTextWidgetReference();
+			Duration = new inkTextWidgetReference();
+			DurationRoot = new inkWidgetReference();
+			Cooldown = new inkTextWidgetReference();
+			CooldownRoot = new inkWidgetReference();
+			UploadTime = new inkTextWidgetReference();
+			UploadTimeRoot = new inkWidgetReference();
+			MemoryCost = new inkTextWidgetReference();
+			MemoryRawCost = new inkTextWidgetReference();
+			CategoryText = new inkTextWidgetReference();
+			CategoryContainer = new inkWidgetReference();
+			DamageWrapper = new inkWidgetReference();
+			DamageLabel = new inkTextWidgetReference();
+			DamageValue = new inkTextWidgetReference();
+			HealthPercentageLabel = new inkTextWidgetReference();
+			EffectsList = new inkCompoundWidgetReference();
+
 			PostConstruct();
 		}
 

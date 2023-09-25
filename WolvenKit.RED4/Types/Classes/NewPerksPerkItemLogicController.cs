@@ -118,6 +118,14 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerksPerkItemLogicController()
 		{
+			Icon = new inkImageWidgetReference();
+			IconGhost = new inkImageWidgetReference();
+			LockIcon = new inkWidgetReference();
+			RequiredPointsText = new inkTextWidgetReference();
+			LevelText = new inkTextWidgetReference();
+			DEV_notYetImplemented = new inkWidgetReference();
+			AnimProxies = new();
+
 			PostConstruct();
 		}
 

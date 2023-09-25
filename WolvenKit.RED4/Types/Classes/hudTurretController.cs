@@ -246,6 +246,23 @@ namespace WolvenKit.RED4.Types
 
 		public hudTurretController()
 		{
+			HealthStatus = new inkTextWidgetReference();
+			MessageText = new inkTextWidgetReference();
+			YawCounter = new inkTextWidgetReference();
+			PitchCounter = new inkTextWidgetReference();
+			Pitch = new inkCanvasWidgetReference();
+			Yaw = new inkCanvasWidgetReference();
+			Pitch_min = -360.000000F;
+			Pitch_max = 360.000000F;
+			Yaw_min = -640.000000F;
+			Yaw_max = 640.000000F;
+			ZoomNumber = new inkTextWidgetReference();
+			DistanceNumber = new inkTextWidgetReference();
+			DistanceImageRuler = new inkImageWidgetReference();
+			ZoomMoveBracketL = new inkImageWidgetReference();
+			ZoomMoveBracketR = new inkImageWidgetReference();
+			GameInstance = new ScriptGameInstance();
+
 			PostConstruct();
 		}
 

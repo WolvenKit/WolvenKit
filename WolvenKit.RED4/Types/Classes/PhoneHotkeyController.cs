@@ -134,6 +134,20 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneHotkeyController()
 		{
+			HotkeyBackground = new inkImageWidgetReference();
+			ButtonHint = new inkWidgetReference();
+			Restrictions = new();
+			DebugCommands = new();
+			MainIcon = new inkImageWidgetReference();
+			QuestIcon = new inkImageWidgetReference();
+			CallIcon = new inkImageWidgetReference();
+			MessageCounterLabel = new inkWidgetReference();
+			MessageCounterLabelCircle = new inkWidgetReference();
+			MessageCounter = new inkTextWidgetReference();
+			MessageCounterCircle = new inkTextWidgetReference();
+			PhoneIconAtlas = "base\\gameplay\\gui\\common\\icons\\atlas_common.inkatlas";
+			PhoneIconName = "ico_phone";
+
 			PostConstruct();
 		}
 

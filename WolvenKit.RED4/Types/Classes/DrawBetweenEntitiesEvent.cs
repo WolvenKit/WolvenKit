@@ -54,6 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public DrawBetweenEntitiesEvent()
 		{
+			FxResource = new gameFxResource();
+			MasterEntity = new entEntityID();
+			SlaveEntity = new entEntityID();
+
 			PostConstruct();
 		}
 

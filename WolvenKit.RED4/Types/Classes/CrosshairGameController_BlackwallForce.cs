@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_BlackwallForce()
 		{
+			TargetList = new();
+			TargetData = new gamesmartGunUITargetParameters { Pos = new Vector2(), EntityID = new entEntityID() };
+
 			PostConstruct();
 		}
 

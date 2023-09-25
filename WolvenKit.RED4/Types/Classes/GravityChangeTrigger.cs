@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public GravityChangeTrigger()
 		{
+			RegularStateMachineName = "Locomotion";
+			LowGravityStateMachineName = "LocomotionLowGravity";
+
 			PostConstruct();
 		}
 

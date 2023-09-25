@@ -54,6 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public DropdownElementController()
 		{
+			Text = new inkTextWidgetReference();
+			Arrow = new inkImageWidgetReference();
+			Frame = new inkWidgetReference();
+			ContentContainer = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -366,6 +366,29 @@ namespace WolvenKit.RED4.Types
 
 		public LootingController()
 		{
+			ItemsListContainer = new inkCompoundWidgetReference();
+			TitleContainer = new inkCompoundWidgetReference();
+			UpArrow = new inkWidgetReference();
+			DownArrow = new inkWidgetReference();
+			ListWrapper = new inkWidgetReference();
+			ActionsListV = new inkCompoundWidgetReference();
+			LockedStatusContainer = new inkWidgetReference();
+			WidgetsPoolList = new();
+			LootList = new();
+			GameInstance = new ScriptGameInstance();
+			MaxItemsNum = 3;
+			BoundOwnerID = new entEntityID();
+			LootingItems = new();
+			UiInventoryItems = new();
+			CurrentComparisonItemId = new gameItemID();
+			LastTooltipItemId = new gameItemID();
+			CurrentTooltipItemId = new gameItemID();
+			LastItemOwnerId = new entEntityID();
+			CurrentItemOwnerId = new entEntityID();
+			BufferedOwnerId = new entEntityID();
+			CurrendData = new gameinteractionsvisLootData { IsListOpen = true, Choices = new(), ItemIDs = new(), OwnerId = new entEntityID() };
+			ActiveWeaponID = new gameItemID();
+
 			PostConstruct();
 		}
 

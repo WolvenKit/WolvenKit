@@ -54,6 +54,10 @@ namespace WolvenKit.RED4.Types
 
 		public EngagementScreenGameController()
 		{
+			BackgroundVideo = new inkVideoWidgetReference();
+			ProceedConfirmation = new inkCompoundWidgetReference();
+			ProgressBar = new inkCompoundWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public PointData()
 		{
+			Position = new Vector4();
+			Direction = new Vector4();
+
 			PostConstruct();
 		}
 

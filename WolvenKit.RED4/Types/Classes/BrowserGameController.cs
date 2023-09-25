@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public BrowserGameController()
 		{
+			LogicControllerRef = new inkWidgetReference();
+			LocationTags = new();
+
 			PostConstruct();
 		}
 

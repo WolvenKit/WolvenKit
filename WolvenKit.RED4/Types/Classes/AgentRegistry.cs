@@ -46,6 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public AgentRegistry()
 		{
+			Agents = new();
+			AgentsLock = new ScriptReentrantRWLock();
+			MaxReprimandsPerNPC = 2;
+			MaxReprimandsPerDEVICE = 1;
+
 			PostConstruct();
 		}
 

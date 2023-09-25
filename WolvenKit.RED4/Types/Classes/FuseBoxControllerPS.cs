@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public FuseBoxControllerPS()
 		{
+			DeviceName = "LocKey#2013";
+			TweakDBRecord = "Devices.FuseBox";
+			TweakDBDescriptionRecord = 118337989519;
+
 			PostConstruct();
 		}
 

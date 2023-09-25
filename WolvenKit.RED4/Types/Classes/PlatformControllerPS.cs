@@ -110,6 +110,10 @@ namespace WolvenKit.RED4.Types
 
 		public PlatformControllerPS()
 		{
+			Floors = new();
+			Speed = 0.500000F;
+			Curve = "cosine";
+
 			PostConstruct();
 		}
 

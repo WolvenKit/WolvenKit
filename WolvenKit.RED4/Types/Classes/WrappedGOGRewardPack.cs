@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public WrappedGOGRewardPack()
 		{
+			Data = new gameRewardPack { Rewards = new() };
+
 			PostConstruct();
 		}
 

@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public LinkController()
 		{
+			DefaultColor = new HDRColor();
+			HoverColor = new HDRColor();
+			IGNORED_COLOR = new HDRColor();
+
 			PostConstruct();
 		}
 

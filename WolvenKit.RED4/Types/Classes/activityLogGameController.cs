@@ -62,6 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public activityLogGameController()
 		{
+			Entries = new();
+			Panel = new inkVerticalPanelWidgetReference();
+
 			PostConstruct();
 		}
 

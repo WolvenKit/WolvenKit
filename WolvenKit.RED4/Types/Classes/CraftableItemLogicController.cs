@@ -54,6 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public CraftableItemLogicController()
 		{
+			NormalAppearence = new inkCompoundWidgetReference();
+
 			PostConstruct();
 		}
 

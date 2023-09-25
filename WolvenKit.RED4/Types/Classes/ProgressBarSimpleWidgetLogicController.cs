@@ -198,6 +198,17 @@ namespace WolvenKit.RED4.Types
 
 		public ProgressBarSimpleWidgetLogicController()
 		{
+			CurrentValue = 1.000000F;
+			PreviousValue = 1.000000F;
+			MaxCNBarFlashSize = 500.000000F;
+			FullBar = new inkWidgetReference();
+			ChangePBar = new inkWidgetReference();
+			ChangeNBar = new inkWidgetReference();
+			EmptyBar = new inkWidgetReference();
+			BarCap = new inkWidgetReference();
+			DamagePreviewBar = new inkWidgetReference();
+			AnimDuration = 2.000000F;
+
 			PostConstruct();
 		}
 

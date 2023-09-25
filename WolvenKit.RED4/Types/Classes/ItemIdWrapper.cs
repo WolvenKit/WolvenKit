@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public ItemIdWrapper()
 		{
+			ItemID = new gameItemID();
+
 			PostConstruct();
 		}
 

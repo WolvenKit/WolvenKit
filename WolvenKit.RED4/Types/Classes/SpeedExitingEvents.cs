@@ -14,6 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public SpeedExitingEvents()
 		{
+			ExitSlot = "speed";
+			ExitForce = new Vector4();
+
 			PostConstruct();
 		}
 

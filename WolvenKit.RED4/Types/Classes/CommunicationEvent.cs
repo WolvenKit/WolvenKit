@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public CommunicationEvent()
 		{
+			Sender = new entEntityID();
+
 			PostConstruct();
 		}
 

@@ -86,6 +86,12 @@ namespace WolvenKit.RED4.Types
 
 		public PatchNotesGameController()
 		{
+			NotesContainerRef = new inkWidgetReference();
+			ItemLibraryName = "item";
+			IntroAnimationName = "intro";
+			CloseButtonRef = new inkWidgetReference();
+			IsInputBlocked = true;
+
 			PostConstruct();
 		}
 

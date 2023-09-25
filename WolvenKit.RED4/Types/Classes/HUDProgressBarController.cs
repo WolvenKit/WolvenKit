@@ -310,6 +310,24 @@ namespace WolvenKit.RED4.Types
 
 		public HUDProgressBarController()
 		{
+			Bar = new inkWidgetReference();
+			BarExtra = new inkWidgetReference();
+			Header = new inkTextWidgetReference();
+			BottomText = new inkTextWidgetReference();
+			Percent = new inkTextWidgetReference();
+			Completed = new inkTextWidgetReference();
+			Failed = new inkTextWidgetReference();
+			AttencionIcon = new inkWidgetReference();
+			NeutralIcon = new inkWidgetReference();
+			RelicIcon = new inkWidgetReference();
+			MoneyIcon = new inkWidgetReference();
+			ApartmentIcon = new inkImageWidgetReference();
+			VehicleIcon = new inkImageWidgetReference();
+			NeutralInIcon = new inkImageWidgetReference();
+			RevealIcon = new inkWidgetReference();
+			VahicleHackIcon = new inkWidgetReference();
+			Wrapper = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

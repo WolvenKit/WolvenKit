@@ -174,6 +174,10 @@ namespace WolvenKit.RED4.Types
 
 		public ChargebarController()
 		{
+			Foreground = new inkWidgetReference();
+			Midground = new inkWidgetReference();
+			Background = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

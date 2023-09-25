@@ -302,6 +302,23 @@ namespace WolvenKit.RED4.Types
 
 		public HUDSignalProgressBarController()
 		{
+			Bar = new inkWidgetReference();
+			SignalBar = new inkWidgetReference();
+			Completed = new inkWidgetReference();
+			SignalLost = new inkWidgetReference();
+			Percent = new inkTextWidgetReference();
+			SignalPercent = new inkTextWidgetReference();
+			SignalLabel = new inkWidgetReference();
+			SignalWrapper = new inkWidgetReference();
+			SignalLostAnimationName = "warning";
+			IntroAnimationName = "intro";
+			OutroAnimationName = "outro";
+			AddPercentSign = true;
+			Data = new HUDProgressBarData();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			BarSize = new Vector2();
+			SignalBarSize = new Vector2();
+
 			PostConstruct();
 		}
 

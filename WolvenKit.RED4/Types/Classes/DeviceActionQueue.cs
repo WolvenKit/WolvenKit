@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceActionQueue()
 		{
+			ActionsInQueue = new();
+			MaxQueueSize = 1;
+
 			PostConstruct();
 		}
 

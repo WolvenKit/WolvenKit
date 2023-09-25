@@ -54,6 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public StimBroadcasterComponent()
 		{
+			ActiveRequests = new();
+			Targets = new();
+			BlockedStims = new();
+			FallbackInterval = 1.000000F;
+
 			PostConstruct();
 		}
 

@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public ToiletControllerPS()
 		{
+			FlushDuration = 5.000000F;
+
 			PostConstruct();
 		}
 

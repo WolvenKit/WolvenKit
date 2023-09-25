@@ -14,6 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public CPOVotingDevice()
 		{
+			BlockAfterOperation = false;
+			FactToUnblock = "defaults to compatibleDeviceName_enabled";
+
 			PostConstruct();
 		}
 

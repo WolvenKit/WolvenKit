@@ -70,6 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public nanowireGrenade()
 		{
+			TrailEffectName = "trail";
+			Alive = true;
+
 			PostConstruct();
 		}
 

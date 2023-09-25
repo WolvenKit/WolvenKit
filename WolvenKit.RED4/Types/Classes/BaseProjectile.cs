@@ -70,6 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public BaseProjectile()
 		{
+			ProjectileSpawnPoint = new Vector4();
+			ProjectilePosition = new Vector4();
+
 			PostConstruct();
 		}
 

@@ -118,6 +118,13 @@ namespace WolvenKit.RED4.Types
 
 		public PingCachedData()
 		{
+			SourceID = new entEntityID();
+			CurrentInterval = 1;
+			DelayID = new gameDelayID();
+			LinkType = Enums.ELinkType.FREE;
+			LinkFXresource = new gameFxResource();
+			SourcePosition = new Vector4();
+
 			PostConstruct();
 		}
 

@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public CraftingNotificationQueue()
 		{
+			Duration = 2.000000F;
+
 			PostConstruct();
 		}
 

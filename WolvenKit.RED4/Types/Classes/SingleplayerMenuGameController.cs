@@ -270,6 +270,20 @@ namespace WolvenKit.RED4.Types
 
 		public SingleplayerMenuGameController()
 		{
+			BaseLogoContainer = new inkCompoundWidgetReference();
+			Ep1LogoContainer = new inkCompoundWidgetReference();
+			GogButtonWidgetRef = new inkWidgetReference();
+			AccountSelector = new inkCompoundWidgetReference();
+			GameVersionButton = new inkCompoundWidgetReference();
+			Patch2Notification = new inkCompoundWidgetReference();
+			Patch2NotificationDelay = 10.000000F;
+			ExpansionBanner = new inkCompoundWidgetReference();
+			Ep1IdName = "EP1";
+			ButtonHintsManagerRef = new inkWidgetReference();
+			ContinuetooltipContainer = new inkCompoundWidgetReference();
+			Patch2NotificationIntroName = "patch2_notification_intro";
+			Patch2NotificationOutroName = "patch2_notification_outro";
+
 			PostConstruct();
 		}
 

@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public SetVendorPriceMultiplierRequest()
 		{
+			Multiplier = 1.000000F;
+
 			PostConstruct();
 		}
 

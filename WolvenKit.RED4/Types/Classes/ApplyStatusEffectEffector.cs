@@ -70,6 +70,8 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyStatusEffectEffector()
 		{
+			TargetEntityID = new entEntityID();
+
 			PostConstruct();
 		}
 

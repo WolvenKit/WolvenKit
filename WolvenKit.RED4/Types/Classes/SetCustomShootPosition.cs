@@ -182,6 +182,17 @@ namespace WolvenKit.RED4.Types
 
 		public SetCustomShootPosition()
 		{
+			Offset = new Vector3();
+			FxOffset = new Vector3();
+			LandIndicatorFX = new gameFxResource();
+			ShootToTheGround = true;
+			OwnerPosition = new Vector4();
+			TargetPosition = new Vector4();
+			Direction = new Vector4();
+			FxPosition = new Vector4();
+			ShootPointPosition = new Vector4();
+			TargetsPosition = new();
+
 			PostConstruct();
 		}
 

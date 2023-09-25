@@ -54,6 +54,13 @@ namespace WolvenKit.RED4.Types
 
 		public SecurityTurretControllerPS()
 		{
+			DeviceName = "LocKey#121";
+			TweakDBRecord = "Devices.SecurityTurret";
+			TweakDBDescriptionRecord = 147741407213;
+			LookAtPresetVert = "LookatPreset.TurretVertical";
+			LookAtPresetHor = "LookatPreset.TurretHorizontal";
+			LaserGameEffectRef = new gameEffectRef();
+
 			PostConstruct();
 		}
 

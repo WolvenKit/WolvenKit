@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public ConsecutiveHitsPrereqCondition()
 		{
+			LastTargetID = new entEntityID();
+			LastHitTime = -1.000000F;
+
 			PostConstruct();
 		}
 

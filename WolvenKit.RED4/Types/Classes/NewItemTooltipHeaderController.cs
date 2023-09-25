@@ -78,6 +78,15 @@ namespace WolvenKit.RED4.Types
 
 		public NewItemTooltipHeaderController()
 		{
+			ItemNameText = new inkTextWidgetReference();
+			ItemRarityText = new inkTextWidgetReference();
+			ItemTypeText = new inkTextWidgetReference();
+			ComparisionArrow = new inkWidgetReference();
+			ItemEvolutionIcon = new inkImageWidgetReference();
+			ItemPerkIcon = new inkImageWidgetReference();
+			ItemWeaponIcon = new inkImageWidgetReference();
+			SeparatorTop = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

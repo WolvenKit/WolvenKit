@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public HUDManagerAssociationRequest()
 		{
+			AssociatedID = new entEntityID();
+
 			PostConstruct();
 		}
 

@@ -158,6 +158,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiCrosshairContainerController()
 		{
+			HiddenTextCanvas = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

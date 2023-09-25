@@ -62,6 +62,11 @@ namespace WolvenKit.RED4.Types
 
 		public LcdScreenILogicController()
 		{
+			DefaultUI = new inkWidgetReference();
+			MainDisplayWidget = new inkVideoWidgetReference();
+			MessegeWidget = new inkTextWidgetReference();
+			BackgroundWidget = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerQuestClue()
 		{
+			CategoryTextRef = new inkTextWidgetReference();
+			DescriptionTextRef = new inkTextWidgetReference();
+			IconRef = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

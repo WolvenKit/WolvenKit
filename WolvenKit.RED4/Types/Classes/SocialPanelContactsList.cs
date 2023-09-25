@@ -46,6 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public SocialPanelContactsList()
 		{
+			ListItemName = "contactsListItem";
+			ItemsRoot = new inkBasePanelWidgetReference();
+			ItemsList = new();
+			CurrentContactHash = -1;
+
 			PostConstruct();
 		}
 

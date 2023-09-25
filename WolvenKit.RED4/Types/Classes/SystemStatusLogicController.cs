@@ -86,6 +86,15 @@ namespace WolvenKit.RED4.Types
 
 		public SystemStatusLogicController()
 		{
+			OnlineRoot = new inkWidgetReference();
+			OfflineRoot = new inkWidgetReference();
+			OnlineIco = new inkWidgetReference();
+			OfflineIco = new inkWidgetReference();
+			SysIndicator = new inkWidgetReference();
+			StatusBackground = new inkWidgetReference();
+			WidgetsToColor = new();
+			TextStatuses = new();
+
 			PostConstruct();
 		}
 

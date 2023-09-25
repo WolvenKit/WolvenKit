@@ -254,6 +254,38 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ScannerModulesDef()
 		{
+			ScannerName = new gamebbScriptID_Variant();
+			ScannerHealth = new gamebbScriptID_Variant();
+			ScannerLevel = new gamebbScriptID_Variant();
+			ScannerAuthorization = new gamebbScriptID_Variant();
+			ScannerRarity = new gamebbScriptID_Variant();
+			ScannerArchetype = new gamebbScriptID_Variant();
+			ScannerFaction = new gamebbScriptID_Variant();
+			ScannerWeaponBasic = new gamebbScriptID_Variant();
+			ScannerWeaponDetailed = new gamebbScriptID_Variant();
+			ScannerVulnerabilities = new gamebbScriptID_Variant();
+			ScannerSquadInfo = new gamebbScriptID_Variant();
+			ScannerResistances = new gamebbScriptID_Variant();
+			ScannerAbilities = new gamebbScriptID_Variant();
+			ScannerAttitude = new gamebbScriptID_Variant();
+			ScannerBountySystem = new gamebbScriptID_Variant();
+			ScannerDeviceStatus = new gamebbScriptID_Variant();
+			ScannerNetworkLevel = new gamebbScriptID_Variant();
+			ScannerNetworkStatus = new gamebbScriptID_Variant();
+			ScannerConnections = new gamebbScriptID_Variant();
+			ScannerDescription = new gamebbScriptID_Variant();
+			ScannerSkillChecks = new gamebbScriptID_Variant();
+			ScannerVehicleName = new gamebbScriptID_Variant();
+			ScannerVehicleManufacturer = new gamebbScriptID_Variant();
+			ScannerVehicleProductionYears = new gamebbScriptID_Variant();
+			ScannerVehicleDriveLayout = new gamebbScriptID_Variant();
+			ScannerVehicleHorsepower = new gamebbScriptID_Variant();
+			ScannerVehicleMass = new gamebbScriptID_Variant();
+			ScannerVehicleState = new gamebbScriptID_Variant();
+			ScannerVehicleInfo = new gamebbScriptID_Variant();
+			ScannerQuickHackDescription = new gamebbScriptID_Variant();
+			ObjectType = new gamebbScriptID_Int32();
+
 			PostConstruct();
 		}
 

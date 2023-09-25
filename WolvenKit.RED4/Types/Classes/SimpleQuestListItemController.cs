@@ -270,6 +270,23 @@ namespace WolvenKit.RED4.Types
 
 		public SimpleQuestListItemController()
 		{
+			Title = new inkTextWidgetReference();
+			Description = new inkTextWidgetReference();
+			TypeIcon = new inkImageWidgetReference();
+			DifficultIcon = new inkImageWidgetReference();
+			FixerIcon = new inkImageWidgetReference();
+			Ep1Icon = new inkImageWidgetReference();
+			ToggleAnimatedIndicator = new inkWidgetReference();
+			HoverIndicator = new inkWidgetReference();
+			QuestItemFrame = new inkWidgetReference();
+			QuestItemBg = new inkWidgetReference();
+			QuestItemBgButton = new inkWidgetReference();
+			DistanceContainer = new inkWidgetReference();
+			DefaultDistance = new inkTextWidgetReference();
+			TrackedDistance = new inkTextWidgetReference();
+			IsNewMarker = new inkWidgetReference();
+			DistanceAnim_toHover_delay = 0.200000F;
+
 			PostConstruct();
 		}
 

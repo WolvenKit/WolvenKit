@@ -78,6 +78,16 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerPerkDataDef()
 		{
+			WoundedInstigated = new gamebbScriptID_Uint32();
+			DismembermentInstigated = new gamebbScriptID_Variant();
+			EntityNoticedPlayer = new gamebbScriptID_Uint32();
+			CombatStateTime = new gamebbScriptID_Float();
+			LeapedDistance = new gamebbScriptID_Float();
+			LeapPosition = new gamebbScriptID_Vector4();
+			LeapTarget = new gamebbScriptID_EntityID();
+			UsedHealingItemOrCyberware = new gamebbScriptID_Uint32();
+			StartedUsingHealingItemOrCyberware = new gamebbScriptID_Uint32();
+
 			PostConstruct();
 		}
 

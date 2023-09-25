@@ -150,6 +150,9 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerInkGameController()
 		{
+			ForceOpenDocumentType = Enums.EDocumentType.Invalid;
+			ForceOpenDocumentAdress = new SDocumentAdress { FolderID = -1, DocumentID = -1 };
+
 			PostConstruct();
 		}
 

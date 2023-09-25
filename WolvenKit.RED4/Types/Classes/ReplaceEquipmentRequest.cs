@@ -62,6 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public ReplaceEquipmentRequest()
 		{
+			ItemID = new gameItemID();
+			CustomPartToGenerateID = new gameItemID();
+
 			PostConstruct();
 		}
 

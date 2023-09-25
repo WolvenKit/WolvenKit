@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public MoveToScavengeTarget()
 		{
+			LastTime = -1.000000F;
+			TimeoutDuration = 0.100000F;
+
 			PostConstruct();
 		}
 

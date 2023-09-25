@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public GameplayTagsPrereq()
 		{
+			AllowedTags = new();
+
 			PostConstruct();
 		}
 

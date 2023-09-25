@@ -70,6 +70,11 @@ namespace WolvenKit.RED4.Types
 
 		public ScannerDeviceBodyGameController()
 		{
+			NetworkStatusText = new inkTextWidgetReference();
+			DeviceAuthorizationText = new inkTextWidgetReference();
+			DeviceAuthorizationRow = new inkCompoundWidgetReference();
+			NetworkStatusRow = new inkCompoundWidgetReference();
+
 			PostConstruct();
 		}
 

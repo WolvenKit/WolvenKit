@@ -894,6 +894,71 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemDisplayController()
 		{
+			WidgetWrapper = new inkWidgetReference();
+			ItemName = new inkTextWidgetReference();
+			ItemPrice = new inkTextWidgetReference();
+			ItemRarity = new inkWidgetReference();
+			CommonModsRoot = new inkCompoundWidgetReference();
+			ItemImage = new inkImageWidgetReference();
+			ItemFallbackImage = new inkImageWidgetReference();
+			ItemEmptyImage = new inkImageWidgetReference();
+			ItemEmptyIcon = new inkImageWidgetReference();
+			CyberwareEmptyImage = new inkImageWidgetReference();
+			ItemSelectedArrow = new inkWidgetReference();
+			QuantintyAmmoIcon = new inkWidgetReference();
+			QuantityWrapper = new inkCompoundWidgetReference();
+			QuantityText = new inkTextWidgetReference();
+			WeaponType = new inkTextWidgetReference();
+			HighlightFrames = new();
+			EquippedWidgets = new();
+			HideWhenEquippedWidgets = new();
+			HideWhenCyberwareInInventory = new();
+			ShowWhenCyberwareInInventory = new();
+			ShowInEmptyWidgets = new();
+			HideInEmptyWidgets = new();
+			BackgroundFrames = new();
+			EquippedMarker = new inkWidgetReference();
+			RequirementsWrapper = new inkWidgetReference();
+			IconicTint = new inkWidgetReference();
+			TransmogContainer = new inkCompoundWidgetReference();
+			RarityWrapper = new inkWidgetReference();
+			RarityCommonWrapper = new inkWidgetReference();
+			WeaponTypeImage = new inkImageWidgetReference();
+			QuestItemMaker = new inkWidgetReference();
+			LabelsContainer = new inkCompoundWidgetReference();
+			BackgroundBlueprint = new inkWidgetReference();
+			IconBlueprint = new inkWidgetReference();
+			FluffBlueprint = new inkImageWidgetReference();
+			Lootitemflufficon = new inkWidgetReference();
+			Lootitemtypeicon = new inkImageWidgetReference();
+			SlotItemsCountWrapper = new inkWidgetReference();
+			SlotItemsCount = new inkTextWidgetReference();
+			IconErrorIndicator = new inkWidgetReference();
+			NewItemsWrapper = new inkWidgetReference();
+			NewItemsCounter = new inkTextWidgetReference();
+			LockIcon = new inkWidgetReference();
+			TransmogedIcon = new inkWidgetReference();
+			IconWardrobeDisabled = new inkWidgetReference();
+			ComparisionArrow = new inkWidgetReference();
+			IconTransmog = new inkWidgetReference();
+			WardrobeInfoContainer = new inkWidgetReference();
+			WardrobeInfoText = new inkTextWidgetReference();
+			PerkWrapper = new inkWidgetReference();
+			PerkIcon = new inkImageWidgetReference();
+			ItemID = new gameItemID();
+			ItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			EquipmentArea = Enums.gamedataEquipmentArea.Invalid;
+			ItemType = Enums.gamedataItemType.Invalid;
+			AttachmentsDisplay = new();
+			TransmogItem = new gameItemID();
+			DefaultFallbackImage = "undefined";
+			DefaultEmptyImage = "icon_add";
+			DefaultEmptyImageAtlas = "base\\gameplay\\gui\\fullscreen\\inventory\\inventory4_atlas.inkatlas";
+			NewItemsIDs = new();
+			VisibleWhenLocked = true;
+			HasAvailableItems = true;
+			WardrobeOutfitIndex = -1;
+
 			PostConstruct();
 		}
 

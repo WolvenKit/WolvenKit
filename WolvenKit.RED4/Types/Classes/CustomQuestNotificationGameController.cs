@@ -62,6 +62,11 @@ namespace WolvenKit.RED4.Types
 
 		public CustomQuestNotificationGameController()
 		{
+			Label = new inkTextWidgetReference();
+			Desc = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			FluffHeader = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

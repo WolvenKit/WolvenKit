@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public WeaponTraining()
 		{
+			ControllerTypeName = "WeaponTrainingController";
+			WeaponTypes = new();
+			LimitOfHits = 30;
+
 			PostConstruct();
 		}
 

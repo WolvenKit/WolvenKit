@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocCwPreviewItemController()
 		{
+			ItemIcon = new inkWidgetReference();
+			AddIcon = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

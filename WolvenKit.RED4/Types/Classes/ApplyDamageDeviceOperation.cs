@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public ApplyDamageDeviceOperation()
 		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			Damages = new();
+
 			PostConstruct();
 		}
 

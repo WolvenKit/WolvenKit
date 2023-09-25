@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerWokrspotDeviceOperation()
 		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			PlayerWorkspot = new SWorkspotData();
+
 			PostConstruct();
 		}
 

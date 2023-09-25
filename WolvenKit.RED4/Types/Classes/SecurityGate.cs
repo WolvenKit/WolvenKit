@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public SecurityGate()
 		{
+			ControllerTypeName = "SecurityGateController";
+			TrespassersDataList = new();
+
 			PostConstruct();
 		}
 

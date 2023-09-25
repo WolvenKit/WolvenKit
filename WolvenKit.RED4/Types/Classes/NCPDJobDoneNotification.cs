@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public NCPDJobDoneNotification()
 		{
+			NCPD_Reward = new inkWidgetReference();
+			NCPD_XP_RewardText = new inkTextWidgetReference();
+			NCPD_SC_RewardText = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -46,6 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public PhoneCallUploadDurationListener()
 		{
+			GameInstance = new ScriptGameInstance();
+			RequesterID = new entEntityID();
+			StatPoolType = Enums.gamedataStatPoolType.PhoneCallDuration;
+
 			PostConstruct();
 		}
 

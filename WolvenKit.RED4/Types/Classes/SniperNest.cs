@@ -126,6 +126,25 @@ namespace WolvenKit.RED4.Types
 
 		public SniperNest()
 		{
+			ControllerTypeName = "SniperNestController";
+			DefaultSensePreset = "Senses.BasicTurret";
+			IdleSound = "idleStart";
+			IdleSoundStop = "idleStop";
+			SoundDeviceON = "activated";
+			SoundDeviceOFF = "deactivated";
+			SoundDeviceDestroyed = "destroyed";
+			MinPitch = -20.000000F;
+			MinYaw = 10.000000F;
+			MaxYaw = 170.000000F;
+			AnimFeatureName = "SecurityTurretData";
+			ItemID = new gameItemID();
+			BurstDelayEvtID = new gameDelayID();
+			NextShootCycleDelayEvtID = new gameDelayID();
+			TargetZoom = 1.000000F;
+			StartZoom = 1.000000F;
+			ZoomLerpTimeStamp = -1.000000F;
+			ZoomLerpDuration = 0.200000F;
+
 			PostConstruct();
 		}
 

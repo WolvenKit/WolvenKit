@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public PuppetReactionDef()
 		{
+			ExitReactionFlag = new gamebbScriptID_Bool();
+			BlockReactionFlag = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

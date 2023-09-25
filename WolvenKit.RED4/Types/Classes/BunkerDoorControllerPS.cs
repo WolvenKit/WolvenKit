@@ -54,6 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public BunkerDoorControllerPS()
 		{
+			NpcOpenSpeed = 1.000000F;
+			NpcOpenTime = 1.000000F;
+			MalfunctioningChance = 100;
+			MalfunctioningStimRange = 10.000000F;
+
 			PostConstruct();
 		}
 

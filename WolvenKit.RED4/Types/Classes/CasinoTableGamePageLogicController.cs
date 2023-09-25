@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public CasinoTableGamePageLogicController()
 		{
+			Cash = new inkTextWidgetReference();
+			Bet = new inkTextWidgetReference();
+			Marks = new();
+
 			PostConstruct();
 		}
 

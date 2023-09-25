@@ -174,6 +174,12 @@ namespace WolvenKit.RED4.Types
 
 		public BaseSubtitlesGameController()
 		{
+			LineMap = new();
+			PendingShowLines = new();
+			PendingHideLines = new();
+			GroupPath = "/audio/subtitles";
+			GameInstance = new ScriptGameInstance();
+
 			PostConstruct();
 		}
 

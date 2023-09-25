@@ -158,6 +158,15 @@ namespace WolvenKit.RED4.Types
 
 		public textScrollingAnimController()
 		{
+			ScannerDetailsHackLog = new inkTextWidgetReference();
+			DefaultScrollSpeed = 0.050000F;
+			NumOfLines = 4;
+			Transparency = 1.000000F;
+			BinaryClusterCount = 4;
+			ScrollingText = new ScrollingText { TextArray = new() };
+			LogArray = new();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

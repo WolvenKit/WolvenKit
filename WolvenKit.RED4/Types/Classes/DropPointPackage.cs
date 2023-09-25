@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public DropPointPackage()
 		{
+			PredefinedDrop = new gamePersistentID();
+			StatusHistory = new();
+
 			PostConstruct();
 		}
 

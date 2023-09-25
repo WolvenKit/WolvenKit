@@ -46,6 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipIconModule()
 		{
+			Container = new inkImageWidgetReference();
+			Icon = new inkImageWidgetReference();
+			IconicLines = new inkImageWidgetReference();
+			Transmogged = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -94,6 +94,12 @@ namespace WolvenKit.RED4.Types
 
 		public SlotMachineController()
 		{
+			WinAnimationsID = new();
+			SlotWidgets = new();
+			ImagePresets = new();
+			MaxWinChance = 100;
+			Slots = new();
+
 			PostConstruct();
 		}
 

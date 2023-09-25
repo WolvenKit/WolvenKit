@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public HotkeyConsumableWidgetController()
 		{
+			Container = new inkCompoundWidgetReference();
+			DpadHintLibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+
 			PostConstruct();
 		}
 

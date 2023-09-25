@@ -94,6 +94,13 @@ namespace WolvenKit.RED4.Types
 
 		public ArcadeMachine()
 		{
+			ControllerTypeName = "ArcadeMachineController";
+			ShortGlitchDelayID = new gameDelayID();
+			CurrentGameVideo = new redResourceReferenceScriptToken();
+			MeshAppearanceOn = "default";
+			MeshAppearanceOff = "default";
+			Minigame = Enums.ArcadeMinigame.INVALID;
+
 			PostConstruct();
 		}
 

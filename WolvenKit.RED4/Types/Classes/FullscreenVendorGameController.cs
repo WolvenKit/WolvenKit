@@ -654,6 +654,37 @@ namespace WolvenKit.RED4.Types
 
 		public FullscreenVendorGameController()
 		{
+			TooltipsManagerRef = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			PlayerFiltersContainer = new inkWidgetReference();
+			VendorFiltersContainer = new inkWidgetReference();
+			InventoryGridList = new inkVirtualCompoundWidgetReference();
+			VendorSpecialOffersInventoryGridList = new inkCompoundWidgetReference();
+			VendorInventoryGridList = new inkVirtualCompoundWidgetReference();
+			PlayerInventoryGridScroll = new inkWidgetReference();
+			VendorInventoryGridScroll = new inkWidgetReference();
+			NotificationRoot = new inkWidgetReference();
+			EmptyStock = new inkWidgetReference();
+			BuyWrapper = new inkWidgetReference();
+			VendorMoney = new inkTextWidgetReference();
+			VendorName = new inkTextWidgetReference();
+			PlayerMoney = new inkTextWidgetReference();
+			QuantityPicker = new inkWidgetReference();
+			PlayerSortingButton = new inkWidgetReference();
+			VendorSortingButton = new inkWidgetReference();
+			SortingDropdown = new inkWidgetReference();
+			PlayerBalance = new inkWidgetReference();
+			VendorBalance = new inkWidgetReference();
+			ItemTypeSorting = new();
+			PlayerInventoryitemControllers = new();
+			VendorInventoryitemControllers = new();
+			VendorSpecialOfferInventoryitemControllers = new();
+			ItemDropQueue = new();
+			SellQueue = new();
+			BuyQueue = new();
+			BoughtQuestItems = new();
+			VendorUIInventoryItems = new();
+
 			PostConstruct();
 		}
 

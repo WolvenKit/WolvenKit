@@ -70,6 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public InnerBunkerSystemStatusLogicController()
 		{
+			OnlineRoot = new inkWidgetReference();
+			OfflineRoot = new inkWidgetReference();
+			OnlineIco = new inkWidgetReference();
+			OfflineIco = new inkWidgetReference();
+			SysIndicator = new inkWidgetReference();
+			WidgetsToColor = new();
+			TextStatuses = new();
+
 			PostConstruct();
 		}
 

@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public NcartTimetable()
 		{
+			ControllerTypeName = "NcartTimetableController";
+			ShortGlitchDelayID = new gameDelayID();
+
 			PostConstruct();
 		}
 

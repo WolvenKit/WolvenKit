@@ -62,6 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public sampleGranade()
 		{
+			TrailEffectName = "trail";
+			Alive = true;
+
 			PostConstruct();
 		}
 

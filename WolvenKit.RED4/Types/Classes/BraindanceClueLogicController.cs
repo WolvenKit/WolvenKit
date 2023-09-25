@@ -78,6 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public BraindanceClueLogicController()
 		{
+			Bg = new inkWidgetReference();
+			Data = new BraindanceClueData();
+
 			PostConstruct();
 		}
 

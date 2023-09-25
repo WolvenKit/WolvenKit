@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public VendorSellJunkPopupData()
 		{
+			Items = new();
+			LimitedItems = new();
+
 			PostConstruct();
 		}
 

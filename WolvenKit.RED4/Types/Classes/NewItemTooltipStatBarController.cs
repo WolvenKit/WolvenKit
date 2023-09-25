@@ -110,6 +110,17 @@ namespace WolvenKit.RED4.Types
 
 		public NewItemTooltipStatBarController()
 		{
+			Background = new inkWidgetReference();
+			Bar = new inkWidgetReference();
+			ComparisonBar = new inkWidgetReference();
+			StatName = new inkTextWidgetReference();
+			Overflow = new inkTextWidgetReference();
+			StatValue = new inkTextWidgetReference();
+			ComparisonArrow = new inkWidgetReference();
+			Separators = new inkWidgetReference();
+			BetterColor = new HDRColor();
+			WorseColor = new HDRColor();
+
 			PostConstruct();
 		}
 

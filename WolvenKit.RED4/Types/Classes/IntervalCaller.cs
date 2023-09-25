@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public IntervalCaller()
 		{
+			SelfDelayID = new gameDelayID();
+
 			PostConstruct();
 		}
 

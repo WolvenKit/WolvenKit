@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public TransmogButtonView()
 		{
+			Container = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

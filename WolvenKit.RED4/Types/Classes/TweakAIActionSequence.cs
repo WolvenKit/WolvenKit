@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public TweakAIActionSequence()
 		{
+			LookatEvents = new();
+			GeneralSubActionsResults = new(8);
+			PhaseSubActionsResults = new(8);
+
 			PostConstruct();
 		}
 

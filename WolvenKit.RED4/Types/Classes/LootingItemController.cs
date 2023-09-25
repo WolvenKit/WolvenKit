@@ -78,6 +78,14 @@ namespace WolvenKit.RED4.Types
 
 		public LootingItemController()
 		{
+			ItemName = new inkTextWidgetReference();
+			ItemType = new inkTextWidgetReference();
+			ItemWeight = new inkTextWidgetReference();
+			ItemQuantity = new inkTextWidgetReference();
+			ItemQualityBar = new inkWidgetReference();
+			ItemSelection = new inkWidgetReference();
+			ItemIcon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

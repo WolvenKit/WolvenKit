@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public MessagePopupDisplayController()
 		{
+			Title = new inkTextWidgetReference();
+			Message = new inkTextWidgetReference();
+			Image = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

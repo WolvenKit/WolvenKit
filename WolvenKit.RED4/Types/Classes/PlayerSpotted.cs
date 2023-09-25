@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerSpotted()
 		{
+			OwnerID = new gamePersistentID();
+			AgentAreas = new();
+
 			PostConstruct();
 		}
 

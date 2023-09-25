@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public ItemLabelController()
 		{
+			Label = new inkTextWidgetReference();
+			MoneyIcon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

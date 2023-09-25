@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ProficiencyTabButtonController()
 		{
+			Bottom_bar = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

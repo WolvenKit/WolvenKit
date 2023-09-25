@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public RevealDeviceRequest()
 		{
+			SourceID = new entEntityID();
+			LinkData = new SNetworkLinkData { FxResource = new gameFxResource(), SlaveID = new entEntityID(), MasterID = new entEntityID(), SlavePos = new Vector4(), MasterPos = new Vector4(), DrawLink = true, RevealMaster = true, RevealSlave = true, Lifetime = -1.000000F, DelayID = new gameDelayID() };
+
 			PostConstruct();
 		}
 

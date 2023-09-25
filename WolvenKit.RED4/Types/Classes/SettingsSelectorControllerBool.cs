@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public SettingsSelectorControllerBool()
 		{
+			OnState = new inkWidgetReference();
+			OffState = new inkWidgetReference();
+			OnStateBody = new inkWidgetReference();
+			OffStateBody = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public CodexImageButton()
 		{
+			Image = new inkImageWidgetReference();
+			Border = new inkImageWidgetReference();
+			TranslateOnSelect = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

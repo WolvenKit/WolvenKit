@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public ServerNodeControllerPS()
 		{
+			CoverState = Enums.CoverState.Closed;
+			DestroyedPin = new(12);
+
 			PostConstruct();
 		}
 

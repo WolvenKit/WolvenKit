@@ -310,6 +310,21 @@ namespace WolvenKit.RED4.Types
 
 		public BraindanceGameController()
 		{
+			CurrentTimerMarker = new inkWidgetReference();
+			CurrentTimerText = new inkTextWidgetReference();
+			ActiveLayer = new inkTextWidgetReference();
+			LayerIcon = new inkImageWidgetReference();
+			LayerThermalIcon = new inkImageWidgetReference();
+			LayerVisualIcon = new inkImageWidgetReference();
+			LayerAudioIcon = new inkImageWidgetReference();
+			CursorPoint = new inkWidgetReference();
+			ButtonHintsManagerRef = new inkWidgetReference();
+			ClueHolder = new();
+			ClueBarHolder = new();
+			SpeedIndicatorManagers = new();
+			ClueArray = new();
+			GameInstance = new ScriptGameInstance();
+
 			PostConstruct();
 		}
 

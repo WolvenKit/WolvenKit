@@ -238,6 +238,13 @@ namespace WolvenKit.RED4.Types
 
 		public JournalNotificationQueue()
 		{
+			ShowDuration = 6.000000F;
+			CurrencyNotification = "notification_currency";
+			ShardNotification = "notification_shard";
+			ItemNotification = "Item_Received_SMALL";
+			QuestNotification = "notification_quest";
+			GenericNotification = "notification";
+
 			PostConstruct();
 		}
 

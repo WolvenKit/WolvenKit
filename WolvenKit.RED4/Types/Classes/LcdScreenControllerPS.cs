@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public LcdScreenControllerPS()
 		{
+			DeviceName = "LocKey#193";
+			TweakDBRecord = "Devices.LcdScreen";
+			TweakDBDescriptionRecord = 126712954239;
+			DisableQuickHacks = true;
+
 			PostConstruct();
 		}
 

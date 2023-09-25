@@ -94,6 +94,11 @@ namespace WolvenKit.RED4.Types
 
 		public Radio()
 		{
+			ControllerTypeName = "RadioController";
+			EffectRef = new gameEffectRef();
+			ShortGlitchDelayID = new gameDelayID();
+			Targets = new();
+
 			PostConstruct();
 		}
 

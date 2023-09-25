@@ -462,6 +462,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIDriveCommandsDelegate()
 		{
+			TargetPosition = new Vector3();
+
 			PostConstruct();
 		}
 

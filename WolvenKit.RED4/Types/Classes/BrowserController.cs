@@ -110,6 +110,12 @@ namespace WolvenKit.RED4.Types
 
 		public BrowserController()
 		{
+			HomeButton = new inkWidgetReference();
+			AddressText = new inkTextWidgetReference();
+			PageContentRoot = new inkWidgetReference();
+			SpinnerContentRoot = new inkWidgetReference();
+			SpinnerPath = new redResourceReferenceScriptToken();
+
 			PostConstruct();
 		}
 

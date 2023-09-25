@@ -5,6 +5,10 @@ namespace WolvenKit.RED4.Types
 	{
 		public SmartWindowControllerPS()
 		{
+			DeviceName = "LocKey#110";
+			TweakDBRecord = "Devices.SmartWindow";
+			TweakDBDescriptionRecord = 133880141476;
+
 			PostConstruct();
 		}
 

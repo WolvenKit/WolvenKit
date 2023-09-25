@@ -86,6 +86,12 @@ namespace WolvenKit.RED4.Types
 
 		public ChargedHotkeyItemBaseController()
 		{
+			ChargebarSizeWidget = new inkWidgetReference();
+			ChargebarOpacityWidget = new inkWidgetReference();
+			StartSize = new Vector2();
+			EndSize = new Vector2();
+			ChargeThreshold = 0.980000F;
+
 			PostConstruct();
 		}
 

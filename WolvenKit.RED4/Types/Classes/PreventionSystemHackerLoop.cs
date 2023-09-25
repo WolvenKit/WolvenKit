@@ -94,6 +94,10 @@ namespace WolvenKit.RED4.Types
 
 		public PreventionSystemHackerLoop()
 		{
+			CurentHackDelayId = new gameDelayID();
+			FutureDelayedUpdateDelayId = new gameDelayID();
+			HackedVehicles = new();
+
 			PostConstruct();
 		}
 

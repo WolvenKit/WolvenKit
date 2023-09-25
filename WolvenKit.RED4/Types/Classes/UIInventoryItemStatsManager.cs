@@ -118,6 +118,11 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryItemStatsManager()
 		{
+			Stats = new();
+			TooltipStats = new();
+			AdditionalStats = new();
+			AttributeAllocationStats = new();
+
 			PostConstruct();
 		}
 

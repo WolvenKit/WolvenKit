@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public FastTravelComponent()
 		{
+			FastTravelNodes = new();
+
 			PostConstruct();
 		}
 

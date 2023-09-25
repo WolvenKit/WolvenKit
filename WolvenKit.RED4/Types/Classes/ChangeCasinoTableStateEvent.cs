@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public ChangeCasinoTableStateEvent()
 		{
+			SlotUser = new gameEntityReference { Names = new() };
+			BetData = new BetData();
+
 			PostConstruct();
 		}
 

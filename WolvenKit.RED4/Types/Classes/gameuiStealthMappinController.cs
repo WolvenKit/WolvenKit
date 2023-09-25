@@ -622,6 +622,30 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiStealthMappinController()
 		{
+			Arrow = new inkImageWidgetReference();
+			Fill = new inkWidgetReference();
+			EyeFillWhite = new inkWidgetReference();
+			EyeFillBlack = new inkWidgetReference();
+			MarkExclamation = new inkTextWidgetReference();
+			Distance = new inkTextWidgetReference();
+			MainArt = new inkWidgetReference();
+			Frame = new inkImageWidgetReference();
+			EliteFrameSize = new Vector2();
+			ObjectMarker = new inkWidgetReference();
+			LevelIcon = new inkImageWidgetReference();
+			TaggedContainer = new inkWidgetReference();
+			Background = new inkCompoundWidgetReference();
+			ContagiousQuickhackArrows = new inkCompoundWidgetReference();
+			StatusEffectMain = new inkWidgetReference();
+			StatusEffectIcon = new inkImageWidgetReference();
+			StatusEffectFill = new inkWidgetReference();
+			StatusEffectBackground = new inkWidgetReference();
+			ObjectMarkerFirstShowing = true;
+			C_combatToAwareThreshold = 99.900002F;
+			C_deviceCombatToAwareThreshold = 35.000000F;
+			C_objectMarkerMaxDistance = 50.000000F;
+			C_objectMarkerMaxCameraDistance = 30.000000F;
+
 			PostConstruct();
 		}
 

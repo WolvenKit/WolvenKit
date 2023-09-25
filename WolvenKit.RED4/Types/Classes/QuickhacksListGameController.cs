@@ -630,6 +630,49 @@ namespace WolvenKit.RED4.Types
 
 		public QuickhacksListGameController()
 		{
+			TimeBetweenIntroAndDescritpionDelayID = new gameDelayID();
+			MiddleDots = new inkWidgetReference();
+			MemoryWidget = new inkWidgetReference();
+			AvaliableMemory = new inkTextWidgetReference();
+			ListWidget = new inkWidgetReference();
+			NoQuickhacks = new inkCompoundWidgetReference();
+			OpenCyberdeckBtn = new inkWidgetReference();
+			ExecuteBtn = new inkWidgetReference();
+			ExecuteAndCloseBtn = new inkWidgetReference();
+			ChangeTarget = new inkWidgetReference();
+			TutorialButton = new inkWidgetReference();
+			RightPanel = new inkWidgetReference();
+			NetworkBreach = new inkWidgetReference();
+			CostReductionPanel = new inkWidgetReference();
+			CostReductionText = new inkTextWidgetReference();
+			CostReductionValue = new inkTextWidgetReference();
+			TargetName = new inkTextWidgetReference();
+			IcePanel = new inkWidgetReference();
+			IceValue = new inkTextWidgetReference();
+			VulnerabilitiesPanel = new inkWidgetReference();
+			VulnerabilityFields = new();
+			SubHeader = new inkTextWidgetReference();
+			Tier = new inkTextWidgetReference();
+			Description = new inkTextWidgetReference();
+			RecompileTimer = new inkTextWidgetReference();
+			Damage = new inkTextWidgetReference();
+			Duration = new inkTextWidgetReference();
+			Cooldown = new inkTextWidgetReference();
+			UploadTime = new inkTextWidgetReference();
+			MemoryCost = new inkTextWidgetReference();
+			MemoryRawCost = new inkTextWidgetReference();
+			WarningWidget = new inkWidgetReference();
+			WarningText = new inkTextWidgetReference();
+			RecompilePanel = new inkWidgetReference();
+			RecompileText = new inkTextWidgetReference();
+			GameInstance = new ScriptGameInstance();
+			QuickhackBarArray = new();
+			Data = new();
+			MemorySpendIndex = -1;
+			SelectedMemoryLoop = new();
+			LastCompiledTarget = new entEntityID();
+			StatPoolListenersIndexes = new();
+
 			PostConstruct();
 		}
 

@@ -1038,6 +1038,39 @@ namespace WolvenKit.RED4.Types
 
 		public HitReactionComponent()
 		{
+			OwnerID = new entEntityID();
+			ImpactDamageDuration = 0.200000F;
+			StaggerDamageDuration = 0.400000F;
+			ImpactDamageDurationMelee = 0.250000F;
+			StaggerDamageDurationMelee = 1.500000F;
+			KnockdownDamageDuration = 2.500000F;
+			PreviousAnimHitReactionArray = new();
+			HitShapeData = new gameShapeData { Result = new gameHitResult { HitPositionEnter = new Vector4 { W = 1.000000F }, HitPositionExit = new Vector4 { W = 1.000000F } } };
+			DismembermentBodyPartDamageThreshold = new();
+			WoundedBodyPartDamageThreshold = new();
+			DefeatedBodyPartDamageThreshold = new();
+			HitComboReset = 2.000000F;
+			PhysicalImpulseReset = 0.500000F;
+			GuardBreakImpulseReset = 5.000000F;
+			BodyPartWoundCumulatedDamages = new();
+			BodyPartDismemberCumulatedDamages = new();
+			RagdollInfluenceRadius = 5.000000F;
+			PreviousMeleeHitTimeStamp = -1.000000F;
+			PreviousRangedHitTimeStamp = -1.000000F;
+			PreviousBlockTimeStamp = -1.000000F;
+			PreviousParryTimeStamp = -1.000000F;
+			PreviousHackStaggerTimeStamp = -1.000000F;
+			PreviousHackImpactTimeStamp = -1.000000F;
+			CumulativeDamageUpdateInterval = 0.250000F;
+			HitPosition = new Vector4();
+			HitDirection = new Vector4();
+			MaxHitChainForMelee = 2;
+			MaxHitChainForRanged = 2;
+			HitCountData = new(100);
+			HitCountArrayEnd = 100;
+			DismemberExecuteHealthRange = new Vector2();
+			DismemberExecuteDistanceRange = new Vector2();
+
 			PostConstruct();
 		}
 

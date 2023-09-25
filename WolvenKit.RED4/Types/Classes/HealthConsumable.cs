@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public HealthConsumable()
 		{
+			DisappearAfterEquip = true;
+			RespawnTime = -1.000000F;
+
 			PostConstruct();
 		}
 

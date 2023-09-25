@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public UIScriptableSystemInventoryAddItem()
 		{
+			ItemID = new gameItemID();
+
 			PostConstruct();
 		}
 

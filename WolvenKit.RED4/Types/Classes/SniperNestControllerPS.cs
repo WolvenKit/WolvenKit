@@ -22,6 +22,14 @@ namespace WolvenKit.RED4.Types
 
 		public SniperNestControllerPS()
 		{
+			DeviceName = "LocKey#91723";
+			TweakDBRecord = "Devices.SniperNest";
+			TweakDBDescriptionRecord = 147741407213;
+			CanBeInDeviceChain = true;
+			DisableQuickHacks = true;
+			LookAtPresetVert = "LookatPreset.TurretVertical";
+			LookAtPresetHor = "LookatPreset.TurretHorizontal";
+
 			PostConstruct();
 		}
 

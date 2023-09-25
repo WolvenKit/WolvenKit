@@ -46,6 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public DispenseStackRequest()
 		{
+			Position = new Vector4();
+			ItemID = new gameItemID();
+
 			PostConstruct();
 		}
 

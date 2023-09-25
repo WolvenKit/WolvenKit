@@ -70,6 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleBrandFilterLogicController()
 		{
+			BrandLogo = new inkImageWidgetReference();
+			BrandText = new inkTextWidgetReference();
+			NewOffers = new();
+
 			PostConstruct();
 		}
 

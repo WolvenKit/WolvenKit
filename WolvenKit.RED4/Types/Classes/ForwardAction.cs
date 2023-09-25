@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public ForwardAction()
 		{
+			Requester = new gamePersistentID();
+
 			PostConstruct();
 		}
 

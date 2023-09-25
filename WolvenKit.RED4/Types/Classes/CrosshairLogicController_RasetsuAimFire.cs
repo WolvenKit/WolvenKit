@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairLogicController_RasetsuAimFire()
 		{
+			ChargebarContainer = new inkWidgetReference();
+			PerfectChargeIndicator = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

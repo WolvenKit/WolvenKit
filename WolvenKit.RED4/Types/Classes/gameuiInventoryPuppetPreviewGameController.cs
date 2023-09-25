@@ -54,6 +54,11 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiInventoryPuppetPreviewGameController()
 		{
+			RotationSpeed = 60.000000F;
+			Collider = new inkWidgetReference();
+			MaxMousePointerOffset = 40.000000F;
+			MouseRotationSpeed = 250.000000F;
+
 			PostConstruct();
 		}
 

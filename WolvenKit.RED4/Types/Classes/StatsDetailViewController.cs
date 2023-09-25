@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public StatsDetailViewController()
 		{
+			StatLabelRef = new inkTextWidgetReference();
+			StatValueRef = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

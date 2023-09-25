@@ -78,6 +78,16 @@ namespace WolvenKit.RED4.Types
 
 		public ComputerControllerPS()
 		{
+			DeviceName = "LocKey#48";
+			TweakDBRecord = "Devices.Computer";
+			TweakDBDescriptionRecord = 122573441327;
+			HasUICameraZoom = true;
+			ComputerSetup = new ComputerSetup { MailsMenu = true, FilesMenu = true, SystemMenu = true, InternetMenu = true, StylePreset = "ComputerUIPresets.DefaultPreset", MailsStructure = new(), FilesStructure = new(), NewsFeed = new(), NewsFeedInterval = 5.000000F, InternetSubnet = new SInternetData() };
+			QuickHackSetup = new ComputerQuickHackData();
+			OpenedMailAdress = new SDocumentAdress { FolderID = -1, DocumentID = -1 };
+			OpenedFileAdress = new SDocumentAdress { FolderID = -1, DocumentID = -1 };
+			IsInSleepMode = true;
+
 			PostConstruct();
 		}
 

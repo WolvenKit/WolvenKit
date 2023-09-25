@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public LimfaticNanoChargeSystemEffector()
 		{
+			OwnerID = new entEntityID();
+
 			PostConstruct();
 		}
 

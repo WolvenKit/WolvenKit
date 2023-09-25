@@ -158,6 +158,14 @@ namespace WolvenKit.RED4.Types
 
 		public Crosshair_Melee_Knife()
 		{
+			TargetColorChange = new inkWidgetReference();
+			LeftPart = new inkWidgetReference();
+			RightPart = new inkWidgetReference();
+			TopPart = new inkWidgetReference();
+			BotPart = new inkWidgetReference();
+			WeaponID = new entEntityID();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

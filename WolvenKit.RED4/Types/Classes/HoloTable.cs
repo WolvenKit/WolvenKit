@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public HoloTable()
 		{
+			ControllerTypeName = "HoloTableController";
+			MeshTable = new();
+
 			PostConstruct();
 		}
 

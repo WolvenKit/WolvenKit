@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public CyberwareAttributes_Logic()
 		{
+			TextValue = new inkTextWidgetReference();
+			ButtonRef = new inkWidgetReference();
+			TooltipRef = new inkWidgetReference();
+			ConnectorRef = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

@@ -46,6 +46,9 @@ namespace WolvenKit.RED4.Types
 
 		public FakeFeature()
 		{
+			Choices = new();
+			Components = new();
+
 			PostConstruct();
 		}
 

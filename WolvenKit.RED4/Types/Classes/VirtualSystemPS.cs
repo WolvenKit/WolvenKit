@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public VirtualSystemPS()
 		{
+			DeviceName = "SYSTEM";
+			Slaves = new();
+
 			PostConstruct();
 		}
 

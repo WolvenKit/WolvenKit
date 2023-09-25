@@ -358,6 +358,14 @@ namespace WolvenKit.RED4.Types
 
 		public sampleSmartBullet()
 		{
+			Effect = new gameEffectRef();
+			ParabolicGravity = new Vector4();
+			Alive = true;
+			WeaponID = new entEntityID();
+			TargetID = new entEntityID();
+			IgnoredTargetID = new entEntityID();
+			StartPosition = new Vector4();
+
 			PostConstruct();
 		}
 

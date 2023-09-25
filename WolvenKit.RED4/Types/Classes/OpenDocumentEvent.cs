@@ -46,6 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		public OpenDocumentEvent()
 		{
+			DocumentAdress = new SDocumentAdress { FolderID = -1, DocumentID = -1 };
+			WakeUp = true;
+			OwnerID = new entEntityID();
+
 			PostConstruct();
 		}
 

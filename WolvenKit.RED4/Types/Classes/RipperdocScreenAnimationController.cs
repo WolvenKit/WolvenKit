@@ -494,6 +494,39 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocScreenAnimationController()
 		{
+			Doll = new inkWidgetReference();
+			DefaultAnimationTab = new inkWidgetReference();
+			ItemAnimationTab = new inkWidgetReference();
+			FemaleHovers = new inkWidgetReference();
+			MaleHovers = new inkWidgetReference();
+			F_immuneHoverTexture = new inkWidgetReference();
+			F_systemReplacementHoverTexture = new inkWidgetReference();
+			F_integumentaryHoverTexture = new inkWidgetReference();
+			F_musculoskeletalHoverTexture = new inkWidgetReference();
+			F_nervousHoverTexture = new inkWidgetReference();
+			F_eyesHoverTexture = new inkImageWidgetReference();
+			F_legsHoverTexture = new inkWidgetReference();
+			F_frontalCortexHoverTexture = new inkWidgetReference();
+			F_handsHoverTexture = new inkWidgetReference();
+			F_cardiovascularHoverTexture = new inkWidgetReference();
+			F_armsHoverTexture = new inkWidgetReference();
+			M_integumentaryHoverTexture = new inkWidgetReference();
+			M_armsHoverTexture = new inkWidgetReference();
+			M_cardiovascularHoverTexture = new inkWidgetReference();
+			M_handsHoverTexture = new inkWidgetReference();
+			M_frontalCortexHoverTexture = new inkWidgetReference();
+			M_immuneHoverTexture = new inkWidgetReference();
+			M_legsHoverTexture = new inkWidgetReference();
+			M_systemReplacementHoverTexture = new inkWidgetReference();
+			M_musculoskeletalHoverTexture = new inkWidgetReference();
+			M_nervousHoverTexture = new inkWidgetReference();
+			M_eyesHoverTexture = new inkImageWidgetReference();
+			Man_wiresTexture = new inkWidgetReference();
+			Woman_wiresTexture = new inkWidgetReference();
+			Position = new inkMargin();
+			CurrentArea = Enums.gamedataEquipmentArea.Invalid;
+			SLIDE_DURATION = 0.250000F;
+
 			PostConstruct();
 		}
 

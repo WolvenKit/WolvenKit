@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public characterCreationGenderBackstoryBtn()
 		{
+			Selector = new inkWidgetReference();
+			FluffText = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

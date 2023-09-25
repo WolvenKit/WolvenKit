@@ -54,6 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public BossStealthComponent()
 		{
+			Owner_id = new entEntityID();
+
 			PostConstruct();
 		}
 

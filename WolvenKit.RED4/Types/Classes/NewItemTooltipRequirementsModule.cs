@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public NewItemTooltipRequirementsModule()
 		{
+			SmartlinkGunWrapper = new inkWidgetReference();
+			Line = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

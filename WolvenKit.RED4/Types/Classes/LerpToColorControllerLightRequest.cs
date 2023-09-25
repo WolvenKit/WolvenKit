@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public LerpToColorControllerLightRequest()
 		{
+			Rgb = new Vector3();
+
 			PostConstruct();
 		}
 

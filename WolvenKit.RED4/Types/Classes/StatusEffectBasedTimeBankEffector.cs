@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public StatusEffectBasedTimeBankEffector()
 		{
+			PlayerEntityID = new entEntityID();
+			GameInstance = new ScriptGameInstance();
+
 			PostConstruct();
 		}
 

@@ -182,6 +182,23 @@ namespace WolvenKit.RED4.Types
 
 		public DatatermDetailGameController()
 		{
+			AuthFactsSet = new AuthorizationFactsSet();
+			AttemptedFactsSet = new AttemptedToStopFactsSet();
+			SystemStatusHeaderPannel = new inkWidgetReference();
+			SystemStatusLeftPannel = new inkWidgetReference();
+			SystemStatusRightPannel = new inkWidgetReference();
+			LoopAnimName = "loop";
+			Popup01Counter = 3;
+			Popup02Counter = 2;
+			Popup01LoopAnimName = "pop1_loop";
+			Popup02LoopAnimName = "pop2_loop";
+			Popup031LoopAnimName = "pop3_loop_01";
+			Popup032LoopAnimName = "pop3_loop_02";
+			Popup04LoopAnimName = "pop4_loop";
+			Popup05LoopAnimName = "pop5_loop";
+			ShutdownButton = new inkWidgetReference();
+			TransitionToMinigame = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

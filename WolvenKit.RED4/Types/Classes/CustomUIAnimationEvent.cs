@@ -62,6 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public CustomUIAnimationEvent()
 		{
+			LibraryItemAnchor = Enums.inkEAnchor.Fill;
+			OwnerID = new entEntityID();
+
 			PostConstruct();
 		}
 

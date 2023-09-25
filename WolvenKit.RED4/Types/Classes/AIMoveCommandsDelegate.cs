@@ -470,6 +470,11 @@ namespace WolvenKit.RED4.Types
 
 		public AIMoveCommandsDelegate()
 		{
+			LowestCompanionDistanceToEnd = 9999999.000000F;
+			PreviousCompanionDistanceToEnd = 9999999.000000F;
+			SplineEndPoint = new Vector4();
+			TeleportDestination = new Vector4();
+
 			PostConstruct();
 		}
 

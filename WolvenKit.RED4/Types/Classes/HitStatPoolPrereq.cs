@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public HitStatPoolPrereq()
 		{
+			IsSync = true;
+			PipelineStage = Enums.gameDamagePipelineStage.Process;
+
 			PostConstruct();
 		}
 

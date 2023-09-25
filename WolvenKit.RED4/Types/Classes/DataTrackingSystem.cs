@@ -438,6 +438,28 @@ namespace WolvenKit.RED4.Types
 
 		public DataTrackingSystem()
 		{
+			AchievementEnumKeyMap = new();
+			AchievementsMask = new();
+			TwoHeadssourceID = new entEntityID();
+			EnemiesKilledInTimeInterval = new();
+			TimeInterval = 5.000000F;
+			NumerOfKillsRequired = 3;
+			ResetKilledReqDelayID = new gameDelayID();
+			ResetFinishedReqDelayID = new gameDelayID();
+			ResetDefeatedReqDelayID = new gameDelayID();
+			ResetIncapacitatedReqDelayID = new gameDelayID();
+			ResetDownedReqDelayID = new gameDelayID();
+			ResetMeleeAttackReqDelayID = new gameDelayID();
+			ResetRangedAttackReqDelayID = new gameDelayID();
+			ResetAttackReqDelayID = new gameDelayID();
+			ResetNpcMeleeLightAttackReqDelayID = new gameDelayID();
+			ResetNpcMeleeStrongAttackReqDelayID = new gameDelayID();
+			ResetNpcMeleeFinalAttackReqDelayID = new gameDelayID();
+			ResetNpcMeleeBlockAttackReqDelayID = new gameDelayID();
+			ResetNpcBlockedReqDelayID = new gameDelayID();
+			ResetNpcDeflectedReqDelayID = new gameDelayID();
+			ResetNpcGuardbreakReqDelayID = new gameDelayID();
+
 			PostConstruct();
 		}
 

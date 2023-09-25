@@ -262,6 +262,39 @@ namespace WolvenKit.RED4.Types
 
 		public AIActionDataDef()
 		{
+			OwnerMeleeAttackBlockedCount = new gamebbScriptID_Int32();
+			OwnerMeleeAttackParriedCount = new gamebbScriptID_Int32();
+			OwnerMeleeAttackDodgedCount = new gamebbScriptID_Int32();
+			OwnerLastAttackTimeStamp = new gamebbScriptID_Float();
+			OwnerLastAttackName = new gamebbScriptID_CName();
+			OwnerInTumble = new gamebbScriptID_Bool();
+			OwnerCurrentAnimVariationSet = new gamebbScriptID_Bool();
+			OwnerLastAnimVariationAction = new gamebbScriptID_CName();
+			OwnerLastAnimVariation = new gamebbScriptID_Int32();
+			OwnerLastBlockAnimVariation = new gamebbScriptID_Int32();
+			OwnerItemsToEquip = new gamebbScriptID_Variant();
+			OwnerItemsUnequipped = new gamebbScriptID_Variant();
+			OwnerItemsForceUnequipped = new gamebbScriptID_Variant();
+			OwnerLastEquippedItems = new gamebbScriptID_Variant();
+			OwnerLastUnequipTimestamp = new gamebbScriptID_Float();
+			OwnerEquipItemTime = new gamebbScriptID_Float();
+			OwnerEquipDuration = new gamebbScriptID_Float();
+			DropItemOnUnequip = new gamebbScriptID_Bool();
+			ArchetypeEffectorsApplied = new gamebbScriptID_Bool();
+			OwnerTimeDilation = new gamebbScriptID_Float();
+			OwnerGlobalTimeDilation = new gamebbScriptID_Float();
+			OperationHasBeenProcessed = new gamebbScriptID_Bool();
+			WeaponTrailInitialised = new gamebbScriptID_Bool();
+			WeaponTrailAborted = new gamebbScriptID_Bool();
+			Netrunner = new gamebbScriptID_Variant();
+			NetrunnerProxy = new gamebbScriptID_Variant();
+			NetrunnerTarget = new gamebbScriptID_Variant();
+			IgnoreInCombatMoveCommand = new gamebbScriptID_Bool();
+			AvoidLOSTimeStamp = new gamebbScriptID_Float();
+			AttackBlocked = new gamebbScriptID_Bool();
+			AttackParried = new gamebbScriptID_Bool();
+			LastGrenadeThrowTimestamp = new gamebbScriptID_Float();
+
 			PostConstruct();
 		}
 

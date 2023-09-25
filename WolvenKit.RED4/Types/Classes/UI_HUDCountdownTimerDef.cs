@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HUDCountdownTimerDef()
 		{
+			TimerID = new gamebbScriptID_Variant();
+			Active = new gamebbScriptID_Bool();
+			Progress = new gamebbScriptID_Float();
+
 			PostConstruct();
 		}
 

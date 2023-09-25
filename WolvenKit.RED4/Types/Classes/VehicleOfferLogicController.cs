@@ -166,6 +166,22 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleOfferLogicController()
 		{
+			VehicleImage = new inkImageWidgetReference();
+			Border = new inkWidgetReference();
+			OwnedIndicator = new inkWidgetReference();
+			NameText = new inkTextWidgetReference();
+			GunImage = new inkImageWidgetReference();
+			RocketImage = new inkImageWidgetReference();
+			PriceTextWrapper = new inkWidgetReference();
+			PriceText = new inkTextWidgetReference();
+			OriginalPriceTextWrapper = new inkWidgetReference();
+			OriginalPriceText = new inkTextWidgetReference();
+			DiscountedPriceTextWrapper = new inkWidgetReference();
+			DiscountedPriceText = new inkTextWidgetReference();
+			DiscountWrapper = new inkWidgetReference();
+			DiscountText = new inkTextWidgetReference();
+			DiscoutImage = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

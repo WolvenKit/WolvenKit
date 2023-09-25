@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public DodgeToAvoidCombatEvent()
 		{
+			DelayID = new gameDelayID();
+			NpcID = new entEntityID();
+
 			PostConstruct();
 		}
 

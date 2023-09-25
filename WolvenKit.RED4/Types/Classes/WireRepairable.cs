@@ -46,6 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public WireRepairable()
 		{
+			DependableEntities = new();
+
 			PostConstruct();
 		}
 

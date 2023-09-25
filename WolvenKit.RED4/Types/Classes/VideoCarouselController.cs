@@ -102,6 +102,14 @@ namespace WolvenKit.RED4.Types
 
 		public VideoCarouselController()
 		{
+			VideoTitleRef = new inkTextWidgetReference();
+			VideoDescriptionRef = new inkTextWidgetReference();
+			VideoWidgetRef = new inkVideoWidgetReference();
+			SwitchLeftArrow = new inkWidgetReference();
+			SwitchRightArrow = new inkWidgetReference();
+			SwitchDotIndicators = new();
+			Videos = new();
+
 			PostConstruct();
 		}
 

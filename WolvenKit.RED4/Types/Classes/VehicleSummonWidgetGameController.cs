@@ -158,6 +158,15 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleSummonWidgetGameController()
 		{
+			VehicleNameLabel = new inkTextWidgetReference();
+			VehicleTypeIcon = new inkImageWidgetReference();
+			VehicleManufactorIcon = new inkImageWidgetReference();
+			DistanceLabel = new inkTextWidgetReference();
+			SubText = new inkTextWidgetReference();
+			RadioStationName = new inkTextWidgetReference();
+			LoopCounter = 35;
+			GameInstance = new ScriptGameInstance();
+
 			PostConstruct();
 		}
 

@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public LootContainerAccessPoint()
 		{
+			ControllerTypeName = "LootContainerAccessPointController";
+
 			PostConstruct();
 		}
 

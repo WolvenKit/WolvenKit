@@ -327,6 +327,13 @@ namespace WolvenKit.RED4.Types
 		public gameuiNpcNameplateGameController()
 		{
 			Projection = new inkWidgetReference();
+			DisplayName = new inkWidgetReference();
+			MappinSlot = new inkWidgetReference();
+			ChattersSlot = new inkWidgetReference();
+			CachedMappinControllers = new();
+			Zoom = 1.000000F;
+			CurrentHealth = 100;
+			MaximumHealth = 100;
 
 			PostConstruct();
 		}

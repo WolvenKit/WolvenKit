@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public SetPoliceSearchArea()
 		{
+			SearchAreaRadius = -1.000000F;
+			ChaseDistance = -1.000000F;
+
 			PostConstruct();
 		}
 

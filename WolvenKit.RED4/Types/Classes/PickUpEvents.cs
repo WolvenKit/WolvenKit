@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public PickUpEvents()
 		{
+			StyleName = "CarriedObject.Style";
+			ForceStyleName = "CarriedObject.ForcedStyle";
+			StateMachineInstanceData = new gamestateMachineStateMachineInstanceData();
+
 			PostConstruct();
 		}
 

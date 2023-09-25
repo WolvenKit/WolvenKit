@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public PoliceAgentRegistry()
 		{
+			Game = new ScriptGameInstance();
+			VehicleAgents = new();
+			NpcAgents = new();
+			RequestTickets = new();
+
 			PostConstruct();
 		}
 

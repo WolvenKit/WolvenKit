@@ -166,6 +166,8 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryScriptableSystem()
 		{
+			BlacklistedTags = new();
+
 			PostConstruct();
 		}
 

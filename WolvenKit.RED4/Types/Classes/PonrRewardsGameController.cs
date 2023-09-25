@@ -110,6 +110,16 @@ namespace WolvenKit.RED4.Types
 
 		public PonrRewardsGameController()
 		{
+			GameInstance = new ScriptGameInstance();
+			RewardListInventoryItemGrid = new inkWidgetReference();
+			RewardListInventoryWeaponGrid = new inkWidgetReference();
+			RewardListRipperdocGrid = new inkWidgetReference();
+			RewardListInventoryItemHolder = new inkWidgetReference();
+			RewardListRipperdocHolder = new inkWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
+			OkayButton = new inkWidgetReference();
+			EndingAchievementArt = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

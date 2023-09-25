@@ -158,6 +158,17 @@ namespace WolvenKit.RED4.Types
 
 		public InnerAdminPanelScreenGameController()
 		{
+			IntroAnimName = "intro";
+			LoopAnimName = "code_loop";
+			ButtonAnimName = new(3);
+			CommandAnimName = new(3);
+			SuccessAnimName = new(3);
+			SuccessPopupAnimName = "popup_01_success";
+			AttemptAnimName = "datafort_command_animation_loop";
+			InstantAttemptAnimName = "datafort_command_instant_loop";
+			InstantAttemptPopupAnimName = "popup_03_datafort_instant_loop";
+			ShutdownButton = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

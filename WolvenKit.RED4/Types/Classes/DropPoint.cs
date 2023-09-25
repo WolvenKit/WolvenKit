@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public DropPoint()
 		{
+			ControllerTypeName = "DropPointController";
+			ShortGlitchDelayID = new gameDelayID();
+			MappinID = new gameNewMappinID();
+
 			PostConstruct();
 		}
 

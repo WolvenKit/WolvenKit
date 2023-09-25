@@ -78,6 +78,13 @@ namespace WolvenKit.RED4.Types
 
 		public HubMenuLabelContentContainer()
 		{
+			Label = new inkTextWidgetReference();
+			Icon = new inkImageWidgetReference();
+			DesiredSizeWrapper = new inkWidgetReference();
+			Border = new inkBorderWidgetReference();
+			Line = new inkWidgetReference();
+			Data = new MenuData { Identifier = -1, SubMenus = new() };
+
 			PostConstruct();
 		}
 

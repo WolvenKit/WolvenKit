@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public DeviceThumbnailWidgetControllerBase()
 		{
+			DeviceIconRef = new inkImageWidgetReference();
+			StatusNameWidget = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

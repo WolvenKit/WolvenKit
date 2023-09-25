@@ -54,6 +54,9 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocNewMeterBar()
 		{
+			Bar = new inkWidgetReference();
+			OverchargeHighlight = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

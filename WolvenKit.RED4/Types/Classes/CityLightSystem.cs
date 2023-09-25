@@ -86,6 +86,10 @@ namespace WolvenKit.RED4.Types
 
 		public CityLightSystem()
 		{
+			TimeSystemCallbacks = new();
+			Fuses = new();
+			ForcedStatesStack = new();
+
 			PostConstruct();
 		}
 

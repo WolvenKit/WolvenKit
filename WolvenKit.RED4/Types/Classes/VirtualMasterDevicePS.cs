@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public VirtualMasterDevicePS()
 		{
+			GlobalActions = new();
+			Context = new gameGetActionsContext { RequestorID = new entEntityID(), ActionPrereqs = new() };
+			ConnectedDevices = new();
+
 			PostConstruct();
 		}
 

@@ -54,6 +54,13 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HUDSignalProgressBarDef()
 		{
+			TimerID = new gamebbScriptID_Variant();
+			State = new gamebbScriptID_Uint32();
+			Progress = new gamebbScriptID_Float();
+			SignalStrength = new gamebbScriptID_Float();
+			Orientation = new gamebbScriptID_Uint32();
+			Appearance = new gamebbScriptID_CName();
+
 			PostConstruct();
 		}
 

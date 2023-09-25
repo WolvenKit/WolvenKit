@@ -102,6 +102,9 @@ namespace WolvenKit.RED4.Types
 
 		public DismembermentInstigated()
 		{
+			TargetPosition = new Vector4();
+			AttackPosition = new Vector4();
+
 			PostConstruct();
 		}
 

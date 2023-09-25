@@ -206,6 +206,9 @@ namespace WolvenKit.RED4.Types
 
 		public AimingStateDecisions()
 		{
+			CallbackIDs = new();
+			MouseZoomLevel = 100000.000000F;
+
 			PostConstruct();
 		}
 

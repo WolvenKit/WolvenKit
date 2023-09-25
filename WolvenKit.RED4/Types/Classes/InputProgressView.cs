@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public InputProgressView()
 		{
+			PartName = "icon_circle_anim_";
+
 			PostConstruct();
 		}
 

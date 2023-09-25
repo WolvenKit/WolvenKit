@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public CandleControllerPS()
 		{
+			DeviceName = "LocKey#45725";
+			TweakDBRecord = 62927945580;
+			TweakDBDescriptionRecord = 115775549431;
+
 			PostConstruct();
 		}
 

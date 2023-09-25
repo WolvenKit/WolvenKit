@@ -78,6 +78,16 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairLogicController_RasetsuHipFire()
 		{
+			OffsetLeftRight = 0.800000F;
+			LatchVertical = 40.000000F;
+			TopPart = new inkWidgetReference();
+			BottomPart = new inkWidgetReference();
+			HoriPart = new inkWidgetReference();
+			VertPart = new inkWidgetReference();
+			LeftPart = new inkWidgetReference();
+			RightPart = new inkWidgetReference();
+			TargetColorChange = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

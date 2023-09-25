@@ -214,6 +214,9 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleBaseObject()
 		{
+			WaitForPassengersToSpawnEventDelayID = new gameDelayID();
+			TriggerPanicDrivingEventDelayID = new gameDelayID();
+
 			PostConstruct();
 		}
 

@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Name = "Component";
 			LocalTransform = new WorldTransform { Position = new WorldPosition { X = new FixedPoint(), Y = new FixedPoint(), Z = new FixedPoint() }, Orientation = new Quaternion { R = 1.000000F } };
-			Mesh = new CResourceReference<CMesh>(14029023581072192580);
+			Mesh = new CResourceReference<CMesh>(@"engine\meshes\editor\box_occluder.w2mesh");
 			Scale = new Vector3 { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 			Color = new CColor();
 			OccluderAutohideDistanceScale = 255;

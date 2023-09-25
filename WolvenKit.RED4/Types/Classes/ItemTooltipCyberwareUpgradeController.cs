@@ -190,6 +190,20 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipCyberwareUpgradeController()
 		{
+			ComponentsContainer = new inkCompoundWidgetReference();
+			MoneyContainer = new inkCompoundWidgetReference();
+			MoneyCostLabel = new inkTextWidgetReference();
+			UpgradeProgressBarRef = new inkWidgetReference();
+			UpgradeCWInputName = "upgrade_cyberware";
+			ProgressEffectName = "progress";
+			ProgressBarAnimName = "upgradeLoop";
+			RipperdocContainer = new inkCompoundWidgetReference();
+			InventoryContainer = new inkCompoundWidgetReference();
+			InputHint = new inkWidgetReference();
+			RarityLabel = new inkTextWidgetReference();
+			ReqNotMetAnimName = "reqNotMet";
+			UpgradeIconAnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

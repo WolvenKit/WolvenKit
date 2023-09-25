@@ -110,6 +110,10 @@ namespace WolvenKit.RED4.Types
 
 		public HotkeysWidgetController()
 		{
+			PhoneSlot = new inkCompoundWidgetReference();
+			CarSlot = new inkCompoundWidgetReference();
+			DpadHintsPanel = new inkCompoundWidgetReference();
+
 			PostConstruct();
 		}
 

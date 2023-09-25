@@ -14,6 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		public OdaCementBagControllerPS()
 		{
+			DeviceName = "LocKey#17265";
+			TweakDBRecord = "Devices.CementContainer";
+			TweakDBDescriptionRecord = 153526934731;
+
 			PostConstruct();
 		}
 

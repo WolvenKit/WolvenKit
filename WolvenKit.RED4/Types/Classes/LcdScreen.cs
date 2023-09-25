@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public LcdScreen()
 		{
+			ControllerTypeName = "LcdScreenController";
+			ShortGlitchDelayID = new gameDelayID();
+
 			PostConstruct();
 		}
 

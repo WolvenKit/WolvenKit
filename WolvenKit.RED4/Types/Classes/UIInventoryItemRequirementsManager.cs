@@ -142,6 +142,9 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryItemRequirementsManager()
 		{
+			IsEquippableAdditionalValue = true;
+			EquipRequirements = new();
+
 			PostConstruct();
 		}
 

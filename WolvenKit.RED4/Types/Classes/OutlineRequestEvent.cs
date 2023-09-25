@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public OutlineRequestEvent()
 		{
+			OutlineDuration = 0.200000F;
+
 			PostConstruct();
 		}
 

@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public MasterDeviceBaseBlackboardDef()
 		{
+			ThumbnailWidgetsData = new gamebbScriptID_Variant();
+			CleanPassword = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

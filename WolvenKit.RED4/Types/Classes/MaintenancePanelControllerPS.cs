@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public MaintenancePanelControllerPS()
 		{
+			DeviceName = "Gameplay-Devices-DisplayNames-MaintenancePanel";
+
 			PostConstruct();
 		}
 

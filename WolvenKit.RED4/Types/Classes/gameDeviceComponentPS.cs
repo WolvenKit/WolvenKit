@@ -118,6 +118,10 @@ namespace WolvenKit.RED4.Types
 
 		public gameDeviceComponentPS()
 		{
+			AutoToggleQuestMark = true;
+			DeviceUIStyle = Enums.gamedataComputerUIStyle.LightBlue;
+			MaxDevicesToExtractInOneFrame = 10;
+
 			PostConstruct();
 		}
 

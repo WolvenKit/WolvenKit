@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public NemaplateChangedRequest()
 		{
+			PlayerTarget = new entEntityID();
+
 			PostConstruct();
 		}
 

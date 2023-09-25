@@ -166,6 +166,13 @@ namespace WolvenKit.RED4.Types
 
 		public scannerDetailsGameController()
 		{
+			ScannerCountainer = new inkCompoundWidgetReference();
+			QuickhackContainer = new inkCompoundWidgetReference();
+			CluesContainer = new inkCompoundWidgetReference();
+			ToggleDescirptionHackPart = new inkWidgetReference();
+			KiroshiLogo = new inkWidgetReference();
+			AsyncSpawnRequests = new();
+
 			PostConstruct();
 		}
 

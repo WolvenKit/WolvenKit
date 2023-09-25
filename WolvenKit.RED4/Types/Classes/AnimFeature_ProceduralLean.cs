@@ -102,6 +102,19 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_ProceduralLean()
 		{
+			Angle_threshold = 5.000000F;
+			Max_turn_angle = 50.000000F;
+			Hips_shift_side = 0.100000F;
+			Hips_shift_down = -0.010000F;
+			Hips_tilt = -8.000000F;
+			Hips_turn = -5.000000F;
+			Spine_tilt = -5.000000F;
+			Spine_turn = -12.000000F;
+			Arms_counter_turn = 10.000000F;
+			Transform_multiplyer = 1.000000F;
+			Damp_value_walk = 100.000000F;
+			Damp_value_sprint = 100.000000F;
+
 			PostConstruct();
 		}
 

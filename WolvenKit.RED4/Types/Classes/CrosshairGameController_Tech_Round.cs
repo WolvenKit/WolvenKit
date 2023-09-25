@@ -334,6 +334,23 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Tech_Round()
 		{
+			LeftPart = new inkImageWidgetReference();
+			RightPart = new inkImageWidgetReference();
+			OffsetLeftRight = 0.800000F;
+			OffsetLeftRightExtra = 1.200000F;
+			LatchVertical = 40.000000F;
+			TopPart = new inkImageWidgetReference();
+			BottomPart = new inkImageWidgetReference();
+			HoriPart = new inkWidgetReference();
+			VertPart = new inkWidgetReference();
+			BufferedSpread = new Vector2();
+			CurrentAmmo = 2;
+			CurrentMaxAmmo = 2;
+			MaxSupportedAmmo = 8;
+			OrgSideSize = new Vector2();
+			UseVisibleTarget = true;
+			GameplaySpreadMultiplier = 1.000000F;
+
 			PostConstruct();
 		}
 

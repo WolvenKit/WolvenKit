@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public Crosshair_Power_Tactician()
 		{
+			LeftPart = new inkWidgetReference();
+			RightPart = new inkWidgetReference();
+			TopPart = new inkWidgetReference();
+			BotPart = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

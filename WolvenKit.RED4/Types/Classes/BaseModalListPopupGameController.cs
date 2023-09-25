@@ -102,6 +102,10 @@ namespace WolvenKit.RED4.Types
 
 		public BaseModalListPopupGameController()
 		{
+			Content = new inkWidgetReference();
+			TimeDilationProfile = "radialMenu";
+			C_scrollInputThreshold = 0.750000F;
+
 			PostConstruct();
 		}
 

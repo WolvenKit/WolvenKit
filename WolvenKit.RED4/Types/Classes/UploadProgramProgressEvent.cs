@@ -78,6 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public UploadProgramProgressEvent()
 		{
+			Duration = 3.000000F;
+			StatPoolType = Enums.gamedataStatPoolType.Invalid;
+
 			PostConstruct();
 		}
 

@@ -46,6 +46,11 @@ namespace WolvenKit.RED4.Types
 
 		public MonoWireQuickHackApplyEffector()
 		{
+			ApplyQuickhackDelayConst = 0.100000F;
+			TargetsToSpreadQuickhack = new();
+			SpreadWindowTime = 0.100000F;
+			SpreadCallbackID = new gameDelayID();
+
 			PostConstruct();
 		}
 

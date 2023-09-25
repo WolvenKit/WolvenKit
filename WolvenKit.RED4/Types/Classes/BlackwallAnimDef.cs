@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public BlackwallAnimDef()
 		{
+			DeathAnimNumber = new gamebbScriptID_Int32();
+			HandGestureAnimNumber = new gamebbScriptID_Int32();
+
 			PostConstruct();
 		}
 

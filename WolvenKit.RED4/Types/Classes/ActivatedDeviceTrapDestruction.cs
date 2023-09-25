@@ -134,6 +134,18 @@ namespace WolvenKit.RED4.Types
 
 		public ActivatedDeviceTrapDestruction()
 		{
+			PhysicalMeshNames = new();
+			PhysicalMeshes = new();
+			HideMeshNames = new();
+			HideMeshes = new();
+			HitColliderNames = new();
+			HitColliders = new();
+			ImpulseVector = new Vector4();
+			PhysicalMeshImpactVFX = new();
+			ComponentsToEnableNames = new();
+			ComponentsToEnable = new();
+			AlreadyPlayedVFXComponents = new();
+
 			PostConstruct();
 		}
 

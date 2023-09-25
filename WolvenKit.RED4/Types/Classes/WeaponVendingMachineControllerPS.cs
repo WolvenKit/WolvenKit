@@ -22,6 +22,12 @@ namespace WolvenKit.RED4.Types
 
 		public WeaponVendingMachineControllerPS()
 		{
+			DeviceName = "LocKey#17883";
+			TweakDBRecord = "Devices.WeaponVendingMachine";
+			TweakDBDescriptionRecord = 174063646172;
+			WeaponVendingMachineSetup = new WeaponVendingMachineSetup { TimeToCompletePurchase = 3.000000F };
+			WeaponVendingMachineSFX = new WeaponVendingMachineSFX { Processing = "dev_vending_machine_processing" };
+
 			PostConstruct();
 		}
 

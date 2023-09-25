@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public VendorRequirementsNotMetNotificationData()
 		{
+			Data = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid };
+
 			PostConstruct();
 		}
 

@@ -126,6 +126,18 @@ namespace WolvenKit.RED4.Types
 
 		public SurveillanceCameraControllerPS()
 		{
+			DeviceName = "LocKey#100";
+			TweakDBRecord = "Devices.SurveillanceCamera";
+			TweakDBDescriptionRecord = 165799279213;
+			CanBeInDeviceChain = true;
+			LookAtPresetVert = "LookatPreset.CameraVertical";
+			LookAtPresetHor = "LookatPreset.CameraHorizontal";
+			CameraProperties = new CameraSetup();
+			CameraQuestProperties = new CameraQuestProperties { FollowedTargetID = new entEntityID() };
+			FeedReceivers = new();
+			MostRecentRequester = new entEntityID();
+			BinkVideoPath = new redResourceReferenceScriptToken();
+
 			PostConstruct();
 		}
 

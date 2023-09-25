@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public UI_ChatBoxDef()
 		{
+			TextList = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

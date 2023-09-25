@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public VEHICLE_Actor()
 		{
+			Type = Enums.HUDActorType.VEHICLE;
+
 			PostConstruct();
 		}
 

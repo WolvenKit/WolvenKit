@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public WeaponJammedAction()
 		{
+			JammedWeaponDuration = 5.000000F;
+
 			PostConstruct();
 		}
 

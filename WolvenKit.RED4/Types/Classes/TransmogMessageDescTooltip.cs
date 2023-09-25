@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public TransmogMessageDescTooltip()
 		{
+			TitleWrapper = new inkWidgetReference();
+			DescriptionWrapper = new inkWidgetReference();
+			DescriptionLine = new inkWidgetReference();
+			Icon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

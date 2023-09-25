@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public CameraDeadBodyInternalData()
 		{
+			OwnerID = new entEntityID();
+			BodyIDs = new();
+
 			PostConstruct();
 		}
 

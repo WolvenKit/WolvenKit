@@ -78,6 +78,9 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocFillLabel()
 		{
+			Label = new inkTextWidgetReference();
+			StartSize = new Vector2();
+
 			PostConstruct();
 		}
 

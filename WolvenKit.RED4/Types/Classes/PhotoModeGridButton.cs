@@ -110,6 +110,13 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModeGridButton()
 		{
+			FrameImg = new inkImageWidgetReference();
+			DynamicImg = new inkImageWidgetReference();
+			BgWidget = new inkWidgetReference();
+			HoverWidget = new inkWidgetReference();
+			PlusImg = new inkImageWidgetReference();
+			AtlasRef = new redResourceReferenceScriptToken();
+
 			PostConstruct();
 		}
 

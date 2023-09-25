@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public DismembermentExplosionEvent()
 		{
+			Epicentrum = new Vector4();
+
 			PostConstruct();
 		}
 

@@ -46,6 +46,12 @@ namespace WolvenKit.RED4.Types
 
 		public DebugDataDef()
 		{
+			WeaponSpread_EvenDistributionRowCount = new gamebbScriptID_Int32();
+			WeaponSpread_ProjectilesPerShot = new gamebbScriptID_Int32();
+			WeaponSpread_UseCircularSpread = new gamebbScriptID_Bool();
+			WeaponSpread_UseEvenDistribution = new gamebbScriptID_Bool();
+			Vehicle_BlockSwitchSeats = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

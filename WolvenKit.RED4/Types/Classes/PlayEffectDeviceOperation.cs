@@ -22,6 +22,11 @@ namespace WolvenKit.RED4.Types
 
 		public PlayEffectDeviceOperation()
 		{
+			IsEnabled = true;
+			ToggleOperations = new();
+			VFXs = new();
+			FxInstances = new();
+
 			PostConstruct();
 		}
 

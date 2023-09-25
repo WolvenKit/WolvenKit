@@ -110,6 +110,13 @@ namespace WolvenKit.RED4.Types
 
 		public MessengerNotification()
 		{
+			MessageText = new inkTextWidgetReference();
+			Avatar = new inkImageWidgetReference();
+			DescriptionText = new inkTextWidgetReference();
+			MappinIcon = new inkImageWidgetReference();
+			EnvelopIcon = new inkWidgetReference();
+			TextSizeLimit = 40;
+
 			PostConstruct();
 		}
 

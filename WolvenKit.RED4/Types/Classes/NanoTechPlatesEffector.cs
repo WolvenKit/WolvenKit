@@ -54,6 +54,8 @@ namespace WolvenKit.RED4.Types
 
 		public NanoTechPlatesEffector()
 		{
+			TimeStamps = new();
+
 			PostConstruct();
 		}
 

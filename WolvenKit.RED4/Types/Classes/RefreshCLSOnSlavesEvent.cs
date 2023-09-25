@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public RefreshCLSOnSlavesEvent()
 		{
+			Slaves = new();
+
 			PostConstruct();
 		}
 

@@ -214,6 +214,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameweaponObject()
 		{
+			MaxChargeThreshold = 100.000000F;
+
 			PostConstruct();
 		}
 

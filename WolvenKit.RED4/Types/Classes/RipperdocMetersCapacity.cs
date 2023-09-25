@@ -302,6 +302,31 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocMetersCapacity()
 		{
+			BarWidgetLibraryName = "CapacityMeterBar";
+			SlopeLengthModifier = 0.075000F;
+			BarsHeigh = 9.000000F;
+			BarsMargin = 9.000000F;
+			DefaultRightBarScale = 1.000000F;
+			OverchargeGapSize = 9.000000F;
+			CurCapacityLabelContainer = new inkWidgetReference();
+			CurCapacityLabelBackground = new inkWidgetReference();
+			CostLabelContainer = new inkWidgetReference();
+			CostLabelText = new inkTextWidgetReference();
+			MaxCapacityLabelContainer = new inkWidgetReference();
+			MaxCapacityLabelText = new inkTextWidgetReference();
+			OverchargeBox = new inkWidgetReference();
+			ThresholdLine = new inkWidgetReference();
+			EdgrunnerLock = new inkWidgetReference();
+			OverchargeGlow = new inkWidgetReference();
+			OverchargeGlowAnimName = "overchargeGlow_pulse";
+			OverchargeVisibilityThreshold = 0.200000F;
+			OverchargeValue = 50;
+			OverchargeGlowAnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			C_costLabelAnchorPoint_ADD = new Vector2();
+			C_costLabelAnchorPoint_SUBTRACT = new Vector2();
+			C_costLabelAnchorPoint_EQUIPPED = new Vector2();
+			C_costLabelAnchorPoint_EQUIPPED_EDGRUNNER = new Vector2();
+
 			PostConstruct();
 		}
 

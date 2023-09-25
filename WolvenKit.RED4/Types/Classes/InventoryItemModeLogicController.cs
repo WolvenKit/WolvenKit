@@ -534,6 +534,23 @@ namespace WolvenKit.RED4.Types
 
 		public InventoryItemModeLogicController()
 		{
+			ItemCategoryList = new inkCompoundWidgetReference();
+			ItemCategoryHeader = new inkTextWidgetReference();
+			MainWrapper = new inkCompoundWidgetReference();
+			EmptyInventoryText = new inkTextWidgetReference();
+			FilterButtonsGrid = new inkCompoundWidgetReference();
+			OutfitsFilterInfoText = new inkTextWidgetReference();
+			ItemGridContainer = new inkWidgetReference();
+			ItemGridScrollControllerWidget = new inkWidgetReference();
+			WardrobeSlotsContainer = new inkWidgetReference();
+			WardrobeSlotsLabel = new inkTextWidgetReference();
+			LastEquipmentAreas = new();
+			CurrentHotkey = Enums.gameEHotkey.INVALID;
+			ItemDropQueue = new();
+			WardrobeOutfitSlotControllers = new();
+			DelayedTimeoutCallbackId = new gameDelayID();
+			TimeoutPeroid = 0.500000F;
+
 			PostConstruct();
 		}
 

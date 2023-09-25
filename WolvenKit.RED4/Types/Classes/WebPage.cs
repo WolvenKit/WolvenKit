@@ -70,6 +70,14 @@ namespace WolvenKit.RED4.Types
 
 		public WebPage()
 		{
+			TextList = new();
+			RectangleList = new();
+			ImageList = new();
+			VideoList = new();
+			CanvasesList = new();
+			HOME_IMAGE_NAME = "ImageLink";
+			HOME_TEXT_NAME = "TextLink";
+
 			PostConstruct();
 		}
 

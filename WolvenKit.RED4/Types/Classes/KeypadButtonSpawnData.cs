@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public KeypadButtonSpawnData()
 		{
+			WidgetData = new SDeviceWidgetPackage { ActionWidgets = new() };
+
 			PostConstruct();
 		}
 

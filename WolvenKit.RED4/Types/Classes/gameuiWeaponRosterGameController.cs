@@ -374,6 +374,31 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiWeaponRosterGameController()
 		{
+			WeaponName = new inkTextWidgetReference();
+			WeaponIcon = new inkImageWidgetReference();
+			WeaponCurrentAmmo = new inkTextWidgetReference();
+			WeaponTotalAmmo = new inkTextWidgetReference();
+			WeaponAmmoWrapper = new inkWidgetReference();
+			OnFootContainer = new inkWidgetReference();
+			WeaponizedVehicleContainer = new inkWidgetReference();
+			WeaponizedVehicleMissileLauncherContainer = new inkWidgetReference();
+			WeaponizedVehicleMachinegunContainer = new inkWidgetReference();
+			MachinegunAmmo = new inkTextWidgetReference();
+			MachinegunReloadingProgressBar = new inkWidgetReference();
+			MachinegunReloadingProgressBarFill = new inkWidgetReference();
+			MissileLauncherAmmo = new inkTextWidgetReference();
+			MissileLauncherReloadingProgressBar = new inkWidgetReference();
+			MissileLauncherReloadingProgressBarFill = new inkWidgetReference();
+			SmartLinkFirmwareOnline = new inkCompoundWidgetReference();
+			SmartLinkFirmwareOffline = new inkCompoundWidgetReference();
+			ActiveWeapon = new gameSlotWeaponData { WeaponID = new gameItemID(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new gameItemID(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
+			Folded = true;
+			WeaponItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			WeaponizedVehiclePowerWeaponReloadTime = -1.000000F;
+			WeaponizedVehiclePowerWeaponReloadElapsedTime = -1.000000F;
+			WeaponizedVehicleMissileLauncherRechargeTime = -1.000000F;
+			WeaponizedVehicleMissileLauncherRechargeElapsedTime = -1.000000F;
+
 			PostConstruct();
 		}
 

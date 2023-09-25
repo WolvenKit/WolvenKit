@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public AIPrereqsDataDef()
 		{
+			NpcHitTypeTimeout = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

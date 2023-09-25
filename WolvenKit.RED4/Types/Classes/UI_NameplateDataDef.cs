@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public UI_NameplateDataDef()
 		{
+			EntityID = new gamebbScriptID_Variant();
+			IsVisible = new gamebbScriptID_Bool();
+			HeightOffset = new gamebbScriptID_Float();
+			DamageProjection = new gamebbScriptID_Int32();
+
 			PostConstruct();
 		}
 

@@ -230,6 +230,11 @@ namespace WolvenKit.RED4.Types
 
 		public SecSystemDebugger()
 		{
+			RealTimeCallbackID = new gameDelayID();
+			Callstack = new();
+			Ids = new();
+			RefreshTime = 60.000000F;
+
 			PostConstruct();
 		}
 

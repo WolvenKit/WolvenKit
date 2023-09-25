@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public PerksSkillLabelContentContainer()
 		{
+			LevelLabel = new inkTextWidgetReference();
+			LevelBar = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

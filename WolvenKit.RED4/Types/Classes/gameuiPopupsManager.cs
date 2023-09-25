@@ -240,6 +240,8 @@ namespace WolvenKit.RED4.Types
 		{
 			BracketsContainer = new inkCompoundWidgetReference();
 			TutorialOverlayContainer = new inkCompoundWidgetReference();
+			TutorialData = new gamePopupData { MessageOverrideDataList = new(), VideoType = Enums.gameVideoType.Unknown };
+			TutorialSettings = new gamePopupSettings { CloseAtInput = true, Position = Enums.gamePopupPosition.Center, Margin = new inkMargin() };
 
 			PostConstruct();
 		}

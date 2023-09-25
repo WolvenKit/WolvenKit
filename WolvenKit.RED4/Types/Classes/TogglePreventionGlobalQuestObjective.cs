@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public TogglePreventionGlobalQuestObjective()
 		{
+			PreventionGlobalQuestDisabled = true;
+			EventSource = "fill_in_with_valid_source_name";
+
 			PostConstruct();
 		}
 

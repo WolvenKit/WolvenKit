@@ -38,6 +38,10 @@ namespace WolvenKit.RED4.Types
 
 		public SettingsLanguageInstallProgressBar()
 		{
+			ProgressBarRoot = new inkWidgetReference();
+			ProgressBarFill = new inkWidgetReference();
+			TextProgress = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

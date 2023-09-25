@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Types
 	{
 		public AirHoverEvents()
 		{
+			UpdateInputToggles = true;
+
 			PostConstruct();
 		}
 

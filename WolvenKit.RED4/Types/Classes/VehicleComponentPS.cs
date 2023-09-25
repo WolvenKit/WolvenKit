@@ -238,6 +238,10 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleComponentPS()
 		{
+			ExposeQuickHacks = true;
+			NpcOccupiedSlots = new();
+			PreviousInteractionState = new();
+
 			PostConstruct();
 		}
 

@@ -62,6 +62,8 @@ namespace WolvenKit.RED4.Types
 
 		public CPOMissionDataState()
 		{
+			DelayedGiveChoiceTokenEventId = new gameDelayID();
+
 			PostConstruct();
 		}
 

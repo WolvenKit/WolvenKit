@@ -182,6 +182,22 @@ namespace WolvenKit.RED4.Types
 
 		public StarController()
 		{
+			AnimIntroOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimBlinkOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			AnimBlinkLoops = new(3);
+			BlinkAnimLoopType = Enums.inkanimLoopType.Cycle;
+			BlinkDuration = 1.000000F;
+			BountyBadgeWidget = new inkWidgetReference();
+			BlinkSpeed1 = 1.000000F;
+			BlinkSpeed2 = 2.000000F;
+			BlinkSpeed3 = 3.000000F;
+			Icon = new inkImageWidgetReference();
+			IconBg = new inkImageWidgetReference();
+			NcpdIconName = "star_active";
+			NcpdIconBgName = "star_shadow";
+			DogtownIconName = "kutrz_active";
+			DogtownIconBgName = "kutrz_shadow";
+
 			PostConstruct();
 		}
 

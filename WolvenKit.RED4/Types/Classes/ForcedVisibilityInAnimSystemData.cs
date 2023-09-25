@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ForcedVisibilityInAnimSystemData()
 		{
+			DelayID = new gameDelayID();
+
 			PostConstruct();
 		}
 

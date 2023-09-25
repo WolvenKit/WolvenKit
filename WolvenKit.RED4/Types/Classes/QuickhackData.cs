@@ -270,6 +270,11 @@ namespace WolvenKit.RED4.Types
 
 		public QuickhackData()
 		{
+			ActionOwner = new entEntityID();
+			ItemID = new gameItemID();
+			Vulnerabilities = new();
+			ActionCompletionEffects = new();
+
 			PostConstruct();
 		}
 

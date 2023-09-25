@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModeDef()
 		{
+			IsActive = new gamebbScriptID_Bool();
+			PlayerHealthState = new gamebbScriptID_Uint32();
+
 			PostConstruct();
 		}
 

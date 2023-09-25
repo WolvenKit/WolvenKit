@@ -118,6 +118,12 @@ namespace WolvenKit.RED4.Types
 
 		public ExplodingBullet()
 		{
+			EffectReference = new gameEffectRef();
+			InitialPosition = new Vector4();
+			ColliderBox = new Vector4();
+			Rotation = new Quaternion { R = 1.000000F };
+			ExplodeAfterRangeTravelled = true;
+
 			PostConstruct();
 		}
 

@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public StorageBlackboardDef()
 		{
+			StorageData = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

@@ -22,6 +22,9 @@ namespace WolvenKit.RED4.Types
 
 		public UI_HudTooltipDef()
 		{
+			ItemId = new gamebbScriptID_Variant();
+			ShowTooltip = new gamebbScriptID_Bool();
+
 			PostConstruct();
 		}
 

@@ -70,6 +70,12 @@ namespace WolvenKit.RED4.Types
 
 		public MessangerReplyItemRenderer()
 		{
+			StateDefault = "Default";
+			StateSelected = "Selected";
+			StateQuestDefault = "Quest";
+			StateQuestSelected = "QuestSelected";
+			StateDisabled = "Disabled";
+
 			PostConstruct();
 		}
 

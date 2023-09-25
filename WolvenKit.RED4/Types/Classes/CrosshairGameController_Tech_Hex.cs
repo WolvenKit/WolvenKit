@@ -174,6 +174,9 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Tech_Hex()
 		{
+			BufferedSpread = new Vector2();
+			GameplaySpreadMultiplier = 1.000000F;
+
 			PostConstruct();
 		}
 

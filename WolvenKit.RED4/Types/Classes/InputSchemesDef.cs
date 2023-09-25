@@ -30,6 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		public InputSchemesDef()
 		{
+			Device = new gamebbScriptID_Uint32();
+			Scheme = new gamebbScriptID_Uint32();
+			InitializedInputHintManagerList = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

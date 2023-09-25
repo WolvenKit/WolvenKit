@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public ReactiveEventSender()
 		{
+			Tags = new();
+			Flags = new();
+
 			PostConstruct();
 		}
 

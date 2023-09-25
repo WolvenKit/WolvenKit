@@ -94,6 +94,10 @@ namespace WolvenKit.RED4.Types
 
 		public TutorialPopupData()
 		{
+			Margin = new inkMargin();
+			MessageOverrideDataList = new();
+			Video = new redResourceReferenceScriptToken();
+
 			PostConstruct();
 		}
 

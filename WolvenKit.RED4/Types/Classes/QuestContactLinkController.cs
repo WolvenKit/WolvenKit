@@ -62,6 +62,9 @@ namespace WolvenKit.RED4.Types
 
 		public QuestContactLinkController()
 		{
+			MsgLabel = new inkTextWidgetReference();
+			MsgContainer = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

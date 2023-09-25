@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 
 		public NewItemTooltipBottomModule()
 		{
+			WeightWrapper = new inkWidgetReference();
+			PriceWrapper = new inkWidgetReference();
+			AmmoWrapper = new inkWidgetReference();
+			WeightText = new inkTextWidgetReference();
+			PriceText = new inkTextWidgetReference();
+			AmmoText = new inkTextWidgetReference();
+			AmmoIcon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

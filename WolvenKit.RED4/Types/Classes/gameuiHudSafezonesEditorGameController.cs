@@ -48,6 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			RootWidget = new inkCompoundWidgetReference();
 			FlexWidget = new inkCompoundWidgetReference();
+			C_adjustment_speed = 400.000000F;
 
 			PostConstruct();
 		}

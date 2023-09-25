@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public HitIsTheSameTargetPrereq()
 		{
+			IsSync = true;
+			PipelineStage = Enums.gameDamagePipelineStage.Process;
+
 			PostConstruct();
 		}
 

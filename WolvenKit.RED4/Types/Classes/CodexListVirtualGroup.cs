@@ -94,6 +94,11 @@ namespace WolvenKit.RED4.Types
 
 		public CodexListVirtualGroup()
 		{
+			Title = new inkTextWidgetReference();
+			Arrow = new inkWidgetReference();
+			NewWrapper = new inkWidgetReference();
+			Counter = new inkTextWidgetReference();
+
 			PostConstruct();
 		}
 

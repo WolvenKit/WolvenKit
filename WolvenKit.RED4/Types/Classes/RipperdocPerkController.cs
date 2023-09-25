@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocPerkController()
 		{
+			Icon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

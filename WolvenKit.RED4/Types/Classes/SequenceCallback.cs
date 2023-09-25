@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public SequenceCallback()
 		{
+			PersistentID = new gamePersistentID();
+
 			PostConstruct();
 		}
 

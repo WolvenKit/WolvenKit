@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public AnimFeature_Whip()
 		{
+			TargetPoint = new Vector4();
+
 			PostConstruct();
 		}
 

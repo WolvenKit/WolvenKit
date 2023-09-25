@@ -166,6 +166,10 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameController_Rasetsu()
 		{
+			HipFire = new inkWidgetReference();
+			AimFire = new inkWidgetReference();
+			IsRootVisible = true;
+
 			PostConstruct();
 		}
 

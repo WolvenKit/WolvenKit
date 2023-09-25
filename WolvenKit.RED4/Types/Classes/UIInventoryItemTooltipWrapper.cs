@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public UIInventoryItemTooltipWrapper()
 		{
+			OverridePrice = -1;
+
 			PostConstruct();
 		}
 

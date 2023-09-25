@@ -102,6 +102,9 @@ namespace WolvenKit.RED4.Types
 
 		public QuestListItemData()
 		{
+			LastUpdateTimestamp = new GameTime();
+			ObjectivesDistances = new();
+
 			PostConstruct();
 		}
 

@@ -150,6 +150,21 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerDevelopmentData()
 		{
+			OwnerID = new entEntityID();
+			QueuedCombatExp = new();
+			Proficiencies = new();
+			Attributes = new();
+			PerkAreas = new();
+			Traits = new();
+			DevPoints = new();
+			SkillPrereqs = new();
+			StatPrereqs = new();
+			KnownRecipes = new();
+			AttributesData = new();
+			StartingLevel = 1;
+			DisplayActivityLog = true;
+			ProgressionBuildSetCompleted = true;
+
 			PostConstruct();
 		}
 

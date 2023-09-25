@@ -86,6 +86,11 @@ namespace WolvenKit.RED4.Types
 
 		public NetworkMinigameBufferController()
 		{
+			BufferSlotsContainer = new inkWidgetReference();
+			SlotList = new();
+			Blinker = new inkWidgetReference();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+
 			PostConstruct();
 		}
 

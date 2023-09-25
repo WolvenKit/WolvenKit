@@ -238,6 +238,29 @@ namespace WolvenKit.RED4.Types
 
 		public RadialMenuHubLogicController()
 		{
+			MenuObject = new inkWidgetReference();
+			BtnCrafting = new inkWidgetReference();
+			BtnPerks = new inkWidgetReference();
+			BtnStats = new inkWidgetReference();
+			BtnInventory = new inkWidgetReference();
+			BtnBackpack = new inkWidgetReference();
+			BtnCyberware = new inkWidgetReference();
+			BtnMap = new inkWidgetReference();
+			BtnJournal = new inkWidgetReference();
+			BtnPhone = new inkWidgetReference();
+			BtnTarot = new inkWidgetReference();
+			BtnShard = new inkWidgetReference();
+			BtnCodex = new inkWidgetReference();
+			PanelInventory = new inkWidgetReference();
+			PanelMap = new inkWidgetReference();
+			PanelJournal = new inkWidgetReference();
+			PanelCharacter = new inkWidgetReference();
+			MouseCollider = new inkWidgetReference();
+			DebugText = new inkTextWidgetReference();
+			TooltipsManagerRef = new inkWidgetReference();
+			WindowSize = new Vector2();
+			HoveredButtons = new();
+
 			PostConstruct();
 		}
 

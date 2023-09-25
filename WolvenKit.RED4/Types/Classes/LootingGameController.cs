@@ -174,6 +174,11 @@ namespace WolvenKit.RED4.Types
 
 		public LootingGameController()
 		{
+			LastActiveWeapon = new gameSlotWeaponData { WeaponID = new gameItemID(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new gameItemID(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
+			LastActiveWeaponID = new gameItemID();
+			PreviousData = new gameinteractionsvisLootData { IsListOpen = true, Choices = new(), ItemIDs = new(), OwnerId = new entEntityID() };
+			LastActiveOwnerId = new entEntityID();
+
 			PostConstruct();
 		}
 

@@ -38,6 +38,9 @@ namespace WolvenKit.RED4.Types
 
 		public VendingMachine()
 		{
+			ControllerTypeName = "VendingMachineController";
+			ShortGlitchDelayID = new gameDelayID();
+
 			PostConstruct();
 		}
 

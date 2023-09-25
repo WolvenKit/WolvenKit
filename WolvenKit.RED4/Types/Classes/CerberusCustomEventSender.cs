@@ -5,6 +5,9 @@ namespace WolvenKit.RED4.Types
 	{
 		public CerberusCustomEventSender()
 		{
+			Tags = new();
+			Flags = new();
+
 			PostConstruct();
 		}
 

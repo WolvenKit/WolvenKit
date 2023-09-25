@@ -46,6 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public SetTopThreatToCombatTarget()
 		{
+			RefreshTimer = 0.500000F;
+
 			PostConstruct();
 		}
 

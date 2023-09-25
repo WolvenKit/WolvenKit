@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleListItemData()
 		{
+			Data = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, DestructionTimeStamp = new EngineTime() };
+
 			PostConstruct();
 		}
 

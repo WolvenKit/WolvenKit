@@ -30,6 +30,9 @@ namespace WolvenKit.RED4.Types
 
 		public NewPerksPerkContainerLogicController()
 		{
+			PerkWidget = new inkWidgetReference();
+			WiresConnections = new();
+
 			PostConstruct();
 		}
 

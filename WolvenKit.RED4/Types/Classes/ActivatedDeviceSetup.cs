@@ -161,7 +161,7 @@ namespace WolvenKit.RED4.Types
 			ActionName = "LocKey#233";
 			VfxResource = new gameFxResource();
 			ShouldRagdollOnAttack = true;
-			ThumbnailIconRecord = 133181765352;
+			ThumbnailIconRecord = "DeviceIcons.GenenericDeviceIcon";
 
 			PostConstruct();
 		}

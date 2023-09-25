@@ -38,6 +38,11 @@ namespace WolvenKit.RED4.Types
 
 		public SystemConsoleLogicController()
 		{
+			AlphaSys = new inkWidgetReference();
+			BravoSys = new inkWidgetReference();
+			SierraSys = new inkWidgetReference();
+			VictorSys = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

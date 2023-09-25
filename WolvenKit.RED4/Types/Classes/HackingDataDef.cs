@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public HackingDataDef()
 		{
+			SpreadMap = new gamebbScriptID_Variant();
+
 			PostConstruct();
 		}
 

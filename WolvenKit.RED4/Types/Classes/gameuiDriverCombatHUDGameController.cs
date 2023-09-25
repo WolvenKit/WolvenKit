@@ -210,6 +210,9 @@ namespace WolvenKit.RED4.Types
 			CrosshairBracketsTrailTransitionTime = 0.250000F;
 			CrosshairReducedOpacity = 0.200000F;
 			UnifomSafeZone = 0.900000F;
+			VehicleFPPRearviewCamera = new inkWidgetReference();
+			VehicleManufacturer = new inkImageWidgetReference();
+			DebugTuningStatusText = new inkTextWidgetReference();
 
 			PostConstruct();
 		}

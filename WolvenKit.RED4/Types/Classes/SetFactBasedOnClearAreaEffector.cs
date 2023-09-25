@@ -70,6 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public SetFactBasedOnClearAreaEffector()
 		{
+			FactSuffixes = new();
+			VectorRotations = new();
+
 			PostConstruct();
 		}
 
