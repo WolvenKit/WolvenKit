@@ -5,13 +5,15 @@ namespace WolvenKit.RED4.Save;
 
 public class DirectorSystem : INodeData
 {
-    // counter?
-    public uint Unknown1 { get; set; }
-    public string Unknown2 { get; set; }
-    // null terminator?
-    public byte Unknown3 { get; set; }
-    public string Unknown4 { get; set; }
-    public uint Unknown5 { get; set; }
+    public List<DirectorSystemClass1> Unknown1 { get; set; } = new();
+}
+
+public class DirectorSystemClass1
+{
+    public string Unknown1 { get; set; }
+    public byte Unknown2 { get; set; }
+    public string Unknown3 { get; set; }
+    public uint Unknown4 { get; set; }
 }
 
 
@@ -22,11 +24,18 @@ public class DirectorSystemParser : INodeParser
     public void Read(BinaryReader reader, NodeEntry node)
     {
         var data = new DirectorSystem();
-        data.Unknown1 = reader.ReadUInt32();
-        data.Unknown2 = reader.ReadLengthPrefixedString();
-        data.Unknown3 = reader.ReadByte();
-        data.Unknown4 = reader.ReadLengthPrefixedString();
-        data.Unknown5 = reader.ReadUInt32();
+
+        var cnt = reader.ReadUInt32();
+        for (var i = 0; i < cnt; i++)
+        {
+            data.Unknown1.Add(new DirectorSystemClass1
+            {
+                Unknown1 = reader.ReadLengthPrefixedString(),
+                Unknown2 = reader.ReadByte(),
+                Unknown3 = reader.ReadLengthPrefixedString(),
+                Unknown4 = reader.ReadUInt32()
+            });
+        }
 
         node.Value = data;
     }
@@ -35,10 +44,13 @@ public class DirectorSystemParser : INodeParser
     {
         var data = (DirectorSystem)node.Value;
 
-        writer.Write(data.Unknown1);
-        writer.WriteLengthPrefixedString(data.Unknown2);
-        writer.Write(data.Unknown3);
-        writer.WriteLengthPrefixedString(data.Unknown4);
-        writer.Write(data.Unknown5);
+        writer.Write(data.Unknown1.Count);
+        foreach (var val in data.Unknown1)
+        {
+            writer.WriteLengthPrefixedString(val.Unknown1);
+            writer.Write(val.Unknown2);
+            writer.WriteLengthPrefixedString(val.Unknown3);
+            writer.Write(val.Unknown4);
+        }
     }
 }
