@@ -1,4 +1,4 @@
-//#define IS_PARALLEL
+#define IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
@@ -13,6 +13,7 @@ using WolvenKit.FunctionalTests.Model;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
+using WolvenKit.RED4.Types;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -542,6 +543,8 @@ namespace WolvenKit.FunctionalTests
                         originalStream.Seek(0, SeekOrigin.Begin);
 
                         using var originalReader = new CR2WReader(originalStream, Encoding.UTF8, true);
+                        originalReader.ParsingError += TypeGlobal.OnParsingError;
+
                         var readResult = originalReader.ReadFile(out var cr2wFile, DECOMPRESS_BUFFERS);
 
                         switch (readResult)

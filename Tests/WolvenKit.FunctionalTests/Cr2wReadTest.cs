@@ -1,4 +1,4 @@
-//#define IS_PARALLEL
+#define IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
@@ -13,6 +13,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.FunctionalTests.Model;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace WolvenKit.FunctionalTests
         public static void SetupClass(TestContext context) => Setup(context);
 
         private const bool TEST_EXISTING = true;
-        private const bool DECOMPRESS_BUFFERS = false;
+        private const bool DECOMPRESS_BUFFERS = true;
 
         #endregion Methods
 
@@ -484,6 +485,8 @@ namespace WolvenKit.FunctionalTests
                         ms.Seek(0, SeekOrigin.Begin);
 
                         using var reader = new CR2WReader(ms);
+                        reader.ParsingError += TypeGlobal.OnParsingError;
+
                         var readResult = reader.ReadFile(out var c, DECOMPRESS_BUFFERS);
 
                         switch (readResult)
