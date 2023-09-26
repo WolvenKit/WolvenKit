@@ -118,9 +118,6 @@ namespace WolvenKit.FunctionalTests
         public void Read_cookedanims() => Test_Extension(".cookedanims");
 
         [TestMethod]
-        public void Read_cookedapp() => Test_Extension(".cookedapp");
-
-        [TestMethod]
         public void Read_cookedprefab() => Test_Extension(".cookedprefab");
 
         [TestMethod]
@@ -143,6 +140,9 @@ namespace WolvenKit.FunctionalTests
 
         [TestMethod]
         public void Read_devices() => Test_Extension(".devices");
+
+        [TestMethod]
+        public void Read_dlcManifest() => Test_Extension(".dlc_manifest");
 
         [TestMethod]
         public void Read_dtex() => Test_Extension(".dtex");
@@ -321,10 +321,6 @@ namespace WolvenKit.FunctionalTests
         [TestMethod]
         public void Read_mt() => Test_Extension(".mt");
 
-        // removed in 1.3
-        //[TestMethod]
-        //public void Read_navmesh() => Test_Extension(".navmesh");
-
         [TestMethod]
         public void Read_null_areas() => Test_Extension(".null_areas");
 
@@ -395,10 +391,10 @@ namespace WolvenKit.FunctionalTests
         public void Read_spatial_representation() => Test_Extension(".spatial_representation");
 
         [TestMethod]
-        public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
+        public void Read_streamingblock() => Test_Extension(".streamingblock");
 
         [TestMethod]
-        public void Read_streamingblock() => Test_Extension(".streamingblock");
+        public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
 
         [TestMethod]
         public void Read_streamingsector() => Test_Extension(".streamingsector");
